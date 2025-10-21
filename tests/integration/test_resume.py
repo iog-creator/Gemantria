@@ -1,8 +1,7 @@
 import os
 from unittest.mock import patch
 
-from src.graph.graph import PipelineState
-from src.infra.checkpointer import get_checkpointer, PostgresCheckpointer
+from src.infra.checkpointer import PostgresCheckpointer, get_checkpointer
 
 
 def test_memory_checkpointer_default():
@@ -51,3 +50,16 @@ def test_checkpointer_instantiation():
     assert checkpointer is not None
     assert hasattr(checkpointer, 'put')
     assert hasattr(checkpointer, 'get')
+
+
+def test_checkpointer_factory_consistency():
+    """Test that checkpointer factory returns consistent instances."""
+    checkpointer1 = get_checkpointer()
+    checkpointer2 = get_checkpointer()
+
+    # Both should be memory checkpointers (default)
+    assert checkpointer1.__class__ == checkpointer2.__class__
+
+    # Should have same basic interface
+    assert hasattr(checkpointer1, 'get')
+    assert hasattr(checkpointer1, 'put')

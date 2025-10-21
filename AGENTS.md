@@ -13,6 +13,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - install: `make deps`
 - DBs: `bible_db` (RO), `gematria` (RW). Never write to bible_db.
 - LLM: LM Studio only when enabled; confidence is metadata only.
+- GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
 ## Workflow (small green PRs)
 - Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
@@ -27,3 +28,4 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Batches default to 50; abort + `review.ndjson` on failure; `ALLOW_PARTIAL=1` override logs manifest.
 - Default edges: shared_prime (cap k=3); optional identical_value/gcd_gt_1 behind flags.
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
+- GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.

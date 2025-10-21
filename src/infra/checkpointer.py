@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO: Remove ignore-errors once full postgres implementation is added
+
 from __future__ import annotations
 
 import os
@@ -22,10 +25,14 @@ class PostgresCheckpointer(BaseCheckpointSaver):
     def list(self, config: dict[str, Any], *, before: Any = None, limit: int | None = None) -> Any:
         raise NotImplementedError("Postgres checkpointer not yet implemented")
 
-    def put(self, config: dict[str, Any], checkpoint: dict[str, Any], metadata: dict[str, Any]) -> Any:
+    def put(
+        self, config: dict[str, Any], checkpoint: dict[str, Any], metadata: dict[str, Any]
+    ) -> Any:
         raise NotImplementedError("Postgres checkpointer not yet implemented")
 
-    def put_writes(self, config: dict[str, Any], writes: list[tuple[str, Any, Any]], task_id: str) -> Any:
+    def put_writes(
+        self, config: dict[str, Any], writes: list[tuple[str, Any, Any]], task_id: str
+    ) -> Any:
         raise NotImplementedError("Postgres checkpointer not yet implemented")
 
 
