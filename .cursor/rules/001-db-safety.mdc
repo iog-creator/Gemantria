@@ -10,3 +10,5 @@ alwaysApply: false
 - All SQL must use %s parameters; no f-strings or string interpolation.
 - Add indices for expected query patterns; enforce unique(content_hash) where applicable.
 - Provide migration tests that apply and rollback cleanly.
+- Bible DB adapter must raise ReadOnlyViolation on any SQL starting with INSERT/UPDATE/DELETE/MERGE/CREATE/ALTER/DROP/TRUNCATE/GRANT/REVOKE *before* opening a connection.
+- Tests must include: (a) contract test exercising this guard without a DSN; (b) static scan forbidding f-strings in `.execute(...)` calls.
