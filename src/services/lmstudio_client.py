@@ -54,5 +54,29 @@ class LMStudioClient:
             score = 0.95  # fallback
         return max(0.0, min(1.0, score))
 
+    def generate_embedding(self, text: str, model: str = None) -> list[float]:
+        """Generate embeddings for text using LM Studio embeddings endpoint."""
+        if MOCK:
+            # Return a mock 1024-dimensional embedding
+            import random
+            random.seed(hash(text) % 10000)  # Deterministic for testing
+            return [random.uniform(-1, 1) for _ in range(1024)]
+
+        model = model or THEOLOGY_MODEL  # Default to theology model for embeddings
+        payload = {"model": model, "input": text}
+        url = f"{HOST}/v1/embeddings"
+
+        for attempt in range(RETRY_ATTEMPTS):
+            try:
+                resp = self.session.post(url, json=payload, timeout=TIMEOUT)
+                resp.raise_for_status()
+                data = resp.json()
+                return data["data"][0]["embedding"]
+            except Exception as e:
+                if attempt < RETRY_ATTEMPTS - 1:
+                    time.sleep(RETRY_DELAY)
+                else:
+                    raise e
+
 def get_lmstudio_client() -> LMStudioClient:
     return LMStudioClient()

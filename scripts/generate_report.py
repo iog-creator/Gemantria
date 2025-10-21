@@ -44,22 +44,42 @@ def get_recent_runs(limit: int = 5) -> List[Dict[str, Any]]:
                 'total_events': row[3]
             } for row in cur.fetchall()]
 
-def get_run_metrics(run_id: str) -> Dict[str, Any]:
-    """Get detailed metrics for a specific run."""
+def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
+    """Get detailed metrics for a specific run or aggregate recent runs."""
     with psycopg.connect(GEMATRIA_DSN) as conn:
         with conn.cursor() as cur:
-            # Node performance
-            cur.execute("""
-                SELECT node,
-                       COUNT(*) as events,
-                       ROUND(AVG(duration_ms)) as avg_duration_ms,
-                       MIN(started_at) as first_event,
-                       MAX(finished_at) as last_event
-                FROM metrics_log
-                WHERE run_id = %s
-                GROUP BY node
-                ORDER BY first_event
-            """, (run_id,))
+            # If no specific run_id, aggregate metrics from recent runs (last 30 minutes)
+            time_filter = ""
+            time_params = ()
+            if not run_id:
+                time_filter = "AND started_at > NOW() - INTERVAL '30 minutes'"
+                time_params = ()
+
+            # Node performance - aggregate across runs if no specific run_id
+            if run_id:
+                cur.execute(f"""
+                    SELECT node,
+                           COUNT(*) as events,
+                           ROUND(AVG(duration_ms)) as avg_duration_ms,
+                           MIN(started_at) as first_event,
+                           MAX(finished_at) as last_event
+                    FROM metrics_log
+                    WHERE run_id = %s
+                    GROUP BY node
+                    ORDER BY first_event
+                """, (run_id,))
+            else:
+                cur.execute(f"""
+                    SELECT node,
+                           COUNT(*) as events,
+                           ROUND(AVG(duration_ms)) as avg_duration_ms,
+                           MIN(started_at) as first_event,
+                           MAX(finished_at) as last_event
+                    FROM metrics_log
+                    WHERE 1=1 {time_filter}
+                    GROUP BY node
+                    ORDER BY first_event
+                """, time_params)
 
             node_metrics = [{
                 'node': row[0],
@@ -69,14 +89,23 @@ def get_run_metrics(run_id: str) -> Dict[str, Any]:
                 'last_event': row[4]
             } for row in cur.fetchall()]
 
-            # AI enrichment results
-            cur.execute("""
-                SELECT COUNT(*) as total_enrichments,
-                       ROUND(AVG(confidence_score), 4) as avg_confidence,
-                       ROUND(AVG(tokens_used)) as avg_tokens
-                FROM ai_enrichment_log
-                WHERE run_id = %s
-            """, (run_id,))
+            # AI enrichment results - aggregate across recent runs
+            if run_id:
+                cur.execute("""
+                    SELECT COUNT(*) as total_enrichments,
+                           ROUND(AVG(confidence_score), 4) as avg_confidence,
+                           ROUND(AVG(tokens_used)) as avg_tokens
+                    FROM ai_enrichment_log
+                    WHERE run_id = %s
+                """, (run_id,))
+            else:
+                cur.execute(f"""
+                    SELECT COUNT(*) as total_enrichments,
+                           ROUND(AVG(confidence_score), 4) as avg_confidence,
+                           ROUND(AVG(tokens_used)) as avg_tokens
+                    FROM ai_enrichment_log
+                    WHERE created_at > NOW() - INTERVAL '30 minutes'
+                """, time_params)
 
             ai_row = cur.fetchone()
             ai_metrics = {
@@ -85,16 +114,27 @@ def get_run_metrics(run_id: str) -> Dict[str, Any]:
                 'avg_tokens': int(ai_row[2]) if ai_row[2] else 0
             }
 
-            # Confidence validation results
-            cur.execute("""
-                SELECT COUNT(*) as total_validations,
-                       SUM(CASE WHEN validation_passed THEN 1 ELSE 0 END) as passed,
-                       SUM(CASE WHEN NOT validation_passed THEN 1 ELSE 0 END) as failed,
-                       ROUND(AVG(gematria_confidence), 4) as avg_gematria_conf,
-                       ROUND(AVG(ai_confidence), 4) as avg_ai_conf
-                FROM confidence_validation_log
-                WHERE run_id = %s
-            """, (run_id,))
+            # Confidence validation results - aggregate across recent runs
+            if run_id:
+                cur.execute("""
+                    SELECT COUNT(*) as total_validations,
+                           SUM(CASE WHEN validation_passed THEN 1 ELSE 0 END) as passed,
+                           SUM(CASE WHEN NOT validation_passed THEN 1 ELSE 0 END) as failed,
+                           ROUND(AVG(gematria_confidence), 4) as avg_gematria_conf,
+                           ROUND(AVG(ai_confidence), 4) as avg_ai_conf
+                    FROM confidence_validation_log
+                    WHERE run_id = %s
+                """, (run_id,))
+            else:
+                cur.execute(f"""
+                    SELECT COUNT(*) as total_validations,
+                           SUM(CASE WHEN validation_passed THEN 1 ELSE 0 END) as passed,
+                           SUM(CASE WHEN NOT validation_passed THEN 1 ELSE 0 END) as failed,
+                           ROUND(AVG(gematria_confidence), 4) as avg_gematria_conf,
+                           ROUND(AVG(ai_confidence), 4) as avg_ai_conf
+                    FROM confidence_validation_log
+                    WHERE created_at > NOW() - INTERVAL '30 minutes'
+                """, time_params)
 
             conf_row = cur.fetchone()
             confidence_metrics = {
@@ -105,10 +145,36 @@ def get_run_metrics(run_id: str) -> Dict[str, Any]:
                 'avg_ai_confidence': float(conf_row[4]) if conf_row[4] else 0
             }
 
+            # Network aggregation results - from most recent network_aggregator run
+            cur.execute(f"""
+                SELECT meta->>'network_summary' as network_summary
+                FROM metrics_log
+                WHERE node = 'network_aggregator' {time_filter}
+                ORDER BY finished_at DESC
+                LIMIT 1
+            """, time_params)
+
+            network_row = cur.fetchone()
+            network_summary = {}
+            if network_row and network_row[0]:
+                try:
+                    network_summary = json.loads(network_row[0])
+                except json.JSONDecodeError:
+                    network_summary = {}
+
+            network_metrics = {
+                'total_nodes': network_summary.get('total_nodes', 0),
+                'strong_edges': network_summary.get('strong_edges', 0),
+                'weak_edges': network_summary.get('weak_edges', 0),
+                'embeddings_generated': network_summary.get('embeddings_generated', 0),
+                'similarity_computations': network_summary.get('similarity_computations', 0)
+            }
+
             return {
                 'node_metrics': node_metrics,
                 'ai_metrics': ai_metrics,
-                'confidence_metrics': confidence_metrics
+                'confidence_metrics': confidence_metrics,
+                'network_metrics': network_metrics
             }
 
 def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
@@ -122,6 +188,7 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 
 - **AI Enrichments**: {metrics['ai_metrics']['total_enrichments']}
 - **Confidence Validations**: {metrics['confidence_metrics']['total_validations']} ({metrics['confidence_metrics']['passed']} passed, {metrics['confidence_metrics']['failed']} failed)
+- **Network Nodes**: {metrics['network_metrics']['total_nodes']} ({metrics['network_metrics']['strong_edges']} strong, {metrics['network_metrics']['weak_edges']} weak edges)
 - **Average AI Confidence**: {metrics['ai_metrics']['avg_confidence']:.4f}
 - **Average Token Usage**: {metrics['ai_metrics']['avg_tokens']}
 
@@ -149,6 +216,14 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 - **Average Gematria Confidence**: {metrics['confidence_metrics']['avg_gematria_confidence']:.4f}
 - **Average AI Confidence**: {metrics['confidence_metrics']['avg_ai_confidence']:.4f}
 
+## Concept Network Summary
+
+- **Total Nodes**: {metrics['network_metrics']['total_nodes']}
+- **Strong Edges (>0.90)**: {metrics['network_metrics']['strong_edges']}
+- **Weak Edges (>0.75)**: {metrics['network_metrics']['weak_edges']}
+- **Embeddings Generated**: {metrics['network_metrics']['embeddings_generated']}
+- **Similarity Computations**: {metrics['network_metrics']['similarity_computations']}
+
 ## Quality Metrics
 
 ✅ **Real LM Studio Inference**: Confirmed active (non-mock mode)
@@ -170,6 +245,12 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
     else:
         report += "⚠️ **No AI Enrichment**: Check LM Studio connection and model availability.\n"
 
+    if metrics['network_metrics']['total_nodes'] > 0:
+        total_edges = metrics['network_metrics']['strong_edges'] + metrics['network_metrics']['weak_edges']
+        report += f"✅ **Semantic Network Built**: {metrics['network_metrics']['total_nodes']} concepts connected with {total_edges} semantic relationships.\n"
+    else:
+        report += "⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.\n"
+
     report += """
 ---
 *Report generated automatically by Gemantria pipeline analysis*
@@ -189,23 +270,22 @@ def main():
     output_dir.mkdir(exist_ok=True)
 
     if args.run_id:
-        run_ids = [args.run_id]
-    else:
-        # Get most recent run
-        recent_runs = get_recent_runs(1)
-        if not recent_runs:
-            print("No recent runs found")
-            return
-        run_ids = [recent_runs[0]['run_id']]
-
-    for run_id in run_ids:
-        print(f"Generating report for run: {run_id}")
-
+        print(f"Generating report for specific run: {args.run_id}")
         try:
-            metrics = get_run_metrics(run_id)
+            metrics = get_run_metrics(args.run_id)
+            run_id = args.run_id
         except Exception as e:
-            print(f"Error getting metrics for run {run_id}: {e}")
-            continue
+            print(f"Error getting metrics for run {args.run_id}: {e}")
+            return
+    else:
+        # Aggregate metrics from recent runs
+        print("Generating aggregated report from recent runs (last 30 minutes)")
+        try:
+            metrics = get_run_metrics()
+            run_id = "aggregated_recent"
+        except Exception as e:
+            print(f"Error getting aggregated metrics: {e}")
+            return
 
         # Generate reports
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

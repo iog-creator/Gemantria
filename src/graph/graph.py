@@ -12,6 +12,7 @@ from src.infra.metrics import get_metrics_client, NodeTimer
 from src.infra.structured_logger import get_logger, log_json
 from src.nodes.enrichment import enrichment_node
 from src.nodes.confidence_validator import confidence_validator_node, ConfidenceValidationError
+from src.nodes.network_aggregator import network_aggregator_node, NetworkAggregationError
 
 LOG = get_logger("gemantria.graph")
 
@@ -24,6 +25,7 @@ class PipelineState(TypedDict, total=False):
     validated_nouns: list[dict[str, Any]]  # Nouns after batch validation
     enriched_nouns: list[dict[str, Any]]  # Nouns with AI enrichment
     confidence_validation: dict[str, Any]  # Confidence validation results
+    network_summary: dict[str, Any]  # Network aggregation results
     conflicts: list[dict[str, Any]]
     predictions: dict[str, Any]
     metadata: dict[str, Any]
@@ -32,10 +34,11 @@ class PipelineState(TypedDict, total=False):
 def with_metrics(node_fn: Callable[[Dict[str, Any]], Dict[str, Any]], node_name: str) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
     metrics = get_metrics_client()
     def _wrapped(state: Dict[str, Any]) -> Dict[str, Any]:
-        run_id = state.get("run_id") or uuid.uuid4()
-        thread_id = state.get("thread_id") or "default"
-        state["run_id"] = run_id
-        state["thread_id"] = thread_id
+        run_id = state.get("run_id", uuid.uuid4())
+        thread_id = state.get("thread_id", "default")
+        # Ensure run_id and thread_id are set in state for consistency
+        state.setdefault("run_id", run_id)
+        state.setdefault("thread_id", thread_id)
         nt = NodeTimer(metrics, run_id, thread_id, node_name, meta={"checkpoint_id": state.get("checkpoint_id")})
         items_in = None
         if isinstance(state.get("items"), list):
@@ -104,7 +107,7 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
 
 
 def create_graph() -> StateGraph:
-    """Create the LangGraph pipeline with batch processing, AI enrichment, and confidence validation."""
+    """Create the LangGraph pipeline with batch processing, AI enrichment, confidence validation, and network aggregation."""
     graph = StateGraph(PipelineState)
 
     # Add nodes with metrics wrapping
@@ -112,11 +115,13 @@ def create_graph() -> StateGraph:
     graph.add_node("validate_batch", with_metrics(validate_batch_node, "validate_batch"))
     graph.add_node("enrichment", with_metrics(enrichment_node, "enrichment"))
     graph.add_node("confidence_validator", with_metrics(confidence_validator_node, "confidence_validator"))
+    graph.add_node("network_aggregator", with_metrics(network_aggregator_node, "network_aggregator"))
 
     # Define flow
     graph.add_edge("collect_nouns", "validate_batch")
     graph.add_edge("validate_batch", "enrichment")
     graph.add_edge("enrichment", "confidence_validator")
+    graph.add_edge("confidence_validator", "network_aggregator")
 
     # Set entry point
     graph.set_entry_point("collect_nouns")
@@ -132,7 +137,11 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
     """Run the complete pipeline."""
     graph = create_graph()
 
+    # Generate a consistent run_id for the entire pipeline
+    pipeline_run_id = uuid.uuid4()
+
     initial_state = {
+        "run_id": pipeline_run_id,
         "book_name": book,
         "mode": mode,
         "nouns": [],
@@ -153,6 +162,15 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
             "error": str(e),
             "confidence_validation_failed": True,
             "low_confidence_nouns": e.low_confidence_nouns
+        }
+    except NetworkAggregationError as e:
+        # Handle network aggregation failure
+        log_json(LOG, 40, "pipeline_aborted_network_aggregation",
+                 book=book, error=str(e))
+        return {
+            **initial_state,
+            "error": str(e),
+            "network_aggregation_failed": True
         }
     except Exception as e:
         # Handle other pipeline errors

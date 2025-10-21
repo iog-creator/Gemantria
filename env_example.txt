@@ -35,6 +35,9 @@ LM_STUDIO_MOCK=false
 # Processing Batch Size
 BATCH_SIZE=50
 
+# Semantic Network Configuration
+VECTOR_DIM=1024
+
 # Error Handling
 CONFLICT_RETRY_LIMIT=3
 
