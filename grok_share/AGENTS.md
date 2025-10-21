@@ -25,7 +25,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - `METRICS_ENABLED=1` — enables Postgres metrics sink; `0` disables DB writes (stdout remains)
 - `LOG_LEVEL=INFO` — controls JSON logger verbosity
 
-- LLM: LM Studio only when enabled; confidence is metadata only.
+- LLM: LM Studio only when enabled; confidence is metadata only. Requires `THEOLOGY_MODEL` and `MATH_MODEL` for inference.
 - Metrics: stdout JSON + Postgres sink (metrics_log). Fail-open (never block pipeline).
 - Observability (Phase 2 baseline):
   - Postgres views: `v_node_latency_7d`, `v_node_throughput_24h`, `v_recent_errors_7d`, `v_pipeline_runs`.
@@ -80,6 +80,24 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 3. Expected: SQL views created, queries return data when metrics exist, exporter optional.
 
+### Runbook: LLM Integration
+1. Apply migration:
+   ```bash
+   psql "${GEMATRIA_DSN}" -f migrations/005_ai_metadata.sql
+   ```
+2. Configure LM Studio:
+   ```bash
+   export LM_STUDIO_HOST=http://127.0.0.1:1234
+   export THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+   export MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+   export LM_STUDIO_MOCK=false  # Set to true for testing without LM Studio
+   ```
+3. Verify locally:
+   ```bash
+   make lint type test.unit test.integration coverage.report
+   ```
+4. Expected: AI enrichment node integrates with pipeline, confidence scores stored in `ai_enrichment_log`, fallback to mock mode when LM Studio unavailable.
+
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
 - Mispar Hechrachi; finals=regular. Surface-form gematria with calc strings.
@@ -88,6 +106,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Default edges: shared_prime (cap k=3); optional identical_value/gcd_gt_1 behind flags.
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
+- LLM Integration: LM Studio only; confidence scores are metadata only (never affect core gematria); mock mode available for testing.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
 
 ## How agents should use rules
