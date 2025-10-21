@@ -1,0 +1,9 @@
+---
+description: Standard PR workflow for this repo
+alwaysApply: false
+---
+
+- One focused goal per PR. Write tests first.
+- Run: make lint type test.unit test.int coverage.report
+- Keep coverage ≥98%. No mocks.
+- Commit & push; open PR with Goal/Files/Tests/Acceptance.
