@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.infra.checkpointer import get_checkpointer, PostgresCheckpointer
+from src.infra.checkpointer import PostgresCheckpointer, get_checkpointer
 
 
 def test_invalid_checkpointer_env_defaults_to_memory():
@@ -48,24 +48,24 @@ def test_postgres_checkpointer_method_signatures():
 
     try:
         checkpointer.get_tuple(config)
-        assert False, "Should raise NotImplementedError"
+        raise AssertionError("Should raise NotImplementedError")
     except NotImplementedError:
         pass
 
     try:
         checkpointer.list(config)
-        assert False, "Should raise NotImplementedError"
+        raise AssertionError("Should raise NotImplementedError")
     except NotImplementedError:
         pass
 
     try:
         checkpointer.put(config, {}, {})
-        assert False, "Should raise NotImplementedError"
+        raise AssertionError("Should raise NotImplementedError")
     except NotImplementedError:
         pass
 
     try:
         checkpointer.put_writes(config, [], "task")
-        assert False, "Should raise NotImplementedError"
+        raise AssertionError("Should raise NotImplementedError")
     except NotImplementedError:
         pass

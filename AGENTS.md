@@ -12,6 +12,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - venv: `python -m venv .venv && source .venv/bin/activate`
 - install: `make deps`
 - DBs: `bible_db` (RO), `gematria` (RW). Never write to bible_db.
+- Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
@@ -28,4 +29,5 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Batches default to 50; abort + `review.ndjson` on failure; `ALLOW_PARTIAL=1` override logs manifest.
 - Default edges: shared_prime (cap k=3); optional identical_value/gcd_gt_1 behind flags.
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
+- Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.

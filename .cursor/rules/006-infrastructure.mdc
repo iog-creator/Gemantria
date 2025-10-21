@@ -1,0 +1,11 @@
+---
+description: Infrastructure and checkpointer safety
+globs:
+  - src/infra/**/*
+alwaysApply: false
+---
+
+- Checkpointer factory validates CHECKPOINTER env var; defaults to memory for unknown values.
+- Postgres checkpointer requires GEMATRIA_DSN; raises clear error when missing.
+- Memory checkpointer used for development/CI; Postgres available for production persistence.
+- Infrastructure code must be fully tested with 100% coverage; placeholder implementations allowed but must raise NotImplementedError.

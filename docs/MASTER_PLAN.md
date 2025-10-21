@@ -9,4 +9,5 @@
   - Normalization verified (NFKD→strip→NFC)
   - Mispar Hechrachi: finals=regular
   - Adam=45, Hevel=37 tests green
+  - Checkpointer infrastructure: Postgres placeholder + Memory fallback
   - No bible_db writes (policy locked; RO enforced in later PR)
