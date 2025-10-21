@@ -51,6 +51,15 @@
 - Comprehensive testing (unit + integration)
 - Documentation synchronized across main and grok_share directories
 
+### PR-006 ✅ (Complete: Observability Dashboards & Queries)
+- SQL views for latency (`v_node_latency_7d`), throughput (`v_node_throughput_24h`), errors (`v_recent_errors_7d`), and pipeline runs
+- Optional materialized view (`mv_node_latency_7d`) with refresh function
+- Query helper functions in `src/infra/metrics_queries.py`
+- Optional OpenMetrics exporter (`src/obs/prom_exporter.py`) for Prometheus/Grafana
+- Example Grafana dashboard JSON configuration
+- Comprehensive testing and documentation
+- Zero runtime dependencies for core dashboards (pure SQL)
+
 ## Key Architecture Decisions
 
 ### Database Safety
