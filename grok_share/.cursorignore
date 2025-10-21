@@ -1,0 +1,7 @@
+# Index control - only .env should be ignored, .env.example is accessible
+.env
+!/.env.example
+data/
+**/__pycache__/
+**/*.pyc
+!/.env.local
