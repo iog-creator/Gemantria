@@ -1,0 +1,31 @@
+{
+  "title": "Gemantria — Pipeline Observability",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Throughput (items_out/min, 24h)",
+      "targets": [
+        { "datasource": "PostgreSQL",
+          "rawSql": "SELECT minute AS time, SUM(items_out) AS value FROM v_node_throughput_24h GROUP BY minute ORDER BY minute" }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Node Latency (7d)",
+      "targets": [
+        { "datasource": "PostgreSQL",
+          "rawSql": "SELECT node, calls, ROUND(avg_ms,1) AS avg_ms, ROUND(p50_ms,1) AS p50_ms, ROUND(p95_ms,1) AS p95_ms FROM v_node_latency_7d ORDER BY node" }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Total Errors (7d)",
+      "targets": [
+        { "datasource": "PostgreSQL",
+          "rawSql": "SELECT COALESCE(SUM(error_count),0) AS value FROM v_recent_errors_7d" }
+      ]
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}

@@ -59,6 +59,10 @@ LOG_LEVEL=INFO
 METRICS_ENABLED=1   # 0 disables DB writes (stdout JSON remains)
 WORKFLOW_ID=gemantria.v1
 
+# Observability / Exporter (optional)
+PROM_EXPORTER_ENABLED=0
+PROM_EXPORTER_PORT=9108
+
 # Enable verbose database logging
 DB_DEBUG=false
 
