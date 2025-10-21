@@ -1,0 +1,11 @@
+---
+description: Bridge Cursor rules to system enforcement (pre-commit + CI + branch protection)
+globs:
+  - ".pre-commit-config.yaml"
+  - "scripts/rules_guard.py"
+  - ".github/workflows/system-enforcement.yml"
+alwaysApply: true
+---
+
+# Rule 026 — System Enforcement Bridge
+Must include pre-commit, rules_guard.py, and system-enforcement workflow. Branch protection must require these checks.

@@ -1,0 +1,12 @@
+---
+description: Require docs/ADR/SSOT updates for any code change
+globs:
+  - "src/**"
+  - "scripts/**"
+  - "migrations/**"
+  - "webui/**"
+alwaysApply: true
+---
+
+# Rule 027 — Docs Sync Gate
+Code changes must update AGENTS.md/ADR/SSOT. Enforcement via rules_guard.py + system-enforcement.yml.
