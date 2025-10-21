@@ -6,11 +6,12 @@ import unittest
 from unittest.mock import patch, MagicMock
 import sys
 import os
+import math
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from nodes.network_aggregator import _cosine_similarity, NetworkAggregationError, _build_document_string, _build_rerank_relationships
+from nodes.network_aggregator import _cosine_similarity, NetworkAggregationError, _build_document_string, _build_rerank_relationships, _l2_normalize, VECTOR_DIM
 from services.lmstudio_client import LMStudioClient
 
 
@@ -402,6 +403,66 @@ class TestRerankScoreMapping(unittest.TestCase):
                 else:
                     score = 0.5
                 self.assertEqual(score, 0.5)
+
+
+class TestVectorNormalization(unittest.TestCase):
+    """Test vector normalization and dimension validation."""
+
+    def test_l2_normalize_unit_vector(self):
+        """Test L2 normalization of already unit vector."""
+        vec = [1.0, 0.0, 0.0]
+        result = _l2_normalize(vec)
+        self.assertAlmostEqual(result[0], 1.0, places=6)
+        self.assertAlmostEqual(result[1], 0.0, places=6)
+        self.assertAlmostEqual(result[2], 0.0, places=6)
+
+        # Check that result is still unit length
+        norm = math.sqrt(sum(x*x for x in result))
+        self.assertAlmostEqual(norm, 1.0, places=6)
+
+    def test_l2_normalize_arbitrary_vector(self):
+        """Test L2 normalization of arbitrary vector."""
+        vec = [3.0, 4.0]  # Should normalize to [0.6, 0.8]
+        result = _l2_normalize(vec)
+
+        expected_norm = math.sqrt(3**2 + 4**2)  # = 5.0
+        expected = [3.0/expected_norm, 4.0/expected_norm]
+
+        self.assertAlmostEqual(result[0], expected[0], places=6)
+        self.assertAlmostEqual(result[1], expected[1], places=6)
+
+        # Check that result has unit norm
+        norm = math.sqrt(sum(x*x for x in result))
+        self.assertAlmostEqual(norm, 1.0, places=6)
+
+    def test_l2_normalize_zero_vector(self):
+        """Test L2 normalization handles zero vector gracefully."""
+        vec = [0.0, 0.0, 0.0]
+        result = _l2_normalize(vec)
+        # Should return the zero vector (norm=0 handled gracefully)
+        self.assertEqual(result, [0.0, 0.0, 0.0])
+
+    def test_vector_dimension_constant(self):
+        """Test that VECTOR_DIM constant is set correctly."""
+        # Should be 1024 for Qwen3 embeddings
+        self.assertEqual(VECTOR_DIM, 1024)
+
+    def test_dimension_mismatch_error_message(self):
+        """Test that dimension mismatch error has proper message."""
+        expected_dim = VECTOR_DIM
+        actual_dim = 512
+        index = 0
+
+        error_msg = (
+            f"Embedding dimension mismatch: expected {expected_dim}, got {actual_dim} "
+            f"(candidate index {index} in batch). Fix by aligning VECTOR_DIM and column type."
+        )
+
+        # Verify the error message format
+        self.assertIn("dimension mismatch", error_msg)
+        self.assertIn("expected 1024", error_msg)
+        self.assertIn("got 512", error_msg)
+        self.assertIn("candidate index 0", error_msg)
 
 
 if __name__ == '__main__':

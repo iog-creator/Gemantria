@@ -1,6 +1,7 @@
 import os
 import uuid
 import time
+import math
 from typing import Any, Dict, List, Tuple
 import psycopg
 from pgvector.psycopg import register_vector
@@ -17,6 +18,12 @@ NN_TOPK = int(os.getenv("NN_TOPK", "20"))
 RERANK_MIN = float(os.getenv("RERANK_MIN", "0.50"))
 EDGE_STRONG = float(os.getenv("EDGE_STRONG", "0.90"))
 EDGE_WEAK = float(os.getenv("EDGE_WEAK", "0.75"))
+
+
+def _l2_normalize(vec: List[float]) -> List[float]:
+    """L2 normalize a vector to unit length."""
+    norm = math.sqrt(sum(x*x for x in vec)) or 1.0
+    return [x / norm for x in vec]
 
 class NetworkAggregationError(Exception):
     """Raised when network aggregation fails."""
@@ -56,19 +63,21 @@ def network_aggregator_node(state: Dict[str, Any]) -> Dict[str, Any]:
             register_vector(conn)
 
             # Process nouns: generate embeddings and store in concept_network
-            concept_data = _generate_and_store_embeddings(client, cur, nouns, network_summary)
+            # Use transaction context for auto-commit enforcement
+            with conn.transaction():
+                concept_data = _generate_and_store_embeddings(client, cur, nouns, network_summary)
 
-            if not concept_data:
-                log_json(LOG, 30, "no_valid_embeddings_generated")
-                return state
+                if not concept_data:
+                    log_json(LOG, 30, "no_valid_embeddings_generated")
+                    return state
 
-            network_summary["total_nodes"] = len(concept_data)
+                network_summary["total_nodes"] = len(concept_data)
 
-            # Build rerank-driven relationships using KNN + reranker
-            if len(concept_data) >= 2:
-                _build_rerank_relationships(client, cur, concept_data, network_summary)
+                # Build rerank-driven relationships using KNN + reranker
+                if len(concept_data) >= 2:
+                    _build_rerank_relationships(client, cur, concept_data, network_summary)
 
-            conn.commit()
+                # Transaction commits automatically on successful exit
 
         log_json(LOG, 20, "network_aggregation_complete", summary=network_summary)
 
@@ -111,6 +120,21 @@ def _generate_and_store_embeddings(client, cur, nouns: List[Dict], summary: Dict
         try:
             batch_embeddings = client.get_embeddings(batch_texts)
             summary["embeddings_generated"] += len(batch_embeddings)
+
+            # Runtime dimension guard and normalization
+            for i, embedding in enumerate(batch_embeddings):
+                if len(embedding) != VECTOR_DIM:
+                    raise RuntimeError(
+                        f"Embedding dimension mismatch: expected {VECTOR_DIM}, got {len(embedding)} "
+                        f"(candidate index {i} in batch). Fix by aligning VECTOR_DIM and column type."
+                    )
+            # L2 normalize all embeddings
+            batch_embeddings = [_l2_normalize(vec) for vec in batch_embeddings]
+
+            # Debug log once per batch
+            log_json(LOG, 20, "concept_network_upsert_batch",
+                    batch_size=len(batch_embeddings),
+                    vector_dim=VECTOR_DIM)
 
             for noun, embedding, doc_text in zip(batch_nouns, batch_embeddings, batch_texts):
                 noun_id = noun.get("noun_id", uuid.uuid4())

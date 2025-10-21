@@ -266,7 +266,10 @@ def get_qwen_usage_metrics() -> Dict[str, Any]:
 
 def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
     """Generate Markdown report."""
-    report = f"""# Gemantria Pipeline Report
+    # Open database connection for concept network verification
+    with psycopg.connect(GEMATRIA_DSN) as conn:
+        with conn.cursor() as cur:
+            report = f"""# Gemantria Pipeline Report
 
 **Run ID**: `{run_id}`
 **Generated**: {datetime.now(timezone.utc).isoformat()}
@@ -331,6 +334,33 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
         report += """### Qwen Live Verification
 
 ⚠️ **No Qwen health check recorded for this run**
+"""
+
+    # Add Concept Network Verification section
+    try:
+        with psycopg.connect(GEMATRIA_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT node_ct, avg_dim, min_dim, max_dim FROM v_concept_network_health;")
+                row = cur.fetchone()
+                if row:
+                    node_ct, avg_dim, min_dim, max_dim = row
+                    report += f"""
+## Concept Network Verification
+
+- **Nodes persisted**: {node_ct}
+- **Embedding dims (avg/min/max)**: {avg_dim}/{min_dim}/{max_dim}
+"""
+                else:
+                    report += """
+## Concept Network Verification
+
+⚠️ **No concept network data found**
+"""
+    except Exception as e:
+        report += f"""
+## Concept Network Verification
+
+❌ **Error checking network health**: {str(e)}
 """
 
     report += f"""
