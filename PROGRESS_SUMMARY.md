@@ -96,7 +96,7 @@
 - Dynamic configuration via `USE_QWEN_EMBEDDINGS` environment variable
 - Enhanced LM Studio client with embedding and reranking methods
 - Comprehensive unit tests for embedding generation and vector processing
-- Updated ADR-009 and new qwen_integration.md documentation
+- Updated ADR-009 and new ADR-010-qwen-integration.md documentation
 - Production-ready semantic intelligence activation
 
 ## Key Architecture Decisions
