@@ -9,25 +9,33 @@ Usage:
     python scripts/generate_report.py [--run-id RUN_ID] [--output-dir DIR]
 """
 
-import os
-import json
 import argparse
-from datetime import datetime, timezone
+import json
+import os
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any
+
 import psycopg
-from src.infra.metrics_queries import qwen_usage_totals, top_rerank_pairs, edge_strength_distribution
+
+from src.infra.metrics_queries import (confidence_gate_tallies_24h,
+                                       edge_strength_distribution,
+                                       pattern_metrics_latest,
+                                       qwen_usage_totals,
+                                       relations_metrics_24h, top_rerank_pairs)
 
 # Database connection
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 if not GEMATRIA_DSN:
     raise ValueError("GEMATRIA_DSN environment variable required")
 
-def get_recent_runs(limit: int = 5) -> List[Dict[str, Any]]:
+
+def get_recent_runs(limit: int = 5) -> list[dict[str, Any]]:
     """Get recent pipeline runs."""
     with psycopg.connect(GEMATRIA_DSN) as conn:
         with conn.cursor() as cur:
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT DISTINCT run_id,
                        MIN(started_at) as run_started,
                        MAX(finished_at) as run_completed,
@@ -37,15 +45,21 @@ def get_recent_runs(limit: int = 5) -> List[Dict[str, Any]]:
                 GROUP BY run_id
                 ORDER BY run_started DESC
                 LIMIT %s
-            """, (limit,))
-            return [{
-                'run_id': str(row[0]),
-                'started_at': row[1],
-                'completed_at': row[2],
-                'total_events': row[3]
-            } for row in cur.fetchall()]
+            """,
+                (limit,),
+            )
+            return [
+                {
+                    "run_id": str(row[0]),
+                    "started_at": row[1],
+                    "completed_at": row[2],
+                    "total_events": row[3],
+                }
+                for row in cur.fetchall()
+            ]
 
-def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
+
+def get_run_metrics(run_id: str = None) -> dict[str, Any]:
     """Get detailed metrics for a specific run or aggregate recent runs."""
     with psycopg.connect(GEMATRIA_DSN) as conn:
         with conn.cursor() as cur:
@@ -58,7 +72,8 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
 
             # Node performance - aggregate across runs if no specific run_id
             if run_id:
-                cur.execute(f"""
+                cur.execute(
+                    """
                     SELECT node,
                            COUNT(*) as events,
                            ROUND(AVG(duration_ms)) as avg_duration_ms,
@@ -68,9 +83,12 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                     WHERE run_id = %s
                     GROUP BY node
                     ORDER BY first_event
-                """, (run_id,))
+                """,
+                    (run_id,),
+                )
             else:
-                cur.execute(f"""
+                cur.execute(
+                    f"""
                     SELECT node,
                            COUNT(*) as events,
                            ROUND(AVG(duration_ms)) as avg_duration_ms,
@@ -80,44 +98,56 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                     WHERE 1=1 {time_filter}
                     GROUP BY node
                     ORDER BY first_event
-                """, time_params)
+                """,
+                    time_params,
+                )
 
-            node_metrics = [{
-                'node': row[0],
-                'events': row[1],
-                'avg_duration_ms': float(row[2]) if row[2] else 0,
-                'first_event': row[3],
-                'last_event': row[4]
-            } for row in cur.fetchall()]
+            node_metrics = [
+                {
+                    "node": row[0],
+                    "events": row[1],
+                    "avg_duration_ms": float(row[2]) if row[2] else 0,
+                    "first_event": row[3],
+                    "last_event": row[4],
+                }
+                for row in cur.fetchall()
+            ]
 
             # AI enrichment results - aggregate across recent runs
             if run_id:
-                cur.execute("""
+                cur.execute(
+                    """
                     SELECT COUNT(*) as total_enrichments,
                            ROUND(AVG(confidence_score), 4) as avg_confidence,
                            ROUND(AVG(tokens_used)) as avg_tokens
                     FROM ai_enrichment_log
                     WHERE run_id = %s
-                """, (run_id,))
+                """,
+                    (run_id,),
+                )
             else:
-                cur.execute(f"""
+                cur.execute(
+                    """
                     SELECT COUNT(*) as total_enrichments,
                            ROUND(AVG(confidence_score), 4) as avg_confidence,
                            ROUND(AVG(tokens_used)) as avg_tokens
                     FROM ai_enrichment_log
                     WHERE created_at > NOW() - INTERVAL '30 minutes'
-                """, time_params)
+                """,
+                    time_params,
+                )
 
             ai_row = cur.fetchone()
             ai_metrics = {
-                'total_enrichments': ai_row[0] if ai_row[0] else 0,
-                'avg_confidence': float(ai_row[1]) if ai_row[1] else 0,
-                'avg_tokens': int(ai_row[2]) if ai_row[2] else 0
+                "total_enrichments": ai_row[0] if ai_row[0] else 0,
+                "avg_confidence": float(ai_row[1]) if ai_row[1] else 0,
+                "avg_tokens": int(ai_row[2]) if ai_row[2] else 0,
             }
 
             # Confidence validation results - aggregate across recent runs
             if run_id:
-                cur.execute("""
+                cur.execute(
+                    """
                     SELECT COUNT(*) as total_validations,
                            SUM(CASE WHEN validation_passed THEN 1 ELSE 0 END) as passed,
                            SUM(CASE WHEN NOT validation_passed THEN 1 ELSE 0 END) as failed,
@@ -125,9 +155,12 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                            ROUND(AVG(ai_confidence), 4) as avg_ai_conf
                     FROM confidence_validation_log
                     WHERE run_id = %s
-                """, (run_id,))
+                """,
+                    (run_id,),
+                )
             else:
-                cur.execute(f"""
+                cur.execute(
+                    """
                     SELECT COUNT(*) as total_validations,
                            SUM(CASE WHEN validation_passed THEN 1 ELSE 0 END) as passed,
                            SUM(CASE WHEN NOT validation_passed THEN 1 ELSE 0 END) as failed,
@@ -135,53 +168,87 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                            ROUND(AVG(ai_confidence), 4) as avg_ai_conf
                     FROM confidence_validation_log
                     WHERE created_at > NOW() - INTERVAL '30 minutes'
-                """, time_params)
+                """,
+                    time_params,
+                )
 
             conf_row = cur.fetchone()
             confidence_metrics = {
-                'total_validations': conf_row[0] if conf_row[0] else 0,
-                'passed': conf_row[1] if conf_row[1] else 0,
-                'failed': conf_row[2] if conf_row[2] else 0,
-                'avg_gematria_confidence': float(conf_row[3]) if conf_row[3] else 0,
-                'avg_ai_confidence': float(conf_row[4]) if conf_row[4] else 0
+                "total_validations": conf_row[0] if conf_row[0] else 0,
+                "passed": conf_row[1] if conf_row[1] else 0,
+                "failed": conf_row[2] if conf_row[2] else 0,
+                "avg_gematria_confidence": float(conf_row[3]) if conf_row[3] else 0,
+                "avg_ai_confidence": float(conf_row[4]) if conf_row[4] else 0,
             }
 
-            # Network aggregation results - from most recent network_aggregator run
-            cur.execute(f"""
-                SELECT meta->>'network_summary' as network_summary
-                FROM metrics_log
-                WHERE node = 'network_aggregator' {time_filter}
-                ORDER BY finished_at DESC
-                LIMIT 1
-            """, time_params)
+            # Network aggregation results - from verification views (more reliable)
+            try:
+                cur.execute(
+                    """
+                    SELECT
+                        COALESCE(cn.node_ct, 0) as total_nodes,
+                        COALESCE(cr.strong_ct, 0) as strong_edges,
+                        COALESCE(cr.weak_ct, 0) as weak_edges,
+                        COALESCE(cn.node_ct, 0) as embeddings_generated,
+                        COALESCE(cr.edge_ct, 0) as similarity_computations,
+                        0 as rerank_calls,  -- TODO: track rerank calls
+                        COALESCE(cr.avg_similarity, 0.0) as avg_edge_strength,
+                        0.0 as rerank_yes_ratio  -- TODO: track rerank yes ratio
+                    FROM v_concept_network_health cn
+                    CROSS JOIN v_concept_relations_health cr
+                    LIMIT 1
+                """
+                )
 
-            network_row = cur.fetchone()
-            network_summary = {}
-            if network_row and network_row[0]:
-                try:
-                    network_summary = json.loads(network_row[0])
-                except json.JSONDecodeError:
-                    network_summary = {}
-
-            network_metrics = {
-                'total_nodes': network_summary.get('total_nodes', 0),
-                'strong_edges': network_summary.get('strong_edges', 0),
-                'weak_edges': network_summary.get('weak_edges', 0),
-                'embeddings_generated': network_summary.get('embeddings_generated', 0),
-                'similarity_computations': network_summary.get('similarity_computations', 0),
-                'rerank_calls': network_summary.get('rerank_calls', 0),
-                'avg_edge_strength': network_summary.get('avg_edge_strength', 0.0),
-                'rerank_yes_ratio': network_summary.get('rerank_yes_ratio', 0.0)
-            }
+                network_row = cur.fetchone()
+                if network_row:
+                    network_metrics = {
+                        "total_nodes": network_row[0],
+                        "strong_edges": network_row[1],
+                        "weak_edges": network_row[2],
+                        "embeddings_generated": network_row[3],
+                        "similarity_computations": network_row[4],
+                        "rerank_calls": network_row[5],
+                        "avg_edge_strength": (
+                            float(network_row[6]) if network_row[6] else 0.0
+                        ),
+                        "rerank_yes_ratio": (
+                            float(network_row[7]) if network_row[7] else 0.0
+                        ),
+                    }
+                else:
+                    network_metrics = {
+                        "total_nodes": 0,
+                        "strong_edges": 0,
+                        "weak_edges": 0,
+                        "embeddings_generated": 0,
+                        "similarity_computations": 0,
+                        "rerank_calls": 0,
+                        "avg_edge_strength": 0.0,
+                        "rerank_yes_ratio": 0.0,
+                    }
+            except Exception as e:
+                print(f"Error getting aggregated metrics: {e}")
+                network_metrics = {
+                    "total_nodes": 0,
+                    "strong_edges": 0,
+                    "weak_edges": 0,
+                    "embeddings_generated": 0,
+                    "similarity_computations": 0,
+                    "rerank_calls": 0,
+                    "avg_edge_strength": 0.0,
+                    "rerank_yes_ratio": 0.0,
+                }
 
             return {
-                'node_metrics': node_metrics,
-                'ai_metrics': ai_metrics,
-                'confidence_metrics': confidence_metrics,
-                'network_metrics': network_metrics
+                "node_metrics": node_metrics,
+                "ai_metrics": ai_metrics,
+                "confidence_metrics": confidence_metrics,
+                "network_metrics": network_metrics,
             }
 
-def get_qwen_health_for_run(run_id: str) -> Dict[str, Any] | None:
+
+def get_qwen_health_for_run(run_id: str) -> dict[str, Any] | None:
     """Get Qwen health check results for a specific run."""
     if not run_id:
         return None
@@ -189,32 +256,48 @@ def get_qwen_health_for_run(run_id: str) -> Dict[str, Any] | None:
     try:
         with psycopg.connect(GEMATRIA_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("""
-                    SELECT embedding_model, reranker_model, embed_dim,
-                           lat_ms_embed, lat_ms_rerank, verified, reason
-                    FROM qwen_health_log
-                    WHERE run_id = %s
-                    ORDER BY created_at DESC
-                    LIMIT 1
-                """, (run_id,))
+                if run_id == "aggregated_recent":
+                    # For aggregated reports, get the most recent health check
+                    cur.execute(
+                        """
+                        SELECT embedding_model, reranker_model, embed_dim,
+                               lat_ms_embed, lat_ms_rerank, verified, reason
+                        FROM qwen_health_log
+                        ORDER BY created_at DESC
+                        LIMIT 1
+                    """
+                    )
+                else:
+                    cur.execute(
+                        """
+                        SELECT embedding_model, reranker_model, embed_dim,
+                               lat_ms_embed, lat_ms_rerank, verified, reason
+                        FROM qwen_health_log
+                        WHERE run_id = %s
+                        ORDER BY created_at DESC
+                        LIMIT 1
+                    """,
+                        (run_id,),
+                    )
 
                 row = cur.fetchone()
                 if row:
                     return {
-                        'embedding_model': row[0],
-                        'reranker_model': row[1],
-                        'embed_dim': row[2],
-                        'lat_ms_embed': row[3],
-                        'lat_ms_rerank': row[4],
-                        'verified': row[5],
-                        'reason': row[6]
+                        "embedding_model": row[0],
+                        "reranker_model": row[1],
+                        "embed_dim": row[2],
+                        "lat_ms_embed": row[3],
+                        "lat_ms_rerank": row[4],
+                        "verified": row[5],
+                        "reason": row[6],
                     }
     except Exception as e:
         print(f"Warning: Could not retrieve Qwen health data: {e}")
 
     return None
 
-def get_qwen_usage_metrics() -> Dict[str, Any]:
+
+def get_qwen_usage_metrics() -> dict[str, Any]:
     """Get comprehensive Qwen model usage statistics."""
     with psycopg.connect(GEMATRIA_DSN) as conn:
         with conn.cursor() as cur:
@@ -223,48 +306,51 @@ def get_qwen_usage_metrics() -> Dict[str, Any]:
             if qwen_totals:
                 totals_row = qwen_totals[0]
                 qwen_metrics = {
-                    'total_runs': totals_row[0],
-                    'total_embeddings': totals_row[1],
-                    'total_rerank_calls': totals_row[2],
-                    'avg_yes_ratio': float(totals_row[3]) if totals_row[3] else 0.0,
-                    'avg_edge_strength': float(totals_row[4]) if totals_row[4] else 0.0
+                    "total_runs": totals_row[0],
+                    "total_embeddings": totals_row[1],
+                    "total_rerank_calls": totals_row[2],
+                    "avg_yes_ratio": float(totals_row[3]) if totals_row[3] else 0.0,
+                    "avg_edge_strength": float(totals_row[4]) if totals_row[4] else 0.0,
                 }
             else:
                 qwen_metrics = {
-                    'total_runs': 0,
-                    'total_embeddings': 0,
-                    'total_rerank_calls': 0,
-                    'avg_yes_ratio': 0.0,
-                    'avg_edge_strength': 0.0
+                    "total_runs": 0,
+                    "total_embeddings": 0,
+                    "total_rerank_calls": 0,
+                    "avg_yes_ratio": 0.0,
+                    "avg_edge_strength": 0.0,
                 }
 
             # Top rerank pairs
             top_pairs = top_rerank_pairs(5)
-            top_pairs_data = [{
-                'source_id': str(row[0]),
-                'target_id': str(row[1]),
-                'edge_strength': float(row[2]),
-                'cosine': float(row[3]),
-                'rerank_score': float(row[4]),
-                'relation_type': row[5],
-                'rerank_model': row[6]
-            } for row in top_pairs]
+            top_pairs_data = [
+                {
+                    "source_id": str(row[0]),
+                    "target_id": str(row[1]),
+                    "edge_strength": float(row[2]),
+                    "cosine": float(row[3]),
+                    "rerank_score": float(row[4]),
+                    "relation_type": row[5],
+                    "rerank_model": row[6],
+                }
+                for row in top_pairs
+            ]
 
             # Edge strength distribution
             distribution = edge_strength_distribution()
-            distribution_data = [{
-                'bucket': row[0],
-                'count': row[1],
-                'avg_strength': float(row[2])
-            } for row in distribution]
+            distribution_data = [
+                {"bucket": row[0], "count": row[1], "avg_strength": float(row[2])}
+                for row in distribution
+            ]
 
             return {
-                'qwen_metrics': qwen_metrics,
-                'top_pairs': top_pairs_data,
-                'distribution': distribution_data
+                "qwen_metrics": qwen_metrics,
+                "top_pairs": top_pairs_data,
+                "distribution": distribution_data,
             }
 
-def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
+
+def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
     """Generate Markdown report."""
     # Open database connection for concept network verification
     with psycopg.connect(GEMATRIA_DSN) as conn:
@@ -272,7 +358,7 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
             report = f"""# Gemantria Pipeline Report
 
 **Run ID**: `{run_id}`
-**Generated**: {datetime.now(timezone.utc).isoformat()}
+**Generated**: {datetime.now(UTC).isoformat()}
 
 ## Executive Summary
 
@@ -288,8 +374,10 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 |------|--------|-------------------|
 """
 
-    for node in metrics['node_metrics']:
-        report += f"| {node['node']} | {node['events']} | {node['avg_duration_ms']:.1f} |\n"
+    for node in metrics["node_metrics"]:
+        report += (
+            f"| {node['node']} | {node['events']} | {node['avg_duration_ms']:.1f} |\n"
+        )
 
     report += f"""
 ## AI Enrichment Details
@@ -336,11 +424,48 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 ⚠️ **No Qwen health check recorded for this run**
 """
 
+    # Add Enrichment Proof section
+    try:
+        cur.execute(
+            """
+            SELECT COUNT(*) FILTER (WHERE verified) AS ok_ct,
+                   MAX(created_at) AS last_chk
+            FROM qwen_health_log
+            WHERE embedding_model IS NULL -- theology checks only
+        """
+        )
+        enrichment_row = cur.fetchone()
+        enrichment_ok_ct = (
+            enrichment_row[0] if enrichment_row and enrichment_row[0] else 0
+        )
+        enrichment_last_chk = (
+            enrichment_row[1] if enrichment_row and enrichment_row[1] else None
+        )
+
+        report += f"""
+## Enrichment Proof
+
+### Live LM Studio Verification
+- **Enrichment model health checks**: {enrichment_ok_ct}
+- **Last verification**: {enrichment_last_chk or "N/A"}
+- **Enrichments generated this run**: {metrics['ai_metrics']['total_enrichments']}
+
+"""
+    except Exception as e:
+        report += f"""
+## Enrichment Proof
+
+❌ **Error retrieving enrichment health data**: {str(e)}
+
+"""
+
     # Add Concept Network Verification section
     try:
         with psycopg.connect(GEMATRIA_DSN) as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT node_ct, avg_dim, min_dim, max_dim FROM v_concept_network_health;")
+                cur.execute(
+                    "SELECT node_ct, avg_dim, min_dim, max_dim FROM v_concept_network_health;"
+                )
                 row = cur.fetchone()
                 if row:
                     node_ct, avg_dim, min_dim, max_dim = row
@@ -363,7 +488,7 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 ❌ **Error checking network health**: {str(e)}
 """
 
-    report += f"""
+    report += """
 ## Quality Metrics
 
 ✅ **Real LM Studio Inference**: Confirmed active (non-mock mode)
@@ -392,37 +517,126 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 |--------|-------|--------------|
 """
 
-    for bucket in qwen_data['distribution']:
+    for bucket in qwen_data["distribution"]:
         report += f"| {bucket['bucket']} | {bucket['count']} | {bucket['avg_strength']:.3f} |\n"
 
-    if qwen_data['top_pairs']:
-        report += f"""
+    if qwen_data["top_pairs"]:
+        report += """
 ### Top Rerank Pairs
 
 | Source ID | Target ID | Edge Strength | Cosine | Rerank Score | Type | Model |
 |-----------|-----------|---------------|--------|--------------|------|-------|
 """
-        for pair in qwen_data['top_pairs']:
+        for pair in qwen_data["top_pairs"]:
             report += f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | {pair['edge_strength']:.4f} | {pair['cosine']:.4f} | {pair['rerank_score']:.4f} | {pair['relation_type']} | {pair['rerank_model']} |\n"
 
-    report += f"""
+    # Add Relations section
+    try:
+        relations_data = relations_metrics_24h()
+        total_edges_persisted = (
+            sum(r[1] for r in relations_data) if relations_data else 0
+        )
+        total_rerank_calls = sum(r[2] for r in relations_data) if relations_data else 0
+
+        report += f"""
+
+## Relations
+
+- **Edges Persisted (24h)**: {total_edges_persisted}
+- **Rerank Calls (24h)**: {total_rerank_calls}
+- **Relations Enabled**: {"✅ Yes" if os.getenv("ENABLE_RELATIONS", "true").lower() == "true" else "❌ No"}
+- **Rerank Enabled**: {"✅ Yes" if os.getenv("ENABLE_RERANK", "true").lower() == "true" else "❌ No"}
+"""
+    except Exception as e:
+        report += f"""
+
+## Relations
+
+❌ **Error retrieving relations data**: {str(e)}
+"""
+
+    # Add Confidence Gates section
+    try:
+        gate_data = confidence_gate_tallies_24h()
+        total_soft_warnings = sum(r[1] for r in gate_data) if gate_data else 0
+        total_hard_failures = sum(r[2] for r in gate_data) if gate_data else 0
+
+        report += f"""
+
+## Confidence Gates
+
+- **Soft Warnings (24h)**: {total_soft_warnings} (threshold: {os.getenv('AI_CONFIDENCE_SOFT', '0.90')})
+- **Hard Failures (24h)**: {total_hard_failures} (threshold: {os.getenv('AI_CONFIDENCE_HARD', '0.95')})
+- **ALLOW_PARTIAL**: {"✅ Yes" if os.getenv('ALLOW_PARTIAL', '0') == '1' else "❌ No"}
+"""
+    except Exception as e:
+        report += f"""
+
+## Confidence Gates
+
+❌ **Error retrieving confidence gate data**: {str(e)}
+"""
+
+    # Add Pattern Discovery section
+    try:
+        pattern_data = pattern_metrics_latest()
+        if pattern_data:
+            (
+                clusters_found,
+                largest_cluster,
+                nodes_with_centrality,
+                avg_degree,
+                top_hub,
+            ) = pattern_data[0]
+
+            report += f"""
+
+## Pattern Discovery
+
+- **Clusters Found**: {clusters_found or 0}
+- **Largest Cluster Size**: {largest_cluster or 0}
+- **Nodes with Centrality**: {nodes_with_centrality or 0}
+- **Average Degree Centrality**: {avg_degree or 0:.3f}
+- **Top Hub Concept**: {top_hub[:8] + '...' if top_hub else 'N/A'}
+- **Cluster Algorithm**: {os.getenv('CLUSTER_ALGO', 'louvain')}
+- **Centrality Measures**: {os.getenv('CENTRALITY', 'degree,betweenness,eigenvector')}
+"""
+        else:
+            report += """
+
+## Pattern Discovery
+
+⚠️ **No pattern discovery data found**
+"""
+    except Exception as e:
+        report += f"""
+
+## Pattern Discovery
+
+❌ **Error retrieving pattern discovery data**: {str(e)}
+"""
+
+    report += """
 
 ## Recommendations
 
 """
 
-    if metrics['confidence_metrics']['failed'] > 0:
+    if metrics["confidence_metrics"]["failed"] > 0:
         report += f"⚠️ **Review Required**: {metrics['confidence_metrics']['failed']} validations failed confidence thresholds.\n"
     else:
         report += "✅ **All validations passed**: Pipeline confidence requirements satisfied.\n"
 
-    if metrics['ai_metrics']['total_enrichments'] > 0:
+    if metrics["ai_metrics"]["total_enrichments"] > 0:
         report += f"✅ **AI Enrichment Active**: {metrics['ai_metrics']['total_enrichments']} theological insights generated with high confidence.\n"
     else:
         report += "⚠️ **No AI Enrichment**: Check LM Studio connection and model availability.\n"
 
-    if metrics['network_metrics']['total_nodes'] > 0:
-        total_edges = metrics['network_metrics']['strong_edges'] + metrics['network_metrics']['weak_edges']
+    if metrics["network_metrics"]["total_nodes"] > 0:
+        total_edges = (
+            metrics["network_metrics"]["strong_edges"]
+            + metrics["network_metrics"]["weak_edges"]
+        )
         report += f"✅ **Semantic Network Built**: {metrics['network_metrics']['total_nodes']} concepts connected with {total_edges} semantic relationships.\n"
     else:
         report += "⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.\n"
@@ -434,10 +648,13 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 
     return report
 
+
 def main():
     parser = argparse.ArgumentParser(description="Generate Gemantria pipeline reports")
     parser.add_argument("--run-id", help="Specific run ID to analyze")
-    parser.add_argument("--output-dir", default="./reports", help="Output directory for reports")
+    parser.add_argument(
+        "--output-dir", default="./reports", help="Output directory for reports"
+    )
 
     args = parser.parse_args()
 
@@ -470,7 +687,7 @@ def main():
         # Markdown report
         md_content = generate_markdown_report(run_id, metrics)
         md_file = output_dir / f"{base_filename}.md"
-        md_file.write_text(md_content, encoding='utf-8')
+        md_file.write_text(md_content, encoding="utf-8")
 
         # Custom JSON encoder for datetime objects
         class DateTimeEncoder(json.JSONEncoder):
@@ -481,16 +698,20 @@ def main():
 
         # JSON report
         json_content = {
-            'run_id': run_id,
-            'generated_at': datetime.now(timezone.utc).isoformat(),
-            'metrics': metrics
+            "run_id": run_id,
+            "generated_at": datetime.now(UTC).isoformat(),
+            "metrics": metrics,
         }
         json_file = output_dir / f"{base_filename}.json"
-        json_file.write_text(json.dumps(json_content, indent=2, ensure_ascii=False, cls=DateTimeEncoder), encoding='utf-8')
+        json_file.write_text(
+            json.dumps(json_content, indent=2, ensure_ascii=False, cls=DateTimeEncoder),
+            encoding="utf-8",
+        )
 
-        print(f"Reports generated:")
+        print("Reports generated:")
         print(f"  📄 Markdown: {md_file}")
         print(f"  📊 JSON: {json_file}")
+
 
 if __name__ == "__main__":
     main()

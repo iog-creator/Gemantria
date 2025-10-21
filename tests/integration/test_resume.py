@@ -48,8 +48,8 @@ def test_checkpointer_instantiation():
     checkpointer = get_checkpointer()
     # Basic smoke test - checkpointer should be created successfully
     assert checkpointer is not None
-    assert hasattr(checkpointer, 'put')
-    assert hasattr(checkpointer, 'get')
+    assert hasattr(checkpointer, "put")
+    assert hasattr(checkpointer, "get")
 
 
 def test_checkpointer_factory_consistency():
@@ -61,5 +61,5 @@ def test_checkpointer_factory_consistency():
     assert checkpointer1.__class__ == checkpointer2.__class__
 
     # Should have same basic interface
-    assert hasattr(checkpointer1, 'get')
-    assert hasattr(checkpointer1, 'put')
+    assert hasattr(checkpointer1, "get")
+    assert hasattr(checkpointer1, "put")

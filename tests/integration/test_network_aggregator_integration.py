@@ -5,7 +5,7 @@ Integration tests for network aggregator with database operations.
 import os
 import unittest
 import uuid
-import tempfile
+
 import psycopg
 from pgvector.psycopg import register_vector
 
@@ -19,9 +19,10 @@ os.environ["EDGE_STRONG"] = "0.90"
 os.environ["EDGE_WEAK"] = "0.75"
 
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from nodes.network_aggregator import network_aggregator_node, NetworkAggregationError
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+
+from nodes.network_aggregator import network_aggregator_node
 
 
 class TestNetworkAggregatorIntegration(unittest.TestCase):
@@ -54,7 +55,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 45,
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
-                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship."
+                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -63,14 +64,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 37,
                 "gematria_confidence": 1.0,
                 "confidence": 0.92,
-                "insights": "Abel represents innocence and the first martyr, showing the contrast between righteousness and evil."
-            }
+                "insights": "Abel represents innocence and the first martyr, showing the contrast between righteousness and evil.",
+            },
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         # Run network aggregator
         result_state = network_aggregator_node(state)
@@ -91,8 +89,10 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
             register_vector(conn)
             with conn.cursor() as cur:
                 # Check concept_network table
-                cur.execute("SELECT COUNT(*) FROM concept_network WHERE concept_id = %s",
-                          (sample_nouns[0]["noun_id"],))
+                cur.execute(
+                    "SELECT COUNT(*) FROM concept_network WHERE concept_id = %s",
+                    (sample_nouns[0]["noun_id"],),
+                )
                 count = cur.fetchone()[0]
                 self.assertEqual(count, 1)
 
@@ -105,10 +105,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
 
     def test_network_aggregator_empty_input(self):
         """Test network aggregator with empty enriched nouns."""
-        state = {
-            "enriched_nouns": [],
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": [], "run_id": str(uuid.uuid4())}
 
         result_state = network_aggregator_node(state)
 
@@ -125,14 +122,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 45,
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
-                "insights": "Adam represents humanity's first relationship with God."
+                "insights": "Adam represents humanity's first relationship with God.",
             }
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         result_state = network_aggregator_node(state)
 
@@ -155,14 +149,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 10,
                 "gematria_confidence": 1.0,
                 "confidence": 0.90,
-                "insights": "Test concept for embedding verification."
+                "insights": "Test concept for embedding verification.",
             }
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         network_aggregator_node(state)
 
@@ -170,21 +161,27 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
         with psycopg.connect(self.dsn) as conn:
             register_vector(conn)
             with conn.cursor() as cur:
-                cur.execute("""
+                cur.execute(
+                    """
                     SELECT embedding FROM concept_network
                     WHERE concept_id = %s
-                """, (sample_nouns[0]["noun_id"],))
+                """,
+                    (sample_nouns[0]["noun_id"],),
+                )
 
                 result = cur.fetchone()
                 self.assertIsNotNone(result)
 
                 embedding = result[0]
                 # pgvector returns numpy arrays, not lists
-                self.assertTrue(hasattr(embedding, '__len__') and hasattr(embedding, '__getitem__'))
+                self.assertTrue(
+                    hasattr(embedding, "__len__") and hasattr(embedding, "__getitem__")
+                )
                 self.assertEqual(len(embedding), 1024)  # VECTOR_DIM
 
                 # Verify it's a numpy array of float32 values
                 import numpy as np
+
                 self.assertIsInstance(embedding, np.ndarray)
                 self.assertEqual(embedding.dtype, np.float32)
 
@@ -203,7 +200,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
                 "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",
-                "primary_verse": "Genesis 1:1"
+                "primary_verse": "Genesis 1:1",
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -213,7 +210,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.92,
                 "insights": "Eve represents the mother of all living, showing the importance of relationships and life.",
-                "primary_verse": "Genesis 2:18"
+                "primary_verse": "Genesis 2:18",
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -223,14 +220,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.90,
                 "insights": "Abel represents innocence and the first martyr, showing righteousness and sacrifice.",
-                "primary_verse": "Genesis 4:2"
-            }
+                "primary_verse": "Genesis 4:2",
+            },
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         # Run network aggregator
         result_state = network_aggregator_node(state)
@@ -247,12 +241,14 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
             register_vector(conn)
             with conn.cursor() as cur:
                 # Check that concept_relations has the new columns populated
-                cur.execute("""
+                cur.execute(
+                    """
                     SELECT cosine, rerank_score, edge_strength, rerank_model, rerank_at
                     FROM concept_relations
                     WHERE rerank_score IS NOT NULL
                     LIMIT 1
-                """)
+                """
+                )
 
                 row = cur.fetchone()
                 if row:  # May not have rerank data in mock mode
@@ -287,7 +283,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.90,
                 "insights": "Test concept one.",
-                "primary_verse": "Genesis 1:1"
+                "primary_verse": "Genesis 1:1",
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -297,14 +293,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.90,
                 "insights": "Test concept two.",
-                "primary_verse": "Genesis 1:2"
-            }
+                "primary_verse": "Genesis 1:2",
+            },
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         result_state = network_aggregator_node(state)
 
@@ -332,14 +325,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
                 "insights": "Consistent test data.",
-                "primary_verse": "Genesis 1:1"
+                "primary_verse": "Genesis 1:1",
             }
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         # Run twice and verify deterministic results
         result1 = network_aggregator_node(state.copy())
@@ -350,27 +340,34 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
         summary2 = result2["network_summary"]
 
         self.assertEqual(summary1["total_nodes"], summary2["total_nodes"])
-        self.assertEqual(summary1["embeddings_generated"], summary2["embeddings_generated"])
+        self.assertEqual(
+            summary1["embeddings_generated"], summary2["embeddings_generated"]
+        )
 
         # Verify embeddings are deterministic
         with psycopg.connect(self.dsn) as conn:
             register_vector(conn)
             with conn.cursor() as cur:
-                cur.execute("SELECT embedding FROM concept_network WHERE concept_id = %s",
-                          (sample_nouns[0]["noun_id"],))
+                cur.execute(
+                    "SELECT embedding FROM concept_network WHERE concept_id = %s",
+                    (sample_nouns[0]["noun_id"],),
+                )
 
                 embedding1 = cur.fetchone()[0]
 
                 # Run again with same noun_id
                 result3 = network_aggregator_node(state.copy())
 
-                cur.execute("SELECT embedding FROM concept_network WHERE concept_id = %s",
-                          (sample_nouns[0]["noun_id"],))
+                cur.execute(
+                    "SELECT embedding FROM concept_network WHERE concept_id = %s",
+                    (sample_nouns[0]["noun_id"],),
+                )
 
                 embedding2 = cur.fetchone()[0]
 
                 # Embeddings should be identical (deterministic mock)
                 import numpy as np
+
                 self.assertTrue(np.array_equal(embedding1, embedding2))
 
     def test_edge_strength_classification(self):
@@ -385,7 +382,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
                 "insights": "Test for strong edge classification.",
-                "primary_verse": "Genesis 1:1"
+                "primary_verse": "Genesis 1:1",
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -395,14 +392,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria_confidence": 1.0,
                 "confidence": 0.92,
                 "insights": "Test for weak edge classification.",
-                "primary_verse": "Genesis 1:2"
-            }
+                "primary_verse": "Genesis 1:2",
+            },
         ]
 
-        state = {
-            "enriched_nouns": sample_nouns,
-            "run_id": str(uuid.uuid4())
-        }
+        state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
         result_state = network_aggregator_node(state)
 
@@ -410,11 +404,13 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
         with psycopg.connect(self.dsn) as conn:
             register_vector(conn)
             with conn.cursor() as cur:
-                cur.execute("""
+                cur.execute(
+                    """
                     SELECT relation_type, edge_strength
                     FROM concept_relations
                     WHERE edge_strength IS NOT NULL
-                """)
+                """
+                )
 
                 for relation_type, edge_strength in cur.fetchall():
                     if edge_strength >= 0.90:
@@ -423,8 +419,10 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                         self.assertEqual(relation_type, "weak")
                     else:
                         # Should not be stored if below threshold
-                        self.fail(f"Edge with strength {edge_strength} should not be stored")
+                        self.fail(
+                            f"Edge with strength {edge_strength} should not be stored"
+                        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

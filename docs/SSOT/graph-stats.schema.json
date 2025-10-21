@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GraphStats",
+  "type": "object",
+  "required": ["nodes", "edges", "clusters", "density", "centrality"],
+  "properties": {
+    "nodes": { "type": "integer", "minimum": 1 },
+    "edges": { "type": "integer", "minimum": 1 },
+    "clusters": { "type": "integer", "minimum": 0 },
+    "density": { "type": "number", "minimum": 0, "maximum": 1 },
+    "centrality": {
+      "type": "object",
+      "required": ["avg_degree", "avg_betweenness"],
+      "properties": {
+        "avg_degree": { "type": "number", "minimum": 0, "maximum": 1 },
+        "avg_betweenness": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

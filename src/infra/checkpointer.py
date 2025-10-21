@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Any, Iterator, Sequence
+from collections.abc import Iterator
+from typing import Any
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import MemorySaver
 
 try:
     import psycopg
+
     HAS_DB = True
 except Exception:  # pragma: no cover
     HAS_DB = False
@@ -52,13 +54,20 @@ class PostgresCheckpointer(BaseCheckpointSaver):
 
             checkpoint, metadata, parent_checkpoint_id = row
             parent_config = (
-                {"configurable": {"thread_id": thread_id, "checkpoint_id": parent_checkpoint_id}}
+                {
+                    "configurable": {
+                        "thread_id": thread_id,
+                        "checkpoint_id": parent_checkpoint_id,
+                    }
+                }
                 if parent_checkpoint_id
                 else None
             )
             return (checkpoint, metadata, parent_config)
 
-    def list(self, config: dict[str, Any], *, before: Any = None, limit: int | None = None) -> Iterator[Any]:
+    def list(
+        self, config: dict[str, Any], *, before: Any = None, limit: int | None = None
+    ) -> Iterator[Any]:
         """List checkpoints for thread with pagination."""
         thread_id = config.get("configurable", {}).get("thread_id")
         if not thread_id:
@@ -77,7 +86,13 @@ class PostgresCheckpointer(BaseCheckpointSaver):
                     ORDER BY created_at DESC, checkpoint_id DESC
                     LIMIT %s
                     """,
-                    (WORKFLOW_ID, thread_id, before_created_at, before_checkpoint_id, limit),
+                    (
+                        WORKFLOW_ID,
+                        thread_id,
+                        before_created_at,
+                        before_checkpoint_id,
+                        limit,
+                    ),
                 )
             else:
                 cur.execute(
@@ -92,7 +107,13 @@ class PostgresCheckpointer(BaseCheckpointSaver):
                 )
 
             for row in cur:
-                checkpoint_id, checkpoint, metadata, parent_checkpoint_id, created_at = row
+                (
+                    checkpoint_id,
+                    checkpoint,
+                    metadata,
+                    parent_checkpoint_id,
+                    created_at,
+                ) = row
                 config_out = {
                     "configurable": {
                         "thread_id": thread_id,
@@ -100,14 +121,22 @@ class PostgresCheckpointer(BaseCheckpointSaver):
                     }
                 }
                 parent_config = (
-                    {"configurable": {"thread_id": thread_id, "checkpoint_id": parent_checkpoint_id}}
+                    {
+                        "configurable": {
+                            "thread_id": thread_id,
+                            "checkpoint_id": parent_checkpoint_id,
+                        }
+                    }
                     if parent_checkpoint_id
                     else None
                 )
                 yield (config_out, checkpoint, metadata, parent_config, created_at)
 
     def put(
-        self, config: dict[str, Any], checkpoint: dict[str, Any], metadata: dict[str, Any]
+        self,
+        config: dict[str, Any],
+        checkpoint: dict[str, Any],
+        metadata: dict[str, Any],
     ) -> Any:
         """Store checkpoint with atomic upsert."""
         thread_id = config.get("configurable", {}).get("thread_id")
@@ -115,7 +144,9 @@ class PostgresCheckpointer(BaseCheckpointSaver):
         if not thread_id or not checkpoint_id:
             raise ValueError("thread_id and checkpoint_id required in config")
 
-        parent_checkpoint_id = checkpoint.get("config", {}).get("configurable", {}).get("checkpoint_id")
+        parent_checkpoint_id = (
+            checkpoint.get("config", {}).get("configurable", {}).get("checkpoint_id")
+        )
 
         with self._connect() as conn, conn.cursor() as cur:
             # Atomic upsert
@@ -195,6 +226,8 @@ def _get_postgres_checkpointer() -> PostgresCheckpointer:
     """Get Postgres checkpointer (full implementation)."""
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
-        raise RuntimeError("GEMATRIA_DSN environment variable required for postgres checkpointer")
+        raise RuntimeError(
+            "GEMATRIA_DSN environment variable required for postgres checkpointer"
+        )
 
     return PostgresCheckpointer(dsn)

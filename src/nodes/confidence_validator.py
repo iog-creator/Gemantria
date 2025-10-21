@@ -1,21 +1,31 @@
 from __future__ import annotations
-import os, psycopg, uuid
-from typing import Dict, Any, List
+
+import os
+import uuid
+from typing import Any
+
+import psycopg
+
 from src.infra.structured_logger import get_logger, log_json
 
 LOG = get_logger("gemantria.confidence_validator")
 
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
-GEMATRIA_CONFIDENCE_THRESHOLD = float(os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90"))
+GEMATRIA_CONFIDENCE_THRESHOLD = float(
+    os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90")
+)
 AI_CONFIDENCE_THRESHOLD = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.95"))
+
 
 class ConfidenceValidationError(Exception):
     """Raised when confidence validation fails and pipeline should abort."""
-    def __init__(self, message: str, low_confidence_nouns: List[Dict[str, Any]]):
+
+    def __init__(self, message: str, low_confidence_nouns: list[dict[str, Any]]):
         super().__init__(message)
         self.low_confidence_nouns = low_confidence_nouns
 
-def confidence_validator_node(state: Dict[str, Any]) -> Dict[str, Any]:
+
+def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
     """
     Validate confidence scores from AI enrichment.
 
@@ -55,12 +65,14 @@ def confidence_validator_node(state: Dict[str, Any]) -> Dict[str, Any]:
                     reasons.append(".2f")
                 abort_reason = "; ".join(reasons)
 
-                low_confidence_nouns.append({
-                    "noun": noun.get("name", "unknown"),
-                    "gematria_confidence": gematria_confidence,
-                    "ai_confidence": ai_confidence,
-                    "reason": abort_reason
-                })
+                low_confidence_nouns.append(
+                    {
+                        "noun": noun.get("name", "unknown"),
+                        "gematria_confidence": gematria_confidence,
+                        "ai_confidence": ai_confidence,
+                        "reason": abort_reason,
+                    }
+                )
 
             # Log validation result to database
             cur.execute(
@@ -68,37 +80,56 @@ def confidence_validator_node(state: Dict[str, Any]) -> Dict[str, Any]:
                    (run_id, node, noun_id, gematria_confidence, ai_confidence,
                     gematria_threshold, ai_threshold, validation_passed, abort_reason)
                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                (run_id, "confidence_validator", noun_id,
-                 gematria_confidence, ai_confidence,
-                 GEMATRIA_CONFIDENCE_THRESHOLD, AI_CONFIDENCE_THRESHOLD,
-                 validation_passed, abort_reason)
+                (
+                    run_id,
+                    "confidence_validator",
+                    noun_id,
+                    gematria_confidence,
+                    ai_confidence,
+                    GEMATRIA_CONFIDENCE_THRESHOLD,
+                    AI_CONFIDENCE_THRESHOLD,
+                    validation_passed,
+                    abort_reason,
+                ),
             )
 
-            validation_results.append({
-                "noun_id": str(noun_id),
-                "noun": noun.get("name", "unknown"),
-                "gematria_confidence": gematria_confidence,
-                "ai_confidence": ai_confidence,
-                "validation_passed": validation_passed
-            })
+            validation_results.append(
+                {
+                    "noun_id": str(noun_id),
+                    "noun": noun.get("name", "unknown"),
+                    "gematria_confidence": gematria_confidence,
+                    "ai_confidence": ai_confidence,
+                    "validation_passed": validation_passed,
+                }
+            )
 
         conn.commit()
 
     # Log summary
-    log_json(LOG, 20, "confidence_validation_complete",
-             total_nouns=len(nouns),
-             passed_validations=sum(1 for r in validation_results if r["validation_passed"]),
-             failed_validations=len(low_confidence_nouns),
-             thresholds={
-                 "gematria": GEMATRIA_CONFIDENCE_THRESHOLD,
-                 "ai": AI_CONFIDENCE_THRESHOLD
-             })
+    log_json(
+        LOG,
+        20,
+        "confidence_validation_complete",
+        total_nouns=len(nouns),
+        passed_validations=sum(1 for r in validation_results if r["validation_passed"]),
+        failed_validations=len(low_confidence_nouns),
+        thresholds={
+            "gematria": GEMATRIA_CONFIDENCE_THRESHOLD,
+            "ai": AI_CONFIDENCE_THRESHOLD,
+        },
+    )
 
     # Abort if any validations failed
     if low_confidence_nouns:
-        error_msg = f"Confidence validation failed for {len(low_confidence_nouns)} nouns"
-        log_json(LOG, 40, "confidence_validation_failed",
-                 low_confidence_nouns=low_confidence_nouns)
+        error_msg = (
+            f"Confidence validation failed for {len(low_confidence_nouns)} nouns"
+        )
+        log_json(
+            LOG,
+            40,
+            "confidence_validation_failed",
+            low_confidence_nouns=low_confidence_nouns,
+        )
         raise ConfidenceValidationError(error_msg, low_confidence_nouns)
 
     # Update state with validation results
@@ -107,8 +138,8 @@ def confidence_validator_node(state: Dict[str, Any]) -> Dict[str, Any]:
         "results": validation_results,
         "thresholds": {
             "gematria": GEMATRIA_CONFIDENCE_THRESHOLD,
-            "ai": AI_CONFIDENCE_THRESHOLD
-        }
+            "ai": AI_CONFIDENCE_THRESHOLD,
+        },
     }
 
     return state

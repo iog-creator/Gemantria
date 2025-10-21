@@ -1,7 +1,11 @@
 from __future__ import annotations
-import os, time, uuid, math
-from typing import Any, Dict, Optional
+
+import os
+import uuid
+from typing import Any
+
 import psycopg
+
 from .structured_logger import get_logger, log_json
 
 LOG = get_logger("gemantria.metrics")
@@ -10,8 +14,9 @@ METRICS_ENABLED = os.getenv("METRICS_ENABLED", "1") not in ("0", "false", "False
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 WORKFLOW_ID = os.getenv("WORKFLOW_ID", "gemantria.v1")
 
+
 class MetricsClient:
-    def __init__(self, dsn: Optional[str]):
+    def __init__(self, dsn: str | None):
         self._dsn = dsn
         self._enabled = bool(METRICS_ENABLED and dsn)
         self._pool = None
@@ -20,10 +25,12 @@ class MetricsClient:
         if not self._enabled:
             return None
         if self._pool is None:
-            self._pool = psycopg.Connection.connect(self._dsn)  # simple conn; swap to pool later
+            self._pool = psycopg.Connection.connect(
+                self._dsn
+            )  # simple conn; swap to pool later
         return self._pool
 
-    def emit(self, row: Dict[str, Any]) -> None:
+    def emit(self, row: dict[str, Any]) -> None:
         # Always emit to stdout JSON; db insert only if enabled
         try:
             log_json(LOG, 20, "metrics", **row)
@@ -35,10 +42,11 @@ class MetricsClient:
             # Convert complex types for database insertion
             db_row = {}
             for k, v in row.items():
-                if hasattr(v, 'isoformat'):  # datetime objects
+                if hasattr(v, "isoformat"):  # datetime objects
                     db_row[k] = v.isoformat()
                 elif isinstance(v, dict):
                     import json
+
                     db_row[k] = json.dumps(v)
                 else:
                     db_row[k] = v
@@ -60,45 +68,93 @@ class MetricsClient:
             # Fail-open for metrics; never break pipeline
             log_json(LOG, 30, "metrics_insert_failed", error=str(e))
 
+
 def now():
     # psycopg can take python datetime; we'll pass None where not applicable
     import datetime as _dt
-    return _dt.datetime.now(_dt.timezone.utc)
+
+    return _dt.datetime.now(_dt.UTC)
+
 
 class NodeTimer:
-    def __init__(self, metrics: MetricsClient, run_id: uuid.UUID, thread_id: str, node: str, meta: Optional[Dict]=None):
-        self.metrics, self.run_id, self.thread_id, self.node = metrics, run_id, thread_id, node
+    def __init__(
+        self,
+        metrics: MetricsClient,
+        run_id: uuid.UUID,
+        thread_id: str,
+        node: str,
+        meta: dict | None = None,
+    ):
+        self.metrics, self.run_id, self.thread_id, self.node = (
+            metrics,
+            run_id,
+            thread_id,
+            node,
+        )
         self.meta = meta or {}
         self.start_ts = now()
 
-    def start(self, items_in: Optional[int] = None):
-        self.metrics.emit({
-            "run_id": self.run_id, "workflow": WORKFLOW_ID, "thread_id": self.thread_id,
-            "node": self.node, "event": "node_start", "status": "ok",
-            "started_at": self.start_ts, "finished_at": None, "duration_ms": None,
-            "items_in": items_in, "items_out": None, "error_json": None, "meta": self.meta,
-        })
+    def start(self, items_in: int | None = None):
+        self.metrics.emit(
+            {
+                "run_id": self.run_id,
+                "workflow": WORKFLOW_ID,
+                "thread_id": self.thread_id,
+                "node": self.node,
+                "event": "node_start",
+                "status": "ok",
+                "started_at": self.start_ts,
+                "finished_at": None,
+                "duration_ms": None,
+                "items_in": items_in,
+                "items_out": None,
+                "error_json": None,
+                "meta": self.meta,
+            }
+        )
 
-    def end(self, items_out: Optional[int] = None, status: str = "ok"):
+    def end(self, items_out: int | None = None, status: str = "ok"):
         end_ts = now()
         dur = (end_ts - self.start_ts).total_seconds() * 1000.0
-        self.metrics.emit({
-            "run_id": self.run_id, "workflow": WORKFLOW_ID, "thread_id": self.thread_id,
-            "node": self.node, "event": "node_end", "status": status,
-            "started_at": self.start_ts, "finished_at": end_ts, "duration_ms": dur,
-            "items_in": None, "items_out": items_out, "error_json": None, "meta": self.meta,
-        })
+        self.metrics.emit(
+            {
+                "run_id": self.run_id,
+                "workflow": WORKFLOW_ID,
+                "thread_id": self.thread_id,
+                "node": self.node,
+                "event": "node_end",
+                "status": status,
+                "started_at": self.start_ts,
+                "finished_at": end_ts,
+                "duration_ms": dur,
+                "items_in": None,
+                "items_out": items_out,
+                "error_json": None,
+                "meta": self.meta,
+            }
+        )
 
     def error(self, exc: Exception):
         end_ts = now()
         dur = (end_ts - self.start_ts).total_seconds() * 1000.0
-        self.metrics.emit({
-            "run_id": self.run_id, "workflow": WORKFLOW_ID, "thread_id": self.thread_id,
-            "node": self.node, "event": "node_error", "status": "error",
-            "started_at": self.start_ts, "finished_at": end_ts, "duration_ms": dur,
-            "items_in": None, "items_out": None, "error_json": {"type": type(exc).__name__, "msg": str(exc)},
-            "meta": self.meta,
-        })
+        self.metrics.emit(
+            {
+                "run_id": self.run_id,
+                "workflow": WORKFLOW_ID,
+                "thread_id": self.thread_id,
+                "node": self.node,
+                "event": "node_error",
+                "status": "error",
+                "started_at": self.start_ts,
+                "finished_at": end_ts,
+                "duration_ms": dur,
+                "items_in": None,
+                "items_out": None,
+                "error_json": {"type": type(exc).__name__, "msg": str(exc)},
+                "meta": self.meta,
+            }
+        )
+
 
 def get_metrics_client() -> MetricsClient:
     return MetricsClient(GEMATRIA_DSN)

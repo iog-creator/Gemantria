@@ -20,7 +20,7 @@ def test_uuidv7_surrogate_format():
     """Test uuidv7_surrogate returns properly formatted UUID."""
     uuid_str = uuidv7_surrogate()
     assert len(uuid_str) == 36  # Standard UUID format length
-    assert uuid_str.count('-') == 4  # Standard UUID has 4 hyphens
+    assert uuid_str.count("-") == 4  # Standard UUID has 4 hyphens
     # Should be able to create another UUID that's different
     another_uuid = uuidv7_surrogate()
     assert uuid_str != another_uuid

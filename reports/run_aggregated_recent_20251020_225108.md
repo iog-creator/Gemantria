@@ -13,13 +13,13 @@
 
 ## Node Performance
 
-| Node | Events | Avg Duration (ms) |
-|------|--------|-------------------|
-| collect_nouns | 10 | 10.0 |
-| validate_batch | 10 | 12.0 |
-| enrichment | 10 | 7309.0 |
-| confidence_validator | 10 | 10.0 |
-| network_aggregator | 10 | 9294.0 |
+| Node                 | Events | Avg Duration (ms) |
+| -------------------- | ------ | ----------------- |
+| collect_nouns        | 10     | 10.0              |
+| validate_batch       | 10     | 12.0              |
+| enrichment           | 10     | 7309.0            |
+| confidence_validator | 10     | 10.0              |
+| network_aggregator   | 10     | 9294.0            |
 
 ## AI Enrichment Details
 
@@ -57,4 +57,5 @@
 ⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.
 
 ---
-*Report generated automatically by Gemantria pipeline analysis*
+
+_Report generated automatically by Gemantria pipeline analysis_

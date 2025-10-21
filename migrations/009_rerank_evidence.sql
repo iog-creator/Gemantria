@@ -34,3 +34,4 @@ SET cosine = similarity
 WHERE cosine IS NULL;
 
 COMMIT;
+

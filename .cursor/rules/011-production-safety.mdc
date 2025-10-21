@@ -7,6 +7,8 @@ globs:
 alwaysApply: false
 ---
 
+# Related ADRs: ADR-010 (Qwen Integration), ADR-011 (Concept Network Verification)
+
 - **Qwen Live Gate**: Pipeline must call assert_qwen_live() before any network aggregation; fail-closed unless verified.
 - **Health Check Requirements**: Verify model availability, test embeddings (1024-dim), measure latency for both embedder and reranker.
 - **Production Mode**: USE_QWEN_EMBEDDINGS=true required; ALLOW_MOCKS_FOR_TESTS=0 in production (only 1 for unit tests).

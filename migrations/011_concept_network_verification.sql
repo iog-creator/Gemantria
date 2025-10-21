@@ -17,9 +17,7 @@ FROM concept_network;
 CREATE OR REPLACE VIEW v_concept_relations_health AS
 SELECT
   COUNT(*)                                         AS edge_ct,
-  AVG(cosine)                                      AS avg_cosine,
-  AVG(rerank_score)                                AS avg_rerank,
-  AVG(edge_strength)                               AS avg_strength,
+  AVG(similarity)                                  AS avg_similarity,
   COUNT(*) FILTER (WHERE relation_type='strong')   AS strong_ct,
   COUNT(*) FILTER (WHERE relation_type='weak')     AS weak_ct,
   NOW()                                            AS observed_at

@@ -2,16 +2,17 @@
 Unit tests for network aggregator functionality.
 """
 
-import unittest
-from unittest.mock import patch, MagicMock
-import sys
-import os
 import math
+import os
+import sys
+import unittest
+from unittest.mock import patch
 
 # Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
-from nodes.network_aggregator import _cosine_similarity, NetworkAggregationError, _build_document_string, _build_rerank_relationships, _l2_normalize, VECTOR_DIM
+from nodes.network_aggregator import (VECTOR_DIM, _build_document_string,
+                                      _cosine_similarity, _l2_normalize)
 from services.lmstudio_client import LMStudioClient
 
 
@@ -43,7 +44,7 @@ class TestCosineSimilarity(unittest.TestCase):
         vec1 = [1.0, 2.0, 3.0]
         vec2 = [4.0, 5.0, 6.0]
         # Manual calculation: (1*4 + 2*5 + 3*6) / (sqrt(14) * sqrt(77)) ≈ 0.974631846
-        expected = (4 + 10 + 18) / ((14 ** 0.5) * (77 ** 0.5))
+        expected = (4 + 10 + 18) / ((14**0.5) * (77**0.5))
         result = _cosine_similarity(vec1, vec2)
         self.assertAlmostEqual(result, expected, places=6)
 
@@ -118,7 +119,7 @@ class TestEmbeddingFunctionality(unittest.TestCase):
         if "USE_QWEN_EMBEDDINGS" in os.environ:
             del os.environ["USE_QWEN_EMBEDDINGS"]
 
-    @patch('services.lmstudio_client.requests.Session.post')
+    @patch("services.lmstudio_client.requests.Session.post")
     def test_get_embeddings_mock_mode(self, mock_post):
         """Test get_embeddings returns normalized vectors in mock mode."""
         client = LMStudioClient()
@@ -136,10 +137,10 @@ class TestEmbeddingFunctionality(unittest.TestCase):
             self.assertEqual(len(embedding), 1024)
 
             # Check L2 normalization
-            norm = sum(x*x for x in embedding) ** 0.5
+            norm = sum(x * x for x in embedding) ** 0.5
             self.assertAlmostEqual(norm, 1.0, places=5)
 
-    @patch('services.lmstudio_client.requests.Session.post')
+    @patch("services.lmstudio_client.requests.Session.post")
     def test_get_embeddings_real_mode_disabled(self, mock_post):
         """Test get_embeddings returns normalized vectors when USE_QWEN_EMBEDDINGS=false."""
         os.environ["USE_QWEN_EMBEDDINGS"] = "false"
@@ -154,7 +155,7 @@ class TestEmbeddingFunctionality(unittest.TestCase):
         self.assertEqual(len(embeddings), 1)
 
         embedding = embeddings[0]
-        norm = sum(x*x for x in embedding) ** 0.5
+        norm = sum(x * x for x in embedding) ** 0.5
         self.assertAlmostEqual(norm, 1.0, places=5)
 
     def test_rerank_mock_mode(self):
@@ -181,14 +182,14 @@ class TestEmbeddingFunctionality(unittest.TestCase):
 
         # Test with a non-normalized vector
         vec = [3.0, 4.0]  # Should normalize to [0.6, 0.8]
-        norm = math.sqrt(sum(x*x for x in vec))
-        normalized = [x/norm for x in vec]
+        norm = math.sqrt(sum(x * x for x in vec))
+        normalized = [x / norm for x in vec]
 
         self.assertAlmostEqual(normalized[0], 0.6, places=5)
         self.assertAlmostEqual(normalized[1], 0.8, places=5)
 
         # Check that normalized vector has unit norm
-        normalized_norm = math.sqrt(sum(x*x for x in normalized))
+        normalized_norm = math.sqrt(sum(x * x for x in normalized))
         self.assertAlmostEqual(normalized_norm, 1.0, places=5)
 
 
@@ -202,7 +203,7 @@ class TestDocumentBuilding(unittest.TestCase):
             "hebrew": "אדם",
             "primary_verse": "Genesis 1:1",
             "value": 45,
-            "insight": "First man created by God"
+            "insight": "First man created by God",
         }
 
         result = _build_document_string(noun)
@@ -217,12 +218,7 @@ Insight: First man created by God"""
 
     def test_build_document_string_missing_primary_verse(self):
         """Test building document string with missing primary_verse uses placeholder."""
-        noun = {
-            "name": "Eve",
-            "hebrew": "חוה",
-            "value": 19,
-            "insight": "First woman"
-        }
+        noun = {"name": "Eve", "hebrew": "חוה", "value": 19, "insight": "First woman"}
 
         result = _build_document_string(noun)
 
@@ -236,11 +232,7 @@ Insight: First woman"""
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
-        noun = {
-            "name": "Test",
-            "hebrew": "טסט",
-            "value": 100
-        }
+        noun = {"name": "Test", "hebrew": "טסט", "value": 100}
 
         result = _build_document_string(noun)
 
@@ -262,11 +254,11 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         test_cases = [
             # (cosine, rerank_score, expected_edge_strength)
             (0.9, 1.0, 0.95),  # High cosine, perfect rerank
-            (0.8, 0.6, 0.7),   # Medium values
-            (0.95, 0.5, 0.725), # High cosine, low rerank
-            (0.7, 0.9, 0.8),   # Low cosine, high rerank
-            (0.0, 1.0, 0.5),   # Zero cosine, perfect rerank
-            (1.0, 0.0, 0.5),   # Perfect cosine, zero rerank
+            (0.8, 0.6, 0.7),  # Medium values
+            (0.95, 0.5, 0.725),  # High cosine, low rerank
+            (0.7, 0.9, 0.8),  # Low cosine, high rerank
+            (0.0, 1.0, 0.5),  # Zero cosine, perfect rerank
+            (1.0, 0.0, 0.5),  # Perfect cosine, zero rerank
         ]
 
         for cosine, rerank_score, expected in test_cases:
@@ -278,18 +270,24 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         """Test edge classification for strong relationships (≥0.90)."""
         # Import the constants
         import os
+
         os.environ["EDGE_STRONG"] = "0.90"
 
         edge_strength = 0.95
         self.assertGreaterEqual(edge_strength, 0.90)
 
         # Should be classified as strong
-        relation_type = "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
+        relation_type = (
+            "strong"
+            if edge_strength >= 0.90
+            else "weak" if edge_strength >= 0.75 else None
+        )
         self.assertEqual(relation_type, "strong")
 
     def test_edge_classification_weak(self):
         """Test edge classification for weak relationships (≥0.75, <0.90)."""
         import os
+
         os.environ["EDGE_STRONG"] = "0.90"
         os.environ["EDGE_WEAK"] = "0.75"
 
@@ -309,6 +307,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
     def test_edge_classification_filtered(self):
         """Test edge classification for filtered relationships (<0.75)."""
         import os
+
         os.environ["EDGE_WEAK"] = "0.75"
 
         edge_strength = 0.70
@@ -335,7 +334,7 @@ class TestRerankScoreMapping(unittest.TestCase):
         logprobs = {
             "content": [
                 {"token": "yes", "logprob": -0.5},
-                {"token": "no", "logprob": -1.0}
+                {"token": "no", "logprob": -1.0},
             ]
         }
 
@@ -348,9 +347,9 @@ class TestRerankScoreMapping(unittest.TestCase):
             logprob = token_info["logprob"]
 
             if "yes" in token:
-                yes_logprob = max(yes_logprob or float('-inf'), logprob)
+                yes_logprob = max(yes_logprob or float("-inf"), logprob)
             elif "no" in token:
-                no_logprob = max(no_logprob or float('-inf'), logprob)
+                no_logprob = max(no_logprob or float("-inf"), logprob)
 
         # Calculate score using sigmoid of logit difference
         if yes_logprob is not None and no_logprob is not None:
@@ -417,7 +416,7 @@ class TestVectorNormalization(unittest.TestCase):
         self.assertAlmostEqual(result[2], 0.0, places=6)
 
         # Check that result is still unit length
-        norm = math.sqrt(sum(x*x for x in result))
+        norm = math.sqrt(sum(x * x for x in result))
         self.assertAlmostEqual(norm, 1.0, places=6)
 
     def test_l2_normalize_arbitrary_vector(self):
@@ -426,13 +425,13 @@ class TestVectorNormalization(unittest.TestCase):
         result = _l2_normalize(vec)
 
         expected_norm = math.sqrt(3**2 + 4**2)  # = 5.0
-        expected = [3.0/expected_norm, 4.0/expected_norm]
+        expected = [3.0 / expected_norm, 4.0 / expected_norm]
 
         self.assertAlmostEqual(result[0], expected[0], places=6)
         self.assertAlmostEqual(result[1], expected[1], places=6)
 
         # Check that result has unit norm
-        norm = math.sqrt(sum(x*x for x in result))
+        norm = math.sqrt(sum(x * x for x in result))
         self.assertAlmostEqual(norm, 1.0, places=6)
 
     def test_l2_normalize_zero_vector(self):
@@ -465,5 +464,5 @@ class TestVectorNormalization(unittest.TestCase):
         self.assertIn("candidate index 0", error_msg)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

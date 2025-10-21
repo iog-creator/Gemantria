@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS ai_enrichment_log (
     node              TEXT        NOT NULL,
     noun_id           UUID        NOT NULL,
     model_name        TEXT        NOT NULL,
-    confidence_model  TEXT        NOT NULL,
+    confidence_model  TEXT        NULL,
     confidence_score  NUMERIC(5,4) CHECK (confidence_score BETWEEN 0 AND 1),
     insights          TEXT        NOT NULL,
     significance      TEXT        NOT NULL,

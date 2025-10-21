@@ -6,6 +6,8 @@ globs:
 alwaysApply: false
 ---
 
+# Related ADR: ADR-001 (Two-DB Safety)
+
 - Never INSERT/UPDATE/DELETE against bible_db.
 - All SQL must use %s parameters; no f-strings or string interpolation.
 - Add indices for expected query patterns; enforce unique(content_hash) where applicable.

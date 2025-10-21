@@ -1,0 +1,293 @@
+{
+  "nodes": [
+    {
+      "id": "17db3202-47bb-4b41-a703-c1d3d8d24547",
+      "label": "17db3202-47bb-4b41-a703-c1d3d8d24547",
+      "cluster": 7,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "186f30ee-6aea-430a-9532-4f818ff5b68c",
+      "label": "186f30ee-6aea-430a-9532-4f818ff5b68c",
+      "cluster": null,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "3228ef61-5b6e-427b-965c-e728baa38f69",
+      "label": "3228ef61-5b6e-427b-965c-e728baa38f69",
+      "cluster": null,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "3c4cdaf5-b118-43dd-8ffb-7a3fba87e9a1",
+      "label": "3c4cdaf5-b118-43dd-8ffb-7a3fba87e9a1",
+      "cluster": 4,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "3de91147-5825-424a-bd8f-ac1acf75eae6",
+      "label": "3de91147-5825-424a-bd8f-ac1acf75eae6",
+      "cluster": 0,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "4233fe0e-43c6-434b-9e8b-506d18dcc7e5",
+      "label": "4233fe0e-43c6-434b-9e8b-506d18dcc7e5",
+      "cluster": 11,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "4ac49ee6-6a07-4592-839a-c695cbb142b3",
+      "label": "4ac49ee6-6a07-4592-839a-c695cbb142b3",
+      "cluster": 2,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "50f25e3e-bf0a-48dd-b119-971a19d204c4",
+      "label": "50f25e3e-bf0a-48dd-b119-971a19d204c4",
+      "cluster": null,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "51f6cef6-fba7-4d5c-ac07-decbf7e32c23",
+      "label": "51f6cef6-fba7-4d5c-ac07-decbf7e32c23",
+      "cluster": 1,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "5e75f102-d3e7-4336-8290-0e74ef9a316f",
+      "label": "5e75f102-d3e7-4336-8290-0e74ef9a316f",
+      "cluster": 6,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "65be1afb-512f-436d-bf29-ba832ff02f30",
+      "label": "65be1afb-512f-436d-bf29-ba832ff02f30",
+      "cluster": 16,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "6f58d7af-b7e5-4b2a-8e6b-090ca4ea5787",
+      "label": "6f58d7af-b7e5-4b2a-8e6b-090ca4ea5787",
+      "cluster": 13,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "75da1201-1f9c-4da7-96a6-e048fd19f6e2",
+      "label": "75da1201-1f9c-4da7-96a6-e048fd19f6e2",
+      "cluster": 14,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "77598929-6118-45e9-a5ee-920f074f6e3d",
+      "label": "77598929-6118-45e9-a5ee-920f074f6e3d",
+      "cluster": 17,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "7bae5d38-3cb0-4468-a4f8-0c57eb803388",
+      "label": "7bae5d38-3cb0-4468-a4f8-0c57eb803388",
+      "cluster": 15,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "a070ac83-1809-4852-8549-b6d54fb4f813",
+      "label": "a070ac83-1809-4852-8549-b6d54fb4f813",
+      "cluster": 12,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "a07b1323-35d6-4c16-ad56-7ab6f6566bad",
+      "label": "a07b1323-35d6-4c16-ad56-7ab6f6566bad",
+      "cluster": 10,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "a52d7d06-d277-481f-be72-4bfc35f16cc2",
+      "label": "a52d7d06-d277-481f-be72-4bfc35f16cc2",
+      "cluster": 8,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "b5d0c295-1d9a-4f0d-b8a4-14d69de0b90b",
+      "label": "b5d0c295-1d9a-4f0d-b8a4-14d69de0b90b",
+      "cluster": 5,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "ca06a29b-502d-49a2-81a5-766dd28e8871",
+      "label": "ca06a29b-502d-49a2-81a5-766dd28e8871",
+      "cluster": null,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "dda93bbd-715c-4cd1-9ee8-55dd9128cdc5",
+      "label": "dda93bbd-715c-4cd1-9ee8-55dd9128cdc5",
+      "cluster": 9,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    },
+    {
+      "id": "ef695e45-f28a-4007-a89b-10c62c3743ed",
+      "label": "ef695e45-f28a-4007-a89b-10c62c3743ed",
+      "cluster": 3,
+      "degree": 0.0,
+      "betweenness": 0.0,
+      "eigenvector": 0.0
+    }
+  ],
+  "edges": [
+    {
+      "source": "48e1b80e-5a65-46a5-affb-8096d488a461",
+      "target": "8d01e612-5d7e-4141-abf2-5a0170fadebc",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "48b461e6-92ba-4100-87a1-b3796794fb9a",
+      "target": "8f26a22e-7e15-48e7-82b6-76cd1011054f",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "8f26a22e-7e15-48e7-82b6-76cd1011054f",
+      "target": "48b461e6-92ba-4100-87a1-b3796794fb9a",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "e95d1521-379a-44a9-aaf3-a11c48bfb570",
+      "target": "d2b1cc0c-076c-441c-bf52-5a36ac362c4d",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "d2b1cc0c-076c-441c-bf52-5a36ac362c4d",
+      "target": "e95d1521-379a-44a9-aaf3-a11c48bfb570",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "b1c17ab3-33d1-4c20-8fda-437da9306755",
+      "target": "a1bb09c4-4f27-4941-b2e9-6b2d387673ae",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "a1bb09c4-4f27-4941-b2e9-6b2d387673ae",
+      "target": "b1c17ab3-33d1-4c20-8fda-437da9306755",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "2fc670dd-dc8a-4934-8cb5-8b687d320745",
+      "target": "65238c25-daa3-47e7-8fe2-5e15fc9db154",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "a0132735-fa0a-49d8-8820-883e0cfa4eab",
+      "target": "93193d79-f5ae-4157-b43e-58d0a0f6937b",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "68d24797-fc47-4ced-a9c7-7394de809aa0",
+      "target": "c567b8f1-a14e-48c7-9676-4b31a1ee0156",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "67472518-0fca-4fd9-8780-bd97beafcdc9",
+      "target": "3f115335-5ba1-4fac-b12c-62155fd4934a",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "3f115335-5ba1-4fac-b12c-62155fd4934a",
+      "target": "67472518-0fca-4fd9-8780-bd97beafcdc9",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "c16abc66-564f-470d-8743-f058544643bc",
+      "target": "8be83aa2-cb97-4411-babd-6813c0115c88",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "c63d84be-e5d7-4efc-8461-6ee716c01b36",
+      "target": "e24f91fb-34e6-455d-9f5f-76a5600c81d6",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    },
+    {
+      "source": "e24f91fb-34e6-455d-9f5f-76a5600c81d6",
+      "target": "c63d84be-e5d7-4efc-8461-6ee716c01b36",
+      "strength": 0.5008549258509712,
+      "rerank": 1.0,
+      "yes": true
+    }
+  ],
+  "metadata": {
+    "node_count": 22,
+    "edge_count": 15,
+    "cluster_count": 18,
+    "export_timestamp": "2025-10-21 13:23:21.626856-07:00"
+  }
+}

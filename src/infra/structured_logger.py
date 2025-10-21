@@ -1,9 +1,16 @@
 from __future__ import annotations
-import json, logging, os, sys, time, uuid
+
+import json
+import logging
+import os
+import sys
+import time
+import uuid
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 _LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
 
 class _UUIDEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -12,6 +19,7 @@ class _UUIDEncoder(json.JSONEncoder):
         if isinstance(obj, datetime):
             return obj.isoformat()
         return super().default(obj)
+
 
 class _JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
@@ -25,6 +33,7 @@ class _JsonFormatter(logging.Formatter):
             payload.update(record.extra_json)
         return json.dumps(payload, ensure_ascii=False, cls=_UUIDEncoder)
 
+
 def get_logger(name: str = "gemantria") -> logging.Logger:
     logger = logging.getLogger(name)
     if logger.handlers:
@@ -35,6 +44,7 @@ def get_logger(name: str = "gemantria") -> logging.Logger:
     logger.addHandler(h)
     logger.propagate = False
     return logger
+
 
 def log_json(logger: logging.Logger, level: int, msg: str, **extra: Any) -> None:
     logger.log(level, msg, extra={"extra_json": extra})

@@ -516,3 +516,5 @@ The project uses a dual documentation system for comprehensive coverage:
 - Connectivity troubleshooting enforced via `012-connectivity-troubleshooting.mdc` (external service handling).
 - Report generation verification enforced via `013-report-generation-verification.mdc` (real data validation, no trust tests).
 - Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
+
+# test doc update

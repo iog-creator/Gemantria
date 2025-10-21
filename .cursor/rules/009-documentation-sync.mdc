@@ -1,25 +1,197 @@
 ---
-description: Documentation synchronization requirements
+description: Documentation must be updated or created for any code change (ALWAYS APPLIED - NO EXCEPTIONS)
 globs:
   - docs/ADRs/*.md
   - docs/*.md
+  - docs/SSOT/*.md
   - .cursor/rules/*.mdc
+  - README.md
+  - */README.md
   - AGENTS.md
+  - src/*/AGENTS.md
+  - tests/AGENTS.md
+  - migrations/AGENTS.md
+  - scripts/AGENTS.md
 alwaysApply: true
 ---
 
-- **ADR Documents**: Must be mirrored to `grok_share/docs/ADRs/` immediately after creation or modification
-  - Command: `cp docs/ADRs/ADR-*.md grok_share/docs/ADRs/`
+# ALWAYS-APPLIED DOCUMENTATION REQUIREMENT - NO EXCEPTIONS
+# This rule is ALWAYS ENFORCED - no exceptions allowed
+# Core Purpose: Documentation must be updated or created for ANY code change
+# Related ADR: ADR-013 (Comprehensive documentation synchronization enhancement)
 
-- **Cursor Rules**: Must be mirrored to `grok_share/cursor_rules/` after any changes
-  - Command: `cp .cursor/rules/*.mdc grok_share/cursor_rules/`
+## Core Documentation Requirements (Pre-PR Mandatory)
 
-- **AGENTS.md**: Must be mirrored to `grok_share/` after any changes
-  - Command: `cp AGENTS.md grok_share/`
+### Documentation Must Be Updated or Created
+- **For ANY code change**: Corresponding documentation must be updated or new documentation created
+- **No code change without documentation change**: Every PR must include documentation updates
+- **README.md files**: Must be created for every directory (user-facing documentation)
+- **AGENTS.md files**: Must be updated or created for source code directories/modules (AI assistant guidance)
+- **Cursor rules**: in the .cursor/rules directory, New rules must be created for new behaviors, existing rules updated for changes
+- **ADR requirement**: Schema changes, architecture decisions, process changes, safety changes require ADRs
 
-- **Other Documentation**: Files in `docs/` (like `qwen_integration.md`) should be mirrored to `grok_share/docs/`
-  - Command: `cp docs/*.md grok_share/docs/`
+### Documentation Requirements by Directory Type
 
-- **Synchronization Check**: Always run documentation sync before PR creation
-- **Violation**: Documentation drift between working directory and grok_share/ folders
-- **Purpose**: Ensures documentation consistency between working directory and shareable artifacts
+#### Source Code Directories (src/*/)
+- **README.md**: Required - User-facing overview, architecture, usage examples
+- **AGENTS.md**: Required - AI assistant development guidance, API contracts, testing standards
+
+#### Tool Directories (scripts/, migrations/, tests/)
+- **README.md**: Required - User-facing usage instructions, examples, configuration
+- **AGENTS.md**: Required - AI assistant development patterns, maintenance procedures
+
+#### Documentation Directories (docs/*/)
+- **README.md**: Required - User-facing documentation navigation and usage
+- **AGENTS.md**: Required - AI assistant documentation maintenance guidance
+
+#### Generated/Output Directories (reports/, exports/, data/)
+- **README.md**: Required - User-facing explanation of contents, format specifications
+- **AGENTS.md**: Not required - These are generated outputs, not development modules
+
+#### Configuration Directories (.cursor/*/)
+- **README.md**: Required - User-facing configuration explanations
+- **AGENTS.md**: Not required - Configuration files, not development modules
+
+### What Requires Documentation Updates
+- **Code changes**: Update relevant README.md and AGENTS.md files, rules, and cross-references
+- **New features**: Create new README.md files, AGENTS.md files, rules, and ADRs as needed
+- **Architecture changes**: Update ADRs, rules, README.md and AGENTS.md files
+- **Process changes**: Update workflow documentation and rules in .cursor/rules directory *.mdc files
+- **Safety changes**: Update safety rules and AGENTS.md sections
+
+## Report Generation and Confirmation Requirements
+
+### Automatic Report Generation
+- **After every pipeline run**: Reports must be generated automatically via `scripts/generate_report.py`
+- **No manual intervention**: Pipeline completion triggers report generation
+- **Failure handling**: Report generation failures must be logged but not block pipeline
+
+### Report Content Validation
+- **Real data verification**: Reports must contain actual pipeline data (enrichments, metrics, network stats)
+- **Template compliance**: Exact markdown and JSON templates with no missing sections
+- **Data integrity**: Database queries must return actual results from recent runs
+- **No placeholder data**: Zero values or "No data" messages are violations
+
+### Report Confirmation Process
+- **Manual verification required**: Tests insufficient for report content accuracy
+- **Cross-reference validation**: Report data must match direct database queries
+- **Evidence preservation**: Reports serve as production verification evidence
+- **Timestamp accuracy**: Report timestamps must match pipeline execution times
+
+## ADR Creation and Maintenance Requirements
+
+### When ADRs Are Required
+- **Schema changes**: Database structure modifications
+- **Architecture decisions**: Major design pattern changes
+- **Dependency changes**: New external libraries or services
+- **Process changes**: Development workflow modifications
+- **Performance decisions**: Significant optimization choices
+- **Safety changes**: Security or production safety modifications
+
+### ADR Content Standards
+- **Status tracking**: [Proposed | Accepted | Rejected | Deprecated | Superseded]
+- **Structured format**: Context → Decision → Rationale → Alternatives → Consequences
+- **Implementation tracking**: What needs to be done and verification steps
+- **Cross-references**: Links to related ADRs and documentation
+
+## ADR Creation and Maintenance Requirements
+
+### When ADRs Are Required
+- **Schema changes**: Database structure modifications
+- **Architecture decisions**: Major design pattern changes
+- **Dependency changes**: New external libraries or services
+- **Process changes**: Development workflow modifications
+- **Performance decisions**: Significant optimization choices
+- **Safety changes**: Security or production safety modifications
+
+### ADR Content Standards
+- **Status tracking**: [Proposed | Accepted | Rejected | Deprecated | Superseded]
+- **Structured format**: Context → Decision → Rationale → Alternatives → Consequences
+- **Implementation tracking**: What needs to be done and verification steps
+- **Cross-references**: Links to related ADRs and documentation
+
+### ADR Lifecycle Enforcement
+- **Pre-implementation**: ADR must be Accepted status before code changes
+- **Post-implementation**: ADR status updated and linked to PRs/issues
+- **Documentation updates**: New ADRs require corresponding rule and AGENTS.md updates
+
+## Cross-Referencing and Linking Requirements
+
+### Internal Documentation Links
+- **ADR references**: All ADRs must reference related decisions with links
+- **Rule references**: Cursor rules must reference related ADRs and AGENTS.md sections
+- **AGENTS.md cross-links**: Directory AGENTS.md files must reference parent/child documentation
+- **Report links**: Reports must link to pipeline runs and health verification data
+
+### External Reference Links
+- **Code to docs**: Source code comments must link to relevant ADRs when applicable
+- **PR to docs**: Pull requests must link to touched ADRs and updated documentation
+- **Issue to docs**: Issues must reference relevant architectural decisions
+
+### Navigation and Discovery
+- **Table of contents**: AGENTS.md files must provide clear navigation to sub-components
+- **Related sections**: Cross-reference related documentation sections
+- **Change tracking**: Documentation must indicate when sections were last updated
+- **Version compatibility**: Links must work across documentation versions
+
+## Rule Creation and Maintenance
+
+### New Rule Creation Protocol
+- **Naming convention**: 3-digit number (next available) + descriptive name (e.g., `013-report-generation-verification.mdc`)
+- **Required metadata**: description, globs, alwaysApply settings
+- **Documentation**: New rules must be documented in AGENTS.md with links
+- **ADR requirement**: Significant new rules require ADR documentation
+
+### Rule Update Requirements
+- **Version tracking**: Rules must indicate when last modified
+- **Backwards compatibility**: Rule changes must consider existing code impact
+- **Testing requirements**: Rule changes may require updated tests
+- **Documentation updates**: AGENTS.md must reflect rule changes
+
+## Documentation Verification and Enforcement
+
+### Pre-PR Verification Checklist
+- [ ] All code changes have corresponding documentation updates
+- [ ] New README.md files created for all directories (user-facing documentation)
+- [ ] New AGENTS.md files created for source code directories (AI assistant guidance)
+- [ ] New cursor rules created for new behaviors
+- [ ] ADRs created for schema/architecture/process/safety changes
+- [ ] Cross-references updated between ADRs, rules, README.md, and AGENTS.md files
+- [ ] Recent pipeline reports generated and verified
+
+### Automated Verification (Future)
+- **Rule validation**: Scripts to verify rules match actual behavior
+- **Link checking**: Automated validation of internal documentation links
+- **Content validation**: Ensure documentation reflects current code
+- **Drift detection**: Alerts when documentation becomes outdated
+
+## Violation Consequences and Remediation
+
+### Violation Detection
+- **Missing documentation**: Code changes without corresponding docs
+- **Missing README.md**: Any directory without user-facing documentation
+- **Missing AGENTS.md**: Source code directories without AI assistant guidance
+- **Missing rules**: New behaviors without cursor rules
+- **Missing ADRs**: Schema/architecture changes without ADRs
+- **Outdated docs**: Documentation not reflecting current code/behavior
+
+### Remediation Requirements
+- **Immediate creation**: Missing README.md and AGENTS.md files must be created before PR merge
+- **Directory classification**: Correctly identify directory types and apply appropriate documentation requirements
+- **Rule updates**: Outdated rules must be updated and documented
+- **ADR creation**: Missing ADRs must be created and linked
+- **Cross-reference updates**: All links between README.md, AGENTS.md, ADRs, and rules must be verified and updated
+
+## Purpose and Rationale
+
+### Why This Rule is Always Applied
+- **Documentation integrity**: Ensures documentation reflects current code and behavior
+- **Knowledge preservation**: Prevents documentation becoming outdated or lost
+- **Compliance verification**: Maintains audit trails for architectural decisions
+- **Developer experience**: Provides accurate, linked documentation for all contributors
+
+### Risk Mitigation
+- **Production safety**: Documentation accuracy prevents operational errors
+- **Knowledge transfer**: Current documentation ensures comprehensive understanding
+- **Change tracking**: Linked documentation provides complete architectural history
+- **Quality assurance**: Documentation requirements prevent incomplete implementations

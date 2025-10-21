@@ -1,0 +1,46 @@
+---
+description: Report generation verification and template validation
+globs:
+  - scripts/generate_report.py
+  - src/infra/metrics_queries.py
+  - reports/*.md
+  - reports/*.json
+alwaysApply: true
+---
+
+## Report Generation Verification
+
+### Core Requirements
+- **Report Generation Must Execute**: After every pipeline run, reports must be generated automatically via `scripts/generate_report.py`
+- **Template Validation**: All reports must follow the exact markdown and JSON templates without missing sections
+- **Database Data Must Appear**: Reports must contain actual pipeline data (enrichments, metrics, network stats) - not zeros/empty
+- **File Creation Verification**: New report files must be created with proper timestamps and naming conventions
+- **No Trust Tests**: Tests are insufficient - manual verification required for report content accuracy
+
+### Verification Checklist
+- [ ] Pipeline runs generate new report files in `reports/` directory
+- [ ] Markdown reports contain actual enrichment data (not "0 enrichments")
+- [ ] JSON reports contain complete metrics data structures
+- [ ] Report timestamps match pipeline execution times
+- [ ] All template sections are populated with real data
+- [ ] Database queries in reports return actual results from recent runs
+- [ ] No "Error retrieving" or "No data" messages in report sections
+
+### Database Schema Requirements
+- **All Required Tables Exist**: Reports fail if any expected tables are missing
+- **Column Name Consistency**: Query column names must match actual table schemas
+- **Data Type Compatibility**: ROUND functions and type casts must work with actual data types
+- **Foreign Key Integrity**: Related data must be properly linked across tables
+
+### Failure Modes (Must Be Fixed)
+- Missing tables (confidence_validation_log, qwen_health_log, etc.)
+- Wrong column names (edge_strength vs similarity)
+- Type casting errors (ROUND on double precision)
+- NULL constraint violations preventing data insertion
+- Empty result sets when data should exist
+
+### Automated Verification
+- Run `scripts/generate_report.py` after every pipeline execution
+- Check file creation timestamps match run times
+- Verify report content contains non-zero, realistic values
+- Cross-reference report data with direct database queries

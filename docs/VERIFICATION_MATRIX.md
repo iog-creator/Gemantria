@@ -1,0 +1,29 @@
+| Rule | Verified Script | CI Workflow | Evidence Artifact |
+|------|-----------------|--------------|-------------------|
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |
+| ? | run_pipeline.py | — | _TBD_ |

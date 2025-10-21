@@ -1,13 +1,13 @@
 from __future__ import annotations
+
 import hashlib
 import json
 import os
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
-from datetime import datetime, timezone
+from typing import Any
 
-from src.core.ids import content_hash
 from src.graph.nodes.validation import validate_noun
 
 __all__ = [
@@ -20,11 +20,12 @@ __all__ = [
 
 DEFAULT_BATCH_SIZE = 50
 
+
 @dataclass
 class BatchConfig:
     batch_size: int = DEFAULT_BATCH_SIZE
     allow_partial: bool = False
-    partial_reason: Optional[str] = None
+    partial_reason: str | None = None
 
     @classmethod
     def from_env(cls) -> BatchConfig:
@@ -39,16 +40,17 @@ class BatchConfig:
             partial_reason=partial_reason,
         )
 
+
 @dataclass
 class BatchResult:
     batch_id: str
     config: BatchConfig
     nouns_processed: int
-    results: List[Dict[str, Any]]
-    manifest: Dict[str, Any]
+    results: list[dict[str, Any]]
+    manifest: dict[str, Any]
     created_at: datetime
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "batch_id": self.batch_id,
             "config": {
@@ -61,6 +63,7 @@ class BatchResult:
             "manifest": self.manifest,
             "created_at": self.created_at.isoformat(),
         }
+
 
 class BatchAbortError(RuntimeError):
     """Raised when batch processing is aborted due to insufficient nouns."""
@@ -75,11 +78,12 @@ class BatchAbortError(RuntimeError):
             f"Set ALLOW_PARTIAL=1 to override."
         )
 
+
 class BatchProcessor:
-    def __init__(self, config: Optional[BatchConfig] = None):
+    def __init__(self, config: BatchConfig | None = None):
         self.config = config or BatchConfig.from_env()
 
-    def validate_batch_size(self, nouns: List[str]) -> None:
+    def validate_batch_size(self, nouns: list[str]) -> None:
         """Validate that we have enough nouns for processing."""
         if len(nouns) < self.config.batch_size and not self.config.allow_partial:
             # Write review file for triage
@@ -91,7 +95,7 @@ class BatchProcessor:
 
             raise BatchAbortError(len(nouns), self.config.batch_size, review_file)
 
-    def process_nouns(self, nouns: List[str]) -> BatchResult:
+    def process_nouns(self, nouns: list[str]) -> BatchResult:
         """Process a batch of nouns through validation pipeline."""
         self.validate_batch_size(nouns)
 
@@ -106,13 +110,15 @@ class BatchProcessor:
                 processed_count += 1
             except Exception as e:
                 # Log error but continue processing
-                results.append({
-                    "surface": noun,
-                    "error": str(e),
-                    "gematria": None,
-                    "db": None,
-                    "llm": None,
-                })
+                results.append(
+                    {
+                        "surface": noun,
+                        "error": str(e),
+                        "gematria": None,
+                        "db": None,
+                        "llm": None,
+                    }
+                )
 
         manifest = self._create_manifest(batch_id, nouns, results)
 
@@ -122,20 +128,27 @@ class BatchProcessor:
             nouns_processed=processed_count,
             results=results,
             manifest=manifest,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
 
-    def _generate_batch_id(self, nouns: List[str]) -> str:
+    def _generate_batch_id(self, nouns: list[str]) -> str:
         """Generate a deterministic batch ID based on noun content."""
         combined_hash = hashlib.sha256()
         for noun in sorted(nouns):  # Sort for deterministic ordering
             combined_hash.update(noun.encode("utf-8"))
         return combined_hash.hexdigest()[:16]  # Short ID for readability
 
-    def _create_manifest(self, batch_id: str, input_nouns: List[str], results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _create_manifest(
+        self, batch_id: str, input_nouns: list[str], results: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """Create manifest with hash proofs and processing metadata."""
-        input_hashes = [hashlib.sha256(noun.encode("utf-8")).hexdigest() for noun in input_nouns]
-        result_hashes = [hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest() for r in results]
+        input_hashes = [
+            hashlib.sha256(noun.encode("utf-8")).hexdigest() for noun in input_nouns
+        ]
+        result_hashes = [
+            hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest()
+            for r in results
+        ]
 
         return {
             "batch_id": batch_id,
@@ -149,7 +162,8 @@ class BatchProcessor:
             "validation": "deterministic_hash_proof",
         }
 
-def process_batch(nouns: List[str], config: Optional[BatchConfig] = None) -> BatchResult:
+
+def process_batch(nouns: list[str], config: BatchConfig | None = None) -> BatchResult:
     """Convenience function for batch processing."""
     processor = BatchProcessor(config)
     return processor.process_nouns(nouns)

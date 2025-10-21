@@ -119,11 +119,13 @@ Reranking validates concept relationships by assessing theological relevance. Fo
 ### Prompt Format
 
 System prompt:
+
 ```
 Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.
 ```
 
 User prompt:
+
 ```
 <Instruct>: Given a theological theme, identify relevant biblical nouns.
 <Query>: {source_concept_document}
@@ -136,11 +138,13 @@ User prompt:
 The reranker supports multiple scoring methods:
 
 1. **Logprob-based scoring** (preferred):
+
    - Extracts yes/no token log probabilities
    - `score = sigmoid(yes_logprob - no_logprob)`
    - More precise than text parsing
 
 2. **Text parsing fallback**:
+
    - "yes" → 1.0 (perfect relevance)
    - "no" → 0.0 (no relevance)
    - unclear → 0.5 (neutral)
@@ -207,6 +211,7 @@ for candidate, score in zip(candidates, scores):
 ### Index Performance
 
 pgvector indexes optimize similarity searches:
+
 - `ivfflat` index with `vector_cosine_ops`
 - `lists = 100` parameter for index tuning
 
@@ -239,25 +244,30 @@ lms load DevQuasar/Qwen.Qwen3-Reranker-0.6B-GGUF --identifier qwen-reranker --gp
 ### Common Issues
 
 1. **Model Loading Failures**
+
    - Verify exact model identifiers: `qwen-embed` and `qwen-reranker`
    - Check GPU memory availability for `--gpu=1.0` flag
    - Confirm LM Studio server is running on correct port
 
 2. **Empty Embeddings Response**
+
    - Check LM Studio model loading status
    - Verify `/v1/embeddings` endpoint availability
    - Confirm model name matches environment variables
 
 3. **Vector Normalization Issues**
+
    - Zero-length vectors cause division by zero
    - Fallback to unnormalized vector if norm = 0
 
 4. **Reranking Connection Errors**
+
    - Verify reranker model is loaded and accessible
    - Check `/v1/chat/completions` endpoint for reranking
    - Confirm `logprobs=True` parameter is supported
 
 5. **Low Rerank Scores**
+
    - Check prompt formatting matches expected structure
    - Verify system/user message separation
    - Test with simpler queries to isolate issues

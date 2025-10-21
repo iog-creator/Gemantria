@@ -1,0 +1,36 @@
+---
+description: Require forest overview & verification matrix regeneration before new PRs
+globs:
+  - "docs/forest/**"
+  - "docs/DECISION_LOG.md"
+  - "docs/VERIFICATION_MATRIX.md"
+  - "scripts/generate_forest.py"
+alwaysApply: true
+---
+
+# Rule 025 — Phase Gate & Forest Sync
+
+**Purpose:**
+Prevent drift between low-level PRs and the global project state.
+
+## Must Exist
+- `docs/forest/overview.md`
+- `docs/DECISION_LOG.md`
+- `docs/VERIFICATION_MATRIX.md`
+- `scripts/generate_forest.py`
+
+## Must Run
+Developers **must run**:
+```bash
+python scripts/generate_forest.py
+```
+
+before opening or merging any new phase PR.
+
+## Fails if
+
+* Any listed file missing or empty
+* overview.md not updated in past 24h
+* verification matrix missing latest rule IDs
+
+**Related Rules:** 000, 006, 013, 021-024

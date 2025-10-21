@@ -1,0 +1,50 @@
+---
+description: Ensure ADR-016 metrics contract is maintained across exports
+globs:
+  - docs/ADRs/ADR-016-insight-metrics-and-ontology.md
+  - docs/SSOT/graph-metrics-api.md
+  - scripts/export_jsonld.py
+  - scripts/export_stats.py
+alwaysApply: true
+---
+
+# Metrics Contract Synchronization Rule
+
+## Core Requirements
+
+### ADR-016 Existence
+- **docs/ADRs/ADR-016-insight-metrics-and-ontology.md** must exist and reference **docs/SSOT/graph-metrics-api.md**
+
+### JSON-LD Context Completeness
+- **scripts/export_jsonld.py** must include ALL metric keys in `@context`:
+  - `semanticCohesion`
+  - `bridgeScore`
+  - `diversityLocal`
+  - `clusterDensity`
+  - `clusterDiversity`
+  - `topExamples`
+
+### Export Stats Integration
+- **scripts/export_stats.py** must emit:
+  - `avg_cluster_density` from `v_metrics_overview`
+  - `avg_cluster_diversity` from `v_metrics_overview`
+
+### Schema Consistency
+- Metric tables must match **docs/SSOT/graph-metrics-api.md** storage schema
+- View definitions must be consistent across documentation and code
+
+## Validation Checklist
+
+- [ ] ADR-016 references SSOT metrics API document
+- [ ] JSON-LD context includes all 6 metric keys with proper namespaces
+- [ ] Export stats includes cluster density and diversity averages
+- [ ] Migration 016_metrics.sql matches documented schema
+- [ ] Analyze script computes metrics per SSOT specifications
+
+## Failure Consequences
+
+If metrics contract is violated:
+- JSON-LD exports become inconsistent
+- Dashboard statistics lose insight value
+- Semantic web compatibility breaks
+- API consumers receive incomplete data

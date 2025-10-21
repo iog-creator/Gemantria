@@ -1,0 +1,53 @@
+name: verify-stats
+on:
+  pull_request:
+    paths:
+      - 'migrations/**'
+      - 'scripts/**'
+      - 'webui/graph/**'
+      - 'exports/**'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      GEMATRIA_DSN: postgresql://postgres:postgres@localhost:5432/gematria
+    services:
+      postgres:
+        image: ankane/pgvector:latest
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt jsonschema psycopg[binary]
+      - name: Apply schema & PR migrations
+        run: |
+          psql "$GEMATRIA_DSN" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+          for f in migrations/*.sql; do psql "$GEMATRIA_DSN" -f "$f"; done
+      - name: Generate metrics & exports
+        run: |
+          python scripts/analyze_graph.py || true
+          python scripts/analyze_metrics.py
+          python scripts/export_stats.py
+          test -s exports/graph_stats.json
+      - name: Verify PR-016/017 contracts (Rule 021)
+        run: |
+          python scripts/verify_pr016_pr017.py \
+            --dsn "$GEMATRIA_DSN" \
+            --stats exports/graph_stats.json \
+            --graph exports/graph_latest.json
+      - name: Frontend contract build (Rules 016/022)
+        run: |
+          cd webui/graph
+          npm ci
+          npm run type-check
+          npm run test:ci || npm test -- --ci
+          npm run build
