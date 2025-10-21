@@ -1,0 +1,38 @@
+[
+  {
+    "hebrew": "א",
+    "expected_value": 1,
+    "description": "Aleph (first letter)",
+    "calculation": "א = 1"
+  },
+  {
+    "hebrew": "אדם",
+    "expected_value": 45,
+    "description": "Adam (א(1) + ד(4) + מ(40) = 45)",
+    "calculation": "א(1) + ד(4) + מ(40) = 45"
+  },
+  {
+    "hebrew": "הבל",
+    "expected_value": 37,
+    "description": "Hevel/Abel (ה(5) + ב(2) + ל(30) = 37)",
+    "calculation": "ה(5) + ב(2) + ל(30) = 37"
+  },
+  {
+    "hebrew": "משיח",
+    "expected_value": 358,
+    "description": "Messiah (מ(40) + ש(300) + י(10) + ח(8) = 358)",
+    "calculation": "מ(40) + ש(300) + י(10) + ח(8) = 358"
+  },
+  {
+    "hebrew": "אלהים",
+    "expected_value": 86,
+    "description": "Elohim (א(1) + ל(30) + ה(5) + י(10) + מ(40) = 86)",
+    "calculation": "א(1) + ל(30) + ה(5) + י(10) + מ(40) = 86"
+  },
+  {
+    "hebrew": "תורה",
+    "expected_value": 611,
+    "description": "Torah (ת(400) + ו(6) + ר(200) + ה(5) = 611)",
+    "calculation": "ת(400) + ו(6) + ר(200) + ה(5) = 611"
+  }
+]

@@ -13,7 +13,8 @@ class PipelineState(TypedDict, total=False):
     metadata: dict[str, Any]
 
 def run_hello(book: str = "Genesis", mode: str = "START") -> PipelineState:
-    # placeholder runner; real nodes arrive in later PRs
+    # placeholder runner; real graph with nodes arrives in later PRs
+    # checkpointer available via get_checkpointer() - will be wired to StateGraph
     return {"book_name": book, "mode": mode, "nouns": [], "conflicts": []}
 
 if __name__ == "__main__":
