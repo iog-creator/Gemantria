@@ -11,7 +11,12 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 ## Environment
 - venv: `python -m venv .venv && source .venv/bin/activate`
 - install: `make deps`
-- DBs: `bible_db` (RO), `gematria` (RW). Never write to bible_db.
+- Databases:
+  - `BIBLE_DB_DSN` — read-only Bible database (RO adapter denies writes pre-connection)
+  - `GEMATRIA_DSN` — read/write application database
+- Batch & overrides:
+  - `BATCH_SIZE=50`
+  - `ALLOW_PARTIAL=0|1` (if 1, manifest must capture reason)
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
