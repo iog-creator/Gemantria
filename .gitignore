@@ -4,4 +4,6 @@ __pycache__/
 dist/
 *.pyc
 .env
+.env.local
 data/
+github-mcp-wrapper.sh
