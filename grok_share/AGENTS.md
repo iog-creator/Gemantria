@@ -22,8 +22,16 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - `CHECKPOINTER=memory|postgres` (default: memory)
 - `GEMATRIA_DSN` — required when `CHECKPOINTER=postgres`
 - `WORKFLOW_ID` — defaults to `gemantria.v1`
+- `METRICS_ENABLED=1` — enables Postgres metrics sink; `0` disables DB writes (stdout remains)
+- `LOG_LEVEL=INFO` — controls JSON logger verbosity
 
 - LLM: LM Studio only when enabled; confidence is metadata only.
+- Metrics: stdout JSON + Postgres sink (metrics_log). Fail-open (never block pipeline).
+- Observability (Phase 2 baseline):
+  - Postgres views: `v_node_latency_7d`, `v_node_throughput_24h`, `v_recent_errors_7d`, `v_pipeline_runs`.
+  - Materialized view: `mv_node_latency_7d`; refresh via `SELECT refresh_metrics_materialized();`.
+  - Optional OpenMetrics exporter: set `PROM_EXPORTER_ENABLED=1` to serve `/metrics` (port `PROM_EXPORTER_PORT`).
+  - Dashboards must use SQL views (no ad-hoc heavy queries in UI).
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
 ## Workflow (small green PRs)
@@ -44,6 +52,33 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    make lint type test.unit test.integration coverage.report
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
+
+### Runbook: Metrics & Logging
+1. Apply migration:
+   ```bash
+   psql "${GEMATRIA_DSN}" -f migrations/003_metrics_logging.sql
+   ```
+2. Verify locally:
+   ```bash
+   export METRICS_ENABLED=1
+   export LOG_LEVEL=INFO
+   export WORKFLOW_ID=gemantria.v1
+   make lint type test.unit test.integration coverage.report
+   ```
+3. Expected: JSON logs to stdout, metrics rows in DB when enabled, pipeline unaffected by metrics failures.
+
+### Runbook: Observability Dashboards
+1. Apply migration:
+   ```bash
+   psql "${GEMATRIA_DSN}" -f migrations/004_metrics_views.sql
+   ```
+2. Verify locally:
+   ```bash
+   export PROM_EXPORTER_ENABLED=0  # Optional exporter disabled by default
+   export PROM_EXPORTER_PORT=9108
+   make lint type test.unit test.integration coverage.report
+   ```
+3. Expected: SQL views created, queries return data when metrics exist, exporter optional.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
