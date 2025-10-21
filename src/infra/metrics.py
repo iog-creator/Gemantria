@@ -32,6 +32,17 @@ class MetricsClient:
         if not self._enabled:
             return
         try:
+            # Convert complex types for database insertion
+            db_row = {}
+            for k, v in row.items():
+                if hasattr(v, 'isoformat'):  # datetime objects
+                    db_row[k] = v.isoformat()
+                elif isinstance(v, dict):
+                    import json
+                    db_row[k] = json.dumps(v)
+                else:
+                    db_row[k] = v
+
             with self._conn().cursor() as cur:
                 cur.execute(
                     """
@@ -42,7 +53,7 @@ class MetricsClient:
                             %(started_at)s, %(finished_at)s, %(duration_ms)s, %(items_in)s, %(items_out)s,
                             %(error_json)s, %(meta)s)
                     """,
-                    row,
+                    db_row,
                 )
                 self._conn().commit()
         except Exception as e:

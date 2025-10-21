@@ -8,14 +8,18 @@ GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 
 def enrichment_node(state: dict) -> dict:
     client = get_lmstudio_client()
-    nouns = state.get("nouns", [])
+    nouns = state.get("validated_nouns", [])
+    log_json(LOG, 20, "enrichment_start", noun_count=len(nouns), nouns=nouns)
     out = []
     with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
         for n in nouns:
             run_id = state.get("run_id", uuid.uuid4())
             try:
+                log_json(LOG, 20, "processing_noun", noun=n.get("name"), hebrew=n.get("hebrew"))
                 insight = client.generate_insight(n)
+                log_json(LOG, 20, "insight_generated", tokens=insight.get("tokens"))
                 confidence = client.confidence_check(n, n["value"])
+                log_json(LOG, 20, "confidence_checked", confidence=confidence)
                 cur.execute(
                     """INSERT INTO ai_enrichment_log
                        (run_id,node,noun_id,model_name,confidence_model,
@@ -33,5 +37,6 @@ def enrichment_node(state: dict) -> dict:
             except Exception as e:
                 log_json(LOG,30,"ai_enrichment_failed",error=str(e))
                 continue
-    state["nouns"] = out
+    log_json(LOG, 20, "enrichment_complete", enriched_count=len(out))
+    state["enriched_nouns"] = out
     return state

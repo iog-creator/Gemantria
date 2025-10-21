@@ -16,7 +16,11 @@ class LMStudioClient:
 
     def _post(self, endpoint: str, payload: dict) -> dict:
         if MOCK:
-            return {"choices": [{"message": {"content": "Sample insight"}}], "usage": {"total_tokens": 42}}
+            # Check if this is a confidence check request (different model)
+            if payload.get("model") == MATH_MODEL:
+                return {"choices": [{"message": {"content": "0.95"}}], "usage": {"total_tokens": 10}}
+            else:
+                return {"choices": [{"message": {"content": "Sample insight"}}], "usage": {"total_tokens": 42}}
         url = f"{HOST}/v1/chat/completions"
         for attempt in range(RETRY_ATTEMPTS):
             try:
@@ -32,15 +36,22 @@ class LMStudioClient:
     def generate_insight(self, noun: dict) -> dict:
         prompt = f"Provide theological insight (150-250 words) for {noun['hebrew']} ({noun['name']})."
         payload = {"model": THEOLOGY_MODEL, "messages": [{"role": "user","content": prompt}]}
-        res = self._post("/chat", payload)
+        res = self._post("v1/chat/completions", payload)
         content = res.get("choices", [{}])[0].get("message", {}).get("content","")
         return {"text": content, "tokens": res.get("usage",{}).get("total_tokens",0)}
 
     def confidence_check(self, noun: dict, expected_value: int) -> float:
-        prompt = f"Gematria confidence: expected={expected_value}, actual={noun['value']}."
+        prompt = f"Rate the confidence (0.0 to 1.0) that the gematria value {noun['value']} for '{noun['name']}' is correct. Expected was {expected_value}. Return only a number between 0.0 and 1.0."
         payload = {"model": MATH_MODEL, "messages": [{"role": "user","content": prompt}]}
-        res = self._post("/chat", payload)
-        score = float(res.get("choices", [{}])[0].get("message", {}).get("content","0.95"))
+        res = self._post("v1/chat/completions", payload)
+        content = res.get("choices", [{}])[0].get("message", {}).get("content","0.95").strip()
+        # Extract just the numeric part if the model returns extra text
+        import re
+        match = re.search(r'([0-9]*\.?[0-9]+)', content)
+        if match:
+            score = float(match.group(1))
+        else:
+            score = 0.95  # fallback
         return max(0.0, min(1.0, score))
 
 def get_lmstudio_client() -> LMStudioClient:

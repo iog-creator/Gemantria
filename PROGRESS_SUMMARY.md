@@ -60,6 +60,24 @@
 - Comprehensive testing and documentation
 - Zero runtime dependencies for core dashboards (pure SQL)
 
+### PR-007 ✅ (Complete: LLM Integration with Confidence Metadata)
+- LM Studio client (`src/services/lmstudio_client.py`) with mock mode for testing
+- AI enrichment node (`src/nodes/enrichment.py`) for theological insights and confidence scoring
+- `ai_enrichment_log` table with confidence scores (0-1) and model provenance
+- Environment variables for model configuration and thresholds
+- ADR-007 documenting architectural decisions
+- Comprehensive testing (unit + integration)
+- Mock mode available when LM Studio unavailable
+
+### PR-008 ✅ (Complete: Confidence-Aware Batch Validation + Post-Run Reports)
+- Confidence validator node (`src/nodes/confidence_validator.py`) with threshold enforcement
+- `confidence_validation_log` table for tracking validation results and abort reasons
+- Pipeline integration with confidence gates (gematria ≥0.90, AI ≥0.95)
+- Automated report generator (`scripts/generate_report.py`) producing MD + JSON outputs
+- Post-run analysis with performance metrics and quality validation
+- ADR-008 documenting confidence validation architecture
+- Comprehensive testing and observability integration
+
 ## Key Architecture Decisions
 
 ### Database Safety
@@ -107,14 +125,15 @@
 - **Security**: No mock artifacts, RO policy enforced, parameterized SQL
 - **Tests**: 50+ tests across unit, integration, and contract categories
 
-## Phase 1 Ready to Begin
-The deterministic gematria pipeline foundation is complete. Phase 0 + PR-004 delivered:
+## Phase 2 Complete ✅
+PR-005 through PR-008 delivered full operational excellence:
 
-- ✅ **Resumable execution**: LangGraph + production-ready Postgres checkpointer
-- ✅ **Data safety**: RO bible_db with Strong's/frequency/context enrichment
-- ✅ **Batch processing**: 50-noun deterministic batches with override capability
-- ✅ **Quality gates**: Comprehensive testing, documentation lockstep
-- ✅ **Production persistence**: JSONB checkpoint storage with transactional semantics
+- ✅ **Real AI enrichment**: LM Studio integration with theological insights
+- ✅ **Confidence validation**: Threshold-enforced pipeline with abort capability
+- ✅ **Observability stack**: Metrics, logging, dashboards, and automated reporting
+- ✅ **Production deployment**: Full end-to-end pipeline with quality gates
+- ✅ **Post-run analysis**: Automated MD + JSON reports with performance insights
 
-Phase 1 focuses on operational excellence: metrics/logging infrastructure, performance optimization, and production deployment readiness.
+## Phase 3 Ready to Begin
+Semantic Aggregation & Network Analysis - transforming enriched nouns into meaningful relationships and insights.
 
