@@ -60,6 +60,15 @@
 - Comprehensive testing and documentation
 - Zero runtime dependencies for core dashboards (pure SQL)
 
+### PR-007 ✅ (Complete: LLM Integration with Confidence Metadata)
+- LM Studio client (`src/services/lmstudio_client.py`) with mock mode for testing
+- AI enrichment node (`src/nodes/enrichment.py`) for theological insights and confidence scoring
+- `ai_enrichment_log` table with confidence scores (0-1) and model provenance
+- Environment variables for model configuration and thresholds
+- ADR-007 documenting architectural decisions
+- Comprehensive testing (unit + integration)
+- Mock mode available when LM Studio unavailable
+
 ## Key Architecture Decisions
 
 ### Database Safety
