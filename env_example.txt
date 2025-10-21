@@ -21,6 +21,11 @@ LM_STUDIO_HOST=http://192.168.1.119:1234
 # Model Configuration
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+QWEN_EMBEDDING_MODEL=qwen-embed
+QWEN_RERANKER_MODEL=qwen-reranker
+
+# Embedding Configuration
+USE_QWEN_EMBEDDINGS=true
 
 # Connection Settings
 LM_STUDIO_TIMEOUT=30

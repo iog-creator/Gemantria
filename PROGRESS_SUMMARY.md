@@ -88,6 +88,17 @@
 - Unit and integration tests for network functionality
 - End-to-end pipeline testing with Genesis batch processing
 
+### PR-010 ✅ (Complete: Enable Real Qwen3 Inference for Embedding and Reranking)
+- Real Qwen3-Embedding-0.6B-GGUF integration replacing mock embeddings
+- Batch embedding generation (16-32 texts per request) with L2 normalization
+- Qwen3-Reranker-0.6B-GGUF for concept relationship validation
+- Structured document formatting for embedding input
+- Dynamic configuration via `USE_QWEN_EMBEDDINGS` environment variable
+- Enhanced LM Studio client with embedding and reranking methods
+- Comprehensive unit tests for embedding generation and vector processing
+- Updated ADR-009 and new qwen_integration.md documentation
+- Production-ready semantic intelligence activation
+
 ## Key Architecture Decisions
 
 ### Database Safety

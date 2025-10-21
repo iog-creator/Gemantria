@@ -46,44 +46,74 @@ def network_aggregator_node(state: Dict[str, Any]) -> Dict[str, Any]:
             # Register pgvector
             register_vector(conn)
 
-            # Process each noun: generate embedding and store in concept_network
+            # Process nouns in batches: generate embeddings and store in concept_network
             concept_ids = []
+
+            # Prepare embedding texts in the specified format
+            embedding_texts = []
+            valid_nouns = []
+
             for noun in nouns:
-                noun_id = noun.get("noun_id", uuid.uuid4())
-
-                # Create embedding text from lemma and insights
-                lemma = noun.get("hebrew", "")
+                # Format embedding input according to specification
+                name = noun.get("name", "")
+                hebrew = noun.get("hebrew", "")
+                value = noun.get("value", "")
                 insights = noun.get("insights", "")
-                embedding_text = f"{lemma} {insights}".strip()
 
-                if not embedding_text:
-                    log_json(LOG, 30, "skipping_noun_no_text", noun_id=str(noun_id))
+                # Create structured document format
+                embedding_text = f"""Document: {name}
+Meaning: {hebrew}
+Reference: Genesis (placeholder)
+Gematria: {value}
+Insight: {insights}""".strip()
+
+                if not embedding_text or not any([name, hebrew, value, insights]):
+                    log_json(LOG, 30, "skipping_noun_incomplete_data", noun_name=name)
                     continue
 
+                embedding_texts.append(embedding_text)
+                valid_nouns.append(noun)
+
+            if not embedding_texts:
+                log_json(LOG, 30, "no_valid_nouns_for_embedding")
+                return state
+
+            # Batch process embeddings (16-32 per batch as specified)
+            batch_size = 16
+            for i in range(0, len(embedding_texts), batch_size):
+                batch_texts = embedding_texts[i:i+batch_size]
+                batch_nouns = valid_nouns[i:i+batch_size]
+
                 try:
-                    # Generate embedding
-                    embedding = client.generate_embedding(embedding_text)
-                    network_summary["embeddings_generated"] += 1
+                    # Generate batch embeddings
+                    batch_embeddings = client.get_embeddings(batch_texts)
+                    network_summary["embeddings_generated"] += len(batch_embeddings)
 
-                    # Store in concept_network
-                    cur.execute(
-                        """INSERT INTO concept_network (concept_id, embedding)
-                           VALUES (%s, %s)
-                           ON CONFLICT (concept_id) DO UPDATE SET
-                           embedding = EXCLUDED.embedding,
-                           created_at = now()
-                           RETURNING id""",
-                        (noun_id, embedding)
-                    )
-                    concept_network_id = cur.fetchone()[0]
-                    concept_ids.append((noun_id, concept_network_id, embedding))
+                    # Store each embedding
+                    for noun, embedding in zip(batch_nouns, batch_embeddings):
+                        noun_id = noun.get("noun_id", uuid.uuid4())
 
-                    log_json(LOG, 20, "embedding_stored",
-                            noun_id=str(noun_id),
-                            network_id=str(concept_network_id))
+                        # Store in concept_network
+                        cur.execute(
+                            """INSERT INTO concept_network (concept_id, embedding)
+                               VALUES (%s, %s)
+                               ON CONFLICT (concept_id) DO UPDATE SET
+                               embedding = EXCLUDED.embedding,
+                               created_at = now()
+                               RETURNING id""",
+                            (noun_id, embedding)
+                        )
+                        concept_network_id = cur.fetchone()[0]
+                        concept_ids.append((noun_id, concept_network_id, embedding))
+
+                        log_json(LOG, 20, "embedding_stored",
+                                noun_id=str(noun_id),
+                                noun_name=noun.get("name"),
+                                network_id=str(concept_network_id))
 
                 except Exception as e:
-                    log_json(LOG, 30, "embedding_failed", noun_id=str(noun_id), error=str(e))
+                    log_json(LOG, 30, "batch_embedding_failed",
+                            batch_start=i, batch_size=len(batch_texts), error=str(e))
                     continue
 
             network_summary["total_nodes"] = len(concept_ids)
