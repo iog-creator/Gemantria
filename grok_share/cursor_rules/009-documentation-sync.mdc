@@ -1,0 +1,11 @@
+---
+description: Documentation synchronization requirements
+globs:
+  - docs/ADRs/*.md
+alwaysApply: true
+---
+
+- All ADR documents must be mirrored to `grok_share/docs/ADRs/` immediately after creation or modification.
+- Use `cp docs/ADRs/ADR-*.md grok_share/docs/ADRs/` to maintain synchronization.
+- This ensures documentation consistency between working directory and shareable artifacts.
+- Violation: Documentation drift between main docs/ and grok_share/docs/ folders.

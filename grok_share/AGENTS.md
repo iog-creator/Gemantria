@@ -18,7 +18,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - `BATCH_SIZE=50` (default noun batch size)
   - `ALLOW_PARTIAL=0|1` (if 1, manifest must capture reason)
   - `PARTIAL_REASON=<string>` (required when ALLOW_PARTIAL=1)
-- Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
+### Checkpointer / Orchestration
+- `CHECKPOINTER=memory|postgres` (default: memory)
+- `GEMATRIA_DSN` — required when `CHECKPOINTER=postgres`
+- `WORKFLOW_ID` — defaults to `gemantria.v1`
+
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
@@ -27,6 +31,19 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Coverage ≥98%.
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
+
+### Runbook: Postgres checkpointer
+1. Apply migration:
+   ```bash
+   psql "$GEMATRIA_DSN" -f migrations/002_create_checkpointer.sql
+   ```
+2. Verify locally:
+   ```bash
+   export CHECKPOINTER=postgres
+   export GEMATRIA_DSN=postgresql://user:pass@localhost:5432/gemantria
+   make lint type test.unit test.integration coverage.report
+   ```
+3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
