@@ -1,0 +1,10 @@
+---
+description: Graph batch semantics and validation gates
+globs:
+  - src/graph/**/*
+alwaysApply: false
+---
+
+- Validation fails closed; resolution may NOT override code math with LLM.
+- Integration enforces noun_count==50 by default; on failure abort & write review.ndjson.
+- Manifest per run: env, seeds, git commit, checksums; record ALLOW_PARTIAL when used.
