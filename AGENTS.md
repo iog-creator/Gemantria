@@ -22,8 +22,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - `CHECKPOINTER=memory|postgres` (default: memory)
 - `GEMATRIA_DSN` — required when `CHECKPOINTER=postgres`
 - `WORKFLOW_ID` — defaults to `gemantria.v1`
+- `METRICS_ENABLED=1` — enables Postgres metrics sink; `0` disables DB writes (stdout remains)
+- `LOG_LEVEL=INFO` — controls JSON logger verbosity
 
 - LLM: LM Studio only when enabled; confidence is metadata only.
+- Metrics: stdout JSON + Postgres sink (metrics_log). Fail-open (never block pipeline).
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
 ## Workflow (small green PRs)
@@ -44,6 +47,20 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    make lint type test.unit test.integration coverage.report
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
+
+### Runbook: Metrics & Logging
+1. Apply migration:
+   ```bash
+   psql "${GEMATRIA_DSN}" -f migrations/003_metrics_logging.sql
+   ```
+2. Verify locally:
+   ```bash
+   export METRICS_ENABLED=1
+   export LOG_LEVEL=INFO
+   export WORKFLOW_ID=gemantria.v1
+   make lint type test.unit test.integration coverage.report
+   ```
+3. Expected: JSON logs to stdout, metrics rows in DB when enabled, pipeline unaffected by metrics failures.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**

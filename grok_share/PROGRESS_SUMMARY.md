@@ -1,4 +1,4 @@
-# Progress Summary - Gemantria v2 (PR-004 Ready)
+# Progress Summary - Gemantria v2 (Phase 0 + PR-004 Complete)
 
 ## What We've Built
 
@@ -35,12 +35,21 @@
 - **PR-002**: Bible DB read-only validation, parameterized SQL enforcement
 - **PR-003**: Batch semantics with 50-noun enforcement, ALLOW_PARTIAL override
 
-### PR-004 ✅ (Ready: Postgres checkpointer implementation)
+### PR-004 ✅ (Complete: Postgres checkpointer implementation)
 - Full LangGraph BaseCheckpointSaver interface implementation
 - JSONB storage with transactional upsert semantics
 - put_writes support for pending writes
 - Comprehensive testing (unit + integration)
-- Ready for CI verification and merge
+- Merged and tagged v0.0.1-phase0-pr004-complete
+
+### PR-005 ✅ (Complete: Metrics & Logging Infrastructure)
+- Structured JSON logging to stdout with millisecond timestamps
+- Optional Postgres metrics sink (`metrics_log` table) gated by `METRICS_ENABLED`
+- NodeTimer class for consistent start/end/error event emission
+- `with_metrics` wrapper applied to all pipeline nodes
+- Fail-open design: metrics failures never break processing
+- Comprehensive testing (unit + integration)
+- Documentation synchronized across main and grok_share directories
 
 ## Key Architecture Decisions
 
@@ -89,13 +98,14 @@
 - **Security**: No mock artifacts, RO policy enforced, parameterized SQL
 - **Tests**: 50+ tests across unit, integration, and contract categories
 
-## Ready for Phase 1
-The deterministic gematria pipeline foundation is complete. Phase 0 delivered:
+## Phase 1 Ready to Begin
+The deterministic gematria pipeline foundation is complete. Phase 0 + PR-004 delivered:
 
-- ✅ **Resumable execution**: LangGraph + checkpointer infrastructure
+- ✅ **Resumable execution**: LangGraph + production-ready Postgres checkpointer
 - ✅ **Data safety**: RO bible_db with Strong's/frequency/context enrichment
 - ✅ **Batch processing**: 50-noun deterministic batches with override capability
 - ✅ **Quality gates**: Comprehensive testing, documentation lockstep
+- ✅ **Production persistence**: JSONB checkpoint storage with transactional semantics
 
-Phase 1 begins with PR-004 merge and focuses on production readiness (metrics/logging, performance optimization).
+Phase 1 focuses on operational excellence: metrics/logging infrastructure, performance optimization, and production deployment readiness.
 

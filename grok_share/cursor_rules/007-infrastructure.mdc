@@ -13,3 +13,8 @@ alwaysApply: false
 - Use transactional upsert (ON CONFLICT) with parameterized SQL (%s).
 - No DDL in runtime code; migrations own schema.
 - Coverage for infra code remains ≥98%.
+
+# Rule: Metrics & Logging Must Be Wired
+- All nodes must be registered via `with_metrics`.
+- Builds fail if any node is added without metrics wrapper.
+- Postgres metrics insert must be parameterized SQL (checked by grep).

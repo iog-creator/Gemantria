@@ -55,6 +55,10 @@ MIN_SIGNIFICANCE_WORDS=75
 # Logging Level (DEBUG, INFO, WARNING, ERROR)
 LOG_LEVEL=INFO
 
+# Metrics & Logging
+METRICS_ENABLED=1   # 0 disables DB writes (stdout JSON remains)
+WORKFLOW_ID=gemantria.v1
+
 # Enable verbose database logging
 DB_DEBUG=false
 
