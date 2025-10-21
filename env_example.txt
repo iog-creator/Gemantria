@@ -1,0 +1,84 @@
+# Gematria Project Environment Configuration
+# Copy this file to .env and customize for your environment
+
+# ============================================================================
+# DATABASE CONFIGURATION
+# ============================================================================
+
+# Gematria Database (read-write) - Primary database for concepts and networks
+GEMATRIA_DSN=postgresql://mccoy@/gematria?host=/var/run/postgresql
+
+# Bible Database (read-only) - Reference database with biblical text
+BIBLE_DB_DSN=postgresql://postgres@/bible_db?host=/var/run/postgresql
+
+# ============================================================================
+# LM STUDIO CONFIGURATION
+# ============================================================================
+
+# LM Studio Server Host
+LM_STUDIO_HOST=http://192.168.1.119:1234
+
+# Model Configuration
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Connection Settings
+LM_STUDIO_TIMEOUT=30
+LM_STUDIO_RETRY_ATTEMPTS=3
+LM_STUDIO_RETRY_DELAY=2.0
+LM_STUDIO_MOCK=false
+
+# ============================================================================
+# PIPELINE CONFIGURATION
+# ============================================================================
+
+# Processing Batch Size
+BATCH_SIZE=50
+
+# Error Handling
+CONFLICT_RETRY_LIMIT=3
+
+# Quality Thresholds
+GEMATRIA_CONFIDENCE_THRESHOLD=0.90
+AI_CONFIDENCE_THRESHOLD=0.95
+
+# Content Limits (words)
+MAX_INSIGHTS_WORDS=250
+MIN_INSIGHTS_WORDS=150
+MAX_SIGNIFICANCE_WORDS=125
+MIN_SIGNIFICANCE_WORDS=75
+
+# ============================================================================
+# DEVELOPMENT SETTINGS
+# ============================================================================
+
+# Logging Level (DEBUG, INFO, WARNING, ERROR)
+LOG_LEVEL=INFO
+
+# Enable verbose database logging
+DB_DEBUG=false
+
+# Database connection pool settings
+DB_POOL_SIZE=5
+DB_MAX_OVERFLOW=10
+
+# ============================================================================
+# OPTIONAL: ADVANCED SETTINGS
+# ============================================================================
+
+# Custom data directory (if different from project root)
+# DATA_DIR=/path/to/custom/data
+
+# Custom models directory
+# MODELS_DIR=/path/to/models
+
+# Custom logs directory
+# LOGS_DIR=/path/to/logs
+
+# ============================================================================
+# SECURITY NOTES
+# ============================================================================
+# - Never commit .env files to version control
+# - Bible DB should remain read-only
+# - Use strong database passwords in production
+# - LM Studio models are local (no cloud credentials needed)

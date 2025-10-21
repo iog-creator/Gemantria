@@ -1,0 +1,79 @@
+---
+description: How to author Cursor rules (.mdc) correctly (agent-requested)
+alwaysApply: false
+---
+
+# Cursor Rule Authoring Guide
+
+## Decide the scope first
+- **Always rule**: non-negotiable, repo-wide constraints → `alwaysApply: true` (use sparingly).
+- **Auto-attached rule**: applies only when editing certain paths → set `globs: [...]` and `alwaysApply: false`.
+- **Manual/agent-requested**: loaded on demand in prompts → set `alwaysApply: false` and a clear `description:`.
+
+## Required YAML header
+```md
+---
+description: <short, action-oriented label>
+globs:
+  - <optional file/path patterns>
+alwaysApply: <true|false>
+---
+```
+
+## Writing the body (what to include)
+
+* Clear imperatives (bullets), not prose.
+* Conflict resolution: specify which rule wins if overlap (e.g., "DB safety overrides convenience prompts").
+* Tests/process coupling: if a rule mandates behavior (e.g., coverage ≥98%), reference the gate/command that enforces it.
+
+## Patterns
+
+### 1) Always rule (global guardrail)
+
+```md
+---
+description: Non-negotiable safety rules
+alwaysApply: true
+---
+- bible_db is READ-ONLY; any write must error.
+- No mock datasets; tests must be code-verified or DB-derived.
+```
+
+### 2) Auto-attached (path-scoped)
+
+```md
+---
+description: DB safety & SQL discipline
+globs:
+  - src/infra/db.py
+  - db/migrations/**/*
+alwaysApply: false
+---
+- Use %s parameterization; never string interpolation in SQL.
+- Provide migration tests that apply and rollback.
+```
+
+### 3) Manual (agent-requested utility)
+
+```md
+---
+description: GitHub PR/Issue operations safety
+alwaysApply: false
+---
+- Confirm repo/branch before acting; search before creating.
+- Use clear titles/descriptions; close with state_reason.
+```
+
+## Naming & lifecycle
+
+* Name rules with a numeric prefix for order: `000-...mdc`, `001-...mdc`, etc.
+* Deprecate by replacing content with:
+
+  * Header unchanged, and a single line: "DEPRECATED — superseded by <file> on <date>".
+
+## Definition of Done for a new/changed rule
+
+* The rule file exists with a valid header and imperative body.
+* If auto-attached, `globs` are correct and minimal.
+* If behavior affects gates or workflows, update `AGENTS.md` and ADRs in the same PR.
+* Add/adjust tests that rely on the rule (e.g., CI scripts, contract tests).
