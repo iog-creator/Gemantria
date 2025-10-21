@@ -31,3 +31,10 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
+
+## How agents should use rules
+
+* Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* Path-scoped rules auto-attach via `globs`.
+* One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
+* Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
