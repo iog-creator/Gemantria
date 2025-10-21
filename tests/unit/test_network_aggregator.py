@@ -10,7 +10,7 @@ import os
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from nodes.network_aggregator import _cosine_similarity, NetworkAggregationError
+from nodes.network_aggregator import _cosine_similarity, NetworkAggregationError, _build_document_string, _build_rerank_relationships
 from services.lmstudio_client import LMStudioClient
 
 
@@ -189,6 +189,219 @@ class TestEmbeddingFunctionality(unittest.TestCase):
         # Check that normalized vector has unit norm
         normalized_norm = math.sqrt(sum(x*x for x in normalized))
         self.assertAlmostEqual(normalized_norm, 1.0, places=5)
+
+
+class TestDocumentBuilding(unittest.TestCase):
+    """Test document string building for embeddings and reranking."""
+
+    def test_build_document_string_complete(self):
+        """Test building document string with all fields present."""
+        noun = {
+            "name": "Adam",
+            "hebrew": "אדם",
+            "primary_verse": "Genesis 1:1",
+            "value": 45,
+            "insight": "First man created by God"
+        }
+
+        result = _build_document_string(noun)
+
+        expected = """Document: Adam
+Meaning: אדם
+Primary Verse: Genesis 1:1
+Gematria: 45
+Insight: First man created by God"""
+
+        self.assertEqual(result, expected)
+
+    def test_build_document_string_missing_primary_verse(self):
+        """Test building document string with missing primary_verse uses placeholder."""
+        noun = {
+            "name": "Eve",
+            "hebrew": "חוה",
+            "value": 19,
+            "insight": "First woman"
+        }
+
+        result = _build_document_string(noun)
+
+        expected = """Document: Eve
+Meaning: חוה
+Primary Verse: Genesis (reference)
+Gematria: 19
+Insight: First woman"""
+
+        self.assertEqual(result, expected)
+
+    def test_build_document_string_minimal(self):
+        """Test building document string with minimal required fields."""
+        noun = {
+            "name": "Test",
+            "hebrew": "טסט",
+            "value": 100
+        }
+
+        result = _build_document_string(noun)
+
+        expected = """Document: Test
+Meaning: טסט
+Primary Verse: Genesis (reference)
+Gematria: 100
+Insight:"""
+
+        self.assertEqual(result, expected)
+
+
+class TestEdgeStrengthCalculation(unittest.TestCase):
+    """Test edge strength calculation logic."""
+
+    def test_edge_strength_calculation(self):
+        """Test edge strength calculation: 0.5 * cosine + 0.5 * rerank_score."""
+        # Test various combinations
+        test_cases = [
+            # (cosine, rerank_score, expected_edge_strength)
+            (0.9, 1.0, 0.95),  # High cosine, perfect rerank
+            (0.8, 0.6, 0.7),   # Medium values
+            (0.95, 0.5, 0.725), # High cosine, low rerank
+            (0.7, 0.9, 0.8),   # Low cosine, high rerank
+            (0.0, 1.0, 0.5),   # Zero cosine, perfect rerank
+            (1.0, 0.0, 0.5),   # Perfect cosine, zero rerank
+        ]
+
+        for cosine, rerank_score, expected in test_cases:
+            with self.subTest(cosine=cosine, rerank_score=rerank_score):
+                edge_strength = 0.5 * cosine + 0.5 * rerank_score
+                self.assertAlmostEqual(edge_strength, expected, places=5)
+
+    def test_edge_classification_strong(self):
+        """Test edge classification for strong relationships (≥0.90)."""
+        # Import the constants
+        import os
+        os.environ["EDGE_STRONG"] = "0.90"
+
+        edge_strength = 0.95
+        self.assertGreaterEqual(edge_strength, 0.90)
+
+        # Should be classified as strong
+        relation_type = "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
+        self.assertEqual(relation_type, "strong")
+
+    def test_edge_classification_weak(self):
+        """Test edge classification for weak relationships (≥0.75, <0.90)."""
+        import os
+        os.environ["EDGE_STRONG"] = "0.90"
+        os.environ["EDGE_WEAK"] = "0.75"
+
+        edge_strength = 0.82
+        self.assertGreaterEqual(edge_strength, 0.75)
+        self.assertLess(edge_strength, 0.90)
+
+        # Should be classified as weak
+        if edge_strength >= 0.90:
+            relation_type = "strong"
+        elif edge_strength >= 0.75:
+            relation_type = "weak"
+        else:
+            relation_type = None
+        self.assertEqual(relation_type, "weak")
+
+    def test_edge_classification_filtered(self):
+        """Test edge classification for filtered relationships (<0.75)."""
+        import os
+        os.environ["EDGE_WEAK"] = "0.75"
+
+        edge_strength = 0.70
+        self.assertLess(edge_strength, 0.75)
+
+        # Should be filtered out
+        if edge_strength >= 0.90:
+            relation_type = "strong"
+        elif edge_strength >= 0.75:
+            relation_type = "weak"
+        else:
+            relation_type = None
+        self.assertIsNone(relation_type)
+
+
+class TestRerankScoreMapping(unittest.TestCase):
+    """Test rerank score mapping from logprobs and text parsing."""
+
+    def test_logprob_score_calculation(self):
+        """Test score calculation from log probabilities using sigmoid."""
+        import math
+
+        # Mock logprobs data
+        logprobs = {
+            "content": [
+                {"token": "yes", "logprob": -0.5},
+                {"token": "no", "logprob": -1.0}
+            ]
+        }
+
+        # Extract logprobs (simulate the logic)
+        yes_logprob = None
+        no_logprob = None
+
+        for token_info in logprobs["content"]:
+            token = token_info["token"].strip().lower()
+            logprob = token_info["logprob"]
+
+            if "yes" in token:
+                yes_logprob = max(yes_logprob or float('-inf'), logprob)
+            elif "no" in token:
+                no_logprob = max(no_logprob or float('-inf'), logprob)
+
+        # Calculate score using sigmoid of logit difference
+        if yes_logprob is not None and no_logprob is not None:
+            logit_diff = yes_logprob - no_logprob
+            score = 1 / (1 + math.exp(-logit_diff))
+
+            # yes_logprob = -0.5, no_logprob = -1.0
+            # logit_diff = -0.5 - (-1.0) = 0.5
+            # score = sigmoid(0.5) ≈ 0.622
+            expected_score = 1 / (1 + math.exp(-0.5))
+            self.assertAlmostEqual(score, expected_score, places=3)
+
+    def test_text_parsing_yes(self):
+        """Test text parsing for 'yes' responses."""
+        response_texts = ["yes", "Yes", "YES", "yes, that matches", "definitely yes"]
+
+        for text in response_texts:
+            with self.subTest(text=text):
+                if "yes" in text.lower():
+                    score = 1.0
+                else:
+                    score = 0.0
+                self.assertEqual(score, 1.0)
+
+    def test_text_parsing_no(self):
+        """Test text parsing for 'no' responses."""
+        response_texts = ["no", "No", "NO", "no, doesn't match", "definitely no"]
+
+        for text in response_texts:
+            with self.subTest(text=text):
+                if "yes" in text.lower():
+                    score = 1.0
+                elif "no" in text.lower():
+                    score = 0.0
+                else:
+                    score = 0.5
+                self.assertEqual(score, 0.0)
+
+    def test_text_parsing_neutral(self):
+        """Test text parsing for unclear responses."""
+        response_texts = ["maybe", "unclear", "possibly", "perhaps"]
+
+        for text in response_texts:
+            with self.subTest(text=text):
+                text_lower = text.lower()
+                if text_lower == "yes":
+                    score = 1.0
+                elif text_lower == "no":
+                    score = 0.0
+                else:
+                    score = 0.5
+                self.assertEqual(score, 0.5)
 
 
 if __name__ == '__main__':

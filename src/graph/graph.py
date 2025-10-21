@@ -13,8 +13,31 @@ from src.infra.structured_logger import get_logger, log_json
 from src.nodes.enrichment import enrichment_node
 from src.nodes.confidence_validator import confidence_validator_node, ConfidenceValidationError
 from src.nodes.network_aggregator import network_aggregator_node, NetworkAggregationError
+from src.services.lmstudio_client import assert_qwen_live, QwenUnavailableError, QwenHealth, QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL
+from src.infra.db import get_gematria_rw
 
-LOG = get_logger("gemantria.graph")
+LOG = get_logger("gematria.graph")
+
+
+def log_qwen_health(run_id: str, health: QwenHealth, embedding_model: str, reranker_model: str) -> None:
+    """Log Qwen health check results to database for production verification."""
+    try:
+        db = get_gematria_rw()
+        db.execute("""
+            INSERT INTO qwen_health_log (
+                run_id, embedding_model, reranker_model, embed_dim,
+                lat_ms_embed, lat_ms_rerank, verified, reason
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            run_id, embedding_model, reranker_model, health.embed_dim,
+            health.lat_ms_embed, health.lat_ms_rerank, health.ok, health.reason
+        ))
+        log_json(LOG, 20, "qwen_health_logged",
+                 run_id=str(run_id), verified=health.ok, reason=health.reason)
+    except Exception as e:
+        # Log failure but don't fail pipeline - health checks are for evidence, not blocking
+        log_json(LOG, 30, "qwen_health_log_failed",
+                 run_id=str(run_id), error=str(e))
 
 
 class PipelineState(TypedDict, total=False):
@@ -150,6 +173,31 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
     }
 
     try:
+        # Qwen Live Gate: Assert models are available before any work
+        qwen_health = assert_qwen_live([QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL])
+        log_json(LOG, 20, "qwen_health_check",
+                 verified=qwen_health.ok,
+                 reason=qwen_health.reason,
+                 embed_dim=qwen_health.embed_dim,
+                 lat_ms_embed=qwen_health.lat_ms_embed,
+                 lat_ms_rerank=qwen_health.lat_ms_rerank)
+
+        # Log health check to database for production verification
+        log_qwen_health(str(pipeline_run_id), qwen_health, QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL)
+
+        # Store health check results in metadata for reporting
+        initial_state["metadata"]["qwen_health"] = {
+            "verified": qwen_health.ok,
+            "reason": qwen_health.reason,
+            "embed_dim": qwen_health.embed_dim,
+            "lat_ms_embed": qwen_health.lat_ms_embed,
+            "lat_ms_rerank": qwen_health.lat_ms_rerank
+        }
+
+        # Hard fail if Qwen models are not live
+        if not qwen_health.ok:
+            raise QwenUnavailableError(f"Qwen health check failed: {qwen_health.reason}")
+
         # Run the graph
         result = graph.invoke(initial_state)
         return result
@@ -171,6 +219,15 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
             **initial_state,
             "error": str(e),
             "network_aggregation_failed": True
+        }
+    except QwenUnavailableError as e:
+        # Handle Qwen unavailability - fail-closed for production
+        log_json(LOG, 40, "pipeline_aborted_qwen_unavailable",
+                 book=book, error=str(e))
+        return {
+            **initial_state,
+            "error": str(e),
+            "qwen_unavailable": True
         }
     except Exception as e:
         # Handle other pipeline errors

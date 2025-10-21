@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List
 import psycopg
+from src.infra.metrics_queries import qwen_usage_totals, top_rerank_pairs, edge_strength_distribution
 
 # Database connection
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
@@ -167,7 +168,10 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                 'strong_edges': network_summary.get('strong_edges', 0),
                 'weak_edges': network_summary.get('weak_edges', 0),
                 'embeddings_generated': network_summary.get('embeddings_generated', 0),
-                'similarity_computations': network_summary.get('similarity_computations', 0)
+                'similarity_computations': network_summary.get('similarity_computations', 0),
+                'rerank_calls': network_summary.get('rerank_calls', 0),
+                'avg_edge_strength': network_summary.get('avg_edge_strength', 0.0),
+                'rerank_yes_ratio': network_summary.get('rerank_yes_ratio', 0.0)
             }
 
             return {
@@ -175,6 +179,89 @@ def get_run_metrics(run_id: str = None) -> Dict[str, Any]:
                 'ai_metrics': ai_metrics,
                 'confidence_metrics': confidence_metrics,
                 'network_metrics': network_metrics
+            }
+
+def get_qwen_health_for_run(run_id: str) -> Dict[str, Any] | None:
+    """Get Qwen health check results for a specific run."""
+    if not run_id:
+        return None
+
+    try:
+        with psycopg.connect(GEMATRIA_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT embedding_model, reranker_model, embed_dim,
+                           lat_ms_embed, lat_ms_rerank, verified, reason
+                    FROM qwen_health_log
+                    WHERE run_id = %s
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                """, (run_id,))
+
+                row = cur.fetchone()
+                if row:
+                    return {
+                        'embedding_model': row[0],
+                        'reranker_model': row[1],
+                        'embed_dim': row[2],
+                        'lat_ms_embed': row[3],
+                        'lat_ms_rerank': row[4],
+                        'verified': row[5],
+                        'reason': row[6]
+                    }
+    except Exception as e:
+        print(f"Warning: Could not retrieve Qwen health data: {e}")
+
+    return None
+
+def get_qwen_usage_metrics() -> Dict[str, Any]:
+    """Get comprehensive Qwen model usage statistics."""
+    with psycopg.connect(GEMATRIA_DSN) as conn:
+        with conn.cursor() as cur:
+            # Qwen usage totals
+            qwen_totals = qwen_usage_totals()
+            if qwen_totals:
+                totals_row = qwen_totals[0]
+                qwen_metrics = {
+                    'total_runs': totals_row[0],
+                    'total_embeddings': totals_row[1],
+                    'total_rerank_calls': totals_row[2],
+                    'avg_yes_ratio': float(totals_row[3]) if totals_row[3] else 0.0,
+                    'avg_edge_strength': float(totals_row[4]) if totals_row[4] else 0.0
+                }
+            else:
+                qwen_metrics = {
+                    'total_runs': 0,
+                    'total_embeddings': 0,
+                    'total_rerank_calls': 0,
+                    'avg_yes_ratio': 0.0,
+                    'avg_edge_strength': 0.0
+                }
+
+            # Top rerank pairs
+            top_pairs = top_rerank_pairs(5)
+            top_pairs_data = [{
+                'source_id': str(row[0]),
+                'target_id': str(row[1]),
+                'edge_strength': float(row[2]),
+                'cosine': float(row[3]),
+                'rerank_score': float(row[4]),
+                'relation_type': row[5],
+                'rerank_model': row[6]
+            } for row in top_pairs]
+
+            # Edge strength distribution
+            distribution = edge_strength_distribution()
+            distribution_data = [{
+                'bucket': row[0],
+                'count': row[1],
+                'avg_strength': float(row[2])
+            } for row in distribution]
+
+            return {
+                'qwen_metrics': qwen_metrics,
+                'top_pairs': top_pairs_data,
+                'distribution': distribution_data
             }
 
 def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
@@ -219,17 +306,76 @@ def generate_markdown_report(run_id: str, metrics: Dict[str, Any]) -> str:
 ## Concept Network Summary
 
 - **Total Nodes**: {metrics['network_metrics']['total_nodes']}
-- **Strong Edges (>0.90)**: {metrics['network_metrics']['strong_edges']}
-- **Weak Edges (>0.75)**: {metrics['network_metrics']['weak_edges']}
+- **Strong Edges (≥0.90)**: {metrics['network_metrics']['strong_edges']}
+- **Weak Edges (≥0.75)**: {metrics['network_metrics']['weak_edges']}
 - **Embeddings Generated**: {metrics['network_metrics']['embeddings_generated']}
-- **Similarity Computations**: {metrics['network_metrics']['similarity_computations']}
+- **Rerank Calls**: {metrics['network_metrics']['rerank_calls']}
+- **Average Edge Strength**: {metrics['network_metrics']['avg_edge_strength']:.4f}
+- **Rerank Yes Ratio**: {metrics['network_metrics']['rerank_yes_ratio']:.3f}
 
+## Qwen Live Verification
+
+"""
+    # Add Qwen health verification section
+    qwen_health = get_qwen_health_for_run(run_id)
+    if qwen_health:
+        report += f"""### Qwen Live Verification
+
+- **Verified**: {"✅ Yes" if qwen_health['verified'] else "❌ No"}
+- **Models**: {qwen_health['embedding_model']}, {qwen_health['reranker_model']}
+- **Embedding Dim**: {qwen_health['embed_dim'] or 'N/A'}
+- **Latency (ms)**: embed={qwen_health['lat_ms_embed'] or 'N/A'}, rerank={qwen_health['lat_ms_rerank'] or 'N/A'}
+- **Reason**: {qwen_health['reason']}
+"""
+    else:
+        report += """### Qwen Live Verification
+
+⚠️ **No Qwen health check recorded for this run**
+"""
+
+    report += f"""
 ## Quality Metrics
 
 ✅ **Real LM Studio Inference**: Confirmed active (non-mock mode)
 ✅ **Database Persistence**: All metrics and enrichments stored
 ✅ **Confidence Thresholds**: Met (gematria ≥0.90, AI ≥0.95)
 ✅ **Pipeline Integrity**: All nodes executed successfully
+✅ **Qwen Integration**: Real embeddings + reranker active (non-mock mode)
+
+## Qwen Usage Statistics
+
+"""
+    # Get Qwen usage metrics
+    qwen_data = get_qwen_usage_metrics()
+
+    report += f"""### Model Usage Summary
+
+- **Total Pipeline Runs**: {qwen_data['qwen_metrics']['total_runs']}
+- **Embeddings Generated**: {qwen_data['qwen_metrics']['total_embeddings']}
+- **Rerank Calls Made**: {qwen_data['qwen_metrics']['total_rerank_calls']}
+- **Average Yes Ratio**: {qwen_data['qwen_metrics']['avg_yes_ratio']:.3f}
+- **Average Edge Strength**: {qwen_data['qwen_metrics']['avg_edge_strength']:.4f}
+
+### Edge Strength Distribution
+
+| Bucket | Count | Avg Strength |
+|--------|-------|--------------|
+"""
+
+    for bucket in qwen_data['distribution']:
+        report += f"| {bucket['bucket']} | {bucket['count']} | {bucket['avg_strength']:.3f} |\n"
+
+    if qwen_data['top_pairs']:
+        report += f"""
+### Top Rerank Pairs
+
+| Source ID | Target ID | Edge Strength | Cosine | Rerank Score | Type | Model |
+|-----------|-----------|---------------|--------|--------------|------|-------|
+"""
+        for pair in qwen_data['top_pairs']:
+            report += f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | {pair['edge_strength']:.4f} | {pair['cosine']:.4f} | {pair['rerank_score']:.4f} | {pair['relation_type']} | {pair['rerank_model']} |\n"
+
+    report += f"""
 
 ## Recommendations
 

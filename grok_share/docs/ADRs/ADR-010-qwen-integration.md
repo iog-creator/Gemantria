@@ -14,7 +14,7 @@ Integrate Qwen3-Embedding-0.6B-GGUF and Qwen3-Reranker-0.6B-GGUF models with the
 3. **Vector Normalization**: L2 normalization for cosine similarity
 4. **Reranking**: Qwen3-Reranker-0.6B-GGUF for relationship validation
 5. **Configuration**: `USE_QWEN_EMBEDDINGS=true` flag for real vs mock mode
-6. **Fallback**: Deterministic mock embeddings when disabled
+6. **Fallback**: Automatic fallback to mock embeddings when LM Studio unavailable
 
 ## Implementation Details
 
@@ -22,58 +22,100 @@ Integrate Qwen3-Embedding-0.6B-GGUF and Qwen3-Reranker-0.6B-GGUF models with the
 
 #### LM Studio Client Extensions
 - **Location**: `src/services/lmstudio_client.py`
-- **New Methods**: `get_embeddings()`, `rerank()`
+- **New Methods**: `get_embeddings()`, `rerank()` with logprob-based scoring
 - **Environment Variables**: `USE_QWEN_EMBEDDINGS`, `QWEN_EMBEDDING_MODEL`, `QWEN_RERANKER_MODEL`
+- **Rerank Features**: Logprob extraction, sigmoid scoring, batch processing (4-8 candidates)
 
 #### Network Aggregator Updates
 - **Location**: `src/nodes/network_aggregator.py`
-- **Enhancement**: Real embedding generation with structured input formatting
-- **Batch Processing**: 16-text batches with error handling
-- **Storage**: pgvector `VECTOR(1024)` with upsert operations
+- **Enhancement**: Rerank-driven relationship refinement with pgvector KNN + Qwen reranker
+- **Two-Stage Process**: Recall (KNN) → Precision (reranking) → Edge strength calculation
+- **Batch Processing**: 16-text embedding batches, 4-8 candidate rerank batches
+- **Storage**: pgvector `VECTOR(1024)` with rerank evidence in `concept_relations`
 
 ### Input Formatting
 
-Embeddings generated from structured documents:
+Embeddings and rerank documents use structured format:
 ```
 Document: {noun_name}
 Meaning: {hebrew_text}
-Reference: Genesis (placeholder)
+Primary Verse: {primary_verse_reference}
 Gematria: {numeric_value}
 Insight: {theological_insight}
 ```
 
-### Reranking Implementation
+### Rerank-Driven Relationship Refinement
 
-- **Query**: Theological theme or relationship question
-- **Candidates**: Concept descriptions to validate
-- **Prompt Format**: Yes/no classification for relevance
-- **Score Mapping**: "yes" → 0.9, "no" → 0.1, unclear → 0.5
+**Algorithm Overview:**
+1. Generate embeddings for all concepts using Qwen3-Embedding
+2. For each source concept, find top-k nearest neighbors via pgvector KNN
+3. Rerank neighbors against source concept using Qwen3-Reranker
+4. Calculate edge strength: `0.5 * cosine + 0.5 * rerank_score`
+5. Classify relationships: strong (≥0.90), weak (≥0.75), filtered (<0.75)
+
+**Configuration:**
+- `NN_TOPK=20`: KNN neighbors to retrieve for reranking
+- `RERANK_MIN=0.50`: Minimum rerank score to keep candidates
+- `EDGE_STRONG=0.90`: Strong relationship threshold
+- `EDGE_WEAK=0.75`: Weak relationship threshold
+
+**Prompt Format:**
+```
+System: Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.
+
+User:
+<Instruct>: Given a theological theme, identify relevant biblical nouns.
+<Query>: {source_concept_document}
+
+<Document>: {candidate_concept_document}
+```
+
+**Score Mapping:**
+1. **Logprob-based** (preferred): `score = sigmoid(yes_logprob - no_logprob)`
+2. **Text parsing** (fallback): "yes" → 1.0, "no" → 0.0, unclear → 0.5
 
 ### Database Schema
 
 ```sql
--- Added in migration 008_add_concept_network_constraints.sql
+-- Migration 008: Concept network constraints
 ALTER TABLE concept_network ADD CONSTRAINT concept_network_concept_id_unique UNIQUE (concept_id);
 ALTER TABLE concept_relations ADD CONSTRAINT concept_relations_unique_pair UNIQUE (source_id, target_id);
+
+-- Migration 009: Rerank evidence storage (PR-011)
+ALTER TABLE concept_relations
+ADD COLUMN cosine NUMERIC(6,5),
+ADD COLUMN rerank_score NUMERIC(6,5),
+ADD COLUMN edge_strength NUMERIC(6,5),
+ADD COLUMN rerank_model TEXT,
+ADD COLUMN rerank_at TIMESTAMPTZ DEFAULT now();
 ```
 
 ### Configuration
 
 ```bash
+# Core Qwen integration
 USE_QWEN_EMBEDDINGS=true          # Enable real embeddings
 QWEN_EMBEDDING_MODEL=qwen-embed   # Embedding model name
 QWEN_RERANKER_MODEL=qwen-reranker # Reranker model name
 LM_STUDIO_HOST=http://127.0.0.1:1234
+
+# Rerank-driven relationship refinement (PR-011)
+NN_TOPK=20              # KNN neighbors for reranking
+RERANK_MIN=0.50         # Minimum rerank score threshold
+EDGE_STRONG=0.90        # Strong relationship threshold
+EDGE_WEAK=0.75          # Weak relationship threshold
 ```
 
 ## Consequences
 
 ### Positive
-- **Real Semantic Intelligence**: Production-quality embeddings instead of mocks
-- **GPU Acceleration**: RTX 5070 Ti utilization for batch processing
-- **Scalable Architecture**: LM Studio server can handle multiple models
-- **Relationship Quality**: Improved concept similarity through real AI understanding
-- **Future-Ready**: Reranking foundation for advanced relationship validation
+- **Real Semantic Intelligence**: Production-quality embeddings + rerank validation
+- **Two-Stage Refinement**: KNN recall + reranker precision for high-quality relationships
+- **Edge Strength Evidence**: Stored rerank scores enable relationship confidence analysis
+- **GPU Acceleration**: RTX 5070 Ti utilization for both embedding and reranking
+- **Scalable Architecture**: LM Studio server handles multiple models concurrently
+- **Deterministic Fallback**: Mock mode preserves testing capabilities
+- **Observability**: Comprehensive metrics for Qwen usage and performance
 
 ### Negative
 - **Dependency on LM Studio**: Requires running LM Studio server
@@ -127,19 +169,23 @@ LM_STUDIO_HOST=http://127.0.0.1:1234
 ## Performance Characteristics
 
 ### Throughput
-- **Mock Mode**: ~1000 embeddings/second (CPU)
-- **Real Mode**: ~50-100 embeddings/second (GPU batched)
-- **Batch Size**: 16-32 optimal for GPU utilization
+- **Embeddings - Mock Mode**: ~1000 embeddings/second (CPU)
+- **Embeddings - Real Mode**: ~50-100 embeddings/second (GPU batched, 16-32 batch)
+- **Reranking - Mock Mode**: ~500 reranks/second (CPU)
+- **Reranking - Real Mode**: ~10-20 reranks/second (GPU batched, 4-8 candidates)
+- **Network Aggregation**: KNN (fast) + reranking (bottleneck) per concept
 
 ### Memory Usage
 - **System RAM**: Minimal additional usage
-- **GPU VRAM**: ~2.4GB total for both models
-- **Database**: ~4KB per embedding vector
+- **GPU VRAM**: ~2.4GB total for both models (4-bit quantized)
+- **Database**: ~4KB per embedding + rerank evidence per relationship
 
 ### Latency
-- **Mock**: <1ms per embedding
-- **Real**: 50-200ms per batch (depending on batch size)
-- **Network**: Additional 10-50ms for LM Studio API calls
+- **Embeddings - Mock**: <1ms per embedding
+- **Embeddings - Real**: 50-200ms per batch
+- **Reranking - Mock**: <2ms per rerank
+- **Reranking - Real**: 100-500ms per batch (logprob processing)
+- **Network**: 10-50ms LM Studio API round-trip per request
 
 ## Future Considerations
 

@@ -21,11 +21,14 @@ LM_STUDIO_HOST=http://192.168.1.119:1234
 # Model Configuration
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-QWEN_EMBEDDING_MODEL=qwen-embed
-QWEN_RERANKER_MODEL=qwen-reranker
+QWEN_EMBEDDING_MODEL=text-embedding-qwen3-embedding-0.6b
+QWEN_RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # Embedding Configuration
 USE_QWEN_EMBEDDINGS=true
+
+# Production Safety: No Mocks in Production
+ALLOW_MOCKS_FOR_TESTS=0           # Only set to 1 inside unit tests
 
 # Connection Settings
 LM_STUDIO_TIMEOUT=30
@@ -42,6 +45,12 @@ BATCH_SIZE=50
 
 # Semantic Network Configuration
 VECTOR_DIM=1024
+
+# Rerank-Driven Relationship Configuration
+NN_TOPK=20
+RERANK_MIN=0.50
+EDGE_STRONG=0.90
+EDGE_WEAK=0.75
 
 # Error Handling
 CONFLICT_RETRY_LIMIT=3
