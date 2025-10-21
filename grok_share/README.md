@@ -83,3 +83,4 @@ See `AGENTS.md` for complete agent framework documentation. Key rules:
 - Always consult AGENTS.md before multi-step tasks
 - Test-first development, small green PRs
 - Documentation lockstep with code changes
+

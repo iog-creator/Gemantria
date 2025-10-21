@@ -1,39 +1,179 @@
-# mypy: ignore-errors
-# TODO: Remove ignore-errors once full postgres implementation is added
-
 from __future__ import annotations
 
+import json
 import os
-from typing import Any
+from typing import Any, Iterator, Sequence
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import MemorySaver
 
+try:
+    import psycopg
+    HAS_DB = True
+except Exception:  # pragma: no cover
+    HAS_DB = False
 
-# Simple postgres checkpointer implementation
+WORKFLOW_ID = os.getenv("WORKFLOW_ID", "gemantria.v1")
+
+
 class PostgresCheckpointer(BaseCheckpointSaver):
-    """Simple Postgres checkpointer implementation."""
+    """Full LangGraph-compatible Postgres checkpointer implementation."""
 
     def __init__(self, conn_string: str):
+        if not conn_string:
+            raise RuntimeError("GEMATRIA_DSN required for PostgresCheckpointer")
+        if not HAS_DB:
+            raise RuntimeError("psycopg not available in this environment")
         self.conn_string = conn_string
-        # TODO: Implement full postgres checkpointer in future PR
-        # For now, this is a placeholder that raises NotImplementedError
+
+    def _connect(self):
+        return psycopg.connect(self.conn_string)
 
     def get_tuple(self, config: dict[str, Any]) -> Any:
-        raise NotImplementedError("Postgres checkpointer not yet implemented")
+        """Get latest checkpoint tuple for thread."""
+        thread_id = config.get("configurable", {}).get("thread_id")
+        if not thread_id:
+            return None
 
-    def list(self, config: dict[str, Any], *, before: Any = None, limit: int | None = None) -> Any:
-        raise NotImplementedError("Postgres checkpointer not yet implemented")
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT checkpoint, metadata, parent_checkpoint_id
+                FROM checkpointer_state
+                WHERE workflow = %s AND thread_id = %s
+                ORDER BY created_at DESC, checkpoint_id DESC
+                LIMIT 1
+                """,
+                (WORKFLOW_ID, thread_id),
+            )
+            row = cur.fetchone()
+            if not row:
+                return None
+
+            checkpoint, metadata, parent_checkpoint_id = row
+            parent_config = (
+                {"configurable": {"thread_id": thread_id, "checkpoint_id": parent_checkpoint_id}}
+                if parent_checkpoint_id
+                else None
+            )
+            return (checkpoint, metadata, parent_config)
+
+    def list(self, config: dict[str, Any], *, before: Any = None, limit: int | None = None) -> Iterator[Any]:
+        """List checkpoints for thread with pagination."""
+        thread_id = config.get("configurable", {}).get("thread_id")
+        if not thread_id:
+            return
+
+        with self._connect() as conn, conn.cursor() as cur:
+            if before:
+                # Use before as exclusive upper bound
+                before_created_at, before_checkpoint_id = before
+                cur.execute(
+                    """
+                    SELECT checkpoint_id, checkpoint, metadata, parent_checkpoint_id, created_at
+                    FROM checkpointer_state
+                    WHERE workflow = %s AND thread_id = %s
+                      AND (created_at, checkpoint_id) < (%s, %s)
+                    ORDER BY created_at DESC, checkpoint_id DESC
+                    LIMIT %s
+                    """,
+                    (WORKFLOW_ID, thread_id, before_created_at, before_checkpoint_id, limit),
+                )
+            else:
+                cur.execute(
+                    """
+                    SELECT checkpoint_id, checkpoint, metadata, parent_checkpoint_id, created_at
+                    FROM checkpointer_state
+                    WHERE workflow = %s AND thread_id = %s
+                    ORDER BY created_at DESC, checkpoint_id DESC
+                    LIMIT %s
+                    """,
+                    (WORKFLOW_ID, thread_id, limit),
+                )
+
+            for row in cur:
+                checkpoint_id, checkpoint, metadata, parent_checkpoint_id, created_at = row
+                config_out = {
+                    "configurable": {
+                        "thread_id": thread_id,
+                        "checkpoint_id": checkpoint_id,
+                    }
+                }
+                parent_config = (
+                    {"configurable": {"thread_id": thread_id, "checkpoint_id": parent_checkpoint_id}}
+                    if parent_checkpoint_id
+                    else None
+                )
+                yield (config_out, checkpoint, metadata, parent_config, created_at)
 
     def put(
         self, config: dict[str, Any], checkpoint: dict[str, Any], metadata: dict[str, Any]
     ) -> Any:
-        raise NotImplementedError("Postgres checkpointer not yet implemented")
+        """Store checkpoint with atomic upsert."""
+        thread_id = config.get("configurable", {}).get("thread_id")
+        checkpoint_id = config.get("configurable", {}).get("checkpoint_id")
+        if not thread_id or not checkpoint_id:
+            raise ValueError("thread_id and checkpoint_id required in config")
+
+        parent_checkpoint_id = checkpoint.get("config", {}).get("configurable", {}).get("checkpoint_id")
+
+        with self._connect() as conn, conn.cursor() as cur:
+            # Atomic upsert
+            cur.execute(
+                """
+                INSERT INTO checkpointer_state
+                (workflow, thread_id, checkpoint_id, parent_checkpoint_id, checkpoint, metadata)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (workflow, thread_id, checkpoint_id)
+                DO UPDATE SET
+                    parent_checkpoint_id = EXCLUDED.parent_checkpoint_id,
+                    checkpoint = EXCLUDED.checkpoint,
+                    metadata = EXCLUDED.metadata,
+                    created_at = NOW()
+                """,
+                (
+                    WORKFLOW_ID,
+                    thread_id,
+                    checkpoint_id,
+                    parent_checkpoint_id,
+                    json.dumps(checkpoint),
+                    json.dumps(metadata or {}),
+                ),
+            )
+            conn.commit()
+
+        return config
 
     def put_writes(
         self, config: dict[str, Any], writes: list[tuple[str, Any, Any]], task_id: str
     ) -> Any:
-        raise NotImplementedError("Postgres checkpointer not yet implemented")
+        """Store pending writes."""
+        thread_id = config.get("configurable", {}).get("thread_id")
+        checkpoint_id = config.get("configurable", {}).get("checkpoint_id")
+        if not thread_id or not checkpoint_id:
+            raise ValueError("thread_id and checkpoint_id required in config")
+
+        with self._connect() as conn, conn.cursor() as cur:
+            for idx, (channel, value) in enumerate(writes):
+                cur.execute(
+                    """
+                    INSERT INTO checkpointer_writes
+                    (workflow, thread_id, checkpoint_id, task_id, idx, channel, value)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    """,
+                    (
+                        WORKFLOW_ID,
+                        thread_id,
+                        checkpoint_id,
+                        task_id,
+                        idx,
+                        channel,
+                        json.dumps(value),
+                    ),
+                )
+            conn.commit()
+
+        return config
 
 
 def get_checkpointer() -> MemorySaver | PostgresCheckpointer:
@@ -52,9 +192,9 @@ def _get_memory_checkpointer() -> MemorySaver:
 
 
 def _get_postgres_checkpointer() -> PostgresCheckpointer:
-    """Get Postgres checkpointer (placeholder implementation)."""
+    """Get Postgres checkpointer (full implementation)."""
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
-        raise ValueError("GEMATRIA_DSN environment variable required for postgres checkpointer")
+        raise RuntimeError("GEMATRIA_DSN environment variable required for postgres checkpointer")
 
     return PostgresCheckpointer(dsn)
