@@ -1,0 +1,19 @@
+---
+description: Semantic network and AI inference rules
+globs:
+  - src/nodes/network_aggregator.py
+  - src/services/lmstudio_client.py
+alwaysApply: false
+---
+
+- Network aggregator processes enriched nouns with Qwen3 embeddings (1024-dim, L2 normalized).
+- Embeddings use structured format: "Document: {name}\nMeaning: {hebrew}\nReference: {reference}\nGematria: {value}\nInsight: {insight}".
+- Batch processing: 16-32 texts per LM Studio request for efficiency.
+- Cosine similarity thresholds: strong edges ≥0.90, weak edges ≥0.75.
+- pgvector storage with ON CONFLICT upsert and unique constraints.
+- USE_QWEN_EMBEDDINGS=true enables real inference; false uses deterministic mocks.
+- Qwen models: Qwen3-Embedding-0.6B-GGUF for vectors, Qwen3-Reranker-0.6B-GGUF for validation.
+- Reranker uses yes/no prompts for relevance scoring (0.9/0.1 confidence mapping).
+- Network summary includes total_nodes, strong_edges, weak_edges, embeddings_generated, similarity_computations.
+- NetworkAggregationError raised on embedding failures; pipeline continues with partial results.
+- Mock embeddings deterministic (seed = hash(text) % 10000) for testing reproducibility.

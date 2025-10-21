@@ -25,7 +25,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - `METRICS_ENABLED=1` — enables Postgres metrics sink; `0` disables DB writes (stdout remains)
 - `LOG_LEVEL=INFO` — controls JSON logger verbosity
 
-- LLM: LM Studio only when enabled; confidence is metadata only. Requires `THEOLOGY_MODEL` and `MATH_MODEL` for inference.
+- LLM: LM Studio with Qwen3 models for semantic intelligence. Requires `THEOLOGY_MODEL`, `MATH_MODEL`, `QWEN_EMBEDDING_MODEL`, `QWEN_RERANKER_MODEL` for inference. `USE_QWEN_EMBEDDINGS=true` enables real semantic vectors.
 - Metrics: stdout JSON + Postgres sink (metrics_log). Fail-open (never block pipeline).
 - Observability (Phase 2 baseline):
   - Postgres views: `v_node_latency_7d`, `v_node_throughput_24h`, `v_recent_errors_7d`, `v_pipeline_runs`.
@@ -98,6 +98,25 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 4. Expected: AI enrichment node integrates with pipeline, confidence scores stored in `ai_enrichment_log`, fallback to mock mode when LM Studio unavailable.
 
+### Runbook: Semantic Network & Qwen Integration
+1. Apply migrations:
+   ```bash
+   psql "${GEMATRIA_DSN}" -f migrations/007_concept_network.sql
+   psql "${GEMATRIA_DSN}" -f migrations/008_add_concept_network_constraints.sql
+   ```
+2. Configure Qwen models:
+   ```bash
+   export USE_QWEN_EMBEDDINGS=true
+   export QWEN_EMBEDDING_MODEL=qwen-embed
+   export QWEN_RERANKER_MODEL=qwen-reranker
+   export LM_STUDIO_HOST=http://127.0.0.1:1234
+   ```
+3. Verify locally:
+   ```bash
+   make lint type test.unit test.integration coverage.report
+   ```
+4. Expected: Network aggregator generates 1024-dim embeddings, stores in `concept_network`, computes similarity relationships, and updates reports with network metrics.
+
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
 - Mispar Hechrachi; finals=regular. Surface-form gematria with calc strings.
@@ -106,7 +125,8 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Default edges: shared_prime (cap k=3); optional identical_value/gcd_gt_1 behind flags.
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
-- LLM Integration: LM Studio only; confidence scores are metadata only (never affect core gematria); mock mode available for testing.
+- LLM Integration: LM Studio with Qwen3 models; confidence scores are metadata only (never affect core gematria); `USE_QWEN_EMBEDDINGS=true` enables real semantic vectors; mock mode available for testing.
+- Semantic Network: pgvector embeddings (1024-dim, L2 normalized) with cosine similarity; strong edges ≥0.90, weak edges ≥0.75; Qwen3 inference for relationship discovery.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
 
 ## How agents should use rules

@@ -29,7 +29,7 @@ Implement semantic aggregation using vector embeddings and graph analysis with t
 ```sql
 CREATE TABLE concept_network (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    concept_id      UUID NOT NULL REFERENCES concepts(id),
+    concept_id      UUID NOT NULL,
     embedding       VECTOR(1024) NOT NULL,
     created_at      TIMESTAMPTZ DEFAULT now()
 );
@@ -45,10 +45,12 @@ CREATE TABLE concept_relations (
 ```
 
 #### LM Studio Integration
-- Endpoint: `/v1/embeddings`
-- Model: Configurable via `THEOLOGY_MODEL` environment variable
-- Dimensions: 1024 (configurable via `VECTOR_DIM`)
-- Fallback: Deterministic mock embeddings for testing
+- **Embeddings**: Qwen3-Embedding-0.6B-GGUF via `/v1/embeddings`
+- **Reranking**: Qwen3-Reranker-0.6B-GGUF via `/v1/chat/completions`
+- **Dimensions**: 1024 (L2 normalized vectors)
+- **Configuration**: `USE_QWEN_EMBEDDINGS=true` to enable real inference
+- **Fallback**: Deterministic mock embeddings when disabled or in test mode
+- **Batch Processing**: 16-32 texts per embedding request for efficiency
 
 ### Pipeline Integration
 
