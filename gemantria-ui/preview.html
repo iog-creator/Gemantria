@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemantria - Hebrew Gematria Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'hebrew': ['Noto Sans Hebrew', 'SBL Hebrew', 'serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        earth: '#8B4513',
+                        sky: '#87CEEB',
+                        gold: '#DAA520',
+                        olive: '#808000',
+                        crimson: '#DC143C',
+                        purple: '#663399',
+                        text: '#2C3E50',
+                        muted: '#7F8C8D',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hebrew-text {
+            font-family: 'Noto Sans Hebrew', 'SBL Hebrew', serif;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+        }
+        .calculation-breakdown {
+            font-family: 'JetBrains Mono', monospace;
+            direction: ltr;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-text">Gemantria</h1>
+                </div>
+                <div class="text-sm text-muted">
+                    Hebrew Gematria Analysis
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="space-y-8">
+            <!-- Hero section -->
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-text mb-4">
+                    Hebrew Gematria Calculator
+                </h2>
+                <p class="text-xl text-muted max-w-2xl mx-auto">
+                    Enter Hebrew text to calculate gematria values, explore biblical references, 
+                    and discover numerical patterns in sacred texts.
+                </p>
+            </div>
+
+            <!-- Input section -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="w-full max-w-2xl mx-auto">
+                    <form class="space-y-4">
+                        <div class="relative">
+                            <textarea
+                                id="hebrew-input"
+                                placeholder="הקלד טקסט עברי כאן..."
+                                class="w-full h-32 px-4 py-3 border-2 border-gray-300 rounded-lg font-hebrew text-right text-lg focus:outline-none focus:ring-2 focus:ring-gold transition-colors"
+                                style="direction: rtl"
+                            ></textarea>
+                            
+                            <!-- Status indicator -->
+                            <div class="absolute top-3 left-3">
+                                <div class="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" id="loading" style="display: none;"></div>
+                                <svg class="w-5 h-5 text-crimson" id="error" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <svg class="w-5 h-5 text-olive" id="success" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Error message -->
+                        <div class="text-crimson text-sm flex items-center gap-2" id="error-message" style="display: none;">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span id="error-text"></span>
+                        </div>
+
+                        <!-- Real-time calculation display -->
+                        <div class="bg-gray-50 p-4 rounded-lg border" id="calculation-display" style="display: none;">
+                            <div class="flex items-center gap-2 mb-2">
+                                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="font-semibold text-text">Gematria Calculation</span>
+                            </div>
+                            <div class="font-mono text-sm text-muted" id="calculation-text">
+                            </div>
+                            <div class="mt-2 text-right">
+                                <span class="text-2xl font-bold text-gold" id="gematria-value">
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button
+                            type="button"
+                            id="calculate-btn"
+                            class="w-full py-3 px-6 rounded-lg font-semibold transition-colors bg-gold text-white hover:bg-yellow-600 active:bg-yellow-700"
+                        >
+                            Calculate Gematria
+                        </button>
+                    </form>
+
+                    <!-- Keyboard shortcut hint -->
+                    <div class="mt-2 text-xs text-muted text-center">
+                        Press Cmd+Enter (Mac) or Ctrl+Enter (Windows) to submit
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results section -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-text">Results (<span id="results-count">0</span>)</h2>
+                        <div class="text-sm text-muted">
+                            Gematria values calculated
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" id="results-grid">
+                        <div class="text-center py-12 text-muted">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            <p>No results to display. Enter Hebrew text to see gematria calculations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features section -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-sm border p-6 text-center">
+                    <svg class="w-12 h-12 text-gold mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-text mb-2">Real-time Calculation</h3>
+                    <p class="text-muted">
+                        Instant gematria calculations with step-by-step breakdowns
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm border p-6 text-center">
+                    <svg class="w-12 h-12 text-olive mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-text mb-2">Biblical Integration</h3>
+                    <p class="text-muted">
+                        Connect with Strong's numbers and biblical references
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm border p-6 text-center">
+                    <svg class="w-12 h-12 text-purple mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-text mb-2">Academic Accuracy</h3>
+                    <p class="text-muted">
+                        Mispar Hechrachi method with proper Hebrew normalization
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-muted">
+                <p>Built with Next.js, TypeScript, and the Gemantria v2.0 pipeline</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Gematria calculation
+        function calculateGematria(hebrewText) {
+            const map = {
+                "א": 1, "ב": 2, "ג": 3, "ד": 4, "ה": 5, "ו": 6, "ז": 7, "ח": 8, "ט": 9, "י": 10,
+                "כ": 20, "ך": 20, "ל": 30, "מ": 40, "ם": 40, "נ": 50, "ן": 50, "ס": 60, "ע": 70,
+                "פ": 80, "ף": 80, "צ": 90, "ץ": 90, "ק": 100, "ר": 200, "ש": 300, "ת": 400
+            };
+            
+            return hebrewText.split('').reduce((sum, char) => sum + (map[char] || 0), 0);
+        }
+
+        // Generate calculation string
+        function generateCalculationString(hebrewText) {
+            const map = {
+                "א": 1, "ב": 2, "ג": 3, "ד": 4, "ה": 5, "ו": 6, "ז": 7, "ח": 8, "ט": 9, "י": 10,
+                "כ": 20, "ך": 20, "ל": 30, "מ": 40, "ם": 40, "נ": 50, "ן": 50, "ס": 60, "ע": 70,
+                "פ": 80, "ף": 80, "צ": 90, "ץ": 90, "ק": 100, "ר": 200, "ש": 300, "ת": 400
+            };
+            
+            const parts = hebrewText.split('').map(char => `${char}(${map[char] || 0})`);
+            const total = calculateGematria(hebrewText);
+            return parts.join(' + ') + ` = ${total}`;
+        }
+
+        // Hebrew text validation
+        function validateHebrewInput(text) {
+            const errors = [];
+            
+            if (!/[\u0590-\u05FF]/.test(text)) {
+                errors.push('Input must contain Hebrew characters');
+            }
+            
+            if (text.length > 1000) {
+                errors.push('Input too long (max 1000 characters)');
+            }
+            
+            const normalized = text.replace(/[\u0591-\u05C7]/g, '');
+            
+            return {
+                isValid: errors.length === 0,
+                normalized,
+                errors
+            };
+        }
+
+        // Add result to display
+        function addResult(text, normalized, gematria, calculation) {
+            const resultsGrid = document.getElementById('results-grid');
+            const resultsCount = document.getElementById('results-count');
+            
+            // Clear "no results" message
+            if (resultsGrid.children.length === 1 && resultsGrid.children[0].classList.contains('text-center')) {
+                resultsGrid.innerHTML = '';
+            }
+            
+            const resultCard = document.createElement('div');
+            resultCard.className = 'bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer';
+            
+            resultCard.innerHTML = `
+                <div class="text-right mb-3">
+                    <div class="font-hebrew text-2xl text-text mb-1">${text}</div>
+                    ${normalized !== text ? `<div class="font-hebrew text-lg text-muted">${normalized}</div>` : ''}
+                </div>
+                <div class="text-center mb-3">
+                    <div class="text-3xl font-bold text-gold">${gematria.toLocaleString()}</div>
+                </div>
+                <div class="text-xs text-muted">
+                    <div class="font-mono calculation-breakdown">${calculation}</div>
+                </div>
+            `;
+            
+            resultsGrid.insertBefore(resultCard, resultsGrid.firstChild);
+            resultsCount.textContent = parseInt(resultsCount.textContent) + 1;
+        }
+
+        // Event listeners
+        const input = document.getElementById('hebrew-input');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const success = document.getElementById('success');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const calculationDisplay = document.getElementById('calculation-display');
+        const calculationText = document.getElementById('calculation-text');
+        const gematriaValue = document.getElementById('gematria-value');
+
+        // Real-time validation and calculation
+        input.addEventListener('input', function() {
+            const text = this.value.trim();
+            
+            if (text) {
+                const validation = validateHebrewInput(text);
+                if (validation.isValid) {
+                    error.style.display = 'none';
+                    success.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    
+                    const gematria = calculateGematria(validation.normalized);
+                    const calculation = generateCalculationString(validation.normalized);
+                    
+                    calculationText.textContent = calculation;
+                    gematriaValue.textContent = gematria.toLocaleString();
+                    calculationDisplay.style.display = 'block';
+                } else {
+                    success.style.display = 'none';
+                    error.style.display = 'block';
+                    errorText.textContent = validation.errors[0];
+                    errorMessage.style.display = 'flex';
+                    calculationDisplay.style.display = 'none';
+                }
+            } else {
+                success.style.display = 'none';
+                error.style.display = 'none';
+                errorMessage.style.display = 'none';
+                calculationDisplay.style.display = 'none';
+            }
+        });
+
+        // Calculate button click
+        calculateBtn.addEventListener('click', function() {
+            const text = input.value.trim();
+            if (!text) return;
+            
+            const validation = validateHebrewInput(text);
+            if (!validation.isValid) return;
+            
+            const gematria = calculateGematria(validation.normalized);
+            const calculation = generateCalculationString(validation.normalized);
+            
+            addResult(text, validation.normalized, gematria, calculation);
+        });
+
+        // Keyboard shortcut
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                calculateBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

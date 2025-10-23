@@ -27,13 +27,15 @@ export default function Home() {
     return response.json();
   };
 
-  const handleProcess = async (text: string) => {
+  const handleProcess = async (text: string): Promise<ProcessedNoun> => {
     setIsProcessing(true);
     try {
       const result = await processHebrewText(text);
       setResults(prev => [result, ...prev]);
+      return result;
     } catch (error) {
       console.error('Processing error:', error);
+      throw error;
     } finally {
       setIsProcessing(false);
     }
