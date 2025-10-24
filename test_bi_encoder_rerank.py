@@ -134,7 +134,9 @@ def test_bi_encoder_rerank():
     print("\n4. Testing import and interface compatibility...")
 
     # Test that the new rerank function can be imported as the old name
-    from src.services.rerank_via_embeddings import rerank_via_embeddings as rerank_pairs  # noqa: E402
+    from src.services.rerank_via_embeddings import (  # noqa: E402
+        rerank_via_embeddings as rerank_pairs,  # noqa: E402
+    )
 
     # Test with simple mock
     with mock.patch("src.services.rerank_via_embeddings.requests") as mock_requests:

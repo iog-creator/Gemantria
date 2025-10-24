@@ -19,15 +19,12 @@ Usage:
 """
 
 import argparse
-import os
 from pathlib import Path
-from typing import Dict, List, Set
-
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def get_required_directories() -> Dict[str, List[str]]:
+def get_required_directories() -> dict[str, list[str]]:
     """Get directories that require AGENTS.md files, grouped by type."""
     required = {
         "source": [],  # src/*/
@@ -39,20 +36,20 @@ def get_required_directories() -> Dict[str, List[str]]:
     src_dir = ROOT / "src"
     if src_dir.exists():
         for subdir in src_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith('.'):
+            if subdir.is_dir() and not subdir.name.startswith("."):
                 required["source"].append(f"src/{subdir.name}")
 
     # Add all docs subdirectories
     docs_dir = ROOT / "docs"
     if docs_dir.exists():
         for subdir in docs_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith('.'):
+            if subdir.is_dir() and not subdir.name.startswith("."):
                 required["docs"].append(f"docs/{subdir.name}")
 
     return required
 
 
-def get_existing_agents_files() -> Set[str]:
+def get_existing_agents_files() -> set[str]:
     """Get all existing AGENTS.md file paths relative to root."""
     existing = set()
     for agents_file in ROOT.glob("**/AGENTS.md"):
@@ -61,7 +58,7 @@ def get_existing_agents_files() -> Set[str]:
     return existing
 
 
-def get_missing_agents_files() -> Dict[str, List[str]]:
+def get_missing_agents_files() -> dict[str, list[str]]:
     """Get AGENTS.md files that need to be created, grouped by directory type."""
     required = get_required_directories()
     existing = get_existing_agents_files()
@@ -158,7 +155,7 @@ All scripts must load environment variables consistently to prevent database con
 
 ```python
 # REQUIRED: Add this to ALL scripts that use environment variables
-from src.infra.env_loader import ensure_env_loaded
+from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 
 # Load environment variables from .env file (REQUIRED)
 ensure_env_loaded()
@@ -714,7 +711,7 @@ def main():
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Show what would be created without actually creating files"
+        help="Show what would be created without actually creating files",
     )
     args = parser.parse_args()
 
@@ -740,7 +737,9 @@ def main():
         print(f"\n✅ Created {created} AGENTS.md files")
         print("Run 'make rules.audit docs.audit' to verify compliance")
     else:
-        print(f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)")
+        print(
+            f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)"
+        )
 
 
 if __name__ == "__main__":

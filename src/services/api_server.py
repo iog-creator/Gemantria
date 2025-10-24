@@ -13,7 +13,7 @@ Usage:
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,30 +29,35 @@ ensure_env_loaded()
 # Initialize logger
 LOG = get_logger("api_server")
 
+
 # --- DTOs (public API surface) -------------------------------------------------
 class HealthResponse(BaseModel):
     status: str
     export_directory: str
-    files: Dict[str, Dict[str, Any]]
-    timestamp: Optional[float] = None
+    files: dict[str, dict[str, Any]]
+    timestamp: float | None = None
+
 
 class APIInfo(BaseModel):
     name: str
     version: str
     description: str
-    endpoints: Dict[str, str]
+    endpoints: dict[str, str]
+
 
 class FilteredResponse(BaseModel):
-    data: List[Dict[str, Any]]
-    metadata: Dict[str, Any]
+    data: list[dict[str, Any]]
+    metadata: dict[str, Any]
     filtered_count: int
-    applied_filters: Dict[str, Any]
+    applied_filters: dict[str, Any]
+
 
 class NetworkResponse(BaseModel):
     center_concept: str
-    connections: List[Dict[str, Any]]
-    network_stats: Dict[str, Any]
-    metadata: Dict[str, Any]
+    connections: list[dict[str, Any]]
+    network_stats: dict[str, Any]
+    metadata: dict[str, Any]
+
 
 # FastAPI app setup
 app = FastAPI(
@@ -395,7 +400,9 @@ async def get_temporal_patterns(
         raise HTTPException(status_code=500, detail="Invalid temporal patterns data")
     except Exception as e:
         LOG.error(f"Error in temporal patterns endpoint: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Internal server error: {str(e)}"
+        ) from e
 
 
 @app.get("/api/v1/forecast")
@@ -448,7 +455,9 @@ async def get_forecasts(
         raise HTTPException(status_code=500, detail="Invalid forecast data")
     except Exception as e:
         LOG.error(f"Error in forecast endpoint: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Internal server error: {str(e)}"
+        ) from e
 
 
 if __name__ == "__main__":
