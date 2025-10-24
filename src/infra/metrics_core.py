@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import os
 import uuid
 from typing import Any
@@ -32,10 +33,8 @@ class MetricsClient:
 
     def emit(self, row: dict[str, Any]) -> None:
         # Always emit to stdout JSON; db insert only if enabled
-        try:
+        with contextlib.suppress(Exception):
             log_json(LOG, 20, "metrics", **row)
-        except Exception:
-            pass
         if not self._enabled:
             return
         try:
@@ -50,6 +49,23 @@ class MetricsClient:
                     db_row[k] = json.dumps(v)
                 else:
                     db_row[k] = v
+
+            # Fill in missing required fields with defaults
+            defaults = {
+                "workflow": WORKFLOW_ID,
+                "thread_id": "default",
+                "status": "ok",
+                "started_at": None,
+                "finished_at": None,
+                "duration_ms": None,
+                "items_in": None,
+                "items_out": None,
+                "error_json": None,
+                "meta": {},
+            }
+            for key, default_value in defaults.items():
+                if key not in db_row:
+                    db_row[key] = default_value
 
             with self._conn().cursor() as cur:
                 cur.execute(

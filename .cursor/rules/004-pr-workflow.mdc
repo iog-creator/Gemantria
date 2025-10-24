@@ -7,3 +7,9 @@ alwaysApply: false
 - Run: make lint type test.unit test.int coverage.report
 - Keep coverage ≥98%. No mocks.
 - Commit & push; open PR with Goal/Files/Tests/Acceptance.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

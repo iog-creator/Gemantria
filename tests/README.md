@@ -27,24 +27,28 @@ tests/
 ### Test Categories
 
 #### Unit Tests (`unit/`)
+
 - **Scope**: Individual functions, methods, and classes
 - **Isolation**: Mock external dependencies
 - **Speed**: Fast execution (< 100ms per test)
 - **Coverage**: 98%+ line and branch coverage required
 
 #### Integration Tests (`integration/`)
+
 - **Scope**: Component interactions and data flow
 - **Dependencies**: Use real databases and services where safe
 - **Focus**: Interface compliance and data consistency
 - **Performance**: Medium execution time (100ms - 10s)
 
 #### End-to-End Tests (`e2e/`)
+
 - **Scope**: Complete pipeline execution
 - **Environment**: Full system with external dependencies
 - **Validation**: End-to-end correctness and performance
 - **Frequency**: Run on major changes and releases
 
 #### Contract Tests (`contract/`)
+
 - **Scope**: Interface compliance between modules
 - **Validation**: API contracts and data schemas
 - **Automation**: Prevent interface drift between versions
@@ -175,6 +179,7 @@ async def mock_ai_client():
 ### Core Algorithm Testing
 
 #### Gematria Calculations
+
 ```python
 def test_gematria_basic_values():
     """Test fundamental gematria value calculations"""
@@ -184,6 +189,7 @@ def test_gematria_basic_values():
 ```
 
 #### Text Processing
+
 ```python
 def test_hebrew_normalization():
     """Test Hebrew text normalization and cleaning"""
@@ -196,6 +202,7 @@ def test_hebrew_normalization():
 ### AI Service Testing
 
 #### Mock vs Live Testing
+
 ```python
 @pytest.mark.parametrize("use_mock", [True, False])
 def test_ai_enrichment(use_mock):
@@ -209,6 +216,7 @@ def test_ai_enrichment(use_mock):
 ```
 
 #### Health Check Validation
+
 ```python
 def test_qwen_live_gate():
     """Test Qwen Live Gate enforcement"""
@@ -220,6 +228,7 @@ def test_qwen_live_gate():
 ### Database Testing
 
 #### Schema Validation
+
 ```python
 def test_database_schema():
     """Validate database schema matches expectations"""
@@ -230,6 +239,7 @@ def test_database_schema():
 ```
 
 #### Data Integrity
+
 ```python
 def test_data_integrity():
     """Test data consistency and referential integrity"""

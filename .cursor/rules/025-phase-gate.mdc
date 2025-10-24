@@ -5,7 +5,7 @@ globs:
   - "docs/DECISION_LOG.md"
   - "docs/VERIFICATION_MATRIX.md"
   - "scripts/generate_forest.py"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 025 — Phase Gate & Forest Sync

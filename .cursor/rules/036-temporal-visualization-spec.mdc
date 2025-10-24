@@ -1,0 +1,79 @@
+---
+description: Spec-only (Phase 8). Enforcement remains via 000/006/017/027.
+globs: ["scripts/export_stats.py", "scripts/generate_report.py", "src/services/api_server.py", "webui/dashboard/**", "docs/SSOT/*.schema.json"]
+alwaysApply: false
+---
+
+# Rule 036 — Temporal Visualization Spec (Phase 8)
+
+**Spec-only rule describing Phase 8 temporal visualization and reporting requirements.**
+
+This rule documents the specification for temporal data visualization and reporting but does not enforce blocking behavior. Actual enforcement remains through core rules 000/006/017/027.
+
+## Phase 8 Visualization Requirements
+
+### Report Integration (`generate_report.py`)
+
+#### Temporal Analytics Section
+- **Summary Statistics**: Total series count, average series length, change point counts
+- **Book Coverage**: List of analyzed books with series counts per book
+- **Parameter Display**: Window sizes, units, and analysis configuration
+- **Top Volatile Series**: Table of most volatile series by coefficient of variation
+- **Series Statistics**: Aggregate metrics across all temporal patterns
+
+#### Forecast Summary Section
+- **Model Distribution**: Pie/bar chart of forecasting models used
+- **Performance Metrics**: Average RMSE and MAE across all forecasts
+- **Horizon Analysis**: Forecast accuracy by prediction horizon
+- **Example Forecasts**: Detailed tables for sample forecast series
+- **Book-wise Summary**: Forecast coverage by biblical book
+
+### Web UI Dashboard Components
+
+#### TemporalExplorer.tsx Requirements
+- **Interactive Filtering**: Series ID, time unit (verse/chapter), window size controls
+- **Time Series Visualization**: Line charts with rolling window overlays
+- **Change Point Indicators**: Visual markers for detected transitions
+- **Series Statistics**: Display of volatility, length, and metadata
+- **Responsive Design**: Mobile-friendly layout with proper error states
+- **Real-time Updates**: API-driven data fetching with loading states
+
+#### ForecastPanel.tsx Requirements
+- **Forecast Visualization**: Historical + forecast curves with uncertainty bands
+- **Model Performance**: Display of RMSE/MAE for each forecast
+- **Interactive Controls**: Series selection, horizon adjustment
+- **Prediction Intervals**: Confidence bands around forecast lines
+- **Comparative Analysis**: Side-by-side forecast comparison
+- **Metadata Display**: Model type, parameters, and performance metrics
+
+### API Integration
+
+#### Temporal Patterns API (`/api/v1/temporal`)
+- **Parameter Validation**: Input sanitization for series_id, unit, window
+- **Efficient Filtering**: Database-like filtering without full dataset transfer
+- **Result Limiting**: Configurable result limits to prevent UI overload
+- **Metadata Inclusion**: Analysis parameters and filtering context
+- **Error Handling**: Graceful degradation with informative error messages
+
+#### Forecast API (`/api/v1/forecast`)
+- **Series Selection**: Efficient lookup of forecast data by series ID
+- **Horizon Filtering**: Support for different forecast lengths
+- **Performance Metadata**: Include RMSE/MAE in API responses
+- **Interval Data**: Prediction intervals for uncertainty visualization
+- **Caching Strategy**: Appropriate cache headers for forecast data
+
+### Interactive Analytics Endpoints
+
+The reporting system should include Phase 8 endpoints in the "Interactive Analytics Endpoints" section:
+- `GET /api/v1/temporal?series_id={id}&unit=chapter&window=5`
+- `GET /api/v1/forecast?series_id={id}&horizon=10`
+
+### Health Check Integration
+
+API health endpoint should include status for new temporal files:
+- `temporal_patterns.json`: existence, size, modification time
+- `pattern_forecast.json`: existence, size, modification time
+
+## Implementation Status
+
+This is a **spec-only rule** - it describes what Phase 8 visualization should implement but does not block commits. The Web UI components extend existing dashboard architecture and follow established patterns for error handling, loading states, and responsive design.

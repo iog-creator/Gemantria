@@ -13,9 +13,12 @@ import math
 import os
 import re
 import unicodedata
-from typing import List
 
 import requests
+
+# Guard against mocks for this run
+if os.getenv("USE_MOCKS", "0") == "1":
+    raise RuntimeError("Mocks are disabled for this run. Set USE_MOCKS=0.")
 
 
 # Environment configuration
@@ -41,7 +44,7 @@ def _norm(text: str) -> str:
     return text
 
 
-def _embed(texts: List[str]) -> List[List[float]]:
+def _embed(texts: list[str]) -> list[list[float]]:
     """
     Generate embeddings for a batch of texts using LM Studio /v1/embeddings.
 
@@ -55,15 +58,13 @@ def _embed(texts: List[str]) -> List[List[float]]:
         requests.HTTPError: If the API call fails
     """
     r = requests.post(
-        f"{LM_BASE}/embeddings",
-        json={"model": EMBED_MODEL, "input": texts},
-        timeout=60
+        f"{LM_BASE}/embeddings", json={"model": EMBED_MODEL, "input": texts}, timeout=60
     )
     r.raise_for_status()
     return [item["embedding"] for item in r.json()["data"]]
 
 
-def _cos(a: List[float], b: List[float]) -> float:
+def _cos(a: list[float], b: list[float]) -> float:
     """
     Compute cosine similarity between two vectors.
 
@@ -74,15 +75,15 @@ def _cos(a: List[float], b: List[float]) -> float:
     Returns:
         Cosine similarity score in [0, 1]
     """
-    dot = sum(x * y for x, y in zip(a, b))
+    dot = sum(x * y for x, y in zip(a, b, strict=False))
     na = math.sqrt(sum(x * x for x in a))
     nb = math.sqrt(sum(y * y for y in b))
     return 0.0 if na == 0 or nb == 0 else dot / (na * nb)
 
 
 def rerank_via_embeddings(
-    pairs: List[Tuple[int, int]], name_map: dict[int, str]
-) -> List[float]:
+    pairs: list[tuple[int, int]], name_map: dict[int, str]
+) -> list[float]:
     """
     Rerank concept pairs by computing cosine similarity of their BGE-M3 embeddings.
 
@@ -108,4 +109,4 @@ def rerank_via_embeddings(
     vecB = _embed(B)
 
     # Compute cosine similarities
-    return [_cos(a, b) for a, b in zip(vecA, vecB)]
+    return [_cos(a, b) for a, b in zip(vecA, vecB, strict=False)]

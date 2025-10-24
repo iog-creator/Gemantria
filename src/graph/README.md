@@ -28,18 +28,21 @@ Input → Extraction → Validation → Enrichment → Network → Analysis → 
 ### Key Components
 
 #### Pipeline Orchestrator (`graph.py`)
+
 - **Main Entry Point**: `python -m src.graph.graph --book Genesis`
 - **Configuration Management**: Load and validate pipeline settings
 - **Execution Control**: Start, monitor, and complete pipeline runs
 - **Result Aggregation**: Collect and format final outputs
 
 #### Node Coordination (`pipeline.py`)
+
 - **LangGraph Setup**: Define the graph structure and node connections
 - **Data Flow**: Manage state transitions between processing steps
 - **Conditional Logic**: Handle branching based on data characteristics
 - **Checkpointing**: Save progress for resumable execution
 
 #### Processing Nodes (`nodes/`)
+
 - **Individual Steps**: Modular processing components
 - **State Updates**: Transform and enrich pipeline state
 - **Validation Gates**: Ensure data quality at each step
@@ -48,21 +51,25 @@ Input → Extraction → Validation → Enrichment → Network → Analysis → 
 ## 🔄 Pipeline Flow
 
 ### Phase 1: Text Processing
+
 1. **Input Validation**: Verify source text and parameters
 2. **Noun Extraction**: Identify Hebrew nouns for analysis
 3. **Basic Validation**: Check data integrity and format
 
 ### Phase 2: Semantic Enrichment
+
 1. **Gematria Calculation**: Compute numerical values
 2. **AI Enrichment**: Generate semantic insights via Qwen models
 3. **Confidence Validation**: Verify AI-generated content quality
 
 ### Phase 3: Network Construction
+
 1. **Embedding Generation**: Create vector representations
 2. **Similarity Analysis**: Find relationships between concepts
 3. **Graph Building**: Construct semantic network structure
 
 ### Phase 4: Analysis & Export
+
 1. **Community Detection**: Identify concept clusters
 2. **Centrality Analysis**: Calculate importance metrics
 3. **Export Generation**: Create multiple output formats

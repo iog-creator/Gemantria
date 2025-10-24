@@ -6,8 +6,8 @@ import unicodedata
 import uuid
 from typing import Any
 
-MAQAF = "\u05BE"
-SOF_PASUQ = "\u05C3"
+MAQAF = "\u05be"
+SOF_PASUQ = "\u05c3"
 _PUNCT = re.compile(r"[^\w\u0590-\u05FF]+", re.UNICODE)
 
 

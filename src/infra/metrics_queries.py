@@ -4,6 +4,11 @@ import os
 
 import psycopg
 
+from .env_loader import ensure_env_loaded
+
+# Ensure environment variables are loaded
+ensure_env_loaded()
+
 DSN = os.getenv("GEMATRIA_DSN")
 
 

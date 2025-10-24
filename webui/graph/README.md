@@ -5,6 +5,7 @@ React-based interactive graph visualization for Gemantria semantic networks.
 ## Overview
 
 This web application provides:
+
 - **Interactive graph visualization** of semantic concept networks
 - **Force-directed layouts** with cluster coloring
 - **Node exploration** with detailed centrality metrics
@@ -22,22 +23,26 @@ This web application provides:
 ## Development Setup
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
 ### Installation
+
 ```bash
 cd webui/graph
 npm install
 ```
 
 ### Development Server
+
 ```bash
 npm run dev
 # Opens http://localhost:5173
 ```
 
 ### Build for Production
+
 ```bash
 npm run build
 npm run preview  # Test production build
@@ -46,6 +51,7 @@ npm run preview  # Test production build
 ## Data Sources
 
 The visualization loads data from `exports/graph_latest.json` which contains:
+
 - **Nodes**: Concepts with positions, labels, and metadata
 - **Edges**: Semantic relationships with strength scores
 - **Clusters**: Community detection results
@@ -54,12 +60,15 @@ The visualization loads data from `exports/graph_latest.json` which contains:
 ## Key Components
 
 ### GraphView (`src/components/GraphView.tsx`)
+
 Main graph visualization component using Visx force-directed layout.
 
 ### NodeDetails (`src/components/NodeDetails.tsx`)
+
 Detailed node information panel with centrality metrics and concept details.
 
 ### GraphDashboard (`src/pages/GraphDashboard.tsx`)
+
 Main dashboard page integrating all components.
 
 ## Data Flow
@@ -79,11 +88,13 @@ Pipeline → exports/graph_latest.json → GraphDashboard → GraphView → Node
 ## Deployment
 
 ### Local Development
+
 ```bash
 make webui  # Launches development server
 ```
 
 ### Production Build
+
 ```bash
 npm run build
 # Deploy dist/ folder to web server
@@ -92,6 +103,7 @@ npm run build
 ## API Integration
 
 Data is loaded via:
+
 - `src/hooks/useGraphData.ts` - Graph data fetching hook
 - Static JSON files in `exports/` directory
 - Future: Real-time API endpoints

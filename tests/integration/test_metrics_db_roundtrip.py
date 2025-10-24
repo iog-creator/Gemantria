@@ -4,7 +4,7 @@ import uuid
 
 import psycopg
 
-from src.infra.metrics import MetricsClient
+from src.infra.metrics_core import MetricsClient
 
 
 def test_metrics_insert_roundtrip():

@@ -1,5 +1,5 @@
 ---
-description: Documentation must be updated or created for any code change (ALWAYS APPLIED - NO EXCEPTIONS)
+description: Informational policy; enforcement is Rule 027
 globs:
   - docs/ADRs/*.md
   - docs/*.md
@@ -12,10 +12,12 @@ globs:
   - tests/AGENTS.md
   - migrations/AGENTS.md
   - scripts/AGENTS.md
-alwaysApply: true
+alwaysApply: false
 ---
 
-# ALWAYS-APPLIED DOCUMENTATION REQUIREMENT - NO EXCEPTIONS
+# Rule 009 — Docs Sync (Policy)
+
+Non-enforcing policy. Actual enforcement: Rule 027 (Docs Sync Gate).
 # This rule is ALWAYS ENFORCED - no exceptions allowed
 # Core Purpose: Documentation must be updated or created for ANY code change
 # Related ADR: ADR-013 (Comprehensive documentation synchronization enhancement)

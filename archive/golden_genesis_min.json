@@ -8,7 +8,14 @@
       "value": 45,
       "calculation": "א(1) + ד(4) + ם(40) = 45",
       "primary_verse": "Genesis 2:7",
-      "verse_refs": ["Genesis 1:26", "Genesis 2:7", "Genesis 2:19", "Genesis 2:23", "Genesis 3:17", "Genesis 3:21"],
+      "verse_refs": [
+        "Genesis 1:26",
+        "Genesis 2:7",
+        "Genesis 2:19",
+        "Genesis 2:23",
+        "Genesis 3:17",
+        "Genesis 3:21"
+      ],
       "meaning": "man, human, mankind",
       "semantic_tags": ["person", "creation", "humanity"],
       "insights": "Adam represents the pinnacle of God's creation, formed from the dust of the earth and given the breath of life. As the federal head of humanity, Adam's choices in the Garden of Eden established the pattern of human rebellion against divine authority, necessitating the redemptive work of the promised Messiah. The name 'Adam' itself reflects the earth's composition, symbolizing humanity's connection to the material world while bearing the divine image.",
@@ -22,7 +29,14 @@
       "value": 37,
       "calculation": "ה(5) + ב(2) + ל(30) = 37",
       "primary_verse": "Genesis 4:2",
-      "verse_refs": ["Genesis 4:2", "Genesis 4:3", "Genesis 4:4", "Genesis 4:8", "Genesis 4:9", "Genesis 4:25"],
+      "verse_refs": [
+        "Genesis 4:2",
+        "Genesis 4:3",
+        "Genesis 4:4",
+        "Genesis 4:8",
+        "Genesis 4:9",
+        "Genesis 4:25"
+      ],
       "meaning": "breath, vapor, vanity",
       "semantic_tags": ["person", "offering", "brevity"],
       "insights": "The name Abel, meaning 'breath' or 'vapor', prophetically points to the fleeting nature of human life and the transience of worldly accomplishments. Abel's righteous offering of the firstborn of his flock foreshadowed Christ's sacrifice as the unblemished Lamb of God. His murder by Cain illustrates the conflict between the seed of the woman and the seed of the serpent, establishing the biblical theme of martyrdom for faithfulness to God.",

@@ -19,8 +19,7 @@ def test_factory_unknown_uses_memory():
 
 
 def test_factory_postgres_missing_dsn_raises_runtime_error():
-    with patch.dict(os.environ, {"CHECKPOINTER": "postgres"}, clear=True):
-        with pytest.raises(
-            RuntimeError, match="GEMATRIA_DSN environment variable required"
-        ):
-            get_checkpointer()
+    with patch.dict(
+        os.environ, {"CHECKPOINTER": "postgres"}, clear=True
+    ), pytest.raises(RuntimeError, match="GEMATRIA_DSN environment variable required"):
+        get_checkpointer()

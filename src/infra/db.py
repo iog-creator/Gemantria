@@ -53,11 +53,9 @@ class BibleReadOnly:
             raise RuntimeError("BIBLE_DB_DSN not set; cannot execute read query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql, params or ())
-                for row in cur:
-                    yield row
+        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
+            cur.execute(sql, params or ())
+            yield from cur
 
 
 @dataclass
@@ -69,12 +67,10 @@ class GematriaRW:
             raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql, params or ())
-                if cur.description:  # SELECT queries return results
-                    for row in cur:
-                        yield row
+        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
+            cur.execute(sql, params or ())
+            if cur.description:  # SELECT queries return results
+                yield from cur
                 # For INSERT/UPDATE/DELETE, execution is complete when we reach here
                 # The transaction will commit when the connection context exits
 

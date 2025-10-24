@@ -1,9 +1,11 @@
 # ADR-002: Gematria Calculation Rules
 
 ## Status
+
 Accepted
 
 ## Context
+
 The Gematria system requires consistent, accurate Hebrew numerology calculations. Key requirements:
 
 - Academic accuracy following standard Hebrew numerology
@@ -12,6 +14,7 @@ The Gematria system requires consistent, accurate Hebrew numerology calculations
 - Clear rules for edge cases (finals, punctuation)
 
 ## Decision
+
 Implement Mispar Hechrachi (standard method) with the following rules:
 
 1. **Standard Values**: א=1, ב=2, ..., ת=400
@@ -22,17 +25,20 @@ Implement Mispar Hechrachi (standard method) with the following rules:
 ## Rationale
 
 ### Mispar Hechrachi Chosen
+
 - **Academic Standard**: Most widely used in Hebrew numerology studies
 - **Consistency**: Matches existing biblical gematria research
 - **Simplicity**: Clear, reproducible calculations
 - **Compatibility**: Aligns with existing golden data
 
 ### Final Forms Handling
+
 - **Standard Practice**: Finals have same value as regular forms
 - **Rationale**: Represents same letter, different positional form
 - **Example**: ך׳ (sofiyot kaf) = 20, same as כ (regular kaf)
 
 ### Nikud Stripping Required
+
 - **Consistency**: Removes ambiguity from vowel marks
 - **Reproducibility**: Same input always produces same output
 - **Performance**: Faster processing without vowel analysis
@@ -41,16 +47,19 @@ Implement Mispar Hechrachi (standard method) with the following rules:
 ## Alternatives Considered
 
 ### Mispar Gadol (Large Method)
+
 - **Pros**: Alternative tradition with different values for finals
 - **Cons**: Less common, inconsistent with existing data
 - **Rejected**: Would require recalculating all existing values
 
 ### Include Nikud in Calculations
+
 - **Pros**: More complete linguistic analysis
 - **Cons**: Complex, inconsistent, vowel values not standardized
 - **Rejected**: Too complex, not standard practice
 
 ### Context-Aware Calculations
+
 - **Pros**: Could account for linguistic context
 - **Cons**: Non-deterministic, hard to validate
 - **Rejected**: Needs to be mathematical and reproducible
@@ -58,6 +67,7 @@ Implement Mispar Hechrachi (standard method) with the following rules:
 ## Implementation Details
 
 ### Calculation Algorithm
+
 ```python
 def calculate_gematria(hebrew_text: str) -> int:
     mapping = {
@@ -70,6 +80,7 @@ def calculate_gematria(hebrew_text: str) -> int:
 ```
 
 ### Text Normalization
+
 ```python
 def strip_nikud(hebrew_text: str) -> str:
     # NFKD decomposition
@@ -83,7 +94,9 @@ def strip_nikud(hebrew_text: str) -> str:
 ```
 
 ### Validation Test Cases
+
 Based on standard biblical examples:
+
 - אדם = 45 (1+4+40)
 - הבל = 37 (5+2+30)
 - משיח = 358 (40+300+10+8)
@@ -93,28 +106,33 @@ Based on standard biblical examples:
 ## Consequences
 
 ### Positive
+
 - Consistent with academic standards
 - Reproducible calculations
 - Easy validation and testing
 - Compatible with existing data
 
 ### Negative
+
 - Strict rules may miss some traditional interpretations
 - Requires careful text preprocessing
 - No support for alternative calculation methods
 
 ### Testing Requirements
+
 - Unit tests for all calculation edge cases
 - Validation against known biblical values
 - Text preprocessing verification
 - Performance benchmarks
 
 ## Migration Notes
+
 - Existing data calculated with these rules remains valid
 - New calculations must follow same algorithm
 - Triple verification ensures accuracy
 - Validation test suite prevents regressions
 
 ## Related ADRs
+
 - ADR-000: Pipeline validation depends on consistent calculations
 - ADR-003: AI verification of calculations (future)

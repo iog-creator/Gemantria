@@ -5,6 +5,7 @@ This directory contains SQL migration scripts for the Gemantria database schema.
 ## Migration Files
 
 ### Schema Migrations
+
 - `001_initial_schema.sql` - Initial database schema (referenced in docs)
 - `002_create_checkpointer.sql` - LangGraph checkpointer tables
 - `003_metrics_logging.sql` - Pipeline metrics and logging tables

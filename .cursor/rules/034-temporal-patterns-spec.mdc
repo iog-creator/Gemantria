@@ -1,0 +1,38 @@
+---
+description: Spec-only (Phase 8). Enforcement remains via 000/006/017/027.
+globs: ["scripts/export_stats.py", "scripts/generate_report.py", "src/services/api_server.py", "webui/dashboard/**", "docs/SSOT/*.schema.json"]
+alwaysApply: false
+---
+
+# Rule 034 — Temporal Patterns Spec (Phase 8)
+
+**Spec-only rule describing Phase 8 temporal pattern analysis requirements.**
+
+This rule documents the specification for temporal pattern analysis but does not enforce blocking behavior. Actual enforcement remains through core rules 000/006/017/027.
+
+## Phase 8 Temporal Pattern Requirements
+
+### Export Function (`export_temporal_patterns()`)
+- **Input**: Concept/cluster time series derived from sequential verse/chapter indices
+- **Computation**: Rolling window means/sums with configurable window sizes
+- **Detection**: Change points using statistical thresholds
+- **Output**: `exports/temporal_patterns.json` validated against `temporal-patterns.schema.json`
+
+### API Endpoint (`/api/v1/temporal`)
+- **Parameters**: `series_id`, `unit` (verse/chapter), `window` size
+- **Filtering**: Efficient filtering by series, unit, and window parameters
+- **Performance**: Result limiting and pagination for large datasets
+
+### Web UI Component (`TemporalExplorer.tsx`)
+- **Visualization**: Line charts with rolling window overlays
+- **Change Points**: Visual indicators for detected transitions
+- **Controls**: Interactive filtering by series, unit, and window size
+
+### Schema Compliance (`temporal-patterns.schema.json`)
+- **Validation**: Draft 2020-12 JSON Schema with required fields
+- **Metadata**: Analysis parameters, series counts, book coverage
+- **Extensible**: Support for z-scores, seasonality, and custom metadata
+
+## Implementation Status
+
+This is a **spec-only rule** - it describes what Phase 8 should implement but does not block commits. The actual implementation is tracked separately and enforced through the core rule system.

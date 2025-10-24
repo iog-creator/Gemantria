@@ -1,4 +1,4 @@
-from src.infra.metrics import MetricsClient
+from src.infra.metrics_core import MetricsClient
 
 
 def test_metrics_disabled_no_crash(monkeypatch):

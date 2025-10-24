@@ -1,7 +1,7 @@
 ---
 description: Any new rules/migrations require ADR delta
 globs: [".cursor/rules/**", "migrations/**", "docs/ADRs/**"]
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 029 — ADR Coverage

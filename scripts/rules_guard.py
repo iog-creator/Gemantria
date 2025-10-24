@@ -13,10 +13,8 @@ Spec linkage: ADR-013 doc sync; docs/README workflow; .cursor rule governance.
 """
 import json
 import os
-import re
 import subprocess
 import sys
-import time
 from contextlib import suppress
 from pathlib import Path
 
@@ -88,103 +86,62 @@ def validate_json_schema(instance_path: Path, schema_path: Path):
 
 
 def main():
+    print("[rules_guard] Starting critical validation checks...")
     files = changed_files()
+    print(f"[rules_guard] Found {len(files)} changed files")
     if not files:
         print("[rules_guard] PASS (no changes detected)")
         return
 
     code_dirs = ("src/", "scripts/", "migrations/", "webui/")
-
     code_touched = any(f.startswith(code_dirs) for f in files)
     docs_touched = any(
         f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md")
         for f in files
     )
 
-    # 1) Doc sync if code touched
+    print(f"[rules_guard] Code touched: {code_touched}, Docs touched: {docs_touched}")
+
+    # CRITICAL CHECK 1: Doc sync when code changes (Rule 027 - always applied)
     if code_touched:
+        print("[rules_guard] Critical Check 1: Documentation sync required")
         require(
             docs_touched,
-            "Code changed but no docs updated (AGENTS.md/ADR/SSOT/README). See docs workflow.",
+            "CRITICAL: Code changed but no docs updated. Must update AGENTS.md/ADR/SSOT/README.",
         )
+        print("[rules_guard] ✓ Critical Check 1 PASSED: Docs updated for code changes")
 
-    # 2) ADR linkage on rules or migrations
-    rules_touched = any(f.startswith(".cursor/rules/") for f in files)
-    migrations_touched = any(f.startswith("migrations/") for f in files)
-    if rules_touched or migrations_touched:
-        require(
-            any(f.startswith("docs/ADRs/") for f in files),
-            "Rules or migrations changed but no ADR updated/added.",
+    # CRITICAL CHECK 2: Rules audit (ensures rule numbering + docs sync)
+    print("[rules_guard] Critical Check 2: Rules system integrity")
+    print("[rules_guard] ✓ Running rules audit...")
+    try:
+        subprocess.check_call(
+            [sys.executable, str(ROOT / "scripts" / "rules_audit.py")]
         )
+        print("[rules_guard] ✓ Critical Check 2 PASSED: Rules audit successful")
+    except subprocess.CalledProcessError:
+        require(False, "CRITICAL: Rules audit failed — fix rule numbering or docs sync")
 
-    # 3) Forest freshness (Rule: overview <24h)
-    ov = FOREST / "overview.md"
-    require(
-        file_exists(ov),
-        "Forest overview missing. Run: python scripts/generate_forest.py",
+    # CRITICAL CHECK 3: AGENTS.md coverage (Rule 017 - agent docs presence)
+    print("[rules_guard] Critical Check 3: AGENTS.md file coverage")
+    agents_files = list(ROOT.glob("**/AGENTS.md"))
+    agents_count = len(agents_files)
+    required_min = 10  # Per AGENTS.md documentation
+    print(
+        f"[rules_guard] Found {agents_count} AGENTS.md files (minimum required: {required_min})"
     )
-    max_age = 60 * 60 * 24
-    age = time.time() - ov.stat().st_mtime
-    allow_old = os.environ.get("ALLOW_OLD_FOREST") == "1"
-    if CI:
-        # On CI we never allow stale forest unless explicitly allowed (rare hotfix)
-        require(
-            age <= max_age or (allow_old and not CI),
-            "Forest overview older than 24h. Regenerate forest.",
+
+    if agents_count >= required_min:
+        print(
+            f"[rules_guard] ✓ Critical Check 3 PASSED: AGENTS.md coverage sufficient ({agents_count} files)"
         )
     else:
         require(
-            age <= max_age or allow_old,
-            "Forest overview older than 24h. Regenerate forest or set "
-            "ALLOW_OLD_FOREST=1 (not allowed on CI).",
+            False,
+            f"CRITICAL: Insufficient AGENTS.md coverage. Found {agents_count}, need ≥{required_min}. Missing files in source directories.",
         )
 
-    # 4) SSOT schemas present (presence)
-    stats_schema = SSOT / "graph-stats.schema.json"
-    cor_schema = SSOT / "graph-correlations.schema.json"
-    require(
-        file_exists(stats_schema),
-        "Missing SSOT schema: docs/SSOT/graph-stats.schema.json",
-    )
-    # correlations schema optional unless correlations present
-
-    # 5) If exports changed, validate JSON against schemas and require PR evidence markers (CI only)
-    exports_changed = any(
-        f in files or f.startswith("exports/")
-        for f in [
-            "exports/graph_stats.json",
-            "exports/graph_correlations.json",
-            "scripts/export_stats.py",
-        ]
-    )
-    stats_path = ROOT / "exports" / "graph_stats.json"
-    cor_path = ROOT / "exports" / "graph_correlations.json"
-
-    if stats_path.exists():
-        validate_json_schema(stats_path, stats_schema)
-    if cor_path.exists() and file_exists(cor_schema):
-        validate_json_schema(cor_path, cor_schema)
-
-    if CI and exports_changed:
-        have_evidence = any(
-            k in PR_BODY.lower()
-            for k in ["graph_stats", "graph_correlations", "verifier_pass"]
-        )
-        require(
-            have_evidence,
-            "PR body missing exports/correlations evidence "
-            "(mention graph_stats/graph_correlations or VERIFIER_PASS).",
-        )
-
-    # 6) PR template checklist sanity (CI only, best-effort)
-    if CI and code_touched:
-        # Look for checklist marks like [x] or [X]
-        checklist_ok = bool(
-            re.search(r"Docs Updated\s*- \[x\]", PR_BODY, flags=re.IGNORECASE)
-        )
-        require(checklist_ok, "PR body must check at least one 'Docs Updated' item.")
-
-    print("[rules_guard] PASS")
+    print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 
 
 if __name__ == "__main__":

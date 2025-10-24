@@ -5,7 +5,7 @@ globs:
   - "scripts/**"
   - "migrations/**"
   - "webui/**"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 027 — Docs Sync Gate

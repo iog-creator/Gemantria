@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { GraphData, GraphNode, GraphEdge } from '../types/graph';
+import { useState, useEffect } from "react";
+import { GraphData, GraphNode, GraphEdge } from "../types/graph";
 
-export function useGraphData(graphUrl: string = '/exports/graph_latest.json') {
+export function useGraphData(graphUrl: string = "/exports/graph_latest.json") {
   const [data, setData] = useState<GraphData>({ nodes: [], edges: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,8 +45,8 @@ export function useGraphData(graphUrl: string = '/exports/graph_latest.json') {
 
         setData(transformedData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error occurred');
-        console.error('Error loading graph data:', err);
+        setError(err instanceof Error ? err.message : "Unknown error occurred");
+        console.error("Error loading graph data:", err);
       } finally {
         setLoading(false);
       }

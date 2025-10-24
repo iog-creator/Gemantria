@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import GraphView from '../components/GraphView';
-import NodeDetails from '../components/NodeDetails';
-import GraphStats from '../components/GraphStats';
-import { useGraphData } from '../hooks/useGraphData';
-import { GraphNode } from '../types/graph';
+import React, { useState } from "react";
+import GraphView from "../components/GraphView";
+import NodeDetails from "../components/NodeDetails";
+import GraphStats from "../components/GraphStats";
+import { useGraphData } from "../hooks/useGraphData";
+import { GraphNode } from "../types/graph";
 
 export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
@@ -24,7 +24,9 @@ export default function GraphDashboard() {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-          <h2 className="text-xl font-semibold text-red-600 mb-2">Error Loading Graph</h2>
+          <h2 className="text-xl font-semibold text-red-600 mb-2">
+            Error Loading Graph
+          </h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -48,7 +50,10 @@ export default function GraphDashboard() {
           <div className="flex gap-4 text-sm text-gray-600">
             <span>Nodes: {data.nodes.length}</span>
             <span>Edges: {data.edges.length}</span>
-            <span>Clusters: {new Set(data.nodes.map(n => n.cluster).filter(Boolean)).size}</span>
+            <span>
+              Clusters:{" "}
+              {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
+            </span>
           </div>
         </div>
 
@@ -64,7 +69,9 @@ export default function GraphDashboard() {
 
             {/* Graph Visualization */}
             <div className="bg-white rounded-lg shadow-lg p-4">
-              <h2 className="text-xl font-semibold mb-4">Network Visualization</h2>
+              <h2 className="text-xl font-semibold mb-4">
+                Network Visualization
+              </h2>
               <div className="h-96 lg:h-[600px]">
                 <GraphView
                   nodes={data.nodes}
@@ -86,9 +93,10 @@ export default function GraphDashboard() {
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>
-            Graph data exported on {data.metadata?.export_timestamp
+            Graph data exported on{" "}
+            {data.metadata?.export_timestamp
               ? new Date(data.metadata.export_timestamp).toLocaleString()
-              : 'Unknown'}
+              : "Unknown"}
           </p>
         </div>
       </div>

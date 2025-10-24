@@ -5,7 +5,7 @@ globs:
   - src/infra/metrics_queries.py
   - reports/*.md
   - reports/*.json
-alwaysApply: true
+alwaysApply: false
 ---
 
 ## Report Generation Verification

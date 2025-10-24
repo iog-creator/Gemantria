@@ -13,7 +13,7 @@ Usage:
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,7 +34,7 @@ app = FastAPI(
     description="REST API for accessing gematria correlation and pattern analytics data",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # CORS middleware for web UI access
@@ -53,14 +53,14 @@ def get_export_path(filename: str) -> Path:
     return Path(export_dir) / filename
 
 
-def load_json_file(filepath: Path) -> Dict[str, Any]:
+def load_json_file(filepath: Path) -> dict[str, Any]:
     """Load and parse a JSON file, returning empty dict on error."""
     try:
         if not filepath.exists():
             LOG.warning(f"Export file not found: {filepath}")
             return {}
 
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         LOG.error(f"Error loading {filepath}: {e}")
@@ -79,8 +79,8 @@ async def root():
             "correlations": "/api/v1/correlations",
             "patterns": "/api/v1/patterns",
             "network": "/api/v1/network/{concept_id}",
-            "health": "/health"
-        }
+            "health": "/health",
+        },
     }
 
 
@@ -91,8 +91,13 @@ async def health_check():
 
     # Check if export directory exists and has files
     files_status = {}
-    expected_files = ["graph_stats.json", "graph_correlations.json", "graph_patterns.json",
-                     "temporal_patterns.json", "pattern_forecast.json"]
+    expected_files = [
+        "graph_stats.json",
+        "graph_correlations.json",
+        "graph_patterns.json",
+        "temporal_patterns.json",
+        "pattern_forecast.json",
+    ]
 
     for filename in expected_files:
         filepath = export_dir / filename
@@ -106,7 +111,7 @@ async def health_check():
         "status": "healthy",
         "export_directory": str(export_dir),
         "files": files_status,
-        "timestamp": None  # Could add last modified time
+        "timestamp": None,  # Could add last modified time
     }
 
 
@@ -119,7 +124,7 @@ async def get_stats():
     if not data:
         raise HTTPException(
             status_code=404,
-            detail="Statistics data not available. Run export pipeline first."
+            detail="Statistics data not available. Run export pipeline first.",
         )
 
     return JSONResponse(content=data)
@@ -127,8 +132,12 @@ async def get_stats():
 
 @app.get("/api/v1/correlations")
 async def get_correlations(
-    limit: Optional[int] = Query(100, description="Maximum number of correlations to return"),
-    min_strength: Optional[float] = Query(0.0, description="Minimum correlation strength threshold")
+    limit: int | None = Query(
+        100, description="Maximum number of correlations to return"
+    ),
+    min_strength: float | None = Query(
+        0.0, description="Minimum correlation strength threshold"
+    ),
 ):
     """Get concept correlation data."""
     filepath = get_export_path("graph_correlations.json")
@@ -137,7 +146,7 @@ async def get_correlations(
     if not data or "correlations" not in data:
         raise HTTPException(
             status_code=404,
-            detail="Correlation data not available. Run export pipeline first."
+            detail="Correlation data not available. Run export pipeline first.",
         )
 
     correlations = data["correlations"]
@@ -145,32 +154,32 @@ async def get_correlations(
     # Apply filters
     if min_strength > 0.0:
         correlations = [
-            c for c in correlations
-            if abs(c.get("correlation", 0)) >= min_strength
+            c for c in correlations if abs(c.get("correlation", 0)) >= min_strength
         ]
 
     if limit and limit > 0:
         correlations = correlations[:limit]
 
     # Return filtered data with metadata
-    return JSONResponse(content={
-        "correlations": correlations,
-        "metadata": {
-            **data.get("metadata", {}),
-            "filtered_count": len(correlations),
-            "applied_filters": {
-                "limit": limit,
-                "min_strength": min_strength
-            }
+    return JSONResponse(
+        content={
+            "correlations": correlations,
+            "metadata": {
+                **data.get("metadata", {}),
+                "filtered_count": len(correlations),
+                "applied_filters": {"limit": limit, "min_strength": min_strength},
+            },
         }
-    })
+    )
 
 
 @app.get("/api/v1/patterns")
 async def get_patterns(
-    limit: Optional[int] = Query(50, description="Maximum number of patterns to return"),
-    min_strength: Optional[float] = Query(0.0, description="Minimum pattern strength threshold"),
-    metric: Optional[str] = Query(None, description="Filter by pattern metric")
+    limit: int | None = Query(50, description="Maximum number of patterns to return"),
+    min_strength: float | None = Query(
+        0.0, description="Minimum pattern strength threshold"
+    ),
+    metric: str | None = Query(None, description="Filter by pattern metric"),
 ):
     """Get cross-text pattern analysis data."""
     filepath = get_export_path("graph_patterns.json")
@@ -179,50 +188,50 @@ async def get_patterns(
     if not data or "patterns" not in data:
         raise HTTPException(
             status_code=404,
-            detail="Pattern data not available. Run export pipeline first."
+            detail="Pattern data not available. Run export pipeline first.",
         )
 
     patterns = data["patterns"]
 
     # Apply filters
     if min_strength > 0.0:
-        patterns = [
-            p for p in patterns
-            if p.get("pattern_strength", 0) >= min_strength
-        ]
+        patterns = [p for p in patterns if p.get("pattern_strength", 0) >= min_strength]
 
     if metric:
-        patterns = [
-            p for p in patterns
-            if p.get("metric", "") == metric
-        ]
+        patterns = [p for p in patterns if p.get("metric", "") == metric]
 
     # Sort by strength (descending)
-    patterns = sorted(patterns, key=lambda x: x.get("pattern_strength", 0), reverse=True)
+    patterns = sorted(
+        patterns, key=lambda x: x.get("pattern_strength", 0), reverse=True
+    )
 
     if limit and limit > 0:
         patterns = patterns[:limit]
 
     # Return filtered data with metadata
-    return JSONResponse(content={
-        "patterns": patterns,
-        "metadata": {
-            **data.get("metadata", {}),
-            "filtered_count": len(patterns),
-            "applied_filters": {
-                "limit": limit,
-                "min_strength": min_strength,
-                "metric": metric
-            }
+    return JSONResponse(
+        content={
+            "patterns": patterns,
+            "metadata": {
+                **data.get("metadata", {}),
+                "filtered_count": len(patterns),
+                "applied_filters": {
+                    "limit": limit,
+                    "min_strength": min_strength,
+                    "metric": metric,
+                },
+            },
         }
-    })
+    )
 
 
 @app.get("/api/v1/network/{concept_id}")
 async def get_concept_network(
     concept_id: str,
-    depth: Optional[int] = Query(1, description="Network depth to traverse"),
-    max_connections: Optional[int] = Query(20, description="Maximum connections to return")
+    depth: int | None = Query(1, description="Network depth to traverse"),
+    max_connections: int | None = Query(
+        20, description="Maximum connections to return"
+    ),
 ):
     """Get network subgraph for a specific concept."""
     # Load correlation data to build network
@@ -232,7 +241,7 @@ async def get_concept_network(
     if not correlation_data or "correlations" not in correlation_data:
         raise HTTPException(
             status_code=404,
-            detail="Correlation data not available for network analysis."
+            detail="Correlation data not available for network analysis.",
         )
 
     correlations = correlation_data["correlations"]
@@ -246,20 +255,16 @@ async def get_concept_network(
         if corr.get("source") == concept_id:
             target = corr.get("target")
             if target not in seen_concepts:
-                connections.append({
-                    "concept_id": target,
-                    "correlation": corr,
-                    "depth": 1
-                })
+                connections.append(
+                    {"concept_id": target, "correlation": corr, "depth": 1}
+                )
                 seen_concepts.add(target)
         elif corr.get("target") == concept_id:
             source = corr.get("source")
             if source not in seen_concepts:
-                connections.append({
-                    "concept_id": source,
-                    "correlation": corr,
-                    "depth": 1
-                })
+                connections.append(
+                    {"concept_id": source, "correlation": corr, "depth": 1}
+                )
                 seen_concepts.add(source)
 
     # For depth > 1, we could implement BFS, but keeping it simple for now
@@ -271,19 +276,21 @@ async def get_concept_network(
         connections = sorted(
             connections,
             key=lambda x: abs(x["correlation"].get("correlation", 0)),
-            reverse=True
+            reverse=True,
         )[:max_connections]
 
-    return JSONResponse(content={
-        "center_concept": concept_id,
-        "connections": connections,
-        "network_stats": {
-            "total_connections": len(connections),
-            "depth": depth,
-            "max_connections_requested": max_connections
-        },
-        "metadata": correlation_data.get("metadata", {})
-    })
+    return JSONResponse(
+        content={
+            "center_concept": concept_id,
+            "connections": connections,
+            "network_stats": {
+                "total_connections": len(connections),
+                "depth": depth,
+                "max_connections_requested": max_connections,
+            },
+            "metadata": correlation_data.get("metadata", {}),
+        }
+    )
 
 
 @app.exception_handler(Exception)
@@ -295,8 +302,8 @@ async def global_exception_handler(request, exc):
         content={
             "error": "Internal server error",
             "detail": str(exc),
-            "path": str(request.url)
-        }
+            "path": str(request.url),
+        },
     )
 
 
@@ -316,9 +323,11 @@ async def get_temporal_patterns(
     try:
         temporal_file = get_export_path("temporal_patterns.json")
         if not temporal_file.exists():
-            raise HTTPException(status_code=404, detail="Temporal patterns data not available")
+            raise HTTPException(
+                status_code=404, detail="Temporal patterns data not available"
+            )
 
-        with open(temporal_file, "r", encoding="utf-8") as f:
+        with open(temporal_file, encoding="utf-8") as f:
             data = json.load(f)
 
         patterns = data.get("temporal_patterns", [])
@@ -340,17 +349,19 @@ async def get_temporal_patterns(
         if len(patterns) > max_results:
             patterns = patterns[:max_results]
 
-        return JSONResponse(content={
-            "temporal_patterns": patterns,
-            "metadata": data.get("metadata", {}),
-            "filters_applied": {
-                "series_id": series_id,
-                "unit": unit,
-                "window": window
-            },
-            "result_count": len(patterns),
-            "max_results": max_results
-        })
+        return JSONResponse(
+            content={
+                "temporal_patterns": patterns,
+                "metadata": data.get("metadata", {}),
+                "filters_applied": {
+                    "series_id": series_id,
+                    "unit": unit,
+                    "window": window,
+                },
+                "result_count": len(patterns),
+                "max_results": max_results,
+            }
+        )
 
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Temporal patterns data not found")
@@ -377,7 +388,7 @@ async def get_forecasts(
         if not forecast_file.exists():
             raise HTTPException(status_code=404, detail="Forecast data not available")
 
-        with open(forecast_file, "r", encoding="utf-8") as f:
+        with open(forecast_file, encoding="utf-8") as f:
             data = json.load(f)
 
         forecasts = data.get("forecasts", [])
@@ -395,16 +406,15 @@ async def get_forecasts(
         if len(forecasts) > max_results:
             forecasts = forecasts[:max_results]
 
-        return JSONResponse(content={
-            "forecasts": forecasts,
-            "metadata": data.get("metadata", {}),
-            "filters_applied": {
-                "series_id": series_id,
-                "horizon": horizon
-            },
-            "result_count": len(forecasts),
-            "max_results": max_results
-        })
+        return JSONResponse(
+            content={
+                "forecasts": forecasts,
+                "metadata": data.get("metadata", {}),
+                "filters_applied": {"series_id": series_id, "horizon": horizon},
+                "result_count": len(forecasts),
+                "max_results": max_results,
+            }
+        )
 
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Forecast data not found")
@@ -428,5 +438,5 @@ if __name__ == "__main__":
         host=host,
         port=port,
         reload=False,
-        log_level="info"
+        log_level="info",
     )

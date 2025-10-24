@@ -19,3 +19,7 @@ jobs:
         run: pip install jsonschema
       - name: Run rules guard (hard gate)
         run: python scripts/rules_guard.py
+      - name: Rules audit (contiguity + docs sync)
+        run: python scripts/rules_audit.py
+      - name: Check share/ sync (flat, current)
+        run: python scripts/check_share_sync.py

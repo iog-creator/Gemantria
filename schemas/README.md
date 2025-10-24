@@ -5,6 +5,7 @@ This directory contains schema definitions and data structure specifications.
 ## Contents
 
 This directory may contain:
+
 - **JSON schemas** for data validation
 - **Type definitions** for API contracts
 - **Data structure specifications** for exports
@@ -13,6 +14,7 @@ This directory may contain:
 ## Usage
 
 ### Validation
+
 ```bash
 # Validate data against schema
 python -c "
@@ -24,6 +26,7 @@ with open('data.json') as f, open('schemas/data_schema.json') as s:
 ```
 
 ### Generation
+
 ```bash
 # Generate schemas from code (future)
 python scripts/generate_schemas.py

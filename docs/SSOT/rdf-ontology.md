@@ -7,6 +7,7 @@ version: 1.0
 # SSOT: RDF Ontology for Concept Network
 
 ## Overview
+
 This document defines the RDF ontology (vocabulary) for the Gematria concept network, providing the semantic foundation for RDF/Turtle exports. This serves as the single source of truth for RDF classes, properties, and relationships.
 
 ## Namespace Declarations
@@ -33,6 +34,7 @@ gem: a owl:Ontology ;
 ## Class Definitions
 
 ### Concept Class
+
 ```turtle
 gem:Concept a owl:Class ;
   rdfs:label "Concept"@en ;
@@ -41,6 +43,7 @@ gem:Concept a owl:Class ;
 ```
 
 ### Relation Class
+
 ```turtle
 gem:Relation a owl:Class ;
   rdfs:label "Relation"@en ;
@@ -53,6 +56,7 @@ gem:Relation a owl:Class ;
 ### Core Properties
 
 #### Label Property
+
 ```turtle
 gem:label a owl:DatatypeProperty ;
   rdfs:label "label"@en ;
@@ -63,6 +67,7 @@ gem:label a owl:DatatypeProperty ;
 ```
 
 #### Cluster Property
+
 ```turtle
 gem:cluster a owl:DatatypeProperty ;
   rdfs:label "cluster"@en ;
@@ -75,6 +80,7 @@ gem:cluster a owl:DatatypeProperty ;
 ### Centrality Properties
 
 #### Degree Centrality
+
 ```turtle
 gem:degree a owl:DatatypeProperty ;
   rdfs:label "degree centrality"@en ;
@@ -84,6 +90,7 @@ gem:degree a owl:DatatypeProperty ;
 ```
 
 #### Betweenness Centrality
+
 ```turtle
 gem:betweenness a owl:DatatypeProperty ;
   rdfs:label "betweenness centrality"@en ;
@@ -93,6 +100,7 @@ gem:betweenness a owl:DatatypeProperty ;
 ```
 
 #### Eigenvector Centrality
+
 ```turtle
 gem:eigenvector a owl:DatatypeProperty ;
   rdfs:label "eigenvector centrality"@en ;
@@ -104,6 +112,7 @@ gem:eigenvector a owl:DatatypeProperty ;
 ### Relation Properties
 
 #### Related To (Object Property)
+
 ```turtle
 gem:relatedTo a owl:ObjectProperty ;
   rdfs:label "related to"@en ;
@@ -114,6 +123,7 @@ gem:relatedTo a owl:ObjectProperty ;
 ```
 
 #### Cosine Similarity
+
 ```turtle
 gem:cosine a owl:DatatypeProperty ;
   rdfs:label "cosine similarity"@en ;
@@ -124,6 +134,7 @@ gem:cosine a owl:DatatypeProperty ;
 ```
 
 #### Rerank Score
+
 ```turtle
 gem:rerankScore a owl:DatatypeProperty ;
   rdfs:label "rerank score"@en ;
@@ -133,6 +144,7 @@ gem:rerankScore a owl:DatatypeProperty ;
 ```
 
 #### Decided Yes
+
 ```turtle
 gem:decidedYes a owl:DatatypeProperty ;
   rdfs:label "decided yes"@en ;
@@ -144,6 +156,7 @@ gem:decidedYes a owl:DatatypeProperty ;
 ## Example Instance Data
 
 ### Concept Instance
+
 ```turtle
 gem:123e4567-e89b-12d3-a456-426614174000 a gem:Concept ;
   gem:label "אלהים" ;
@@ -157,6 +170,7 @@ gem:123e4567-e89b-12d3-a456-426614174000 a gem:Concept ;
 ```
 
 ### Relation Instance
+
 ```turtle
 gem:edge/123e4567-e89b-12d3-a456-426614174000/987fcdeb-51a2-43d7-8f9e-123456789abc a gem:Relation ;
   gem:relatedTo gem:123e4567-e89b-12d3-a456-426614174000 ;
@@ -169,6 +183,7 @@ gem:edge/123e4567-e89b-12d3-a456-426614174000/987fcdeb-51a2-43d7-8f9e-123456789a
 ## Constraints and Validation
 
 ### Class Constraints
+
 ```turtle
 # Concepts must have labels
 gem:Concept owl:equivalentClass [
@@ -186,6 +201,7 @@ gem:Relation owl:equivalentClass [
 ```
 
 ### Property Constraints
+
 ```turtle
 # Cosine similarity range constraint
 gem:cosine rdfs:range [
@@ -211,6 +227,7 @@ gem:rerankScore rdfs:range [
 ## Reasoning and Inference Rules
 
 ### Transitivity Rules
+
 ```turtle
 # Symmetric relations (if A related to B, then B related to A)
 gem:relatedTo a owl:SymmetricProperty .
@@ -220,6 +237,7 @@ gem:relatedTo a owl:SymmetricProperty .
 ```
 
 ### Inference Capabilities
+
 - **Symmetric Relations**: If concept A is related to concept B, then concept B is related to concept A
 - **Transitive Clustering**: Concepts in same cluster may be transitively related
 - **Centrality Propagation**: High-centrality concepts influence related concepts
@@ -227,17 +245,20 @@ gem:relatedTo a owl:SymmetricProperty .
 ## Extensions and Evolution
 
 ### Versioning Strategy
+
 - Ontology versions follow semantic versioning (MAJOR.MINOR.PATCH)
 - Breaking changes increment MAJOR version
 - New properties increment MINOR version
 - Bug fixes increment PATCH version
 
 ### Extension Points
+
 - **Domain-specific vocabularies**: Can import additional ontologies
 - **Property extensions**: New relation types can extend gem:Relation
 - **Class hierarchies**: Subclasses can be defined for specific concept types
 
 ### Deprecation Policy
+
 - Deprecated terms marked with `owl:deprecated true`
 - Deprecated terms maintained for backwards compatibility
 - Migration guides provided for major version changes
@@ -245,6 +266,7 @@ gem:relatedTo a owl:SymmetricProperty .
 ## Implementation Guidelines
 
 ### Export Process
+
 1. Query database for concepts and relations
 2. Generate RDF triples according to this ontology
 3. Serialize as Turtle format
@@ -252,6 +274,7 @@ gem:relatedTo a owl:SymmetricProperty .
 5. Write to `exports/graph_latest.ttl`
 
 ### Consumption Guidelines
+
 1. Import this ontology namespace
 2. Use OWL reasoners for inference
 3. Validate instances against class/property constraints
@@ -260,11 +283,13 @@ gem:relatedTo a owl:SymmetricProperty .
 ## Tooling Support
 
 ### Validation Tools
+
 - **RDF Validators**: Check syntax and schema compliance
 - **OWL Reasoners**: Perform logical inference and consistency checking
 - **SPARQL Engines**: Query and analyze the knowledge graph
 
 ### Conversion Tools
+
 - **JSON-LD to RDF**: Convert between serialization formats
 - **Ontology Editors**: Protégé, TopBraid Composer for ontology development
 - **Triple Stores**: Blazegraph, Jena for storage and querying

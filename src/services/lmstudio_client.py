@@ -590,7 +590,7 @@ def chat_completion(
             "model": model,
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": 500,  # Sufficient for JSON responses
+            "max_tokens": 8192,  # Increased for detailed theological analysis (150-250 words)
         }
 
         for attempt in range(RETRY_ATTEMPTS):

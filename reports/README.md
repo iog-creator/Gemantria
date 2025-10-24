@@ -19,6 +19,7 @@ The reports directory serves as the central repository for:
 **Format**: Markdown files with comprehensive execution summaries
 **Naming**: `run_{run_id}_{timestamp}.md`
 **Contents**:
+
 - Pipeline configuration and parameters
 - Execution timeline and performance metrics
 - Quality validation results
@@ -26,6 +27,7 @@ The reports directory serves as the central repository for:
 - Error logs and troubleshooting information
 
 **Example**:
+
 ```
 run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.md
 ```
@@ -35,6 +37,7 @@ run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.md
 **Format**: Structured JSON with detailed execution data
 **Naming**: `run_{run_id}_{timestamp}.json`
 **Contents**:
+
 - Complete pipeline configuration
 - Step-by-step execution metrics
 - Quality scores and validation results
@@ -42,6 +45,7 @@ run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.md
 - Health check results and model verification
 
 **Example**:
+
 ```
 run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.json
 ```
@@ -51,6 +55,7 @@ run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.json
 **Format**: Combined reports across multiple pipeline runs
 **Purpose**: Comparative analysis and trend identification
 **Contents**:
+
 - Multi-run performance comparisons
 - Quality metric trends over time
 - System health patterns
@@ -61,6 +66,7 @@ run_87ec9234-7431-4536-bd5a-0e227d30c0eb_20251020_221737.json
 ### Execution Summary
 
 Each report includes:
+
 - **Run ID**: Unique identifier for the pipeline execution
 - **Timestamp**: When the pipeline started and completed
 - **Configuration**: All environment variables and settings used
@@ -69,6 +75,7 @@ Each report includes:
 ### Quality Metrics
 
 Quality validation results:
+
 - **Gematria Accuracy**: Calculation verification scores
 - **AI Confidence**: Model prediction confidence levels
 - **Data Integrity**: Schema validation and consistency checks
@@ -77,6 +84,7 @@ Quality validation results:
 ### Graph Analysis
 
 Network structure insights:
+
 - **Node Count**: Total concepts processed
 - **Edge Count**: Total relationships discovered
 - **Cluster Count**: Number of concept communities identified
@@ -86,6 +94,7 @@ Network structure insights:
 ### Error Tracking
 
 Failure analysis and diagnostics:
+
 - **Pipeline Errors**: Step failures with detailed error messages
 - **Validation Failures**: Quality check failures with specific issues
 - **Service Issues**: External dependency problems and resolutions

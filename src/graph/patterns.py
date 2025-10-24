@@ -5,9 +5,9 @@ Provides graph construction from database relations and community detection
 with centrality analysis using NetworkX algorithms.
 """
 
-from collections import defaultdict
-import networkx as nx
 import logging
+
+import networkx as nx
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +23,16 @@ def build_graph(db):
         nx.Graph: NetworkX graph with nodes and weighted edges
     """
     # nodes - use UUID as label since concept names aren't stored in concept_network
-    nodes = list(db.execute("SELECT concept_id, LEFT(CAST(concept_id AS TEXT), 8) FROM concept_network"))
+    nodes = list(
+        db.execute(
+            "SELECT concept_id, LEFT(CAST(concept_id AS TEXT), 8) FROM concept_network"
+        )
+    )
 
     # edges
-    edges = list(db.execute("SELECT source_id, target_id, cosine FROM concept_relations"))
+    edges = list(
+        db.execute("SELECT source_id, target_id, cosine FROM concept_relations")
+    )
 
     G = nx.Graph()
     for cid, label in nodes:
@@ -34,7 +40,9 @@ def build_graph(db):
     for sid, tid, cos in edges:
         G.add_edge(str(sid), str(tid), weight=float(cos))
 
-    logger.info(f"Built graph with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges")
+    logger.info(
+        f"Built graph with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges"
+    )
     return G
 
 
@@ -50,7 +58,8 @@ def compute_patterns(G):
     """
     # clusters using Louvain method
     from networkx.algorithms.community import louvain_communities
-    comms = louvain_communities(G, weight='weight', seed=42)
+
+    comms = louvain_communities(G, weight="weight", seed=42)
     cluster_map = {}
     for idx, c in enumerate(comms):
         for n in c:
@@ -60,11 +69,11 @@ def compute_patterns(G):
 
     # centrality measures
     degree = nx.degree_centrality(G)
-    betw = nx.betweenness_centrality(G, weight='weight', normalized=True)
+    betw = nx.betweenness_centrality(G, weight="weight", normalized=True)
 
     # eigenvector centrality (may fail on disconnected graphs)
     try:
-        eigen = nx.eigenvector_centrality_numpy(G, weight='weight')
+        eigen = nx.eigenvector_centrality_numpy(G, weight="weight")
     except nx.PowerIterationFailedConvergence:
         logger.warning("Eigenvector centrality failed to converge, using zeros")
         eigen = {n: 0.0 for n in G.nodes()}
@@ -73,4 +82,3 @@ def compute_patterns(G):
         eigen = {n: 0.0 for n in G.nodes()}
 
     return cluster_map, degree, betw, eigen
-

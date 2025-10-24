@@ -49,12 +49,14 @@ node = EnrichmentNode(ai_service, db_service)
 **Purpose**: Manage connections to PostgreSQL databases with pgvector support
 
 **Key Features**:
+
 - **Connection Pooling**: Efficient connection reuse with configurable limits
 - **Read-Only Enforcement**: Bible database protected from writes
 - **Parameterized Queries**: SQL injection prevention
 - **Transaction Management**: Proper commit/rollback handling
 
 **Configuration**:
+
 ```python
 # Primary database (read-write)
 GEMATRIA_DSN=postgresql://user:pass@localhost:5432/gematria
@@ -68,14 +70,16 @@ BIBLE_DB_DSN=postgresql://user:pass@localhost:5432/bible_db
 **Purpose**: Interface with local LLM models via LM Studio API
 
 **Key Features**:
+
 - **Qwen Live Gate**: Health checks before AI operations
-- **Model Validation**: Verify embedding and reranker availability
+- **Model Validation**: Verify embedding model availability
 - **Timeout Handling**: Configurable request timeouts and retries
 - **Response Parsing**: Structured handling of AI model outputs
 
 **Supported Models**:
-- **Embedding**: `text-embedding-qwen3-embedding-0.6b`
-- **Reranker**: `qwen.qwen3-reranker-0.6b`
+
+- **Embedding**: `text-embedding-bge-m3` (primary), `text-embedding-qwen3-embedding-0.6b` (fallback)
+- **Bi-Encoder Proxy**: Semantic similarity via embedding cosine similarity (replaces reranker models)
 - **Theology**: `christian-bible-expert-v2.0-12b`
 - **Math**: `self-certainty-qwen3-1.7b-base-math`
 
@@ -84,6 +88,7 @@ BIBLE_DB_DSN=postgresql://user:pass@localhost:5432/bible_db
 **Purpose**: Centralized management of environment variables and settings
 
 **Key Features**:
+
 - **Type Safety**: Strongly typed configuration objects
 - **Validation**: Required fields and value range checking
 - **Defaults**: Sensible defaults with override capability
@@ -166,7 +171,7 @@ embeddings = await client.embed_texts([
     "In the beginning God created heaven and earth"  # English translation
 ])
 
-# Get semantic similarity
+# Get semantic similarity via bi-encoder proxy (cosine similarity of embeddings)
 similarity = await client.rerank_pairs([
     ("אלהים", "God"),
     ("ברא", "created"),

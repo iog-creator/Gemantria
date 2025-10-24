@@ -13,13 +13,13 @@
 
 ## Node Performance
 
-| Node | Events | Avg Duration (ms) |
-|------|--------|-------------------|
-| collect_nouns | 52 | 5.0 |
-| validate_batch | 52 | 7.0 |
-| enrichment | 52 | 3169.0 |
-| confidence_validator | 52 | 9.0 |
-| network_aggregator | 43 | 5532.0 |
+| Node                 | Events | Avg Duration (ms) |
+| -------------------- | ------ | ----------------- |
+| collect_nouns        | 52     | 5.0               |
+| validate_batch       | 52     | 7.0               |
+| enrichment           | 52     | 3169.0            |
+| confidence_validator | 52     | 9.0               |
+| network_aggregator   | 43     | 5532.0            |
 
 ## AI Enrichment Details
 
@@ -59,7 +59,6 @@
 
 ❌ **Error retrieving enrichment health data**: the connection is closed
 
-
 ## Concept Network Verification
 
 - **Nodes persisted**: 10
@@ -85,20 +84,19 @@
 
 ### Edge Strength Distribution
 
-| Bucket | Count | Avg Strength |
-|--------|-------|--------------|
-| filtered (<0.75) | 7 | 0.501 |
+| Bucket           | Count | Avg Strength |
+| ---------------- | ----- | ------------ |
+| filtered (<0.75) | 7     | 0.501        |
 
 ### Top Rerank Pairs
 
-| Source ID | Target ID | Edge Strength | Cosine | Rerank Score | Type | Model |
-|-----------|-----------|---------------|--------|--------------|------|-------|
-| 48e1b80e... | 8d01e612... | 0.5009 | 1.0000 | 0.5009 | decided_yes | qwen-reranker |
-| 48b461e6... | 8f26a22e... | 0.5009 | 1.0000 | 0.5009 | decided_yes | qwen-reranker |
-| 8f26a22e... | 48b461e6... | 0.5009 | 1.0000 | 0.5009 | decided_yes | qwen-reranker |
-| e95d1521... | d2b1cc0c... | 0.5009 | 1.0000 | 0.5009 | decided_yes | qwen-reranker |
-| d2b1cc0c... | e95d1521... | 0.5009 | 1.0000 | 0.5009 | decided_yes | qwen-reranker |
-
+| Source ID   | Target ID   | Edge Strength | Cosine | Rerank Score | Type        | Model         |
+| ----------- | ----------- | ------------- | ------ | ------------ | ----------- | ------------- |
+| 48e1b80e... | 8d01e612... | 0.5009        | 1.0000 | 0.5009       | decided_yes | qwen-reranker |
+| 48b461e6... | 8f26a22e... | 0.5009        | 1.0000 | 0.5009       | decided_yes | qwen-reranker |
+| 8f26a22e... | 48b461e6... | 0.5009        | 1.0000 | 0.5009       | decided_yes | qwen-reranker |
+| e95d1521... | d2b1cc0c... | 0.5009        | 1.0000 | 0.5009       | decided_yes | qwen-reranker |
+| d2b1cc0c... | e95d1521... | 0.5009        | 1.0000 | 0.5009       | decided_yes | qwen-reranker |
 
 ## Relations
 
@@ -107,21 +105,18 @@
 - **Relations Enabled**: ✅ Yes
 - **Rerank Enabled**: ✅ Yes
 
-
 ## Confidence Gates
 
 - **Soft Warnings (24h)**: 0 (threshold: 0.90)
 - **Hard Failures (24h)**: 0 (threshold: 0.85)
 - **ALLOW_PARTIAL**: ✅ Yes
 
-
 ## Pattern Discovery
 
 ❌ **Error retrieving pattern discovery data**: function round(double precision, integer) does not exist
-LINE 6:             (SELECT ROUND(AVG(degree), 3) FROM concept_centr...
-                            ^
-HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-
+LINE 6: (SELECT ROUND(AVG(degree), 3) FROM concept_centr...
+^
+HINT: No function matches the given name and argument types. You might need to add explicit type casts.
 
 ## Recommendations
 
@@ -130,4 +125,5 @@ HINT:  No function matches the given name and argument types. You might need to 
 ⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.
 
 ---
-*Report generated automatically by Gemantria pipeline analysis*
+
+_Report generated automatically by Gemantria pipeline analysis_

@@ -7,3 +7,9 @@ dist/
 .env.local
 data/
 github-mcp-wrapper.sh
+.env.backup
+
+# Share directory - generated files (keep manifest and README tracked)
+share/
+!share/SHARE_MANIFEST.json
+!share/README.md

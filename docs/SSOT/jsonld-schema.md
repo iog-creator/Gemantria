@@ -7,6 +7,7 @@ version: 1.0
 # SSOT: JSON-LD Schema for Concept Network Exports
 
 ## Overview
+
 This document defines the canonical JSON-LD schema used for exporting semantic concept networks from the Gematria pipeline. This serves as the single source of truth for JSON-LD structure, @context definitions, and semantic web compliance.
 
 ## @Context Definition
@@ -72,10 +73,12 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ## Graph Structure
 
 ### Root Level Properties
+
 - **`@context`**: Required. The JSON-LD context defining namespaces and terms
 - **`@graph`**: Required. Array of all RDF resources (nodes and edges)
 
 ### Concept Node Schema
+
 ```json
 {
   "@id": "https://gemantria.ai/concept/uuid-string",
@@ -92,6 +95,7 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ```
 
 ### Relation Edge Schema
+
 ```json
 {
   "@id": "https://gemantria.ai/concept/edge/source-uuid-target-uuid",
@@ -109,10 +113,12 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ## Property Definitions
 
 ### Required Properties
+
 - **`@id`**: Unique IRI identifier for the resource
 - **`@type`**: RDF type/class of the resource
 
 ### Concept Properties
+
 - **`label`**: Human-readable name (string, required)
 - **`cluster`**: Community/cluster assignment (integer, optional)
 - **`degree`**: Degree centrality score (double, optional)
@@ -120,11 +126,13 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 - **`eigenvector`**: Eigenvector centrality score (double, optional)
 
 ### Metadata Properties (Optional)
+
 - **`description`**: Detailed description of the concept (string)
 - **`source`**: Source text/document (string, e.g., "genesis", "exodus")
 - **`language`**: ISO language code (string, default "he")
 
 ### Relation Properties
+
 - **`relatedTo`**: Array of exactly 2 IRIs being related (required)
 - **`cosine`**: Cosine similarity score (double, 0.0-1.0, required)
 - **`rerankScore`**: Reranker confidence score (double, 0.0-1.0, optional)
@@ -133,6 +141,7 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ## Validation Rules
 
 ### Node Validation
+
 1. `@id` must be valid IRI format: `https://gemantria.ai/concept/{uuid}`
 2. `@type` must be `"https://gemantria.ai/concept/Concept"`
 3. `label` is required and non-empty
@@ -140,6 +149,7 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 5. Centrality scores must be non-negative doubles if present
 
 ### Edge Validation
+
 1. `@id` must be valid IRI format: `https://gemantria.ai/concept/edge/{source-uuid}-{target-uuid}`
 2. `@type` must be `"https://gemantria.ai/concept/Relation"`
 3. `relatedTo` must contain exactly 2 valid concept IRIs
@@ -149,29 +159,35 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ## IRI Namespace Conventions
 
 ### Base Namespace
+
 - **Prefix**: `https://gemantria.ai/concept/`
 - **Purpose**: All concept network resources
 
 ### Concept IRIs
+
 - **Format**: `https://gemantria.ai/concept/{uuid}`
 - **Example**: `https://gemantria.ai/concept/123e4567-e89b-12d3-a456-426614174000`
 
 ### Relation IRIs
+
 - **Format**: `https://gemantria.ai/concept/edge/{source-uuid}-{target-uuid}`
 - **Note**: Source UUID comes first lexicographically
 
 ## Extensions and Future Compatibility
 
 ### Versioning
+
 - **`@version`** in context indicates schema version
 - Current version: 1.1 (supports language containers)
 
 ### Backwards Compatibility
+
 - New optional properties can be added without breaking existing consumers
 - Required properties cannot be removed or changed
 - Context can be extended with new terms
 
 ### Custom Extensions
+
 - Project-specific terms use `https://gemantria.ai/concept/` namespace
 - Standard vocabularies preferred over custom terms
 - Extensions must be documented here
@@ -179,12 +195,14 @@ This document defines the canonical JSON-LD schema used for exporting semantic c
 ## Implementation Notes
 
 ### Export Process
+
 1. Query concept_network and concept_relations tables
 2. Transform database rows to JSON-LD structure
 3. Validate against this schema
 4. Write to `exports/graph_latest.jsonld`
 
 ### Consumption Guidelines
+
 1. Always process `@context` first
 2. Validate `@id` and `@type` fields
 3. Handle optional properties gracefully

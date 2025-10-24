@@ -5,7 +5,7 @@ globs:
   - docs/SSOT/graph-metrics-api.md
   - scripts/export_jsonld.py
   - scripts/export_stats.py
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Metrics Contract Synchronization Rule

@@ -6,13 +6,19 @@ Creates graph_latest.jsonld and graph_latest.ttl files with proper linked data s
 URI namespaces, and semantic web standards compliance for knowledge graph integration.
 """
 
-import os
 import json
-from typing import Dict, List, Any, Optional
-from rdflib import Graph, URIRef, Literal, Namespace, RDF, RDFS
+import os
+from typing import Any
+
+from rdflib import RDF, RDFS, Graph, Literal, Namespace
 from rdflib.namespace import SDO as SCHEMA
+
 from src.infra.db import get_gematria_rw
+from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
+
+# Load environment variables from .env file
+ensure_env_loaded()
 
 LOG = get_logger("export_jsonld")
 
@@ -21,11 +27,16 @@ GEMATRIA = Namespace("https://gemantria.ai/concept/")
 SCHEMA_ORG = Namespace("http://schema.org/")
 
 
-def fetch_graph_data(db) -> tuple[List[tuple], List[tuple], Optional[List[tuple]], Optional[Dict[int, Dict[str, Any]]]]:
+def fetch_graph_data(
+    db,
+) -> tuple[
+    list[tuple], list[tuple], list[tuple] | None, dict[int, dict[str, Any]] | None
+]:
     """Fetch nodes, edges, optional metadata, and cluster metrics from database."""
 
     # Fetch nodes with cluster, centrality, and concept metrics data
-    nodes = db.execute("""
+    nodes = db.execute(
+        """
         SELECT DISTINCT n.concept_id, n.label, c.cluster_id,
                ce.degree, ce.betweenness, ce.eigenvector,
                cm.semantic_cohesion, cm.bridge_score, cm.diversity_local
@@ -33,34 +44,49 @@ def fetch_graph_data(db) -> tuple[List[tuple], List[tuple], Optional[List[tuple]
         LEFT JOIN concept_clusters c ON c.concept_id = n.concept_id
         LEFT JOIN concept_centrality ce ON ce.concept_id = n.concept_id
         LEFT JOIN concept_metrics cm ON cm.concept_id = n.concept_id
-    """).fetchall()
+    """
+    ).fetchall()
 
     # Fetch edges
-    edges = db.execute("""
+    edges = db.execute(
+        """
         SELECT source_id, target_id, cosine, rerank_score, decided_yes
         FROM concept_relations
-    """).fetchall()
+    """
+    ).fetchall()
 
     # Fetch cluster metrics
-    cmetrics = db.execute("""
+    cmetrics = db.execute(
+        """
         SELECT cluster_id, density, semantic_diversity, top_examples FROM cluster_metrics
-    """).fetchall()
-    cmeta = {r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]} for r in cmetrics}
+    """
+    ).fetchall()
+    cmeta = {
+        r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]}
+        for r in cmetrics
+    }
 
     # Try to fetch metadata (optional table)
     metadata = None
     try:
-        metadata = db.execute("""
+        metadata = db.execute(
+            """
             SELECT concept_id, label, description, source, language
             FROM concept_metadata
-        """).fetchall()
+        """
+        ).fetchall()
     except Exception:
-        log_json(LOG, 15, "metadata_table_missing", message="concept_metadata table not found, using basic labels")
+        log_json(
+            LOG,
+            15,
+            "metadata_table_missing",
+            message="concept_metadata table not found, using basic labels",
+        )
 
     return nodes, edges, metadata, cmeta
 
 
-def create_jsonld_context() -> Dict[str, Any]:
+def create_jsonld_context() -> dict[str, Any]:
     """Create JSON-LD context with proper namespace mappings."""
     return {
         "@context": {
@@ -81,12 +107,17 @@ def create_jsonld_context() -> Dict[str, Any]:
             "topExamples": str(GEMATRIA.topExamples),
             "description": str(SCHEMA.description),
             "source": str(SCHEMA.source),
-            "language": str(SCHEMA.inLanguage)
+            "language": str(SCHEMA.inLanguage),
         }
     }
 
 
-def build_jsonld_graph(nodes: List[tuple], edges: List[tuple], metadata: Optional[List[tuple]] = None, cmeta: Optional[Dict[int, Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
+def build_jsonld_graph(
+    nodes: list[tuple],
+    edges: list[tuple],
+    metadata: list[tuple] | None = None,
+    cmeta: dict[int, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     """Build JSON-LD @graph array with nodes and edges."""
 
     # Create metadata lookup
@@ -97,14 +128,24 @@ def build_jsonld_graph(nodes: List[tuple], edges: List[tuple], metadata: Optiona
                 "label": m[1],
                 "description": m[2],
                 "source": m[3],
-                "language": m[4]
+                "language": m[4],
             }
 
     graph = []
 
     # Add concept nodes
     for node in nodes:
-        concept_id, label, cluster_id, degree, betweenness, eigenvector, semantic_cohesion, bridge_score, diversity_local = node
+        (
+            concept_id,
+            label,
+            cluster_id,
+            degree,
+            betweenness,
+            eigenvector,
+            semantic_cohesion,
+            bridge_score,
+            diversity_local,
+        ) = node
         concept_uri = GEMATRIA[str(concept_id)]
 
         # Use metadata if available, otherwise basic label
@@ -114,7 +155,7 @@ def build_jsonld_graph(nodes: List[tuple], edges: List[tuple], metadata: Optiona
         node_data = {
             "@id": str(concept_uri),
             "@type": str(GEMATRIA.Concept),
-            "label": final_label
+            "label": final_label,
         }
 
         # Add optional metadata
@@ -159,7 +200,7 @@ def build_jsonld_graph(nodes: List[tuple], edges: List[tuple], metadata: Optiona
             "@id": str(edge_uri),
             "@type": str(GEMATRIA.Relation),
             "relatedTo": [str(GEMATRIA[str(source_id)]), str(GEMATRIA[str(target_id)])],
-            "cosine": float(cosine) if cosine else 0.0
+            "cosine": float(cosine) if cosine else 0.0,
         }
 
         if rerank_score is not None:
@@ -172,7 +213,9 @@ def build_jsonld_graph(nodes: List[tuple], edges: List[tuple], metadata: Optiona
     return graph
 
 
-def create_rdf_graph(nodes: List[tuple], edges: List[tuple], metadata: Optional[List[tuple]] = None) -> Graph:
+def create_rdf_graph(
+    nodes: list[tuple], edges: list[tuple], metadata: list[tuple] | None = None
+) -> Graph:
     """Create RDF graph using rdflib."""
 
     g = Graph()
@@ -190,7 +233,7 @@ def create_rdf_graph(nodes: List[tuple], edges: List[tuple], metadata: Optional[
                 "label": m[1],
                 "description": m[2],
                 "source": m[3],
-                "language": m[4]
+                "language": m[4],
             }
 
     # Add concept nodes
@@ -284,7 +327,7 @@ def export_jsonld():
             "edge_count": edge_count,
             "cluster_count": cluster_count,
             "export_complete": True,
-            "metadata_available": metadata is not None
+            "metadata_available": metadata is not None,
         }
 
         log_json(LOG, 20, "export_jsonld_complete", **result)

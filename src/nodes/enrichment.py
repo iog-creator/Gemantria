@@ -6,9 +6,10 @@ import uuid
 
 import psycopg
 
-from src.infra.metrics import get_metrics_client
+from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
-from src.services.lmstudio_client import chat_completion, safe_json_parse
+from src.services.lmstudio_client import chat_completion
+from src.utils.json_sanitize import parse_llm_json
 
 LOG = get_logger("gemantria.enrichment")
 
@@ -53,11 +54,16 @@ def enrichment_node(state: dict) -> dict:
     run_id = state.get("run_id", uuid.uuid4())
 
     # 1) Build prompts once per noun
-    sys_msg = "You are a concise biblical scholar. Provide a short theological insight (150–250 words max) and a 0–1 confidence score. Return only valid JSON with keys 'insight' and 'confidence'."
+    sys_msg = (
+        "You are an expert biblical scholar with deep theological insight. Provide a comprehensive 200-300 word theological analysis and a confidence score (0.0-1.0). You have sufficient context length to provide detailed analysis. Return only valid JSON with keys 'insight' and 'confidence'. "
+        'When a node expects JSON, respond with only minified JSON on one line, no markdown, matching the provided schema; include "confidence" as a float in [0,1].'
+    )
     tmpl = (
         "Noun: {name}\nHebrew: {hebrew}\nPrimary Verse: {primary_verse}\n"
-        "Task: Provide 1 concise theological insight. Return JSON: "
-        '{{"insight": "...", "confidence": <0..1>}}'
+        "Task: Provide a detailed theological analysis (200-300 words) exploring biblical significance, "
+        "historical context, symbolic meanings, theological implications, and connections to broader biblical themes. "
+        "Be comprehensive and scholarly in your analysis. "
+        'Return JSON: {{"insight": "...detailed 200-300 word analysis...", "confidence": <0.90-1.0>}}'
     )
 
     # 2) Process in batches of 4 to avoid overwhelming LM Studio
@@ -88,31 +94,78 @@ def enrichment_node(state: dict) -> dict:
             # Process responses
             for n, out in zip(chunk, outs, strict=False):
                 try:
-                    # Parse and validate JSON response
-                    data = safe_json_parse(
-                        out.text, required_keys=["insight", "confidence"]
-                    )
+                    # Parse and validate JSON response with repair + retry up to 2
+                    retry = 0
+                    raw_text = out.text
+                    while True:
+                        try:
+                            data = parse_llm_json(raw_text)
+                            break
+                        except Exception:
+                            if retry >= 2:
+                                raise
+                            # Re-prompt this single item with stricter instruction
+                            messages = [
+                                {"role": "system", "content": sys_msg},
+                                {
+                                    "role": "user",
+                                    "content": tmpl.format(**n)
+                                    + "\nReturn only valid JSON; previous reply was invalid.",
+                                },
+                            ]
+                            metrics_client.emit(
+                                {
+                                    "event": "enrichment_json_retry",
+                                    "retry": retry + 1,
+                                }
+                            )
+                            raw_text = chat_completion(
+                                [messages], model=theology_model, temperature=0.0
+                            )[0].text
+                            retry += 1
 
-                    insight_text = data["insight"]
-                    confidence = float(data["confidence"])
+                    # enforce required keys; extract confidence if needed
+                    if "confidence" not in data:
+                        import json as _json
+                        import re
 
-                    # Validate confidence range
+                        m = re.search(
+                            r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",
+                            _json.dumps(data, ensure_ascii=False) + " " + raw_text,
+                            re.I,
+                        )
+                        if m:
+                            data["confidence"] = float(m.group(1))
+                        else:
+                            raise ValueError(
+                                "JSON response missing required keys: ['confidence']"
+                            )
+
+                    insight_text = data.get("insight", "").strip()
+                    confidence = float(data.get("confidence", 0.0))
+
+                    # Hard schema checks
+                    missing = [k for k in ("insight", "confidence") if k not in data]
+                    if missing:
+                        raise ValueError(
+                            f"JSON response missing required keys: {missing}"
+                        )
                     if not (0.0 <= confidence <= 1.0):
-                        raise ValueError(f"Confidence {confidence} out of range [0,1]")
+                        raise ValueError("confidence must be a float in [0,1]")
 
                     # Evaluate confidence gates
-                    confidence_status = evaluate_confidence(confidence)
+                    evaluate_confidence(confidence)
 
-                    # Validate insight length (150-250 words)
+                    # Validate insight length (200-300 words)
                     word_count = len(insight_text.split())
-                    if not (150 <= word_count <= 250):
+                    if not (200 <= word_count <= 300):
                         log_json(
                             LOG,
                             30,
                             "insight_length_warning",
                             noun=n.get("name"),
                             word_count=word_count,
-                            expected="150-250",
+                            expected="200-300",
                         )
 
                     # Estimate tokens (rough approximation: 4 chars per token)
@@ -181,10 +234,9 @@ def enrichment_node(state: dict) -> dict:
                     "run_id": run_id,
                     "node": "enrichment",
                     "event": "batch_processed",
-                    "batch_size": len(chunk),
-                    "latency_ms": batch_lat_ms,
-                    "success_count": len(enriched_nouns)
-                    - (len(enriched_nouns) - len(chunk)),
+                    "items_in": len(chunk),
+                    "items_out": len(enriched_nouns),
+                    "duration_ms": batch_lat_ms,
                 }
             )
 

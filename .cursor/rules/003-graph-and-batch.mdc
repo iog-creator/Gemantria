@@ -14,3 +14,9 @@ alwaysApply: false
 - StateGraph wires collect_nouns → validate_batch → enrichment → confidence_validator → network_aggregator with checkpointer integration.
 - BatchAbortError raised with review file path when batch size insufficient and ALLOW_PARTIAL=0.
 - Contract tests must verify batch size enforcement and manifest recording.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

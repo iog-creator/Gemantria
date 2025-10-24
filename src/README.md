@@ -38,18 +38,23 @@ The pipeline follows a modular architecture where each module has clear responsi
 ## 🔧 Key Components
 
 ### Core Module (`core/`)
+
 Contains the fundamental algorithms for Hebrew text processing, gematria calculations, and validation logic. This is where the core business logic resides.
 
 ### Graph Module (`graph/`)
+
 Implements the LangGraph pipeline orchestration, managing the flow of data through various processing nodes and coordinating the overall execution.
 
 ### Infrastructure (`infra/`)
+
 Provides essential services like database connections, structured logging, and state persistence through the checkpointer system.
 
 ### Services (`services/`)
+
 Handles integrations with external dependencies like LM Studio for AI model access, with proper error handling and health checking.
 
 ### Nodes (`nodes/`)
+
 Contains the individual processing steps that make up the LangGraph pipeline, each implementing a specific transformation or analysis.
 
 ## 🚀 Getting Started
@@ -82,14 +87,14 @@ make type
 
 ## 📋 Module Responsibilities
 
-| Module | Responsibility | Key Files |
-|--------|----------------|-----------|
-| `core/` | Text processing, gematria, validation | `extraction.py`, `validation.py` |
-| `graph/` | Pipeline orchestration | `graph.py`, `pipeline.py` |
-| `infra/` | Persistence, logging | `db.py`, `structured_logger.py` |
-| `nodes/` | Processing steps | `ai_enrichment.py`, `network_aggregator.py` |
-| `services/` | External APIs | `lmstudio_client.py`, `config.py` |
-| `obs/` | Metrics collection | `prom_exporter.py` |
+| Module      | Responsibility                        | Key Files                                   |
+| ----------- | ------------------------------------- | ------------------------------------------- |
+| `core/`     | Text processing, gematria, validation | `extraction.py`, `validation.py`            |
+| `graph/`    | Pipeline orchestration                | `graph.py`, `pipeline.py`                   |
+| `infra/`    | Persistence, logging                  | `db.py`, `structured_logger.py`             |
+| `nodes/`    | Processing steps                      | `ai_enrichment.py`, `network_aggregator.py` |
+| `services/` | External APIs                         | `lmstudio_client.py`, `config.py`           |
+| `obs/`      | Metrics collection                    | `prom_exporter.py`                          |
 
 ## 🔒 Safety & Quality
 

@@ -368,10 +368,7 @@ class TestRerankScoreMapping(unittest.TestCase):
 
         for text in response_texts:
             with self.subTest(text=text):
-                if "yes" in text.lower():
-                    score = 1.0
-                else:
-                    score = 0.0
+                score = 1.0 if "yes" in text.lower() else 0.0
                 self.assertEqual(score, 1.0)
 
     def test_text_parsing_no(self):

@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
-import argparse, json, sys
-import psycopg
+import argparse
+import json
+import sys
 from pathlib import Path
 
-def fail(msg): 
+import psycopg
+
+from src.infra.env_loader import ensure_env_loaded
+
+# Load environment variables from .env file
+ensure_env_loaded()
+
+
+def fail(msg):
     print(f"VERIFIER_FAIL: {msg}", file=sys.stderr)
     sys.exit(2)
+
 
 def read_json(p):
     try:
@@ -13,23 +23,27 @@ def read_json(p):
     except Exception as e:
         fail(f"Cannot read JSON {p}: {e}")
 
+
 def q1(conn, sql):
     with conn.cursor() as cur:
         cur.execute(sql)
         return cur.fetchone()[0]
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dsn", required=True)
     ap.add_argument("--stats", required=True)
     ap.add_argument("--graph", required=True)
-    ap.add_argument("--mock-db", action="store_true", help="Use mock DB values for testing")
+    ap.add_argument(
+        "--mock-db", action="store_true", help="Use mock DB values for testing"
+    )
     args = ap.parse_args()
 
     stats = read_json(args.stats)
     graph = read_json(args.graph)
 
-    for k in ["nodes","edges","clusters","density","centrality"]:
+    for k in ["nodes", "edges", "clusters", "density", "centrality"]:
         if k not in stats:
             fail(f"stats missing key: {k}")
 
@@ -42,7 +56,9 @@ def main():
         with psycopg.connect(args.dsn) as conn:
             db_nodes = q1(conn, "SELECT COUNT(*) FROM concept_network;")
             db_edges = q1(conn, "SELECT COUNT(*) FROM concept_relations;")
-            db_clusters = q1(conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;")
+            db_clusters = q1(
+                conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;"
+            )
 
     file_nodes = int(stats["nodes"])
     file_edges = int(stats["edges"])
@@ -51,22 +67,22 @@ def main():
     if file_nodes < 1 or file_edges < 1:
         fail("stats shows zero nodes/edges (expected non-zero real data)")
 
-    if abs(file_nodes - db_nodes) > max(5, int(0.01*max(1, db_nodes))):
+    if abs(file_nodes - db_nodes) > max(5, int(0.01 * max(1, db_nodes))):
         fail(f"nodes mismatch file={file_nodes} db={db_nodes}")
-    if abs(file_edges - db_edges) > max(25, int(0.02*max(1, db_edges))):
+    if abs(file_edges - db_edges) > max(25, int(0.02 * max(1, db_edges))):
         fail(f"edges mismatch file={file_edges} db={db_edges}")
     if file_clusters < 0 or file_clusters > db_clusters:
         fail(f"clusters out of range file={file_clusters} db_max={db_clusters}")
 
     g_nodes = len(graph.get("nodes", []))
     g_edges = len(graph.get("edges", []))
-    if abs(g_nodes - file_nodes) > max(5, int(0.02*file_nodes)):
+    if abs(g_nodes - file_nodes) > max(5, int(0.02 * file_nodes)):
         fail(f"graph_latest.json nodes mismatch export={g_nodes} stats={file_nodes}")
-    if abs(g_edges - file_edges) > max(25, int(0.03*file_edges)):
+    if abs(g_edges - file_edges) > max(25, int(0.03 * file_edges)):
         fail(f"graph_latest.json edges mismatch export={g_edges} stats={file_edges}")
 
     cent = stats["centrality"]
-    for required in ["avg_degree","avg_betweenness"]:
+    for required in ["avg_degree", "avg_betweenness"]:
         if required not in cent:
             fail(f"centrality missing {required}")
     if not (0 <= stats["density"] <= 1):
@@ -75,6 +91,7 @@ def main():
         fail(f"avg_degree out of bounds: {cent['avg_degree']}")
 
     print("VERIFIER_PASS: PR-016/017 contracts intact.")
+
 
 if __name__ == "__main__":
     main()

@@ -7,24 +7,28 @@ This directory contains the comprehensive documentation system for the Gemantria
 The Gemantria documentation system consists of four interconnected layers:
 
 ### 1. User-Facing Documentation (`README.md` files)
+
 - **Purpose**: Human-readable guides for developers and users
 - **Location**: Every directory contains a `README.md`
 - **Content**: Setup instructions, usage examples, architecture overviews
 - **Audience**: Developers, maintainers, and end users
 
 ### 2. AI Assistant Documentation (`AGENTS.md` files)
+
 - **Purpose**: Structured guidance for AI assistants working on the codebase
 - **Location**: Key directories contain `AGENTS.md` files
 - **Content**: Development patterns, API contracts, coding standards
 - **Audience**: AI assistants and automated tooling
 
 ### 3. Architectural Decision Records (`ADRs/` directory)
+
 - **Purpose**: Record important architectural decisions and their rationales
 - **Location**: `docs/ADRs/` with ADR-XXX-title.md naming
 - **Content**: Context, decision, rationale, alternatives, consequences
 - **Audience**: Architects, senior developers, future maintainers
 
 ### 4. Single Source of Truth (`SSOT/` directory)
+
 - **Purpose**: Canonical schemas and contract definitions
 - **Location**: `docs/SSOT/` with specific schema files
 - **Content**: API contracts, data schemas, configuration specifications
@@ -71,21 +75,21 @@ docs/
 
 ### ADRs (Architectural Decisions)
 
-| ADR | Title | Status |
-|-----|-------|--------|
+| ADR     | Title                          | Status   |
+| ------- | ------------------------------ | -------- |
 | ADR-001 | Database Architecture & Safety | Accepted |
-| ADR-002 | Gematria Calculation Rules | Accepted |
-| ADR-013 | Documentation Synchronization | Accepted |
-| ADR-015 | JSON-LD & Visualization | Accepted |
+| ADR-002 | Gematria Calculation Rules     | Accepted |
+| ADR-013 | Documentation Synchronization  | Accepted |
+| ADR-015 | JSON-LD & Visualization        | Accepted |
 
 ### SSOT (Canonical Schemas)
 
-| Schema | Purpose | Format |
-|--------|---------|--------|
-| `jsonld-schema.md` | JSON-LD export format specification | Markdown |
-| `rdf-ontology.md` | RDF vocabulary definitions | Turtle snippets |
-| `webui-contract.md` | Frontend-backend data contracts | JSON schemas |
-| `graph-stats-api.md` | Statistics API specification | JSON examples |
+| Schema               | Purpose                             | Format          |
+| -------------------- | ----------------------------------- | --------------- |
+| `jsonld-schema.md`   | JSON-LD export format specification | Markdown        |
+| `rdf-ontology.md`    | RDF vocabulary definitions          | Turtle snippets |
+| `webui-contract.md`  | Frontend-backend data contracts     | JSON schemas    |
+| `graph-stats-api.md` | Statistics API specification        | JSON examples   |
 
 ## 🛠️ Documentation Tools
 
@@ -181,13 +185,13 @@ Canonical schemas include:
 
 ### Validation Gates
 
-| Gate | Description | Rule |
-|------|-------------|------|
-| **Documentation Sync** | Pre-PR validation ensures docs match code | 009 — Documentation Sync |
-| **Metrics Verification** | Enforces real data & export consistency | 021 — Stats Proof |
-| **CI/CD** | Automated documentation checks | 007 — Infrastructure |
-| **Release** | Complete documentation review | — |
-| **Audit** | Periodic documentation quality assessment | — |
+| Gate                     | Description                               | Rule                     |
+| ------------------------ | ----------------------------------------- | ------------------------ |
+| **Documentation Sync**   | Pre-PR validation ensures docs match code | 009 — Documentation Sync |
+| **Metrics Verification** | Enforces real data & export consistency   | 021 — Stats Proof        |
+| **CI/CD**                | Automated documentation checks            | 007 — Infrastructure     |
+| **Release**              | Complete documentation review             | —                        |
+| **Audit**                | Periodic documentation quality assessment | —                        |
 
 ## 🤝 Contributing to Documentation
 

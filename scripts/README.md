@@ -16,45 +16,54 @@ The scripts directory serves as the command-line interface for:
 ### Data Export Scripts
 
 #### `export_graph.py`
+
 **Purpose**: Export semantic concept networks to visualization-ready JSON
 
 **Features**:
+
 - Node-link format for graph visualization libraries
 - Cluster membership and centrality metrics
 - Relationship strengths and types
 - Metadata export with timestamps
 
 **Usage**:
+
 ```bash
 python scripts/export_graph.py
 # Outputs: exports/graph_latest.json
 ```
 
 #### `export_jsonld.py`
+
 **Purpose**: Export semantic networks as JSON-LD and RDF/Turtle
 
 **Features**:
+
 - W3C JSON-LD standard compliance
 - RDF/Turtle serialization for knowledge graphs
 - Global URIs using gematria.ai namespace
 - Schema.org vocabulary integration
 
 **Usage**:
+
 ```bash
 python scripts/export_jsonld.py
 # Outputs: exports/graph_latest.jsonld, exports/graph_latest.ttl
 ```
 
 #### `export_stats.py`
+
 **Purpose**: Generate graph statistics for dashboards and monitoring
 
 **Features**:
+
 - Node and edge counts
 - Cluster distribution analysis
 - Centrality metrics aggregation
 - Performance and quality indicators
 
 **Usage**:
+
 ```bash
 python scripts/export_stats.py
 # Outputs: JSON metrics for dashboard consumption
@@ -63,15 +72,18 @@ python scripts/export_stats.py
 ### Analysis Scripts
 
 #### `analyze_graph.py`
+
 **Purpose**: Perform advanced graph analysis on semantic networks
 
 **Features**:
+
 - Community detection algorithms
 - Centrality calculations (degree, betweenness, eigenvector)
 - Pattern discovery and motif analysis
 - Statistical summaries and distributions
 
 **Usage**:
+
 ```bash
 python scripts/analyze_graph.py
 # Performs comprehensive graph analysis
@@ -80,15 +92,18 @@ python scripts/analyze_graph.py
 ### Maintenance Scripts
 
 #### `generate_report.py`
+
 **Purpose**: Generate comprehensive pipeline execution reports
 
 **Features**:
+
 - Markdown and JSON report formats
 - Pipeline metrics and performance data
 - Quality validation results
 - Health check summaries
 
 **Usage**:
+
 ```bash
 python scripts/generate_report.py
 python scripts/generate_report.py --run-id abc123
@@ -96,15 +111,18 @@ python scripts/generate_report.py --run-id abc123
 ```
 
 #### `test_docs_sync_rule.sh`
+
 **Purpose**: Validate documentation synchronization requirements
 
 **Features**:
+
 - Comprehensive documentation coverage checking
 - AGENTS.md and README.md presence validation
 - Cross-reference verification
 - ADR and rule linkage validation
 
 **Usage**:
+
 ```bash
 ./scripts/test_docs_sync_rule.sh
 # Returns: PASS/FAIL with detailed coverage report

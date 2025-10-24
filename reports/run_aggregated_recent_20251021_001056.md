@@ -13,13 +13,13 @@
 
 ## Node Performance
 
-| Node | Events | Avg Duration (ms) |
-|------|--------|-------------------|
-| collect_nouns | 20 | 7.0 |
-| validate_batch | 20 | 5.0 |
-| enrichment | 20 | 2324.0 |
-| confidence_validator | 18 | 8.0 |
-| network_aggregator | 4 | 5.0 |
+| Node                 | Events | Avg Duration (ms) |
+| -------------------- | ------ | ----------------- |
+| collect_nouns        | 20     | 7.0               |
+| validate_batch       | 20     | 5.0               |
+| enrichment           | 20     | 2324.0            |
+| confidence_validator | 18     | 8.0               |
+| network_aggregator   | 4      | 5.0               |
 
 ## AI Enrichment Details
 
@@ -59,7 +59,6 @@
 
 ❌ **Error retrieving enrichment health data**: the connection is closed
 
-
 ## Concept Network Verification
 
 - **Nodes persisted**: 2
@@ -86,8 +85,7 @@
 ### Edge Strength Distribution
 
 | Bucket | Count | Avg Strength |
-|--------|-------|--------------|
-
+| ------ | ----- | ------------ |
 
 ## Recommendations
 
@@ -96,4 +94,5 @@
 ✅ **Semantic Network Built**: 2 concepts connected with 0 semantic relationships.
 
 ---
-*Report generated automatically by Gemantria pipeline analysis*
+
+_Report generated automatically by Gemantria pipeline analysis_

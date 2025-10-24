@@ -20,10 +20,13 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from src.graph.graph import run_pipeline
 
+
 def main():
     parser = argparse.ArgumentParser(description="Run Gemantria pipeline")
     parser.add_argument("book", help="Book name to process (e.g., Genesis)")
-    parser.add_argument("--batch-size", type=int, help="Override batch size (sets BATCH_SIZE env var)")
+    parser.add_argument(
+        "--batch-size", type=int, help="Override batch size (sets BATCH_SIZE env var)"
+    )
 
     args = parser.parse_args()
 
@@ -40,6 +43,7 @@ def main():
     except Exception as e:
         print(f"❌ Pipeline failed: {e}", file=sys.stderr)
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

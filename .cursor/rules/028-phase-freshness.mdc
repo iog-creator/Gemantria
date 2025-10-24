@@ -1,7 +1,7 @@
 ---
 description: Forest must be regenerated within 24h before PR
 globs: ["docs/forest/**", "scripts/generate_forest.py"]
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 028 — Phase Freshness

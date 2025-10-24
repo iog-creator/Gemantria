@@ -3,13 +3,14 @@
 Assert only the three navigator rules are marked alwaysApply: true.
 Intended as a fast guard for Cursor rule bloat/regression.
 """
-import sys
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RULES_DIR = ROOT / ".cursor" / "rules"
 ALLOWED = {"000-ssot-index.mdc", "010-task-brief.mdc", "030-share-sync.mdc"}
+
 
 def main():
     offenders = []
@@ -25,6 +26,7 @@ def main():
         print(f"[rules.navigator.check] FAIL: {msg}", file=sys.stderr)
         sys.exit(2)
     print("[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)")
+
 
 if __name__ == "__main__":
     main()

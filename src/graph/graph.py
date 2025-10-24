@@ -8,12 +8,18 @@ from typing import Any, TypedDict
 
 from langgraph.graph import StateGraph
 
+from src.infra.env_loader import ensure_env_loaded
+
+# Load environment variables from .env file
+ensure_env_loaded()
+
 from src.graph.batch_processor import (BatchAbortError, BatchConfig,
                                        BatchProcessor, BatchResult)
 from src.infra.checkpointer import get_checkpointer
 from src.infra.db import get_gematria_rw
-from src.infra.metrics import NodeTimer, get_metrics_client
+from src.infra.metrics_core import NodeTimer, get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
+from src.nodes.collect_nouns_db import collect_nouns_for_book
 from src.nodes.confidence_validator import (ConfidenceValidationError,
                                             confidence_validator_node)
 from src.nodes.enrichment import enrichment_node
@@ -238,24 +244,10 @@ def with_metrics(
 
 
 def collect_nouns_node(state: PipelineState) -> PipelineState:
-    """Collect nouns from book for batch processing."""
-    # For testing: return some sample Hebrew nouns with their expected gematria values
-    # In real implementation, this would extract nouns from actual book text
-    sample_nouns = [
-        {
-            "hebrew": "אָדָם",
-            "name": "adam",
-            "value": 45,
-            "primary_verse": "Genesis 2:19",
-        },  # Adam
-        {
-            "hebrew": "הֶבֶל",
-            "name": "hevel",
-            "value": 37,
-            "primary_verse": "Genesis 4:2",
-        },  # Abel
-    ]
-    return {**state, "nouns": sample_nouns}
+    """Collect nouns from bible_db for the requested book."""
+    book = state.get("book_name", "Genesis")
+    nouns = collect_nouns_for_book(book)
+    return {**state, "nouns": nouns}
 
 
 def validate_batch_node(state: PipelineState) -> PipelineState:
@@ -532,7 +524,15 @@ if __name__ == "__main__":
         results = debug_connectivity()
         print(json.dumps(results, indent=2, ensure_ascii=False))
     else:
-        result = run_hello()
+        # Minimal CLI parsing to accept --book without changing public API
+        book = "Genesis"
+        if "--book" in sys.argv:
+            try:
+                i = sys.argv.index("--book")
+                book = sys.argv[i + 1]
+            except Exception:
+                pass
+        result = run_pipeline(book=book)
 
         # Convert any UUID objects to strings for JSON serialization
         def convert_uuids(obj):

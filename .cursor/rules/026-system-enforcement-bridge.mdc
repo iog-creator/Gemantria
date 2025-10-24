@@ -4,7 +4,7 @@ globs:
   - ".pre-commit-config.yaml"
   - "scripts/rules_guard.py"
   - ".github/workflows/system-enforcement.yml"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 026 — System Enforcement Bridge

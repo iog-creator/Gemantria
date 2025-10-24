@@ -88,9 +88,15 @@ def _knn_pairs(vecs, ids, k):
                 pairs.append((ids[i], ids[j], cos))
                 take.append(j)
 
-    log_json(LOG, 20, "knn_pairs_computed",
-             batch_size=n, pairs_found=len(pairs), k=k,
-             similarity_range=(float(np.min(sims)), float(np.max(sims))) if n > 1 else None)
+    log_json(
+        LOG,
+        20,
+        "knn_pairs_computed",
+        batch_size=n,
+        pairs_found=len(pairs),
+        k=k,
+        similarity_range=(float(np.min(sims)), float(np.max(sims))) if n > 1 else None,
+    )
 
     return pairs
 
@@ -118,7 +124,8 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     kept = []
-    from src.services.rerank_via_embeddings import rerank_via_embeddings as rerank_pairs
+    from src.services.rerank_via_embeddings import \
+        rerank_via_embeddings as rerank_pairs
 
     # Build name_map once for all pairs
     name_map = {}
@@ -132,24 +139,32 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
             concept_name = noun_id_to_name.get(noun_id, str(noun_id))
             name_map[concept_network_id] = concept_name
     except Exception as e:
-        log_json(LOG, 40, "name_map_creation_error", error=str(e),
-                 enriched_nouns_count=len(enriched_nouns) if enriched_nouns else 0)
+        log_json(
+            LOG,
+            40,
+            "name_map_creation_error",
+            error=str(e),
+            enriched_nouns_count=len(enriched_nouns) if enriched_nouns else 0,
+        )
         raise
 
     # Rerank ALL pairs in batches
-    import os, math
+    import os
+
     # Weight cosine vs rerank via env knob (default: lean on cosine)
     EDGE_ALPHA = float(os.getenv("EDGE_ALPHA", "0.70"))  # 0..1
 
     BATCH = max(1, min(RERANK_TOPK, int(os.getenv("RERANK_BATCH_MAX", "128"))))
     for i in range(0, len(pairs), BATCH):
-        batch = pairs[i:i+BATCH]
+        batch = pairs[i : i + BATCH]
         payload = [(sid, tid) for (sid, tid, _) in batch]
         try:
             scores = rerank_pairs(payload, name_map)  # list[float 0..1]
             rerank_calls += 1
         except Exception as e:
-            log_json(LOG, 40, "rerank_pairs_error", error=str(e), payload_length=len(payload))
+            log_json(
+                LOG, 40, "rerank_pairs_error", error=str(e), payload_length=len(payload)
+            )
             # Fallback: neutral scores to avoid dropping edges outright
             scores = [0.5] * len(batch)
 
@@ -167,7 +182,9 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
 
     # Execute inserts using the same schema as rerank pipeline
     # Use specific model tag for bi-encoder proxy to avoid cache collisions
-    rerank_model = f"bge-m3-emb-proxy@{os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')}"
+    rerank_model = (
+        f"bge-m3-emb-proxy@{os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')}"
+    )
     for sid, tid, cos, score, edge_strength, relation_type in kept:
         db.execute(
             """INSERT INTO concept_relations
@@ -383,6 +400,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
 
     # Build highly differentiated semantic document with unique identifiers
     import uuid
+
     unique_id = str(uuid.uuid4())[:8]  # Short unique identifier
 
     doc_parts = [
@@ -411,10 +429,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
 
     if insight:
         # Include full insight but truncate if extremely long
-        if len(insight) > 800:
-            truncated_insight = insight[:800] + "..."
-        else:
-            truncated_insight = insight
+        truncated_insight = insight[:800] + "..." if len(insight) > 800 else insight
         doc_parts.append(f"Theological Analysis: {truncated_insight}")
 
     # Add uniqueness markers

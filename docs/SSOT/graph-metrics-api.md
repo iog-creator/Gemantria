@@ -9,18 +9,21 @@ version: 1.0
 ## Per-Cluster Metrics
 
 ### density: float [0..1]
+
 - **Definition**: Proportion of possible edges that exist within the cluster
 - **Formula**: `actual_edges / (node_count * (node_count - 1) / 2)`
 - **Interpretation**: Higher values indicate tightly connected communities
 - **Use Case**: Identify cohesive vs sparse communities
 
 ### semantic_diversity: float [0..1]
+
 - **Definition**: Semantic spread within cluster (1 - average cosine similarity)
 - **Formula**: `1 - mean(cosine_similarity(concept_embeddings))`
 - **Interpretation**: Higher values indicate diverse semantic content
 - **Use Case**: Evaluate cluster homogeneity vs heterogeneity
 
 ### top_examples: UUID[]
+
 - **Definition**: Most representative concepts by average similarity to cluster
 - **Formula**: Sort by `mean(cosine_to_all_other_concepts)` descending, take top K
 - **Interpretation**: Exemplar concepts that best represent cluster semantics
@@ -29,18 +32,21 @@ version: 1.0
 ## Per-Concept Metrics
 
 ### semantic_cohesion: float [0..1]
+
 - **Definition**: Average similarity to other concepts in same cluster
 - **Formula**: `mean(cosine_to_cluster_members_excluding_self)`
 - **Interpretation**: How well concept fits within its community
 - **Use Case**: Identify peripheral vs central concepts within clusters
 
 ### bridge_score: float [0..1]
+
 - **Definition**: Average similarity to concepts outside cluster
 - **Formula**: `mean(cosine_to_outside_cluster_concepts)`
 - **Interpretation**: Potential for cross-cluster connectivity
 - **Use Case**: Identify concepts that bridge different semantic areas
 
 ### diversity_local: float [0..1]
+
 - **Definition**: Semantic variety in concept's neighborhood (1 - average similarity to neighbors)
 - **Formula**: `1 - mean(cosine_to_direct_neighbors)`
 - **Interpretation**: Local semantic diversity around concept
@@ -49,6 +55,7 @@ version: 1.0
 ## JSON-LD Keys
 
 When metrics are available, they appear in JSON-LD exports with these keys:
+
 - `semanticCohesion` (per-concept)
 - `bridgeScore` (per-concept)
 - `diversityLocal` (per-concept)
@@ -67,6 +74,7 @@ When metrics are available, they appear in JSON-LD exports with these keys:
 ## Computation Order
 
 Metrics should be computed after graph analysis:
+
 1. `analyze_graph.py` → clusters + centrality
 2. `analyze_metrics.py` → insight metrics
 3. Export scripts → include metrics in outputs

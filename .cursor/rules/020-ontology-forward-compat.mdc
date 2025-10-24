@@ -4,7 +4,7 @@ globs:
   - docs/SSOT/graph-metrics-api.md
   - scripts/export_jsonld.py
   - docs/SSOT/jsonld-schema.md
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Ontology Forward Compatibility Rule

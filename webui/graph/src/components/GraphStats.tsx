@@ -16,9 +16,18 @@ export default function GraphStats() {
       <Card label="Nodes" value={s.nodes} />
       <Card label="Edges" value={s.edges} />
       <Card label="Clusters" value={s.clusters} />
-      <Card label="Avg Degree" value={s.avg_degree?.toFixed?.(2) ?? s.avg_degree} />
-      <Card label="Avg Cluster Density" value={s.avg_cluster_density?.toFixed?.(3) ?? s.avg_cluster_density} />
-      <Card label="Avg Cluster Diversity" value={s.avg_cluster_diversity?.toFixed?.(3) ?? s.avg_cluster_diversity} />
+      <Card
+        label="Avg Degree"
+        value={s.avg_degree?.toFixed?.(2) ?? s.avg_degree}
+      />
+      <Card
+        label="Avg Cluster Density"
+        value={s.avg_cluster_density?.toFixed?.(3) ?? s.avg_cluster_density}
+      />
+      <Card
+        label="Avg Cluster Diversity"
+        value={s.avg_cluster_diversity?.toFixed?.(3) ?? s.avg_cluster_diversity}
+      />
     </div>
   );
 }

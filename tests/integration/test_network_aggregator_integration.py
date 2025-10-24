@@ -36,11 +36,10 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
 
         # Verify pgvector extension is available
         try:
-            with psycopg.connect(self.dsn) as conn:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT * FROM pg_extension WHERE extname = 'vector'")
-                    if not cur.fetchone():
-                        self.skipTest("pgvector extension not installed")
+            with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
+                cur.execute("SELECT * FROM pg_extension WHERE extname = 'vector'")
+                if not cur.fetchone():
+                    self.skipTest("pgvector extension not installed")
         except Exception:
             self.skipTest("Cannot connect to test database")
 
@@ -356,7 +355,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 embedding1 = cur.fetchone()[0]
 
                 # Run again with same noun_id
-                result3 = network_aggregator_node(state.copy())
+                network_aggregator_node(state.copy())
 
                 cur.execute(
                     "SELECT embedding FROM concept_network WHERE concept_id = %s",
@@ -398,7 +397,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
 
         state = {"enriched_nouns": sample_nouns, "run_id": str(uuid.uuid4())}
 
-        result_state = network_aggregator_node(state)
+        network_aggregator_node(state)
 
         # Verify that edges are classified appropriately
         with psycopg.connect(self.dsn) as conn:

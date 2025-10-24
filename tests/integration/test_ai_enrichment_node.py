@@ -98,25 +98,24 @@ def test_enrichment_live_lm_studio():
         ), f"Insight length {word_count} not in 150-250 word range"
 
     # Verify DB persistence
-    with psycopg.connect(os.getenv("GEMATRIA_DSN")) as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                """
+    with psycopg.connect(os.getenv("GEMATRIA_DSN")) as conn, conn.cursor() as cur:
+        cur.execute(
+            """
                 SELECT COUNT(*) FROM ai_enrichment_log
                 WHERE run_id = %s AND node = 'enrichment'
             """,
-                ("test-live-enrichment",),
-            )
-            count = cur.fetchone()[0]
-            assert count == 2
+            ("test-live-enrichment",),
+        )
+        count = cur.fetchone()[0]
+        assert count == 2
 
-            # Verify health log entry
-            cur.execute(
-                """
+        # Verify health log entry
+        cur.execute(
+            """
                 SELECT COUNT(*) FROM qwen_health_log
                 WHERE run_id = %s AND verified = true
             """,
-                ("test-live-enrichment",),
-            )
-            health_count = cur.fetchone()[0]
-            assert health_count >= 1  # At least one health check recorded
+            ("test-live-enrichment",),
+        )
+        health_count = cur.fetchone()[0]
+        assert health_count >= 1  # At least one health check recorded

@@ -6,7 +6,7 @@ globs:
   - "migrations/**"
   - "exports/**"
   - ".github/workflows/**"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 021 — Stats Proof (PR-016/017)

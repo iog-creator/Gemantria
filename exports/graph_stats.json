@@ -1,10 +1,10 @@
 {
-  "nodes": 22,
-  "edges": 15,
+  "nodes": 28,
+  "edges": 6,
   "clusters": 26,
   "centrality": {
-    "avg_degree": 0.0,
-    "max_degree": 0.0,
+    "avg_degree": 1.0,
+    "max_degree": 1.0,
     "avg_betweenness": 0.0,
     "max_betweenness": 0.0,
     "avg_eigenvector": 0.0,
@@ -12,11 +12,11 @@
   },
   "edge_distribution": {
     "strong_edges": 0,
-    "weak_edges": 0,
-    "very_weak_edges": 15,
-    "avg_cosine": 0.5008549258509712,
-    "min_cosine": 0.5008549258509712,
-    "max_cosine": 0.5008549258509712
+    "weak_edges": 6,
+    "very_weak_edges": 0,
+    "avg_cosine": 0.8760786453882853,
+    "min_cosine": 0.8663026094436646,
+    "max_cosine": 0.8896368741989136
   },
   "cluster_sizes": [
     {
@@ -128,7 +128,7 @@
     "id": 23,
     "size": 2
   },
-  "density": 0.06493506493506493,
+  "density": 0.015873015873015872,
   "cluster_metrics": {
     "avg_cluster_density": null,
     "avg_cluster_diversity": null
@@ -139,5 +139,5 @@
     "has_clusters": true,
     "density_reasonable": true
   },
-  "export_timestamp": "2025-10-21T13:22:48.459152"
+  "export_timestamp": "2025-10-23T19:21:02.580105"
 }

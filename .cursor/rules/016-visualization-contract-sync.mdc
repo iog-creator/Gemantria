@@ -1,14 +1,12 @@
 ---
-description: Validate consistency between SSOT webui-contract.md and webui/graph components
-globs:
-  - docs/SSOT/webui-contract.md
-  - webui/graph/src/types/graph.ts
-  - webui/graph/src/hooks/useGraphData.ts
-  - webui/graph/src/components/GraphView.tsx
+description: Deprecated alias of Rule 022
+globs: []
 alwaysApply: false
 ---
 
-# Related ADRs: ADR-015 (JSON-LD & RDF Graph Exports + Visualization Interface)
+# Rule 016 — DEPRECATED
+
+Alias of Rule 022 (Visualization Contract Sync). Do not rely on 016; use 022.
 
 - **Purpose**: Validate consistency between docs/SSOT/webui-contract.md and webui/graph components to ensure frontend-backend data contract compliance.
 
@@ -23,3 +21,9 @@ alwaysApply: false
 - **Error Handling**: Components gracefully handle missing/invalid data per contract
 
 - **Validation**: Run `make webui` and verify data loads without type errors or missing field warnings.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

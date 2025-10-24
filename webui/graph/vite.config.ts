@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,10 +7,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/exports': {
-        target: 'http://localhost:8000', // Assuming backend runs on port 8000
+      "/exports": {
+        target: "http://localhost:8000", // Assuming backend runs on port 8000
         changeOrigin: true,
       },
     },
   },
-})
+});

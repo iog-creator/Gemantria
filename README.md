@@ -49,7 +49,7 @@ cp env_example.txt .env
 
 ### Basic Usage
 
-```bash
+````bash
 # Run pipeline for Genesis (requires BIBLE_DB_DSN; bible_db is read-only)
 python -m src.graph.graph --book Genesis
 
@@ -68,36 +68,39 @@ python -m src.services.api_server &
 curl -s 'http://127.0.0.1:8000/api/v1/temporal?unit=chapter&window=5' | jq
 curl -s 'http://127.0.0.1:8000/api/v1/forecast?horizon=10' | jq
 # Phase-8 endpoints read from exports/ (override with EXPORT_DIR)
-```
-
+````
 
 # Run tests
+
 make test
+
 ```
 
 ## 📁 Project Structure
 
 ```
+
 gemantria/
-├── src/                    # Core pipeline code
-│   ├── core/              # Core processing logic
-│   ├── graph/             # Graph processing & LangGraph pipeline
-│   ├── infra/             # Infrastructure (DB, logging, checkpointer)
-│   ├── nodes/             # LangGraph node implementations
-│   ├── obs/               # Observability & metrics
-│   └── services/          # External service integrations
-├── scripts/               # Utility scripts & export tools
-├── tests/                 # Test suites (unit, integration, e2e)
-├── webui/graph/           # React visualization application
-├── docs/                  # Documentation
-│   ├── ADRs/             # Architectural Decision Records
-│   └── SSOT/             # Single Source of Truth schemas
-├── migrations/           # Database schema migrations
-├── reports/              # Generated pipeline reports
-├── exports/              # Data export outputs
-├── .cursor/rules/        # Cursor IDE configuration rules
-└── AGENTS.md             # Agent documentation for AI assistants
-```
+├── src/ # Core pipeline code
+│ ├── core/ # Core processing logic
+│ ├── graph/ # Graph processing & LangGraph pipeline
+│ ├── infra/ # Infrastructure (DB, logging, checkpointer)
+│ ├── nodes/ # LangGraph node implementations
+│ ├── obs/ # Observability & metrics
+│ └── services/ # External service integrations
+├── scripts/ # Utility scripts & export tools
+├── tests/ # Test suites (unit, integration, e2e)
+├── webui/graph/ # React visualization application
+├── docs/ # Documentation
+│ ├── ADRs/ # Architectural Decision Records
+│ └── SSOT/ # Single Source of Truth schemas
+├── migrations/ # Database schema migrations
+├── reports/ # Generated pipeline reports
+├── exports/ # Data export outputs
+├── .cursor/rules/ # Cursor IDE configuration rules
+└── AGENTS.md # Agent documentation for AI assistants
+
+````
 
 ## 🏗️ Architecture
 
@@ -140,7 +143,7 @@ EMBEDDING_MODEL=text-embedding-bge-m3  # 1024-dim, L2-normalized
 ENFORCE_QWEN_LIVE=1          # Require live models
 ALLOW_MOCKS_FOR_TESTS=0      # Production safety
 ALLOW_PARTIAL=0              # Batch validation
-```
+````
 
 ### Pipeline Configuration
 

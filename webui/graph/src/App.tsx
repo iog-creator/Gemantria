@@ -1,5 +1,5 @@
-import React from 'react';
-import GraphDashboard from './pages/GraphDashboard';
+import React from "react";
+import GraphDashboard from "./pages/GraphDashboard";
 
 function App() {
   return <GraphDashboard />;

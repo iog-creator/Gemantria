@@ -10,6 +10,12 @@ alwaysApply: true
 - Finals=regular (Mispar Hechrachi). Compute gematria on surface form; keep calc strings.
 - Identity: content_hash (SHA-256) as deterministic ID; uuidv7 as a sortable surrogate.
 - Batches: 50 nouns by default; if <50, abort and write review.ndjson. `ALLOW_PARTIAL=1` must be explicit and recorded in the run manifest.
-- Network: pgvector embeddings (1024-dim, L2 normalized) with cosine similarity; strong edges ≥0.90, weak edges ≥0.75; Qwen3 inference for semantic intelligence.
+- Network: pgvector embeddings (1024-dim, L2 normalized) with cosine similarity; configurable edge strength via EDGE_ALPHA/EDGE_STRONG/EDGE_WEAK; Qwen3 inference for semantic intelligence.
 - Qwen Live Gate: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation; otherwise fail-closed. Pipeline must abort unless LM Studio models verified live.
 - Schema/algorithm changes require ADR + tests (+ migrations if DB) in the same PR.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

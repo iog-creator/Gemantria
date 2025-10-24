@@ -32,7 +32,22 @@ python tools/genesis_autopilot.py Genesis --batch 10
 ```
 
 Autopilot will:
+
 - Start headless servers on 9994/9991/9993
 - Audit /v1/models and GGUF quants
 - Smoke /v1/embeddings (dim check)
 - Run graph shard; assert SQL sanity
+
+### LM Studio Port Split (Env-only)
+
+- Embeddings: `EMBED_URL=http://127.0.0.1:9994/v1`
+- Chat/Live Gate: `LM_STUDIO_HOST=http://127.0.0.1:9994` (or `:9991` when chat lives there)
+- Critic (optional): `:9993`
+
+Make targets:
+
+```bash
+make models.verify   # Verify endpoints and models
+make models.swap     # Test alt answerer model
+make models.params   # Show recommended runtime knobs
+```

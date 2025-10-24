@@ -5,6 +5,7 @@ This module contains the fundamental algorithms and business logic for Hebrew te
 ## 📋 Purpose
 
 The core module implements the essential algorithms that:
+
 - Process Hebrew text according to traditional linguistic rules
 - Calculate gematria values using established mathematical methods
 - Validate data integrity and consistency
@@ -13,18 +14,21 @@ The core module implements the essential algorithms that:
 ## 🔧 Key Components
 
 ### Text Processing (`extraction.py`)
+
 - **Hebrew Text Analysis**: Extract nouns and linguistic features from biblical text
 - **Normalization**: Apply Unicode normalization and Hebrew-specific text cleaning
 - **Tokenization**: Break text into meaningful linguistic units
 - **Morphological Analysis**: Identify word forms and grammatical features
 
 ### Gematria Calculation (`gematria.py`)
+
 - **Traditional Methods**: Implement Mispar Hechrachi (standard gematria)
 - **Finals Handling**: Correctly process final letter forms (ך, ם, נ, פ, ץ)
 - **Value Computation**: Calculate numerical values for Hebrew words
 - **Verification**: Cross-check calculations for accuracy
 
 ### Validation (`validation.py`)
+
 - **Schema Validation**: Ensure data conforms to expected formats
 - **Consistency Checks**: Verify relationships between data elements
 - **Duplicate Detection**: Identify and handle duplicate entries
@@ -156,6 +160,7 @@ nouns = extract_nouns(text)
 ### Algorithm Changes
 
 Any changes to gematria calculation algorithms require:
+
 - Updated test cases with known reference values
 - Documentation of the change rationale
 - Validation against existing processed data

@@ -10,7 +10,8 @@ Scans ADRs, .cursor/rules, and CI workflows to produce:
 Rule Reference: 025-phase-gate.mdc
 """
 
-import os, yaml, json, re
+import os
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -19,13 +20,16 @@ FOREST = DOCS / "forest"
 RULES = ROOT / ".cursor" / "rules"
 CI = ROOT / ".github" / "workflows"
 
+
 def list_files(path, ext):
     return sorted(p for p in path.glob(f"**/*{ext}") if p.is_file())
+
 
 def parse_rule(file):
     text = file.read_text()
     title = re.search(r"# (Rule .+)", text)
     return title.group(1) if title else file.name
+
 
 def main():
     FOREST.mkdir(parents=True, exist_ok=True)
@@ -61,6 +65,7 @@ def main():
 
     (DOCS / "VERIFICATION_MATRIX.md").write_text("\n".join(matrix))
     print("[generate_forest] overview + verification matrix rebuilt.")
+
 
 if __name__ == "__main__":
     main()

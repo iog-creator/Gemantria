@@ -15,7 +15,7 @@ pytestmark = pytest.mark.skipif(
 @pytest.fixture
 def clean_test_data():
     """Clean up test data after each test."""
-    cp = get_checkpointer()
+    get_checkpointer()
     thread_id = "test-thread-cleanup"
 
     # Clean up any existing data

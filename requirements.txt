@@ -11,3 +11,4 @@ pytest-cov~=5.0
 ruff~=0.6
 mypy~=1.11
 rdflib~=7.0
+jsonschema~=4.23

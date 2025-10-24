@@ -15,17 +15,19 @@ export default function useGraphStats() {
   useEffect(() => {
     fetch("/exports/graph_latest.json") // fallback if stats file not hosted
       .catch(() => null);
-    fetch("/exports/graph_stats.json").then(async r => {
-      if (r.ok) {
-        setStats(await r.json());
-        return;
-      }
-      // fallback to on-demand script output path if you serve it
-      try {
-        const r2 = await fetch("/api/stats");
-        setStats(await r2.json());
-      } catch {}
-    }).catch(() => {});
+    fetch("/exports/graph_stats.json")
+      .then(async (r) => {
+        if (r.ok) {
+          setStats(await r.json());
+          return;
+        }
+        // fallback to on-demand script output path if you serve it
+        try {
+          const r2 = await fetch("/api/stats");
+          setStats(await r2.json());
+        } catch {}
+      })
+      .catch(() => {});
   }, []);
 
   return stats;

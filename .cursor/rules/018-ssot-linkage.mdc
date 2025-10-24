@@ -22,3 +22,9 @@ alwaysApply: false
 - **Validation**: Run `grep -r "docs/SSOT/" docs/ADRs/` and verify all SSOT docs are referenced.
 
 - **Failure Mode**: Broken documentation links prevent complete architectural traceability.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

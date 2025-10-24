@@ -1,5 +1,5 @@
-import React from 'react';
-import { GraphNode } from '../types/graph';
+import React from "react";
+import { GraphNode } from "../types/graph";
 
 interface NodeDetailsProps {
   node: GraphNode | null;
@@ -32,28 +32,36 @@ export default function NodeDetails({ node }: NodeDetailsProps) {
 
         {node.cluster !== undefined && (
           <div>
-            <label className="text-sm font-medium text-gray-600">Cluster:</label>
+            <label className="text-sm font-medium text-gray-600">
+              Cluster:
+            </label>
             <p className="text-sm">{node.cluster}</p>
           </div>
         )}
 
         {node.degree !== undefined && (
           <div>
-            <label className="text-sm font-medium text-gray-600">Degree Centrality:</label>
+            <label className="text-sm font-medium text-gray-600">
+              Degree Centrality:
+            </label>
             <p className="text-sm">{node.degree.toFixed(4)}</p>
           </div>
         )}
 
         {node.betweenness !== undefined && (
           <div>
-            <label className="text-sm font-medium text-gray-600">Betweenness:</label>
+            <label className="text-sm font-medium text-gray-600">
+              Betweenness:
+            </label>
             <p className="text-sm">{node.betweenness.toExponential(2)}</p>
           </div>
         )}
 
         {node.eigenvector !== undefined && (
           <div>
-            <label className="text-sm font-medium text-gray-600">Eigenvector:</label>
+            <label className="text-sm font-medium text-gray-600">
+              Eigenvector:
+            </label>
             <p className="text-sm">{node.eigenvector.toFixed(4)}</p>
           </div>
         )}

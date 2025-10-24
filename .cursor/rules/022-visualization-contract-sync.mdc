@@ -5,7 +5,7 @@ globs:
   - "scripts/export_graph.py"
   - "webui/graph/src/hooks/**"
   - "webui/graph/src/components/**"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 022 — Visualization Contract Sync

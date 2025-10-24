@@ -11,8 +11,8 @@ test("renders six metric cards from stats JSON", () => {
       edges: 5400,
       clusters: 8,
       density: 0.007,
-      centrality: { avg_degree: 0.045, avg_betweenness: 0.0011 }
-    }
+      centrality: { avg_degree: 0.045, avg_betweenness: 0.0011 },
+    },
   } as any);
 
   render(<GraphStats />);

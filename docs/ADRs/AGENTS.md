@@ -30,6 +30,7 @@ The `docs/ADRs/` directory contains Architectural Decision Records that document
 - **ADR-020**: Ontology forward compatibility
 - **ADR-021**: Metrics contract synchronization
 - **ADR-022**: System enforcement bridge
+- **ADR-025**: Multi-temporal analytics and predictive patterns
 
 ### Naming Convention
 
