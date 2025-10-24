@@ -13,7 +13,7 @@ RULES_DIR = ROOT / ".cursor" / "rules"
 ALLOWED = {"000-ssot-index.mdc", "010-task-brief.mdc", "030-share-sync.mdc"}
 
 
-def main():
+def main() -> None:
     offenders = []
     for p in sorted(RULES_DIR.glob("*.mdc")):
         text = p.read_text(errors="ignore")

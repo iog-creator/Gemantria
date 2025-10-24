@@ -2,8 +2,8 @@
 """
 Add '# noqa: E501' to truly non-wrappable long lines:
 - URLs / curl commands
-- SQL keywords (SELECT/INSERT/UPDATE/DELETE) within string literals
-Skips files in venv/.git/.ruff_cache and already-noqa'd lines.
+- SQL keywords (SELECT/INSERT/UPDATE/DELETE/WITH) inside string literals
+Skips venv/.git/.ruff_cache and already-noqa'd lines.
 """
 
 import re
