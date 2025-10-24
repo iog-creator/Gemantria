@@ -53,6 +53,15 @@ make share.sync
 | Smoke | `make test.smoke` | 2 passed or skipped (if endpoints unavailable) |
 | Share | `make share.sync` | Mirrors only allow-listed outputs |
 
+### Book Readiness Flow
+
+**Setup once (hard requirement):**
+```bash
+pip install -r requirements-dev.txt
+```
+
+Schema validation is **mandatory**. If it fails or `jsonschema` isn't installed, readiness checks will fail.
+
 > Navigator (always-apply) rules: `000-ssot-index.mdc`, `010-task-brief.mdc`, `030-share-sync.mdc` (see `AGENTS.md`).
 
 ### SSOT Cross-References (contracts & example heads)

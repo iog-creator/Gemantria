@@ -831,12 +831,24 @@ def main():
         temporal_patterns["metadata"]["generated_at"] = now
         forecasts["metadata"]["generated_at"] = now
 
-        # === Rule 021/022 + Rule 030: schema validation (fail-closed) ===
+        # === Rule 021/022 + Rule 030: schema validation (HARD-REQUIRED) ===
         import json  # noqa: E402
         import sys  # noqa: E402
         from pathlib import Path  # noqa: E402
 
-        from jsonschema import ValidationError, validate  # noqa: E402
+        # Hard requirement: jsonschema must be installed
+        try:
+            from jsonschema import ValidationError, validate  # noqa: E402
+        except ImportError:
+            print(
+                "[export_stats] CRITICAL: jsonschema not installed (hard requirement)",
+                file=sys.stderr,
+            )
+            print(
+                "[export_stats] Install with: pip install -r requirements-dev.txt",
+                file=sys.stderr,
+            )
+            sys.exit(2)
 
         # Validate stats schema
         SCHEMA_PATH = Path("docs/SSOT/graph-stats.schema.json")

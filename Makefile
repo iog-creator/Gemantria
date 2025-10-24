@@ -65,7 +65,7 @@ schema.validate.smart:
 ci.smart:
 	@python3 scripts/mode_decider.py && make rules.navigator.check rules.audit repo.audit docs.audit
 
-.PHONY: go
+.PHONY: go deps.dev
 # One-command, zero-choices path for Cursor and devs:
 #  - lint/format/quickfix
 #  - smart strict/soft smoke + schema
@@ -76,3 +76,8 @@ go:
 	@$(MAKE) py.fullwave.c
 	@$(MAKE) ci.smart
 	@$(MAKE) share.sync
+
+# Install development dependencies (jsonschema, PyYAML)
+deps.dev:
+	@echo "[guide] Installing dev dependencies (jsonschema, PyYAML)..."
+	pip install -r requirements-dev.txt
