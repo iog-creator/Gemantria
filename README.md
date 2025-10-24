@@ -22,6 +22,13 @@ Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria 
 ---
 
 ## 🚀 60-Second Runbook (copy/paste)
+
+**Zero decisions:**
+```bash
+make go
+```
+
+**Or manually:**
 ```bash
 # 1) Install tooling (once)
 pip install -U ruff pytest pre-commit

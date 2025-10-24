@@ -57,10 +57,22 @@ repo.audit:
 docs.audit:
 	@python3 scripts/rules_guard.py
 
-.PHONY: smoke.smart schema.validate.smart ci.smart
+.PHONY: smoke.smart schema.validate.smart ci.smart go
 smoke.smart:
 	@python3 scripts/mode_decider.py
 schema.validate.smart:
 	@python3 scripts/mode_decider.py
 ci.smart:
 	@python3 scripts/mode_decider.py && make rules.navigator.check rules.audit repo.audit docs.audit
+
+.PHONY: go
+# One-command, zero-choices path for Cursor and devs:
+#  - lint/format/quickfix
+#  - smart strict/soft smoke + schema
+#  - audits
+#  - share sync
+go:
+	@echo "[guide] go: lint/format → smart smoke/schema → audits → share"
+	@$(MAKE) py.fullwave.c
+	@$(MAKE) ci.smart
+	@$(MAKE) share.sync

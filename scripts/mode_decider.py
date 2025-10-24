@@ -3,7 +3,7 @@
 Smart mode decider for smoke + schema validation.
 Picks STRICT or SOFT automatically and *emits guidance messages* for Cursor.
 
-Decision rules (first true wins):
+Decision rules (first true wins; can be manually overridden):
 1) If CI=true or GITHUB_ACTIONS=true -> STRICT.
 2) If current branch in ('main','master') or running on a tag -> STRICT.
 3) If staged/changed files touch critical paths -> STRICT:
@@ -84,6 +84,12 @@ def _current_ref() -> tuple[str, bool]:
 
 def decide_mode() -> tuple[str, list[str]]:
     notes: list[str] = []
+    # 0) Manual override knob for automation / CI debug
+    override = os.getenv("AUTO_MODE", "").upper()
+    if override in {"STRICT", "SOFT"}:
+        notes.append(f"[guide] AUTO_MODE={override} → forcing {override} mode.")
+        return override, notes
+
     # 1) CI signals
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         notes.append("[guide] CI detected → STRICT mode.")
@@ -122,19 +128,20 @@ def decide_mode() -> tuple[str, list[str]]:
     chat_up = _is_open(chat_host, chat_port)
     emb_up = _is_open(emb_host, emb_port)
     if api_up and chat_up and emb_up:
-        notes.append("[guide] All local services reachable → STRICT mode.")
+        notes.append(
+            "[guide] All local services reachable (API:8000, chat:9991, embed:9994) → STRICT mode."
+        )
         return "STRICT", notes
 
     # 5) Default soft with instructions
     notes.append(
-        "[guide] Services not detected; using SOFT mode to keep dev flow unblocked."
+        "[guide] Services not detected → SOFT mode to keep dev flow unblocked."
     )
     notes.append(
-        "[guide] To force STRICT locally, run: make test.smoke.strict && "
-        "make schema.validate.temporal.strict"
+        "[guide] For STRICT locally: make test.smoke.strict && make schema.validate.temporal.strict"
     )
     notes.append(
-        "[guide] Start services to enable STRICT: API :8000, LM chat :9991, LM embed :9994"
+        "[guide] Start services for STRICT: API :8000, LM chat :9991, LM embed :9994"
     )
     return "SOFT", notes
 
