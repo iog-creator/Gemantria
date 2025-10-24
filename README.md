@@ -64,6 +64,19 @@ Schema validation is **mandatory**. If it fails or `jsonschema` isn't installed,
 
 Artifacts (proofs) are written to `reports/readiness/` and mirrored by `make share.sync`.
 
+### Whole-Book Operations (deterministic & safe)
+```bash
+# Plan chapters (no inference)
+make book.plan
+# Dry-run checks (no inference)
+make book.dry
+# Stop-loss: run first N chapters with real inference
+make book.stop N=1
+# Resume last run
+make book.resume
+```
+Seeds and endpoints come from `config/book_plan.yaml` (and `.env`). Logs live under `logs/book/`.
+
 > Navigator (always-apply) rules: `000-ssot-index.mdc`, `010-task-brief.mdc`, `030-share-sync.mdc` (see `AGENTS.md`).
 
 ### SSOT Cross-References (contracts & example heads)
