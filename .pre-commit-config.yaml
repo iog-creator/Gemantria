@@ -35,3 +35,9 @@ repos:
         language: python
         additional_dependencies: ["jsonschema==4.23.0"]
         pass_filenames: false
+
+      - id: rules-audit
+        name: rules-audit (generate RULES_INDEX + sync docs)
+        entry: python scripts/rules_audit.py
+        language: system
+        pass_filenames: false

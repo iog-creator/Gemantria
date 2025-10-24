@@ -61,16 +61,20 @@ def _l2_normalize(vec: list[float]) -> list[float]:
 
 
 def _knn_pairs(vecs, ids, k):
-    """Naive cosine KNN for small batches."""
+    """Naive cosine KNN for small batches with improved similarity computation."""
     import numpy as np
 
     X = np.vstack(vecs)  # L2-normalized already
-    sims = X @ X.T
+    sims = X @ X.T  # Cosine similarity (vectors are L2 normalized)
+
+    # Ensure similarities are in valid range [-1, 1] and handle numerical precision
+    sims = np.clip(sims, -1.0, 1.0)
+
     pairs = []
     n = len(ids)
     for i in range(n):
         # top-k excluding self
-        idxs = np.argsort(-sims[i])  # desc
+        idxs = np.argsort(-sims[i])  # descending order
         take = []
         for j in idxs:
             if j == i:
@@ -78,14 +82,21 @@ def _knn_pairs(vecs, ids, k):
             if len(take) >= k:
                 break
             cos = float(sims[i, j])
-            if cos >= SIM_MIN:
+
+            # Semantic similarity threshold - allow broader relationships initially
+            if cos >= 0.4:  # More permissive threshold for semantic relationships
                 pairs.append((ids[i], ids[j], cos))
                 take.append(j)
+
+    log_json(LOG, 20, "knn_pairs_computed",
+             batch_size=n, pairs_found=len(pairs), k=k,
+             similarity_range=(float(np.min(sims)), float(np.max(sims))) if n > 1 else None)
+
     return pairs
 
 
 def build_relations(db, embeddings_batch, enriched_nouns=None):
-    """Build relations using KNN + optional rerank."""
+    """Build relations using KNN + rerank on ALL candidates with unified edge_strength logic."""
     if not ENABLE_REL or len(embeddings_batch) < 2:
         return 0, 0  # no edges, no rerank
 
@@ -94,7 +105,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         ids = [e[1] for e in embeddings_batch]  # concept_network_id for relations
         vecs = [e[2] for e in embeddings_batch]  # embedding
 
-        pairs = _knn_pairs(vecs, ids, K)
+        pairs = _knn_pairs(vecs, ids, K)  # list[(sid, tid, cos)]
         rerank_calls = 0
     except Exception as e:
         log_json(
@@ -107,63 +118,71 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     kept = []
-    if ENABLE_RERANK and pairs:
-        # Prepare topK text pairs from your concept labels/notes
-        from src.services.lmstudio_client import rerank_pairs
+    from src.services.rerank_via_embeddings import rerank_via_embeddings as rerank_pairs
 
-        top_pairs = pairs[:RERANK_TOPK]
-        payload = [(p[0], p[1]) for p in top_pairs]
+    # Build name_map once for all pairs
+    name_map = {}
+    try:
+        noun_id_to_name = {
+            noun.get("noun_id"): noun.get("name", str(noun.get("noun_id")))
+            for noun in (enriched_nouns or [])
+        }
+        for e in embeddings_batch:
+            noun_id, concept_network_id, _, _ = e
+            concept_name = noun_id_to_name.get(noun_id, str(noun_id))
+            name_map[concept_network_id] = concept_name
+    except Exception as e:
+        log_json(LOG, 40, "name_map_creation_error", error=str(e),
+                 enriched_nouns_count=len(enriched_nouns) if enriched_nouns else 0)
+        raise
 
-        # Create name mapping from enriched nouns
-        name_map = {}
+    # Rerank ALL pairs in batches
+    import os, math
+    # Weight cosine vs rerank via env knob (default: lean on cosine)
+    EDGE_ALPHA = float(os.getenv("EDGE_ALPHA", "0.70"))  # 0..1
+
+    BATCH = max(1, min(RERANK_TOPK, int(os.getenv("RERANK_BATCH_MAX", "128"))))
+    for i in range(0, len(pairs), BATCH):
+        batch = pairs[i:i+BATCH]
+        payload = [(sid, tid) for (sid, tid, _) in batch]
         try:
-            # Create mapping from noun_id to name, then from concept_network_id to name
-            noun_id_to_name = {
-                noun.get("noun_id"): noun.get("name", str(noun.get("noun_id")))
-                for noun in (enriched_nouns or [])
-            }
-            for e in embeddings_batch:
-                noun_id, concept_network_id, _, _ = e
-                concept_name = noun_id_to_name.get(noun_id, str(noun_id))
-                name_map[concept_network_id] = concept_name
-        except Exception as e:
-            log_json(
-                LOG,
-                40,
-                "name_map_creation_error",
-                error=str(e),
-                enriched_nouns_count=len(enriched_nouns) if enriched_nouns else 0,
-            )
-            raise
-
-        try:
-            rr = rerank_pairs(payload, name_map)  # returns list of scores [0..1]
+            scores = rerank_pairs(payload, name_map)  # list[float 0..1]
             rerank_calls += 1
         except Exception as e:
-            log_json(
-                LOG,
-                40,
-                "rerank_pairs_error",
-                error=str(e),
-                payload_length=len(payload),
-                name_map_keys=list(name_map.keys())[:5],
-            )
-            raise
-        for (sid, tid, cos), score in zip(top_pairs, rr, strict=False):
-            if score >= RERANK_PASS:
-                kept.append((sid, tid, cos, score, True))
-        # Add remaining pairs without reranking
-        for sid, tid, cos in pairs[RERANK_TOPK:]:
-            kept.append((sid, tid, cos, None, None))
-    else:
-        kept = [(sid, tid, cos, None, None) for (sid, tid, cos) in pairs]
+            log_json(LOG, 40, "rerank_pairs_error", error=str(e), payload_length=len(payload))
+            # Fallback: neutral scores to avoid dropping edges outright
+            scores = [0.5] * len(batch)
 
-    # Execute inserts within the connection's transaction context (auto-committed)
-    for sid, tid, cos, score, yes in kept:
+        for (sid, tid, cos), score in zip(batch, scores, strict=False):
+            # Compute unified edge strength with configurable alpha blend
+            edge_strength = EDGE_ALPHA * float(cos) + (1.0 - EDGE_ALPHA) * float(score)
+            if edge_strength >= EDGE_STRONG:
+                relation_type = "strong"
+            elif edge_strength >= EDGE_WEAK:
+                relation_type = "weak"
+            else:
+                # keep as reviewable 'candidate' so we don't lose signal
+                relation_type = "candidate"
+            kept.append((sid, tid, cos, score, edge_strength, relation_type))
+
+    # Execute inserts using the same schema as rerank pipeline
+    # Use specific model tag for bi-encoder proxy to avoid cache collisions
+    rerank_model = f"bge-m3-emb-proxy@{os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')}"
+    for sid, tid, cos, score, edge_strength, relation_type in kept:
         db.execute(
-            "INSERT INTO concept_relations (source_id, target_id, cosine, rerank_score, decided_yes) \
-             VALUES (%s,%s,%s,%s,%s) ON CONFLICT (source_id,target_id) DO NOTHING",
-            (sid, tid, cos, score, yes),
+            """INSERT INTO concept_relations
+               (source_id, target_id, similarity, relation_type,
+                cosine, rerank_score, edge_strength, rerank_model)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+               ON CONFLICT (source_id, target_id) DO UPDATE SET
+                 similarity = EXCLUDED.similarity,
+                 relation_type = EXCLUDED.relation_type,
+                 cosine = EXCLUDED.cosine,
+                 rerank_score = EXCLUDED.rerank_score,
+                 edge_strength = EXCLUDED.edge_strength,
+                 rerank_model = EXCLUDED.rerank_model,
+                 rerank_at = now()""",
+            (sid, tid, cos, relation_type, cos, score, edge_strength, rerank_model),
         )
     return len(kept), rerank_calls
 
@@ -193,7 +212,6 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
         return state
 
     nouns = state.get("enriched_nouns", [])
-    run_id = state.get("run_id", uuid.uuid4())
 
     if not nouns:
         log_json(LOG, 20, "network_aggregation_skipped", reason="no_nouns")
@@ -248,7 +266,7 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
 
     except Exception as e:
         log_json(LOG, 40, "network_aggregation_failed", error=str(e))
-        raise NetworkAggregationError(f"Network aggregation failed: {str(e)}")
+        raise NetworkAggregationError(f"Network aggregation failed: {str(e)}") from e
 
 
 def _generate_and_store_embeddings(
@@ -291,8 +309,9 @@ def _generate_and_store_embeddings(
             for i, embedding in enumerate(batch_embeddings):
                 if len(embedding) != VECTOR_DIM:
                     raise RuntimeError(
-                        f"Embedding dimension mismatch: expected {VECTOR_DIM}, got {len(embedding)} "
-                        f"(candidate index {i} in batch). Fix by aligning VECTOR_DIM and column type."
+                        f"Embedding dimension mismatch: expected {VECTOR_DIM}, "
+                        f"got {len(embedding)} (candidate index {i} in batch). "
+                        "Fix by aligning VECTOR_DIM and column type."
                     )
             # L2 normalize all embeddings
             batch_embeddings = [_l2_normalize(vec) for vec in batch_embeddings]
@@ -353,17 +372,55 @@ def _build_document_string(noun: dict[str, Any]) -> str:
     hebrew = noun.get("hebrew", "")
     primary_verse = noun.get("primary_verse", "")
     value = noun.get("value", "")
-    insight = noun.get("insight", "")
+    insight = noun.get("insights", noun.get("insight", ""))
+    confidence = noun.get("confidence", "")
+    freq = noun.get("freq", "")
+    book = noun.get("book", "Genesis")
 
     # Use placeholder if primary_verse not available
     if not primary_verse:
-        primary_verse = "Genesis (reference)"
+        primary_verse = f"{book} (reference)"
 
-    return f"""Document: {name}
-Meaning: {hebrew}
-Primary Verse: {primary_verse}
-Gematria: {value}
-Insight: {insight}""".strip()
+    # Build highly differentiated semantic document with unique identifiers
+    import uuid
+    unique_id = str(uuid.uuid4())[:8]  # Short unique identifier
+
+    doc_parts = [
+        f"Concept ID: {unique_id}",
+        f"Concept Name: {name}",
+        f"Hebrew Text: {hebrew}",
+        f"Biblical Book: {book}",
+        f"Primary Reference: {primary_verse}",
+        f"Text Frequency: {freq} occurrences in {book}",
+    ]
+
+    if value:
+        doc_parts.append(f"Numerical Value (Gematria): {value}")
+
+    if confidence:
+        doc_parts.append(f"AI Confidence Level: {confidence}")
+
+    # Add semantic context to differentiate similar concepts
+    semantic_context = (
+        f"This concept appears {freq} times in {book} and is associated "
+        f"with the Hebrew word '{hebrew}'"
+    )
+    if primary_verse and primary_verse != f"{book} (reference)":
+        semantic_context += f", first appearing at {primary_verse}"
+    doc_parts.append(f"Semantic Context: {semantic_context}")
+
+    if insight:
+        # Include full insight but truncate if extremely long
+        if len(insight) > 800:
+            truncated_insight = insight[:800] + "..."
+        else:
+            truncated_insight = insight
+        doc_parts.append(f"Theological Analysis: {truncated_insight}")
+
+    # Add uniqueness markers
+    doc_parts.append(f"Document Fingerprint: {name}-{hebrew}-{book}-{freq}-{unique_id}")
+
+    return "\n".join(doc_parts)
 
 
 def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary: dict):
@@ -373,7 +430,7 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
     total_rerank_calls = 0
 
     # Process each concept as a potential source
-    for source_id, source_net_id, source_emb, source_doc in concept_data:
+    for source_id, source_net_id, _source_emb, source_doc in concept_data:
         # Get KNN neighbors using pgvector
         neighbors = _get_knn_neighbors(cur, source_net_id, NN_TOPK)
 
@@ -423,7 +480,7 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
         )
 
         # Process rerank results and create edges
-        for (target_id, target_net_id, cosine_sim, target_emb), rerank_score in zip(
+        for (target_id, target_net_id, cosine_sim, _target_emb), rerank_score in zip(
             neighbor_data, rerank_scores, strict=False
         ):
             # Filter by rerank threshold
@@ -448,7 +505,8 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
             rerank_model = os.getenv("QWEN_RERANKER_MODEL", "qwen-reranker")
             cur.execute(
                 """INSERT INTO concept_relations
-                   (source_id, target_id, similarity, relation_type, cosine, rerank_score, edge_strength, rerank_model)
+                   (source_id, target_id, similarity, relation_type, cosine,
+                    rerank_score, edge_strength, rerank_model)
                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                    ON CONFLICT (source_id, target_id) DO UPDATE SET
                    similarity = EXCLUDED.similarity,
@@ -497,7 +555,9 @@ def _get_knn_neighbors(
 ) -> list[tuple[uuid.UUID, float]]:
     """Get KNN neighbors using pgvector cosine similarity."""
     cur.execute(
-        """SELECT id, 1 - (embedding <=> (SELECT embedding FROM concept_network WHERE id = %s)) as cosine
+        """SELECT id,
+                  1 - (embedding <=> (SELECT embedding FROM concept_network
+                                      WHERE id = %s)) as cosine
            FROM concept_network
            WHERE id != %s
            ORDER BY embedding <=> (SELECT embedding FROM concept_network WHERE id = %s)

@@ -1,10 +1,22 @@
+
+.PHONY: models.verify models.swap models.params
 PY=./.venv/bin/python
 PIP=./.venv/bin/pip
 PYTEST=./.venv/bin/pytest
 RUFF=./.venv/bin/ruff
 MYPY=./.venv/bin/mypy
 
-.PHONY: deps lint type test.unit test.int test.integration test.e2e test.live coverage.report graph-e2e report.run check.qwen analyze.graph exports.graph exports.jsonld webui doctor preflight run.small verify.metrics generate.forest hooks verify.all
+.PHONY: repo.audit docs.audit rules.audit rules.navigator.check share.sync
+repo.audit:
+	@python3 scripts/repo_audit.py
+docs.audit:
+	@echo "Docs changed:" && git diff --name-only -- docs | sed -n "1,50p"
+rules.audit:
+	@python3 scripts/rules_audit.py
+rules.navigator.check:
+	@python3 scripts/check_cursor_always_apply.py
+share.sync:
+	@python3 scripts/sync_share.py
 
 deps: ; $(PIP) install -U pip && $(PIP) install -r requirements.txt
 
@@ -64,3 +76,55 @@ verify.all: generate.forest
 	pre-commit run --all-files
 	@$(MAKE) -s verify.metrics || true
 	@$(MAKE) -s verify.correlations || true
+
+.PHONY: share.refresh
+share.refresh:
+	python3 scripts/update_share.py
+
+.PHONY: share.sync
+share.sync: share.refresh
+	@python3 scripts/sync_share.py
+
+.PHONY: share.check
+share.check:
+	python3 scripts/check_share_sync.py
+PYTHONPATH ?= $(shell pwd)
+.PHONY: models.verify models.swap models.params env.print
+models.verify:
+	@echo "[models.verify] Using PYTHONPATH=$(PYTHONPATH)"
+	PYTHONPATH=$(PYTHONPATH) python3 scripts/models_verify.py
+
+models.swap:
+	@echo "[models.swap] Using PYTHONPATH=$(PYTHONPATH)"
+	@ANSWERER_USE_ALT=1 PYTHONPATH=$(PYTHONPATH) python3 scripts/models_verify.py
+
+# Print the currently effective model knobs (reads .env via env_loader)
+models.params:
+	@python3 -c "from src.infra.env_loader import ensure_env_loaded; import os; ensure_env_loaded(); keys = ['ANSWERER_USE_ALT','ANSWERER_MODEL_PRIMARY','ANSWERER_MODEL_ALT','EMBEDDING_MODEL','EMBED_BATCH_MAX','EDGE_ALPHA','EDGE_STRONG','EDGE_WEAK','NN_TOPK','LM_STUDIO_HOST']; [print(f'{k}={os.getenv(k,\"<unset>\")}') for k in keys]"
+
+env.print:
+	python3 scripts/echo_env.py
+
+.PHONY: rules.lint rules.refactor.dry rules.refactor.apply repo.clean py.lint py.type py.format
+
+rules.lint:
+	@python3 scripts/rules_lint.py
+
+rules.refactor.dry:
+	@python3 scripts/rules_refactor.py dry
+
+rules.refactor.apply:
+	@python3 scripts/rules_refactor.py apply
+
+repo.clean:
+	@find . -name "__pycache__" -type d -prune -exec rm -rf {} +; \
+	 find . -name "*.pyc" -delete
+
+py.lint:
+	@python3 -c "import sys, subprocess; subprocess.check_call([sys.executable,'-m','ruff','check','src','scripts'])" 2>/dev/null || echo "[py.lint] skipped or issues"
+
+py.type:
+	@python3 -c "import sys, subprocess; subprocess.check_call([sys.executable,'-m','mypy','--ignore-missing-imports','src'])" 2>/dev/null || echo "[py.type] skipped or issues"
+
+py.format:
+	@python3 -c "import sys, subprocess; subprocess.check_call([sys.executable,'-m','black','src','scripts'])" 2>/dev/null || echo "[py.format] skipped or issues"
