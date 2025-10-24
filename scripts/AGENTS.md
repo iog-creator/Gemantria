@@ -325,7 +325,7 @@ python scripts/verify_pr016_pr017.py --dsn "$GEMATRIA_DSN" \
 
 - **Documentation Sync**: Verifies AGENTS.md/ADR/README updates when code changes
 - **Rules System Integrity**: Runs rules_audit.py to validate rule numbering and documentation sync
-- **AGENTS.md Coverage**: Ensures ≥10 AGENTS.md files exist across source directories (Rule 017 enforcement)
+- **AGENTS.md Coverage**: Ensures required AGENTS.md files exist per Rule 017 (src/AGENTS.md, src/services/AGENTS.md, webui/graph/AGENTS.md)
 - **Fail-Closed Design**: Hard stops commits that violate critical rules
 - **Pre-commit Integration**: Runs automatically via .pre-commit-config.yaml
 - **CI/CD Integration**: Runs in GitHub Actions for PR validation
@@ -334,7 +334,7 @@ python scripts/verify_pr016_pr017.py --dsn "$GEMATRIA_DSN" \
 
 1. **Documentation Sync**: Code changes require corresponding docs updates
 2. **Rules Audit**: Rule numbering contiguous, docs automatically synced
-3. **AGENTS.md Coverage**: Minimum 10 AGENTS.md files in source directories
+3. **AGENTS.md Coverage**: Required AGENTS.md files present per Rule 017
 
 **Usage:**
 

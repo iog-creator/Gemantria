@@ -125,22 +125,27 @@ def main():
 
     # CRITICAL CHECK 3: AGENTS.md coverage (Rule 017 - agent docs presence)
     print("[rules_guard] Critical Check 3: AGENTS.md file coverage")
-    agents_files = list(ROOT.glob("**/AGENTS.md"))
-    agents_count = len(agents_files)
-    required_min = 10  # Per AGENTS.md documentation
-    print(
-        f"[rules_guard] Found {agents_count} AGENTS.md files (minimum required: {required_min})"
-    )
+    # Rule 017 specifies specific required files
+    required_files = [
+        ROOT / "src" / "AGENTS.md",
+        ROOT / "src" / "services" / "AGENTS.md",
+        ROOT / "webui" / "graph" / "AGENTS.md",
+    ]
 
-    if agents_count >= required_min:
-        print(
-            f"[rules_guard] ✓ Critical Check 3 PASSED: AGENTS.md coverage sufficient ({agents_count} files)"
-        )
-    else:
+    missing_files = []
+    for req_file in required_files:
+        if not file_exists(req_file):
+            missing_files.append(str(req_file.relative_to(ROOT)))
+
+    if missing_files:
         require(
             False,
-            f"CRITICAL: Insufficient AGENTS.md coverage. Found {agents_count}, need ≥{required_min}. Missing files in source directories.",
+            f"CRITICAL: Missing required AGENTS.md files per Rule 017: {', '.join(missing_files)}",
         )
+
+    print(
+        "[rules_guard] ✓ Critical Check 3 PASSED: All Rule 017 required AGENTS.md files present"
+    )
 
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 
