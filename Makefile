@@ -1,5 +1,6 @@
 
 
+
 .PHONY: py.quickfix py.longline py.fullwave
 py.quickfix:
 	@python3 scripts/quick_fixes.py && ruff check --fix src scripts
@@ -31,6 +32,10 @@ rules.navigator.check:
 .PHONY: share.sync
 share.sync:
 	@python3 scripts/sync_share.py
+
+.PHONY: py.fullwave.c
+py.fullwave.c:
+	@$(MAKE) py.quickfix && $(MAKE) py.longline && $(MAKE) py.format && $(MAKE) py.lint && $(MAKE) py.type
 
 .PHONY: rules.audit
 rules.audit:

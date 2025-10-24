@@ -31,6 +31,43 @@ Notes:
 - Requires servers running (headless): `lms server start --port 9994 [--port 9991/9993]`
 - Script loads `.env` via `ensure_env_loaded()` and uses `/v1` endpoints.
 
+### Lint Automation Scripts (NEW)
+
+#### `longline_noqa.py` — Smart E501 `# noqa` Tagger
+
+**Purpose**: Automatically add `# noqa: E501` comments to truly non-wrappable long lines that are safe to ignore.
+
+**Detection Categories**:
+- URLs and curl commands
+- SQL keywords within string literals (SELECT/INSERT/UPDATE/DELETE/WITH)
+- Compiled regex patterns (`re.compile(...)`)
+- Structured payload dumps (`json.dumps`, large dict/array literals)
+- Logging calls (`logger.debug/info/warning/error`) with format strings
+
+**Usage**:
+```bash
+python scripts/longline_noqa.py  # Tags non-wrappable lines with # noqa: E501
+```
+
+**Safety**: Uses higher threshold (110 chars) to let black/ruff-format handle most wrapping.
+
+#### `quick_fixes.py` — Mechanical Lint Fixes
+
+**Purpose**: Apply safe, mechanical fixes for common lint issues without breaking functionality.
+
+**Fix Categories**:
+- **E722**: Replace bare `except:` with `except Exception:` (preserves indentation)
+- **E402**: Mark late imports with `# noqa: E402` (heuristic after first def/class)
+- **B904**: Add `from e` to exception chains in `except ... as e:` blocks
+- **SIM108**: Handled by `ruff --fix` (ternary operator opportunities)
+
+**Usage**:
+```bash
+python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
+```
+
+**Safety**: Conservative approach - E402 uses `# noqa` instead of moving imports.
+
 ### `generate_report.py` - Pipeline Reporting (Critical - Always Apply)
 
 **Purpose**: Generate comprehensive markdown and JSON reports from pipeline execution data
@@ -237,8 +274,8 @@ make exports.stats              # Same via Makefile target
 
 ### verify_pr016_pr017.py — Metrics Contract Verifier
 
-**Purpose:** Ensures exported statistics reflect live DB and UI contracts.  
-**Rule References:** 021 (Stats Proof), 022 (Visualization Contract Sync), 006 (AGENTS.md Governance), 013 (Report Verification)  
+**Purpose:** Ensures exported statistics reflect live DB and UI contracts.
+**Rule References:** 021 (Stats Proof), 022 (Visualization Contract Sync), 006 (AGENTS.md Governance), 013 (Report Verification)
 **Usage:**
 
 ```bash
