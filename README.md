@@ -19,6 +19,51 @@ Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria 
 - **📋 Multiple Export Formats**: JSON-LD, RDF/Turtle, and structured JSON exports
 - **🔒 Production Safety**: Qwen Live Gate and comprehensive validation gates
 
+---
+
+## 🚀 60-Second Runbook (copy/paste)
+```bash
+# 1) Install tooling (once)
+pip install -U ruff pytest pre-commit
+pre-commit install
+
+# 2) Lint & format + fast fixes
+make py.fullwave.c     # quickfix + longline + format + lint + (types optional)
+
+# 3) Audits and smoke
+make rules.navigator.check rules.audit repo.audit docs.audit
+make test.smoke        # skips cleanly if LM Studio endpoints are down
+
+# 4) Share artifacts
+make share.sync
+```
+
+### Quality Gates (cheat-sheet)
+| Gate | Command | Expectation |
+|---|---|---|
+| Lint | `ruff check` | Only intentional `E501` with `# noqa: E501` (URLs/SQL/regex/payloads) |
+| Audits | `make rules.navigator.check rules.audit repo.audit docs.audit` | All green |
+| Smoke | `make test.smoke` | 2 passed or skipped (if endpoints unavailable) |
+| Share | `make share.sync` | Mirrors only allow-listed outputs |
+
+> Navigator (always-apply) rules: `000-ssot-index.mdc`, `010-task-brief.mdc`, `030-share-sync.mdc` (see `AGENTS.md`).
+
+### SSOT Cross-References (contracts & example heads)
+| Domain | Schema (authoritative) | Example head export (for quick inspection) |
+|---|---|---|
+| Graph patterns | `SSOT_graph-patterns.schema.json` | `graph_stats.head.json` |
+| Temporal patterns | `SSOT_temporal-patterns.schema.json` | `temporal_patterns.head.json` |
+| Pattern forecast | `SSOT_pattern-forecast.schema.json` | `pattern_forecast.head.json` |
+
+> Heads are truncated JSONs intended for PR review and CI proofs; full artifacts live under `exports/` in real runs.
+
+### Smoke tests (models)
+Run a quick health check against local LM Studio endpoints:
+```bash
+make test.smoke   # verifies /v1/models advertises the answerer; embeddings are 1024-dim
+```
+Override defaults with `LM_CHAT_HOST/LM_CHAT_PORT` and `LM_EMBED_HOST/LM_EMBED_PORT` if needed.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
