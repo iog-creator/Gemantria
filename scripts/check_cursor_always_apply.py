@@ -3,6 +3,7 @@
 Assert only the three navigator rules are marked alwaysApply: true.
 Intended as a fast guard for Cursor rule bloat/regression.
 """
+
 import re
 import sys
 from pathlib import Path
