@@ -54,7 +54,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 45,
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
-                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",
+                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",  # noqa: E501
             },
             {
                 "noun_id": str(uuid.uuid4()),
@@ -179,7 +179,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 self.assertEqual(len(embedding), 1024)  # VECTOR_DIM
 
                 # Verify it's a numpy array of float32 values
-                import numpy as np
+                import numpy as np  # noqa: E402
 
                 self.assertIsInstance(embedding, np.ndarray)
                 self.assertEqual(embedding.dtype, np.float32)
@@ -198,7 +198,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "value": 45,
                 "gematria_confidence": 1.0,
                 "confidence": 0.95,
-                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",
+                "insights": "Adam represents humanity's first relationship with God, symbolizing creation and stewardship.",  # noqa: E501
                 "primary_verse": "Genesis 1:1",
             },
             {
@@ -365,7 +365,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 embedding2 = cur.fetchone()[0]
 
                 # Embeddings should be identical (deterministic mock)
-                import numpy as np
+                import numpy as np  # noqa: E402
 
                 self.assertTrue(np.array_equal(embedding1, embedding2))
 

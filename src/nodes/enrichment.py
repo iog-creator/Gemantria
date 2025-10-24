@@ -55,8 +55,8 @@ def enrichment_node(state: dict) -> dict:
 
     # 1) Build prompts once per noun
     sys_msg = (
-        "You are an expert biblical scholar with deep theological insight. Provide a comprehensive 200-300 word theological analysis and a confidence score (0.0-1.0). You have sufficient context length to provide detailed analysis. Return only valid JSON with keys 'insight' and 'confidence'. "
-        'When a node expects JSON, respond with only minified JSON on one line, no markdown, matching the provided schema; include "confidence" as a float in [0,1].'
+        "You are an expert biblical scholar with deep theological insight. Provide a comprehensive 200-300 word theological analysis and a confidence score (0.0-1.0). You have sufficient context length to provide detailed analysis. Return only valid JSON with keys 'insight' and 'confidence'. "  # noqa: E501
+        'When a node expects JSON, respond with only minified JSON on one line, no markdown, matching the provided schema; include "confidence" as a float in [0,1].'  # noqa: E501
     )
     tmpl = (
         "Noun: {name}\nHebrew: {hebrew}\nPrimary Verse: {primary_verse}\n"
@@ -126,8 +126,8 @@ def enrichment_node(state: dict) -> dict:
 
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
-                        import json as _json
-                        import re
+                        import json as _json  # noqa: E402
+                        import re  # noqa: E402
 
                         m = re.search(
                             r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",

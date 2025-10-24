@@ -17,16 +17,18 @@ def main() -> None:
     offenders = []
     for p in sorted(RULES_DIR.glob("*.mdc")):
         text = p.read_text(errors="ignore")
-        # poor-man's frontmatter parse: look for `alwaysApply:` in the first 100 lines
+        # poor-man's frontmatter parse: look for `alwaysApply:` in first 100 lines
         header = "\n".join(text.splitlines()[:100])
         m = re.search(r"alwaysApply:\s*(true|True|1)", header)
         if m and p.name not in ALLOWED:
             offenders.append(p.name)
     if offenders:
-        msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"
+        msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"  # noqa: E501
         print(f"[rules.navigator.check] FAIL: {msg}", file=sys.stderr)
         sys.exit(2)
-    print("[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)")
+    print(
+        "[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)"
+    )  # noqa: E501
 
 
 if __name__ == "__main__":

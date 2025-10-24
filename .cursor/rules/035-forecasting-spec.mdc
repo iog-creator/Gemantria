@@ -1,62 +1,9 @@
 ---
-description: Spec-only (Phase 8). Enforcement remains via 000/006/017/027.
-globs: ["scripts/export_stats.py", "scripts/generate_report.py", "src/services/api_server.py", "webui/dashboard/**", "docs/SSOT/*.schema.json"]
+description: DEPRECATED — Forecasting spec consolidated into Rule 034 (Temporal Analytics Suite).
+globs: []
 alwaysApply: false
 ---
 
-# Rule 035 — Forecasting Spec (Phase 8)
+# Rule 035 — Forecasting Spec (DEPRECATED)
 
-**Spec-only rule describing Phase 8 predictive forecasting requirements.**
-
-This rule documents the specification for forecasting analytics but does not enforce blocking behavior. Actual enforcement remains through core rules 000/006/017/027.
-
-## Phase 8 Forecasting Requirements
-
-### Export Function (`export_forecast()`)
-- **Models**: Naive, Simple Moving Average (SMA), and ARIMA implementations
-- **Horizon**: Configurable forecast lengths (default 10 steps ahead)
-- **Metrics**: RMSE and MAE calculation for model evaluation
-- **Intervals**: Prediction intervals with configurable confidence levels
-- **Output**: `exports/pattern_forecast.json` validated against `pattern-forecast.schema.json`
-
-### Statistical Models
-
-#### Naive Model
-- **Algorithm**: Last observed value repeated for forecast horizon
-- **Use Case**: Baseline forecasting for comparison
-- **Performance**: Simple but often surprisingly effective
-
-#### Simple Moving Average (SMA)
-- **Algorithm**: Average of last N observations for each forecast step
-- **Parameters**: Configurable window size for moving average
-- **Use Case**: Smooth trend-following forecasts
-
-#### ARIMA Model (when available)
-- **Algorithm**: AutoRegressive Integrated Moving Average
-- **Parameters**: Automatic order selection (p,d,q)
-- **Fallback**: Graceful degradation to SMA when statsmodels unavailable
-
-### Performance Evaluation
-- **RMSE**: Root Mean Square Error across forecast horizon
-- **MAE**: Mean Absolute Error for forecast accuracy
-- **Model Distribution**: Tracking which models are used for which series
-
-### API Endpoint (`/api/v1/forecast`)
-- **Parameters**: `series_id`, `horizon` length
-- **Filtering**: Efficient retrieval of specific forecast series
-- **Metadata**: Model information, performance metrics, confidence intervals
-
-### Web UI Component (`ForecastPanel.tsx`)
-- **Visualization**: Historical + forecast line charts with uncertainty bands
-- **Model Comparison**: Side-by-side forecast comparison
-- **Interactive Controls**: Horizon adjustment, series selection
-- **Performance Display**: RMSE/MAE metrics for each forecast
-
-### Schema Compliance (`pattern-forecast.schema.json`)
-- **Validation**: Draft 2020-12 JSON Schema with comprehensive forecast structure
-- **Metadata**: Model distribution, average performance metrics
-- **Extensible**: Support for custom model parameters and evaluation metrics
-
-## Implementation Status
-
-This is a **spec-only rule** - it describes what Phase 8 forecasting should implement but does not block commits. The implementation provides statistical baselines that can be extended with more sophisticated ML models in future phases.
+**Status:** Deprecated on 2025-10-24. See **Rule 034 — Temporal Analytics Suite**.

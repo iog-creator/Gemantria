@@ -8,8 +8,8 @@ echo ""
 
 # Test 1: Rule syntax and core purpose
 echo "1. Testing rule syntax and core purpose..."
-if grep -q "alwaysApply: true" .cursor/rules/009-documentation-sync.mdc && grep -q "Documentation must be updated or created for any code change" .cursor/rules/009-documentation-sync.mdc; then
-    echo "✅ Rule syntax and purpose: PASS (always applied + core requirement)"
+if grep -q "Require docs/ADR/SSOT updates for any code change" .cursor/rules/027-docs-sync-gate.mdc && grep -q "rules_guard.py" .cursor/rules/027-docs-sync-gate.mdc; then
+    echo "✅ Rule syntax and purpose: PASS (enforcement rule + core requirement)"
 else
     echo "❌ Rule syntax and purpose: FAIL"
 fi

@@ -3,8 +3,13 @@ import os
 
 import numpy as np
 
-from src.graph.metrics import (bridge_score, cluster_semantic_diversity,
-                               density, diversity_local, semantic_cohesion)
+from src.graph.metrics import (
+    bridge_score,
+    cluster_semantic_diversity,
+    density,
+    diversity_local,
+    semantic_cohesion,
+)
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 

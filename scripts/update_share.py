@@ -7,6 +7,7 @@ update_share.py — refresh a flat share/ folder with current canonical files.
 - For large JSON exports, writes a small head preview as valid JSON when possible
 - Exits nonzero on errors
 """
+
 import json
 import shutil
 import sys

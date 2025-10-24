@@ -15,7 +15,7 @@ def exists(p):
 def read(p):
     try:
         return (ROOT / p).read_text(encoding="utf-8", errors="ignore")
-    except:
+    except Exception:
         return ""
 
 
@@ -85,12 +85,12 @@ for p in list(ROOT.rglob("src/**/*.py")) + list(ROOT.rglob("docs/**/*.md")):
         t = p.read_text(encoding="utf-8", errors="ignore")
         if "TODO" in t or "FIXME" in t:
             hits.append(str(p.relative_to(ROOT)))
-    except:
+    except Exception:
         pass
 if hits:
     add(
         "INFO",
-        f"TODO/FIXME present in: {', '.join(hits[:20])}{'…' if len(hits)>20 else ''}",
+        f"TODO/FIXME present in: {', '.join(hits[:20])}{'…' if len(hits) > 20 else ''}",
     )
 
 # 7) Env/model knobs present
@@ -126,6 +126,6 @@ for sev, msg in issues:
     print(f"{sev}: {msg}")
 print("== repo_audit summary ==")
 print(
-    f"errors={sum(1 for s,_ in issues if s=='ERR')}, warnings={sum(1 for s,_ in issues if s=='WARN')}, info={sum(1 for s,_ in issues if s=='INFO')}"
+    f"errors={sum(1 for s, _ in issues if s == 'ERR')}, warnings={sum(1 for s, _ in issues if s == 'WARN')}, info={sum(1 for s, _ in issues if s == 'INFO')}"
 )
 sys.exit(1 if any(s == "ERR" for s, _ in issues) else 0)

@@ -13,11 +13,12 @@ Usage:
 import json
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger
@@ -27,6 +28,31 @@ ensure_env_loaded()
 
 # Initialize logger
 LOG = get_logger("api_server")
+
+# --- DTOs (public API surface) -------------------------------------------------
+class HealthResponse(BaseModel):
+    status: str
+    export_directory: str
+    files: Dict[str, Dict[str, Any]]
+    timestamp: Optional[float] = None
+
+class APIInfo(BaseModel):
+    name: str
+    version: str
+    description: str
+    endpoints: Dict[str, str]
+
+class FilteredResponse(BaseModel):
+    data: List[Dict[str, Any]]
+    metadata: Dict[str, Any]
+    filtered_count: int
+    applied_filters: Dict[str, Any]
+
+class NetworkResponse(BaseModel):
+    center_concept: str
+    connections: List[Dict[str, Any]]
+    network_stats: Dict[str, Any]
+    metadata: Dict[str, Any]
 
 # FastAPI app setup
 app = FastAPI(
@@ -67,25 +93,25 @@ def load_json_file(filepath: Path) -> dict[str, Any]:
         return {}
 
 
-@app.get("/")
-async def root():
+@app.get("/", response_model=APIInfo)
+async def root() -> APIInfo:
     """Root endpoint with API information."""
-    return {
-        "name": "Gemantria Analytics API",
-        "version": "1.0.0",
-        "description": "REST API for gematria correlation and pattern analytics",
-        "endpoints": {
+    return APIInfo(
+        name="Gemantria Analytics API",
+        version="1.0.0",
+        description="REST API for gematria correlation and pattern analytics",
+        endpoints={
             "stats": "/api/v1/stats",
             "correlations": "/api/v1/correlations",
             "patterns": "/api/v1/patterns",
             "network": "/api/v1/network/{concept_id}",
             "health": "/health",
         },
-    }
+    )
 
 
-@app.get("/health")
-async def health_check():
+@app.get("/health", response_model=HealthResponse)
+async def health_check() -> HealthResponse:
     """Health check endpoint."""
     export_dir = Path(os.getenv("EXPORT_DIR", "exports"))
 
@@ -107,16 +133,16 @@ async def health_check():
             "mtime": filepath.stat().st_mtime if filepath.exists() else None,
         }
 
-    return {
-        "status": "healthy",
-        "export_directory": str(export_dir),
-        "files": files_status,
-        "timestamp": None,  # Could add last modified time
-    }
+    return HealthResponse(
+        status="healthy",
+        export_directory=str(export_dir),
+        files=files_status,
+        timestamp=None,  # Could add last modified time
+    )
 
 
 @app.get("/api/v1/stats")
-async def get_stats():
+async def get_stats() -> JSONResponse:
     """Get comprehensive graph statistics."""
     filepath = get_export_path("graph_stats.json")
     data = load_json_file(filepath)
@@ -138,7 +164,7 @@ async def get_correlations(
     min_strength: float | None = Query(
         0.0, description="Minimum correlation strength threshold"
     ),
-):
+) -> JSONResponse:
     """Get concept correlation data."""
     filepath = get_export_path("graph_correlations.json")
     data = load_json_file(filepath)
@@ -180,7 +206,7 @@ async def get_patterns(
         0.0, description="Minimum pattern strength threshold"
     ),
     metric: str | None = Query(None, description="Filter by pattern metric"),
-):
+) -> JSONResponse:
     """Get cross-text pattern analysis data."""
     filepath = get_export_path("graph_patterns.json")
     data = load_json_file(filepath)
@@ -232,7 +258,7 @@ async def get_concept_network(
     max_connections: int | None = Query(
         20, description="Maximum connections to return"
     ),
-):
+) -> JSONResponse:
     """Get network subgraph for a specific concept."""
     # Load correlation data to build network
     filepath = get_export_path("graph_correlations.json")
@@ -312,7 +338,7 @@ async def get_temporal_patterns(
     series_id: str = Query(None, description="Specific series ID to filter by"),
     unit: str = Query("chapter", description="Time unit: 'verse' or 'chapter'"),
     window: int = Query(5, min=1, description="Rolling window size"),
-):
+) -> JSONResponse:
     """
     Get temporal pattern data with optional filtering.
 
@@ -369,14 +395,14 @@ async def get_temporal_patterns(
         raise HTTPException(status_code=500, detail="Invalid temporal patterns data")
     except Exception as e:
         LOG.error(f"Error in temporal patterns endpoint: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") from e
 
 
 @app.get("/api/v1/forecast")
 async def get_forecasts(
     series_id: str = Query(None, description="Specific series ID to filter by"),
     horizon: int = Query(10, min=1, description="Forecast horizon"),
-):
+) -> JSONResponse:
     """
     Get forecast data with optional filtering.
 
@@ -422,11 +448,11 @@ async def get_forecasts(
         raise HTTPException(status_code=500, detail="Invalid forecast data")
     except Exception as e:
         LOG.error(f"Error in forecast endpoint: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") from e
 
 
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn  # noqa: E402
 
     # Default to port 8000, but allow override
     port = int(os.getenv("API_PORT", "8000"))

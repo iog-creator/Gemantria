@@ -83,32 +83,32 @@ flowchart TD
 
 ### 1. Collection Stage
 
-**Input**: Raw KJV Bible text  
-**Process**: Hebrew noun extraction, deduplication, normalization  
+**Input**: Raw KJV Bible text
+**Process**: Hebrew noun extraction, deduplication, normalization
 **Output**: Structured noun objects with IDs and metadata
 
 ### 2. Validation Stage
 
-**Input**: Noun list with metadata  
-**Process**: Batch size checks, quality gates, ALLOW_PARTIAL logic  
+**Input**: Noun list with metadata
+**Process**: Batch size checks, quality gates, ALLOW_PARTIAL logic
 **Output**: Validated batch or detailed error manifest
 
 ### 3. Enrichment Stage
 
-**Input**: Validated nouns  
-**Process**: AI prompt engineering, LM Studio API calls, response parsing  
+**Input**: Validated nouns
+**Process**: AI prompt engineering, LM Studio API calls, response parsing
 **Output**: Nouns with theological insights and confidence scores
 
 ### 4. Confidence Validation Stage
 
-**Input**: AI-enriched nouns  
-**Process**: Multi-gate validation (gematria ≥90%, AI ≥85% soft/95% hard)  
+**Input**: AI-enriched nouns
+**Process**: Multi-gate validation (gematria ≥90%, AI ≥85% soft/95% hard)
 **Output**: Filtered noun list with validation evidence
 
 ### 5. Network Aggregation Stage
 
-**Input**: Confidence-validated nouns  
-**Process**: Embedding generation (1024-dim), KNN relations, community detection  
+**Input**: Confidence-validated nouns
+**Process**: Embedding generation (1024-dim), KNN relations, community detection
 **Output**: Semantic network with relations, clusters, and centrality measures
 
 ## Storage Schema Overview

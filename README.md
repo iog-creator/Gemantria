@@ -57,7 +57,8 @@ make share.sync
 
 > Heads are truncated JSONs intended for PR review and CI proofs; full artifacts live under `exports/` in real runs.
 
-### Smoke tests (models)
+
+> **Note:** Phase-8 rules are consolidated under **Rule 034** (Temporal Analytics Suite).### Smoke tests (models)
 Run a quick health check against local LM Studio endpoints:
 ```bash
 make test.smoke   # verifies /v1/models advertises the answerer; embeddings are 1024-dim

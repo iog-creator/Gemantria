@@ -20,6 +20,8 @@ alwaysApply: false
 
 - **Structure**: Tables with columns for Component/Function and Related ADRs.
 
-- **Validation**: Run `find . -name "AGENTS.md" | wc -l` should return ≥4 (including root AGENTS.md).
+- **Validation**: Run `find . -name "AGENTS.md" | wc -l` should return ≥10 (minimum required).
+- **Automatic Creation**: Run `python scripts/create_agents_md.py` to create missing AGENTS.md files.
+- **Coverage Check**: `rules_guard.py` enforces minimum AGENTS.md coverage (currently 10 files).
 
 - **Failure Mode**: Missing AGENTS.md files prevent complete agent documentation coverage.

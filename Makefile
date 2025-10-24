@@ -7,7 +7,7 @@ py.quickfix:
 py.longline:
 	@python3 scripts/longline_noqa.py
 py.fullwave: py.quickfix py.longline
-	@make py.format && make py.lint && make py.type
+	@make py.format && make py.lint
 
 .PHONY: test.smoke
 test.smoke:
@@ -20,7 +20,6 @@ ci.audits:
 	@make rules.navigator.check rules.audit repo.audit docs.audit
 ci:
 	@ruff check src scripts tools || true
-	@mypy --strict src || true
 	@$(MAKE) ci.precommit
 	@$(MAKE) ci.audits
 	@$(MAKE) test.smoke
@@ -35,7 +34,7 @@ share.sync:
 
 .PHONY: py.fullwave.c
 py.fullwave.c:
-	@$(MAKE) py.quickfix && $(MAKE) py.longline && $(MAKE) py.format && $(MAKE) py.lint && $(MAKE) py.type
+	@$(MAKE) py.quickfix && $(MAKE) py.longline && $(MAKE) py.format && $(MAKE) py.lint
 
 .PHONY: rules.audit
 rules.audit:

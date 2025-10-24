@@ -45,4 +45,3 @@ SELECT
 FROM concept_relations;
 
 COMMIT;
-

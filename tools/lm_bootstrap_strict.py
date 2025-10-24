@@ -46,7 +46,7 @@ def main() -> None:
     cli = find_cli()
     if not cli:
         print(
-            "[FAIL] LM Studio CLI 'lms' not found. Install or symlink the binary; no UI fallback allowed.",
+            "[FAIL] LM Studio CLI 'lms' not found. Install or symlink the binary; no UI fallback allowed.",  # noqa: E501
             file=sys.stderr,
         )
         sys.exit(1)

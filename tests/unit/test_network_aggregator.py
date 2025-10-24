@@ -11,8 +11,12 @@ from unittest.mock import patch
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
-from nodes.network_aggregator import (VECTOR_DIM, _build_document_string,
-                                      _cosine_similarity, _l2_normalize)
+from nodes.network_aggregator import (
+    VECTOR_DIM,
+    _build_document_string,
+    _cosine_similarity,
+    _l2_normalize,
+)
 from services.lmstudio_client import LMStudioClient
 
 
@@ -178,7 +182,7 @@ class TestEmbeddingFunctionality(unittest.TestCase):
 
     def test_vector_normalization(self):
         """Test that vectors are properly L2 normalized."""
-        import math
+        import math  # noqa: E402
 
         # Test with a non-normalized vector
         vec = [3.0, 4.0]  # Should normalize to [0.6, 0.8]
@@ -269,7 +273,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
     def test_edge_classification_strong(self):
         """Test edge classification for strong relationships (≥0.90)."""
         # Import the constants
-        import os
+        import os  # noqa: E402
 
         os.environ["EDGE_STRONG"] = "0.90"
 
@@ -286,7 +290,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
 
     def test_edge_classification_weak(self):
         """Test edge classification for weak relationships (≥0.75, <0.90)."""
-        import os
+        import os  # noqa: E402
 
         os.environ["EDGE_STRONG"] = "0.90"
         os.environ["EDGE_WEAK"] = "0.75"
@@ -306,7 +310,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
 
     def test_edge_classification_filtered(self):
         """Test edge classification for filtered relationships (<0.75)."""
-        import os
+        import os  # noqa: E402
 
         os.environ["EDGE_WEAK"] = "0.75"
 
@@ -328,7 +332,7 @@ class TestRerankScoreMapping(unittest.TestCase):
 
     def test_logprob_score_calculation(self):
         """Test score calculation from log probabilities using sigmoid."""
-        import math
+        import math  # noqa: E402
 
         # Mock logprobs data
         logprobs = {

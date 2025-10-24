@@ -57,7 +57,7 @@ def compute_patterns(G):
         tuple: (cluster_map, degree_centrality, betweenness_centrality, eigenvector_centrality)
     """
     # clusters using Louvain method
-    from networkx.algorithms.community import louvain_communities
+    from networkx.algorithms.community import louvain_communities  # noqa: E402
 
     comms = louvain_communities(G, weight="weight", seed=42)
     cluster_map = {}

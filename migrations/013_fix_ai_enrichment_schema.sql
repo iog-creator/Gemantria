@@ -6,4 +6,3 @@ BEGIN;
 ALTER TABLE ai_enrichment_log ALTER COLUMN confidence_model DROP NOT NULL;
 
 COMMIT;
-

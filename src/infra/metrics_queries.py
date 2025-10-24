@@ -22,27 +22,27 @@ def _q(sql: str, *params) -> list[tuple]:
 
 def node_latency_7d() -> list[tuple]:
     return _q(
-        "SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node"
+        "SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node"  # noqa: E501
     )
 
 
 def pipeline_runs(limit: int = 50) -> list[tuple]:
     return _q(
-        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",
+        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",  # noqa: E501
         limit,
     )
 
 
 def recent_errors_7d() -> list[tuple]:
     return _q(
-        "SELECT node, error_count, last_seen, error_types FROM v_recent_errors_7d ORDER BY error_count DESC, last_seen DESC"
+        "SELECT node, error_count, last_seen, error_types FROM v_recent_errors_7d ORDER BY error_count DESC, last_seen DESC"  # noqa: E501
     )
 
 
 def node_throughput_24h(node: str | None = None) -> list[tuple]:
     if node:
         return _q(
-            "SELECT minute, items_out FROM v_node_throughput_24h WHERE node=%s ORDER BY minute DESC",
+            "SELECT minute, items_out FROM v_node_throughput_24h WHERE node=%s ORDER BY minute DESC",  # noqa: E501
             node,
         )
     return _q(

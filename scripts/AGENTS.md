@@ -272,6 +272,37 @@ make exports.stats              # Same via Makefile target
 - [ ] Forecasting models attempt ARIMA with SMA fallback
 - [ ] Change points detected and annotated in metadata
 
+### `create_agents_md.py` — AGENTS.md File Creator
+
+**Purpose:** Automatically creates missing AGENTS.md files in directories that require them according to Rule 009 - Documentation Sync.
+**Rule References:** 009 (Documentation Sync), 017 (Agent Docs Presence), 006 (AGENTS.md Governance)
+**Capabilities:**
+
+- **Directory Scanning**: Identifies directories requiring AGENTS.md files
+- **Template Generation**: Creates appropriate templates based on directory type (source/tools/docs)
+- **Dry Run Mode**: Preview what would be created without making changes
+- **Coverage Verification**: Reports on missing AGENTS.md files
+
+**Usage:**
+
+```bash
+# Check what AGENTS.md files are missing
+python scripts/create_agents_md.py --dry-run
+
+# Create missing AGENTS.md files
+python scripts/create_agents_md.py
+```
+
+**Required Directories (per Rule 009):**
+- Source Code: `src/*/` (all subdirectories)
+- Tool Directories: `scripts/`, `migrations/`, `tests/`
+- Documentation: `docs/*/` (all subdirectories)
+
+**Templates Generated:**
+- **Source directories**: Component-focused templates with API contracts and testing sections
+- **Tool directories**: Specialized templates for scripts/migrations/tests with appropriate standards
+- **Docs directories**: Documentation maintenance templates with ADR cross-references
+
 ### verify_pr016_pr017.py — Metrics Contract Verifier
 
 **Purpose:** Ensures exported statistics reflect live DB and UI contracts.

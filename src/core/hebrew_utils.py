@@ -37,5 +37,5 @@ def calculate_gematria(word: str) -> int:
 
 
 def calc_string(word: str) -> str:
-    parts = [f"{ch}({MAP.get(ch,0)})" for ch in word]
+    parts = [f"{ch}({MAP.get(ch, 0)})" for ch in word]
     return "+".join(parts) + f"={calculate_gematria(word)}"

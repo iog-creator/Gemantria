@@ -23,8 +23,8 @@ alwaysApply: false
 - `exports/graph_latest.json` (non-empty)
 
 ## Hard Checks
-- `scripts/export_stats.py` validates output via `jsonschema` and **fails closed** on invalid schema.  
-- `scripts/verify_pr016_pr017.py` must **PASS** locally and in CI.  
+- `scripts/export_stats.py` validates output via `jsonschema` and **fails closed** on invalid schema.
+- `scripts/verify_pr016_pr017.py` must **PASS** locally and in CI.
 - WebUI must pass `npm run type-check`, `npm run test:ci`, and `npm run build`.
 
 ## Disallowed

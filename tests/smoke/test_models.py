@@ -29,9 +29,12 @@ def _get(url: str, timeout: float = 2.0) -> dict:
 def _post(url: str, payload: dict[str, str], timeout: float = 4.0) -> dict:
     if requests is None:
         pytest.skip("requests not installed")
-    r = requests.post(url, data=json.dumps(payload),
-                      headers={"Content-Type": "application/json"},
-                      timeout=timeout)
+    r = requests.post(
+        url,
+        data=json.dumps(payload),
+        headers={"Content-Type": "application/json"},
+        timeout=timeout,
+    )
     r.raise_for_status()
     return r.json()
 

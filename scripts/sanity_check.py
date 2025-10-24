@@ -17,8 +17,11 @@ sys.path.insert(0, src_path)
 from src.infra.env_loader import ensure_env_loaded
 from src.nodes.collect_nouns_db import collect_nouns_for_book
 from src.nodes.enrichment import enrichment_node
-from src.nodes.network_aggregator import (_build_document_string, _knn_pairs,
-                                          _l2_normalize)
+from src.nodes.network_aggregator import (
+    _build_document_string,
+    _knn_pairs,
+    _l2_normalize,
+)
 from src.services.lmstudio_client import get_lmstudio_client
 
 # Load environment
@@ -42,7 +45,7 @@ def test_genesis_chapter_1():
         print(f"   Found {len(all_nouns)} total nouns, testing with {len(test_nouns)}")
 
         for i, noun in enumerate(test_nouns[:3]):  # Show first 3
-            print(f"   {i+1}. {noun['hebrew']} ({noun['freq']} occurrences)")
+            print(f"   {i + 1}. {noun['hebrew']} ({noun['freq']} occurrences)")
 
     except Exception as e:
         print(f"   ❌ Collection failed: {e}")
@@ -55,7 +58,7 @@ def test_genesis_chapter_1():
     total_confidence = 0
 
     for i, noun in enumerate(test_nouns):
-        print(f"   Enriching {i+1}/{len(test_nouns)}: {noun['hebrew']}")
+        print(f"   Enriching {i + 1}/{len(test_nouns)}: {noun['hebrew']}")
         try:
             # Create run context
 
@@ -122,7 +125,7 @@ def test_genesis_chapter_1():
         mean_self_sim = statistics.mean(self_similarities)
 
         # Test top-5 similarities across all pairs
-        import numpy as np
+        import numpy as np  # noqa: E402
 
         X = np.vstack(embeddings)
         sim_matrix = X @ X.T  # Cosine similarities
@@ -222,7 +225,7 @@ def test_genesis_chapter_1():
 
     except Exception as e:
         print(f"   ❌ Embedding test failed: {e}")
-        import traceback
+        import traceback  # noqa: E402
 
         traceback.print_exc()
 

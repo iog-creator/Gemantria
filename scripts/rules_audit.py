@@ -9,6 +9,7 @@ rules_audit.py — Ensure .cursor/rules numbering is contiguous; update docs lis
   * Appends/updates a "Rules" table in docs/SSOT/MASTER_PLAN.md (phases–rules mapping)
 - Exits nonzero on drift unless ALLOW_RULES_GAP=1 (local only).
 """
+
 import os
 import re
 import sys

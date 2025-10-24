@@ -96,7 +96,7 @@ def assert_no_ui_server():
         try:
             requests.get(f"http://127.0.0.1:{port}/v1/models", timeout=1)
             print(
-                f"[FAIL] UI server detected on :{port}. Close LM Studio UI. Headless-only mode enforced.",
+                f"[FAIL] UI server detected on :{port}. Close LM Studio UI. Headless-only mode enforced.",  # noqa: E501
                 file=sys.stderr,
             )
             sys.exit(1)
@@ -132,7 +132,7 @@ def _wait_ready_remote(port, expected_model):
                 or "ECONNREFUSED" in msg
             ):
                 print(
-                    f"[FAIL] Remote server not reachable at {REMOTE_HOST}:{port} (connection refused)",
+                    f"[FAIL] Remote server not reachable at {REMOTE_HOST}:{port} (connection refused)",  # noqa: E501
                     file=sys.stderr,
                 )
                 sys.exit(1)
@@ -197,7 +197,7 @@ def audit_phase(phase):
     expected = MODELS[phase]
     if expected not in ids:
         print(
-            f"[FAIL] :{port} expected model '{expected}' not found. Available: {ids}",
+            f"[FAIL] :{port} expected model '{expected}' not found. Available: {ids}",  # noqa: E501
             file=sys.stderr,
         )
         sys.exit(1)
@@ -258,10 +258,10 @@ def sanity_sql():
     )
     psql("SELECT relation_type, COUNT(*) FROM concept_relations GROUP BY 1;")
     psql(
-        "SELECT AVG(rerank_score) avg, MIN(rerank_score) min, MAX(rerank_score) max FROM concept_relations;"
+        "SELECT AVG(rerank_score) avg, MIN(rerank_score) min, MAX(rerank_score) max FROM concept_relations;"  # noqa: E501
     )
     psql(
-        "SELECT cosine, rerank_score, edge_strength, relation_type FROM concept_relations ORDER BY edge_strength DESC LIMIT 20;"
+        "SELECT cosine, rerank_score, edge_strength, relation_type FROM concept_relations ORDER BY edge_strength DESC LIMIT 20;"  # noqa: E501
     )
 
 

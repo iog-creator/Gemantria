@@ -63,7 +63,9 @@ def test_bi_encoder_rerank():
         mock_requests.post.side_effect = [mock_resp_a, mock_resp_b]
 
         # Import and test the rerank function
-        from src.services.rerank_via_embeddings import rerank_via_embeddings
+        from src.services.rerank_via_embeddings import (  # noqa: E402
+            rerank_via_embeddings,
+        )  # noqa: E402
 
         test_pairs = [(0, 1), (0, 2), (1, 2)]
         test_names = {0: "אלהים", 1: "ברא", 2: "שמים"}
@@ -95,7 +97,7 @@ def test_bi_encoder_rerank():
     # Test 2: Normalization
     print("\n2. Testing text normalization...")
 
-    from src.services.rerank_via_embeddings import _norm
+    from src.services.rerank_via_embeddings import _norm  # noqa: E402
 
     test_cases = [
         ("hello world", "hello world"),
@@ -132,8 +134,7 @@ def test_bi_encoder_rerank():
     print("\n4. Testing import and interface compatibility...")
 
     # Test that the new rerank function can be imported as the old name
-    from src.services.rerank_via_embeddings import \
-        rerank_via_embeddings as rerank_pairs
+    from src.services.rerank_via_embeddings import rerank_via_embeddings as rerank_pairs  # noqa: E402
 
     # Test with simple mock
     with mock.patch("src.services.rerank_via_embeddings.requests") as mock_requests:

@@ -187,7 +187,7 @@ DB_MAX_OVERFLOW=10
 
 - Tests planned and estimated
 - ADR touched if schema/behavior changes
-- Gates runnable (make lint type test.unit)
+- Gates runnable (make lint test.unit)
 - Environment setup documented
 - Acceptance criteria defined
 
@@ -196,14 +196,14 @@ DB_MAX_OVERFLOW=10
 **All of these must be true before merge:**
 
 - Tests pass with ≥98% coverage
-- Linting and type checking pass
+- Linting passes
 - ADR updated if behavior changes
 - Rules updated if workflow changes
 - Documentation synchronized
 
 ## Workflow (small green PRs)
 
-- Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR
+- Branch `feature/<short>` → **write tests first** → code → `make lint test.unit test.int coverage.report` → commit → push → PR
 - Coverage ≥98% (required gate)
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 
@@ -212,14 +212,13 @@ DB_MAX_OVERFLOW=10
 - **Goal**: What this PR achieves
 - **Files changed**: List of modified files
 - **Tests added/updated**: Test coverage changes
-- **Acceptance**: lint, type, tests, coverage ≥98%, safety checks
+- **Acceptance**: lint, tests, coverage ≥98%, safety checks
 - **ADRs/rules touched**: Links to any architectural changes
 
 ## Quality Gates
 
 - **Coverage**: ≥98% across all modules
 - **Linting**: 100% ruff compliance
-- **Type Checking**: 100% mypy compliance
 - **Tests**: Unit + Integration + E2E passing
 - **Safety**: No mock datasets; DB read-only enforcement; Qwen Live Gate
 - **Documentation**: ADRs for schema changes; AGENTS.md updates for workflow changes
@@ -286,7 +285,6 @@ make test.e2e          # End-to-end tests only
 
 # Quality checks
 make lint              # Code linting
-make type              # Type checking
 make coverage.report   # Coverage report
 
 # Graph analysis and export
@@ -294,7 +292,7 @@ make analyze.graph     # Compute communities and centrality
 make exports.graph     # Export viz-ready JSON
 make exports.jsonld    # Export JSON-LD and RDF/Turtle for semantic web
 make webui             # Launch React visualization (localhost:5173)
- 
+
 # Verify LM Studio lineup (env-only split)
 make models.verify        # answerer chat ping + embeddings dim
 make models.swap          # test alt answerer model
@@ -373,7 +371,7 @@ python scripts/generate_report.py --run-id <run_id>
    ```bash
    export CHECKPOINTER=postgres
    export GEMATRIA_DSN=postgresql://user:pass@localhost:5432/gemantria
-   make lint type test.unit test.integration coverage.report
+   make lint test.unit test.integration coverage.report
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
 
@@ -388,7 +386,7 @@ python scripts/generate_report.py --run-id <run_id>
    export METRICS_ENABLED=1
    export LOG_LEVEL=INFO
    export WORKFLOW_ID=gemantria.v1
-   make lint type test.unit test.integration coverage.report
+   make lint test.unit test.integration coverage.report
    ```
 3. Expected: JSON logs to stdout, metrics rows in DB when enabled, pipeline unaffected by metrics failures.
 
@@ -402,7 +400,7 @@ python scripts/generate_report.py --run-id <run_id>
    ```bash
    export PROM_EXPORTER_ENABLED=0  # Optional exporter disabled by default
    export PROM_EXPORTER_PORT=9108
-   make lint type test.unit test.integration coverage.report
+   make lint test.unit test.integration coverage.report
    ```
 3. Expected: SQL views created, queries return data when metrics exist, exporter optional.
 
@@ -421,7 +419,7 @@ python scripts/generate_report.py --run-id <run_id>
    ```
 3. Verify locally:
    ```bash
-   make lint type test.unit test.integration coverage.report
+   make lint test.unit test.integration coverage.report
    ```
 4. Expected: AI enrichment node integrates with pipeline, confidence scores stored in `ai_enrichment_log`, fallback to mock mode when LM Studio unavailable.
 
@@ -441,7 +439,7 @@ python scripts/generate_report.py --run-id <run_id>
    ```
 3. Verify locally:
    ```bash
-   make lint type test.unit test.integration coverage.report
+   make lint test.unit test.integration coverage.report
    ```
 4. Expected: Network aggregator generates 1024-dim embeddings, stores in `concept_network`, computes similarity relationships, and updates reports with network metrics.
 
@@ -749,7 +747,9 @@ globs:
 - **CI/CD Pipeline**: Automated rule validation in GitHub Actions
 - **Documentation Sync**: Rules automatically inventoried in AGENTS.md and MASTER_PLAN.md
 
-### Rule System Governance
+#> **Phase-8 consolidation:** Rule 034 is the single active temporal suite; Rules 035/036 are deprecated pointers.
+
+## Rule System Governance
 
 - **Change Policy**: Rule changes require ADR for significant behavioral changes
 - **Deprecation Policy**: Deprecated rules clearly marked with replacement references

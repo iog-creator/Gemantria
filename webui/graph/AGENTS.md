@@ -114,9 +114,9 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 
 #### GraphStats.tsx & useGraphStats.ts
 
-Implements PR-017 metrics visualization.  
-**Verification Rules:** 016 (contract sync), 021 (stats proof), 022 (viz contract sync).  
-**Testing:** `npm run test:ci` runs `__tests__/GraphStats.test.tsx`.  
+Implements PR-017 metrics visualization.
+**Verification Rules:** 016 (contract sync), 021 (stats proof), 022 (viz contract sync).
+**Testing:** `npm run test:ci` runs `__tests__/GraphStats.test.tsx`.
 **Data Flow:** export_stats.py → graph_stats.json → useGraphStats → GraphStats.tsx → GraphDashboard.tsx.
 
 ## Development Workflow

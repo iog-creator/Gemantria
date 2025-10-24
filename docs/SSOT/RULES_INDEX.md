@@ -36,6 +36,6 @@
 | 031 | 031-correlation-visualization-validation.mdc | # --- |
 | 032 | 032-pattern-integrity-validation.mdc | # --- |
 | 033 | 033-visualization-api-validation.mdc | # --- |
-| 034 | 034-temporal-patterns-spec.mdc | # --- |
+| 034 | 034-temporal-suite.mdc | # --- |
 | 035 | 035-forecasting-spec.mdc | # --- |
 | 036 | 036-temporal-visualization-spec.mdc | # --- |

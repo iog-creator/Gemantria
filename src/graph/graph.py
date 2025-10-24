@@ -13,22 +13,34 @@ from src.infra.env_loader import ensure_env_loaded
 # Load environment variables from .env file
 ensure_env_loaded()
 
-from src.graph.batch_processor import (BatchAbortError, BatchConfig,
-                                       BatchProcessor, BatchResult)
+from src.graph.batch_processor import (
+    BatchAbortError,
+    BatchConfig,
+    BatchProcessor,
+    BatchResult,
+)
 from src.infra.checkpointer import get_checkpointer
 from src.infra.db import get_gematria_rw
 from src.infra.metrics_core import NodeTimer, get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
 from src.nodes.collect_nouns_db import collect_nouns_for_book
-from src.nodes.confidence_validator import (ConfidenceValidationError,
-                                            confidence_validator_node)
+from src.nodes.confidence_validator import (
+    ConfidenceValidationError,
+    confidence_validator_node,
+)
 from src.nodes.enrichment import enrichment_node
-from src.nodes.network_aggregator import (NetworkAggregationError,
-                                          network_aggregator_node)
-from src.services.lmstudio_client import (QWEN_EMBEDDING_MODEL,
-                                          QWEN_RERANKER_MODEL, THEOLOGY_MODEL,
-                                          QwenHealth, QwenUnavailableError,
-                                          assert_qwen_live)
+from src.nodes.network_aggregator import (
+    NetworkAggregationError,
+    network_aggregator_node,
+)
+from src.services.lmstudio_client import (
+    QWEN_EMBEDDING_MODEL,
+    QWEN_RERANKER_MODEL,
+    THEOLOGY_MODEL,
+    QwenHealth,
+    QwenUnavailableError,
+    assert_qwen_live,
+)
 
 LOG = get_logger("gematria.graph")
 
@@ -36,8 +48,8 @@ LOG = get_logger("gematria.graph")
 # Environment precedence guard - detect conflicting env sources
 def _check_env_precedence():
     """Check for environment variable conflicts between .env and .env.local."""
-    import re
-    from pathlib import Path
+    import re  # noqa: E402
+    from pathlib import Path  # noqa: E402
 
     def read_env_file(path: Path) -> dict[str, str]:
         if not path.exists():
@@ -91,7 +103,7 @@ _verify_lm_studio()
 # Postgres connectivity guard
 def _verify_postgres():
     """Verify Postgres connectivity on startup."""
-    import psycopg
+    import psycopg  # noqa: E402
 
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
@@ -106,7 +118,7 @@ def _verify_postgres():
             dsn_masked=dsn.replace(dsn.split("@")[0], "***") if "@" in dsn else "***",
         )
     except Exception as e:
-        raise SystemExit(f"[DB FATAL] Cannot connect using GEMATRIA_DSN: {e}")
+        raise SystemExit(f"[DB FATAL] Cannot connect using GEMATRIA_DSN: {e}") from e
 
 
 _verify_postgres()
@@ -115,7 +127,7 @@ _verify_postgres()
 # Python environment guard
 def _verify_python_env():
     """Verify we're running in the correct Python environment."""
-    import sys
+    import sys  # noqa: E402
 
     venv_expected = ".venv" in sys.executable
     if not venv_expected:
@@ -151,7 +163,7 @@ def log_qwen_health(
     try:
         db = get_gematria_rw()
         # Convert string run_id to UUID for database
-        import uuid
+        import uuid  # noqa: E402
 
         uuid_run_id = uuid.UUID(run_id)
         # Execute the insert and consume the generator to ensure it runs
@@ -295,7 +307,7 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
 
 
 def create_graph() -> StateGraph:
-    """Create the LangGraph pipeline with batch processing, AI enrichment, confidence validation, and network aggregation."""
+    """Create the LangGraph pipeline with batch processing, AI enrichment, confidence validation, and network aggregation."""  # noqa: E501
     graph = StateGraph(PipelineState)
 
     # Add nodes with metrics wrapping
@@ -342,10 +354,13 @@ def debug_connectivity() -> dict:
 
     # Test LM Studio
     try:
-        from src.services.lmstudio_client import (HOST, QWEN_EMBEDDING_MODEL,
-                                                  QWEN_RERANKER_MODEL,
-                                                  THEOLOGY_MODEL,
-                                                  assert_qwen_live)
+        from src.services.lmstudio_client import (  # noqa: E402
+            HOST,
+            QWEN_EMBEDDING_MODEL,
+            QWEN_RERANKER_MODEL,
+            THEOLOGY_MODEL,
+            assert_qwen_live,
+        )
 
         results["lm_studio"]["details"]["host"] = HOST
 
@@ -368,7 +383,7 @@ def debug_connectivity() -> dict:
 
     # Test Gematria DB
     try:
-        from src.infra.db import get_gematria_rw
+        from src.infra.db import get_gematria_rw  # noqa: E402
 
         db = get_gematria_rw()
         if db.dsn:
@@ -389,7 +404,7 @@ def debug_connectivity() -> dict:
 
     # Test Bible DB
     try:
-        from src.infra.db import get_bible_ro
+        from src.infra.db import get_bible_ro  # noqa: E402
 
         db = get_bible_ro()
         if db.dsn:
@@ -516,7 +531,7 @@ def run_hello(book: str = "Genesis", mode: str = "START") -> PipelineState:
 
 
 if __name__ == "__main__":
-    import sys
+    import sys  # noqa: E402
 
     if len(sys.argv) > 1 and sys.argv[1] == "--debug-connectivity":
         print("🔍 Connectivity Debug Report")

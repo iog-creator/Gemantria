@@ -1,7 +1,10 @@
 import pytest
 
-from src.services.lmstudio_client import (LMStudioClient, chat_completion,
-                                          safe_json_parse)
+from src.services.lmstudio_client import (
+    LMStudioClient,
+    chat_completion,
+    safe_json_parse,
+)
 
 
 def test_mock_mode(monkeypatch):

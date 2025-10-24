@@ -41,7 +41,7 @@ def metrics():
     # Counters/Gauges following OpenMetrics text format
     lines.append("# HELP gemantria_total_errors_7d Total errors over the last 7 days.")
     lines.append("# TYPE gemantria_total_errors_7d gauge")
-    lines.append(f"gemantria_total_errors_7d {data.get('total_errors',0)}")
+    lines.append(f"gemantria_total_errors_7d {data.get('total_errors', 0)}")
 
     lines.append(
         "# HELP gemantria_node_items_out_24h Total items_out over the last 24 hours by node."
@@ -56,7 +56,7 @@ def metrics():
     lines.append("# TYPE gemantria_node_latency_ms_7d summary")
     for node, calls, avg_ms, p50, p90, p95, p99 in data.get("latency", []):
         lines.append(
-            f'gemantria_node_latency_ms_7d_sum{{node="{node}"}} {avg_ms * max(calls,1)}'
+            f'gemantria_node_latency_ms_7d_sum{{node="{node}"}} {avg_ms * max(calls, 1)}'
         )
         lines.append(f'gemantria_node_latency_ms_7d_count{{node="{node}"}} {calls}')
         lines.append(
@@ -78,6 +78,6 @@ def metrics():
 
 # Optional: local runner
 if __name__ == "__main__" and PROM_EXPORTER_ENABLED:
-    import uvicorn
+    import uvicorn  # noqa: E402
 
     uvicorn.run(app, host="0.0.0.0", port=PROM_EXPORTER_PORT)

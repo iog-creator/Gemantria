@@ -61,6 +61,11 @@ Non-enforcing policy. Actual enforcement: Rule 027 (Docs Sync Gate).
 - **Process changes**: Update workflow documentation and rules in .cursor/rules directory *.mdc files
 - **Safety changes**: Update safety rules and AGENTS.md sections
 
+### AGENTS.md File Management
+- **Automatic Creation**: Run `python scripts/create_agents_md.py` to create missing AGENTS.md files
+- **Coverage Verification**: `rules_guard.py` enforces minimum AGENTS.md coverage (currently 10 files)
+- **Template Generation**: Script creates appropriate templates based on directory type (source/tools/docs)
+
 ## Report Generation and Confirmation Requirements
 
 ### Automatic Report Generation

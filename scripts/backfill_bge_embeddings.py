@@ -37,7 +37,6 @@ def backfill_bge_embeddings():
     with psycopg.connect(dsn) as conn:
         register_vector(conn)
         with conn.cursor() as cur:
-
             # Find nodes with Qwen3 embeddings but no BGE-M3 embeddings
             cur.execute(
                 """
@@ -66,7 +65,7 @@ def backfill_bge_embeddings():
             for i in range(0, len(rows), batch_size):
                 batch = rows[i : i + batch_size]
                 print(
-                    f"Processing batch {i//batch_size + 1}/{(len(rows) + batch_size - 1)//batch_size}..."
+                    f"Processing batch {i // batch_size + 1}/{(len(rows) + batch_size - 1) // batch_size}..."
                 )
 
                 # Prepare documents for embedding

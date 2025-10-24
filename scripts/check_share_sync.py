@@ -7,6 +7,7 @@ check_share_sync.py — verify a flat share/ folder is up-to-date.
 - For head_json item: asserts share file exists, <= max_bytes, non-empty
 - Fails fast with a clear message if any check fails
 """
+
 import hashlib
 import json
 import sys

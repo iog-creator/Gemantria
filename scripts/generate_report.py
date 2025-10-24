@@ -19,11 +19,14 @@ from typing import Any
 import psycopg
 
 from src.infra.env_loader import ensure_env_loaded
-from src.infra.metrics_queries import (confidence_gate_tallies_24h,
-                                       edge_strength_distribution,
-                                       pattern_metrics_latest,
-                                       qwen_usage_totals,
-                                       relations_metrics_24h, top_rerank_pairs)
+from src.infra.metrics_queries import (
+    confidence_gate_tallies_24h,
+    edge_strength_distribution,
+    pattern_metrics_latest,
+    qwen_usage_totals,
+    relations_metrics_24h,
+    top_rerank_pairs,
+)
 
 # Load environment variables from .env file
 ensure_env_loaded()
@@ -362,11 +365,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Executive Summary
 
-- **AI Enrichments**: {metrics['ai_metrics']['total_enrichments']}
-- **Confidence Validations**: {metrics['confidence_metrics']['total_validations']} ({metrics['confidence_metrics']['passed']} passed, {metrics['confidence_metrics']['failed']} failed)
-- **Network Nodes**: {metrics['network_metrics']['total_nodes']} ({metrics['network_metrics']['strong_edges']} strong, {metrics['network_metrics']['weak_edges']} weak edges)
-- **Average AI Confidence**: {metrics['ai_metrics']['avg_confidence']:.4f}
-- **Average Token Usage**: {metrics['ai_metrics']['avg_tokens']}
+- **AI Enrichments**: {metrics["ai_metrics"]["total_enrichments"]}
+- **Confidence Validations**: {metrics["confidence_metrics"]["total_validations"]} ({metrics["confidence_metrics"]["passed"]} passed, {metrics["confidence_metrics"]["failed"]} failed)
+- **Network Nodes**: {metrics["network_metrics"]["total_nodes"]} ({metrics["network_metrics"]["strong_edges"]} strong, {metrics["network_metrics"]["weak_edges"]} weak edges)
+- **Average AI Confidence**: {metrics["ai_metrics"]["avg_confidence"]:.4f}
+- **Average Token Usage**: {metrics["ai_metrics"]["avg_tokens"]}
 
 ## Node Performance
 
@@ -382,27 +385,27 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
     report += f"""
 ## AI Enrichment Details
 
-- **Total Theological Insights Generated**: {metrics['ai_metrics']['total_enrichments']}
-- **Average Confidence Score**: {metrics['ai_metrics']['avg_confidence']:.4f}
-- **Average Token Consumption**: {metrics['ai_metrics']['avg_tokens']} tokens per insight
+- **Total Theological Insights Generated**: {metrics["ai_metrics"]["total_enrichments"]}
+- **Average Confidence Score**: {metrics["ai_metrics"]["avg_confidence"]:.4f}
+- **Average Token Consumption**: {metrics["ai_metrics"]["avg_tokens"]} tokens per insight
 
 ## Confidence Validation Results
 
-- **Total Validations**: {metrics['confidence_metrics']['total_validations']}
-- **Passed**: {metrics['confidence_metrics']['passed']}
-- **Failed**: {metrics['confidence_metrics']['failed']}
-- **Average Gematria Confidence**: {metrics['confidence_metrics']['avg_gematria_confidence']:.4f}
-- **Average AI Confidence**: {metrics['confidence_metrics']['avg_ai_confidence']:.4f}
+- **Total Validations**: {metrics["confidence_metrics"]["total_validations"]}
+- **Passed**: {metrics["confidence_metrics"]["passed"]}
+- **Failed**: {metrics["confidence_metrics"]["failed"]}
+- **Average Gematria Confidence**: {metrics["confidence_metrics"]["avg_gematria_confidence"]:.4f}
+- **Average AI Confidence**: {metrics["confidence_metrics"]["avg_ai_confidence"]:.4f}
 
 ## Concept Network Summary
 
-- **Total Nodes**: {metrics['network_metrics']['total_nodes']}
-- **Strong Edges (≥0.90)**: {metrics['network_metrics']['strong_edges']}
-- **Weak Edges (≥0.75)**: {metrics['network_metrics']['weak_edges']}
-- **Embeddings Generated**: {metrics['network_metrics']['embeddings_generated']}
-- **Rerank Calls**: {metrics['network_metrics']['rerank_calls']}
-- **Average Edge Strength**: {metrics['network_metrics']['avg_edge_strength']:.4f}
-- **Rerank Yes Ratio**: {metrics['network_metrics']['rerank_yes_ratio']:.3f}
+- **Total Nodes**: {metrics["network_metrics"]["total_nodes"]}
+- **Strong Edges (≥0.90)**: {metrics["network_metrics"]["strong_edges"]}
+- **Weak Edges (≥0.75)**: {metrics["network_metrics"]["weak_edges"]}
+- **Embeddings Generated**: {metrics["network_metrics"]["embeddings_generated"]}
+- **Rerank Calls**: {metrics["network_metrics"]["rerank_calls"]}
+- **Average Edge Strength**: {metrics["network_metrics"]["avg_edge_strength"]:.4f}
+- **Rerank Yes Ratio**: {metrics["network_metrics"]["rerank_yes_ratio"]:.3f}
 
 ## Qwen Live Verification
 
@@ -412,11 +415,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
     if qwen_health:
         report += f"""### Qwen Live Verification
 
-- **Verified**: {"✅ Yes" if qwen_health['verified'] else "❌ No"}
-- **Models**: {qwen_health['embedding_model']}, {qwen_health['reranker_model']}
-- **Embedding Dim**: {qwen_health['embed_dim'] or 'N/A'}
-- **Latency (ms)**: embed={qwen_health['lat_ms_embed'] or 'N/A'}, rerank={qwen_health['lat_ms_rerank'] or 'N/A'}
-- **Reason**: {qwen_health['reason']}
+- **Verified**: {"✅ Yes" if qwen_health["verified"] else "❌ No"}
+- **Models**: {qwen_health["embedding_model"]}, {qwen_health["reranker_model"]}
+- **Embedding Dim**: {qwen_health["embed_dim"] or "N/A"}
+- **Latency (ms)**: embed={qwen_health["lat_ms_embed"] or "N/A"}, rerank={qwen_health["lat_ms_rerank"] or "N/A"}
+- **Reason**: {qwen_health["reason"]}
 """
     else:
         report += """### Qwen Live Verification
@@ -448,7 +451,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 ### Live LM Studio Verification
 - **Enrichment model health checks**: {enrichment_ok_ct}
 - **Last verification**: {enrichment_last_chk or "N/A"}
-- **Enrichments generated this run**: {metrics['ai_metrics']['total_enrichments']}
+- **Enrichments generated this run**: {metrics["ai_metrics"]["total_enrichments"]}
 
 """
     except Exception as e:
@@ -504,11 +507,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
     report += f"""### Model Usage Summary
 
-- **Total Pipeline Runs**: {qwen_data['qwen_metrics']['total_runs']}
-- **Embeddings Generated**: {qwen_data['qwen_metrics']['total_embeddings']}
-- **Rerank Calls Made**: {qwen_data['qwen_metrics']['total_rerank_calls']}
-- **Average Yes Ratio**: {qwen_data['qwen_metrics']['avg_yes_ratio']:.3f}
-- **Average Edge Strength**: {qwen_data['qwen_metrics']['avg_edge_strength']:.4f}
+- **Total Pipeline Runs**: {qwen_data["qwen_metrics"]["total_runs"]}
+- **Embeddings Generated**: {qwen_data["qwen_metrics"]["total_embeddings"]}
+- **Rerank Calls Made**: {qwen_data["qwen_metrics"]["total_rerank_calls"]}
+- **Average Yes Ratio**: {qwen_data["qwen_metrics"]["avg_yes_ratio"]:.3f}
+- **Average Edge Strength**: {qwen_data["qwen_metrics"]["avg_edge_strength"]:.4f}
 
 ### Edge Strength Distribution
 
@@ -564,9 +567,9 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Confidence Gates
 
-- **Soft Warnings (24h)**: {total_soft_warnings} (threshold: {os.getenv('AI_CONFIDENCE_SOFT', '0.90')})
-- **Hard Failures (24h)**: {total_hard_failures} (threshold: {os.getenv('AI_CONFIDENCE_HARD', '0.95')})
-- **ALLOW_PARTIAL**: {"✅ Yes" if os.getenv('ALLOW_PARTIAL', '0') == '1' else "❌ No"}
+- **Soft Warnings (24h)**: {total_soft_warnings} (threshold: {os.getenv("AI_CONFIDENCE_SOFT", "0.90")})
+- **Hard Failures (24h)**: {total_hard_failures} (threshold: {os.getenv("AI_CONFIDENCE_HARD", "0.95")})
+- **ALLOW_PARTIAL**: {"✅ Yes" if os.getenv("ALLOW_PARTIAL", "0") == "1" else "❌ No"}
 """
     except Exception as e:
         report += f"""
@@ -596,9 +599,9 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 - **Largest Cluster Size**: {largest_cluster or 0}
 - **Nodes with Centrality**: {nodes_with_centrality or 0}
 - **Average Degree Centrality**: {avg_degree or 0:.3f}
-- **Top Hub Concept**: {top_hub[:8] + '...' if top_hub else 'N/A'}
-- **Cluster Algorithm**: {os.getenv('CLUSTER_ALGO', 'louvain')}
-- **Centrality Measures**: {os.getenv('CENTRALITY', 'degree,betweenness,eigenvector')}
+- **Top Hub Concept**: {top_hub[:8] + "..." if top_hub else "N/A"}
+- **Cluster Algorithm**: {os.getenv("CLUSTER_ALGO", "louvain")}
+- **Centrality Measures**: {os.getenv("CENTRALITY", "degree,betweenness,eigenvector")}
 """
         else:
             report += """
@@ -620,7 +623,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         # Try to load correlations from the export file
         correlations_path = Path("exports/graph_correlations.json")
         if correlations_path.exists():
-            import json
+            import json  # noqa: E402
 
             correlations_data = json.loads(correlations_path.read_text())
 
@@ -741,16 +744,16 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Correlation Network Analytics
 
-- **Correlation Threshold**: ≥{metadata.get('correlation_threshold', 'N/A')}
+- **Correlation Threshold**: ≥{metadata.get("correlation_threshold", "N/A")}
 - **Network Nodes**: {len(nodes)}
-- **Correlation Edges**: {len(edges)} (filtered from {metadata.get('total_input_correlations', 0)} total)
-- **Connected Components**: {metadata.get('connected_components', 'N/A')}
-- **Network Connected**: {"Yes" if metadata.get('is_connected') else "No"}
+- **Correlation Edges**: {len(edges)} (filtered from {metadata.get("total_input_correlations", 0)} total)
+- **Connected Components**: {metadata.get("connected_components", "N/A")}
+- **Network Connected**: {"Yes" if metadata.get("is_connected") else "No"}
 
 ### Network Metrics
-- **Average Weighted Degree**: {metadata.get('avg_weighted_degree', 'N/A')}
-- **Maximum Weighted Degree**: {metadata.get('max_weighted_degree', 'N/A')}
-- **Average Clustering Coefficient**: {metadata.get('avg_clustering_coeff', 'N/A')}
+- **Average Weighted Degree**: {metadata.get("avg_weighted_degree", "N/A")}
+- **Maximum Weighted Degree**: {metadata.get("max_weighted_degree", "N/A")}
+- **Average Clustering Coefficient**: {metadata.get("avg_clustering_coeff", "N/A")}
 
 ### Top 10 Strongest Connections
 """
@@ -830,11 +833,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Cross-Book Pattern Analytics
 
-- **Total Patterns**: {metadata.get('total_patterns', 0)}
-- **Analyzed Books**: {", ".join(metadata.get('analyzed_books', []))}
-- **Pattern Methods**: {", ".join(metadata.get('pattern_methods', ['None']))}
-- **Min Shared Concepts**: {metadata.get('analysis_parameters', {}).get('min_shared_concepts', 'N/A')}
-- **Min Pattern Strength**: {metadata.get('analysis_parameters', {}).get('min_pattern_strength', 'N/A')}
+- **Total Patterns**: {metadata.get("total_patterns", 0)}
+- **Analyzed Books**: {", ".join(metadata.get("analyzed_books", []))}
+- **Pattern Methods**: {", ".join(metadata.get("pattern_methods", ["None"]))}
+- **Min Shared Concepts**: {metadata.get("analysis_parameters", {}).get("min_shared_concepts", "N/A")}
+- **Min Pattern Strength**: {metadata.get("analysis_parameters", {}).get("min_pattern_strength", "N/A")}
 
 """
 
@@ -926,11 +929,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Temporal Analytics
 
-- **Total Series**: {metadata.get('total_series', 0)}
-- **Analyzed Books**: {", ".join(metadata.get('books_analyzed', []))}
-- **Default Unit**: {metadata.get('analysis_parameters', {}).get('default_unit', 'N/A')}
-- **Default Window**: {metadata.get('analysis_parameters', {}).get('default_window', 'N/A')}
-- **Min Series Length**: {metadata.get('analysis_parameters', {}).get('min_series_length', 'N/A')}
+- **Total Series**: {metadata.get("total_series", 0)}
+- **Analyzed Books**: {", ".join(metadata.get("books_analyzed", []))}
+- **Default Unit**: {metadata.get("analysis_parameters", {}).get("default_unit", "N/A")}
+- **Default Window**: {metadata.get("analysis_parameters", {}).get("default_window", "N/A")}
+- **Min Series Length**: {metadata.get("analysis_parameters", {}).get("min_series_length", "N/A")}
 
 """
 
@@ -1013,10 +1016,10 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Forecast Summary
 
-- **Total Forecasts**: {metadata.get('total_forecasts', 0)}
-- **Forecasted Books**: {", ".join(metadata.get('books_forecasted', []))}
-- **Default Horizon**: {metadata.get('forecast_parameters', {}).get('default_horizon', 'N/A')}
-- **Default Model**: {metadata.get('forecast_parameters', {}).get('default_model', 'N/A')}
+- **Total Forecasts**: {metadata.get("total_forecasts", 0)}
+- **Forecasted Books**: {", ".join(metadata.get("books_forecasted", []))}
+- **Default Horizon**: {metadata.get("forecast_parameters", {}).get("default_horizon", "N/A")}
+- **Default Model**: {metadata.get("forecast_parameters", {}).get("default_model", "N/A")}
 
 """
 
@@ -1170,7 +1173,7 @@ The API endpoints power the interactive dashboards:
         report += "✅ **All validations passed**: Pipeline confidence requirements satisfied.\n"
 
     if metrics["ai_metrics"]["total_enrichments"] > 0:
-        report += f"✅ **AI Enrichment Active**: {metrics['ai_metrics']['total_enrichments']} theological insights generated with high confidence.\n"
+        report += f"✅ **AI Enrichment Active**: {metrics['ai_metrics']['total_enrichments']} theological insights generated with high confidence.\n"  # noqa: E501
     else:
         report += "⚠️ **No AI Enrichment**: Check LM Studio connection and model availability.\n"
 
@@ -1179,7 +1182,7 @@ The API endpoints power the interactive dashboards:
             metrics["network_metrics"]["strong_edges"]
             + metrics["network_metrics"]["weak_edges"]
         )
-        report += f"✅ **Semantic Network Built**: {metrics['network_metrics']['total_nodes']} concepts connected with {total_edges} semantic relationships.\n"
+        report += f"✅ **Semantic Network Built**: {metrics['network_metrics']['total_nodes']} concepts connected with {total_edges} semantic relationships.\n"  # noqa: E501
     else:
         report += "⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.\n"
 
