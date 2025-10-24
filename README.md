@@ -291,6 +291,6 @@ Set `LM_CHAT_HOST/LM_CHAT_PORT` and `LM_EMBED_HOST/LM_EMBED_PORT` if not using d
 All gates run locally and in CI:
 ```bash
 pre-commit run -a    # ruff, black, mypy, audits, share.sync
-make ci              # mirrors CI locally (lint, type, audits, smoke)
+make ci.smart        # smart strict/soft choice + audits\nmake ci              # mirrors CI locally (legacy)
 ```
 CI workflow lives in `.github/workflows/ci.yml`.
