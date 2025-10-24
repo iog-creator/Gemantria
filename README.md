@@ -230,3 +230,13 @@ See AGENTS.md for detailed contribution guidelines and development setup.
 - Qwen3 models for semantic understanding
 - LangGraph for pipeline orchestration
 - pgvector for embedding storage and similarity search
+
+## Smoke tests (models)
+
+Run a quick health check against local LM Studio endpoints:
+
+```bash
+make test.smoke   # verifies /v1/models has your answerer; embeddings are 1024-dim
+```
+
+Set `LM_CHAT_HOST/LM_CHAT_PORT` and `LM_EMBED_HOST/LM_EMBED_PORT` if not using defaults.

@@ -7,3 +7,7 @@ py.longline:
 	@python3 scripts/longline_noqa.py
 py.fullwave: py.quickfix py.longline
 	@make py.format && make py.lint && make py.type
+
+.PHONY: test.smoke
+test.smoke:
+	pytest -q --no-cov -m smoke tests/smoke || true
