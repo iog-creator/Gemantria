@@ -50,7 +50,7 @@ cp env_example.txt .env
 ### Basic Usage
 
 ```bash
-# Run pipeline for Genesis
+# Run pipeline for Genesis (requires BIBLE_DB_DSN; bible_db is read-only)
 python -m src.graph.graph --book Genesis
 
 # Generate exports
@@ -59,6 +59,17 @@ make exports.jsonld    # JSON-LD + RDF/Turtle
 
 # Launch visualization
 make webui            # Opens http://localhost:5173
+### Temporal Analytics (Phase 8)
+
+```bash
+# Produce temporal and forecast exports (validated against SSOT schemas)
+python scripts/export_stats.py
+python -m src.services.api_server &
+curl -s 'http://127.0.0.1:8000/api/v1/temporal?unit=chapter&window=5' | jq
+curl -s 'http://127.0.0.1:8000/api/v1/forecast?horizon=10' | jq
+# Phase-8 endpoints read from exports/ (override with EXPORT_DIR)
+```
+
 
 # Run tests
 make test
@@ -117,11 +128,13 @@ See `env_example.txt` for complete configuration options. Key variables:
 GEMATRIA_DSN=postgresql://user:pass@localhost:5432/gematria
 BIBLE_DB_DSN=postgresql://user:pass@localhost:5432/bible_db
 
-# AI Models
-LM_STUDIO_HOST=http://127.0.0.1:1234
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-QWEN_EMBEDDING_MODEL=text-embedding-qwen3-embedding-0.6b
+## AI Models (split endpoints)
+# Chat models (answerer/critic) on :9991; embeddings on :9994
+LM_STUDIO_HOST=http://127.0.0.1:9991
+EMBED_URL=http://127.0.0.1:9994
+ANSWERER_MODEL_PRIMARY=christian-bible-expert-v2.0-12b
+ANSWERER_MODEL_ALT=Qwen2.5-14B-Instruct-GGUF
+EMBEDDING_MODEL=text-embedding-bge-m3  # 1024-dim, L2-normalized
 
 # Safety Gates
 ENFORCE_QWEN_LIVE=1          # Require live models
@@ -136,10 +149,10 @@ ALLOW_PARTIAL=0              # Batch validation
 BATCH_SIZE=50               # Nouns per batch
 VECTOR_DIM=1024             # Embedding dimensions
 
-# Network parameters
-EDGE_STRONG=0.90            # Strong relationship threshold
-EDGE_WEAK=0.75              # Weak relationship threshold
-NN_TOPK=20                  # KNN neighbors for relationships
+# Network parameters (see SSOT + report generator expectations)
+EDGE_STRONG=0.88            # Strong relationship threshold
+EDGE_WEAK=0.70              # Weak relationship threshold
+NN_TOPK=10                  # KNN neighbors for relationships
 ```
 
 ## 📊 Outputs
