@@ -57,10 +57,12 @@ make share.sync
 
 **Setup once (hard requirement):**
 ```bash
-pip install -r requirements-dev.txt
+make deps.dev
 ```
 
 Schema validation is **mandatory**. If it fails or `jsonschema` isn't installed, readiness checks will fail.
+
+Artifacts (proofs) are written to `reports/readiness/` and mirrored by `make share.sync`.
 
 > Navigator (always-apply) rules: `000-ssot-index.mdc`, `010-task-brief.mdc`, `030-share-sync.mdc` (see `AGENTS.md`).
 
