@@ -1,30 +1,43 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ "**" ]
+
 jobs:
-  verify:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - name: Setup venv
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
         run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade "psycopg[binary]" pgvector requests python-dotenv
-      - name: Bootstrap (no secrets)
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pre-commit ruff mypy pytest
+
+      - name: Pre-commit (all files)
         run: |
-          cp -f env_example.txt .env
-          echo "ALLOW_PARTIAL=1" >> .env
-          echo "ENFORCE_QWEN_LIVE=0" >> .env   # CI skips real LM Studio
-      - name: Doctor (non-fatal in CI)
+          pre-commit install
+          pre-commit run -a
+
+      - name: Lint & type
         run: |
-          . .venv/bin/activate
-          set -a && source .env && set +a
-          python scripts/doctor.py || true
-      - name: Docs/rules presence
+          make py.lint || ruff check
+          make py.type || mypy --strict src
+
+      - name: Audits
         run: |
-          test -f .cursor/rules/009-documentation-sync.mdc
-          test -f AGENTS.md
-          test -f docs/ADRs
+          make rules.navigator.check rules.audit repo.audit docs.audit
+
+      - name: Smoke tests
+        run: |
+          make test.smoke

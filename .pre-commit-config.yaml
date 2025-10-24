@@ -1,43 +1,43 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.6.9
-    hooks: [{ id: ruff, args: ["--fix"] }]
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.11.2
     hooks:
       - id: mypy
+        args: [--strict]
         additional_dependencies: []
 
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks: [{ id: black }]
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks: [{ id: isort }]
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
-    hooks: [{ id: flake8 }]
-
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
     hooks:
-      - id: prettier
-        additional_dependencies: ["prettier@3.3.3"]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
 
   - repo: local
     hooks:
-      - id: rules-guard
-        name: rules-guard (docs/ADR/SSOT sync, forest gate, schemas, evidence)
-        entry: python scripts/rules_guard.py
-        language: python
-        additional_dependencies: ["jsonschema==4.23.0"]
+      - id: repo-audits
+        name: repo audits (rules.navigator.check, rules.audit, repo.audit, docs.audit)
+        language: system
+        entry: bash -lc 'make rules.navigator.check rules.audit repo.audit docs.audit'
         pass_filenames: false
 
-      - id: rules-audit
-        name: rules-audit (generate RULES_INDEX + sync docs)
-        entry: python scripts/rules_audit.py
+      - id: share-sync
+        name: share.sync (mirror artifacts)
         language: system
+        entry: bash -lc 'make share.sync'
         pass_filenames: false

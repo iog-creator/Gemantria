@@ -240,3 +240,11 @@ make test.smoke   # verifies /v1/models has your answerer; embeddings are 1024-d
 ```
 
 Set `LM_CHAT_HOST/LM_CHAT_PORT` and `LM_EMBED_HOST/LM_EMBED_PORT` if not using defaults.
+
+## CI guardrails
+All gates run locally and in CI:
+```bash
+pre-commit run -a    # ruff, black, mypy, audits, share.sync
+make ci              # mirrors CI locally (lint, type, audits, smoke)
+```
+CI workflow lives in `.github/workflows/ci.yml`.
