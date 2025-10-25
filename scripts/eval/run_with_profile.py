@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-import sys, pathlib, json, time, shutil
-from typing import Any, Dict
+import pathlib
+import sys
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 BASE = ROOT / "eval" / "thresholds.yml"
 PROFILES = ROOT / "eval" / "profiles"
 REPORT = ROOT / "scripts" / "eval" / "report.py"
 
-def _read_yaml(p: pathlib.Path) -> Dict[str, Any]:
+
+def _read_yaml(p: pathlib.Path) -> dict[str, Any]:
     import yaml
+
     return yaml.safe_load(p.read_text(encoding="utf-8"))
 
-def _deep_merge(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
+
+def _deep_merge(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
     out = dict(a)
     for k, v in b.items():
         if isinstance(v, dict) and isinstance(out.get(k), dict):
@@ -19,6 +23,7 @@ def _deep_merge(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
         else:
             out[k] = v
     return out
+
 
 def main() -> int:
     if len(sys.argv) != 2:
@@ -44,6 +49,7 @@ def main() -> int:
         BASE.write_text(tmp.read_text(encoding="utf-8"), encoding="utf-8")
         # run report.py using subprocess
         import subprocess
+
         result = subprocess.run(["python3", str(REPORT)], cwd=ROOT)
         if result.returncode != 0:
             print(f"[eval.profile] report failed with code {result.returncode}")
@@ -54,6 +60,7 @@ def main() -> int:
 
     print("[eval.profile] OK")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
