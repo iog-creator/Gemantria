@@ -278,6 +278,63 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_id_type_audit(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    ids: list[Any] = []
+    if isinstance(nodes, list):
+        for n in nodes:
+            if isinstance(n, dict) and "id" in n:
+                ids.append(n.get("id"))
+
+    def _type_name(v: Any) -> str:
+        if isinstance(v, bool):  # keep bool separate from integer semantic confusion
+            return "boolean"
+        if isinstance(v, int):
+            return "integer"
+        if isinstance(v, float):
+            return "number"
+        if isinstance(v, str):
+            return "string"
+        if v is None:
+            return "null"
+        return "other"
+
+    types = [_type_name(v) for v in ids]
+    from collections import Counter
+
+    counts = Counter(types)
+
+    allowed: list[str] = list(args.get("allowed_node_id_types", []))
+    require_single = int(args.get("require_single_id_type", 0)) == 1
+    max_nonconf = int(args.get("max_nonconforming_ids", 0))
+
+    # Nonconforming = ids whose type not in allowed
+    nonconf = sum(1 for t in types if t not in allowed)
+
+    # If require_single, then among allowed types used by any id, must be exactly one unique
+    used_allowed = sorted(set(t for t in types if t in allowed))
+    single_ok = (len(used_allowed) == 1) if require_single else True
+
+    status = "OK"
+    if nonconf > max_nonconf or not single_ok:
+        status = "FAIL"
+
+    return {
+        "status": status,
+        "id_count": len(ids),
+        "type_counts": dict(counts),
+        "allowed_types": allowed,
+        "require_single": require_single,
+        "max_nonconforming_ids": max_nonconf,
+        "observed_allowed_used": used_allowed,
+        "nonconforming_ids": nonconf,
+    }
+
+
 KIND_IMPL = {
     "print": task_print,
     "grep": task_grep,
@@ -286,6 +343,7 @@ KIND_IMPL = {
     "json_schema": task_json_schema,
     "json_shape": task_json_shape,
     "ref_integrity": task_ref_integrity,
+    "id_type_audit": task_id_type_audit,
 }
 
 
