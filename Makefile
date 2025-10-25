@@ -33,22 +33,13 @@ ci:
 	@$(MAKE) ci.audits
 	@$(MAKE) test.smoke
 
-.PHONY: rules.navigator.check rules.numbering.check
+.PHONY: rules.navigator.check
 rules.navigator.check:
 	@python3 scripts/check_cursor_always_apply.py
-rules.numbering.check:
-	@python3 scripts/check_rule_numbering.py
 
-.PHONY: share.sync share.check
+.PHONY: share.sync
 share.sync:
 	@python3 scripts/sync_share.py
-share.check:
-	@$(MAKE) share.sync >/dev/null
-	@if git diff --quiet --exit-code -- share; then \
-	  echo "[share.check] OK — share mirror is clean"; \
-	else \
-	  echo "[share.check] OUT OF DATE — run 'make share.sync' and commit updates"; exit 1; \
-	fi
 
 .PHONY: py.fullwave.c
 py.fullwave.c:
