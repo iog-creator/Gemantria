@@ -15,7 +15,7 @@ tasks:
   - key: rule_names_sanity
     kind: grep
     args:
-      file: "RULES_INDEX.md"
+      file: "docs/SSOT/RULES_INDEX.md"
       patterns:
         - "037"
         - "038"
