@@ -1,4 +1,4 @@
-version: 0.3
+version: 0.4
 run_id: local-dev
 tasks:
   - key: smoke_hello
@@ -43,6 +43,12 @@ tasks:
           path: "nodes[*].embedding_dim"
           op: "if_present_eq_all"
           value: 1024
+
+  - key: exports_schema_validate_latest
+    kind: json_schema
+    args:
+      file: "exports/graph_latest.json"
+      schema: "docs/SSOT/schemas/graph_export.schema.json"
 
 success_policy:
   mode: all_must_pass

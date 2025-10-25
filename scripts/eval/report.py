@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
+import glob
 import json
 import pathlib
 import re
 import sys
 import time
 from typing import Any
-
-import yaml  # type: ignore  # Requires PyYAML available in dev env; not wired into CI
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "eval" / "manifest.yml"
@@ -15,17 +14,46 @@ JSON_OUT = OUTDIR / "report.json"
 MD_OUT = OUTDIR / "report.md"
 
 
+def _read_yaml(path: pathlib.Path) -> dict[str, Any]:
+    try:
+        import yaml  # type: ignore
+
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        raise RuntimeError(
+            "PyYAML is required for eval.report. Please `pip install pyyaml`."
+        ) from e
+
+
+def _load_json(path: pathlib.Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _extract_all(doc: Any, path: str) -> list[Any]:
+    parts = path.split(".") if path else []
+    cur = [doc]
+    for seg in parts:
+        arr = seg.endswith("[*]")
+        key = seg[:-3] if arr else seg
+        nxt = []
+        for node in cur:
+            if isinstance(node, dict) and key in node:
+                val = node[key]
+                if arr and isinstance(val, list):
+                    nxt.extend(val)
+                else:
+                    nxt.append(val)
+        cur = nxt
+    return cur
+
+
+# ---- Task impls -------------------------------------------------------------
+
+
 def task_print(args: dict[str, Any]) -> dict[str, Any]:
     msg = str(args.get("message", ""))
     return {"status": "OK", "stdout": msg}
-
-
-def task_verify_files(args: dict[str, Any]) -> dict[str, Any]:
-    missing = []
-    for p in args.get("must_exist", []):
-        if not (ROOT / p).exists():
-            missing.append(p)
-    return {"status": "OK" if not missing else "FAIL", "missing": missing}
 
 
 def task_grep(args: dict[str, Any]) -> dict[str, Any]:
@@ -38,17 +66,113 @@ def task_grep(args: dict[str, Any]) -> dict[str, Any]:
     return {"status": "OK" if not misses else "FAIL", "misses": misses}
 
 
+def task_file_glob(args: dict[str, Any]) -> dict[str, Any]:
+    globspecs = args.get("globs", [])
+    missing = []
+    for g in globspecs:
+        matches = glob.glob(str(ROOT / g))
+        if not matches:
+            missing.append(g)
+    return {"status": "OK" if not missing else "FAIL", "missing": missing}
+
+
+def _assert_not_null_all(vals: list[Any]) -> dict[str, Any]:
+    bad = [i for i, v in enumerate(vals) if v is None]
+    return {"status": "OK" if not bad else "FAIL", "null_indices": bad}
+
+
+def _assert_frac_in_range(
+    vals: list[Any], lo: float, hi: float, min_frac: float
+) -> dict[str, Any]:
+    nums = [v for v in vals if isinstance(v, (int, float))]
+    if not nums:
+        return {"status": "FAIL", "error": "no numeric values"}
+    ok = [v for v in nums if lo <= float(v) <= hi]
+    frac = len(ok) / max(1, len(nums))
+    res = {
+        "observed_frac": round(frac, 4),
+        "n": len(nums),
+        "ok_n": len(ok),
+        "range": [lo, hi],
+        "min_frac": min_frac,
+    }
+    res["status"] = "OK" if frac >= min_frac else "FAIL"
+    return res
+
+
+def _assert_if_present_eq_all(vals: list[Any], value: Any) -> dict[str, Any]:
+    present = [v for v in vals if v is not None]
+    bad = [i for i, v in enumerate(present) if v != value]
+    return {
+        "status": "OK" if not bad else "FAIL",
+        "present_n": len(present),
+        "bad_indices": bad,
+        "expected": value,
+    }
+
+
+def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    checks = []
+    all_ok = True
+    for a in args.get("asserts", []):
+        name = a.get("name", "assert")
+        path = a["path"]
+        vals = _extract_all(doc, path)
+        op = a["op"]
+        detail = {"name": name, "path": path, "op": op}
+        if op == "not_null_all":
+            r = _assert_not_null_all(vals)
+        elif op == "frac_in_range":
+            r = _assert_frac_in_range(
+                vals, float(a["min"]), float(a["max"]), float(a["min_frac"])
+            )
+        elif op == "if_present_eq_all":
+            r = _assert_if_present_eq_all(vals, a.get("value"))
+        else:
+            r = {"status": "FAIL", "error": f"unknown op: {op}"}
+        status = r.get("status", "FAIL")
+        if status != "OK":
+            all_ok = False
+        checks.append({**detail, **r})
+    return {"status": "OK" if all_ok else "FAIL", "checks": checks}
+
+
+def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
+    try:
+        import jsonschema  # type: ignore
+    except Exception:
+        return {
+            "status": "FAIL",
+            "error": "jsonschema not installed; run `pip install jsonschema`",
+        }
+    file = ROOT / args["file"]
+    schema = ROOT / args["schema"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    if not schema.exists():
+        return {"status": "FAIL", "error": f"no such schema: {schema}"}
+    doc = _load_json(file)
+    sch = _load_json(schema)
+    try:
+        jsonschema.validate(instance=doc, schema=sch)
+        return {"status": "OK"}
+    except Exception as e:
+        return {"status": "FAIL", "error": str(e)}
+
+
 KIND_IMPL = {
     "print": task_print,
-    "verify_files": task_verify_files,
     "grep": task_grep,
+    "file_glob": task_file_glob,
+    "json_assert": task_json_assert,
+    "json_schema": task_json_schema,
 }
 
-
-def load_manifest() -> dict[str, Any]:
-    with open(MANIFEST, encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-        return data if isinstance(data, dict) else {}
+# ---- Driver ----------------------------------------------------------------
 
 
 def main() -> int:
@@ -58,7 +182,7 @@ def main() -> int:
         return 2
     OUTDIR.mkdir(parents=True, exist_ok=True)
 
-    m = load_manifest()
+    m = _read_yaml(MANIFEST)
     results = []
     all_ok = True
     for t in m.get("tasks", []):
@@ -94,10 +218,9 @@ def main() -> int:
     lines = []
     lines.append("# Gemantria Eval Report")
     lines.append("")
-    summary = report["summary"]
-    run_id_part = f"*run_id:* `{report['run_id']}`"
-    stats_part = f"  •  *tasks:* {summary['task_count']}  •  *ok:* {summary['ok_count']}  •  *fail:* {summary['fail_count']}"  # noqa: E501
-    lines.append(run_id_part + stats_part)
+    lines.append(
+        f"*run_id:* `{report['run_id']}`  •  *tasks:* {report['summary']['task_count']}  •  *ok:* {report['summary']['ok_count']}  •  *fail:* {report['summary']['fail_count']}"
+    )
     lines.append("")
     for r in results:
         status = r.get("status")
