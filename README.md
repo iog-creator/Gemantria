@@ -2,6 +2,8 @@
 
 _A deterministic semantic network pipeline for Hebrew text analysis using gematria, embeddings, and AI inference._
 
+📋 **[Repository Index](docs/INDEX.md)** - Quick navigation for all documentation and configuration
+
 [![CI](https://github.com/your-org/gemantria/workflows/CI/badge.svg)](https://github.com/your-org/gemantria/actions)
 [![Coverage](https://codecov.io/gh/your-org/gemantria/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/gemantria)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
