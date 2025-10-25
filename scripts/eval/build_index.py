@@ -16,6 +16,8 @@ def main() -> int:
         ("delta.md", "Delta (latest vs previous)"),
         ("provenance.md", "Provenance"),
         ("checksums.csv", "Checksums"),
+        ("anomalies.md", "Anomalies"),
+        ("run_log.jsonl", "Run Log"),
     ]
     lines = []
     lines.append("# Gemantria Eval — Artifacts Index")

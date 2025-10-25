@@ -263,3 +263,19 @@ eval.checksums:
 
 ci.eval.checksums:
 	@python3 scripts/eval/build_checksums.py
+
+.PHONY: eval.anomalies ci.eval.anomalies eval.runlog ci.eval.runlog
+
+# Aggregate anomalies into a single markdown file
+eval.anomalies:
+	@python3 scripts/eval/anomalies.py
+
+ci.eval.anomalies:
+	@python3 scripts/eval/anomalies.py
+
+# Append one JSON line capturing the latest run's artifacts
+eval.runlog:
+	@python3 scripts/eval/run_log.py
+
+ci.eval.runlog:
+	@python3 scripts/eval/run_log.py
