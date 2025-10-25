@@ -37,9 +37,16 @@ ci:
 rules.navigator.check:
 	@python3 scripts/check_cursor_always_apply.py
 
-.PHONY: share.sync
+.PHONY: share.sync share.check
 share.sync:
 	@python3 scripts/sync_share.py
+share.check:
+	@$(MAKE) share.sync >/dev/null
+	@if git diff --quiet --exit-code -- share; then \
+	  echo "[share.check] OK — share mirror is clean"; \
+	else \
+	  echo "[share.check] OUT OF DATE — run 'make share.sync' and commit updates"; exit 1; \
+	fi
 
 .PHONY: py.fullwave.c
 py.fullwave.c:
