@@ -1,0 +1,25 @@
+---
+description: Enforce backend→frontend stats/graph contracts for WebUI
+globs:
+  - "scripts/export_stats.py"
+  - "scripts/export_graph.py"
+  - "webui/graph/src/hooks/**"
+  - "webui/graph/src/components/**"
+alwaysApply: false
+---
+
+# Rule 022 — Visualization Contract Sync
+
+**Required Stats Keys:**
+`nodes`, `edges`, `clusters`, `density`, `centrality.avg_degree`, `centrality.avg_betweenness`
+
+**Hooks:**
+- `useGraphStats.ts` must load primary `/exports/graph_stats.json`, fallback `/exports/graph_latest.json`, and expose `{ loading, error, data }`.
+
+**Components:**
+- `GraphStats.tsx` renders six cards: Nodes, Edges, Clusters, Avg Degree, Avg Cluster Density, Avg Cluster Diversity.
+
+**Build/Test Gate:**
+- TypeScript types reflect the JSON contract; missing fields must fail build/test with an actionable message.
+
+**Related Rules:** 006, 016, 017, 021

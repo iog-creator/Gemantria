@@ -1,0 +1,30 @@
+---
+description: Ensure all SSOT docs are linked from ADRs and vice versa
+globs:
+  - docs/ADRs/*.md
+  - docs/SSOT/*.md
+alwaysApply: false
+---
+
+# Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement)
+
+- **Purpose**: Ensure all SSOT docs are linked from ADRs and vice versa to maintain bidirectional documentation relationships.
+
+- **ADR Requirements**: ADR text must contain "docs/SSOT/..." reference for each related SSOT document.
+
+- **SSOT Requirements**: SSOT front matter must list originating ADR in "originating_ADR" field.
+
+- **Linkage Validation**:
+  - ADRs must have "Related SSOT" section
+  - SSOT docs must have "--- originating_ADR: ADR-XXX ---" header
+  - Cross-references must be consistent and bidirectional
+
+- **Validation**: Run `grep -r "docs/SSOT/" docs/ADRs/` and verify all SSOT docs are referenced.
+
+- **Failure Mode**: Broken documentation links prevent complete architectural traceability.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

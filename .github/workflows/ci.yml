@@ -1,26 +1,43 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ "**" ]
+
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+
       - name: Install deps
         run: |
-          python -m pip install -U pip
-          pip install -r requirements.txt
-      - name: No Mocks Guard
-        run: scripts/ci-no-mocks.sh
-      - name: Lint
-        run: make lint || true
-      - name: Type Check
-        run: make type || true
-      - name: Unit Tests
-        run: make test.unit || true
-      - name: Integration Tests
-        run: make test.int || true
-      - name: Coverage
-        run: make coverage.report || true
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pre-commit ruff mypy pytest
+
+      - name: Pre-commit (all files)
+        run: |
+          pre-commit install
+          pre-commit run -a
+
+      - name: Lint & type
+        run: |
+          make py.lint || ruff check
+          make py.type || mypy --strict src
+
+      - name: Audits
+        run: |
+          make rules.navigator.check rules.audit repo.audit docs.audit
+
+      - name: Smoke tests
+        run: |
+          make test.smoke

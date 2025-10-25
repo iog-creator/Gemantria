@@ -1,0 +1,27 @@
+---
+description: SHORT BRIEF format for all interactions
+alwaysApply: true
+---
+
+# SHORT BRIEF Format (Always Required)
+
+## Required Structure
+**Goal**: One sentence describing the objective
+**Inputs consulted**: List of files/docs/SSOT referenced
+**Changes to make**: Bulleted list of modifications
+**Tests/checks**: Commands or criteria to verify
+**Share sync**: Whether to run make share.sync
+
+## Examples
+**Goal**: Fix model verification environment
+**Inputs consulted**: AGENTS.md; SHARE_MANIFEST.json; scripts/models_verify.py
+**Changes to make**: Update PYTHONPATH handling in Makefile
+**Tests/checks**: make models.verify; make models.swap
+**Share sync**: make share.sync
+
+## Enforcement
+- Always start responses with SHORT BRIEF
+- Keep goals focused and achievable
+- Reference SSOT sources explicitly
+- Include verification steps
+- End with share sync if docs/code changed

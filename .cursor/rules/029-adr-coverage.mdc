@@ -1,0 +1,8 @@
+---
+description: Any new rules/migrations require ADR delta
+globs: [".cursor/rules/**", "migrations/**", "docs/ADRs/**"]
+alwaysApply: false
+---
+
+# Rule 029 — ADR Coverage
+If rules or migrations change, an ADR must be added/updated. Enforcement via rules_guard.py.

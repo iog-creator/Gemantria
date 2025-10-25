@@ -1,0 +1,19 @@
+---
+description: Connectivity troubleshooting and external service handling
+globs:
+  - src/services/lmstudio_client.py
+  - src/infra/db.py
+  - src/graph/graph.py
+alwaysApply: false
+---
+
+- **Connection Timeout Handling**: All external connections (LM Studio, DB) must have configurable timeouts with clear error messages.
+- **Retry Logic**: Implement exponential backoff for transient failures; maximum 3 attempts with clear logging.
+- **Health Check Failures**: Qwen health checks must fail fast with actionable error messages (not generic "connection failed").
+- **Environment Validation**: Critical connection strings (DSN, LM_STUDIO_HOST) validated at startup with helpful error messages.
+- **Service Discovery**: LM Studio server detection with fallback localhost and clear port/service requirements.
+- **Connection Pooling**: Database connections use connection pooling; no direct psycopg.connect() in application code.
+- **Dependency Checks**: Critical dependencies (pgvector, requests) checked at import time with clear installation instructions.
+- **Network Errors**: Distinguish between network failures, auth failures, and service unavailability with specific error types.
+- **Graceful Degradation**: When external services unavailable, log warnings but don't crash unless required by Qwen Live Gate.
+- **Debug Connectivity**: Include --debug-connectivity flag to test all external connections with detailed diagnostics.

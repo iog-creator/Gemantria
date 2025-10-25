@@ -1,0 +1,19 @@
+{
+  "nodes": [],
+  "edges": [],
+  "metadata": {
+    "node_count": 0,
+    "edge_count": 0,
+    "connected_components": 0,
+    "is_connected": false,
+    "avg_weighted_degree": 0,
+    "max_weighted_degree": 0,
+    "avg_clustering_coeff": 0,
+    "top_weighted_degree_nodes": [],
+    "correlation_threshold": 0.4,
+    "total_input_correlations": 0,
+    "filtered_correlations": 0,
+    "correlation_methods": [],
+    "export_timestamp": "2025-10-23T17:59:39.618287"
+  }
+}

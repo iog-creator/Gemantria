@@ -1,0 +1,16 @@
+---
+description: Dashboard UI spec linkage (ADR-023)
+globs:
+  - "webui/dashboard/**"
+alwaysApply: false
+---
+
+# Rule 024 — Dashboard UI Spec
+
+Specification for dashboard components (see ADR-023). Enforcement lives in Rule 033.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

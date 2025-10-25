@@ -1,0 +1,13 @@
+# Hebrew OT mini-run (Gematria noun extraction) to prove gates before whole-book extraction.
+passages:
+  - book: Genesis
+    chapter: 1
+    verses: [1,2,3,4,5]
+  - book: Exodus
+    chapter: 3
+    verses: [1,2,3,4,5,6]
+embed_dims: 1024
+endpoints:
+  api: [localhost, 8000]
+  chat: [localhost, 9991]
+  embed: [localhost, 9994]

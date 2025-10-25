@@ -1,0 +1,53 @@
+---
+description: Validate cross-text pattern analytics exports and schema
+globs:
+  - "docs/SSOT/graph-patterns.schema.json"
+  - "scripts/export_stats.py"
+  - "scripts/generate_report.py"
+alwaysApply: false
+---
+
+# Rule 032 — Pattern Integrity Validation
+
+All cross-text pattern analytics must validate against docs/SSOT/graph-patterns.schema.json.
+Enforced via rules_guard.py + system-enforcement CI.
+
+## Core Requirements
+
+### Schema Compliance (Hard Fail)
+- JSON Schema validation against `docs/SSOT/graph-patterns.schema.json`
+- Required fields: `book_source`, `book_target`, `shared_concepts`, `pattern_strength`, `metric`
+- Data types: `pattern_strength` ∈ [0,1], `support`/`confidence`/`jaccard` ∈ [0,1], `lift` ≥ 0
+- Metadata validation: `total_patterns`, `generated_at` required
+
+### Data Quality (Soft Warn → Hard Fail)
+- Non-empty patterns array when concept data exists
+- Reasonable pattern strength values (not all zeros)
+- Statistical metrics within expected ranges
+- Book associations must exist in database
+
+## Enforcement
+
+### CI/CD Integration
+- `scripts/rules_guard.py` validates `exports/graph_patterns.json` if schema exists
+- Schema validation fails closed (prevents bad pattern exports)
+- Evidence markers required in PR body: `graph_patterns` or `pattern_analysis`
+
+### Local Development
+- `make verify.all` includes pattern validation
+- Schema errors block commits if `pre-commit-config.yaml` active
+- Share system includes pattern schema
+
+## Related Rules
+- **000**: Always-Apply (production safety)
+- **006**: AGENTS.md Governance
+- **013**: Report Verification
+- **021**: Stats Proof (export validation)
+- **022**: Visualization Contract Sync
+
+## Implementation Notes
+
+- Pattern export may be empty (graceful degradation)
+- Schema validation only when patterns present
+- Report generation handles missing pattern data
+- Cross-book analysis requires concepts with book associations

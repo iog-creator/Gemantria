@@ -1,0 +1,43 @@
+repos:
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        args: [--strict]
+        additional_dependencies: []
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: repo-audits
+        name: repo audits (rules.navigator.check, rules.audit, repo.audit, docs.audit)
+        language: system
+        entry: bash -lc 'make rules.navigator.check rules.audit repo.audit docs.audit'
+        pass_filenames: false
+
+      - id: share-sync
+        name: share.sync (mirror artifacts)
+        language: system
+        entry: bash -lc 'make share.sync'
+        pass_filenames: false

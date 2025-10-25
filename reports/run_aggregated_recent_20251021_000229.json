@@ -1,0 +1,65 @@
+{
+  "run_id": "aggregated_recent",
+  "generated_at": "2025-10-21T07:02:29.525833+00:00",
+  "metrics": {
+    "node_metrics": [
+      {
+        "node": "collect_nouns",
+        "events": 14,
+        "avg_duration_ms": 8.0,
+        "first_event": "2025-10-20T23:54:54.970149-07:00",
+        "last_event": "2025-10-21T00:02:23.413263-07:00"
+      },
+      {
+        "node": "validate_batch",
+        "events": 14,
+        "avg_duration_ms": 6.0,
+        "first_event": "2025-10-20T23:54:54.984205-07:00",
+        "last_event": "2025-10-21T00:02:23.420950-07:00"
+      },
+      {
+        "node": "enrichment",
+        "events": 14,
+        "avg_duration_ms": 1897.0,
+        "first_event": "2025-10-20T23:54:54.991737-07:00",
+        "last_event": "2025-10-21T00:02:26.738171-07:00"
+      },
+      {
+        "node": "confidence_validator",
+        "events": 12,
+        "avg_duration_ms": 7.0,
+        "first_event": "2025-10-20T23:54:54.998523-07:00",
+        "last_event": "2025-10-21T00:02:26.750244-07:00"
+      },
+      {
+        "node": "network_aggregator",
+        "events": 4,
+        "avg_duration_ms": 5.0,
+        "first_event": "2025-10-20T23:54:55.005892-07:00",
+        "last_event": "2025-10-20T23:55:11.597756-07:00"
+      }
+    ],
+    "ai_metrics": {
+      "total_enrichments": 2,
+      "avg_confidence": 0.9,
+      "avg_tokens": 76
+    },
+    "confidence_metrics": {
+      "total_validations": 2,
+      "passed": 0,
+      "failed": 2,
+      "avg_gematria_confidence": 1.0,
+      "avg_ai_confidence": 0.9
+    },
+    "network_metrics": {
+      "total_nodes": 0,
+      "strong_edges": 0,
+      "weak_edges": 0,
+      "embeddings_generated": 0,
+      "similarity_computations": 0,
+      "rerank_calls": 0,
+      "avg_edge_strength": 0.0,
+      "rerank_yes_ratio": 0.0
+    }
+  }
+}

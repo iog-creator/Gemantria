@@ -6,7 +6,7 @@ alwaysApply: false
 # Cursor Rule Authoring Guide
 
 ## Decide the scope first
-- **Always rule**: non-negotiable, repo-wide constraints → `alwaysApply: true` (use sparingly).
+- **Always rule**: non-negotiable, repo-wide constraints → `alwaysApply: false` (use sparingly).
 - **Auto-attached rule**: applies only when editing certain paths → set `globs: [...]` and `alwaysApply: false`.
 - **Manual/agent-requested**: loaded on demand in prompts → set `alwaysApply: false` and a clear `description:`.
 
@@ -33,7 +33,7 @@ alwaysApply: <true|false>
 ```md
 ---
 description: Non-negotiable safety rules
-alwaysApply: true
+alwaysApply: false
 ---
 - bible_db is READ-ONLY; any write must error.
 - No mock datasets; tests must be code-verified or DB-derived.

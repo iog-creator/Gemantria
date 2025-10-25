@@ -1,0 +1,27 @@
+name: system-enforcement
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - uses: pre-commit/action@v3.0.1
+      - name: Install guard deps
+        run: pip install jsonschema
+      - name: Run rules guard (hard gate)
+        run: python scripts/rules_guard.py
+      - name: Rules audit (contiguity + docs sync)
+        run: python scripts/rules_audit.py
+      - name: Check share/ sync (flat, current)
+        run: python scripts/check_share_sync.py
+      - name: Data completeness gate (Rule 037)
+        run: make ci.data.verify

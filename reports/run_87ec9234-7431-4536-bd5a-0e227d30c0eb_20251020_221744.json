@@ -1,0 +1,27 @@
+{
+  "run_id": "87ec9234-7431-4536-bd5a-0e227d30c0eb",
+  "generated_at": "2025-10-21T05:17:44.734955+00:00",
+  "metrics": {
+    "node_metrics": [
+      {
+        "node": "confidence_validator",
+        "events": 2,
+        "avg_duration_ms": 10.0,
+        "first_event": "2025-10-20T22:11:28.762389-07:00",
+        "last_event": "2025-10-20T22:11:28.772307-07:00"
+      }
+    ],
+    "ai_metrics": {
+      "total_enrichments": 0,
+      "avg_confidence": 0,
+      "avg_tokens": 0
+    },
+    "confidence_metrics": {
+      "total_validations": 2,
+      "passed": 2,
+      "failed": 0,
+      "avg_gematria_confidence": 1.0,
+      "avg_ai_confidence": 1.0
+    }
+  }
+}
