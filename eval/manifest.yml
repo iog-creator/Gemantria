@@ -67,6 +67,7 @@ tasks:
       max_self_loops: "${thresholds:integrity.max_self_loops}"
       max_duplicate_node_ids: "${thresholds:integrity.max_duplicate_node_ids}"
       max_duplicate_edge_pairs: "${thresholds:integrity.max_duplicate_edge_pairs}"
+      whitelist_path: "eval/id_whitelist.txt"
 
   - key: exports_id_type_audit_latest
     kind: id_type_audit
@@ -75,6 +76,7 @@ tasks:
       allowed_node_id_types: "${thresholds:id_audit.allowed_node_id_types}"
       require_single_id_type: "${thresholds:id_audit.require_single_id_type}"
       max_nonconforming_ids: "${thresholds:id_audit.max_nonconforming_ids}"
+      whitelist_path: "eval/id_whitelist.txt"
 
 success_policy:
   mode: all_must_pass
