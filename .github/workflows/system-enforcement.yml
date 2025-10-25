@@ -17,6 +17,8 @@ jobs:
       - uses: pre-commit/action@v3.0.1
       - name: Install guard deps
         run: pip install jsonschema
+      - name: Rules numbering check
+        run: make rules.numbering.check
       - name: Install psycopg (v3)
         run: pip install "psycopg[binary]"
       - name: Confirm DSN secret present
@@ -36,5 +38,14 @@ jobs:
         run: make ci.data.verify
       - name: Exports smoke (Rule 038)
         run: make ci.exports.smoke
+      - name: Share consistency check (no drift)
+        run: |
+          make go || true            # ensure build steps run; ignore share writes in CI
+          make share.sync            # run mirror generation in CI workspace
+          git status --porcelain
+          if ! git diff --quiet --exit-code -- share; then
+            echo "[share.check] Share out-of-date. Run 'make share.sync' locally and commit."
+            exit 1
+          fi
       - name: NEXT_STEPS check
         run: make ops.next
