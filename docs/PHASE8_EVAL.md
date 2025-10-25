@@ -137,3 +137,25 @@ Artifact:
 * `share/eval/checksums.csv` — sha256 + size for each `exports/graph_*.json`
 
 > After generating, re-run `make eval.index` to add badges for these artifacts.
+
+### Anomalies (local-only)
+Run:
+```bash
+make eval.anomalies
+```
+
+Artifact:
+
+* `share/eval/anomalies.md` — consolidated red flags from report/history/delta/id_stability.
+
+### Run log (local-only)
+
+Run:
+
+```bash
+make eval.runlog
+```
+
+Artifact:
+
+* `share/eval/run_log.jsonl` — append-only JSONL; each line captures provenance + results snapshot.
