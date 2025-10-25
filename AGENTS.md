@@ -244,7 +244,7 @@ DB_MAX_OVERFLOW=10
 - **Connection Pooling**: Configured for performance and safety
 
 ### Exports Safety
-- **Exports Smoke Gate (Rule 037)**: `make exports.smoke` MUST pass locally; `make ci.exports.smoke` MUST pass in CI for PRs touching export/reranker code.
+- **Exports Smoke Gate (Rule 038)**: `make exports.smoke` MUST pass locally; `make ci.exports.smoke` MUST pass in CI for PRs touching export/reranker code.
 
 ### Testing Safety
 
@@ -339,6 +339,10 @@ psql "$GEMATRIA_DSN" -f migrations/002_create_checkpointer.sql
 # Check pipeline runs
 psql "$GEMATRIA_DSN" -c "SELECT * FROM pipeline_runs ORDER BY created_at DESC LIMIT 5;"
 ```
+
+### Cursor Instruction Loop
+
+Cursor MUST read and execute tasks in `NEXT_STEPS.md` on the current branch. After completion: check all boxes, paste acceptance tails under "Evidence tails," and set Status to Done. GPT-5 updates `NEXT_STEPS.md` to provide subsequent tasks. This file is authoritative for per-PR work sequencing.
 
 ### Report Generation
 
@@ -799,6 +803,8 @@ globs:
 | 034 | # --- |
 | 035 | # --- |
 | 036 | # --- |
+| 037 | # --- |
+| 038 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 # test doc update

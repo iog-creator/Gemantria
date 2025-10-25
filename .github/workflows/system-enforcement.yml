@@ -25,5 +25,5 @@ jobs:
         run: python scripts/check_share_sync.py
       - name: Data completeness gate (Rule 037)
         run: make ci.data.verify
-      - name: Exports smoke (Rule 037)
+      - name: Exports smoke (Rule 038)
         run: make ci.exports.smoke
