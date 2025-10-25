@@ -67,6 +67,10 @@ make eval.index
 
 Artifact: `share/eval/index.md` — quick links/badges for `report.md`, `history.md`, `delta.md`.
 
+### Referential integrity (local-only)
+Task kind `ref_integrity` checks that edges reference existing node ids, and enforces limits on self-loops and duplicates.
+Thresholds come from `eval/thresholds.yml` (integrity.*). See task `exports_ref_integrity_latest`.
+
 ## Notes
 
 * Deterministic and fast; suited for PR evidence.

@@ -213,6 +213,71 @@ def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    edges = doc.get("edges", [])
+    node_ids: list[Any] = []
+    if isinstance(nodes, list):
+        for n in nodes:
+            if isinstance(n, dict) and "id" in n:
+                node_ids.append(n.get("id"))
+    node_set = set(node_ids)
+    dup_node_ids = len(node_ids) - len(node_set)
+
+    def _ekey(e: dict[str, Any]) -> tuple[Any, Any]:
+        return (e.get("source"), e.get("target"))
+
+    missing_endpoints = 0
+    self_loops = 0
+    edge_pairs: list[tuple[Any, Any]] = []
+    if isinstance(edges, list):
+        for e in edges:
+            if not isinstance(e, dict):
+                continue
+            s, t = e.get("source"), e.get("target")
+            if s == t:
+                self_loops += 1
+            if (s not in node_set) or (t not in node_set):
+                missing_endpoints += 1
+            edge_pairs.append(_ekey(e))
+    dup_edge_pairs = len(edge_pairs) - len(set(edge_pairs))
+
+    # thresholds (already substituted if using ${thresholds:...})
+    allow_missing_endpoints = int(args.get("allow_missing_endpoints", 0))
+    max_self_loops = int(args.get("max_self_loops", 0))
+    max_dup_nodes = int(args.get("max_duplicate_node_ids", 0))
+    max_dup_edges = int(args.get("max_duplicate_edge_pairs", 0))
+
+    status = "OK"
+    if (
+        missing_endpoints > allow_missing_endpoints
+        or self_loops > max_self_loops
+        or dup_node_ids > max_dup_nodes
+        or dup_edge_pairs > max_dup_edges
+    ):
+        status = "FAIL"
+
+    return {
+        "status": status,
+        "counts": {
+            "missing_endpoints": missing_endpoints,
+            "self_loops": self_loops,
+            "duplicate_node_ids": dup_node_ids,
+            "duplicate_edge_pairs": dup_edge_pairs,
+        },
+        "limits": {
+            "allow_missing_endpoints": allow_missing_endpoints,
+            "max_self_loops": max_self_loops,
+            "max_duplicate_node_ids": max_dup_nodes,
+            "max_duplicate_edge_pairs": max_dup_edges,
+        },
+    }
+
+
 KIND_IMPL = {
     "print": task_print,
     "grep": task_grep,
@@ -220,6 +285,7 @@ KIND_IMPL = {
     "json_assert": task_json_assert,
     "json_schema": task_json_schema,
     "json_shape": task_json_shape,
+    "ref_integrity": task_ref_integrity,
 }
 
 
