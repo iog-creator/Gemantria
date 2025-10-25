@@ -247,3 +247,19 @@ eval.catalog:
 
 ci.eval.catalog:
 	@python3 scripts/eval/build_exports_catalog.py
+
+.PHONY: eval.provenance ci.eval.provenance eval.checksums ci.eval.checksums
+
+# Provenance (writes share/eval/provenance.{json,md})
+eval.provenance:
+	@python3 scripts/eval/provenance.py
+
+ci.eval.provenance:
+	@python3 scripts/eval/provenance.py
+
+# Checksums for exports (writes share/eval/checksums.csv)
+eval.checksums:
+	@python3 scripts/eval/build_checksums.py
+
+ci.eval.checksums:
+	@python3 scripts/eval/build_checksums.py

@@ -112,3 +112,28 @@ Thresholds come from `eval/thresholds.yml` (integrity.*). See task `exports_ref_
 * Deterministic and fast; suited for PR evidence.
 * Do **not** wire into CI until stabilized.
 * Governance: 037/038 unchanged; share drift remains read-only in CI.
+
+### Provenance (local-only)
+Run:
+```bash
+make eval.provenance
+```
+
+Artifacts:
+
+* `share/eval/provenance.json` — git SHA, manifest/thresholds versions, latest export info
+* `share/eval/provenance.md` — human-readable summary
+
+### Checksums (local-only)
+
+Run:
+
+```bash
+make eval.checksums
+```
+
+Artifact:
+
+* `share/eval/checksums.csv` — sha256 + size for each `exports/graph_*.json`
+
+> After generating, re-run `make eval.index` to add badges for these artifacts.
