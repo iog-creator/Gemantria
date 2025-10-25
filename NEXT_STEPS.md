@@ -140,6 +140,20 @@ Confirm that either branches are merged (and deleted) or listed for cleanup.
 - **Required checks**: All policy checks visible on PR
 - **CI Status**: Pending (will merge when green)
 
+### 1.4) feature/pr-003-batch-semantics - PR OPEN
+- [x] **Branch created**: `integrate/feature/pr-003-batch-semantics` from `origin/feature/pr-003-batch-semantics`
+- [x] **Rebase**: Successfully rebased with conflicts resolved by keeping main versions for governance files
+- [x] **Local sanity tails**:
+  - `[rules.numbering.check] OK`
+  - `[share.check] OK — share mirror is clean`
+  - `[ops.next] NEXT_STEPS clear`
+- [x] **PR opened**: [integrate/feature/pr-003-batch-semantics → main](https://github.com/iog-creator/Gemantria/pull/14)
+- [x] **What it adds**: Batch processing with size enforcement and deterministic semantics
+- [x] **Special handling**: Batch config consolidated to single canonical source (`src/graph/batch_processor.py#DEFAULT_BATCH_SIZE = 50` with `BATCH_SIZE` env override, documented in AGENTS.md)
+- [x] **Governance alignment**: Governance files reset to main versions as source of truth
+- [x] **Required checks**: All policy checks visible on PR
+- [x] **CI Status**: Pending (will merge when green)
+
 ## Evidence tails
 
 ### Docs Index Creation (PR #13)
