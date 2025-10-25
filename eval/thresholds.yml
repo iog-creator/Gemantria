@@ -1,0 +1,17 @@
+version: 1
+strength:
+  min: 0.30
+  max: 0.95
+  min_frac: 0.70   # fraction of edges within [min,max] required
+shape:
+  nodes:
+    min: 1
+    max: 10000000
+  edges:
+    min: 1
+    max: 10000000
+embedding:
+  dim_if_present: 1024
+delta:
+  allow_removed_nodes: 0
+  allow_removed_edges: 0

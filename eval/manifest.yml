@@ -1,4 +1,4 @@
-version: 0.4
+version: 0.5
 run_id: local-dev
 tasks:
   - key: smoke_hello
@@ -27,28 +27,37 @@ tasks:
     args:
       file: "exports/graph_latest.json"
       asserts:
-        - name: "edge strength fraction in [0.30,0.95]"
+        - name: "edge strength fraction in [min,max]"
           path: "edges[*].strength"
           op: "frac_in_range"
-          min: 0.30
-          max: 0.95
-          min_frac: 0.70
+          min: "${thresholds:strength.min}"
+          max: "${thresholds:strength.max}"
+          min_frac: "${thresholds:strength.min_frac}"
 
   - key: exports_nodes_dim_if_present_latest
     kind: json_assert
     args:
       file: "exports/graph_latest.json"
       asserts:
-        - name: "nodes[*].embedding_dim==1024 if present"
+        - name: "nodes[*].embedding_dim==dim_if_present if present"
           path: "nodes[*].embedding_dim"
           op: "if_present_eq_all"
-          value: 1024
+          value: "${thresholds:embedding.dim_if_present}"
 
   - key: exports_schema_validate_latest
     kind: json_schema
     args:
       file: "exports/graph_latest.json"
       schema: "docs/SSOT/schemas/graph_export.schema.json"
+
+  - key: exports_shape_smoke_latest
+    kind: json_shape
+    args:
+      file: "exports/graph_latest.json"
+      min_nodes: "${thresholds:shape.nodes.min}"
+      max_nodes: "${thresholds:shape.nodes.max}"
+      min_edges: "${thresholds:shape.edges.min}"
+      max_edges: "${thresholds:shape.edges.max}"
 
 success_policy:
   mode: all_must_pass

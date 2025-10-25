@@ -220,3 +220,12 @@ eval.delta:
 # Not wired into CI; identical to local for now
 ci.eval.delta:
 	@python3 scripts/eval/report_delta.py
+
+.PHONY: eval.index ci.eval.index
+
+# Build a simple index of eval artifacts
+eval.index:
+	@python3 scripts/eval/build_index.py
+
+ci.eval.index:
+	@python3 scripts/eval/build_index.py
