@@ -229,3 +229,12 @@ eval.index:
 
 ci.eval.index:
 	@python3 scripts/eval/build_index.py
+
+.PHONY: eval.idstability ci.eval.idstability
+
+# Node ID stability (writes share/eval/id_stability.{json,md})
+eval.idstability:
+	@python3 scripts/eval/report_id_stability.py
+
+ci.eval.idstability:
+	@python3 scripts/eval/report_id_stability.py

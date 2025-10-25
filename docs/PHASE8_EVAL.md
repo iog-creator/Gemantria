@@ -67,6 +67,22 @@ make eval.index
 
 Artifact: `share/eval/index.md` — quick links/badges for `report.md`, `history.md`, `delta.md`.
 
+### ID-type audit (local-only)
+Task kind `id_type_audit` enforces ID type policy for nodes. Thresholds under `id_audit.*`.
+See `exports_id_type_audit_latest`.
+
+### ID stability (local-only)
+Run:
+```bash
+make eval.idstability
+```
+
+Artifacts:
+
+* `share/eval/id_stability.json` — Jaccard similarity and add/remove counts
+* `share/eval/id_stability.md` — summary with badge
+  Thresholds in `eval/thresholds.yml` under `id_stability.*`.
+
 ### Referential integrity (local-only)
 Task kind `ref_integrity` checks that edges reference existing node ids, and enforces limits on self-loops and duplicates.
 Thresholds come from `eval/thresholds.yml` (integrity.*). See task `exports_ref_integrity_latest`.
