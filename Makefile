@@ -33,13 +33,22 @@ ci:
 	@$(MAKE) ci.audits
 	@$(MAKE) test.smoke
 
-.PHONY: rules.navigator.check
+.PHONY: rules.navigator.check rules.numbering.check
 rules.navigator.check:
 	@python3 scripts/check_cursor_always_apply.py
+rules.numbering.check:
+	@python3 scripts/check_rule_numbering.py
 
-.PHONY: share.sync
+.PHONY: share.sync share.check
 share.sync:
 	@python3 scripts/sync_share.py
+share.check:
+	@$(MAKE) share.sync >/dev/null
+	@if git diff --quiet --exit-code -- share; then \
+	  echo "[share.check] OK — share mirror is clean"; \
+	else \
+	  echo "[share.check] OUT OF DATE — run 'make share.sync' and commit updates"; exit 1; \
+	fi
 
 .PHONY: py.fullwave.c
 py.fullwave.c:
@@ -89,7 +98,12 @@ exports.smoke:
 ci.exports.smoke:
 	@python3 scripts/exports_smoke.py
 
-.PHONY: go deps.dev
+.PHONY: ops.next go deps.dev
+ops.next:
+	@if rg -n "^- \[ \]" NEXT_STEPS.md >/dev/null 2>&1; then \
+	echo "[ops.next] NEXT_STEPS has unchecked boxes — complete them or mark Done."; exit 1; \
+	else echo "[ops.next] NEXT_STEPS clear"; fi
+
 # One-command, zero-choices path for Cursor and devs:
 #  - lint/format/quickfix
 #  - smart strict/soft smoke + schema
