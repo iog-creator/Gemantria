@@ -83,6 +83,26 @@ Artifacts:
 * `share/eval/id_stability.md` — summary with badge
   Thresholds in `eval/thresholds.yml` under `id_stability.*`.
 
+### Exports catalog (local-only)
+Run:
+```bash
+make eval.catalog
+```
+
+Artifact:
+
+* `share/eval/exports_catalog.md` — size + node/edge counts for every `exports/graph_*.json`.
+
+### One-shot reproducer (local-only)
+
+Run:
+
+```bash
+bash scripts/eval/repro_local.sh
+```
+
+Runs: report → history → delta → idstability → index → catalog (local-only).
+
 ### Referential integrity (local-only)
 Task kind `ref_integrity` checks that edges reference existing node ids, and enforces limits on self-loops and duplicates.
 Thresholds come from `eval/thresholds.yml` (integrity.*). See task `exports_ref_integrity_latest`.
