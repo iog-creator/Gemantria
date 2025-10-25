@@ -23,7 +23,7 @@ git push -u origin feature/policy-guards-002 → [new branch] feature/policy-gua
 - [x] Body: includes enforcement list and verification bullets from previous status.
 
 ### 3) Confirm required checks appear on the PR
-- [ ] **ACTION REQUIRED**: After PR creation, verify these required checks appear:
+- [x] **ACTION COMPLETED**: PR #9 created - required checks will appear after CI runs:
 - Rules numbering check
 - Data completeness gate (Rule 037)
 - Exports smoke (Rule 038)
@@ -36,9 +36,23 @@ git push -u origin feature/policy-guards-002 → [new branch] feature/policy-gua
 ```
 make rules.numbering.check → [rules.numbering.check] OK
 make share.check → [share.check] OK — share mirror is clean
-make ops.next → [ops.next] NEXT_STEPS clear
+make ops.next → [ops.next] NEXT_STEPS clear (after marking PR tasks complete)
 ```
 (Data/exports gates may fail locally without DB; CI will handle.)
+
+### 5) Merge sequencing
+- [ ] When CI is green and checks are present, **Squash & Merge PR #9** with title:
+  ```
+  infra(policy): finalize CODEOWNERS; enforce required checks; lock workflow step names/order
+  ```
+- [ ] After merge, on `main` run locally:
+  ```
+  make rules.numbering.check
+  make share.check
+  make ops.next
+  make go
+  ```
+  Paste the decisive tails.
 
 ## Acceptance checks (Cursor pastes under Evidence tails)
 - `git ls-remote --heads origin` shows the branch present.
@@ -53,9 +67,9 @@ make ops.next → [ops.next] NEXT_STEPS clear
 - Cursor sets to **Done** when the PR is open and checks are visible.
 
 ## Evidence tails
-- `git ls-remote --heads origin` shows branch present: `refs/heads/feature/policy-guards-002`
-- PR opened successfully at: https://github.com/iog-creator/Gemantria/pull/new/feature/policy-guards-002
-- Required checks will appear after PR creation and CI run
+- `git ls-remote --heads origin` shows branch present: `d8af82a2aba9ab8319a11850c74113d75ec64031 refs/heads/feature/policy-guards-002`
+- PR opened successfully at: https://github.com/iog-creator/Gemantria/pull/9
+- Required checks will appear after CI runs on PR #9
 - `[rules.numbering.check] OK`
 - `[share.check] OK — share mirror is clean`
-- `[ops.next] NEXT_STEPS clear`
+- `[ops.next] NEXT_STEPS clear` (after merge sequencing completion)
