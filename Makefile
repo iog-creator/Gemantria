@@ -210,3 +210,13 @@ eval.history:
 # Not wired into CI; identical to local for now
 ci.eval.history:
 	@python3 scripts/eval/report_history.py
+
+.PHONY: eval.delta ci.eval.delta
+
+# Per-run delta report (writes share/eval/delta.{json,md})
+eval.delta:
+	@python3 scripts/eval/report_delta.py
+
+# Not wired into CI; identical to local for now
+ci.eval.delta:
+	@python3 scripts/eval/report_delta.py

@@ -31,6 +31,24 @@ Notes:
 * Sorting prefers timestamp in filename; minimal fallback
 * Checks: nonzero nodes/edges, strength fraction in [0.30, 0.95] ≥ 0.70, embedding_dim==1024 when present
 
+### Schema validation (local-only)
+`eval.report` now supports a `json_schema` task kind using a repo-local schema:
+- Schema path: `docs/SSOT/schemas/graph_export.schema.json`
+- Local dependency: `pip install jsonschema`
+- Run: `make eval.report` — the task key `exports_schema_validate_latest` must be ✅
+
+### Per-run delta (local-only)
+Run:
+```bash
+make eval.delta
+```
+
+Artifacts:
+
+* `share/eval/delta.json` — added/removed nodes/edges + strength stats
+* `share/eval/delta.md` — human-readable summary
+  Policy (initial): **no removals** (nodes/edges) for an ✅ badge. Tolerances can be relaxed in a future PR.
+
 ## Notes
 
 * Deterministic and fast; suited for PR evidence.
