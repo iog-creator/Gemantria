@@ -180,3 +180,13 @@ book.resume:
 	@python3 scripts/run_book.py resume
 
 # ---------- Governance & Policy Gates ----------
+
+.PHONY: eval.report ci.eval.report
+
+# Manifest-driven local report (writes to share/eval/)
+eval.report:
+	@python3 scripts/eval/report.py
+
+# Not wired into CI; identical to local for now
+ci.eval.report:
+	@python3 scripts/eval/report.py
