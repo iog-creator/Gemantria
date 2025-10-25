@@ -190,3 +190,13 @@ eval.report:
 # Not wired into CI; identical to local for now
 ci.eval.report:
 	@python3 scripts/eval/report.py
+
+.PHONY: ops.verify ci.ops.verify
+
+# Local repo ops verifier (prints decisive lines; no CI wiring)
+ops.verify:
+	@python3 scripts/ops/verify_repo.py
+
+# Identical to local; intentionally not part of CI
+ci.ops.verify:
+	@python3 scripts/ops/verify_repo.py
