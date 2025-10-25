@@ -1,15 +1,13 @@
 from __future__ import annotations
-
 import os
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
 from src.core.hebrew_utils import calculate_gematria
 from src.core.ids import normalize_hebrew
-from src.infra.db import get_bible_ro
-
+from src.infra.db import get_bible_ro, sql_is_write
 
 # Public API
-def validate_noun(hebrew_surface: str) -> dict[str, Any]:
+def validate_noun(hebrew_surface: str) -> Dict[str, Any]:
     """
     Deterministic validation:
     - Code gematria/normalization are the source of truth.
@@ -19,7 +17,7 @@ def validate_noun(hebrew_surface: str) -> dict[str, Any]:
     norm = normalize_hebrew(hebrew_surface)
     gematria = calculate_gematria(norm)
 
-    db_info: dict[str, Any] = {
+    db_info: Dict[str, Any] = {
         "present_in_bible_db": False,
         "strong_number": None,
         "lemma_frequency": None,
