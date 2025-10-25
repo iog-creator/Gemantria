@@ -238,3 +238,12 @@ eval.idstability:
 
 ci.eval.idstability:
 	@python3 scripts/eval/report_id_stability.py
+
+.PHONY: eval.catalog ci.eval.catalog
+
+# Build an exports catalog (writes share/eval/exports_catalog.md)
+eval.catalog:
+	@python3 scripts/eval/build_exports_catalog.py
+
+ci.eval.catalog:
+	@python3 scripts/eval/build_exports_catalog.py
