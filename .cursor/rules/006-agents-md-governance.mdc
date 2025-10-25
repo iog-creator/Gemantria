@@ -1,6 +1,6 @@
 ---
 description: Governance for AGENTS.md (always-on)
-alwaysApply: true
+alwaysApply: false
 ---
 
 # AGENTS.md Governance — How agents must use and maintain AGENTS.md

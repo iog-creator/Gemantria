@@ -1,0 +1,34 @@
+---
+description: Enforce PR-016/017 metrics proof and UI contract (Always-Verify Template exemplar)
+globs:
+  - "scripts/**"
+  - "webui/graph/**"
+  - "migrations/**"
+  - "exports/**"
+  - ".github/workflows/**"
+alwaysApply: false
+---
+
+# Rule 021 — Stats Proof (PR-016/017)
+
+**Goal:** Prevent merges unless metrics are real, exports are consistent with DB, and the UI renders them.
+
+## Must Exist
+- `scripts/verify_pr016_pr017.py`
+- `.github/workflows/verify-stats.yml`
+- `webui/graph/__tests__/GraphStats.test.tsx`
+
+## Must Produce (dev & CI)
+- `exports/graph_stats.json` (non-empty, **valid against** `docs/SSOT/graph-stats.schema.json`)
+- `exports/graph_latest.json` (non-empty)
+
+## Hard Checks
+- `scripts/export_stats.py` validates output via `jsonschema` and **fails closed** on invalid schema.
+- `scripts/verify_pr016_pr017.py` must **PASS** locally and in CI.
+- WebUI must pass `npm run type-check`, `npm run test:ci`, and `npm run build`.
+
+## Disallowed
+- Mock/placeholder zeros in stats fields.
+- Skipping the verifier in CI.
+
+**Related Rules:** 000 (Always-Apply), 006 (AGENTS.md Governance), 013 (Report Verification), 016 (Visualization Contract Sync), 017 (Agent Docs Presence), 022 (Viz Contract Sync)

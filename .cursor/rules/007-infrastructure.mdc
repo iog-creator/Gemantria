@@ -13,3 +13,9 @@ alwaysApply: false
 - Use transactional upsert (ON CONFLICT) with parameterized SQL (%s).
 - No DDL in runtime code; migrations own schema.
 - Coverage for infra code remains ≥98%.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

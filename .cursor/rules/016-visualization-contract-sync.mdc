@@ -1,0 +1,29 @@
+---
+description: Deprecated alias of Rule 022
+globs: []
+alwaysApply: false
+---
+
+# Rule 016 — DEPRECATED
+
+Alias of Rule 022 (Visualization Contract Sync). Do not rely on 016; use 022.
+
+- **Purpose**: Validate consistency between docs/SSOT/webui-contract.md and webui/graph components to ensure frontend-backend data contract compliance.
+
+- **Required Node Fields**: id (string), label (string), cluster (number)
+- **Required Edge Fields**: source (string), target (string), strength (number)
+- **Optional Node Fields**: degree, betweenness, eigenvector (numbers)
+- **Optional Edge Fields**: rerank, yes (numbers/booleans)
+
+- **File Path Validation**: WebUI loads same file path defined in SSOT (exports/graph_latest.json)
+- **Type Consistency**: TypeScript interfaces match SSOT schema definitions
+- **Data Loading**: useGraphData hook properly handles SSOT-defined file format
+- **Error Handling**: Components gracefully handle missing/invalid data per contract
+
+- **Validation**: Run `make webui` and verify data loads without type errors or missing field warnings.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

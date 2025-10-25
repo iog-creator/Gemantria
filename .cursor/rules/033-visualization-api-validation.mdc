@@ -1,0 +1,58 @@
+---
+description: Validate visualization API + dashboard presence
+globs:
+  - "src/services/api_server.py"
+  - "webui/dashboard/**"
+  - "scripts/generate_report.py"
+alwaysApply: false
+---
+
+# Rule 033 — Visualization API Validation
+
+All visualization and API components must exist and be referenced in docs.
+Enforced by rules_guard.py + CI.
+
+## Core Requirements
+
+### API Server Presence (Hard Fail)
+- `src/services/api_server.py` must exist with FastAPI app
+- Must include all required endpoints:
+  - `GET /api/v1/stats` → serves graph_stats.json
+  - `GET /api/v1/correlations` → serves graph_correlations.json
+  - `GET /api/v1/patterns` → serves graph_patterns.json
+  - `GET /api/v1/network/{concept_id}` → returns subgraph
+
+### Dashboard Components (Hard Fail)
+- `webui/dashboard/src/components/PatternExplorer.tsx` must exist
+- `webui/dashboard/src/components/MetricsPanel.tsx` must exist
+- Components must be functional React components with TypeScript
+
+### Report Integration (Hard Fail)
+- `scripts/generate_report.py` must include "Interactive Analytics Endpoints" section
+- Section must list all API endpoints with data sources
+- Must include API server startup instructions
+
+## Enforcement
+
+### CI/CD Integration
+- `scripts/rules_guard.py` validates all required files exist
+- File presence validation fails closed (prevents bad merges)
+- Evidence markers required: `api_server`, `dashboard_components`
+
+### Local Development
+- `make verify.all` includes visualization API validation
+- Syntax errors in API server prevent commits if `pre-commit-config.yaml` active
+- TypeScript compilation validates dashboard components
+
+## Related Rules
+- **000**: Always-Apply (production safety)
+- **006**: AGENTS.md Governance
+- **021**: Stats Proof (data validation)
+- **022**: Visualization Contract Sync
+
+## Implementation Notes
+
+- API server includes comprehensive error handling
+- Dashboard components follow existing Visx + Tailwind patterns
+- Report integration provides operational documentation
+- CORS enabled for web UI access (configurable for production)

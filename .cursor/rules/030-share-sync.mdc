@@ -1,0 +1,32 @@
+---
+description: Always sync share directory after changes
+alwaysApply: true
+---
+
+# Share Directory Synchronization (Always Required)
+
+## Purpose
+Keep `share/` directory synchronized with main codebase for documentation and tooling access.
+
+## Requirements
+- Run `make share.sync` after any changes to docs, scripts, or rules
+- Share contains mirrored copies of key files for external access
+- Manifest in `docs/SSOT/SHARE_MANIFEST.json` controls what gets synced
+
+## When to Sync
+- Documentation changes (README.md, AGENTS.md, ADRs)
+- Script modifications or additions
+- Rule changes (.cursor/rules/*.mdc)
+- Makefile target additions
+- SSOT schema updates
+
+## Verification
+- `make share.sync` completes without errors
+- Output shows "OK — share/ refreshed"
+- Git status shows share/ changes ready for commit
+
+## References
+- docs/SSOT/SHARE_MANIFEST.json
+- scripts/sync_share.py
+- scripts/update_share.py
+- Makefile (share.sync target)

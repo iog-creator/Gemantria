@@ -1,11 +1,12 @@
 import os
-import pytest
 from pathlib import Path
 
+import pytest
+
 from src.graph.batch_processor import (
-    BatchProcessor,
-    BatchConfig,
     BatchAbortError,
+    BatchConfig,
+    BatchProcessor,
     process_batch,
 )
 
@@ -39,11 +40,12 @@ def test_batch_size_enforcement_strict_mode(cleanup_review_file):
     assert review_file.exists()
 
     content = review_file.read_text()
-    lines = content.strip().split('\n')
+    lines = content.strip().split("\n")
     assert len(lines) == 2  # One line per noun
 
     # Check content structure
-    import json
+    import json  # noqa: E402
+
     for line in lines:
         entry = json.loads(line)
         assert "noun" in entry
@@ -56,7 +58,7 @@ def test_batch_size_allow_partial_override(cleanup_review_file):
     config = BatchConfig(
         batch_size=3,
         allow_partial=True,
-        partial_reason="Testing partial batch processing"
+        partial_reason="Testing partial batch processing",
     )
     processor = BatchProcessor(config)
 
@@ -122,12 +124,12 @@ def test_batch_result_structure():
     result = process_batch(["אדם", "חוה"], config)
 
     # Check result structure
-    assert hasattr(result, 'batch_id')
-    assert hasattr(result, 'config')
-    assert hasattr(result, 'nouns_processed')
-    assert hasattr(result, 'results')
-    assert hasattr(result, 'manifest')
-    assert hasattr(result, 'created_at')
+    assert hasattr(result, "batch_id")
+    assert hasattr(result, "config")
+    assert hasattr(result, "nouns_processed")
+    assert hasattr(result, "results")
+    assert hasattr(result, "manifest")
+    assert hasattr(result, "created_at")
 
     # Check to_dict serialization
     result_dict = result.to_dict()

@@ -1,0 +1,10 @@
+---
+description: Visualization API spec linkage (ADR-023)
+globs:
+  - "src/services/api_server.py"
+alwaysApply: false
+---
+
+# Rule 023 — Visualization API Spec
+
+Specification for analytics API (see ADR-023). Enforcement lives in Rule 033.

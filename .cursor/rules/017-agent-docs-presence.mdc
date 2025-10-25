@@ -1,0 +1,26 @@
+---
+description: Enforce AGENTS.md presence in required source directories
+globs:
+  - src/AGENTS.md
+  - src/services/AGENTS.md
+  - webui/graph/AGENTS.md
+alwaysApply: false
+---
+
+# Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement)
+
+- **Purpose**: Enforce AGENTS.md presence in key source directories for agent documentation coverage.
+
+- **Required Files**:
+  - `src/AGENTS.md` (core pipeline agents)
+  - `src/services/AGENTS.md` (service layer integrations)
+  - `webui/graph/AGENTS.md` (visualization components)
+
+- **Required Content**: Each AGENTS.md must contain "Related ADRs" table linking to architectural decisions.
+
+- **Structure**: Tables with columns for Component/Function and Related ADRs.
+
+- **Validation**: `rules_guard.py` checks for presence of required AGENTS.md files.
+- **Additional Coverage**: Rule 009 enforces broader AGENTS.md requirements via `create_agents_md.py`.
+
+- **Failure Mode**: Missing required AGENTS.md files prevent proper agent documentation coverage.

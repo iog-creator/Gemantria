@@ -1,0 +1,15 @@
+---
+description: Rule index continuity (reserved/spec-only)
+globs: []
+alwaysApply: false
+---
+
+# Rule 014 — Governance Index (Reserved)
+
+Stable numbering. Use 025–029 for enforcement and governance.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

@@ -7,6 +7,7 @@ SRC = ROOT / "src"
 # Forbid f-strings in SQL .execute("...") calls.
 PATTERN = re.compile(r"\.execute\(\s*f['\"]", re.I)
 
+
 def test_no_fstrings_in_execute_calls():
     offenders = []
     for py in SRC.rglob("*.py"):

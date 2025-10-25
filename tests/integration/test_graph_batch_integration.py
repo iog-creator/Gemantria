@@ -1,9 +1,9 @@
 import os
-import pytest
 from pathlib import Path
 
+import pytest
+
 from src.graph.graph import create_graph, run_pipeline
-from src.graph.batch_processor import BatchConfig
 
 
 @pytest.fixture
@@ -21,11 +21,12 @@ def test_graph_pipeline_structure():
     graph = create_graph()
 
     # Check that graph has the expected nodes
-    assert hasattr(graph, 'nodes')
-    assert hasattr(graph, 'invoke')  # Should be a compiled graph
+    assert hasattr(graph, "nodes")
+    assert hasattr(graph, "invoke")  # Should be a compiled graph
 
     # Check that checkpointer was set during creation
-    from src.infra.checkpointer import get_checkpointer
+    from src.infra.checkpointer import get_checkpointer  # noqa: E402
+
     checkpointer = get_checkpointer()
     assert checkpointer is not None
 
@@ -79,7 +80,7 @@ def test_graph_pipeline_execution_allow_partial(cleanup_review_file):
         # Since we have empty nouns, batch_result might be None or have empty results
         batch_result = result["batch_result"]
         if batch_result is not None:
-            assert hasattr(batch_result, 'config')
+            assert hasattr(batch_result, "config")
             assert batch_result.config.allow_partial is True
             assert batch_result.config.partial_reason == "Integration test"
 
@@ -117,7 +118,7 @@ def test_graph_state_preservation():
 
 def test_backward_compatibility():
     """Test that run_hello still works for backward compatibility."""
-    from src.graph.graph import run_hello
+    from src.graph.graph import run_hello  # noqa: E402
 
     result = run_hello("Exodus", "TEST")
 
