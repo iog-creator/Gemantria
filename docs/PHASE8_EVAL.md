@@ -14,6 +14,23 @@ Local-only evaluation flow. No CI gates or `make go` changes.
    * `share/eval/report.json`
    * `share/eval/report.md`
 
+### Temporal history (local-only)
+Run:
+```bash
+make eval.history
+```
+
+Artifacts:
+
+* `share/eval/history.json` — per-export metrics + summary
+* `share/eval/history.md` — human-readable trend table and OK badge
+
+Notes:
+
+* Files matched: `exports/graph_*.json`
+* Sorting prefers timestamp in filename; minimal fallback
+* Checks: nonzero nodes/edges, strength fraction in [0.30, 0.95] ≥ 0.70, embedding_dim==1024 when present
+
 ## Notes
 
 * Deterministic and fast; suited for PR evidence.
