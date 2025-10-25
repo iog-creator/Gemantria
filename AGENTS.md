@@ -45,6 +45,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
+* **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
@@ -62,3 +63,48 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
 * Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
+
+
+<!-- RULES_INVENTORY_START -->
+| # | Title |
+|---:|-------|
+| 000 | # --- |
+| 001 | # --- |
+| 002 | # --- |
+| 003 | # --- |
+| 004 | # --- |
+| 005 | # --- |
+| 006 | # --- |
+| 007 | # --- |
+| 008 | # --- |
+| 009 | # --- |
+| 010 | # --- |
+| 011 | # --- |
+| 012 | # --- |
+| 013 | # --- |
+| 014 | # --- |
+| 015 | # --- |
+| 016 | # --- |
+| 017 | # --- |
+| 018 | # --- |
+| 019 | # --- |
+| 020 | # --- |
+| 021 | # --- |
+| 022 | # --- |
+| 023 | # --- |
+| 024 | # --- |
+| 025 | # --- |
+| 026 | # --- |
+| 027 | # --- |
+| 028 | # --- |
+| 029 | # --- |
+| 030 | # --- |
+| 031 | # --- |
+| 032 | # --- |
+| 033 | # --- |
+| 034 | # --- |
+| 035 | # --- |
+| 036 | # --- |
+| 037 | # --- |
+| 038 | # --- |
+<!-- RULES_INVENTORY_END -->
