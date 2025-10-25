@@ -119,7 +119,7 @@ Confirm that either branches are merged (and deleted) or listed for cleanup.
   - `[rules.numbering.check] OK`
   - `[share.check] OK — share mirror is clean`
   - `[ops.next] NEXT_STEPS clear`
-- **PR opened**: integrate/feature/ops-pr-template → main
+- **PR opened**: [integrate/feature/ops-pr-template → main](https://github.com/iog-creator/Gemantria/pull/10)
 - **Title**: `integrate(feature/ops-pr-template): rebase on main; pass policy gates`
 - **What it adds**: PR template and Cursor instruction loop blurb in AGENTS.md; adds NEXT_STEPS template
 - **Conflicts**: No conflicts
