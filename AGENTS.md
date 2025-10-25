@@ -41,6 +41,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
 
+## Operations
+
+### Evaluation
+* **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
+
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
 - Mispar Hechrachi; finals=regular. Surface-form gematria with calc strings.
