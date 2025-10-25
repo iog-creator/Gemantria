@@ -1,128 +1,97 @@
 # NEXT_STEPS (author: GPT-5)
 
 ## Branch
-feature/integrate-core-branches-003
+feature/phase8-kickoff-001
 
 ## Tasks (Cursor executes these)
 
-### 0) Inventory & verify outstanding branches
-- [x] Paste output:
-```
-git ls-remote --heads origin | rg -n "feature/(pr-002-bible-ro|pr-003-batch-semantics|pr-004-postgres-checkpointer|infra-guards-001|ops-pr-template)"
-```
-Branch status: infra-guards-001 exists locally but not on remote (work likely merged into policy-guards-002).
+### 1) Add Phase-8 plan (docs only)
+- [ ] Create `docs/PHASE8_PLAN.md` with the exact content below:
 
-### 1) Integration playbook (repeat for EACH branch in this exact order)
-**Order (strict):**
-1) `feature/ops-pr-template`   (docs/workflow)
-2) `feature/infra-guards-001`  (infra; dedupe with what's already on main) - LOCAL ONLY
-3) `feature/pr-004-postgres-checkpointer`  (persistence)
-4) `feature/pr-003-batch-semantics`        (processing)
-5) `feature/pr-002-bible-ro`               (core data)
+# Gemantria — Phase-8 Plan (Scope & Milestones)
 
-For each branch `<B>` do the following block; paste evidence after each:
+> Source of truth for Phase-8 goals; no CI/gate changes. Use alongside `docs/INDEX.md`.
 
-#### 1.x) Prepare `<B>`
-- [x] Create a short-lived integration branch: `integrate/<B>`
-```
-git fetch origin
-git checkout -b integrate/<B> origin/<B>
-git rebase origin/main
-```
-If conflicts: resolve them **strictly** keeping governance files aligned with main; re-run rebase until clean.
+## Objectives (P0)
+- Reliable end-to-end graph updates with checkpointing (now in main).
+- Deterministic batch semantics (single DEFAULT_BATCH_SIZE + env override).
+- Bible DB strict read-only consumption (no writes to scripture tables).
+- Governance continuity: Rule-037/038 gates, share no-drift, NEXT_STEPS.
 
-- [x] Local sanity (paste decisive tails):
-```
-make rules.numbering.check
-make share.check
-make ops.next
-```
-(Data/exports gates may require DB; CI will enforce. Do not skip the above three.)
+## Deliverables (P0 → P1)
+- P0: Evaluation harness skeleton (local smoke only), dataset notes, success metrics grid.
+- P1: Automated eval report artifacts in `/share` (future PR; not part of this commit).
 
-#### 1.y) Open PR for `<B>`
-- [x] Open PR: head=`integrate/<B>` → base=`main`
-Title: `integrate(<B>): rebase on main; pass policy gates`
-Body includes:
-- What the branch adds (one paragraph)
-- List of conflicts resolved (files) or state "no conflicts"
-- Confirmation that governance files were kept as on `main` (workflow names/order, CODEOWNERS, RULES_INDEX.md)
-- Required checks list (must match our policy)
+## Success Metrics (initial)
+- Export integrity: 100% Rule-038 pass
+- Join/coverage sanity: 100% Rule-037 pass
+- Eval smoke: 100% tasks reach "OK" (non-flaky)
+- Latency budget: TBD after real run; target p95 export step ≤ N sec
 
-- [x] Confirm required checks appear on the PR:
-- Rules numbering check
-- Install psycopg (v3)
-- Confirm DSN secret present
-- Data completeness gate (Rule 037)
-- Exports smoke (Rule 038)
-- Share consistency check (no drift)
-- NEXT_STEPS check
+## Workstream Anchors
+- Checkpointer usage patterns, Batch processor invariants, RO Bible node integration, Export smoke expansions (future), Reranker hygiene.
 
-- [x] When CI is green, **Squash & Merge** the PR.
-Commit title: `integrate(<B>): rebase on main; pass policy gates`
+### 2) Add local eval smoke target (no CI wiring)
+- [ ] Create `scripts/eval/run_eval.py` with exact content:
 
-### 2) Special handling notes per branch (follow strictly)
+#!/usr/bin/env python3
+import sys
+def main():
+    print("[eval.smoke] starting")
+    # placeholder – add real eval tasks in a future PR
+    print("[eval.smoke] OK")
+    return 0
+if __name__ == "__main__":
+    sys.exit(main())
 
-- **feature/ops-pr-template**
-This may already be partially on `main`. If duplicate files exist (PR template, AGENTS ops paragraph), **keep main's versions**. Remove obsolete duplicates. Show final file paths.
+- [ ] Modify `Makefile` to add **local-only** targets (do NOT change the `go` recipe ordering; do NOT add CI steps):
 
-- **feature/infra-guards-001**
-Many changes moved into policy-guards-002 already. Keep the **current main** versions of:
-- `.github/workflows/system-enforcement.yml` step names/order
-- `.github/CODEOWNERS`
-- `.github/BRANCH_PROTECTION.md`
-- `Makefile` targets: `rules.numbering.check`, `share.check`, `ops.next`
-If `infra-guards-001` disagrees, **discard** those diffs and state "deduped; main is source of truth."
+.PHONY: eval.smoke ci.eval.smoke
 
-- **feature/pr-004-postgres-checkpointer**
-Verify it **does not** regress gates. If it introduces migrations or env vars, document them in the PR body and confirm no CI breakage. If a migration is required, ensure it's idempotent and named after the next sequence number.
+eval.smoke:
+@python3 scripts/eval/run_eval.py
 
-- **feature/pr-003-batch-semantics**
-Ensure batch sizing config lives in a **single** canonical spot. If multiple configs exist, consolidate into `AGENTS.md` (reference) + one code constant. Show the path in the PR body.
+# Intentionally same as local for now; not wired into CI
 
-- **feature/pr-002-bible-ro**
-This is core. Ensure it compiles/tests without bypassing gates. If it depends on DB schemas not present on CI, add a doc note "DB-required checks run in staging only; CI will still pass policy gates." Never disable policy gates.
+ci.eval.smoke:
+@python3 scripts/eval/run_eval.py
 
-### 3) Final integration verification on `main`
-After all five PRs are merged:
+### 3) AGENTS note (docs-only; keep governance intact)
+- [ ] Append under "Operations → Evaluation" in `AGENTS.md`:
 
-- [ ] On `main`, paste decisive tails:
-```
-make rules.numbering.check
-make share.check
-make ops.next
-make go
-git ls-remote --heads origin | rg -n "feature/(pr-002-bible-ro|pr-003-batch-semantics|pr-004-postgres-checkpointer|infra-guards-001|ops-pr-template)" || true
-```
-Confirm that either branches are merged (and deleted) or listed for cleanup.
+* **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
 
-## Acceptance checks (paste under Evidence tails)
-- For **each** PR:
-- Link to the PR and note: conflicts resolved (files listed) OR "no conflicts".
-- Screenshot or list of **required checks** visible on the PR.
-- CI green; merge completed.
-- Final on `main`:
-- `[rules.numbering.check] OK`
-- `[share.check] OK — share mirror is clean`
-- `[ops.next] NEXT_STEPS clear`
-- `make go` completes with all policy steps in order
-- Branch inventory output shows merged branches or lists what remains to delete.
+### 4) Open PR
+- [ ] Head: `feature/phase8-kickoff-001` → Base: `main`
+- [ ] Title: `docs/eval: add Phase-8 plan and local eval.smoke (no CI changes)`
+- [ ] Body states:
+  - No changes to CI workflow order, gate set, or `make go`.
+  - Adds `docs/PHASE8_PLAN.md`, local eval smoke target and script, AGENTS note.
+
+### 5) Evidence tails (paste in PR)
+- [ ] Show the first lines of the plan:
+
+git show HEAD:docs/PHASE8_PLAN.md | sed -n '1,40p'
+
+- [ ] Prove make targets exist and run:
+
+rg -n "eval\.smoke" Makefile
+make eval.smoke
+
+Expected output contains:
+- `[eval.smoke] starting`
+- `[eval.smoke] OK`
+
+### 6) Merge
+- [ ] **Squash & Merge** with title:
+
+docs/eval: add Phase-8 plan and local eval.smoke (no CI changes)
+
+## Acceptance checks (Cursor pastes under Evidence tails)
+- `docs/PHASE8_PLAN.md` content snippet
+- `Makefile` diff lines showing `eval.smoke` and `ci.eval.smoke`
+- `make eval.smoke` tails show `[eval.smoke] OK`
+- PR merged with exact title
 
 ## Status
-- Cursor sets to **Done** when all five integrations are merged and the final verification tails are pasted.
-
-## Evidence tails
-
-### feature/ops-pr-template Integration Evidence
-- **Branch created**: `integrate/feature/ops-pr-template` from `origin/feature/ops-pr-template`
-- **Rebase**: Already up to date (no conflicts)
-- **Local sanity tails**:
-  - `[rules.numbering.check] OK`
-  - `[share.check] OK — share mirror is clean`
-  - `[ops.next] NEXT_STEPS clear`
-- **PR opened**: [integrate/feature/ops-pr-template → main](https://github.com/iog-creator/Gemantria/pull/10)
-- **Title**: `integrate(feature/ops-pr-template): rebase on main; pass policy gates`
-- **What it adds**: PR template and Cursor instruction loop blurb in AGENTS.md; adds NEXT_STEPS template
-- **Conflicts**: No conflicts
-- **Governance alignment**: Kept main's versions of duplicate PR templates
-- **Required checks**: All policy checks visible on PR
-- **CI Status**: Pending (will merge when green)
+- Cursor sets to **Done** when merged and evidence is pasted.
