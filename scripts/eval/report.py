@@ -9,12 +9,13 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "eval" / "manifest.yml"
+THRESHOLDS = ROOT / "eval" / "thresholds.yml"
 OUTDIR = ROOT / "share" / "eval"
 JSON_OUT = OUTDIR / "report.json"
 MD_OUT = OUTDIR / "report.md"
 
 
-def _read_yaml(path: pathlib.Path) -> dict[str, Any]:
+def _read_yaml(path: pathlib.Path) -> Any:
     try:
         import yaml  # type: ignore
 
@@ -48,9 +49,33 @@ def _extract_all(doc: Any, path: str) -> list[Any]:
     return cur
 
 
-# ---- Task impls -------------------------------------------------------------
+# ---------- thresholds substitution ----------
+def _lookup_threshold(k: str, t: dict[str, Any]) -> Any:
+    p = k.split(".")
+    cur: Any = t
+    for seg in p:
+        if isinstance(cur, dict) and seg in cur:
+            cur = cur[seg]
+        else:
+            raise KeyError(f"thresholds path not found: {k}")
+    return cur
 
 
+def _resolve_thresholds(obj: Any, t: dict[str, Any]) -> Any:
+    # resolves strings of the form "${thresholds:foo.bar.baz}"
+    if isinstance(obj, str):
+        m = re.fullmatch(r"\$\{thresholds:([A-Za-z0-9_.]+)\}", obj.strip())
+        if m:
+            return _lookup_threshold(m.group(1), t)
+        return obj
+    if isinstance(obj, list):
+        return [_resolve_thresholds(x, t) for x in obj]
+    if isinstance(obj, dict):
+        return {k: _resolve_thresholds(v, t) for k, v in obj.items()}
+    return obj
+
+
+# ---------- Task impls ----------
 def task_print(args: dict[str, Any]) -> dict[str, Any]:
     msg = str(args.get("message", ""))
     return {"status": "OK", "stdout": msg}
@@ -84,7 +109,7 @@ def _assert_not_null_all(vals: list[Any]) -> dict[str, Any]:
 def _assert_frac_in_range(
     vals: list[Any], lo: float, hi: float, min_frac: float
 ) -> dict[str, Any]:
-    nums = [v for v in vals if isinstance(v, (int, float))]
+    nums = [v for v in vals if isinstance(v, int | float)]
     if not nums:
         return {"status": "FAIL", "error": "no numeric values"}
     ok = [v for v in nums if lo <= float(v) <= hi]
@@ -164,17 +189,41 @@ def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
         return {"status": "FAIL", "error": str(e)}
 
 
+def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    edges = doc.get("edges", [])
+    n_nodes = len(nodes) if isinstance(nodes, list) else 0
+    n_edges = len(edges) if isinstance(edges, list) else 0
+    mn = int(args.get("min_nodes", 0))
+    mxn = int(args.get("max_nodes", 2**31 - 1))
+    me = int(args.get("min_edges", 0))
+    mxe = int(args.get("max_edges", 2**31 - 1))
+    ok_nodes = mn <= n_nodes <= mxn
+    ok_edges = me <= n_edges <= mxe
+    status = "OK" if (ok_nodes and ok_edges) else "FAIL"
+    return {
+        "status": status,
+        "nodes": n_nodes,
+        "edges": n_edges,
+        "limits": {"nodes": [mn, mxn], "edges": [me, mxe]},
+    }
+
+
 KIND_IMPL = {
     "print": task_print,
     "grep": task_grep,
     "file_glob": task_file_glob,
     "json_assert": task_json_assert,
     "json_schema": task_json_schema,
+    "json_shape": task_json_shape,
 }
 
-# ---- Driver ----------------------------------------------------------------
 
-
+# ---------- Driver ----------
 def main() -> int:
     print("[eval.report] starting")
     if not MANIFEST.exists():
@@ -183,12 +232,15 @@ def main() -> int:
     OUTDIR.mkdir(parents=True, exist_ok=True)
 
     m = _read_yaml(MANIFEST)
+    t = _read_yaml(THRESHOLDS) if THRESHOLDS.exists() else {}
+    m = _resolve_thresholds(m, t)  # substitute ${thresholds:...}
+
     results = []
     all_ok = True
-    for t in m.get("tasks", []):
-        key = t["key"]
-        kind = t["kind"]
-        args = t.get("args", {})
+    for tsk in m.get("tasks", []):
+        key = tsk["key"]
+        kind = tsk["kind"]
+        args = tsk.get("args", {})
         impl = KIND_IMPL.get(kind)
         if not impl:
             results.append(
@@ -219,7 +271,10 @@ def main() -> int:
     lines.append("# Gemantria Eval Report")
     lines.append("")
     lines.append(
-        f"*run_id:* `{report['run_id']}`  •  *tasks:* {report['summary']['task_count']}  •  *ok:* {report['summary']['ok_count']}  •  *fail:* {report['summary']['fail_count']}"
+        f"*run_id:* `{report['run_id']}`  •  "
+        f"*tasks:* {report['summary']['task_count']}  •  "
+        f"*ok:* {report['summary']['ok_count']}  •  "
+        f"*fail:* {report['summary']['fail_count']}"
     )
     lines.append("")
     for r in results:

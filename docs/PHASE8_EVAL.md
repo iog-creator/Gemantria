@@ -49,6 +49,24 @@ Artifacts:
 * `share/eval/delta.md` — human-readable summary
   Policy (initial): **no removals** (nodes/edges) for an ✅ badge. Tolerances can be relaxed in a future PR.
 
+### Thresholds (local-only)
+Centralized in `eval/thresholds.yml`. The eval engine substitutes `${thresholds:...}` in `eval/manifest.yml` before running.
+Examples:
+- `${thresholds:strength.min}` / `${thresholds:strength.max}` / `${thresholds:strength.min_frac}`
+- `${thresholds:embedding.dim_if_present}`
+- `${thresholds:shape.nodes.min}` / `${thresholds:shape.edges.max}`
+
+### Shape smoke
+Task kind `json_shape` verifies node/edge counts within bounds. See task `exports_shape_smoke_latest`.
+
+### Eval index
+Run:
+```bash
+make eval.index
+```
+
+Artifact: `share/eval/index.md` — quick links/badges for `report.md`, `history.md`, `delta.md`.
+
 ## Notes
 
 * Deterministic and fast; suited for PR evidence.
