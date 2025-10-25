@@ -159,3 +159,27 @@ make eval.runlog
 Artifact:
 
 * `share/eval/run_log.jsonl` — append-only JSONL; each line captures provenance + results snapshot.
+
+### Sanitized export (local-only)
+Run:
+```bash
+make data.sanitize
+make eval.report.sanitized
+```
+
+Artifacts:
+
+* `exports/graph_sanitized.json` and time-stamped `exports/graph_sanitized_*.json`
+* `share/eval/report_for_graph_sanitized.json` — manifest report applied to sanitized file
+
+### Integrity diagnostics (local-only)
+
+Run:
+
+```bash
+make diag.integrity
+```
+
+Artifact:
+
+* `share/eval/integrity_diag.md` — count + examples of missing endpoints in the canonical latest export.
