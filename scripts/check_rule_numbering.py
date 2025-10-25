@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Check rule numbering integrity - no duplicates, required rules present.
-"""
-
 import glob
 import re
 import sys
@@ -17,13 +12,11 @@ def main() -> None:
         if m:
             nums.append(m.group(1))
 
-    # Check for duplicates
     dup = sorted({n for n in nums if nums.count(n) > 1})
     if dup:
         print("[rules.numbering.check] duplicate rule numbers:", ", ".join(dup))
         sys.exit(1)
 
-    # Check required rules are present exactly once
     for must in ("037", "038"):
         c = nums.count(must)
         if c != 1:

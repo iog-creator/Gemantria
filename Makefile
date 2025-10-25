@@ -168,3 +168,25 @@ book.stop:
 # Resume the last interrupted/partial run from logs/book/
 book.resume:
 	@python3 scripts/run_book.py resume
+
+# ---------- Governance & Policy Gates ----------
+.PHONY: rules.numbering.check share.check ops.next
+
+# Check rule numbering integrity (no duplicates, required rules present)
+rules.numbering.check:
+	@python3 scripts/check_rule_numbering.py
+
+# Verify share mirror is clean (no drift from source files)
+share.check:
+	@$(MAKE) share.sync >/dev/null
+	@if git diff --quiet --exit-code -- share; then \
+	  echo "[share.check] OK — share mirror is clean"; \
+	else \
+	  echo "[share.check] OUT OF DATE — run 'make share.sync' and commit updates"; exit 1; \
+	fi
+
+# Check NEXT_STEPS.md has no unchecked boxes
+ops.next:
+	@if rg -n "^- [ \]" NEXT_STEPS.md >/dev/null 2>&1; then \
+	echo "[ops.next] NEXT_STEPS has unchecked boxes — complete them or mark Done."; exit 1; \
+	else echo "[ops.next] NEXT_STEPS clear"; fi

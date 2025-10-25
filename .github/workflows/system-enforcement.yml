@@ -32,6 +32,17 @@ jobs:
         run: python scripts/rules_guard.py
       - name: Rules audit (contiguity + docs sync)
         run: python scripts/rules_audit.py
+      - name: Rules numbering check
+        run: make rules.numbering.check
+      - name: Install psycopg (v3)
+        run: pip install "psycopg[binary]"
+      - name: Confirm DSN secret present
+        run: |
+          if [ -z "${{ secrets.GEMATRIA_DSN }}" ]; then
+            echo "[ci] GEMATRIA_DSN secret is missing"; exit 1;
+          else
+            echo "[ci] GEMATRIA_DSN secret is present (value not printed)";
+          fi
       - name: Check share/ sync (flat, current)
         run: python scripts/check_share_sync.py
       - name: Data completeness gate (Rule 037)

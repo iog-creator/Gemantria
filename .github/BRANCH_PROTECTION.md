@@ -13,26 +13,12 @@
 - **Require code owner reviews**: Enabled (via CODEOWNERS)
 - **Restrict pushes**: Enabled (disallow direct pushes by non-admins)
 - **Include administrators**: Disabled (admins must follow same rules)
-
-## Status Check Enforcement
-All PRs to `main` must pass the following status checks:
-- `Rules numbering check` (Rule numbering integrity - no duplicates, required rules present)
-- `Data completeness gate (Rule 037)` (Data persistence completeness - tables exist, joins work)
-- `Exports smoke (Rule 038)` (Exports readiness - concept graph non-empty, integrity checks)
-- `Share consistency check (no drift)` (Share mirror up-to-date - no drift from manifest)
-- `NEXT_STEPS check` (Task completion - no unchecked boxes in NEXT_STEPS.md)
+- **Linear history**: Enabled
+- **Require signed commits**: Enabled
+- **Allow force pushes**: Disabled
+- **Allow deletions**: Disabled
 
 ## Configuration Details
-- **Branch**: `main`
-- **Protection type**: Branch protection rules + status checks + CODEOWNERS
-- **Admin enforcement**: Same rules apply to administrators
-- **Code owner reviews**: Required for governance-critical files
-- **Timestamp**: Configured via GitHub UI
-- **Configured by**: Repository administrators
-
-## Verification
-To verify current configuration:
-1. Go to Repository Settings → Branches
-2. Check `main` branch protection rules
-3. Confirm required status checks match exactly
-4. Verify CODEOWNERS file is active and reviews are required
+- **Timestamp**: [Date and Time of Configuration]
+- **Configured By**: [GitHub User/Team]
+- **Rationale**: These settings ensure the integrity and quality of the `main` branch by enforcing automated checks and mandatory human review for all changes, including those made by administrators.
