@@ -18,11 +18,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - `BATCH_SIZE=50` (default noun batch size)
   - `ALLOW_PARTIAL=0|1` (if 1, manifest must capture reason)
   - `PARTIAL_REASON=<string>` (required when ALLOW_PARTIAL=1)
-### Checkpointer / Orchestration
-- `CHECKPOINTER=memory|postgres` (default: memory)
-- `GEMATRIA_DSN` — required when `CHECKPOINTER=postgres`
-- `WORKFLOW_ID` — defaults to `gemantria.v1`
-
+- Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 
