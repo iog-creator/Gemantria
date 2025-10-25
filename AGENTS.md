@@ -242,7 +242,10 @@ DB_MAX_OVERFLOW=10
 - **Phase 8 Sources**: `v_concept_occurrences(book, concept_id, chapter, count)` feeds temporal patterns and forecasts.
 - **Parameterized SQL Only**: No f-strings in DB operations; banned `%s` parameterization required
 - **Connection Pooling**: Configured for performance and safety
-- **Data Persistence Completeness (Rule 037)**: `make data.verify` MUST pass locally; `make ci.data.verify` MUST pass in CI for PRs touching pipeline/db/export code.
+
+- **Completeness Gate (Rule 037)**: `concepts`, `concept_network`, `concept_relations` MUST exist and be populated prior to exports/reranking.
+- **Pre-run check**: `make data.verify` MUST pass locally; `make ci.data.verify` MUST pass on PRs that touch pipeline/db/export code.
+- **Backfill policy**: Any stubs inserted by migrations MUST be replaced by real metadata ingestion before release.
 
 ### Testing Safety
 
@@ -797,6 +800,7 @@ globs:
 | 034 | # --- |
 | 035 | # --- |
 | 036 | # --- |
+| 037 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 # test doc update

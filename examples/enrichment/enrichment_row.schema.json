@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EnrichmentRow",
+  "description": "Schema for rows produced by the enrichment node (LM analysis + confidence)",
+  "type": "object",
+  "required": ["hebrew", "name", "confidence", "source"],
+  "properties": {
+    "hebrew": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Hebrew lemma from collection phase"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display name (same as hebrew)"
+    },
+    "primary_verse": {
+      "type": "string",
+      "description": "First verse reference from collection phase"
+    },
+    "freq": {
+      "type": "number",
+      "description": "Frequency count from collection phase"
+    },
+    "book": {
+      "type": "string",
+      "description": "Book name from collection phase"
+    },
+    "chapter": {
+      "type": "number",
+      "description": "Chapter number from collection phase"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "LM model confidence score (0.0-1.0)"
+    },
+    "insights": {
+      "type": "string",
+      "description": "Theological analysis text from LM model (150-300 words when present)"
+    },
+    "tokens": {
+      "type": "number",
+      "description": "Estimated token usage for the LM call"
+    },
+    "source": {
+      "type": "string",
+      "description": "Source identifier (typically 'lm')"
+    }
+  },
+  "additionalProperties": true
+}

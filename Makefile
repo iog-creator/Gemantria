@@ -65,7 +65,6 @@ schema.validate.smart:
 ci.smart:
 	@python3 scripts/mode_decider.py && make rules.navigator.check rules.audit repo.audit docs.audit
 
-.PHONY: go deps.dev
 .PHONY: data.verify ci.data.verify db.migrate
 
 # Run the data completeness verifier (local)
@@ -82,9 +81,11 @@ db.migrate:
 	@psql "$${GEMATRIA_DSN:-$${DB_DSN:-postgresql://localhost/gemantria}}" -v ON_ERROR_STOP=1 -f migrations/037_create_concepts.sql
 	@echo "[db] migrations OK"
 
+.PHONY: go deps.dev
 # One-command, zero-choices path for Cursor and devs:
 #  - lint/format/quickfix
 #  - smart strict/soft smoke + schema
+#  - db gate
 #  - audits
 #  - share sync
 go:
@@ -100,7 +101,7 @@ deps.dev:
 	pip install -r requirements-dev.txt
 
 .PHONY: mini.go mini.extract mini.verify readiness.verify book.go ci.book.readiness \
-        book.plan book.dry book.resume book.stop
+        book.plan book.dry book.resume book.stop book.stats book.last book.policy.check book.cmd
 
 # Mini experiment (real inference) → verify → (then book)
 mini.go: mini.extract mini.verify
@@ -120,12 +121,16 @@ readiness.verify:
 
 book.go:
 	@python3 scripts/book_readiness.py assert-pass || (echo "[gate] readiness not satisfied"; exit 2)
-	@echo "[guide] book.go: launching full extraction (real inference)"
-	@python3 scripts/book_readiness.py run-book
+	@echo "[guide] book.go: launching full extraction (real inference via run_book.py)"
+	@python3 scripts/run_book.py stop --cfg config/book_plan.yaml --n 9999
 
 # CI-friendly single gate (use in workflows)
 ci.book.readiness:
 	@python3 scripts/book_readiness.py gate --strict
+
+# Validate runner governance gates quickly (Rule 003 and Qwen Live Gate visible checks)
+book.policy.check:
+	@python3 scripts/book_policy_check.py
 
 # ---------- Whole-book ops helpers ----------
 # Plan the chapters to run (no inference; produces reports/book_plan.json)
@@ -145,3 +150,47 @@ book.stop:
 # Resume the last interrupted/partial run from logs/book/
 book.resume:
 	@python3 scripts/run_book.py resume
+
+# Echo the resolved command for a chapter without executing it
+book.cmd:
+	@python3 scripts/run_book.py echo --cfg config/book_plan.yaml --chapter $${CH:-1}
+
+# Summarize timings/RCs and flag suspicious fast chapters
+book.stats:
+	@python3 scripts/book_stats.py
+
+# Quick peek at the last chapter's stdout/stderr (if present)
+book.last:
+	@python3 -c "from pathlib import Path; LOGS=Path('logs/book'); outs=sorted(LOGS.glob('*.out')); errs=sorted(LOGS.glob('*.err')); print('[last] outs:', outs[-1] if outs else 'none'); print('[last] errs:', errs[-1] if errs else 'none')"
+
+# Scan for approved/golden example files with git history and content preview
+examples.scan:
+	@python3 scripts/find_approved_examples.py
+
+# Validate new probe output against golden examples
+examples.check:
+	@python3 scripts/validate_examples.py --new $(NEW) --golden $(GOLDEN)
+
+# Golden files management
+.PHONY: goldens.status goldens.schema.enrichment goldens.sample.check goldens.seed.enrichment goldens.check.archive
+goldens.status:
+	@python3 scripts/goldens_status.py
+
+# Validate the current enrichment golden against the enrichment schema
+goldens.schema.enrichment:
+	@python3 scripts/goldens_enrichment_schema_check.py
+
+# Validate the latest live sample (from logs/) against the enrichment schema
+goldens.sample.check:
+	@python3 scripts/goldens_sample_check.py
+
+# Promote the latest live sample to be the current enrichment golden
+goldens.seed.enrichment:
+	@latest=$$(ls -1t logs/book/*.out logs/book/*.jsonl logs/probes/*.out logs/probes/*.jsonl 2>/dev/null | head -n1); \
+	test -n "$$latest" || (echo "[goldens.seed] no logs to seed from"; exit 2); \
+	cp "$$latest" examples/enrichment/golden_enrichment.jsonl; \
+	echo "[goldens.seed] seeded examples/enrichment/golden_enrichment.jsonl from $$latest"
+
+# Run archive-track unit tests (your legacy goldens)
+goldens.check.archive:
+	@python3 scripts/gematria_verify.py

@@ -27,10 +27,15 @@ BEGIN
   END IF;
 END$$;
 
--- Optional: stub backfill so existing concept_network joins work
--- (replace with real data ingestion later)
-INSERT INTO concepts (name, content_hash)
-SELECT DISTINCT 'stub_concept_' || concept_id, 'stub_' || concept_id
-FROM concept_network
-WHERE concept_id NOT IN (SELECT id FROM concepts)
-ON CONFLICT (content_hash) DO NOTHING;
+-- Optional: stub backfill so existing network rows don't break joins
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='concept_network')
+     AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='concept_network' AND column_name='concept_id') THEN
+    INSERT INTO concepts (id, name, content_hash)
+    SELECT DISTINCT cn.concept_id, 'concept_'||LEFT(cast(cn.concept_id AS TEXT), 8), md5(cast(cn.concept_id AS TEXT))
+    FROM concept_network cn
+    LEFT JOIN concepts c ON c.id = cn.concept_id
+    WHERE c.id IS NULL;
+  END IF;
+END$$;

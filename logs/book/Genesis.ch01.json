@@ -1,0 +1,14 @@
+{
+  "book": "Genesis",
+  "chapter": 1,
+  "seed": 20251024,
+  "real": true,
+  "ts": 1761360952.4252791,
+  "returncode": 124,
+  "elapsed_sec": 30.007,
+  "suspicious_fast": false,
+  "command": "cd /home/mccoy/Projects/Gemantria.v2 && . .venv/bin/activate && python3 -m src.graph.graph --book Genesis --chapter 1 --seed 20251024 --noun-min 50",
+  "timeout_sec": 30.0,
+  "kill_grace_sec": 5.0,
+  "timed_out": true
+}
