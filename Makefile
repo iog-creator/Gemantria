@@ -33,9 +33,11 @@ ci:
 	@$(MAKE) ci.audits
 	@$(MAKE) test.smoke
 
-.PHONY: rules.navigator.check
+.PHONY: rules.navigator.check rules.numbering.check
 rules.navigator.check:
 	@python3 scripts/check_cursor_always_apply.py
+rules.numbering.check:
+	@python3 scripts/check_rule_numbering.py
 
 .PHONY: share.sync share.check
 share.sync:
