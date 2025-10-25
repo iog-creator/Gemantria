@@ -1,0 +1,8 @@
+# Critical governance and infra
+
+.cursor/rules/**        @your-handle
+Makefile                @your-handle
+.github/workflows/**    @your-handle
+AGENTS.md               @your-handle
+SHARE_MANIFEST.json     @your-handle
+share/**                @your-handle

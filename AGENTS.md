@@ -344,6 +344,8 @@ psql "$GEMATRIA_DSN" -c "SELECT * FROM pipeline_runs ORDER BY created_at DESC LI
 
 Cursor MUST read and execute tasks in `NEXT_STEPS.md` on the current branch. After completion: check all boxes, paste acceptance tails under "Evidence tails," and set Status to Done. GPT-5 updates `NEXT_STEPS.md` to provide subsequent tasks. This file is authoritative for per-PR work sequencing.
 
+CI requires: rules.numbering.check, data gate (Rule 037), exports gate (Rule 038), share drift check, and NEXT_STEPS completion.
+
 ### Report Generation
 
 ```bash

@@ -17,6 +17,15 @@ jobs:
       - uses: pre-commit/action@v3.0.1
       - name: Install guard deps
         run: pip install jsonschema
+      - name: Install psycopg (v3)
+        run: pip install "psycopg[binary]"
+      - name: Confirm DSN secret present
+        run: |
+          if [ -z "${{ secrets.GEMATRIA_DSN }}" ]; then
+            echo "[ci] GEMATRIA_DSN secret is missing"; exit 1;
+          else
+            echo "[ci] GEMATRIA_DSN secret is present (value not printed)";
+          fi
       - name: Run rules guard (hard gate)
         run: python scripts/rules_guard.py
       - name: Rules audit (contiguity + docs sync)
@@ -27,3 +36,5 @@ jobs:
         run: make ci.data.verify
       - name: Exports smoke (Rule 038)
         run: make ci.exports.smoke
+      - name: NEXT_STEPS check
+        run: make ops.next
