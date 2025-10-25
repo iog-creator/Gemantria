@@ -109,3 +109,33 @@ Confirm that either branches are merged (and deleted) or listed for cleanup.
 
 ## Status
 - Cursor sets to **Done** when all five integrations are merged and the final verification tails are pasted.
+
+## Evidence tails
+
+### feature/ops-pr-template Integration Evidence
+- **Branch created**: `integrate/feature/ops-pr-template` from `origin/feature/ops-pr-template`
+- **Rebase**: Already up to date (no conflicts)
+- **Local sanity tails**:
+  - `[rules.numbering.check] OK`
+  - `[share.check] OK — share mirror is clean`
+  - `[ops.next] NEXT_STEPS clear`
+- **PR opened**: [integrate/feature/ops-pr-template → main](https://github.com/iog-creator/Gemantria/pull/10)
+- **What it adds**: PR template and Cursor instruction loop blurb in AGENTS.md; adds NEXT_STEPS template
+- **Conflicts**: No conflicts
+- **Governance alignment**: Kept main's versions of duplicate PR templates
+- **Required checks**: All policy checks visible on PR
+- **CI Status**: Passed - merged with title `integrate(feature/ops-pr-template): rebase on main; pass policy gates`
+
+### feature/infra-guards-001 Integration Evidence
+- **Branch created**: `integrate/feature/infra-guards-001` from local `feature/infra-guards-001`
+- **Rebase**: Successfully rebased with conflicts resolved by keeping main versions for governance files
+- **Local sanity tails**:
+  - `[rules.numbering.check] OK`
+  - `[share.check] OK — share mirror is clean`
+  - `[ops.next] NEXT_STEPS clear`
+- **PR opened**: [integrate/feature/infra-guards-001 → main](https://github.com/iog-creator/Gemantria/pull/11)
+- **What it adds**: Code quality improvements (import organization, linting fixes) in book_readiness.py, run_book.py, verify_data_completeness.py
+- **Special handling**: Deduped governance files per integration playbook - reset .github/, Makefile, AGENTS.md to main versions (overlapping changes moved to policy-guards-002)
+- **Governance alignment**: Governance files reset to main versions as source of truth
+- **Required checks**: All policy checks visible on PR
+- **CI Status**: Pending (will merge when green)
