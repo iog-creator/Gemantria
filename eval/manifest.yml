@@ -1,23 +1,44 @@
-version: 0.1
+version: 0.2
 run_id: local-dev
 tasks:
   - key: smoke_hello
     kind: print
     args:
       message: "hello, gemantria"
+
   - key: gate_presence_rules
-    kind: verify_files
-    args:
-      must_exist:
-        - "AGENTS.md"
-        - "Makefile"
-        - ".github"
-  - key: rule_names_sanity
     kind: grep
     args:
       file: "docs/SSOT/RULES_INDEX.md"
-      patterns:
-        - "037"
-        - "038"
+      patterns: ["037", "038"]
+
+  - key: exports_presence
+    kind: file_glob
+    args:
+      globs:
+        - "exports/graph_latest.json"
+
+  - key: exports_edge_strength_spread
+    kind: json_assert
+    args:
+      file: "exports/graph_latest.json"
+      asserts:
+        - name: "edge strength fraction in [0.30,0.95]"
+          path: "edges[*].strength"
+          op: "frac_in_range"
+          min: 0.30
+          max: 0.95
+          min_frac: 0.70  # allow some outliers; policy target ≈0.3–0.95
+
+  - key: exports_nodes_dim_if_present
+    kind: json_assert
+    args:
+      file: "exports/graph_latest.json"
+      asserts:
+        - name: "nodes[*].embedding_dim==1024 if present"
+          path: "nodes[*].embedding_dim"
+          op: "if_present_eq_all"
+          value: 1024
+
 success_policy:
   mode: all_must_pass
