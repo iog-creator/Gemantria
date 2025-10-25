@@ -1,0 +1,21 @@
+---
+description: Fail-fast guard for export readiness; prevents running exports when upstream data is empty or malformed.
+globs:
+  - src/**/*.py
+  - scripts/**/*.py
+  - migrations/**/*.sql
+alwaysApply: false
+---
+
+# Rule 037 — Exports Smoke Gate
+
+## Hard requirements
+- Concept graph is non-empty: `concept_network` and `concept_relations` contain rows.
+- Basic integrity: counts and NULL-safety checks pass for key columns used by exporters.
+
+## Gates
+- Local: `make exports.smoke` must pass before export/reranker runs.
+- CI: `make ci.exports.smoke` must pass for PRs that touch export code.
+
+## Evidence
+- `scripts/exports_smoke.py` prints a green summary or the failing probe.
