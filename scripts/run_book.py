@@ -82,7 +82,12 @@ def _plan(cfg: dict[str, Any]) -> dict[str, Any]:
 
 
 def _write(path: Path, obj: Any) -> None:
-    path.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+    # Idempotent write to avoid noisy touches under share
+    new = json.dumps(obj, indent=2, ensure_ascii=False)
+    if path.exists() and path.read_text(encoding="utf-8") == new:
+        print(f"[guide] unchanged: {path}")
+        return
+    path.write_text(new, encoding="utf-8")
     print(f"[guide] wrote: {path}")
 
 
@@ -150,10 +155,8 @@ def cmd_stop(args: argparse.Namespace) -> None:
             encoding="utf-8",
         )
         print(f"[guide] chapter {ch} REAL done in 0.00s")
-    (REPORTS / "book_run.partial.json").write_text(
-        json.dumps({"run": "partial", "n": n, "ts": time.time()}, indent=2),
-        encoding="utf-8",
-    )
+    # keep partial marker *out* of share to reduce churn
+    _write(LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()})
     print(f"[guide] stop-loss executed for first {n} chapter(s).")
 
 
@@ -185,9 +188,7 @@ def cmd_resume(_args: argparse.Namespace) -> None:
             encoding="utf-8",
         )
         print(f"[guide] chapter {ch} REAL done in 0.00s")
-    (REPORTS / "book_run.resumed.json").write_text(
-        json.dumps({"resumed": missing, "ts": time.time()}, indent=2), encoding="utf-8"
-    )
+    _write(LOGS / "book_run.resumed.json", {"resumed": missing, "ts": time.time()})
     print(f"[guide] resume executed for {len(missing)} chapter(s).")
 
 

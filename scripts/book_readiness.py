@@ -11,6 +11,7 @@ Proofs stored under reports/readiness/ and mirrored to share.
 """
 
 import argparse
+import hashlib
 import json
 import socket
 import sys
@@ -21,6 +22,19 @@ VECTOR_DIM = 1024
 READINESS_DIR = Path("reports/readiness")
 READINESS_DIR.mkdir(parents=True, exist_ok=True)
 READINESS_JSON = READINESS_DIR / "readiness_report.json"
+
+
+def _write_json_if_changed(path: Path, obj: dict) -> bool:
+    """Write pretty JSON only if content changed. Returns True if wrote."""
+    new = json.dumps(obj, indent=2, ensure_ascii=False)
+    if path.exists():
+        old = path.read_text(encoding="utf-8")
+        if hashlib.sha256(old.encode()).hexdigest() == hashlib.sha256(new.encode()).hexdigest():
+            print(f"[guide] unchanged: {path}")
+            return False
+    path.write_text(new, encoding="utf-8")
+    print(f"[guide] wrote: {path}")
+    return True
 
 THRESHOLDS = {
     "cosine_min": 0.0,  # Allow negative correlations
@@ -37,7 +51,11 @@ def _load_cfg(config_path):
     """Load mini experiment config."""
     if not Path(config_path).exists():
         return {"passages": ["Gen 1:1-10"], "batch_size": 50}
+    config_path = Path(config_path)
     with open(config_path) as f:
+        if config_path.suffix.lower() in (".yaml", ".yml"):
+            import yaml  # type: ignore
+            return yaml.safe_load(f)
         return json.load(f)
 
 
@@ -142,7 +160,9 @@ def cmd_run_mini(args):
     _require_services(cfg)
     # Here we would call the real pipeline entrypoint(s).
     # For ops gate, emit a trace file so downstream steps can proceed deterministically.
-    trace = READINESS_DIR / "mini_run.trace"
+    # put traces outside share to reduce noise
+    trace = Path("logs") / "readiness" / "mini_run.trace"
+    trace.parent.mkdir(parents=True, exist_ok=True)
     trace.write_text(
         json.dumps({"cfg": cfg, "ts": time.time()}, indent=2), encoding="utf-8"
     )
@@ -159,8 +179,8 @@ def cmd_compute(args):
         "status": "UNKNOWN",
         "ts": time.time(),
     }
-    READINESS_JSON.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    print(f"[guide] readiness_report written: {READINESS_JSON}")
+    _write_json_if_changed(READINESS_JSON, report)
+    print("[guide] compute stage complete")
 
 
 def cmd_gate(args):
@@ -241,7 +261,7 @@ def cmd_gate(args):
         report["status"] = "FAIL"
 
     # Write updated report
-    READINESS_JSON.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    _write_json_if_changed(READINESS_JSON, report)
 
     # Print gate results
     print(f"[gate] schema: {'OK' if schema_ok else 'FAIL'}")
@@ -280,7 +300,8 @@ def cmd_run_book(args):
     """Run full book extraction."""
     print("[guide] launching full-book extraction (respecting current env + endpoints)")
     # Replace with your actual full-book driver
-    trace = READINESS_DIR / "book_run.trace"
+    trace = Path("logs") / "readiness" / "book_run.trace"
+    trace.parent.mkdir(parents=True, exist_ok=True)
     trace.write_text(json.dumps({"ts": time.time()}), encoding="utf-8")
     print(f"[guide] full-book driver invoked (trace: {trace})")
 

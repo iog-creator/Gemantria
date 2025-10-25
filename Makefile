@@ -82,7 +82,8 @@ deps.dev:
 	@echo "[guide] Installing dev dependencies (jsonschema, PyYAML)..."
 	pip install -r requirements-dev.txt
 
-.PHONY: mini.go mini.extract mini.verify readiness.verify book.go ci.book.readiness
+.PHONY: mini.go mini.extract mini.verify readiness.verify book.go ci.book.readiness \
+        book.plan book.dry book.resume book.stop
 
 # Mini experiment (real inference) → verify → (then book)
 mini.go: mini.extract mini.verify
@@ -93,7 +94,7 @@ mini.extract:
 	@python3 scripts/book_readiness.py run-mini --config config/mini_experiments.yaml
 
 mini.verify:
-	@echo "[guide] mini.verify: computing metrics from head exports → reports/readiness/readiness_report.json"
+	@echo "[guide] mini.verify: metrics → reports/readiness/readiness_report.json (idempotent)"
 	@python3 scripts/book_readiness.py compute --inputs graph_stats.head.json temporal_patterns.head.json pattern_forecast.head.json
 
 readiness.verify:
@@ -108,3 +109,22 @@ book.go:
 # CI-friendly single gate (use in workflows)
 ci.book.readiness:
 	@python3 scripts/book_readiness.py gate --strict
+
+# ---------- Whole-book ops helpers ----------
+# Plan the chapters to run (no inference; produces reports/book_plan.json)
+book.plan:
+	@python3 scripts/run_book.py plan --cfg config/book_plan.yaml
+	@echo "[guide] plan written to reports/readiness/book_plan.json"
+
+# Dry-run (no LM calls). Validates plan, seeds, env, and output dirs.
+book.dry:
+	@python3 scripts/run_book.py dry --cfg config/book_plan.yaml
+
+# Stop-loss: run first N chapters with real inference (requires readiness PASS)
+book.stop:
+	@python3 scripts/book_readiness.py assert-pass
+	@python3 scripts/run_book.py stop --cfg config/book_plan.yaml --n $${N:-1}
+
+# Resume the last interrupted/partial run from logs/book/
+book.resume:
+	@python3 scripts/run_book.py resume

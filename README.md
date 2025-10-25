@@ -62,7 +62,8 @@ make deps.dev
 
 Schema validation is **mandatory**. If it fails or `jsonschema` isn't installed, readiness checks will fail.
 
-Artifacts (proofs) are written to `reports/readiness/` and mirrored by `make share.sync`.
+Artifacts mirrored to share: **only** `reports/readiness/readiness_report.json`.
+Operational traces & logs live in `logs/` (not mirrored) to avoid churn.
 
 ### Whole-Book Operations (deterministic & safe)
 ```bash
