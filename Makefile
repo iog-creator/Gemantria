@@ -279,3 +279,26 @@ eval.runlog:
 
 ci.eval.runlog:
 	@python3 scripts/eval/run_log.py
+
+.PHONY: data.sanitize ci.data.sanitize eval.report.sanitized ci.eval.report.sanitized diag.integrity ci.diag.integrity
+
+# Drop edges whose endpoints are missing; writes exports/graph_sanitized_*.json and graph_sanitized.json
+data.sanitize:
+	@python3 scripts/fix/sanitize_missing_endpoints.py
+
+ci.data.sanitize:
+	@python3 scripts/fix/sanitize_missing_endpoints.py
+
+# Run manifest report against the sanitized export (graph_sanitized.json)
+eval.report.sanitized:
+	@python3 scripts/eval/report_for_file.py exports/graph_sanitized.json
+
+ci.eval.report.sanitized:
+	@python3 scripts/eval/report_for_file.py exports/graph_sanitized.json
+
+# Diagnostics for current latest export (counts and examples)
+diag.integrity:
+	@python3 scripts/diagnostics/diagnose_integrity.py
+
+ci.diag.integrity:
+	@python3 scripts/diagnostics/diagnose_integrity.py
