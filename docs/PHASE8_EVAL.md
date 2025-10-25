@@ -183,3 +183,26 @@ make diag.integrity
 Artifact:
 
 * `share/eval/integrity_diag.md` — count + examples of missing endpoints in the canonical latest export.
+
+### Profiles (local-only)
+Overlays in `eval/profiles/<name>.yml` merge onto `eval/thresholds.yml`.
+Run:
+```bash
+make eval.profile.strict
+make eval.profile.dev
+```
+
+### Whitelist (local-only)
+
+Add problematic IDs (one per line) to `eval/id_whitelist.txt`. Integrity and ID-type audits will ignore those IDs when configured via manifest args.
+
+### Repair plan (local-only)
+
+```bash
+make eval.repairplan
+```
+
+Artifacts:
+
+* `share/eval/repair_plan.json` — proposed stub nodes to fix missing endpoints
+* `share/eval/repair_plan.md` — human-readable summary

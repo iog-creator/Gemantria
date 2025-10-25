@@ -302,3 +302,16 @@ diag.integrity:
 
 ci.diag.integrity:
 	@python3 scripts/diagnostics/diagnose_integrity.py
+
+.PHONY: eval.profile.strict eval.profile.dev eval.repairplan
+
+# Run manifest report under strict/dev profiles
+eval.profile.strict:
+	@python3 scripts/eval/run_with_profile.py strict
+
+eval.profile.dev:
+	@python3 scripts/eval/run_with_profile.py dev
+
+# Build a non-destructive repair plan (JSON + MD)
+eval.repairplan:
+	@python3 scripts/eval/build_repair_plan.py
