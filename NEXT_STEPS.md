@@ -140,6 +140,16 @@ Confirm that either branches are merged (and deleted) or listed for cleanup.
 - **Required checks**: All policy checks visible on PR
 - **CI Status**: Pending (will merge when green)
 
+## Evidence tails
+
+### Docs Index Creation (PR #13)
+- **Branch created**: `feature/docs-index-005`
+- **Files added**: `docs/INDEX.md` (comprehensive navigation index), one-line link in `README.md`
+- **Content**: Links to RULES_INDEX, AGENTS, CI workflow, CODEOWNERS, SHARE_MANIFEST, SSOT schemas, latest exports, make targets
+- **PR opened**: [feature/docs-index-005 → main](https://github.com/iog-creator/Gemantria/pull/13)
+- **Purpose**: Single jump page for repo navigation without attachments
+- **CI Status**: Pending (docs-only changes, policy gates still enforced)
+
 ### 1.3) feature/pr-004-postgres-checkpointer - PR OPEN
 - [x] **Branch created**: `integrate/feature/pr-004-postgres-checkpointer` from `origin/feature/pr-004-postgres-checkpointer`
 - [x] **Rebase**: Successfully rebased with conflicts resolved by keeping main versions for governance files and branch versions for postgres checkpointer implementation
