@@ -69,7 +69,7 @@ def _load_cfg(config_path):
     config_path = Path(config_path)
     with open(config_path) as f:
         if config_path.suffix.lower() in (".yaml", ".yml"):
-            import yaml  # type: ignore
+            import yaml  # type: ignore  # noqa: E402
 
             return yaml.safe_load(f)
         return json.load(f)
@@ -201,7 +201,7 @@ def cmd_compute(args):
 
 def cmd_gate(args):
     """Validate head artifacts against SSOT schemas. HARD-REQUIRED."""
-    import json
+    import json  # noqa: E402
 
     # Load existing report
     if not READINESS_JSON.exists():
@@ -224,7 +224,7 @@ def cmd_gate(args):
 
     # Validate graph stats schema
     try:
-        from jsonschema import ValidationError, validate
+        from jsonschema import ValidationError, validate  # noqa: E402
 
         # Graph stats schema
         schema_path = Path("docs/SSOT/graph-stats.schema.json")

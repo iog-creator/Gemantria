@@ -39,3 +39,5 @@
 | 034 | 034-temporal-suite.mdc | # --- |
 | 035 | 035-forecasting-spec.mdc | # --- |
 | 036 | 036-temporal-visualization-spec.mdc | # --- |
+| 037 | 037-data-persistence-completeness.mdc | # --- |
+| 038 | 038-exports-smoke-gate.mdc | # --- |

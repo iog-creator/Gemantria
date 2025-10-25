@@ -1,0 +1,8 @@
+# Critical governance and infra
+
+.cursor/rules/**        @iog-creator
+Makefile                @iog-creator
+.github/workflows/**    @iog-creator
+AGENTS.md               @iog-creator
+SHARE_MANIFEST.json     @iog-creator
+share/**                @iog-creator
