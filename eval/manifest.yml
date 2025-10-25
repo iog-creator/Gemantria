@@ -1,4 +1,4 @@
-version: 0.5
+version: 0.6
 run_id: local-dev
 tasks:
   - key: smoke_hello
@@ -58,6 +58,15 @@ tasks:
       max_nodes: "${thresholds:shape.nodes.max}"
       min_edges: "${thresholds:shape.edges.min}"
       max_edges: "${thresholds:shape.edges.max}"
+
+  - key: exports_ref_integrity_latest
+    kind: ref_integrity
+    args:
+      file: "exports/graph_latest.json"
+      allow_missing_endpoints: "${thresholds:integrity.allow_missing_endpoints}"
+      max_self_loops: "${thresholds:integrity.max_self_loops}"
+      max_duplicate_node_ids: "${thresholds:integrity.max_duplicate_node_ids}"
+      max_duplicate_edge_pairs: "${thresholds:integrity.max_duplicate_edge_pairs}"
 
 success_policy:
   mode: all_must_pass
