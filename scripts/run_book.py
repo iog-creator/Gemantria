@@ -16,8 +16,8 @@ REPORTS.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_CFG = {
-    "book": "Romans",
-    "chapters": list(range(1, 17)),  # Romans 1..16
+    "book": "Genesis",
+    "chapters": list(range(1, 51)),  # Genesis 1..50
     "seed": 20251024,
     "endpoints": {
         "api": ["localhost", 8000],
@@ -156,7 +156,9 @@ def cmd_stop(args: argparse.Namespace) -> None:
         )
         print(f"[guide] chapter {ch} REAL done in 0.00s")
     # keep partial marker *out* of share to reduce churn
-    _write(LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()})
+    _write(
+        LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()}
+    )
     print(f"[guide] stop-loss executed for first {n} chapter(s).")
 
 

@@ -29,12 +29,16 @@ def _write_json_if_changed(path: Path, obj: dict) -> bool:
     new = json.dumps(obj, indent=2, ensure_ascii=False)
     if path.exists():
         old = path.read_text(encoding="utf-8")
-        if hashlib.sha256(old.encode()).hexdigest() == hashlib.sha256(new.encode()).hexdigest():
+        if (
+            hashlib.sha256(old.encode()).hexdigest()
+            == hashlib.sha256(new.encode()).hexdigest()
+        ):
             print(f"[guide] unchanged: {path}")
             return False
     path.write_text(new, encoding="utf-8")
     print(f"[guide] wrote: {path}")
     return True
+
 
 THRESHOLDS = {
     "cosine_min": 0.0,  # Allow negative correlations
@@ -50,11 +54,23 @@ THRESHOLDS = {
 def _load_cfg(config_path):
     """Load mini experiment config."""
     if not Path(config_path).exists():
-        return {"passages": ["Gen 1:1-10"], "batch_size": 50}
+        return {
+            "passages": [
+                {"book": "Genesis", "chapter": 1, "verses": [1, 2, 3, 4, 5]},
+                {"book": "Exodus", "chapter": 3, "verses": [1, 2, 3, 4, 5, 6]},
+            ],
+            "embed_dims": VECTOR_DIM,
+            "endpoints": {
+                "api": ("localhost", 8000),
+                "chat": ("localhost", 9991),
+                "embed": ("localhost", 9994),
+            },
+        }
     config_path = Path(config_path)
     with open(config_path) as f:
         if config_path.suffix.lower() in (".yaml", ".yml"):
             import yaml  # type: ignore
+
             return yaml.safe_load(f)
         return json.load(f)
 
