@@ -243,6 +243,9 @@ DB_MAX_OVERFLOW=10
 - **Parameterized SQL Only**: No f-strings in DB operations; banned `%s` parameterization required
 - **Connection Pooling**: Configured for performance and safety
 
+### Exports Safety
+- **Exports Smoke Gate (Rule 037)**: `make exports.smoke` MUST pass locally; `make ci.exports.smoke` MUST pass in CI for PRs touching export/reranker code.
+
 ### Testing Safety
 
 - **No Mock Datasets**: Tests code-verified or DB-derived only; no `__mocks__` folders
