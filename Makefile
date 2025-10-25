@@ -200,3 +200,13 @@ ops.verify:
 # Identical to local; intentionally not part of CI
 ci.ops.verify:
 	@python3 scripts/ops/verify_repo.py
+
+.PHONY: eval.history ci.eval.history
+
+# Temporal export history (writes share/eval/history.{json,md})
+eval.history:
+	@python3 scripts/eval/report_history.py
+
+# Not wired into CI; identical to local for now
+ci.eval.history:
+	@python3 scripts/eval/report_history.py

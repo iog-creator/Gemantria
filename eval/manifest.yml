@@ -1,4 +1,4 @@
-version: 0.2
+version: 0.3
 run_id: local-dev
 tasks:
   - key: smoke_hello
@@ -12,13 +12,17 @@ tasks:
       file: "docs/SSOT/RULES_INDEX.md"
       patterns: ["037", "038"]
 
-  - key: exports_presence
+  - key: exports_presence_latest
     kind: file_glob
     args:
-      globs:
-        - "exports/graph_latest.json"
+      globs: ["exports/graph_latest.json"]
 
-  - key: exports_edge_strength_spread
+  - key: exports_presence_all
+    kind: file_glob
+    args:
+      globs: ["exports/graph_*.json"]
+
+  - key: exports_edge_strength_spread_latest
     kind: json_assert
     args:
       file: "exports/graph_latest.json"
@@ -28,9 +32,9 @@ tasks:
           op: "frac_in_range"
           min: 0.30
           max: 0.95
-          min_frac: 0.70  # allow some outliers; policy target ≈0.3–0.95
+          min_frac: 0.70
 
-  - key: exports_nodes_dim_if_present
+  - key: exports_nodes_dim_if_present_latest
     kind: json_assert
     args:
       file: "exports/graph_latest.json"
