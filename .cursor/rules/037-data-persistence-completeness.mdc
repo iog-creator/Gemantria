@@ -1,0 +1,22 @@
+---
+description: Enforce complete data persistence and schema fulfillment for core pipeline artifacts.
+globs:
+  - src/**/*.py
+  - scripts/**/*.py
+  - migrations/**/*.sql
+alwaysApply: false
+---
+
+# Rule 037 — Data Persistence Completeness
+
+## Hard requirements
+- **Tables exist & are populated**: `concepts`, `concept_network`, `concept_relations`.
+- **Join sanity**: `concept_network → concepts` and `concept_relations → concepts` return rows.
+- **Exports runnable**: Stats/graph exports execute successfully against current DB state.
+
+## Gates
+- Local: `make data.verify` must pass before book runs.
+- CI: `make ci.data.verify` must pass on PRs touching pipeline/db/export code.
+
+## Evidence
+- `scripts/verify_data_completeness.py` prints a green summary or the failing query/table.

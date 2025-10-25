@@ -66,15 +66,32 @@ ci.smart:
 	@python3 scripts/mode_decider.py && make rules.navigator.check rules.audit repo.audit docs.audit
 
 .PHONY: go deps.dev
+.PHONY: data.verify ci.data.verify db.migrate
+
+# Run the data completeness verifier (local)
+data.verify:
+	@python3 scripts/verify_data_completeness.py
+
+# CI gate (same check, enforced in PRs)
+ci.data.verify:
+	@python3 scripts/verify_data_completeness.py
+
+# Apply SQL migrations (adjust DSN if needed)
+db.migrate:
+	@echo "[db] applying migrations…"
+	@psql "$${GEMATRIA_DSN:-$${DB_DSN:-postgresql://localhost/gemantria}}" -v ON_ERROR_STOP=1 -f migrations/037_create_concepts.sql
+	@echo "[db] migrations OK"
+
 # One-command, zero-choices path for Cursor and devs:
 #  - lint/format/quickfix
 #  - smart strict/soft smoke + schema
 #  - audits
 #  - share sync
 go:
-	@echo "[guide] go: lint/format → smart smoke/schema → audits → share"
+	@echo "[guide] go: lint/format → smart smoke/schema → db gate → audits → share"
 	@$(MAKE) py.fullwave.c
 	@$(MAKE) ci.smart
+	@$(MAKE) data.verify
 	@$(MAKE) share.sync
 
 # Install development dependencies (jsonschema, PyYAML)

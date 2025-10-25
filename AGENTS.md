@@ -242,6 +242,7 @@ DB_MAX_OVERFLOW=10
 - **Phase 8 Sources**: `v_concept_occurrences(book, concept_id, chapter, count)` feeds temporal patterns and forecasts.
 - **Parameterized SQL Only**: No f-strings in DB operations; banned `%s` parameterization required
 - **Connection Pooling**: Configured for performance and safety
+- **Data Persistence Completeness (Rule 037)**: `make data.verify` MUST pass locally; `make ci.data.verify` MUST pass in CI for PRs touching pipeline/db/export code.
 
 ### Testing Safety
 
