@@ -139,3 +139,17 @@ Confirm that either branches are merged (and deleted) or listed for cleanup.
 - **Governance alignment**: Governance files reset to main versions as source of truth
 - **Required checks**: All policy checks visible on PR
 - **CI Status**: Pending (will merge when green)
+
+### 1.3) feature/pr-004-postgres-checkpointer - PR OPEN
+- [x] **Branch created**: `integrate/feature/pr-004-postgres-checkpointer` from `origin/feature/pr-004-postgres-checkpointer`
+- [x] **Rebase**: Successfully rebased with conflicts resolved by keeping main versions for governance files and branch versions for postgres checkpointer implementation
+- [x] **Local sanity tails**:
+  - `[rules.numbering.check] OK`
+  - `[share.check] OK — share mirror is clean`
+  - `[ops.next] NEXT_STEPS clear`
+- [x] **PR opened**: [integrate/feature/pr-004-postgres-checkpointer → main](https://github.com/iog-creator/Gemantria/pull/12)
+- [x] **What it adds**: LangGraph-compatible Postgres checkpointer with BaseCheckpointSaver interface, JSONB storage, and transactional upsert semantics
+- [x] **Special handling**: Verified no gate regressions; migration `002_create_checkpointer.sql` documented (creates checkpointer_state and checkpointer_writes tables)
+- [x] **Governance alignment**: Governance files reset to main versions; postgres implementation preserved
+- [x] **Required checks**: All policy checks visible on PR
+- [x] **CI Status**: Pending (will merge when green)
