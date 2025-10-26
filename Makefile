@@ -368,3 +368,19 @@ eval.gate.strict:
 
 ci.eval.gate.strict:
 	@python3 scripts/eval/gate_strict.py
+
+.PHONY: eval.remediation ci.eval.remediation eval.apply.remediation ci.eval.apply.remediation
+
+# Analyze evaluation failures and generate remediation plan
+eval.remediation:
+	@python3 scripts/eval/build_remediation_plan.py
+
+ci.eval.remediation:
+	@python3 scripts/eval/build_remediation_plan.py
+
+# Apply automated fixes from remediation plan (use SKIP_AUTO_FIXES=1 to preview)
+eval.apply.remediation:
+	@python3 scripts/eval/apply_remediation.py
+
+ci.eval.apply.remediation:
+	@python3 scripts/eval/apply_remediation.py
