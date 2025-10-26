@@ -203,7 +203,7 @@ ops.verify:
 	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
 	fi
 	@missing=0; \
-	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json; do \
+	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg; do \
 	  if [ ! -f $$f ]; then echo "[ops.verify] MISSING $$f"; missing=1; fi; \
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
@@ -432,6 +432,7 @@ eval.package:
 	@$(MAKE) eval.verify.integrity
 	@$(MAKE) eval.summary
 	@$(MAKE) eval.quality.check
+	@$(MAKE) eval.quality.badge
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -497,6 +498,11 @@ eval.quality.check:
 	@python3 scripts/eval/check_quality.py
 eval.summary:
 	@python3 scripts/eval/build_run_summary.py
+.PHONY: eval.quality.badge eval.graph.calibrate
+eval.quality.badge:
+	@python3 scripts/eval/make_quality_badge.py
+eval.graph.calibrate:
+	@python3 scripts/eval/calibrate_thresholds.py
 
 .PHONY: eval.open
 eval.open:
