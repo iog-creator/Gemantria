@@ -18,7 +18,7 @@ def _status_badge(status: str) -> str:
         return '<span style="background-color: #ffc107; color: black; padding: 2px 8px; border-radius: 4px; font-size: 12px;">WARN</span>'  # noqa: E501
 
 
-def _load_report() -> dict[str, Any]:
+def _load_report() -> dict[str, Any]:  # type: ignore[return]
     if REPORT_JSON.exists():
         return json.loads(REPORT_JSON.read_text(encoding="utf-8"))
     return {"summary": {"ok_count": 0, "fail_count": 0}, "results": []}
@@ -182,20 +182,21 @@ def main() -> int:
         "                const tbody = document.getElementById('manifest-tbody');"
     )
     html.append(
-        "                summary.textContent = `Artifacts: ${data.artifact_count} | Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"
+        "                summary.textContent = `Artifacts: ${data.artifact_count} | "
+        "Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"  # noqa: E501
     )
     html.append("                const artifacts = data.artifacts.slice(0, 200);")
     html.append("                tbody.innerHTML = '';")
     html.append("                artifacts.forEach(a => {")
     html.append("                    const tr = document.createElement('tr');")
     html.append(
-        "                    tr.innerHTML = `<td>${a.path || ''}</td><td>${a.size !== null ? a.size : ''}</td><td>${a.sha256 || ''}</td>`;  # noqa: E501"
+        "                    tr.innerHTML = `<td>${a.path || ''}</td><td>${a.size !== null ? a.size : ''}</td><td>${a.sha256 || ''}</td>`;"  # noqa: E501
     )
     html.append("                    tbody.appendChild(tr);")
     html.append("                });")
     html.append("            } catch (e) {")
     html.append(
-        "                document.getElementById('manifest-summary').textContent = 'Manifest not found';  # noqa: E501"
+        "                document.getElementById('manifest-summary').textContent = 'Manifest not found';"  # noqa: E501
     )
     html.append("            }")
     html.append("        }")

@@ -2,6 +2,7 @@
 import json
 import pathlib
 import time
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
