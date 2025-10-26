@@ -42,6 +42,15 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
 
+### Runbook: Database Bootstrap (CI)
+1. Bootstrap script ensures database exists before migrations:
+   ```bash
+   scripts/ci/ensure_db_then_migrate.sh
+   ```
+2. Handles missing database gracefully with admin connection fallback
+3. Applies vector extension and all migrations in order
+4. Used in CI workflows for reliable database setup
+
 ## Operations
 
 ### Evaluation

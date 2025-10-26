@@ -24,7 +24,14 @@ echo "[ensure_db_then_migrate] admin_dsn=$admin_dsn"
 # Create database if missing
 if ! psql "$admin_dsn" -tAc "SELECT 1 FROM pg_database WHERE datname='${target_db}'" | grep -q 1; then
   echo "[ensure_db_then_migrate] creating database '${target_db}' ..."
-  createdb "${target_db}" -d "$admin_dsn" || createdb -U "${PGUSER:-postgres}" "${target_db}" || true
+  psql "$admin_dsn" -c "CREATE DATABASE ${target_db};" || {
+    echo "[ensure_db_then_migrate] failed to create database via psql, trying createdb..."
+    # Fallback: try createdb with environment variables
+    export PGHOST="${PGHOST:-localhost}"
+    export PGPORT="${PGPORT:-5432}"
+    export PGUSER="${PGUSER:-postgres}"
+    createdb "${target_db}" || true
+  }
 fi
 
 # Ensure vector extension and run migrations inside the target DB
