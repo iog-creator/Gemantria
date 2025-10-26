@@ -128,4 +128,7 @@
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
+| 039 | # id: 039_EXECUTION_CONTRACT |
+| 040 | # id: 040_CI_TRIAGE_PLAYBOOK |
+| 041 | # id: 041_PR_MERGE_POLICY |
 <!-- RULES_TABLE_END -->

@@ -10,7 +10,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RULES_DIR = ROOT / ".cursor" / "rules"
-ALLOWED = {"000-ssot-index.mdc", "010-task-brief.mdc", "030-share-sync.mdc"}
+ALLOWED = {
+    "000-ssot-index.mdc",
+    "010-task-brief.mdc",
+    "030-share-sync.mdc",
+    "039-execution-contract.mdc",
+    "040-ci-triage-playbook.mdc",
+}
 
 
 def main() -> None:
