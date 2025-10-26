@@ -202,6 +202,11 @@ ops.verify:
 	else \
 	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
 	fi
+	@missing=0; \
+	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json; do \
+	  if [ ! -f $$f ]; then echo "[ops.verify] MISSING $$f"; missing=1; fi; \
+	done; \
+	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
 	@python3 scripts/ops/verify_repo.py
 	@echo "[ops.verify] OK"
 
@@ -411,13 +416,19 @@ ci.eval.release_notes:
 eval.package:
 	@$(MAKE) eval.snapshot
 	@$(MAKE) eval.html
+	@$(MAKE) eval.graph.rerank.refresh
 	@$(MAKE) eval.graph.rerank_blend
 	@$(MAKE) eval.graph.centrality
+	@$(MAKE) eval.snapshot.rotate
+	@$(MAKE) eval.graph.tables
+	@$(MAKE) eval.graph.delta
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
 	@$(MAKE) eval.bundle.all
+	@$(MAKE) eval.provenance
 	@$(MAKE) eval.release_manifest
+	@$(MAKE) eval.schema.verify
 	@$(MAKE) eval.verify.integrity
 	@echo "[eval.package] OK"
 
@@ -462,11 +473,24 @@ eval.verify.integrity:
 ci.eval.verify.integrity:
 	@python3 scripts/eval/verify_integrity.py
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
 	@.venv/bin/python3 scripts/eval/apply_rerank_blend.py
+eval.graph.rerank.refresh:
+	@python3 scripts/eval/apply_rerank_refresh.py
+eval.graph.tables:
+	@python3 scripts/eval/export_graph_tables.py
+eval.graph.delta:
+	@python3 scripts/eval/compute_delta.py
+eval.schema.verify:
+	@python3 -c "import jsonschema" >/dev/null 2>&1 || (echo '[schema] installing jsonschema' && pip3 install --quiet jsonschema)
+	@python3 scripts/eval/verify_schema.py
+eval.snapshot.rotate:
+	@python3 scripts/eval/rotate_snapshot.py
+eval.provenance:
+	@python3 scripts/eval/build_provenance.py
 
 .PHONY: eval.open
 eval.open:
