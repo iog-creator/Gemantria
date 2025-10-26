@@ -261,14 +261,9 @@ eval.catalog:
 ci.eval.catalog:
 	@python3 scripts/eval/build_exports_catalog.py
 
-.PHONY: eval.provenance ci.eval.provenance eval.checksums ci.eval.checksums
 
 # Provenance (writes share/eval/provenance.{json,md})
-eval.provenance:
-	@python3 scripts/eval/provenance.py
 
-ci.eval.provenance:
-	@python3 scripts/eval/provenance.py
 
 # Checksums for exports (writes share/eval/checksums.csv)
 eval.checksums:
@@ -499,8 +494,6 @@ eval.schema.verify:
 	@python3 scripts/eval/verify_schema.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
-eval.provenance:
-	@python3 scripts/eval/build_provenance.py
 eval.quality.check:
 	@python3 scripts/eval/check_quality.py
 eval.summary:
@@ -515,3 +508,10 @@ eval.graph.calibrate:
 eval.open:
 	@echo "[eval.open] Opening dashboard..."
 	@python3 -c "import pathlib, webbrowser; p = pathlib.Path('share/eval/index.html').resolve(); print('[eval.open]', p); webbrowser.open(p.as_uri())"
+
+.PHONY: eval.provenance ci.eval.provenance
+eval.provenance:
+	@python3 scripts/eval/build_provenance.py
+
+ci.eval.provenance:
+	@python3 scripts/eval/build_provenance.py
