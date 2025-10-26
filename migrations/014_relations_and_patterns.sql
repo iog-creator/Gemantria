@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS concept_centrality (
 );
 
 -- 4) Views (robust to missing rows)
-CREATE OR REPLACE VIEW v_concept_relations_health AS
+DROP VIEW IF EXISTS v_concept_relations_health;
+CREATE VIEW v_concept_relations_health AS
 SELECT
   COUNT(*)::int AS edge_ct,
   COALESCE(AVG(cosine),0)::float AS avg_cosine,
