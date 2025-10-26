@@ -406,7 +406,9 @@ eval.package:
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
+	@$(MAKE) eval.bundle.all
 	@$(MAKE) eval.release_manifest
+	@$(MAKE) eval.verify.integrity
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -432,3 +434,20 @@ eval.release_manifest:
 
 ci.eval.release_manifest:
 	@python3 scripts/eval/build_release_manifest.py
+
+.PHONY: eval.bundle.all
+
+# Create a single tar.gz of share/eval for handoff (idempotent path)
+eval.bundle.all:
+	@mkdir -p share/eval/bundles
+	@ts=$$(date -u +%Y%m%dT%H%M%SZ); \
+	out="share/eval/bundles/eval_$${ts}.tar.gz"; \
+	(cd share && tar -czf "../$${out}" --mtime='UTC 2020-01-01' --owner=0 --group=0 --numeric-owner eval); \
+	echo "[eval.bundle.all] wrote $${out}"
+
+.PHONY: eval.verify.integrity ci.eval.verify.integrity
+eval.verify.integrity:
+	@python3 scripts/eval/verify_integrity.py
+
+ci.eval.verify.integrity:
+	@python3 scripts/eval/verify_integrity.py
