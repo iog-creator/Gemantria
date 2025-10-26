@@ -13,12 +13,12 @@ SELECT
     -- Source concept information
     cn1.concept_id AS source,
     c1.name AS source_name,
-    cn1.cluster_id AS cluster_source,
+    COALESCE(cc1.cluster_id, -1) AS cluster_source,
 
     -- Target concept information
     cn2.concept_id AS target,
     c2.name AS target_name,
-    cn2.cluster_id AS cluster_target,
+    COALESCE(cc2.cluster_id, -1) AS cluster_target,
 
     -- Correlation analysis
     corr(cn1.embedding, cn2.embedding) AS correlation,
@@ -42,6 +42,8 @@ FROM concept_network cn1
 JOIN concept_network cn2
     ON cn1.id < cn2.id  -- Avoid duplicate pairs and self-correlations
     AND cn1.concept_id != cn2.concept_id  -- Ensure different concepts
+LEFT JOIN concept_clusters cc1 ON cn1.id = cc1.concept_id
+LEFT JOIN concept_clusters cc2 ON cn2.id = cc2.concept_id
 JOIN concepts c1 ON cn1.concept_id = c1.id
 JOIN concepts c2 ON cn2.concept_id = c2.id
 
@@ -50,8 +52,8 @@ WHERE cn1.embedding IS NOT NULL
   AND cn2.embedding IS NOT NULL
 
 -- Group by concept pairs to compute correlations
-GROUP BY cn1.concept_id, c1.name, cn1.cluster_id,
-         cn2.concept_id, c2.name, cn2.cluster_id
+GROUP BY cn1.concept_id, c1.name, COALESCE(cc1.cluster_id, -1),
+         cn2.concept_id, c2.name, COALESCE(cc2.cluster_id, -1)
 
 -- Only include correlations with sufficient sample size (minimum 2 observations)
 HAVING COUNT(*) >= 2
@@ -70,7 +72,7 @@ analysis and pattern discovery.';
 CREATE INDEX IF NOT EXISTS idx_concept_correlations_source
     ON concept_network(concept_id);
 
-CREATE INDEX IF NOT EXISTS idx_concept_correlations_cluster
-    ON concept_network(cluster_id);
+CREATE INDEX IF NOT EXISTS idx_concept_clusters_cluster_id
+    ON concept_clusters(cluster_id);
 
 COMMIT;
