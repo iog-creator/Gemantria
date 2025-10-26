@@ -120,4 +120,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
+| 039 | # id: 039_EXECUTION_CONTRACT |
+| 040 | # id: 040_CI_TRIAGE_PLAYBOOK |
+| 041 | # id: 041_PR_MERGE_POLICY |
 <!-- RULES_INVENTORY_END -->

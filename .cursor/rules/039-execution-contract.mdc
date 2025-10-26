@@ -1,0 +1,13 @@
+id: 039_EXECUTION_CONTRACT
+version: 1
+alwaysApply: true
+title: Cursor Execution Contract (GPT-5 orchestrates; Cursor executes)
+description: |
+  Cursor executes commands, applies diffs, runs make/CI, and merges PRs.
+  Cursor MUST follow NEXT_STEPS.md exactly. No scope drift.
+policy:
+  - Follow NEXT_STEPS.md in order. Paste evidence tails after each step.
+  - If a command fails, paste last 40 lines and STOP for GPT-5 instructions.
+  - Do not modify governance or workflows unless NEXT_STEPS explicitly says so.
+acceptance:
+  - Each step shows decisive OK/FAIL lines. Evidence pasted verbatim.

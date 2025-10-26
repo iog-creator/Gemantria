@@ -41,3 +41,6 @@
 | 036 | 036-temporal-visualization-spec.mdc | # --- |
 | 037 | 037-data-persistence-completeness.mdc | # --- |
 | 038 | 038-exports-smoke-gate.mdc | # --- |
+| 039 | 039-execution-contract.mdc | # id: 039_EXECUTION_CONTRACT |
+| 040 | 040-ci-triage-playbook.mdc | # id: 040_CI_TRIAGE_PLAYBOOK |
+| 041 | 041-pr-merge-policy.mdc | # id: 041_PR_MERGE_POLICY |
