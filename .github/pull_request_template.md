@@ -1,23 +1,23 @@
-# Summary
+## Title
+<!-- concise, imperative; include PR code (e.g., 024c), scope keyword -->
 
-- What this PR changes (1–3 bullets)
+## Summary
+<!-- what & why in 2–4 lines -->
 
-# Phase & Rules
+## References (REQUIRED)
+- **Rules cited:** <!-- e.g., 039-execution-contract; 040-ci-triage; 041-pr-merge-policy -->
+- **Agents referenced:** <!-- e.g., AGENTS.md#orchestrator; AGENTS.md#cursor -->
+- **Docs touched:** <!-- list relative paths -->
+- **SSOT links:** <!-- RULES_INDEX.md anchors; AGENTS.md anchors; SSOT_MASTER_PLAN.md sections -->
 
-- Phase: <!-- e.g., Phase 5 (PR-017) -->
-- Rules: <!-- e.g., 000,006,013,021,022,025,026-029 -->
+## Scope (files only)
+<!-- exact list; no others -->
 
-# Verification (paste raw)
+## Acceptance
+- [ ] `make -s ops.verify` → `[ops.verify] OK`
+- [ ] If Makefile edited: `make -s targets.check.dupes` → OK
+- [ ] No governance/workflow drift
+- [ ] CI green
 
-- VERIFIER output(s):
-- Head(≈200) of exports (if applicable):
-- WebUI test/build outputs (if applicable):
-
-# Docs Updated
-
-- [ ] AGENTS.md (affected dirs)
-- [ ] ADR (linked):
-- [ ] SSOT (schema / MASTER_PLAN / EPOCH_LEDGER)
-- [ ] Forest refreshed: `python scripts/generate_forest.py`
-
-# Notes
+## Evidence tails
+<!-- paste decisive tails or failing tails -->
