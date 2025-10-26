@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+emit() { if [ -x scripts/hint.sh ]; then scripts/hint.sh "$*"; else echo "HINT: $*"; fi; }
 
 # Expects: GEMATRIA_DSN (e.g., postgresql://postgres@localhost:5432/gematria)
 # Requires: psql, createdb
@@ -18,12 +19,12 @@ admin_dsn="$(printf '%s' "$dsn" | sed -E 's#(/)[^/?]+(\?|$)#\1postgres\2#')"
 # Derive target database name from DSN (path segment after last '/')
 target_db="$(printf '%s' "$dsn" | sed -E 's#.*/([^/?]+)(\?.*)?$#\1#')"
 
-echo "[ensure_db_then_migrate] target_db=$target_db"
-echo "[ensure_db_then_migrate] admin_dsn=$admin_dsn"
+emit "verify: target_db=$target_db"
+emit "verify: admin_dsn derived for bootstrap"
 
 # Create database if missing
 if ! psql "$admin_dsn" -tAc "SELECT 1 FROM pg_database WHERE datname='${target_db}'" | grep -q 1; then
-  echo "[ensure_db_then_migrate] creating database '${target_db}' ..."
+  emit "verify: creating database '${target_db}'"
   psql "$admin_dsn" -c "CREATE DATABASE ${target_db};" || {
     echo "[ensure_db_then_migrate] failed to create database via psql, trying createdb..."
     # Fallback: try createdb with environment variables
@@ -35,14 +36,14 @@ if ! psql "$admin_dsn" -tAc "SELECT 1 FROM pg_database WHERE datname='${target_d
 fi
 
 # Ensure vector extension and run migrations inside the target DB
-echo "[ensure_db_then_migrate] ensuring vector extension ..."
+emit "verify: ensuring extension 'vector'"
 psql "$dsn" -v ON_ERROR_STOP=1 -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
-echo "[ensure_db_then_migrate] applying migrations ..."
+emit "verify: applying migrations from migrations/*.sql"
 shopt -s nullglob
 for f in migrations/*.sql; do
-  echo "[ensure_db_then_migrate] applying $f"
+  emit "verify: applying $f"
   psql "$dsn" -v ON_ERROR_STOP=1 -f "$f"
 done
 
-echo "[ensure_db_then_migrate] OK"
+emit "verify: database bootstrap OK"
