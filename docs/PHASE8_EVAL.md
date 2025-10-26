@@ -206,3 +206,28 @@ Artifacts:
 
 * `share/eval/repair_plan.json` — proposed stub nodes to fix missing endpoints
 * `share/eval/repair_plan.md` — human-readable summary
+
+### Repaired export (local-only)
+Run:
+```bash
+make eval.repairplan
+make repair.apply
+make eval.report.repaired
+```
+
+Artifacts:
+
+* `exports/graph_repaired.json` and time-stamped `exports/graph_repaired_*.json`
+* `share/eval/report_for_graph_repaired.json` — manifest report applied to repaired file
+
+### Policy delta (local-only)
+
+Run:
+
+```bash
+make eval.policydiff
+```
+
+Artifact:
+
+* `share/eval/policy_diff.md` — pass/fail summary for strict vs dev
