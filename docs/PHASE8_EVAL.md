@@ -461,3 +461,16 @@ make eval.summary
 ```
 - Outputs: `share/eval/quality_report.txt`, `share/eval/summary.md`, `share/eval/summary.json`
 - `eval.package` runs both and shows the result on the dashboard.
+
+### Edge thresholds, badge, and calibration (MANDATORY)
+- Env knobs (defaults): `EDGE_BLEND_WEIGHT=0.5`, `EDGE_STRONG_THRESH=0.90`, `EDGE_WEAK_THRESH=0.75`
+- Generate suggestions:
+```bash
+make eval.graph.calibrate
+cat share/eval/calibration_suggest.json
+```
+- Override for a run:
+```bash
+EDGE_STRONG_THRESH=0.80 EDGE_WEAK_THRESH=0.65 make eval.package
+```
+- The QUALITY badge is generated at `share/eval/badges/quality.svg` and is **required** by `ops.verify`.
