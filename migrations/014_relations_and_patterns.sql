@@ -14,12 +14,6 @@ CREATE TABLE IF NOT EXISTS concept_relations (
 -- Add missing columns if they don't exist
 DO $$
 BEGIN
-    -- Add id column if missing
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
-                   WHERE table_name = 'concept_relations' AND column_name = 'id') THEN
-        ALTER TABLE concept_relations ADD COLUMN id UUID PRIMARY KEY DEFAULT gen_random_uuid();
-    END IF;
-
     -- Add cosine column if missing (rename similarity to cosine)
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns
                    WHERE table_name = 'concept_relations' AND column_name = 'cosine') THEN
