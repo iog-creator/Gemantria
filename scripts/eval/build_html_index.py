@@ -172,6 +172,19 @@ def main() -> int:
     )
     html.append("        </details>")
     html.append("")
+
+    html.append("        <!-- Calibration & Quality Trend -->")
+    html.append('        <details style="margin-top:12px;">')
+    html.append("          <summary>Calibration & Trend</summary>")
+    html.append(
+        '          <div id="calib" style="font-family:monospace; white-space:pre;"></div>'
+    )
+    html.append('          <div style="margin-top:8px;">')
+    html.append('            <img alt="quality_trend" src="badges/quality_trend.svg">')
+    html.append("          </div>")
+    html.append("        </details>")
+    html.append("")
+
     html.append("        <div class='artifacts'>")
 
     # Core reports
@@ -372,6 +385,27 @@ def main() -> int:
     html.append(
         "                document.getElementById('quality-status').textContent = t;"
     )
+    html.append("            }catch(_){/* silent */}")
+    html.append("        })();")
+    html.append("    </script>")
+    html.append("    <script>")
+    html.append("        (async function(){")
+    html.append("            try{")
+    html.append(
+        "                const a = await fetch('calibration_adv.json'); if(a.ok){"
+    )
+    html.append("                    const adv = await a.json();")
+    html.append("                    const s = adv.suggested || {};")
+    html.append("                    const lines = [")
+    html.append('                        "suggested:",')
+    html.append('                        "  EDGE_BLEND_WEIGHT="+s.EDGE_BLEND_WEIGHT,')
+    html.append('                        "  EDGE_WEAK_THRESH="+s.EDGE_WEAK_THRESH,')
+    html.append('                        "  EDGE_STRONG_THRESH="+s.EDGE_STRONG_THRESH')
+    html.append("                    ];")
+    html.append(
+        "                    document.getElementById('calib').textContent = lines.join(\"\\n\");"
+    )
+    html.append("                }")
     html.append("            }catch(_){/* silent */}")
     html.append("        })();")
     html.append("    </script>")

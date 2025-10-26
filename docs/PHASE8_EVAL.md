@@ -474,3 +474,15 @@ cat share/eval/calibration_suggest.json
 EDGE_STRONG_THRESH=0.80 EDGE_WEAK_THRESH=0.65 make eval.package
 ```
 - The QUALITY badge is generated at `share/eval/badges/quality.svg` and is **required** by `ops.verify`.
+
+### Advanced calibration & trend (MANDATORY)
+- Run:
+```bash
+make eval.package
+```
+- Outputs:
+  - `share/eval/calibration_adv.json` — data-driven W/thresholds (2-threshold Otsu-like objective)
+  - `share/eval/quality_history.jsonl` — pass/fail history
+  - `share/eval/badges/quality_trend.svg` — sparkline badge (last 30 runs)
+- Dashboard shows **Calibration & Trend** section with suggested env values and the trend sparkline.
+- `ops.verify` requires these artifacts.
