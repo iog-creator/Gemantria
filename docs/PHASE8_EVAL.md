@@ -372,4 +372,41 @@ Run:
 make eval.package
 ```
 
-Runs: snapshot → html → bundle → badges → release_notes, then prints `[eval.package] OK`.
+Runs: snapshot → html → bundle → badges → release_notes → bundle.all → release_manifest → verify.integrity, then prints `[eval.package] OK`.
+
+### Manifest viewer
+Dashboard now renders `release_manifest.json` inline (summary + first 200 artifacts). Works offline.
+
+### Download-all bundle
+```bash
+make eval.bundle.all
+```
+Outputs a deterministic tar.gz under `share/eval/bundles/`.
+
+### Integrity verification
+```bash
+make eval.verify.integrity
+```
+Writes `share/eval/integrity_report.txt`, exits nonzero on mismatches.
+
+### HTML badges embed
+Badges now render inside `share/eval/index.html` when present (no external hosting required).
+
+### Strict package (local-only)
+Run:
+```bash
+make eval.package.strict           # fails if strict has FAILs
+ALLOW_FAIL=1 make eval.package.strict  # continues despite strict failures
+```
+
+### Release manifest (local-only)
+
+Run:
+
+```bash
+make eval.release_manifest
+```
+
+Artifact:
+
+* `share/eval/release_manifest.json` — path, size, sha256 for all packaged artifacts.
