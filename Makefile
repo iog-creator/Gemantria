@@ -430,6 +430,8 @@ eval.package:
 	@$(MAKE) eval.release_manifest
 	@$(MAKE) eval.schema.verify
 	@$(MAKE) eval.verify.integrity
+	@$(MAKE) eval.summary
+	@$(MAKE) eval.quality.check
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -491,6 +493,10 @@ eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
 eval.provenance:
 	@python3 scripts/eval/build_provenance.py
+eval.quality.check:
+	@python3 scripts/eval/check_quality.py
+eval.summary:
+	@python3 scripts/eval/build_run_summary.py
 
 .PHONY: eval.open
 eval.open:

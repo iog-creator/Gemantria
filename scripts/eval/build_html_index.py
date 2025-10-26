@@ -160,6 +160,16 @@ def main() -> int:
     )
     html.append("        </details>")
     html.append("")
+
+    html.append("        <!-- Run summary (optional) -->")
+    html.append('        <details style="margin-top:12px;">')
+    html.append("          <summary>Run summary</summary>")
+    html.append('          <div><a href="summary.md" target="_blank" rel="noopener">Open summary.md</a></div>')
+    html.append(
+        '          <div id="quality-status" style="font-family:monospace; white-space:pre; margin-top:8px;"></div>'
+    )
+    html.append("        </details>")
+    html.append("")
     html.append("        <div class='artifacts'>")
 
     # Core reports
@@ -339,6 +349,15 @@ def main() -> int:
     html.append("                    \"delta=\" + (p.delta_present ? \"yes\":\"no\") + \" centrality=\" + (p.centrality_present ? \"yes\":\"no\")")
     html.append("                ];")
     html.append("                document.getElementById('prov').textContent = lines.join(\"\\n\");")
+    html.append("            }catch(_){/* silent */}")
+    html.append("        })();")
+    html.append("    </script>")
+    html.append("    <script>")
+    html.append("        (async function(){")
+    html.append("            try{")
+    html.append("                const r = await fetch('quality_report.txt'); if(!r.ok) return;")
+    html.append("                const t = await r.text();")
+    html.append("                document.getElementById('quality-status').textContent = t;")
     html.append("            }catch(_){/* silent */}")
     html.append("        })();")
     html.append("    </script>")
