@@ -286,3 +286,57 @@ Returns:
 * `0` (success) — no failures detected
 * `1` (failure) — failures detected in strict profile
 * Override with `ALLOW_FAIL=1` environment variable
+
+### Remediation workflow (local-only)
+
+Automated analysis and fixing of evaluation failures:
+
+```bash
+# Step 1: Run evaluation to identify issues
+make eval.report
+
+# Step 2: Generate remediation plan with specific fix suggestions
+make eval.remediation
+
+# Step 3: Apply automated fixes (optional, skips if SKIP_AUTO_FIXES=1)
+make eval.apply.remediation
+```
+
+#### Remediation plan generation
+
+Run:
+```bash
+make eval.remediation
+```
+
+Artifacts:
+* `share/eval/remediation_plan.json` — structured remediation data
+* `share/eval/remediation_plan.md` — human-readable plan with suggested actions
+
+The plan analyzes failed evaluation tasks and provides:
+- **Issue categorization** (data_integrity, data_quality, data_distribution, etc.)
+- **Severity levels** (high, medium, low)
+- **Specific fix suggestions** for each failure type
+- **Automated fix availability** indicators
+- **Effort estimates** for manual interventions
+
+#### Automated fix application
+
+Run:
+```bash
+make eval.apply.remediation
+```
+
+Features:
+* **Safe execution** — only applies fixes marked as automated
+* **Timeout protection** — 5-minute timeout per fix
+* **Validation** — re-runs evaluation after fixes to measure improvement
+* **Detailed logging** — tracks all attempted fixes and outcomes
+* **Preview mode** — set `SKIP_AUTO_FIXES=1` to analyze without applying
+
+Artifact:
+* `share/eval/remediation_applied.json` — execution log with success/failure details
+
+**Current automated fixes:**
+- Pipeline regeneration (`make go`) for missing files
+- Future: Additional automated fixes as they're identified and validated
