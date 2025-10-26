@@ -30,7 +30,7 @@ def main() -> int:
         path = a.get("path")
         exp_sha = a.get("sha256")
         exp_sz = a.get("size")
-        if not path or path == "release_manifest.json":
+        if not path or path in ("release_manifest.json", "integrity_report.txt"):
             continue
         fp = EVAL / path
         if not fp.exists():
