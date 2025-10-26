@@ -1,16 +1,31 @@
 #!/usr/bin/env python3
-import argparse, hashlib, json, pathlib, subprocess, sys, time
+import argparse
+import hashlib
+import json
+import pathlib
+import subprocess
+import sys
+import time
+
 
 def sha256(b: bytes) -> str:
-    h = hashlib.sha256(); h.update(b); return h.hexdigest()
+    h = hashlib.sha256()
+    h.update(b)
+    return h.hexdigest()
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", required=True, help="Path to release_manifest.json")
-    ap.add_argument("--hard-cmd", default="make -s eval.verify.integrity",
-                    help="Command to run the hard integrity check once")
+    ap.add_argument(
+        "--hard-cmd",
+        default="make -s eval.verify.integrity",
+        help="Command to run the hard integrity check once",
+    )
     ap.add_argument("--cache-dir", default=".cache/integrity", help="Cache directory")
-    ap.add_argument("--timeout", type=int, default=180, help="Timeout (s) for hard check")
+    ap.add_argument(
+        "--timeout", type=int, default=180, help="Timeout (s) for hard check"
+    )
     args = ap.parse_args()
 
     man = pathlib.Path(args.manifest)
@@ -48,6 +63,7 @@ def main():
     print(f"[integrity.fast] result={status} rc={rc} dur={dur:.2f}s")
     print(f"[integrity] soft gate: {status.upper()} (non-blocking)")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

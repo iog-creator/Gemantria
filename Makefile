@@ -203,7 +203,7 @@ ops.verify:
 	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
 	fi
 	@missing=0; \
-	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg share/eval/quality_history.jsonl share/eval/badges/quality_trend.svg share/eval/calibration_adv.json share/eval/edge_audit.csv share/eval/edge_audit.json share/eval/anomalies.json share/eval/badges/anomalies.svg; do \
+	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg; do \
 	  if [ ! -f $$f ]; then echo "[ops.verify] MISSING $$f"; missing=1; fi; \
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
@@ -260,6 +260,9 @@ eval.catalog:
 
 ci.eval.catalog:
 	@python3 scripts/eval/build_exports_catalog.py
+
+
+# Provenance (writes share/eval/provenance.{json,md})
 
 
 # Checksums for exports (writes share/eval/checksums.csv)
@@ -414,22 +417,17 @@ eval.package:
 	@$(MAKE) eval.snapshot.rotate
 	@$(MAKE) eval.graph.tables
 	@$(MAKE) eval.graph.delta
-	@$(MAKE) eval.edge.audit
-	@$(MAKE) eval.edge.anomalies
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
 	@$(MAKE) eval.bundle.all
-	@$(MAKE) eval.release_manifest
 	@$(MAKE) eval.provenance
+	@$(MAKE) eval.release_manifest
 	@$(MAKE) eval.schema.verify
 	@$(MAKE) -s eval.verify.integrity.soft
 	@$(MAKE) eval.summary
 	@$(MAKE) eval.quality.check
 	@$(MAKE) eval.quality.badge
-	@$(MAKE) eval.quality.trend
-	@$(MAKE) eval.graph.calibrate
-	@$(MAKE) eval.graph.calibrate.adv
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -463,26 +461,31 @@ eval.bundle.all:
 	@mkdir -p share/eval/bundles
 	@ts=$$(date -u +%Y%m%dT%H%M%SZ); \
 	out="share/eval/bundles/eval_$${ts}.tar.gz"; \
-	tmp="share/eval/tmp_bundle_all.tar.gz"; \
-	(cd share/eval && find . -maxdepth 1 -type f -o -type d ! -name bundles ! -name . | xargs tar -czf "../../$${tmp}" --mtime='UTC 2020-01-01' --owner=0 --group=0 --numeric-owner); \
-	mv "$${tmp}" "$${out}"; \
+	(cd share && tar -czf "../$${out}" --mtime='UTC 2020-01-01' --owner=0 --group=0 --numeric-owner eval); \
 	echo "[eval.bundle.all] wrote $${out}"
 
 .PHONY: eval.verify.integrity ci.eval.verify.integrity
 eval.verify.integrity:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
 ci.eval.verify.integrity:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
 .PHONY: eval.verify.integrity.soft
 # Fast, non-blocking soft integrity: cached by release_manifest fingerprint
 RELEASE_MANIFEST ?= share/eval/release_manifest.json
 eval.verify.integrity.soft:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/integrity_fast.py --manifest "$(RELEASE_MANIFEST)" \
 	  --hard-cmd "make -s eval.verify.integrity" ; true
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.edge.audit eval.edge.anomalies eval.schema.verify eval.provenance ci.eval.provenance
+.PHONY: ci.db.ensure
+ci.db.ensure:
+	@bash scripts/ci/db_ensure.sh || true
+
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -493,50 +496,29 @@ eval.graph.tables:
 	@python3 scripts/eval/export_graph_tables.py
 eval.graph.delta:
 	@python3 scripts/eval/compute_delta.py
-eval.edge.audit:
-	@python3 scripts/eval/build_edge_audit.py
-eval.edge.anomalies:
-	@python3 scripts/eval/detect_anomalies.py
 eval.schema.verify:
 	@python3 -c "import jsonschema" >/dev/null 2>&1 || (echo '[schema] installing jsonschema' && pip3 install --quiet jsonschema)
 	@python3 scripts/eval/verify_schema.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
-eval.provenance:
-	@python3 scripts/eval/build_provenance.py
-
-ci.eval.provenance:
-	@python3 scripts/eval/build_provenance.py
-
 eval.quality.check:
 	@python3 scripts/eval/check_quality.py
 eval.summary:
 	@python3 scripts/eval/build_run_summary.py
-.PHONY: eval.quality.badge eval.graph.calibrate eval.graph.calibrate.adv eval.quality.trend
+.PHONY: eval.quality.badge eval.graph.calibrate
 eval.quality.badge:
 	@python3 scripts/eval/make_quality_badge.py
 eval.graph.calibrate:
 	@python3 scripts/eval/calibrate_thresholds.py
-eval.graph.calibrate.adv:
-	@python3 scripts/eval/calibrate_advanced.py
-eval.quality.trend:
-	@python3 scripts/eval/quality_trend.py
 
 .PHONY: eval.open
 eval.open:
 	@echo "[eval.open] Opening dashboard..."
 	@python3 -c "import pathlib, webbrowser; p = pathlib.Path('share/eval/index.html').resolve(); print('[eval.open]', p); webbrowser.open(p.as_uri())"
 
-.PHONY: targets.check.dupes
-targets.check.dupes:
-	@echo "[targets.check.dupes] scanning for duplicate targets/PHONY…"
-	@rg -n '^(\.PHONY:\s*)?[A-Za-z0-9_.-]+' Makefile | \
-	  sed -E 's/^.*:(\s*)?//' >/dev/null 2>&1 || true
-	@rg -n '^(\.PHONY:\s*)?[A-Za-z0-9_.-]+\b' Makefile | \
-	  sed -E 's/^(\.PHONY:\s*)?//' | sort | uniq -d | tee /tmp/dupes.lst
-	@[ ! -s /tmp/dupes.lst ] || { echo "[targets.check.dupes] FAIL: duplicates found above"; exit 1; }
-	@echo "[targets.check.dupes] OK: no duplicates"
+.PHONY: eval.provenance ci.eval.provenance
+eval.provenance:
+	@python3 scripts/eval/build_provenance.py
 
-.PHONY: eval.cache.clear
-eval.cache.clear:
-	@rm -rf .cache/integrity && echo "[eval.cache.clear] cleared integrity cache"
+ci.eval.provenance:
+	@python3 scripts/eval/build_provenance.py

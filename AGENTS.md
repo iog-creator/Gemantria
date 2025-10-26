@@ -21,6 +21,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
+- CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
 ## Workflow (small green PRs)
 - Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
@@ -40,6 +41,16 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    make lint type test.unit test.integration coverage.report
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
+
+### Runbook: Database Bootstrap (CI)
+1. Bootstrap script ensures database exists before migrations:
+   ```bash
+   scripts/ci/ensure_db_then_migrate.sh
+   ```
+2. Handles missing database gracefully with admin connection fallback
+3. Applies vector extension and all migrations in order
+4. Migration 014 fixed to handle schema evolution from migration 007 (composite primary key preservation, view recreation)
+5. Used in CI workflows for reliable database setup
 
 ## Operations
 
