@@ -1,6 +1,24 @@
 
 
 
+# ------------------------------------------------------------------
+# Duplicate Makefile target guard (CI smoke-friendly; no hard gate)
+# ------------------------------------------------------------------
+.PHONY: targets.check.dupes
+targets.check.dupes:
+	@dupes=$$(awk -F: '/^[[:alnum:]_.-][^:]*:/ { \
+	  if ($$1 !~ /^\.PHONY/) { \
+	    split($$1,a,/ +/); \
+	    for(i in a) if (a[i]!="" && a[i]!~/^\.PHONY/) print a[i] \
+	  } \
+	}' Makefile | sort | uniq -d); \
+	if [ -n "$$dupes" ]; then \
+	  echo "[targets.check.dupes] ERROR: duplicate targets found:"; \
+	  echo "$$dupes"; \
+	  exit 1; \
+	else \
+	  echo "[targets.check.dupes] OK: no duplicates"; \
+	fi
 
 .PHONY: py.quickfix py.longline py.fullwave
 py.quickfix:
