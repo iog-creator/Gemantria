@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pathlib
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
 BADGES = EVAL / "badges"; BADGES.mkdir(parents=True, exist_ok=True)

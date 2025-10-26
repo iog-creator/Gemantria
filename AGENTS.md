@@ -109,4 +109,5 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
+| 039 | # --- |
 <!-- RULES_INVENTORY_END -->

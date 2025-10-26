@@ -41,3 +41,4 @@
 | 036 | 036-temporal-visualization-spec.mdc | # --- |
 | 037 | 037-data-persistence-completeness.mdc | # --- |
 | 038 | 038-exports-smoke-gate.mdc | # --- |
+| 039 | 039-cursor-execution-contract.mdc | # --- |

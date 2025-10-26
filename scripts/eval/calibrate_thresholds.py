@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import json, pathlib, statistics as st
+import json
+import pathlib
+import statistics as st
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"; GRAPH = EVAL / "graph_latest.json"; OUT = EVAL / "calibration_suggest.json"
 

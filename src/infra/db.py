@@ -1,8 +1,10 @@
 from __future__ import annotations
+
 import os
 import re
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import Any, Iterable, Optional, Sequence, Tuple
+from typing import Any
 
 try:
     # psycopg 3 preferred
@@ -30,9 +32,9 @@ def sql_is_write(sql: str) -> bool:
 
 @dataclass
 class BibleReadOnly:
-    dsn: Optional[str]
+    dsn: str | None
 
-    def execute(self, sql: str, params: Optional[Sequence[Any]] = None) -> Iterable[Tuple]:
+    def execute(self, sql: str, params: Sequence[Any] | None = None) -> Iterable[tuple]:
         """
         Enforces read-only at the adapter level *before* any DB connection is touched.
         Requires %s parameterization; does not permit f-string interpolation.
@@ -45,27 +47,25 @@ class BibleReadOnly:
             raise RuntimeError("BIBLE_DB_DSN not set; cannot execute read query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql, params or ())
-                for row in cur:
-                    yield row
+        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
+            cur.execute(sql, params or ())
+            for row in cur:
+                yield row
 
 @dataclass
 class GematriaRW:
-    dsn: Optional[str]
+    dsn: str | None
 
-    def execute(self, sql: str, params: Optional[Sequence[Any]] = None) -> Iterable[Tuple]:
+    def execute(self, sql: str, params: Sequence[Any] | None = None) -> Iterable[tuple]:
         if not self.dsn:
             raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql, params or ())
-                if cur.description:
-                    for row in cur:
-                        yield row
+        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
+            cur.execute(sql, params or ())
+            if cur.description:
+                for row in cur:
+                    yield row
 
 def get_bible_ro() -> BibleReadOnly:
     return BibleReadOnly(dsn=os.getenv("BIBLE_DB_DSN"))

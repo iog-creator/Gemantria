@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-import argparse, hashlib, json, pathlib, subprocess, sys, time
+import argparse
+import hashlib
+import json
+import pathlib
+import subprocess
+import sys
+import time
+
 
 def sha256(b: bytes) -> str:
     h = hashlib.sha256(); h.update(b); return h.hexdigest()

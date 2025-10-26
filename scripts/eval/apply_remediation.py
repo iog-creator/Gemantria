@@ -232,6 +232,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    import sys
+    import sys  # noqa: E402
 
     sys.exit(main())

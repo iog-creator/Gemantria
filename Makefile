@@ -2,6 +2,26 @@
 
 
 
+# ------------------------------------------------------------------
+# Duplicate Makefile target guard (CI smoke-friendly; no hard gate)
+# ------------------------------------------------------------------
+.PHONY: targets.check.dupes
+# guard: duplicate-target check (no-op comment for CI visibility)
+targets.check.dupes:
+	@dupes=$$(awk -F: '/^[[:alnum:]_.-][^:]*:/ { \
+	  if ($$1 !~ /^\.PHONY/) { \
+	    split($$1,a,/ +/); \
+	    for(i in a) if (a[i]!="" && a[i]!~/^\.PHONY/) print a[i] \
+	  } \
+	}' Makefile | sort | uniq -d); \
+	if [ -n "$$dupes" ]; then \
+	  echo "[targets.check.dupes] ERROR: duplicate targets found:"; \
+	  echo "$$dupes"; \
+	  exit 1; \
+	else \
+	  echo "[targets.check.dupes] OK: no duplicates"; \
+	fi
+
 .PHONY: py.quickfix py.longline py.fullwave
 py.quickfix:
 	@python3 scripts/quick_fixes.py && ruff check --fix src scripts
@@ -261,14 +281,7 @@ eval.catalog:
 ci.eval.catalog:
 	@python3 scripts/eval/build_exports_catalog.py
 
-.PHONY: eval.provenance ci.eval.provenance eval.checksums ci.eval.checksums
-
-# Provenance (writes share/eval/provenance.{json,md})
-eval.provenance:
-	@python3 scripts/eval/provenance.py
-
-ci.eval.provenance:
-	@python3 scripts/eval/provenance.py
+.PHONY: eval.checksums ci.eval.checksums
 
 # Checksums for exports (writes share/eval/checksums.csv)
 eval.checksums:
