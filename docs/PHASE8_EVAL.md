@@ -231,3 +231,58 @@ make eval.policydiff
 Artifact:
 
 * `share/eval/policy_diff.md` — pass/fail summary for strict vs dev
+
+### Config snapshots (local-only)
+
+Create frozen copies of configuration used for evaluation:
+
+```bash
+make eval.snapshot
+```
+
+Artifacts:
+
+* `share/eval/snapshot/manifest.snapshot.yml` — exact manifest used
+* `share/eval/snapshot/thresholds.snapshot.yml` — resolved thresholds
+* `share/eval/snapshot/provenance.snapshot.json` — git SHA, timestamp, tool versions
+
+### HTML dashboard (local-only)
+
+Generate browsable HTML dashboard with artifact links and pass/fail badges:
+
+```bash
+make eval.html
+```
+
+Artifact:
+
+* `share/eval/index.html` — lightweight dashboard linking to all artifacts with status badges
+
+### Bundle for handoff (local-only)
+
+Create distributable tar.gz bundle with all evaluation artifacts:
+
+```bash
+make eval.bundle
+```
+
+Artifact:
+
+* `share/eval/bundles/eval_bundle_<ts>.tar.gz` — includes:
+  * `share/eval/*` (all artifacts)
+  * `exports/graph_{latest,sanitized,repaired}.json` (if present)
+  * `eval/manifest.yml`, `eval/thresholds.yml`
+  * `share/eval/snapshot/*` (snapshot files)
+
+### Strict preflight gate (local-only)
+
+Quality gate that enforces zero failures under strict profile:
+
+```bash
+make eval.gate.strict
+```
+
+Returns:
+* `0` (success) — no failures detected
+* `1` (failure) — failures detected in strict profile
+* Override with `ALLOW_FAIL=1` environment variable
