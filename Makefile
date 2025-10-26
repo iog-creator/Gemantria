@@ -411,6 +411,8 @@ ci.eval.release_notes:
 eval.package:
 	@$(MAKE) eval.snapshot
 	@$(MAKE) eval.html
+	@$(MAKE) eval.graph.rerank_blend
+	@$(MAKE) eval.graph.centrality
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
@@ -459,6 +461,12 @@ eval.verify.integrity:
 
 ci.eval.verify.integrity:
 	@python3 scripts/eval/verify_integrity.py
+
+.PHONY: eval.graph.centrality eval.graph.rerank_blend
+eval.graph.centrality:
+	@.venv/bin/python3 scripts/eval/compute_centrality.py
+eval.graph.rerank_blend:
+	@.venv/bin/python3 scripts/eval/apply_rerank_blend.py
 
 .PHONY: eval.open
 eval.open:

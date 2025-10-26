@@ -419,3 +419,8 @@ Opens the offline dashboard.
 
 ### Governance
 When `share/eval/release_manifest.json` is present, `make ops.verify` now runs integrity verification as part of the ops gate.
+
+### Centrality & Edge Strength
+- `make eval.graph.centrality` writes `share/eval/centrality.json` with degree/betweenness/eigenvector.
+- `make eval.graph.rerank_blend` fills missing rerank and computes `edge_strength = 0.5*cos + 0.5*rerank` with classes {strong, weak, other}.
+- `make eval.package` runs both and updates dashboard + manifest.
