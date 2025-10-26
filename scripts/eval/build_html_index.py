@@ -70,6 +70,17 @@ def main() -> int:
     html.append("<body>")
     html.append("    <div class='container'>")
     html.append("        <h1>🔍 Gemantria Phase-8 Evaluation Dashboard</h1>")
+    # badges (optional)
+    badges_dir = OUTDIR / "badges"
+    report_badge = badges_dir / "report_status.svg"
+    strict_badge = badges_dir / "strict_gate.svg"
+    badges_html = ""
+    if report_badge.exists():
+        badges_html += f'<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
+    if strict_badge.exists():
+        badges_html += f'<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
+    if badges_html:
+        html.append(f"<div>{badges_html}</div>")
     html.append("")
     html.append("        <div class='summary'>")
     html.append(

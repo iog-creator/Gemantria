@@ -406,6 +406,7 @@ eval.package:
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
+	@$(MAKE) eval.release_manifest
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -415,3 +416,19 @@ ci.eval.package:
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
 	@echo "[eval.package] OK"
+
+.PHONY: eval.package.strict ci.eval.package.strict
+eval.package.strict:
+	@$(MAKE) eval.gate.strict
+	@$(MAKE) eval.package
+
+ci.eval.package.strict:
+	@$(MAKE) eval.gate.strict
+	@$(MAKE) eval.package
+
+.PHONY: eval.release_manifest ci.eval.release_manifest
+eval.release_manifest:
+	@python3 scripts/eval/build_release_manifest.py
+
+ci.eval.release_manifest:
+	@python3 scripts/eval/build_release_manifest.py

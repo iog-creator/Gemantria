@@ -372,4 +372,26 @@ Run:
 make eval.package
 ```
 
-Runs: snapshot → html → bundle → badges → release_notes, then prints `[eval.package] OK`.
+Runs: snapshot → html → bundle → badges → release_notes → release_manifest, then prints `[eval.package] OK`.
+
+### HTML badges embed
+Badges now render inside `share/eval/index.html` when present (no external hosting required).
+
+### Strict package (local-only)
+Run:
+```bash
+make eval.package.strict           # fails if strict has FAILs
+ALLOW_FAIL=1 make eval.package.strict  # continues despite strict failures
+```
+
+### Release manifest (local-only)
+
+Run:
+
+```bash
+make eval.release_manifest
+```
+
+Artifact:
+
+* `share/eval/release_manifest.json` — path, size, sha256 for all packaged artifacts.
