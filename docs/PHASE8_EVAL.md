@@ -486,3 +486,19 @@ make eval.package
   - `share/eval/badges/quality_trend.svg` — sparkline badge (last 30 runs)
 - Dashboard shows **Calibration & Trend** section with suggested env values and the trend sparkline.
 - `ops.verify` requires these artifacts.
+
+### Edge audit & anomalies (MANDATORY)
+- Build:
+```bash
+make eval.edge.audit
+make eval.edge.anomalies
+```
+- Outputs:
+  - `edge_audit.csv`, `edge_audit.json`
+  - `anomalies.json` and badge `badges/anomalies.svg`
+- Env knobs for anomaly detection:
+  - `ANOM_COS_RERANK_GAP` (default 0.40)
+  - `ANOM_LOW_STRONG` (default 0.85)
+  - `ANOM_HI_OTHER` (default 0.70)
+- Dashboard shows anomaly count and examples.
+- `ops.verify` requires all of the above.

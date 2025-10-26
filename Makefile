@@ -203,7 +203,7 @@ ops.verify:
 	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
 	fi
 	@missing=0; \
-	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg share/eval/quality_history.jsonl share/eval/badges/quality_trend.svg share/eval/calibration_adv.json; do \
+	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg share/eval/quality_history.jsonl share/eval/badges/quality_trend.svg share/eval/calibration_adv.json share/eval/edge_audit.csv share/eval/edge_audit.json share/eval/anomalies.json share/eval/badges/anomalies.svg; do \
 	  if [ ! -f $$f ]; then echo "[ops.verify] MISSING $$f"; missing=1; fi; \
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
@@ -422,6 +422,8 @@ eval.package:
 	@$(MAKE) eval.snapshot.rotate
 	@$(MAKE) eval.graph.tables
 	@$(MAKE) eval.graph.delta
+	@$(MAKE) eval.edge.audit
+	@$(MAKE) eval.edge.anomalies
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
@@ -479,7 +481,7 @@ eval.verify.integrity:
 ci.eval.verify.integrity:
 	@python3 scripts/eval/verify_integrity.py
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.edge.audit eval.edge.anomalies eval.schema.verify
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -490,6 +492,10 @@ eval.graph.tables:
 	@python3 scripts/eval/export_graph_tables.py
 eval.graph.delta:
 	@python3 scripts/eval/compute_delta.py
+eval.edge.audit:
+	@python3 scripts/eval/build_edge_audit.py
+eval.edge.anomalies:
+	@python3 scripts/eval/detect_anomalies.py
 eval.schema.verify:
 	@python3 -c "import jsonschema" >/dev/null 2>&1 || (echo '[schema] installing jsonschema' && pip3 install --quiet jsonschema)
 	@python3 scripts/eval/verify_schema.py
