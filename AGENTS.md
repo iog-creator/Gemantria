@@ -49,7 +49,8 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 2. Handles missing database gracefully with admin connection fallback
 3. Applies vector extension and all migrations in order
-4. Used in CI workflows for reliable database setup
+4. Migration 014 fixed to handle schema evolution from migration 007
+5. Used in CI workflows for reliable database setup
 
 ## Operations
 

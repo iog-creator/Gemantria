@@ -1,16 +1,45 @@
 BEGIN;
 
--- 1) Ensure relations table exists
+-- 1) Ensure relations table exists and has required columns
+-- Migration 007 created basic table, this adds missing columns
 CREATE TABLE IF NOT EXISTS concept_relations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   source_id UUID NOT NULL,
   target_id UUID NOT NULL,
-  cosine FLOAT NOT NULL,
-  rerank_score FLOAT,
-  decided_yes BOOLEAN,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT concept_relations_uniq UNIQUE (source_id, target_id)
+  similarity DOUBLE PRECISION,
+  relation_type TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY (source_id, target_id)
 );
+
+-- Add missing columns if they don't exist
+DO $$
+BEGIN
+    -- Add id column if missing
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_name = 'concept_relations' AND column_name = 'id') THEN
+        ALTER TABLE concept_relations ADD COLUMN id UUID PRIMARY KEY DEFAULT gen_random_uuid();
+    END IF;
+
+    -- Add cosine column if missing (rename similarity to cosine)
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_name = 'concept_relations' AND column_name = 'cosine') THEN
+        ALTER TABLE concept_relations ADD COLUMN cosine FLOAT;
+        -- Copy similarity values to cosine if they exist
+        UPDATE concept_relations SET cosine = similarity WHERE similarity IS NOT NULL;
+    END IF;
+
+    -- Add rerank_score column if missing
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_name = 'concept_relations' AND column_name = 'rerank_score') THEN
+        ALTER TABLE concept_relations ADD COLUMN rerank_score FLOAT;
+    END IF;
+
+    -- Add decided_yes column if missing
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_name = 'concept_relations' AND column_name = 'decided_yes') THEN
+        ALTER TABLE concept_relations ADD COLUMN decided_yes BOOLEAN;
+    END IF;
+END $$;
 
 -- Optional helpful index
 CREATE INDEX IF NOT EXISTS idx_concept_relations_pair
