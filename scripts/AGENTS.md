@@ -31,6 +31,38 @@ Notes:
 - Requires servers running (headless): `lms server start --port 9994 [--port 9991/9993]`
 - Script loads `.env` via `ensure_env_loaded()` and uses `/v1` endpoints.
 
+### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
+
+**Purpose:** Emit standardized `HINT:` lines for clear CI log visibility and Cursor runtime tracking.
+
+**Requirements:**
+- **Uniform Format**: All hints start with `HINT:` for easy grepping
+- **Runtime Clarity**: Key operations emit hints so CI logs are self-documenting
+- **Fallback Safe**: Works even if hint.sh script is missing (echo fallback)
+- **Template Integration**: Required in PR templates and NEXT_STEPS runbooks
+
+**Usage:**
+```bash
+# Direct usage
+./scripts/hint.sh "verify: database bootstrap OK"
+
+# Via emit() function (preferred in scripts)
+emit() { if [ -x scripts/hint.sh ]; then scripts/hint.sh "$*"; else echo "HINT: $*"; fi; }
+emit "verify: target_db=$target_db"
+```
+
+**Output Format:**
+```
+HINT: verify: database bootstrap OK
+HINT: verify: applying migrations/002_create_checkpointer.sql
+```
+
+**Integration Points:**
+- `scripts/ci/ensure_db_then_migrate.sh` - Database bootstrap hints
+- PR templates - Require listing expected HINT lines
+- NEXT_STEPS templates - Require HINT planning
+- CI logs - Clear runtime visibility for Cursor and reviewers
+
 ### Lint Automation Scripts (NEW)
 
 #### `longline_noqa.py` — Smart E501 `# noqa` Tagger

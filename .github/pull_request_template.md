@@ -19,5 +19,8 @@
 - [ ] No governance/workflow drift
 - [ ] CI green
 
+## Emitted Hints (REQUIRED)
+- List the key runtime HINT lines your changes will emit (e.g., `HINT: verify: database bootstrap OK`) so CI logs are clear for both Cursor and reviewers.
+
 ## Evidence tails
 <!-- paste decisive tails or failing tails -->

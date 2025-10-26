@@ -9,6 +9,11 @@
 ## Scope (only these files change)
 - <paths>
 
+## Emitted Hints (REQUIRED)
+- HINT lines this run will emit:
+  - HINT: <short message 1>
+  - HINT: <short message 2>
+
 ## Steps
 - [ ] <step>
       Evidence: <command + decisive tail lines>
