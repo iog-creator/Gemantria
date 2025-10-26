@@ -317,6 +317,40 @@ python scripts/verify_pr016_pr017.py --dsn "$GEMATRIA_DSN" \
 
 **Outputs:** `VERIFIER_PASS` on success; fails closed otherwise.
 
+### `eval/integrity_fast.py` — Fast Integrity Caching Wrapper
+
+**Purpose:** Caches integrity verification results by manifest fingerprint to speed up repeated runs of `ops.verify`.
+**Rule References:** 017a (Surgical Soft Integrity Caching)
+**Capabilities:**
+
+- **Manifest Fingerprinting**: Uses SHA-256 of release_manifest.json to detect changes
+- **Cache Storage**: Stores results in `.cache/integrity/` directory
+- **Timeout Protection**: Hard check limited to 180 seconds with graceful timeout handling
+- **Status Caching**: Caches pass/fail/timeout status with timestamps
+- **Skip on No Manifest**: Gracefully skips when manifest doesn't exist
+
+**Usage:**
+
+```bash
+# Called automatically by eval.verify.integrity.soft
+python scripts/eval/integrity_fast.py --manifest share/eval/release_manifest.json
+
+# Clear cache if needed
+make eval.cache.clear
+```
+
+**Cache Behavior:**
+
+- **First Run**: Executes hard check, caches result (may take ~100+ seconds)
+- **Subsequent Runs**: Returns cached result instantly when manifest unchanged
+- **Manifest Changes**: Invalidates cache and re-runs hard check
+- **No Manifest**: Skips with non-blocking status
+
+**Performance Impact:**
+- **First run**: ~100+ seconds (hard check execution time)
+- **Cached runs**: ~0.02 seconds (JSON file read)
+- **Cache invalidation**: Automatic on manifest changes
+
 ### rules_guard.py — Critical System Enforcement
 
 **Purpose:** System-level validation ensuring rules aren't just documentation. Fail-closed verification for code changes.

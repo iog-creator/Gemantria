@@ -476,15 +476,11 @@ ci.eval.verify.integrity:
 	@python3 scripts/eval/verify_integrity.py
 
 .PHONY: eval.verify.integrity.soft
-
-# Soft wrapper: report status; do NOT fail unless HARD_INTEGRITY=1
+# Fast, non-blocking soft integrity: cached by release_manifest fingerprint
+RELEASE_MANIFEST ?= share/eval/release_manifest.json
 eval.verify.integrity.soft:
-	@if [ "$$HARD_INTEGRITY" = "1" ]; then \
-		$(MAKE) -s eval.verify.integrity; \
-	else \
-		echo "[integrity] running soft check..."; \
-		$(MAKE) -s eval.verify.integrity >/dev/null 2>&1 && echo "[integrity] soft gate: PASS" || echo "[integrity] soft gate: FAIL (non-blocking)"; \
-	fi
+	@python3 scripts/eval/integrity_fast.py --manifest "$(RELEASE_MANIFEST)" \
+	  --hard-cmd "make -s eval.verify.integrity" ; true
 
 .PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.edge.audit eval.edge.anomalies eval.schema.verify eval.provenance ci.eval.provenance
 eval.graph.centrality:
@@ -540,3 +536,7 @@ targets.check.dupes:
 	  sed -E 's/^(\.PHONY:\s*)?//' | sort | uniq -d | tee /tmp/dupes.lst
 	@[ ! -s /tmp/dupes.lst ] || { echo "[targets.check.dupes] FAIL: duplicates found above"; exit 1; }
 	@echo "[targets.check.dupes] OK: no duplicates"
+
+.PHONY: eval.cache.clear
+eval.cache.clear:
+	@rm -rf .cache/integrity && echo "[eval.cache.clear] cleared integrity cache"
