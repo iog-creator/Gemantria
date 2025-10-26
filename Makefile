@@ -315,3 +315,26 @@ eval.profile.dev:
 # Build a non-destructive repair plan (JSON + MD)
 eval.repairplan:
 	@python3 scripts/eval/build_repair_plan.py
+
+.PHONY: repair.apply ci.repair.apply eval.policydiff ci.eval.policydiff eval.report.repaired ci.eval.report.repaired
+
+# Apply repair plan to produce a repaired export (adds stub nodes)
+repair.apply:
+	@python3 scripts/fix/apply_repair_plan.py
+
+ci.repair.apply:
+	@python3 scripts/fix/apply_repair_plan.py
+
+# Run manifest report against the repaired export
+eval.report.repaired:
+	@python3 scripts/eval/report_for_file.py exports/graph_repaired.json
+
+ci.eval.report.repaired:
+	@python3 scripts/eval/report_for_file.py exports/graph_repaired.json
+
+# Compare strict vs dev outcomes and write policy_diff.md
+eval.policydiff:
+	@python3 scripts/eval/policy_diff.py
+
+ci.eval.policydiff:
+	@python3 scripts/eval/policy_diff.py
