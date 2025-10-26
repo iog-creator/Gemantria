@@ -384,3 +384,34 @@ eval.apply.remediation:
 
 ci.eval.apply.remediation:
 	@python3 scripts/eval/apply_remediation.py
+
+.PHONY: eval.badges ci.eval.badges eval.release_notes ci.eval.release_notes eval.package ci.eval.package
+
+eval.badges:
+	@python3 scripts/eval/build_badges.py
+
+ci.eval.badges:
+	@python3 scripts/eval/build_badges.py
+
+eval.release_notes:
+	@python3 scripts/eval/build_release_notes.py
+
+ci.eval.release_notes:
+	@python3 scripts/eval/build_release_notes.py
+
+# One-shot local packaging: snapshot → html → bundle → badges → release_notes
+eval.package:
+	@$(MAKE) eval.snapshot
+	@$(MAKE) eval.html
+	@$(MAKE) eval.bundle
+	@$(MAKE) eval.badges
+	@$(MAKE) eval.release_notes
+	@echo "[eval.package] OK"
+
+ci.eval.package:
+	@$(MAKE) eval.snapshot
+	@$(MAKE) eval.html
+	@$(MAKE) eval.bundle
+	@$(MAKE) eval.badges
+	@$(MAKE) eval.release_notes
+	@echo "[eval.package] OK"

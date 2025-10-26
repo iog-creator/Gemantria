@@ -340,3 +340,36 @@ Artifact:
 **Current automated fixes:**
 - Pipeline regeneration (`make go`) for missing files
 - Future: Additional automated fixes as they're identified and validated
+
+### Badges (local-only)
+Run:
+```bash
+make eval.badges
+```
+
+Artifacts:
+
+* `share/eval/badges/report_status.svg`
+* `share/eval/badges/strict_gate.svg`
+
+### Release notes (local-only)
+
+Run:
+
+```bash
+make eval.release_notes
+```
+
+Artifact:
+
+* `share/eval/release_notes.md` — curated summary from report/history/delta/id-stability/provenance/policy_diff.
+
+### Package (local-only)
+
+Run:
+
+```bash
+make eval.package
+```
+
+Runs: snapshot → html → bundle → badges → release_notes, then prints `[eval.package] OK`.
