@@ -338,3 +338,33 @@ eval.policydiff:
 
 ci.eval.policydiff:
 	@python3 scripts/eval/policy_diff.py
+
+.PHONY: eval.snapshot ci.eval.snapshot eval.html ci.eval.html eval.bundle ci.eval.bundle eval.gate.strict ci.eval.gate.strict
+
+# Create config snapshots (manifest, thresholds, provenance)
+eval.snapshot:
+	@python3 scripts/eval/build_snapshot.py
+
+ci.eval.snapshot:
+	@python3 scripts/eval/build_snapshot.py
+
+# Generate HTML dashboard with artifact links and badges
+eval.html:
+	@python3 scripts/eval/build_html_index.py
+
+ci.eval.html:
+	@python3 scripts/eval/build_html_index.py
+
+# Create distributable bundle (tar.gz) with all artifacts
+eval.bundle:
+	@python3 scripts/eval/build_bundle.py
+
+ci.eval.bundle:
+	@python3 scripts/eval/build_bundle.py
+
+# Strict profile gate - fails if any failures detected (unless ALLOW_FAIL=1)
+eval.gate.strict:
+	@python3 scripts/eval/gate_strict.py
+
+ci.eval.gate.strict:
+	@python3 scripts/eval/gate_strict.py
