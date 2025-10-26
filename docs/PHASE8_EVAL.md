@@ -410,3 +410,12 @@ make eval.release_manifest
 Artifact:
 
 * `share/eval/release_manifest.json` — path, size, sha256 for all packaged artifacts.
+
+### Convenience
+```bash
+make eval.open
+```
+Opens the offline dashboard.
+
+### Governance
+When `share/eval/release_manifest.json` is present, `make ops.verify` now runs integrity verification as part of the ops gate.

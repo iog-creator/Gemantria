@@ -195,7 +195,15 @@ ci.eval.report:
 
 # Local repo ops verifier (prints decisive lines; no CI wiring)
 ops.verify:
+	@echo "[ops.verify] running"
+	@if [ -f share/eval/release_manifest.json ]; then \
+	  echo "[ops.verify] integrity check present → verifying"; \
+	  $(MAKE) eval.verify.integrity; \
+	else \
+	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
+	fi
 	@python3 scripts/ops/verify_repo.py
+	@echo "[ops.verify] OK"
 
 # Identical to local; intentionally not part of CI
 ci.ops.verify:
@@ -451,3 +459,8 @@ eval.verify.integrity:
 
 ci.eval.verify.integrity:
 	@python3 scripts/eval/verify_integrity.py
+
+.PHONY: eval.open
+eval.open:
+	@echo "[eval.open] Opening dashboard..."
+	@python3 -c "import pathlib, webbrowser; p = pathlib.Path('share/eval/index.html').resolve(); print('[eval.open]', p); webbrowser.open(p.as_uri())"
