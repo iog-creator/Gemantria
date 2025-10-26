@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-import hashlib, json, os, pathlib, subprocess, time
+import hashlib
+import json
+import os
+import pathlib
+import subprocess
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
-OUT  = EVAL / "provenance.json"
+OUT = EVAL / "provenance.json"
+
 
 def sha256_path(p: pathlib.Path) -> str:
     h = hashlib.sha256()
@@ -26,6 +32,7 @@ def safe_json(p: pathlib.Path) -> dict | None:
     except Exception:
         return None
 
+
 def main() -> int:
     cur = safe_json(EVAL / "graph_latest.json") or {}
     man = safe_json(EVAL / "release_manifest.json") or {}
@@ -40,7 +47,10 @@ def main() -> int:
     prov = {
         "generated_at": int(time.time()),
         "git": {"commit": commit, "branch": branch, "describe": tag},
-        "env": {"python": py, "rerank_provider": os.environ.get("RERANK_PROVIDER", "none")},
+        "env": {
+            "python": py,
+            "rerank_provider": os.environ.get("RERANK_PROVIDER", "none"),
+        },
         "counts": {"nodes": nodes, "edges": edges, "artifacts": artifacts},
         "hashes": {
             "graph_latest.json": (
@@ -65,6 +75,7 @@ def main() -> int:
     OUT.write_text(json.dumps(prov, indent=2, sort_keys=True), encoding="utf-8")
     print(f"[provenance] wrote {OUT.relative_to(ROOT)}")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

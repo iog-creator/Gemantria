@@ -28,10 +28,10 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt jsonschema psycopg[binary]
-      - name: Apply schema & PR migrations
+      - name: Apply schema & PR migrations (safe bootstrap)
         run: |
-          psql "$GEMATRIA_DSN" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
-          for f in migrations/*.sql; do psql "$GEMATRIA_DSN" -f "$f"; done
+          chmod +x scripts/ci/ensure_db_then_migrate.sh
+          scripts/ci/ensure_db_then_migrate.sh
       - name: Generate metrics & exports
         run: |
           python scripts/analyze_graph.py || true
