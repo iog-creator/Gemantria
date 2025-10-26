@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-import hashlib, json, pathlib, sys
+import hashlib
+import json
+import pathlib
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
 MANIFEST = EVAL / "release_manifest.json"
 REPORT = EVAL / "integrity_report.txt"
+
 
 def sha256(p: pathlib.Path) -> str:
     h = hashlib.sha256()
@@ -12,6 +16,7 @@ def sha256(p: pathlib.Path) -> str:
         for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
+
 
 def main() -> int:
     if not MANIFEST.exists():
@@ -24,8 +29,8 @@ def main() -> int:
     for a in artifacts:
         path = a.get("path")
         exp_sha = a.get("sha256")
-        exp_sz  = a.get("size")
-        if not path:
+        exp_sz = a.get("size")
+        if not path or path == "release_manifest.json":
             continue
         fp = EVAL / path
         if not fp.exists():
@@ -44,12 +49,15 @@ def main() -> int:
         if ok_sz and ok_sh:
             lines.append(f"OK\t{path}")
         else:
-            lines.append(f"MISMATCH\t{path}\tgot_size={sz}\texp_size={exp_sz}\tgot_sha256={sh}\texp_sha256={exp_sha}")
+            lines.append(
+                f"MISMATCH\t{path}\tgot_size={sz}\texp_size={exp_sz}\tgot_sha256={sh}\texp_sha256={exp_sha}"
+            )
             bad += 1
     header = f"[integrity] checked={len(artifacts)} mismatches={bad}"
     print(header)
     REPORT.write_text(header + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
     return 1 if bad else 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

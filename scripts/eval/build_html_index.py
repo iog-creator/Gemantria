@@ -18,7 +18,7 @@ def _status_badge(status: str) -> str:
         return '<span style="background-color: #ffc107; color: black; padding: 2px 8px; border-radius: 4px; font-size: 12px;">WARN</span>'  # noqa: E501
 
 
-def _load_report() -> dict[str, Any] | dict[str, dict[str, int] | list]:
+def _load_report() -> dict[str, Any]:
     if REPORT_JSON.exists():
         return json.loads(REPORT_JSON.read_text(encoding="utf-8"))
     return {"summary": {"ok_count": 0, "fail_count": 0}, "results": []}
@@ -66,10 +66,18 @@ def main() -> int:
     html.append(
         "        .manifest-section { margin: 20px 0; border: 1px solid #e1e4e8; border-radius: 6px; padding: 15px; background: #fafbfc; }"  # noqa: E501
     )
-    html.append("        .manifest-section summary { cursor: pointer; font-weight: bold; }")
-    html.append("        #manifest-table { width: 100%; border-collapse: collapse; margin-top: 10px; }")
-    html.append("        #manifest-table th, #manifest-table td { border: 1px solid #e1e4e8; padding: 8px; text-align: left; }")
-    html.append("        #manifest-table th { background: #f1f8ff; font-weight: bold; }")
+    html.append(
+        "        .manifest-section summary { cursor: pointer; font-weight: bold; }"
+    )
+    html.append(
+        "        #manifest-table { width: 100%; border-collapse: collapse; margin-top: 10px; }"  # noqa: E501
+    )
+    html.append(
+        "        #manifest-table th, #manifest-table td { border: 1px solid #e1e4e8; padding: 8px; text-align: left; }"  # noqa: E501
+    )
+    html.append(
+        "        #manifest-table th { background: #f1f8ff; font-weight: bold; }"
+    )
     html.append("        #manifest-summary { margin-bottom: 10px; font-weight: bold; }")
     html.append(
         "        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e4e8; color: #586069; font-size: 14px; }"  # noqa: E501
@@ -162,25 +170,39 @@ def main() -> int:
     html.append("    <script>")
     html.append("        async function loadManifest() {")
     html.append("            try {")
-    html.append("                const response = await fetch('release_manifest.json');")
+    html.append(
+        "                const response = await fetch('release_manifest.json');"
+    )
     html.append("                if (!response.ok) throw new Error('Not found');")
     html.append("                const data = await response.json();")
-    html.append("                const summary = document.getElementById('manifest-summary');")
-    html.append("                const tbody = document.getElementById('manifest-tbody');")
-    html.append("                summary.textContent = `Artifacts: ${data.artifact_count} | Generated: ${new Date(data.generated_at * 1000).toISOString()}`;")
+    html.append(
+        "                const summary = document.getElementById('manifest-summary');"
+    )
+    html.append(
+        "                const tbody = document.getElementById('manifest-tbody');"
+    )
+    html.append(
+        "                summary.textContent = `Artifacts: ${data.artifact_count} | Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"
+    )
     html.append("                const artifacts = data.artifacts.slice(0, 200);")
     html.append("                tbody.innerHTML = '';")
     html.append("                artifacts.forEach(a => {")
     html.append("                    const tr = document.createElement('tr');")
-    html.append("                    tr.innerHTML = `<td>${a.path || ''}</td><td>${a.size !== null ? a.size : ''}</td><td>${a.sha256 || ''}</td>`;")
+    html.append(
+        "                    tr.innerHTML = `<td>${a.path || ''}</td><td>${a.size !== null ? a.size : ''}</td><td>${a.sha256 || ''}</td>`;  # noqa: E501"
+    )
     html.append("                    tbody.appendChild(tr);")
     html.append("                });")
     html.append("            } catch (e) {")
-    html.append("                document.getElementById('manifest-summary').textContent = 'Manifest not found';")
+    html.append(
+        "                document.getElementById('manifest-summary').textContent = 'Manifest not found';  # noqa: E501"
+    )
     html.append("            }")
     html.append("        }")
     html.append("        if (document.readyState === 'loading') {")
-    html.append("            document.addEventListener('DOMContentLoaded', loadManifest);")
+    html.append(
+        "            document.addEventListener('DOMContentLoaded', loadManifest);"
+    )
     html.append("        } else {")
     html.append("            loadManifest();")
     html.append("        }")
