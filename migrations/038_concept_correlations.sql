@@ -7,7 +7,7 @@
 BEGIN;
 
 -- Create concept_correlations view
--- Computes Pearson correlation coefficients between concept embeddings
+-- Computes cosine similarity between concept embeddings
 CREATE OR REPLACE VIEW concept_correlations AS
 SELECT
     -- Source concept information
@@ -20,20 +20,20 @@ SELECT
     c2.name AS target_name,
     COALESCE(cc2.cluster_id, -1) AS cluster_target,
 
-    -- Correlation analysis
-    corr(cn1.embedding, cn2.embedding) AS correlation,
+    -- Similarity analysis
+    (cn1.embedding <=> cn2.embedding) AS similarity,
     COUNT(*) AS sample_size,
 
-    -- Statistical significance (approximate p-value using t-distribution)
-    -- For now, we'll use a simple threshold; can be enhanced with proper statistical functions
+    -- Statistical significance (approximate p-value using similarity threshold)
+    -- For cosine similarity: higher values indicate stronger similarity
     CASE
-        WHEN ABS(corr(cn1.embedding, cn2.embedding)) > 0.5 THEN 0.01  -- Strong correlation
-        WHEN ABS(corr(cn1.embedding, cn2.embedding)) > 0.3 THEN 0.05  -- Moderate correlation
-        ELSE 0.1  -- Weak or no correlation
+        WHEN (cn1.embedding <=> cn2.embedding) > 0.8 THEN 0.01  -- Very similar
+        WHEN (cn1.embedding <=> cn2.embedding) > 0.6 THEN 0.05  -- Moderately similar
+        ELSE 0.1  -- Weak similarity
     END AS p_value,
 
-    -- Correlation method identifier
-    'pearson_embedding' AS metric,
+    -- Similarity method identifier
+    'cosine_similarity' AS metric,
 
     -- Metadata
     NOW() AS computed_at
@@ -58,14 +58,14 @@ GROUP BY cn1.concept_id, c1.name, COALESCE(cc1.cluster_id, -1),
 -- Only include correlations with sufficient sample size (minimum 2 observations)
 HAVING COUNT(*) >= 2
 
--- Order by correlation strength (absolute value)
-ORDER BY ABS(corr(cn1.embedding, cn2.embedding)) DESC;
+-- Order by similarity strength (higher similarity first)
+ORDER BY (cn1.embedding <=> cn2.embedding) DESC;
 
 -- Add comment for documentation
 COMMENT ON VIEW concept_correlations IS
-'Phase 5-B: Correlation analysis between concepts in the semantic network.
-Provides Pearson correlation coefficients between concept embeddings with
-statistical significance estimates. Used by export_stats.py for correlation
+'Phase 5-B: Similarity analysis between concepts in the semantic network.
+Provides cosine similarity scores between concept embeddings with
+statistical significance estimates. Used by export_stats.py for similarity
 analysis and pattern discovery.';
 
 -- Create index for performance (optional but recommended for large networks)
