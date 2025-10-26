@@ -466,17 +466,24 @@ eval.bundle.all:
 
 .PHONY: eval.verify.integrity ci.eval.verify.integrity
 eval.verify.integrity:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
 ci.eval.verify.integrity:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
 .PHONY: eval.verify.integrity.soft
 # Fast, non-blocking soft integrity: cached by release_manifest fingerprint
 RELEASE_MANIFEST ?= share/eval/release_manifest.json
 eval.verify.integrity.soft:
+	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/integrity_fast.py --manifest "$(RELEASE_MANIFEST)" \
 	  --hard-cmd "make -s eval.verify.integrity" ; true
+
+.PHONY: ci.db.ensure
+ci.db.ensure:
+	@bash scripts/ci/db_ensure.sh || true
 
 .PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify
 eval.graph.centrality:
