@@ -1,4 +1,4 @@
--- Migration 017: Create concept_correlations view for pattern correlation analysis
+-- Migration 038: Create concept_correlations view for pattern correlation analysis
 -- Phase 5-B: Correlation Engine Implementation
 --
 -- This view provides correlation analysis between concepts in the semantic network.
