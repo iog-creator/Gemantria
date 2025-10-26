@@ -22,7 +22,6 @@ SELECT
 
     -- Similarity analysis
     (cn1.embedding <=> cn2.embedding) AS similarity,
-    COUNT(*) AS sample_size,
 
     -- Statistical significance (approximate p-value using similarity threshold)
     -- For cosine similarity: higher values indicate stronger similarity
@@ -47,16 +46,9 @@ LEFT JOIN concept_clusters cc2 ON cn2.id = cc2.concept_id
 JOIN concepts c1 ON cn1.concept_id = c1.id
 JOIN concepts c2 ON cn2.concept_id = c2.id
 
--- Only compute correlations for concepts with embeddings
+-- Only compute similarities for concepts with embeddings
 WHERE cn1.embedding IS NOT NULL
   AND cn2.embedding IS NOT NULL
-
--- Group by concept pairs to compute correlations
-GROUP BY cn1.concept_id, c1.name, COALESCE(cc1.cluster_id, -1),
-         cn2.concept_id, c2.name, COALESCE(cc2.cluster_id, -1)
-
--- Only include correlations with sufficient sample size (minimum 2 observations)
-HAVING COUNT(*) >= 2
 
 -- Order by similarity strength (higher similarity first)
 ORDER BY (cn1.embedding <=> cn2.embedding) DESC;
