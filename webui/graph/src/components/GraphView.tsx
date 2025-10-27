@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { ForceGraph2D } from "@visx/force";
+import ForceGraph2D from "react-force-graph-2d";
 import { scaleOrdinal } from "@visx/scale";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
