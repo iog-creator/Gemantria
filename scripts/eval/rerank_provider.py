@@ -38,8 +38,8 @@ def _write_cache(key: str, payload: dict[str, str | float]) -> None:
 
 def _provider_lmstudio(a: str, b: str) -> float:
     # Local-only LM Studio HTTP provider (optional). If not configured, raises.
-    import json as _json  # noqa: E402
-    import urllib.request  # noqa: E402
+    import json as _json
+    import urllib.request
 
     url = os.environ.get("LMSTUDIO_RERANK_URL", "http://127.0.0.1:1234/v1/rerank")
     model = os.environ.get("LMSTUDIO_RERANK_MODEL", "qwen2.5-rerank")

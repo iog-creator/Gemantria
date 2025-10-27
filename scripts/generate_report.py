@@ -458,7 +458,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         report += f"""
 ## Enrichment Proof
 
-❌ **Error retrieving enrichment health data**: {str(e)}
+❌ **Error retrieving enrichment health data**: {e!s}
 
 """
 
@@ -487,7 +487,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         report += f"""
 ## Concept Network Verification
 
-❌ **Error checking network health**: {str(e)}
+❌ **Error checking network health**: {e!s}
 """
 
     report += """
@@ -554,7 +554,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Relations
 
-❌ **Error retrieving relations data**: {str(e)}
+❌ **Error retrieving relations data**: {e!s}
 """
 
     # Add Confidence Gates section
@@ -576,7 +576,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Confidence Gates
 
-❌ **Error retrieving confidence gate data**: {str(e)}
+❌ **Error retrieving confidence gate data**: {e!s}
 """
 
     # Add Pattern Discovery section
@@ -615,7 +615,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Pattern Discovery
 
-❌ **Error retrieving pattern discovery data**: {str(e)}
+❌ **Error retrieving pattern discovery data**: {e!s}
 """
 
     # Add Pattern Correlation Summary (Phase 5)
@@ -623,7 +623,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         # Try to load correlations from the export file
         correlations_path = Path("exports/graph_correlations.json")
         if correlations_path.exists():
-            import json  # noqa: E402
+            import json
 
             correlations_data = json.loads(correlations_path.read_text())
 
@@ -726,7 +726,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Pattern Correlation Summary
 
-❌ **Error retrieving correlation data**: {str(e)}
+❌ **Error retrieving correlation data**: {e!s}
 """
 
     # Phase 5-C: Add Correlation Network Analytics section
@@ -816,7 +816,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Correlation Network Analytics
 
-❌ **Error retrieving correlation network data**: {str(e)}
+❌ **Error retrieving correlation network data**: {e!s}
 """
 
     # Phase 6: Add Cross-Book Pattern Analytics section
@@ -912,7 +912,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Cross-Book Pattern Analytics
 
-❌ **Error retrieving pattern analysis data**: {str(e)}
+❌ **Error retrieving pattern analysis data**: {e!s}
 """
 
     # Phase 8: Add Temporal Analytics section
@@ -999,7 +999,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Temporal Analytics
 
-❌ **Error retrieving temporal analytics data**: {str(e)}
+❌ **Error retrieving temporal analytics data**: {e!s}
 """
 
     # Phase 8: Add Forecast Summary section
@@ -1069,7 +1069,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Forecast Summary
 
-❌ **Error retrieving forecast data**: {str(e)}
+❌ **Error retrieving forecast data**: {e!s}
 """
 
     # Phase 7: Add Interactive Analytics Endpoints section
@@ -1158,7 +1158,7 @@ The API endpoints power the interactive dashboards:
 
 ## Interactive Analytics Endpoints
 
-❌ **Error retrieving endpoint information**: {str(e)}
+❌ **Error retrieving endpoint information**: {e!s}
 """
 
     report += """

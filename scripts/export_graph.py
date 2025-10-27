@@ -47,7 +47,7 @@ def export_correlation_graph():
 
         # Build NetworkX graph for analysis
         try:
-            import networkx as nx  # noqa: E402
+            import networkx as nx
 
             G = nx.Graph()
 

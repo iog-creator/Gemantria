@@ -59,7 +59,7 @@ def main() -> int:
     }
 
     provenance_snapshot = SNAPSHOT_DIR / "provenance.snapshot.json"
-    import json  # noqa: E402
+    import json
 
     provenance_snapshot.write_text(
         json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8"

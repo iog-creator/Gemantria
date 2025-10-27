@@ -14,7 +14,7 @@ def badge(text, ok=True):
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="quality:{text}">
   <linearGradient id="g" x2="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/>
   <rect rx="3" width="{w}" height="20" fill="#555"/>
-  <rect rx="3" x="60" width="{w-60}" height="20" fill="{color}"/>
+  <rect rx="3" x="60" width="{w - 60}" height="20" fill="{color}"/>
   <path fill="{color}" d="M60 0h4v20h-4z"/>
   <rect rx="3" width="{w}" height="20" fill="url(#g)"/>
   <g fill="#fff" text-anchor="start" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">

@@ -15,9 +15,9 @@ except Exception:  # pragma: no cover
     HAS_DB = False  # Import optional for CI paths without DSNs
 
 __all__ = [
-    "ReadOnlyViolation",
     "BibleReadOnly",
     "GematriaRW",
+    "ReadOnlyViolation",
     "get_bible_ro",
     "get_gematria_rw",
     "sql_is_write",

@@ -44,7 +44,7 @@ def main() -> int:
         )
     GRAPH.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
     path_str = GRAPH.relative_to(ROOT)
-    print(  # noqa: E501
+    print(
         f"[rerank.refresh] updated edges={len(edges)} (filled_from_provider={filled}) → {path_str}"
     )
     return 0

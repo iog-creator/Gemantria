@@ -60,7 +60,7 @@ def main() -> int:
     )
     print(f"[data.sanitize] wrote {out_path.relative_to(ROOT)}")
     print(
-        f"[data.sanitize] wrote { (EXPORTS/'graph_sanitized.json').relative_to(ROOT) }"
+        f"[data.sanitize] wrote {(EXPORTS / 'graph_sanitized.json').relative_to(ROOT)}"
     )
     print("[data.sanitize] OK")
     return 0

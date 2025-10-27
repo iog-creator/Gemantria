@@ -14,12 +14,12 @@ def _badge(label: str, value: str, color: str) -> str:
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{text}">
   <linearGradient id="a" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
   <rect rx="3" width="{w}" height="20" fill="#555"/>
-  <rect rx="3" x="55" width="{w-55}" height="20" fill="{color}"/>
+  <rect rx="3" x="55" width="{w - 55}" height="20" fill="{color}"/>
   <path fill="{color}" d="M55 0h4v20h-4z"/>
   <rect rx="3" width="{w}" height="20" fill="url(#a)"/>
   <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
     <text x="28" y="14">{label}</text>
-    <text x="{(55 + (w-55)/2):.0f}" y="14">{value}</text>
+    <text x="{(55 + (w - 55) / 2):.0f}" y="14">{value}</text>
   </g>
 </svg>"""
 

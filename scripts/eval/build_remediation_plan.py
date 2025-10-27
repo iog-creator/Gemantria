@@ -213,7 +213,9 @@ def _generate_summary(remediations: list[dict[str, Any]]) -> dict[str, Any]:
         "estimated_total_effort": (
             "high"
             if severities["high"] > 0
-            else "medium" if severities["medium"] > 2 else "low"
+            else "medium"
+            if severities["medium"] > 2
+            else "low"
         ),
     }
 
@@ -323,6 +325,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    import sys  # noqa: E402
+    import sys
 
     sys.exit(main())

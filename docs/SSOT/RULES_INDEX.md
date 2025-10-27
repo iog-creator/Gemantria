@@ -44,3 +44,10 @@
 | 039 | 039-execution-contract.mdc | # id: 039_EXECUTION_CONTRACT |
 | 040 | 040-ci-triage-playbook.mdc | # id: 040_CI_TRIAGE_PLAYBOOK |
 | 041 | 041-pr-merge-policy.mdc | # id: 041_PR_MERGE_POLICY |
+| 042 | 042-formatter-single-source-of-truth.mdc | # 042 — Formatter Single Source of Truth (AlwaysApply) |
+| 043 | 043-ci-db-bootstrap.mdc | # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) |
+| 044 | 044-share-manifest-contract.mdc | # 044 — Share Manifest Contract (AlwaysApply) |
+| 045 | 045-rerank-blend-SSOT.mdc | # 045 — Rerank Blend is SSOT (AlwaysApply) |
+| 046 | 046-ci-hermetic-fallbacks.mdc | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
+| 047 | 047-nightly-metrics-contract.mdc | # 047 — Nightly Metrics Contract (AlwaysApply) |
+| 048 | 048-agents-docs-coverage.mdc | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |

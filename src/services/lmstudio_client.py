@@ -168,7 +168,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         )
 
     except requests.exceptions.ConnectionError as e:
-        reason = f"Cannot connect to LM Studio at {HOST}. Is LM Studio server running? Error: {str(e)}"
+        reason = f"Cannot connect to LM Studio at {HOST}. Is LM Studio server running? Error: {e!s}"
         return QwenHealth(
             ok=False,
             reason=reason,
@@ -200,7 +200,9 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
             lat_ms_rerank=None,
         )
     except requests.RequestException as e:
-        reason = f"LM Studio network error: {str(e)}. Check firewall and network connectivity."
+        reason = (
+            f"LM Studio network error: {e!s}. Check firewall and network connectivity."
+        )
         return QwenHealth(
             ok=False,
             reason=reason,
@@ -210,7 +212,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         )
     except Exception as e:
         reason = (
-            f"Unexpected health check failure: {str(e)}. Check LM Studio configuration."
+            f"Unexpected health check failure: {e!s}. Check LM Studio configuration."
         )
         return QwenHealth(
             ok=False,
@@ -277,7 +279,7 @@ class LMStudioClient:
                     )
                 raise QwenUnavailableError(error_msg) from e
             except Exception as e:
-                error_msg = f"Unexpected LM Studio error: {str(e)}"
+                error_msg = f"Unexpected LM Studio error: {e!s}"
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -308,7 +310,7 @@ class LMStudioClient:
             .strip()
         )
         # Extract just the numeric part if the model returns extra text
-        import re  # noqa: E402
+        import re
 
         match = re.search(r"([0-9]*\.?[0-9]+)", content)
         if match:
@@ -334,7 +336,7 @@ class LMStudioClient:
         """
         if _is_mock_mode() or not _get_bool_env("USE_QWEN_EMBEDDINGS", "true"):
             # Return mock embeddings for testing or when disabled
-            import random  # noqa: E402
+            import random
 
             result = []
             for text in texts:
@@ -375,7 +377,7 @@ class LMStudioClient:
                     # Hard fail - no mock fallback in production
                     if _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false"):
                         # Test-only bypass for unit tests
-                        import random  # noqa: E402
+                        import random
 
                         result = []
                         for text in texts:
@@ -389,7 +391,7 @@ class LMStudioClient:
                     else:
                         # Production mode - hard fail
                         raise QwenUnavailableError(
-                            f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {str(e)}"
+                            f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {e!s}"
                         )
 
     def rerank(
@@ -411,7 +413,7 @@ class LMStudioClient:
         """
         if _is_mock_mode():
             # Return mock reranking scores for testing
-            import random  # noqa: E402
+            import random
 
             random.seed(hash(query) % 10000)
             return [random.uniform(0.1, 0.9) for _ in candidates]
@@ -521,7 +523,7 @@ def rerank_pairs(pairs, name_map=None):
     name_map: optional dict mapping concept_ids to names
     Returns list of scores [0..1] indicating similarity strength.
     """
-    from src.infra.db import get_gematria_rw  # noqa: E402
+    from src.infra.db import get_gematria_rw
 
     texts = []
     if name_map:
@@ -617,7 +619,7 @@ def chat_completion(
                         break
                     else:
                         raise QwenUnavailableError(
-                            f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {str(e)}"
+                            f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {e!s}"
                         )
 
     return results
@@ -651,7 +653,7 @@ def safe_json_parse(text: str, required_keys: list[str]) -> dict:
         data = json.loads(text)
     except Exception as e:
         raise ValueError(
-            f"Failed to parse JSON response: {str(e)}. Raw text: {text[:200]}..."
+            f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}..."
         )
 
     # Validate required keys
