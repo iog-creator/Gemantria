@@ -36,6 +36,12 @@ jobs:
         with:
           extra_args: --all-files
 
+      - name: Edge reclassify (non-blocking)
+        run: |
+          set -e
+          export MOCK_AI=1
+          make -s eval.edges.reclassify || true
+
       # Example secret-dependent step: only run if secret is present
       - name: DB-enforced checks
         env:

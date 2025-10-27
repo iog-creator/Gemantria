@@ -59,3 +59,9 @@ jobs:
       - name: Smoke tests
         run: |
           make test.smoke
+
+      - name: Edge reclassify (non-blocking)
+        run: |
+          set -e
+          export MOCK_AI=1
+          make -s eval.edges.reclassify || true

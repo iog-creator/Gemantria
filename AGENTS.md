@@ -54,6 +54,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 
 ## Operations
 
+### CI Verification
+- **Empty DB tolerance**: Verify scripts handle missing tables gracefully in CI (zero counts allowed when DB empty)
+- **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
+- **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
+
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
 * **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
@@ -69,6 +74,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Layouts persisted with (algorithm, params_json, seed, version). New params → new layout id.
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
+
+### Edge reranking & classification (Phase-10)
+All exported edges now carry a `rerank` score and an `edge_strength = 0.5*cos + 0.5*rerank`.
+Edges are classified as **strong** (≥0.90), **weak** (≥0.75), or **other**.
+Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 
 ## How agents should use rules
 

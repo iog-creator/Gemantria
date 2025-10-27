@@ -524,7 +524,7 @@ eval.verify.integrity.soft:
 ci.db.ensure:
 	@bash scripts/ci/db_ensure.sh || true
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -538,6 +538,9 @@ eval.graph.delta:
 eval.schema.verify:
 	@python3 -c "import jsonschema" >/dev/null 2>&1 || (echo '[schema] installing jsonschema' && pip3 install --quiet jsonschema)
 	@python3 scripts/eval/verify_schema.py
+eval.edges.reclassify:
+	@echo "[eval.edges.reclassify] Filling rerank where missing, computing edge_strength, classifying, and emitting counts..."
+	@GRAPH_JSON=share/graph/graph_latest.json MOCK_AI=1 scripts/eval/reclassify_edges.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
 eval.quality.check:
