@@ -3,6 +3,8 @@ on:
   schedule:
     - cron: "31 7 * * *" # daily 07:31 UTC (after mypy/lint)
   workflow_dispatch: {}
+  pull_request:
+    branches: [ main, master, develop ]
 permissions:
   contents: read
   actions: read
