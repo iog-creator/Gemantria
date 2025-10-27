@@ -15,8 +15,12 @@ repos:
     rev: v1.11.2
     hooks:
       - id: mypy
-        args: [--strict]
-        additional_dependencies: []
+        args:
+          - --config-file=mypy.ini
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-requests
+          - types-PyYAML
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
