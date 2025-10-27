@@ -34,7 +34,7 @@ jobs:
           set -e
           echo "::group::DB bootstrap + migrations"
           if [ -x scripts/ci/ensure_db_then_migrate.sh ]; then
-            bash scripts/ci/ensure_db_then_migrate.sh
+            GEMATRIA_DSN="$GEMATRIA_DSN" bash scripts/ci/ensure_db_then_migrate.sh
           else
             echo "HINT: scripts/ci/ensure_db_then_migrate.sh missing; attempting manual migrations"
             : "${GEMATRIA_DSN:=postgresql://postgres:postgres@localhost:5432/gematria}"
