@@ -44,6 +44,17 @@ jobs:
             echo "HINT: ruff-nightly: count=${COUNT}"
           fi
 
+      - name: Soft threshold (non-fatal warning)
+        env:
+          COUNT: ${{ steps.ruff.outputs.count }}
+          LINT_WARN_MAX: ${{ vars.LINT_WARN_MAX }}
+        run: |
+          LW="${LINT_WARN_MAX:-}"
+          C="${COUNT:-0}"
+          if [ -n "$LW" ] && [ "$C" -gt "$LW" ]; then
+            echo "HINT: ruff-nightly WARN: count=$C > LINT_WARN_MAX=$LW"
+          fi
+
       - name: Append ruff metric to history (JSONL)
         env:
           COUNT: ${{ steps.ruff.outputs.count }}

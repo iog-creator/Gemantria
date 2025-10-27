@@ -55,6 +55,18 @@ jobs:
             echo "HINT: coverage-nightly: percent=$(printf '%.2f' "$pct")"
           fi
 
+      - name: Soft threshold (non-fatal warning)
+        env:
+          PERCENT: ${{ steps.covpct.outputs.percent }}
+          COVERAGE_WARN_MIN: ${{ vars.COVERAGE_WARN_MIN }}
+        run: |
+          CM="${COVERAGE_WARN_MIN:-}"
+          P="${PERCENT:-0}"
+          if [ -n "$CM" ]; then
+            # Use awk for floating point comparison
+            echo "$P $CM" | awk '{if ($1 < $2) print "HINT: coverage-nightly WARN: percent=" $1 " < COVERAGE_WARN_MIN=" $2}'
+          fi
+
       - name: Append coverage metric to history (JSONL)
         env:
           PERCENT: ${{ steps.covpct.outputs.percent }}
