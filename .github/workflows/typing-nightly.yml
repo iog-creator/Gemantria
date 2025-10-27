@@ -45,11 +45,27 @@ jobs:
             echo "HINT: mypy-nightly: errors=${ERRORS}"
           fi
 
+      - name: Append mypy metric to history (JSONL)
+        env:
+          ERRORS: ${{ steps.mypy.outputs.errors }}
+        run: |
+          set -e
+          mkdir -p share/eval/mypy
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "{\"ts\":\"${TS}\",\"errors\":${ERRORS:-0}}" >> share/eval/mypy/mypy_history.jsonl
+
       - name: Upload mypy report artifact
         uses: actions/upload-artifact@v4
         with:
           name: mypy_full_report
           path: share/eval/mypy/mypy_full.txt
+
+      - name: Upload mypy history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mypy_history
+          path: share/eval/mypy/mypy_history.jsonl
+          if-no-files-found: error
 
       - name: Summarize
         run: |

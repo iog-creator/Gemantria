@@ -30,20 +30,35 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt || true; fi
 
-      - name: Run coverage sweep (non-blocking)
-        id: coverage
+      - name: Run coverage (non-blocking)
+        id: cov
         continue-on-error: true
         run: |
           set -e
           mkdir -p share/eval/coverage
-          # Run pytest coverage with multiple output formats
           export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
           pytest -q --maxfail=1 --disable-warnings \
             --cov=src --cov-report=term --cov-report=xml:share/eval/coverage/coverage.xml \
             --cov-report=html:share/eval/coverage/html || true
-          # Extract coverage percentage and emit HINT
-          PCT=$(python3 -c "import xml.etree.ElementTree as ET; t=ET.parse('share/eval/coverage/coverage.xml').getroot(); print(float(t.attrib.get('line-rate', '0')) * 100)" 2>/dev/null || echo "0")
-          echo "HINT: coverage-nightly: percent=${PCT}"
+      - name: Extract coverage percent and emit hint
+        id: covpct
+        run: |
+          pct=$(python3 -c "import xml.etree.ElementTree as ET; root=ET.parse('share/eval/coverage/coverage.xml').getroot(); print(float(root.attrib.get('line-rate','0'))*100)")
+          printf "percent=%.2f\n" "$pct" >> "$GITHUB_OUTPUT"
+          if [ -f scripts/hint.sh ]; then
+            bash scripts/hint.sh "coverage-nightly: percent=$(printf '%.2f' "$pct")"
+          else
+            echo "HINT: coverage-nightly: percent=$(printf '%.2f' "$pct")"
+          fi
+
+      - name: Append coverage metric to history (JSONL)
+        env:
+          PERCENT: ${{ steps.covpct.outputs.percent }}
+        run: |
+          set -e
+          mkdir -p share/eval/coverage
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          printf '{"ts":"%s","percent":%.2f}\n' "$TS" "${PERCENT:-0}" >> share/eval/coverage/coverage_history.jsonl
 
       - name: Upload coverage report artifacts
         uses: actions/upload-artifact@v4
@@ -52,6 +67,13 @@ jobs:
           path: |
             share/eval/coverage/coverage.xml
             share/eval/coverage/html/
+
+      - name: Upload coverage history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage_history
+          path: share/eval/coverage/coverage_history.jsonl
+          if-no-files-found: error
 
       - name: Summarize
         run: |

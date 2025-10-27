@@ -27,30 +27,45 @@ jobs:
           pip install -e .
           pip install ruff
 
-      - name: Run full ruff lint sweep (non-blocking)
-        id: lint
+      - name: Run full ruff sweep (non-blocking)
+        id: ruff
         continue-on-error: true
         run: |
           set -e
-          mkdir -p share/eval/lint
-          # Full sweep using ruff (no --fix to avoid modifying code)
-          ruff check src scripts tools | tee share/eval/lint/ruff_full.txt || true
-          # Count violations (lines containing file:line:col: code)
-          VIOLATIONS=$(grep -E "^[^[:space:]]+\.py:[0-9]+:[0-9]+: " -c share/eval/lint/ruff_full.txt || true)
-          echo "violations=${VIOLATIONS}" >> "$GITHUB_OUTPUT"
-          # Emit standardized hint line for CI triage
+          mkdir -p share/eval/ruff
+          # Always exit zero but emit findings
+          ruff check . --exit-zero --output-format text | tee share/eval/ruff/ruff_full.txt
+          # Count issues (lines starting with a code like E501/F401/etc.)
+          COUNT=$(grep -E '^[A-Z][0-9]{3}' -c share/eval/ruff/ruff_full.txt || true)
+          echo "count=${COUNT}" >> "$GITHUB_OUTPUT"
           if [ -f scripts/hint.sh ]; then
-            bash scripts/hint.sh "lint-nightly: violations=${VIOLATIONS}"
+            bash scripts/hint.sh "ruff-nightly: count=${COUNT}"
           else
-            echo "HINT: lint-nightly: violations=${VIOLATIONS}"
+            echo "HINT: ruff-nightly: count=${COUNT}"
           fi
+
+      - name: Append ruff metric to history (JSONL)
+        env:
+          COUNT: ${{ steps.ruff.outputs.count }}
+        run: |
+          set -e
+          mkdir -p share/eval/ruff
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "{\"ts\":\"${TS}\",\"count\":${COUNT:-0}}" >> share/eval/ruff/ruff_history.jsonl
 
       - name: Upload ruff report artifact
         uses: actions/upload-artifact@v4
         with:
           name: ruff_full_report
-          path: share/eval/lint/ruff_full.txt
+          path: share/eval/ruff/ruff_full.txt
+
+      - name: Upload ruff history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruff_history
+          path: share/eval/ruff/ruff_history.jsonl
+          if-no-files-found: error
 
       - name: Summarize
         run: |
-          echo "Nightly ruff violations: ${{ steps.lint.outputs.violations }}"
+          echo "Nightly ruff count: ${{ steps.ruff.outputs.count }}"
