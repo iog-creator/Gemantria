@@ -66,7 +66,7 @@
       "src": "exports/graph_stats.json",
       "dst": "share/graph_stats.head.json",
       "generate": "head_json",
-      "max_bytes": 2048
+      "max_bytes": 2300
     },
     {
       "src": "exports/pattern_forecast.json",
