@@ -243,6 +243,7 @@ ops.verify:
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
 	@python3 scripts/ops/verify_repo.py
+	$(MAKE) -s eval.edges.blend.validate   # non-fatal HINTs; hermetic
 	@echo "[ops.verify] OK"
 
 # Identical to local; intentionally not part of CI
@@ -524,7 +525,7 @@ eval.verify.integrity.soft:
 ci.db.ensure:
 	@bash scripts/ci/db_ensure.sh || true
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify eval.edges.blend.validate
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -541,6 +542,8 @@ eval.schema.verify:
 eval.edges.reclassify:
 	@echo "[eval.edges.reclassify] Filling rerank where missing, computing edge_strength, classifying, and emitting counts..."
 	@GRAPH_JSON=share/graph/graph_latest.json MOCK_AI=1 scripts/eval/reclassify_edges.py
+eval.edges.blend.validate:
+	@python3 scripts/eval/validate_blend_ssot.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
 eval.quality.check:
