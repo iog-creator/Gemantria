@@ -27,6 +27,7 @@ jobs:
           tail -n 1 _artifacts/mypy_history/mypy_history.jsonl 2>/dev/null > _mypy.jsonl || true
           tail -n 1 _artifacts/ruff_history/ruff_history.jsonl 2>/dev/null > _ruff.jsonl || true
           tail -n 1 _artifacts/coverage_history/coverage_history.jsonl 2>/dev/null > _cov.jsonl || true
+          tail -n 1 _artifacts/graph_history/graph_anomalies.jsonl 2>/dev/null > _graph.jsonl || true
 
       - name: Extract values
         id: vals
@@ -38,12 +39,23 @@ jobs:
           echo "mypy=${mypy_errors}" >> "$GITHUB_OUTPUT"
           echo "ruff=${ruff_count}" >> "$GITHUB_OUTPUT"
           printf "cover=%.2f\n" "$cov_pct" >> "$GITHUB_OUTPUT"
+          graph_badge=$(python - <<'PY'
+          import json,os,sys
+          p="_graph.jsonl"
+          if not os.path.exists(p) or os.path.getsize(p)==0:
+              print("isolates:0,dangling:0,cycles:0"); sys.exit(0)
+          o=json.loads(open(p).read())
+          print(f"isolates:{o.get('isolates',0)},dangling:{o.get('dangling',0)},cycles:{o.get('cycles',0)}")
+          PY
+          )
+          echo "graph=${graph_badge}" >> "$GITHUB_OUTPUT"
 
       - name: Generate SVG badges
         run: |
           python scripts/eval/gen_badge.py "MyPy Errors"  "${{ steps.vals.outputs.mypy }}"  "#007ec6" > share/eval/badges/mypy.svg
           python scripts/eval/gen_badge.py "Ruff Issues"  "${{ steps.vals.outputs.ruff }}"  "#5c53ff" > share/eval/badges/ruff.svg
           python scripts/eval/gen_badge.py "Coverage %"   "${{ steps.vals.outputs.cover }}" "#4c1"    > share/eval/badges/coverage.svg
+          python scripts/eval/gen_badge.py "Graph Anoms" "${{ steps.vals.outputs.graph }}" "#d97706" > share/eval/badges/graph.svg
 
       - name: Upload badges as artifact
         uses: actions/upload-artifact@v4
