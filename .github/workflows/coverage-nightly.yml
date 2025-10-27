@@ -43,7 +43,11 @@ jobs:
       - name: Extract coverage percent and emit hint
         id: covpct
         run: |
-          pct=$(python3 -c "import xml.etree.ElementTree as ET; root=ET.parse('share/eval/coverage/coverage.xml').getroot(); print(float(root.attrib.get('line-rate','0'))*100)")
+          if [ -f share/eval/coverage/coverage.xml ]; then
+            pct=$(python3 -c "import xml.etree.ElementTree as ET; root=ET.parse('share/eval/coverage/coverage.xml').getroot(); print(float(root.attrib.get('line-rate','0'))*100)" 2>/dev/null || echo "0")
+          else
+            pct="0"
+          fi
           printf "percent=%.2f\n" "$pct" >> "$GITHUB_OUTPUT"
           if [ -f scripts/hint.sh ]; then
             bash scripts/hint.sh "coverage-nightly: percent=$(printf '%.2f' "$pct")"
