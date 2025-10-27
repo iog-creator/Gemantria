@@ -27,11 +27,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r requirements.txt jsonschema psycopg[binary]
-      - name: Apply schema & PR migrations (safe bootstrap)
+
+      # Ensure DB is up and schema is applied before any verify/export step touches it.
+      - name: Ensure DB then migrate (idempotent)
         run: |
-          chmod +x scripts/ci/ensure_db_then_migrate.sh
-          scripts/ci/ensure_db_then_migrate.sh
+          set -e
+          echo "::group::DB bootstrap + migrations"
+          if [ -x scripts/ci/ensure_db_then_migrate.sh ]; then
+            GEMATRIA_DSN="$GEMATRIA_DSN" bash scripts/ci/ensure_db_then_migrate.sh
+          else
+            echo "HINT: scripts/ci/ensure_db_then_migrate.sh missing; attempting manual migrations"
+            : "${GEMATRIA_DSN:=postgresql://postgres:postgres@localhost:5432/gematria}"
+            # Wait for Postgres if needed
+            for i in $(seq 1 30); do pg_isready -d "$GEMATRIA_DSN" && break || sleep 1; done
+            # Create DB if not present (ignore errors)
+            db_name=$(echo "$GEMATRIA_DSN" | sed 's/.*\/\([^?]*\).*/\1/' | grep -v '^$' || echo "postgres")
+            createdb "$db_name" || true
+            # Apply migrations in order if present
+            if ls migrations/*.sql >/dev/null 2>&1; then
+              for f in migrations/*.sql; do
+                echo "Applying $f"
+                psql "$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -f "$f"
+              done
+            else
+              echo "HINT: no migrations/*.sql found; continuing"
+            fi
+          fi
+          echo "::endgroup::"
+
+      - run: pip install -r requirements.txt jsonschema psycopg[binary]
       - name: Generate metrics & exports
         run: |
           export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
