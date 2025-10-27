@@ -26,13 +26,19 @@ jobs:
           pip install -r requirements.txt || true
           pip install pre-commit ruff mypy pytest
 
-      # Temporarily disabled - scoping not working correctly, runs on all files
-      # Will be re-enabled after fixing scoping logic
-      # - name: Run pre-commit (changed files only)
-      #   uses: pre-commit/action@v3.0.1
-      #   with:
-      #     # Lint/type-check only files changed in this PR
-      #     extra_args: --from-ref origin/${{ github.base_ref }} --to-ref ${{ github.sha }}
+      # PRs: run on the diff (base→head)
+      - name: Pre-commit (PR diff)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+
+      # Pushes: run on all files (e.g., pushes to main)
+      - name: Pre-commit (push all-files)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files
 
       # Temporarily disabled - pre-existing code quality issues
       # Will be re-enabled after codebase cleanup

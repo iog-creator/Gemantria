@@ -5,21 +5,46 @@ on:
 jobs:
   enforce:
     runs-on: ubuntu-latest
+    # Only enforce on first-party contexts:
+    #  - push on main (internal)
+    #  - first-party PRs (not forks)
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
     env:
       CI: "true"
       PR_BODY: ${{ github.event.pull_request.body }}
       BASE_REF: ${{ github.event.pull_request.base.sha }}
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      # Temporarily disabled - scoping not working correctly, runs on all files
-      # Will be re-enabled after fixing scoping logic
-      # - name: Run pre-commit (changed files only)
-      #   uses: pre-commit/action@v3.0.1
-      #   with:
-      #     extra_args: --from-ref origin/${{ github.base_ref }} --to-ref ${{ github.sha }}
+      # PRs: run on the diff
+      - name: Pre-commit (PR diff)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+
+      # Pushes: run on all files
+      - name: Pre-commit (push all-files)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files
+
+      # Example secret-dependent step: only run if secret is present
+      - name: DB-enforced checks
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        if: ${{ env.GEMATRIA_DSN != '' }}
+        run: |
+          echo "Running DB-enforced checks..."
+          make -s ci.data.verify
+
       - name: Install guard deps
         run: pip install jsonschema
       - name: Rules numbering check
