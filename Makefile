@@ -28,6 +28,23 @@ py.longline:
 py.fullwave: py.quickfix py.longline
 	@make py.format && make py.lint
 
+.PHONY: fmt fmt.check lint lint.fix
+fmt:
+	@echo "[fmt] Applying ruff-format..."
+	@ruff format .
+
+fmt.check:
+	@echo "[fmt.check] Checking format (no changes)..."
+	@ruff format --check .
+
+lint:
+	@echo "[lint] Running ruff check..."
+	@ruff check .
+
+lint.fix:
+	@echo "[lint.fix] Running ruff check with fixes..."
+	@ruff check . --fix
+
 .PHONY: test.smoke test.smoke.strict
 test.smoke:
 	pytest -q --no-cov -m smoke tests/smoke || true

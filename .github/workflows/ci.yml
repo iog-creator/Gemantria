@@ -26,6 +26,11 @@ jobs:
           pip install -r requirements.txt || true
           pip install pre-commit ruff mypy pytest
 
+      - name: Tooling versions
+        run: |
+          ruff --version || true
+          mypy --version || true
+
       # PRs: run on the diff (base→head)
       - name: Pre-commit (PR diff)
         if: ${{ github.event_name == 'pull_request' }}
