@@ -175,9 +175,10 @@ def enrichment_node(state: dict) -> dict:
                     # Persist to database (optional for testing)
                     if GEMATRIA_DSN:
                         try:
-                            with psycopg.connect(
-                                GEMATRIA_DSN
-                            ) as conn, conn.cursor() as cur:
+                            with (
+                                psycopg.connect(GEMATRIA_DSN) as conn,
+                                conn.cursor() as cur,
+                            ):
                                 cur.execute(
                                     """INSERT INTO ai_enrichment_log
                                        (run_id,node,noun_id,model_name,confidence_model,

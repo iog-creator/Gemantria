@@ -284,7 +284,9 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         relation_type = (
             "strong"
             if edge_strength >= 0.90
-            else "weak" if edge_strength >= 0.75 else None
+            else "weak"
+            if edge_strength >= 0.75
+            else None
         )
         self.assertEqual(relation_type, "strong")
 

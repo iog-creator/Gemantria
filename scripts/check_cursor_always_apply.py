@@ -32,9 +32,7 @@ def main() -> None:
         msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"  # noqa: E501
         print(f"[rules.navigator.check] FAIL: {msg}", file=sys.stderr)
         sys.exit(2)
-    print(
-        "[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)"
-    )  # noqa: E501
+    print("[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)")  # noqa: E501
 
 
 if __name__ == "__main__":

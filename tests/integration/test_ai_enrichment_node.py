@@ -93,9 +93,9 @@ def test_enrichment_live_lm_studio():
 
         # Check insight length (should be 150-250 words)
         word_count = len(noun["insights"].split())
-        assert (
-            150 <= word_count <= 250
-        ), f"Insight length {word_count} not in 150-250 word range"
+        assert 150 <= word_count <= 250, (
+            f"Insight length {word_count} not in 150-250 word range"
+        )
 
     # Verify DB persistence
     with psycopg.connect(os.getenv("GEMATRIA_DSN")) as conn, conn.cursor() as cur:

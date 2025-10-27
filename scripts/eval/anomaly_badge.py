@@ -50,7 +50,7 @@ def badge(count: int) -> str:
   <linearGradient id="g" x2="0" stop-color="#bbb" stop-opacity=".1"/>
   <stop offset="1" stop-opacity=".1"/>
   <rect rx="3" width="{width}" height="20" fill="#555"/>
-  <rect rx="3" x="55" width="{width-55}" height="20" fill="{color}"/>
+  <rect rx="3" x="55" width="{width - 55}" height="20" fill="{color}"/>
   <path fill="{color}" d="M55 0h4v20h-4z"/>
   <rect rx="3" width="{width}" height="20" fill="url(#g)"/>
   <g fill="#fff" text-anchor="start"

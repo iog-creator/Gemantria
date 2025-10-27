@@ -58,7 +58,7 @@ def main() -> int:
 
     print(f"[repair.apply] added_stub_nodes={len(added)}")
     print(f"[repair.apply] wrote {out_path.relative_to(ROOT)}")
-    print(f"[repair.apply] wrote {(EXPORTS/'graph_repaired.json').relative_to(ROOT)}")
+    print(f"[repair.apply] wrote {(EXPORTS / 'graph_repaired.json').relative_to(ROOT)}")
     print("[repair.apply] OK")
     return 0
 

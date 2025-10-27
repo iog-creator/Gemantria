@@ -88,9 +88,9 @@ def test_bi_encoder_rerank():
         # Validate scores are reasonable
         assert all(0 <= s <= 1 for s in scores), "Scores should be in [0,1] range"
         assert len(scores) == len(test_pairs), "Should return one score per pair"
-        assert (
-            scores[0] < scores[1]
-        ), "Orthogonal vectors should have lower similarity than 45°"
+        assert scores[0] < scores[1], (
+            "Orthogonal vectors should have lower similarity than 45°"
+        )
 
         print("   ✅ Basic functionality test PASSED")
 
@@ -109,9 +109,9 @@ def test_bi_encoder_rerank():
 
     for input_text, expected in test_cases:
         result = _norm(input_text)
-        assert (
-            result == expected
-        ), f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
+        assert result == expected, (
+            f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
+        )
         print(f"   '{input_text}' -> '{result}' ✅")
 
     print("   ✅ Text normalization test PASSED")
@@ -123,9 +123,9 @@ def test_bi_encoder_rerank():
     with open("src/nodes/network_aggregator.py") as f:
         content = f.read()
 
-    assert (
-        "bge-m3-emb-proxy@" in content
-    ), "Cache tagging not found in network_aggregator.py"
+    assert "bge-m3-emb-proxy@" in content, (
+        "Cache tagging not found in network_aggregator.py"
+    )
     assert "EMBEDDING_MODEL" in content, "Embedding model reference not found"
 
     print("   ✅ Cache tagging test PASSED")
