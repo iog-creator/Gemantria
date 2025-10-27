@@ -25,13 +25,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt || true
           pip install pre-commit 'ruff==0.14.2' 'mypy==1.18.2' pytest
+          # Ensure jsonschema is present before version echo and SSOT validation
+          pip install 'jsonschema==4.21.2'
 
       - name: Tooling versions
         run: |
           echo "=== Pinned Tool Versions ==="
           ruff --version
           mypy --version
-          python -c "import jsonschema; print('jsonschema:', jsonschema.__version__)"
+          python - <<'PY'
+import jsonschema, sys
+print('jsonschema:', jsonschema.__version__)
+PY
 
       # PRs: run on the diff (base→head)
       - name: Pre-commit (PR diff)
