@@ -63,7 +63,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "gematria": 37,
                 "gematria_confidence": 1.0,
                 "confidence": 0.92,
-                "insights": "Abel represents innocence and the first martyr, showing the contrast between righteousness and evil.",
+                "insights": "Abel represents innocence and the first martyr.",
             },
         ]
 
@@ -208,7 +208,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "value": 19,
                 "gematria_confidence": 1.0,
                 "confidence": 0.92,
-                "insights": "Eve represents the mother of all living, showing the importance of relationships and life.",
+                "insights": "Eve represents the mother of all living.",
                 "primary_verse": "Genesis 2:18",
             },
             {
@@ -218,7 +218,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 "value": 37,
                 "gematria_confidence": 1.0,
                 "confidence": 0.90,
-                "insights": "Abel represents innocence and the first martyr, showing righteousness and sacrifice.",
+                "insights": "Abel represents innocence and the first martyr.",
                 "primary_verse": "Genesis 4:2",
             },
         ]

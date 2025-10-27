@@ -122,6 +122,65 @@ make eval.quality.trend                 # Same via Makefile target
 **Emitted Hints:**
 - `HINT: eval: writing quality trend badge`
 
+### `edge_audit.py` — Edge Anomaly Detection (Phase-9)
+
+**Purpose:** Analyze semantic network edges for anomalous strength values using statistical outlier detection.
+
+**Requirements:**
+- **Dual Detection Methods**: Combines z-score (>3σ) and IQR (1.5×IQR) outlier detection for robust anomaly identification
+- **Comprehensive Analysis**: Provides detailed statistics on edge strength distribution and anomaly counts
+- **Audit Output**: Saves structured JSON report with anomaly details for review and alerting
+
+**Capabilities:**
+- Statistical outlier detection using both parametric (z-score) and non-parametric (IQR) methods
+- Detailed anomaly reporting with deviation metrics and thresholds
+- Integration with evaluation pipeline for automated quality monitoring
+- Configurable detection parameters for different sensitivity levels
+
+**Usage:**
+```bash
+python scripts/eval/edge_audit.py  # Analyze current graph for edge anomalies
+make eval.edge.audit             # Same via Makefile target
+```
+
+**Output:** `share/eval/edge_audit.json` with complete anomaly analysis including:
+- Edge strength distribution statistics
+- Z-score and IQR anomaly detection results
+- Summary counts and anomaly rates
+- Detailed outlier lists with deviation metrics
+
+**Emitted Hints:**
+- `HINT: eval: auditing edges for anomalies`
+
+### `anomaly_badge.py` — Edge Anomaly Visualization Badge (Phase-9)
+
+**Purpose:** Generate visual SVG badge showing the count of anomalous edges detected in the semantic network.
+
+**Requirements:**
+- **Visual Status Indicator**: Color-coded badge (green=0, yellow=1-5, red=6+) for quick anomaly assessment
+- **Audit Integration**: Reads edge_audit.json results to determine anomaly count
+- **Graceful Fallback**: Handles missing audit files with safe defaults and error indicators
+
+**Capabilities:**
+- Automated badge generation with appropriate color coding
+- Real-time reflection of network quality status
+- CI/CD integration for automated quality monitoring
+- Error handling with distinct error indicators (999 = error state)
+
+**Usage:**
+```bash
+python scripts/eval/anomaly_badge.py  # Generate anomaly count badge
+make eval.anomaly.badge              # Same via Makefile target
+```
+
+**Output:** `share/eval/badges/anomaly.svg` with:
+- Color-coded status (green/yellow/red based on anomaly count)
+- Numerical anomaly count display
+- Accessible SVG format for web dashboards
+
+**Emitted Hints:**
+- `HINT: eval: writing anomaly badge`
+
 ### Lint Automation Scripts (NEW)
 
 #### `longline_noqa.py` — Smart E501 `# noqa` Tagger
