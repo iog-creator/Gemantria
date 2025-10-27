@@ -1,0 +1,56 @@
+name: typing-nightly
+on:
+  schedule:
+    - cron: "17 7 * * *" # daily 07:17 UTC
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  mypy-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (project + mypy)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install mypy types-requests types-PyYAML
+
+      - name: Run full mypy sweep (non-blocking)
+        id: mypy
+        continue-on-error: true
+        run: |
+          set -e
+          mkdir -p share/eval/mypy
+          # Full sweep using repo config (mypy.ini)
+          mypy --config-file=mypy.ini --ignore-missing-imports | tee share/eval/mypy/mypy_full.txt || true
+          # Count errors (lines containing ": error:")
+          ERRORS=$(grep -E ":[0-9]+:[0-9]+: error:" -c share/eval/mypy/mypy_full.txt || true)
+          echo "errors=${ERRORS}" >> "$GITHUB_OUTPUT"
+          # Emit standardized hint line for CI triage
+          if [ -f scripts/hint.sh ]; then
+            bash scripts/hint.sh "mypy-nightly: errors=${ERRORS}"
+          else
+            echo "HINT: mypy-nightly: errors=${ERRORS}"
+          fi
+
+      - name: Upload mypy report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mypy_full_report
+          path: share/eval/mypy/mypy_full.txt
+
+      - name: Summarize
+        run: |
+          echo "Nightly mypy errors: ${{ steps.mypy.outputs.errors }}"

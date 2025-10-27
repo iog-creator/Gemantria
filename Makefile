@@ -552,3 +552,16 @@ eval.provenance:
 
 ci.eval.provenance:
 	@python3 scripts/eval/build_provenance.py
+
+## Typing (mypy) — convenience targets
+.PHONY: ci.mypy.full
+ci.mypy.full:
+	@echo "[ci.mypy.full] Running repository-wide mypy sweep..."
+	@mypy --config-file=mypy.ini --ignore-missing-imports || true
+
+.PHONY: ci.mypy.changed
+ci.mypy.changed:
+	@echo "[ci.mypy.changed] Running mypy on changed files (against main)..."
+	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
+	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
+	mypy --config-file=mypy.ini --ignore-missing-imports $$CHANGED || true

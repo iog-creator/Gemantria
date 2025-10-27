@@ -366,6 +366,7 @@ pre-commit run -a    # ruff, black, mypy, audits, share.sync
 make ci.smart        # smart strict/soft choice + audits\nmake ci              # mirrors CI locally (legacy)
 ```
 CI workflow lives in `.github/workflows/ci.yml`.
+Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
 
 ---
 
