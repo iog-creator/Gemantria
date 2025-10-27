@@ -89,6 +89,11 @@ jobs:
       - name: Frontend contract build (Rules 016/022)
         run: |
           cd webui/graph
+          # Skip if no package-lock.json (backend-only changes)
+          if [ ! -f package-lock.json ]; then
+            echo "Skipping frontend build: no package-lock.json (backend-only PR)"
+            exit 0
+          fi
           npm ci
           npm run type-check
           npm run test:ci || npm test -- --ci
