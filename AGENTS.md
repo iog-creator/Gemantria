@@ -57,6 +57,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 ### CI Verification
 - **Empty DB tolerance**: Verify scripts handle missing tables gracefully in CI (zero counts allowed when DB empty)
 - **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
+- **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
