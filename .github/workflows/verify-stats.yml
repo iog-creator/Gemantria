@@ -34,12 +34,14 @@ jobs:
           scripts/ci/ensure_db_then_migrate.sh
       - name: Generate metrics & exports
         run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
           python scripts/analyze_graph.py || true
           python scripts/analyze_metrics.py
           python scripts/export_stats.py
           test -s exports/graph_stats.json
       - name: Verify PR-016/017 contracts (Rule 021)
         run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
           python scripts/verify_pr016_pr017.py \
             --dsn "$GEMATRIA_DSN" \
             --stats exports/graph_stats.json \
