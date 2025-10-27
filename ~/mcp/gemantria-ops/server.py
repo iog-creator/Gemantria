@@ -15,8 +15,7 @@ def _run(cmd: str) -> dict:
         shlex.split(cmd),
         cwd=str(ROOT),
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     return {
         "cmd": cmd,
@@ -29,7 +28,7 @@ def _run(cmd: str) -> dict:
 
 @mcp.tool()  # one-command pipeline
 def make_go() -> dict:
-    "Run lint/format → smart strict/soft → audits → share"
+    "Run lint/format → audits → share"
     return _run("make go")
 
 
