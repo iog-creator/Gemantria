@@ -297,6 +297,8 @@ def calculate_graph_stats(db):
     if stats["nodes"] > 1:
         possible_edges = stats["nodes"] * (stats["nodes"] - 1) / 2
         stats["density"] = stats["edges"] / possible_edges if possible_edges > 0 else 0
+    else:
+        stats["density"] = 0
 
     # Cluster metrics (if available)
     metrics_overview = list(db.execute("SELECT * FROM v_metrics_overview"))
