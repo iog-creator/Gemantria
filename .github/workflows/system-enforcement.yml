@@ -14,8 +14,12 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      # Temporarily disabled pre-commit due to pre-existing formatting issues
-      # - uses: pre-commit/action@v3.0.1
+      # Temporarily disabled - scoping not working correctly, runs on all files
+      # Will be re-enabled after fixing scoping logic
+      # - name: Run pre-commit (changed files only)
+      #   uses: pre-commit/action@v3.0.1
+      #   with:
+      #     extra_args: --from-ref origin/${{ github.base_ref }} --to-ref ${{ github.sha }}
       - name: Install guard deps
         run: pip install jsonschema
       - name: Rules numbering check

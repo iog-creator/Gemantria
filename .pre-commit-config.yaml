@@ -11,17 +11,16 @@ repos:
     hooks:
       - id: black
 
-  # Temporarily disabled mypy due to pre-existing type errors unrelated to PR-026
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v1.11.2
-  #   hooks:
-  #     - id: mypy
-  #       args:
-  #         - --config-file=mypy.ini
-  #         - --ignore-missing-imports
-  #       additional_dependencies:
-  #         - types-requests
-  #         - types-PyYAML
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.0
+    hooks:
+      - id: mypy
+        args:
+          - --config-file=mypy.ini
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-requests
+          - types-PyYAML
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0

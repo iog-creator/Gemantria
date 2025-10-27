@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for --from-ref/--to-ref
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,17 +26,20 @@ jobs:
           pip install -r requirements.txt || true
           pip install pre-commit ruff mypy pytest
 
-      # Temporarily disabled pre-commit due to pre-existing formatting issues
-      # - name: Pre-commit (all files)
-      #   run: |
-      #     pre-commit install
-      #     pre-commit run -a
+      # Temporarily disabled - scoping not working correctly, runs on all files
+      # Will be re-enabled after fixing scoping logic
+      # - name: Run pre-commit (changed files only)
+      #   uses: pre-commit/action@v3.0.1
+      #   with:
+      #     # Lint/type-check only files changed in this PR
+      #     extra_args: --from-ref origin/${{ github.base_ref }} --to-ref ${{ github.sha }}
 
-      # Temporarily disabled linting due to pre-existing code quality issues
+      # Temporarily disabled - pre-existing code quality issues
+      # Will be re-enabled after codebase cleanup
       # - name: Lint & type
       #   run: |
       #     make py.lint || ruff check
-      #     make py.type || mypy --strict src
+      #     make py.type || mypy --config-file=mypy.ini --ignore-missing-imports src
 
       - name: Audits
         run: |
