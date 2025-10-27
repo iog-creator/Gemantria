@@ -367,6 +367,7 @@ make ci.smart        # smart strict/soft choice + audits\nmake ci              #
 ```
 CI workflow lives in `.github/workflows/ci.yml`.
 Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
+Nightly linting: non-blocking full-repo ruff report (see Actions → lint-nightly).
 
 ---
 

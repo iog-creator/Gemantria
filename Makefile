@@ -565,3 +565,16 @@ ci.mypy.changed:
 	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
 	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
 	mypy --config-file=mypy.ini --ignore-missing-imports $$CHANGED || true
+
+## Linting (ruff) — convenience targets
+.PHONY: ci.lint.full
+ci.lint.full:
+	@echo "[ci.lint.full] Running repository-wide ruff lint sweep..."
+	@ruff check src scripts tools || true
+
+.PHONY: ci.lint.changed
+ci.lint.changed:
+	@echo "[ci.lint.changed] Running ruff on changed files (against main)..."
+	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
+	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
+	ruff check $$CHANGED || true
