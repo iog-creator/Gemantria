@@ -70,6 +70,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
 
+### Edge reranking & classification (Phase-10)
+All exported edges now carry a `rerank` score and an `edge_strength = 0.5*cos + 0.5*rerank`.
+Edges are classified as **strong** (≥0.90), **weak** (≥0.75), or **other**.
+Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
+
 ## How agents should use rules
 
 * Global constraints live in `.cursor/rules/000-always-apply.mdc`.

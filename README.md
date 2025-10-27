@@ -369,6 +369,7 @@ CI workflow lives in `.github/workflows/ci.yml`.
 Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
 Nightly linting: non-blocking full-repo ruff report (see Actions → lint-nightly).
 Nightly coverage: non-blocking full-repo pytest coverage (see Actions → coverage-nightly).
+- Edge quality: `make eval.edges.reclassify` fills missing `rerank`, computes `edge_strength`, and emits class counts.
 - See also: [Quality Dashboard](share/eval/QUALITY_DASHBOARD.md)
 
 ### Nightly Workflow Status

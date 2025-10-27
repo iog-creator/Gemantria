@@ -79,11 +79,6 @@
       "dst": "share/temporal_patterns.head.json",
       "generate": "head_json",
       "max_bytes": 2048
-    },
-    {
-      "src": "share/eval/edges/edge_class_counts.json",
-      "dst": "share/eval/edges/edge_class_counts.json",
-      "max_bytes": 4096
     }
   ]
 }
