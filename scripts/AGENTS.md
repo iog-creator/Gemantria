@@ -346,14 +346,14 @@ make exports.jsonld             # Same via Makefile target
 - **Health Indicators**: Provides network health and quality metrics
 - **Dashboard Ready**: JSON output formatted for UI consumption
 - **Real-time Data**: Direct database queries for current state
-- **NetworkX Fallback**: Optional centrality calculation when DB tables empty
+- **Automatic Centrality**: Computes and persists centrality metrics when missing from database
   **Capabilities**:
 - Node/edge/cluster counts and distributions
-- Centrality averages (DB or NetworkX-computed)
+- Centrality averages (DB-persisted with automatic computation)
 - Edge strength analysis (strong/weak/candidate connection counts)
 - Network density and health indicators
 - Largest cluster identification
-- Configurable centrality computation via `STATS_CENTRALITY_FALLBACK=1`
+- Automatic centrality persistence using NetworkX algorithms
   **Usage**:
 
 ```bash

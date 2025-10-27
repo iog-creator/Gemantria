@@ -8,6 +8,7 @@ and monitoring dashboards, focusing on key insights and health indicators.
 
 import os
 
+from src.graph.patterns import build_graph, compute_patterns
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
@@ -75,7 +76,92 @@ def calculate_graph_stats(db):
         }
     )
 
-    # Optional NetworkX fallback if DB table is empty or zeros
+    # Compute and persist centrality if missing from database
+    centrality_missing = not centrality_stats or all(
+        row[0] == 0
+        and row[1] == 0
+        and row[2] == 0
+        and row[3] == 0
+        and row[4] == 0
+        and row[5] == 0
+        for row in centrality_stats
+    )
+
+    if centrality_missing:
+        try:
+            # Build graph and compute centrality
+            G = build_graph(db)
+            if G.number_of_nodes() > 0:
+                cluster_map, degree, betw, eigen = compute_patterns(G)
+
+                # Persist centrality to database
+                centrality_insert_count = 0
+                for node in G.nodes():
+                    try:
+                        db.execute(
+                            """
+                            INSERT INTO concept_centrality (
+                                concept_id, degree, betweenness, eigenvector
+                            )
+                            VALUES (%s, %s, %s, %s)
+                            ON CONFLICT (concept_id) DO UPDATE SET
+                                degree = EXCLUDED.degree,
+                                betweenness = EXCLUDED.betweenness,
+                                eigenvector = EXCLUDED.eigenvector
+                            """,
+                            (
+                                node,
+                                degree.get(node, 0),
+                                betw.get(node, 0),
+                                eigen.get(node, 0),
+                            ),
+                        )
+                        centrality_insert_count += 1
+                    except Exception as e:
+                        log_json(
+                            LOG,
+                            40,
+                            "centrality_persist_failed",
+                            node=node[:8],
+                            error=str(e),
+                        )
+
+                # Re-query centrality stats after persistence
+                centrality_stats = list(
+                    db.execute(
+                        """
+                        SELECT
+                            COALESCE(AVG(degree), 0) as avg_degree,
+                            COALESCE(MAX(degree), 0) as max_degree,
+                            COALESCE(AVG(betweenness), 0) as avg_betweenness,
+                            COALESCE(MAX(betweenness), 0) as max_betweenness,
+                            COALESCE(AVG(eigenvector), 0) as avg_eigenvector,
+                            COALESCE(MAX(eigenvector), 0) as max_eigenvector
+                        FROM concept_centrality
+                        """
+                    )
+                )
+
+                log_json(
+                    LOG,
+                    20,
+                    "centrality_computed_and_persisted",
+                    nodes_computed=G.number_of_nodes(),
+                    centrality_inserts=centrality_insert_count,
+                    stats_reloaded=bool(centrality_stats),
+                )
+
+        except Exception as e:
+            log_json(
+                LOG,
+                30,
+                "centrality_computation_failed",
+                error=str(e),
+                falling_back_to_zeros=True,
+            )
+            centrality_stats = None
+
+    # Optional NetworkX fallback if DB table is empty or zeros (legacy behavior)
     use_fallback = os.getenv("STATS_CENTRALITY_FALLBACK", "0").lower() in (
         "1",
         "true",
@@ -285,7 +371,8 @@ def export_correlations(db):
 
         except Exception as db_error:
             LOG.warning(
-                f"Database correlation view not available ({db_error}), falling back to Python computation"
+                f"Database correlation view not available ({db_error}), "
+                "falling back to Python computation"
             )
             correlations = _compute_correlations_python(db)
 
@@ -597,7 +684,8 @@ def export_patterns(db):
             metadata["run_id"] = "unknown"
 
         LOG.info(
-            f"Generated {len(patterns)} cross-text patterns across {len(metadata['analyzed_books'])} books"
+            f"Generated {len(patterns)} cross-text patterns across "
+            f"{len(metadata['analyzed_books'])} books"
         )
 
     except Exception as e:
@@ -950,7 +1038,7 @@ def main():
             LOG,
             20,
             "export_stats_complete",
-            **{k: v for k, v in stats.items() if isinstance(v, (int, float, bool))},
+            **{k: v for k, v in stats.items() if isinstance(v, int | float | bool)},
             correlations_total=correlations["metadata"]["total_correlations"],
             correlations_significant=correlations["metadata"][
                 "significant_correlations"
