@@ -446,6 +446,8 @@ eval.package:
 	@$(MAKE) eval.summary
 	@$(MAKE) eval.quality.check
 	@$(MAKE) eval.quality.badge
+	@$(MAKE) eval.quality.trend
+	@$(MAKE) eval.graph.calibrate.adv
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -523,11 +525,15 @@ eval.quality.check:
 	@python3 scripts/eval/check_quality.py
 eval.summary:
 	@python3 scripts/eval/build_run_summary.py
-.PHONY: eval.quality.badge eval.graph.calibrate
+.PHONY: eval.quality.badge eval.graph.calibrate eval.graph.calibrate.adv eval.quality.trend
 eval.quality.badge:
 	@python3 scripts/eval/make_quality_badge.py
 eval.graph.calibrate:
 	@python3 scripts/eval/calibrate_thresholds.py
+eval.graph.calibrate.adv:
+	@python3 scripts/eval/calibrate_advanced.py
+eval.quality.trend:
+	@python3 scripts/eval/quality_trend.py
 
 .PHONY: eval.open
 eval.open:
