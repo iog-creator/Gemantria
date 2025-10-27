@@ -366,3 +366,7 @@ pre-commit run -a    # ruff, black, mypy, audits, share.sync
 make ci.smart        # smart strict/soft choice + audits\nmake ci              # mirrors CI locally (legacy)
 ```
 CI workflow lives in `.github/workflows/ci.yml`.
+
+---
+
+> Looking for the full documentation? See **README_FULL.md**.
