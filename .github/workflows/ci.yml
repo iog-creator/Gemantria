@@ -60,6 +60,15 @@ jobs:
         run: |
           make test.smoke
 
+      - name: SSOT JSONSchema (PR-diff)
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -e
+          make -s ssot.validate.changed
+
       - name: Edge reclassify (non-blocking)
         run: |
           set -e
