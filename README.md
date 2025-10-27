@@ -368,6 +368,12 @@ make ci.smart        # smart strict/soft choice + audits\nmake ci              #
 CI workflow lives in `.github/workflows/ci.yml`.
 Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
 Nightly linting: non-blocking full-repo ruff report (see Actions → lint-nightly).
+Nightly coverage: non-blocking full-repo pytest coverage (see Actions → coverage-nightly).
+
+### Nightly Workflow Status
+![typing-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/typing-nightly.yml/badge.svg)
+![lint-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/lint-nightly.yml/badge.svg)
+![coverage-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/coverage-nightly.yml/badge.svg)
 
 ---
 
