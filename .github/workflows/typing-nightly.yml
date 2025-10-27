@@ -45,6 +45,17 @@ jobs:
             echo "HINT: mypy-nightly: errors=${ERRORS}"
           fi
 
+      - name: Soft threshold (non-fatal warning)
+        env:
+          ERRORS: ${{ steps.mypy.outputs.errors }}
+          TYPING_WARN_MAX: ${{ vars.TYPING_WARN_MAX }}
+        run: |
+          TW="${TYPING_WARN_MAX:-}"
+          E="${ERRORS:-0}"
+          if [ -n "$TW" ] && [ "$E" -gt "$TW" ]; then
+            echo "HINT: mypy-nightly WARN: errors=$E > TYPING_WARN_MAX=$TW"
+          fi
+
       - name: Append mypy metric to history (JSONL)
         env:
           ERRORS: ${{ steps.mypy.outputs.errors }}
