@@ -24,17 +24,15 @@ jobs:
           pip install -r requirements.txt || true
           pip install pre-commit ruff mypy pytest
 
-      # Temporarily disabled pre-commit due to pre-existing formatting issues
-      # - name: Pre-commit (all files)
-      #   run: |
-      #     pre-commit install
-      #     pre-commit run -a
+      - name: Pre-commit (all files)
+        run: |
+          pre-commit install
+          pre-commit run -a
 
-      # Temporarily disabled linting due to pre-existing code quality issues
-      # - name: Lint & type
-      #   run: |
-      #     make py.lint || ruff check
-      #     make py.type || mypy --strict src
+      - name: Lint & type
+        run: |
+          make py.lint || ruff check
+          make py.type || mypy --config-file=mypy.ini --ignore-missing-imports src
 
       - name: Audits
         run: |
