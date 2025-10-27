@@ -578,3 +578,13 @@ ci.lint.changed:
 	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
 	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
 	ruff check $$CHANGED || true
+
+## Coverage (pytest-cov) — convenience targets
+.PHONY: ci.coverage.full
+ci.coverage.full:
+	@echo "[ci.coverage.full] Running pytest coverage (non-blocking)..."
+	@pytest -q --maxfail=1 --disable-warnings --cov=src --cov-report=term --cov-report=xml:share/eval/coverage/coverage.xml || true
+
+.PHONY: ci.coverage.badge   # (optional later)
+ci.coverage.badge:
+	@echo "[ci.coverage.badge] TODO: generate svg from coverage.xml"
