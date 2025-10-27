@@ -18,6 +18,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from src.infra.env_loader import ensure_env_loaded
@@ -76,6 +77,14 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
+# Mount static files from exports directory
+export_dir = os.getenv("EXPORT_DIR", "exports")
+if Path(export_dir).exists():
+    app.mount("/exports", StaticFiles(directory=export_dir), name="exports")
+    LOG.info(f"Mounted static files from {export_dir} at /exports")
+else:
+    LOG.warning(f"Export directory {export_dir} not found - static files not mounted")
 
 
 def get_export_path(filename: str) -> Path:
