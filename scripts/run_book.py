@@ -32,7 +32,7 @@ def _load_yaml_or_json(p: Path) -> dict[str, Any]:
     if not p.exists():
         return DEFAULT_CFG
     if p.suffix.lower() in (".yaml", ".yml"):
-        import yaml  # type: ignore  # hard-required by requirements-dev.txt  # noqa: E402
+        import yaml  # type: ignore  # hard-required by requirements-dev.txt
 
         return yaml.safe_load(p.read_text(encoding="utf-8"))
     return json.loads(p.read_text(encoding="utf-8"))
@@ -130,7 +130,7 @@ def _run_chapters(cfg: dict[str, Any], chapters: list[int], real: bool) -> None:
             encoding="utf-8",
         )
         print(
-            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time()-t0:.2f}s"
+            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s"
         )
 
 

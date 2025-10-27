@@ -29,12 +29,10 @@ def main() -> None:
         if m and p.name not in ALLOWED:
             offenders.append(p.name)
     if offenders:
-        msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"  # noqa: E501
+        msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"
         print(f"[rules.navigator.check] FAIL: {msg}", file=sys.stderr)
         sys.exit(2)
-    print(
-        "[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)"
-    )  # noqa: E501
+    print("[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)")
 
 
 if __name__ == "__main__":

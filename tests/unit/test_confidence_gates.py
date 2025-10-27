@@ -81,13 +81,13 @@ class TestConfidenceGates:
     def test_custom_thresholds(self):
         """Test with custom environment thresholds."""
         # Reload module to pick up new env vars
-        import importlib  # noqa: E402
+        import importlib
 
-        import src.nodes.enrichment  # noqa: E402
+        import src.nodes.enrichment
 
         importlib.reload(src.nodes.enrichment)
-        from src.nodes.enrichment import HARD as new_hard  # noqa: E402
-        from src.nodes.enrichment import SOFT as new_soft  # noqa: E402
+        from src.nodes.enrichment import HARD as new_hard
+        from src.nodes.enrichment import SOFT as new_soft
 
         assert new_soft == 0.85
         assert new_hard == 0.92

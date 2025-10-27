@@ -10,7 +10,7 @@ REPORT = ROOT / "scripts" / "eval" / "report.py"
 
 
 def _read_yaml(p: pathlib.Path) -> dict[str, Any]:
-    import yaml  # noqa: E402
+    import yaml
 
     return yaml.safe_load(p.read_text(encoding="utf-8"))
 
@@ -48,7 +48,7 @@ def main() -> int:
     try:
         BASE.write_text(tmp.read_text(encoding="utf-8"), encoding="utf-8")
         # run report.py using subprocess
-        import subprocess  # noqa: E402
+        import subprocess
 
         result = subprocess.run(["python3", str(REPORT)], cwd=ROOT)
         if result.returncode != 0:

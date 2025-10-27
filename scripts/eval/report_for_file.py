@@ -35,7 +35,7 @@ def main() -> int:
     try:
         MANIFEST.write_text(patched, encoding="utf-8")
         # import and run report.py as a module
-        import runpy  # noqa: E402
+        import runpy
 
         runpy.run_path(str(REPORT))
     finally:

@@ -169,7 +169,7 @@ def calculate_graph_stats(db):
     )
     if use_fallback:
         try:
-            import networkx as nx  # noqa: E402
+            import networkx as nx
 
             # consider "cosine" as edge weight if present
             rows = list(
@@ -392,7 +392,7 @@ def export_correlations(db):
             set(c.get("metric", "unknown") for c in correlations)
         )
 
-    import datetime  # noqa: E402
+    import datetime
 
     metadata["generated_at"] = datetime.datetime.now().isoformat()
 
@@ -414,9 +414,9 @@ def export_correlations(db):
 def _compute_correlations_python(db):
     """Fallback: Compute correlations using Python/scipy when database view unavailable."""
     try:
-        from itertools import combinations  # noqa: E402
+        from itertools import combinations
 
-        from scipy.stats import pearsonr  # noqa: E402
+        from scipy.stats import pearsonr
     except ImportError:
         LOG.error("scipy not available for correlation computation fallback")
         return []
@@ -444,7 +444,7 @@ def _compute_correlations_python(db):
         batch_size = 100  # Limit combinations per batch
 
         # Convert embeddings to numpy arrays for efficient computation
-        import numpy as np  # noqa: E402
+        import numpy as np
 
         concept_list = []
         for row in concept_data:
@@ -669,7 +669,7 @@ def export_patterns(db):
                 set(p.get("metric", "unknown") for p in patterns)
             )
 
-        import datetime  # noqa: E402
+        import datetime
 
         metadata["generated_at"] = datetime.datetime.now().isoformat()
 
@@ -705,7 +705,7 @@ def export_temporal_patterns(db):
     - Writes exports/temporal_patterns.json
     - Validates against temporal-patterns.schema.json
     """
-    import statistics  # noqa: E402
+    import statistics
 
     patterns = []
     metadata = {
@@ -911,7 +911,7 @@ def main():
         forecasts = export_forecast(db)
 
         # Add timestamp
-        import datetime  # noqa: E402
+        import datetime
 
         now = datetime.datetime.now().isoformat()
 
@@ -922,13 +922,13 @@ def main():
         forecasts["metadata"]["generated_at"] = now
 
         # === Rule 021/022 + Rule 030: schema validation (HARD-REQUIRED) ===
-        import json  # noqa: E402
-        import sys  # noqa: E402
-        from pathlib import Path  # noqa: E402
+        import json
+        import sys
+        from pathlib import Path
 
         # Hard requirement: jsonschema must be installed
         try:
-            from jsonschema import ValidationError, validate  # noqa: E402
+            from jsonschema import ValidationError, validate
         except ImportError:
             print(
                 "[export_stats] CRITICAL: jsonschema not installed (hard requirement)",

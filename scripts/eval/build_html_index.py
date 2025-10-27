@@ -234,7 +234,7 @@ def main() -> int:
     )
     html.append(
         "                summary.textContent = `Artifacts: ${data.artifact_count} | "
-        "Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"  # noqa: E501
+        "Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"
     )
     html.append("                const artifacts = data.artifacts.slice(0, 200);")
     html.append("                tbody.innerHTML = '';")

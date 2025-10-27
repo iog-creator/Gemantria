@@ -197,7 +197,7 @@ def audit_phase(phase):
     expected = MODELS[phase]
     if expected not in ids:
         print(
-            f"[FAIL] :{port} expected model '{expected}' not found. Available: {ids}",  # noqa: E501
+            f"[FAIL] :{port} expected model '{expected}' not found. Available: {ids}",
             file=sys.stderr,
         )
         sys.exit(1)

@@ -69,7 +69,7 @@ def _load_cfg(config_path):
     config_path = Path(config_path)
     with open(config_path) as f:
         if config_path.suffix.lower() in (".yaml", ".yml"):
-            import yaml  # type: ignore  # noqa: E402
+            import yaml  # type: ignore
 
             return yaml.safe_load(f)
         return json.load(f)
@@ -121,7 +121,7 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
             ) / total_edges
 
     # Correlation metrics
-    if "correlations" in stats and stats["correlations"]:
+    if stats.get("correlations"):
         corrs = [c["cosine"] for c in stats["correlations"] if "cosine" in c]
         if corrs:
             metrics["cosine_min"] = min(corrs)
@@ -201,7 +201,7 @@ def cmd_compute(args):
 
 def cmd_gate(args):
     """Validate head artifacts against SSOT schemas. HARD-REQUIRED."""
-    import json  # noqa: E402
+    import json
 
     # Load existing report
     if not READINESS_JSON.exists():
@@ -224,7 +224,7 @@ def cmd_gate(args):
 
     # Validate graph stats schema
     try:
-        from jsonschema import ValidationError, validate  # noqa: E402
+        from jsonschema import ValidationError, validate
 
         # Graph stats schema
         schema_path = Path("docs/SSOT/graph-stats.schema.json")
@@ -264,7 +264,7 @@ def cmd_gate(args):
         schema_errs.append(f"Schema validation error: {e.message}")
     except Exception as e:
         schema_ok = False
-        schema_errs.append(f"Schema validation failed: {str(e)}")
+        schema_errs.append(f"Schema validation failed: {e!s}")
 
     # Update report
     report["schema"] = {"validated": schema_ok, "errors": schema_errs}

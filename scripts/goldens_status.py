@@ -57,7 +57,7 @@ def main():
     print("-" * 96)
     for r in sorted(rows, key=lambda x: x["path"]):
         print(
-            f'{r["path"]} | {r["mtime"]} | {r["kb"]} | {r["commit"]} | {r["date"]} | {r["msg"]}'
+            f"{r['path']} | {r['mtime']} | {r['kb']} | {r['commit']} | {r['date']} | {r['msg']}"
         )
     return 0
 

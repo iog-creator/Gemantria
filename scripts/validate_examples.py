@@ -32,50 +32,50 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
         # Check required fields
         missing_core = [f for f in core_fields if f not in record]
         if missing_core:
-            errors.append(f"Record {i+1}: missing required fields {missing_core}")
+            errors.append(f"Record {i + 1}: missing required fields {missing_core}")
 
         # Type checks for required fields
         if "confidence" in record and not isinstance(
             record["confidence"], (int, float)
         ):
             errors.append(
-                f"Record {i+1}: confidence should be numeric, got {type(record['confidence'])}"
+                f"Record {i + 1}: confidence should be numeric, got {type(record['confidence'])}"
             )
 
         if "tokens" in record and not isinstance(record["tokens"], int):
             errors.append(
-                f"Record {i+1}: tokens should be int, got {type(record['tokens'])}"
+                f"Record {i + 1}: tokens should be int, got {type(record['tokens'])}"
             )
 
         if "insights" in record and not isinstance(record["insights"], str):
             errors.append(
-                f"Record {i+1}: insights should be str, got {type(record['insights'])}"
+                f"Record {i + 1}: insights should be str, got {type(record['insights'])}"
             )
 
         if "hebrew" in record and not isinstance(record["hebrew"], str):
             errors.append(
-                f"Record {i+1}: hebrew should be str, got {type(record['hebrew'])}"
+                f"Record {i + 1}: hebrew should be str, got {type(record['hebrew'])}"
             )
 
         if "name" in record and not isinstance(record["name"], str):
             errors.append(
-                f"Record {i+1}: name should be str, got {type(record['name'])}"
+                f"Record {i + 1}: name should be str, got {type(record['name'])}"
             )
 
         # Optional fields from collection phase (may be present)
         if "primary_verse" in record and not isinstance(record["primary_verse"], str):
             errors.append(
-                f"Record {i+1}: primary_verse should be str, got {type(record['primary_verse'])}"
+                f"Record {i + 1}: primary_verse should be str, got {type(record['primary_verse'])}"
             )
 
         if "freq" in record and not isinstance(record["freq"], int):
             errors.append(
-                f"Record {i+1}: freq should be int, got {type(record['freq'])}"
+                f"Record {i + 1}: freq should be int, got {type(record['freq'])}"
             )
 
         if "book" in record and not isinstance(record["book"], str):
             errors.append(
-                f"Record {i+1}: book should be str, got {type(record['book'])}"
+                f"Record {i + 1}: book should be str, got {type(record['book'])}"
             )
 
         if (
@@ -84,7 +84,7 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
             and not isinstance(record["chapter"], int)
         ):
             errors.append(
-                f"Record {i+1}: chapter should be int or null, got {type(record['chapter'])}"
+                f"Record {i + 1}: chapter should be int or null, got {type(record['chapter'])}"
             )
 
         # Validate insight length (should be substantial theological analysis)
@@ -92,14 +92,14 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
             word_count = len(record["insights"].split())
             if word_count < 150:
                 errors.append(
-                    f"Record {i+1}: insights too short ({word_count} words), expected 150-300 words"
+                    f"Record {i + 1}: insights too short ({word_count} words), expected 150-300 words"
                 )
 
         # Validate confidence range
         if "confidence" in record:
             conf = record["confidence"]
             if not (0.0 <= conf <= 1.0):
-                errors.append(f"Record {i+1}: confidence {conf} out of range [0,1]")
+                errors.append(f"Record {i + 1}: confidence {conf} out of range [0,1]")
 
     return errors
 
