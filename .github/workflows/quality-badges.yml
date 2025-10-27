@@ -40,14 +40,14 @@ jobs:
           echo "ruff=${ruff_count}" >> "$GITHUB_OUTPUT"
           printf "cover=%.2f\n" "$cov_pct" >> "$GITHUB_OUTPUT"
           graph_badge=$(python - <<'PY'
-import json,os,sys
-p="_graph.jsonl"
-if not os.path.exists(p) or os.path.getsize(p)==0:
-    print("isolates:0,dangling:0,cycles:0"); sys.exit(0)
-o=json.loads(open(p).read())
-print(f"isolates:{o.get('isolates',0)},dangling:{o.get('dangling',0)},cycles:{o.get('cycles',0)}")
-PY
-)
+          import json,os,sys
+          p="_graph.jsonl"
+          if not os.path.exists(p) or os.path.getsize(p)==0:
+              print("isolates:0,dangling:0,cycles:0"); sys.exit(0)
+          o=json.loads(open(p).read())
+          print(f"isolates:{o.get('isolates',0)},dangling:{o.get('dangling',0)},cycles:{o.get('cycles',0)}")
+          PY
+          )
           echo "graph=${graph_badge}" >> "$GITHUB_OUTPUT"
 
       - name: Generate SVG badges

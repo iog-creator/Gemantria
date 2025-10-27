@@ -79,16 +79,6 @@
       "dst": "share/temporal_patterns.head.json",
       "generate": "head_json",
       "max_bytes": 2048
-    },
-    {
-      "src": "share/eval/graph/graph_anomalies.jsonl",
-      "dst": "share/eval/graph/graph_anomalies.jsonl",
-      "max_bytes": 262144
-    },
-    {
-      "src": "share/eval/badges/graph.svg",
-      "dst": "share/eval/badges/graph.svg",
-      "max_bytes": 4096
     }
   ]
 }
