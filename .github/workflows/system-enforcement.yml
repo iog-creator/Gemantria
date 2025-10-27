@@ -83,6 +83,8 @@ jobs:
           fi
           echo "HINT: enforcement DB steps enabled"
           echo "::endgroup::"
+      - name: Refresh share mirror before checking
+        run: make -s share.sync
       - name: Check share/ sync (flat, current)
         run: python scripts/check_share_sync.py
       - name: Data completeness gate (Rule 037)
