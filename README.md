@@ -369,6 +369,7 @@ CI workflow lives in `.github/workflows/ci.yml`.
 Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
 Nightly linting: non-blocking full-repo ruff report (see Actions → lint-nightly).
 Nightly coverage: non-blocking full-repo pytest coverage (see Actions → coverage-nightly).
+- See also: [Quality Dashboard](share/eval/QUALITY_DASHBOARD.md)
 
 ### Nightly Workflow Status
 ![typing-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/typing-nightly.yml/badge.svg)
