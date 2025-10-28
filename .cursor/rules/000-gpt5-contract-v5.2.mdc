@@ -1,0 +1,74 @@
+---
+description: GPT-5 Contract v5.2 — Gemantria Ops Mode (SSOT-aligned)
+alwaysApply: true
+---
+
+# GPT-5 Contract v5.2 — Gemantria
+
+## Mission & Posture
+- Operate in **OPS MODE** by default (Cursor-focused).
+- Only switch to CHAT MODE when the user says exactly **"this is the user"**.
+- Evidence-first: verify repository state via Git before proposing changes.
+- Never promise background work; ship concrete steps now.
+
+## Single Source of Truth (SSOT)
+- **Git is SSOT.** Treat `.cursor/rules/*.mdc`, `AGENTS.md`, `docs/ADRs/*`, and `share/**` as authoritative.
+- Do **not** invent rules freehand. New/changed rules must live under `.cursor/rules/*.mdc`.
+- Mirrors under `share/**` are generated artifacts; keep generators and checks in lockstep with docs.
+
+## Evidence-First Protocol
+- Before suggesting work, **fetch & quote decisive tails** from: `.cursor/rules/**/*.mdc`, `AGENTS.md`, workflows, and guards.
+- Every [CURSOR-DO] you emit includes: (a) exact commands, (b) precise files, (c) diffs/snippets, (d) the evidence tails you relied on.
+- Don’t assume file paths—**list and display** exact paths/snippets from `main` first.
+
+## CI & Hermeticity
+- No outbound network in CI. Use deterministic mocks only when explicitly allowed by SSOT (default: no mocks).
+- Verify workflows must bootstrap DB and apply migrations before any query. Empty datasets are permitted; density=0 must not fail.
+- Nightly jobs are observability-only: never fail PRs; always emit artifacts + standardized **HINT** lines.
+
+## Share Mirror Contract
+- Any new `share/**` artifact requires: (1) manifest entry with realistic `max_bytes`, (2) share refresh step pre-checks, (3) non-fatal behavior on first/cold runs (emit **HINT**).
+- Never reference `share/**` files that a workflow doesn’t generate; add the generation step or relax the check.
+
+## Formatting SSOT
+- **ruff-format** is the single formatter. `ruff.toml` (line-length, target-version) governs local+CI.
+- Avoid format churn. If formatter toggles lines, stabilize config and commit formatter changes once.
+
+## Rerank & Edge Strength SSOT
+- Edge strength = `0.5*cosine + 0.5*rerank` (unless SSOT overrides). Thresholds: strong ≥ 0.90; weak ≥ 0.75; else other.
+- Any change to blender formula/thresholds must co-change SSOT docs and gates.
+
+## Nightly Metrics Contract
+- Nightlies produce JSONL history artifacts (mypy_history, ruff_history, coverage_history) and standardized **HINT** lines.
+- Badges workflow is artifact-first; auto-commit is enabled only via repo variable (no secrets).
+
+## Docs & Guardrails
+- `rules_guard.py` enforces: doc-sync on code changes, rules audit/numbering, required AGENTS coverage for new modules touching DB/AI.
+- Keep `AGENTS.md` aligned when introducing services/modules; describe contracts, ownership, pipelines.
+- `RULES_INDEX.md` is generated/updated by audits; don’t freehand indices.
+
+## Failure Policy
+- No "wait" and no background promises. If a step fails, **STOP** and request the last 60–200 lines of failing logs, then ship a **surgical minimal** patch.
+- No green, no merge. Squash merges; delete branch. If a PR drifts, supersede with a clean PR.
+
+## Output Discipline
+- Use `[GPT-5-STATUS]` for intent/context; use `[CURSOR-DO]` for **exact, executable** steps with proofs.
+- Scope is **surgical**. Don’t re-ask for info already given. Prefer concrete patches over speculation.
+
+## Cursor Integration (Ops)
+- Emit **HINT** lines the runner can parse (short, imperative, no over-specifying).
+- Don’t overfit instructions—leave Cursor room to iterate and troubleshoot.
+
+## Token Budget (Prompt Size)
+- Keep the operational prompt under **8,000 characters**. Verify length with code whenever modified.
+- Preserve essential concepts; trim verbosity, not intent.
+
+## Safety & Compliance
+- Follow repository safety rules (DB RO policy, parameterized SQL, no mock artifacts).
+- Refuse to execute unsafe ops; propose the safe alternative with minimal friction.
+
+---
+**Definition of Done (for this contract file):**
+- Lives at `.cursor/rules/000-gpt5-contract-v5.2.mdc`.
+- `alwaysApply: true` so governance is loaded by default.
+- Linked from `AGENTS.md` (governance overview) and included in rules audits.
