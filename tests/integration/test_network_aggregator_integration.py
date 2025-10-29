@@ -177,7 +177,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 self.assertEqual(len(embedding), 1024)  # VECTOR_DIM
 
                 # Verify it's a numpy array of float32 values
-                import numpy as np  # noqa: E402
+                import numpy as np
 
                 self.assertIsInstance(embedding, np.ndarray)
                 self.assertEqual(embedding.dtype, np.float32)
@@ -361,7 +361,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 embedding2 = cur.fetchone()[0]
 
                 # Embeddings should be identical (deterministic mock)
-                import numpy as np  # noqa: E402
+                import numpy as np
 
                 self.assertTrue(np.array_equal(embedding1, embedding2))
 

@@ -44,7 +44,7 @@ def test_batch_size_enforcement_strict_mode(cleanup_review_file):
     assert len(lines) == 2  # One line per noun
 
     # Check content structure
-    import json  # noqa: E402
+    import json
 
     for line in lines:
         entry = json.loads(line)

@@ -15,24 +15,18 @@ Outputs:
 """
 
 import csv
-import json
-import os
 import subprocess
-import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-
-import requests
 
 
-def run_cmd(cmd: List[str], cwd: Optional[str] = None) -> Tuple[str, str, int]:
+def run_cmd(cmd: list[str], cwd: str | None = None) -> tuple[str, str, int]:
     """Run a command and return stdout, stderr, exit_code."""
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     return result.stdout.strip(), result.stderr.strip(), result.returncode
 
 
-def get_branches() -> List[Dict]:
+def get_branches() -> list[dict]:
     """Get all branches (local and remote) with metadata."""
     branches = []
 
@@ -91,7 +85,7 @@ def get_branches() -> List[Dict]:
     return branches
 
 
-def get_pr_info(branches: List[Dict], repo_owner: str, repo_name: str) -> None:
+def get_pr_info(branches: list[dict], repo_owner: str, repo_name: str) -> None:
     """Add PR information to branches using GitHub API."""
     try:
         # This would need GitHub token - for now we'll use MCP tools
@@ -102,7 +96,7 @@ def get_pr_info(branches: List[Dict], repo_owner: str, repo_name: str) -> None:
         # Continue without PR info
 
 
-def analyze_branch_health(branches: List[Dict]) -> Dict:
+def analyze_branch_health(branches: list[dict]) -> dict:
     """Analyze overall branch health statistics."""
     total_branches = len(branches)
     local_only = sum(1 for b in branches if b["local_exists"] and not b["remote_exists"])
@@ -132,7 +126,7 @@ def analyze_branch_health(branches: List[Dict]) -> Dict:
     }
 
 
-def generate_csv_report(branches: List[Dict], output_path: Path) -> None:
+def generate_csv_report(branches: list[dict], output_path: Path) -> None:
     """Generate CSV report."""
     fieldnames = [
         "branch_name",
@@ -172,12 +166,12 @@ def generate_csv_report(branches: List[Dict], output_path: Path) -> None:
             )
 
 
-def generate_markdown_report(branches: List[Dict], stats: Dict, output_path: Path) -> None:
+def generate_markdown_report(branches: list[dict], stats: dict, output_path: Path) -> None:
     """Generate markdown report."""
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
 
     with open(output_path, "w") as f:
-        f.write(f"# Branch Health Report\n\n")
+        f.write("# Branch Health Report\n\n")
         f.write(f"**Generated:** {now}\n\n")
 
         # Summary statistics
@@ -213,7 +207,7 @@ def generate_markdown_report(branches: List[Dict], stats: Dict, output_path: Pat
         has_pr_no_checks = [b for b in branches if b["pr_number"] and not b["checks_status"]]
         has_checks = [b for b in branches if b["checks_status"]]
 
-        def write_branch_table(title: str, branch_list: List[Dict]):
+        def write_branch_table(title: str, branch_list: list[dict]):
             if not branch_list:
                 return
             f.write(f"### {title} ({len(branch_list)} branches)\n\n")

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 import os
 import sys
-from typing import Tuple, List
 
 # REQUIRED across scripts: load .env before any getenv/DB access
 # (prevents DSN/connection issues)
@@ -50,7 +50,7 @@ JOIN_QUERIES: list[tuple[str, str]] = [
 ]
 
 
-def run_query(cur: "psycopg.Cursor", label: str, q: str) -> int:
+def run_query(cur: psycopg.Cursor, label: str, q: str) -> int:
     try:
         cur.execute(q)
         rows = cur.fetchall()
