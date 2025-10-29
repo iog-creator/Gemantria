@@ -55,7 +55,10 @@ def _prepare_args(raw: dict[str, Any]) -> dict[str, Any]:
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "eval" / "manifest.yml"
-OUTDIR = ROOT / "share" / "eval"
+import os
+DEFAULT_OUTDIR = ROOT / "share" / "eval"
+ENV_OUTDIR = os.environ.get("EVAL_OUTDIR")
+OUTDIR = (ROOT / ENV_OUTDIR) if ENV_OUTDIR else DEFAULT_OUTDIR
 JSON_OUT = OUTDIR / "report.json"
 MD_OUT = OUTDIR / "report.md"
 
@@ -157,11 +160,60 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
+    """Validate JSON file structure/shape against expected patterns."""
+    file_path = ROOT / args["file"]
+    expected_keys = set(args.get("required_keys", []))
+    expected_types = args.get("key_types", {})
+
+    if not file_path.exists():
+        return {"status": "FAIL", "error": f"file not found: {file_path}"}
+
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        return {"status": "FAIL", "error": f"failed to parse JSON: {e}"}
+
+    if not isinstance(data, dict):
+        return {"status": "FAIL", "error": "expected top-level object"}
+
+    # Check required keys
+    missing_keys = expected_keys - set(data.keys())
+    if missing_keys:
+        return {"status": "FAIL", "error": f"missing required keys: {missing_keys}"}
+
+    # Check key types
+    type_errors = []
+    for key, expected_type in expected_types.items():
+        if key in data:
+            actual_value = data[key]
+            if expected_type == "array" and not isinstance(actual_value, list):
+                type_errors.append(f"{key}: expected array, got {type(actual_value).__name__}")
+            elif expected_type == "object" and not isinstance(actual_value, dict):
+                type_errors.append(f"{key}: expected object, got {type(actual_value).__name__}")
+            elif expected_type == "number" and not isinstance(actual_value, (int, float)):
+                type_errors.append(f"{key}: expected number, got {type(actual_value).__name__}")
+            elif expected_type == "string" and not isinstance(actual_value, str):
+                type_errors.append(f"{key}: expected string, got {type(actual_value).__name__}")
+
+    if type_errors:
+        return {"status": "FAIL", "error": f"type validation errors: {type_errors}"}
+
+    return {
+        "status": "OK",
+        "keys_found": len(data),
+        "required_keys_present": len(expected_keys),
+        "type_checks_passed": len(expected_types)
+    }
+
+
 KIND_IMPL = {
     "print": task_print,
     "verify_files": task_verify_files,
     "grep": task_grep,
     "ref_integrity": task_ref_integrity,
+    "json_shape": task_json_shape,
 }
 
 

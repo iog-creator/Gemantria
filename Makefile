@@ -185,11 +185,13 @@ book.resume:
 
 # Manifest-driven local report (writes to share/eval/)
 eval.report:
-	@python3 scripts/eval/report.py
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report.py
 
-# Not wired into CI; identical to local for now
+# CI version writes to _artifacts/eval/
 ci.eval.report:
-	@python3 scripts/eval/report.py
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/report.py
 
 .PHONY: eval.catalog ci.eval.catalog
 
@@ -234,3 +236,14 @@ eval.bundle:
 ci.eval.bundle:
 	@EVAL_BUNDLES_DIR=_artifacts/eval/bundles EVAL_DIR=_artifacts/eval \
 	 python3 scripts/eval/build_bundle.py
+
+.PHONY: eval.index ci.eval.index
+
+# Build eval index (writes share/eval/index.md)
+eval.index:
+	@EVAL_DIR=share/eval \
+	 python3 scripts/eval/build_index.py
+
+ci.eval.index:
+	@EVAL_DIR=_artifacts/eval \
+	 python3 scripts/eval/build_index.py

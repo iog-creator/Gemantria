@@ -51,7 +51,9 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Exports catalog**: `make eval.catalog` generates `share/eval/exports_catalog.md` with summary of all export files. CI uses `_artifacts/` to avoid share drift.
 * **Eval snapshots**: `make eval.snapshot` creates timestamped snapshots of eval results in `share/eval/snapshot/`.
 * **HTML reports**: `make eval.html` generates HTML index from eval reports at `share/eval/index.html`.
-* **Eval bundles**: `make eval.bundle` creates tarballs of key eval artifacts in `share/eval/bundles/`. All Phase 8 eval targets route CI outputs to `_artifacts/` to prevent share drift.
+* **Eval bundles**: `make eval.bundle` creates tarballs of key eval artifacts in `share/eval/bundles/`.
+* **Eval index**: `make eval.index` generates `share/eval/index.md` with summary of all eval artifacts.
+* **JSON shape validation**: `json_shape` task validates JSON file structure and types against expected schemas. All Phase 8 eval targets route CI outputs to `_artifacts/` to prevent share drift.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
