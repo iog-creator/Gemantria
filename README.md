@@ -25,6 +25,7 @@ Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria 
 - **🔒 Production Safety**: Qwen Live Gate and comprehensive validation gates
 - **📈 Evaluation Pipeline**: Edge audit, anomaly detection, and quality monitoring
 - **🎯 Deterministic Processing**: Reproducible results with comprehensive testing
+- **🎨 Figma MCP Integration**: Real-time design collaboration with 35+ automation tools ([Setup Guide](docs/FIGMA_MCP_SETUP.md))
 
 ---
 

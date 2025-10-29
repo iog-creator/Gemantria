@@ -173,13 +173,11 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
 
                 embedding = result[0]
                 # pgvector returns numpy arrays, not lists
-                self.assertTrue(
-                    hasattr(embedding, "__len__") and hasattr(embedding, "__getitem__")
-                )
+                self.assertTrue(hasattr(embedding, "__len__") and hasattr(embedding, "__getitem__"))
                 self.assertEqual(len(embedding), 1024)  # VECTOR_DIM
 
                 # Verify it's a numpy array of float32 values
-                import numpy as np
+                import numpy as np  # noqa: E402
 
                 self.assertIsInstance(embedding, np.ndarray)
                 self.assertEqual(embedding.dtype, np.float32)
@@ -339,9 +337,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
         summary2 = result2["network_summary"]
 
         self.assertEqual(summary1["total_nodes"], summary2["total_nodes"])
-        self.assertEqual(
-            summary1["embeddings_generated"], summary2["embeddings_generated"]
-        )
+        self.assertEqual(summary1["embeddings_generated"], summary2["embeddings_generated"])
 
         # Verify embeddings are deterministic
         with psycopg.connect(self.dsn) as conn:
@@ -365,7 +361,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                 embedding2 = cur.fetchone()[0]
 
                 # Embeddings should be identical (deterministic mock)
-                import numpy as np
+                import numpy as np  # noqa: E402
 
                 self.assertTrue(np.array_equal(embedding1, embedding2))
 
@@ -418,9 +414,7 @@ class TestNetworkAggregatorIntegration(unittest.TestCase):
                         self.assertEqual(relation_type, "weak")
                     else:
                         # Should not be stored if below threshold
-                        self.fail(
-                            f"Edge with strength {edge_strength} should not be stored"
-                        )
+                        self.fail(f"Edge with strength {edge_strength} should not be stored")
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ THRESHOLDS = ROOT / "eval" / "thresholds.yml"
 
 def _git(cmd: list[str]) -> str | None:
     try:
-        return subprocess.check_output(["git"] + cmd, cwd=ROOT).decode("utf-8").strip()
+        return subprocess.check_output(["git", *cmd], cwd=ROOT).decode("utf-8").strip()
     except Exception:
         return None
 
@@ -61,9 +61,7 @@ def main() -> int:
     provenance_snapshot = SNAPSHOT_DIR / "provenance.snapshot.json"
     import json
 
-    provenance_snapshot.write_text(
-        json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    provenance_snapshot.write_text(json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8")
 
     print(f"[eval.snapshot] wrote {manifest_snapshot.relative_to(ROOT)}")
     print(f"[eval.snapshot] wrote {thresholds_snapshot.relative_to(ROOT)}")

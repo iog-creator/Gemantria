@@ -84,6 +84,7 @@ Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 ## How agents should use rules
 
 * Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
 * Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
@@ -141,4 +142,5 @@ Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 | 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
 | 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
 | 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
