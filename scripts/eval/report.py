@@ -67,12 +67,27 @@ def _resolve_thresholds(obj: Any, t: dict[str, Any]) -> Any:
         m = re.fullmatch(r"\$\{thresholds:([A-Za-z0-9_.]+)\}", obj.strip())
         if m:
             return _lookup_threshold(m.group(1), t)
-        return obj
     if isinstance(obj, list):
         return [_resolve_thresholds(x, t) for x in obj]
     if isinstance(obj, dict):
         return {k: _resolve_thresholds(v, t) for k, v in obj.items()}
     return obj
+
+
+def _load_whitelist(path: str) -> set[Any]:
+    ids: set[Any] = set()
+    if path:
+        p = ROOT / path
+        if p.exists():
+            for line in p.read_text(encoding="utf-8", errors="ignore").splitlines():
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    # keep raw token; ids may be strings or integers; we store both
+                    try:
+                        ids.add(int(line))
+                    except Exception:
+                        ids.add(line)
+    return ids
 
 
 # ---------- Task impls ----------
@@ -228,6 +243,8 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     node_set = set(node_ids)
     dup_node_ids = len(node_ids) - len(node_set)
 
+    wl = _load_whitelist(args.get("whitelist_path", ""))
+
     def _ekey(e: dict[str, Any]) -> tuple[Any, Any]:
         return (e.get("source"), e.get("target"))
 
@@ -239,6 +256,9 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
             if not isinstance(e, dict):
                 continue
             s, t = e.get("source"), e.get("target")
+            if s in wl or t in wl:
+                edge_pairs.append(_ekey(e))
+                continue  # ignore whitelist edges for counting violations
             if s == t:
                 self_loops += 1
             if (s not in node_set) or (t not in node_set):
@@ -284,11 +304,15 @@ def task_id_type_audit(args: dict[str, Any]) -> dict[str, Any]:
         return {"status": "FAIL", "error": f"no such file: {file}"}
     doc = _load_json(file)
     nodes = doc.get("nodes", [])
+    wl = _load_whitelist(args.get("whitelist_path", ""))
     ids: list[Any] = []
     if isinstance(nodes, list):
         for n in nodes:
             if isinstance(n, dict) and "id" in n:
-                ids.append(n.get("id"))
+                nid = n.get("id")
+                if nid in wl:
+                    continue
+                ids.append(nid)
 
     def _type_name(v: Any) -> str:
         if isinstance(v, bool):  # keep bool separate from integer semantic confusion

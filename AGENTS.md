@@ -21,6 +21,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
+- CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
 ## Workflow (small green PRs)
 - Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
@@ -41,12 +42,29 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
    ```
 3. Expected: tests green, coverage ≥98%, checkpoint storage and retrieval works end-to-end.
 
+### Runbook: Database Bootstrap (CI)
+1. Bootstrap script ensures database exists before migrations:
+   ```bash
+   scripts/ci/ensure_db_then_migrate.sh
+   ```
+2. Handles missing database gracefully with admin connection fallback
+3. Applies vector extension and all migrations in order
+4. Migration 014 fixed to handle schema evolution from migration 007 (composite primary key preservation, view recreation)
+5. Used in CI workflows for reliable database setup
+
 ## Operations
+
+### CI Verification
+- **Empty DB tolerance**: Verify scripts handle missing tables gracefully in CI (zero counts allowed when DB empty)
+- **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
+- **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
+- **SSOT JSONSchema validation**: PR-diff scoped validation of JSON files against schemas (non-blocking nightly sweep)
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
 * **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
 * **Ops verifier (local)**: `make ops.verify` prints deterministic checks confirming Phase-8 eval surfaces exist (Makefile targets, manifest version, docs header, share dir). Local-only; not wired into CI.
+* **Pipeline stabilization**: `eval.package` runs to completion with soft integrity gates; `targets.check.dupes` prevents Makefile regressions; `build_release_manifest.py` skips bundles/ for performance.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
@@ -58,9 +76,25 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Checkpointer: `CHECKPOINTER=postgres|memory` (memory default); Postgres requires `GEMATRIA_DSN`.
 - GitHub operations: Use MCP server for issues/PRs/search; confirm ownership; search before creating; use Copilot for AI tasks.
 
+### Edge reranking & classification (Phase-10)
+All exported edges now carry a `rerank` score and an `edge_strength = 0.5*cos + 0.5*rerank`.
+Edges are classified as **strong** (≥0.90), **weak** (≥0.75), or **other**.
+Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
+
+### SSOT Blend Validation (Phase-10)
+Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` contract (Rule-045).
+- **Validator**: `scripts/eval/validate_blend_ssot.py` (non-fatal HINTs only)
+- **Field aliases**: Accepts SSOT names first, then legacy (`similarity`→`cosine`, `rerank`→`rerank_score`, `strength`→`edge_strength`)
+- **Exporter**: `scripts/export_graph.py` emits SSOT field names with proper blend computation
+- **Reclassifier**: `scripts/eval/reclassify_edges.py` prefers SSOT edge_strength for classification
+- **Defaults**: `EDGE_ALPHA=0.5`, `BLEND_TOL=0.005`
+- **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
+- **Integration**: Wired into `ops.verify` as non-fatal validation step
+
 ## How agents should use rules
 
 * Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
 * Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
@@ -108,4 +142,15 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
+| 039 | # id: 039_EXECUTION_CONTRACT |
+| 040 | # id: 040_CI_TRIAGE_PLAYBOOK |
+| 041 | # id: 041_PR_MERGE_POLICY |
+| 042 | # 042 — Formatter Single Source of Truth (AlwaysApply) |
+| 043 | # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) |
+| 044 | # 044 — Share Manifest Contract (AlwaysApply) |
+| 045 | # 045 — Rerank Blend is SSOT (AlwaysApply) |
+| 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
+| 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
+| 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->

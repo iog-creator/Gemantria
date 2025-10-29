@@ -401,7 +401,7 @@ async def get_temporal_patterns(
     except Exception as e:
         LOG.error(f"Error in temporal patterns endpoint: {e}")
         raise HTTPException(
-            status_code=500, detail=f"Internal server error: {str(e)}"
+            status_code=500, detail=f"Internal server error: {e!s}"
         ) from e
 
 
@@ -456,12 +456,12 @@ async def get_forecasts(
     except Exception as e:
         LOG.error(f"Error in forecast endpoint: {e}")
         raise HTTPException(
-            status_code=500, detail=f"Internal server error: {str(e)}"
+            status_code=500, detail=f"Internal server error: {e!s}"
         ) from e
 
 
 if __name__ == "__main__":
-    import uvicorn  # noqa: E402
+    import uvicorn
 
     # Default to port 8000, but allow override
     port = int(os.getenv("API_PORT", "8000"))
