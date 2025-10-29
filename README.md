@@ -381,7 +381,7 @@ Nightly coverage: non-blocking full-repo pytest coverage (see Actions → covera
 <p>
   <img alt="MyPy Errors" src="share/eval/badges/mypy.svg" />
   <img alt="Ruff Issues" src="share/eval/badges/ruff.svg" />
-  <img alt="Coverage %"  src="share/eval/badges/coverage.svg" />
+  <img alt="Coverage"    src="share/eval/badges/coverage.svg" />
   <img alt="Graph Anoms" src="share/eval/badges/graph.svg" />
 </p>
 <sub>Badges refresh automatically when repo variable <code>ALLOW_BADGE_COMMITS=true</code> on main/schedule; otherwise they appear after manual commit.</sub>
