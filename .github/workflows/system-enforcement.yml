@@ -2,6 +2,9 @@ name: system-enforcement
 on:
   pull_request:
     types: [opened, synchronize, edited]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   enforce:
     runs-on: ubuntu-latest
