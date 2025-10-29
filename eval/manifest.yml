@@ -19,8 +19,8 @@ tasks:
       must_exist:
         - "exports/graph_latest.json"
 
-  # NOTE: The evaluator in this repo doesn't yet support json_assert/frac_in_range.
-  # The following is preserved as intent, but commented out until evaluator supports it.
+  # NOTE: The evaluator now supports json_assert/frac_in_range and file_glob.
+  # Uncomment these tasks when ready to enable them.
   # - key: exports_edge_strength_spread
   #   kind: json_assert
   #   args:

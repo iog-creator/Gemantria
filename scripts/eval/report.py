@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import fnmatch
 import json
+import math
 import pathlib
 import re
 import sys
@@ -208,12 +210,140 @@ def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_file_glob(args: dict[str, Any]) -> dict[str, Any]:
+    """Ensure globs match at least one file, report missing patterns deterministically."""
+    globs = args.get("globs", [])
+    if not isinstance(globs, list) or not globs:
+        return {"status": "FAIL", "error": "file_glob.globs must be a non-empty list"}
+
+    matched: dict[str, list[str]] = {}
+    missing: list[str] = []
+
+    for pat in globs:
+        found = []
+        for p in ROOT.rglob("*"):
+            if p.is_file():
+                rel = str(p.relative_to(ROOT))
+                if fnmatch.fnmatch(rel, pat):
+                    found.append(rel)
+        if found:
+            matched[pat] = sorted(found)
+        else:
+            missing.append(pat)
+
+    if missing:
+        return {"status": "FAIL", "error": f"no files matched: {missing}", "matched": matched}
+    return {"status": "OK", "matched": matched}
+
+
+def _json_query_all(obj: Any, path: str) -> list[Any]:
+    """
+    Simple path evaluator to support patterns like:
+      - "edges[*].strength"
+      - "nodes[*].embedding_dim"
+    Supports dotted keys and single-level '[*]' list expansion.
+    """
+    parts = path.split(".")
+    cur: list[Any] = [obj]
+    for part in parts:
+        nxt: list[Any] = []
+        if part.endswith("[*]"):
+            key = part[:-3]
+            for x in cur:
+                if isinstance(x, dict) and key in x and isinstance(x[key], list):
+                    nxt.extend(x[key])
+        else:
+            for x in cur:
+                if isinstance(x, dict) and part in x:
+                    nxt.append(x[part])
+        cur = nxt
+        if not cur:
+            break
+    # Flatten one level if still nested lists from '[*]'
+    flat: list[Any] = []
+    for v in cur:
+        if isinstance(v, list):
+            flat.extend(v)
+        else:
+            flat.append(v)
+    return flat
+
+
+def _op_frac_in_range(vals: list[Any], min_v: float, max_v: float, min_frac: float) -> tuple[bool, dict[str, Any]]:
+    nums = [float(v) for v in vals if isinstance(v, (int, float))]
+    if not nums:
+        return False, {"reason": "no numeric values", "count": 0}
+    within = [x for x in nums if min_v <= x <= max_v]
+    frac = len(within) / len(nums)
+    ok = frac >= min_frac
+    return ok, {"count": len(nums), "within": len(within), "fraction": frac}
+
+
+def _op_if_present_eq_all(vals: list[Any], value: Any) -> tuple[bool, dict[str, Any]]:
+    present = [v for v in vals if v is not None]
+    if not present:
+        return True, {"present": 0, "note": "no values present → PASS"}
+    all_eq = all(v == value for v in present)
+    return all_eq, {"present": len(present), "expected": value}
+
+
+def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
+    """Validate JSON structure with various assertion operations."""
+    p = args.get("file")
+    if not p:
+        return {"status": "FAIL", "error": "json_assert.file is required"}
+
+    file_path = ROOT / p
+    if not file_path.exists():
+        return {"status": "FAIL", "error": f"file not found: {p}"}
+
+    try:
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        return {"status": "FAIL", "error": f"json parse error: {e}"}
+
+    asserts = args.get("asserts", [])
+    if not isinstance(asserts, list) or not asserts:
+        return {"status": "FAIL", "error": "json_assert.asserts must be a non-empty list"}
+
+    results: list[dict[str, Any]] = []
+    all_ok = True
+
+    for a in asserts:
+        name = a.get("name", "(unnamed)")
+        path = a.get("path")
+        op = a.get("op")
+        vals = _json_query_all(data, path) if path else []
+
+        ok = False
+        detail: dict[str, Any] = {"path": path, "op": op}
+
+        if op == "frac_in_range":
+            min_v = float(a.get("min", float("-inf")))
+            max_v = float(a.get("max", float("inf")))
+            min_frac = float(a.get("min_frac", 1.0))
+            ok, extra = _op_frac_in_range(vals, min_v, max_v, min_frac)
+            detail.update(extra)
+        elif op == "if_present_eq_all":
+            ok, extra = _op_if_present_eq_all(vals, a.get("value"))
+            detail.update(extra)
+        else:
+            detail["error"] = f"unknown op: {op}"
+
+        results.append({"name": name, "ok": ok, "detail": detail})
+        all_ok = all_ok and ok
+
+    return {"status": "OK" if all_ok else "FAIL", "results": results}
+
+
 KIND_IMPL = {
     "print": task_print,
     "verify_files": task_verify_files,
     "grep": task_grep,
     "ref_integrity": task_ref_integrity,
     "json_shape": task_json_shape,
+    "file_glob": task_file_glob,
+    "json_assert": task_json_assert,
 }
 
 
