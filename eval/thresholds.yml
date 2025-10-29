@@ -1,0 +1,17 @@
+# Gemantria Eval Thresholds
+# Values used by ${thresholds:...} placeholders in eval/manifest.yml
+
+integrity:
+  # Reference integrity checks for concept network
+  max_self_loops: 0          # Self-referencing concepts not allowed
+  max_duplicate_edges: 0     # Duplicate edges between same concepts
+  min_concept_coverage: 0.95 # Minimum fraction of concepts that should have relations
+  max_orphaned_concepts: 50  # Maximum orphaned concepts without any relations
+
+# Future thresholds for other checks
+# correlation:
+#   min_pearson_r: 0.3
+#   max_p_value: 0.05
+# temporal:
+#   min_window_size: 3
+#   max_forecast_horizon: 10

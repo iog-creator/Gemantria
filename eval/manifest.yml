@@ -44,5 +44,15 @@ tasks:
   #         op: "if_present_eq_all"
   #         value: 1024
 
+  # Reference integrity check for graph data (supported with thresholds substitution)
+  - key: graph_ref_integrity
+    kind: ref_integrity
+    args:
+      graph_file: "exports/graph_latest.json"
+      max_self_loops: "${thresholds:integrity.max_self_loops}"
+      max_duplicate_edges: "${thresholds:integrity.max_duplicate_edges}"
+      max_orphaned_concepts: "${thresholds:integrity.max_orphaned_concepts}"
+      min_concept_coverage: "${thresholds:integrity.min_concept_coverage}"
+
 success_policy:
   mode: all_must_pass
