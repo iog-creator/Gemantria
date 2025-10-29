@@ -44,7 +44,7 @@ class MetricsClient:
                 if hasattr(v, "isoformat"):  # datetime objects
                     db_row[k] = v.isoformat()
                 elif isinstance(v, dict):
-                    import json  # noqa: E402
+                    import json
 
                     db_row[k] = json.dumps(v)
                 else:
@@ -87,7 +87,7 @@ class MetricsClient:
 
 def now():
     # psycopg can take python datetime; we'll pass None where not applicable
-    import datetime as _dt  # noqa: E402
+    import datetime as _dt
 
     return _dt.datetime.now(_dt.UTC)
 

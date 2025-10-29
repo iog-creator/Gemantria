@@ -31,6 +31,156 @@ Notes:
 - Requires servers running (headless): `lms server start --port 9994 [--port 9991/9993]`
 - Script loads `.env` via `ensure_env_loaded()` and uses `/v1` endpoints.
 
+### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
+
+**Purpose:** Emit standardized `HINT:` lines for clear CI log visibility and Cursor runtime tracking.
+
+**Requirements:**
+- **Uniform Format**: All hints start with `HINT:` for easy grepping
+- **Runtime Clarity**: Key operations emit hints so CI logs are self-documenting
+- **Fallback Safe**: Works even if hint.sh script is missing (echo fallback)
+- **Template Integration**: Required in PR templates and NEXT_STEPS runbooks
+
+**Usage:**
+```bash
+# Direct usage
+./scripts/hint.sh "verify: database bootstrap OK"
+
+# Via emit() function (preferred in scripts)
+emit() { if [ -x scripts/hint.sh ]; then scripts/hint.sh "$*"; else echo "HINT: $*"; fi; }
+emit "verify: target_db=$target_db"
+```
+
+**Output Format:**
+```
+HINT: verify: database bootstrap OK
+HINT: eval: running advanced calibration
+HINT: eval: writing quality trend badge
+```
+
+**Integration Points:**
+- `scripts/ci/ensure_db_then_migrate.sh` - Database bootstrap hints
+- `scripts/eval/calibrate_advanced.py` - Calibration operation hints
+- `scripts/eval/quality_trend.py` - Quality trend generation hints
+- PR templates - Require listing expected HINT lines
+- NEXT_STEPS templates - Require HINT planning
+- CI logs - Clear runtime visibility for Cursor and reviewers
+
+### `calibrate_advanced.py` — Advanced Edge Strength Calibration (Phase-9)
+
+**Purpose:** Optimize edge strength thresholds using between-class variance analysis for semantic network quality.
+
+**Requirements:**
+- **Optimization Algorithm**: Uses Otsu-like 2-threshold method on blended cosine + rerank scores
+- **Grid Search**: Searches weight parameter W ∈ [0.0, 1.0] to find optimal blend ratios
+- **Threshold Calculation**: Determines weak/strong edge boundaries for network classification
+- **Calibration Output**: Saves optimal parameters to `calibration_adv.json`
+
+**Capabilities:**
+- Automatic threshold optimization for edge strength classification
+- Statistical analysis using between-class variance maximization
+- Configurable search space and precision parameters
+- Integration with evaluation pipeline for automated recalibration
+
+**Usage:**
+```bash
+python scripts/eval/calibrate_advanced.py  # Optimize thresholds and save to calibration_adv.json
+make eval.graph.calibrate.adv            # Same via Makefile target
+```
+
+**Output:** `share/eval/calibration_adv.json` with suggested EDGE_BLEND_WEIGHT, EDGE_WEAK_THRESH, EDGE_STRONG_THRESH
+
+**Emitted Hints:**
+- `HINT: eval: running advanced calibration`
+
+### `quality_trend.py` — Quality History Tracking & Trend Visualization (Phase-9)
+
+**Purpose:** Monitor and visualize quality metrics over time with historical trend analysis.
+
+**Requirements:**
+- **Quality Parsing**: Extracts pass/fail status and edge distribution from quality reports
+- **History Maintenance**: Appends metrics to `quality_history.jsonl` with timestamps
+- **Trend Visualization**: Generates sparkline SVG badges showing quality trends
+- **Rolling Window**: Maintains last 30 quality measurements for trend analysis
+
+**Capabilities:**
+- Real-time quality monitoring with historical persistence
+- Visual trend indicators via SVG sparkline badges
+- Statistical analysis of edge distribution changes over time
+- Integration with CI/CD for automated quality tracking
+
+**Usage:**
+```bash
+python scripts/eval/quality_trend.py     # Update history and generate trend badge
+make eval.quality.trend                 # Same via Makefile target
+```
+
+**Outputs:**
+- `share/eval/quality_history.jsonl` - Historical quality metrics with timestamps
+- `share/eval/badges/quality_trend.svg` - Visual trend indicator badge
+
+**Emitted Hints:**
+- `HINT: eval: writing quality trend badge`
+
+### `edge_audit.py` — Edge Anomaly Detection (Phase-9)
+
+**Purpose:** Analyze semantic network edges for anomalous strength values using statistical outlier detection.
+
+**Requirements:**
+- **Dual Detection Methods**: Combines z-score (>3σ) and IQR (1.5×IQR) outlier detection for robust anomaly identification
+- **Comprehensive Analysis**: Provides detailed statistics on edge strength distribution and anomaly counts
+- **Audit Output**: Saves structured JSON report with anomaly details for review and alerting
+
+**Capabilities:**
+- Statistical outlier detection using both parametric (z-score) and non-parametric (IQR) methods
+- Detailed anomaly reporting with deviation metrics and thresholds
+- Integration with evaluation pipeline for automated quality monitoring
+- Configurable detection parameters for different sensitivity levels
+
+**Usage:**
+```bash
+python scripts/eval/edge_audit.py  # Analyze current graph for edge anomalies
+make eval.edge.audit             # Same via Makefile target
+```
+
+**Output:** `share/eval/edge_audit.json` with complete anomaly analysis including:
+- Edge strength distribution statistics
+- Z-score and IQR anomaly detection results
+- Summary counts and anomaly rates
+- Detailed outlier lists with deviation metrics
+
+**Emitted Hints:**
+- `HINT: eval: auditing edges for anomalies`
+
+### `anomaly_badge.py` — Edge Anomaly Visualization Badge (Phase-9)
+
+**Purpose:** Generate visual SVG badge showing the count of anomalous edges detected in the semantic network.
+
+**Requirements:**
+- **Visual Status Indicator**: Color-coded badge (green=0, yellow=1-5, red=6+) for quick anomaly assessment
+- **Audit Integration**: Reads edge_audit.json results to determine anomaly count
+- **Graceful Fallback**: Handles missing audit files with safe defaults and error indicators
+
+**Capabilities:**
+- Automated badge generation with appropriate color coding
+- Real-time reflection of network quality status
+- CI/CD integration for automated quality monitoring
+- Error handling with distinct error indicators (999 = error state)
+
+**Usage:**
+```bash
+python scripts/eval/anomaly_badge.py  # Generate anomaly count badge
+make eval.anomaly.badge              # Same via Makefile target
+```
+
+**Output:** `share/eval/badges/anomaly.svg` with:
+- Color-coded status (green/yellow/red based on anomaly count)
+- Numerical anomaly count display
+- Accessible SVG format for web dashboards
+
+**Emitted Hints:**
+- `HINT: eval: writing anomaly badge`
+
 ### Lint Automation Scripts (NEW)
 
 #### `longline_noqa.py` — Smart E501 `# noqa` Tagger
@@ -196,14 +346,14 @@ make exports.jsonld             # Same via Makefile target
 - **Health Indicators**: Provides network health and quality metrics
 - **Dashboard Ready**: JSON output formatted for UI consumption
 - **Real-time Data**: Direct database queries for current state
-- **NetworkX Fallback**: Optional centrality calculation when DB tables empty
+- **Automatic Centrality**: Computes and persists centrality metrics when missing from database
   **Capabilities**:
 - Node/edge/cluster counts and distributions
-- Centrality averages (DB or NetworkX-computed)
+- Centrality averages (DB-persisted with automatic computation)
 - Edge strength analysis (strong/weak/candidate connection counts)
 - Network density and health indicators
 - Largest cluster identification
-- Configurable centrality computation via `STATS_CENTRALITY_FALLBACK=1`
+- Automatic centrality persistence using NetworkX algorithms
   **Usage**:
 
 ```bash
@@ -316,6 +466,40 @@ python scripts/verify_pr016_pr017.py --dsn "$GEMATRIA_DSN" \
 ```
 
 **Outputs:** `VERIFIER_PASS` on success; fails closed otherwise.
+
+### `eval/integrity_fast.py` — Fast Integrity Caching Wrapper
+
+**Purpose:** Caches integrity verification results by manifest fingerprint to speed up repeated runs of `ops.verify`.
+**Rule References:** 017a (Surgical Soft Integrity Caching)
+**Capabilities:**
+
+- **Manifest Fingerprinting**: Uses SHA-256 of release_manifest.json to detect changes
+- **Cache Storage**: Stores results in `.cache/integrity/` directory
+- **Timeout Protection**: Hard check limited to 180 seconds with graceful timeout handling
+- **Status Caching**: Caches pass/fail/timeout status with timestamps
+- **Skip on No Manifest**: Gracefully skips when manifest doesn't exist
+
+**Usage:**
+
+```bash
+# Called automatically by eval.verify.integrity.soft
+python scripts/eval/integrity_fast.py --manifest share/eval/release_manifest.json
+
+# Clear cache if needed
+make eval.cache.clear
+```
+
+**Cache Behavior:**
+
+- **First Run**: Executes hard check, caches result (may take ~100+ seconds)
+- **Subsequent Runs**: Returns cached result instantly when manifest unchanged
+- **Manifest Changes**: Invalidates cache and re-runs hard check
+- **No Manifest**: Skips with non-blocking status
+
+**Performance Impact:**
+- **First run**: ~100+ seconds (hard check execution time)
+- **Cached runs**: ~0.02 seconds (JSON file read)
+- **Cache invalidation**: Automatic on manifest changes
 
 ### rules_guard.py — Critical System Enforcement
 

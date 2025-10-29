@@ -13,12 +13,8 @@ KEEP_ALWAYS = {"000-ssot-index.mdc", "010-task-brief.mdc", "030-share-sync.mdc"}
 
 
 def next_index(prefix):
-    nums = [
-        int(p.name.split("-")[0])
-        for p in RULES.glob("*.mdc")
-        if re.match(r"^\d{3}-", p.name)
-    ]
-    n = max(nums + [0]) + 1
+    nums = [int(p.name.split("-")[0]) for p in RULES.glob("*.mdc") if re.match(r"^\d{3}-", p.name)]
+    n = max([*nums, 0]) + 1
     return f"{n:03d}-{prefix}.mdc"
 
 
@@ -47,9 +43,7 @@ def apply(plan):
     for fname in plan["demote"]:
         p = RULES / fname
         txt = p.read_text(encoding="utf-8", errors="ignore")
-        txt = re.sub(
-            r"^alwaysApply:\s*true", "alwaysApply: false", txt, flags=re.MULTILINE
-        )
+        txt = re.sub(r"^alwaysApply:\s*true", "alwaysApply: false", txt, flags=re.MULTILINE)
         p.write_text(txt, encoding="utf-8")
     # rename non-canonical
     for old, new in plan["rename"]:
@@ -75,9 +69,7 @@ def apply(plan):
                 in_active = True
             elif line.strip().lower().startswith("## deprecated"):
                 in_active = False
-            if in_active and any(
-                x[0] == line.strip().split()[-1] for x in plan["rename"]
-            ):
+            if in_active and any(x[0] == line.strip().split()[-1] for x in plan["rename"]):
                 # naive: skip; we'll add fresh
                 continue
             out.append(line)

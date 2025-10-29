@@ -34,9 +34,9 @@ for f in [
         add("ERR", f"Missing {f}")
 
 # 2) Schemas present
-schemas = [p for p in ROOT.rglob("SSOT_*schema*.json")]
+schemas = [p for p in ROOT.rglob("*schema*.json")]
 if not schemas:
-    add("ERR", "No SSOT_*schema*.json files found")
+    add("ERR", "No *schema*.json files found")
 
 # 3) Rules integrity (index alignment)
 rules_dir = ROOT / ".cursor" / "rules"

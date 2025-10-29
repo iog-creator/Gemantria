@@ -15,17 +15,15 @@ except Exception:  # pragma: no cover
     HAS_DB = False  # Import optional for CI paths without DSNs
 
 __all__ = [
-    "ReadOnlyViolation",
     "BibleReadOnly",
     "GematriaRW",
+    "ReadOnlyViolation",
     "get_bible_ro",
     "get_gematria_rw",
     "sql_is_write",
 ]
 
-WRITE_RE = re.compile(
-    r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I
-)
+WRITE_RE = re.compile(r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I)
 
 
 class ReadOnlyViolation(RuntimeError):
@@ -69,10 +67,8 @@ class GematriaRW:
             raise RuntimeError("psycopg not available in this environment")
         with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
             cur.execute(sql, params or ())
-            if cur.description:  # SELECT queries return results
+            if cur.description:
                 yield from cur
-                # For INSERT/UPDATE/DELETE, execution is complete when we reach here
-                # The transaction will commit when the connection context exits
 
 
 def get_bible_ro() -> BibleReadOnly:
