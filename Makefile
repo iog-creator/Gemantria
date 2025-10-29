@@ -190,3 +190,14 @@ eval.report:
 # Not wired into CI; identical to local for now
 ci.eval.report:
 	@python3 scripts/eval/report.py
+
+.PHONY: eval.catalog ci.eval.catalog
+
+# Build an exports catalog (writes share/eval/exports_catalog.md)
+eval.catalog:
+	@EXPORTS_CATALOG_OUT=share/eval/exports_catalog.md \
+	 python3 scripts/eval/build_exports_catalog.py
+
+ci.eval.catalog:
+	@EXPORTS_CATALOG_OUT=_artifacts/eval/exports_catalog.md \
+	 python3 scripts/eval/build_exports_catalog.py

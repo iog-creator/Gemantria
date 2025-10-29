@@ -48,6 +48,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
 * **Thresholds substitution**: Eval tasks support `${thresholds:key.path}` placeholders resolved from `eval/thresholds.yml` before task execution.
 * **Reference integrity checks**: `ref_integrity` task validates graph data integrity (self-loops, duplicates, coverage, orphans) with configurable thresholds.
+* **Exports catalog**: `make eval.catalog` generates `share/eval/exports_catalog.md` with summary of all export files. CI uses `_artifacts/` to avoid share drift.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
