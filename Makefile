@@ -193,6 +193,18 @@ ci.eval.report:
 	@EVAL_OUTDIR=_artifacts/eval \
 	 python3 scripts/eval/report.py
 
+.PHONY: eval.history ci.eval.history
+
+# Temporal export history (writes share/eval/history.{json,md})
+eval.history:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report_history.py
+
+# CI version writes to _artifacts/eval/
+ci.eval.history:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/report_history.py
+
 .PHONY: eval.catalog ci.eval.catalog
 
 # Build an exports catalog (writes share/eval/exports_catalog.md)
