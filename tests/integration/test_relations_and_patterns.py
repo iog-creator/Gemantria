@@ -53,9 +53,7 @@ class TestRelationsAndPatternsIntegration:
             ),
         )
 
-        with patch.dict(
-            os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "false"}
-        ):
+        with patch.dict(os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "false"}):
             embeddings_batch = [
                 {"concept_id": "test-concept-1", "embedding": [0.1] * 1024},
                 {"concept_id": "test-concept-2", "embedding": [0.9] * 1024},
@@ -85,9 +83,7 @@ class TestRelationsAndPatternsIntegration:
         )
 
         with (
-            patch.dict(
-                os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "true"}
-            ),
+            patch.dict(os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "true"}),
             patch("src.services.lmstudio_client.rerank_pairs") as mock_rerank,
         ):
             mock_rerank.return_value = [0.8, 0.9]  # Mock high rerank scores
@@ -152,8 +148,8 @@ class TestRelationsAndPatternsIntegration:
         """Test that analyze_graph.py script can be executed."""
         # This is a basic smoke test - the script should not crash
         # In a real test environment, we'd run the script and check results
-        import subprocess
-        import sys
+        import subprocess  # noqa: E402
+        import sys  # noqa: E402
 
         try:
             result = subprocess.run(
@@ -173,8 +169,8 @@ class TestRelationsAndPatternsIntegration:
 
     def test_export_script_execution(self, db_connection):
         """Test that export_graph.py script can be executed."""
-        import subprocess
-        import sys
+        import subprocess  # noqa: E402
+        import sys  # noqa: E402
 
         try:
             result = subprocess.run(
