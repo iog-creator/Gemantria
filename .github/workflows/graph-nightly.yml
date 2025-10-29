@@ -1,0 +1,91 @@
+name: Graph Nightly Analysis
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up databases
+        run: |
+          # Mock setup for CI
+          export BIBLE_DB_DSN="sqlite:///tmp/bible.db"
+          export GEMATRIA_DSN="sqlite:///tmp/gemantria.db"
+
+      - name: Compute anomalies (non-blocking)
+        id: anomalies
+        continue-on-error: true
+        env:
+          MOCK_AI: "1"
+        run: |
+          set -e
+          mkdir -p _artifacts/graph
+          python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          graph = Path("share/graph/graph_latest.json")
+          out = Path("_artifacts/graph/graph_anomalies.jsonl")
+          out.parent.mkdir(parents=True, exist_ok=True)
+
+          # Simple anomaly detection - find nodes with unusual connection patterns
+          if graph.exists():
+              with open(graph) as f:
+                  data = json.load(f)
+
+              nodes = data.get("nodes", [])
+              edges = data.get("edges", [])
+
+              # Count connections per node
+              node_degrees = {}
+              for node in nodes:
+                  node_degrees[node["id"]] = 0
+
+              for edge in edges:
+                  if edge["source"] in node_degrees:
+                      node_degrees[edge["source"]] += 1
+                  if edge["target"] in node_degrees:
+                      node_degrees[edge["target"]] += 1
+
+              # Find anomalies: nodes with 0 connections or > 10 connections
+              anomalies = []
+              for node_id, degree in node_degrees.items():
+                  if degree == 0 or degree > 10:
+                      anomalies.append({
+                          "node_id": node_id,
+                          "degree": degree,
+                          "type": "isolated" if degree == 0 else "hub",
+                          "timestamp": "2024-01-01T00:00:00Z"
+                      })
+
+              # Write anomalies
+              with open(out, 'w') as f:
+                  for anomaly in anomalies:
+                      f.write(json.dumps(anomaly) + '\n')
+
+              print(f"Found {len(anomalies)} anomalies")
+          else:
+              print("No graph file found, skipping anomaly detection")
+          PY
+
+      - name: Upload anomalies history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph_history
+          path: _artifacts/graph/graph_anomalies.jsonl
+          if-no-files-found: error

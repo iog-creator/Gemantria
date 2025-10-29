@@ -1,0 +1,96 @@
+name: Update Quality Badges
+
+on:
+  workflow_run:
+    workflows: ["Graph Nightly Analysis"]
+    types:
+      - completed
+
+jobs:
+  badges:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download CI artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+          path: _artifacts/test-results
+
+      - name: Download graph anomalies
+        uses: actions/download-artifact@v4
+        with:
+          name: graph_history
+          path: _artifacts/graph_history
+
+      - name: Extract values
+        id: vals
+        run: |
+          set -e
+          mypy_errors=$(python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+
+          # Count mypy errors from test results
+          test_results = Path("_artifacts/test-results")
+          mypy_count = 0
+          if test_results.exists():
+              for f in test_results.rglob("*.json"):
+                  if f.name.startswith("mypy"):
+                      try:
+                          data = json.loads(f.read_text())
+                          mypy_count += len(data.get("errors", []))
+                      except:
+                          pass
+
+          print(mypy_count)
+          PY
+          )
+
+          # Count graph anomalies
+          anomalies_file = Path("_artifacts/graph_history/graph_anomalies.jsonl")
+          anomaly_count = 0
+          if anomalies_file.exists():
+              with open(anomalies_file) as f:
+                  for line in f:
+                      if line.strip():
+                          anomaly_count += 1
+
+          # Output for badge generation
+          echo "mypy_errors=$mypy_errors" >> $GITHUB_OUTPUT
+          echo "anomalies=$anomaly_count" >> $GITHUB_OUTPUT
+
+      - name: Generate badges
+        run: |
+          # Create quality badges based on extracted values
+          mypy_errors=${{ steps.vals.outputs.mypy_errors }}
+          anomalies=${{ steps.vals.outputs.anomalies }}
+
+          # Create mypy badge
+          if [ "$mypy_errors" -eq 0 ]; then
+            mypy_color="brightgreen"
+            mypy_status="passing"
+          elif [ "$mypy_errors" -lt 10 ]; then
+            mypy_color="yellow"
+            mypy_status="warning"
+          else
+            mypy_color="red"
+            mypy_status="failing"
+          fi
+
+          # Create anomalies badge
+          if [ "$anomalies" -eq 0 ]; then
+            anomaly_color="brightgreen"
+            anomaly_status="clean"
+          elif [ "$anomalies" -lt 5 ]; then
+            anomaly_color="yellow"
+            anomaly_status="minor"
+          else
+            anomaly_color="red"
+            anomaly_status="issues"
+          fi
+
+          echo "Generated badges: mypy=$mypy_status ($mypy_errors errors), anomalies=$anomaly_status ($anomalies issues)"
