@@ -26,7 +26,7 @@ try:
     from jsonschema import ValidationError, validate
 except Exception:
     ValidationError = None  # type: ignore
-    validate = None         # type: ignore
+    validate = None  # type: ignore
 
 VECTOR_DIM = 1024
 READINESS_DIR = Path("reports/readiness")
@@ -39,10 +39,7 @@ def _write_json_if_changed(path: Path, obj: dict) -> bool:
     new = json.dumps(obj, indent=2, ensure_ascii=False)
     if path.exists():
         old = path.read_text(encoding="utf-8")
-        if (
-            hashlib.sha256(old.encode()).hexdigest()
-            == hashlib.sha256(new.encode()).hexdigest()
-        ):
+        if hashlib.sha256(old.encode()).hexdigest() == hashlib.sha256(new.encode()).hexdigest():
             print(f"[guide] unchanged: {path}")
             return False
     path.write_text(new, encoding="utf-8")
@@ -126,9 +123,7 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
         total_edges = edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
         if total_edges > 0:
             metrics["strong_edges"] = edges.get("strong_edges", 0) / total_edges
-            metrics["weak_edges"] = (
-                edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
-            ) / total_edges
+            metrics["weak_edges"] = (edges.get("strong_edges", 0) + edges.get("weak_edges", 0)) / total_edges
 
     # Correlation metrics
     if stats.get("correlations"):
@@ -141,21 +136,13 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
     if "metadata" in stats and "rerank_calls" in stats["metadata"]:
         total_concepts = stats.get("nodes", 0)
         if total_concepts > 0:
-            metrics["rerank_nonnull_ratio"] = (
-                stats["metadata"]["rerank_calls"] / total_concepts
-            )
+            metrics["rerank_nonnull_ratio"] = stats["metadata"]["rerank_calls"] / total_concepts
 
     # Centrality coverage
     if "centrality" in stats:
-        cent_values = [
-            v
-            for v in stats["centrality"].values()
-            if isinstance(v, int | float) and v > 0
-        ]
+        cent_values = [v for v in stats["centrality"].values() if isinstance(v, int | float) and v > 0]
         if cent_values:
-            metrics["centrality_nonzero_ratio"] = len(cent_values) / len(
-                stats["centrality"]
-            )
+            metrics["centrality_nonzero_ratio"] = len(cent_values) / len(stats["centrality"])
 
     # Critic failure rate (placeholder - would come from logs)
     metrics["critic_fail_rate"] = 0.0  # Assume perfect for now
@@ -189,9 +176,7 @@ def cmd_run_mini(args):
     # put traces outside share to reduce noise
     trace = Path("logs") / "readiness" / "mini_run.trace"
     trace.parent.mkdir(parents=True, exist_ok=True)
-    trace.write_text(
-        json.dumps({"cfg": cfg, "ts": time.time()}, indent=2), encoding="utf-8"
-    )
+    trace.write_text(json.dumps({"cfg": cfg, "ts": time.time()}, indent=2), encoding="utf-8")
     print(f"[guide] mini.extract complete (trace: {trace})")
 
 
@@ -279,9 +264,7 @@ def cmd_gate(args):
 
     except ImportError:
         schema_ok = False
-        schema_errs.append(
-            "jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt"
-        )
+        schema_errs.append("jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt")
     except ValidationError as e:
         schema_ok = False
         schema_errs.append(f"Schema validation error: {e.message}")
@@ -351,9 +334,7 @@ def main():
 
     # run-mini
     mini_parser = subparsers.add_parser("run-mini", help="Run mini experiment")
-    mini_parser.add_argument(
-        "--config", default="config/mini_experiments.yaml", help="Mini config file"
-    )
+    mini_parser.add_argument("--config", default="config/mini_experiments.yaml", help="Mini config file")
     mini_parser.set_defaults(func=cmd_run_mini)
 
     # compute
@@ -368,9 +349,7 @@ def main():
 
     # gate
     gate_parser = subparsers.add_parser("gate", help="Validate readiness gates")
-    gate_parser.add_argument(
-        "--strict", action="store_true", help="Exit on any failure"
-    )
+    gate_parser.add_argument("--strict", action="store_true", help="Exit on any failure")
     gate_parser.set_defaults(func=cmd_gate)
 
     # assert-pass
