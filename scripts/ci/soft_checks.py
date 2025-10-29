@@ -29,13 +29,9 @@ for name, cmd, tag in CMDS:
     rc, out, err = run(cmd)
     print(tag + ' rc=' + str(rc))
     if out:
-        print('HINT: ' + name + '.out.head=
-' + '
-'.join(out.splitlines()[:20]))
+        print('HINT: ' + name + '.out.head=\n' + '\n'.join(out.splitlines()[:20]))
     if err:
-        print('HINT: ' + name + '.err.head=
-' + '
-'.join(err.splitlines()[:20]))
+        print('HINT: ' + name + '.err.head=\n' + '\n'.join(err.splitlines()[:20]))
     results.append({'tool': name, 'rc': rc, 'stdout': out[-4000:], 'stderr': err[-4000:]})
 
 LOG.write_text(json.dumps(results, indent=2), encoding='utf-8')
