@@ -17,11 +17,7 @@ except Exception:
     )
     sys.exit(2)
 
-DB_DSN = (
-    os.getenv("GEMATRIA_DSN")
-    or os.getenv("DB_DSN")
-    or "postgresql://localhost/gemantria"
-)
+DB_DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DB_DSN") or "postgresql://localhost/gemantria"
 
 TABLE_QUERIES: list[tuple[str, str]] = [
     ("concepts", "SELECT 1 FROM concepts LIMIT 1"),

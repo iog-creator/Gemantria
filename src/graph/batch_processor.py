@@ -138,17 +138,10 @@ class BatchProcessor:
             combined_hash.update(noun.encode("utf-8"))
         return combined_hash.hexdigest()[:16]  # Short ID for readability
 
-    def _create_manifest(
-        self, batch_id: str, input_nouns: list[str], results: list[dict[str, Any]]
-    ) -> dict[str, Any]:
+    def _create_manifest(self, batch_id: str, input_nouns: list[str], results: list[dict[str, Any]]) -> dict[str, Any]:
         """Create manifest with hash proofs and processing metadata."""
-        input_hashes = [
-            hashlib.sha256(noun.encode("utf-8")).hexdigest() for noun in input_nouns
-        ]
-        result_hashes = [
-            hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest()
-            for r in results
-        ]
+        input_hashes = [hashlib.sha256(noun.encode("utf-8")).hexdigest() for noun in input_nouns]
+        result_hashes = [hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest() for r in results]
 
         return {
             "batch_id": batch_id,

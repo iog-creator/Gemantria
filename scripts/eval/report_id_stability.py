@@ -60,15 +60,9 @@ def main() -> int:
         print("[eval.idstability] FAIL no exports/graph_latest.json")
         return 2
 
-    prev_cands = [
-        p
-        for p in glob.glob(str(EXPORT_DIR / "graph_*.json"))
-        if pathlib.Path(p).name != "graph_latest.json"
-    ]
+    prev_cands = [p for p in glob.glob(str(EXPORT_DIR / "graph_*.json")) if pathlib.Path(p).name != "graph_latest.json"]
     if not prev_cands:
-        JSON_OUT.write_text(
-            json.dumps({"summary": {"has_previous": False}}, indent=2), encoding="utf-8"
-        )
+        JSON_OUT.write_text(json.dumps({"summary": {"has_previous": False}}, indent=2), encoding="utf-8")
         MD_OUT.write_text(
             "# Gemantria ID Stability\n\n_No previous export found._\n",
             encoding="utf-8",
@@ -99,9 +93,7 @@ def main() -> int:
     allow_add = int(th.get("id_stability", {}).get("allow_added_node_ids", 0))
     allow_rem = int(th.get("id_stability", {}).get("allow_removed_node_ids", 0))
 
-    ok = (
-        (jaccard >= j_min) and (len(added) <= allow_add) and (len(removed) <= allow_rem)
-    )
+    ok = (jaccard >= j_min) and (len(added) <= allow_add) and (len(removed) <= allow_rem)
 
     report = {
         "ts_unix": int(time.time()),

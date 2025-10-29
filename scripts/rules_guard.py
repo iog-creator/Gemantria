@@ -96,10 +96,7 @@ def main():
 
     code_dirs = ("src/", "scripts/", "migrations/", "webui/")
     code_touched = any(f.startswith(code_dirs) for f in files)
-    docs_touched = any(
-        f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md")
-        for f in files
-    )
+    docs_touched = any(f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files)
 
     print(f"[rules_guard] Code touched: {code_touched}, Docs touched: {docs_touched}")
 
@@ -116,9 +113,7 @@ def main():
     print("[rules_guard] Critical Check 2: Rules system integrity")
     print("[rules_guard] ✓ Running rules audit...")
     try:
-        subprocess.check_call(
-            [sys.executable, str(ROOT / "scripts" / "rules_audit.py")]
-        )
+        subprocess.check_call([sys.executable, str(ROOT / "scripts" / "rules_audit.py")])
         print("[rules_guard] ✓ Critical Check 2 PASSED: Rules audit successful")
     except subprocess.CalledProcessError:
         require(False, "CRITICAL: Rules audit failed — fix rule numbering or docs sync")
@@ -143,9 +138,7 @@ def main():
             f"CRITICAL: Missing required AGENTS.md files per Rule 017: {', '.join(missing_files)}",
         )
 
-    print(
-        "[rules_guard] ✓ Critical Check 3 PASSED: All Rule 017 required AGENTS.md files present"
-    )
+    print("[rules_guard] ✓ Critical Check 3 PASSED: All Rule 017 required AGENTS.md files present")
 
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 

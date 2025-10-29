@@ -40,9 +40,7 @@ def main() -> int:
 
     edges = data.get("edges") or data.get("graph", {}).get("edges")
     if edges is None:
-        print(
-            "[edges] WARN: no edges key found in graph JSON; skipping.", file=sys.stderr
-        )
+        print("[edges] WARN: no edges key found in graph JSON; skipping.", file=sys.stderr)
         return 0
 
     counts = {"strong": 0, "weak": 0, "other": 0}

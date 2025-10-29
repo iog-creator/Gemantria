@@ -84,7 +84,7 @@ def main() -> int:
     badges_html = ""
     if report_badge.exists():
         badges_html += (
-            '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'  # noqa: E501
+            '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
         )
     if strict_badge.exists():
         badges_html += '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'

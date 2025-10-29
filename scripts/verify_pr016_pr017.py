@@ -39,9 +39,7 @@ def main():
     ap.add_argument("--dsn", required=True)
     ap.add_argument("--stats", required=True)
     ap.add_argument("--graph", required=True)
-    ap.add_argument(
-        "--mock-db", action="store_true", help="Use mock DB values for testing"
-    )
+    ap.add_argument("--mock-db", action="store_true", help="Use mock DB values for testing")
     args = ap.parse_args()
 
     stats = read_json(args.stats)
@@ -61,9 +59,7 @@ def main():
             with psycopg.connect(args.dsn) as conn:
                 db_nodes = q1(conn, "SELECT COUNT(*) FROM concept_network;")
                 db_edges = q1(conn, "SELECT COUNT(*) FROM concept_relations;")
-                db_clusters = q1(
-                    conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;"
-                )
+                db_clusters = q1(conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;")
         except psycopg.ProgrammingError as e:
             # Tables don't exist (empty CI DB), use zero counts
             if "does not exist" in str(e):

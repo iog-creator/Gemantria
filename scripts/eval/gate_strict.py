@@ -32,15 +32,11 @@ def main() -> int:
     if fail_count > 0:
         allow_fail = os.getenv("ALLOW_FAIL", "0") == "1"
         if allow_fail:
-            print(
-                f"[eval.gate.strict] WARN: {fail_count} failures detected but ALLOW_FAIL=1"
-            )
+            print(f"[eval.gate.strict] WARN: {fail_count} failures detected but ALLOW_FAIL=1")
             print("[eval.gate.strict] OK (override)")
             return 0
         else:
-            print(
-                f"[eval.gate.strict] FAIL: {fail_count} failures detected in strict profile"
-            )
+            print(f"[eval.gate.strict] FAIL: {fail_count} failures detected in strict profile")
             return 1
 
     print("[eval.gate.strict] OK: no failures in strict profile")

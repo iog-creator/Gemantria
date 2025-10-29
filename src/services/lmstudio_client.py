@@ -9,22 +9,7 @@ from typing import NamedTuple
 
 import requests
 
-# Dependency checks
-try:
-    import psycopg
-    from pgvector.psycopg import register_vector
-
-    HAS_VECTOR_DB = True
-except ImportError:
-    HAS_VECTOR_DB = False
-    import warnings
-
-    warnings.warn(
-        "pgvector not installed. Semantic network features will be unavailable. "
-        "Install with: pip install pgvector psycopg[binary]",
-        UserWarning,
-        stacklevel=2,
-    )
+# Dependency checks - pgvector availability checked in network_aggregator.py
 
 
 class QwenHealth(NamedTuple):

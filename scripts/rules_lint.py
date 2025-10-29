@@ -64,9 +64,7 @@ def main():
     overlaps = [files for files in dups.values() if len(files) > 1]
 
     # 3) Non-canonical names: enforce NNN-name.mdc (NNN = 3 digits)
-    noncanon = [
-        r["file"] for r in rules if not re.match(r"^\d{3}-[a-z0-9\-]+\.mdc$", r["file"])
-    ]
+    noncanon = [r["file"] for r in rules if not re.match(r"^\d{3}-[a-z0-9\-]+\.mdc$", r["file"])]
 
     # 4) Broken index: files not in Active
     unindexed = sorted([r["file"] for r in rules if r["file"] not in active])
@@ -83,9 +81,7 @@ def main():
     missing_links = [r["file"] for r in rules if not r["links"]]
 
     # 7) Agent ↔ rule references quick check
-    agents_txt = (
-        AGENTS.read_text(encoding="utf-8", errors="ignore") if AGENTS.exists() else ""
-    )
+    agents_txt = AGENTS.read_text(encoding="utf-8", errors="ignore") if AGENTS.exists() else ""
     mentions_in_agents = [r["file"] for r in rules if r["file"] in agents_txt]
 
     print("== rules.lint ==")

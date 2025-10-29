@@ -23,9 +23,7 @@ def main():
         help="Command to run the hard integrity check once",
     )
     ap.add_argument("--cache-dir", default=".cache/integrity", help="Cache directory")
-    ap.add_argument(
-        "--timeout", type=int, default=180, help="Timeout (s) for hard check"
-    )
+    ap.add_argument("--timeout", type=int, default=180, help="Timeout (s) for hard check")
     args = ap.parse_args()
 
     man = pathlib.Path(args.manifest)

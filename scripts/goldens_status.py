@@ -41,9 +41,7 @@ def main():
             rows.append(
                 {
                     "path": str(f),
-                    "mtime": datetime.fromtimestamp(st.st_mtime).isoformat(
-                        timespec="seconds"
-                    ),
+                    "mtime": datetime.fromtimestamp(st.st_mtime).isoformat(timespec="seconds"),
                     "kb": round(st.st_size / 1024, 1),
                     "commit": h,
                     "date": d,
@@ -56,9 +54,7 @@ def main():
     print("path | mtime | size_kb | git_commit | git_date | git_msg")
     print("-" * 96)
     for r in sorted(rows, key=lambda x: x["path"]):
-        print(
-            f"{r['path']} | {r['mtime']} | {r['kb']} | {r['commit']} | {r['date']} | {r['msg']}"
-        )
+        print(f"{r['path']} | {r['mtime']} | {r['kb']} | {r['commit']} | {r['date']} | {r['msg']}")
     return 0
 
 
