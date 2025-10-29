@@ -8,7 +8,10 @@ import sys
 import time
 from typing import Any
 
-import yaml  # type: ignore  # Requires PyYAML available in dev env; not wired into CI
+try:
+    import yaml  # type: ignore
+except Exception:
+    yaml = None
 
 # ---------- Thresholds substitution ----------
 _THRESHOLDS_CACHE: dict[str, Any] | None = None
@@ -56,11 +59,11 @@ def _prepare_args(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-MANIFEST = ROOT / "eval" / "manifest.yml"
 import os
+MANIFEST_YML = ROOT / "eval" / "manifest.yml"
+MANIFEST_JSON = ROOT / "eval" / "manifest.json"
 DEFAULT_OUTDIR = ROOT / "share" / "eval"
-ENV_OUTDIR = os.environ.get("EVAL_OUTDIR")
-OUTDIR = (ROOT / ENV_OUTDIR) if ENV_OUTDIR else DEFAULT_OUTDIR
+OUTDIR = (ROOT / os.environ.get("EVAL_OUTDIR")) if os.environ.get("EVAL_OUTDIR") else DEFAULT_OUTDIR
 JSON_OUT = OUTDIR / "report.json"
 MD_OUT = OUTDIR / "report.md"
 
@@ -407,15 +410,21 @@ KIND_IMPL = {
 
 
 def load_manifest() -> dict[str, Any]:
-    with open(MANIFEST, encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+    # Prefer JSON manifest (no external deps)
+    if MANIFEST_JSON.exists():
+        return json.loads(MANIFEST_JSON.read_text(encoding="utf-8"))
+    # Fallback to YAML only if PyYAML is available
+    if MANIFEST_YML.exists() and yaml is not None:
+        data = yaml.safe_load(MANIFEST_YML.read_text(encoding="utf-8"))
         return data if isinstance(data, dict) else {}
+    # Last resort: empty manifest; caller will flag as failure
+    return {}
 
 
 def main() -> int:
     print("[eval.report] starting")
-    if not MANIFEST.exists():
-        print(f"[eval.report] FAIL no manifest at {MANIFEST}")
+    if not MANIFEST_JSON.exists() and not MANIFEST_YML.exists():
+        print(f"[eval.report] FAIL no manifest at {MANIFEST_YML}")
         return 2
     OUTDIR.mkdir(parents=True, exist_ok=True)
 
