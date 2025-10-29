@@ -260,6 +260,41 @@ ci.eval.bundle:
 	@EVAL_BUNDLES_DIR=_artifacts/eval/bundles EVAL_DIR=_artifacts/eval \
 	 python3 scripts/eval/build_bundle.py
 
+.PHONY: eval.badges ci.eval.badges eval.release_notes ci.eval.release_notes eval.package ci.eval.package
+
+eval.badges:
+	@EVAL_OUTDIR=share/eval BADGES_OUTDIR=share/eval/badges \
+	 python3 scripts/eval/build_badges.py
+
+ci.eval.badges:
+	@EVAL_OUTDIR=_artifacts/eval BADGES_OUTDIR=_artifacts/eval/badges \
+	 python3 scripts/eval/build_badges.py
+
+eval.release_notes:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/build_release_notes.py
+
+ci.eval.release_notes:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/build_release_notes.py
+
+# One-shot local packaging: snapshot → html → bundle → badges → release_notes
+eval.package:
+	@$(MAKE) eval.snapshot
+	@$(MAKE) eval.html
+	@$(MAKE) eval.bundle
+	@$(MAKE) eval.badges
+	@$(MAKE) eval.release_notes
+	@echo "[eval.package] OK"
+
+ci.eval.package:
+	@$(MAKE) ci.eval.snapshot
+	@$(MAKE) ci.eval.html
+	@$(MAKE) ci.eval.bundle
+	@$(MAKE) ci.eval.badges
+	@$(MAKE) ci.eval.release_notes
+	@echo "[ci.eval.package] OK"
+
 .PHONY: repair.apply ci.repair.apply eval.policydiff ci.eval.policydiff eval.report.repaired ci.eval.report.repaired ci.eval.repairplan
 
 repair.apply:
