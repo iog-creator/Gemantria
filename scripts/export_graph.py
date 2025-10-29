@@ -12,6 +12,7 @@ import os
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
+from src.rerank.blender import blend_strength
 
 # Load environment variables from .env file
 ensure_env_loaded()
@@ -232,13 +233,16 @@ def main():
                 }
                 for r in nodes
             ],
+            # SSOT field names (Rule-045); validators depend on exact keys.
             "edges": [
                 {
                     "source": str(r[0]),
                     "target": str(r[1]),
-                    "strength": float(r[2] or 0),
-                    "rerank": float(r[3] or 0) if r[3] else None,
-                    "yes": bool(r[4]) if r[4] is not None else None,
+                    "cosine": float(r[2] or 0),
+                    "rerank_score": float(r[3] or 0) if r[3] else None,
+                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0))
+                    if r[3]
+                    else float(r[2] or 0),
                 }
                 for r in edges
             ],

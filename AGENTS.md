@@ -85,6 +85,7 @@ Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` contract (Rule-045).
 - **Validator**: `scripts/eval/validate_blend_ssot.py` (non-fatal HINTs only)
 - **Field aliases**: Accepts SSOT names first, then legacy (`similarity`→`cosine`, `rerank`→`rerank_score`, `strength`→`edge_strength`)
+- **Exporter**: `scripts/export_graph.py` emits SSOT field names with proper blend computation
 - **Defaults**: `EDGE_ALPHA=0.5`, `BLEND_TOL=0.005`
 - **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
 - **Integration**: Wired into `ops.verify` as non-fatal validation step
