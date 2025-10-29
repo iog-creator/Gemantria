@@ -201,3 +201,36 @@ eval.catalog:
 ci.eval.catalog:
 	@EXPORTS_CATALOG_OUT=_artifacts/eval/exports_catalog.md \
 	 python3 scripts/eval/build_exports_catalog.py
+
+.PHONY: eval.snapshot ci.eval.snapshot
+
+# Build an eval snapshot (writes share/eval/snapshot/)
+eval.snapshot:
+	@SNAPSHOT_DIR=share/eval/snapshot \
+	 python3 scripts/eval/build_snapshot.py
+
+ci.eval.snapshot:
+	@SNAPSHOT_DIR=_artifacts/eval/snapshot \
+	 python3 scripts/eval/build_snapshot.py
+
+.PHONY: eval.html ci.eval.html
+
+# Build HTML index from eval results (writes share/eval/index.html)
+eval.html:
+	@EVAL_HTML_OUTDIR=share/eval \
+	 python3 scripts/eval/build_html_index.py
+
+ci.eval.html:
+	@EVAL_HTML_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/build_html_index.py
+
+.PHONY: eval.bundle ci.eval.bundle
+
+# Build eval bundle tarball (writes share/eval/bundles/)
+eval.bundle:
+	@EVAL_BUNDLES_DIR=share/eval/bundles EVAL_DIR=share/eval \
+	 python3 scripts/eval/build_bundle.py
+
+ci.eval.bundle:
+	@EVAL_BUNDLES_DIR=_artifacts/eval/bundles EVAL_DIR=_artifacts/eval \
+	 python3 scripts/eval/build_bundle.py
