@@ -22,9 +22,7 @@ def _read_yaml(path: pathlib.Path) -> Any:
         with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
     except Exception as e:
-        raise RuntimeError(
-            "PyYAML is required for eval.report. Please `pip install pyyaml`."
-        ) from e
+        raise RuntimeError("PyYAML is required for eval.report. Please `pip install pyyaml`.") from e
 
 
 def _load_json(path: pathlib.Path) -> Any:
@@ -67,12 +65,27 @@ def _resolve_thresholds(obj: Any, t: dict[str, Any]) -> Any:
         m = re.fullmatch(r"\$\{thresholds:([A-Za-z0-9_.]+)\}", obj.strip())
         if m:
             return _lookup_threshold(m.group(1), t)
-        return obj
     if isinstance(obj, list):
         return [_resolve_thresholds(x, t) for x in obj]
     if isinstance(obj, dict):
         return {k: _resolve_thresholds(v, t) for k, v in obj.items()}
     return obj
+
+
+def _load_whitelist(path: str) -> set[Any]:
+    ids: set[Any] = set()
+    if path:
+        p = ROOT / path
+        if p.exists():
+            for line in p.read_text(encoding="utf-8", errors="ignore").splitlines():
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    # keep raw token; ids may be strings or integers; we store both
+                    try:
+                        ids.add(int(line))
+                    except Exception:
+                        ids.add(line)
+    return ids
 
 
 # ---------- Task impls ----------
@@ -106,9 +119,7 @@ def _assert_not_null_all(vals: list[Any]) -> dict[str, Any]:
     return {"status": "OK" if not bad else "FAIL", "null_indices": bad}
 
 
-def _assert_frac_in_range(
-    vals: list[Any], lo: float, hi: float, min_frac: float
-) -> dict[str, Any]:
+def _assert_frac_in_range(vals: list[Any], lo: float, hi: float, min_frac: float) -> dict[str, Any]:
     nums = [v for v in vals if isinstance(v, int | float)]
     if not nums:
         return {"status": "FAIL", "error": "no numeric values"}
@@ -152,9 +163,7 @@ def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
         if op == "not_null_all":
             r = _assert_not_null_all(vals)
         elif op == "frac_in_range":
-            r = _assert_frac_in_range(
-                vals, float(a["min"]), float(a["max"]), float(a["min_frac"])
-            )
+            r = _assert_frac_in_range(vals, float(a["min"]), float(a["max"]), float(a["min_frac"]))
         elif op == "if_present_eq_all":
             r = _assert_if_present_eq_all(vals, a.get("value"))
         else:
@@ -228,6 +237,8 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     node_set = set(node_ids)
     dup_node_ids = len(node_ids) - len(node_set)
 
+    wl = _load_whitelist(args.get("whitelist_path", ""))
+
     def _ekey(e: dict[str, Any]) -> tuple[Any, Any]:
         return (e.get("source"), e.get("target"))
 
@@ -239,6 +250,9 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
             if not isinstance(e, dict):
                 continue
             s, t = e.get("source"), e.get("target")
+            if s in wl or t in wl:
+                edge_pairs.append(_ekey(e))
+                continue  # ignore whitelist edges for counting violations
             if s == t:
                 self_loops += 1
             if (s not in node_set) or (t not in node_set):
@@ -278,6 +292,67 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_id_type_audit(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    wl = _load_whitelist(args.get("whitelist_path", ""))
+    ids: list[Any] = []
+    if isinstance(nodes, list):
+        for n in nodes:
+            if isinstance(n, dict) and "id" in n:
+                nid = n.get("id")
+                if nid in wl:
+                    continue
+                ids.append(nid)
+
+    def _type_name(v: Any) -> str:
+        if isinstance(v, bool):  # keep bool separate from integer semantic confusion
+            return "boolean"
+        if isinstance(v, int):
+            return "integer"
+        if isinstance(v, float):
+            return "number"
+        if isinstance(v, str):
+            return "string"
+        if v is None:
+            return "null"
+        return "other"
+
+    types = [_type_name(v) for v in ids]
+    from collections import Counter
+
+    counts = Counter(types)
+
+    allowed: list[str] = list(args.get("allowed_node_id_types", []))
+    require_single = int(args.get("require_single_id_type", 0)) == 1
+    max_nonconf = int(args.get("max_nonconforming_ids", 0))
+
+    # Nonconforming = ids whose type not in allowed
+    nonconf = sum(1 for t in types if t not in allowed)
+
+    # If require_single, then among allowed types used by any id, must be exactly one unique
+    used_allowed = sorted(set(t for t in types if t in allowed))
+    single_ok = (len(used_allowed) == 1) if require_single else True
+
+    status = "OK"
+    if nonconf > max_nonconf or not single_ok:
+        status = "FAIL"
+
+    return {
+        "status": status,
+        "id_count": len(ids),
+        "type_counts": dict(counts),
+        "allowed_types": allowed,
+        "require_single": require_single,
+        "max_nonconforming_ids": max_nonconf,
+        "observed_allowed_used": used_allowed,
+        "nonconforming_ids": nonconf,
+    }
+
+
 KIND_IMPL = {
     "print": task_print,
     "grep": task_grep,
@@ -286,6 +361,7 @@ KIND_IMPL = {
     "json_schema": task_json_schema,
     "json_shape": task_json_shape,
     "ref_integrity": task_ref_integrity,
+    "id_type_audit": task_id_type_audit,
 }
 
 
@@ -309,9 +385,7 @@ def main() -> int:
         args = tsk.get("args", {})
         impl = KIND_IMPL.get(kind)
         if not impl:
-            results.append(
-                {"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"}
-            )
+            results.append({"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"})
             all_ok = False
             continue
         r = impl(args)
