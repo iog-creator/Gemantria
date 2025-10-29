@@ -150,7 +150,7 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 044 | # 044 — Share Manifest Contract (AlwaysApply) |
 | 045 | # 045 — Rerank Blend is SSOT (AlwaysApply) |
 | 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
-| 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
-| 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 047 | # --- |
+| 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
