@@ -51,3 +51,4 @@
 | 046 | 046-ci-hermetic-fallbacks.mdc | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
 | 047 | 047-nightly-metrics-contract.mdc | # 047 — Nightly Metrics Contract (AlwaysApply) |
 | 048 | 048-agents-docs-coverage.mdc | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
