@@ -142,4 +142,5 @@ Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 | 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
 | 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
 | 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
