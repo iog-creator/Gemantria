@@ -86,6 +86,7 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Validator**: `scripts/eval/validate_blend_ssot.py` (non-fatal HINTs only)
 - **Field aliases**: Accepts SSOT names first, then legacy (`similarity`→`cosine`, `rerank`→`rerank_score`, `strength`→`edge_strength`)
 - **Exporter**: `scripts/export_graph.py` emits SSOT field names with proper blend computation
+- **Reclassifier**: `scripts/eval/reclassify_edges.py` prefers SSOT edge_strength for classification
 - **Defaults**: `EDGE_ALPHA=0.5`, `BLEND_TOL=0.005`
 - **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
 - **Integration**: Wired into `ops.verify` as non-fatal validation step
