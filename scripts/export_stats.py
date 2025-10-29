@@ -8,6 +8,7 @@ and monitoring dashboards, focusing on key insights and health indicators.
 
 import os
 
+from src.graph.patterns import build_graph, compute_patterns
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
@@ -31,9 +32,7 @@ def calculate_graph_stats(db):
     stats["edges"] = edge_result[0][0] if edge_result else 0
 
     # Cluster statistics
-    cluster_result = list(
-        db.execute("SELECT COUNT(DISTINCT cluster_id) FROM concept_clusters")
-    )
+    cluster_result = list(db.execute("SELECT COUNT(DISTINCT cluster_id) FROM concept_clusters"))
     stats["clusters"] = cluster_result[0][0] if cluster_result else 0
 
     # Centrality averages (DB) with optional NetworkX fallback
@@ -75,7 +74,87 @@ def calculate_graph_stats(db):
         }
     )
 
-    # Optional NetworkX fallback if DB table is empty or zeros
+    # Compute and persist centrality if missing from database
+    centrality_missing = not centrality_stats or all(
+        row[0] == 0 and row[1] == 0 and row[2] == 0 and row[3] == 0 and row[4] == 0 and row[5] == 0
+        for row in centrality_stats
+    )
+
+    if centrality_missing:
+        try:
+            # Build graph and compute centrality
+            G = build_graph(db)
+            if G.number_of_nodes() > 0:
+                _cluster_map, degree, betw, eigen = compute_patterns(G)
+
+                # Persist centrality to database
+                centrality_insert_count = 0
+                for node in G.nodes():
+                    try:
+                        db.execute(
+                            """
+                            INSERT INTO concept_centrality (
+                                concept_id, degree, betweenness, eigenvector
+                            )
+                            VALUES (%s, %s, %s, %s)
+                            ON CONFLICT (concept_id) DO UPDATE SET
+                                degree = EXCLUDED.degree,
+                                betweenness = EXCLUDED.betweenness,
+                                eigenvector = EXCLUDED.eigenvector
+                            """,
+                            (
+                                node,
+                                degree.get(node, 0),
+                                betw.get(node, 0),
+                                eigen.get(node, 0),
+                            ),
+                        )
+                        centrality_insert_count += 1
+                    except Exception as e:
+                        log_json(
+                            LOG,
+                            40,
+                            "centrality_persist_failed",
+                            node=node[:8],
+                            error=str(e),
+                        )
+
+                # Re-query centrality stats after persistence
+                centrality_stats = list(
+                    db.execute(
+                        """
+                        SELECT
+                            COALESCE(AVG(degree), 0) as avg_degree,
+                            COALESCE(MAX(degree), 0) as max_degree,
+                            COALESCE(AVG(betweenness), 0) as avg_betweenness,
+                            COALESCE(MAX(betweenness), 0) as max_betweenness,
+                            COALESCE(AVG(eigenvector), 0) as avg_eigenvector,
+                            COALESCE(MAX(eigenvector), 0) as max_eigenvector
+                        FROM concept_centrality
+                        """
+                    )
+                )
+
+                log_json(
+                    LOG,
+                    20,
+                    "centrality_computed_and_persisted",
+                    nodes_computed=G.number_of_nodes(),
+                    centrality_inserts=centrality_insert_count,
+                    stats_reloaded=bool(centrality_stats),
+                )
+
+        except Exception as e:
+            log_json(
+                LOG,
+                30,
+                "centrality_computation_failed",
+                error=str(e),
+                falling_back_to_zeros=True,
+            )
+            centrality_stats = None
+
+    # Optional NetworkX fallback if DB table is empty or zeros (legacy behavior)
     use_fallback = os.getenv("STATS_CENTRALITY_FALLBACK", "0").lower() in (
         "1",
         "true",
@@ -83,14 +162,10 @@ def calculate_graph_stats(db):
     )
     if use_fallback:
         try:
-            import networkx as nx  # noqa: E402
+            import networkx as nx
 
             # consider "cosine" as edge weight if present
-            rows = list(
-                db.execute(
-                    "SELECT source_id, target_id, COALESCE(cosine, 0.0) FROM concept_relations"
-                )
-            )
+            rows = list(db.execute("SELECT source_id, target_id, COALESCE(cosine, 0.0) FROM concept_relations"))
             if rows:
                 G = nx.Graph()
                 for s, t, w in rows:
@@ -99,30 +174,19 @@ def calculate_graph_stats(db):
                 degrees = dict(G.degree())
                 max_possible_degree = len(G.nodes()) - 1
                 degree_centrality = (
-                    {n: d / max_possible_degree for n, d in degrees.items()}
-                    if max_possible_degree > 0
-                    else {}
+                    {n: d / max_possible_degree for n, d in degrees.items()} if max_possible_degree > 0 else {}
                 )
 
                 # Betweenness (weighted by inverse similarity to prefer stronger ties)
                 inv_weights = {
-                    (u, v): (1.0 - max(0.0, min(1.0, d.get("weight", 0.0)))) + 1e-6
-                    for u, v, d in G.edges(data=True)
+                    (u, v): (1.0 - max(0.0, min(1.0, d.get("weight", 0.0)))) + 1e-6 for u, v, d in G.edges(data=True)
                 }
                 nx.set_edge_attributes(G, inv_weights, name="invw")
-                bet = (
-                    nx.betweenness_centrality(G, weight="invw", normalized=True)
-                    if G.number_of_edges()
-                    else {}
-                )
+                bet = nx.betweenness_centrality(G, weight="invw", normalized=True) if G.number_of_edges() else {}
 
                 # Eigenvector centrality (use weight, already normalized)
                 try:
-                    eig = (
-                        nx.eigenvector_centrality_numpy(G, weight="weight")
-                        if G.number_of_edges()
-                        else {}
-                    )
+                    eig = nx.eigenvector_centrality_numpy(G, weight="weight") if G.number_of_edges() else {}
                 except Exception:
                     eig = {}
 
@@ -131,11 +195,7 @@ def calculate_graph_stats(db):
 
                 stats["centrality"] = {
                     "avg_degree": _avg(degree_centrality),
-                    "max_degree": (
-                        float(max(degree_centrality.values()))
-                        if degree_centrality
-                        else 0.0
-                    ),
+                    "max_degree": (float(max(degree_centrality.values())) if degree_centrality else 0.0),
                     "avg_betweenness": _avg(bet),
                     "max_betweenness": float(max(bet.values())) if bet else 0.0,
                     "avg_eigenvector": _avg(eig),
@@ -196,9 +256,7 @@ def calculate_graph_stats(db):
     )
 
     if cluster_sizes:
-        stats["cluster_sizes"] = [
-            {"cluster_id": row[0], "size": row[1]} for row in cluster_sizes
-        ]
+        stats["cluster_sizes"] = [{"cluster_id": row[0], "size": row[1]} for row in cluster_sizes]
 
         # Largest cluster info
         largest_cluster = cluster_sizes[0]
@@ -211,17 +269,15 @@ def calculate_graph_stats(db):
     if stats["nodes"] > 1:
         possible_edges = stats["nodes"] * (stats["nodes"] - 1) / 2
         stats["density"] = stats["edges"] / possible_edges if possible_edges > 0 else 0
+    else:
+        stats["density"] = 0
 
     # Cluster metrics (if available)
     metrics_overview = list(db.execute("SELECT * FROM v_metrics_overview"))
     if metrics_overview:
         stats["cluster_metrics"] = {
-            "avg_cluster_density": (
-                float(metrics_overview[0][3]) if metrics_overview[0][3] else None
-            ),
-            "avg_cluster_diversity": (
-                float(metrics_overview[0][4]) if metrics_overview[0][4] else None
-            ),
+            "avg_cluster_density": (float(metrics_overview[0][3]) if metrics_overview[0][3] else None),
+            "avg_cluster_diversity": (float(metrics_overview[0][4]) if metrics_overview[0][4] else None),
         }
 
     # Health indicators
@@ -229,9 +285,7 @@ def calculate_graph_stats(db):
         "has_nodes": stats["nodes"] > 0,
         "has_edges": stats["edges"] > 0,
         "has_clusters": stats["clusters"] > 0,
-        "density_reasonable": (
-            0.001 <= stats.get("density", 0) <= 0.1 if "density" in stats else False
-        ),
+        "density_reasonable": (0.001 <= stats.get("density", 0) <= 0.1 if "density" in stats else False),
     }
 
     return stats
@@ -284,9 +338,7 @@ def export_correlations(db):
                 LOG.info(f"Loaded {len(correlations)} correlations from database view")
 
         except Exception as db_error:
-            LOG.warning(
-                f"Database correlation view not available ({db_error}), falling back to Python computation"
-            )
+            LOG.warning(f"Database correlation view not available ({db_error}), " "falling back to Python computation")
             correlations = _compute_correlations_python(db)
 
     except Exception as e:
@@ -296,24 +348,16 @@ def export_correlations(db):
     # Calculate metadata
     if correlations:
         metadata["total_correlations"] = len(correlations)
-        metadata["significant_correlations"] = sum(
-            1 for c in correlations if c.get("p_value", 1.0) < 0.05
-        )
-        metadata["correlation_methods"] = list(
-            set(c.get("metric", "unknown") for c in correlations)
-        )
+        metadata["significant_correlations"] = sum(1 for c in correlations if c.get("p_value", 1.0) < 0.05)
+        metadata["correlation_methods"] = list(set(c.get("metric", "unknown") for c in correlations))
 
-    import datetime  # noqa: E402
+    import datetime
 
     metadata["generated_at"] = datetime.datetime.now().isoformat()
 
     # Try to get run_id from recent pipeline runs
     try:
-        run_row = list(
-            db.execute(
-                "SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"
-            )
-        )
+        run_row = list(db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"))
         if run_row:
             metadata["run_id"] = str(run_row[0][0])
     except Exception:
@@ -325,9 +369,9 @@ def export_correlations(db):
 def _compute_correlations_python(db):
     """Fallback: Compute correlations using Python/scipy when database view unavailable."""
     try:
-        from itertools import combinations  # noqa: E402
+        from itertools import combinations
 
-        from scipy.stats import pearsonr  # noqa: E402
+        from scipy.stats import pearsonr
     except ImportError:
         LOG.error("scipy not available for correlation computation fallback")
         return []
@@ -355,7 +399,7 @@ def _compute_correlations_python(db):
         batch_size = 100  # Limit combinations per batch
 
         # Convert embeddings to numpy arrays for efficient computation
-        import numpy as np  # noqa: E402
+        import numpy as np
 
         concept_list = []
         for row in concept_data:
@@ -371,16 +415,12 @@ def _compute_correlations_python(db):
                     }
                 )
             except Exception as e:
-                LOG.warning(
-                    f"Skipping concept {row[0]} due to embedding parsing error: {e}"
-                )
+                LOG.warning(f"Skipping concept {row[0]} due to embedding parsing error: {e}")
                 continue
 
         # Compute correlations between concept pairs
         processed_pairs = 0
-        for (_i, concept_a), (_j, concept_b) in combinations(
-            enumerate(concept_list), 2
-        ):
+        for (_i, concept_a), (_j, concept_b) in combinations(enumerate(concept_list), 2):
             if processed_pairs >= batch_size:
                 break  # Limit for performance
 
@@ -407,9 +447,7 @@ def _compute_correlations_python(db):
                 processed_pairs += 1
 
             except Exception as e:
-                LOG.warning(
-                    f"Error computing correlation for {concept_a['id']} vs {concept_b['id']}: {e}"
-                )
+                LOG.warning(f"Error computing correlation for {concept_a['id']} vs {concept_b['id']}: {e}")
                 continue
 
         # Sort by absolute correlation strength
@@ -494,52 +532,32 @@ def export_patterns(db):
 
                 # Find shared concepts
                 shared_concepts = concepts_a.intersection(concepts_b)
-                if (
-                    len(shared_concepts)
-                    < metadata["analysis_parameters"]["min_shared_concepts"]
-                ):
+                if len(shared_concepts) < metadata["analysis_parameters"]["min_shared_concepts"]:
                     continue
 
                 # Calculate association metrics
                 total_concepts = len(concepts_a.union(concepts_b))
-                support = (
-                    len(shared_concepts) / total_concepts if total_concepts > 0 else 0
-                )
+                support = len(shared_concepts) / total_concepts if total_concepts > 0 else 0
 
                 # Confidence: P(B|A) = |shared| / |A|
-                confidence_a_to_b = (
-                    len(shared_concepts) / len(concepts_a) if concepts_a else 0
-                )
-                confidence_b_to_a = (
-                    len(shared_concepts) / len(concepts_b) if concepts_b else 0
-                )
+                confidence_a_to_b = len(shared_concepts) / len(concepts_a) if concepts_a else 0
+                confidence_b_to_a = len(shared_concepts) / len(concepts_b) if concepts_b else 0
 
                 # Lift: P(A,B) / (P(A) * P(B))
                 p_a = len(concepts_a) / total_concepts if total_concepts > 0 else 0
                 p_b = len(concepts_b) / total_concepts if total_concepts > 0 else 0
-                p_a_and_b = (
-                    len(shared_concepts) / total_concepts if total_concepts > 0 else 0
-                )
+                p_a_and_b = len(shared_concepts) / total_concepts if total_concepts > 0 else 0
                 lift = p_a_and_b / (p_a * p_b) if (p_a * p_b) > 0 else 0
 
                 # Jaccard similarity
                 jaccard = (
-                    len(shared_concepts) / len(concepts_a.union(concepts_b))
-                    if concepts_a.union(concepts_b)
-                    else 0
+                    len(shared_concepts) / len(concepts_a.union(concepts_b)) if concepts_a.union(concepts_b) else 0
                 )
 
                 # Pattern strength (weighted combination)
-                pattern_strength = (
-                    jaccard * 0.4
-                    + min(confidence_a_to_b, confidence_b_to_a) * 0.4
-                    + support * 0.2
-                )
+                pattern_strength = jaccard * 0.4 + min(confidence_a_to_b, confidence_b_to_a) * 0.4 + support * 0.2
 
-                if (
-                    pattern_strength
-                    >= metadata["analysis_parameters"]["min_pattern_strength"]
-                ):
+                if pattern_strength >= metadata["analysis_parameters"]["min_pattern_strength"]:
                     pattern_record = {
                         "book_source": book_a,
                         "book_target": book_b,
@@ -553,16 +571,8 @@ def export_patterns(db):
                     }
 
                     # Add cluster information if available
-                    clusters_a = set(
-                        c["cluster_id"]
-                        for c in books_concepts[book_a]
-                        if c["cluster_id"] is not None
-                    )
-                    clusters_b = set(
-                        c["cluster_id"]
-                        for c in books_concepts[book_b]
-                        if c["cluster_id"] is not None
-                    )
+                    clusters_a = set(c["cluster_id"] for c in books_concepts[book_a] if c["cluster_id"] is not None)
+                    clusters_b = set(c["cluster_id"] for c in books_concepts[book_b] if c["cluster_id"] is not None)
 
                     if clusters_a and clusters_b:
                         pattern_record["source_clusters"] = list(clusters_a)
@@ -576,29 +586,21 @@ def export_patterns(db):
         # Update metadata
         metadata["total_patterns"] = len(patterns)
         if patterns:
-            metadata["pattern_methods"] = list(
-                set(p.get("metric", "unknown") for p in patterns)
-            )
+            metadata["pattern_methods"] = list(set(p.get("metric", "unknown") for p in patterns))
 
-        import datetime  # noqa: E402
+        import datetime
 
         metadata["generated_at"] = datetime.datetime.now().isoformat()
 
         # Try to get run_id from recent pipeline runs
         try:
-            run_row = list(
-                db.execute(
-                    "SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"
-                )
-            )
+            run_row = list(db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"))
             if run_row:
                 metadata["run_id"] = str(run_row[0][0])
         except Exception:
             metadata["run_id"] = "unknown"
 
-        LOG.info(
-            f"Generated {len(patterns)} cross-text patterns across {len(metadata['analyzed_books'])} books"
-        )
+        LOG.info(f"Generated {len(patterns)} cross-text patterns across " f"{len(metadata['analyzed_books'])} books")
 
     except Exception as e:
         LOG.warning(f"Could not compute cross-text patterns: {e}")
@@ -615,7 +617,7 @@ def export_temporal_patterns(db):
     - Writes exports/temporal_patterns.json
     - Validates against temporal-patterns.schema.json
     """
-    import statistics  # noqa: E402
+    import statistics
 
     patterns = []
     metadata = {
@@ -657,10 +659,7 @@ def export_temporal_patterns(db):
             if len(values) < metadata["analysis_parameters"]["min_series_length"]:
                 continue
             window = metadata["analysis_parameters"]["default_window"]
-            rolling = [
-                statistics.mean(values[i : i + window])
-                for i in range(0, len(values) - window + 1)
-            ]
+            rolling = [statistics.mean(values[i : i + window]) for i in range(0, len(values) - window + 1)]
             change_points = []
             if len(rolling) > 2:
                 st = statistics.pstdev(rolling)
@@ -783,14 +782,10 @@ def export_forecast(db):
         if forecasts:
             rmses = [f["rmse"] for f in forecasts if "rmse" in f]
             maes = [f["mae"] for f in forecasts if "mae" in f]
-            metadata["average_metrics"]["rmse"] = (
-                sum(rmses) / len(rmses) if rmses else None
-            )
+            metadata["average_metrics"]["rmse"] = sum(rmses) / len(rmses) if rmses else None
             metadata["average_metrics"]["mae"] = sum(maes) / len(maes) if maes else None
 
-        LOG.info(
-            f"Generated {len(forecasts)} forecasts across {len(metadata['books_forecasted'])} books"
-        )
+        LOG.info(f"Generated {len(forecasts)} forecasts across {len(metadata['books_forecasted'])} books")
 
     except Exception as e:
         LOG.warning(f"Could not compute forecasts: {e}")
@@ -821,7 +816,7 @@ def main():
         forecasts = export_forecast(db)
 
         # Add timestamp
-        import datetime  # noqa: E402
+        import datetime
 
         now = datetime.datetime.now().isoformat()
 
@@ -832,13 +827,13 @@ def main():
         forecasts["metadata"]["generated_at"] = now
 
         # === Rule 021/022 + Rule 030: schema validation (HARD-REQUIRED) ===
-        import json  # noqa: E402
-        import sys  # noqa: E402
-        from pathlib import Path  # noqa: E402
+        import json
+        import sys
+        from pathlib import Path
 
         # Hard requirement: jsonschema must be installed
         try:
-            from jsonschema import ValidationError, validate  # noqa: E402
+            from jsonschema import ValidationError, validate
         except ImportError:
             print(
                 "[export_stats] CRITICAL: jsonschema not installed (hard requirement)",
@@ -950,11 +945,9 @@ def main():
             LOG,
             20,
             "export_stats_complete",
-            **{k: v for k, v in stats.items() if isinstance(v, (int, float, bool))},
+            **{k: v for k, v in stats.items() if isinstance(v, int | float | bool)},
             correlations_total=correlations["metadata"]["total_correlations"],
-            correlations_significant=correlations["metadata"][
-                "significant_correlations"
-            ],
+            correlations_significant=correlations["metadata"]["significant_correlations"],
             patterns_total=patterns["metadata"]["total_patterns"],
             temporal_patterns_total=temporal_patterns["metadata"]["total_series"],
             forecasts_total=forecasts["metadata"]["total_forecasts"],
@@ -968,3 +961,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# PR-061: Graph centrality computation and persistence

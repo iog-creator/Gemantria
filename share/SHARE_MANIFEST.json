@@ -1,0 +1,84 @@
+{
+  "items": [
+    {
+      "src": "AGENTS.md",
+      "dst": "share/AGENTS.md"
+    },
+    {
+      "src": "docs/SSOT/RULES_INDEX.md",
+      "dst": "share/RULES_INDEX.md"
+    },
+    {
+      "src": "docs/SSOT/MASTER_PLAN.md",
+      "dst": "share/SSOT_MASTER_PLAN.md"
+    },
+    {
+      "src": "docs/SSOT/graph-patterns.schema.json",
+      "dst": "share/SSOT_graph-patterns.schema.json"
+    },
+    {
+      "src": "docs/SSOT/graph-stats.schema.json",
+      "dst": "share/SSOT_graph-stats.schema.json"
+    },
+    {
+      "src": "docs/SSOT/pattern-forecast.schema.json",
+      "dst": "share/SSOT_pattern-forecast.schema.json"
+    },
+    {
+      "src": "docs/SSOT/temporal-patterns.schema.json",
+      "dst": "share/SSOT_temporal-patterns.schema.json"
+    },
+    {
+      "src": "README.md",
+      "dst": "share/README.md"
+    },
+    {
+      "src": "scripts/generate_report.py",
+      "dst": "share/generate_report.py"
+    },
+    {
+      "src": "scripts/export_stats.py",
+      "dst": "share/export_stats.py"
+    },
+    {
+      "src": "scripts/rules_guard.py",
+      "dst": "share/rules_guard.py"
+    },
+    {
+      "src": "scripts/rules_audit.py",
+      "dst": "share/rules_audit.py"
+    },
+    {
+      "src": "src/infra/env_loader.py",
+      "dst": "share/env_loader.py"
+    },
+    {
+      "src": "src/services/api_server.py",
+      "dst": "share/api_server.py"
+    },
+    {
+      "src": "config/book_plan.yaml",
+      "dst": "share/book_plan.json",
+      "generate": "head_json",
+      "max_bytes": 2048
+    },
+    {
+      "src": "exports/graph_stats.json",
+      "dst": "share/graph_stats.head.json",
+      "generate": "head_json",
+      "max_bytes": 2300
+    },
+    {
+      "src": "exports/pattern_forecast.json",
+      "dst": "share/pattern_forecast.head.json",
+      "generate": "head_json",
+      "max_bytes": 2048
+    },
+    {
+      "src": "exports/temporal_patterns.json",
+      "dst": "share/temporal_patterns.head.json",
+      "generate": "head_json",
+      "max_bytes": 2048
+    }
+  ]
+}

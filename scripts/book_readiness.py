@@ -131,7 +131,7 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
             ) / total_edges
 
     # Correlation metrics
-    if "correlations" in stats and stats["correlations"]:
+    if stats.get("correlations"):
         corrs = [c["cosine"] for c in stats["correlations"] if "cosine" in c]
         if corrs:
             metrics["cosine_min"] = min(corrs)
@@ -287,7 +287,7 @@ def cmd_gate(args):
         schema_errs.append(f"Schema validation error: {e.message}")
     except Exception as e:
         schema_ok = False
-        schema_errs.append(f"Schema validation failed: {str(e)}")
+        schema_errs.append(f"Schema validation failed: {e!s}")
 
     # Update report
     report["schema"] = {"validated": schema_ok, "errors": schema_errs}

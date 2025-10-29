@@ -1,0 +1,4 @@
+# 042 — Formatter Single Source of Truth (AlwaysApply)
+- Use **ruff-format** only; Black is not allowed in CI/pre-commit.
+- Keep `ruff.toml` with line-length and Python version.
+- CI runs `ruff format --check` and `ruff check` (PR-diff scoped for PRs; full on main).

@@ -135,7 +135,7 @@ def _run_chapters(cfg: dict[str, Any], chapters: list[int], real: bool) -> None:
             encoding="utf-8",
         )
         print(
-            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time()-t0:.2f}s"
+            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s"
         )
 
 
