@@ -226,6 +226,17 @@ ci.eval.html:
 	@EVAL_HTML_OUTDIR=_artifacts/eval \
 	 python3 scripts/eval/build_html_index.py
 
+.PHONY: eval.delta ci.eval.delta
+
+# Build eval delta report (writes share/eval/delta.{json,md})
+eval.delta:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report_delta.py
+
+ci.eval.delta:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/report_delta.py
+
 .PHONY: eval.bundle ci.eval.bundle
 
 # Build eval bundle tarball (writes share/eval/bundles/)

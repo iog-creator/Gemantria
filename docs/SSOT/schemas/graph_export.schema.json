@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Graph Export Schema",
+  "description": "Schema for exported concept network graphs",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": ["string", "integer"],
+            "description": "Unique identifier for the concept node"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable label for the concept"
+          },
+          "embedding_dim": {
+            "type": "integer",
+            "description": "Dimension of the embedding vector"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target"],
+        "properties": {
+          "source": {
+            "type": ["string", "integer"],
+            "description": "Source node ID"
+          },
+          "target": {
+            "type": ["string", "integer"],
+            "description": "Target node ID"
+          },
+          "strength": {
+            "type": ["number", "null"],
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Edge strength/cosine similarity score"
+          },
+          "rerank": {
+            "type": ["number", "null"],
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Reranking score"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

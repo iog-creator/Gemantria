@@ -162,6 +162,64 @@ def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
+    """
+    Lightweight, built-in graph export validator (no external deps).
+    Validates a subset of the schema used by docs/SSOT/schemas/graph_export.schema.json:
+      - top-level object has 'nodes' (array) and 'edges' (array)
+      - node: {'id': str|int, ...}
+      - edge: {'source': str|int, 'target': str|int, optional 'strength'/'rerank' in [0,1]}
+    """
+    def _is_id(v: Any) -> bool:
+        return isinstance(v, (str, int))
+
+    def _in_01(v: Any) -> bool:
+        return isinstance(v, (int, float)) and 0.0 <= float(v) <= 1.0
+
+    file = ROOT / args.get("file", "")
+    schema_path = ROOT / args.get("schema", "")  # not parsed; presence only
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    if not schema_path.exists():
+        return {"status": "FAIL", "error": f"no such schema: {schema_path}"}
+
+    try:
+        with open(file, encoding="utf-8") as f:
+            doc = json.load(f)
+    except Exception as e:
+        return {"status": "FAIL", "error": f"json parse error: {e}"}
+
+    if not isinstance(doc, dict):
+        return {"status": "FAIL", "error": "top-level must be object"}
+    nodes = doc.get("nodes")
+    edges = doc.get("edges")
+    if not isinstance(nodes, list) or not isinstance(edges, list):
+        return {"status": "FAIL", "error": "'nodes' and 'edges' must be arrays"}
+
+    node_errs = []
+    for i, n in enumerate(nodes):
+        if not isinstance(n, dict):
+            node_errs.append(f"nodes[{i}] not object")
+            continue
+        if "id" not in n or not _is_id(n["id"]):
+            node_errs.append(f"nodes[{i}].id missing or invalid")
+
+    edge_errs = []
+    for i, e in enumerate(edges):
+        if not isinstance(e, dict):
+            edge_errs.append(f"edges[{i}] not object")
+            continue
+        if not _is_id(e.get("source")) or not _is_id(e.get("target")):
+            edge_errs.append(f"edges[{i}].source/target invalid")
+        if "strength" in e and not _in_01(e["strength"]):
+            edge_errs.append(f"edges[{i}].strength out of [0,1]")
+        if "rerank" in e and not _in_01(e["rerank"]):
+            edge_errs.append(f"edges[{i}].rerank out of [0,1]")
+
+    errs = node_errs + edge_errs
+    return {"status": "OK"} if not errs else {"status": "FAIL", "errors": errs}
+
+
 def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
     """Validate JSON file structure/shape against expected patterns."""
     file_path = ROOT / args["file"]
@@ -342,6 +400,7 @@ KIND_IMPL = {
     "grep": task_grep,
     "ref_integrity": task_ref_integrity,
     "json_shape": task_json_shape,
+    "json_schema": task_json_schema,
     "file_glob": task_file_glob,
     "json_assert": task_json_assert,
 }

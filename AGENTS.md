@@ -50,6 +50,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Reference integrity checks**: `ref_integrity` task validates graph data integrity (self-loops, duplicates, coverage, orphans) with configurable thresholds.
 * **JSON assertions**: `json_assert` task supports `frac_in_range` (fraction within numeric range) and `if_present_eq_all` (conditional equality) operations.
 * **File globbing**: `file_glob` task ensures patterns match at least one file, with deterministic reporting of missing patterns.
+* **JSON schema validation**: `json_schema` task validates JSON structure against schemas using built-in validator (no external dependencies).
 * **Exports catalog**: `make eval.catalog` generates `share/eval/exports_catalog.md` with summary of all export files. CI uses `_artifacts/` to avoid share drift.
 * **Eval snapshots**: `make eval.snapshot` creates timestamped snapshots of eval results in `share/eval/snapshot/`.
 * **HTML reports**: `make eval.html` generates HTML index from eval reports at `share/eval/index.html`.
