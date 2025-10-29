@@ -53,12 +53,17 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **JSON schema validation**: `json_schema` task validates JSON structure against schemas using built-in validator (no external dependencies).
 * **Graph repair system**: `make eval.repairplan` generates repair plans, `make repair.apply` applies them with CI-safe output routing.
 * **Policy diff analysis**: `make eval.policydiff` compares strict vs dev evaluation profiles with environment variable passing to sub-makes.
+* **Eval history reporting**: `make eval.history` generates `share/eval/history.{json,md}` with task execution history and statistics.
+* **Quality badges generation**: `make eval.badges` creates quality and coverage badges in `share/eval/badges/` based on evaluation results.
+* **Release notes generation**: `make eval.release_notes` generates `share/eval/release_notes.md` with automated release notes from evaluation data.
+* **One-shot packaging**: `make eval.package` runs the complete eval pipeline (snapshot → html → bundle → badges → release_notes).
 * **Exports catalog**: `make eval.catalog` generates `share/eval/exports_catalog.md` with summary of all export files. CI uses `_artifacts/` to avoid share drift.
 * **Eval snapshots**: `make eval.snapshot` creates timestamped snapshots of eval results in `share/eval/snapshot/`.
 * **HTML reports**: `make eval.html` generates HTML index from eval reports at `share/eval/index.html`.
 * **Eval bundles**: `make eval.bundle` creates tarballs of key eval artifacts in `share/eval/bundles/`.
 * **Eval index**: `make eval.index` generates `share/eval/index.md` with summary of all eval artifacts.
 * **JSON shape validation**: `json_shape` task validates JSON file structure and types against expected schemas. All Phase 8 eval targets route CI outputs to `_artifacts/` to prevent share drift.
+* **SSOT validation**: `make ssot.validate` runs hermetic JSON Schema validation against docs/SSOT schemas (no pip installs, CI-safe); `make ssot.validate.changed` validates only changed files for PR-diff checks.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**

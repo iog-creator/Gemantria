@@ -355,6 +355,60 @@ ci.eval.index:
 	@EVAL_DIR=_artifacts/eval \
 	 python3 scripts/eval/build_index.py
 
+# ---------- SSOT Validation (Hermetic, no pip) ----------
+
+.PHONY: ssot.validate ssot.validate.changed
+
+# SSOT schema files
+SSOT_SCHEMAS := \
+	docs/SSOT/graph-patterns.schema.json \
+	docs/SSOT/graph-stats.schema.json \
+	docs/SSOT/graph-correlations.schema.json \
+	docs/SSOT/temporal-patterns.schema.json \
+	docs/SSOT/pattern-forecast.schema.json
+
+# Validate all SSOT JSON files against their schemas (hermetic, no pip)
+ssot.validate:
+	@echo "[ssot.validate] Validating all SSOT JSON against schemas..."
+	@set -e; \
+	for S in $(SSOT_SCHEMAS); do \
+	  case "$$S" in \
+	    *graph-patterns* ) INST="docs/SSOT/graph/*.json";; \
+	    *graph-stats* )    INST="share/graph/*stats*.json share/graph/graph_stats.head.json";; \
+	    *graph-correlations* ) INST="docs/SSOT/graph-correlations/*.json";; \
+	    *temporal-patterns* ) INST="docs/SSOT/temporal/*.json";; \
+	    *pattern-forecast* )  INST="docs/SSOT/forecast/*.json";; \
+	    * ) INST="";; \
+	  esac; \
+	  if [ -n "$$INST" ]; then \
+	    echo " - $$S"; \
+	    python3 scripts/eval/jsonschema_validate.py --schema "$$S" --instance $$INST || exit 2; \
+	  fi; \
+	done
+
+# Validate only changed SSOT JSON files (for PR-diff validation)
+ssot.validate.changed:
+	@echo "[ssot.validate.changed] Validating only changed SSOT JSON..."
+	@base="${BASE_SHA:-$(git merge-base origin/main HEAD)}"; head="${HEAD_SHA:-HEAD}"; \
+	files="$(git diff --name-only $$base $$head | grep -E '^(docs/SSOT|share/graph)/.*\\.json$$' || true)"; \
+	if [ -z "$$files" ]; then echo " - no SSOT JSON changed"; exit 0; fi; \
+	status=0; \
+	for f in $$files; do \
+	  case "$$f" in \
+	    docs/SSOT/graph/* )     S="docs/SSOT/graph-patterns.schema.json";; \
+	    share/graph/*stats*.json|share/graph/graph_stats.head.json ) S="docs/SSOT/graph-stats.schema.json";; \
+	    docs/SSOT/graph-correlations/* )  S="docs/SSOT/graph-correlations.schema.json";; \
+	    docs/SSOT/temporal/* )  S="docs/SSOT/temporal-patterns.schema.json";; \
+	    docs/SSOT/forecast/* )  S="docs/SSOT/pattern-forecast.schema.json";; \
+	    * ) S="";; \
+	  esac; \
+	  if [ -n "$$S" ]; then \
+	    echo " - $$f vs $$S"; \
+	    python3 scripts/eval/jsonschema_validate.py --schema "$$S" --instance "$$f" || status=2; \
+	  fi; \
+	done; \
+	exit $$status
+
 # ---------- Governance & Policy Gates ----------
 
 .PHONY: rules.numbering.check share.check
