@@ -248,6 +248,55 @@ ci.eval.bundle:
 	@EVAL_BUNDLES_DIR=_artifacts/eval/bundles EVAL_DIR=_artifacts/eval \
 	 python3 scripts/eval/build_bundle.py
 
+.PHONY: repair.apply ci.repair.apply eval.policydiff ci.eval.policydiff eval.report.repaired ci.eval.report.repaired ci.eval.repairplan
+
+repair.apply:
+	@REPAIR_PLAN=share/eval/repair_plan.json \
+	 REPAIRED_DIR=exports \
+	 REPAIRED_BASENAME=graph_repaired.json \
+	 python3 scripts/fix/apply_repair_plan.py
+
+ci.repair.apply:
+	@REPAIR_PLAN=_artifacts/eval/repair_plan.json \
+	 REPAIRED_DIR=_artifacts/exports \
+	 REPAIRED_BASENAME=graph_repaired.json \
+	 python3 scripts/fix/apply_repair_plan.py
+
+eval.report.repaired:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report_for_file.py exports/graph_repaired.json
+
+ci.eval.report.repaired:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/report_for_file.py _artifacts/exports/graph_repaired.json
+
+eval.policydiff:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/policy_diff.py
+
+ci.eval.policydiff:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/policy_diff.py
+
+# Build repair plan for local development
+eval.repairplan:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/build_repair_plan.py
+
+# Build repair plan for CI into _artifacts
+ci.eval.repairplan:
+	@EVAL_OUTDIR=_artifacts/eval \
+	 python3 scripts/eval/build_repair_plan.py
+
+# Profile targets for policy diff
+eval.profile.strict:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report.py
+
+eval.profile.dev:
+	@EVAL_OUTDIR=share/eval \
+	 python3 scripts/eval/report.py
+
 .PHONY: eval.index ci.eval.index
 
 # Build eval index (writes share/eval/index.md)
