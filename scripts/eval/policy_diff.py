@@ -30,7 +30,7 @@ def main() -> int:
     ok_strict, fail_strict = _summary(ROOT / "share" / "eval" / "report.json")
 
     # dev
-    code, so, se = _run(["make", "eval.profile.dev"])
+    _code, _so, _se = _run(["make", "eval.profile.dev"])
     ok_dev, fail_dev = _summary(ROOT / "share" / "eval" / "report.json")
 
     lines = []
@@ -40,15 +40,11 @@ def main() -> int:
     lines.append(f"*dev:*    ok={ok_dev} fail={fail_dev}")
     lines.append("")
     if fail_strict > fail_dev:
-        lines.append(
-            "**Observation:** Dev profile masks some failures present under strict."
-        )
+        lines.append("**Observation:** Dev profile masks some failures present under strict.")
     elif fail_strict == fail_dev:
         lines.append("**Observation:** Profiles produce identical pass/fail counts.")
     else:
-        lines.append(
-            "**Observation:** Dev profile surfaced more failures (unexpected)."
-        )
+        lines.append("**Observation:** Dev profile surfaced more failures (unexpected).")
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"[eval.policydiff] wrote {OUT.relative_to(ROOT)}")
     print("[eval.policydiff] OK")

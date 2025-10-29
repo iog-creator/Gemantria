@@ -14,7 +14,7 @@ MD_OUT = OUTDIR / "provenance.md"
 
 def _git(cmd: list[str]) -> str | None:
     try:
-        return subprocess.check_output(["git"] + cmd, cwd=ROOT).decode("utf-8").strip()
+        return subprocess.check_output(["git", *cmd], cwd=ROOT).decode("utf-8").strip()
     except Exception:
         return None
 
@@ -52,9 +52,7 @@ def main() -> int:
 
     thr_ver = None
     if thresholds.exists():
-        for line in thresholds.read_text(
-            encoding="utf-8", errors="ignore"
-        ).splitlines():
+        for line in thresholds.read_text(encoding="utf-8", errors="ignore").splitlines():
             if line.strip().startswith("version:"):
                 thr_ver = line.split(":", 1)[1].strip()
                 break
@@ -88,13 +86,10 @@ def main() -> int:
     lines.append(f"*git:* `{repo['git_head']}`  •  *branch:* `{repo['git_branch']}`")
     lines.append(f"*manifest_version:* {man_ver}  •  *thresholds_version:* {thr_ver}")
     lines.append(
-        f"*exports:* count={exports_data['count']}  •  "
-        f"total_size_bytes={exports_data['total_size_bytes']}"
+        f"*exports:* count={exports_data['count']}  •  " f"total_size_bytes={exports_data['total_size_bytes']}"
     )
     if latest_info:
-        lines.append(
-            f"*latest:* `{latest_info['path']}`  •  sha256={latest_info['sha256']}"
-        )
+        lines.append(f"*latest:* `{latest_info['path']}`  •  sha256={latest_info['sha256']}")
     lines.append("")
     MD_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
