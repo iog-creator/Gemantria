@@ -1,17 +1,24 @@
 {
+  "description": "Share directory synchronization manifest - maps canonical files to flat share/ exports",
   "items": [
-    {
-      "src": "AGENTS.md",
-      "dst": "share/AGENTS.md"
-    },
-    {
-      "src": "docs/SSOT/RULES_INDEX.md",
-      "dst": "share/RULES_INDEX.md"
-    },
-    {
-      "src": "docs/SSOT/MASTER_PLAN.md",
-      "dst": "share/SSOT_MASTER_PLAN.md"
-    },
+    {"src": "AGENTS.md", "dst": "share/AGENTS.md"},
+    {"src": "README.md", "dst": "share/README.md"},
+    {"src": "docs/SSOT/MASTER_PLAN.md", "dst": "share/MASTER_PLAN.md"},
+    {"src": "docs/SSOT/RULES_INDEX.md", "dst": "share/RULES_INDEX.md"},
+    {"src": "docs/SSOT/MASTER_PLAN.md", "dst": "share/SSOT_MASTER_PLAN.md"},
+    {"src": "docs/forest/overview.md", "dst": "share/forest_overview.md"},
+    {"src": "src/infra/env_loader.py", "dst": "share/env_loader.py"},
+    {"src": "src/services/api_server.py", "dst": "share/api_server.py"},
+    {"src": "scripts/export_stats.py", "dst": "share/export_stats.py"},
+    {"src": "scripts/generate_report.py", "dst": "share/generate_report.py"},
+    {"src": ".pre-commit-config.yaml", "dst": "share/pre-commit-config.yaml"},
+    {"src": ".github/pull_request_template.md", "dst": "share/pull_request_template.md"},
+    {"src": "reports/readiness/readiness_report.json", "dst": "share/readiness_report.json", "generate": "head_json", "max_bytes": 4096},
+    {"src": "reports/readiness/book_run.partial.json", "dst": "share/book_run.partial.json", "generate": "head_json", "max_bytes": 4096},
+    {"src": "reports/readiness/book_plan.json", "dst": "share/book_plan.json", "generate": "head_json", "max_bytes": 4096},
+    {"src": "exports/graph_stats.json", "dst": "share/graph_stats.head.json", "generate": "head_json", "max_bytes": 4096},
+    {"src": "exports/pattern_forecast.json", "dst": "share/pattern_forecast.head.json", "generate": "head_json", "max_bytes": 4096},
+    {"src": "exports/temporal_patterns.json", "dst": "share/temporal_patterns.head.json", "generate": "head_json", "max_bytes": 4096},
     {
       "src": "docs/SSOT/graph-patterns.schema.json",
       "dst": "share/SSOT_graph-patterns.schema.json"
@@ -29,18 +36,6 @@
       "dst": "share/SSOT_temporal-patterns.schema.json"
     },
     {
-      "src": "README.md",
-      "dst": "share/README.md"
-    },
-    {
-      "src": "scripts/generate_report.py",
-      "dst": "share/generate_report.py"
-    },
-    {
-      "src": "scripts/export_stats.py",
-      "dst": "share/export_stats.py"
-    },
-    {
       "src": "scripts/rules_guard.py",
       "dst": "share/rules_guard.py"
     },
@@ -49,34 +44,8 @@
       "dst": "share/rules_audit.py"
     },
     {
-      "src": "src/infra/env_loader.py",
-      "dst": "share/env_loader.py"
-    },
-    {
-      "src": "src/services/api_server.py",
-      "dst": "share/api_server.py"
-    },
-    {
       "src": "config/book_plan.yaml",
       "dst": "share/book_plan.json",
-      "generate": "head_json",
-      "max_bytes": 2048
-    },
-    {
-      "src": "exports/graph_stats.json",
-      "dst": "share/graph_stats.head.json",
-      "generate": "head_json",
-      "max_bytes": 2300
-    },
-    {
-      "src": "exports/pattern_forecast.json",
-      "dst": "share/pattern_forecast.head.json",
-      "generate": "head_json",
-      "max_bytes": 2048
-    },
-    {
-      "src": "exports/temporal_patterns.json",
-      "dst": "share/temporal_patterns.head.json",
       "generate": "head_json",
       "max_bytes": 2048
     }
