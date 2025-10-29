@@ -22,9 +22,7 @@ def _read_yaml(path: pathlib.Path) -> Any:
         with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
     except Exception as e:
-        raise RuntimeError(
-            "PyYAML is required for eval.report. Please `pip install pyyaml`."
-        ) from e
+        raise RuntimeError("PyYAML is required for eval.report. Please `pip install pyyaml`.") from e
 
 
 def _load_json(path: pathlib.Path) -> Any:
@@ -121,9 +119,7 @@ def _assert_not_null_all(vals: list[Any]) -> dict[str, Any]:
     return {"status": "OK" if not bad else "FAIL", "null_indices": bad}
 
 
-def _assert_frac_in_range(
-    vals: list[Any], lo: float, hi: float, min_frac: float
-) -> dict[str, Any]:
+def _assert_frac_in_range(vals: list[Any], lo: float, hi: float, min_frac: float) -> dict[str, Any]:
     nums = [v for v in vals if isinstance(v, int | float)]
     if not nums:
         return {"status": "FAIL", "error": "no numeric values"}
@@ -167,9 +163,7 @@ def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
         if op == "not_null_all":
             r = _assert_not_null_all(vals)
         elif op == "frac_in_range":
-            r = _assert_frac_in_range(
-                vals, float(a["min"]), float(a["max"]), float(a["min_frac"])
-            )
+            r = _assert_frac_in_range(vals, float(a["min"]), float(a["max"]), float(a["min_frac"]))
         elif op == "if_present_eq_all":
             r = _assert_if_present_eq_all(vals, a.get("value"))
         else:
@@ -391,9 +385,7 @@ def main() -> int:
         args = tsk.get("args", {})
         impl = KIND_IMPL.get(kind)
         if not impl:
-            results.append(
-                {"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"}
-            )
+            results.append({"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"})
             all_ok = False
             continue
         r = impl(args)
