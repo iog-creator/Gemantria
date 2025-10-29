@@ -49,6 +49,6 @@
 | 044 | 044-share-manifest-contract.mdc | # 044 — Share Manifest Contract (AlwaysApply) |
 | 045 | 045-rerank-blend-SSOT.mdc | # 045 — Rerank Blend is SSOT (AlwaysApply) |
 | 046 | 046-ci-hermetic-fallbacks.mdc | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
-| 047 | 047-nightly-metrics-contract.mdc | # 047 — Nightly Metrics Contract (AlwaysApply) |
-| 048 | 048-agents-docs-coverage.mdc | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 047 | 047-reserved.mdc | # --- |
+| 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
