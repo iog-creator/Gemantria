@@ -201,7 +201,7 @@ def log_qwen_health(
 class PipelineState(TypedDict, total=False):
     book_name: str
     mode: str
-    nouns: list[str]  # Raw noun strings for processing
+    nouns: list[dict[str, Any]]  # Raw noun dictionaries for processing
     batch_result: BatchResult
     validated_nouns: list[dict[str, Any]]  # Nouns after batch validation
     enriched_nouns: list[dict[str, Any]]  # Nouns with AI enrichment
