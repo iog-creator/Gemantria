@@ -52,6 +52,11 @@ def main() -> int:
             "blend_mismatch": 0,
             "missing_fields": 0,
             "examples": {"blend_mismatch": [], "missing_fields": []},
+            "aliases_used": {
+                "cosine_via_similarity": 0,
+                "rerank_via_legacy": 0,
+                "strength_via_legacy": 0,
+            },
         }
         _dump_json(Path("share/eval/edges/blend_ssot_report.json"), out)
         _dump_json(
@@ -65,13 +70,32 @@ def main() -> int:
     checked = 0
     mism = 0
     miss = 0
+    alias_counts = {
+        "cosine_via_similarity": 0,
+        "rerank_via_legacy": 0,
+        "strength_via_legacy": 0,
+    }
     ex_mism: list[dict[str, Any]] = []
     ex_miss: list[dict[str, Any]] = []
 
     for e in edges:
+        # Accept SSOT names first, then legacy aliases
         cos = e.get("cosine")
+        if cos is None:
+            sim = e.get("similarity")
+            if sim is not None:
+                cos = sim
+                alias_counts["cosine_via_similarity"] += 1
+
         rrs = e.get("rerank_score")
+        if rrs is None and e.get("rerank") is not None:
+            rrs = e.get("rerank")
+            alias_counts["rerank_via_legacy"] += 1
+
         es = e.get("edge_strength")
+        if es is None and e.get("strength") is not None:
+            es = e.get("strength")
+            alias_counts["strength_via_legacy"] += 1
         if cos is None or rrs is None or es is None:
             miss += 1
             if len(ex_miss) < 10:
@@ -102,6 +126,7 @@ def main() -> int:
         "blend_mismatch": mism,
         "missing_fields": miss,
         "examples": {"blend_mismatch": ex_mism, "missing_fields": ex_miss},
+        "aliases_used": alias_counts,
     }
     _dump_json(Path("share/eval/edges/blend_ssot_report.json"), out)
 
@@ -113,6 +138,7 @@ def main() -> int:
         f"- checked_edges: {checked}",
         f"- blend_mismatch: {mism}",
         f"- missing_fields: {miss}",
+        f"- aliases_used: {alias_counts}",
     ]
     _dump_json(Path("share/eval/edges/blend_ssot_report.md"), {"lines": md})
 
