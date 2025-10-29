@@ -9,6 +9,11 @@ import time
 from pathlib import Path
 from typing import Any
 
+try:
+    import yaml  # type: ignore  # hard-required by requirements-dev.txt
+except Exception:
+    yaml = None
+
 BASE = Path(__file__).resolve().parent.parent
 REPORTS = BASE / "reports" / "readiness"
 LOGS = BASE / "logs" / "book"
@@ -32,8 +37,8 @@ def _load_yaml_or_json(p: Path) -> dict[str, Any]:
     if not p.exists():
         return DEFAULT_CFG
     if p.suffix.lower() in (".yaml", ".yml"):
-        import yaml  # type: ignore  # hard-required by requirements-dev.txt  # noqa: E402
-
+        if yaml is None:
+            raise RuntimeError("PyYAML not available but YAML config requested")
         return yaml.safe_load(p.read_text(encoding="utf-8"))
     return json.loads(p.read_text(encoding="utf-8"))
 

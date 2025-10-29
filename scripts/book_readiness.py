@@ -18,6 +18,16 @@ import sys
 import time
 from pathlib import Path
 
+try:
+    import yaml  # type: ignore
+except Exception:
+    yaml = None
+try:
+    from jsonschema import ValidationError, validate
+except Exception:
+    ValidationError = None  # type: ignore
+    validate = None         # type: ignore
+
 VECTOR_DIM = 1024
 READINESS_DIR = Path("reports/readiness")
 READINESS_DIR.mkdir(parents=True, exist_ok=True)
@@ -69,8 +79,8 @@ def _load_cfg(config_path):
     config_path = Path(config_path)
     with open(config_path) as f:
         if config_path.suffix.lower() in (".yaml", ".yml"):
-            import yaml  # type: ignore  # noqa: E402
-
+            if yaml is None:
+                raise RuntimeError("PyYAML not available but YAML config requested")
             return yaml.safe_load(f)
         return json.load(f)
 
@@ -201,7 +211,6 @@ def cmd_compute(args):
 
 def cmd_gate(args):
     """Validate head artifacts against SSOT schemas. HARD-REQUIRED."""
-    import json  # noqa: E402
 
     # Load existing report
     if not READINESS_JSON.exists():
@@ -224,10 +233,24 @@ def cmd_gate(args):
 
     # Validate graph stats schema
     try:
-        from jsonschema import ValidationError, validate  # noqa: E402
-
-        # Graph stats schema
-        schema_path = Path("docs/SSOT/graph-stats.schema.json")
+        if validate is None or ValidationError is None:
+            raise RuntimeError("jsonschema library not available")
+        # Prefer schemas under docs/SSOT/schemas; fall back if needed.
+        candidate_dirs = [Path("docs/SSOT/schemas"), Path("docs/SSOT")]
+        schema_path = None
+        for d in candidate_dirs:
+            if not d.exists():
+                continue
+            # Accept common names used across PRs: graph-stats or graph_export
+            for name in ("graph-stats.schema.json", "graph_export.schema.json"):
+                p = d / name
+                if p.exists():
+                    schema_path = p
+                    break
+            if schema_path:
+                break
+        if schema_path is None:
+            raise FileNotFoundError("graph schema not found under docs/SSOT[/schemas]")
         if schema_path.exists():
             schema = json.loads(schema_path.read_text())
             # Load current stats (assume graph_stats.head.json exists)

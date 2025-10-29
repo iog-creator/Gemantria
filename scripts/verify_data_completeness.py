@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 import os
 import sys
+from typing import Tuple, List
 
 # REQUIRED across scripts: load .env before any getenv/DB access
 # (prevents DSN/connection issues)
@@ -32,16 +34,22 @@ TABLE_QUERIES: list[tuple[str, str]] = [
 JOIN_QUERIES: list[tuple[str, str]] = [
     (
         "network→concepts",
-        "SELECT cn.id, c.id AS concept_id FROM concept_network cn "
-        "LEFT JOIN concepts c ON c.id = cn.concept_id "
-        "WHERE cn.id IS NOT NULL LIMIT 10",
+        (
+            "SELECT cn.id, c.id AS concept_id "
+            "FROM concept_network cn "
+            "LEFT JOIN concepts c ON c.id = cn.concept_id "
+            "WHERE cn.id IS NOT NULL LIMIT 10"
+        ),
     ),
     (
         "relations→concepts",
-        "SELECT cr.id, cs.id AS src_cid, ct.id AS tgt_cid FROM concept_relations cr "
-        "LEFT JOIN concepts cs ON cs.id = cr.source_id "
-        "LEFT JOIN concepts ct ON ct.id = cr.target_id "
-        "WHERE cr.id IS NOT NULL LIMIT 10",
+        (
+            "SELECT cr.id, cs.id AS src_cid, ct.id AS tgt_cid "
+            "FROM concept_relations cr "
+            "LEFT JOIN concepts cs ON cs.id = cr.source_id "
+            "LEFT JOIN concepts ct ON ct.id = cr.target_id "
+            "WHERE cr.id IS NOT NULL LIMIT 10"
+        ),
     ),
 ]
 
