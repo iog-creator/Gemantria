@@ -16,6 +16,7 @@ ALLOWED = {
     "030-share-sync.mdc",
     "039-execution-contract.mdc",
     "040-ci-triage-playbook.mdc",
+    "049-gpt5-contract-v5.2.mdc",
 }
 
 

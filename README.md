@@ -25,6 +25,7 @@ Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria 
 - **🔒 Production Safety**: Qwen Live Gate and comprehensive validation gates
 - **📈 Evaluation Pipeline**: Edge audit, anomaly detection, and quality monitoring
 - **🎯 Deterministic Processing**: Reproducible results with comprehensive testing
+- **🎨 Figma MCP Integration**: Real-time design collaboration with 35+ automation tools ([Setup Guide](docs/FIGMA_MCP_SETUP.md))
 
 ---
 
@@ -382,6 +383,7 @@ Nightly coverage: non-blocking full-repo pytest coverage (see Actions → covera
   <img alt="MyPy Errors" src="share/eval/badges/mypy.svg" />
   <img alt="Ruff Issues" src="share/eval/badges/ruff.svg" />
   <img alt="Coverage %"  src="share/eval/badges/coverage.svg" />
+  <img alt="Graph Anoms" src="share/eval/badges/graph.svg" />
 </p>
 <sub>Badges refresh automatically when repo variable <code>ALLOW_BADGE_COMMITS=true</code> on main/schedule; otherwise they appear after manual commit.</sub>
 

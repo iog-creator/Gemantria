@@ -58,6 +58,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Empty DB tolerance**: Verify scripts handle missing tables gracefully in CI (zero counts allowed when DB empty)
 - **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
 - **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
+- **SSOT JSONSchema validation**: PR-diff scoped validation of JSON files against schemas (non-blocking nightly sweep)
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
@@ -80,9 +81,20 @@ All exported edges now carry a `rerank` score and an `edge_strength = 0.5*cos + 
 Edges are classified as **strong** (≥0.90), **weak** (≥0.75), or **other**.
 Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 
+### SSOT Blend Validation (Phase-10)
+Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` contract (Rule-045).
+- **Validator**: `scripts/eval/validate_blend_ssot.py` (non-fatal HINTs only)
+- **Field aliases**: Accepts SSOT names first, then legacy (`similarity`→`cosine`, `rerank`→`rerank_score`, `strength`→`edge_strength`)
+- **Exporter**: `scripts/export_graph.py` emits SSOT field names with proper blend computation
+- **Reclassifier**: `scripts/eval/reclassify_edges.py` prefers SSOT edge_strength for classification
+- **Defaults**: `EDGE_ALPHA=0.5`, `BLEND_TOL=0.005`
+- **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
+- **Integration**: Wired into `ops.verify` as non-fatal validation step
+
 ## How agents should use rules
 
 * Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
 * Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
@@ -140,4 +152,5 @@ Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
 | 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
 | 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
 | 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->

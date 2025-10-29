@@ -70,13 +70,11 @@ def scan():
             if not match(f.name) and not match(str(f)):
                 continue
             try:
-                mtime = datetime.fromtimestamp(f.stat().st_mtime).isoformat(
-                    timespec="seconds"
-                )
+                mtime = datetime.fromtimestamp(f.stat().st_mtime).isoformat(timespec="seconds")
                 # peek first 2 lines
                 head = []
                 with f.open("r", encoding="utf-8", errors="ignore") as fh:
-                    for i, line in enumerate(fh):
+                    for _i, line in enumerate(fh):
                         if line.strip():
                             head.append(line.strip())
                         if len(head) >= 2:
@@ -153,11 +151,7 @@ def print_table(rows):
         upd(gi.get("commit", ""), "git_commit")
         upd(gi.get("date", ""), "git_date")
         upd(
-            (
-                (gi.get("msg", "")[:60] + "…")
-                if gi.get("msg", "") and len(gi["msg"]) > 60
-                else gi.get("msg", "")
-            ),
+            ((gi.get("msg", "")[:60] + "…") if gi.get("msg", "") and len(gi["msg"]) > 60 else gi.get("msg", "")),
             "git_msg",
         )
         upd(str(r["looks_like_nouns"]), "looks_like_nouns")
@@ -175,17 +169,11 @@ def print_table(rows):
             str(r["size_kb"]),
             gi.get("commit", ""),
             gi.get("date", ""),
-            (
-                (gi.get("msg", "")[:60] + "…")
-                if gi.get("msg", "") and len(gi["msg"]) > 60
-                else gi.get("msg", "")
-            ),
+            ((gi.get("msg", "")[:60] + "…") if gi.get("msg", "") and len(gi["msg"]) > 60 else gi.get("msg", "")),
             str(r["looks_like_nouns"]),
             str(r["content_flag"]),
         ]
-        print(
-            " | ".join(row_vals[j].ljust(widths[cols[j]]) for j in range(len(row_vals)))
-        )
+        print(" | ".join(row_vals[j].ljust(widths[cols[j]]) for j in range(len(row_vals))))
     print("\n[scan] Tip: to inspect a row's head lines, run:\n  sed -n '1,5p' <PATH>\n")
     return 0
 

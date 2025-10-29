@@ -243,6 +243,7 @@ ops.verify:
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
 	@python3 scripts/ops/verify_repo.py
+	$(MAKE) -s eval.edges.blend.validate   # non-fatal HINTs; hermetic
 	@echo "[ops.verify] OK"
 
 # Identical to local; intentionally not part of CI
@@ -524,7 +525,7 @@ eval.verify.integrity.soft:
 ci.db.ensure:
 	@bash scripts/ci/db_ensure.sh || true
 
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify eval.edges.blend.validate
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -541,6 +542,8 @@ eval.schema.verify:
 eval.edges.reclassify:
 	@echo "[eval.edges.reclassify] Filling rerank where missing, computing edge_strength, classifying, and emitting counts..."
 	@GRAPH_JSON=share/graph/graph_latest.json MOCK_AI=1 scripts/eval/reclassify_edges.py
+eval.edges.blend.validate:
+	@python3 scripts/eval/validate_blend_ssot.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
 eval.quality.check:
@@ -608,3 +611,46 @@ ci.coverage.full:
 .PHONY: ci.coverage.badge   # (optional later)
 ci.coverage.badge:
 	@echo "[ci.coverage.badge] TODO: generate svg from coverage.xml"
+
+## SSOT JSONSchema validation
+.PHONY: ssot.validate ssot.validate.changed
+SSOT_SCHEMAS := docs/SSOT/SSOT_graph-patterns.schema.json docs/SSOT/SSOT_graph-stats.schema.json docs/SSOT/SSOT_temporal-patterns.schema.json docs/SSOT/SSOT_pattern-forecast.schema.json
+ssot.validate:
+	@echo "[ssot.validate] Validating all SSOT JSON against schemas..."
+	@python -m pip -q install 'jsonschema>=4.21,<5' >/dev/null 2>&1 || true
+	@set -e; \
+	for S in $(SSOT_SCHEMAS); do \
+	  case "$$S" in \
+	    *graph-patterns* ) INST="docs/SSOT/graph/*.json";; \
+	    *graph-stats* )    INST="share/graph/*stats*.json share/graph/graph_stats.head.json";; \
+	    *temporal-patterns* ) INST="docs/SSOT/temporal/*.json";; \
+	    *pattern-forecast* )  INST="docs/SSOT/forecast/*.json";; \
+	    * ) INST="";; \
+	  esac; \
+	  if [ -n "$$INST" ]; then \
+	    echo " - $$S"; \
+	    scripts/eval/jsonschema_validate.py --schema "$$S" --instance $$INST || exit 2; \
+	  fi; \
+	done
+
+ssot.validate.changed:
+	@echo "[ssot.validate.changed] Validating only changed SSOT JSON..."
+	@python -m pip -q install 'jsonschema>=4.21,<5' >/dev/null 2>&1 || true
+	@base="${BASE_SHA:-$(git merge-base origin/main HEAD)}"; head="${HEAD_SHA:-HEAD}"; \
+	files="$(git diff --name-only $$base $$head | grep -E '^(docs/SSOT|share/graph)/.*\\.json$$' || true)"; \
+	if [ -z "$$files" ]; then echo " - no SSOT JSON changed"; exit 0; fi; \
+	status=0; \
+	for f in $$files; do \
+	  case "$$f" in \
+	    docs/SSOT/graph/* )     S="docs/SSOT/SSOT_graph-patterns.schema.json";; \
+	    share/graph/*stats*.json|share/graph/graph_stats.head.json ) S="docs/SSOT/SSOT_graph-stats.schema.json";; \
+	    docs/SSOT/temporal/* )  S="docs/SSOT/SSOT_temporal-patterns.schema.json";; \
+	    docs/SSOT/forecast/* )  S="docs/SSOT/SSOT_pattern-forecast.schema.json";; \
+	    * ) S="";; \
+	  esac; \
+	  if [ -n "$$S" ]; then \
+	    echo " - $$f vs $$S"; \
+	    scripts/eval/jsonschema_validate.py --schema "$$S" --instance "$$f" || status=2; \
+	  fi; \
+	done; \
+	exit $$status

@@ -27,21 +27,16 @@ def _badge(label: str, value: str, color: str) -> str:
 def main() -> int:
     print("[eval.badges] starting")
     BADGES.mkdir(parents=True, exist_ok=True)
-    ok = 0
     fail = 0
     if REPORT_JSON.exists():
         doc = json.loads(REPORT_JSON.read_text(encoding="utf-8"))
         s = doc.get("summary", {})
-        ok = int(s.get("ok_count", 0))
+        int(s.get("ok_count", 0))
         fail = int(s.get("fail_count", 0))
     status = "OK" if fail == 0 else "FAIL"
     color = "#4c1" if fail == 0 else "#e05d44"
-    (BADGES / "report_status.svg").write_text(
-        _badge("report", status, color), encoding="utf-8"
-    )
-    (BADGES / "strict_gate.svg").write_text(
-        _badge("strict", status, color), encoding="utf-8"
-    )
+    (BADGES / "report_status.svg").write_text(_badge("report", status, color), encoding="utf-8")
+    (BADGES / "strict_gate.svg").write_text(_badge("strict", status, color), encoding="utf-8")
     print(f"[eval.badges] wrote {BADGES.relative_to(ROOT)}/report_status.svg")
     print(f"[eval.badges] wrote {BADGES.relative_to(ROOT)}/strict_gate.svg")
     print("[eval.badges] OK")
