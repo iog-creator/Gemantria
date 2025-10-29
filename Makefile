@@ -307,3 +307,20 @@ eval.index:
 ci.eval.index:
 	@EVAL_DIR=_artifacts/eval \
 	 python3 scripts/eval/build_index.py
+
+# ---------- Governance & Policy Gates ----------
+
+.PHONY: rules.numbering.check share.check
+
+# Check rule numbering integrity (no duplicates, required rules present)
+rules.numbering.check:
+	@python3 scripts/check_rule_numbering.py
+
+# Verify share mirror is clean (no drift from source files)
+share.check:
+	@$(MAKE) share.sync >/dev/null
+	@if git diff --quiet --exit-code -- share; then \
+	  echo "[share.check] OK — share mirror is clean"; \
+	else \
+	  echo "[share.check] OUT OF DATE — run 'make share.sync' and commit updates"; exit 1; \
+	fi
