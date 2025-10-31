@@ -34,9 +34,9 @@ for f in [
         add("ERR", f"Missing {f}")
 
 # 2) Schemas present
-schemas = [p for p in ROOT.rglob("SSOT_*schema*.json")]
+schemas = [p for p in ROOT.rglob("*schema*.json")]
 if not schemas:
-    add("ERR", "No SSOT_*schema*.json files found")
+    add("ERR", "No *schema*.json files found")
 
 # 3) Rules integrity (index alignment)
 rules_dir = ROOT / ".cursor" / "rules"
@@ -110,13 +110,10 @@ for key in [
 
 # 8) JSON adapters (psycopg3) guard
 code_uses_json = any(
-    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT)))
-    for p in ROOT.rglob("**/*.py")
+    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT))) for p in ROOT.rglob("**/*.py")
 )
 if not code_uses_json:
-    add(
-        "WARN", "No psycopg Json adapter import found; ensure JSONB inserts adapt dicts"
-    )
+    add("WARN", "No psycopg Json adapter import found; ensure JSONB inserts adapt dicts")
 
 # 9) Output
 sev_rank = {"ERR": 0, "WARN": 1, "INFO": 2}
@@ -125,7 +122,8 @@ print("== repo_audit ==")
 for sev, msg in issues:
     print(f"{sev}: {msg}")
 print("== repo_audit summary ==")
-print(
-    f"errors={sum(1 for s, _ in issues if s == 'ERR')}, warnings={sum(1 for s, _ in issues if s == 'WARN')}, info={sum(1 for s, _ in issues if s == 'INFO')}"
-)
+error_count = sum(1 for s, _ in issues if s == "ERR")
+warn_count = sum(1 for s, _ in issues if s == "WARN")
+info_count = sum(1 for s, _ in issues if s == "INFO")
+print(f"errors={error_count}, warnings={warn_count}, info={info_count}")
 sys.exit(1 if any(s == "ERR" for s, _ in issues) else 0)

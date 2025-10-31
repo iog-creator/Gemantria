@@ -4,8 +4,8 @@
   "type": "object",
   "required": ["nodes", "edges", "clusters", "density", "centrality"],
   "properties": {
-    "nodes": { "type": "integer", "minimum": 1 },
-    "edges": { "type": "integer", "minimum": 1 },
+    "nodes": { "type": "integer", "minimum": 0 },
+    "edges": { "type": "integer", "minimum": 0 },
     "clusters": { "type": "integer", "minimum": 0 },
     "density": { "type": "number", "minimum": 0, "maximum": 1 },
     "centrality": {

@@ -24,17 +24,11 @@ def density(n_nodes, n_edges):
 
 
 def semantic_cohesion(v, cluster_vecs):
-    return (
-        0.0 if not cluster_vecs else float(np.mean([_cos(v, u) for u in cluster_vecs]))
-    )
+    return 0.0 if not cluster_vecs else float(np.mean([_cos(v, u) for u in cluster_vecs]))
 
 
 def bridge_score(v, out_cluster_vecs):
-    return (
-        0.0
-        if not out_cluster_vecs
-        else float(np.mean([_cos(v, u) for u in out_cluster_vecs]))
-    )
+    return 0.0 if not out_cluster_vecs else float(np.mean([_cos(v, u) for u in out_cluster_vecs]))
 
 
 def diversity_local(neigh_vecs):

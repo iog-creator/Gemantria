@@ -29,9 +29,7 @@ def main() -> int:
         print("[repair.apply] FAIL no exports/graph_latest.json")
         return 2
     if not PLAN_J.exists():
-        print(
-            "[repair.apply] FAIL no share/eval/repair_plan.json (run make eval.repairplan)"
-        )
+        print("[repair.apply] FAIL no share/eval/repair_plan.json (run make eval.repairplan)")
         return 2
 
     base = _load_json(LATEST)
@@ -51,14 +49,12 @@ def main() -> int:
     out["nodes"] = nodes
     ts = time.strftime("%Y%m%d%H%M%S")
     out_path = EXPORTS / f"graph_repaired_{ts}.json"
-    (EXPORTS / "graph_repaired.json").write_text(
-        json.dumps(out, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (EXPORTS / "graph_repaired.json").write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
     out_path.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
 
     print(f"[repair.apply] added_stub_nodes={len(added)}")
     print(f"[repair.apply] wrote {out_path.relative_to(ROOT)}")
-    print(f"[repair.apply] wrote {(EXPORTS/'graph_repaired.json').relative_to(ROOT)}")
+    print(f"[repair.apply] wrote {(EXPORTS / 'graph_repaired.json').relative_to(ROOT)}")
     print("[repair.apply] OK")
     return 0
 

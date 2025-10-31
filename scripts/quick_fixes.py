@@ -77,15 +77,9 @@ def fix_b904(lines: list[str]) -> list[str]:
             cur = lines[i]
             if cur.startswith(indent + "    "):  # inside block
                 mr = RE_RAISE_SIMPLE.match(cur)
-                if (
-                    mr
-                    and mr.group(1) == indent + "    "
-                    and f" from {exc_var}" not in cur
-                ):
+                if mr and mr.group(1) == indent + "    " and f" from {exc_var}" not in cur:
                     # Don't modify if 'from' already present
-                    out.append(
-                        f"{mr.group(1)}raise {mr.group(2)}({mr.group(3)}) from {exc_var}"
-                    )
+                    out.append(f"{mr.group(1)}raise {mr.group(2)}({mr.group(3)}) from {exc_var}")
                 else:
                     out.append(cur)
                 i += 1

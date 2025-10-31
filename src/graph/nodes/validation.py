@@ -1,13 +1,15 @@
 from __future__ import annotations
+
 import os
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from src.core.hebrew_utils import calculate_gematria
 from src.core.ids import normalize_hebrew
-from src.infra.db import get_bible_ro, sql_is_write
+from src.infra.db import get_bible_ro
+
 
 # Public API
-def validate_noun(hebrew_surface: str) -> Dict[str, Any]:
+def validate_noun(hebrew_surface: str) -> dict[str, Any]:
     """
     Deterministic validation:
     - Code gematria/normalization are the source of truth.
@@ -17,7 +19,7 @@ def validate_noun(hebrew_surface: str) -> Dict[str, Any]:
     norm = normalize_hebrew(hebrew_surface)
     gematria = calculate_gematria(norm)
 
-    db_info: Dict[str, Any] = {
+    db_info: dict[str, Any] = {
         "present_in_bible_db": False,
         "strong_number": None,
         "lemma_frequency": None,
@@ -29,30 +31,34 @@ def validate_noun(hebrew_surface: str) -> Dict[str, Any]:
         ro = get_bible_ro()
         # Example parameterized SQL; projects may adjust to real schema.
         # Finds lemma row + frequency, and grabs a small context window.
-        rows = list(ro.execute(
-            """
+        rows = list(
+            ro.execute(
+                """
             SELECT strong_number, lemma, frequency
             FROM lemmas
             WHERE lemma = %s
             """,
-            (norm,),
-        ))
+                (norm,),
+            )
+        )
         if rows:
             strong, _lemma, freq = rows[0]
             db_info["present_in_bible_db"] = True
             db_info["strong_number"] = strong
             db_info["lemma_frequency"] = int(freq)
 
-            ctx = list(ro.execute(
-                """
+            ctx = list(
+                ro.execute(
+                    """
                 SELECT book, chapter, verse, verse_text
                 FROM verses
                 WHERE lemma = %s
                 ORDER BY book, chapter, verse
                 LIMIT 5
                 """,
-                (norm,),
-            ))
+                    (norm,),
+                )
+            )
             db_info["verse_context"] = [
                 {"book": c[0], "chapter": int(c[1]), "verse": int(c[2]), "text": c[3]} for c in ctx
             ]
