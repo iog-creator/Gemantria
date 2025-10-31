@@ -372,22 +372,7 @@ Run:
 make eval.package
 ```
 
-Runs: snapshot → html → bundle → badges → release_notes → bundle.all → release_manifest → verify.integrity, then prints `[eval.package] OK`.
-
-### Manifest viewer
-Dashboard now renders `release_manifest.json` inline (summary + first 200 artifacts). Works offline.
-
-### Download-all bundle
-```bash
-make eval.bundle.all
-```
-Outputs a deterministic tar.gz under `share/eval/bundles/`.
-
-### Integrity verification
-```bash
-make eval.verify.integrity
-```
-Writes `share/eval/integrity_report.txt`, exits nonzero on mismatches.
+Runs: snapshot → html → bundle → badges → release_notes → release_manifest, then prints `[eval.package] OK`.
 
 ### HTML badges embed
 Badges now render inside `share/eval/index.html` when present (no external hosting required).
@@ -410,67 +395,3 @@ make eval.release_manifest
 Artifact:
 
 * `share/eval/release_manifest.json` — path, size, sha256 for all packaged artifacts.
-
-### Convenience
-```bash
-make eval.open
-```
-Opens the offline dashboard.
-
-### Governance
-When `share/eval/release_manifest.json` is present, `make ops.verify` now runs integrity verification as part of the ops gate.
-
-### Centrality & Edge Strength
-- `make eval.graph.centrality` writes `share/eval/centrality.json` with degree/betweenness/eigenvector.
-- `make eval.graph.rerank_blend` fills missing rerank and computes `edge_strength = 0.5*cos + 0.5*rerank` with classes {strong, weak, other}.
-- `make eval.package` runs both and updates dashboard + manifest.
-
-### Rerank provider & cache
-- Configure (optional) LM Studio provider:
-  - `export RERANK_PROVIDER=lmstudio`
-  - `export LMSTUDIO_RERANK_URL=http://127.0.0.1:1234/v1/rerank`
-  - `export LMSTUDIO_RERANK_MODEL=qwen2.5-rerank`
-- Cache lives in `.cache/rerank/` to ensure reproducibility. Safe to delete; it will repopulate.
-
-### Schema verification
-```bash
-make eval.schema.verify
-```
-Validates `graph_latest.json`, `centrality.json`, `release_manifest.json` via JSON Schema. Runs automatically inside `eval.package`.
-
-### CSV & Delta
-- `make eval.graph.tables` → `share/eval/nodes.csv`, `share/eval/edges.csv`
-- `make eval.graph.delta`  → `share/eval/delta.json` and `share/eval/badges/edges_delta.svg`
-- Dashboard shows an optional Delta summary. If badge loop is enabled, all `badges/*.svg` display automatically.
-
-### Snapshot & Provenance
-- `make eval.snapshot.rotate` writes `graph_prev.json` from the current `graph_latest.json`.
-- `make eval.provenance` writes `provenance.json` (git describe, counts, hashes).
-- `make eval.package` includes both; dashboard shows a Provenance pane.
-- `make ops.verify` now fails if required artifacts (graph, centrality, manifest, provenance) are missing.
-
-### Quality & Summary
-- Configure thresholds (optional):
-  - `Q_MAX_MISSING_RERANK_PCT` (default 0)
-  - `Q_MIN_STRONG_OR_WEAK` (default 1)
-  - `Q_REQUIRE_NONZERO_EIG` (default 1)
-- Run:
-```bash
-make eval.quality.check
-make eval.summary
-```
-- Outputs: `share/eval/quality_report.txt`, `share/eval/summary.md`, `share/eval/summary.json`
-- `eval.package` runs both and shows the result on the dashboard.
-
-### Edge thresholds, badge, and calibration (MANDATORY)
-- Env knobs (defaults): `EDGE_BLEND_WEIGHT=0.5`, `EDGE_STRONG_THRESH=0.90`, `EDGE_WEAK_THRESH=0.75`
-- Generate suggestions:
-```bash
-make eval.graph.calibrate
-cat share/eval/calibration_suggest.json
-```
-- Override for a run:
-```bash
-EDGE_STRONG_THRESH=0.80 EDGE_WEAK_THRESH=0.65 make eval.package
-```
-- The QUALITY badge is generated at `share/eval/badges/quality.svg` and is **required** by `ops.verify`.
