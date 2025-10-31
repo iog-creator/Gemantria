@@ -432,3 +432,9 @@ eval.release_manifest:
 
 ci.eval.release_manifest:
 	@python3 scripts/eval/build_release_manifest.py
+
+# --- Rerank calibration (local smoke) ---
+.PHONY: eval.graph.calibrate.adv
+eval.graph.calibrate.adv:
+	@echo "[eval.graph.calibrate.adv] advanced calibration with rerank blend validation"
+	@python3 scripts/eval/calibrate_advanced.py
