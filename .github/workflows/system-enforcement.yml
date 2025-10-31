@@ -8,16 +8,17 @@ concurrency:
 jobs:
   enforce:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+      CI: "true"
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
     # Only enforce on first-party contexts:
     #  - push on main (internal)
     #  - first-party PRs (not forks)
     if: >
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
-    env:
-      CI: "true"
-      PR_BODY: ${{ github.event.pull_request.body }}
-      BASE_REF: ${{ github.event.pull_request.base.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
