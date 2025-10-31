@@ -61,6 +61,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **SSOT JSONSchema validation**: PR-diff scoped validation of JSON files against schemas (non-blocking nightly sweep)
 - **Rules audit strictness**: No ALLOW_RULES_GAP toggle; RESERVED stubs (047/048) maintain contiguous numbering
 - **Pre-commit ordering**: `share.sync` runs before `repo.audit` to ensure share/ directory is synchronized before validation
+- **Ruff version pinning**: CI workflows hard-pin ruff==0.13.0 with version verification to defeat cache drift (enforce-ruff.yml, lint-nightly.yml, soft-checks.yml, ci.yml)
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
