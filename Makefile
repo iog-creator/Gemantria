@@ -1,24 +1,6 @@
 
 
 
-# ------------------------------------------------------------------
-# Duplicate Makefile target guard (CI smoke-friendly; no hard gate)
-# ------------------------------------------------------------------
-.PHONY: targets.check.dupes
-targets.check.dupes:
-	@dupes=$$(awk -F: '/^[[:alnum:]_.-][^:]*:/ { \
-	  if ($$1 !~ /^\.PHONY/) { \
-	    split($$1,a,/ +/); \
-	    for(i in a) if (a[i]!="" && a[i]!~/^\.PHONY/) print a[i] \
-	  } \
-	}' Makefile | sort | uniq -d); \
-	if [ -n "$$dupes" ]; then \
-	  echo "[targets.check.dupes] ERROR: duplicate targets found:"; \
-	  echo "$$dupes"; \
-	  exit 1; \
-	else \
-	  echo "[targets.check.dupes] OK: no duplicates"; \
-	fi
 
 .PHONY: py.quickfix py.longline py.fullwave
 py.quickfix:
@@ -27,23 +9,6 @@ py.longline:
 	@python3 scripts/longline_noqa.py
 py.fullwave: py.quickfix py.longline
 	@make py.format && make py.lint
-
-.PHONY: fmt fmt.check lint lint.fix
-fmt:
-	@echo "[fmt] Applying ruff-format..."
-	@ruff format .
-
-fmt.check:
-	@echo "[fmt.check] Checking format (no changes)..."
-	@ruff format --check .
-
-lint:
-	@echo "[lint] Running ruff check..."
-	@ruff check .
-
-lint.fix:
-	@echo "[lint.fix] Running ruff check with fixes..."
-	@ruff check . --fix
 
 .PHONY: test.smoke test.smoke.strict
 test.smoke:
@@ -233,12 +198,12 @@ ops.verify:
 	@echo "[ops.verify] running"
 	@if [ -f share/eval/release_manifest.json ]; then \
 	  echo "[ops.verify] integrity check present → verifying"; \
-	  $(MAKE) -s eval.verify.integrity.soft; \
+	  $(MAKE) eval.verify.integrity; \
 	else \
 	  echo "[ops.verify] no release_manifest.json → skipping integrity check"; \
 	fi
 	@missing=0; \
-	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg; do \
+	for f in share/eval/graph_latest.json share/eval/centrality.json share/eval/release_manifest.json share/eval/provenance.json share/eval/quality_report.txt share/eval/summary.md share/eval/summary.json share/eval/badges/quality.svg share/eval/quality_history.jsonl share/eval/badges/quality_trend.svg share/eval/calibration_adv.json share/eval/edge_audit.csv share/eval/edge_audit.json share/eval/anomalies.json share/eval/badges/anomalies.svg; do \
 	  if [ ! -f $$f ]; then echo "[ops.verify] MISSING $$f"; missing=1; fi; \
 	done; \
 	if [ $$missing -ne 0 ]; then echo "[ops.verify] FAIL required artifacts missing"; exit 2; fi
@@ -296,9 +261,14 @@ eval.catalog:
 ci.eval.catalog:
 	@python3 scripts/eval/build_exports_catalog.py
 
+.PHONY: eval.provenance ci.eval.provenance eval.checksums ci.eval.checksums
 
 # Provenance (writes share/eval/provenance.{json,md})
+eval.provenance:
+	@python3 scripts/eval/provenance.py
 
+ci.eval.provenance:
+	@python3 scripts/eval/provenance.py
 
 # Checksums for exports (writes share/eval/checksums.csv)
 eval.checksums:
@@ -452,6 +422,8 @@ eval.package:
 	@$(MAKE) eval.snapshot.rotate
 	@$(MAKE) eval.graph.tables
 	@$(MAKE) eval.graph.delta
+	@$(MAKE) eval.edge.audit
+	@$(MAKE) eval.edge.anomalies
 	@$(MAKE) eval.bundle
 	@$(MAKE) eval.badges
 	@$(MAKE) eval.release_notes
@@ -459,14 +431,13 @@ eval.package:
 	@$(MAKE) eval.provenance
 	@$(MAKE) eval.release_manifest
 	@$(MAKE) eval.schema.verify
-	@$(MAKE) -s eval.verify.integrity.soft
+	@$(MAKE) eval.verify.integrity
 	@$(MAKE) eval.summary
 	@$(MAKE) eval.quality.check
 	@$(MAKE) eval.quality.badge
 	@$(MAKE) eval.quality.trend
+	@$(MAKE) eval.graph.calibrate
 	@$(MAKE) eval.graph.calibrate.adv
-	@$(MAKE) eval.edge.audit
-	@$(MAKE) eval.anomaly.badge
 	@echo "[eval.package] OK"
 
 ci.eval.package:
@@ -505,26 +476,12 @@ eval.bundle.all:
 
 .PHONY: eval.verify.integrity ci.eval.verify.integrity
 eval.verify.integrity:
-	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
 ci.eval.verify.integrity:
-	@bash scripts/ci/db_ensure.sh || true
 	@python3 scripts/eval/verify_integrity.py
 
-.PHONY: eval.verify.integrity.soft
-# Fast, non-blocking soft integrity: cached by release_manifest fingerprint
-RELEASE_MANIFEST ?= share/eval/release_manifest.json
-eval.verify.integrity.soft:
-	@bash scripts/ci/db_ensure.sh || true
-	@python3 scripts/eval/integrity_fast.py --manifest "$(RELEASE_MANIFEST)" \
-	  --hard-cmd "make -s eval.verify.integrity" ; true
-
-.PHONY: ci.db.ensure
-ci.db.ensure:
-	@bash scripts/ci/db_ensure.sh || true
-
-.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.schema.verify eval.edges.reclassify
+.PHONY: eval.graph.centrality eval.graph.rerank_blend eval.graph.rerank.refresh eval.graph.tables eval.graph.delta eval.edge.audit eval.edge.anomalies eval.schema.verify
 eval.graph.centrality:
 	@.venv/bin/python3 scripts/eval/compute_centrality.py
 eval.graph.rerank_blend:
@@ -535,19 +492,22 @@ eval.graph.tables:
 	@python3 scripts/eval/export_graph_tables.py
 eval.graph.delta:
 	@python3 scripts/eval/compute_delta.py
+eval.edge.audit:
+	@python3 scripts/eval/build_edge_audit.py
+eval.edge.anomalies:
+	@python3 scripts/eval/detect_anomalies.py
 eval.schema.verify:
 	@python3 -c "import jsonschema" >/dev/null 2>&1 || (echo '[schema] installing jsonschema' && pip3 install --quiet jsonschema)
 	@python3 scripts/eval/verify_schema.py
-eval.edges.reclassify:
-	@echo "[eval.edges.reclassify] Filling rerank where missing, computing edge_strength, classifying, and emitting counts..."
-	@GRAPH_JSON=share/graph/graph_latest.json MOCK_AI=1 scripts/eval/reclassify_edges.py
 eval.snapshot.rotate:
 	@python3 scripts/eval/rotate_snapshot.py
+eval.provenance:
+	@python3 scripts/eval/build_provenance.py
 eval.quality.check:
 	@python3 scripts/eval/check_quality.py
 eval.summary:
 	@python3 scripts/eval/build_run_summary.py
-.PHONY: eval.quality.badge eval.graph.calibrate eval.graph.calibrate.adv eval.quality.trend eval.edge.audit eval.anomaly.badge
+.PHONY: eval.quality.badge eval.graph.calibrate eval.graph.calibrate.adv eval.quality.trend
 eval.quality.badge:
 	@python3 scripts/eval/make_quality_badge.py
 eval.graph.calibrate:
@@ -556,96 +516,8 @@ eval.graph.calibrate.adv:
 	@python3 scripts/eval/calibrate_advanced.py
 eval.quality.trend:
 	@python3 scripts/eval/quality_trend.py
-eval.edge.audit:
-	@python3 scripts/eval/edge_audit.py
-eval.anomaly.badge:
-	@python3 scripts/eval/anomaly_badge.py
 
 .PHONY: eval.open
 eval.open:
 	@echo "[eval.open] Opening dashboard..."
 	@python3 -c "import pathlib, webbrowser; p = pathlib.Path('share/eval/index.html').resolve(); print('[eval.open]', p); webbrowser.open(p.as_uri())"
-
-.PHONY: eval.provenance ci.eval.provenance
-eval.provenance:
-	@python3 scripts/eval/build_provenance.py
-
-ci.eval.provenance:
-	@python3 scripts/eval/build_provenance.py
-
-## Typing (mypy) — convenience targets
-.PHONY: ci.mypy.full
-ci.mypy.full:
-	@echo "[ci.mypy.full] Running repository-wide mypy sweep..."
-	@mypy --config-file=mypy.ini --ignore-missing-imports || true
-
-.PHONY: ci.mypy.changed
-ci.mypy.changed:
-	@echo "[ci.mypy.changed] Running mypy on changed files (against main)..."
-	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
-	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
-	mypy --config-file=mypy.ini --ignore-missing-imports $$CHANGED || true
-
-## Linting (ruff) — convenience targets
-.PHONY: ci.lint.full
-ci.lint.full:
-	@echo "[ci.lint.full] Running repository-wide ruff lint sweep..."
-	@ruff check src scripts tools || true
-
-.PHONY: ci.lint.changed
-ci.lint.changed:
-	@echo "[ci.lint.changed] Running ruff on changed files (against main)..."
-	@CHANGED=$$(git diff --name-only origin/main...HEAD | grep -E '\.py$$' || true); \
-	if [ -z "$$CHANGED" ]; then echo "No changed Python files."; exit 0; fi; \
-	ruff check $$CHANGED || true
-
-## Coverage (pytest-cov) — convenience targets
-.PHONY: ci.coverage.full
-ci.coverage.full:
-	@echo "[ci.coverage.full] Running pytest coverage (non-blocking)..."
-	@pytest -q --maxfail=1 --disable-warnings --cov=src --cov-report=term --cov-report=xml:share/eval/coverage/coverage.xml || true
-
-.PHONY: ci.coverage.badge   # (optional later)
-ci.coverage.badge:
-	@echo "[ci.coverage.badge] TODO: generate svg from coverage.xml"
-
-## SSOT JSONSchema validation
-.PHONY: ssot.validate ssot.validate.changed
-SSOT_SCHEMAS := docs/SSOT/SSOT_graph-patterns.schema.json docs/SSOT/SSOT_graph-stats.schema.json docs/SSOT/SSOT_temporal-patterns.schema.json docs/SSOT/SSOT_pattern-forecast.schema.json
-ssot.validate:
-	@echo "[ssot.validate] Validating all SSOT JSON against schemas..."
-	@set -e; \
-	for S in $(SSOT_SCHEMAS); do \
-	  case "$$S" in \
-	    *graph-patterns* ) INST="docs/SSOT/graph/*.json";; \
-	    *graph-stats* )    INST="share/graph/*stats*.json share/graph/graph_stats.head.json";; \
-	    *temporal-patterns* ) INST="docs/SSOT/temporal/*.json";; \
-	    *pattern-forecast* )  INST="docs/SSOT/forecast/*.json";; \
-	    * ) INST="";; \
-	  esac; \
-	  if [ -n "$$INST" ]; then \
-	    echo " - $$S"; \
-	    scripts/eval/jsonschema_validate.py --schema "$$S" --instance $$INST || exit 2; \
-	  fi; \
-	done
-
-ssot.validate.changed:
-	@echo "[ssot.validate.changed] Validating only changed SSOT JSON..."
-	@base="${BASE_SHA:-$(git merge-base origin/main HEAD)}"; head="${HEAD_SHA:-HEAD}"; \
-	files="$(git diff --name-only $$base $$head | grep -E '^(docs/SSOT|share/graph)/.*\\.json$$' || true)"; \
-	if [ -z "$$files" ]; then echo " - no SSOT JSON changed"; exit 0; fi; \
-	status=0; \
-	for f in $$files; do \
-	  case "$$f" in \
-	    docs/SSOT/graph/* )     S="docs/SSOT/SSOT_graph-patterns.schema.json";; \
-	    share/graph/*stats*.json|share/graph/graph_stats.head.json ) S="docs/SSOT/SSOT_graph-stats.schema.json";; \
-	    docs/SSOT/temporal/* )  S="docs/SSOT/SSOT_temporal-patterns.schema.json";; \
-	    docs/SSOT/forecast/* )  S="docs/SSOT/SSOT_pattern-forecast.schema.json";; \
-	    * ) S="";; \
-	  esac; \
-	  if [ -n "$$S" ]; then \
-	    echo " - $$f vs $$S"; \
-	    scripts/eval/jsonschema_validate.py --schema "$$S" --instance "$$f" || status=2; \
-	  fi; \
-	done; \
-	exit $$status

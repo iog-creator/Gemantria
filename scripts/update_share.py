@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MANIFEST = ROOT / "share" / "SHARE_MANIFEST.json"
+MANIFEST = ROOT / "docs" / "SSOT" / "SHARE_MANIFEST.json"
 SHARE = ROOT / "share"
 
 

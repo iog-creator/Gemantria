@@ -14,12 +14,7 @@ def test_validate_noun_shape_when_db_present():
     out = validate_noun("אדם")
     assert set(out.keys()) == {"surface", "normalized", "gematria", "db", "llm"}
     db = out["db"]
-    assert set(db.keys()) == {
-        "present_in_bible_db",
-        "strong_number",
-        "lemma_frequency",
-        "verse_context",
-    }
+    assert set(db.keys()) == {"present_in_bible_db", "strong_number", "lemma_frequency", "verse_context"}
     assert isinstance(db["present_in_bible_db"], bool)
     # If present, fields should be populated with expected types
     if db["present_in_bible_db"]:

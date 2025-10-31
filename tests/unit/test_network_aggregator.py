@@ -236,7 +236,7 @@ Insight: First woman"""
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
-        noun = {"name": "Test", "hebrew": "טסט", "value": 100}
+        noun = {"name": "Test", "hebrew": "טסט", "value": 100}  # noqa: RUF001
 
         result = _build_document_string(noun)
 
@@ -244,7 +244,7 @@ Insight: First woman"""
 Meaning: טסט
 Primary Verse: Genesis (reference)
 Gematria: 100
-Insight:"""
+Insight:"""  # noqa: RUF001
 
         self.assertEqual(result, expected)
 

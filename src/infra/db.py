@@ -51,9 +51,11 @@ class BibleReadOnly:
             raise RuntimeError("BIBLE_DB_DSN not set; cannot execute read query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
-            cur.execute(sql, params or ())
-            yield from cur
+        with psycopg.connect(self.dsn) as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql, params or ())
+                for row in cur:
+                    yield row
 
 
 @dataclass
@@ -65,10 +67,12 @@ class GematriaRW:
             raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
         if not HAS_DB:
             raise RuntimeError("psycopg not available in this environment")
-        with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
-            cur.execute(sql, params or ())
-            if cur.description:
-                yield from cur
+        with psycopg.connect(self.dsn) as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql, params or ())
+                if cur.description:
+                    for row in cur:
+                        yield row
 
 
 def get_bible_ro() -> BibleReadOnly:

@@ -1,16 +1,17 @@
 name: CI
 on:
-  push:
-    branches: [ main, master, develop ]
   pull_request:
-    branches: [ "**" ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: ['**']
+  push:
+    branches: ['main', '**']
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,8 +41,6 @@ jobs:
         uses: pre-commit/action@v3.0.1
         with:
           extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
-        env:
-          # ALLOW_RULES_GAP removed - RESERVED stubs now fill gaps
 
       # Pushes: run on all files (e.g., pushes to main)
       - name: Pre-commit (push all-files)
