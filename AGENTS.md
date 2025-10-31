@@ -154,6 +154,7 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
+| 050 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

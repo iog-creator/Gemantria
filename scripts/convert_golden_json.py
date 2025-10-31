@@ -52,9 +52,7 @@ def extract_chapter(verse_ref: str) -> int:
 
 def main():
     if len(sys.argv) != 3:
-        print(
-            "Usage: python3 scripts/convert_golden_json.py <input.json> <output.jsonl>"
-        )
+        print("Usage: python3 scripts/convert_golden_json.py <input.json> <output.jsonl>")
         sys.exit(1)
 
     input_path = Path(sys.argv[1])

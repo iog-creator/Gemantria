@@ -16,9 +16,7 @@ def _summ(p: pathlib.Path):
         doc = _load_json(p)
         nodes = doc.get("nodes", [])
         edges = doc.get("edges", [])
-        return len(nodes) if isinstance(nodes, list) else 0, (
-            len(edges) if isinstance(edges, list) else 0
-        )
+        return len(nodes) if isinstance(nodes, list) else 0, (len(edges) if isinstance(edges, list) else 0)
     except Exception:
         return 0, 0
 

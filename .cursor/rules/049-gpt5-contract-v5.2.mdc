@@ -13,3 +13,30 @@ policy:
 acceptance:
   - NEXT_STEPS executed in order with evidence tails.
   - No unapproved changes to governance or workflows.
+---
+
+### Operational Addendum — 2025-10-30
+
+This addendum records clarifications discovered during CI rescue and Cursor 2.0 adoption. It does not change core intent.
+
+**Connector Reliability & LOUD FAIL**
+
+- Git (and verified `gh` outputs) remain SSOT. When any GitHub connector call fails or returns ambiguous data, the agent MUST:
+  1) Emit a **LOUD FAIL** block (tool name, action, args, short error),
+  2) **STOP inferring**, and
+  3) Request the exact `gh` fallback commands (verdicts, checks, failing tails) to proceed.
+
+**Cursor 2.0 Usage (Editor-side only)**
+
+- Multi-Agents (worktrees) permitted for parallel rescue work; keep patches **surgical**.
+- **Plan** with a strong reasoner; **Build** with Cursor **Composer**. CI remains hermetic.
+- Browser for Agent allowed only for research; never relied upon in CI.
+- Sandboxed terminals preferred (no network); CI's **no outbound network** remains mandatory.
+
+**Ruff-only Formatter Gate**
+
+- Reinforce Rule-042: ruff-format is the single formatter. CI should run `ruff format --check .` and `ruff check .`.
+
+**Share Mirror (CI)**
+
+- CI must never write to `share/**`; route CI outputs to `_artifacts/**` and upload as artifacts.

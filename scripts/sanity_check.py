@@ -8,12 +8,6 @@ import os
 import statistics
 import sys
 
-# Add src to path
-script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(script_dir)
-src_path = os.path.join(project_root, "src")
-sys.path.insert(0, src_path)
-
 from src.infra.env_loader import ensure_env_loaded
 from src.nodes.collect_nouns_db import collect_nouns_for_book
 from src.nodes.enrichment import enrichment_node
@@ -23,6 +17,12 @@ from src.nodes.network_aggregator import (
     _l2_normalize,
 )
 from src.services.lmstudio_client import get_lmstudio_client
+
+# Add src to path
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+src_path = os.path.join(project_root, "src")
+sys.path.insert(0, src_path)
 
 # Load environment
 ensure_env_loaded()
@@ -111,13 +111,11 @@ def test_genesis_chapter_1():
         embeddings = client.get_embeddings(doc_strings)
         embeddings = [_l2_normalize(vec) for vec in embeddings]
 
-        print(
-            f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})"
-        )
+        print(f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})")
 
         # Test self-similarities (should be ~1.0)
         self_similarities = []
-        for i, emb in enumerate(embeddings):
+        for _i, emb in enumerate(embeddings):
             # Cosine similarity with itself should be 1.0
             self_sim = sum(a * b for a, b in zip(emb, emb, strict=False))
             self_similarities.append(self_sim)
@@ -170,15 +168,9 @@ def test_genesis_chapter_1():
         mock_rerank_scores = [sim for _, _, sim in pairs_0_4]
 
         if mock_rerank_scores:
-            yes_at_02 = sum(1 for s in mock_rerank_scores if s >= 0.2) / len(
-                mock_rerank_scores
-            )
-            yes_at_04 = sum(1 for s in mock_rerank_scores if s >= 0.4) / len(
-                mock_rerank_scores
-            )
-            yes_at_06 = sum(1 for s in mock_rerank_scores if s >= 0.6) / len(
-                mock_rerank_scores
-            )
+            yes_at_02 = sum(1 for s in mock_rerank_scores if s >= 0.2) / len(mock_rerank_scores)
+            yes_at_04 = sum(1 for s in mock_rerank_scores if s >= 0.4) / len(mock_rerank_scores)
+            yes_at_06 = sum(1 for s in mock_rerank_scores if s >= 0.6) / len(mock_rerank_scores)
 
             print(".2f")
             print(".2f")

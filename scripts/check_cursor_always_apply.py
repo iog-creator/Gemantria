@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Assert only the three navigator rules are marked alwaysApply: true.
+Assert only the specified rules are marked alwaysApply: true.
 Intended as a fast guard for Cursor rule bloat/regression.
 """
 
@@ -17,6 +17,7 @@ ALLOWED = {
     "039-execution-contract.mdc",
     "040-ci-triage-playbook.mdc",
     "049-gpt5-contract-v5.2.mdc",
+    "050-connector-failure.mdc",
 }
 
 
@@ -30,10 +31,10 @@ def main() -> None:
         if m and p.name not in ALLOWED:
             offenders.append(p.name)
     if offenders:
-        msg = f"only 000/010/030 may be alwaysApply; found: {', '.join(offenders)}"
+        msg = f"only {', '.join(sorted(ALLOWED))} may be alwaysApply; found: {', '.join(offenders)}"
         print(f"[rules.navigator.check] FAIL: {msg}", file=sys.stderr)
         sys.exit(2)
-    print("[rules.navigator.check] PASS: only navigators are alwaysApply (000/010/030)")
+    print(f"[rules.navigator.check] PASS: only {', '.join(sorted(ALLOWED))} are alwaysApply")
 
 
 if __name__ == "__main__":

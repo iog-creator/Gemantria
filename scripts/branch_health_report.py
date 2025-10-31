@@ -178,25 +178,31 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
         f.write("## 📊 Summary Statistics\n\n")
         f.write("| Metric | Count | Percentage |\n")
         f.write("|--------|-------|------------|\n")
-        f.write(f'| Total Branches | {stats["total_branches"]} | 100% |\n')
-        f.write(f'| Local Only | {stats["local_only"]} | {stats["local_only"]/stats["total_branches"]*100:.1f}% |\n')
-        f.write(f'| Remote Only | {stats["remote_only"]} | {stats["remote_only"]/stats["total_branches"]*100:.1f}% |\n')
+        f.write(f"| Total Branches | {stats['total_branches']} | 100% |\n")
         f.write(
-            f'| Synced (Local + Remote) | {stats["synced"]} | {stats["synced"]/stats["total_branches"]*100:.1f}% |\n'
-        )
-        f.write(f'| With Pull Request | {stats["with_pr"]} | {stats["with_pr"]/stats["total_branches"]*100:.1f}% |\n')
-        f.write(
-            f'| Checks Passed | {stats["checks_passed"]} | {stats["checks_passed"]/stats["total_branches"]*100:.1f}% |\n'
+            f"| Local Only | {stats['local_only']} | {stats['local_only'] / stats['total_branches'] * 100:.1f}% |\n"
         )
         f.write(
-            f'| Checks Failed | {stats["checks_failed"]} | {stats["checks_failed"]/stats["total_branches"]*100:.1f}% |\n'
+            f"| Remote Only | {stats['remote_only']} | {stats['remote_only'] / stats['total_branches'] * 100:.1f}% |\n"
         )
         f.write(
-            f'| Checks Pending | {stats["checks_pending"]} | {stats["checks_pending"]/stats["total_branches"]*100:.1f}% |\n'
+            f"| Synced (Local + Remote) | {stats['synced']} | {stats['synced'] / stats['total_branches'] * 100:.1f}% |\n"
         )
-        f.write(f'| No Checks | {stats["no_checks"]} | {stats["no_checks"]/stats["total_branches"]*100:.1f}% |\n')
         f.write(
-            f'| Old Branches (>1 month) | {stats["old_branches"]} | {stats["old_branches"]/stats["total_branches"]*100:.1f}% |\n\n'
+            f"| With Pull Request | {stats['with_pr']} | {stats['with_pr'] / stats['total_branches'] * 100:.1f}% |\n"
+        )
+        f.write(
+            f"| Checks Passed | {stats['checks_passed']} | {stats['checks_passed'] / stats['total_branches'] * 100:.1f}% |\n"
+        )
+        f.write(
+            f"| Checks Failed | {stats['checks_failed']} | {stats['checks_failed'] / stats['total_branches'] * 100:.1f}% |\n"
+        )
+        f.write(
+            f"| Checks Pending | {stats['checks_pending']} | {stats['checks_pending'] / stats['total_branches'] * 100:.1f}% |\n"
+        )
+        f.write(f"| No Checks | {stats['no_checks']} | {stats['no_checks'] / stats['total_branches'] * 100:.1f}% |\n")
+        f.write(
+            f"| Old Branches (>1 month) | {stats['old_branches']} | {stats['old_branches'] / stats['total_branches'] * 100:.1f}% |\n\n"
         )
 
         # Branch details

@@ -52,3 +52,4 @@
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
+| 050 | 050-connector-failure.mdc | # --- |

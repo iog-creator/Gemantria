@@ -381,7 +381,7 @@ class LMStudioClient:
                         # Production mode - hard fail
                         raise QwenUnavailableError(
                             f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {e!s}"
-                        )
+                        ) from e
 
     def rerank(self, query: str, candidates: list[str], model: str | None = None) -> list[float]:
         """
@@ -594,7 +594,7 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
                     else:
                         raise QwenUnavailableError(
                             f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {e!s}"
-                        )
+                        ) from e
 
     return results
 
@@ -626,7 +626,7 @@ def safe_json_parse(text: str, required_keys: list[str]) -> dict:
     try:
         data = json.loads(text)
     except Exception as e:
-        raise ValueError(f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}...")
+        raise ValueError(f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}...") from e
 
     # Validate required keys
     missing_keys = [key for key in required_keys if key not in data]

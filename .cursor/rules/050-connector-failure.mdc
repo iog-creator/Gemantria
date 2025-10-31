@@ -1,0 +1,61 @@
+---
+
+title: Connector Failure Protocol (LOUD FAIL)
+
+number: 050
+
+alwaysApply: true
+
+status: active
+
+---
+
+This rule codifies the **evidence-first** behavior when external connectors (e.g., GitHub) fail or return ambiguous data.
+
+**Policy**
+
+- Do not proceed on assumptions. If a connector errors or cannot return decisive evidence:
+  - Emit a **LOUD FAIL** block immediately:
+
+    ```
+    [CONNECTOR-FAIL]
+
+    tool: <name>
+
+    action: <action>
+
+    args: <essential>
+
+    error: <short>
+
+
+
+    IMPACT
+
+    - Evidence-first workflow blocked. No inference without verified state.
+
+
+
+    WHAT I NEED
+
+    1) Run locally and paste results:
+
+       gh pr list --state open --json number,title,additions,deletions,statusCheckRollup,mergeable \
+
+         --jq '[.[] | {n:.number,t:.title,loc:(.additions+.deletions),m:.mergeable,ver:([.statusCheckRollup[]?.conclusion] // [])}] | sort_by(.loc)'
+
+       gh pr checks <PR>
+
+       gh run view <RUN_ID> --log --job "<JOB>" | tail -200
+
+    ```
+
+  - After tails arrive, proceed with **one-file surgical patches** and decisive proofs.
+
+
+
+**Notes**
+
+- This rule is operational; it does not weaken hermetic CI, share-mirror policy, or formatting SSOT.
+
+---

@@ -737,9 +737,7 @@ def main():
         print(f"\n✅ Created {created} AGENTS.md files")
         print("Run 'make rules.audit docs.audit' to verify compliance")
     else:
-        print(
-            f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)"
-        )
+        print(f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)")
 
 
 if __name__ == "__main__":

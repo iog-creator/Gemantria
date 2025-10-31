@@ -85,9 +85,7 @@ def main() -> int:
     lines.append("")
     lines.append(f"*git:* `{repo['git_head']}`  •  *branch:* `{repo['git_branch']}`")
     lines.append(f"*manifest_version:* {man_ver}  •  *thresholds_version:* {thr_ver}")
-    lines.append(
-        f"*exports:* count={exports_data['count']}  •  " f"total_size_bytes={exports_data['total_size_bytes']}"
-    )
+    lines.append(f"*exports:* count={exports_data['count']}  •  total_size_bytes={exports_data['total_size_bytes']}")
     if latest_info:
         lines.append(f"*latest:* `{latest_info['path']}`  •  sha256={latest_info['sha256']}")
     lines.append("")

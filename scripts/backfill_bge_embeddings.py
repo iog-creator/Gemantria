@@ -10,17 +10,17 @@ import os
 import sys
 from pathlib import Path
 
-# Add src to path
-script_dir = Path(__file__).parent
-project_root = script_dir.parent
-src_path = project_root / "src"
-sys.path.insert(0, str(src_path))
-
 import psycopg
 from pgvector.psycopg import register_vector
 
 from src.infra.env_loader import ensure_env_loaded
 from src.services.lmstudio_client import get_lmstudio_client
+
+# Add src to path
+script_dir = Path(__file__).parent
+project_root = script_dir.parent
+src_path = project_root / "src"
+sys.path.insert(0, str(src_path))
 
 # Load environment
 ensure_env_loaded()
@@ -64,9 +64,7 @@ def backfill_bge_embeddings():
 
             for i in range(0, len(rows), batch_size):
                 batch = rows[i : i + batch_size]
-                print(
-                    f"Processing batch {i // batch_size + 1}/{(len(rows) + batch_size - 1) // batch_size}..."
-                )
+                print(f"Processing batch {i // batch_size + 1}/{(len(rows) + batch_size - 1) // batch_size}...")
 
                 # Prepare documents for embedding
                 documents = []
@@ -92,15 +90,11 @@ Frequency: {verse_occurrence_count} occurrences"""
 
                 # Generate BGE-M3 embeddings
                 try:
-                    bge_embeddings = client.get_embeddings(
-                        documents, model="text-embedding-bge-m3"
-                    )
+                    bge_embeddings = client.get_embeddings(documents, model="text-embedding-bge-m3")
                     print(f"Generated {len(bge_embeddings)} BGE-M3 embeddings")
 
                     # Update database
-                    for network_id, bge_embedding in zip(
-                        network_ids, bge_embeddings, strict=False
-                    ):
+                    for network_id, bge_embedding in zip(network_ids, bge_embeddings, strict=False):
                         # BGE embeddings are already lists
                         embedding_list = bge_embedding
 
@@ -114,9 +108,7 @@ Frequency: {verse_occurrence_count} occurrences"""
                         )
 
                     total_processed += len(batch)
-                    print(
-                        f"Updated {total_processed}/{len(rows)} nodes with BGE-M3 embeddings"
-                    )
+                    print(f"Updated {total_processed}/{len(rows)} nodes with BGE-M3 embeddings")
 
                     # Immediate verification for this batch
                     cur.execute(

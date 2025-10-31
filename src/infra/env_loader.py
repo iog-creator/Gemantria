@@ -28,12 +28,7 @@ def load_env_file(env_path: Path = Path(".env")) -> None:
             key = key.strip()
             value = value.strip()
             # Remove surrounding quotes if present
-            if (
-                value
-                and len(value) >= 2
-                and value[0] == value[-1]
-                and value[0] in ['"', "'"]
-            ):
+            if value and len(value) >= 2 and value[0] == value[-1] and value[0] in ['"', "'"]:
                 value = value[1:-1]
             os.environ[key] = value
 
