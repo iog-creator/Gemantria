@@ -54,7 +54,7 @@ def _summarize_file(p: pathlib.Path) -> dict[str, Any]:
         edge_count = 0
         strengths = []
 
-    nums = [float(x) for x in strengths if isinstance(x, (int, float))]
+    nums = [float(x) for x in strengths if isinstance(x, int | float)]
     in_range = [x for x in nums if 0.30 <= x <= 0.95]
     frac = len(in_range) / max(1, len(nums))
 
@@ -151,11 +151,13 @@ def main() -> int:
     lines.append("")
     lines.append(f"*series:* {len(series)}  •  *ok:* {'✅' if ok else '❌'}")
     lines.append("")
-    lines.append("| file | nodes | edges | strength ok frac (0.30–0.95) | dims ok (if present) |")
+    lines.append("| file | nodes | edges | strength ok frac (0.30-0.95) | dims ok (if present) |")
     lines.append("|---|---:|---:|---:|:---:|")
     for item in series:
         lines.append(
-            f"| {item['file']} | {item['nodes']} | {item['edges']} | {item['strength']['ok_frac_0.30_0.95']} | {'✅' if item['embedding_dim_if_present_1024'] else '❌'} |"
+            f"| {item['file']} | {item['nodes']} | {item['edges']} | "
+            f"{item['strength']['ok_frac_0.30_0.95']} | "
+            f"{'✅' if item['embedding_dim_if_present_1024'] else '❌'} |"
         )
     lines.append("")
     MD_OUT.write_text("\n".join(lines), encoding="utf-8")
