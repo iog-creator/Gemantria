@@ -13,8 +13,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install ruff (pinned)
-        run: pip install ruff==0.6.9
+      - name: Install ruff (pinned v0.13.0)
+        run: pip install ruff==0.13.0
       - name: Ruff format (check only)
         run: ruff format --check .
       - name: Ruff lint
