@@ -11,7 +11,7 @@ OUT = BADGES / "quality.svg"
 def badge(text, ok=True):
     color = "#4c1" if ok else "#e05d44"
     w = 150
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="quality:{text}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="quality:{text}">
   <linearGradient id="g" x2="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/>
   <rect rx="3" width="{w}" height="20" fill="#555"/>
   <rect rx="3" x="60" width="{w - 60}" height="20" fill="{color}"/>
@@ -21,7 +21,7 @@ def badge(text, ok=True):
     <text x="6" y="14">quality</text>
     <text x="66" y="14">{text}</text>
   </g>
-</svg>'''
+</svg>"""
 
 
 def main():
