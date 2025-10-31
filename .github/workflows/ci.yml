@@ -43,6 +43,10 @@ jobs:
           ruff --version || true
           mypy --version || true
 
+      # Force fresh pre-commit environment to defeat ruff version cache drift
+      - name: Clear pre-commit cache (force ruff 0.13.0)
+        run: rm -rf ~/.cache/pre-commit
+
       # PRs: run on the diff (base→head)
       - name: Pre-commit (PR diff)
         if: ${{ github.event_name == 'pull_request' }}
