@@ -23,7 +23,7 @@ def _badge(n):
     color = "#4c1" if n == 0 else "#e05d44"
     txt = f"anomalies:{n}"
     w = 130
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{txt}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{txt}">
   <linearGradient id="g" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
   <rect rx="3" width="{w}" height="20" fill="#555"/>
   <rect rx="3" x="75" width="{w - 75}" height="20" fill="{color}"/>
@@ -32,7 +32,7 @@ def _badge(n):
     <text x="6" y="14">anomalies</text>
     <text x="81" y="14">{n}</text>
   </g>
-</svg>'''
+</svg>"""
 
 
 def main() -> int:
