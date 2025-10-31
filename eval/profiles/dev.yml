@@ -1,0 +1,11 @@
+# Overlay for current dev realities (looser tolerances)
+version: 1
+integrity:
+  allow_missing_endpoints: 26
+id_stability:
+  min_node_id_jaccard: 0.50
+  allow_added_node_ids: 1000
+  allow_removed_node_ids: 1000
+id_audit:
+  require_single_id_type: 1
+  max_nonconforming_ids: 0

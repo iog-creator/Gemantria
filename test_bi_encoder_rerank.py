@@ -63,9 +63,9 @@ def test_bi_encoder_rerank():
         mock_requests.post.side_effect = [mock_resp_a, mock_resp_b]
 
         # Import and test the rerank function
-        from src.services.rerank_via_embeddings import (  # noqa: E402
+        from src.services.rerank_via_embeddings import (
             rerank_via_embeddings,
-        )  # noqa: E402
+        )
 
         test_pairs = [(0, 1), (0, 2), (1, 2)]
         test_names = {0: "אלהים", 1: "ברא", 2: "שמים"}
@@ -76,9 +76,7 @@ def test_bi_encoder_rerank():
 
         # Expected scores (cosine similarity)
         expected_scores = [
-            cosine_similarity(
-                embeddings["אלהים"], embeddings["ברא"]
-            ),  # 0.0 (orthogonal)
+            cosine_similarity(embeddings["אלהים"], embeddings["ברא"]),  # 0.0 (orthogonal)
             cosine_similarity(embeddings["אלהים"], embeddings["שמים"]),  # ~0.707 (45°)
             cosine_similarity(embeddings["ברא"], embeddings["שמים"]),  # ~0.707 (45°)
         ]
@@ -88,16 +86,14 @@ def test_bi_encoder_rerank():
         # Validate scores are reasonable
         assert all(0 <= s <= 1 for s in scores), "Scores should be in [0,1] range"
         assert len(scores) == len(test_pairs), "Should return one score per pair"
-        assert (
-            scores[0] < scores[1]
-        ), "Orthogonal vectors should have lower similarity than 45°"
+        assert scores[0] < scores[1], "Orthogonal vectors should have lower similarity than 45°"
 
         print("   ✅ Basic functionality test PASSED")
 
     # Test 2: Normalization
     print("\n2. Testing text normalization...")
 
-    from src.services.rerank_via_embeddings import _norm  # noqa: E402
+    from src.services.rerank_via_embeddings import _norm
 
     test_cases = [
         ("hello world", "hello world"),
@@ -109,9 +105,7 @@ def test_bi_encoder_rerank():
 
     for input_text, expected in test_cases:
         result = _norm(input_text)
-        assert (
-            result == expected
-        ), f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
+        assert result == expected, f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
         print(f"   '{input_text}' -> '{result}' ✅")
 
     print("   ✅ Text normalization test PASSED")
@@ -123,9 +117,7 @@ def test_bi_encoder_rerank():
     with open("src/nodes/network_aggregator.py") as f:
         content = f.read()
 
-    assert (
-        "bge-m3-emb-proxy@" in content
-    ), "Cache tagging not found in network_aggregator.py"
+    assert "bge-m3-emb-proxy@" in content, "Cache tagging not found in network_aggregator.py"
     assert "EMBEDDING_MODEL" in content, "Embedding model reference not found"
 
     print("   ✅ Cache tagging test PASSED")
@@ -134,8 +126,8 @@ def test_bi_encoder_rerank():
     print("\n4. Testing import and interface compatibility...")
 
     # Test that the new rerank function can be imported as the old name
-    from src.services.rerank_via_embeddings import (  # noqa: E402
-        rerank_via_embeddings as rerank_pairs,  # noqa: E402
+    from src.services.rerank_via_embeddings import (
+        rerank_via_embeddings as rerank_pairs,
     )
 
     # Test with simple mock

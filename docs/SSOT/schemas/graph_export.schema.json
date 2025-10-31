@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gemantria Graph Export",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "anyOf": [{"type": "string"}, {"type": "integer"}] },
+          "label": { "type": ["string", "null"] },
+          "embedding_dim": { "type": ["integer", "null"] },
+          "meta": { "type": ["object", "null"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target"],
+        "properties": {
+          "source": { "anyOf": [{"type": "string"}, {"type": "integer"}] },
+          "target": { "anyOf": [{"type": "string"}, {"type": "integer"}] },
+          "strength": { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 },
+          "rerank":   { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 },
+          "meta":     { "type": ["object", "null"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "meta": { "type": ["object", "null"] }
+  },
+  "additionalProperties": true
+}

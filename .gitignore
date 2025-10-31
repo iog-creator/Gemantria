@@ -13,3 +13,4 @@ github-mcp-wrapper.sh
 share/
 !share/SHARE_MANIFEST.json
 !share/README.md
+.cache/

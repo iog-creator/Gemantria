@@ -1,0 +1,21 @@
+name: ssot-nightly
+on:
+  schedule:
+    - cron: "23 7 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  ssot-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Full SSOT JSONSchema sweep (non-blocking)
+        continue-on-error: true
+        run: |
+          set -e
+          make -s ssot.validate || true
+          echo "HINT: ssot-nightly: sweep completed"

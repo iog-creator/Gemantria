@@ -10,7 +10,7 @@ from src.infra.metrics_core import MetricsClient
 def test_metrics_insert_roundtrip():
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
-        import pytest  # noqa: E402
+        import pytest
 
         pytest.skip("no DB configured")
     mc = MetricsClient(dsn)

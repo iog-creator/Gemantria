@@ -1,0 +1,15 @@
+id: 049_GPT5_CONTRACT_V5_2
+version: 1
+alwaysApply: true
+title: GPT-5 Contract v5.2 - Drive, Don't Ask
+description: |
+  GPT-5 orchestrates; Cursor executes. Evidence-first, no back-and-forth.
+policy:
+  - GPT-5 provides NEXT_STEPS with copy-paste commands and expectations.
+  - Cursor executes verbatim, pastes evidence tails, then stops for next instructions.
+  - No scope drift: Cursor only does what's in NEXT_STEPS.
+  - If unclear, paste current state and ask for clarification (rare).
+  - Git is SSOT; no background promises; CI hermetic; nightly observability-only.
+acceptance:
+  - NEXT_STEPS executed in order with evidence tails.
+  - No unapproved changes to governance or workflows.

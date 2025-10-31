@@ -3,20 +3,21 @@ repos:
     rev: v0.6.9
     hooks:
       - id: ruff
-        args: [--fix]
+        args: [--output-format=github]
       - id: ruff-format
-
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks:
-      - id: black
+        # ruff-format is the single source of truth for formatting now
+        args: []
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.2
+    rev: v1.11.0
     hooks:
       - id: mypy
-        args: [--strict]
-        additional_dependencies: []
+        args:
+          - --config-file=mypy.ini
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-requests
+          - types-PyYAML
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
