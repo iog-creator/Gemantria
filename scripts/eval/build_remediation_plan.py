@@ -87,7 +87,8 @@ def _analyze_failures(report: dict[str, Any]) -> list[dict[str, Any]]:
                     remediations.append(
                         {
                             "task_key": key,
-                            "issue": f"Value distribution out of range in {check_name}: {observed_frac:.2%} in [{range_spec[0]}, {range_spec[1]}], minimum required: {min_frac:.2%}",
+                            "issue": f"Value distribution out of range in {check_name}: {observed_frac:.2%} in "
+                            f"[{range_spec[0]}, {range_spec[1]}], minimum required: {min_frac:.2%}",
                             "severity": "medium",
                             "category": "data_distribution",
                             "suggested_actions": [
@@ -107,7 +108,8 @@ def _analyze_failures(report: dict[str, Any]) -> list[dict[str, Any]]:
                     remediations.append(
                         {
                             "task_key": key,
-                            "issue": f"Inconsistent values in {check_name}: {len(bad_indices)} entries don't match expected value {expected}",
+                            "issue": f"Inconsistent values in {check_name}: {len(bad_indices)} entries "
+                            f"don't match expected value {expected}",
                             "severity": "medium",
                             "category": "data_consistency",
                             "suggested_actions": [
@@ -153,7 +155,8 @@ def _analyze_failures(report: dict[str, Any]) -> list[dict[str, Any]]:
                 remediations.append(
                     {
                         "task_key": key,
-                        "issue": f"Referential integrity violation: {missing_endpoints} missing endpoints (limit: {allow_missing})",
+                        "issue": f"Referential integrity violation: {missing_endpoints} missing endpoints "
+                        f"(limit: {allow_missing})",
                         "severity": "high" if missing_endpoints > 10 else "medium",
                         "category": "data_integrity",
                         "suggested_actions": [

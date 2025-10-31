@@ -6,7 +6,7 @@ rules_audit.py — Ensure .cursor/rules numbering is contiguous; update docs lis
 - Generates/updates:
   * docs/SSOT/RULES_INDEX.md (authoritative list)
   * Injects a short "Rules Inventory" table into AGENTS.md
-  * Appends/updates a "Rules" table in docs/SSOT/MASTER_PLAN.md (phases–rules mapping)
+  * Appends/updates a "Rules" table in docs/SSOT/MASTER_PLAN.md (phases-rules mapping)
 - Exits nonzero on drift unless ALLOW_RULES_GAP=1 (local only).
 """
 

@@ -218,7 +218,8 @@ def pattern_metrics_latest() -> list[tuple]:
         """
         SELECT
             (SELECT COUNT(DISTINCT cluster_id) FROM concept_clusters) as clusters_found,
-            (SELECT COUNT(*) FROM concept_clusters GROUP BY cluster_id ORDER BY COUNT(*) DESC LIMIT 1) as largest_cluster_size,
+            (SELECT COUNT(*) FROM concept_clusters GROUP BY cluster_id ORDER BY COUNT(*) DESC LIMIT 1)
+            as largest_cluster_size,
             (SELECT COUNT(*) FROM concept_centrality WHERE degree > 0) as nodes_with_centrality,
             (SELECT ROUND(AVG(degree), 3) FROM concept_centrality) as avg_degree_centrality,
             (SELECT concept_id FROM concept_centrality ORDER BY degree DESC LIMIT 1) as top_hub_concept

@@ -8,11 +8,6 @@ from typing import Any, TypedDict
 
 from langgraph.graph import StateGraph
 
-from src.infra.env_loader import ensure_env_loaded
-
-# Load environment variables from .env file
-ensure_env_loaded()
-
 from src.graph.batch_processor import (
     BatchAbortError,
     BatchConfig,
@@ -21,6 +16,7 @@ from src.graph.batch_processor import (
 )
 from src.infra.checkpointer import get_checkpointer
 from src.infra.db import get_gematria_rw
+from src.infra.env_loader import ensure_env_loaded
 from src.infra.metrics_core import NodeTimer, get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
 from src.nodes.collect_nouns_db import collect_nouns_for_book
@@ -41,6 +37,9 @@ from src.services.lmstudio_client import (
     QwenUnavailableError,
     assert_qwen_live,
 )
+
+# Load environment variables from .env file
+ensure_env_loaded()
 
 LOG = get_logger("gematria.graph")
 

@@ -10,11 +10,20 @@ REPORT_JSON = OUTDIR / "report.json"
 
 def _status_badge(status: str) -> str:
     if status == "OK":
-        return '<span style="background-color: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">PASS</span>'
+        return (
+            '<span style="background-color: #28a745; color: white; padding: 2px 8px; '
+            'border-radius: 4px; font-size: 12px;">PASS</span>'
+        )
     elif status == "FAIL":
-        return '<span style="background-color: #dc3545; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">FAIL</span>'
+        return (
+            '<span style="background-color: #dc3545; color: white; padding: 2px 8px; '
+            'border-radius: 4px; font-size: 12px;">FAIL</span>'
+        )
     else:
-        return '<span style="background-color: #ffc107; color: black; padding: 2px 8px; border-radius: 4px; font-size: 12px;">WARN</span>'
+        return (
+            '<span style="background-color: #ffc107; color: black; padding: 2px 8px; '
+            'border-radius: 4px; font-size: 12px;">WARN</span>'
+        )
 
 
 def _load_report() -> dict[str, any]:
@@ -34,26 +43,23 @@ def main() -> int:
     html.append("<html lang='en'>")
     html.append("<head>")
     html.append("    <meta charset='UTF-8'>")
-    html.append(
-        "    <meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-    )
+    html.append("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
     html.append("    <title>Gemantria Phase-8 Eval Dashboard</title>")
     html.append("    <style>")
     html.append(
-        "        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; }"
+        "        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; "
+        "margin: 0; padding: 20px; background-color: #f8f9fa; }"
     )
     html.append(
-        "        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }"
+        "        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; "
+        "border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }"
     )
-    html.append(
-        "        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }"
-    )
-    html.append(
-        "        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }"
-    )
+    html.append("        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }")
+    html.append("        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }")
     html.append("        .summary strong { color: #007acc; }")
     html.append(
-        "        .artifacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }"
+        "        .artifacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); "
+        "gap: 15px; margin: 20px 0; }"
     )
     html.append(
         "        .artifact { border: 1px solid #e1e4e8; border-radius: 6px; padding: 15px; background: #fafbfc; }"
@@ -63,7 +69,8 @@ def main() -> int:
     html.append("        .artifact a:hover { text-decoration: underline; }")
     html.append("        .badge { margin-left: 10px; }")
     html.append(
-        "        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e4e8; color: #586069; font-size: 14px; }"
+        "        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e4e8; "
+        "color: #586069; font-size: 14px; }"
     )
     html.append("    </style>")
     html.append("</head>")
@@ -76,15 +83,18 @@ def main() -> int:
     strict_badge = badges_dir / "strict_gate.svg"
     badges_html = ""
     if report_badge.exists():
-        badges_html += f'<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
+        badges_html += (
+            '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
+        )
     if strict_badge.exists():
-        badges_html += f'<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
+        badges_html += '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
     if badges_html:
         html.append(f"<div>{badges_html}</div>")
     html.append("")
     html.append("        <div class='summary'>")
     html.append(
-        f"            <strong>Overall Status:</strong> {summary.get('ok_count', 0)} PASS, {summary.get('fail_count', 0)} FAIL"
+        f"            <strong>Overall Status:</strong> {summary.get('ok_count', 0)} PASS, "
+        f"{summary.get('fail_count', 0)} FAIL"
     )
     html.append("        </div>")
     html.append("")

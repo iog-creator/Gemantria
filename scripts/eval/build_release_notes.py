@@ -2,6 +2,7 @@
 import json
 import pathlib
 import time
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
@@ -20,11 +21,7 @@ def main() -> int:
     delta = _load(EVAL / "delta.json") or {}
     idst = _load(EVAL / "id_stability.json") or {}
     prov = _load(EVAL / "provenance.json") or {}
-    policy = (
-        (EVAL / "policy_diff.md").read_text(encoding="utf-8")
-        if (EVAL / "policy_diff.md").exists()
-        else ""
-    )
+    policy = (EVAL / "policy_diff.md").read_text(encoding="utf-8") if (EVAL / "policy_diff.md").exists() else ""
     s = report.get("summary", {})
     ok, fail, tasks = (
         s.get("ok_count", 0),
@@ -42,7 +39,7 @@ def main() -> int:
     d_ok = dsum.get("ok", True)
 
     lines = []
-    lines.append("# Gemantria – Release Notes (Local Eval)\n")
+    lines.append("# Gemantria - Release Notes (Local Eval)\n")
     lines.append(f"*generated:* {int(time.time())}")
     if prov:
         head = prov.get("repo", {}).get("git_head")
@@ -52,13 +49,9 @@ def main() -> int:
     lines.append(f"- Manifest tasks: **{ok}/{tasks} OK**, **{fail} FAIL**")
     lines.append(f"- History: series={hist_n} • ok_all={'✅' if hist_ok else '❌'}")
     if jaccard is not None:
-        lines.append(
-            f"- ID stability: jaccard={jaccard} • added={id_added} • removed={id_removed}"
-        )
+        lines.append(f"- ID stability: jaccard={jaccard} • added={id_added} • removed={id_removed}")
     if d_has_prev is not None:
-        lines.append(
-            f"- Delta: has_previous={d_has_prev} • ok={'✅' if d_ok else '❌'}\n"
-        )
+        lines.append(f"- Delta: has_previous={d_has_prev} • ok={'✅' if d_ok else '❌'}\n")
     lines.append("## Policy Delta (strict vs dev)")
     lines.append(policy.strip() or "_No policy_diff.md present._\n")
     lines.append("## Provenance (excerpt)")

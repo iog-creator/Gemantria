@@ -55,15 +55,15 @@ def main() -> int:
     for e in data.get("edges", []):
         try:
             cos.append(float(e.get("cosine", 0.0)))
-        except:
+        except (ValueError, TypeError):
             cos.append(0.0)
         try:
             rr.append(float(e.get("rerank", 0.0) if e.get("rerank") is not None else 0.0))
-        except:
+        except (ValueError, TypeError):
             rr.append(0.0)
         try:
             strg.append(float(e.get("edge_strength", 0.0) or 0.0))
-        except:
+        except (ValueError, TypeError):
             strg.append(0.0)
 
     # Scan blend weight W in [0.00..1.00] and choose thresholds per W
