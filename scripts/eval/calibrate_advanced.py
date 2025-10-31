@@ -58,9 +58,7 @@ def main() -> int:
         except:
             cos.append(0.0)
         try:
-            rr.append(
-                float(e.get("rerank", 0.0) if e.get("rerank") is not None else 0.0)
-            )
+            rr.append(float(e.get("rerank", 0.0) if e.get("rerank") is not None else 0.0))
         except:
             rr.append(0.0)
         try:
@@ -72,10 +70,7 @@ def main() -> int:
     best = {"score": -1.0}
     for i in range(0, 101, 5):  # step 0.05 for speed/determinism
         W = i / 100.0
-        vals = [
-            max(0.0, min(1.0, W * c + (1.0 - W) * r))
-            for c, r in zip(cos, rr, strict=False)
-        ]
+        vals = [max(0.0, min(1.0, W * c + (1.0 - W) * r)) for c, r in zip(cos, rr, strict=False)]
         score, wth, sth = grid(vals, step=0.01)
         # tie-break: prefer fewer "other" (larger weak/strong share)
         other = sum(v < wth for v in vals)
@@ -102,9 +97,7 @@ def main() -> int:
         },
     }
     OUT.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
-    print(
-        f"[calibrate.adv] wrote {OUT.relative_to(ROOT)} W={best['W']} weak≥{best['weak']} strong≥{best['strong']}"
-    )
+    print(f"[calibrate.adv] wrote {OUT.relative_to(ROOT)} W={best['W']} weak≥{best['weak']} strong≥{best['strong']}")
     return 0
 
 

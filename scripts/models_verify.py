@@ -10,9 +10,7 @@ ensure_env_loaded()
 
 
 def get(url, data=None, headers=None, timeout=30):
-    req = urllib.request.Request(
-        url, data=data, headers=headers or {}, method="POST" if data else "GET"
-    )
+    req = urllib.request.Request(url, data=data, headers=headers or {}, method="POST" if data else "GET")
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8")
 
@@ -52,12 +50,7 @@ def chat_ping(host, model, retries: int = 3):
             )
             dt = time.time() - t0
             obj = json.loads(txt)
-            out = (
-                obj.get("choices", [{}])[0]
-                .get("message", {})
-                .get("content", "")
-                .strip()
-            )
+            out = obj.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
             return True, {"latency_s": round(dt, 3), "output": out}
         except Exception as e:
             err = e
@@ -126,7 +119,5 @@ except Exception as e:
     print(f"[verify] embeddings FAILED: {e}")
     dim = -1
 
-ok = (
-    ok_chat1 and isinstance(info1, dict) and info1.get("output") == "OK" and dim == 1024
-)
+ok = ok_chat1 and isinstance(info1, dict) and info1.get("output") == "OK" and dim == 1024
 print("[verify] OK" if ok else "[verify] FAIL")

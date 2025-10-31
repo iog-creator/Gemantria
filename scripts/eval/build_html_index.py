@@ -37,9 +37,7 @@ def main() -> int:
     html.append("<html lang='en'>")
     html.append("<head>")
     html.append("    <meta charset='UTF-8'>")
-    html.append(
-        "    <meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-    )
+    html.append("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
     html.append("    <title>Gemantria Phase-8 Eval Dashboard</title>")
     html.append("    <style>")
     html.append(
@@ -48,18 +46,14 @@ def main() -> int:
     html.append(
         "        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }"  # noqa: E501
     )
-    html.append(
-        "        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }"
-    )
-    html.append(
-        "        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }"  # noqa: E501
-    )
+    html.append("        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }")
+    html.append("        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }")
     html.append("        .summary strong { color: #007acc; }")
     html.append(
         "        .artifacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }"  # noqa: E501
     )
     html.append(
-        "        .artifact { border: 1px solid #e1e4e8; border-radius: 6px; padding: 15px; background: #fafbfc; }"  # noqa: E501
+        "        .artifact { border: 1px solid #e1e4e8; border-radius: 6px; padding: 15px; background: #fafbfc; }"
     )
     html.append("        .artifact h3 { margin: 0 0 10px 0; color: #333; }")
     html.append("        .artifact a { color: #0366d6; text-decoration: none; }")
@@ -68,18 +62,12 @@ def main() -> int:
     html.append(
         "        .manifest-section { margin: 20px 0; border: 1px solid #e1e4e8; border-radius: 6px; padding: 15px; background: #fafbfc; }"  # noqa: E501
     )
+    html.append("        .manifest-section summary { cursor: pointer; font-weight: bold; }")
+    html.append("        #manifest-table { width: 100%; border-collapse: collapse; margin-top: 10px; }")
     html.append(
-        "        .manifest-section summary { cursor: pointer; font-weight: bold; }"
+        "        #manifest-table th, #manifest-table td { border: 1px solid #e1e4e8; padding: 8px; text-align: left; }"
     )
-    html.append(
-        "        #manifest-table { width: 100%; border-collapse: collapse; margin-top: 10px; }"  # noqa: E501
-    )
-    html.append(
-        "        #manifest-table th, #manifest-table td { border: 1px solid #e1e4e8; padding: 8px; text-align: left; }"  # noqa: E501
-    )
-    html.append(
-        "        #manifest-table th { background: #f1f8ff; font-weight: bold; }"
-    )
+    html.append("        #manifest-table th { background: #f1f8ff; font-weight: bold; }")
     html.append("        #manifest-summary { margin-bottom: 10px; font-weight: bold; }")
     html.append(
         "        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e4e8; color: #586069; font-size: 14px; }"  # noqa: E501
@@ -95,9 +83,11 @@ def main() -> int:
     strict_badge = badges_dir / "strict_gate.svg"
     badges_html = ""
     if report_badge.exists():
-        badges_html += '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'  # noqa: E501
+        badges_html += (
+            '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
+        )
     if strict_badge.exists():
-        badges_html += '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'  # noqa: E501
+        badges_html += '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
     if badges_html:
         html.append(f"<div>{badges_html}</div>")
     html.append("")
@@ -126,9 +116,7 @@ def main() -> int:
     html.append("        <!-- Centrality (optional) -->")
     html.append("        <details style='margin-top:12px;'>")
     html.append("            <summary>📊 Centrality summary</summary>")
-    html.append(
-        "            <div id='centrality-summary' style='font-family:monospace;"
-    )
+    html.append("            <div id='centrality-summary' style='font-family:monospace;")
     html.append("                white-space:pre;'></div>")
     html.append("        </details>")
     html.append("")
@@ -136,9 +124,7 @@ def main() -> int:
     html.append("        <!-- Edge strength / rerank summary (optional) -->")
     html.append('        <details style="margin-top:12px;">')
     html.append("          <summary>🔗 Edge strength summary</summary>")
-    html.append(
-        '          <div id="edge-strength-summary" style="font-family:monospace;'
-    )
+    html.append('          <div id="edge-strength-summary" style="font-family:monospace;')
     html.append('                white-space:pre;"></div>')
     html.append("        </details>")
     html.append("")
@@ -146,53 +132,26 @@ def main() -> int:
     html.append("        <!-- Delta summary (optional) -->")
     html.append('        <details style="margin-top:12px;">')
     html.append("          <summary>Delta summary</summary>")
-    html.append(
-        '          <div id="delta-summary" style="font-family:monospace; white-space:pre;"></div>'
-    )
+    html.append('          <div id="delta-summary" style="font-family:monospace; white-space:pre;"></div>')
     html.append("        </details>")
     html.append("")
 
     html.append("        <!-- Provenance (optional) -->")
     html.append('        <details style="margin-top:12px;">')
     html.append("          <summary>Provenance</summary>")
-    html.append(
-        '          <div id="prov" style="font-family:monospace; white-space:pre;"></div>'
-    )
+    html.append('          <div id="prov" style="font-family:monospace; white-space:pre;"></div>')
     html.append("        </details>")
     html.append("")
 
     html.append("        <!-- Run summary (optional) -->")
     html.append('        <details style="margin-top:12px;">')
     html.append("          <summary>Run summary</summary>")
-    html.append(
-        '          <div><a href="summary.md" target="_blank" rel="noopener">Open summary.md</a></div>'
-    )
+    html.append('          <div><a href="summary.md" target="_blank" rel="noopener">Open summary.md</a></div>')
     html.append(
         '          <div id="quality-status" style="font-family:monospace; white-space:pre; margin-top:8px;"></div>'
     )
     html.append("        </details>")
     html.append("")
-
-    html.append("        <!-- Calibration & Quality Trend -->")
-    html.append('        <details style="margin-top:12px;">')
-    html.append("          <summary>Calibration & Trend</summary>")
-    html.append(
-        '          <div id="calib" style="font-family:monospace; white-space:pre;"></div>'
-    )
-    html.append('          <div style="margin-top:8px;">')
-    html.append('            <img alt="quality_trend" src="badges/quality_trend.svg">')
-    html.append("          </div>")
-    html.append("                </details>")
-    html.append("")
-
-    html.append("        <!-- Edge Audit & Anomalies -->")
-    html.append('        <details style="margin-top:12px;">')
-    html.append("          <summary>Edge audit & anomalies</summary>")
-    html.append('          <div><a href="edge_audit.csv" target="_blank" rel="noopener">Download edge_audit.csv</a></div>')
-    html.append('          <div id="anoms" style="font-family:monospace; white-space:pre; margin-top:8px;"></div>')
-    html.append("        </details>")
-    html.append("")
-
     html.append("        <div class='artifacts'>")
 
     # Core reports
@@ -235,27 +194,21 @@ def main() -> int:
     html.append("")
     html.append("        <div class='footer'>")
     html.append(
-        "            <p>Generated by Phase-8 evaluation system. Use <code>make eval.html</code> to regenerate.</p>"  # noqa: E501
+        "            <p>Generated by Phase-8 evaluation system. Use <code>make eval.html</code> to regenerate.</p>"
     )
     html.append("        </div>")
     html.append("    </div>")
     html.append("    <script>")
     html.append("        async function loadManifest() {")
     html.append("            try {")
-    html.append(
-        "                const response = await fetch('release_manifest.json');"
-    )
+    html.append("                const response = await fetch('release_manifest.json');")
     html.append("                if (!response.ok) throw new Error('Not found');")
     html.append("                const data = await response.json();")
-    html.append(
-        "                const summary = document.getElementById('manifest-summary');"
-    )
-    html.append(
-        "                const tbody = document.getElementById('manifest-tbody');"
-    )
+    html.append("                const summary = document.getElementById('manifest-summary');")
+    html.append("                const tbody = document.getElementById('manifest-tbody');")
     html.append(
         "                summary.textContent = `Artifacts: ${data.artifact_count} | "
-        "Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"  # noqa: E501
+        "Generated: ${new Date(data.generated_at * 1000).toISOString()}`;"
     )
     html.append("                const artifacts = data.artifacts.slice(0, 200);")
     html.append("                tbody.innerHTML = '';")
@@ -267,15 +220,11 @@ def main() -> int:
     html.append("                    tbody.appendChild(tr);")
     html.append("                });")
     html.append("            } catch (e) {")
-    html.append(
-        "                document.getElementById('manifest-summary').textContent = 'Manifest not found';"  # noqa: E501
-    )
+    html.append("                document.getElementById('manifest-summary').textContent = 'Manifest not found';")
     html.append("            }")
     html.append("        }")
     html.append("        if (document.readyState === 'loading') {")
-    html.append(
-        "            document.addEventListener('DOMContentLoaded', loadManifest);"
-    )
+    html.append("            document.addEventListener('DOMContentLoaded', loadManifest);")
     html.append("        } else {")
     html.append("            loadManifest();")
     html.append("        }")
@@ -291,12 +240,8 @@ def main() -> int:
     html.append("                    .map(([id,v]) => [id, (v.eigenvector ?? 0)])")
     html.append("                    .sort((a,b)=>b[1]-a[1]).slice(0,10);")
     html.append("                const lines = ['nodes='+n, 'top10_eigenvector:']")
-    html.append(
-        "                    .concat(top.map(([id,ev])=>`${id}\t${ev.toFixed(6)}`));"
-    )
-    html.append(
-        "                document.getElementById('centrality-summary').textContent ="
-    )
+    html.append("                    .concat(top.map(([id,ev])=>`${id}\t${ev.toFixed(6)}`));")
+    html.append("                document.getElementById('centrality-summary').textContent =")
     html.append("                    lines.join('\\n');")
     html.append("            }catch(e){/* silent */}")
     html.append("        })();")
@@ -304,9 +249,7 @@ def main() -> int:
     html.append("    <script>")
     html.append("        (async function(){")
     html.append("            try{")
-    html.append(
-        "                const r = await fetch('graph_latest.json'); if(!r.ok) return;"
-    )
+    html.append("                const r = await fetch('graph_latest.json'); if(!r.ok) return;")
     html.append("                const g = await r.json();")
     html.append("                const edges = g.edges || [];")
     html.append("                let s=0,w=0,o=0,miss=0;")
@@ -314,18 +257,14 @@ def main() -> int:
     html.append('                    if(e.class==="strong") s++;')
     html.append('                    else if(e.class==="weak") w++;')
     html.append("                    else o++;")
-    html.append(
-        "                    if(e.rerank===null || e.rerank===undefined) miss++;"
-    )
+    html.append("                    if(e.rerank===null || e.rerank===undefined) miss++;")
     html.append("                }")
     html.append("                const lines = [")
     html.append('                    "edges="+edges.length,')
     html.append('                    "strong="+s, "weak="+w, "other="+o,')
     html.append('                    "missing_rerank="+miss')
     html.append("                ];")
-    html.append(
-        "                document.getElementById('edge-strength-summary').textContent ="
-    )
+    html.append("                document.getElementById('edge-strength-summary').textContent =")
     html.append('                    lines.join("\\n");')
     html.append("            }catch(_){/* silent */}")
     html.append("        })();")
@@ -333,38 +272,24 @@ def main() -> int:
     html.append("    <script>")
     html.append("        (async function(){")
     html.append("            try{")
-    html.append(
-        "                const r = await fetch('delta.json'); if(!r.ok) return;"
-    )
+    html.append("                const r = await fetch('delta.json'); if(!r.ok) return;")
     html.append("                const d = await r.json();")
-    html.append(
-        "                const cur = d.counts.current, prev = d.counts.previous, dd = d.counts.delta;"
-    )
+    html.append("                const cur = d.counts.current, prev = d.counts.previous, dd = d.counts.delta;")
     html.append("                const lines = [")
     html.append('                    "previous_present=" + d.prev_present,')
-    html.append(
-        '                    "current   strong=" + cur.strong + " weak=" + cur.weak,'
-    )
-    html.append(
-        '                    "previous  strong=" + prev.strong + " weak=" + prev.weak,'
-    )
-    html.append(
-        '                    "delta     strong=" + (dd.strong>=0? "+"+dd.strong: dd.strong) +'
-    )
+    html.append('                    "current   strong=" + cur.strong + " weak=" + cur.weak,')
+    html.append('                    "previous  strong=" + prev.strong + " weak=" + prev.weak,')
+    html.append('                    "delta     strong=" + (dd.strong>=0? "+"+dd.strong: dd.strong) +')
     html.append('                        " weak=" + (dd.weak>=0? "+"+dd.weak: dd.weak)')
     html.append("                ];")
-    html.append(
-        "                document.getElementById('delta-summary').textContent = lines.join(\"\\n\");"
-    )
+    html.append("                document.getElementById('delta-summary').textContent = lines.join(\"\\n\");")
     html.append("            }catch(_){/* silent */}")
     html.append("        })();")
     html.append("    </script>")
     html.append("    <script>")
     html.append("        (async function(){")
     html.append("            try{")
-    html.append(
-        "                const r = await fetch('provenance.json'); if(!r.ok) return;"
-    )
+    html.append("                const r = await fetch('provenance.json'); if(!r.ok) return;")
     html.append("                const p = await r.json();")
     html.append("                const lines = [")
     html.append('                    "commit=" + (p.git?.commit ?? "?"),')
@@ -377,56 +302,17 @@ def main() -> int:
         '                    "delta=" + (p.delta_present ? "yes":"no") + " centrality=" + (p.centrality_present ? "yes":"no")'
     )
     html.append("                ];")
-    html.append(
-        "                document.getElementById('prov').textContent = lines.join(\"\\n\");"
-    )
+    html.append("                document.getElementById('prov').textContent = lines.join(\"\\n\");")
     html.append("            }catch(_){/* silent */}")
     html.append("        })();")
     html.append("    </script>")
     html.append("    <script>")
     html.append("        (async function(){")
     html.append("            try{")
-    html.append(
-        "                const r = await fetch('quality_report.txt'); if(!r.ok) return;"
-    )
+    html.append("                const r = await fetch('quality_report.txt'); if(!r.ok) return;")
     html.append("                const t = await r.text();")
-    html.append(
-        "                document.getElementById('quality-status').textContent = t;"
-    )
+    html.append("                document.getElementById('quality-status').textContent = t;")
     html.append("            }catch(_){/* silent */}")
-    html.append("        })();")
-    html.append("    </script>")
-    html.append("    <script>")
-    html.append("        (async function(){")
-    html.append("            try{")
-    html.append(
-        "                const a = await fetch('calibration_adv.json'); if(a.ok){"
-    )
-    html.append("                    const adv = await a.json();")
-    html.append("                    const s = adv.suggested || {};")
-    html.append("                    const lines = [")
-    html.append('                        "suggested:",')
-    html.append('                        "  EDGE_BLEND_WEIGHT="+s.EDGE_BLEND_WEIGHT,')
-    html.append('                        "  EDGE_WEAK_THRESH="+s.EDGE_WEAK_THRESH,')
-    html.append('                        "  EDGE_STRONG_THRESH="+s.EDGE_STRONG_THRESH')
-    html.append("                    ];")
-    html.append(
-        "                    document.getElementById('calib').textContent = lines.join(\"\\n\");"
-    )
-    html.append("                }")
-    html.append("            }catch(_){/* silent */}")
-    html.append("        })();")
-    html.append("    </script>")
-    html.append("    <script>")
-    html.append("        (async function(){")
-    html.append("            try{")
-    html.append("                const r = await fetch('anomalies.json'); if(!r.ok) return;")
-    html.append("                const d = await r.json();")
-    html.append("                const c = d.count ?? 0;")
-    html.append("                const examples = (d.items || []).slice(0,5).map(e => `${e.src} → ${e.dst}  st=${(e.edge_strength||0).toFixed(3)}  flags=${(e.flags||[]).join(',')}`);")
-    html.append("                const lines = [`count=${c}`].concat(examples);")
-    html.append("                document.getElementById('anoms').textContent = lines.join('\n');")
-    html.append("            }catch(_){}")
     html.append("        })();")
     html.append("    </script>")
     html.append("</body>")

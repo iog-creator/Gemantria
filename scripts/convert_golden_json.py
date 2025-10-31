@@ -3,6 +3,7 @@
 Convert old golden JSON format to new JSONL format.
 Usage: python3 scripts/convert_golden_json.py <input.json> <output.jsonl>
 """
+
 import json
 import sys
 from pathlib import Path
@@ -31,7 +32,7 @@ def convert_record(record: dict[str, Any], book: str = "Genesis") -> dict[str, A
         "source": "lm",
         "book": book,
         "chapter": extract_chapter(record.get("primary_verse", "")),
-        "timestamp": "2025-10-25T02:55:50.000Z"
+        "timestamp": "2025-10-25T02:55:50.000Z",
     }
     return new_record
 
@@ -62,7 +63,7 @@ def main():
         sys.exit(1)
 
     try:
-        with input_path.open('r', encoding='utf-8') as f:
+        with input_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
 
         book_name = data.get("book_name", "Genesis")
@@ -70,10 +71,10 @@ def main():
 
         print(f"[convert] Converting {len(nouns)} nouns from {book_name}")
 
-        with output_path.open('w', encoding='utf-8') as f:
+        with output_path.open("w", encoding="utf-8") as f:
             for noun in nouns:
                 converted = convert_record(noun, book_name)
-                f.write(json.dumps(converted, ensure_ascii=False) + '\n')
+                f.write(json.dumps(converted, ensure_ascii=False) + "\n")
 
         print(f"[convert] Successfully converted to {output_path}")
 
@@ -82,5 +83,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -211,28 +211,20 @@ def _generate_summary(remediations: list[dict[str, Any]]) -> dict[str, Any]:
         "by_severity": severities,
         "automated_fixes_available": automated_available,
         "estimated_total_effort": (
-            "high"
-            if severities["high"] > 0
-            else "medium" if severities["medium"] > 2 else "low"
+            "high" if severities["high"] > 0 else "medium" if severities["medium"] > 2 else "low"
         ),
     }
 
 
-def _write_markdown_plan(
-    remediations: list[dict[str, Any]], summary: dict[str, Any]
-) -> None:
+def _write_markdown_plan(remediations: list[dict[str, Any]], summary: dict[str, Any]) -> None:
     """Write remediation plan in human-readable Markdown format."""
     lines = []
     lines.append("# Gemantria Remediation Plan")
     lines.append("")
-    lines.append(
-        f"**Generated:** {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}"
-    )
+    lines.append(f"**Generated:** {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}")
     lines.append("")
     lines.append(f"**Total Issues:** {summary['total_issues']}")
-    lines.append(
-        f"**Automated Fixes Available:** {summary['automated_fixes_available']}"
-    )
+    lines.append(f"**Automated Fixes Available:** {summary['automated_fixes_available']}")
     lines.append(f"**Estimated Effort:** {summary['estimated_total_effort'].upper()}")
     lines.append("")
 
@@ -277,9 +269,7 @@ def main() -> int:
     print("[eval.remediation] starting")
 
     if not REPORT_JSON.exists():
-        print(
-            "[eval.remediation] FAIL no report.json found (run make eval.report first)"
-        )
+        print("[eval.remediation] FAIL no report.json found (run make eval.report first)")
         return 2
 
     report = _load_report()
@@ -305,16 +295,12 @@ def main() -> int:
     }
 
     # Write outputs
-    REMEDIATION_PLAN.write_text(
-        json.dumps(plan, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    REMEDIATION_PLAN.write_text(json.dumps(plan, indent=2, sort_keys=True), encoding="utf-8")
 
     _write_markdown_plan(remediations, summary)
 
     print(f"[eval.remediation] analyzed {summary['total_issues']} issues")
-    print(
-        f"[eval.remediation] {summary['automated_fixes_available']} automated fixes available"
-    )
+    print(f"[eval.remediation] {summary['automated_fixes_available']} automated fixes available")
     print(f"[eval.remediation] wrote {REMEDIATION_PLAN.relative_to(ROOT)}")
     print(f"[eval.remediation] wrote {REMEDIATION_MD.relative_to(ROOT)}")
     print("[eval.remediation] OK")

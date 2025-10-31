@@ -2,7 +2,6 @@
 import pathlib
 import re
 import sys
-from typing import Optional, Tuple
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MAKEFILE = ROOT / "Makefile"
@@ -15,7 +14,7 @@ def _print(msg: str) -> None:  # deterministic prefix
     print(f"[ops.verify] {msg}")
 
 
-def check_make_targets() -> Tuple[bool, str]:
+def check_make_targets() -> tuple[bool, str]:
     if not MAKEFILE.exists():
         return False, "Makefile missing"
     text = MAKEFILE.read_text(encoding="utf-8", errors="ignore")
@@ -31,7 +30,7 @@ def check_make_targets() -> Tuple[bool, str]:
     return True, "Makefile targets present: eval.report, ci.eval.report"
 
 
-def read_manifest_version() -> Tuple[Optional[str], str]:
+def read_manifest_version() -> tuple[str | None, str]:
     if not MANIFEST.exists():
         return None, "eval/manifest.yml not found"
     # minimal 'version:' line parser (no pyYAML dependency)
@@ -42,7 +41,7 @@ def read_manifest_version() -> Tuple[Optional[str], str]:
     return "(unknown)", "manifest version not found (line 'version: ...' missing)"
 
 
-def check_eval_doc() -> Tuple[bool, str]:
+def check_eval_doc() -> tuple[bool, str]:
     if not DOC_EVAL.exists():
         return False, "docs/PHASE8_EVAL.md missing"
     head = DOC_EVAL.read_text(encoding="utf-8", errors="ignore").splitlines()[:1]
@@ -50,7 +49,7 @@ def check_eval_doc() -> Tuple[bool, str]:
     return ok, f"PHASE8_EVAL header={'OK' if ok else 'MISSING'}"
 
 
-def check_share_dir() -> Tuple[bool, str]:
+def check_share_dir() -> tuple[bool, str]:
     exists = SHARE_EVAL_DIR.exists()
     return exists, f"share/eval/ {'exists' if exists else 'missing'}"
 

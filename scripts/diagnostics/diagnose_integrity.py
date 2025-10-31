@@ -21,9 +21,7 @@ def main() -> int:
     doc = _load(LATEST)
     nodes = doc.get("nodes", []) or []
     edges = doc.get("edges", []) or []
-    node_ids: set[Any] = {
-        n.get("id") for n in nodes if isinstance(n, dict) and "id" in n
-    }
+    node_ids: set[Any] = {n.get("id") for n in nodes if isinstance(n, dict) and "id" in n}
 
     missing = []
     for e in edges:
@@ -38,9 +36,7 @@ def main() -> int:
     OUT.write_text(
         "# Integrity Diagnostics\n\n"
         f"*missing_endpoints:* {len(missing)}\n\n"
-        "## Examples (up to 10)\n\n"
-        + "\n".join(f"- {pair}" for pair in examples)
-        + "\n",
+        "## Examples (up to 10)\n\n" + "\n".join(f"- {pair}" for pair in examples) + "\n",
         encoding="utf-8",
     )
     print(f"[diag.integrity] missing_endpoints={len(missing)}")

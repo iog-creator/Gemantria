@@ -4,7 +4,7 @@ import json
 import os
 import pathlib
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
@@ -21,11 +21,11 @@ def _sha256(path: pathlib.Path) -> str:
 
 def main() -> int:
     print("[eval.release_manifest] starting")
-    artifacts: List[Dict[str, Any]] = []  # type: ignore[type-arg]
+    artifacts: list[dict[str, Any]] = []
     for base in [
         EVAL,
         EVAL / "badges",
-        EVAL / "bundles",
+        # EVAL / "bundles",  # Skip bundles to avoid hashing large archives
     ]:
         if not base.exists():
             continue

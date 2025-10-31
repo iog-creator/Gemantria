@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-import hashlib, json, os, pathlib, subprocess, time
+import hashlib
+import json
+import os
+import pathlib
+import subprocess
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
-OUT  = EVAL / "provenance.json"
+OUT = EVAL / "provenance.json"
+
 
 def sha256_path(p: pathlib.Path) -> str:
     h = hashlib.sha256()
@@ -13,22 +19,26 @@ def sha256_path(p: pathlib.Path) -> str:
     return h.hexdigest()
 
 
-def git(cmd: list[str]) -> str | None:
+def git(cmd):
     try:
         return subprocess.check_output(["git"] + cmd, cwd=ROOT).decode().strip()
     except Exception:
         return None
 
 
-def safe_json(p: pathlib.Path) -> dict | None:
+def safe_json(p: pathlib.Path):
     try:
         return json.loads(p.read_text(encoding="utf-8"))
     except Exception:
         return None
 
+
 def main() -> int:
     cur = safe_json(EVAL / "graph_latest.json") or {}
+    prev = safe_json(EVAL / "graph_prev.json") or {}
     man = safe_json(EVAL / "release_manifest.json") or {}
+    cen = safe_json(EVAL / "centrality.json") or {}
+    delta = safe_json(EVAL / "delta.json") or {}
 
     nodes = len(cur.get("nodes", []))
     edges = len(cur.get("edges", []))
@@ -43,21 +53,13 @@ def main() -> int:
         "env": {"python": py, "rerank_provider": os.environ.get("RERANK_PROVIDER", "none")},
         "counts": {"nodes": nodes, "edges": edges, "artifacts": artifacts},
         "hashes": {
-            "graph_latest.json": (
-                sha256_path(EVAL / "graph_latest.json")
-                if (EVAL / "graph_latest.json").exists()
-                else None
-            ),
-            "graph_prev.json": (
-                sha256_path(EVAL / "graph_prev.json")
-                if (EVAL / "graph_prev.json").exists()
-                else None
-            ),
-            "release_manifest.json": (
-                sha256_path(EVAL / "release_manifest.json")
-                if (EVAL / "release_manifest.json").exists()
-                else None
-            ),
+            "graph_latest.json": sha256_path(EVAL / "graph_latest.json")
+            if (EVAL / "graph_latest.json").exists()
+            else None,
+            "graph_prev.json": sha256_path(EVAL / "graph_prev.json") if (EVAL / "graph_prev.json").exists() else None,
+            "release_manifest.json": sha256_path(EVAL / "release_manifest.json")
+            if (EVAL / "release_manifest.json").exists()
+            else None,
         },
         "delta_present": (EVAL / "delta.json").exists(),
         "centrality_present": (EVAL / "centrality.json").exists(),
@@ -65,6 +67,7 @@ def main() -> int:
     OUT.write_text(json.dumps(prov, indent=2, sort_keys=True), encoding="utf-8")
     print(f"[provenance] wrote {OUT.relative_to(ROOT)}")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

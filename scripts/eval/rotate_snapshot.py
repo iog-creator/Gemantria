@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-import json, pathlib, shutil, sys
+import json
+import pathlib
+import shutil
+import sys
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
-CUR  = EVAL / "graph_latest.json"
+CUR = EVAL / "graph_latest.json"
 PREV = EVAL / "graph_prev.json"
+
 
 def main() -> int:
     if not CUR.exists():
@@ -18,6 +23,7 @@ def main() -> int:
     shutil.copy2(CUR, PREV)
     print(f"[snapshot.rotate] {CUR.relative_to(ROOT)} → {PREV.relative_to(ROOT)}")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
