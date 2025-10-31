@@ -1,23 +1,27 @@
 name: system-enforcement
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, edited]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
-    branches: ['main', '**']
+    branches: [ main, master, develop ]
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   enforce:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+      CI: "true"
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
     # Only enforce on first-party contexts:
     #  - push on main (internal)
     #  - first-party PRs (not forks)
     if: >
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
-    env:
-      CI: "true"
-      PR_BODY: ${{ github.event.pull_request.body }}
-      BASE_REF: ${{ github.event.pull_request.base.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,8 +78,6 @@ jobs:
           echo "::endgroup::"
       - name: Run rules guard (hard gate)
         run: python scripts/rules_guard.py
-      - name: Refresh share mirror before checking
-        run: make -s share.sync
       - name: Rules audit (contiguity + docs sync)
         run: python scripts/rules_audit.py
       - name: Rules numbering check
@@ -93,7 +95,9 @@ jobs:
             exit 0
           fi
           echo "HINT: enforcement DB steps enabled"
-          echo "::endgroup::"
+            echo "::endgroup::"
+      - name: Refresh share mirror before checking
+        run: make -s share.sync
       - name: Check share/ sync (flat, current)
         run: python scripts/check_share_sync.py
       - name: Data completeness gate (Rule 037)
