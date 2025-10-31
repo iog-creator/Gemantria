@@ -74,6 +74,8 @@ jobs:
           echo "::endgroup::"
       - name: Run rules guard (hard gate)
         run: python scripts/rules_guard.py
+      - name: Refresh share mirror before checking
+        run: make -s share.sync
       - name: Rules audit (contiguity + docs sync)
         run: python scripts/rules_audit.py
       - name: Rules numbering check
@@ -92,8 +94,6 @@ jobs:
           fi
           echo "HINT: enforcement DB steps enabled"
           echo "::endgroup::"
-      - name: Refresh share mirror before checking
-        run: make -s share.sync
       - name: Check share/ sync (flat, current)
         run: python scripts/check_share_sync.py
       - name: Data completeness gate (Rule 037)
