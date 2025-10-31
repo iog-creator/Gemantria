@@ -41,6 +41,10 @@
       "dst": "share/forest_overview.md"
     },
     {
+      "src": "src/infra/env_loader.py",
+      "dst": "share/env_loader.py"
+    },
+    {
       "src": "scripts/generate_report.py",
       "dst": "share/generate_report.py"
     },
