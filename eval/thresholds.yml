@@ -1,0 +1,32 @@
+version: 1
+strength:
+  min: 0.30
+  max: 0.95
+  min_frac: 0.70   # fraction of edges within [min,max] required
+shape:
+  nodes:
+    min: 1
+    max: 10000000
+  edges:
+    min: 1
+    max: 10000000
+embedding:
+  dim_if_present: 1024
+delta:
+  allow_removed_nodes: 0
+  allow_removed_edges: 0
+integrity:
+  allow_missing_endpoints: 26   # edges whose source/target is absent from nodes (current graph has 26 missing)
+  max_self_loops: 0            # edges where source == target
+  max_duplicate_node_ids: 0    # repeated node ids
+  max_duplicate_edge_pairs: 0  # repeated (source,target) pairs
+id_audit:
+  # Allowed JSON types for node ids: "string", "integer"
+  allowed_node_id_types: ["string", "integer"]
+  require_single_id_type: 1       # 1 = all ids must share a single type
+  max_nonconforming_ids: 0
+
+id_stability:
+  min_node_id_jaccard: 0.95       # Jaccard(current_ids, previous_ids)
+  allow_added_node_ids: 0
+  allow_removed_node_ids: 0

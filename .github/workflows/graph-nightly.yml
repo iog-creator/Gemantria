@@ -1,0 +1,68 @@
+name: graph-nightly
+on:
+  schedule:
+    - cron: "19 7 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: read
+jobs:
+  graph-anomalies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+
+      # Hermetic: no external calls
+      - name: Compute anomalies (non-blocking)
+        id: anomalies
+        continue-on-error: true
+        env:
+          MOCK_AI: "1"
+        run: |
+          set -e
+          mkdir -p share/eval/graph
+          python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          graph = Path("share/graph/graph_latest.json")
+          out = Path("share/eval/graph/graph_anomalies.jsonl")
+          out.parent.mkdir(parents=True, exist_ok=True)
+          isolates = 0
+          dangling = 0
+          cycles = 0
+          # If graph exists, compute naive counts. If absent, leave zeros.
+          if graph.exists():
+              try:
+                  data = json.loads(graph.read_text(encoding="utf-8"))
+                  edges = data.get("edges") or data.get("graph",{}).get("edges") or []
+                  nodes = data.get("nodes") or data.get("graph",{}).get("nodes") or []
+                  nids = { (n.get("id") or n.get("name")) for n in nodes }
+                  e_pairs = [ (e.get("source"), e.get("target")) for e in edges if e.get("source") is not None and e.get("target") is not None ]
+                  seen = set()
+                  for s,t in e_pairs:
+                      if s is not None: seen.add(s)
+                      if t is not None: seen.add(t)
+                  # isolate ~ node not seen in any edge
+                  isolates = sum(1 for n in nids if n not in seen)
+                  # dangling ref ~ edge endpoints not in nodes set
+                  dangling = sum(1 for s,t in e_pairs if s not in nids or t not in nids)
+                  # cycles (very naive): any self-loop counts as a cycle
+                  cycles = sum(1 for s,t in e_pairs if s == t)
+              except Exception:
+                  pass
+          line = {"ts": __import__("datetime").datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                  "isolates": isolates, "dangling": dangling, "cycles": cycles}
+          with out.open("a", encoding="utf-8") as f:
+              f.write(json.dumps(line) + "\n")
+          print(f"HINT: graph-nightly: isolates={isolates}, dangling={dangling}, cycles={cycles}")
+          PY
+
+      - name: Upload anomalies history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph_history
+          path: share/eval/graph/graph_anomalies.jsonl
+          if-no-files-found: error

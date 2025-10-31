@@ -126,8 +126,8 @@ def enrichment_node(state: dict) -> dict:
 
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
-                        import json as _json  # noqa: E402
-                        import re  # noqa: E402
+                        import json as _json
+                        import re
 
                         m = re.search(
                             r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",
@@ -175,9 +175,10 @@ def enrichment_node(state: dict) -> dict:
                     # Persist to database (optional for testing)
                     if GEMATRIA_DSN:
                         try:
-                            with psycopg.connect(
-                                GEMATRIA_DSN
-                            ) as conn, conn.cursor() as cur:
+                            with (
+                                psycopg.connect(GEMATRIA_DSN) as conn,
+                                conn.cursor() as cur,
+                            ):
                                 cur.execute(
                                     """INSERT INTO ai_enrichment_log
                                        (run_id,node,noun_id,model_name,confidence_model,

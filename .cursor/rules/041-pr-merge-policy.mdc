@@ -1,0 +1,10 @@
+id: 041_PR_MERGE_POLICY
+version: 1
+alwaysApply: false
+title: PR Merge Policy (no green, no merge)
+policy:
+  - Do not merge if any required check fails.
+  - Use squash merge. Delete head branch after merge.
+  - Stacked PRs labeled 'stacked-on-<base>' merge only after base merges.
+acceptance:
+  - Checks green in GitHub UI; merge confirmation posted as evidence.

@@ -1,0 +1,82 @@
+name: lint-nightly
+on:
+  schedule:
+    - cron: "17 7 * * *" # daily 07:17 UTC (same as mypy-nightly)
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  lint-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (project + ruff)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install ruff
+
+      - name: Run full ruff sweep (non-blocking)
+        id: ruff
+        continue-on-error: true
+        run: |
+          set -e
+          mkdir -p share/eval/ruff
+          # Always exit zero but emit findings
+          ruff check . --exit-zero --output-format text | tee share/eval/ruff/ruff_full.txt
+          # Count issues (lines starting with a code like E501/F401/etc.)
+          COUNT=$(grep -E '^[A-Z][0-9]{3}' -c share/eval/ruff/ruff_full.txt || true)
+          echo "count=${COUNT}" >> "$GITHUB_OUTPUT"
+          if [ -f scripts/hint.sh ]; then
+            bash scripts/hint.sh "ruff-nightly: count=${COUNT}"
+          else
+            echo "HINT: ruff-nightly: count=${COUNT}"
+          fi
+
+      - name: Soft threshold (non-fatal warning)
+        env:
+          COUNT: ${{ steps.ruff.outputs.count }}
+          LINT_WARN_MAX: ${{ vars.LINT_WARN_MAX }}
+        run: |
+          LW="${LINT_WARN_MAX:-}"
+          C="${COUNT:-0}"
+          if [ -n "$LW" ] && [ "$C" -gt "$LW" ]; then
+            echo "HINT: ruff-nightly WARN: count=$C > LINT_WARN_MAX=$LW"
+          fi
+
+      - name: Append ruff metric to history (JSONL)
+        env:
+          COUNT: ${{ steps.ruff.outputs.count }}
+        run: |
+          set -e
+          mkdir -p share/eval/ruff
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "{\"ts\":\"${TS}\",\"count\":${COUNT:-0}}" >> share/eval/ruff/ruff_history.jsonl
+
+      - name: Upload ruff report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruff_full_report
+          path: share/eval/ruff/ruff_full.txt
+
+      - name: Upload ruff history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruff_history
+          path: share/eval/ruff/ruff_history.jsonl
+          if-no-files-found: error
+
+      - name: Summarize
+        run: |
+          echo "Nightly ruff count: ${{ steps.ruff.outputs.count }}"

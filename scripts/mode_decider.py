@@ -113,8 +113,9 @@ def decide_mode() -> tuple[str, list[str]]:
         return "STRICT", notes
 
     # 4) Service reachability implies we can be strict
-    api_host, api_port = os.getenv("API_HOST", "127.0.0.1"), int(
-        os.getenv("API_PORT", "8000")
+    api_host, api_port = (
+        os.getenv("API_HOST", "127.0.0.1"),
+        int(os.getenv("API_PORT", "8000")),
     )
     chat_host, chat_port = (
         os.getenv("LM_CHAT_HOST", "127.0.0.1"),

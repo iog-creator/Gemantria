@@ -18,6 +18,16 @@ import sys
 import time
 from pathlib import Path
 
+try:
+    import yaml  # type: ignore
+except Exception:
+    yaml = None
+try:
+    from jsonschema import ValidationError, validate
+except Exception:
+    ValidationError = None  # type: ignore
+    validate = None  # type: ignore
+
 VECTOR_DIM = 1024
 READINESS_DIR = Path("reports/readiness")
 READINESS_DIR.mkdir(parents=True, exist_ok=True)
@@ -29,10 +39,7 @@ def _write_json_if_changed(path: Path, obj: dict) -> bool:
     new = json.dumps(obj, indent=2, ensure_ascii=False)
     if path.exists():
         old = path.read_text(encoding="utf-8")
-        if (
-            hashlib.sha256(old.encode()).hexdigest()
-            == hashlib.sha256(new.encode()).hexdigest()
-        ):
+        if hashlib.sha256(old.encode()).hexdigest() == hashlib.sha256(new.encode()).hexdigest():
             print(f"[guide] unchanged: {path}")
             return False
     path.write_text(new, encoding="utf-8")
@@ -69,8 +76,8 @@ def _load_cfg(config_path):
     config_path = Path(config_path)
     with open(config_path) as f:
         if config_path.suffix.lower() in (".yaml", ".yml"):
-            import yaml  # type: ignore  # noqa: E402
-
+            if yaml is None:
+                raise RuntimeError("PyYAML not available but YAML config requested")
             return yaml.safe_load(f)
         return json.load(f)
 
@@ -116,12 +123,10 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
         total_edges = edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
         if total_edges > 0:
             metrics["strong_edges"] = edges.get("strong_edges", 0) / total_edges
-            metrics["weak_edges"] = (
-                edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
-            ) / total_edges
+            metrics["weak_edges"] = (edges.get("strong_edges", 0) + edges.get("weak_edges", 0)) / total_edges
 
     # Correlation metrics
-    if "correlations" in stats and stats["correlations"]:
+    if stats.get("correlations"):
         corrs = [c["cosine"] for c in stats["correlations"] if "cosine" in c]
         if corrs:
             metrics["cosine_min"] = min(corrs)
@@ -131,21 +136,13 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
     if "metadata" in stats and "rerank_calls" in stats["metadata"]:
         total_concepts = stats.get("nodes", 0)
         if total_concepts > 0:
-            metrics["rerank_nonnull_ratio"] = (
-                stats["metadata"]["rerank_calls"] / total_concepts
-            )
+            metrics["rerank_nonnull_ratio"] = stats["metadata"]["rerank_calls"] / total_concepts
 
     # Centrality coverage
     if "centrality" in stats:
-        cent_values = [
-            v
-            for v in stats["centrality"].values()
-            if isinstance(v, int | float) and v > 0
-        ]
+        cent_values = [v for v in stats["centrality"].values() if isinstance(v, int | float) and v > 0]
         if cent_values:
-            metrics["centrality_nonzero_ratio"] = len(cent_values) / len(
-                stats["centrality"]
-            )
+            metrics["centrality_nonzero_ratio"] = len(cent_values) / len(stats["centrality"])
 
     # Critic failure rate (placeholder - would come from logs)
     metrics["critic_fail_rate"] = 0.0  # Assume perfect for now
@@ -179,9 +176,7 @@ def cmd_run_mini(args):
     # put traces outside share to reduce noise
     trace = Path("logs") / "readiness" / "mini_run.trace"
     trace.parent.mkdir(parents=True, exist_ok=True)
-    trace.write_text(
-        json.dumps({"cfg": cfg, "ts": time.time()}, indent=2), encoding="utf-8"
-    )
+    trace.write_text(json.dumps({"cfg": cfg, "ts": time.time()}, indent=2), encoding="utf-8")
     print(f"[guide] mini.extract complete (trace: {trace})")
 
 
@@ -201,7 +196,6 @@ def cmd_compute(args):
 
 def cmd_gate(args):
     """Validate head artifacts against SSOT schemas. HARD-REQUIRED."""
-    import json  # noqa: E402
 
     # Load existing report
     if not READINESS_JSON.exists():
@@ -224,10 +218,24 @@ def cmd_gate(args):
 
     # Validate graph stats schema
     try:
-        from jsonschema import ValidationError, validate  # noqa: E402
-
-        # Graph stats schema
-        schema_path = Path("docs/SSOT/graph-stats.schema.json")
+        if validate is None or ValidationError is None:
+            raise RuntimeError("jsonschema library not available")
+        # Prefer schemas under docs/SSOT/schemas; fall back if needed.
+        candidate_dirs = [Path("docs/SSOT/schemas"), Path("docs/SSOT")]
+        schema_path = None
+        for d in candidate_dirs:
+            if not d.exists():
+                continue
+            # Accept common names used across PRs: graph-stats or graph_export
+            for name in ("graph-stats.schema.json", "graph_export.schema.json"):
+                p = d / name
+                if p.exists():
+                    schema_path = p
+                    break
+            if schema_path:
+                break
+        if schema_path is None:
+            raise FileNotFoundError("graph schema not found under docs/SSOT[/schemas]")
         if schema_path.exists():
             schema = json.loads(schema_path.read_text())
             # Load current stats (assume graph_stats.head.json exists)
@@ -256,15 +264,13 @@ def cmd_gate(args):
 
     except ImportError:
         schema_ok = False
-        schema_errs.append(
-            "jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt"
-        )
+        schema_errs.append("jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt")
     except ValidationError as e:
         schema_ok = False
         schema_errs.append(f"Schema validation error: {e.message}")
     except Exception as e:
         schema_ok = False
-        schema_errs.append(f"Schema validation failed: {str(e)}")
+        schema_errs.append(f"Schema validation failed: {e!s}")
 
     # Update report
     report["schema"] = {"validated": schema_ok, "errors": schema_errs}
@@ -328,9 +334,7 @@ def main():
 
     # run-mini
     mini_parser = subparsers.add_parser("run-mini", help="Run mini experiment")
-    mini_parser.add_argument(
-        "--config", default="config/mini_experiments.yaml", help="Mini config file"
-    )
+    mini_parser.add_argument("--config", default="config/mini_experiments.yaml", help="Mini config file")
     mini_parser.set_defaults(func=cmd_run_mini)
 
     # compute
@@ -345,9 +349,7 @@ def main():
 
     # gate
     gate_parser = subparsers.add_parser("gate", help="Validate readiness gates")
-    gate_parser.add_argument(
-        "--strict", action="store_true", help="Exit on any failure"
-    )
+    gate_parser.add_argument("--strict", action="store_true", help="Exit on any failure")
     gate_parser.set_defaults(func=cmd_gate)
 
     # assert-pass
