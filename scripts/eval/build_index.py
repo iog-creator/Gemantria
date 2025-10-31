@@ -1,43 +1,39 @@
 #!/usr/bin/env python3
 import pathlib
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-import os
-DEFAULT_EVAL = ROOT / "share" / "eval"
-ENV_EVAL = os.environ.get("EVAL_DIR")
-EVAL = (ROOT / ENV_EVAL) if ENV_EVAL else DEFAULT_EVAL
+EVAL = ROOT / "share" / "eval"
 OUT = EVAL / "index.md"
 
 
-def main():
+def main() -> int:
     print("[eval.index] starting")
-
-    # Ensure output directory exists
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-
-    # Gather eval artifacts
-    eval_files = []
-    if EVAL.exists():
-        for pattern in ["*.json", "*.md", "*.html"]:
-            eval_files.extend(EVAL.glob(pattern))
-
-    # Create index content
-    lines = ["# Eval Index", "", f"Generated from {len(eval_files)} eval artifacts:", ""]
-
-    for file_path in sorted(eval_files):
-        rel_path = file_path.relative_to(ROOT)
-        size = file_path.stat().st_size
-        lines.append(f"* `{rel_path}` ({size} bytes)")
-
-    # Add summary
-    lines.extend(["", "## Summary", "", f"Total artifacts: {len(eval_files)}"])
-
-    # Write index
-    content = "\n".join(lines)
-    OUT.write_text(content, encoding="utf-8")
-    print(f"[eval.index] wrote {OUT}")
+    EVAL.mkdir(parents=True, exist_ok=True)
+    artifacts = [
+        ("report.md", "Latest manifest report"),
+        ("history.md", "Temporal history/trend"),
+        ("delta.md", "Delta (latest vs previous)"),
+        ("provenance.md", "Provenance"),
+        ("checksums.csv", "Checksums"),
+        ("anomalies.md", "Anomalies"),
+        ("run_log.jsonl", "Run Log"),
+    ]
+    lines = []
+    lines.append("# Gemantria Eval — Artifacts Index")
+    lines.append("")
+    lines.append(f"*generated:* {int(time.time())}")
+    lines.append("")
+    for fn, label in artifacts:
+        p = EVAL / fn
+        exists = p.exists()
+        badge = "✅" if exists else "❌"
+        lines.append(f"- {badge} **{label}** — {fn if exists else '(missing)'}")
+    OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"[eval.index] wrote {OUT.relative_to(ROOT)}")
     print("[eval.index] OK")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

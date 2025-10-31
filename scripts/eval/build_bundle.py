@@ -4,52 +4,62 @@ import tarfile
 import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-import os
-DEFAULT_BUNDLES_DIR = ROOT / "share" / "eval" / "bundles"
-DEFAULT_EVAL_DIR = ROOT / "share" / "eval"
-BUNDLES_DIR = ROOT / os.environ.get("EVAL_BUNDLES_DIR", str(DEFAULT_BUNDLES_DIR.relative_to(ROOT)))
-EVAL_DIR = ROOT / os.environ.get("EVAL_DIR", str(DEFAULT_EVAL_DIR.relative_to(ROOT)))
+BUNDLES_DIR = ROOT / "share" / "eval" / "bundles"
+EVAL_DIR = ROOT / "share" / "eval"
+EXPORTS_DIR = ROOT / "exports"
+EVAL_CONFIG_DIR = ROOT / "eval"
 
 
-def main():
+def main() -> int:
     print("[eval.bundle] starting")
 
-    # Create bundles directory
     BUNDLES_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Create timestamped bundle name
-    timestamp = int(time.time())
-    bundle_name = f"eval_bundle_{timestamp}.tar.gz"
+    # Generate timestamp
+    ts = time.strftime("%Y%m%d%H%M%S")
+    bundle_name = f"eval_bundle_{ts}.tar.gz"
     bundle_path = BUNDLES_DIR / bundle_name
 
-    # Create tar.gz bundle
+    # Files to include
+    files_to_bundle = []
+
+    # Add share/eval/* artifacts
+    if EVAL_DIR.exists():
+        for item in EVAL_DIR.glob("*"):
+            if item.is_file():
+                files_to_bundle.append((item, f"share/eval/{item.name}"))
+
+    # Add exports (if present)
+    export_files = ["graph_latest.json", "graph_sanitized.json", "graph_repaired.json"]
+    for export_file in export_files:
+        export_path = EXPORTS_DIR / export_file
+        if export_path.exists():
+            files_to_bundle.append((export_path, f"exports/{export_file}"))
+
+    # Add eval config files
+    config_files = ["manifest.yml", "thresholds.yml"]
+    for config_file in config_files:
+        config_path = EVAL_CONFIG_DIR / config_file
+        if config_path.exists():
+            files_to_bundle.append((config_path, f"eval/{config_file}"))
+
+    # Add snapshot files (if present)
+    snapshot_dir = EVAL_DIR / "snapshot"
+    if snapshot_dir.exists():
+        for item in snapshot_dir.glob("*"):
+            if item.is_file():
+                files_to_bundle.append((item, f"share/eval/snapshot/{item.name}"))
+
+    # Create the tar.gz bundle
     with tarfile.open(bundle_path, "w:gz") as tar:
-        # Add key eval files (not entire directories)
-        if EVAL_DIR.exists():
-            # Add report files
-            for pattern in ["*.json", "*.md", "*.html"]:
-                for item in EVAL_DIR.glob(pattern):
-                    if item.is_file() and item.stat().st_size < 1024*1024:  # Skip files > 1MB
-                        tar.add(item, arcname=f"eval/{item.name}")
+        for src_path, arc_name in files_to_bundle:
+            tar.add(src_path, arcname=arc_name)
 
-        # Add exports directory (just JSON files, not entire subdirs)
-        exports_dir = ROOT / "exports"
-        if exports_dir.exists():
-            for item in exports_dir.glob("*.json"):
-                if item.is_file() and item.stat().st_size < 1024*1024:  # Skip files > 1MB
-                    tar.add(item, arcname=f"exports/{item.name}")
-
-        # Add eval config files
-        eval_config_dir = ROOT / "eval"
-        if eval_config_dir.exists():
-            for item in eval_config_dir.glob("*.yml"):
-                if item.is_file():
-                    tar.add(item, arcname=f"config/{item.name}")
-
-    print(f"[eval.bundle] created {bundle_path}")
-    print(f"[eval.bundle] bundle size: {bundle_path.stat().st_size} bytes")
+    print(f"[eval.bundle] created {bundle_path.relative_to(ROOT)}")
+    print(f"[eval.bundle] included {len(files_to_bundle)} files")
     print("[eval.bundle] OK")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

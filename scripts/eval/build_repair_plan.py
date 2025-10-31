@@ -1,67 +1,78 @@
 #!/usr/bin/env python3
 import json
 import pathlib
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-import os
-DEFAULT_OUTDIR = ROOT / "share" / "eval"
-OUTDIR = ROOT / os.environ.get("EVAL_OUTDIR", str(DEFAULT_OUTDIR.relative_to(ROOT)))
-OUT = OUTDIR / "repair_plan.json"
+LATEST = ROOT / "exports" / "graph_latest.json"
+OUTJ = ROOT / "share" / "eval" / "repair_plan.json"
+OUTM = ROOT / "share" / "eval" / "repair_plan.md"
 
 
-def main():
+def _load(p: pathlib.Path) -> Any:
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def main() -> int:
     print("[eval.repairplan] starting")
-
-    OUTDIR.mkdir(parents=True, exist_ok=True)
-
-    # Load latest graph to analyze for repairs
-    latest = ROOT / "exports" / "graph_latest.json"
-    if not latest.exists():
-        print(f"[eval.repairplan] FAIL no latest graph at {latest}")
-        return 1
-
-    try:
-        graph = json.loads(latest.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"[eval.repairplan] FAIL could not parse graph: {e}")
-        return 1
-
-    nodes = graph.get("nodes", [])
-    edges = graph.get("edges", [])
-
-    # Simple repair plan logic - identify orphaned nodes, etc.
-    repairs = []
-
-    # Find nodes with no edges
-    node_ids = {n.get("id") for n in nodes if n.get("id") is not None}
-    connected_nodes = set()
-    for e in edges:
-        connected_nodes.add(e.get("source"))
-        connected_nodes.add(e.get("target"))
-
-    orphaned = node_ids - connected_nodes
-    for node_id in orphaned:
-        repairs.append({
-            "action": "remove_node",
-            "node_id": node_id,
-            "reason": "orphaned (no edges)"
-        })
-
-    # Create repair plan
-    plan = {
-        "version": "1.0",
-        "generated_from": str(latest.relative_to(ROOT)),
-        "node_count": len(nodes),
-        "edge_count": len(edges),
-        "repairs": repairs,
-        "summary": f"Found {len(repairs)} repairs needed"
+    if not LATEST.exists():
+        print("[eval.repairplan] FAIL no exports/graph_latest.json")
+        return 2
+    doc = _load(LATEST)
+    nodes = doc.get("nodes", []) or []
+    edges = doc.get("edges", []) or []
+    node_ids: set[Any] = {
+        n.get("id") for n in nodes if isinstance(n, dict) and "id" in n
     }
 
-    OUT.write_text(json.dumps(plan, indent=2), encoding="utf-8")
-    print(f"[eval.repairplan] wrote {OUT.relative_to(ROOT)}")
-    print(f"[eval.repairplan] identified {len(repairs)} repairs")
-    print("[eval.repairplan] done")
+    missing_ids: set[Any] = set()
+    for e in edges:
+        if not isinstance(e, dict):
+            continue
+        s, t = e.get("source"), e.get("target")
+        if s not in node_ids:
+            missing_ids.add(s)
+        if t not in node_ids:
+            missing_ids.add(t)
+    if None in missing_ids:
+        missing_ids.remove(None)
+
+    # propose minimal stub nodes
+    stubs: list[dict[str, Any]] = []
+    for mid in sorted(missing_ids, key=lambda x: str(x)):
+        stubs.append(
+            {
+                "id": mid,
+                "label": f"[MISSING:{mid}] (stub)",
+                "meta": {"proposed_stub": True},
+            }
+        )
+
+    OUTJ.parent.mkdir(parents=True, exist_ok=True)
+    OUTJ.write_text(
+        json.dumps(
+            {"missing_node_count": len(missing_ids), "proposed_stubs": stubs},
+            indent=2,
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+
+    lines = []
+    lines.append("# Gemantria Repair Plan")
+    lines.append("")
+    lines.append(f"*missing_node_count:* {len(missing_ids)}")
+    lines.append("")
+    lines.append("## Proposed stub nodes (first 25)")
+    for s in stubs[:25]:
+        lines.append(f"- id={s['id']} label={s['label']}")
+    OUTM.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    print(f"[eval.repairplan] wrote {OUTJ.relative_to(ROOT)}")
+    print(f"[eval.repairplan] wrote {OUTM.relative_to(ROOT)}")
+    print("[eval.repairplan] OK")
+    return 0
 
 
 if __name__ == "__main__":
-    exit(main() or 0)
+    raise SystemExit(main())

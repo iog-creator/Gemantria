@@ -1,96 +1,79 @@
-name: Update Quality Badges
-
+name: quality-badges
 on:
-  workflow_run:
-    workflows: ["Graph Nightly Analysis"]
-    types:
-      - completed
-
+  schedule:
+    - cron: "37 7 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write    # used only when ALLOW_BADGE_COMMITS=true on first-party runs
+  actions: read
 jobs:
   badges:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
-
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
 
-      - name: Download CI artifacts
+      - name: Download latest history artifacts
         uses: actions/download-artifact@v4
         with:
-          name: test-results
-          path: _artifacts/test-results
-
-      - name: Download graph anomalies
-        uses: actions/download-artifact@v4
-        with:
-          name: graph_history
-          path: _artifacts/graph_history
+          path: _artifacts
+      - name: Prepare histories
+        run: |
+          set -e
+          mkdir -p share/eval/badges
+          # Grab most recent line from each JSONL if present
+          tail -n 1 _artifacts/mypy_history/mypy_history.jsonl 2>/dev/null > _mypy.jsonl || true
+          tail -n 1 _artifacts/ruff_history/ruff_history.jsonl 2>/dev/null > _ruff.jsonl || true
+          tail -n 1 _artifacts/coverage_history/coverage_history.jsonl 2>/dev/null > _cov.jsonl || true
+          tail -n 1 _artifacts/graph_history/graph_anomalies.jsonl 2>/dev/null > _graph.jsonl || true
 
       - name: Extract values
         id: vals
         run: |
           set -e
-          mypy_errors=$(python - <<'PY'
-          import json, os, sys
-          from pathlib import Path
-
-          # Count mypy errors from test results
-          test_results = Path("_artifacts/test-results")
-          mypy_count = 0
-          if test_results.exists():
-              for f in test_results.rglob("*.json"):
-                  if f.name.startswith("mypy"):
-                      try:
-                          data = json.loads(f.read_text())
-                          mypy_count += len(data.get("errors", []))
-                      except:
-                          pass
-
-          print(mypy_count)
+          mypy_errors=$(python3 -c "import json,os; p='_mypy.jsonl'; print(json.loads(open(p).read())['errors'] if os.path.exists(p) and os.path.getsize(p)>0 else 0)" 2>/dev/null || echo "0")
+          ruff_count=$(python3 -c "import json,os; p='_ruff.jsonl'; print(json.loads(open(p).read())['count'] if os.path.exists(p) and os.path.getsize(p)>0 else 0)" 2>/dev/null || echo "0")
+          cov_pct=$(python3 -c "import json,os; p='_cov.jsonl'; print(json.loads(open(p).read())['percent'] if os.path.exists(p) and os.path.getsize(p)>0 else 0.0)" 2>/dev/null || echo "0.0")
+          echo "mypy=${mypy_errors}" >> "$GITHUB_OUTPUT"
+          echo "ruff=${ruff_count}" >> "$GITHUB_OUTPUT"
+          printf "cover=%.2f\n" "$cov_pct" >> "$GITHUB_OUTPUT"
+          graph_badge=$(python - <<'PY'
+          import json,os,sys
+          p="_graph.jsonl"
+          if not os.path.exists(p) or os.path.getsize(p)==0:
+              print("isolates:0,dangling:0,cycles:0"); sys.exit(0)
+          o=json.loads(open(p).read())
+          print(f"isolates:{o.get('isolates',0)},dangling:{o.get('dangling',0)},cycles:{o.get('cycles',0)}")
           PY
           )
+          echo "graph=${graph_badge}" >> "$GITHUB_OUTPUT"
 
-          # Count graph anomalies
-          anomalies_file = Path("_artifacts/graph_history/graph_anomalies.jsonl")
-          anomaly_count = 0
-          if anomalies_file.exists():
-              with open(anomalies_file) as f:
-                  for line in f:
-                      if line.strip():
-                          anomaly_count += 1
-
-          # Output for badge generation
-          echo "mypy_errors=$mypy_errors" >> $GITHUB_OUTPUT
-          echo "anomalies=$anomaly_count" >> $GITHUB_OUTPUT
-
-      - name: Generate badges
+      - name: Generate SVG badges
         run: |
-          # Create quality badges based on extracted values
-          mypy_errors=${{ steps.vals.outputs.mypy_errors }}
-          anomalies=${{ steps.vals.outputs.anomalies }}
+          python scripts/eval/gen_badge.py "MyPy Errors"  "${{ steps.vals.outputs.mypy }}"  "#007ec6" > share/eval/badges/mypy.svg
+          python scripts/eval/gen_badge.py "Ruff Issues"  "${{ steps.vals.outputs.ruff }}"  "#5c53ff" > share/eval/badges/ruff.svg
+          # Show exact percent with two decimals inside the value: e.g., "Coverage 87.32%"
+          python scripts/eval/gen_badge.py "Coverage"     "${{ steps.vals.outputs.cover }}%" "#4c1"    > share/eval/badges/coverage.svg
+          python scripts/eval/gen_badge.py "Graph Anoms" "${{ steps.vals.outputs.graph }}" "#d97706" > share/eval/badges/graph.svg
 
-          # Create mypy badge
-          if [ "$mypy_errors" -eq 0 ]; then
-            mypy_color="brightgreen"
-            mypy_status="passing"
-          elif [ "$mypy_errors" -lt 10 ]; then
-            mypy_color="yellow"
-            mypy_status="warning"
+      - name: Upload badges as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality_badges
+          path: share/eval/badges/*.svg
+
+      - name: Conditionally commit refreshed badges to repo
+        if: ${{ vars.ALLOW_BADGE_COMMITS == 'true' && (github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main')) }}
+        run: |
+          set -e
+          git config user.name  "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add share/eval/badges/*.svg
+          if git diff --cached --quiet; then
+            echo "No badge changes to commit."
           else
-            mypy_color="red"
-            mypy_status="failing"
+            git commit -m "ci(059): refresh quality metric badges"
+            git push
           fi
-
-          # Create anomalies badge
-          if [ "$anomalies" -eq 0 ]; then
-            anomaly_color="brightgreen"
-            anomaly_status="clean"
-          elif [ "$anomalies" -lt 5 ]; then
-            anomaly_color="yellow"
-            anomaly_status="minor"
-          else
-            anomaly_color="red"
-            anomaly_status="issues"
-          fi
-
-          echo "Generated badges: mypy=$mypy_status ($mypy_errors errors), anomalies=$anomaly_status ($anomalies issues)"

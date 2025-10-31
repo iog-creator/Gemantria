@@ -1,81 +1,67 @@
 #!/usr/bin/env python3
 import json
 import pathlib
+import sys
 import time
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EXPORTS = ROOT / "exports"
 LATEST = EXPORTS / "graph_latest.json"
-import os
-# Allow env overrides:
-#   REPAIR_PLAN: path to repair_plan.json (default: share/eval/repair_plan.json)
-#   REPAIRED_DIR: directory for outputs (default: exports/)
-#   REPAIRED_BASENAME: base filename without timestamp (default: graph_repaired.json)
-PLAN_J = ROOT / os.environ.get("REPAIR_PLAN", "share/eval/repair_plan.json")
-REPAIRED_DIR = ROOT / os.environ.get("REPAIRED_DIR", "exports")
-REPAIRED_BASENAME = os.environ.get("REPAIRED_BASENAME", "graph_repaired.json")
+PLAN_J = ROOT / "share" / "eval" / "repair_plan.json"
 
 
-def main():
+def _load_json(p: pathlib.Path) -> Any:
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def _node_ids(nodes: list[dict[str, Any]]) -> set[Any]:
+    out = set()
+    for n in nodes:
+        if isinstance(n, dict) and "id" in n:
+            out.add(n["id"])
+    return out
+
+
+def main() -> int:
     print("[repair.apply] starting")
-
-    # Load repair plan
-    if not PLAN_J.exists():
-        print(f"[repair.apply] FAIL no repair plan at {PLAN_J}")
-        return 1
-
-    try:
-        plan = json.loads(PLAN_J.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"[repair.apply] FAIL could not parse repair plan: {e}")
-        return 1
-
-    # Load latest graph
     if not LATEST.exists():
-        print(f"[repair.apply] FAIL no latest graph at {LATEST}")
-        return 1
+        print("[repair.apply] FAIL no exports/graph_latest.json")
+        return 2
+    if not PLAN_J.exists():
+        print(
+            "[repair.apply] FAIL no share/eval/repair_plan.json (run make eval.repairplan)"
+        )
+        return 2
 
-    try:
-        base = json.loads(LATEST.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"[repair.apply] FAIL could not parse latest graph: {e}")
-        return 1
+    base = _load_json(LATEST)
+    plan = _load_json(PLAN_J)
+    nodes = list(base.get("nodes", []) or [])
 
-    # Apply repairs
-    nodes = base.get("nodes", [])
-    repairs = plan.get("repairs", [])
+    have = _node_ids(nodes)
+    stubs = plan.get("proposed_stubs", []) or []
+    added = []
+    for s in stubs:
+        sid = s.get("id")
+        if sid not in have:
+            nodes.append(s)
+            added.append(sid)
 
-    print(f"[repair.apply] applying {len(repairs)} repairs to {len(nodes)} nodes")
-
-    # Simple repair logic - remove nodes marked for removal
-    to_remove = set()
-    for repair in repairs:
-        if repair.get("action") == "remove_node":
-            to_remove.add(repair.get("node_id"))
-
-    nodes = [n for n in nodes if n.get("id") not in to_remove]
-
-    # Update edges to remove references to removed nodes
-    edges = base.get("edges", [])
-    edges = [e for e in edges if e.get("source") not in to_remove and e.get("target") not in to_remove]
-
-    print(f"[repair.apply] kept {len(nodes)} nodes and {len(edges)} edges")
-
-    # Write repaired graph
     out = dict(base)
     out["nodes"] = nodes
-    out["edges"] = edges
     ts = time.strftime("%Y%m%d%H%M%S")
-    REPAIRED_DIR.mkdir(parents=True, exist_ok=True)
-    out_latest = REPAIRED_DIR / REPAIRED_BASENAME
-    out_ts = REPAIRED_DIR / f"{REPAIRED_BASENAME.rsplit('.',1)[0]}_{ts}.json"
-    out_latest.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
-    out_ts.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
+    out_path = EXPORTS / f"graph_repaired_{ts}.json"
+    (EXPORTS / "graph_repaired.json").write_text(
+        json.dumps(out, indent=2, sort_keys=True), encoding="utf-8"
+    )
+    out_path.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
 
-    print(f"[repair.apply] wrote {out_ts.relative_to(ROOT)}")
-    print(f"[repair.apply] wrote {out_latest.relative_to(ROOT)}")
-    print("[repair.apply] done")
+    print(f"[repair.apply] added_stub_nodes={len(added)}")
+    print(f"[repair.apply] wrote {out_path.relative_to(ROOT)}")
+    print(f"[repair.apply] wrote {(EXPORTS / 'graph_repaired.json').relative_to(ROOT)}")
+    print("[repair.apply] OK")
+    return 0
 
 
 if __name__ == "__main__":
-    exit(main() or 0)
+    sys.exit(main())

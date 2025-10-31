@@ -2,72 +2,54 @@
 import json
 import pathlib
 import subprocess
-import os
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-DEFAULT_OUTDIR = ROOT / "share" / "eval"
-OUTDIR = ROOT / os.environ.get("EVAL_OUTDIR", str(DEFAULT_OUTDIR.relative_to(ROOT)))
-OUT = OUTDIR / "policy_diff.md"
+OUT = ROOT / "share" / "eval" / "policy_diff.md"
 
 
-def _run(cmd: list[str], env: dict | None = None) -> tuple[int, str, str]:
-    r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env)
+def _run(cmd: list[str]) -> tuple[int, str, str]:
+    r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
     return r.returncode, r.stdout, r.stderr
 
 
-def _summary(report_path: pathlib.Path) -> tuple[int, int]:
-    if not report_path.exists():
-        return 0, 0
+def _summary(path: pathlib.Path) -> tuple[int, int]:
     try:
-        data = json.loads(report_path.read_text(encoding="utf-8"))
-        summary = data.get("summary", {})
-        return summary.get("ok_count", 0), summary.get("fail_count", 0)
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        s = doc.get("summary", {})
+        return int(s.get("ok_count", 0)), int(s.get("fail_count", 0))
     except Exception:
         return 0, 0
 
 
-def main():
+def main() -> int:
     print("[eval.policydiff] starting")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
 
-    OUTDIR.mkdir(parents=True, exist_ok=True)
-
-    # strict (ensure sub-make writes into our OUTDIR)
-    env = dict(os.environ)
-    env["EVAL_OUTDIR"] = str(OUTDIR.relative_to(ROOT))
-    code, so, se = _run(["make", "eval.profile.strict"], env=env)
-    if code != 0:
-        print(f"[eval.policydiff] WARN eval.profile.strict failed: {se}")
-    ok_strict, fail_strict = _summary(OUTDIR / "report.json")
+    # strict
+    code, so, se = _run(["make", "eval.profile.strict"])
+    ok_strict, fail_strict = _summary(ROOT / "share" / "eval" / "report.json")
 
     # dev
-    code, so, se = _run(["make", "eval.profile.dev"], env=env)
-    if code != 0:
-        print(f"[eval.policydiff] WARN eval.profile.dev failed: {se}")
-    ok_dev, fail_dev = _summary(OUTDIR / "report.json")
+    _code, _so, _se = _run(["make", "eval.profile.dev"])
+    ok_dev, fail_dev = _summary(ROOT / "share" / "eval" / "report.json")
 
-    # Generate diff
-    diff_lines = [
-        "# Policy Diff Report",
-        "",
-        f"Generated in {OUTDIR.relative_to(ROOT)}",
-        "",
-        "## Strict Profile",
-        f"- OK: {ok_strict}",
-        f"- FAIL: {fail_strict}",
-        "",
-        "## Dev Profile",
-        f"- OK: {ok_dev}",
-        f"- FAIL: {fail_dev}",
-        "",
-        "## Summary",
-        f"Strict: {ok_strict}/{ok_strict + fail_strict} OK",
-        f"Dev: {ok_dev}/{ok_dev + fail_dev} OK",
-    ]
-
-    OUT.write_text("\n".join(diff_lines), encoding="utf-8")
+    lines = []
+    lines.append("# Gemantria Policy Delta")
+    lines.append("")
+    lines.append(f"*strict:* ok={ok_strict} fail={fail_strict}")
+    lines.append(f"*dev:*    ok={ok_dev} fail={fail_dev}")
+    lines.append("")
+    if fail_strict > fail_dev:
+        lines.append("**Observation:** Dev profile masks some failures present under strict.")
+    elif fail_strict == fail_dev:
+        lines.append("**Observation:** Profiles produce identical pass/fail counts.")
+    else:
+        lines.append("**Observation:** Dev profile surfaced more failures (unexpected).")
+    OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"[eval.policydiff] wrote {OUT.relative_to(ROOT)}")
-    print("[eval.policydiff] done")
+    print("[eval.policydiff] OK")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

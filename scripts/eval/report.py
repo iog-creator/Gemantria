@@ -1,84 +1,97 @@
 #!/usr/bin/env python3
-import fnmatch
+import glob
 import json
-import math
 import pathlib
 import re
 import sys
 import time
 from typing import Any
 
-try:
-    import yaml  # type: ignore
-except Exception:
-    yaml = None
-
-# ---------- Thresholds substitution ----------
-_THRESHOLDS_CACHE: dict[str, Any] | None = None
-_THRESH_RE = re.compile(r"^\$\{thresholds:([A-Za-z0-9_.-]+)\}$")
-
-
-def _load_thresholds() -> dict[str, Any]:
-    global _THRESHOLDS_CACHE
-    if _THRESHOLDS_CACHE is not None:
-        return _THRESHOLDS_CACHE
-    p = ROOT / "eval" / "thresholds.yml"
-    data: dict[str, Any] = {}
-    if p.exists() and yaml is not None:
-        data = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-    _THRESHOLDS_CACHE = data
-    return data
-
-
-def _th_get(path: str, default: Any = None) -> Any:
-    cur: Any = _load_thresholds()
-    for part in path.split("."):
-        if not isinstance(cur, dict) or part not in cur:
-            return default
-        cur = cur[part]
-    return cur
-
-
-def _subst_thresholds(value: Any) -> Any:
-    """Recursively substitute ${thresholds:...} placeholders in task args."""
-    if isinstance(value, str):
-        m = _THRESH_RE.match(value)
-        if m:
-            v = _th_get(m.group(1))
-            return v if v is not None else value
-        return value
-    if isinstance(value, dict):
-        return {k: _subst_thresholds(v) for k, v in value.items()}
-    if isinstance(value, list):
-        return [_subst_thresholds(v) for v in value]
-    return value
-
-
-def _prepare_args(raw: dict[str, Any]) -> dict[str, Any]:
-    return _subst_thresholds(raw)  # type: ignore[no-any-return]
-
-
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-import os
-MANIFEST_YML = ROOT / "eval" / "manifest.yml"
-MANIFEST_JSON = ROOT / "eval" / "manifest.json"
-DEFAULT_OUTDIR = ROOT / "share" / "eval"
-OUTDIR = (ROOT / os.environ.get("EVAL_OUTDIR")) if os.environ.get("EVAL_OUTDIR") else DEFAULT_OUTDIR
+MANIFEST = ROOT / "eval" / "manifest.yml"
+THRESHOLDS = ROOT / "eval" / "thresholds.yml"
+OUTDIR = ROOT / "share" / "eval"
 JSON_OUT = OUTDIR / "report.json"
 MD_OUT = OUTDIR / "report.md"
 
 
+def _read_yaml(path: pathlib.Path) -> Any:
+    try:
+        import yaml  # type: ignore
+
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        raise RuntimeError("PyYAML is required for eval.report. Please `pip install pyyaml`.") from e
+
+
+def _load_json(path: pathlib.Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _extract_all(doc: Any, path: str) -> list[Any]:
+    parts = path.split(".") if path else []
+    cur = [doc]
+    for seg in parts:
+        arr = seg.endswith("[*]")
+        key = seg[:-3] if arr else seg
+        nxt = []
+        for node in cur:
+            if isinstance(node, dict) and key in node:
+                val = node[key]
+                if arr and isinstance(val, list):
+                    nxt.extend(val)
+                else:
+                    nxt.append(val)
+        cur = nxt
+    return cur
+
+
+# ---------- thresholds substitution ----------
+def _lookup_threshold(k: str, t: dict[str, Any]) -> Any:
+    p = k.split(".")
+    cur: Any = t
+    for seg in p:
+        if isinstance(cur, dict) and seg in cur:
+            cur = cur[seg]
+        else:
+            raise KeyError(f"thresholds path not found: {k}")
+    return cur
+
+
+def _resolve_thresholds(obj: Any, t: dict[str, Any]) -> Any:
+    # resolves strings of the form "${thresholds:foo.bar.baz}"
+    if isinstance(obj, str):
+        m = re.fullmatch(r"\$\{thresholds:([A-Za-z0-9_.]+)\}", obj.strip())
+        if m:
+            return _lookup_threshold(m.group(1), t)
+    if isinstance(obj, list):
+        return [_resolve_thresholds(x, t) for x in obj]
+    if isinstance(obj, dict):
+        return {k: _resolve_thresholds(v, t) for k, v in obj.items()}
+    return obj
+
+
+def _load_whitelist(path: str) -> set[Any]:
+    ids: set[Any] = set()
+    if path:
+        p = ROOT / path
+        if p.exists():
+            for line in p.read_text(encoding="utf-8", errors="ignore").splitlines():
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    # keep raw token; ids may be strings or integers; we store both
+                    try:
+                        ids.add(int(line))
+                    except Exception:
+                        ids.add(line)
+    return ids
+
+
+# ---------- Task impls ----------
 def task_print(args: dict[str, Any]) -> dict[str, Any]:
     msg = str(args.get("message", ""))
     return {"status": "OK", "stdout": msg}
-
-
-def task_verify_files(args: dict[str, Any]) -> dict[str, Any]:
-    missing = []
-    for p in args.get("must_exist", []):
-        if not (ROOT / p).exists():
-            missing.append(p)
-    return {"status": "OK" if not missing else "FAIL", "missing": missing}
 
 
 def task_grep(args: dict[str, Any]) -> dict[str, Any]:
@@ -91,369 +104,288 @@ def task_grep(args: dict[str, Any]) -> dict[str, Any]:
     return {"status": "OK" if not misses else "FAIL", "misses": misses}
 
 
-def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
-    """Check reference integrity of exported graph data."""
-    graph_file = ROOT / args.get("graph_file", "exports/graph_latest.json")
-    if not graph_file.exists():
-        return {"status": "FAIL", "error": f"graph file not found: {graph_file}"}
-
-    try:
-        with open(graph_file, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as exc:
-        return {"status": "FAIL", "error": f"failed to parse graph JSON: {exc}"}
-
-    nodes = data.get("nodes", [])
-    edges = data.get("edges", [])
-
-    # Check for self-loops
-    self_loops = [e for e in edges if e.get("source") == e.get("target")]
-    max_self_loops = args.get("max_self_loops", 0)
-    if len(self_loops) > max_self_loops:
-        return {
-            "status": "FAIL",
-            "error": f"too many self-loops: {len(self_loops)} > {max_self_loops}",
-            "self_loops": len(self_loops),
-        }
-
-    # Check for duplicate edges
-    edge_keys = [(e.get("source"), e.get("target")) for e in edges]
-    unique_edges = set(edge_keys)
-    duplicates = len(edge_keys) - len(unique_edges)
-    max_duplicates = args.get("max_duplicate_edges", 0)
-    if duplicates > max_duplicates:
-        return {
-            "status": "FAIL",
-            "error": f"too many duplicate edges: {duplicates} > {max_duplicates}",
-            "duplicate_edges": duplicates,
-        }
-
-    # Check concept coverage (concepts with relations)
-    node_ids = {n.get("id") for n in nodes}
-    connected_ids = set()
-    for e in edges:
-        connected_ids.add(e.get("source"))
-        connected_ids.add(e.get("target"))
-
-    orphaned = len(node_ids - connected_ids)
-    max_orphaned = args.get("max_orphaned_concepts", 50)
-    if orphaned > max_orphaned:
-        return {
-            "status": "FAIL",
-            "error": f"too many orphaned concepts: {orphaned} > {max_orphaned}",
-            "orphaned_concepts": orphaned,
-        }
-
-    # Check minimum coverage
-    coverage = len(connected_ids) / len(node_ids) if node_ids else 0
-    min_coverage = args.get("min_concept_coverage", 0.95)
-    if coverage < min_coverage:
-        return {
-            "status": "FAIL",
-            "error": f"concept coverage too low: {coverage:.3f} < {min_coverage}",
-            "coverage": coverage,
-        }
-
-    return {
-        "status": "OK",
-        "nodes": len(nodes),
-        "edges": len(edges),
-        "self_loops": len(self_loops),
-        "duplicate_edges": duplicates,
-        "orphaned_concepts": orphaned,
-        "coverage": coverage,
-    }
-
-
-def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
-    """
-    Lightweight, built-in graph export validator (no external deps).
-    Validates a subset of the schema used by docs/SSOT/schemas/graph_export.schema.json:
-      - top-level object has 'nodes' (array) and 'edges' (array)
-      - node: {'id': str|int, ...}
-      - edge: {'source': str|int, 'target': str|int, optional 'strength'/'rerank' in [0,1]}
-    """
-    def _is_id(v: Any) -> bool:
-        return isinstance(v, (str, int))
-
-    def _in_01(v: Any) -> bool:
-        return isinstance(v, (int, float)) and 0.0 <= float(v) <= 1.0
-
-    file = ROOT / args.get("file", "")
-    schema_path = ROOT / args.get("schema", "")  # not parsed; presence only
-    if not file.exists():
-        return {"status": "FAIL", "error": f"no such file: {file}"}
-    if not schema_path.exists():
-        return {"status": "FAIL", "error": f"no such schema: {schema_path}"}
-
-    try:
-        with open(file, encoding="utf-8") as f:
-            doc = json.load(f)
-    except Exception as e:
-        return {"status": "FAIL", "error": f"json parse error: {e}"}
-
-    if not isinstance(doc, dict):
-        return {"status": "FAIL", "error": "top-level must be object"}
-    nodes = doc.get("nodes")
-    edges = doc.get("edges")
-    if not isinstance(nodes, list) or not isinstance(edges, list):
-        return {"status": "FAIL", "error": "'nodes' and 'edges' must be arrays"}
-
-    node_errs = []
-    for i, n in enumerate(nodes):
-        if not isinstance(n, dict):
-            node_errs.append(f"nodes[{i}] not object")
-            continue
-        if "id" not in n or not _is_id(n["id"]):
-            node_errs.append(f"nodes[{i}].id missing or invalid")
-
-    edge_errs = []
-    for i, e in enumerate(edges):
-        if not isinstance(e, dict):
-            edge_errs.append(f"edges[{i}] not object")
-            continue
-        if not _is_id(e.get("source")) or not _is_id(e.get("target")):
-            edge_errs.append(f"edges[{i}].source/target invalid")
-        if "strength" in e and not _in_01(e["strength"]):
-            edge_errs.append(f"edges[{i}].strength out of [0,1]")
-        if "rerank" in e and not _in_01(e["rerank"]):
-            edge_errs.append(f"edges[{i}].rerank out of [0,1]")
-
-    errs = node_errs + edge_errs
-    return {"status": "OK"} if not errs else {"status": "FAIL", "errors": errs}
-
-
-def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
-    """Validate JSON file structure/shape against expected patterns."""
-    file_path = ROOT / args["file"]
-    expected_keys = set(args.get("required_keys", []))
-    expected_types = args.get("key_types", {})
-
-    if not file_path.exists():
-        return {"status": "FAIL", "error": f"file not found: {file_path}"}
-
-    try:
-        with open(file_path, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as e:
-        return {"status": "FAIL", "error": f"failed to parse JSON: {e}"}
-
-    if not isinstance(data, dict):
-        return {"status": "FAIL", "error": "expected top-level object"}
-
-    # Check required keys
-    missing_keys = expected_keys - set(data.keys())
-    if missing_keys:
-        return {"status": "FAIL", "error": f"missing required keys: {missing_keys}"}
-
-    # Check key types
-    type_errors = []
-    for key, expected_type in expected_types.items():
-        if key in data:
-            actual_value = data[key]
-            if expected_type == "array" and not isinstance(actual_value, list):
-                type_errors.append(f"{key}: expected array, got {type(actual_value).__name__}")
-            elif expected_type == "object" and not isinstance(actual_value, dict):
-                type_errors.append(f"{key}: expected object, got {type(actual_value).__name__}")
-            elif expected_type == "number" and not isinstance(actual_value, (int, float)):
-                type_errors.append(f"{key}: expected number, got {type(actual_value).__name__}")
-            elif expected_type == "string" and not isinstance(actual_value, str):
-                type_errors.append(f"{key}: expected string, got {type(actual_value).__name__}")
-
-    if type_errors:
-        return {"status": "FAIL", "error": f"type validation errors: {type_errors}"}
-
-    return {
-        "status": "OK",
-        "keys_found": len(data),
-        "required_keys_present": len(expected_keys),
-        "type_checks_passed": len(expected_types)
-    }
-
-
 def task_file_glob(args: dict[str, Any]) -> dict[str, Any]:
-    """Ensure globs match at least one file, report missing patterns deterministically."""
-    globs = args.get("globs", [])
-    if not isinstance(globs, list) or not globs:
-        return {"status": "FAIL", "error": "file_glob.globs must be a non-empty list"}
-
-    matched: dict[str, list[str]] = {}
-    missing: list[str] = []
-
-    for pat in globs:
-        found = []
-        for p in ROOT.rglob("*"):
-            if p.is_file():
-                rel = str(p.relative_to(ROOT))
-                if fnmatch.fnmatch(rel, pat):
-                    found.append(rel)
-        if found:
-            matched[pat] = sorted(found)
-        else:
-            missing.append(pat)
-
-    if missing:
-        return {"status": "FAIL", "error": f"no files matched: {missing}", "matched": matched}
-    return {"status": "OK", "matched": matched}
+    globspecs = args.get("globs", [])
+    missing = []
+    for g in globspecs:
+        matches = glob.glob(str(ROOT / g))
+        if not matches:
+            missing.append(g)
+    return {"status": "OK" if not missing else "FAIL", "missing": missing}
 
 
-def _json_query_all(obj: Any, path: str) -> list[Any]:
-    """
-    Simple path evaluator to support patterns like:
-      - "edges[*].strength"
-      - "nodes[*].embedding_dim"
-    Supports dotted keys and single-level '[*]' list expansion.
-    """
-    parts = path.split(".")
-    cur: list[Any] = [obj]
-    for part in parts:
-        nxt: list[Any] = []
-        if part.endswith("[*]"):
-            key = part[:-3]
-            for x in cur:
-                if isinstance(x, dict) and key in x and isinstance(x[key], list):
-                    nxt.extend(x[key])
-        else:
-            for x in cur:
-                if isinstance(x, dict) and part in x:
-                    nxt.append(x[part])
-        cur = nxt
-        if not cur:
-            break
-    # Flatten one level if still nested lists from '[*]'
-    flat: list[Any] = []
-    for v in cur:
-        if isinstance(v, list):
-            flat.extend(v)
-        else:
-            flat.append(v)
-    return flat
+def _assert_not_null_all(vals: list[Any]) -> dict[str, Any]:
+    bad = [i for i, v in enumerate(vals) if v is None]
+    return {"status": "OK" if not bad else "FAIL", "null_indices": bad}
 
 
-def _op_frac_in_range(vals: list[Any], min_v: float, max_v: float, min_frac: float) -> tuple[bool, dict[str, Any]]:
-    nums = [float(v) for v in vals if isinstance(v, (int, float))]
+def _assert_frac_in_range(vals: list[Any], lo: float, hi: float, min_frac: float) -> dict[str, Any]:
+    nums = [v for v in vals if isinstance(v, int | float)]
     if not nums:
-        return False, {"reason": "no numeric values", "count": 0}
-    within = [x for x in nums if min_v <= x <= max_v]
-    frac = len(within) / len(nums)
-    ok = frac >= min_frac
-    return ok, {"count": len(nums), "within": len(within), "fraction": frac}
+        return {"status": "FAIL", "error": "no numeric values"}
+    ok = [v for v in nums if lo <= float(v) <= hi]
+    frac = len(ok) / max(1, len(nums))
+    res = {
+        "observed_frac": round(frac, 4),
+        "n": len(nums),
+        "ok_n": len(ok),
+        "range": [lo, hi],
+        "min_frac": min_frac,
+    }
+    res["status"] = "OK" if frac >= min_frac else "FAIL"
+    return res
 
 
-def _op_if_present_eq_all(vals: list[Any], value: Any) -> tuple[bool, dict[str, Any]]:
+def _assert_if_present_eq_all(vals: list[Any], value: Any) -> dict[str, Any]:
     present = [v for v in vals if v is not None]
-    if not present:
-        return True, {"present": 0, "note": "no values present → PASS"}
-    all_eq = all(v == value for v in present)
-    return all_eq, {"present": len(present), "expected": value}
+    bad = [i for i, v in enumerate(present) if v != value]
+    return {
+        "status": "OK" if not bad else "FAIL",
+        "present_n": len(present),
+        "bad_indices": bad,
+        "expected": value,
+    }
 
 
 def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
-    """Validate JSON structure with various assertion operations."""
-    p = args.get("file")
-    if not p:
-        return {"status": "FAIL", "error": "json_assert.file is required"}
-
-    file_path = ROOT / p
-    if not file_path.exists():
-        return {"status": "FAIL", "error": f"file not found: {p}"}
-
-    try:
-        data = json.loads(file_path.read_text(encoding="utf-8"))
-    except Exception as e:
-        return {"status": "FAIL", "error": f"json parse error: {e}"}
-
-    asserts = args.get("asserts", [])
-    if not isinstance(asserts, list) or not asserts:
-        return {"status": "FAIL", "error": "json_assert.asserts must be a non-empty list"}
-
-    results: list[dict[str, Any]] = []
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    checks = []
     all_ok = True
-
-    for a in asserts:
-        name = a.get("name", "(unnamed)")
-        path = a.get("path")
-        op = a.get("op")
-        vals = _json_query_all(data, path) if path else []
-
-        ok = False
-        detail: dict[str, Any] = {"path": path, "op": op}
-
-        if op == "frac_in_range":
-            min_v = float(a.get("min", float("-inf")))
-            max_v = float(a.get("max", float("inf")))
-            min_frac = float(a.get("min_frac", 1.0))
-            ok, extra = _op_frac_in_range(vals, min_v, max_v, min_frac)
-            detail.update(extra)
+    for a in args.get("asserts", []):
+        name = a.get("name", "assert")
+        path = a["path"]
+        vals = _extract_all(doc, path)
+        op = a["op"]
+        detail = {"name": name, "path": path, "op": op}
+        if op == "not_null_all":
+            r = _assert_not_null_all(vals)
+        elif op == "frac_in_range":
+            r = _assert_frac_in_range(vals, float(a["min"]), float(a["max"]), float(a["min_frac"]))
         elif op == "if_present_eq_all":
-            ok, extra = _op_if_present_eq_all(vals, a.get("value"))
-            detail.update(extra)
+            r = _assert_if_present_eq_all(vals, a.get("value"))
         else:
-            detail["error"] = f"unknown op: {op}"
+            r = {"status": "FAIL", "error": f"unknown op: {op}"}
+        status = r.get("status", "FAIL")
+        if status != "OK":
+            all_ok = False
+        checks.append({**detail, **r})
+    return {"status": "OK" if all_ok else "FAIL", "checks": checks}
 
-        results.append({"name": name, "ok": ok, "detail": detail})
-        all_ok = all_ok and ok
 
-    return {"status": "OK" if all_ok else "FAIL", "results": results}
+def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
+    try:
+        import jsonschema  # type: ignore
+    except Exception:
+        return {
+            "status": "FAIL",
+            "error": "jsonschema not installed; run `pip install jsonschema`",
+        }
+    file = ROOT / args["file"]
+    schema = ROOT / args["schema"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    if not schema.exists():
+        return {"status": "FAIL", "error": f"no such schema: {schema}"}
+    doc = _load_json(file)
+    sch = _load_json(schema)
+    try:
+        jsonschema.validate(instance=doc, schema=sch)
+        return {"status": "OK"}
+    except Exception as e:
+        return {"status": "FAIL", "error": str(e)}
+
+
+def task_json_shape(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    edges = doc.get("edges", [])
+    n_nodes = len(nodes) if isinstance(nodes, list) else 0
+    n_edges = len(edges) if isinstance(edges, list) else 0
+    mn = int(args.get("min_nodes", 0))
+    mxn = int(args.get("max_nodes", 2**31 - 1))
+    me = int(args.get("min_edges", 0))
+    mxe = int(args.get("max_edges", 2**31 - 1))
+    ok_nodes = mn <= n_nodes <= mxn
+    ok_edges = me <= n_edges <= mxe
+    status = "OK" if (ok_nodes and ok_edges) else "FAIL"
+    return {
+        "status": status,
+        "nodes": n_nodes,
+        "edges": n_edges,
+        "limits": {"nodes": [mn, mxn], "edges": [me, mxe]},
+    }
+
+
+def task_ref_integrity(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    edges = doc.get("edges", [])
+    node_ids: list[Any] = []
+    if isinstance(nodes, list):
+        for n in nodes:
+            if isinstance(n, dict) and "id" in n:
+                node_ids.append(n.get("id"))
+    node_set = set(node_ids)
+    dup_node_ids = len(node_ids) - len(node_set)
+
+    wl = _load_whitelist(args.get("whitelist_path", ""))
+
+    def _ekey(e: dict[str, Any]) -> tuple[Any, Any]:
+        return (e.get("source"), e.get("target"))
+
+    missing_endpoints = 0
+    self_loops = 0
+    edge_pairs: list[tuple[Any, Any]] = []
+    if isinstance(edges, list):
+        for e in edges:
+            if not isinstance(e, dict):
+                continue
+            s, t = e.get("source"), e.get("target")
+            if s in wl or t in wl:
+                edge_pairs.append(_ekey(e))
+                continue  # ignore whitelist edges for counting violations
+            if s == t:
+                self_loops += 1
+            if (s not in node_set) or (t not in node_set):
+                missing_endpoints += 1
+            edge_pairs.append(_ekey(e))
+    dup_edge_pairs = len(edge_pairs) - len(set(edge_pairs))
+
+    # thresholds (already substituted if using ${thresholds:...})
+    allow_missing_endpoints = int(args.get("allow_missing_endpoints", 0))
+    max_self_loops = int(args.get("max_self_loops", 0))
+    max_dup_nodes = int(args.get("max_duplicate_node_ids", 0))
+    max_dup_edges = int(args.get("max_duplicate_edge_pairs", 0))
+
+    status = "OK"
+    if (
+        missing_endpoints > allow_missing_endpoints
+        or self_loops > max_self_loops
+        or dup_node_ids > max_dup_nodes
+        or dup_edge_pairs > max_dup_edges
+    ):
+        status = "FAIL"
+
+    return {
+        "status": status,
+        "counts": {
+            "missing_endpoints": missing_endpoints,
+            "self_loops": self_loops,
+            "duplicate_node_ids": dup_node_ids,
+            "duplicate_edge_pairs": dup_edge_pairs,
+        },
+        "limits": {
+            "allow_missing_endpoints": allow_missing_endpoints,
+            "max_self_loops": max_self_loops,
+            "max_duplicate_node_ids": max_dup_nodes,
+            "max_duplicate_edge_pairs": max_dup_edges,
+        },
+    }
+
+
+def task_id_type_audit(args: dict[str, Any]) -> dict[str, Any]:
+    file = ROOT / args["file"]
+    if not file.exists():
+        return {"status": "FAIL", "error": f"no such file: {file}"}
+    doc = _load_json(file)
+    nodes = doc.get("nodes", [])
+    wl = _load_whitelist(args.get("whitelist_path", ""))
+    ids: list[Any] = []
+    if isinstance(nodes, list):
+        for n in nodes:
+            if isinstance(n, dict) and "id" in n:
+                nid = n.get("id")
+                if nid in wl:
+                    continue
+                ids.append(nid)
+
+    def _type_name(v: Any) -> str:
+        if isinstance(v, bool):  # keep bool separate from integer semantic confusion
+            return "boolean"
+        if isinstance(v, int):
+            return "integer"
+        if isinstance(v, float):
+            return "number"
+        if isinstance(v, str):
+            return "string"
+        if v is None:
+            return "null"
+        return "other"
+
+    types = [_type_name(v) for v in ids]
+    from collections import Counter
+
+    counts = Counter(types)
+
+    allowed: list[str] = list(args.get("allowed_node_id_types", []))
+    require_single = int(args.get("require_single_id_type", 0)) == 1
+    max_nonconf = int(args.get("max_nonconforming_ids", 0))
+
+    # Nonconforming = ids whose type not in allowed
+    nonconf = sum(1 for t in types if t not in allowed)
+
+    # If require_single, then among allowed types used by any id, must be exactly one unique
+    used_allowed = sorted(set(t for t in types if t in allowed))
+    single_ok = (len(used_allowed) == 1) if require_single else True
+
+    status = "OK"
+    if nonconf > max_nonconf or not single_ok:
+        status = "FAIL"
+
+    return {
+        "status": status,
+        "id_count": len(ids),
+        "type_counts": dict(counts),
+        "allowed_types": allowed,
+        "require_single": require_single,
+        "max_nonconforming_ids": max_nonconf,
+        "observed_allowed_used": used_allowed,
+        "nonconforming_ids": nonconf,
+    }
 
 
 KIND_IMPL = {
     "print": task_print,
-    "verify_files": task_verify_files,
     "grep": task_grep,
-    "ref_integrity": task_ref_integrity,
-    "json_shape": task_json_shape,
-    "json_schema": task_json_schema,
     "file_glob": task_file_glob,
     "json_assert": task_json_assert,
+    "json_schema": task_json_schema,
+    "json_shape": task_json_shape,
+    "ref_integrity": task_ref_integrity,
+    "id_type_audit": task_id_type_audit,
 }
 
 
-def load_manifest() -> dict[str, Any]:
-    # Prefer JSON manifest (no external deps)
-    if MANIFEST_JSON.exists():
-        return json.loads(MANIFEST_JSON.read_text(encoding="utf-8"))
-    # Fallback to YAML only if PyYAML is available
-    if MANIFEST_YML.exists() and yaml is not None:
-        data = yaml.safe_load(MANIFEST_YML.read_text(encoding="utf-8"))
-        return data if isinstance(data, dict) else {}
-    # Last resort: empty manifest; caller will flag as failure
-    return {}
-
-
+# ---------- Driver ----------
 def main() -> int:
     print("[eval.report] starting")
-    if not MANIFEST_JSON.exists() and not MANIFEST_YML.exists():
-        print(f"[eval.report] FAIL no manifest at {MANIFEST_YML}")
+    if not MANIFEST.exists():
+        print(f"[eval.report] FAIL no manifest at {MANIFEST}")
         return 2
     OUTDIR.mkdir(parents=True, exist_ok=True)
 
-    m = load_manifest()
+    m = _read_yaml(MANIFEST)
+    t = _read_yaml(THRESHOLDS) if THRESHOLDS.exists() else {}
+    m = _resolve_thresholds(m, t)  # substitute ${thresholds:...}
+
     results = []
     all_ok = True
-    for t in m.get("tasks", []):
-        key = t["key"]
-        kind = t["kind"]
-        args = t.get("args", {})
-        # Substitute ${thresholds:...} placeholders before running the task
-        try:
-            args = _prepare_args(args)
-        except Exception as e:
-            results.append(
-                {
-                    "key": key,
-                    "kind": kind,
-                    "status": "FAIL",
-                    "error": f"thresholds substitution error: {e}",
-                }
-            )
-            all_ok = False
-            continue
+    for tsk in m.get("tasks", []):
+        key = tsk["key"]
+        kind = tsk["kind"]
+        args = tsk.get("args", {})
         impl = KIND_IMPL.get(kind)
         if not impl:
-            results.append(
-                {"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"}
-            )
+            results.append({"key": key, "kind": kind, "status": "FAIL", "error": "unknown kind"})
             all_ok = False
             continue
         r = impl(args)
@@ -478,10 +410,12 @@ def main() -> int:
     lines = []
     lines.append("# Gemantria Eval Report")
     lines.append("")
-    summary = report["summary"]
-    run_id_part = f"*run_id:* `{report['run_id']}`"
-    stats_part = f"  •  *tasks:* {summary['task_count']}  •  *ok:* {summary['ok_count']}  •  *fail:* {summary['fail_count']}"  # noqa: E501
-    lines.append(run_id_part + stats_part)
+    lines.append(
+        f"*run_id:* `{report['run_id']}`  •  "
+        f"*tasks:* {report['summary']['task_count']}  •  "
+        f"*ok:* {report['summary']['ok_count']}  •  "
+        f"*fail:* {report['summary']['fail_count']}"
+    )
     lines.append("")
     for r in results:
         status = r.get("status")

@@ -47,4 +47,4 @@ def ensure_env_loaded() -> None:
     load_env_file()
 
 
-__all__ = ["load_env_file", "ensure_env_loaded"]
+__all__ = ["ensure_env_loaded", "load_env_file"]
