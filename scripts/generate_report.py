@@ -359,8 +359,10 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 ## Executive Summary
 
 - **AI Enrichments**: {metrics["ai_metrics"]["total_enrichments"]}
-- **Confidence Validations**: {metrics["confidence_metrics"]["total_validations"]} ({metrics["confidence_metrics"]["passed"]} passed, {metrics["confidence_metrics"]["failed"]} failed)
-- **Network Nodes**: {metrics["network_metrics"]["total_nodes"]} ({metrics["network_metrics"]["strong_edges"]} strong, {metrics["network_metrics"]["weak_edges"]} weak edges)
+- **Confidence Validations**: {metrics["confidence_metrics"]["total_validations"]} \
+  ({metrics["confidence_metrics"]["passed"]} passed, {metrics["confidence_metrics"]["failed"]} failed)
+- **Network Nodes**: {metrics["network_metrics"]["total_nodes"]} \
+  ({metrics["network_metrics"]["strong_edges"]} strong, {metrics["network_metrics"]["weak_edges"]} weak edges)
 - **Average AI Confidence**: {metrics["ai_metrics"]["avg_confidence"]:.4f}
 - **Average Token Usage**: {metrics["ai_metrics"]["avg_tokens"]}
 
@@ -515,7 +517,12 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 |-----------|-----------|---------------|--------|--------------|------|-------|
 """
         for pair in qwen_data["top_pairs"]:
-            report += f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | {pair['edge_strength']:.4f} | {pair['cosine']:.4f} | {pair['rerank_score']:.4f} | {pair['relation_type']} | {pair['rerank_model']} |\n"
+            report += (
+                f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | "
+                f"{pair['edge_strength']:.4f} | {pair['cosine']:.4f} | "
+                f"{pair['rerank_score']:.4f} | {pair['relation_type']} | "
+                f"{pair['rerank_model']} |\n"
+            )
 
     # Add Relations section
     try:
@@ -656,7 +663,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                         cluster_source = corr.get("cluster_source", "N/A")
                         cluster_target = corr.get("cluster_target", "N/A")
 
-                        report += f"| {source} | {target} | {correlation:.3f} | {p_value:.4f} | {method} | {cluster_source}→{cluster_target} |\n"
+                        report += (
+                            f"| {source} | {target} | {correlation:.3f} | "
+                            f"{p_value:.4f} | {method} | "
+                            f"{cluster_source}→{cluster_target} |\n"
+                        )
 
                     # Calculate summary statistics
                     correlations_list = correlations_data.get("correlations", [])
@@ -753,7 +764,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     cluster_source = edge.get("cluster_source", "N/A")
                     cluster_target = edge.get("cluster_target", "N/A")
 
-                    report += f"| {source} | {target} | {correlation:.3f} | {p_value:.4f} | {significance} | {cluster_source}→{cluster_target} |\n"
+                    report += (
+                        f"| {source} | {target} | {correlation:.3f} | "
+                        f"{p_value:.4f} | {significance} | "
+                        f"{cluster_source}→{cluster_target} |\n"
+                    )
 
                 # Summary statistics
                 correlations_list = [edge.get("correlation", 0) for edge in edges]
@@ -838,7 +853,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     lift = pattern.get("lift", 0)
                     confidence = pattern.get("confidence", 0)
 
-                    report += f"| {source} | {target} | {strength:.3f} | {shared_count} | {jaccard:.3f} | {lift:.2f} | {confidence:.3f} |\n"
+                    report += (
+                        f"| {source} | {target} | {strength:.3f} | "
+                        f"{shared_count} | {jaccard:.3f} | "
+                        f"{lift:.2f} | {confidence:.3f} |\n"
+                    )
 
                 # Summary statistics
                 if patterns:
@@ -1004,7 +1023,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     for i, pred in enumerate(predictions, 1):
                         report += f"| {i} | {pred:.3f} |\n"
                     report += "\n"
-                    report += f"*Model: {example_forecast.get('model', 'unknown').upper()}, RMSE: {example_forecast.get('rmse', 'N/A')}, MAE: {example_forecast.get('mae', 'N/A')}*\n"
+                    report += (
+                        f"*Model: {example_forecast.get('model', 'unknown').upper()}, "
+                        f"RMSE: {example_forecast.get('rmse', 'N/A')}, "
+                        f"MAE: {example_forecast.get('mae', 'N/A')}*\n"
+                    )
         else:
             report += """
 
@@ -1110,7 +1133,10 @@ The API endpoints power the interactive dashboards:
 """
 
     if metrics["confidence_metrics"]["failed"] > 0:
-        report += f"⚠️ **Review Required**: {metrics['confidence_metrics']['failed']} validations failed confidence thresholds.\n"
+        report += (
+            f"⚠️ **Review Required**: {metrics['confidence_metrics']['failed']} "
+            "validations failed confidence thresholds.\n"
+        )
     else:
         report += "✅ **All validations passed**: Pipeline confidence requirements satisfied.\n"
 

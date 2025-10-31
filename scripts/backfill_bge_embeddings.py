@@ -10,17 +10,17 @@ import os
 import sys
 from pathlib import Path
 
-# Add src to path
+# Add src to path for imports
 script_dir = Path(__file__).parent
 project_root = script_dir.parent
 src_path = project_root / "src"
 sys.path.insert(0, str(src_path))
 
-import psycopg
-from pgvector.psycopg import register_vector
+import psycopg  # noqa: E402
+from pgvector.psycopg import register_vector  # noqa: E402
 
-from src.infra.env_loader import ensure_env_loaded
-from src.services.lmstudio_client import get_lmstudio_client
+from src.infra.env_loader import ensure_env_loaded  # noqa: E402
+from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
 
 # Load environment
 ensure_env_loaded()
