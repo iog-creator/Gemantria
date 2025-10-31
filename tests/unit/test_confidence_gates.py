@@ -75,9 +75,7 @@ class TestConfidenceGates:
         assert result == "warn"
         mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn"})
 
-    @patch.dict(
-        os.environ, {"AI_CONFIDENCE_SOFT": "0.85", "AI_CONFIDENCE_HARD": "0.92"}
-    )
+    @patch.dict(os.environ, {"AI_CONFIDENCE_SOFT": "0.85", "AI_CONFIDENCE_HARD": "0.92"})
     def test_custom_thresholds(self):
         """Test with custom environment thresholds."""
         # Reload module to pick up new env vars

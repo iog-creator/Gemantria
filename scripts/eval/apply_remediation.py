@@ -81,9 +81,7 @@ def _run_command(cmd: str, description: str) -> dict[str, Any]:
 def _apply_automated_fixes(plan: dict[str, Any]) -> list[dict[str, Any]]:
     """Apply all automated fixes from the remediation plan."""
     remediations = plan.get("remediations", [])
-    automated_fixes = [
-        r for r in remediations if r.get("automated_fix_available", False)
-    ]
+    automated_fixes = [r for r in remediations if r.get("automated_fix_available", False)]
 
     applied_fixes = []
 
@@ -127,11 +125,7 @@ def _validate_fixes(applied_fixes: list[dict[str, Any]]) -> dict[str, Any]:
         try:
             # Load the updated report
             if (ROOT / "share" / "eval" / "report.json").exists():
-                new_report = json.loads(
-                    (ROOT / "share" / "eval" / "report.json").read_text(
-                        encoding="utf-8"
-                    )
-                )
+                new_report = json.loads((ROOT / "share" / "eval" / "report.json").read_text(encoding="utf-8"))
                 summary = new_report.get("summary", {})
                 validation.update(
                     {
@@ -150,9 +144,7 @@ def main() -> int:
     print("[eval.apply.remediation] starting")
 
     if not REMEDIATION_PLAN.exists():
-        print(
-            "[eval.apply.remediation] FAIL no remediation_plan.json found (run make eval.remediation first)"
-        )
+        print("[eval.apply.remediation] FAIL no remediation_plan.json found (run make eval.remediation first)")
         return 2
 
     plan = _load_plan()
@@ -211,20 +203,14 @@ def main() -> int:
         }
 
     # Write log
-    REMEDIATION_LOG.write_text(
-        json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    REMEDIATION_LOG.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
 
     print(f"[eval.apply.remediation] applied {len(applied_fixes)} fixes")
-    print(
-        f"[eval.apply.remediation] {len(successful_fixes)} successful, {len(failed_fixes)} failed"
-    )
+    print(f"[eval.apply.remediation] {len(successful_fixes)} successful, {len(failed_fixes)} failed")
     print(f"[eval.apply.remediation] wrote {REMEDIATION_LOG.relative_to(ROOT)}")
 
     if failed_fixes:
-        print(
-            "[eval.apply.remediation] WARNING: Some fixes failed - check log for details"
-        )
+        print("[eval.apply.remediation] WARNING: Some fixes failed - check log for details")
         return 1
 
     print("[eval.apply.remediation] OK")

@@ -21,7 +21,7 @@ def sha256_path(p: pathlib.Path) -> str:
 
 def git(cmd: list[str]) -> str | None:
     try:
-        return subprocess.check_output(["git"] + cmd, cwd=ROOT).decode().strip()
+        return subprocess.check_output(["git", *cmd], cwd=ROOT).decode().strip()
     except Exception:
         return None
 
@@ -54,19 +54,11 @@ def main() -> int:
         "counts": {"nodes": nodes, "edges": edges, "artifacts": artifacts},
         "hashes": {
             "graph_latest.json": (
-                sha256_path(EVAL / "graph_latest.json")
-                if (EVAL / "graph_latest.json").exists()
-                else None
+                sha256_path(EVAL / "graph_latest.json") if (EVAL / "graph_latest.json").exists() else None
             ),
-            "graph_prev.json": (
-                sha256_path(EVAL / "graph_prev.json")
-                if (EVAL / "graph_prev.json").exists()
-                else None
-            ),
+            "graph_prev.json": (sha256_path(EVAL / "graph_prev.json") if (EVAL / "graph_prev.json").exists() else None),
             "release_manifest.json": (
-                sha256_path(EVAL / "release_manifest.json")
-                if (EVAL / "release_manifest.json").exists()
-                else None
+                sha256_path(EVAL / "release_manifest.json") if (EVAL / "release_manifest.json").exists() else None
             ),
         },
         "delta_present": (EVAL / "delta.json").exists(),

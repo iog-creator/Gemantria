@@ -59,6 +59,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
 - **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
 - **SSOT JSONSchema validation**: PR-diff scoped validation of JSON files against schemas (non-blocking nightly sweep)
+- **Rules audit strictness**: No ALLOW_RULES_GAP toggle; RESERVED stubs (047/048) maintain contiguous numbering
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
@@ -94,6 +95,7 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 ## How agents should use rules
 
 * Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
 * Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
@@ -149,6 +151,35 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 044 | # 044 — Share Manifest Contract (AlwaysApply) |
 | 045 | # 045 — Rerank Blend is SSOT (AlwaysApply) |
 | 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
-| 047 | # 047 — Nightly Metrics Contract (AlwaysApply) |
-| 048 | # 048 — Agent Docs Coverage for New Modules (AlwaysApply) |
+| 047 | # --- |
+| 048 | # --- |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
+
+---
+
+## Editor Baseline (Cursor 2.0)
+
+**Purpose:** speed up surgical PR work while preserving SSOT governance.
+
+### Settings (per developer)
+
+- **Multi-Agents:** **Enabled**; set parallel agents to **4–8** as hardware allows. Cursor isolates agents via **git worktrees / remote machines** to avoid file conflicts. :contentReference[oaicite:1]{index=1}
+
+- **Models:** **Plan with your top reasoner**; **Build with *Composer*** (Cursor's agentic coding model, ~**4× faster**, most turns **<30s**). :contentReference[oaicite:2]{index=2}
+
+- **Browser for Agent:** Allowed **in-editor** for research/design only (CI remains hermetic). Browser is **GA** in 2.0 and can forward DOM to the agent. :contentReference[oaicite:3]{index=3}
+
+- **Sandboxed Terminals:** Prefer sandboxed agent shells (no network) where supported; keep our CI "no network" invariant regardless. :contentReference[oaicite:4]{index=4}
+
+### Team Rules / Commands
+
+- SSOT remains in-repo (`.cursor/rules/*.mdc`). Optional dashboard **Team Rules/Commands** may drift or fail to sync; if used, generate them **from** the repo and treat dashboard as a mirror only. :contentReference[oaicite:5]{index=5}
+
+### Guardrails we keep
+
+- **No outbound network in CI.** Use hermetic validators and artifacts-first routing.
+
+- **No `share/**` writes in CI.** Route CI outputs to `_artifacts/**`.
+
+- **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.

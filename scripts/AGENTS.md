@@ -249,6 +249,93 @@ python scripts/generate_report.py                 # Recent aggregated report
 - [ ] All template sections populated with real database data
 - [ ] Qwen health verification shows verified=true with latencies
 
+### `verify_data_completeness.py` - Data Completeness Verification (Rule 037)
+
+**Purpose**: Verify database schema completeness and data integrity for Rule 037 compliance
+**Requirements**: Rule 037 (Data Persistence Completeness) - ensure complete data persistence
+
+**Capabilities**:
+- Table presence validation (concepts, concept_network, concept_relations)
+- Join integrity checks between related tables
+- Connection robustness testing
+- No data writes - read-only verification
+
+**Usage**:
+```bash
+python scripts/verify_data_completeness.py  # Check all tables and joins
+```
+
+**Verification Checklist**:
+- [ ] All required tables exist and are populated
+- [ ] Foreign key relationships are intact
+- [ ] No orphaned records in join tables
+- [ ] Database connection stable under load
+
+### `book_readiness.py` - Book Pipeline Readiness Gate
+
+**Purpose**: Validate system readiness for full book extraction (mini experiment → thresholds → schema validation)
+**Requirements**: Rule 037 gate enforcement - block book runs until mini experiment passes
+
+**Capabilities**:
+- Mini experiment execution with real inference
+- Threshold validation against configurable metrics
+- SSOT schema validation (robust path discovery)
+- Readiness report generation
+- Service availability checking
+
+**Usage**:
+```bash
+# Run mini experiment
+python scripts/book_readiness.py run-mini --config config/mini_experiments.yaml
+
+# Compute readiness metrics
+python scripts/book_readiness.py compute --inputs graph_stats.json temporal_patterns.json pattern_forecast.json
+
+# Validate gates (HARD-REQUIRED)
+python scripts/book_readiness.py gate
+
+# Assert readiness before book run
+python scripts/book_readiness.py assert-pass
+```
+
+**Schema Path Robustness**:
+- Searches `docs/SSOT/schemas/` first (preferred location)
+- Falls back to `docs/SSOT/` for compatibility
+- Accepts multiple naming patterns: `graph-stats.schema.json`, `graph_export.schema.json`
+
+### `run_book.py` - Book Pipeline Orchestration
+
+**Purpose**: Orchestrate deterministic book extraction with confidence-building phases
+**Requirements**: Rule 049 governance - ops-mode controlled execution
+
+**Capabilities**:
+- Plan phase: Configuration validation and planning
+- Dry-run phase: Service validation without inference
+- Stop-loss phase: Partial execution with N-chapter limit
+- Resume phase: Continue from interruption point
+- YAML/JSON config support with graceful fallbacks
+
+**Usage**:
+```bash
+# Plan extraction
+python scripts/run_book.py plan --cfg config/book_config.yaml
+
+# Dry run (validate services, no inference)
+python scripts/run_book.py dry --cfg config/book_config.yaml
+
+# Stop after N chapters
+python scripts/run_book.py stop --cfg config/book_config.yaml --n 5
+
+# Resume from interruption
+python scripts/run_book.py resume
+```
+
+**Safety Features**:
+- Deterministic seeding for reproducible runs
+- Service availability validation before execution
+- Partial execution tracking and resume capability
+- Environment isolation per run
+
 ### `ci-no-mocks.sh` - CI Quality Gate
 
 **Purpose**: Ensure production readiness by running tests without mocks

@@ -11,9 +11,7 @@ import requests
 
 """Headless-only Autopilot: resolve CLI strictly; no UI fallback allowed."""
 try:
-    cfg = json.loads(
-        subprocess.check_output(["python3", "tools/lm_bootstrap_strict.py"], text=True)
-    )
+    cfg = json.loads(subprocess.check_output(["python3", "tools/lm_bootstrap_strict.py"], text=True))
 except subprocess.CalledProcessError as e:
     print((e.stdout or "") + (e.stderr or ""), file=sys.stderr)
     sys.exit(1)
@@ -26,12 +24,8 @@ USE_REMOTE = os.environ.get("USE_REMOTE_LM_STUDIO", "true").lower() == "true"
 REMOTE_HOST = os.environ.get("LM_STUDIO_REMOTE_HOST", "192.168.1.119")
 MODELS = {
     # Prefer explicit local/remote identifiers via env; fall back to defaults
-    "embed": os.environ.get(
-        "EMBED_MODEL_ID", os.environ.get("EMBEDDING_MODEL", "text-embedding-bge-m3")
-    ),
-    "llm": os.environ.get(
-        "LLM_MODEL_ID", os.environ.get("ANSWERER_MODEL", "Qwen2.5-14B-Instruct-GGUF")
-    ),
+    "embed": os.environ.get("EMBED_MODEL_ID", os.environ.get("EMBEDDING_MODEL", "text-embedding-bge-m3")),
+    "llm": os.environ.get("LLM_MODEL_ID", os.environ.get("ANSWERER_MODEL", "Qwen2.5-14B-Instruct-GGUF")),
     "critic": os.environ.get("CRITIC_MODEL_ID", "skywork-critic-llama-3.1-8b"),
 }
 QUANT_OK = {
@@ -48,9 +42,7 @@ ROOTS = [
 
 
 def run(cmd):
-    p = subprocess.run(
-        shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
-    )
+    p = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     return p.returncode, p.stdout
 
 
@@ -96,7 +88,7 @@ def assert_no_ui_server():
         try:
             requests.get(f"http://127.0.0.1:{port}/v1/models", timeout=1)
             print(
-                f"[FAIL] UI server detected on :{port}. Close LM Studio UI. Headless-only mode enforced.",  # noqa: E501
+                f"[FAIL] UI server detected on :{port}. Close LM Studio UI. Headless-only mode enforced.",
                 file=sys.stderr,
             )
             sys.exit(1)
@@ -119,20 +111,14 @@ def _wait_ready_remote(port, expected_model):
                     print(f"[REMOTE] Found {expected_model} on {REMOTE_HOST}:{port}")
                     return
                 else:
-                    print(
-                        f"[REMOTE] Waiting for {expected_model}, currently loaded: {model_ids}"
-                    )
+                    print(f"[REMOTE] Waiting for {expected_model}, currently loaded: {model_ids}")
         except Exception as e:
             msg = str(e)
             print(f"[REMOTE] Connection failed: {msg}")
             # Fail-fast on explicit connection refused (server not running)
-            if (
-                "Connection refused" in msg
-                or "Errno 111" in msg
-                or "ECONNREFUSED" in msg
-            ):
+            if "Connection refused" in msg or "Errno 111" in msg or "ECONNREFUSED" in msg:
                 print(
-                    f"[FAIL] Remote server not reachable at {REMOTE_HOST}:{port} (connection refused)",  # noqa: E501
+                    f"[FAIL] Remote server not reachable at {REMOTE_HOST}:{port} (connection refused)",
                     file=sys.stderr,
                 )
                 sys.exit(1)
@@ -223,9 +209,7 @@ def set_env_defaults():
 
 
 def run_graph(book, batch_size):
-    code, out = run(
-        f"python3 -m src.graph.graph --book {book} --batch-size {batch_size}"
-    )
+    code, out = run(f"python3 -m src.graph.graph --book {book} --batch-size {batch_size}")
     print(out)
     if code != 0:
         print("[FAIL] graph run failed", file=sys.stderr)
@@ -250,16 +234,12 @@ def sanity_sql():
         return
 
     def psql(q):
-        code, out = run(f'psql "{dsn}" -c "{q}"')
+        _code, out = run(f'psql "{dsn}" -c "{q}"')
         print(out)
 
-    psql(
-        "SELECT COUNT(*) AS null_scores FROM concept_relations WHERE rerank_score IS NULL;"
-    )
+    psql("SELECT COUNT(*) AS null_scores FROM concept_relations WHERE rerank_score IS NULL;")
     psql("SELECT relation_type, COUNT(*) FROM concept_relations GROUP BY 1;")
-    psql(
-        "SELECT AVG(rerank_score) avg, MIN(rerank_score) min, MAX(rerank_score) max FROM concept_relations;"  # noqa: E501
-    )
+    psql("SELECT AVG(rerank_score) avg, MIN(rerank_score) min, MAX(rerank_score) max FROM concept_relations;")
     psql(
         "SELECT cosine, rerank_score, edge_strength, relation_type FROM concept_relations ORDER BY edge_strength DESC LIMIT 20;"  # noqa: E501
     )

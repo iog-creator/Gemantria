@@ -21,9 +21,7 @@ def main() -> int:
     doc = _load(LATEST)
     nodes = doc.get("nodes", []) or []
     edges = doc.get("edges", []) or []
-    node_ids: set[Any] = {
-        n.get("id") for n in nodes if isinstance(n, dict) and "id" in n
-    }
+    node_ids: set[Any] = {n.get("id") for n in nodes if isinstance(n, dict) and "id" in n}
 
     missing_ids: set[Any] = set()
     for e in edges:

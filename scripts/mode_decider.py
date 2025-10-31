@@ -48,11 +48,7 @@ def _changed_files() -> list[str]:
     changed: set[str] = set()
     for c in cmds:
         try:
-            out = (
-                subprocess.check_output(c, text=True, stderr=subprocess.DEVNULL)
-                .strip()
-                .splitlines()
-            )
+            out = subprocess.check_output(c, text=True, stderr=subprocess.DEVNULL).strip().splitlines()
             changed.update([x.strip() for x in out if x.strip()])
         except Exception:
             pass
@@ -62,9 +58,7 @@ def _changed_files() -> list[str]:
 def _current_ref() -> tuple[str, bool]:
     # returns (branch_or_ref, is_tag)
     try:
-        branch = subprocess.check_output(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True
-        ).strip()
+        branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
     except Exception:
         branch = "unknown"
     is_tag = False
@@ -129,21 +123,13 @@ def decide_mode() -> tuple[str, list[str]]:
     chat_up = _is_open(chat_host, chat_port)
     emb_up = _is_open(emb_host, emb_port)
     if api_up and chat_up and emb_up:
-        notes.append(
-            "[guide] All local services reachable (API:8000, chat:9991, embed:9994) → STRICT mode."
-        )
+        notes.append("[guide] All local services reachable (API:8000, chat:9991, embed:9994) → STRICT mode.")
         return "STRICT", notes
 
     # 5) Default soft with instructions
-    notes.append(
-        "[guide] Services not detected → SOFT mode to keep dev flow unblocked."
-    )
-    notes.append(
-        "[guide] For STRICT locally: make test.smoke.strict && make schema.validate.temporal.strict"
-    )
-    notes.append(
-        "[guide] Start services for STRICT: API :8000, LM chat :9991, LM embed :9994"
-    )
+    notes.append("[guide] Services not detected → SOFT mode to keep dev flow unblocked.")
+    notes.append("[guide] For STRICT locally: make test.smoke.strict && make schema.validate.temporal.strict")
+    notes.append("[guide] Start services for STRICT: API :8000, LM chat :9991, LM embed :9994")
     return "SOFT", notes
 
 
@@ -152,14 +138,10 @@ def main() -> int:
     for n in notes:
         print(n)
     if mode == "STRICT":
-        return subprocess.call(
-            "make test.smoke.strict && make schema.validate.temporal.strict", shell=True
-        )
+        return subprocess.call("make test.smoke.strict && make schema.validate.temporal.strict", shell=True)
     else:
         # SOFT: allow skips/||true behavior
-        return subprocess.call(
-            "make test.smoke && make schema.validate.temporal", shell=True
-        )
+        return subprocess.call("make test.smoke && make schema.validate.temporal", shell=True)
 
 
 if __name__ == "__main__":

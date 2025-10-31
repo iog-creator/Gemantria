@@ -11,9 +11,7 @@ from src.infra.structured_logger import get_logger, log_json
 LOG = get_logger("gemantria.confidence_validator")
 
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
-GEMATRIA_CONFIDENCE_THRESHOLD = float(
-    os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90")
-)
+GEMATRIA_CONFIDENCE_THRESHOLD = float(os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90"))
 AI_CONFIDENCE_THRESHOLD = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.95"))
 
 
@@ -121,9 +119,7 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
 
     # Abort if any validations failed
     if low_confidence_nouns:
-        error_msg = (
-            f"Confidence validation failed for {len(low_confidence_nouns)} nouns"
-        )
+        error_msg = f"Confidence validation failed for {len(low_confidence_nouns)} nouns"
         log_json(
             LOG,
             40,

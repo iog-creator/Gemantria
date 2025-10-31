@@ -54,8 +54,7 @@ jobs:
         run: |
           python scripts/eval/gen_badge.py "MyPy Errors"  "${{ steps.vals.outputs.mypy }}"  "#007ec6" > share/eval/badges/mypy.svg
           python scripts/eval/gen_badge.py "Ruff Issues"  "${{ steps.vals.outputs.ruff }}"  "#5c53ff" > share/eval/badges/ruff.svg
-          # Show exact percent with two decimals inside the value: e.g., "Coverage 87.32%"
-          python scripts/eval/gen_badge.py "Coverage"     "${{ steps.vals.outputs.cover }}%" "#4c1"    > share/eval/badges/coverage.svg
+          python scripts/eval/gen_badge.py "Coverage %"   "${{ steps.vals.outputs.cover }}" "#4c1"    > share/eval/badges/coverage.svg
           python scripts/eval/gen_badge.py "Graph Anoms" "${{ steps.vals.outputs.graph }}" "#d97706" > share/eval/badges/graph.svg
 
       - name: Upload badges as artifact

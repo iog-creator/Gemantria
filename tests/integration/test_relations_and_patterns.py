@@ -53,9 +53,7 @@ class TestRelationsAndPatternsIntegration:
             ),
         )
 
-        with patch.dict(
-            os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "false"}
-        ):
+        with patch.dict(os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "false"}):
             embeddings_batch = [
                 {"concept_id": "test-concept-1", "embedding": [0.1] * 1024},
                 {"concept_id": "test-concept-2", "embedding": [0.9] * 1024},
@@ -85,9 +83,7 @@ class TestRelationsAndPatternsIntegration:
         )
 
         with (
-            patch.dict(
-                os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "true"}
-            ),
+            patch.dict(os.environ, {"ENABLE_RELATIONS": "true", "ENABLE_RERANK": "true"}),
             patch("src.services.lmstudio_client.rerank_pairs") as mock_rerank,
         ):
             mock_rerank.return_value = [0.8, 0.9]  # Mock high rerank scores
@@ -97,7 +93,7 @@ class TestRelationsAndPatternsIntegration:
                 {"concept_id": "test-concept-4", "embedding": [0.15] * 1024},
             ]
 
-            edges, rerank_calls = build_relations(db_connection, embeddings_batch)
+            _edges, rerank_calls = build_relations(db_connection, embeddings_batch)
             assert rerank_calls == 1  # Rerank should be called
             mock_rerank.assert_called_once()
 

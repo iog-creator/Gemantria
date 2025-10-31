@@ -9,19 +9,19 @@ MAP = {
     "ג": 3,
     "ד": 4,
     "ה": 5,
-    "ו": 6,
+    "ו": 6,  # noqa: RUF001
     "ז": 7,
     "ח": 8,
-    "ט": 9,
-    "י": 10,
+    "ט": 9,  # noqa: RUF001
+    "י": 10,  # noqa: RUF001
     "כ": 20,
     "ך": 20,
     "ל": 30,
     "מ": 40,
     "ם": 40,
     "נ": 50,
-    "ן": 50,
-    "ס": 60,
+    "ן": 50,  # noqa: RUF001
+    "ס": 60,  # noqa: RUF001
     "ע": 70,
     "פ": 80,
     "ף": 80,
@@ -48,9 +48,7 @@ def main():
     for c in cases:
         got = gematria(c["hebrew"])
         exp = int(c["expected_value"])
-        print(
-            f"{c['hebrew']}: got={got} expected={exp}  {'OK' if got == exp else 'FAIL'}"
-        )
+        print(f"{c['hebrew']}: got={got} expected={exp}  {'OK' if got == exp else 'FAIL'}")
         if got != exp:
             bad += 1
     if bad:

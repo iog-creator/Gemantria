@@ -29,9 +29,7 @@ SCHEMA_ORG = Namespace("http://schema.org/")
 
 def fetch_graph_data(
     db,
-) -> tuple[
-    list[tuple], list[tuple], list[tuple] | None, dict[int, dict[str, Any]] | None
-]:
+) -> tuple[list[tuple], list[tuple], list[tuple] | None, dict[int, dict[str, Any]] | None]:
     """Fetch nodes, edges, optional metadata, and cluster metrics from database."""
 
     # Fetch nodes with cluster, centrality, and concept metrics data
@@ -61,10 +59,7 @@ def fetch_graph_data(
         SELECT cluster_id, density, semantic_diversity, top_examples FROM cluster_metrics
     """
     ).fetchall()
-    cmeta = {
-        r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]}
-        for r in cmetrics
-    }
+    cmeta = {r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]} for r in cmetrics}
 
     # Try to fetch metadata (optional table)
     metadata = None
@@ -213,9 +208,7 @@ def build_jsonld_graph(
     return graph
 
 
-def create_rdf_graph(
-    nodes: list[tuple], edges: list[tuple], metadata: list[tuple] | None = None
-) -> Graph:
+def create_rdf_graph(nodes: list[tuple], edges: list[tuple], metadata: list[tuple] | None = None) -> Graph:
     """Create RDF graph using rdflib."""
 
     g = Graph()

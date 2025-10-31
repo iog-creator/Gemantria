@@ -1,0 +1,25 @@
+name: Soft Checks
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {}
+jobs:
+  soft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff mypy pytest
+      - name: Run soft checks (non-fatal)
+        run: |
+          python scripts/ci/soft_checks.py || true
+      - name: Upload soft logs (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: soft-checks
+          path: share/eval/soft_checks/soft_checks.log

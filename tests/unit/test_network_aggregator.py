@@ -236,7 +236,7 @@ Insight: First woman"""
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
-        noun = {"name": "Test", "hebrew": "טסט", "value": 100}
+        noun = {"name": "Test", "hebrew": "טסט", "value": 100}  # noqa: RUF001
 
         result = _build_document_string(noun)
 
@@ -244,7 +244,7 @@ Insight: First woman"""
 Meaning: טסט
 Primary Verse: Genesis (reference)
 Gematria: 100
-Insight:"""
+Insight:"""  # noqa: RUF001
 
         self.assertEqual(result, expected)
 
@@ -281,13 +281,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         self.assertGreaterEqual(edge_strength, 0.90)
 
         # Should be classified as strong
-        relation_type = (
-            "strong"
-            if edge_strength >= 0.90
-            else "weak"
-            if edge_strength >= 0.75
-            else None
-        )
+        relation_type = "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
         self.assertEqual(relation_type, "strong")
 
     def test_edge_classification_weak(self):

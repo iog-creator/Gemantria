@@ -9,6 +9,11 @@ import time
 from pathlib import Path
 from typing import Any
 
+try:
+    import yaml  # type: ignore  # hard-required by requirements-dev.txt
+except Exception:
+    yaml = None
+
 BASE = Path(__file__).resolve().parent.parent
 REPORTS = BASE / "reports" / "readiness"
 LOGS = BASE / "logs" / "book"
@@ -32,8 +37,8 @@ def _load_yaml_or_json(p: Path) -> dict[str, Any]:
     if not p.exists():
         return DEFAULT_CFG
     if p.suffix.lower() in (".yaml", ".yml"):
-        import yaml  # type: ignore  # hard-required by requirements-dev.txt
-
+        if yaml is None:
+            raise RuntimeError("PyYAML not available but YAML config requested")
         return yaml.safe_load(p.read_text(encoding="utf-8"))
     return json.loads(p.read_text(encoding="utf-8"))
 
@@ -102,9 +107,7 @@ def cmd_dry(args: argparse.Namespace) -> None:
     _require_services(cfg)
     plan = _plan(cfg)
     _write(REPORTS / "book_plan.json", plan)
-    _write(
-        LOGS / "dry_run.trace", {"ts": time.time(), "plan_id": plan["id"], "dry": True}
-    )
+    _write(LOGS / "dry_run.trace", {"ts": time.time(), "plan_id": plan["id"], "dry": True})
     print("[guide] dry-run OK (no LM calls executed)")
 
 
@@ -129,9 +132,7 @@ def _run_chapters(cfg: dict[str, Any], chapters: list[int], real: bool) -> None:
             ),
             encoding="utf-8",
         )
-        print(
-            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s"
-        )
+        print(f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s")
 
 
 def cmd_stop(args: argparse.Namespace) -> None:
@@ -156,9 +157,7 @@ def cmd_stop(args: argparse.Namespace) -> None:
         )
         print(f"[guide] chapter {ch} REAL done in 0.00s")
     # keep partial marker *out* of share to reduce churn
-    _write(
-        LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()}
-    )
+    _write(LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()})
     print(f"[guide] stop-loss executed for first {n} chapter(s).")
 
 
@@ -166,11 +165,7 @@ def cmd_resume(_args: argparse.Namespace) -> None:
     # Naive resume: find next chapter without a log file
     # (Assumes DEFAULT_CFG or last used cfg; users can re-run stop/dry to reset plan)
     cfg = DEFAULT_CFG
-    missing = [
-        ch
-        for ch in cfg["chapters"]
-        if not (LOGS / f"{cfg['book']}.ch{ch:02d}.json").exists()
-    ]
+    missing = [ch for ch in cfg["chapters"] if not (LOGS / f"{cfg['book']}.ch{ch:02d}.json").exists()]
     if not missing:
         print("[guide] nothing to resume — all chapters present.")
         return

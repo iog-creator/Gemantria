@@ -57,9 +57,7 @@ def _embed(texts: list[str]) -> list[list[float]]:
     Raises:
         requests.HTTPError: If the API call fails
     """
-    r = requests.post(
-        f"{LM_BASE}/embeddings", json={"model": EMBED_MODEL, "input": texts}, timeout=60
-    )
+    r = requests.post(f"{LM_BASE}/embeddings", json={"model": EMBED_MODEL, "input": texts}, timeout=60)
     r.raise_for_status()
     return [item["embedding"] for item in r.json()["data"]]
 
@@ -81,9 +79,7 @@ def _cos(a: list[float], b: list[float]) -> float:
     return 0.0 if na == 0 or nb == 0 else dot / (na * nb)
 
 
-def rerank_via_embeddings(
-    pairs: list[tuple[int, int]], name_map: dict[int, str]
-) -> list[float]:
+def rerank_via_embeddings(pairs: list[tuple[int, int]], name_map: dict[int, str]) -> list[float]:
     """
     Rerank concept pairs by computing cosine similarity of their BGE-M3 embeddings.
 

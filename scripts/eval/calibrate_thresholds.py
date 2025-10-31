@@ -25,9 +25,7 @@ def main() -> int:
         print("[calibrate] missing graph")
         return 2
     data = json.loads(GRAPH.read_text(encoding="utf-8"))
-    strengths = [
-        float(e.get("edge_strength", 0.0) or 0.0) for e in data.get("edges", [])
-    ]
+    strengths = [float(e.get("edge_strength", 0.0) or 0.0) for e in data.get("edges", [])]
     sugg = {
         "n_edges": len(strengths),
         "mean": st.fmean(strengths) if strengths else 0.0,

@@ -50,9 +50,7 @@ def main() -> int:
         print("[delta] missing", CUR)
         return 2
     cur = json.loads(CUR.read_text(encoding="utf-8"))
-    prev = (
-        json.loads(PREV.read_text(encoding="utf-8")) if PREV.exists() else {"edges": []}
-    )
+    prev = json.loads(PREV.read_text(encoding="utf-8")) if PREV.exists() else {"edges": []}
     cs, cw, _ = _counts(cur.get("edges", []))
     ps, pw, _ = _counts(prev.get("edges", []))
     ds, dw = cs - ps, cw - pw
@@ -67,9 +65,7 @@ def main() -> int:
     }
     DELTAJ.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
     BADGE.write_text(_badge_svg(ds, dw), encoding="utf-8")
-    print(
-        f"[delta] wrote {DELTAJ.relative_to(ROOT)} and badge {BADGE.relative_to(ROOT)}"
-    )
+    print(f"[delta] wrote {DELTAJ.relative_to(ROOT)} and badge {BADGE.relative_to(ROOT)}")
     return 0
 
 
