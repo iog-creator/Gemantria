@@ -1,0 +1,23 @@
+# Mirror of .cursorignore, but *only* for indexing scope
+
+share/**
+
+_artifacts/**
+
+node_modules/**
+
+.venv/**
+
+**/.pytest_cache/**
+
+**/__pycache__/**
+
+.git/**
+
+**/*.parquet
+
+**/*.feather
+
+**/*.csv
+
+dumps/**

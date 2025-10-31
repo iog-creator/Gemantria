@@ -18,7 +18,7 @@ def test_postgres_missing_dsn_raises_error():
     """Test that postgres checkpointer without DSN raises clear error."""
     with (
         patch.dict(os.environ, {"CHECKPOINTER": "postgres"}, clear=True),
-        pytest.raises(ValueError, match="GEMATRIA_DSN.*required"),
+        pytest.raises(ValueError, match=r"GEMATRIA_DSN.*required"),
     ):
         get_checkpointer()
 

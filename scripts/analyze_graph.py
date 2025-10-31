@@ -69,9 +69,7 @@ def main():
                 )
                 centrality_insert_count += 1
             except Exception as e:
-                log_json(
-                    LOG, 40, "centrality_insert_failed", node=node[:8], error=str(e)
-                )
+                log_json(LOG, 40, "centrality_insert_failed", node=node[:8], error=str(e))
 
         # Report results
         result = {
@@ -79,10 +77,7 @@ def main():
             "nodes_analyzed": G.number_of_nodes(),
             "edges_analyzed": G.number_of_edges(),
             "largest_cluster": max(
-                [
-                    list(cluster_map.values()).count(cid)
-                    for cid in set(cluster_map.values())
-                ],
+                [list(cluster_map.values()).count(cid) for cid in set(cluster_map.values())],
                 default=0,
             ),
             "avg_degree": sum(degree.values()) / len(degree) if degree else 0,

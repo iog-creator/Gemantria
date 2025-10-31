@@ -11,8 +11,8 @@ import requests
 
 # Dependency checks
 try:
-    import psycopg
-    from pgvector.psycopg import register_vector
+    import psycopg  # noqa: F401
+    from pgvector.psycopg import register_vector  # noqa: F401
 
     HAS_VECTOR_DB = True
 except ImportError:
@@ -54,9 +54,7 @@ if TIMEOUT <= 0:
 
 RETRY_ATTEMPTS = int(os.getenv("LM_STUDIO_RETRY_ATTEMPTS", "3"))
 if RETRY_ATTEMPTS < 1:
-    raise ValueError(
-        f"LM_STUDIO_RETRY_ATTEMPTS must be at least 1, got: {RETRY_ATTEMPTS}"
-    )
+    raise ValueError(f"LM_STUDIO_RETRY_ATTEMPTS must be at least 1, got: {RETRY_ATTEMPTS}")
 
 RETRY_DELAY = float(os.getenv("LM_STUDIO_RETRY_DELAY", "2.0"))
 if RETRY_DELAY <= 0:
@@ -112,9 +110,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         available_models = {model["id"] for model in models_resp.json().get("data", [])}
 
         # Verify required models are loaded
-        missing_models = [
-            model for model in required_models if model not in available_models
-        ]
+        missing_models = [model for model in required_models if model not in available_models]
         if missing_models:
             reason = f"Missing models: {', '.join(missing_models)}. Available: {', '.join(available_models)}"
             return QwenHealth(
@@ -168,7 +164,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         )
 
     except requests.exceptions.ConnectionError as e:
-        reason = f"Cannot connect to LM Studio at {HOST}. Is LM Studio server running? Error: {str(e)}"
+        reason = f"Cannot connect to LM Studio at {HOST}. Is LM Studio server running? Error: {e!s}"
         return QwenHealth(
             ok=False,
             reason=reason,
@@ -200,7 +196,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
             lat_ms_rerank=None,
         )
     except requests.RequestException as e:
-        reason = f"LM Studio network error: {str(e)}. Check firewall and network connectivity."
+        reason = f"LM Studio network error: {e!s}. Check firewall and network connectivity."
         return QwenHealth(
             ok=False,
             reason=reason,
@@ -209,9 +205,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
             lat_ms_rerank=None,
         )
     except Exception as e:
-        reason = (
-            f"Unexpected health check failure: {str(e)}. Check LM Studio configuration."
-        )
+        reason = f"Unexpected health check failure: {e!s}. Check LM Studio configuration."
         return QwenHealth(
             ok=False,
             reason=reason,
@@ -251,7 +245,9 @@ class LMStudioClient:
                 resp.raise_for_status()
                 return resp.json()
             except requests.exceptions.ConnectionError as e:
-                error_msg = f"Cannot connect to LM Studio at {HOST}. Is server running? Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                error_msg = (
+                    f"Cannot connect to LM Studio at {HOST}. Is server running? Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                )
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -266,18 +262,18 @@ class LMStudioClient:
                 raise QwenUnavailableError(error_msg) from e
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 404:
-                    error_msg = f"LM Studio API endpoint not found at {HOST}/v1/chat/completions. Check LM Studio version."
+                    error_msg = (
+                        f"LM Studio API endpoint not found at {HOST}/v1/chat/completions. Check LM Studio version."
+                    )
                 elif e.response.status_code == 400:
                     error_msg = f"Bad request to LM Studio: {e.response.text}"
                 elif e.response.status_code >= 500:
                     error_msg = f"LM Studio server error ({e.response.status_code}): {e.response.text}"
                 else:
-                    error_msg = (
-                        f"LM Studio HTTP {e.response.status_code}: {e.response.text}"
-                    )
+                    error_msg = f"LM Studio HTTP {e.response.status_code}: {e.response.text}"
                 raise QwenUnavailableError(error_msg) from e
             except Exception as e:
-                error_msg = f"Unexpected LM Studio error: {str(e)}"
+                error_msg = f"Unexpected LM Studio error: {e!s}"
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -301,14 +297,9 @@ class LMStudioClient:
             "messages": [{"role": "user", "content": prompt}],
         }
         res = self._post("v1/chat/completions", payload)
-        content = (
-            res.get("choices", [{}])[0]
-            .get("message", {})
-            .get("content", "0.95")
-            .strip()
-        )
+        content = res.get("choices", [{}])[0].get("message", {}).get("content", "0.95").strip()
         # Extract just the numeric part if the model returns extra text
-        import re  # noqa: E402
+        import re
 
         match = re.search(r"([0-9]*\.?[0-9]+)", content)
         if match:
@@ -317,11 +308,11 @@ class LMStudioClient:
             score = 0.95  # fallback
         return max(0.0, min(1.0, score))
 
-    def generate_embedding(self, text: str, model: str = None) -> list[float]:
+    def generate_embedding(self, text: str, model: str | None = None) -> list[float]:
         """Generate single embedding for text (legacy method)."""
         return self.get_embeddings([text], model)[0]
 
-    def get_embeddings(self, texts: list[str], model: str = None) -> list[list[float]]:
+    def get_embeddings(self, texts: list[str], model: str | None = None) -> list[list[float]]:
         """
         Generate embeddings for multiple texts using Qwen3-Embedding-0.6B-GGUF.
 
@@ -334,7 +325,7 @@ class LMStudioClient:
         """
         if _is_mock_mode() or not _get_bool_env("USE_QWEN_EMBEDDINGS", "true"):
             # Return mock embeddings for testing or when disabled
-            import random  # noqa: E402
+            import random
 
             result = []
             for text in texts:
@@ -375,7 +366,7 @@ class LMStudioClient:
                     # Hard fail - no mock fallback in production
                     if _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false"):
                         # Test-only bypass for unit tests
-                        import random  # noqa: E402
+                        import random
 
                         result = []
                         for text in texts:
@@ -389,12 +380,10 @@ class LMStudioClient:
                     else:
                         # Production mode - hard fail
                         raise QwenUnavailableError(
-                            f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {str(e)}"
+                            f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {e!s}"
                         )
 
-    def rerank(
-        self, query: str, candidates: list[str], model: str = None
-    ) -> list[float]:
+    def rerank(self, query: str, candidates: list[str], model: str | None = None) -> list[float]:
         """
         Rerank candidates using Qwen3-Reranker-0.6B-GGUF for theological relevance.
 
@@ -411,7 +400,7 @@ class LMStudioClient:
         """
         if _is_mock_mode():
             # Return mock reranking scores for testing
-            import random  # noqa: E402
+            import random
 
             random.seed(hash(query) % 10000)
             return [random.uniform(0.1, 0.9) for _ in candidates]
@@ -447,15 +436,11 @@ class LMStudioClient:
 
                 for attempt in range(RETRY_ATTEMPTS):
                     try:
-                        resp = self.session.post(
-                            f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT
-                        )
+                        resp = self.session.post(f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT)
                         resp.raise_for_status()
                         data = resp.json()
 
-                        response_text = (
-                            data["choices"][0]["message"]["content"].strip().lower()
-                        )
+                        response_text = data["choices"][0]["message"]["content"].strip().lower()
                         logprobs = data["choices"][0].get("logprobs", {})
 
                         # Try logprob-based scoring first (more precise)
@@ -521,7 +506,7 @@ def rerank_pairs(pairs, name_map=None):
     name_map: optional dict mapping concept_ids to names
     Returns list of scores [0..1] indicating similarity strength.
     """
-    from src.infra.db import get_gematria_rw  # noqa: E402
+    from src.infra.db import get_gematria_rw
 
     texts = []
     if name_map:
@@ -536,11 +521,11 @@ def rerank_pairs(pairs, name_map=None):
         for sid, tid in pairs:
             # Fetch concept names from concepts table (sid/tid are concept_network.id values)
             s_name = db.execute(
-                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",  # noqa: E501
+                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",
                 (sid,),
             ).fetchone()
             t_name = db.execute(
-                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",  # noqa: E501
+                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",
                 (tid,),
             ).fetchone()
             s_text = s_name[0] if s_name else str(sid)
@@ -558,9 +543,7 @@ def rerank_pairs(pairs, name_map=None):
     return scores
 
 
-def chat_completion(
-    messages_batch: list[list[dict]], model: str, temperature: float = 0.0
-) -> list:
+def chat_completion(messages_batch: list[list[dict]], model: str, temperature: float = 0.0) -> list:
     """
     Execute batched chat completions using LM Studio.
 
@@ -578,10 +561,7 @@ def chat_completion(
     if _is_mock_mode():
         # Return mock responses for testing
         return [
-            SimpleNamespace(
-                text='{"insight": "Mock theological insight", "confidence": 0.95}'
-            )
-            for _ in messages_batch
+            SimpleNamespace(text='{"insight": "Mock theological insight", "confidence": 0.95}') for _ in messages_batch
         ]
 
     results = []
@@ -595,9 +575,7 @@ def chat_completion(
 
         for attempt in range(RETRY_ATTEMPTS):
             try:
-                resp = requests.post(
-                    f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT
-                )
+                resp = requests.post(f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT)
                 resp.raise_for_status()
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"]
@@ -610,14 +588,12 @@ def chat_completion(
                     if _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false"):
                         # Test-only fallback
                         results.append(
-                            SimpleNamespace(
-                                text='{"insight": "Fallback theological insight", "confidence": 0.90}'
-                            )
+                            SimpleNamespace(text='{"insight": "Fallback theological insight", "confidence": 0.90}')
                         )
                         break
                     else:
                         raise QwenUnavailableError(
-                            f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {str(e)}"
+                            f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {e!s}"
                         )
 
     return results
@@ -650,16 +626,12 @@ def safe_json_parse(text: str, required_keys: list[str]) -> dict:
     try:
         data = json.loads(text)
     except Exception as e:
-        raise ValueError(
-            f"Failed to parse JSON response: {str(e)}. Raw text: {text[:200]}..."
-        )
+        raise ValueError(f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}...")
 
     # Validate required keys
     missing_keys = [key for key in required_keys if key not in data]
     if missing_keys:
-        raise ValueError(
-            f"JSON response missing required keys: {missing_keys}. Parsed data: {data}"
-        )
+        raise ValueError(f"JSON response missing required keys: {missing_keys}. Parsed data: {data}")
 
     return data
 

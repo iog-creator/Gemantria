@@ -7,6 +7,7 @@ from typing import Any, Iterable, Optional, Sequence, Tuple
 try:
     # psycopg 3 preferred
     import psycopg
+
     HAS_DB = True
 except Exception:  # pragma: no cover
     HAS_DB = False  # Import optional for CI paths without DSNs
@@ -22,11 +23,14 @@ __all__ = [
 
 WRITE_RE = re.compile(r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I)
 
+
 class ReadOnlyViolation(RuntimeError):
     """Attempted write against read-only bible_db."""
 
+
 def sql_is_write(sql: str) -> bool:
     return bool(WRITE_RE.match(sql or ""))
+
 
 @dataclass
 class BibleReadOnly:
@@ -51,6 +55,7 @@ class BibleReadOnly:
                 for row in cur:
                     yield row
 
+
 @dataclass
 class GematriaRW:
     dsn: Optional[str]
@@ -67,8 +72,10 @@ class GematriaRW:
                     for row in cur:
                         yield row
 
+
 def get_bible_ro() -> BibleReadOnly:
     return BibleReadOnly(dsn=os.getenv("BIBLE_DB_DSN"))
+
 
 def get_gematria_rw() -> GematriaRW:
     return GematriaRW(dsn=os.getenv("GEMATRIA_DSN"))

@@ -182,7 +182,7 @@ class TestEmbeddingFunctionality(unittest.TestCase):
 
     def test_vector_normalization(self):
         """Test that vectors are properly L2 normalized."""
-        import math  # noqa: E402
+        import math
 
         # Test with a non-normalized vector
         vec = [3.0, 4.0]  # Should normalize to [0.6, 0.8]
@@ -236,7 +236,7 @@ Insight: First woman"""
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
-        noun = {"name": "Test", "hebrew": "טסט", "value": 100}
+        noun = {"name": "Test", "hebrew": "טסט", "value": 100}  # noqa: RUF001
 
         result = _build_document_string(noun)
 
@@ -244,7 +244,7 @@ Insight: First woman"""
 Meaning: טסט
 Primary Verse: Genesis (reference)
 Gematria: 100
-Insight:"""
+Insight:"""  # noqa: RUF001
 
         self.assertEqual(result, expected)
 
@@ -273,7 +273,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
     def test_edge_classification_strong(self):
         """Test edge classification for strong relationships (≥0.90)."""
         # Import the constants
-        import os  # noqa: E402
+        import os
 
         os.environ["EDGE_STRONG"] = "0.90"
 
@@ -281,16 +281,12 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         self.assertGreaterEqual(edge_strength, 0.90)
 
         # Should be classified as strong
-        relation_type = (
-            "strong"
-            if edge_strength >= 0.90
-            else "weak" if edge_strength >= 0.75 else None
-        )
+        relation_type = "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
         self.assertEqual(relation_type, "strong")
 
     def test_edge_classification_weak(self):
         """Test edge classification for weak relationships (≥0.75, <0.90)."""
-        import os  # noqa: E402
+        import os
 
         os.environ["EDGE_STRONG"] = "0.90"
         os.environ["EDGE_WEAK"] = "0.75"
@@ -310,7 +306,7 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
 
     def test_edge_classification_filtered(self):
         """Test edge classification for filtered relationships (<0.75)."""
-        import os  # noqa: E402
+        import os
 
         os.environ["EDGE_WEAK"] = "0.75"
 
@@ -332,7 +328,7 @@ class TestRerankScoreMapping(unittest.TestCase):
 
     def test_logprob_score_calculation(self):
         """Test score calculation from log probabilities using sigmoid."""
-        import math  # noqa: E402
+        import math
 
         # Mock logprobs data
         logprobs = {

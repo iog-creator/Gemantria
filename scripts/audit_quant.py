@@ -26,7 +26,7 @@ def audit_model_on_port(port: int, name: str) -> dict[str, str]:
         return {
             "name": "error",
             "quant": "error",
-            "status": f"connection_failed: {str(e)}",
+            "status": f"connection_failed: {e!s}",
         }
 
 
