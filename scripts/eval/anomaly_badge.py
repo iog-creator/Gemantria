@@ -77,9 +77,7 @@ def main() -> int:
         anomaly_count = audit_data.get("summary", {}).get("total_anomalous", 0)
 
         OUT.write_text(badge(anomaly_count), encoding="utf-8")
-        print(
-            f"[anomaly_badge] wrote {OUT.relative_to(ROOT)} ({anomaly_count} anomalies)"
-        )
+        print(f"[anomaly_badge] wrote {OUT.relative_to(ROOT)} ({anomaly_count} anomalies)")
 
     except (json.JSONDecodeError, KeyError) as e:
         print(f"[anomaly_badge] error reading audit file: {e}")

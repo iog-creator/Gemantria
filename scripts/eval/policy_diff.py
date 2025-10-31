@@ -26,7 +26,7 @@ def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
 
     # strict
-    code, so, se = _run(["make", "eval.profile.strict"])
+    code, _so, _se = _run(["make", "eval.profile.strict"])
     ok_strict, fail_strict = _summary(ROOT / "share" / "eval" / "report.json")
 
     # dev

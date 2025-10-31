@@ -12,11 +12,7 @@ SVG = BADGES / "quality_trend.svg"
 
 
 def parse_quality() -> dict:
-    rpt = (
-        (EVAL / "quality_report.txt").read_text(encoding="utf-8")
-        if (EVAL / "quality_report.txt").exists()
-        else ""
-    )
+    rpt = (EVAL / "quality_report.txt").read_text(encoding="utf-8") if (EVAL / "quality_report.txt").exists() else ""
     failed = "FAIL:" in rpt
     stats = {"edges": 0, "strong": 0, "weak": 0, "other": 0}
     for line in rpt.splitlines():
@@ -63,9 +59,7 @@ def main() -> int:
     except Exception:
         pass
     SVG.write_text(sparkline(last), encoding="utf-8")
-    print(
-        f"[quality.trend] appended history ({len(last)} pts), wrote {SVG.relative_to(ROOT)}"
-    )
+    print(f"[quality.trend] appended history ({len(last)} pts), wrote {SVG.relative_to(ROOT)}")
     return 0
 
 

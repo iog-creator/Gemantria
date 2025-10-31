@@ -93,7 +93,7 @@ class TestRelationsAndPatternsIntegration:
                 {"concept_id": "test-concept-4", "embedding": [0.15] * 1024},
             ]
 
-            edges, rerank_calls = build_relations(db_connection, embeddings_batch)
+            _edges, rerank_calls = build_relations(db_connection, embeddings_batch)
             assert rerank_calls == 1  # Rerank should be called
             mock_rerank.assert_called_once()
 

@@ -24,7 +24,5 @@ def test_views_exist():
 @pytest.mark.skipif(not dsn, reason="no DB configured")
 def test_latency_view_shape():
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-        cur.execute(
-            "SELECT node, calls, avg_ms, p50_ms, p95_ms FROM v_node_latency_7d LIMIT 1"
-        )
+        cur.execute("SELECT node, calls, avg_ms, p50_ms, p95_ms FROM v_node_latency_7d LIMIT 1")
         _ = cur.fetchone()  # shape validated if no error is raised

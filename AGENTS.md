@@ -183,4 +183,3 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **No `share/**` writes in CI.** Route CI outputs to `_artifacts/**`.
 
 - **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.
-
