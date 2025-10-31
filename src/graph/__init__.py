@@ -1,5 +1,5 @@
 """Graph entry points and helpers."""
 
-from .graph import HelloGraph, GraphRunResult, main
+from .graph import GraphRunResult, HelloGraph, main
 
-__all__ = ["HelloGraph", "GraphRunResult", "main"]
+__all__ = ["GraphRunResult", "HelloGraph", "main"]
