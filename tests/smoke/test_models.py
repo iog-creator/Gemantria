@@ -59,8 +59,7 @@ def test_models_endpoint_has_answerer() -> None:
 
     assert model_ids, "No models returned from /v1/models"
     assert (primary in model_ids) or (alt in model_ids), (
-        f"Neither primary ({primary}) nor alt ({alt}) appears in /v1/models. "
-        f"Seen: {sorted(model_ids)}"  # type: ignore[arg-type]
+        f"Neither primary ({primary}) nor alt ({alt}) appears in /v1/models. Seen: {sorted(model_ids)}"  # type: ignore[arg-type]
     )
 
 

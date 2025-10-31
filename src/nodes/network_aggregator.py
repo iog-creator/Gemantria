@@ -31,8 +31,8 @@ except ImportError:
         pass
 
 
-from src.infra.structured_logger import get_logger, log_json  # noqa: E402
-from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
+from src.infra.structured_logger import get_logger, log_json
+from src.services.lmstudio_client import get_lmstudio_client
 
 LOG = get_logger("gemantria.network_aggregator")
 
@@ -62,7 +62,7 @@ def _l2_normalize(vec: list[float]) -> list[float]:
 
 def _knn_pairs(vecs, ids, k):
     """Naive cosine KNN for small batches with improved similarity computation."""
-    import numpy as np  # noqa: E402
+    import numpy as np
 
     X = np.vstack(vecs)  # L2-normalized already
     sims = X @ X.T  # Cosine similarity (vectors are L2 normalized)
@@ -124,7 +124,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     kept = []
-    from src.services.rerank_via_embeddings import (  # noqa: E402
+    from src.services.rerank_via_embeddings import (
         rerank_via_embeddings as rerank_pairs,
     )
 
@@ -132,8 +132,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
     name_map = {}
     try:
         noun_id_to_name = {
-            noun.get("noun_id"): noun.get("name", str(noun.get("noun_id")))
-            for noun in (enriched_nouns or [])
+            noun.get("noun_id"): noun.get("name", str(noun.get("noun_id"))) for noun in (enriched_nouns or [])
         }
         for e in embeddings_batch:
             noun_id, concept_network_id, _, _ = e
@@ -150,7 +149,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     # Rerank ALL pairs in batches
-    import os  # noqa: E402
+    import os
 
     # Weight cosine vs rerank via env knob (default: lean on cosine)
     EDGE_ALPHA = float(os.getenv("EDGE_ALPHA", "0.70"))  # 0..1
@@ -163,9 +162,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
             scores = rerank_pairs(payload, name_map)  # list[float 0..1]
             rerank_calls += 1
         except Exception as e:
-            log_json(
-                LOG, 40, "rerank_pairs_error", error=str(e), payload_length=len(payload)
-            )
+            log_json(LOG, 40, "rerank_pairs_error", error=str(e), payload_length=len(payload))
             # Fallback: neutral scores to avoid dropping edges outright
             scores = [0.5] * len(batch)
 
@@ -183,9 +180,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
 
     # Execute inserts using the same schema as rerank pipeline
     # Use specific model tag for bi-encoder proxy to avoid cache collisions
-    rerank_model = (
-        f"bge-m3-emb-proxy@{os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')}"
-    )
+    rerank_model = f"bge-m3-emb-proxy@{os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')}"
     for sid, tid, cos, score, edge_strength, relation_type in kept:
         db.execute(
             """INSERT INTO concept_relations
@@ -256,9 +251,7 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
 
             # Process nouns: generate embeddings and store in concept_network
             # Use connection context for transaction management (auto-commits on exit)
-            concept_data = _generate_and_store_embeddings(
-                client, cur, nouns, network_summary
-            )
+            concept_data = _generate_and_store_embeddings(client, cur, nouns, network_summary)
 
             if not concept_data:
                 log_json(LOG, 30, "no_valid_embeddings_generated")
@@ -284,12 +277,10 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
 
     except Exception as e:
         log_json(LOG, 40, "network_aggregation_failed", error=str(e))
-        raise NetworkAggregationError(f"Network aggregation failed: {str(e)}") from e
+        raise NetworkAggregationError(f"Network aggregation failed: {e!s}") from e
 
 
-def _generate_and_store_embeddings(
-    client, cur, nouns: list[dict], summary: dict
-) -> list[tuple]:
+def _generate_and_store_embeddings(client, cur, nouns: list[dict], summary: dict) -> list[tuple]:
     """
     Generate embeddings for nouns and store them in concept_network table.
     Returns list of (noun_id, network_id, embedding, doc_string) tuples.
@@ -300,9 +291,7 @@ def _generate_and_store_embeddings(
     for noun in nouns:
         doc_string = _build_document_string(noun)
         if not doc_string:
-            log_json(
-                LOG, 30, "skipping_noun_incomplete_data", noun_name=noun.get("name")
-            )
+            log_json(LOG, 30, "skipping_noun_incomplete_data", noun_name=noun.get("name"))
             continue
 
         embedding_texts.append(doc_string)
@@ -343,9 +332,7 @@ def _generate_and_store_embeddings(
                 vector_dim=VECTOR_DIM,
             )
 
-            for noun, embedding, doc_text in zip(
-                batch_nouns, batch_embeddings, batch_texts, strict=False
-            ):
+            for noun, embedding, doc_text in zip(batch_nouns, batch_embeddings, batch_texts, strict=False):
                 noun_id = noun.get("noun_id", uuid.uuid4())
 
                 # Store in concept_network
@@ -400,7 +387,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
         primary_verse = f"{book} (reference)"
 
     # Build highly differentiated semantic document with unique identifiers
-    import uuid  # noqa: E402
+    import uuid
 
     unique_id = str(uuid.uuid4())[:8]  # Short unique identifier
 
@@ -420,10 +407,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
         doc_parts.append(f"AI Confidence Level: {confidence}")
 
     # Add semantic context to differentiate similar concepts
-    semantic_context = (
-        f"This concept appears {freq} times in {book} and is associated "
-        f"with the Hebrew word '{hebrew}'"
-    )
+    semantic_context = f"This concept appears {freq} times in {book} and is associated with the Hebrew word '{hebrew}'"
     if primary_verse and primary_verse != f"{book} (reference)":
         semantic_context += f", first appearing at {primary_verse}"
     doc_parts.append(f"Semantic Context: {semantic_context}")
@@ -558,17 +542,13 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
 
     # Update summary metrics
     if summary["strong_edges"] + summary["weak_edges"] > 0:
-        summary["avg_edge_strength"] = total_edge_strength / (
-            summary["strong_edges"] + summary["weak_edges"]
-        )
+        summary["avg_edge_strength"] = total_edge_strength / (summary["strong_edges"] + summary["weak_edges"])
 
     if total_rerank_calls > 0:
         summary["rerank_yes_ratio"] = total_yes_scores / total_rerank_calls
 
 
-def _get_knn_neighbors(
-    cur, source_net_id: uuid.UUID, top_k: int
-) -> list[tuple[uuid.UUID, float]]:
+def _get_knn_neighbors(cur, source_net_id: uuid.UUID, top_k: int) -> list[tuple[uuid.UUID, float]]:
     """Get KNN neighbors using pgvector cosine similarity."""
     cur.execute(
         """SELECT id,
@@ -586,7 +566,7 @@ def _get_knn_neighbors(
 
 def _cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
     """Compute cosine similarity between two vectors."""
-    import math  # noqa: E402
+    import math
 
     if len(vec1) != len(vec2):
         raise ValueError("Vectors must have same length")

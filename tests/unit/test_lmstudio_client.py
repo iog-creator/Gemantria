@@ -21,9 +21,7 @@ def test_chat_completion_mock_mode(monkeypatch):
     messages_batch = [[{"role": "user", "content": "test"}]]
     results = chat_completion(messages_batch, model="test-model")
     assert len(results) == 1
-    assert (
-        results[0].text == '{"insight": "Mock theological insight", "confidence": 0.95}'
-    )
+    assert results[0].text == '{"insight": "Mock theological insight", "confidence": 0.95}'
 
 
 def test_safe_json_parse_valid():

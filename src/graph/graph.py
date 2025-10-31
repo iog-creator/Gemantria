@@ -48,8 +48,8 @@ LOG = get_logger("gematria.graph")
 # Environment precedence guard - detect conflicting env sources
 def _check_env_precedence():
     """Check for environment variable conflicts between .env and .env.local."""
-    import re  # noqa: E402
-    from pathlib import Path  # noqa: E402
+    import re
+    from pathlib import Path
 
     def read_env_file(path: Path) -> dict[str, str]:
         if not path.exists():
@@ -72,9 +72,7 @@ def _check_env_precedence():
     conflicts = [k for k in local_env if k in base_env and local_env[k] != base_env[k]]
 
     if conflicts:
-        print(
-            f"[ENV WARNING] .env.local overrides {len(conflicts)} vars: {', '.join(conflicts)}"
-        )
+        print(f"[ENV WARNING] .env.local overrides {len(conflicts)} vars: {', '.join(conflicts)}")
         LOG.warning(
             "env_precedence_conflict",
             conflicts=conflicts,
@@ -103,7 +101,7 @@ _verify_lm_studio()
 # Postgres connectivity guard
 def _verify_postgres():
     """Verify Postgres connectivity on startup."""
-    import psycopg  # noqa: E402
+    import psycopg
 
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
@@ -127,7 +125,7 @@ _verify_postgres()
 # Python environment guard
 def _verify_python_env():
     """Verify we're running in the correct Python environment."""
-    import sys  # noqa: E402
+    import sys
 
     venv_expected = ".venv" in sys.executable
     if not venv_expected:
@@ -142,14 +140,10 @@ GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 BIBLE_DB_DSN = os.getenv("BIBLE_DB_DSN")
 
 if not GEMATRIA_DSN:
-    LOG.warning(
-        "GEMATRIA_DSN not set. Database operations will fail. Set GEMATRIA_DSN for full functionality."
-    )
+    LOG.warning("GEMATRIA_DSN not set. Database operations will fail. Set GEMATRIA_DSN for full functionality.")
 
 if not BIBLE_DB_DSN:
-    LOG.warning(
-        "BIBLE_DB_DSN not set. Bible data access will fail. Set BIBLE_DB_DSN for full functionality."
-    )
+    LOG.warning("BIBLE_DB_DSN not set. Bible data access will fail. Set BIBLE_DB_DSN for full functionality.")
 
 
 def log_qwen_health(
@@ -157,13 +151,13 @@ def log_qwen_health(
     health: QwenHealth,
     embedding_model: str,
     reranker_model: str,
-    theology_model: str = None,
+    theology_model: str | None = None,
 ) -> None:
     """Log Qwen health check results to database for production verification."""
     try:
         db = get_gematria_rw()
         # Convert string run_id to UUID for database
-        import uuid  # noqa: E402
+        import uuid
 
         uuid_run_id = uuid.UUID(run_id)
         # Execute the insert and consume the generator to ensure it runs
@@ -290,9 +284,7 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
             "batch_result": batch_result,
             "validated_nouns": validated_nouns,
         }
-        log_json(
-            LOG, 20, "validate_batch_complete", validated_count=len(validated_nouns)
-        )
+        log_json(LOG, 20, "validate_batch_complete", validated_count=len(validated_nouns))
         return result_state
     except BatchAbortError as e:
         # Handle batch abort specifically
@@ -312,9 +304,7 @@ def create_graph() -> StateGraph:
 
     # Add nodes with metrics wrapping
     graph.add_node("collect_nouns", with_metrics(collect_nouns_node, "collect_nouns"))
-    graph.add_node(
-        "validate_batch", with_metrics(validate_batch_node, "validate_batch")
-    )
+    graph.add_node("validate_batch", with_metrics(validate_batch_node, "validate_batch"))
     graph.add_node("enrichment", with_metrics(enrichment_node, "enrichment"))
     graph.add_node(
         "confidence_validator",
@@ -354,7 +344,7 @@ def debug_connectivity() -> dict:
 
     # Test LM Studio
     try:
-        from src.services.lmstudio_client import (  # noqa: E402
+        from src.services.lmstudio_client import (
             HOST,
             QWEN_EMBEDDING_MODEL,
             QWEN_RERANKER_MODEL,
@@ -364,9 +354,7 @@ def debug_connectivity() -> dict:
 
         results["lm_studio"]["details"]["host"] = HOST
 
-        health = assert_qwen_live(
-            [QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL, THEOLOGY_MODEL]
-        )
+        health = assert_qwen_live([QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL, THEOLOGY_MODEL])
         results["lm_studio"]["status"] = "ok" if health.ok else "error"
         results["lm_studio"]["details"].update(
             {
@@ -383,7 +371,7 @@ def debug_connectivity() -> dict:
 
     # Test Gematria DB
     try:
-        from src.infra.db import get_gematria_rw  # noqa: E402
+        from src.infra.db import get_gematria_rw
 
         db = get_gematria_rw()
         if db.dsn:
@@ -404,7 +392,7 @@ def debug_connectivity() -> dict:
 
     # Test Bible DB
     try:
-        from src.infra.db import get_bible_ro  # noqa: E402
+        from src.infra.db import get_bible_ro
 
         db = get_bible_ro()
         if db.dsn:
@@ -476,9 +464,7 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
 
         # Hard fail if Qwen models are not live
         if not qwen_health.ok:
-            raise QwenUnavailableError(
-                f"Qwen health check failed: {qwen_health.reason}"
-            )
+            raise QwenUnavailableError(f"Qwen health check failed: {qwen_health.reason}")
 
         # Run the graph
         result = graph.invoke(initial_state)
@@ -510,9 +496,7 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
         }
     except NetworkAggregationError as e:
         # Handle network aggregation failure
-        log_json(
-            LOG, 40, "pipeline_aborted_network_aggregation", book=book, error=str(e)
-        )
+        log_json(LOG, 40, "pipeline_aborted_network_aggregation", book=book, error=str(e))
         return {**initial_state, "error": str(e), "network_aggregation_failed": True}
     except QwenUnavailableError as e:
         # Handle Qwen unavailability - fail-closed for production
@@ -531,7 +515,7 @@ def run_hello(book: str = "Genesis", mode: str = "START") -> PipelineState:
 
 
 if __name__ == "__main__":
-    import sys  # noqa: E402
+    import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "--debug-connectivity":
         print("🔍 Connectivity Debug Report")

@@ -67,10 +67,7 @@ def main() -> int:
     isb = idstab.get("summary") or {}
     if isb.get("has_previous") and not isb.get("ok", True):
         lines.append("## ❌ ID Stability")
-        lines.append(
-            f"- jaccard={isb.get('jaccard')} added={isb.get('added_ids')} "
-            f"removed={isb.get('removed_ids')}"
-        )
+        lines.append(f"- jaccard={isb.get('jaccard')} added={isb.get('added_ids')} removed={isb.get('removed_ids')}")
         lines.append("")
 
     # 5) Referential integrity: extract counts from report result if present
@@ -91,10 +88,10 @@ def main() -> int:
         ):
             lines.append("## ⚠️ Referential Integrity (counts)")
             lines.append(
-                f"- missing_endpoints={c.get('missing_endpoints',0)} "
-                f"self_loops={c.get('self_loops',0)} "
-                f"dup_node_ids={c.get('duplicate_node_ids',0)} "
-                f"dup_edge_pairs={c.get('duplicate_edge_pairs',0)}"
+                f"- missing_endpoints={c.get('missing_endpoints', 0)} "
+                f"self_loops={c.get('self_loops', 0)} "
+                f"dup_node_ids={c.get('duplicate_node_ids', 0)} "
+                f"dup_edge_pairs={c.get('duplicate_edge_pairs', 0)}"
             )
             lines.append("")
 

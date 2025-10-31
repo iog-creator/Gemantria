@@ -1,29 +1,34 @@
 #!/usr/bin/env python3
-import json, pathlib, time
+import json
+import pathlib
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
 OUTM = EVAL / "summary.md"
 OUTJ = EVAL / "summary.json"
 
+
 def _load(name):
     p = EVAL / name
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
+
 def main() -> int:
     graph = _load("graph_latest.json") or {}
     delta = _load("delta.json") or {}
-    prov  = _load("provenance.json") or {}
-    cent  = _load("centrality.json") or {}
+    prov = _load("provenance.json") or {}
+    cent = _load("centrality.json") or {}
 
     edges = graph.get("edges", [])
-    strong = sum(1 for e in edges if e.get("class")=="strong")
-    weak   = sum(1 for e in edges if e.get("class")=="weak")
-    other  = len(edges) - strong - weak
+    strong = sum(1 for e in edges if e.get("class") == "strong")
+    weak = sum(1 for e in edges if e.get("class") == "weak")
+    other = len(edges) - strong - weak
 
     top10 = sorted(
         ((n, (cent.get(n) or {}).get("eigenvector", 0.0)) for n in (cent.keys() if isinstance(cent, dict) else [])),
-        key=lambda x: x[1], reverse=True
+        key=lambda x: x[1],
+        reverse=True,
     )[:10]
 
     summary = {
@@ -32,7 +37,9 @@ def main() -> int:
         "counts": {
             "nodes": len(graph.get("nodes", [])),
             "edges": len(edges),
-            "strong": strong, "weak": weak, "other": other
+            "strong": strong,
+            "weak": weak,
+            "other": other,
         },
         "delta": delta.get("counts"),
         "artifacts": prov.get("counts", {}).get("artifacts"),
@@ -59,6 +66,7 @@ def main() -> int:
     OUTM.write_text("\n".join(md) + "\n", encoding="utf-8")
     print(f"[summary] wrote {OUTM.relative_to(ROOT)} and {OUTJ.relative_to(ROOT)}")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

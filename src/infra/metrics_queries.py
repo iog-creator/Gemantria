@@ -21,14 +21,12 @@ def _q(sql: str, *params) -> list[tuple]:
 
 
 def node_latency_7d() -> list[tuple]:
-    return _q(
-        "SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node"  # noqa: E501
-    )
+    return _q("SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node")
 
 
 def pipeline_runs(limit: int = 50) -> list[tuple]:
     return _q(
-        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",  # noqa: E501
+        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",
         limit,
     )
 
@@ -42,12 +40,10 @@ def recent_errors_7d() -> list[tuple]:
 def node_throughput_24h(node: str | None = None) -> list[tuple]:
     if node:
         return _q(
-            "SELECT minute, items_out FROM v_node_throughput_24h WHERE node=%s ORDER BY minute DESC",  # noqa: E501
+            "SELECT minute, items_out FROM v_node_throughput_24h WHERE node=%s ORDER BY minute DESC",
             node,
         )
-    return _q(
-        "SELECT node, minute, items_out FROM v_node_throughput_24h ORDER BY minute DESC"
-    )
+    return _q("SELECT node, minute, items_out FROM v_node_throughput_24h ORDER BY minute DESC")
 
 
 def embedding_requests_24h() -> list[tuple]:

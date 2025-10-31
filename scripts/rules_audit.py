@@ -53,9 +53,7 @@ def inject_agents_table(entries):
         table.append(f"| {num:03d} | {title} |")
     block = start + "\n" + "\n".join(table) + "\n" + end
     if start in text and end in text:
-        text = re.sub(
-            rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S
-        )
+        text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S)
     else:
         text += "\n\n" + block + "\n"
     AGENTS.write_text(text)
@@ -72,9 +70,7 @@ def inject_plan_rules(entries):
         table.append(f"| {num:03d} | {title} |")
     block = start + "\n" + "\n".join(table) + "\n" + end
     if start in text and end in text:
-        text = re.sub(
-            rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S
-        )
+        text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S)
     else:
         text += "\n\n" + block + "\n"
     PLAN.write_text(text)
@@ -83,9 +79,7 @@ def inject_plan_rules(entries):
 def main():
     print(f"[rules_audit] Scanning {RULES} for rule files...")
     entries = find_rules()
-    print(
-        f"[rules_audit] Found {len(entries)} rule files: {[f'{num:03d}-{fname}' for num, fname, _ in entries]}"
-    )
+    print(f"[rules_audit] Found {len(entries)} rule files: {[f'{num:03d}-{fname}' for num, fname, _ in entries]}")
 
     if not entries:
         print("[rules_audit] FAIL: No rules found", file=sys.stderr)
@@ -93,9 +87,7 @@ def main():
 
     # Detect gaps/dupes
     nums = [n for n, _, _ in entries]
-    print(
-        f"[rules_audit] Rule numbers range: {min(nums)}-{max(nums)} (total: {len(nums)} unique)"
-    )
+    print(f"[rules_audit] Rule numbers range: {min(nums)}-{max(nums)} (total: {len(nums)} unique)")
 
     missing = []
     for n in range(min(nums), max(nums) + 1):
@@ -129,9 +121,7 @@ def main():
         sys.exit(2)
 
     if unresolved:
-        print(
-            f"[rules_audit] Tolerating {len(unresolved)} missing numbers (reserved markers present): {unresolved}"
-        )
+        print(f"[rules_audit] Tolerating {len(unresolved)} missing numbers (reserved markers present): {unresolved}")
 
     print(f"[rules_audit] Generating {INDEX}...")
     write_rules_index(entries)

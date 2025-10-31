@@ -65,7 +65,7 @@ def get_recent_runs(limit: int = 5) -> list[dict[str, Any]]:
         ]
 
 
-def get_run_metrics(run_id: str = None) -> dict[str, Any]:
+def get_run_metrics(run_id: str | None = None) -> dict[str, Any]:
     """Get detailed metrics for a specific run or aggregate recent runs."""
     with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
         # If no specific run_id, aggregate metrics from recent runs (last 30 minutes)
@@ -214,12 +214,8 @@ def get_run_metrics(run_id: str = None) -> dict[str, Any]:
                     "embeddings_generated": network_row[3],
                     "similarity_computations": network_row[4],
                     "rerank_calls": network_row[5],
-                    "avg_edge_strength": (
-                        float(network_row[6]) if network_row[6] else 0.0
-                    ),
-                    "rerank_yes_ratio": (
-                        float(network_row[7]) if network_row[7] else 0.0
-                    ),
+                    "avg_edge_strength": (float(network_row[6]) if network_row[6] else 0.0),
+                    "rerank_yes_ratio": (float(network_row[7]) if network_row[7] else 0.0),
                 }
             else:
                 network_metrics = {
@@ -341,10 +337,7 @@ def get_qwen_usage_metrics() -> dict[str, Any]:
 
         # Edge strength distribution
         distribution = edge_strength_distribution()
-        distribution_data = [
-            {"bucket": row[0], "count": row[1], "avg_strength": float(row[2])}
-            for row in distribution
-        ]
+        distribution_data = [{"bucket": row[0], "count": row[1], "avg_strength": float(row[2])} for row in distribution]
 
         return {
             "qwen_metrics": qwen_metrics,
@@ -366,8 +359,10 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 ## Executive Summary
 
 - **AI Enrichments**: {metrics["ai_metrics"]["total_enrichments"]}
-- **Confidence Validations**: {metrics["confidence_metrics"]["total_validations"]} ({metrics["confidence_metrics"]["passed"]} passed, {metrics["confidence_metrics"]["failed"]} failed)
-- **Network Nodes**: {metrics["network_metrics"]["total_nodes"]} ({metrics["network_metrics"]["strong_edges"]} strong, {metrics["network_metrics"]["weak_edges"]} weak edges)
+- **Confidence Validations**: {metrics["confidence_metrics"]["total_validations"]} \
+  ({metrics["confidence_metrics"]["passed"]} passed, {metrics["confidence_metrics"]["failed"]} failed)
+- **Network Nodes**: {metrics["network_metrics"]["total_nodes"]} \
+  ({metrics["network_metrics"]["strong_edges"]} strong, {metrics["network_metrics"]["weak_edges"]} weak edges)
 - **Average AI Confidence**: {metrics["ai_metrics"]["avg_confidence"]:.4f}
 - **Average Token Usage**: {metrics["ai_metrics"]["avg_tokens"]}
 
@@ -378,9 +373,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 """
 
     for node in metrics["node_metrics"]:
-        report += (
-            f"| {node['node']} | {node['events']} | {node['avg_duration_ms']:.1f} |\n"
-        )
+        report += f"| {node['node']} | {node['events']} | {node['avg_duration_ms']:.1f} |\n"
 
     report += f"""
 ## AI Enrichment Details
@@ -438,12 +431,8 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         """
         )
         enrichment_row = cur.fetchone()
-        enrichment_ok_ct = (
-            enrichment_row[0] if enrichment_row and enrichment_row[0] else 0
-        )
-        enrichment_last_chk = (
-            enrichment_row[1] if enrichment_row and enrichment_row[1] else None
-        )
+        enrichment_ok_ct = enrichment_row[0] if enrichment_row and enrichment_row[0] else 0
+        enrichment_last_chk = enrichment_row[1] if enrichment_row and enrichment_row[1] else None
 
         report += f"""
 ## Enrichment Proof
@@ -458,16 +447,14 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         report += f"""
 ## Enrichment Proof
 
-❌ **Error retrieving enrichment health data**: {str(e)}
+❌ **Error retrieving enrichment health data**: {e!s}
 
 """
 
     # Add Concept Network Verification section
     try:
         with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
-            cur.execute(
-                "SELECT node_ct, avg_dim, min_dim, max_dim FROM v_concept_network_health;"
-            )
+            cur.execute("SELECT node_ct, avg_dim, min_dim, max_dim FROM v_concept_network_health;")
             row = cur.fetchone()
             if row:
                 node_ct, avg_dim, min_dim, max_dim = row
@@ -487,7 +474,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         report += f"""
 ## Concept Network Verification
 
-❌ **Error checking network health**: {str(e)}
+❌ **Error checking network health**: {e!s}
 """
 
     report += """
@@ -530,14 +517,17 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 |-----------|-----------|---------------|--------|--------------|------|-------|
 """
         for pair in qwen_data["top_pairs"]:
-            report += f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | {pair['edge_strength']:.4f} | {pair['cosine']:.4f} | {pair['rerank_score']:.4f} | {pair['relation_type']} | {pair['rerank_model']} |\n"
+            report += (
+                f"| {pair['source_id'][:8]}... | {pair['target_id'][:8]}... | "
+                f"{pair['edge_strength']:.4f} | {pair['cosine']:.4f} | "
+                f"{pair['rerank_score']:.4f} | {pair['relation_type']} | "
+                f"{pair['rerank_model']} |\n"
+            )
 
     # Add Relations section
     try:
         relations_data = relations_metrics_24h()
-        total_edges_persisted = (
-            sum(r[1] for r in relations_data) if relations_data else 0
-        )
+        total_edges_persisted = sum(r[1] for r in relations_data) if relations_data else 0
         total_rerank_calls = sum(r[2] for r in relations_data) if relations_data else 0
 
         report += f"""
@@ -554,7 +544,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Relations
 
-❌ **Error retrieving relations data**: {str(e)}
+❌ **Error retrieving relations data**: {e!s}
 """
 
     # Add Confidence Gates section
@@ -576,7 +566,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Confidence Gates
 
-❌ **Error retrieving confidence gate data**: {str(e)}
+❌ **Error retrieving confidence gate data**: {e!s}
 """
 
     # Add Pattern Discovery section
@@ -615,7 +605,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Pattern Discovery
 
-❌ **Error retrieving pattern discovery data**: {str(e)}
+❌ **Error retrieving pattern discovery data**: {e!s}
 """
 
     # Add Pattern Correlation Summary (Phase 5)
@@ -623,19 +613,13 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         # Try to load correlations from the export file
         correlations_path = Path("exports/graph_correlations.json")
         if correlations_path.exists():
-            import json  # noqa: E402
+            import json
 
             correlations_data = json.loads(correlations_path.read_text())
 
-            total_correlations = correlations_data.get("metadata", {}).get(
-                "total_correlations", 0
-            )
-            significant_correlations = correlations_data.get("metadata", {}).get(
-                "significant_correlations", 0
-            )
-            correlation_methods = correlations_data.get("metadata", {}).get(
-                "correlation_methods", []
-            )
+            total_correlations = correlations_data.get("metadata", {}).get("total_correlations", 0)
+            significant_correlations = correlations_data.get("metadata", {}).get("significant_correlations", 0)
+            correlation_methods = correlations_data.get("metadata", {}).get("correlation_methods", [])
 
             if total_correlations > 0:
                 # Get top 10 correlations by absolute correlation value
@@ -679,24 +663,21 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                         cluster_source = corr.get("cluster_source", "N/A")
                         cluster_target = corr.get("cluster_target", "N/A")
 
-                        report += f"| {source} | {target} | {correlation:.3f} | {p_value:.4f} | {method} | {cluster_source}→{cluster_target} |\n"
+                        report += (
+                            f"| {source} | {target} | {correlation:.3f} | "
+                            f"{p_value:.4f} | {method} | "
+                            f"{cluster_source}→{cluster_target} |\n"
+                        )
 
                     # Calculate summary statistics
                     correlations_list = correlations_data.get("correlations", [])
                     if correlations_list:
-                        mean_r = sum(
-                            c.get("correlation", 0) for c in correlations_list
-                        ) / len(correlations_list)
+                        mean_r = sum(c.get("correlation", 0) for c in correlations_list) / len(correlations_list)
                         stdev_r = (
-                            sum(
-                                (c.get("correlation", 0) - mean_r) ** 2
-                                for c in correlations_list
-                            )
+                            sum((c.get("correlation", 0) - mean_r) ** 2 for c in correlations_list)
                             / len(correlations_list)
                         ) ** 0.5
-                        count_significant = sum(
-                            1 for c in correlations_list if c.get("p_value", 1.0) < 0.05
-                        )
+                        count_significant = sum(1 for c in correlations_list if c.get("p_value", 1.0) < 0.05)
 
                         report += f"""
 
@@ -726,7 +707,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Pattern Correlation Summary
 
-❌ **Error retrieving correlation data**: {str(e)}
+❌ **Error retrieving correlation data**: {e!s}
 """
 
     # Phase 5-C: Add Correlation Network Analytics section
@@ -760,9 +741,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
             if edges:
                 # Sort edges by absolute correlation strength
-                sorted_edges = sorted(
-                    edges, key=lambda x: abs(x.get("correlation", 0)), reverse=True
-                )[:10]
+                sorted_edges = sorted(edges, key=lambda x: abs(x.get("correlation", 0)), reverse=True)[:10]
 
                 report += """
 | Source | Target | Correlation | p-value | Significance | Clusters |
@@ -785,15 +764,17 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     cluster_source = edge.get("cluster_source", "N/A")
                     cluster_target = edge.get("cluster_target", "N/A")
 
-                    report += f"| {source} | {target} | {correlation:.3f} | {p_value:.4f} | {significance} | {cluster_source}→{cluster_target} |\n"
+                    report += (
+                        f"| {source} | {target} | {correlation:.3f} | "
+                        f"{p_value:.4f} | {significance} | "
+                        f"{cluster_source}→{cluster_target} |\n"
+                    )
 
                 # Summary statistics
                 correlations_list = [edge.get("correlation", 0) for edge in edges]
                 if correlations_list:
                     mean_corr = sum(correlations_list) / len(correlations_list)
-                    significant_count = sum(
-                        1 for edge in edges if edge.get("p_value", 1.0) < 0.05
-                    )
+                    significant_count = sum(1 for edge in edges if edge.get("p_value", 1.0) < 0.05)
 
                     report += f"""
 
@@ -816,7 +797,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Correlation Network Analytics
 
-❌ **Error retrieving correlation network data**: {str(e)}
+❌ **Error retrieving correlation network data**: {e!s}
 """
 
     # Phase 6: Add Cross-Book Pattern Analytics section
@@ -848,9 +829,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 """
 
                 # Sort patterns by strength (already sorted in export, but ensure)
-                sorted_patterns = sorted(
-                    patterns, key=lambda x: x.get("pattern_strength", 0), reverse=True
-                )[:10]
+                sorted_patterns = sorted(patterns, key=lambda x: x.get("pattern_strength", 0), reverse=True)[:10]
 
                 report += """
 | Source Book | Target Book | Strength | Shared Concepts | Jaccard | Lift | Confidence |
@@ -874,7 +853,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     lift = pattern.get("lift", 0)
                     confidence = pattern.get("confidence", 0)
 
-                    report += f"| {source} | {target} | {strength:.3f} | {shared_count} | {jaccard:.3f} | {lift:.2f} | {confidence:.3f} |\n"
+                    report += (
+                        f"| {source} | {target} | {strength:.3f} | "
+                        f"{shared_count} | {jaccard:.3f} | "
+                        f"{lift:.2f} | {confidence:.3f} |\n"
+                    )
 
                 # Summary statistics
                 if patterns:
@@ -886,9 +869,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     mean_strength = sum(strengths) / len(strengths) if strengths else 0
                     mean_jaccard = sum(jaccards) / len(jaccards) if jaccards else 0
                     mean_lift = sum(lifts) / len(lifts) if lifts else 0
-                    mean_confidence = (
-                        sum(confidences) / len(confidences) if confidences else 0
-                    )
+                    mean_confidence = sum(confidences) / len(confidences) if confidences else 0
 
                     report += f"""
 
@@ -912,7 +893,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Cross-Book Pattern Analytics
 
-❌ **Error retrieving pattern analysis data**: {str(e)}
+❌ **Error retrieving pattern analysis data**: {e!s}
 """
 
     # Phase 8: Add Temporal Analytics section
@@ -939,14 +920,8 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
             if patterns:
                 # Calculate some aggregate statistics
-                total_change_points = sum(
-                    len(p.get("change_points", [])) for p in patterns
-                )
-                avg_series_length = (
-                    sum(len(p.get("values", [])) for p in patterns) / len(patterns)
-                    if patterns
-                    else 0
-                )
+                total_change_points = sum(len(p.get("change_points", [])) for p in patterns)
+                avg_series_length = sum(len(p.get("values", [])) for p in patterns) / len(patterns) if patterns else 0
 
                 # Top 10 most volatile series (by coefficient of variation if available)
                 try:
@@ -955,13 +930,9 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                         values = p.get("values", [])
                         if len(values) > 1:
                             mean_val = sum(values) / len(values)
-                            std_val = (
-                                sum((x - mean_val) ** 2 for x in values) / len(values)
-                            ) ** 0.5
+                            std_val = (sum((x - mean_val) ** 2 for x in values) / len(values)) ** 0.5
                             cv = std_val / mean_val if mean_val > 0 else 0
-                            volatile_series.append(
-                                (p.get("series_id", "unknown"), cv, len(values))
-                            )
+                            volatile_series.append((p.get("series_id", "unknown"), cv, len(values)))
 
                     volatile_series.sort(key=lambda x: x[1], reverse=True)
                     top_volatile = volatile_series[:10]
@@ -982,9 +953,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                             report += f"| {series_id} | {cv:.3f} | {length} |\n"
 
                 except Exception as calc_error:
-                    report += (
-                        f"\n*Could not calculate volatility metrics: {calc_error}*\n"
-                    )
+                    report += f"\n*Could not calculate volatility metrics: {calc_error}*\n"
             else:
                 report += "\n*No temporal patterns available for analysis.*\n"
         else:
@@ -999,7 +968,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Temporal Analytics
 
-❌ **Error retrieving temporal analytics data**: {str(e)}
+❌ **Error retrieving temporal analytics data**: {e!s}
 """
 
     # Phase 8: Add Forecast Summary section
@@ -1045,9 +1014,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
             if forecasts:
                 # Show example forecast table for first forecast
                 example_forecast = forecasts[0]
-                predictions = example_forecast.get("predictions", [])[
-                    :5
-                ]  # First 5 predictions
+                predictions = example_forecast.get("predictions", [])[:5]  # First 5 predictions
 
                 if predictions:
                     report += f"### Example Forecast: {example_forecast.get('series_id', 'unknown')}\n\n"
@@ -1056,7 +1023,11 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                     for i, pred in enumerate(predictions, 1):
                         report += f"| {i} | {pred:.3f} |\n"
                     report += "\n"
-                    report += f"*Model: {example_forecast.get('model', 'unknown').upper()}, RMSE: {example_forecast.get('rmse', 'N/A')}, MAE: {example_forecast.get('mae', 'N/A')}*\n"
+                    report += (
+                        f"*Model: {example_forecast.get('model', 'unknown').upper()}, "
+                        f"RMSE: {example_forecast.get('rmse', 'N/A')}, "
+                        f"MAE: {example_forecast.get('mae', 'N/A')}*\n"
+                    )
         else:
             report += """
 
@@ -1069,7 +1040,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
 
 ## Forecast Summary
 
-❌ **Error retrieving forecast data**: {str(e)}
+❌ **Error retrieving forecast data**: {e!s}
 """
 
     # Phase 7: Add Interactive Analytics Endpoints section
@@ -1100,9 +1071,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
                 filepath = export_dir / filename
                 if filepath.exists():
                     mtime = filepath.stat().st_mtime
-                    file_timestamps[filename] = datetime.fromtimestamp(mtime).strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
+                    file_timestamps[filename] = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d %H:%M:%S")
                 else:
                     file_timestamps[filename] = "Not found"
 
@@ -1117,11 +1086,7 @@ The analytics pipeline now provides REST API endpoints for real-time access to c
 """
 
         for name, method, filename in endpoints:
-            last_modified = (
-                file_timestamps.get(filename, "N/A")
-                if filename != "dynamic"
-                else "Dynamic"
-            )
+            last_modified = file_timestamps.get(filename, "N/A") if filename != "dynamic" else "Dynamic"
             report += f"| {name} | `{method}` | `{filename}` | {last_modified} |\n"
 
         report += """
@@ -1158,7 +1123,7 @@ The API endpoints power the interactive dashboards:
 
 ## Interactive Analytics Endpoints
 
-❌ **Error retrieving endpoint information**: {str(e)}
+❌ **Error retrieving endpoint information**: {e!s}
 """
 
     report += """
@@ -1168,7 +1133,10 @@ The API endpoints power the interactive dashboards:
 """
 
     if metrics["confidence_metrics"]["failed"] > 0:
-        report += f"⚠️ **Review Required**: {metrics['confidence_metrics']['failed']} validations failed confidence thresholds.\n"
+        report += (
+            f"⚠️ **Review Required**: {metrics['confidence_metrics']['failed']} "
+            "validations failed confidence thresholds.\n"
+        )
     else:
         report += "✅ **All validations passed**: Pipeline confidence requirements satisfied.\n"
 
@@ -1178,10 +1146,7 @@ The API endpoints power the interactive dashboards:
         report += "⚠️ **No AI Enrichment**: Check LM Studio connection and model availability.\n"
 
     if metrics["network_metrics"]["total_nodes"] > 0:
-        total_edges = (
-            metrics["network_metrics"]["strong_edges"]
-            + metrics["network_metrics"]["weak_edges"]
-        )
+        total_edges = metrics["network_metrics"]["strong_edges"] + metrics["network_metrics"]["weak_edges"]
         report += f"✅ **Semantic Network Built**: {metrics['network_metrics']['total_nodes']} concepts connected with {total_edges} semantic relationships.\n"  # noqa: E501
     else:
         report += "⚠️ **No Semantic Network**: Network aggregation may have failed - check logs.\n"
@@ -1197,9 +1162,7 @@ The API endpoints power the interactive dashboards:
 def main():
     parser = argparse.ArgumentParser(description="Generate Gemantria pipeline reports")
     parser.add_argument("--run-id", help="Specific run ID to analyze")
-    parser.add_argument(
-        "--output-dir", default="./reports", help="Output directory for reports"
-    )
+    parser.add_argument("--output-dir", default="./reports", help="Output directory for reports")
 
     args = parser.parse_args()
 
