@@ -144,7 +144,10 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
                 "messages": [
                     {
                         "role": "system",
-                        "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",
+                        "content": (
+                            "Judge whether the Document meets the requirements based on the Query "
+                            "and the Instruct provided. The answer can only be yes or no."
+                        ),
                     },
                     {"role": "user", "content": "Query: health check\nDocument: test"},
                 ],
@@ -254,7 +257,10 @@ class LMStudioClient:
                     continue
                 raise QwenUnavailableError(error_msg) from e
             except requests.exceptions.Timeout as e:
-                error_msg = f"LM Studio timeout ({TIMEOUT}s) at {HOST}. Server may be overloaded. Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                error_msg = (
+                    f"LM Studio timeout ({TIMEOUT}s) at {HOST}. Server may be overloaded. "
+                    f"Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                )
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -280,6 +286,9 @@ class LMStudioClient:
                     continue
                 raise QwenUnavailableError(error_msg) from e
 
+        # This should never be reached, but satisfies MyPy
+        raise QwenUnavailableError("Unexpected error in _post method")
+
     def generate_insight(self, noun: dict) -> dict:
         prompt = f"Provide theological insight (150-250 words) for {noun['hebrew']} ({noun['name']})."
         payload = {
@@ -291,7 +300,11 @@ class LMStudioClient:
         return {"text": content, "tokens": res.get("usage", {}).get("total_tokens", 0)}
 
     def confidence_check(self, noun: dict, expected_value: int) -> float:
-        prompt = f"Rate the confidence (0.0 to 1.0) that the gematria value {noun['value']} for '{noun['name']}' is correct. Expected was {expected_value}. Return only a number between 0.0 and 1.0."
+        prompt = (
+            f"Rate the confidence (0.0 to 1.0) that the gematria value {noun['value']} for "
+            f"'{noun['name']}' is correct. Expected was {expected_value}. Return only a number "
+            "between 0.0 and 1.0."
+        )
         payload = {
             "model": MATH_MODEL,
             "messages": [{"role": "user", "content": prompt}],
@@ -381,7 +394,10 @@ class LMStudioClient:
                         # Production mode - hard fail
                         raise QwenUnavailableError(
                             f"LM Studio embeddings failed after {RETRY_ATTEMPTS} attempts: {e!s}"
-                        )
+                        ) from e
+
+        # This should never be reached, but satisfies MyPy
+        raise QwenUnavailableError("Unexpected error in get_embeddings method")
 
     def rerank(self, query: str, candidates: list[str], model: str | None = None) -> list[float]:
         """
@@ -414,19 +430,23 @@ class LMStudioClient:
             batch_candidates = candidates[i : i + batch_size]
 
             for candidate in batch_candidates:
-                prompt = f"""Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.
-
-<Instruct>: Given a theological theme, identify relevant biblical nouns.
-<Query>: {query}
-
-<Document>: {candidate}"""
+                prompt = (
+                    f"Judge whether the Document meets the requirements based on the Query "
+                    f"and the Instruct provided. The answer can only be yes or no.\n\n"
+                    f"<Instruct>: Given a theological theme, identify relevant biblical nouns.\n"
+                    f"<Query>: {query}\n\n"
+                    f"<Document>: {candidate}"
+                )
 
                 payload = {
                     "model": model,
                     "messages": [
                         {
                             "role": "system",
-                            "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",
+                            "content": (
+                                "Judge whether the Document meets the requirements based on the Query "
+                                "and the Instruct provided. The answer can only be yes or no."
+                            ),
                         },
                         {"role": "user", "content": prompt},
                     ],
@@ -594,7 +614,7 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
                     else:
                         raise QwenUnavailableError(
                             f"LM Studio chat completion failed after {RETRY_ATTEMPTS} attempts: {e!s}"
-                        )
+                        ) from e
 
     return results
 
@@ -626,7 +646,7 @@ def safe_json_parse(text: str, required_keys: list[str]) -> dict:
     try:
         data = json.loads(text)
     except Exception as e:
-        raise ValueError(f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}...")
+        raise ValueError(f"Failed to parse JSON response: {e!s}. Raw text: {text[:200]}...") from e
 
     # Validate required keys
     missing_keys = [key for key in required_keys if key not in data]
