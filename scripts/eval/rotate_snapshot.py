@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import json, pathlib, shutil, sys
+import json
+import pathlib
+import shutil
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
