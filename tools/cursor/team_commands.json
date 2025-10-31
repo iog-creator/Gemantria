@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "commands": [
+    {
+      "name": "verdicts",
+      "desc": "PRs sorted by smallest diff + verdicts",
+      "shell": "gh pr list --state open --json number,title,additions,deletions,statusCheckRollup,mergeable --jq '[.[] | {n:.number,t:.title,loc:(.additions+.deletions),m:.mergeable,ver:([.statusCheckRollup[]?.conclusion] // [])}] | sort_by(.loc)'"
+    },
+    { "name": "checks", "desc": "Show checks for a PR", "shell": "gh pr checks ${PR}" },
+    {
+      "name": "tails",
+      "desc": "Tail last 200 lines of a failing job",
+      "shell": "gh run view ${RUN_ID} --log --job \"${JOB}\" | tail -200"
+    },
+    {
+      "name": "surgical",
+      "desc": "Commit a one-file patch (edit vars then run)",
+      "shell": "git add ${FILE} && git commit -m \"ci(${PR}): surgical fix — ${WHY}\" && git push"
+    },
+    {
+      "name": "merge-train",
+      "desc": "Merge all-green PRs (no branch delete)",
+      "shell": "for N in $(gh pr list --state open --json number,statusCheckRollup --jq '[.[] | select(([.statusCheckRollup[]?.conclusion] | all(. == \"SUCCESS\"))) | .number] | .[]'); do gh pr merge $N --merge --delete-branch=false || true; done"
+    }
+  ]
+}

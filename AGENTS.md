@@ -155,3 +155,11 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
+
+---
+### Cursor 2.0 — Ops Notes
+- **Multi-Agents**: use 4–8 in parallel; isolation via git worktrees avoids file conflicts. Plan with a strong reasoner, **Build with Composer** (~4× faster; sub-30s turns) for small diffs.
+- **Browser (GA)**: allowed for research/design; **CI remains hermetic**.
+- **Sandboxed terminals**: prefer sandbox on macOS; keep no-network invariant regardless.
+- **Team Commands**: dashboard is a convenience mirror of `tools/cursor/team_commands.json` (repo stays SSOT).
+- **Ignore files**: `.cursorignore` + indexing ignore are primary; watch for user-level **Global ignore** in settings that may hide/lock files (e.g. `.env`). Document exceptions (e.g. `!.env.example`).
