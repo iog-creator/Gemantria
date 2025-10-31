@@ -90,9 +90,7 @@ def main() -> int:
             json.dumps({"results": [], "summary": {"series_n": 0}}, indent=2),
             encoding="utf-8",
         )
-        MD_OUT.write_text(
-            "# Gemantria Export History\n\n_No exports found._\n", encoding="utf-8"
-        )
+        MD_OUT.write_text("# Gemantria Export History\n\n_No exports found._\n", encoding="utf-8")
         print(f"[eval.history] wrote {JSON_OUT.relative_to(ROOT)}")
         print(f"[eval.history] wrote {MD_OUT.relative_to(ROOT)}")
         print("[eval.history] DONE_WITH_EMPTY")
@@ -106,12 +104,7 @@ def main() -> int:
             nodes = doc.get("nodes", [])
             edges = doc.get("edges", [])
             # Only include files where nodes/edges are arrays with content
-            if (
-                isinstance(nodes, list)
-                and isinstance(edges, list)
-                and len(nodes) > 0
-                and len(edges) > 0
-            ):
+            if isinstance(nodes, list) and isinstance(edges, list) and len(nodes) > 0 and len(edges) > 0:
                 graph_files.append(f)
         except Exception:
             continue
@@ -158,9 +151,7 @@ def main() -> int:
     lines.append("")
     lines.append(f"*series:* {len(series)}  •  *ok:* {'✅' if ok else '❌'}")
     lines.append("")
-    lines.append(
-        "| file | nodes | edges | strength ok frac (0.30–0.95) | dims ok (if present) |"
-    )
+    lines.append("| file | nodes | edges | strength ok frac (0.30-0.95) | dims ok (if present) |")
     lines.append("|---|---:|---:|---:|:---:|")
     for item in series:
         lines.append(

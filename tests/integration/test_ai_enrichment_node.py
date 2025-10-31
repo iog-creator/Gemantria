@@ -20,11 +20,7 @@ def test_enrichment_qwen_live_gate_enabled(monkeypatch):
     monkeypatch.setenv("THEOLOGY_MODEL", "nonexistent-model")
     monkeypatch.setenv("ALLOW_MOCKS_FOR_TESTS", "0")
 
-    state = {
-        "validated_nouns": [
-            {"name": "Adam", "hebrew": "אדם", "value": 45, "primary_verse": "Gen 1:1"}
-        ]
-    }
+    state = {"validated_nouns": [{"name": "Adam", "hebrew": "אדם", "value": 45, "primary_verse": "Gen 1:1"}]}
 
     with pytest.raises(Exception, match="Qwen Live Gate failed"):
         enrichment_node(state)
@@ -93,9 +89,7 @@ def test_enrichment_live_lm_studio():
 
         # Check insight length (should be 150-250 words)
         word_count = len(noun["insights"].split())
-        assert (
-            150 <= word_count <= 250
-        ), f"Insight length {word_count} not in 150-250 word range"
+        assert 150 <= word_count <= 250, f"Insight length {word_count} not in 150-250 word range"
 
     # Verify DB persistence
     with psycopg.connect(os.getenv("GEMATRIA_DSN")) as conn, conn.cursor() as cur:

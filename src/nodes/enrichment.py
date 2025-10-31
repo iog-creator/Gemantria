@@ -42,9 +42,7 @@ def enrichment_node(state: dict) -> dict:
 
     nouns = state.get("validated_nouns", [])
     if not nouns:
-        log_json(
-            LOG, 20, "enrichment_start", noun_count=0, message="No nouns to enrich"
-        )
+        log_json(LOG, 20, "enrichment_start", noun_count=0, message="No nouns to enrich")
         state["enriched_nouns"] = []
         state["ai_enrichments_generated"] = 0
         return state
@@ -86,9 +84,7 @@ def enrichment_node(state: dict) -> dict:
 
         # Call LM Studio with batched requests
         try:
-            outs = chat_completion(
-                messages_batch, model=theology_model, temperature=0.0
-            )
+            outs = chat_completion(messages_batch, model=theology_model, temperature=0.0)
             batch_lat_ms = int((time.time() - batch_start) * 1000)
 
             # Process responses
@@ -119,15 +115,13 @@ def enrichment_node(state: dict) -> dict:
                                     "retry": retry + 1,
                                 }
                             )
-                            raw_text = chat_completion(
-                                [messages], model=theology_model, temperature=0.0
-                            )[0].text
+                            raw_text = chat_completion([messages], model=theology_model, temperature=0.0)[0].text
                             retry += 1
 
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
-                        import json as _json  # noqa: E402
-                        import re  # noqa: E402
+                        import json as _json
+                        import re
 
                         m = re.search(
                             r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",
@@ -137,9 +131,7 @@ def enrichment_node(state: dict) -> dict:
                         if m:
                             data["confidence"] = float(m.group(1))
                         else:
-                            raise ValueError(
-                                "JSON response missing required keys: ['confidence']"
-                            )
+                            raise ValueError("JSON response missing required keys: ['confidence']")
 
                     insight_text = data.get("insight", "").strip()
                     confidence = float(data.get("confidence", 0.0))
@@ -147,9 +139,7 @@ def enrichment_node(state: dict) -> dict:
                     # Hard schema checks
                     missing = [k for k in ("insight", "confidence") if k not in data]
                     if missing:
-                        raise ValueError(
-                            f"JSON response missing required keys: {missing}"
-                        )
+                        raise ValueError(f"JSON response missing required keys: {missing}")
                     if not (0.0 <= confidence <= 1.0):
                         raise ValueError("confidence must be a float in [0,1]")
 
@@ -175,9 +165,10 @@ def enrichment_node(state: dict) -> dict:
                     # Persist to database (optional for testing)
                     if GEMATRIA_DSN:
                         try:
-                            with psycopg.connect(
-                                GEMATRIA_DSN
-                            ) as conn, conn.cursor() as cur:
+                            with (
+                                psycopg.connect(GEMATRIA_DSN) as conn,
+                                conn.cursor() as cur,
+                            ):
                                 cur.execute(
                                     """INSERT INTO ai_enrichment_log
                                        (run_id,node,noun_id,model_name,confidence_model,
@@ -197,9 +188,7 @@ def enrichment_node(state: dict) -> dict:
                                 )
                                 conn.commit()
                         except Exception as db_error:
-                            log_json(
-                                LOG, 30, "db_persistence_failed", error=str(db_error)
-                            )
+                            log_json(LOG, 30, "db_persistence_failed", error=str(db_error))
                             # Continue with enrichment even if DB fails
 
                     # Add to enriched nouns

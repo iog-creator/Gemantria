@@ -448,3 +448,29 @@ Validates `graph_latest.json`, `centrality.json`, `release_manifest.json` via JS
 - `make eval.provenance` writes `provenance.json` (git describe, counts, hashes).
 - `make eval.package` includes both; dashboard shows a Provenance pane.
 - `make ops.verify` now fails if required artifacts (graph, centrality, manifest, provenance) are missing.
+
+### Quality & Summary
+- Configure thresholds (optional):
+  - `Q_MAX_MISSING_RERANK_PCT` (default 0)
+  - `Q_MIN_STRONG_OR_WEAK` (default 1)
+  - `Q_REQUIRE_NONZERO_EIG` (default 1)
+- Run:
+```bash
+make eval.quality.check
+make eval.summary
+```
+- Outputs: `share/eval/quality_report.txt`, `share/eval/summary.md`, `share/eval/summary.json`
+- `eval.package` runs both and shows the result on the dashboard.
+
+### Edge thresholds, badge, and calibration (MANDATORY)
+- Env knobs (defaults): `EDGE_BLEND_WEIGHT=0.5`, `EDGE_STRONG_THRESH=0.90`, `EDGE_WEAK_THRESH=0.75`
+- Generate suggestions:
+```bash
+make eval.graph.calibrate
+cat share/eval/calibration_suggest.json
+```
+- Override for a run:
+```bash
+EDGE_STRONG_THRESH=0.80 EDGE_WEAK_THRESH=0.65 make eval.package
+```
+- The QUALITY badge is generated at `share/eval/badges/quality.svg` and is **required** by `ops.verify`.

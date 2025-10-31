@@ -111,13 +111,11 @@ def test_genesis_chapter_1():
         embeddings = client.get_embeddings(doc_strings)
         embeddings = [_l2_normalize(vec) for vec in embeddings]
 
-        print(
-            f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})"
-        )
+        print(f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})")
 
         # Test self-similarities (should be ~1.0)
         self_similarities = []
-        for i, emb in enumerate(embeddings):
+        for _i, emb in enumerate(embeddings):
             # Cosine similarity with itself should be 1.0
             self_sim = sum(a * b for a, b in zip(emb, emb, strict=False))
             self_similarities.append(self_sim)
@@ -125,7 +123,7 @@ def test_genesis_chapter_1():
         mean_self_sim = statistics.mean(self_similarities)
 
         # Test top-5 similarities across all pairs
-        import numpy as np  # noqa: E402
+        import numpy as np
 
         X = np.vstack(embeddings)
         sim_matrix = X @ X.T  # Cosine similarities
@@ -170,15 +168,9 @@ def test_genesis_chapter_1():
         mock_rerank_scores = [sim for _, _, sim in pairs_0_4]
 
         if mock_rerank_scores:
-            yes_at_02 = sum(1 for s in mock_rerank_scores if s >= 0.2) / len(
-                mock_rerank_scores
-            )
-            yes_at_04 = sum(1 for s in mock_rerank_scores if s >= 0.4) / len(
-                mock_rerank_scores
-            )
-            yes_at_06 = sum(1 for s in mock_rerank_scores if s >= 0.6) / len(
-                mock_rerank_scores
-            )
+            yes_at_02 = sum(1 for s in mock_rerank_scores if s >= 0.2) / len(mock_rerank_scores)
+            yes_at_04 = sum(1 for s in mock_rerank_scores if s >= 0.4) / len(mock_rerank_scores)
+            yes_at_06 = sum(1 for s in mock_rerank_scores if s >= 0.6) / len(mock_rerank_scores)
 
             print(".2f")
             print(".2f")
@@ -225,7 +217,7 @@ def test_genesis_chapter_1():
 
     except Exception as e:
         print(f"   ❌ Embedding test failed: {e}")
-        import traceback  # noqa: E402
+        import traceback
 
         traceback.print_exc()
 
