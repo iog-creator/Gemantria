@@ -151,7 +151,7 @@ def main() -> int:
     lines.append("")
     lines.append(f"*series:* {len(series)}  •  *ok:* {'✅' if ok else '❌'}")
     lines.append("")
-    lines.append("| file | nodes | edges | strength ok frac (0.30–0.95) | dims ok (if present) |")
+    lines.append("| file | nodes | edges | strength ok frac (0.30-0.95) | dims ok (if present) |")
     lines.append("|---|---:|---:|---:|:---:|")
     for item in series:
         lines.append(
