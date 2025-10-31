@@ -186,3 +186,15 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **No `share/**` writes in CI.** Route CI outputs to `_artifacts/**`.
 
 - **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.
+
+### Runbook: Codex CLI (optional, local-only)
+
+- **Docs:** `docs/runbooks/CODEX_CLI.md`
+
+- **Enable locally:** `npm i -g @openai/codex && codex login`
+
+- **Config:** copy `.codex/config.example.toml` to `~/.codex/config.toml`
+
+- **Use:** `make codex.task TASK="List last 5 commits; propose 2-line release note."`
+
+- **Gating:** **Off in CI** by default; to allow in CI, set `ALLOW_CODEX=1` (not recommended).

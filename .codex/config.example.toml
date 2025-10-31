@@ -1,0 +1,21 @@
+## Codex CLI example config (copy to ~/.codex/config.toml)
+## Safe defaults: stateless runs, repo-scoped writes (local only), Cursor opener.
+
+model = "gpt-5-codex"
+model_provider = "openai"
+approval_policy = "on-request"         # ask before edits
+sandbox_mode   = "workspace-write"     # edits limited to repo root
+history = { persistence = "none" }     # fresh context per run
+file_opener = "cursor"                 # jump-to-file in Cursor
+
+[model_providers.openai]
+base_url = "https://api.openai.com/v1"
+env_key  = "OPENAI_API_KEY"
+
+[model_providers.xai]
+base_url = "https://api.x.ai/v1"
+env_key  = "XAI_API_KEY"
+
+[profiles.grok4]
+model = "grok-4-fast"
+model_provider = "xai"
