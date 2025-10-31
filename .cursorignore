@@ -1,0 +1,43 @@
+# Build artifacts and mirrors
+
+share/**
+
+_artifacts/**
+
+# Environments / vendors / caches
+
+.venv/**
+
+env/**
+
+venv/**
+
+node_modules/**
+
+**/.pytest_cache/**
+
+**/__pycache__/**
+
+# Heavy or binary data (agents shouldn't ingest)
+
+**/*.parquet
+
+**/*.feather
+
+**/*.csv
+
+**/*.npz
+
+**/*.npy
+
+dumps/**
+
+data/**
+
+# VCS and editor internals
+
+.git/**
+
+.vscode/**
+
+.idea/**

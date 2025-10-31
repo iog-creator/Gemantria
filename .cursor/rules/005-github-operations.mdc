@@ -1,0 +1,15 @@
+---
+description: GitHub PR/Issue operations safety (agent-requested)
+alwaysApply: false
+---
+
+- Confirm repo/branch before acting
+- Search for existing PR/issue before creating one
+- Use clear titles/descriptions and close with state_reason
+- Prefer small PRs; link to CI results
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

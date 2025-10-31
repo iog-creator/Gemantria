@@ -1,0 +1,129 @@
+# Gematria Project Environment Configuration
+# Copy this file to .env and customize for your environment
+
+# ============================================================================
+# DATABASE CONFIGURATION
+# ============================================================================
+
+# Gematria Database (read-write) - Primary database for concepts and networks
+GEMATRIA_DSN=postgresql://mccoy@/gematria?host=/var/run/postgresql
+
+# Bible Database (read-only) - Reference database with biblical text
+BIBLE_DB_DSN=postgresql://postgres@/bible_db?host=/var/run/postgresql
+
+# ============================================================================
+# LM STUDIO CONFIGURATION
+# ============================================================================
+
+# LM Studio Server Host
+LM_STUDIO_HOST=http://192.168.1.119:1234
+
+# Model Configuration
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+QWEN_EMBEDDING_MODEL=text-embedding-qwen3-embedding-0.6b
+QWEN_RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# Embedding Configuration
+USE_QWEN_EMBEDDINGS=true
+
+# Production Safety: No Mocks in Production
+ALLOW_MOCKS_FOR_TESTS=0           # Only set to 1 inside unit tests
+ENFORCE_QWEN_LIVE=1               # Require live Qwen models for enrichment (fail-closed if unavailable)
+
+# Connection Settings
+LM_STUDIO_TIMEOUT=30
+LM_STUDIO_RETRY_ATTEMPTS=3
+LM_STUDIO_RETRY_DELAY=2.0
+LM_STUDIO_MOCK=false
+
+# ============================================================================
+# PIPELINE CONFIGURATION
+# ============================================================================
+
+# Processing Batch Size
+BATCH_SIZE=50
+
+# Semantic Network Configuration
+VECTOR_DIM=1024
+
+# Relations Configuration (KNN + optional rerank)
+ENABLE_RELATIONS=true
+ENABLE_RERANK=true
+SIM_MIN_COSINE=0.15
+KNN_K=8
+RERANK_TOPK=50
+RERANK_PASS=0.50
+
+# Rerank-Driven Relationship Configuration
+NN_TOPK=20
+RERANK_MIN=0.50
+EDGE_STRONG=0.90
+EDGE_WEAK=0.75
+
+# Pattern Discovery Configuration
+CLUSTER_ALGO=louvain
+CENTRALITY=degree,betweenness,eigenvector
+
+# Exports Configuration
+EXPORT_DIR=exports
+
+# Error Handling
+CONFLICT_RETRY_LIMIT=3
+
+# Quality Thresholds
+GEMATRIA_CONFIDENCE_THRESHOLD=0.90
+AI_CONFIDENCE_THRESHOLD=0.95
+
+# Confidence Gates (soft = warn, hard = fail)
+AI_CONFIDENCE_SOFT=0.90
+AI_CONFIDENCE_HARD=0.95
+
+# Content Limits (words)
+MAX_INSIGHTS_WORDS=250
+MIN_INSIGHTS_WORDS=150
+MAX_SIGNIFICANCE_WORDS=125
+MIN_SIGNIFICANCE_WORDS=75
+
+# ============================================================================
+# DEVELOPMENT SETTINGS
+# ============================================================================
+
+# Logging Level (DEBUG, INFO, WARNING, ERROR)
+LOG_LEVEL=INFO
+
+# Metrics & Logging
+METRICS_ENABLED=1   # 0 disables DB writes (stdout JSON remains)
+WORKFLOW_ID=gemantria.v1
+
+# Observability / Exporter (optional)
+PROM_EXPORTER_ENABLED=0
+PROM_EXPORTER_PORT=9108
+
+# Enable verbose database logging
+DB_DEBUG=false
+
+# Database connection pool settings
+DB_POOL_SIZE=5
+DB_MAX_OVERFLOW=10
+
+# ============================================================================
+# OPTIONAL: ADVANCED SETTINGS
+# ============================================================================
+
+# Custom data directory (if different from project root)
+# DATA_DIR=/path/to/custom/data
+
+# Custom models directory
+# MODELS_DIR=/path/to/models
+
+# Custom logs directory
+# LOGS_DIR=/path/to/logs
+
+# ============================================================================
+# SECURITY NOTES
+# ============================================================================
+# - Never commit .env files to version control
+# - Bible DB should remain read-only
+# - Use strong database passwords in production
+# - LM Studio models are local (no cloud credentials needed)

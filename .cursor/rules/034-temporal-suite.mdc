@@ -1,0 +1,33 @@
+---
+description: Phase 8 — Temporal Analytics Suite (spec + forecasts + visualization) consolidated into a single active rule.
+globs:
+  - "src/**/*.py"
+  - "scripts/**/*.py"
+  - "exports/*.json"
+  - "docs/SSOT/*.json"
+  - "src/services/api_server.py"
+alwaysApply: false
+---
+
+# Rule 034 — Temporal Analytics Suite (Phase 8)
+
+This rule **consolidates** the former trio (034/035/036) into one enforceable spec:
+
+- **Exports**: `exports/temporal_patterns.json`, `exports/pattern_forecast.json`
+- **Schemas (authoritative)**: `docs/SSOT/temporal-patterns.schema.json`, `docs/SSOT/pattern-forecast.schema.json`
+- **API**: `/api/v1/temporal` and `/api/v1/forecast` must read from exports and apply filters (unit, window, series_id; horizon).
+- **README**: Must include a minimal runbook for temporal/forecast usage.
+- **Heads**: `temporal_patterns.head.json`, `pattern_forecast.head.json` kept for PR proofs.
+
+## Enforcement Criteria
+- CI (or local) must validate both temporal and forecast exports against their SSOT schemas.
+- API endpoints present and return filtered payloads with metadata.
+- README/AGENTS mention Phase-8 temporal suite and where outputs live.
+- Forest/master plan references a **single** active rule (034) for Phase-8.
+
+## Evidence
+- JSON heads and schema validations pass.
+- Endpoints reachable locally (FastAPI) or skipped in smoke when services down.
+
+## Deprecation Notes
+- Rule 035 and 036 are **deprecated pointers** to this rule.

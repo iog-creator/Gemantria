@@ -1,0 +1,235 @@
+{
+  "edges": [],
+  "metadata": {
+    "cluster_count": 18,
+    "edge_count": 26,
+    "export_timestamp": "2025-10-23 17:59:42.882918-07:00",
+    "node_count": 28
+  },
+  "nodes": [
+    {
+      "betweenness": 0.0,
+      "cluster": 7,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "17db3202-47bb-4b41-a703-c1d3d8d24547",
+      "label": "17db3202-47bb-4b41-a703-c1d3d8d24547"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "186f30ee-6aea-430a-9532-4f818ff5b68c",
+      "label": "186f30ee-6aea-430a-9532-4f818ff5b68c"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "2fac55d7-fdee-4e00-bf4c-d4ab617474fa",
+      "label": "2fac55d7-fdee-4e00-bf4c-d4ab617474fa"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "3228ef61-5b6e-427b-965c-e728baa38f69",
+      "label": "3228ef61-5b6e-427b-965c-e728baa38f69"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 4,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "3c4cdaf5-b118-43dd-8ffb-7a3fba87e9a1",
+      "label": "3c4cdaf5-b118-43dd-8ffb-7a3fba87e9a1"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 0,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "3de91147-5825-424a-bd8f-ac1acf75eae6",
+      "label": "3de91147-5825-424a-bd8f-ac1acf75eae6"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 11,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "4233fe0e-43c6-434b-9e8b-506d18dcc7e5",
+      "label": "4233fe0e-43c6-434b-9e8b-506d18dcc7e5"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 2,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "4ac49ee6-6a07-4592-839a-c695cbb142b3",
+      "label": "4ac49ee6-6a07-4592-839a-c695cbb142b3"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "50f25e3e-bf0a-48dd-b119-971a19d204c4",
+      "label": "50f25e3e-bf0a-48dd-b119-971a19d204c4"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 1,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "51f6cef6-fba7-4d5c-ac07-decbf7e32c23",
+      "label": "51f6cef6-fba7-4d5c-ac07-decbf7e32c23"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "58b5f280-75f8-4043-a293-8fa1b272c014",
+      "label": "58b5f280-75f8-4043-a293-8fa1b272c014"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 6,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "5e75f102-d3e7-4336-8290-0e74ef9a316f",
+      "label": "5e75f102-d3e7-4336-8290-0e74ef9a316f"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "64747c10-4f52-4c7c-a0e3-00197212619c",
+      "label": "64747c10-4f52-4c7c-a0e3-00197212619c"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 16,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "65be1afb-512f-436d-bf29-ba832ff02f30",
+      "label": "65be1afb-512f-436d-bf29-ba832ff02f30"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 13,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "6f58d7af-b7e5-4b2a-8e6b-090ca4ea5787",
+      "label": "6f58d7af-b7e5-4b2a-8e6b-090ca4ea5787"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 14,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "75da1201-1f9c-4da7-96a6-e048fd19f6e2",
+      "label": "75da1201-1f9c-4da7-96a6-e048fd19f6e2"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 17,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "77598929-6118-45e9-a5ee-920f074f6e3d",
+      "label": "77598929-6118-45e9-a5ee-920f074f6e3d"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 15,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "7bae5d38-3cb0-4468-a4f8-0c57eb803388",
+      "label": "7bae5d38-3cb0-4468-a4f8-0c57eb803388"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "9343ede1-71ed-4e61-b6c6-c33f075cc787",
+      "label": "9343ede1-71ed-4e61-b6c6-c33f075cc787"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 12,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "a070ac83-1809-4852-8549-b6d54fb4f813",
+      "label": "a070ac83-1809-4852-8549-b6d54fb4f813"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 10,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "a07b1323-35d6-4c16-ad56-7ab6f6566bad",
+      "label": "a07b1323-35d6-4c16-ad56-7ab6f6566bad"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 8,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "a52d7d06-d277-481f-be72-4bfc35f16cc2",
+      "label": "a52d7d06-d277-481f-be72-4bfc35f16cc2"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 5,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "b5d0c295-1d9a-4f0d-b8a4-14d69de0b90b",
+      "label": "b5d0c295-1d9a-4f0d-b8a4-14d69de0b90b"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "c97b3527-9281-4b00-8510-8caf954d20dc",
+      "label": "c97b3527-9281-4b00-8510-8caf954d20dc"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "ca06a29b-502d-49a2-81a5-766dd28e8871",
+      "label": "ca06a29b-502d-49a2-81a5-766dd28e8871"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 9,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "dda93bbd-715c-4cd1-9ee8-55dd9128cdc5",
+      "label": "dda93bbd-715c-4cd1-9ee8-55dd9128cdc5"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": null,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "ed13aed9-5c04-43f0-ae70-3a126724ab25",
+      "label": "ed13aed9-5c04-43f0-ae70-3a126724ab25"
+    },
+    {
+      "betweenness": 0.0,
+      "cluster": 3,
+      "degree": 0.0,
+      "eigenvector": 0.0,
+      "id": "ef695e45-f28a-4007-a89b-10c62c3743ed",
+      "label": "ef695e45-f28a-4007-a89b-10c62c3743ed"
+    }
+  ]
+}

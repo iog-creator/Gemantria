@@ -1,5 +1,3 @@
-"""Core utilities for the Gemantria bootstrap."""
-
-from .ssot import MasterPlan
-
-__all__ = ["MasterPlan"]
+# test change
+# test change for pre-commit
+# another test change

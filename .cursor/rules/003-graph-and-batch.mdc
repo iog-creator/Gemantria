@@ -1,0 +1,22 @@
+---
+description: Graph batch semantics and validation gates
+globs:
+  - src/graph/**/*
+alwaysApply: false
+---
+
+- Validation fails closed; resolution may NOT override code math with LLM.
+- Integration enforces noun_count==50 by default; on failure abort & write review.ndjson.
+- Manifest per run: env, seeds, git commit, checksums; record ALLOW_PARTIAL when used.
+- BatchProcessor enforces BATCH_SIZE=50 default; creates review.ndjson on insufficient nouns unless ALLOW_PARTIAL=1.
+- ALLOW_PARTIAL=1 requires PARTIAL_REASON env var explaining override (logged in manifest).
+- Batch results include deterministic batch_id (SHA-256 of sorted noun content) and hash proofs for input/output.
+- StateGraph wires collect_nouns → validate_batch → enrichment → confidence_validator → network_aggregator with checkpointer integration.
+- BatchAbortError raised with review file path when batch size insufficient and ALLOW_PARTIAL=0.
+- Contract tests must verify batch size enforcement and manifest recording.
+
+# References
+- RULES_INDEX.md
+- AGENTS.md
+- SHARE_MANIFEST.json
+- Makefile (relevant targets)

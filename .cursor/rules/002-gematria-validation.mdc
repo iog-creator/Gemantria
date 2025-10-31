@@ -1,0 +1,12 @@
+---
+description: Hebrew normalization and gematria validation
+globs:
+  - src/core/hebrew_utils.py
+  - src/core/ids.py
+alwaysApply: false
+---
+
+- Enforce NFKD→strip→NFC; strip maqaf (U+05BE), sof pasuq (U+05C3), punctuation.
+- Finals=regular; Mispar Hechrachi mapping.
+- Provide calc strings, e.g., א(1)+ד(4)+ם(40)=45.
+- Add property tests: stripping is idempotent; gematria equals per-char mapping.

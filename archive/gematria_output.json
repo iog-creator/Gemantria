@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gematria Output Schema",
+  "description": "Schema for Hebrew noun extraction with gematria calculations",
+  "type": "object",
+  "properties": {
+    "book_name": {
+      "type": "string",
+      "description": "Name of the biblical book",
+      "examples": ["Genesis", "Exodus", "Leviticus"]
+    },
+    "nouns": {
+      "type": "array",
+      "description": "Array of extracted Hebrew nouns",
+      "items": {
+        "type": "object",
+        "required": ["name", "hebrew", "value", "calculation", "primary_verse"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "English name/translation of the noun",
+            "examples": ["Adam", "Hevel", "Messiah"]
+          },
+          "hebrew": {
+            "type": "string",
+            "description": "Hebrew text (consonants only, no nikud/vowels)",
+            "pattern": "^[א-תךםןףץ]+$",
+            "examples": ["אדם", "הבל", "משיח"]
+          },
+          "hebrew_with_nikud": {
+            "type": "string",
+            "description": "Hebrew text with nikud/vowels (optional)",
+            "examples": ["אָדָם", "הֶבֶל"]
+          },
+          "value": {
+            "type": "integer",
+            "description": "Gematria numerical value",
+            "minimum": 1,
+            "examples": [45, 37, 358]
+          },
+          "calculation": {
+            "type": "string",
+            "description": "Detailed calculation showing each letter's value",
+            "examples": ["א(1) + ד(4) + מ(40) = 45"]
+          },
+          "primary_verse": {
+            "type": "string",
+            "description": "Primary biblical reference",
+            "pattern": "^\\w+ \\d+:\\d+$",
+            "examples": ["Genesis 1:1", "Genesis 4:2"]
+          },
+          "verse_refs": {
+            "type": "array",
+            "description": "All verse references for this noun",
+            "items": {
+              "type": "string",
+              "pattern": "^\\w+ \\d+:\\d+$"
+            }
+          },
+          "meaning": {
+            "type": "string",
+            "description": "Basic meaning/definition",
+            "examples": ["man, human", "breath, vapor"]
+          },
+          "semantic_tags": {
+            "type": "array",
+            "description": "Semantic categories",
+            "items": {
+              "type": "string",
+              "examples": ["person", "creation", "sacrifice"]
+            }
+          },
+          "insights": {
+            "type": "string",
+            "description": "AI-generated theological insights",
+            "minLength": 150,
+            "maxLength": 250
+          },
+          "theological_significance": {
+            "type": "string",
+            "description": "Theological significance analysis",
+            "minLength": 75,
+            "maxLength": 125
+          },
+          "strong_number": {
+            "type": "string",
+            "description": "Strong's concordance number",
+            "pattern": "^H\\d+$",
+            "examples": ["H0120", "H0180"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["book_name", "nouns"]
+}

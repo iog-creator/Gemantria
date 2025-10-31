@@ -1,0 +1,15 @@
+PR,Branch,Additions,Deletions,Files,Checks,Title
+78,fix/ci-linting-wave2,1506155,1347,8481,FAILURE,SUCCESS,fix(ci): linting fixes Wave 2 - reduce errors from 255 to 188
+77,ci/soft-checks-081,70,0,3,FAILURE,SUCCESS,ci(081): add soft-checks workflow + pytest.ini; emit HINT lines; non-fatal
+75,ci/trigger-hardening-077,201,11,7,FAILURE,SKIPPED,SUCCESS,ci(077): PR trigger hardening; pull_request + push + dispatch
+74,fix/reclassify-ssot-keys-076,192,7,5,SUCCESS,fix(076): reclassify prefers SSOT edge_strength; legacy fallbacks kept
+73,feat/exporter-field-alignment-074,182,6,4,SUCCESS,feat(074): exporter field alignment with SSOT keys; proper blend computation
+72,fix/blend-validator-field-aliases-073,172,1,3,SUCCESS,fix(073): blend validator accepts legacy field names; adds alias stats
+71,verify/rerank-blend-ssot-072,145,1,3,SUCCESS,verify(072): SSOT blend validator (non-fatal); emits share/eval/edges/blend_ssot_report.*
+70,feat/env-edge-thresholds-071,88,69,11,FAILURE,SUCCESS,feat(071): env-config edge thresholds + doc-sync soft guard
+69,ci/pin-toolchain-070,4974,14,15,FAILURE,SUCCESS,ci(070): pin toolchain versions and mirror tools versions
+63,ci/repo-wide-fmt-067,51,47,17,FAILURE,SUCCESS,ci(067): repo-wide ruff-format normalization
+14,integrate/feature/pr-003-batch-semantics,3,26,2,FAILURE,integrate(feature/pr-003-batch-semantics): consolidate batch config; rebase on main; pass policy gates
+9,feature/policy-guards-002,281,80,13,FAILURE,infra(policy): finalize CODEOWNERS; enforce required checks; lock workflow step names/order
+7,feature/rule-038-exports-smoke,35943,2248,390,FAILURE,Rule-038: Exports Smoke Gate
+1,codex/bootstrap-project-with-initial-scaffolding,598,1,24,,docs: expand bootstrap readme

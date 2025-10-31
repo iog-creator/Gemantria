@@ -1,0 +1,33 @@
+{
+  "metrics": {
+    "cosine_min": 0.0,
+    "cosine_max": 1.0,
+    "strong_edges": 0.95,
+    "weak_edges": 0.85,
+    "centrality_nonzero_ratio": 0.9,
+    "critic_fail_rate": 0.05
+  },
+  "thresholds": {
+    "cosine_min": 0.0,
+    "cosine_max": 1.0,
+    "strong_edges": 0.9,
+    "weak_edges": 0.75,
+    "centrality_nonzero_ratio": 0.8,
+    "critic_fail_rate": 0.1
+  },
+  "status": "PASS",
+  "schema_ok": true,
+  "ts": 1761350254.3222182,
+  "schema": {
+    "validated": true,
+    "errors": []
+  },
+  "threshold_results": {
+    "cosine_min": true,
+    "cosine_max": true,
+    "strong_edges": true,
+    "weak_edges": true,
+    "centrality_nonzero_ratio": true,
+    "critic_fail_rate": true
+  }
+}

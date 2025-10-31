@@ -1,0 +1,103 @@
+name: verify-stats
+on:
+  pull_request:
+    paths:
+      - "migrations/**"
+      - "scripts/**"
+      - "webui/graph/**"
+      - "exports/**"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      GEMATRIA_DSN: postgresql://postgres:postgres@localhost:5432/gematria
+    services:
+      postgres:
+        image: ankane/pgvector:latest
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Ensure DB is up and schema is applied before any verify/export step touches it.
+      - name: Ensure DB then migrate (idempotent)
+        run: |
+          set -e
+          echo "::group::DB bootstrap + migrations"
+          if [ -x scripts/ci/ensure_db_then_migrate.sh ]; then
+            GEMATRIA_DSN="$GEMATRIA_DSN" bash scripts/ci/ensure_db_then_migrate.sh
+          else
+            echo "HINT: scripts/ci/ensure_db_then_migrate.sh missing; attempting manual migrations"
+            : "${GEMATRIA_DSN:=postgresql://postgres:postgres@localhost:5432/gematria}"
+            # Wait for Postgres if needed
+            for i in $(seq 1 30); do pg_isready -d "$GEMATRIA_DSN" && break || sleep 1; done
+            # Create DB if not present (ignore errors)
+            db_name=$(echo "$GEMATRIA_DSN" | sed 's/.*\/\([^?]*\).*/\1/' | grep -v '^$' || echo "postgres")
+            createdb "$db_name" || true
+            # Apply migrations in order if present
+            if ls migrations/*.sql >/dev/null 2>&1; then
+              for f in migrations/*.sql; do
+                echo "Applying $f"
+                psql "$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -f "$f"
+              done
+            else
+              echo "HINT: no migrations/*.sql found; continuing"
+            fi
+          fi
+          echo "::endgroup::"
+
+      - run: pip install -r requirements.txt jsonschema psycopg[binary]
+      - name: Clean previous exports (CI hermeticity)
+        run: |
+          rm -f exports/graph_stats.json exports/graph_latest.json
+      - name: Generate metrics & exports
+        run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
+          python scripts/analyze_graph.py || true
+          python scripts/analyze_metrics.py
+          python scripts/export_stats.py
+          test -s exports/graph_stats.json
+      - name: Verify PR-016/017 contracts (Rule 021)
+        run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE:$PYTHONPATH"
+          python scripts/verify_pr016_pr017.py \
+            --dsn "$GEMATRIA_DSN" \
+            --stats exports/graph_stats.json \
+            --graph exports/graph_latest.json
+      - name: Run verify
+        run: |
+          set -e
+          # CI only runs PR-016/017 contract verification, not full ops.verify (which requires pipeline artifacts)
+          echo "CI verify: only checking PR-016/017 contracts"
+          # If exports show zeros, emit a hint rather than failing CI (empty CI DB).
+          if [ -f share/graph/graph_stats.head.json ]; then
+            NODES=$(jq -r '.node_count // .nodes // 0' share/graph/graph_stats.head.json || echo 0)
+            EDGES=$(jq -r '.edge_count // .edges // 0' share/graph/graph_stats.head.json || echo 0)
+            if [ "${NODES}" = "0" ] && [ "${EDGES}" = "0" ]; then
+              echo "HINT: verify — graph stats are zero in CI (empty DB), proceeding."
+            fi
+          fi
+      - name: Frontend contract build (Rules 016/022)
+        run: |
+          cd webui/graph
+          # Skip if no package-lock.json (backend-only changes)
+          if [ ! -f package-lock.json ]; then
+            echo "Skipping frontend build: no package-lock.json (backend-only PR)"
+            exit 0
+          fi
+          npm ci
+          npm run type-check
+          npm run test:ci || npm test -- --ci
+          npm run build

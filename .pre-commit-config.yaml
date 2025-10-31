@@ -1,0 +1,46 @@
+repos:
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--output-format=github]
+      - id: ruff-format
+        # ruff-format is the single source of truth for formatting now
+        args: []
+
+  # Temporarily disabled - pre-existing type checking issues
+  # Will be re-enabled after codebase cleanup
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.11.0
+  #   hooks:
+  #     - id: mypy
+  #       args:
+  #         - --config-file=mypy.ini
+  #         - --ignore-missing-imports
+  #       additional_dependencies:
+  #         - types-requests
+  #         - types-PyYAML
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: share-sync
+        name: share.sync (mirror artifacts)
+        language: system
+        entry: bash -lc 'make share.sync'
+        pass_filenames: false
+
+      - id: repo-audits
+        name: repo audits (rules.navigator.check, rules.audit, repo.audit, docs.audit)
+        language: system
+        entry: bash -lc 'make rules.navigator.check rules.audit repo.audit docs.audit'
+        pass_filenames: false

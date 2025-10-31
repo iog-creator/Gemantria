@@ -1,0 +1,36 @@
+---
+description: Governance for AGENTS.md (always-on)
+alwaysApply: false
+---
+
+# AGENTS.md Governance — How agents must use and maintain AGENTS.md
+
+## Read-before-act
+- Before performing any multi-step or repo-wide task (scaffold, DB work, CI edits, PR ops), READ `AGENTS.md` and follow its workflow, priorities, and gates.
+- If a needed instruction is missing, propose a patch to `AGENTS.md` in the same PR (DoR/DoD below).
+
+## Canonical sections required in AGENTS.md
+- Mission & priorities (e.g., Code > bible_db > LLM; determinism; safety).
+- Environment setup (venv, deps, `.env.example`), and how to run tests/gates.
+- Definitions of Done & Ready:
+  - **DoR** (ready): tests planned, ADR touched if schema/behavior changes, gates runnable.
+  - **DoD** (done): tests pass, coverage gate met, ADR updated, rules updated if behavior changes.
+- PR workflow (branch naming, commit style, CI targets).
+- Security/Safety (no mocks, read-only DB policy, param SQL).
+- Quick commands (one-liners for common tasks).
+
+## Change policy (keep docs in lockstep)
+- Any change to workflows, gates, or safety rules MUST update `AGENTS.md` in the same PR and adjust tests/CI accordingly.
+- If instructions in chat conflict with `AGENTS.md`, follow the chat for this task but OPEN A FOLLOW-UP PATCH to reconcile and update `AGENTS.md`.
+
+## Verification checklist (agents enforce)
+- Commands shown in AGENTS.md are executable (no typos).
+- Coverage threshold matches CI config.
+- PR template in AGENTS.md includes Goal/Files/Tests/Acceptance and links to ADRs/rules touched.
+
+## Minimal PR template (to embed in PR body)
+- Goal:
+- Files changed:
+- Tests added/updated:
+- Acceptance (lint, type, tests, coverage ≥X, safety checks):
+- ADRs/rules touched:

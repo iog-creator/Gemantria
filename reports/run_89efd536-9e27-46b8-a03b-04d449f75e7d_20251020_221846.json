@@ -1,0 +1,27 @@
+{
+  "run_id": "89efd536-9e27-46b8-a03b-04d449f75e7d",
+  "generated_at": "2025-10-21T05:18:46.341276+00:00",
+  "metrics": {
+    "node_metrics": [
+      {
+        "node": "enrichment",
+        "events": 2,
+        "avg_duration_ms": 13222.0,
+        "first_event": "2025-10-20T22:11:15.538066-07:00",
+        "last_event": "2025-10-20T22:11:28.760059-07:00"
+      }
+    ],
+    "ai_metrics": {
+      "total_enrichments": 2,
+      "avg_confidence": 1.0,
+      "avg_tokens": 375
+    },
+    "confidence_metrics": {
+      "total_validations": 0,
+      "passed": 0,
+      "failed": 0,
+      "avg_gematria_confidence": 0,
+      "avg_ai_confidence": 0
+    }
+  }
+}

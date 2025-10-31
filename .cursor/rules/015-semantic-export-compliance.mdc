@@ -1,0 +1,25 @@
+---
+description: Ensure semantic export scripts produce both JSON-LD and RDF/Turtle formats
+globs:
+  - scripts/export_jsonld.py
+  - scripts/export_stats.py
+alwaysApply: false
+---
+
+# Related ADRs: ADR-015 (JSON-LD & RDF Graph Exports + Visualization Interface)
+
+- **Purpose**: Ensure all semantic export scripts produce both JSON-LD and RDF/Turtle formats with proper semantic web standards compliance.
+
+- **Scope**: scripts/export_jsonld.py, export_stats.py
+
+- **Checks**:
+  - Verify rdflib import present and functional
+  - Verify .jsonld and .ttl files written to exports/ directory
+  - Enforce `@context` field in JSON-LD output
+  - Validate RDF/Turtle syntax with rdflib parser
+  - Ensure IRI namespaces follow gematria.ai conventions
+  - Check that both formats represent equivalent semantic content
+
+- **Validation**: Run `python scripts/export_jsonld.py` and verify both output files exist and parse correctly.
+
+- **Failure Mode**: Pipeline can export basic JSON but must produce semantic web formats for downstream tools.
