@@ -12,6 +12,7 @@ import os
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
+from src.rerank.blender import blend_strength
 
 # Load environment variables from .env file
 ensure_env_loaded()
@@ -35,19 +36,15 @@ def export_correlation_graph():
         metadata = correlation_data.get("metadata", {})
 
         # Filter correlations |r| >= 0.4
-        filtered_correlations = [
-            corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4
-        ]
+        filtered_correlations = [corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4]
 
         if not filtered_correlations:
-            LOG.info(
-                "No strong correlations found (>= 0.4), correlation graph will be empty"
-            )
+            LOG.info("No strong correlations found (>= 0.4), correlation graph will be empty")
             filtered_correlations = []
 
         # Build NetworkX graph for analysis
         try:
-            import networkx as nx  # noqa: E402
+            import networkx as nx
 
             G = nx.Graph()
 
@@ -65,9 +62,7 @@ def export_correlation_graph():
                 G.add_edge(
                     corr["source"],
                     corr["target"],
-                    weight=abs(
-                        corr["correlation"]
-                    ),  # Use absolute correlation as weight
+                    weight=abs(corr["correlation"]),  # Use absolute correlation as weight
                     correlation=corr["correlation"],  # Keep signed correlation
                     p_value=corr.get("p_value", 1.0),
                     metric=corr.get("metric", "unknown"),
@@ -78,9 +73,7 @@ def export_correlation_graph():
                 "node_count": G.number_of_nodes(),
                 "edge_count": G.number_of_edges(),
                 "connected_components": nx.number_connected_components(G),
-                "is_connected": (
-                    nx.is_connected(G) if G.number_of_nodes() > 0 else False
-                ),
+                "is_connected": (nx.is_connected(G) if G.number_of_nodes() > 0 else False),
             }
 
             # Weighted degree statistics
@@ -88,24 +81,17 @@ def export_correlation_graph():
                 degrees = dict(G.degree(weight="weight"))
                 network_metrics.update(
                     {
-                        "avg_weighted_degree": (
-                            sum(degrees.values()) / len(degrees) if degrees else 0
-                        ),
+                        "avg_weighted_degree": (sum(degrees.values()) / len(degrees) if degrees else 0),
                         "max_weighted_degree": max(degrees.values()) if degrees else 0,
-                        "avg_clustering_coeff": nx.average_clustering(
-                            G, weight="weight"
-                        ),
+                        "avg_clustering_coeff": nx.average_clustering(G, weight="weight"),
                     }
                 )
 
                 # Find most central nodes
                 if degrees:
-                    top_nodes = sorted(
-                        degrees.items(), key=lambda x: x[1], reverse=True
-                    )[:5]
+                    top_nodes = sorted(degrees.items(), key=lambda x: x[1], reverse=True)[:5]
                     network_metrics["top_weighted_degree_nodes"] = [
-                        {"node": node, "weighted_degree": degree}
-                        for node, degree in top_nodes
+                        {"node": node, "weighted_degree": degree} for node, degree in top_nodes
                     ]
             else:
                 network_metrics.update(
@@ -157,11 +143,7 @@ def export_correlation_graph():
                     "metric": corr.get("metric", "unknown"),
                     "cluster_source": corr.get("cluster_source"),
                     "cluster_target": corr.get("cluster_target"),
-                    "significance": (
-                        "significant"
-                        if corr.get("p_value", 1.0) < 0.05
-                        else "not_significant"
-                    ),
+                    "significance": ("significant" if corr.get("p_value", 1.0) < 0.05 else "not_significant"),
                 }
                 for corr in filtered_correlations
             ],
@@ -173,7 +155,7 @@ def export_correlation_graph():
                 "correlation_methods": metadata.get("correlation_methods", []),
                 "export_timestamp": metadata.get(
                     "generated_at",
-                    str(list(get_gematria_rw().execute("SELECT now()"))[0][0]),
+                    str(next(iter(get_gematria_rw().execute("SELECT now()")))[0]),
                 ),
             },
         }
@@ -251,13 +233,16 @@ def main():
                 }
                 for r in nodes
             ],
+            # SSOT field names (Rule-045); validators depend on exact keys.
             "edges": [
                 {
                     "source": str(r[0]),
                     "target": str(r[1]),
-                    "strength": float(r[2] or 0),
-                    "rerank": float(r[3] or 0) if r[3] else None,
-                    "yes": bool(r[4]) if r[4] is not None else None,
+                    "cosine": float(r[2] or 0),
+                    "rerank_score": float(r[3] or 0) if r[3] else None,
+                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0))
+                    if r[3]
+                    else float(r[2] or 0),
                 }
                 for r in edges
             ],
@@ -265,7 +250,7 @@ def main():
                 "node_count": len(nodes),
                 "edge_count": len(edges),
                 "cluster_count": len(set(r[2] for r in nodes if r[2] is not None)),
-                "export_timestamp": str(list(db.execute("SELECT now()"))[0][0]),
+                "export_timestamp": str(next(iter(db.execute("SELECT now()")))[0]),
             },
         }
 

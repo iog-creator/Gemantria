@@ -1,16 +1,19 @@
 # Gemantria v2.0
 
-_A deterministic semantic network pipeline for Hebrew text analysis using gematria, embeddings, and AI inference._
+_A comprehensive pipeline for Hebrew biblical text analysis combining traditional gematria with modern AI semantic networks. Features deterministic processing, graph visualization, and multiple export formats for academic and personal research._
 
 📋 **[Repository Index](docs/INDEX.md)** - Quick navigation for all documentation and configuration
 
-[![CI](https://github.com/your-org/gemantria/workflows/CI/badge.svg)](https://github.com/your-org/gemantria/actions)
-[![Coverage](https://codecov.io/gh/your-org/gemantria/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/gemantria)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/iog-creator/Gemantria/workflows/CI/badge.svg)](https://github.com/iog-creator/Gemantria/actions)
+[![License](https://img.shields.io/badge/license-Personal%20Use%20Only-red.svg)](LICENSE)
 
 ## 🌟 Overview
 
 Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria analysis with modern semantic AI to create verified concept networks from biblical text. The system produces both structured data exports and interactive visualizations.
+
+### Current Status
+
+**Phase 9**: Advanced evaluation pipeline with edge anomaly detection, quality monitoring, and comprehensive artifact generation. Features deterministic processing, extensive validation gates, and production-ready exports.
 
 ### Key Features
 
@@ -20,6 +23,9 @@ Gemantria is a sophisticated pipeline that combines traditional Hebrew gematria 
 - **📊 Interactive Visualization**: React-based graph explorer with real-time data loading
 - **📋 Multiple Export Formats**: JSON-LD, RDF/Turtle, and structured JSON exports
 - **🔒 Production Safety**: Qwen Live Gate and comprehensive validation gates
+- **📈 Evaluation Pipeline**: Edge audit, anomaly detection, and quality monitoring
+- **🎯 Deterministic Processing**: Reproducible results with comprehensive testing
+- **🎨 Figma MCP Integration**: Real-time design collaboration with 35+ automation tools ([Setup Guide](docs/FIGMA_MCP_SETUP.md))
 
 ---
 
@@ -112,8 +118,8 @@ Override defaults with `LM_CHAT_HOST/LM_CHAT_PORT` and `LM_EMBED_HOST/LM_EMBED_P
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/gemantria.git
-cd gemantria
+git clone https://github.com/iog-creator/Gemantria.git
+cd Gemantria.v2
 
 # Set up Python environment
 python -m venv .venv
@@ -199,6 +205,35 @@ Gemantria follows a deterministic pipeline architecture with multiple safety gat
 - **Batch Validation**: Enforces 50-noun minimum (ALLOW_PARTIAL=1 for exceptions)
 - **Read-Only Bible DB**: Enforces separation between reference and working data
 - **Parameterized SQL**: Prevents SQL injection through query parameterization
+
+## 📦 Shipping UX (Local Evaluation Dashboard)
+
+Gemantria includes a polished evaluation system for local development and handoff:
+
+```bash
+# Generate complete evaluation package
+make eval.package
+
+# View interactive dashboard (opens browser)
+make eval.open
+
+# Download all artifacts as single bundle
+make eval.bundle.all
+```
+
+**Dashboard Features:**
+- **Status badges** embedded inline (PASS/FAIL/WARN indicators)
+- **Release manifest viewer** with artifact inventory (expandable table)
+- **Integrity verification** with hash checking
+- **Offline operation** (works without internet)
+
+**Artifacts include:**
+- HTML dashboard with embedded badges and manifest viewer
+- JSON reports, Markdown summaries, and CSV exports
+- Deterministic tar.gz bundle for handoff
+- Integrity verification reports
+
+See [`docs/PHASE8_EVAL.md`](docs/PHASE8_EVAL.md) for complete documentation.
 
 ## 🔧 Configuration
 
@@ -292,13 +327,17 @@ The project uses a comprehensive documentation system:
 ## 📈 Roadmap
 
 - **Phase 4** ✅: Semantic network with embeddings and relations
-- **Phase 5**: Enhanced analytics and pattern discovery
-- **Phase 6**: Multi-text support and cross-references
-- **Phase 7**: Advanced visualization and exploration tools
+- **Phase 5** ✅: Enhanced analytics and pattern discovery
+- **Phase 6** ✅: Multi-text support and cross-references
+- **Phase 7** ✅: Advanced visualization and exploration tools
+- **Phase 8** ✅: Temporal Analytics Suite (forecasts + visualization)
+- **Phase 9** 🔄: Evaluation pipeline with edge audit & anomaly detection
 
 ## 📄 License
 
-MIT License - see LICENSE file for details.
+**Personal Use Only License** - see LICENSE file for details.
+
+This software is provided free for personal, non-commercial use only. Commercial use requires a separate license agreement. Contact the repository owner for commercial licensing inquiries.
 
 ## 🤝 Contributing
 
@@ -328,3 +367,26 @@ pre-commit run -a    # ruff, black, mypy, audits, share.sync
 make ci.smart        # smart strict/soft choice + audits\nmake ci              # mirrors CI locally (legacy)
 ```
 CI workflow lives in `.github/workflows/ci.yml`.
+Nightly typing: non-blocking full-repo mypy report (see Actions → typing-nightly).
+Nightly linting: non-blocking full-repo ruff report (see Actions → lint-nightly).
+Nightly coverage: non-blocking full-repo pytest coverage (see Actions → coverage-nightly).
+- Edge quality: `make eval.edges.reclassify` fills missing `rerank`, computes `edge_strength`, and emits class counts.
+- See also: [Quality Dashboard](share/eval/QUALITY_DASHBOARD.md)
+
+### Nightly Workflow Status
+![typing-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/typing-nightly.yml/badge.svg)
+![lint-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/lint-nightly.yml/badge.svg)
+![coverage-nightly](https://github.com/iog-creator/Gemantria/actions/workflows/coverage-nightly.yml/badge.svg)
+
+### Nightly Metrics (optional auto-refresh)
+<p>
+  <img alt="MyPy Errors" src="share/eval/badges/mypy.svg" />
+  <img alt="Ruff Issues" src="share/eval/badges/ruff.svg" />
+  <img alt="Coverage %"  src="share/eval/badges/coverage.svg" />
+  <img alt="Graph Anoms" src="share/eval/badges/graph.svg" />
+</p>
+<sub>Badges refresh automatically when repo variable <code>ALLOW_BADGE_COMMITS=true</code> on main/schedule; otherwise they appear after manual commit.</sub>
+
+---
+
+> Looking for the full documentation? See **README_FULL.md**.

@@ -85,7 +85,7 @@ def compare_env_sources() -> None:
 
 def check_postgres():
     try:
-        import psycopg  # noqa: E402
+        import psycopg
 
         dsn = os.environ.get("GEMATRIA_DSN", "")
         if not dsn:
@@ -110,9 +110,9 @@ def check_postgres():
 
 
 def check_lmstudio():
-    import time  # noqa: E402
+    import time
 
-    import requests  # noqa: E402
+    import requests
 
     host = os.environ.get("LM_STUDIO_HOST", "")
     if not host:

@@ -7,9 +7,11 @@ from statistics import mean
 
 LOGS = Path("logs") / "book"
 
+
 def load_meta():
     if not LOGS.exists():
-        print("[stats] no logs/book/ directory found"); return []
+        print("[stats] no logs/book/ directory found")
+        return []
     metas = []
     for p in sorted(LOGS.glob("*.json")):
         if p.name.startswith("book_run."):  # skip run markers
@@ -22,10 +24,12 @@ def load_meta():
             pass
     return metas
 
+
 def main():
     metas = load_meta()
     if not metas:
-        print("[stats] no chapter meta logs found (run a chapter first)"); return 2
+        print("[stats] no chapter meta logs found (run a chapter first)")
+        return 2
 
     elapsed = [m["elapsed_sec"] for _, m in metas if "elapsed_sec" in m]
     rc_ok = all(m.get("returncode", 1) == 0 for _, m in metas)
@@ -54,6 +58,7 @@ def main():
         print("[stats][gate] non-zero return codes detected")
         return 2
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

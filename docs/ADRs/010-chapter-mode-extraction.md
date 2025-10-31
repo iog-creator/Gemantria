@@ -23,4 +23,3 @@ We introduced per-chapter execution (plan/dry/stop/resume) to improve safety and
 
 ## References
 - RULES_INDEX.md: Rule 003 (batch size), Rule 011 (Qwen live gate), Rule 034 (temporal).
-

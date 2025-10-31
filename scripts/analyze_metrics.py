@@ -57,26 +57,22 @@ if __name__ == "__main__":
         ids = [cid for cid, _ in pairs]
         vecs = [v for _, v in pairs]
         n = len(ids)
-        e_within = list(
-            db.execute(
-                """
+        e_within = next(
+            iter(
+                db.execute(
+                    """
           SELECT COUNT(*) FROM concept_relations
           WHERE source_id = ANY(%s) AND target_id = ANY(%s)
         """,
-                (ids, ids),
+                    (ids, ids),
+                )
             )
-        )[0][0]
+        )[0]
         dens = density(n, e_within)
-        sample = (
-            vecs
-            if n <= SAMPLE
-            else [vecs[i] for i in np.random.choice(n, SAMPLE, replace=False)]
-        )
+        sample = vecs if n <= SAMPLE else [vecs[i] for i in np.random.choice(n, SAMPLE, replace=False)]
         div = cluster_semantic_diversity(sample)
         # exemplars by mean cosine to cluster
-        means = [
-            (cid, float(np.mean([np.dot(v, u) for u in vecs]))) for cid, v in pairs
-        ]
+        means = [(cid, float(np.mean([np.dot(v, u) for u in vecs]))) for cid, v in pairs]
         means.sort(key=lambda x: x[1], reverse=True)
         top = [cid for cid, _ in means[:TOPK]]
         db.execute(

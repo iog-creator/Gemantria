@@ -2,7 +2,7 @@
 description: Documentation synchronization requirements
 globs:
   - docs/ADRs/*.md
-alwaysApply: true
+alwaysApply: false
 ---
 
 - All ADR documents must be mirrored to `grok_share/docs/ADRs/` immediately after creation or modification.

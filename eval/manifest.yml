@@ -1,0 +1,82 @@
+version: 0.7
+run_id: local-dev
+tasks:
+  - key: smoke_hello
+    kind: print
+    args:
+      message: "hello, gemantria"
+
+  - key: gate_presence_rules
+    kind: grep
+    args:
+      file: "docs/SSOT/RULES_INDEX.md"
+      patterns: ["037", "038"]
+
+  - key: exports_presence_latest
+    kind: file_glob
+    args:
+      globs: ["exports/graph_latest.json"]
+
+  - key: exports_presence_all
+    kind: file_glob
+    args:
+      globs: ["exports/graph_*.json"]
+
+  - key: exports_edge_strength_spread_latest
+    kind: json_assert
+    args:
+      file: "exports/graph_latest.json"
+      asserts:
+        - name: "edge strength fraction in [min,max]"
+          path: "edges[*].strength"
+          op: "frac_in_range"
+          min: "${thresholds:strength.min}"
+          max: "${thresholds:strength.max}"
+          min_frac: "${thresholds:strength.min_frac}"
+
+  - key: exports_nodes_dim_if_present_latest
+    kind: json_assert
+    args:
+      file: "exports/graph_latest.json"
+      asserts:
+        - name: "nodes[*].embedding_dim==dim_if_present if present"
+          path: "nodes[*].embedding_dim"
+          op: "if_present_eq_all"
+          value: "${thresholds:embedding.dim_if_present}"
+
+  - key: exports_schema_validate_latest
+    kind: json_schema
+    args:
+      file: "exports/graph_latest.json"
+      schema: "docs/SSOT/schemas/graph_export.schema.json"
+
+  - key: exports_shape_smoke_latest
+    kind: json_shape
+    args:
+      file: "exports/graph_latest.json"
+      min_nodes: "${thresholds:shape.nodes.min}"
+      max_nodes: "${thresholds:shape.nodes.max}"
+      min_edges: "${thresholds:shape.edges.min}"
+      max_edges: "${thresholds:shape.edges.max}"
+
+  - key: exports_ref_integrity_latest
+    kind: ref_integrity
+    args:
+      file: "exports/graph_latest.json"
+      allow_missing_endpoints: "${thresholds:integrity.allow_missing_endpoints}"
+      max_self_loops: "${thresholds:integrity.max_self_loops}"
+      max_duplicate_node_ids: "${thresholds:integrity.max_duplicate_node_ids}"
+      max_duplicate_edge_pairs: "${thresholds:integrity.max_duplicate_edge_pairs}"
+      whitelist_path: "eval/id_whitelist.txt"
+
+  - key: exports_id_type_audit_latest
+    kind: id_type_audit
+    args:
+      file: "exports/graph_latest.json"
+      allowed_node_id_types: "${thresholds:id_audit.allowed_node_id_types}"
+      require_single_id_type: "${thresholds:id_audit.require_single_id_type}"
+      max_nonconforming_ids: "${thresholds:id_audit.max_nonconforming_ids}"
+      whitelist_path: "eval/id_whitelist.txt"
+
+success_policy:
+  mode: all_must_pass
