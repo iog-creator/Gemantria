@@ -29,7 +29,7 @@ ignore = [
 "src/graph/graph.py" = ["E402","UP028"]
 
 # Eval scripts often carry temp vars/placeholders during smoke runs
-"scripts/eval/**/*.py" = ["F841","RUF005","E722","E501","E401","I001","F401"]
+"scripts/eval/**/*.py" = ["F841","RUF005","E722","E501","E401","I001","F401","RUF059"]
 
 # Specific files with unique issues
 "**/build_release_notes.py" = ["F821","RUF001","RUF003"]
