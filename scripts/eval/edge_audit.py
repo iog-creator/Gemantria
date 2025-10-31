@@ -23,9 +23,7 @@ def emit_hint(msg: str) -> None:
     print(f"HINT: {msg}")
 
 
-def compute_zscore_outliers(
-    values: list[float], threshold: float = 3.0
-) -> dict[str, Any]:
+def compute_zscore_outliers(values: list[float], threshold: float = 3.0) -> dict[str, Any]:
     """
     Detect outliers using z-score method.
 
@@ -78,9 +76,7 @@ def compute_zscore_outliers(
     }
 
 
-def compute_iqr_outliers(
-    values: list[float], multiplier: float = 1.5
-) -> dict[str, Any]:
+def compute_iqr_outliers(values: list[float], multiplier: float = 1.5) -> dict[str, Any]:
     """
     Detect outliers using IQR (Interquartile Range) method.
 
@@ -121,12 +117,8 @@ def compute_iqr_outliers(
                     "index": i,
                     "value": val,
                     "bound": "lower" if val < lower_bound else "upper",
-                    "threshold": round(
-                        lower_bound if val < lower_bound else upper_bound, 6
-                    ),
-                    "deviation": round(
-                        val - (lower_bound if val < lower_bound else upper_bound), 6
-                    ),
+                    "threshold": round(lower_bound if val < lower_bound else upper_bound, 6),
+                    "deviation": round(val - (lower_bound if val < lower_bound else upper_bound), 6),
                 }
             )
 
@@ -196,11 +188,7 @@ def main() -> int:
             "zscore_anomalies": zscore_result["n_outliers"],
             "iqr_anomalies": iqr_result["n_outliers"],
             "anomaly_rate_percent": round(
-                (
-                    (zscore_result["n_outliers"] + iqr_result["n_outliers"])
-                    / len(strengths)
-                )
-                * 100,
+                ((zscore_result["n_outliers"] + iqr_result["n_outliers"]) / len(strengths)) * 100,
                 2,
             ),
         },
@@ -215,9 +203,7 @@ def main() -> int:
     anomaly_rate = audit_result["summary"]["anomaly_rate_percent"]
 
     if total_anomalous > 0:
-        print(
-            f"[edge_audit] found {total_anomalous} anomalous edges ({anomaly_rate}% of total)"
-        )
+        print(f"[edge_audit] found {total_anomalous} anomalous edges ({anomaly_rate}% of total)")
         print(f"[edge_audit] z-score anomalies: {zscore_result['n_outliers']}")
         print(f"[edge_audit] IQR anomalies: {iqr_result['n_outliers']}")
     else:

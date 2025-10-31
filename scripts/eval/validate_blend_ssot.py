@@ -42,7 +42,7 @@ def main() -> int:
     if not gpath.exists():
         # Hermetic non-fatal behavior: still emit report with HINT
         print(
-            "[HINT] exports/graph_latest.json not found; " "skipping blend validation.",
+            "[HINT] exports/graph_latest.json not found; skipping blend validation.",
             file=sys.stderr,
         )
         out = {
@@ -61,7 +61,7 @@ def main() -> int:
         _dump_json(Path("share/eval/edges/blend_ssot_report.json"), out)
         _dump_json(
             Path("share/eval/edges/blend_ssot_report.md"),
-            {"note": "No graph export present; " "validation skipped (non-fatal)."},
+            {"note": "No graph export present; validation skipped (non-fatal)."},
         )
         return 0
 
@@ -144,8 +144,7 @@ def main() -> int:
 
     if miss > 0:
         print(
-            f"[HINT] blend_ssot: {miss} edges missing fields "
-            "(cosine/rerank_score/edge_strength)",
+            f"[HINT] blend_ssot: {miss} edges missing fields (cosine/rerank_score/edge_strength)",
             file=sys.stderr,
         )
     if mism > 0:

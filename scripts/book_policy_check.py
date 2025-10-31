@@ -17,9 +17,7 @@ def main():
         return 1
 
     cfg = yaml.safe_load(p.read_text())
-    tmpl = cfg.get("command_template") or os.environ.get(
-        "BOOK_EXTRACT_CMD_TEMPLATE", ""
-    )
+    tmpl = cfg.get("command_template") or os.environ.get("BOOK_EXTRACT_CMD_TEMPLATE", "")
 
     missing = [ph for ph in ("{book}", "{chapter}", "{seed}") if ph not in tmpl]
     print(f"[policy] command_template: {tmpl if tmpl else '<unset>'}")

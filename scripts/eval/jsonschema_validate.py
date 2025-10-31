@@ -22,11 +22,7 @@ def _type_ok(value: Any, t: str | list[str]) -> bool:
             (name == "object" and isinstance(v, dict))
             or (name == "array" and isinstance(v, list))
             or (name == "string" and isinstance(v, str))
-            or (
-                name == "number"
-                and isinstance(v, int | float)
-                and not isinstance(v, bool)
-            )
+            or (name == "number" and isinstance(v, int | float) and not isinstance(v, bool))
             or (name == "integer" and isinstance(v, int) and not isinstance(v, bool))
             or (name == "boolean" and isinstance(v, bool))
             or (name == "null" and v is None)
@@ -37,13 +33,10 @@ def _type_ok(value: Any, t: str | list[str]) -> bool:
     return one(value, t)
 
 
-def _validate(
-    instance: Json, schema: dict[str, Any], path: list[str | int], errs: list[str]
-) -> None:
+def _validate(instance: Json, schema: dict[str, Any], path: list[str | int], errs: list[str]) -> None:
     # type
     if "type" in schema and not _type_ok(instance, schema["type"]):
-        errs.append(f"{_loc(path)}: expected type {schema['type']}, "
-                    f"got {type(instance).__name__}")
+        errs.append(f"{_loc(path)}: expected type {schema['type']}, got {type(instance).__name__}")
         return  # further checks depend on type
 
     # enum
