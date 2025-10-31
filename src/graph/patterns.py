@@ -23,16 +23,10 @@ def build_graph(db):
         nx.Graph: NetworkX graph with nodes and weighted edges
     """
     # nodes - use UUID as label since concept names aren't stored in concept_network
-    nodes = list(
-        db.execute(
-            "SELECT concept_id, LEFT(CAST(concept_id AS TEXT), 8) FROM concept_network"
-        )
-    )
+    nodes = list(db.execute("SELECT concept_id, LEFT(CAST(concept_id AS TEXT), 8) FROM concept_network"))
 
     # edges
-    edges = list(
-        db.execute("SELECT source_id, target_id, cosine FROM concept_relations")
-    )
+    edges = list(db.execute("SELECT source_id, target_id, cosine FROM concept_relations"))
 
     G = nx.Graph()
     for cid, label in nodes:
@@ -40,9 +34,7 @@ def build_graph(db):
     for sid, tid, cos in edges:
         G.add_edge(str(sid), str(tid), weight=float(cos))
 
-    logger.info(
-        f"Built graph with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges"
-    )
+    logger.info(f"Built graph with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges")
     return G
 
 

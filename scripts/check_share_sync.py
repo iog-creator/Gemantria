@@ -57,9 +57,7 @@ def main():
             if size == 0:
                 fail(f"Head preview is empty: {dst_rel}")
             if size > max_bytes:
-                fail(
-                    f"Head preview exceeds max_bytes ({size} > {max_bytes}): {dst_rel}"
-                )
+                fail(f"Head preview exceeds max_bytes ({size} > {max_bytes}): {dst_rel}")
             continue
 
         if not src_rel:
@@ -77,9 +75,7 @@ def main():
             fail(f"Content mismatch: {src_rel} -> {dst_rel} (run `make share.refresh`)")
 
         if dst.stat().st_mtime < src.stat().st_mtime:
-            fail(
-                f"Share copy is older than source: {dst_rel} (run `make share.refresh`)"
-            )
+            fail(f"Share copy is older than source: {dst_rel} (run `make share.refresh`)")
 
     print("[share.check] PASS — share/ is flat and current")
 

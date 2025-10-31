@@ -240,9 +240,7 @@ def main():
                     "target": str(r[1]),
                     "cosine": float(r[2] or 0),
                     "rerank_score": float(r[3] or 0) if r[3] else None,
-                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0))
-                    if r[3]
-                    else float(r[2] or 0),
+                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0)) if r[3] else float(r[2] or 0),
                 }
                 for r in edges
             ],

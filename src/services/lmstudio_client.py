@@ -11,8 +11,8 @@ import requests
 
 # Dependency checks
 try:
-    import psycopg
-    from pgvector.psycopg import register_vector
+    import psycopg  # noqa: F401
+    from pgvector.psycopg import register_vector  # noqa: F401
 
     HAS_VECTOR_DB = True
 except ImportError:

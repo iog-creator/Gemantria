@@ -48,9 +48,7 @@ def main():
     for c in cases:
         got = gematria(c["hebrew"])
         exp = int(c["expected_value"])
-        print(
-            f"{c['hebrew']}: got={got} expected={exp}  {'OK' if got == exp else 'FAIL'}"
-        )
+        print(f"{c['hebrew']}: got={got} expected={exp}  {'OK' if got == exp else 'FAIL'}")
         if got != exp:
             bad += 1
     if bad:

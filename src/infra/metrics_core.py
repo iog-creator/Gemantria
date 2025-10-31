@@ -26,9 +26,7 @@ class MetricsClient:
         if not self._enabled:
             return None
         if self._pool is None:
-            self._pool = psycopg.Connection.connect(
-                self._dsn
-            )  # simple conn; swap to pool later
+            self._pool = psycopg.Connection.connect(self._dsn)  # simple conn; swap to pool later
         return self._pool
 
     def emit(self, row: dict[str, Any]) -> None:

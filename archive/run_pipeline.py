@@ -24,9 +24,7 @@ from src.graph.graph import run_pipeline
 def main():
     parser = argparse.ArgumentParser(description="Run Gemantria pipeline")
     parser.add_argument("book", help="Book name to process (e.g., Genesis)")
-    parser.add_argument(
-        "--batch-size", type=int, help="Override batch size (sets BATCH_SIZE env var)"
-    )
+    parser.add_argument("--batch-size", type=int, help="Override batch size (sets BATCH_SIZE env var)")
 
     args = parser.parse_args()
 

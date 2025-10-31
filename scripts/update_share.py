@@ -65,9 +65,7 @@ def main():
     items = spec.get("items", [])
     # Optional safety: enforce low file count
     if len(items) > 25:
-        print(
-            "[update_share] ERROR: more than 25 items; trim manifest.", file=sys.stderr
-        )
+        print("[update_share] ERROR: more than 25 items; trim manifest.", file=sys.stderr)
         sys.exit(2)
 
     # Ensure share/ exists; **flat** layout only

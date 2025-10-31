@@ -338,7 +338,7 @@ def export_correlations(db):
                 LOG.info(f"Loaded {len(correlations)} correlations from database view")
 
         except Exception as db_error:
-            LOG.warning(f"Database correlation view not available ({db_error}), " "falling back to Python computation")
+            LOG.warning(f"Database correlation view not available ({db_error}), falling back to Python computation")
             correlations = _compute_correlations_python(db)
 
     except Exception as e:
@@ -600,7 +600,7 @@ def export_patterns(db):
         except Exception:
             metadata["run_id"] = "unknown"
 
-        LOG.info(f"Generated {len(patterns)} cross-text patterns across " f"{len(metadata['analyzed_books'])} books")
+        LOG.info(f"Generated {len(patterns)} cross-text patterns across {len(metadata['analyzed_books'])} books")
 
     except Exception as e:
         LOG.warning(f"Could not compute cross-text patterns: {e}")

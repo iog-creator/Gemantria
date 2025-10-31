@@ -60,8 +60,7 @@ def validate_noun(hebrew_surface: str) -> dict[str, Any]:
                 )
             )
             db_info["verse_context"] = [
-                {"book": c[0], "chapter": int(c[1]), "verse": int(c[2]), "text": c[3]}
-                for c in ctx
+                {"book": c[0], "chapter": int(c[1]), "verse": int(c[2]), "text": c[3]} for c in ctx
             ]
     except RuntimeError:
         # No DSN / no driver: allowed; we just skip DB augmentation.
