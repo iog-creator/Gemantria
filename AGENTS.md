@@ -62,6 +62,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Rules audit strictness**: No ALLOW_RULES_GAP toggle; RESERVED stubs (047/048) maintain contiguous numbering
 - **Pre-commit ordering**: `share.sync` runs before `repo.audit` to ensure share/ directory is synchronized before validation
 - **Ruff version pinning**: CI workflows hard-pin ruff==0.13.0 with version verification to defeat cache drift (enforce-ruff.yml, lint-nightly.yml, soft-checks.yml, ci.yml)
+- **Share sync robustness**: Content-only validation (mtime checks removed) ensures sync works across different filesystem timestamps
 
 ### Evaluation
 * **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.

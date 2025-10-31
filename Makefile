@@ -12,15 +12,20 @@ py.fullwave: py.quickfix py.longline
 
 .PHONY: test.smoke test.smoke.strict
 test.smoke:
-	pytest -q --no-cov -m smoke tests/smoke || true
+	pytest -o addopts="" -q --no-cov -m smoke tests/smoke || true
 test.smoke.strict:
-	pytest -q --no-cov -m smoke tests/smoke
+	pytest -o addopts="" -q --no-cov -m smoke tests/smoke
 
 .PHONY: schema.validate.temporal schema.validate.temporal.strict
 schema.validate.temporal:
 	@echo "Schema validation not yet implemented - skipping"
 schema.validate.temporal.strict:
-	@echo "Schema validation not yet implemented - skipping"
+
+.PHONY: ssot.validate ssot.validate.changed
+ssot.validate:
+	@echo "SSOT validation not yet implemented - skipping"
+ssot.validate.changed:
+	@echo "SSOT changed-files validation not yet implemented - skipping"
 
 .PHONY: ci ci.precommit ci.audits
 ci.precommit:

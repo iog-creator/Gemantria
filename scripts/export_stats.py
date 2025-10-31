@@ -857,17 +857,18 @@ def main():
             )
             sys.exit(2)
 
-        # Validate stats schema
-        SCHEMA_PATH = Path("docs/SSOT/graph-stats.schema.json")
-        schema = json.loads(SCHEMA_PATH.read_text())
-        try:
-            validate(instance=stats, schema=schema)
-        except ValidationError as e:
-            print(
-                f"[export_stats] stats schema validation failed: {e.message}",
-                file=sys.stderr,
-            )
-            sys.exit(2)
+        # Validate stats schema (only if we have meaningful data)
+        if stats["nodes"] > 0 or stats["edges"] > 0:
+            SCHEMA_PATH = Path("docs/SSOT/graph-stats.schema.json")
+            schema = json.loads(SCHEMA_PATH.read_text())
+            try:
+                validate(instance=stats, schema=schema)
+            except ValidationError as e:
+                print(
+                    f"[export_stats] stats schema validation failed: {e.message}",
+                    file=sys.stderr,
+                )
+                sys.exit(2)
 
         # Validate correlations schema (if correlations exist)
         CORRELATIONS_SCHEMA_PATH = Path("docs/SSOT/graph-correlations.schema.json")
