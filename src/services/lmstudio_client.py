@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# Dependency checks
+import importlib.util
 import json
 import math
 import os
@@ -9,14 +11,11 @@ from typing import NamedTuple
 
 import requests
 
-# Dependency checks
-try:
-    import psycopg
-    from pgvector.psycopg import register_vector
+HAS_VECTOR_DB = (
+    importlib.util.find_spec("psycopg") is not None and importlib.util.find_spec("pgvector.psycopg") is not None
+)
 
-    HAS_VECTOR_DB = True
-except ImportError:
-    HAS_VECTOR_DB = False
+if not HAS_VECTOR_DB:
     import warnings
 
     warnings.warn(
@@ -144,7 +143,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
                 "messages": [
                     {
                         "role": "system",
-                        "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",
+                        "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",  # noqa: E501
                     },
                     {"role": "user", "content": "Query: health check\nDocument: test"},
                 ],
@@ -254,7 +253,7 @@ class LMStudioClient:
                     continue
                 raise QwenUnavailableError(error_msg) from e
             except requests.exceptions.Timeout as e:
-                error_msg = f"LM Studio timeout ({TIMEOUT}s) at {HOST}. Server may be overloaded. Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                error_msg = f"LM Studio timeout ({TIMEOUT}s) at {HOST}. Server may be overloaded. Attempt {attempt + 1}/{RETRY_ATTEMPTS}"  # noqa: E501
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -291,7 +290,7 @@ class LMStudioClient:
         return {"text": content, "tokens": res.get("usage", {}).get("total_tokens", 0)}
 
     def confidence_check(self, noun: dict, expected_value: int) -> float:
-        prompt = f"Rate the confidence (0.0 to 1.0) that the gematria value {noun['value']} for '{noun['name']}' is correct. Expected was {expected_value}. Return only a number between 0.0 and 1.0."
+        prompt = f"Rate the confidence (0.0 to 1.0) that the gematria value {noun['value']} for '{noun['name']}' is correct. Expected was {expected_value}. Return only a number between 0.0 and 1.0."  # noqa: E501
         payload = {
             "model": MATH_MODEL,
             "messages": [{"role": "user", "content": prompt}],
@@ -419,14 +418,14 @@ class LMStudioClient:
 <Instruct>: Given a theological theme, identify relevant biblical nouns.
 <Query>: {query}
 
-<Document>: {candidate}"""
+<Document>: {candidate}"""  # noqa: E501
 
                 payload = {
                     "model": model,
                     "messages": [
                         {
                             "role": "system",
-                            "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",
+                            "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. The answer can only be yes or no.",  # noqa: E501
                         },
                         {"role": "user", "content": prompt},
                     ],

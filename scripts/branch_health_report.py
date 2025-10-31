@@ -186,23 +186,23 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
             f"| Remote Only | {stats['remote_only']} | {stats['remote_only'] / stats['total_branches'] * 100:.1f}% |\n"
         )
         f.write(
-            f"| Synced (Local + Remote) | {stats['synced']} | {stats['synced'] / stats['total_branches'] * 100:.1f}% |\n"
+            f"| Synced (Local + Remote) | {stats['synced']} | {stats['synced'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(
             f"| With Pull Request | {stats['with_pr']} | {stats['with_pr'] / stats['total_branches'] * 100:.1f}% |\n"
         )
         f.write(
-            f"| Checks Passed | {stats['checks_passed']} | {stats['checks_passed'] / stats['total_branches'] * 100:.1f}% |\n"
+            f"| Checks Passed | {stats['checks_passed']} | {stats['checks_passed'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(
-            f"| Checks Failed | {stats['checks_failed']} | {stats['checks_failed'] / stats['total_branches'] * 100:.1f}% |\n"
+            f"| Checks Failed | {stats['checks_failed']} | {stats['checks_failed'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(
-            f"| Checks Pending | {stats['checks_pending']} | {stats['checks_pending'] / stats['total_branches'] * 100:.1f}% |\n"
+            f"| Checks Pending | {stats['checks_pending']} | {stats['checks_pending'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(f"| No Checks | {stats['no_checks']} | {stats['no_checks'] / stats['total_branches'] * 100:.1f}% |\n")
         f.write(
-            f"| Old Branches (>1 month) | {stats['old_branches']} | {stats['old_branches'] / stats['total_branches'] * 100:.1f}% |\n\n"
+            f"| Old Branches (>1 month) | {stats['old_branches']} | {stats['old_branches'] / stats['total_branches'] * 100:.1f}% |\n\n"  # noqa: E501
         )
 
         # Branch details
@@ -235,7 +235,7 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
                     checks_status = "⏳"
 
                 f.write(
-                    f"| {branch['name']} | {'✅' if branch['local_exists'] else ''} | {'✅' if branch['remote_exists'] else ''} | {pr_link} | {checks_status} | {branch['relative_age']} | {branch['commit_hash']} |\n"
+                    f"| {branch['name']} | {'✅' if branch['local_exists'] else ''} | {'✅' if branch['remote_exists'] else ''} | {pr_link} | {checks_status} | {branch['relative_age']} | {branch['commit_hash']} |\n"  # noqa: E501
                 )
 
             f.write("\n")
@@ -262,9 +262,6 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
 
 def main():
     """Main function."""
-    # Get repository info
-    repo_owner = "iog-creator"
-    repo_name = "Gemantria"
 
     print("🔍 Gathering branch information...")
     branches = get_branches()

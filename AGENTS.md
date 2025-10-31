@@ -21,6 +21,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
+- Vector DB: Optional pgvector support detected via `importlib.util.find_spec()` (no forced imports).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
 ## Workflow (small green PRs)
