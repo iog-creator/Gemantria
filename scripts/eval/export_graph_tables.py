@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import csv, json, pathlib
+import csv
+import json
+import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"

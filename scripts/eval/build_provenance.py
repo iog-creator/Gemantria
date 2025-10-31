@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-import hashlib, json, os, pathlib, subprocess, time
+import hashlib
+import json
+import os
+import pathlib
+import subprocess
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"

@@ -1,8 +1,10 @@
 from __future__ import annotations
+
 import os
 import re
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import Any, Iterable, Optional, Sequence, Tuple
+from typing import Any
 
 try:
     # psycopg 3 preferred
@@ -13,9 +15,9 @@ except Exception:  # pragma: no cover
     HAS_DB = False  # Import optional for CI paths without DSNs
 
 __all__ = [
-    "ReadOnlyViolation",
     "BibleReadOnly",
     "GematriaRW",
+    "ReadOnlyViolation",
     "get_bible_ro",
     "get_gematria_rw",
     "sql_is_write",
@@ -34,9 +36,9 @@ def sql_is_write(sql: str) -> bool:
 
 @dataclass
 class BibleReadOnly:
-    dsn: Optional[str]
+    dsn: str | None
 
-    def execute(self, sql: str, params: Optional[Sequence[Any]] = None) -> Iterable[Tuple]:
+    def execute(self, sql: str, params: Sequence[Any] | None = None) -> Iterable[tuple]:
         """
         Enforces read-only at the adapter level *before* any DB connection is touched.
         Requires %s parameterization; does not permit f-string interpolation.
@@ -58,9 +60,9 @@ class BibleReadOnly:
 
 @dataclass
 class GematriaRW:
-    dsn: Optional[str]
+    dsn: str | None
 
-    def execute(self, sql: str, params: Optional[Sequence[Any]] = None) -> Iterable[Tuple]:
+    def execute(self, sql: str, params: Sequence[Any] | None = None) -> Iterable[tuple]:
         if not self.dsn:
             raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
         if not HAS_DB:
