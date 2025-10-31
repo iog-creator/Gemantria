@@ -2,26 +2,26 @@ from __future__ import annotations
 
 import sys
 import trace
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Iterable, List, Sequence, Set
 
 import pytest
 
 
-def _resolve_paths(root: Path, values: Sequence[str]) -> List[Path]:
-    return [ (root / value).resolve() for value in values ]
+def _resolve_paths(root: Path, values: Sequence[str]) -> list[Path]:
+    return [(root / value).resolve() for value in values]
 
 
 @dataclass
 class MiniCov:
-    paths: List[Path]
+    paths: list[Path]
     fail_under: float
     reports: Sequence[str]
     tracer: trace.Trace = field(init=False)
     overall: float = field(init=False, default=100.0)
-    file_coverage: Dict[Path, float] = field(init=False, default_factory=dict)
-    missing_lines: Dict[Path, Set[int]] = field(init=False, default_factory=dict)
+    file_coverage: dict[Path, float] = field(init=False, default_factory=dict)
+    missing_lines: dict[Path, set[int]] = field(init=False, default_factory=dict)
     failed: bool = field(init=False, default=False)
 
     def __post_init__(self) -> None:
@@ -37,7 +37,7 @@ class MiniCov:
     def analyze(self) -> None:
         results = self.tracer.results()
         counts = getattr(results, "counts", {})
-        executed: Dict[Path, Set[int]] = {}
+        executed: dict[Path, set[int]] = {}
         for (filename, lineno), _ in counts.items():
             path = Path(filename).resolve()
             if not self._is_included(path):
@@ -46,8 +46,8 @@ class MiniCov:
 
         total_lines = 0
         total_hits = 0
-        coverage_per_file: Dict[Path, float] = {}
-        missing_by_file: Dict[Path, Set[int]] = {}
+        coverage_per_file: dict[Path, float] = {}
+        missing_by_file: dict[Path, set[int]] = {}
         for file_path in self._iter_python_files():
             relevant_lines = self._relevant_lines(file_path)
             if not relevant_lines:
@@ -90,8 +90,8 @@ class MiniCov:
                         continue
                     yield candidate
 
-    def _relevant_lines(self, path: Path) -> Set[int]:
-        relevant: Set[int] = set()
+    def _relevant_lines(self, path: Path) -> set[int]:
+        relevant: set[int] = set()
         in_docstring = False
         for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             stripped = line.strip()
@@ -182,10 +182,7 @@ def pytest_terminal_summary(terminalreporter: pytest.TerminalReporter, exitstatu
         for path, percentage in minicov.file_coverage.items():
             display_path = _display_path(Path(terminalreporter.config.rootpath), path)
             terminalreporter.write_line(f"  - {display_path}: {percentage:.1f}%")
-        terminalreporter.write_line(
-            "Overall coverage: "
-            f"{minicov.overall:.1f}% (fail-under={minicov.fail_under:.1f}%)"
-        )
+        terminalreporter.write_line(f"Overall coverage: {minicov.overall:.1f}% (fail-under={minicov.fail_under:.1f}%)")
         if "term-missing" in minicov.reports:
             for path, missing in minicov.missing_lines.items():
                 display_path = _display_path(Path(terminalreporter.config.rootpath), path)
