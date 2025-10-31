@@ -438,7 +438,7 @@ eval.release_manifest:
 ci.eval.release_manifest:
 	@python3 scripts/eval/build_release_manifest.py
 
-.PHONY: codex.task codex.grok codex.parallel
+.PHONY: codex.task codex.grok codex.parallel codex.mcp.edit codex.mcp.validate
 codex.task:
 	@ALLOWED="$(ALLOW_CODEX)"; \
 	IN_CI=false; \
@@ -470,3 +470,13 @@ codex.parallel:
 	  exit 0; \
 	fi; \
 	echo "$$TASKS" | tr '\r' '\n' | scripts/agents/codex-par.sh
+
+codex.mcp.edit:
+	@${EDITOR:-nano} ~/.cursor/mcp.json
+
+codex.mcp.validate:
+	@if command -v jq >/dev/null 2>&1; then \
+	  jq . ~/.cursor/mcp.json; \
+	else \
+	  python3 -m json.tool ~/.cursor/mcp.json; \
+	fi

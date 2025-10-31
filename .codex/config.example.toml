@@ -19,3 +19,15 @@ env_key  = "XAI_API_KEY"
 [profiles.grok4]
 model = "grok-4-fast"
 model_provider = "xai"
+
+# MCP Servers (Model Context Protocol)
+# Add MCP servers to extend Codex CLI capabilities
+[mcp_servers.codex-data]
+command = "npx"
+args = ["-y", "@codex-data/codex-mcp"]
+
+[mcp_servers.codex-data.env]
+CODEX_API_KEY = ""  # Set via environment variable: export CODEX_API_KEY=your-key
+
+# Usage: codex mcp add codex-data -- npx -y @codex-data/codex-mcp
+# List: codex mcp list

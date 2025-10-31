@@ -5,7 +5,14 @@
 ## Install
 
 ```bash
-npm i -g @openai/codex
+# Option 1: Global install (requires sudo)
+sudo npm i -g @openai/codex
+
+# Option 2: Local install (no sudo)
+npm i -g @openai/codex --prefix ~/.local
+export PATH="$HOME/.local/bin:$PATH"
+
+# Then login
 codex login
 ```
 
@@ -21,7 +28,80 @@ Export keys when needed:
 ```bash
 export OPENAI_API_KEY=...      # OpenAI
 export XAI_API_KEY=...         # xAI (Grok)
+export CODEX_API_KEY=...       # Codex.io (for MCP server)
 ```
+
+## MCP Server (Model Context Protocol)
+
+### Codex CLI as MCP Server
+
+Codex CLI itself can act as an MCP server, allowing Cursor to use Codex directly. **No API key needed** - Codex CLI uses your ChatGPT subscription via OAuth login.
+
+### Cursor MCP Integration
+
+**Configure Codex CLI in Cursor's global MCP config:**
+
+1. **Login to Codex CLI** (uses your ChatGPT subscription, no API key):
+   ```bash
+   codex login        # OAuth/device auth flow
+   codex login status # Verify login status
+   ```
+
+2. **Add Codex to Cursor's global MCP config** (`~/.cursor/mcp.json`):
+   ```json
+   {
+     "mcpServers": {
+       "codex": {
+         "command": "codex",
+         "args": ["mcp-server"]
+       }
+     }
+   }
+   ```
+   **Note:** This is configured in your **global** `~/.cursor/mcp.json` file (not the project `.cursor/mcp.json`).
+
+3. **Restart Cursor** to load the MCP server.
+
+4. **Verify in Cursor:** Settings → MCP → "codex" should show as Connected.
+
+### Using Codex via Cursor MCP
+
+Once configured, you can use Codex through Cursor's AI features:
+- "Use the 'codex' MCP to read the workspace Makefile and propose a minimal fix."
+- Codex will run with your ChatGPT subscription, no separate API key needed.
+
+### Quick Setup & Verification Steps
+
+**1. Login to Codex CLI:**
+```bash
+codex login        # OAuth/device auth (no API key needed)
+codex status       # Verify login status
+```
+
+**2. Configure Cursor MCP:**
+```bash
+make codex.mcp.edit      # Edit global MCP config
+make codex.mcp.validate  # Validate MCP config JSON
+```
+
+**3. Restart Cursor completely**
+
+**4. Verify MCP connection:**
+- Cursor Settings → MCP → Look for "codex" server (should show "Connected")
+
+**5. Smoke test in Cursor:**
+- "Use the 'codex' MCP to list the last 3 git commits with one-line messages."
+
+**6. Terminal smoke test:**
+```bash
+codex exec -C . "List the last 3 git commits with one-line messages."
+```
+
+### Note on External MCP Servers
+
+Codex CLI can also connect to external MCP servers (see `.codex/config.example.toml`), but the primary integration is Codex CLI itself acting as an MCP server for Cursor.
+
+**Important:** The `@codex-data/codex-mcp` package is **not** OpenAI's Codex CLI - it's a separate blockchain data service that requires a different API key. For Cursor integration, use **Codex CLI itself** (`codex mcp-server`).
 
 ## Safety Defaults
 
