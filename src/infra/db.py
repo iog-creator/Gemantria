@@ -23,9 +23,7 @@ __all__ = [
     "sql_is_write",
 ]
 
-WRITE_RE = re.compile(
-    r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I
-)
+WRITE_RE = re.compile(r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I)
 
 
 class ReadOnlyViolation(RuntimeError):
@@ -55,8 +53,7 @@ class BibleReadOnly:
             raise RuntimeError("psycopg not available in this environment")
         with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
             cur.execute(sql, params or ())
-            for row in cur:
-                yield row
+            yield from cur
 
 
 @dataclass
@@ -71,8 +68,7 @@ class GematriaRW:
         with psycopg.connect(self.dsn) as conn, conn.cursor() as cur:
             cur.execute(sql, params or ())
             if cur.description:
-                for row in cur:
-                    yield row
+                yield from cur
 
 
 def get_bible_ro() -> BibleReadOnly:

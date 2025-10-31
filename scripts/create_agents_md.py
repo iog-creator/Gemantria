@@ -131,7 +131,7 @@ def create_tools_agents_md(dir_path: str) -> str:
 
 ## Directory Purpose
 
-The `scripts/` directory contains executable scripts for pipeline operations, reporting, testing, and maintenance tasks. These scripts provide command-line interfaces for common development and operational workflows.
+The `scripts/` directory contains executable scripts for pipeline operations, reporting, testing, and maintenance tasks. These scripts provide command-line interfaces for common development and operational workflows.  # noqa: E501
 
 ## Key Scripts
 
@@ -241,7 +241,7 @@ ensure_env_loaded()
 
 ## Directory Purpose
 
-The `migrations/` directory contains database schema migration scripts for the Gematria analysis system. These migrations ensure consistent database schema evolution across development and production environments.
+The `migrations/` directory contains database schema migration scripts for the Gematria analysis system. These migrations ensure consistent database schema evolution across development and production environments.  # noqa: E501
 
 ## Migration Scripts
 
@@ -291,7 +291,7 @@ The `migrations/` directory contains database schema migration scripts for the G
 
 ## Directory Purpose
 
-The `tests/` directory contains comprehensive test suites for the Gematria analysis system, ensuring code quality, correctness, and reliability through automated validation.
+The `tests/` directory contains comprehensive test suites for the Gematria analysis system, ensuring code quality, correctness, and reliability through automated validation.  # noqa: E501
 
 ## Test Organization
 
@@ -414,7 +414,7 @@ def create_docs_agents_md(dir_path: str) -> str:
 
 ## Directory Purpose
 
-The `docs/ADRs/` directory contains Architecture Decision Records that document significant architectural decisions made during the development of the Gematria analysis system.
+The `docs/ADRs/` directory contains Architecture Decision Records that document significant architectural decisions made during the development of the Gematria analysis system.  # noqa: E501
 
 ## ADR Categories
 
@@ -485,7 +485,7 @@ The `docs/ADRs/` directory contains Architecture Decision Records that document 
 
 ## Directory Purpose
 
-The `docs/SSOT/` directory contains Single Source of Truth documents that define canonical schemas, contracts, and specifications for the Gematria analysis system.
+The `docs/SSOT/` directory contains Single Source of Truth documents that define canonical schemas, contracts, and specifications for the Gematria analysis system.  # noqa: E501
 
 ## SSOT Documents
 
@@ -569,7 +569,7 @@ The `docs/SSOT/` directory contains Single Source of Truth documents that define
 
 ## Directory Purpose
 
-The `docs/forest/` directory contains high-level project overviews and navigation aids that help developers and stakeholders understand the overall architecture and current state of the Gematria analysis system.
+The `docs/forest/` directory contains high-level project overviews and navigation aids that help developers and stakeholders understand the overall architecture and current state of the Gematria analysis system.  # noqa: E501
 
 ## Forest Documents
 
@@ -737,9 +737,7 @@ def main():
         print(f"\n✅ Created {created} AGENTS.md files")
         print("Run 'make rules.audit docs.audit' to verify compliance")
     else:
-        print(
-            f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)"
-        )
+        print(f"\n📋 Would create {created} AGENTS.md files (use without --dry-run to create)")
 
 
 if __name__ == "__main__":

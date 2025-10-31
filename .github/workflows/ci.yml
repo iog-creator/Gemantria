@@ -4,6 +4,9 @@ on:
     branches: [ main, master, develop ]
   pull_request:
     branches: [ "**" ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -37,6 +40,8 @@ jobs:
         uses: pre-commit/action@v3.0.1
         with:
           extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+        env:
+          # ALLOW_RULES_GAP removed - RESERVED stubs now fill gaps
 
       # Pushes: run on all files (e.g., pushes to main)
       - name: Pre-commit (push all-files)
@@ -59,6 +64,15 @@ jobs:
       - name: Smoke tests
         run: |
           make test.smoke
+
+      - name: SSOT JSONSchema (PR-diff)
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -e
+          make -s ssot.validate.changed
 
       - name: Edge reclassify (non-blocking)
         run: |

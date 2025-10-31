@@ -46,22 +46,14 @@ def main() -> int:
 
     ts = time.strftime("%Y%m%d%H%M%S")
     out_path = EXPORTS / f"graph_sanitized_{ts}.json"
-    out_path.write_text(
-        json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    out_path.write_text(json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8")
 
     # lightweight marker to latest sanitized
-    (EXPORTS / "graph_sanitized.json").write_text(
-        json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (EXPORTS / "graph_sanitized.json").write_text(json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8")
 
-    print(
-        f"[data.sanitize] kept_edges={len(kept_edges)} dropped_edges={len(dropped_edges)}"
-    )
+    print(f"[data.sanitize] kept_edges={len(kept_edges)} dropped_edges={len(dropped_edges)}")
     print(f"[data.sanitize] wrote {out_path.relative_to(ROOT)}")
-    print(
-        f"[data.sanitize] wrote {(EXPORTS / 'graph_sanitized.json').relative_to(ROOT)}"
-    )
+    print(f"[data.sanitize] wrote {(EXPORTS / 'graph_sanitized.json').relative_to(ROOT)}")
     print("[data.sanitize] OK")
     return 0
 

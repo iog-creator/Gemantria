@@ -40,9 +40,7 @@ def main() -> int:
 
     edges = data.get("edges") or data.get("graph", {}).get("edges")
     if edges is None:
-        print(
-            "[edges] WARN: no edges key found in graph JSON; skipping.", file=sys.stderr
-        )
+        print("[edges] WARN: no edges key found in graph JSON; skipping.", file=sys.stderr)
         return 0
 
     counts = {"strong": 0, "weak": 0, "other": 0}
@@ -70,7 +68,15 @@ def main() -> int:
         # clamp to [0,1]
         strength = max(0.0, min(1.0, strength))
         e["edge_strength"] = strength
-        cls = classify_strength(strength)
+
+        # SSOT edge_strength first; legacy strength; then cosine/similarity
+        s = e.get("edge_strength")
+        if s is None:
+            s = e.get("strength")
+        if s is None:
+            s = e.get("cosine") or e.get("similarity") or 0.0
+
+        cls = classify_strength(float(s))
         e["class"] = cls
         counts[cls] += 1
 

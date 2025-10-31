@@ -18,11 +18,7 @@ except Exception:
     )
     sys.exit(2)
 
-DSN = (
-    os.getenv("GEMATRIA_DSN")
-    or os.getenv("DB_DSN")
-    or "postgresql://localhost/gemantria"
-)
+DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DB_DSN") or "postgresql://localhost/gemantria"
 
 PROBES = [
     (
@@ -55,9 +51,7 @@ def main() -> int:
                     if verdict:
                         print(f"[exports.smoke] OK {label}: {row[0]}")
                     else:
-                        print(
-                            f"[exports.smoke] FAIL {label}: {row[0]}", file=sys.stderr
-                        )
+                        print(f"[exports.smoke] FAIL {label}: {row[0]}", file=sys.stderr)
                         failures += 1
                 except Exception as e:
                     print(f"[exports.smoke] FAIL {label}: {e}", file=sys.stderr)

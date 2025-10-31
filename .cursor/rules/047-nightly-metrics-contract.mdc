@@ -1,3 +1,0 @@
-# 047 — Nightly Metrics Contract (AlwaysApply)
-- Nightlies produce JSONL history artifacts and standardized HINT lines.
-- Badges workflow is artifact-first; auto-commit is optional via repo variable.

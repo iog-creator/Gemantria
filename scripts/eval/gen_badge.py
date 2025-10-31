@@ -3,7 +3,7 @@
 # Usage: gen_badge.py "label" "value" "color" > badge.svg
 import sys
 
-label, value, color = (sys.argv + ["", "", ""])[1:4]
+label, value, color = ([*sys.argv, "", "", ""])[1:4]
 # Basic left/right boxes; keeps it tiny & readable.
 svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="160" height="20"
      role="img" aria-label="{label}: {value}">
