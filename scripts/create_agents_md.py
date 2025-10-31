@@ -63,7 +63,7 @@ def get_missing_agents_files() -> dict[str, list[str]]:
     required = get_required_directories()
     existing = get_existing_agents_files()
 
-    missing = {"source": [], "tools": [], "docs": []}
+    missing: dict[str, list[str]] = {"source": [], "tools": [], "docs": []}
 
     # Check source directories
     for src_subdir in required["source"]:
@@ -131,7 +131,8 @@ def create_tools_agents_md(dir_path: str) -> str:
 
 ## Directory Purpose
 
-The `scripts/` directory contains executable scripts for pipeline operations, reporting, testing, and maintenance tasks. These scripts provide command-line interfaces for common development and operational workflows.  # noqa: E501
+The `scripts/` directory contains executable scripts for pipeline operations, reporting, testing, and maintenance tasks.
+These scripts provide command-line interfaces for common development and operational workflows.
 
 ## Key Scripts
 
@@ -241,7 +242,8 @@ ensure_env_loaded()
 
 ## Directory Purpose
 
-The `migrations/` directory contains database schema migration scripts for the Gematria analysis system. These migrations ensure consistent database schema evolution across development and production environments.  # noqa: E501
+The `migrations/` directory contains database schema migration scripts for the Gematria analysis system.
+These migrations ensure consistent database schema evolution across development and production environments.
 
 ## Migration Scripts
 
@@ -291,7 +293,8 @@ The `migrations/` directory contains database schema migration scripts for the G
 
 ## Directory Purpose
 
-The `tests/` directory contains comprehensive test suites for the Gematria analysis system, ensuring code quality, correctness, and reliability through automated validation.  # noqa: E501
+The `tests/` directory contains comprehensive test suites for the Gematria analysis system,
+ensuring code quality, correctness, and reliability through automated validation.
 
 ## Test Organization
 
@@ -404,6 +407,33 @@ tests/
 <!-- Add test category to ADR mappings here -->
 """
 
+    # Fallback for unrecognized tool directories
+    template = f"""# AGENTS.md - {dir_path} Directory
+
+## Directory Purpose
+
+The `{dir_path}/` directory contains {dir_name} tools for the Gematria analysis pipeline.
+
+## Key Tools
+
+<!-- Add key tools and their purposes here -->
+
+## Tool Categories
+
+<!-- Add tool categories and their purposes here -->
+
+## Tool Standards
+
+<!-- Add tool standards and conventions here -->
+
+## Related ADRs
+
+| Tool/Component | Related ADRs |
+|----------------|--------------|
+<!-- Add ADR references here -->
+"""
+    return template
+
 
 def create_docs_agents_md(dir_path: str) -> str:
     """Create AGENTS.md content for documentation directories."""
@@ -414,7 +444,8 @@ def create_docs_agents_md(dir_path: str) -> str:
 
 ## Directory Purpose
 
-The `docs/ADRs/` directory contains Architecture Decision Records that document significant architectural decisions made during the development of the Gematria analysis system.  # noqa: E501
+The `docs/ADRs/` directory contains Architecture Decision Records that document significant architectural decisions
+made during the development of the Gematria analysis system.
 
 ## ADR Categories
 
@@ -485,7 +516,8 @@ The `docs/ADRs/` directory contains Architecture Decision Records that document 
 
 ## Directory Purpose
 
-The `docs/SSOT/` directory contains Single Source of Truth documents that define canonical schemas, contracts, and specifications for the Gematria analysis system.  # noqa: E501
+The `docs/SSOT/` directory contains Single Source of Truth documents that define canonical schemas, contracts,
+and specifications for the Gematria analysis system.
 
 ## SSOT Documents
 
@@ -564,90 +596,9 @@ The `docs/SSOT/` directory contains Single Source of Truth documents that define
 | webui-contract.md | ADR-022 | Backend-frontend visualization contract |
 """
 
-    elif dir_name == "forest":
-        return """# AGENTS.md - Forest Directory
-
-## Directory Purpose
-
-The `docs/forest/` directory contains high-level project overviews and navigation aids that help developers and stakeholders understand the overall architecture and current state of the Gematria analysis system.  # noqa: E501
-
-## Forest Documents
-
-### Overview Documents
-- **overview.md**: Comprehensive project overview with architecture diagrams
-- **README.md**: Navigation guide for forest documents
-
-### Navigation Aids
-<!-- Add navigation and overview documents here -->
-
-## Forest Generation
-
-### Automatic Updates
-- **generate_forest.py**: Script that rebuilds forest documents from source
-- **Rule 025**: Phase gate requiring forest regeneration before PRs
-- **CI Integration**: Automated forest updates in CI pipeline
-
-### Content Sources
-- **ADR Analysis**: Architecture decisions distilled into overviews
-- **Rule Synthesis**: Cursor rules summarized for project context
-- **Code Analysis**: Key components and relationships extracted
-- **Documentation Aggregation**: Cross-references between all docs
-
-## Forest Standards
-
-### Document Structure
-- **Executive Summary**: High-level project status and goals
-- **Architecture Overview**: Key components and relationships
-- **Current Phase**: Active development focus and priorities
-- **Quality Metrics**: Coverage, test status, and compliance metrics
-
-### Update Frequency
-- **Pre-PR**: Forest must be regenerated before pull requests
-- **Phase Changes**: Major updates when entering new development phases
-- **Architecture Changes**: Updates when significant architectural decisions are made
-
-### Validation Checks
-- **Completeness**: All major components documented
-- **Accuracy**: Information reflects current codebase
-- **Consistency**: No conflicts with other documentation
-- **Navigation**: Clear paths to detailed documentation
-
-## Development Integration
-
-### PR Requirements
-1. **Forest Freshness**: Run `make generate.forest` before PR creation
-2. **Review Check**: Ensure forest documents reflect proposed changes
-3. **Navigation Update**: Update forest navigation if new documents added
-
-### Development Workflow
-1. **Context Gathering**: Use forest documents for project orientation
-2. **Architecture Reference**: Check forest overviews for design context
-3. **Navigation Aid**: Use forest to locate relevant detailed documentation
-
-## Quality Assurance
-
-### Forest Validation
-- **Completeness Check**: All phases and components represented
-- **Accuracy Verification**: Content matches current implementation
-- **Link Validation**: All references point to existing documents
-- **Update Verification**: Forest reflects recent changes
-
-### Maintenance Procedures
-- **Automated Updates**: Scripts handle most forest maintenance
-- **Manual Review**: Human verification of generated content
-- **Issue Tracking**: Problems with forest documents tracked as issues
-- **Improvement Process**: Continuous improvement of generation scripts
-
-## Related ADRs
-
-| Document | Related ADRs | Description |
-|----------|--------------|-------------|
-| overview.md | ADR-025 | Forest overview and phase gate requirements |
-| generate_forest.py | ADR-025 | Automated forest generation system |
-"""
-
-    # Generic docs template
-    return f"""# AGENTS.md - {dir_path} Directory
+    else:
+        # Generic docs template
+        return f"""# AGENTS.md - {dir_path} Directory
 
 ## Directory Purpose
 

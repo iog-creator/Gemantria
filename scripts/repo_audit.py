@@ -122,7 +122,8 @@ print("== repo_audit ==")
 for sev, msg in issues:
     print(f"{sev}: {msg}")
 print("== repo_audit summary ==")
-print(
-    f"errors={sum(1 for s, _ in issues if s == 'ERR')}, warnings={sum(1 for s, _ in issues if s == 'WARN')}, info={sum(1 for s, _ in issues if s == 'INFO')}"
-)
+error_count = sum(1 for s, _ in issues if s == "ERR")
+warn_count = sum(1 for s, _ in issues if s == "WARN")
+info_count = sum(1 for s, _ in issues if s == "INFO")
+print(f"errors={error_count}, warnings={warn_count}, info={info_count}")
 sys.exit(1 if any(s == "ERR" for s, _ in issues) else 0)

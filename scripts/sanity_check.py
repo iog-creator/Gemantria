@@ -14,15 +14,15 @@ project_root = os.path.dirname(script_dir)
 src_path = os.path.join(project_root, "src")
 sys.path.insert(0, src_path)
 
-from src.infra.env_loader import ensure_env_loaded
-from src.nodes.collect_nouns_db import collect_nouns_for_book
-from src.nodes.enrichment import enrichment_node
-from src.nodes.network_aggregator import (
+from src.infra.env_loader import ensure_env_loaded  # noqa: E402
+from src.nodes.collect_nouns_db import collect_nouns_for_book  # noqa: E402
+from src.nodes.enrichment import enrichment_node  # noqa: E402
+from src.nodes.network_aggregator import (  # noqa: E402
     _build_document_string,
     _knn_pairs,
     _l2_normalize,
 )
-from src.services.lmstudio_client import get_lmstudio_client
+from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
 
 # Load environment
 ensure_env_loaded()
