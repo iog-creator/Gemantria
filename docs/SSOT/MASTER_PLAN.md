@@ -128,4 +128,15 @@
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
+| 039 | # id: 039_EXECUTION_CONTRACT |
+| 040 | # id: 040_CI_TRIAGE_PLAYBOOK |
+| 041 | # id: 041_PR_MERGE_POLICY |
+| 042 | # 042 — Formatter Single Source of Truth (AlwaysApply) |
+| 043 | # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) |
+| 044 | # 044 — Share Manifest Contract (AlwaysApply) |
+| 045 | # 045 — Rerank Blend is SSOT (AlwaysApply) |
+| 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
+| 047 | # --- |
+| 048 | # --- |
+| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_TABLE_END -->

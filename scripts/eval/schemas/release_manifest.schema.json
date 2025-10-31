@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["generated_at","artifact_count","artifacts"],
+  "properties": {
+    "generated_at": { "type": "integer" },
+    "artifact_count": { "type": "integer" },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "size": { "type": ["integer","null"] },
+          "sha256": { "type": ["string","null"] }
+        }
+      }
+    }
+  }
+}
