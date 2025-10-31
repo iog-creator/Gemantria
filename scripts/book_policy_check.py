@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Quick policy check for chapter-mode governance gates."""
+
 import os
 import sys
 from pathlib import Path

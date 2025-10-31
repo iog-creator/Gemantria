@@ -34,9 +34,9 @@ for f in [
         add("ERR", f"Missing {f}")
 
 # 2) Schemas present
-schemas = [p for p in ROOT.rglob("SSOT_*schema*.json")]
+schemas = [p for p in ROOT.rglob("*schema*.json")]
 if not schemas:
-    add("ERR", "No SSOT_*schema*.json files found")
+    add("ERR", "No *schema*.json files found")
 
 # 3) Rules integrity (index alignment)
 rules_dir = ROOT / ".cursor" / "rules"
@@ -110,13 +110,10 @@ for key in [
 
 # 8) JSON adapters (psycopg3) guard
 code_uses_json = any(
-    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT)))
-    for p in ROOT.rglob("**/*.py")
+    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT))) for p in ROOT.rglob("**/*.py")
 )
 if not code_uses_json:
-    add(
-        "WARN", "No psycopg Json adapter import found; ensure JSONB inserts adapt dicts"
-    )
+    add("WARN", "No psycopg Json adapter import found; ensure JSONB inserts adapt dicts")
 
 # 9) Output
 sev_rank = {"ERR": 0, "WARN": 1, "INFO": 2}

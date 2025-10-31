@@ -6,8 +6,7 @@ import pytest
 from src.infra.checkpointer import get_checkpointer
 
 pytestmark = pytest.mark.skipif(
-    os.getenv("CHECKPOINTER", "memory").lower() != "postgres"
-    or not os.getenv("GEMATRIA_DSN"),
+    os.getenv("CHECKPOINTER", "memory").lower() != "postgres" or not os.getenv("GEMATRIA_DSN"),
     reason="Postgres checkpointer not configured for integration test",
 )
 
@@ -77,9 +76,7 @@ def test_postgres_checkpointer_list_with_data():
     configs = []
     for i in range(3):
         checkpoint_id = f"cp-{i:03d}"
-        config = {
-            "configurable": {"thread_id": thread_id, "checkpoint_id": checkpoint_id}
-        }
+        config = {"configurable": {"thread_id": thread_id, "checkpoint_id": checkpoint_id}}
         checkpoint = {"state": {"key": f"value-{i}"}}
         metadata = {"index": i}
         cp.put(config, checkpoint, metadata)
@@ -103,9 +100,7 @@ def test_postgres_checkpointer_list_with_before():
     # Put checkpoints
     for i in range(5):
         checkpoint_id = f"cp-{i:03d}"
-        config = {
-            "configurable": {"thread_id": thread_id, "checkpoint_id": checkpoint_id}
-        }
+        config = {"configurable": {"thread_id": thread_id, "checkpoint_id": checkpoint_id}}
         checkpoint = {"state": {"key": f"value-{i}"}}
         cp.put(config, checkpoint, {})
         time.sleep(0.001)
@@ -121,11 +116,7 @@ def test_postgres_checkpointer_list_with_before():
         before_checkpoint[0]["configurable"]["checkpoint_id"],
     )  # (created_at, checkpoint_id)
 
-    next_batch = list(
-        cp.list(
-            {"configurable": {"thread_id": thread_id}}, before=before_param, limit=2
-        )
-    )
+    next_batch = list(cp.list({"configurable": {"thread_id": thread_id}}, before=before_param, limit=2))
     assert len(next_batch) == 2
 
     # Should not overlap

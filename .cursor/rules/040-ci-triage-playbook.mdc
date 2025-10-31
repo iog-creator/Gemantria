@@ -1,0 +1,15 @@
+id: 040_CI_TRIAGE_PLAYBOOK
+version: 1
+alwaysApply: true
+title: CI Triage Playbook (surgical)
+policy:
+  - Minimal fixes only, within current PR scope.
+  - Allowed self-heals (same PR):
+    - De-duplicate Makefile targets; add missing .PHONY for new ones.
+    - Add/repair share/SHARE_MANIFEST.json so share.sync passes.
+    - Add mypy.ini with ignore_missing_imports = True (no code edits).
+    - Add scripts/ci/db_ensure.sh and wire under verify targets.
+  - Disallowed: changing workflows/governance, renaming gates, adding deps.
+acceptance:
+  - make -s ops.verify → ends "[ops.verify] OK"
+  - share.sync completes with no errors when required.

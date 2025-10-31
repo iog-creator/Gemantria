@@ -1,0 +1,58 @@
+version: 0.2
+run_id: local-dev
+tasks:
+  - key: smoke_hello
+    kind: print
+    args:
+      message: "hello, gemantria"
+
+  - key: gate_presence_rules
+    kind: grep
+    args:
+      file: "docs/SSOT/RULES_INDEX.md"
+      patterns: ["037", "038"]
+
+  # Ensure the core export exists (supported kind)
+  - key: exports_presence
+    kind: verify_files
+    args:
+      must_exist:
+        - "exports/graph_latest.json"
+
+  # NOTE: The evaluator now supports json_assert/frac_in_range and file_glob.
+  # Uncomment these tasks when ready to enable them.
+  # - key: exports_edge_strength_spread
+  #   kind: json_assert
+  #   args:
+  #     file: "exports/graph_latest.json"
+  #     asserts:
+  #       - name: "edge strength fraction in [0.30,0.95]"
+  #         path: "edges[*].strength"
+  #         op: "frac_in_range"
+  #         min: 0.30
+  #         max: 0.95
+  #         min_frac: 0.70
+
+  # NOTE: Likewise, keep the dim check as a placeholder for future evaluator support.
+  # - key: exports_nodes_dim_if_present
+  #   kind: json_assert
+  #   args:
+  #     file: "exports/graph_latest.json"
+  #     asserts:
+  #       - name: "nodes[*].embedding_dim==1024 if present"
+  #         path: "nodes[*].embedding_dim"
+  #         op: "if_present_eq_all"
+  #         value: 1024
+
+  # Reference integrity check for graph data (supported with thresholds substitution)
+  - key: graph_ref_integrity
+    kind: ref_integrity
+    args:
+      graph_file: "exports/graph_latest.json"
+      max_self_loops: "${thresholds:integrity.max_self_loops}"
+      max_duplicate_edges: "${thresholds:integrity.max_duplicate_edges}"
+      max_orphaned_concepts: "${thresholds:integrity.max_orphaned_concepts}"
+      min_concept_coverage: "${thresholds:integrity.min_concept_coverage}"
+
+success_policy:
+  mode: all_must_pass
