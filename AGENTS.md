@@ -155,3 +155,31 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 <!-- RULES_INVENTORY_END -->
+
+---
+
+## Editor Baseline (Cursor 2.0)
+
+**Purpose:** speed up surgical PR work while preserving SSOT governance.
+
+### Settings (per developer)
+
+- **Multi-Agents:** **Enabled**; set parallel agents to **4–8** as hardware allows. Cursor isolates agents via **git worktrees / remote machines** to avoid file conflicts. :contentReference[oaicite:1]{index=1}
+
+- **Models:** **Plan with your top reasoner**; **Build with *Composer*** (Cursor's agentic coding model, ~**4× faster**, most turns **<30s**). :contentReference[oaicite:2]{index=2}
+
+- **Browser for Agent:** Allowed **in-editor** for research/design only (CI remains hermetic). Browser is **GA** in 2.0 and can forward DOM to the agent. :contentReference[oaicite:3]{index=3}
+
+- **Sandboxed Terminals:** Prefer sandboxed agent shells (no network) where supported; keep our CI "no network" invariant regardless. :contentReference[oaicite:4]{index=4}
+
+### Team Rules / Commands
+
+- SSOT remains in-repo (`.cursor/rules/*.mdc`). Optional dashboard **Team Rules/Commands** may drift or fail to sync; if used, generate them **from** the repo and treat dashboard as a mirror only. :contentReference[oaicite:5]{index=5}
+
+### Guardrails we keep
+
+- **No outbound network in CI.** Use hermetic validators and artifacts-first routing.
+
+- **No `share/**` writes in CI.** Route CI outputs to `_artifacts/**`.
+
+- **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.
