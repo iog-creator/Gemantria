@@ -1,7 +1,10 @@
 name: system-enforcement
 on:
   pull_request:
-    types: [opened, synchronize, edited]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
