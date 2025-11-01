@@ -1,23 +1,45 @@
-# NEXT_STEPS (author: GPT-5)
+# NEXT_STEPS v6.2.3 (Governance + CI + Guards Hardened)
 
-## Branch
-feature/integrate-core-branches-003
+## Status
+✅ Phase 0 complete: Governance v6.2.3, internal guardrails active, infra tagged `infra/v6.2.3`
 
-## Tasks (Cursor executes these)
+## Active Development Tracks
 
-### 0) Inventory & verify outstanding branches
-- [ ] Paste output:
-```
-git ls-remote --heads origin | rg -n "feature/(pr-002-bible-ro|pr-003-batch-semantics|pr-004-postgres-checkpointer|infra-guards-001|ops-pr-template)"
-```
-Branch status: infra-guards-001 exists locally but not on remote (work likely merged into policy-guards-002).
+### Phase 1 — Data Layer (DB foundation)
+**Branch:** `dev/p1-db-schema` (PR #138)
+**Scope:** Finalize schemas (`concepts`, `concept_relations`, `concept_centrality`), migrations, seed/fixtures, RO `bible_db` vs RW `gematria`
+**Exit:** `make db.migrate` green; CI smoke tolerates empty DB; schema docs exported
+**Status:** ⏳ Ready for development
 
-### 1) Integration playbook (repeat for EACH branch in this exact order)
-**Order (strict):**
-1) `feature/ops-pr-template`   (docs/workflow)
-2) `feature/infra-guards-001`  (infra; dedupe with what's already on main) - LOCAL ONLY
-3) `feature/pr-004-postgres-checkpointer`  (persistence)
-4) `feature/pr-003-batch-semantics`        (processing)
+### Phase 2 — Pipeline Core (LangGraph)
+**Branch:** `dev/p2-pipeline` (PR #139)
+**Scope:** Noun extraction → gematria → enrichment → aggregation; checkpointer; deterministic IDs; retries
+**Exit:** `make pipeline.smoke` local + CI `SKIP_DB` green; envelope-first logs; deterministic seeds
+**Status:** ⏳ Ready for development
+
+### Phase 3 — Exports & Badges
+**Branch:** `dev/p3-exports` (PR #140)
+**Scope:** CSV/JSONL exports, stats, badges; no writes to `share/` in CI; validate export schemas only when data present
+**Exit:** `ci.exports.smoke` passes with data and with empty DB (conditional validation)
+**Status:** ⏳ Ready for development
+
+## Development Workflow (v6.2.3)
+
+### Per-PR Process
+1. **Branch:** Use existing draft PR branches above
+2. **Work:** Make changes, commit with conventional format
+3. **Test:** `make [area].smoke` + `ruff format --check . && ruff check .`
+4. **PR:** Mark ready, ensure policy-gate + build-pr pass
+5. **Merge:** Bot-mediated squash merge when conditions met
+
+### Quality Gates (Active)
+- **policy-gate:** Conventional Commits + signed commit verification
+- **build-pr:** CI checks with hermetic behavior
+- **human approval:** Required for merge
+- **bot mediation:** Mergify handles merge when conditions met
+
+## Current Operator Pick
+**P1-DB**: Implement migrations + `make db.migrate` + CI empty-DB tolerance.
 5) `feature/pr-002-bible-ro`               (core data)
 
 For each branch `<B>` do the following block; paste evidence after each:
