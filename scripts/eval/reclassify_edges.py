@@ -42,9 +42,7 @@ def _to_float(name: str, default: float) -> float:
         print(f"[HINT] {name}='{v}' invalid; using default {default}", file=sys.stderr)
         return default
     if not (0.0 <= x <= 1.0):
-        print(
-            f"[HINT] {name}={x} out of [0,1]; using default {default}", file=sys.stderr
-        )
+        print(f"[HINT] {name}={x} out of [0,1]; using default {default}", file=sys.stderr)
         return default
     return x
 
