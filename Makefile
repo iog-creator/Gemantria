@@ -2,8 +2,24 @@
 
 
 
-.PHONY: py.format py.lint py.quickfix py.longline py.fullwave \
+.PHONY: help py.format py.lint py.quickfix py.longline py.fullwave \
         eval.graph.calibrate.adv ci.exports.smoke gemini.task gemini.parallel gemini.session
+
+help:
+	@echo "Gemantria OPS Contract v6: ruff is SSOT; make book.smoke / eval.graph.calibrate.adv / ci.exports.smoke; fail-closed on share."
+	@echo ""
+	@echo "Available targets:"
+	@echo "  py.format          Format Python code with ruff"
+	@echo "  py.lint            Lint Python code with ruff"
+	@echo "  py.fullwave        Full Python quality wave (fix + format + lint)"
+	@echo "  test.smoke         Run smoke tests"
+	@echo "  book.smoke         Dry-run book pipeline (hermetic)"
+	@echo "  eval.graph.calibrate.adv  Advanced graph calibration"
+	@echo "  ci.exports.smoke   CI exports smoke test"
+	@echo "  ops.verify         Verify OPS contract compliance"
+	@echo "  share.sync         Sync share directory"
+	@echo ""
+
 py.format:
 	@ruff format src scripts tools
 py.lint:

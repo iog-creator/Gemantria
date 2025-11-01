@@ -18,6 +18,10 @@
 - [ ] If Makefile edited: `make -s targets.check.dupes` → OK
 - [ ] No governance/workflow drift
 - [ ] CI green
+- [ ] Ruff format + check green
+- [ ] make book.smoke / eval.graph.calibrate.adv / ci.exports.smoke green
+- [ ] Evidence pasted per OPS contract (see AGENTS.md)
+- [ ] If branch was dirty: hygiene PR created first (see .cursor/rules/050-ops-contract.mdc)
 
 ## Emitted Hints (REQUIRED)
 - List the key runtime HINT lines your changes will emit (e.g., `HINT: verify: database bootstrap OK`) so CI logs are clear for both Cursor and reviewers.

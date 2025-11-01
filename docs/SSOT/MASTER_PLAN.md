@@ -139,4 +139,5 @@
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
+| 050 | # 050 — OPS Contract Enforcement |
 <!-- RULES_TABLE_END -->

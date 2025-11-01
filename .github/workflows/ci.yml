@@ -18,6 +18,10 @@ jobs:
         with:
           fetch-depth: 0  # required for --from-ref/--to-ref
 
+      - name: Echo OPS contract
+        run: |
+          echo "Gemantria OPS Contract v6: ruff is SSOT; make book.smoke / eval.graph.calibrate.adv / ci.exports.smoke; fail-closed on share."
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
