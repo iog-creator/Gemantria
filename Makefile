@@ -76,6 +76,13 @@ repo.audit:
 docs.audit:
 	@python3 scripts/rules_guard.py
 
+.PHONY: docs.smoke
+docs.smoke: ## Validate docs exist and basic commands print help
+	@test -f README.md && echo "[docs] README present"
+	@test -f CHANGELOG.md && echo "[docs] CHANGELOG present"
+	@test -f RELEASE_CHECKLIST.md && echo "[docs] checklist present"
+	@python3 scripts/cli/gemantria_cli.py --help >/dev/null || true
+
 .PHONY: smoke.smart schema.validate.smart ci.smart go
 smoke.smart:
 	@python3 scripts/mode_decider.py

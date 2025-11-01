@@ -11,6 +11,18 @@ This repository contains the planning scaffolding, lightweight gematria helpers,
    - `make test.unit`
    - `make coverage.report`
 
+## Quick Start (5 minutes, hermetic)
+
+Use the reuse-first CLI wrapper (no new logic):
+
+```
+python3 scripts/cli/gemantria_cli.py quickstart
+# or simply:
+make cli.quickstart
+```
+
+Key knobs (already in your env): `EDGE_STRONG`, `EDGE_WEAK`, `CANDIDATE_POLICY`, `PIPELINE_SEED`.
+
 ## Project structure
 - `docs/`: ADRs and the SSOT master plan that describe the rebuild objectives.
 - `schemas/`: JSON schema placeholders for contract validation.
