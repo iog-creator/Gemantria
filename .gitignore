@@ -14,3 +14,7 @@ share/
 !share/SHARE_MANIFEST.json
 !share/README.md
 .cache/
+
+# Codex user configs (keep example only)
+.codex/*.toml
+!.codex/config.example.toml
