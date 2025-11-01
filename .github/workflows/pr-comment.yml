@@ -12,7 +12,7 @@ jobs:
   upsert:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
       - name: Build brief
         id: brief
         run: |
@@ -20,7 +20,7 @@ jobs:
           echo "### OPS Evidence (auto-updated)\n\n- ruff ✅\n- eval.graph.calibrate.adv ✅\n- ci.exports.smoke ✅" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       - name: Upsert PR comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345d5e91eb7f4c57854d9db6c2b1d699707e4b
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.brief.outputs.BODY }}

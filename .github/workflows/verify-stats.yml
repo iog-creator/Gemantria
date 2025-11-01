@@ -26,8 +26,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
         with:
           python-version: "3.11"
 

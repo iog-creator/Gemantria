@@ -7,8 +7,8 @@ jobs:
   soft:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
         with:
           python-version: '3.11'
       - name: Install tooling
@@ -27,7 +27,7 @@ jobs:
         run: |
           python scripts/ci/soft_checks.py || true
       - name: Upload soft logs (artifact)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a
         with:
           name: soft-checks
           path: share/eval/soft_checks/soft_checks.log

@@ -24,10 +24,10 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
         with: { python-version: "3.11" }
       # Force fresh pre-commit environment to defeat ruff version cache drift
       - name: Clear pre-commit cache (force ruff 0.13.0)
@@ -35,14 +35,14 @@ jobs:
       # PRs: run on the diff
       - name: Pre-commit (PR diff)
         if: ${{ github.event_name == 'pull_request' }}
-        uses: pre-commit/action@v3.0.1
+        uses: pre-commit/action@2c7b3805fd36ad8535802b9827a9958bf525d3be7
         with:
           extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
 
       # Pushes: run on all files
       - name: Pre-commit (push all-files)
         if: ${{ github.event_name != 'pull_request' }}
-        uses: pre-commit/action@v3.0.1
+        uses: pre-commit/action@2c7b3805fd36ad8535802b9827a9958bf525d3be7
         with:
           extra_args: --all-files
 
