@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-import json, sys, os, glob
+import json, os, glob
+
 
 def size(p):
-    try: return os.path.getsize(p)
-    except OSError: return 0
+    try:
+        return os.path.getsize(p)
+    except OSError:
+        return 0
+
 
 def main():
     files = glob.glob("exports/**/*.json*", recursive=True) + glob.glob("exports/**/*.csv", recursive=True)
@@ -15,15 +19,18 @@ def main():
 
     ok = True
     for f in files:
-        if f.endswith((".json",".jsonl",".ndjson")):
+        if f.endswith((".json", ".jsonl", ".ndjson")):
             try:
-                with open(f, "r", encoding="utf-8") as fh:
+                with open(f, encoding="utf-8") as fh:
                     head = fh.read(2048)
                     json.loads(head if not f.endswith(".jsonl") else "[" + ",".join(head.splitlines()[:5]) + "]")
             except Exception as e:
-                ok = False; print(f"[validate] JSON parse error in {f}: {e}")
+                ok = False
+                print(f"[validate] JSON parse error in {f}: {e}")
 
     print(f"[validate] checked {len(files)} file(s); {'OK' if ok else 'FAIL'}")
     return 0 if ok else 2
 
-if __name__ == "__main__": raise SystemExit(main())
+
+if __name__ == "__main__":
+    raise SystemExit(main())
