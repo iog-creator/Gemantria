@@ -141,4 +141,5 @@
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
 | 050 | # 050 — OPS Contract v6 (AlwaysApply) |
 | 051 | # 051 — Cursor Insight & Handoff (AlwaysApply) |
+| 052 | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
 <!-- RULES_TABLE_END -->
