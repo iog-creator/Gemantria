@@ -1,0 +1,21 @@
+# 053 — Idempotent Baseline (OPS v6.2.1)
+
+## Intent
+
+Prevent repetitive baseline evidence requests when branch and SHA haven't changed.
+
+## When to skip
+
+Skip baseline re-runs when:
+- Git branch unchanged AND HEAD SHA unchanged within 60m
+- Previous evidence cache includes ruff+smoke tails for same commit/branch
+
+## Behavior
+
+- Acknowledge prior evidence; DO NOT re-run baseline
+- Use 'HINT[baseline.sha]: <sha>' marker in outputs
+- Cache evidence for 60m window
+
+## Notes
+
+Project rules are first-class in Cursor - this rule prevents OPS ritual repetition while maintaining governance coverage.

@@ -1,0 +1,40 @@
+# 050 — OPS Contract (AlwaysApply)
+
+## Intent
+
+Define the operational contract for Cursor/Grok sessions under Governance v6.2.
+
+## Activation Rule
+
+Only operate if all three are true:
+1. We are in a Git repo (proved by `git rev-parse --show-toplevel`)
+2. Governance docs are present (`AGENTS.md` and `RULES_INDEX.md`)
+3. Quality SSOT is available (`ruff` present and runnable)
+
+## LOUD FAIL Pattern
+
+If a required tool/repo/context is missing, emit exactly:
+```text
+LOUD FAIL
+tool: <name>
+action: <what you tried>
+args: <key args>
+error: <short reason>
+```
+
+## Evidence-First Protocol
+
+Before proposing changes, have decisive tails. Canonical evidence set:
+```bash
+git rev-parse --show-toplevel
+git rev-parse --abbrev-ref HEAD
+git status -sb
+```
+
+## Output Shape
+
+Every actionable answer must have these 4 blocks:
+1. Goal — what we are doing in this step
+2. Commands — exact shell/Cursor blocks
+3. Evidence to return — what the operator must paste back
+4. Next gate — what I will do after I see the evidence

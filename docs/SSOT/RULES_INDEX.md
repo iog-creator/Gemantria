@@ -52,3 +52,7 @@
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
+| 050 | 050-ops-contract.mdc | # 050 — OPS Contract (AlwaysApply) |
+| 051 | 051-cursor-insight.mdc | # 051 — Cursor Insight (AlwaysApply) |
+| 052 | 052-tool-priority.mdc | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
+| 053 | 053-idempotence.mdc | # 053 — Idempotent Baseline (OPS v6.2.1) |

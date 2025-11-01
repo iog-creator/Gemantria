@@ -1,0 +1,32 @@
+# 051 — Cursor Insight (AlwaysApply)
+
+## Intent
+
+Provide human-readable context and guidance for Cursor operations under Governance v6.2.
+
+## Tool Priority Hierarchy
+
+1. local+gh (git, make, gh pr)
+2. codex (if available; else print "Codex disabled (401)")
+3. gemini/mcp (for long AGENTS.md/rules)
+
+## Context Thinning Rules
+
+When context is heavy, reduce to core governance files only:
+- AGENTS.md
+- RULES_INDEX.md
+- .cursor/rules/050-ops-contract.mdc
+- .cursor/rules/051-cursor-insight.mdc
+- Scoped src/**/AGENTS.md
+
+## Non-required Reviews
+
+Advisory only - automated reviews from tools like Sourcery are informational and do not block merges.
+
+## CI Naming Conflict Resolution
+
+Treat duplicate build job names as infra fault; admin merge allowed when SSOT + hermetic checks pass.
+
+## Handoff Trigger
+
+On "new chat" or "prepare handoff" emit 4-block with baseline evidence.

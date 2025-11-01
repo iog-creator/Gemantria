@@ -4,12 +4,16 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: ['**']
   push:
-    branches: ['main', '**']
+    branches: ['main']  # allow push builds only for main to prevent duplicate PR checks
   workflow_dispatch:
 
 jobs:
-  build:
+  build-pr:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     env:
       PYTHONPATH: .
     steps:
@@ -17,6 +21,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # required for --from-ref/--to-ref
+
+      - name: Skip Duplicate Actions
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          cancel_others: 'true'
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -84,6 +93,71 @@ jobs:
         run: |
           set -e
           make -s ssot.validate.changed
+
+      - name: Edge reclassify (non-blocking)
+        run: |
+          set -e
+          export MOCK_AI=1
+          make -s eval.edges.reclassify || true
+
+  build-main:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for --from-ref/--to-ref
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pre-commit mypy pytest
+      - name: Ensure pinned ruff (0.13.0)
+        run: |
+          python -m pip install --upgrade --force-reinstall "ruff==0.13.0"
+          ruff --version
+      - name: Verify ruff version
+        run: |
+          V=$(ruff --version | awk '{print $2}')
+          test "$V" = "0.13.0" || (echo "::error::Expected ruff 0.13.0, got $V"; exit 2)
+
+      - name: Tooling versions
+        run: |
+          ruff --version || true
+          mypy --version || true
+
+      # Force fresh pre-commit environment to defeat ruff version cache drift
+      - name: Clear pre-commit cache (force ruff 0.13.0)
+        run: rm -rf ~/.cache/pre-commit
+
+      # Pushes to main: run on all files
+      - name: Pre-commit (push all-files)
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files
+
+      - name: Audits
+        run: |
+          make rules.navigator.check rules.audit repo.audit docs.audit
+
+      - name: Smoke tests
+        run: |
+          make test.smoke
+
+      - name: SSOT JSONSchema (all files)
+        run: |
+          set -e
+          make -s ssot.validate.all
 
       - name: Edge reclassify (non-blocking)
         run: |
