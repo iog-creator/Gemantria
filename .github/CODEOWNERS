@@ -1,8 +1,3 @@
-# Critical governance and infra
+# Only human maintainers are code owners; bots must not block merges
 
-.cursor/rules/**        @iog-creator
-Makefile                @iog-creator
-.github/workflows/**    @iog-creator
-AGENTS.md               @iog-creator
-SHARE_MANIFEST.json     @iog-creator
-share/**                @iog-creator
+*   @iog-creator/maintainers
