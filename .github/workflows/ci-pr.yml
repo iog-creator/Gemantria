@@ -17,3 +17,5 @@ concurrency:
 jobs:
   call:
     uses: ./.github/workflows/reusable-ci.yml
+    with:
+      ref: ${{ github.event.pull_request.head.sha }}
