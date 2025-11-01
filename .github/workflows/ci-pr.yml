@@ -15,7 +15,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  call:
-    uses: ./.github/workflows/reusable-ci.yml
-    with:
-      ref: ${{ github.event.pull_request.head.sha }}
+  build-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ruff format --check . && ruff check .
+      - run: make share.sync
+      - run: make eval.graph.calibrate.adv
+      - run: make ci.exports.smoke
