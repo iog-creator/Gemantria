@@ -103,7 +103,7 @@ make ci.exports.smoke
 
 **GitHub PR policy for automated tools:**
 
-* If `gh pr checks <N> --required` is **all SUCCESS** → non-required automated reviews (Sourcery, Copilot Security, Snyk) are **advisory only**.
+* If `gh pr checks <N> --required` is **all SUCCESS** → non-required automated reviews are **advisory only**.
 * Cursor must **say that** in the output:
 
   > "Required checks are green; automated review is advisory per AGENTS.md and RULE 051."
