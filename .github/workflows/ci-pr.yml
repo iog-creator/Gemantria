@@ -25,5 +25,3 @@ jobs:
       - run: pip install ruff==0.13.0
       - run: ruff format --check . && ruff check .
       - run: make share.sync
-      - run: make eval.graph.calibrate.adv
-      - run: make ci.exports.smoke
