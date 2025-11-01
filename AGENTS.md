@@ -195,6 +195,24 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 
 - **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.
 
+### Runbook: PR Gating (required checks only)
+
+- **Script:** `scripts/pr_gate.sh <pr-number>`
+
+- **Purpose:** Gate PR merges by required checks only (connector-less strategy)
+
+- **Required checks:** `ruff` (formatting + linting), `build` (CI pipeline)
+
+- **Usage:**
+  ```bash
+  # Check if PR #123 is ready to merge
+  ./scripts/pr_gate.sh 123
+
+  # In CI: exits 0 if mergeable, 1 if not ready
+  ```
+
+- **Branch protection:** Main branch requires reviews from CODEOWNERS + required checks
+
 ### Runbook: Codex CLI (optional, local-only)
 
 - **Docs:** `docs/runbooks/CODEX_CLI.md`
