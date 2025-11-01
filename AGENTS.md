@@ -197,6 +197,8 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 
 ### Runbook: PR Gating (required checks only)
 
+**Note:** Ruff formatting applied during rebase conflict resolution in PR #70.
+
 - **Script:** `scripts/pr_gate.sh <pr-number>`
 
 - **Purpose:** Gate PR merges by required checks only (connector-less strategy)

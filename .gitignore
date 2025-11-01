@@ -18,3 +18,7 @@ share/
 # Codex user configs (keep example only)
 .codex/*.toml
 !.codex/config.example.toml
+
+node_modules/
+webui/graph/node_modules/
+webui/graph/node_modules/.vite/
