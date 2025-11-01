@@ -21,12 +21,12 @@ def _q(sql: str, *params) -> list[tuple]:
 
 
 def node_latency_7d() -> list[tuple]:
-    return _q("SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node")
+    return _q("SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d ORDER BY node")  # noqa: E501
 
 
 def pipeline_runs(limit: int = 50) -> list[tuple]:
     return _q(
-        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",
+        "SELECT run_id, started_at, finished_at, duration_ms FROM v_pipeline_runs ORDER BY started_at DESC LIMIT %s",  # noqa: E501
         limit,
     )
 

@@ -3,7 +3,7 @@
 
 
 .PHONY: py.format py.lint py.quickfix py.longline py.fullwave \
-        eval.graph.calibrate.adv ci.exports.smoke
+        eval.graph.calibrate.adv ci.exports.smoke gemini.task gemini.parallel gemini.session
 py.format:
 	@ruff format src scripts tools
 py.lint:
@@ -510,3 +510,53 @@ codex.mcp.validate:
 	else \
 	  python3 -m json.tool ~/.cursor/mcp.json; \
 	fi
+
+.PHONY: gemini.task gemini.parallel gemini.session
+
+## Single Gemini task (repo-scoped)
+gemini.task:
+	@ALLOWED="$(ALLOW_GEMINI)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[gemini.task]: disabled in CI (set ALLOW_GEMINI=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	if ! command -v gemini >/dev/null 2>&1; then \
+	  echo "ERR: gemini CLI missing"; exit 1; \
+	fi; \
+	if [ -z "$$TASK" ]; then \
+	  echo "Usage: make gemini.task TASK='…' [MODEL=gemini-2.0-flash-exp CWD=. ]"; exit 2; \
+	fi; \
+	CWD="$${CWD:-.}"; \
+	bash -lc "cd \"$$CWD\" && printf '%s\\n' \"$$TASK\" | gemini -p \"$$TASK\""
+
+## Parallel Gemini tasks (one fresh context per line)
+gemini.parallel:
+	@ALLOWED="$(ALLOW_GEMINI)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[gemini.parallel]: disabled in CI (set ALLOW_GEMINI=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	if [ -z "$$TASKS" ]; then \
+	  echo "Usage: make gemini.parallel TASKS=$$'t1\\nt2' [MODEL=gemini-2.0-flash-exp CWD=. ]"; exit 2; \
+	fi; \
+	CWD="$${CWD:-.}"; \
+	bash -lc "cd \"$$CWD\"; echo \"$$TASKS\" | xargs -I{} -P $${P:-4} sh -c 'printf \"%s\\n\" {} | gemini -p \"{}\" 2>/dev/null || true'"
+
+## Named persistent session (interactive mode with checkpointing)
+gemini.session:
+	@ALLOWED="$(ALLOW_GEMINI)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[gemini.session]: disabled in CI (set ALLOW_GEMINI=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	if [ -z "$$NAME" ]; then \
+	  echo "Usage: make gemini.session NAME='g-ops-smoke' [MODEL=gemini-2.0-flash-exp]"; exit 2; \
+	fi; \
+	echo "Starting Gemini interactive session (checkpointing enabled via settings.json)"; \
+	gemini

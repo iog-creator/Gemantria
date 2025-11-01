@@ -120,8 +120,8 @@ def enrichment_node(state: dict) -> dict:
 
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
-                        import json as _json
-                        import re
+                        import json as _json  # noqa: E402
+                        import re  # noqa: E402
 
                         m = re.search(
                             r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",

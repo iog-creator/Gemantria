@@ -17,7 +17,7 @@ MD_OUT = OUTDIR / "report.md"
 
 def _read_yaml(path: pathlib.Path) -> Any:
     try:
-        import yaml  # type: ignore
+        import yaml  # type: ignore  # noqa: E402
 
         with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
@@ -177,7 +177,7 @@ def task_json_assert(args: dict[str, Any]) -> dict[str, Any]:
 
 def task_json_schema(args: dict[str, Any]) -> dict[str, Any]:
     try:
-        import jsonschema  # type: ignore
+        import jsonschema  # type: ignore  # noqa: E402
     except Exception:
         return {
             "status": "FAIL",
@@ -322,7 +322,7 @@ def task_id_type_audit(args: dict[str, Any]) -> dict[str, Any]:
         return "other"
 
     types = [_type_name(v) for v in ids]
-    from collections import Counter
+    from collections import Counter  # noqa: E402
 
     counts = Counter(types)
 

@@ -25,7 +25,7 @@ def test_graph_pipeline_structure():
     assert hasattr(graph, "invoke")  # Should be a compiled graph
 
     # Check that checkpointer was set during creation
-    from src.infra.checkpointer import get_checkpointer
+    from src.infra.checkpointer import get_checkpointer  # noqa: E402
 
     checkpointer = get_checkpointer()
     assert checkpointer is not None
@@ -118,7 +118,7 @@ def test_graph_state_preservation():
 
 def test_backward_compatibility():
     """Test that run_hello still works for backward compatibility."""
-    from src.graph.graph import run_hello
+    from src.graph.graph import run_hello  # noqa: E402
 
     result = run_hello("Exodus", "TEST")
 

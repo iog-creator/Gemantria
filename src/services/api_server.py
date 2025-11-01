@@ -439,7 +439,7 @@ async def get_forecasts(
 
 
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn  # noqa: E402
 
     # Default to port 8000, but allow override
     port = int(os.getenv("API_PORT", "8000"))
