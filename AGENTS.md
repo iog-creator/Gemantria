@@ -224,3 +224,12 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Use:** `make codex.task TASK="List last 5 commits; propose 2-line release note."`
 
 - **Gating:** **Off in CI** by default; to allow in CI, set `ALLOW_CODEX=1` (not recommended).
+
+---
+
+🧭 OPS Enforcement:
+- Cursor + GPT-5 obey Gemantria OPS Contract v6
+- Ruff is SSOT for quality
+- All merges gated by required checks
+- Hermetic smokes prove CI wiring
+- Automated AI reviews MAY be dismissed when SSOT gates + CI gates are green
