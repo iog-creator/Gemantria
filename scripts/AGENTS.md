@@ -218,6 +218,59 @@ python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
 
 **Safety**: Conservative approach - E402 uses `# noqa` instead of moving imports.
 
+### `update_share.py` & `sync_share.py` — Share Directory Synchronization
+
+**Purpose**: Maintain a flat `share/` directory with canonical project files for external access and tooling.
+
+**Requirements**:
+- **Manifest-Driven**: Reads `docs/SSOT/SHARE_MANIFEST.json` for file list and destinations
+- **Change Detection**: Only copies files that have actually changed (SHA-256 content comparison)
+- **Preview Generation**: Creates small JSON head previews for large export files
+- **Flat Layout**: All files copied to root `share/` directory (no subdirectories)
+
+**Capabilities**:
+- **Efficient Sync**: Compares file hashes before copying to avoid unnecessary I/O
+- **Large File Handling**: Generates preview headers for JSON exports over 4KB
+- **Progress Reporting**: Shows count of files updated vs total files processed
+- **Error Handling**: Validates source files exist and manifest is well-formed
+
+**Usage**:
+```bash
+# Via Makefile (recommended)
+make share.sync
+
+# Direct script execution
+python scripts/update_share.py
+python scripts/sync_share.py  # Wrapper script
+```
+
+**Output Examples**:
+```bash
+# When files changed
+[update_share] OK — share/ refreshed (3/20 files updated)
+
+# When no changes
+[update_share] OK — share/ up to date (no changes)
+```
+
+**Manifest Structure**:
+```json
+{
+  "items": [
+    {
+      "src": "AGENTS.md",
+      "dst": "share/AGENTS.md"
+    },
+    {
+      "src": "exports/graph_stats.json",
+      "dst": "share/graph_stats.head.json",
+      "generate": "head_json",
+      "max_bytes": 4096
+    }
+  ]
+}
+```
+
 ### `generate_report.py` - Pipeline Reporting (Critical - Always Apply)
 
 **Purpose**: Generate comprehensive markdown and JSON reports from pipeline execution data

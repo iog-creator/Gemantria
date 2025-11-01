@@ -10,10 +10,6 @@
     },
     {
       "src": "docs/SSOT/MASTER_PLAN.md",
-      "dst": "share/MASTER_PLAN.md"
-    },
-    {
-      "src": "docs/SSOT/MASTER_PLAN.md",
       "dst": "share/SSOT_MASTER_PLAN.md"
     },
     {
