@@ -137,7 +137,7 @@ deps.dev:
 	@echo "[guide] Installing dev dependencies (jsonschema, PyYAML)..."
 	pip install -r requirements-dev.txt
 
-.PHONY: mini.go mini.extract mini.verify readiness.verify book.go ci.book.readiness \
+.PHONY: mini.go mini.extract mini.verify readiness.verify book.smoke book.go ci.book.readiness \
         book.plan book.dry book.resume book.stop
 
 # Mini experiment (real inference) → verify → (then book)
@@ -155,6 +155,11 @@ mini.verify:
 readiness.verify:
 	@echo "[guide] readiness.verify: schema + thresholds"
 	@python3 scripts/book_readiness.py gate --strict
+
+# --- Book pipeline (local smoke) ---
+book.smoke:
+	@echo "[book.smoke] dry-run book pipeline (no external services required)"
+	@python3 scripts/run_book.py dry --cfg config/book_plan.yaml || true
 
 book.go:
 	@python3 scripts/book_readiness.py assert-pass || (echo "[gate] readiness not satisfied"; exit 2)

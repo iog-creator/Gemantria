@@ -21,7 +21,7 @@ def sha256_path(p: pathlib.Path) -> str:
 
 def git(cmd):
     try:
-        return subprocess.check_output(["git"] + cmd, cwd=ROOT).decode().strip()
+        return subprocess.check_output(["git", *cmd], cwd=ROOT).decode().strip()
     except Exception:
         return None
 
@@ -35,10 +35,7 @@ def safe_json(p: pathlib.Path):
 
 def main() -> int:
     cur = safe_json(EVAL / "graph_latest.json") or {}
-    prev = safe_json(EVAL / "graph_prev.json") or {}
     man = safe_json(EVAL / "release_manifest.json") or {}
-    cen = safe_json(EVAL / "centrality.json") or {}
-    delta = safe_json(EVAL / "delta.json") or {}
 
     nodes = len(cur.get("nodes", []))
     edges = len(cur.get("edges", []))

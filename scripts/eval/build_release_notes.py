@@ -2,6 +2,7 @@
 import json
 import pathlib
 import time
+from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EVAL = ROOT / "share" / "eval"
@@ -38,7 +39,7 @@ def main() -> int:
     d_ok = dsum.get("ok", True)
 
     lines = []
-    lines.append("# Gemantria – Release Notes (Local Eval)\n")
+    lines.append("# Gemantria - Release Notes (Local Eval)\n")
     lines.append(f"*generated:* {int(time.time())}")
     if prov:
         head = prov.get("repo", {}).get("git_head")

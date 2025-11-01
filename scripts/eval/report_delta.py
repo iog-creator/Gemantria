@@ -59,7 +59,7 @@ def _strengths(doc: dict[str, Any]) -> list[float]:
     if isinstance(edges, list):
         for e in edges:
             v = e.get("strength")
-            if isinstance(v, (int, float)):
+            if isinstance(v, int | float):
                 vals.append(float(v))
     return vals
 
@@ -147,7 +147,8 @@ def main() -> int:
     lines.append(f"*current:*  `{report['current_file']}`")
     lines.append("")
     lines.append(
-        f"*removed_nodes:* {len(removed_nodes)}  •  *removed_edges:* {len(removed_edges)}  •  *ok:* {'✅' if ok else '❌'}"
+        f"*removed_nodes:* {len(removed_nodes)}  •  *removed_edges:* {len(removed_edges)}  "
+        f"•  *ok:* {'✅' if ok else '❌'}"
     )
     lines.append("")
     lines.append("## Strength stats")

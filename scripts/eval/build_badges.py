@@ -12,7 +12,10 @@ def _badge(label: str, value: str, color: str) -> str:
     text = f"{label}: {value}"
     w = 90 + 8 * max(0, len(text) - 8)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{text}">
-  <linearGradient id="a" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
   <rect rx="3" width="{w}" height="20" fill="#555"/>
   <rect rx="3" x="55" width="{w - 55}" height="20" fill="{color}"/>
   <path fill="{color}" d="M55 0h4v20h-4z"/>
@@ -27,12 +30,10 @@ def _badge(label: str, value: str, color: str) -> str:
 def main() -> int:
     print("[eval.badges] starting")
     BADGES.mkdir(parents=True, exist_ok=True)
-    ok = 0
     fail = 0
     if REPORT_JSON.exists():
         doc = json.loads(REPORT_JSON.read_text(encoding="utf-8"))
         s = doc.get("summary", {})
-        ok = int(s.get("ok_count", 0))
         fail = int(s.get("fail_count", 0))
     status = "OK" if fail == 0 else "FAIL"
     color = "#4c1" if fail == 0 else "#e05d44"

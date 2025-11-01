@@ -49,7 +49,8 @@ def main() -> int:
     lines.append(f"missing_rerank={missing} ({miss_pct:.2f}%)")
     lines.append(f"eigenvector_nonzero={eig_nonzero}")
     lines.append(
-        f"thresholds: max_missing_rerank_pct={max_missing_pct} min_strong_or_weak={min_strong_or_weak} require_nonzero_eig={require_nonzero_eig}"
+        f"thresholds: max_missing_rerank_pct={max_missing_pct} "
+        f"min_strong_or_weak={min_strong_or_weak} require_nonzero_eig={require_nonzero_eig}"
     )
 
     failed = False

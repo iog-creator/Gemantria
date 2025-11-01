@@ -124,7 +124,8 @@ def main() -> int:
     lines.append("")
     badge = "✅" if ok else "❌"
     lines.append(
-        f"*jaccard:* {report['summary']['jaccard']}  •  *added:* {report['summary']['added_ids']}  •  *removed:* {report['summary']['removed_ids']}  •  *ok:* {badge}"
+        f"*jaccard:* {report['summary']['jaccard']}  •  *added:* {report['summary']['added_ids']}  "
+        f"•  *removed:* {report['summary']['removed_ids']}  •  *ok:* {badge}"
     )
     lines.append("")
     lines.append("```json")

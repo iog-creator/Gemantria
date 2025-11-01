@@ -4,7 +4,7 @@ import sys
 
 def main() -> int:
     print("[eval.smoke] starting")
-    # placeholder – add real eval tasks in a future PR
+    # placeholder - add real eval tasks in a future PR
     print("[eval.smoke] OK")
     return 0
 

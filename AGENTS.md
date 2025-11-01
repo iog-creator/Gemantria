@@ -29,6 +29,14 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
 
+## Code Quality Standards
+- **Formatting**: Ruff format (single source of truth)
+- **Linting**: Ruff check with zero tolerance for style issues
+- **Type checking**: MyPy with `ignore_missing_imports=True` for external deps
+- **Import organization**: All imports at module top (no mid-file imports)
+- **Line length**: 120 characters maximum
+- **String concatenation**: Use `["cmd", *args]` instead of `["cmd"] + args`
+
 ### Runbook: Postgres checkpointer
 1. Apply migration:
    ```bash

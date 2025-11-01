@@ -54,8 +54,7 @@ class BibleReadOnly:
         with psycopg.connect(self.dsn) as conn:
             with conn.cursor() as cur:
                 cur.execute(sql, params or ())
-                for row in cur:
-                    yield row
+                yield from cur
 
 
 @dataclass
@@ -71,8 +70,7 @@ class GematriaRW:
             with conn.cursor() as cur:
                 cur.execute(sql, params or ())
                 if cur.description:
-                    for row in cur:
-                        yield row
+                    yield from cur
 
 
 def get_bible_ro() -> BibleReadOnly:

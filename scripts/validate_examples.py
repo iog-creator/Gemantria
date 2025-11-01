@@ -35,7 +35,7 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
             errors.append(f"Record {i + 1}: missing required fields {missing_core}")
 
         # Type checks for required fields
-        if "confidence" in record and not isinstance(record["confidence"], (int, float)):
+        if "confidence" in record and not isinstance(record["confidence"], int | float):
             errors.append(f"Record {i + 1}: confidence should be numeric, got {type(record['confidence'])}")
 
         if "tokens" in record and not isinstance(record["tokens"], int):
