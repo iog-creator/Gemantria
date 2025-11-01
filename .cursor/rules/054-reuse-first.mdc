@@ -1,0 +1,14 @@
+# Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)
+
+- When a capability already exists (schema, reranker, pipeline step, export),
+  do not create new files or modules for it.
+
+- Prefer adapters/thin wrappers that call existing modules.
+
+- Block merges if new files match patterns already present:
+  - src/**/{*pipeline*,*graph*,*envelope*,*rerank*}
+  - migrations/** (duplicate tables already defined)
+  - scripts/**/{*export*,*pipeline*,*db*} where existing name patterns match
+  - docs/**/{*pipeline*,*schema*,*exports*} where existing name patterns match
+
+- Enforcement: rules_guard.py (054) fails CI if duplication is detected.
