@@ -26,5 +26,14 @@ Local smoke artifacts (run via the eval tools) can render quality trends:
 
 > In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
 
+## Required Checks
+
+Main branch requires these checks to pass before merging:
+
+![Ruff Format & Lint](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/enforce-ruff.yml?label=ruff&branch=main)
+![CI Build](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/ci.yml?label=ci&branch=main)
+
+> Branch protection requires: `ruff` (formatting + linting) and `build` (CI pipeline)
+
 ## Pushing changes
 A remote is not configured by default. Add the desired remote (for example, `git remote add origin <url>`) and push normally once credentials are available.
