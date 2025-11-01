@@ -210,13 +210,25 @@ eval.graph.calibrate.adv:
 # CI exports smoke
 # -----------------------------
 
+.PHONY: exports.write
+exports.write: ## Write exports using existing exporters (reuse-first)
+	@python scripts/export_stats.py
+	@python scripts/generate_report.py
+
 ## Smoke test for exports. Hermetic CI: if no DB env is present, emit HINT and exit 0.
 ## Recognizes Postgres envs (PGHOST, PGUSER, PGDATABASE, DATABASE_URL).
 ci.exports.smoke: ## Exports smoke (reuse-first; empty-DB tolerant)
-	@echo "[ci.exports.smoke] start"
-	@EDGE_STRONG=${EDGE_STRONG:-0.90} EDGE_WEAK=${EDGE_WEAK:-0.75} \
-	  python3 scripts/export_stats.py || echo "[ci.exports] stats skipped (empty DB tolerated)"
+	@python3 scripts/export_stats.py    || echo "[ci.exports] stats skipped (empty DB tolerated)"
 	@python3 scripts/generate_report.py || echo "[ci.exports] report skipped (no data tolerated)"
+
+.PHONY: ci.exports.validate
+ci.exports.validate: ## Validate export artifacts (conditional; hermetic)
+	@python3 scripts/ci/validate_exports.py
+
+.PHONY: ci.badges
+ci.badges: ## Build badges (reuse-first; tolerate missing)
+	@{ test -f scripts/eval/build_badges.py && python3 scripts/eval/build_badges.py; } \
+	  || echo "[ci.badges] badges script not present; skip"
 
 .PHONY: pipeline.smoke
 pipeline.smoke: ## Reuse-first pipeline smoke (uses existing book pipeline)
