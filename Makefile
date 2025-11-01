@@ -94,11 +94,17 @@ data.verify:
 ci.data.verify:
 	@python3 scripts/verify_data_completeness.py
 
-# Apply SQL migrations (adjust DSN if needed)
+# Apply SQL migrations (Phase-1 foundation)
 db.migrate:
-	@echo "[db] applying migrations…"
-	@psql "$${GEMATRIA_DSN:-$${DB_DSN:-postgresql://localhost/gemantria}}" -v ON_ERROR_STOP=1 -f migrations/037_create_concepts.sql
-	@echo "[db] migrations OK"
+	@bash scripts/db/migrate.sh
+
+# Quick status (tables count) — tolerates empty DB
+db.status:
+	@psql "$(GEMATRIA_DSN)" -qAt -c "SELECT table_schema, count(*) FROM information_schema.tables WHERE table_schema='gematria' GROUP BY 1;" || echo "DB unavailable - tolerated"
+
+# CI helper: succeed if DB missing/unavailable (hermetic)
+ci.db.tolerate.empty:
+	@echo "[ci] empty/missing DB tolerated by policy"; exit 0
 
 # Local exports smoke (Rule 038)
 exports.smoke:
