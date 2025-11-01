@@ -47,8 +47,8 @@ LOG = get_logger("gematria.graph")
 # Environment precedence guard - detect conflicting env sources
 def _check_env_precedence():
     """Check for environment variable conflicts between .env and .env.local."""
-    import re
-    from pathlib import Path
+    import re  # noqa: E402
+    from pathlib import Path  # noqa: E402
 
     def read_env_file(path: Path) -> dict[str, str]:
         if not path.exists():
@@ -100,7 +100,7 @@ _verify_lm_studio()
 # Postgres connectivity guard
 def _verify_postgres():
     """Verify Postgres connectivity on startup."""
-    import psycopg
+    import psycopg  # noqa: E402
 
     dsn = os.getenv("GEMATRIA_DSN")
     if not dsn:
@@ -124,7 +124,7 @@ _verify_postgres()
 # Python environment guard
 def _verify_python_env():
     """Verify we're running in the correct Python environment."""
-    import sys
+    import sys  # noqa: E402
 
     venv_expected = ".venv" in sys.executable
     if not venv_expected:
@@ -156,7 +156,7 @@ def log_qwen_health(
     try:
         db = get_gematria_rw()
         # Convert string run_id to UUID for database
-        import uuid
+        import uuid  # noqa: E402
 
         uuid_run_id = uuid.UUID(run_id)
         # Execute the insert and consume the generator to ensure it runs
@@ -343,7 +343,7 @@ def debug_connectivity() -> dict:
 
     # Test LM Studio
     try:
-        from src.services.lmstudio_client import (
+        from src.services.lmstudio_client import (  # noqa: E402
             HOST,
             QWEN_EMBEDDING_MODEL,
             QWEN_RERANKER_MODEL,
@@ -370,7 +370,7 @@ def debug_connectivity() -> dict:
 
     # Test Gematria DB
     try:
-        from src.infra.db import get_gematria_rw
+        from src.infra.db import get_gematria_rw  # noqa: E402
 
         db = get_gematria_rw()
         if db.dsn:
@@ -391,7 +391,7 @@ def debug_connectivity() -> dict:
 
     # Test Bible DB
     try:
-        from src.infra.db import get_bible_ro
+        from src.infra.db import get_bible_ro  # noqa: E402
 
         db = get_bible_ro()
         if db.dsn:
@@ -514,7 +514,7 @@ def run_hello(book: str = "Genesis", mode: str = "START") -> PipelineState:
 
 
 if __name__ == "__main__":
-    import sys
+    import sys  # noqa: E402
 
     if len(sys.argv) > 1 and sys.argv[1] == "--debug-connectivity":
         print("🔍 Connectivity Debug Report")

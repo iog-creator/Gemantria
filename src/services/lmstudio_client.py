@@ -312,7 +312,7 @@ class LMStudioClient:
         res = self._post("v1/chat/completions", payload)
         content = res.get("choices", [{}])[0].get("message", {}).get("content", "0.95").strip()
         # Extract just the numeric part if the model returns extra text
-        import re
+        import re  # noqa: E402
 
         match = re.search(r"([0-9]*\.?[0-9]+)", content)
         if match:
@@ -338,7 +338,7 @@ class LMStudioClient:
         """
         if _is_mock_mode() or not _get_bool_env("USE_QWEN_EMBEDDINGS", "true"):
             # Return mock embeddings for testing or when disabled
-            import random
+            import random  # noqa: E402
 
             result = []
             for text in texts:
@@ -379,7 +379,7 @@ class LMStudioClient:
                     # Hard fail - no mock fallback in production
                     if _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false"):
                         # Test-only bypass for unit tests
-                        import random
+                        import random  # noqa: E402
 
                         result = []
                         for text in texts:
@@ -416,7 +416,7 @@ class LMStudioClient:
         """
         if _is_mock_mode():
             # Return mock reranking scores for testing
-            import random
+            import random  # noqa: E402
 
             random.seed(hash(query) % 10000)
             return [random.uniform(0.1, 0.9) for _ in candidates]
@@ -526,7 +526,7 @@ def rerank_pairs(pairs, name_map=None):
     name_map: optional dict mapping concept_ids to names
     Returns list of scores [0..1] indicating similarity strength.
     """
-    from src.infra.db import get_gematria_rw
+    from src.infra.db import get_gematria_rw  # noqa: E402
 
     texts = []
     if name_map:
@@ -541,11 +541,11 @@ def rerank_pairs(pairs, name_map=None):
         for sid, tid in pairs:
             # Fetch concept names from concepts table (sid/tid are concept_network.id values)
             s_name = db.execute(
-                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",
+                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",  # noqa: E501
                 (sid,),
             ).fetchone()
             t_name = db.execute(
-                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",
+                "SELECT c.name FROM concepts c JOIN concept_network cn ON c.id = cn.concept_id WHERE cn.id = %s",  # noqa: E501
                 (tid,),
             ).fetchone()
             s_text = s_name[0] if s_name else str(sid)
