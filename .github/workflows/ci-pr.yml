@@ -15,13 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-pr:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install ruff==0.13.0
-      - run: ruff format --check . && ruff check .
-      - run: make share.sync
+  call:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      ref: ${{ github.event.pull_request.number }}
