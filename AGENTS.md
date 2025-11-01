@@ -274,3 +274,245 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Use:** `make codex.task TASK="List last 5 commits; propose 2-line release note."`
 
 - **Gating:** **Off in CI** by default; to allow in CI, set `ALLOW_CODEX=1` (not recommended).
+
+---
+
+# 🧭 Gemantria — OPS Contract v6.2.3
+
+**Mode:** OPS MODE only (no small talk, no speculation without evidence)
+**Scope:** Gemantria repository and its subprojects (pipeline, exports, viz)
+**Authority chain:** Rules 039 → 041 → 046 → 050 → 051 → **052 (Tool Priority & Context Guidance)**
+
+## 1 · Activation Rule
+
+I operate *only if all three* are true:
+
+1. **Repo present** → `git rev-parse --show-toplevel` succeeds.
+2. **Governance docs present** → `AGENTS.md` and `RULES_INDEX.md` exist.
+3. **Quality SSOT available** → `ruff format --check . && ruff check .` runs.
+
+If any is missing → **FAIL-CLOSED (LOUD FAIL)**.
+
+## 2 · LOUD FAIL Pattern
+
+Emit **exactly** if a required tool/context is missing:
+
+```
+LOUD FAIL
+governance: Gemantria OPS v6.2
+tool: <name>              # e.g., codex, gemini, gh, local-make
+action: <what you tried>
+args: <key args>
+error: <short reason>
+fallback:
+
+* git pull --ff-only
+* make share.sync
+* ruff format --check . && ruff check .
+```
+
+## 3 · Tool Priority & File References
+
+Cursor **must** declare the tool and files used.
+
+### Tool Order
+
+1. **Local + GH tools** (`git`, `make`, `gh pr …`)
+2. **Codex** — edits/patches/re-writes
+   *If unavailable → print `Codex disabled (401)` and fallback*
+3. **Gemini / MCP** — long-context reasoning or large docs
+
+### Files Referenced
+
+* `AGENTS.md`
+* `RULES_INDEX.md`
+* `.cursor/rules/050-ops-contract.mdc`
+* `.cursor/rules/051-cursor-insight.mdc`
+* `src/**/AGENTS.md` (scoped to relevant module)
+
+### Example Cursor Header
+
+```
+governance: Gemantria OPS v6.2.3
+tool-priority:
+  1. local+gh
+  2. codex (if available)
+  3. gemini/mcp (for long files)
+   files-referenced:
+* AGENTS.md
+* RULES_INDEX.md
+* .cursor/rules/050-ops-contract.mdc
+* .cursor/rules/051-cursor-insight.mdc
+* .cursor/rules/053-idempotence.mdc
+  output-shape: 4 blocks (Goal, Commands, Evidence, Next gate)
+  ssot: ruff format --check . && ruff check .
+```
+
+## 4 · Context-Thinning Rule
+
+If overflow, **reduce** to:
+
+1. `AGENTS.md`
+2. `RULES_INDEX.md`
+3. `.cursor/rules/050-ops-contract.mdc`
+4. `.cursor/rules/051-cursor-insight.mdc`
+5. The single relevant submodule `AGENTS.md`
+
+Do **not** reload the entire repo once this subset is set.
+
+## 5 · Evidence-First Protocol
+
+Before proposing changes:
+
+```bash
+git rev-parse --show-toplevel
+git rev-parse --abbrev-ref HEAD
+git status -sb
+ruff format --check . && ruff check .
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
+```
+
+For PR work:
+
+```bash
+gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks
+gh pr checks <N> --required --json name,state
+```
+
+## 6 · Output Shape (4-Block Standard)
+
+1. **Goal** — one sentence defining the action.
+2. **Commands** — runnable shell/gh/make lines only.
+3. **Evidence to return** — numbered list of expected outputs.
+4. **Next gate** — what to do after I see the evidence.
+
+   Each command block begins with:
+
+```
+# source: AGENTS.md + RULES_INDEX.md + .cursor/rules/050 + .cursor/rules/051
+```
+
+## 7 · SSOT for Quality
+
+```bash
+ruff format --check . && ruff check .
+```
+
+If ruff fails → stop and request the last 60–200 lines.
+
+## 8 · Hermetic Test Bundle
+
+```bash
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
+```
+
+If DB/services down → "correct hermetic behavior."
+
+## 9 · Non-Required Automated Reviews
+
+If required checks are green:
+
+> "Required checks are green; non-required automated reviews are **advisory only** per AGENTS.md and Rule 051."
+
+## 10 · CI Naming-Conflict Clause
+
+If duplicate `build` jobs (one pass / one fail):
+
+> "Treat as infra fault. With ruff + smokes green, **admin merge allowed** per Governance v6.2 §10."
+
+## 11 · Handoff / New Chat Rule
+
+On "prepare handoff" or "new chat", output **only** the 4 blocks and include baseline evidence (§5).
+
+## 12 · Dirty-Branch Rule
+
+If `git status -sb` shows dirty on `main`, open hygiene PR first:
+
+```bash
+git switch -c ci/hygiene-ruff-$(date +%Y%m%d-%H%M)
+ruff format --check . && ruff check .
+make ops.verify
+make share.sync
+git add .
+git commit -m "ci: apply ruff/py.fullwave hygiene"
+git push -u origin HEAD
+gh pr create --title "ci: hygiene (ruff)" --body "Automated hygiene per OPS v6.2"
+```
+
+## 13 · Required-Checks Gate
+
+Always emit:
+
+```bash
+gh pr checks <N> --required --json name,state \
+  --jq 'if length==0 then "NO_REQUIRED_CHECKS" else all(.state=="SUCCESS") end'
+```
+
+If `NO_REQUIRED_CHECKS`, say: *"Automated checks present → advisory only (051)."*
+
+## 14 · Fail-Closed on Share
+
+If CI writes to `share/`:
+
+1. Identify script. 2) Explain why it breaks hermetic CI.
+2. `make share.sync`. 4) Re-run CI.
+
+## 15 · No Async Promises
+
+Never say "I'll check later" or give time estimates.
+
+Always output commands runnable **now**.
+
+## 16 · Header Banner for OPS Responses
+
+Every OPS reply begins:
+
+> **Governance: Gemantria OPS v6.2.3 (tool-aware, 050 + 051 + 052 active)**
+
+> Then the 4-block format follows.
+
+## 17 · Rule-053 — Idempotent Baseline
+
+Cache baseline evidence by `(branch, HEAD)` for **60 minutes**.
+
+If unchanged, **do not** re-ask for baseline; acknowledge cached evidence.
+
+Emit `HINT[baseline.sha]: <sha>` when using cache.
+
+## 18 · CI Single-Context Requirement
+
+PRs expose **one** required status context: **`build-pr`**.
+
+Use concurrency with `cancel-in-progress: true`.
+
+Duplicate/legacy contexts = **infra fault** (see §10).
+
+## 19 · Internal Guardrails (Branch Protection OFF allowed)
+
+Merges are permitted only when **all** are true:
+
+* **policy-gate** passed (Conventional Commits + signed-commit verification).
+* **build-pr** passed.
+* ≥ **1 human approval** present.
+* Prefer **bot-mediated merge** (queue/automation) over manual "Merge".
+
+## 20 · Security & Supply Chain
+
+* Pin third-party actions to **full commit SHAs** (avoid `@v*` tags).
+* Enable **Dependabot** for `github-actions` (weekly).
+* Nightly **OpenSSF Scorecard** with SARIF upload to Security tab.
+
+### Summary
+
+* **SSOT:** Ruff
+* **Hermetic:** book + eval + exports smokes
+* **Reviews:** non-required = advisory
+* **Tool Priority:** local+gh → codex → gemini/mcp
+* **Files:** AGENTS.md, RULES_INDEX.md, 050, 051 (+ Rule-053)
+* **Output:** 4 blocks
+* **Failure:** LOUD FAIL v6.2
+* **Chain:** 039→041→046→050→051→052→**053**

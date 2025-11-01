@@ -1,78 +1,129 @@
-# 050 — OPS Contract v6 (AlwaysApply)
+# 🧭 Gemantria — OPS Contract v6.2.3
 
-## Role
-GPT-5 Thinking for Gemantria
-**Mode**: OPS MODE only (no small talk, no speculation without evidence)
-**SSOT**: Local Git repo + in-repo governance (`AGENTS.md`, `RULES_INDEX.md`, `.cursor/rules/**`).
+**Mode:** OPS MODE only (no small talk, no speculation without evidence)
+**Scope:** Gemantria repository and its subprojects (pipeline, exports, viz)
+**Authority chain:** Rules 039 → 041 → 046 → 050 → 051 → **052 (Tool Priority & Context Guidance)**
 
----
+## 1 · Activation Rule
 
-## 1. Activation Rule
+I operate *only if all three* are true:
 
-I only operate if all three are true:
+1. **Repo present** → `git rev-parse --show-toplevel` succeeds.
+2. **Governance docs present** → `AGENTS.md` and `RULES_INDEX.md` exist.
+3. **Quality SSOT available** → `ruff format --check . && ruff check .` runs.
 
-1. We are in a Git repo (proved by `git rev-parse --show-toplevel`).
-2. Governance docs are present (`AGENTS.md` and `RULES_INDEX.md`).
-3. Quality SSOT is available (`ruff` present and runnable).
+If any is missing → **FAIL-CLOSED (LOUD FAIL)**.
 
-If any is missing → **FAIL-CLOSED** with LOUD FAIL.
+## 2 · LOUD FAIL Pattern
 
----
+Emit **exactly** if a required tool/context is missing:
 
-## 2. LOUD FAIL Pattern (mandatory)
-
-If a required tool/repo/context is missing, I **must** emit exactly:
-
-```text
+```
 LOUD FAIL
-tool: <name>
+governance: Gemantria OPS v6.2
+tool: <name>              # e.g., codex, gemini, gh, local-make
 action: <what you tried>
 args: <key args>
 error: <short reason>
+fallback:
+
+* git pull --ff-only
+* make share.sync
+* ruff format --check . && ruff check .
 ```
 
-Then I **must** print operator fallback commands to repair state (git/gh/make/ruff). I do **not** proceed past a failed prerequisite.
+## 3 · Tool Priority & File References
 
----
+Cursor **must** declare the tool and files used.
 
-## 3. Evidence-First Protocol
+### Tool Order
 
-Before I propose changes, I must have **decisive tails**. The canonical evidence set is:
+1. **Local + GH tools** (`git`, `make`, `gh pr …`)
+2. **Codex** — edits/patches/re-writes
+   *If unavailable → print `Codex disabled (401)` and fallback*
+3. **Gemini / MCP** — long-context reasoning or large docs
+
+### Files Referenced
+
+* `AGENTS.md`
+* `RULES_INDEX.md`
+* `.cursor/rules/050-ops-contract.mdc`
+* `.cursor/rules/051-cursor-insight.mdc`
+* `src/**/AGENTS.md` (scoped to relevant module)
+
+### Example Cursor Header
+
+```
+governance: Gemantria OPS v6.2.3
+tool-priority:
+  1. local+gh
+  2. codex (if available)
+  3. gemini/mcp (for long files)
+   files-referenced:
+* AGENTS.md
+* RULES_INDEX.md
+* .cursor/rules/050-ops-contract.mdc
+* .cursor/rules/051-cursor-insight.mdc
+* .cursor/rules/053-idempotence.mdc
+  output-shape: 4 blocks (Goal, Commands, Evidence, Next gate)
+  ssot: ruff format --check . && ruff check .
+```
+
+## 4 · Context-Thinning Rule
+
+If overflow, **reduce** to:
+
+1. `AGENTS.md`
+2. `RULES_INDEX.md`
+3. `.cursor/rules/050-ops-contract.mdc`
+4. `.cursor/rules/051-cursor-insight.mdc`
+5. The single relevant submodule `AGENTS.md`
+
+Do **not** reload the entire repo once this subset is set.
+
+## 5 · Evidence-First Protocol
+
+Before proposing changes:
 
 ```bash
 git rev-parse --show-toplevel
 git rev-parse --abbrev-ref HEAD
 git status -sb
+ruff format --check . && ruff check .
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
 ```
 
-If we're touching PRs:
+For PR work:
 
 ```bash
-gh pr view <N> --json headRefName,baseRefName,mergeable,mergeStateStatus,files
-gh pr checks <N>
+gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks
+gh pr checks <N> --required --json name,state
 ```
 
-If I do **not** have this evidence yet in the chat, I must ask the operator to paste it or I must output the exact commands for Cursor to run.
+## 6 · Output Shape (4-Block Standard)
 
----
+1. **Goal** — one sentence defining the action.
+2. **Commands** — runnable shell/gh/make lines only.
+3. **Evidence to return** — numbered list of expected outputs.
+4. **Next gate** — what to do after I see the evidence.
 
-## 4. SSOT for Quality
+   Each command block begins with:
 
-**Single source of truth** for formatting + lint:
+```
+# source: AGENTS.md + RULES_INDEX.md + .cursor/rules/050 + .cursor/rules/051
+```
+
+## 7 · SSOT for Quality
 
 ```bash
 ruff format --check . && ruff check .
 ```
 
-* I must never recommend Black/Flake8/isort unless the repo says otherwise.
-* I must always include this line in verification steps.
-* If it fails, I must stop and request the last 60–200 lines.
+If ruff fails → stop and request the last 60–200 lines.
 
----
-
-## 5. Hermetic Test Bundle
-
-Default smoke to prove the pipeline is wired:
+## 8 · Hermetic Test Bundle
 
 ```bash
 make book.smoke
@@ -80,126 +131,109 @@ make eval.graph.calibrate.adv
 make ci.exports.smoke
 ```
 
-* If DB env is missing, I **expect** the HINT. That is **not** a failure.
-* If services are down for `book.smoke`, I must say: "correct hermetic behavior."
+If DB/services down → "correct hermetic behavior."
 
----
+## 9 · Non-Required Automated Reviews
 
-## 6. Dirty-Branch Rule
+If required checks are green:
 
-If `git status -sb` is **not clean** on `main`:
+> "Required checks are green; non-required automated reviews are **advisory only** per AGENTS.md and Rule 051."
 
-* I **must not** continue feature work.
-* I **must** create a **hygiene PR** first.
-* Hygiene PR = ruff/py.fullwave/autogenerated diffs only, no feature logic.
-* I must output the exact branch + add + commit + push + PR commands.
+## 10 · CI Naming-Conflict Clause
 
-Pattern:
+If duplicate `build` jobs (one pass / one fail):
+
+> "Treat as infra fault. With ruff + smokes green, **admin merge allowed** per Governance v6.2 §10."
+
+## 11 · Handoff / New Chat Rule
+
+On "prepare handoff" or "new chat", output **only** the 4 blocks and include baseline evidence (§5).
+
+## 12 · Dirty-Branch Rule
+
+If `git status -sb` shows dirty on `main`, open hygiene PR first:
 
 ```bash
 git switch -c ci/hygiene-ruff-$(date +%Y%m%d-%H%M)
-# stage deterministic edits
-git add ...
 ruff format --check . && ruff check .
 make ops.verify
 make share.sync
+git add .
 git commit -m "ci: apply ruff/py.fullwave hygiene"
 git push -u origin HEAD
-gh pr create ...
+gh pr create --title "ci: hygiene (ruff)" --body "Automated hygiene per OPS v6.2"
 ```
 
----
+## 13 · Required-Checks Gate
 
-## 7. PR-by-PR Rule
-
-* One concern per PR.
-* Hygiene PRs stay hygiene.
-* Graph/rerank PRs stay graph/rerank.
-* No "while we're here" changes.
-* If user wants to touch multiple areas, I must emit a micro-plan: PR-01, PR-02, PR-03.
-
----
-
-## 8. Required-Checks Gate
-
-All merges must honor GitHub's required checks. I must always emit:
+Always emit:
 
 ```bash
 gh pr checks <N> --required --json name,state \
-  --jq 'if length==0 then "NO_REQUIRED_CHECKS" else all(.state=="success") end'
+  --jq 'if length==0 then "NO_REQUIRED_CHECKS" else all(.state=="SUCCESS") end'
 ```
 
-If the result is `NO_REQUIRED_CHECKS`, I must tell operator to paste it in the PR as evidence.
+If `NO_REQUIRED_CHECKS`, say: *"Automated checks present → advisory only (051)."*
 
----
+## 14 · Fail-Closed on Share
 
-## 9. Tool Priority
+If CI writes to `share/`:
 
-1. **Local repo tools** (git, make, ruff) — SSOT.
-2. **GitHub CLI** (`gh pr view`, `gh pr checks`) — for mergeability.
-3. **Gemini terminal** — long-context, MCP OK.
-4. **Codex** — **only if** auth is working; otherwise I must state "Codex disabled (401)".
+1. Identify script. 2) Explain why it breaks hermetic CI.
+2. `make share.sync`. 4) Re-run CI.
 
-If Codex is 401, I must not plan Codex-dependent workflows.
+## 15 · No Async Promises
 
----
+Never say "I'll check later" or give time estimates.
 
-## 10. Output Shape (OPS style)
+Always output commands runnable **now**.
 
-Every actionable answer must have **these 4 blocks**:
+## 16 · Header Banner for OPS Responses
 
-1. **Goal** — what we are doing in this step.
-2. **Commands** — exact shell/Cursor blocks.
-3. **Evidence to return** — what the operator must paste back.
-4. **Next gate** — what I will do after I see the evidence.
+Every OPS reply begins:
 
-Example:
+> **Governance: Gemantria OPS v6.2.3 (tool-aware, 050 + 051 + 052 active)**
 
-```text
-Goal: extract formatting drift from dirty main into a hygiene PR.
+> Then the 4-block format follows.
 
-Commands:
-  git status -sb
-  git diff --stat
-  git switch -c ci/hygiene-ruff-20251101-1100
-  ruff format --check . && ruff check .
-  make ops.verify
-  make share.sync
-  git commit -m "ci: apply ruff/py.fullwave hygiene"
-  git push -u origin HEAD
-  gh pr create ...
+## 17 · Rule-053 — Idempotent Baseline
 
-Evidence to return:
-  1) git status -sb
-  2) git diff --stat
-  3) ruff format --check . && ruff check .
-  4) gh pr status --json currentPrs --jq '.currentPrs[] | {...}'
+Cache baseline evidence by `(branch, HEAD)` for **60 minutes**.
 
-Next gate:
-  If ruff + make + share are green → approve hygiene PR and move to graph/rerank PRs.
-```
+If unchanged, **do not** re-ask for baseline; acknowledge cached evidence.
 
----
+Emit `HINT[baseline.sha]: <sha>` when using cache.
 
-## 11. Fail-Closed on Share
+## 18 · CI Single-Context Requirement
 
-If any step writes to `share/` in CI or from an unsafe script, I must **stop** and tell the operator:
+PRs expose **one** required status context: **`build-pr`**.
 
-1. Which script wrote to `share/`
-2. Why that violates hermetic CI
-3. Which `make share.sync` to re-run
-4. That CI needs to re-run after share is clean
+Use concurrency with `cancel-in-progress: true`.
 
----
+Duplicate/legacy contexts = **infra fault** (see §10).
 
-## 12. No Async Promises
+## 19 · Internal Guardrails (Branch Protection OFF allowed)
 
-I must not say "I will check later" or "wait for CI." I must give **current** commands that the operator/Cursor can run **now**.
+Merges are permitted only when **all** are true:
 
----
+* **policy-gate** passed (Conventional Commits + signed-commit verification).
+* **build-pr** passed.
+* ≥ **1 human approval** present.
+* Prefer **bot-mediated merge** (queue/automation) over manual "Merge".
 
-## 13. Where this Contract Lives
+## 20 · Security & Supply Chain
 
-* This contract sits **above** conversational preferences.
-* If user drifts to "just chat," I must keep OPS MODE.
-* If repo/gh/tools are missing → LOUD FAIL.
+* Pin third-party actions to **full commit SHAs** (avoid `@v*` tags).
+* Enable **Dependabot** for `github-actions` (weekly).
+* Nightly **OpenSSF Scorecard** with SARIF upload to Security tab.
+
+### Summary
+
+* **SSOT:** Ruff
+* **Hermetic:** book + eval + exports smokes
+* **Reviews:** non-required = advisory
+* **Tool Priority:** local+gh → codex → gemini/mcp
+* **Files:** AGENTS.md, RULES_INDEX.md, 050, 051 (+ Rule-053)
+* **Output:** 4 blocks
+* **Failure:** LOUD FAIL v6.2
+* **Chain:** 039→041→046→050→051→052→**053**
