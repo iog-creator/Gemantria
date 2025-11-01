@@ -264,6 +264,22 @@ ci.quality.smoke: ## CI quality smoke (no DB, no network)
 	  MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 \
 	  bash scripts/quality/smoke.sh
 
+# ---------- CLI (Phase-6: reuse-first Typer wrapper) ----------
+
+.PHONY: cli.help
+cli.help: ## Show CLI usage (reuse-first Typer CLI)
+	@python3 scripts/cli/gemantria_cli.py --help || true
+
+.PHONY: cli.quickstart
+cli.quickstart: ## 5-minute local quick-start (hermetic)
+	@python3 scripts/cli/gemantria_cli.py quickstart
+
+.PHONY: ci.cli.smoke
+ci.cli.smoke: ## CLI smoke (hermetic)
+	@python3 scripts/cli/gemantria_cli.py verify
+	@MOCK_AI=1 SKIP_DB=1 EDGE_STRONG=${EDGE_STRONG:-0.90} EDGE_WEAK=${EDGE_WEAK:-0.75} \
+	  python3 scripts/cli/gemantria_cli.py pipeline
+
 # ---------- Governance & Policy Gates ----------
 
 .PHONY: eval.report ci.eval.report
