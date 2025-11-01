@@ -2,7 +2,11 @@
 
 
 
-.PHONY: py.quickfix py.longline py.fullwave
+.PHONY: py.format py.lint py.quickfix py.longline py.fullwave
+py.format:
+	@ruff format src scripts tools
+py.lint:
+	@ruff check src scripts tools
 py.quickfix:
 	@python3 scripts/quick_fixes.py && ruff check --fix src scripts
 py.longline:
