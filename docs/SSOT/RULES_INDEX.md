@@ -55,3 +55,4 @@
 | 050 | 050-ops-contract.mdc | # 050 — OPS Contract v6 (AlwaysApply) |
 | 051 | 051-cursor-insight.mdc | # 051 — Cursor Insight & Handoff (AlwaysApply) |
 | 052 | 052-tool-priority.mdc | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
+| 053 | 053-idempotence.mdc | # 053 — Idempotent Baseline (OPS v6.2.1) |
