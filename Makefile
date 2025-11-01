@@ -213,16 +213,9 @@ ci.exports.smoke: ## Exports smoke (reuse-first; empty-DB tolerant)
 	@python3 scripts/generate_report.py || echo "[ci.exports] report skipped (no data tolerated)"
 
 .PHONY: pipeline.smoke
-pipeline.smoke: ## Reuse-first pipeline smoke (no new scaffolds)
-	@if [ -f scripts/pipeline/run_existing_smoke.sh ]; then \
-	  bash scripts/pipeline/run_existing_smoke.sh ; \
-	elif [ -f scripts/pipeline/smoke.sh ]; then \
-	  bash scripts/pipeline/smoke.sh ; \
-	elif [ -f scripts/run_pipeline_smoke.sh ]; then \
-	  bash scripts/run_pipeline_smoke.sh ; \
-	else \
-	  echo "[pipeline.smoke] no existing runner found (expected: scripts/pipeline/run_existing_smoke.sh)"; exit 1; \
-	fi
+pipeline.smoke: ## Reuse-first pipeline smoke (uses existing book pipeline)
+	@echo "[pipeline.smoke] delegating to existing book.smoke (reuse-first)"
+	@$(MAKE) -s book.smoke
 
 .PHONY: ci.pipeline.smoke
 ci.pipeline.smoke: ## CI-safe pipeline smoke (reuse-first; hermetic)
