@@ -4,6 +4,11 @@
 
 The `src/obs/` directory contains observability and monitoring components for the Gemantria pipeline. These components provide metrics collection, health monitoring, and external system integration for operational visibility.
 
+## Agent Output Format
+
+**Output shape:** 4 blocks (Goal, Commands, Evidence to return, Next gate)
+**SSOT:** Rule 051 — Cursor Insight & Handoff (AlwaysApply)
+
 ## Key Components
 
 ### `prom_exporter.py` - Prometheus Metrics Exporter
@@ -95,3 +100,4 @@ scrape_configs:
 - **Infrastructure**: [../infra/AGENTS.md](../infra/AGENTS.md) - Metrics collection
 - **Rules**: [.cursor/rules/006-agents-md-governance.mdc](../../.cursor/rules/006-agents-md-governance.mdc)
 - **SSOT**: [docs/SSOT/](../../docs/SSOT/) - Metrics schemas
+* See .cursor/rules/050-ops-contract.mdc (AlwaysApply).

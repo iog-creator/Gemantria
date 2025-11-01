@@ -1,0 +1,24 @@
+# 052 — Tool Priority & Context Guidance (AlwaysApply)
+
+## Intent
+
+Prevent Cursor from ignoring Codex/Gemini when context is large.
+
+## Tool order
+
+1. local+gh
+2. codex (if available; else declare 401 and fall back)
+3. gemini/mcp for long governance files
+
+## Files to reference
+
+- AGENTS.md
+- RULES_INDEX.md
+- .cursor/rules/050-ops-contract.mdc
+- .cursor/rules/051-cursor-insight.mdc
+- src/**/AGENTS.md (scoped)
+
+## Output
+
+Always 4 blocks (Goal, Commands, Evidence, Next gate).
+Always print tool-priority + files-referenced at the top.
