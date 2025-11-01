@@ -212,16 +212,16 @@ exports.write: ## Write exports using existing exporters (reuse-first)
 ## Smoke test for exports. Hermetic CI: if no DB env is present, emit HINT and exit 0.
 ## Recognizes Postgres envs (PGHOST, PGUSER, PGDATABASE, DATABASE_URL).
 ci.exports.smoke: ## Exports smoke (reuse-first; empty-DB tolerant)
-	@python scripts/export_stats.py       || echo "[ci.exports] stats skipped (empty DB tolerated)"
-	@python scripts/generate_report.py    || echo "[ci.exports] report skipped (no data tolerated)"
+	@python3 scripts/export_stats.py       || echo "[ci.exports] stats skipped (empty DB tolerated)"
+	@python3 scripts/generate_report.py    || echo "[ci.exports] report skipped (no data tolerated)"
 
 .PHONY: ci.exports.validate
 ci.exports.validate: ## Validate export artifacts (conditional; hermetic)
-	@python scripts/ci/validate_exports.py
+	@python3 scripts/ci/validate_exports.py
 
 .PHONY: ci.badges
 ci.badges: ## Build badges (reuse-first; tolerate missing)
-	@{ test -f scripts/eval/build_badges.py && python scripts/eval/build_badges.py; } \
+	@{ test -f scripts/eval/build_badges.py && python3 scripts/eval/build_badges.py; } \
 	  || echo "[ci.badges] badges script not present; skip"
 
 # ---------- Governance & Policy Gates ----------
