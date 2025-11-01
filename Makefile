@@ -12,15 +12,20 @@ py.fullwave: py.quickfix py.longline
 
 .PHONY: test.smoke test.smoke.strict
 test.smoke:
-	pytest -q --no-cov -m smoke tests/smoke || true
+	pytest -o addopts="" -q --no-cov -m smoke tests/smoke || true
 test.smoke.strict:
-	pytest -q --no-cov -m smoke tests/smoke
+	pytest -o addopts="" -q --no-cov -m smoke tests/smoke
 
 .PHONY: schema.validate.temporal schema.validate.temporal.strict
 schema.validate.temporal:
 	@echo "Schema validation not yet implemented - skipping"
 schema.validate.temporal.strict:
-	@echo "Schema validation not yet implemented - skipping"
+
+.PHONY: ssot.validate ssot.validate.changed
+ssot.validate:
+	@echo "SSOT validation not yet implemented - skipping"
+ssot.validate.changed:
+	@echo "SSOT changed-files validation not yet implemented - skipping"
 
 .PHONY: ci ci.precommit ci.audits
 ci.precommit:
@@ -433,8 +438,45 @@ eval.release_manifest:
 ci.eval.release_manifest:
 	@python3 scripts/eval/build_release_manifest.py
 
-# --- Rerank calibration (local smoke) ---
-.PHONY: eval.graph.calibrate.adv
-eval.graph.calibrate.adv:
-	@echo "[eval.graph.calibrate.adv] advanced calibration with rerank blend validation"
-	@python3 scripts/eval/calibrate_advanced.py
+.PHONY: codex.task codex.grok codex.parallel codex.mcp.edit codex.mcp.validate
+codex.task:
+	@ALLOWED="$(ALLOW_CODEX)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[codex]: disabled in CI (set ALLOW_CODEX=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	if ! command -v scripts/agents/codex-task.sh >/dev/null 2>&1; then \
+	  echo "ERR: scripts/agents/codex-task.sh missing"; exit 1; fi; \
+	scripts/agents/codex-task.sh "$(TASK)"
+
+codex.grok:
+	@ALLOWED="$(ALLOW_CODEX)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[codex]: disabled in CI (set ALLOW_CODEX=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	PROFILE=grok4 scripts/agents/codex-task.sh "$(TASK)"
+
+codex.parallel:
+	@ALLOWED="$(ALLOW_CODEX)"; \
+	IN_CI=false; \
+	if [ "$${CI:-}" = "true" ] || [ -n "$${GITHUB_ACTIONS:-}" ] || [ -n "$${GITLAB_CI:-}" ] || [ -n "$${BUILDKITE:-}" ]; then IN_CI=true; fi; \
+	if $${IN_CI} && [ "$$ALLOWED" != "1" ]; then \
+	  echo "HINT[codex]: disabled in CI (set ALLOW_CODEX=1 to enable explicitly)"; \
+	  exit 0; \
+	fi; \
+	echo "$$TASKS" | tr '\r' '\n' | scripts/agents/codex-par.sh
+
+codex.mcp.edit:
+	@${EDITOR:-nano} ~/.cursor/mcp.json
+
+codex.mcp.validate:
+	@if command -v jq >/dev/null 2>&1; then \
+	  jq . ~/.cursor/mcp.json; \
+	else \
+	  python3 -m json.tool ~/.cursor/mcp.json; \
+	fi

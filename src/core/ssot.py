@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
-import re
 
 
 @dataclass(frozen=True)
@@ -16,7 +16,7 @@ class MasterPlan:
     prohibits_db_writes: bool
 
     @classmethod
-    def load_from_file(cls, path: Path) -> "MasterPlan":
+    def load_from_file(cls, path: Path) -> MasterPlan:
         """Load the master plan from ``path``.
 
         The markdown file contains a bullet list with the guarantees we care about.  The
@@ -60,10 +60,7 @@ class MasterPlan:
         """Validate that the observed conditions meet the SSOT requirements."""
 
         if measured_coverage < self.coverage_gate:
-            msg = (
-                "Coverage requirement not met: "
-                f"expected ≥{self.coverage_gate}, observed {measured_coverage}."
-            )
+            msg = f"Coverage requirement not met: expected ≥{self.coverage_gate}, observed {measured_coverage}."
             raise ValueError(msg)
         if wrote_to_db and self.prohibits_db_writes:
             msg = "Database writes were attempted even though they are forbidden."

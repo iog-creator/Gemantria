@@ -28,12 +28,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt || true
-          pip install pre-commit ruff mypy pytest
+          pip install pre-commit mypy pytest
+      - name: Ensure pinned ruff (0.13.0)
+        run: |
+          python -m pip install --upgrade --force-reinstall "ruff==0.13.0"
+          ruff --version
+      - name: Verify ruff version
+        run: |
+          V=$(ruff --version | awk '{print $2}')
+          test "$V" = "0.13.0" || (echo "::error::Expected ruff 0.13.0, got $V"; exit 2)
 
       - name: Tooling versions
         run: |
           ruff --version || true
           mypy --version || true
+
+      # Force fresh pre-commit environment to defeat ruff version cache drift
+      - name: Clear pre-commit cache (force ruff 0.13.0)
+        run: rm -rf ~/.cache/pre-commit
 
       # PRs: run on the diff (base→head)
       - name: Pre-commit (PR diff)

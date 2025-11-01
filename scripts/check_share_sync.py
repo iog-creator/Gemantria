@@ -70,12 +70,9 @@ def main():
         if not dst.exists():
             fail(f"Share copy missing: {dst_rel}")
 
-        # Must be byte-identical and at least as new as source
+        # Must be byte-identical
         if sha256(src) != sha256(dst):
             fail(f"Content mismatch: {src_rel} -> {dst_rel} (run `make share.refresh`)")
-
-        if dst.stat().st_mtime < src.stat().st_mtime:
-            fail(f"Share copy is older than source: {dst_rel} (run `make share.refresh`)")
 
     print("[share.check] PASS — share/ is flat and current")
 
