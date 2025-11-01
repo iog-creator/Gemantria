@@ -613,7 +613,7 @@ def generate_markdown_report(run_id: str, metrics: dict[str, Any]) -> str:
         # Try to load correlations from the export file
         correlations_path = Path("exports/graph_correlations.json")
         if correlations_path.exists():
-            import json
+            import json  # noqa: E402
 
             correlations_data = json.loads(correlations_path.read_text())
 

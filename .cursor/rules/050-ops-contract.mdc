@@ -1,0 +1,7 @@
+# 050 — OPS Contract Enforcement
+
+description: |
+
+  Ensures GPT-5 OPS MODE runs under the same constraints as AGENTS.md and the
+
+  Gemantria OPS Contract v6. Mirrors user-rules contract to enforce in-repo SSOT.

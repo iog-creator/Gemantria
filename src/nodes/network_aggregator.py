@@ -31,8 +31,8 @@ except ImportError:
         pass
 
 
-from src.infra.structured_logger import get_logger, log_json
-from src.services.lmstudio_client import get_lmstudio_client
+from src.infra.structured_logger import get_logger, log_json  # noqa: E402
+from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
 
 LOG = get_logger("gemantria.network_aggregator")
 
@@ -62,7 +62,7 @@ def _l2_normalize(vec: list[float]) -> list[float]:
 
 def _knn_pairs(vecs, ids, k):
     """Naive cosine KNN for small batches with improved similarity computation."""
-    import numpy as np
+    import numpy as np  # noqa: E402
 
     X = np.vstack(vecs)  # L2-normalized already
     sims = X @ X.T  # Cosine similarity (vectors are L2 normalized)
@@ -124,7 +124,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     kept = []
-    from src.services.rerank_via_embeddings import (
+    from src.services.rerank_via_embeddings import (  # noqa: E402
         rerank_via_embeddings as rerank_pairs,
     )
 
@@ -149,7 +149,7 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
         raise
 
     # Rerank ALL pairs in batches
-    import os
+    import os  # noqa: E402
 
     # Weight cosine vs rerank via env knob (default: lean on cosine)
     EDGE_ALPHA = float(os.getenv("EDGE_ALPHA", "0.70"))  # 0..1
@@ -387,7 +387,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
         primary_verse = f"{book} (reference)"
 
     # Build highly differentiated semantic document with unique identifiers
-    import uuid
+    import uuid  # noqa: E402
 
     unique_id = str(uuid.uuid4())[:8]  # Short unique identifier
 
@@ -407,7 +407,7 @@ def _build_document_string(noun: dict[str, Any]) -> str:
         doc_parts.append(f"AI Confidence Level: {confidence}")
 
     # Add semantic context to differentiate similar concepts
-    semantic_context = f"This concept appears {freq} times in {book} and is associated with the Hebrew word '{hebrew}'"
+    semantic_context = f"This concept appears {freq} times in {book} and is associated with the Hebrew word '{hebrew}'"  # noqa: E501
     if primary_verse and primary_verse != f"{book} (reference)":
         semantic_context += f", first appearing at {primary_verse}"
     doc_parts.append(f"Semantic Context: {semantic_context}")
@@ -566,7 +566,7 @@ def _get_knn_neighbors(cur, source_net_id: uuid.UUID, top_k: int) -> list[tuple[
 
 def _cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
     """Compute cosine similarity between two vectors."""
-    import math
+    import math  # noqa: E402
 
     if len(vec1) != len(vec2):
         raise ValueError("Vectors must have same length")

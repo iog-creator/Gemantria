@@ -22,7 +22,7 @@ def _load_json(p: pathlib.Path) -> Any:
 
 
 def _read_yaml(path: pathlib.Path):
-    import yaml  # dev-only dep
+    import yaml  # dev-only dep  # noqa: E402
 
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 

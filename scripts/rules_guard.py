@@ -76,7 +76,7 @@ def load_json(p: Path):
 
 def validate_json_schema(instance_path: Path, schema_path: Path):
     try:
-        from jsonschema import Draft202012Validator, validate
+        from jsonschema import Draft202012Validator, validate  # noqa: E402
 
         instance = load_json(instance_path)
         schema = load_json(schema_path)

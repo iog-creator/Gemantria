@@ -78,7 +78,7 @@ def main() -> int:
                 }
             )
 
-    OUTJ.write_text(json.dumps({"count": len(anoms), "items": anoms}, indent=2, sort_keys=True), encoding="utf-8")
+    OUTJ.write_text(json.dumps({"count": len(anoms), "items": anoms}, indent=2, sort_keys=True), encoding="utf-8")  # noqa: E501
     BADG.write_text(_badge(len(anoms)), encoding="utf-8")
     print(f"[anoms] count={len(anoms)} wrote {OUTJ.relative_to(ROOT)} and {BADG.relative_to(ROOT)}")
     return 0

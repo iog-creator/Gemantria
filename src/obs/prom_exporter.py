@@ -60,6 +60,6 @@ def metrics():
 
 # Optional: local runner
 if __name__ == "__main__" and PROM_EXPORTER_ENABLED:
-    import uvicorn
+    import uvicorn  # noqa: E402
 
     uvicorn.run(app, host="0.0.0.0", port=PROM_EXPORTER_PORT)

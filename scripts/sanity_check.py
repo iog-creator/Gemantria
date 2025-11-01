@@ -123,7 +123,7 @@ def test_genesis_chapter_1():
         mean_self_sim = statistics.mean(self_similarities)
 
         # Test top-5 similarities across all pairs
-        import numpy as np
+        import numpy as np  # noqa: E402
 
         X = np.vstack(embeddings)
         sim_matrix = X @ X.T  # Cosine similarities
@@ -217,7 +217,7 @@ def test_genesis_chapter_1():
 
     except Exception as e:
         print(f"   ❌ Embedding test failed: {e}")
-        import traceback
+        import traceback  # noqa: E402
 
         traceback.print_exc()
 

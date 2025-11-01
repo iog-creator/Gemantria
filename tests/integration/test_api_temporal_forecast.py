@@ -64,7 +64,7 @@ def test_api_temporal_and_forecast_smoke(tmp_path, monkeypatch):
     proc = subprocess.Popen(["python", "-m", "src.services.api_server"])
     try:
         time.sleep(1.5)
-        import urllib.request
+        import urllib.request  # noqa: E402
 
         with urllib.request.urlopen("http://127.0.0.1:8000/api/v1/temporal?unit=chapter&window=5") as r:
             data = json.loads(r.read().decode("utf-8"))

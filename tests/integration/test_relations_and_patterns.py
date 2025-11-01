@@ -148,8 +148,8 @@ class TestRelationsAndPatternsIntegration:
         """Test that analyze_graph.py script can be executed."""
         # This is a basic smoke test - the script should not crash
         # In a real test environment, we'd run the script and check results
-        import subprocess
-        import sys
+        import subprocess  # noqa: E402
+        import sys  # noqa: E402
 
         try:
             result = subprocess.run(
@@ -169,8 +169,8 @@ class TestRelationsAndPatternsIntegration:
 
     def test_export_script_execution(self, db_connection):
         """Test that export_graph.py script can be executed."""
-        import subprocess
-        import sys
+        import subprocess  # noqa: E402
+        import sys  # noqa: E402
 
         try:
             result = subprocess.run(

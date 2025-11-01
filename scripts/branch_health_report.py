@@ -32,7 +32,7 @@ def get_branches() -> list[dict]:
 
     # Get local branches
     stdout, _, _ = run_cmd(
-        ["git", "branch", "-a", "--format=%(refname:short)|%(committerdate:iso)|%(committerdate:relative)|%(subject)"]
+        ["git", "branch", "-a", "--format=%(refname:short)|%(committerdate:iso)|%(committerdate:relative)|%(subject)"]  # noqa: E501
     )
 
     for line in stdout.split("\n"):
@@ -189,7 +189,7 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
             f"| Synced (Local + Remote) | {stats['synced']} | {stats['synced'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(
-            f"| With Pull Request | {stats['with_pr']} | {stats['with_pr'] / stats['total_branches'] * 100:.1f}% |\n"
+            f"| With Pull Request | {stats['with_pr']} | {stats['with_pr'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
         f.write(
             f"| Checks Passed | {stats['checks_passed']} | {stats['checks_passed'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501

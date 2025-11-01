@@ -1,5 +1,7 @@
 # NEXT_STEPS (author: GPT-5)
 
+> OPS MODE: run ruff, run 3 hermetic makes, paste evidence. If main is dirty → stop and make hygiene PR.
+
 ## Branch
 <auto-filled by Cursor>
 

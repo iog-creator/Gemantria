@@ -63,7 +63,7 @@ def main() -> int:
             "exports_count": (prov.get("exports", {}) or {}).get("count"),
         }
         lines.append("```json")
-        import json as _json
+        import json as _json  # noqa: E402
 
         lines.append(_json.dumps(pv, indent=2, sort_keys=True))
         lines.append("```")

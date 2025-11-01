@@ -19,9 +19,11 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - `ALLOW_PARTIAL=0|1` (if 1, manifest must capture reason)
   - `PARTIAL_REASON=<string>` (required when ALLOW_PARTIAL=1)
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
-- LLM: LM Studio only when enabled; confidence is metadata only.
-- GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
-- CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
+- AI Agents: Gemini CLI (long-context sessions), Codex CLI (terminal + MCP), LM Studio (metadata only)
+- API Keys: `GEMINI_API_KEY` (for Gemini CLI), OpenAI key (for Codex CLI when configured)
+- MCP Servers: GitHub (46 tools), Gemantria-ops (13 tools), Codex (2 tools) integrated in Cursor
+- GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration)
+- CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps
 
 ## Workflow (small green PRs)
 - Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
@@ -164,6 +166,7 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
+| 050 | # 050 — OPS Contract Enforcement |
 <!-- RULES_INVENTORY_END -->
 
 ---
@@ -225,3 +228,12 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Use:** `make codex.task TASK="List last 5 commits; propose 2-line release note."`
 
 - **Gating:** **Off in CI** by default; to allow in CI, set `ALLOW_CODEX=1` (not recommended).
+
+---
+
+🧭 OPS Enforcement:
+
+- Cursor + GPT-5 obey Gemantria OPS Contract v6
+- Ruff is SSOT for quality
+- All merges gated by required checks
+- Hermetic smokes prove CI wiring
