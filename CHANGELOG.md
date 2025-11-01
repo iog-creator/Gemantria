@@ -1,3 +1,13 @@
+## v0.9.0 — Post-merge hardening + evaluation suite
+
+- **Post-merge hardening**: Added CODEOWNERS, RELEASES.md process, required checks badges
+- **Branch protection**: Main branch now requires `ruff` + `ci/build` checks before merging
+- **Advanced calibration**: `make eval.graph.calibrate.adv` target with OPS_CALIBRATION.md
+- **Book smoke testing**: `make book.smoke` dry-run target with OPS_BOOK_SMOKE.md
+- **Quality badges**: README now embeds live quality trend/status badges
+- **Codex CLI integration**: Optional local CLI integration (CI-gated)
+- **Ruff pinning**: CI workflows pin ruff==0.13.0 with version verification
+
 ## v0.8.1 — Phase-8 shipping UX (local-only)
 
 - **Embed badges in HTML**: Status badges now render inline in `share/eval/index.html`
