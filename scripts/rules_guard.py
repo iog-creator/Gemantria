@@ -146,6 +146,8 @@ def main():
     # Blocks newly-added files that duplicate existing feature classes.
     dup_patterns = [
         r"src/.*/(?:pipeline|graph|envelope|rerank).*\\.py$",
+        r"^src/(?:.*)/rerank_.*\\.py$",  # block adding new reranker impls
+        r"^src/rerank/(?!__init__\\.py$).+\\.py$",  # block files under src/rerank/** (reuse existing only)
         r"migrations/.*\\.sql$",
         r"scripts/.*/(?:export|pipeline|db).*\\.(sh|py)$",
         r"docs/.*/(?:pipeline|schema|exports|badges).*\\.md$",
