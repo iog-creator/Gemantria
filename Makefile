@@ -218,10 +218,10 @@ ci.exports.smoke:
 pipeline.smoke: ## Run pipeline smoke (reuse-first; hermetic)
 	@if [ -f scripts/pipeline/run_existing_smoke.sh ]; then \
 	  bash scripts/pipeline/run_existing_smoke.sh ; \
-	elif [ -f _quarantine/p2-scaffold/smoke.sh ]; then \
-	  MOCK_AI=${MOCK_AI:-1} SKIP_DB=${SKIP_DB:-1} PIPELINE_SEED=${PIPELINE_SEED:-4242} bash _quarantine/p2-scaffold/smoke.sh ; \
 	else \
-	  echo "[pipeline] no smoke runner found"; exit 1; \
+	  echo "[pipeline] quarantined scaffold available but requires existing pipeline modules"; \
+	  echo "[pipeline] implement adapters to existing pipeline functionality first"; \
+	  exit 1; \
 	fi
 
 .PHONY: ci.pipeline.smoke
