@@ -97,7 +97,9 @@ def main():
 
     code_dirs = ("src/", "scripts/", "migrations/", "webui/")
     code_touched = any(f.startswith(code_dirs) for f in files)
-    docs_touched = any(f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files)
+    docs_touched = any(
+        f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files
+    )
 
     print(f"[rules_guard] Code touched: {code_touched}, Docs touched: {docs_touched}")
 
@@ -155,7 +157,7 @@ def main():
     # Diff only against main to detect NEW files in this PR/branch
     try:
         out = sh("git diff --name-status origin/main...HEAD")
-        added = [ln.split("\t",1)[1] for ln in out.splitlines() if ln.startswith("A\t")]
+        added = [ln.split("\t", 1)[1] for ln in out.splitlines() if ln.startswith("A\t")]
         offenders = []
         for path in added:
             for pat in dup_patterns:
