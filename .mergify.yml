@@ -1,0 +1,17 @@
+queue_rules:
+  - name: default
+    conditions: []
+
+pull_request_rules:
+  - name: auto-queue when all gates pass
+    conditions:
+      - check-success=build-pr
+      - check-success=policy-gate
+      - "#approved-reviews-by>=1"
+      - base=main
+      - -draft
+    actions:
+      queue:
+        name: default
+        method: squash
+        allow_speculation: false

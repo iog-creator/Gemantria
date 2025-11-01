@@ -1,0 +1,19 @@
+name: policy-gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
+      # A) Conventional Commits on all PR commits
+      - name: Conventional Commits
+        uses: wagoid/commitlint-github-action@v6
