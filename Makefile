@@ -214,6 +214,14 @@ ci.exports.smoke:
 	  PYTHONPATH=. python3 export_stats.py && echo "[ci.exports.smoke] OK (DB path)"; \
 	fi
 
+.PHONY: pipeline.smoke
+pipeline.smoke: ## Run LangGraph pipeline smoke (hermetic, MOCK_AI=1)
+	@bash scripts/pipeline/smoke.sh
+
+.PHONY: ci.pipeline.smoke
+ci.pipeline.smoke: ## CI-safe pipeline smoke (no DB, no network)
+	@MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 bash scripts/pipeline/smoke.sh
+
 # ---------- Governance & Policy Gates ----------
 
 .PHONY: eval.report ci.eval.report
