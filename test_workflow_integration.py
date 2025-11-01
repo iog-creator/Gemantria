@@ -25,6 +25,8 @@ class WorkflowTest:
     def run_command(self, cmd, cwd=None, env=None, timeout=30):
         """Run a command and return (success, output, error)"""
         try:
+            # SECURITY: Commands are hardcoded in test code, not user-controllable
+            # Use shell=True for commands with pipes/redirection, but commands are trusted
             result = subprocess.run(
                 cmd, shell=True, cwd=cwd or self.project_root, env=env, capture_output=True, text=True, timeout=timeout
             )
