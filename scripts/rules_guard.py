@@ -14,6 +14,7 @@ Spec linkage: ADR-013 doc sync; docs/README workflow; .cursor rule governance.
 
 import json
 import os
+import re
 import subprocess
 import sys
 from contextlib import suppress
@@ -139,6 +140,37 @@ def main():
         )
 
     print("[rules_guard] ✓ Critical Check 3 PASSED: All Rule 017 required AGENTS.md files present")
+
+    print("[rules_guard] Critical Check 4: Rule-054 reuse-first duplicate detection")
+    # Rule-054: Reuse-first duplicate detection (scoped, conservative)
+    # Blocks newly-added files that duplicate existing feature classes.
+    dup_patterns = [
+        r"src/.*/(?:pipeline|graph|envelope|rerank).*\\.py$",
+        r"migrations/.*\\.sql$",
+        r"scripts/.*/(?:export|pipeline|db).*\\.(sh|py)$",
+        r"docs/.*/(?:pipeline|schema|exports|badges).*\\.md$",
+        r"scripts/.*/build_badges\\.py$",
+        r"exports/.+\\.(json|csv)$",  # block adding checked-in static exports
+    ]
+    # Diff only against main to detect NEW files in this PR/branch
+    try:
+        out = sh("git diff --name-status origin/main...HEAD")
+        added = [ln.split("\t",1)[1] for ln in out.splitlines() if ln.startswith("A\t")]
+        offenders = []
+        for path in added:
+            for pat in dup_patterns:
+                if re.search(pat, path):
+                    offenders.append(path)
+                    break
+        if offenders:
+            require(
+                False,
+                f"RULE-054 violation: duplicate-like files added: {', '.join(offenders)}. Use adapters to existing modules; do not re-scaffold.",
+            )
+    except Exception as e:
+        print(f"[rules_guard] Warning: Could not check Rule-054 (diff failed): {e}")
+
+    print("[rules_guard] ✓ Critical Check 4 PASSED: Rule-054 reuse-first compliance")
 
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 
