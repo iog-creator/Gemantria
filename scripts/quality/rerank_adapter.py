@@ -23,7 +23,12 @@ random.seed(SEED)
 
 def _load_rerank():
     # Try likely modules in this repo (reuse-first); add more paths if needed.
-    for mod in ("src.rerank.blender", "src.services.rerank_via_embeddings", "rerank", "services.rerank"):
+    for mod in (
+        "src.rerank.blender",
+        "src.services.rerank_via_embeddings",
+        "rerank",
+        "services.rerank",
+    ):
         try:
             m = importlib.import_module(mod)
             if hasattr(m, "rerank"):
