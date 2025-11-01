@@ -151,6 +151,7 @@ def main():
         r"docs/.*/(?:pipeline|schema|exports|badges).*\\.md$",
         r"scripts/.*/build_badges\\.py$",
         r"exports/.+\\.(json|csv)$",  # block adding checked-in static exports
+        r"webui/.*/(components|pages|views)/.*\\.(tsx|jsx|vue)$",  # block duplicate UI scaffolds
     ]
     # Diff only against main to detect NEW files in this PR/branch
     try:

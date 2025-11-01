@@ -239,6 +239,14 @@ pipeline.smoke: ## Reuse-first pipeline smoke (uses existing book pipeline)
 ci.pipeline.smoke: ## CI-safe pipeline smoke (reuse-first; hermetic)
 	@MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 $(MAKE) -s pipeline.smoke
 
+.PHONY: webui.smoke
+webui.smoke: ## Reuse-first Web UI smoke (adapter + existing viewer build if present)
+	@bash scripts/webui/smoke.sh
+
+.PHONY: ci.webui.smoke
+ci.webui.smoke: ## CI-safe Web UI smoke (no network; OK if viewer build absent)
+	@MOCK_AI=1 SKIP_DB=1 $(MAKE) -s webui.smoke
+
 # ---------- Governance & Policy Gates ----------
 
 .PHONY: eval.report ci.eval.report
