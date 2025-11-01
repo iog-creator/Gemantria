@@ -19,6 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
+        with:
+          python-version: '3.11'
+      - run: pip install ruff==0.13.0
       - run: ruff format --check . && ruff check .
       - run: make share.sync
       - run: make eval.graph.calibrate.adv
