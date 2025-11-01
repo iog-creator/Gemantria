@@ -4,6 +4,11 @@
 
 The `src/graph/` directory contains the main LangGraph pipeline orchestration, execution engine, and batch processing logic. This is the heart of the Gemantria data processing workflow.
 
+## Agent Output Format
+
+**Output shape:** 4 blocks (Goal, Commands, Evidence to return, Next gate)
+**SSOT:** Rule 051 — Cursor Insight & Handoff (AlwaysApply)
+
 ## Key Components
 
 ### `graph.py` - Main Pipeline Engine
@@ -149,3 +154,4 @@ if not qwen_health.ok:
 - **psycopg**: Database operations and checkpointer
 - **lmstudio_client**: Qwen model health verification
 - **Core modules**: Hebrew processing and ID generation
+* See .cursor/rules/050-ops-contract.mdc (AlwaysApply).

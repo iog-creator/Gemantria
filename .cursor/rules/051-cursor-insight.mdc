@@ -1,0 +1,50 @@
+# 051 — Cursor Insight & Handoff (AlwaysApply)
+
+## Intent
+
+Cursor must stop exploratory / unfocused tool flurries and instead **emit the exact evidence set** the PM agent needs. This rule anchors to the OPS Contract (050) and the PR Merge Policy (041).
+
+## Triggers
+
+- PR is *mergeable* but appears "blocked" by a **non-required** automated review (Sourcery, Copilot, Snyk, etc.)
+- PR is rebased on `main` and needs verification gates
+- Operator asks for "handoff", "next chat", or "prepare evidence"
+
+## Required Evidence Set
+
+Cursor **must** paste, in this order:
+
+1. `git rev-parse --show-toplevel`
+2. `git rev-parse --abbrev-ref HEAD`
+3. `git status -sb`
+4. One hermetic block (all 3, even if they no-op):
+   - `ruff format --check . && ruff check .`
+   - `make book.smoke`
+   - `make ci.exports.smoke`
+5. For the active PR **N**:
+   - `gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks`
+   - `gh pr checks <N> --required --json name,state`
+6. If `gh pr checks ...` shows **all required = SUCCESS**, Cursor must **explicitly state**:
+   > "Non-required automated review present → advisory only per 041 + 050. Standard merge allowed."
+
+## Non-Required Review Rule
+
+- If the review is **not** part of GitHub's "required" checks and **not** in CODEOWNERS → treat as **advisory**.
+- Cursor **must not** stop or say "blocked" if: ruff ✅, build ✅, required checks ✅.
+- Cursor **may** note: "If you have admin you can dismiss the stale automated review."
+
+## Handoff Format
+
+When a handoff is requested, Cursor must output **4 blocks only**:
+
+1. **Goal** — single sentence, present tense
+2. **Commands** — runnable shell, in order
+3. **Evidence to return** — numbered list tied to the commands
+4. **Next gate** — what the PM/next chat will do
+
+No extra narrative, no speculation.
+
+## Notes
+
+- This rule is **AlwaysApply** for Gemantria
+- This rule depends on: 039, 041, 046, 050
