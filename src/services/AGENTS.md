@@ -4,6 +4,11 @@
 
 Describes service-level integrations (database + LM Studio) that provide external dependencies for the Gematria pipeline. This document ensures consistent interface contracts and safety policies across all service interactions.
 
+## Agent Output Format
+
+**Output shape:** 4 blocks (Goal, Commands, Evidence to return, Next gate)
+**SSOT:** Rule 051 — Cursor Insight & Handoff (AlwaysApply)
+
 | Service                  | Function                        | Related ADRs     |
 | ------------------------ | ------------------------------- | ---------------- |
 | db.py                    | Connection management + pooling | ADR-001          |
@@ -67,3 +72,4 @@ Describes service-level integrations (database + LM Studio) that provide externa
 - **Parent**: [AGENTS.md](../AGENTS.md) - Repository overview
 - **Rules**: [.cursor/rules/011-production-safety.mdc](../../.cursor/rules/011-production-safety.mdc)
 - **SSOT**: [docs/SSOT/](../../docs/SSOT/) - Service contracts
+* See .cursor/rules/050-ops-contract.mdc (AlwaysApply).

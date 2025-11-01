@@ -77,6 +77,51 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
 * **Ops verifier (local)**: `make ops.verify` prints deterministic checks confirming Phase-8 eval surfaces exist (Makefile targets, manifest version, docs header, share dir). Local-only; not wired into CI.
 * **Pipeline stabilization**: `eval.package` runs to completion with soft integrity gates; `targets.check.dupes` prevents Makefile regressions; `build_release_manifest.py` skips bundles/ for performance.
+
+## Cursor Execution Profile (AlwaysApply)
+
+This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and human operators can continue from any point.
+
+**Always output in 4 blocks:**
+
+1. **Goal** — what this step is doing (e.g. "rebase PR #70 onto clean main and re-run hermetic bundle")
+2. **Commands** — exact shell commands, top to bottom, no prose in between
+3. **Evidence to return** — which command outputs we expect to see pasted back
+4. **Next gate** — what happens once the evidence is pasted
+
+**Minimum evidence per PR session:**
+
+```bash
+git rev-parse --show-toplevel
+git rev-parse --abbrev-ref HEAD
+git status -sb
+ruff format --check . && ruff check .
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
+```
+
+**GitHub PR policy for automated tools:**
+
+* If `gh pr checks <N> --required` is **all SUCCESS** → non-required automated reviews are **advisory only**.
+* Cursor must **say that** in the output:
+
+  > "Required checks are green; automated review is advisory per AGENTS.md and RULE 051."
+
+* Cursor must prefer **standard merge**:
+
+  ```bash
+  gh pr merge <N> --squash
+  ```
+
+  when checks are green.
+
+**Fumbling prevention:**
+
+* Do **not** re-ask for repo location if `git rev-parse --show-toplevel` already succeeded in this session.
+* Do **not** re-run discovery (`gh pr list …`) more than once per handoff unless the previous output showed conflicts.
+* Do **not** propose alternative tooling (Black, isort, flake8) — SSOT is `ruff`.
+
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
 - Mispar Hechrachi; finals=regular. Surface-form gematria with calc strings.
@@ -164,8 +209,8 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
-| 050 | # 050 — OPS Contract (AlwaysApply) |
-| 051 | # 051 — Cursor Insight (AlwaysApply) |
+| 050 | # 050 — OPS Contract v6 (AlwaysApply) |
+| 051 | # 051 — Cursor Insight & Handoff (AlwaysApply) |
 | 052 | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | # 053 — Idempotent Baseline (OPS v6.2.1) |
 <!-- RULES_INVENTORY_END -->
