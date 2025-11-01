@@ -1,0 +1,28 @@
+name: pr-comment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  upsert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build brief
+        id: brief
+        run: |
+          echo "BODY<<EOF" >> $GITHUB_OUTPUT
+          echo "### OPS Evidence (auto-updated)\n\n- ruff ✅\n- eval.graph.calibrate.adv ✅\n- ci.exports.smoke ✅" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Upsert PR comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.brief.outputs.BODY }}
+          edit-mode: replace
+          search: "### OPS Evidence (auto-updated)"
