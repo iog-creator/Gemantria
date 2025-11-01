@@ -29,6 +29,7 @@ repos:
       - id: check-merge-conflict
       - id: check-yaml
       - id: check-json
+        exclude: ^webui/.*/node_modules/
       - id: check-added-large-files
 
   - repo: local
