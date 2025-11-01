@@ -239,6 +239,31 @@ pipeline.smoke: ## Reuse-first pipeline smoke (uses existing book pipeline)
 ci.pipeline.smoke: ## CI-safe pipeline smoke (reuse-first; hermetic)
 	@MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 $(MAKE) -s pipeline.smoke
 
+.PHONY: webui.smoke
+webui.smoke: ## Reuse-first Web UI smoke (adapter + existing viewer build if present)
+	@bash scripts/webui/smoke.sh
+
+.PHONY: ci.webui.smoke
+ci.webui.smoke: ## CI-safe Web UI smoke (no network; OK if viewer build absent)
+	@MOCK_AI=1 SKIP_DB=1 $(MAKE) -s webui.smoke
+
+.PHONY: quality.show.thresholds
+quality.show.thresholds: ## Echo current reranker thresholds (reuse-first)
+	@echo "EDGE_STRONG=${EDGE_STRONG:-0.90}"; \
+	 echo "EDGE_WEAK=${EDGE_WEAK:-0.75}"; \
+	 echo "CANDIDATE_POLICY=${CANDIDATE_POLICY:-cache}"
+
+.PHONY: quality.smoke
+quality.smoke: ## Local quality smoke (adapter-only; hermetic)
+	@bash scripts/quality/smoke.sh
+
+.PHONY: ci.quality.smoke
+ci.quality.smoke: ## CI quality smoke (no DB, no network)
+	@EDGE_STRONG=${EDGE_STRONG:-0.90} EDGE_WEAK=${EDGE_WEAK:-0.75} \
+	  CANDIDATE_POLICY=${CANDIDATE_POLICY:-cache} \
+	  MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 \
+	  bash scripts/quality/smoke.sh
+
 # ---------- Governance & Policy Gates ----------
 
 .PHONY: eval.report ci.eval.report
