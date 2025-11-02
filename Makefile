@@ -1,30 +1,9 @@
 
 
-ingest.local.envelope:
-	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope]: CI detected; noop."; exit 0; fi
-	@PYTHONPATH=. python3 scripts/ingest/build_envelope.py
-
-ci.ingest.envelope.check:
-	@echo "[ci.ingest.envelope.check] start"
-	@if [ -n "$$CI" ]; then echo "HINT[ci.ingest.envelope.check]: CI detected; noop by design."; exit 0; fi
-	@echo "Local-only envelope build; OUT_FILE=/tmp/p9-ingest-envelope.json"
-
-ingest.local.envelope.schema:
-	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.schema]: CI detected; noop."; exit 0; fi
-	@OUT_FILE=/tmp/p9-ingest-envelope.json python3 scripts/ingest/build_envelope.py > /dev/null
-	@python3 scripts/ingest/validate_ingest_envelope_schema.py /tmp/p9-ingest-envelope.json
-
-ci.ingest.envelope.schema:
-	@echo "[ci.ingest.envelope.schema] start"
-	@if [ -n "$$CI" ]; then echo "HINT[ci.ingest.envelope.schema]: CI detected; noop by design."; exit 0; fi
-	@echo "Local-only schema check; set SNAPSHOT_FILE to your local path."
-
-ingest.local.envelope.show:
-	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.show]: CI detected; noop."; exit 0; fi
-	@OUT_FILE=/tmp/p9-ingest-envelope.json P9_CREATED_AT=2025-11-02T00:00:00 \
-	  PYTHONPATH=. python3 scripts/ingest/build_envelope.py > /dev/null && head -40 /tmp/p9-ingest-envelope.json
-
-ingest.local.envelope.meta:
-	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.meta]: CI detected; noop."; exit 0; fi
-	@OUT_FILE=/tmp/p9-ingest-envelope.json python3 scripts/ingest/build_envelope.py > /dev/null
-	@python3 scripts/ingest/show_meta.py
+ui.dev.help:
+	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
+	@echo "UI local dev instructions:"
+	@echo "1) make ingest.local.envelope"
+	@echo "2) cd ui && npm create vite@latest . -- --template react-ts (or pnpm)"
+	@echo "3) Implement loader to read /tmp/p9-ingest-envelope.json"
+	@echo "4) Run: npm run dev (local only)"
