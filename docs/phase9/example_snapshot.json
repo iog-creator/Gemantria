@@ -1,0 +1,9 @@
+{
+
+  "meta": {"version": "0.1.0", "seed": 42},
+
+  "nodes": [{"id": "n1", "label": "example"}],
+
+  "edges": []
+
+}
