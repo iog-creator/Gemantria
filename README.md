@@ -64,3 +64,5 @@ See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 - Snapshot prep guide: see `docs/phase9/SNAPSHOTS.md`.
 
 - Ingestion envelope fields (plan): see `docs/phase9/ENVELOPE_FIELDS.md`.
+
+- Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
