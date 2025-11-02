@@ -287,15 +287,7 @@ ci.webui.smoke: ## CI-safe Web UI smoke (no network; OK if viewer build absent)
 .PHONY: ci.webui.temporal.smoke
 ci.webui.temporal.smoke: ## CI: regenerate bundle and report meta.temporal (tolerates empty exports)
 	@MOCK_AI=1 SKIP_DB=1 python3 scripts/adapter/exports_to_viewer.py || true
-	@python3 - <<'PY'
-import json, pathlib
-p = pathlib.Path("build/webui_bundle/bundle.json")
-if p.exists():
-    meta = json.loads(p.read_text(encoding="utf-8")).get("meta", {})
-    print("[webui.temporal] meta.temporal =", meta.get("temporal"))
-else:
-    print("[webui.temporal] no bundle present (no exports) — OK")
-PY
+	@python3 scripts/webui/temporal_smoke.py
 
 .PHONY: quality.show.thresholds
 quality.show.thresholds: ## Echo current reranker thresholds (reuse-first)
