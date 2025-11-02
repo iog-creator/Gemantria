@@ -11,7 +11,7 @@ ci.ingest.envelope.check:
 
 ingest.local.envelope.schema:
 	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.schema]: CI detected; noop."; exit 0; fi
-	@OUT_FILE=/tmp/p9-ingest-envelope.json python3 scripts/ingest/build_envelope.py > /dev/null
+	@OUT_FILE=/tmp/p9-ingest-envelope.json PYTHONPATH=. python3 scripts/ingest/build_envelope.py > /dev/null
 	@python3 scripts/ingest/validate_ingest_envelope_schema.py /tmp/p9-ingest-envelope.json
 
 ci.ingest.envelope.schema:
