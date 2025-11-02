@@ -1,12 +1,11 @@
 
 
-ingest.help:
-	@echo "Phase-9 Local Ingestion/Validation Helpers"
-	@echo "------------------------------------------------"
-	@echo "make ingest.local.validate              # build metrics envelope from snapshot (LOCAL)"
-	@echo "make ingest.local.validate.schema       # build + schema-check envelope (LOCAL)"
-	@echo "make ci.ingest.check                    # CI-guarded noop with HINT (hermetic)"
-	@echo "make ci.ingest.validate.check           # CI-guarded noop with HINT (hermetic)"
-	@echo ""
-	@echo "Env knobs (LOCAL ONLY): SNAPSHOT_FILE=path, P9_SEED=int"
-	@echo "In CI, these targets print HINT lines and exit 0 (no DB/network; hermetic)."
+ingest.example.roll:
+	@if [ -n "$$CI" ]; then echo "HINT[ingest.example.roll]: CI detected; noop."; exit 0; fi
+	@mkdir -p docs/phase9/snapshots
+	@SEED=$${P9_SEED:-42}; D=$$(date +%Y%m%d); OUT=docs/phase9/snapshots/$${D}_example_seed$${SEED}.json; \
+	  if [ -f "$$OUT" ] && [ "$$${FORCE:-0}" != "1" ]; then \
+	    echo "HINT[ingest.example.roll]: exists $$OUT (use FORCE=1 to overwrite)"; \
+	  else \
+	    cp docs/phase9/example_snapshot.json "$$OUT" && echo "ROLLED: $$OUT"; \
+	  fi
