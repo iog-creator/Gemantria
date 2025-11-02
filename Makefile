@@ -9,3 +9,6 @@ ingest.example.roll:
 	  else \
 	    cp docs/phase9/example_snapshot.json "$$OUT" && echo "ROLLED: $$OUT"; \
 	  fi
+
+# Phase-9 helpers
+-include make/ingest.mk
