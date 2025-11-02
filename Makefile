@@ -23,3 +23,8 @@ ingest.local.envelope.show:
 	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.show]: CI detected; noop."; exit 0; fi
 	@OUT_FILE=/tmp/p9-ingest-envelope.json P9_CREATED_AT=2025-11-02T00:00:00 \
 	  PYTHONPATH=. python3 scripts/ingest/build_envelope.py > /dev/null && head -40 /tmp/p9-ingest-envelope.json
+
+ingest.local.envelope.meta:
+	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.meta]: CI detected; noop."; exit 0; fi
+	@OUT_FILE=/tmp/p9-ingest-envelope.json python3 scripts/ingest/build_envelope.py > /dev/null
+	@python3 scripts/ingest/show_meta.py
