@@ -66,3 +66,5 @@ See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 - Ingestion envelope fields (plan): see `docs/phase9/ENVELOPE_FIELDS.md`.
 
 - Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
+
+- UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
