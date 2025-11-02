@@ -21,3 +21,8 @@ make ingest.local.envelope
 ### CI behavior
 
 Targets `ci.ingest.envelope.check` and `ingest.local.envelope` are guarded in CI and do not perform IO.
+
+### Provenance
+
+- `meta.created_at` is included by the builder.
+- For deterministic local runs, set `P9_CREATED_AT=YYYY-MM-DDTHH:MM:SS` before building.

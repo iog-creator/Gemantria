@@ -18,3 +18,8 @@ ci.ingest.envelope.schema:
 	@echo "[ci.ingest.envelope.schema] start"
 	@if [ -n "$$CI" ]; then echo "HINT[ci.ingest.envelope.schema]: CI detected; noop by design."; exit 0; fi
 	@echo "Local-only schema check; set SNAPSHOT_FILE to your local path."
+
+ingest.local.envelope.show:
+	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope.show]: CI detected; noop."; exit 0; fi
+	@OUT_FILE=/tmp/p9-ingest-envelope.json P9_CREATED_AT=2025-11-02T00:00:00 \
+	  python3 scripts/ingest/build_envelope.py > /dev/null && head -40 /tmp/p9-ingest-envelope.json
