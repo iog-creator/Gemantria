@@ -62,3 +62,5 @@ make ingest.local.validate.schema
 See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 
 - Snapshot prep guide: see `docs/phase9/SNAPSHOTS.md`.
+
+- Ingestion envelope fields (plan): see `docs/phase9/ENVELOPE_FIELDS.md`.
