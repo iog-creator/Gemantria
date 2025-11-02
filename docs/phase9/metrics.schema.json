@@ -1,0 +1,59 @@
+{
+
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "title": "P9 Metrics Envelope",
+
+  "type": "object",
+
+  "required": ["meta", "metrics"],
+
+  "properties": {
+
+    "meta": {
+
+      "type": "object",
+
+      "required": ["version", "source", "snapshot_path", "seed"],
+
+      "properties": {
+
+        "version": {"type": "string"},
+
+        "source": {"type": "string"},
+
+        "snapshot_path": {"type": "string"},
+
+        "seed": {"type": "integer"}
+
+      },
+
+      "additionalProperties": true
+
+    },
+
+    "metrics": {
+
+      "type": "object",
+
+      "required": ["nodes", "edges", "density"],
+
+      "properties": {
+
+        "nodes": {"type": "integer", "minimum": 0},
+
+        "edges": {"type": "integer", "minimum": 0},
+
+        "density": {"type": "number", "minimum": 0}
+
+      },
+
+      "additionalProperties": true
+
+    }
+
+  },
+
+  "additionalProperties": false
+
+}
