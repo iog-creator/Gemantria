@@ -284,6 +284,11 @@ webui.smoke: ## Reuse-first Web UI smoke (adapter + existing viewer build if pre
 ci.webui.smoke: ## CI-safe Web UI smoke (no network; OK if viewer build absent)
 	@MOCK_AI=1 SKIP_DB=1 $(MAKE) -s webui.smoke
 
+.PHONY: ci.webui.temporal.smoke
+ci.webui.temporal.smoke: ## CI: regenerate bundle and report meta.temporal (tolerates empty exports)
+	@MOCK_AI=1 SKIP_DB=1 python3 scripts/adapter/exports_to_viewer.py || true
+	@python3 scripts/webui/temporal_smoke.py
+
 .PHONY: quality.show.thresholds
 quality.show.thresholds: ## Echo current reranker thresholds (reuse-first)
 	@echo "EDGE_STRONG=${EDGE_STRONG:-0.90}"; \

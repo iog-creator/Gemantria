@@ -36,6 +36,10 @@ bundle = {
             "CANDIDATE_POLICY": CANDIDATE_POLICY,
         },
         "seed": SEED,
+        "temporal": {
+            "files": 0,
+            "keys": [],
+        },  # filled in below if any temporal-looking exports are present
     },
 }
 
@@ -103,6 +107,24 @@ for p in cands:
                         "weight": r.get("weight", 0),
                     }
                 )
+
+# --- NEW: temporal facet (reuse-first heuristic; mirrors scripts/temporal expectations) ---
+temporal_keys = {"ts", "timestamp", "date", "datetime", "period", "year", "month", "day"}
+temporal_files, keys_seen = [], set()
+for p in cands:
+    obj = try_load_json(p)
+    if obj is None:
+        continue
+    sample = obj[0] if isinstance(obj, list) and obj else (obj if isinstance(obj, dict) else None)
+    if isinstance(sample, dict):
+        ks = {k.lower() for k in sample.keys()}
+        hit = temporal_keys & ks
+        if hit:
+            temporal_files.append(p)
+            keys_seen |= hit
+
+if temporal_files:
+    bundle["meta"]["temporal"] = {"files": len(temporal_files), "keys": sorted(keys_seen)}
 
 
 with open(OUTDIR / "bundle.json", "w", encoding="utf-8") as fh:
