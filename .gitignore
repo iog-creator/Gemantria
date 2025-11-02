@@ -22,3 +22,7 @@ share/
 node_modules/
 webui/graph/node_modules/
 webui/graph/node_modules/.vite/
+
+# Local Phase-9 snapshots (do not commit real data)
+docs/phase9/snapshots/*.json
+docs/phase9/snapshots/*.ndjson
