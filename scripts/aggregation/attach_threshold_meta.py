@@ -16,13 +16,13 @@ from __future__ import annotations
 
 import os, json, pathlib, hashlib, time
 
-EDGE_STRONG = float(os.getenv("EDGE_STRONG", "0.90"))
+EDGE_STRONG = float(os.getenv("EDGE_STRONG") or "0.90")
 
-EDGE_WEAK = float(os.getenv("EDGE_WEAK", "0.75"))
+EDGE_WEAK = float(os.getenv("EDGE_WEAK") or "0.75")
 
-CANDIDATE_POLICY = os.getenv("CANDIDATE_POLICY", "cache")
+CANDIDATE_POLICY = os.getenv("CANDIDATE_POLICY") or "cache"
 
-SEED = int(os.getenv("PIPELINE_SEED", "4242"))
+SEED = int(os.getenv("PIPELINE_SEED") or "4242")
 
 meta = {
     "stage": "aggregate.meta",
