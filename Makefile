@@ -2,7 +2,7 @@
 
 ingest.local.envelope:
 	@if [ -n "$$CI" ]; then echo "HINT[ingest.local.envelope]: CI detected; noop."; exit 0; fi
-	@python3 scripts/ingest/build_envelope.py
+	@PYTHONPATH=. python3 scripts/ingest/build_envelope.py
 
 ci.ingest.envelope.check:
 	@echo "[ci.ingest.envelope.check] start"
