@@ -83,6 +83,20 @@ docs.smoke: ## Validate docs exist and basic commands print help
 	@test -f RELEASE_CHECKLIST.md && echo "[docs] checklist present"
 	@python3 scripts/cli/gemantria_cli.py --help >/dev/null || true
 
+# ---------- Temporal (Phase-8: adapters only) ----------
+
+.PHONY: temporal.validate
+temporal.validate: ## Validate temporal exports against SSOT (if present); heuristic otherwise
+	@SSOT_DIR=${SSOT_DIR:-schemas} python3 scripts/temporal/validate.py
+
+.PHONY: temporal.smoke
+temporal.smoke: ## Hermetic temporal smoke (reuse-first)
+	@bash scripts/temporal/smoke.sh
+
+.PHONY: ci.temporal.smoke
+ci.temporal.smoke: ## CI temporal smoke (hermetic, empty-DB tolerant)
+	@SSOT_DIR=${SSOT_DIR:-schemas} bash scripts/temporal/smoke.sh
+
 .PHONY: smoke.smart schema.validate.smart ci.smart go
 smoke.smart:
 	@python3 scripts/mode_decider.py
