@@ -624,3 +624,8 @@ codex.mcp.validate:
 	else \
 	  python3 -m json.tool ~/.cursor/mcp.json; \
 	fi
+
+ci.ingest.check:
+	@echo "[ci.ingest.check] start"
+	@if [ -n "$$CI" ]; then echo "HINT[ci.ingest.check]: CI detected; no DB/network. noop by design."; exit 0; fi
+	@echo "Local-only: set DATABASE_URL or PGHOST/PGDATABASE to run ingestion harness."
