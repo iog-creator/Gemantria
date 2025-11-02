@@ -83,6 +83,12 @@ docs.smoke: ## Validate docs exist and basic commands print help
 	@test -f RELEASE_CHECKLIST.md && echo "[docs] checklist present"
 	@python3 scripts/cli/gemantria_cli.py --help >/dev/null || true
 
+# ---------- Phase-9 (plan-only) ----------
+
+.PHONY: ci.ingest.check
+ci.ingest.check: ## Hermetic env check for real-data ingestion (no DB/network)
+	@python3 scripts/ingest/check_env.py
+
 # ---------- Temporal (Phase-8: adapters only) ----------
 
 .PHONY: temporal.validate
