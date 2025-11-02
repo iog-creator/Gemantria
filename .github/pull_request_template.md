@@ -13,11 +13,11 @@
 ## Scope (files only)
 <!-- exact list; no others -->
 
-## Acceptance
-- [ ] `make -s ops.verify` → `[ops.verify] OK`
-- [ ] If Makefile edited: `make -s targets.check.dupes` → OK
-- [ ] No governance/workflow drift
-- [ ] CI green
+## Acceptance (governance v6.2.3)
+- [ ] ruff format/check green (SSOT)
+- [ ] `make ops.verify` passes (Rule-054 duplicate guard)
+- [ ] Smokes relevant to this area green
+- [ ] No new knobs or duplicate scaffolds
 
 ## Emitted Hints (REQUIRED)
 - List the key runtime HINT lines your changes will emit (e.g., `HINT: verify: database bootstrap OK`) so CI logs are clear for both Cursor and reviewers.
