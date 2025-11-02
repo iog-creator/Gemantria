@@ -49,3 +49,14 @@ Main branch requires these checks to pass before merging:
 
 ## Pushing changes
 A remote is not configured by default. Add the desired remote (for example, `git remote add origin <url>`) and push normally once credentials are available.
+
+## Developer Validation (Phase-9)
+
+Local-only helpers (CI no-ops):
+
+```bash
+make ingest.local.validate
+make ingest.local.validate.schema
+```
+
+See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
