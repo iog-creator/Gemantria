@@ -12,7 +12,7 @@ Temporal validation adapter (reuse-first).
 
 """
 
-import os, json, glob, sys, re
+import os, json, glob
 
 SSOT_DIR = os.getenv("SSOT_DIR", "schemas")
 
@@ -21,7 +21,7 @@ CAND_EXPORTS = glob.glob("exports/**/*.json*", recursive=True)
 
 def head_json(path, limit=200):
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             if path.endswith((".jsonl", ".ndjson")):
                 return [json.loads(x) for x in fh.readlines()[:limit] if x.strip()]
             return json.load(fh)

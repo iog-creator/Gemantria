@@ -260,6 +260,22 @@ pipeline.smoke: ## Reuse-first pipeline smoke (uses existing book pipeline)
 ci.pipeline.smoke: ## CI-safe pipeline smoke (reuse-first; hermetic)
 	@MOCK_AI=1 SKIP_DB=1 PIPELINE_SEED=4242 $(MAKE) -s pipeline.smoke
 
+# ---------- Pipeline polish: thresholds → aggregation meta (Option A) ----------
+
+.PHONY: pipeline.meta
+pipeline.meta: ## Write aggregation meta with thresholds (reuse-first; hermetic)
+	@EDGE_STRONG=${EDGE_STRONG:-0.90} EDGE_WEAK=${EDGE_WEAK:-0.75} \
+	  CANDIDATE_POLICY=${CANDIDATE_POLICY:-cache} \
+	  PIPELINE_SEED=${PIPELINE_SEED:-4242} \
+	  python3 scripts/aggregation/attach_threshold_meta.py
+
+.PHONY: ci.pipeline.meta
+ci.pipeline.meta: ## CI: thresholds meta (prints one JSON line; writes build/aggregation_meta.json)
+	@EDGE_STRONG=${EDGE_STRONG:-0.90} EDGE_WEAK=${EDGE_WEAK:-0.75} \
+	  CANDIDATE_POLICY=${CANDIDATE_POLICY:-cache} \
+	  PIPELINE_SEED=${PIPELINE_SEED:-4242} \
+	  python3 scripts/aggregation/attach_threshold_meta.py
+
 .PHONY: webui.smoke
 webui.smoke: ## Reuse-first Web UI smoke (adapter + existing viewer build if present)
 	@bash scripts/webui/smoke.sh
