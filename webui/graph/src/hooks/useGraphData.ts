@@ -19,6 +19,13 @@ export function useGraphData(graphUrl: string = "/exports/graph_latest.json") {
 
         const rawData = await response.json();
 
+        // Memory guard for large datasets
+        const dataSizeMB = JSON.stringify(rawData).length / (1024 * 1024);
+        if (dataSizeMB > 100) {
+          console.warn(`Large dataset (${dataSizeMB}MB). Forcing Preview + WebGL.`);
+          // Future: trigger escalation modal
+        }
+
         // Transform the data to match our expected format
         const nodes: GraphNode[] = rawData.nodes.map((node: any) => ({
           id: node.id,
