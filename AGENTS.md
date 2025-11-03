@@ -78,6 +78,31 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Ops verifier (local)**: `make ops.verify` prints deterministic checks confirming Phase-8 eval surfaces exist (Makefile targets, manifest version, docs header, share dir). Local-only; not wired into CI.
 * **Pipeline stabilization**: `eval.package` runs to completion with soft integrity gates; `targets.check.dupes` prevents Makefile regressions; `build_release_manifest.py` skips bundles/ for performance.
 
+## Data Extraction Lineage
+
+Phase 11 unified pipeline flow:
+
+1. **graph_latest.json** (Phase 9 output)
+   - Nodes with gematria values, Hebrew text, book/chapter/verse refs
+   - Edges with cosine similarity, rerank scores, edge_strength blend
+
+2. **temporal_patterns.json** + **pattern_forecast.json** (Phase 8 output)
+   - Time-series data for frequency trends
+   - Prophet forecasts with confidence intervals
+
+3. **correlation_weights.json** (Phase 10 output)
+   - Cross-text pattern analytics
+   - Edge classification (strong/weak thresholds)
+
+4. **unified_envelope.json** (Phase 11 output)
+   - Single integrated format with all attributes
+   - Versioned schema (`unified-v1`)
+   - Configurable size extraction (100, 1k, 10k, 100k+ nodes)
+
+**Extraction Script:** `scripts/extract/extract_all.py`
+**Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
+**Validation:** JSON schema enforcement + size/performance gates
+
 ## Cursor Execution Profile (AlwaysApply)
 
 This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and human operators can continue from any point.

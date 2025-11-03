@@ -32,6 +32,18 @@ codex.parallel:
 share.sync:
 	@python3 scripts/sync_share.py
 
+# Quick plan viewer (local-only convenience)
+
+.PHONY: plan
+plan:
+	@if ls .cursor/plans/*.plan.md 1> /dev/null 2>&1; then \
+		cat .cursor/plans/*.plan.md | head -100; \
+		echo ""; \
+		echo "[Full plan: $$(ls .cursor/plans/*.plan.md)]"; \
+	else \
+		echo "No active plan found in .cursor/plans/"; \
+	fi
+
 # UI temporal export targets (local-only)
 
 OUTDIR ?= ui/out
