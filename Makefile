@@ -55,3 +55,24 @@ ui.publish.temporal:
 .PHONY: pr.check.model_usage
 pr.check.model_usage:
 	@$(PYTHON) scripts/ci/check_pr_model_usage.py
+
+# --- P11 acceptance: perf, a11y, metrics (local-only) ---
+
+.PHONY: ui.perf.load
+ui.perf.load:
+	@echo ">> Timed-load probe (UI_URL=$${UI_URL:-''} / file fallback)"
+	@$(PYTHON) scripts/ui/perf_load.py --url "$${UI_URL:-}" --index webui/public/index.html --out var/ui/perf.json
+
+.PHONY: ui.a11y.smoke
+ui.a11y.smoke:
+	@echo ">> A11y smoke (zero-Node) on webui/public/index.html"
+	@$(PYTHON) scripts/ui/a11y_smoke.py --path webui/public/index.html --out var/ui/a11y.json
+
+.PHONY: ui.metrics.log
+ui.metrics.log:
+	@echo ">> Append UI metrics entry (temporal artifacts, git sha)"
+	@$(PYTHON) scripts/ui/metrics_log.py --log var/ui/metrics.jsonl
+
+.PHONY: ui.accept
+ui.accept: ui.perf.load ui.a11y.smoke ui.metrics.log
+	@echo ">> P11 acceptance bundle complete. See var/ui/{perf.json,a11y.json,metrics.jsonl}"
