@@ -107,6 +107,49 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 - Automated performance recommendations (WebGL, virtualization, simplification)
 - Configurable thresholds for different performance metrics
 
+#### `DebugPanel.tsx` - Performance Debug Panel (Phase 4)
+
+**Purpose**: Detailed performance debugging interface with comprehensive metrics display
+**Features**:
+
+- Tabbed interface (Core Metrics, Recommendations, Graph Stats)
+- Real-time performance indicators with status colors and icons
+- Detailed recommendations with actionable steps
+- Graph rendering statistics (visible/total nodes, zoom level, culling efficiency)
+- ARIA-compliant with keyboard navigation and screen reader support
+- Modal overlay with backdrop dismissal
+
+**Integration**: Accessible via PerformanceBadge clicks in GraphDashboard header
+
+#### `PerformanceBadge.tsx` - Performance Status Indicator (Phase 4)
+
+**Purpose**: Visual performance status badge with click-to-debug functionality
+**Features**:
+
+- Color-coded status (green=good, yellow=warning, red=error)
+- Summary metrics display (TTI, FPS, memory, issue count)
+- Hover tooltips with detailed status messages
+- Click handler to open DebugPanel
+- Configurable size and detail level
+- Trend indicators for performance changes
+
+**Integration**: Embedded in GraphDashboard header next to dataset statistics
+
+#### `MetricsDashboard.tsx` - Performance Analytics Dashboard (Phase 4)
+
+**Purpose**: Development-focused performance trends and historical analytics
+**Features**:
+
+- Time-range selection (1min, 5min, 15min) for historical data
+- Real-time sparkline charts for key metrics
+- Trend analysis with percentage changes vs previous periods
+- Performance recommendations with priority levels
+- Graph rendering metrics integration
+- Data export functionality (JSON/CSV)
+- Auto-refresh toggle for continuous monitoring
+
+**Integration**: Standalone page accessible via routing, receives graph metrics from parent components
+
 #### `TemporalExplorer.tsx` - Phase 8 Temporal Pattern Visualization (NEW)
 
 **Purpose**: Interactive exploration of time-series patterns across biblical texts

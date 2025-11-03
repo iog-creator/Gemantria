@@ -3,6 +3,8 @@ import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
 import GraphPreview from "../components/GraphPreview";
+import PerformanceBadge from "../components/PerformanceBadge";
+import DebugPanel from "../components/DebugPanel";
 import { useGraphData } from "../hooks/useGraphData";
 import { usePerformance } from "../hooks/usePerformance";
 import { GraphNode } from "../types/graph";
@@ -11,6 +13,15 @@ export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEscalationModal, setShowEscalationModal] = useState(false);
+  const [showDebugPanel, setShowDebugPanel] = useState(false);
+  const [graphMetrics, setGraphMetrics] = useState<{
+    visibleNodes: number;
+    totalNodes: number;
+    visibleEdges: number;
+    totalEdges: number;
+    zoomLevel: number;
+    isLargeDataset: boolean;
+  } | undefined>();
 
   // Performance monitoring for escalation decisions
   const { metrics, recommendations, measureTTI, needsWebGL } = usePerformance({
@@ -55,6 +66,18 @@ export default function GraphDashboard() {
       measureTTI();
     }
   }, [data.nodes, loading, measureTTI]);
+
+  // Callback to receive metrics from GraphView
+  const handleGraphMetrics = (metrics: {
+    visibleNodes: number;
+    totalNodes: number;
+    visibleEdges: number;
+    totalEdges: number;
+    zoomLevel: number;
+    isLargeDataset: boolean;
+  }) => {
+    setGraphMetrics(metrics);
+  };
 
   if (loading) {
     return (
@@ -112,6 +135,11 @@ export default function GraphDashboard() {
               Clusters:{" "}
               {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
             </span>
+            <PerformanceBadge
+              onClick={() => setShowDebugPanel(true)}
+              showDetails={false}
+              size="sm"
+            />
           </div>
           </header>
 
@@ -145,6 +173,7 @@ export default function GraphDashboard() {
                   width={800}
                   height={600}
                   onNodeSelect={setSelectedNode}
+                  onMetricsReport={handleGraphMetrics}
                 />
               </div>
             </div>
@@ -251,6 +280,13 @@ export default function GraphDashboard() {
           </div>
         </div>
       )}
+
+      {/* Debug Panel */}
+      <DebugPanel
+        isVisible={showDebugPanel}
+        onClose={() => setShowDebugPanel(false)}
+        graphMetrics={graphMetrics}
+      />
     </div>
   );
 }

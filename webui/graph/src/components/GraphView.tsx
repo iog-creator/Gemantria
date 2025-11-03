@@ -13,6 +13,14 @@ interface GraphViewProps {
   width: number;
   height: number;
   onNodeSelect?: (node: GraphNode | null) => void;
+  onMetricsReport?: (metrics: {
+    visibleNodes: number;
+    totalNodes: number;
+    visibleEdges: number;
+    totalEdges: number;
+    zoomLevel: number;
+    isLargeDataset: boolean;
+  }) => void;
 }
 
 const colorScale = scaleOrdinal({
@@ -52,6 +60,7 @@ export default function GraphView({
   width,
   height,
   onNodeSelect,
+  onMetricsReport,
 }: GraphViewProps) {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
@@ -233,6 +242,20 @@ export default function GraphView({
       simulation.stop();
     };
   }, [nodes, edges, width, height]);
+
+  // Report metrics to parent
+  useEffect(() => {
+    if (onMetricsReport) {
+      onMetricsReport({
+        visibleNodes: visibleNodes.length,
+        totalNodes: nodes.length,
+        visibleEdges: visibleEdges.length,
+        totalEdges: edges.length,
+        zoomLevel: zoom.scale,
+        isLargeDataset,
+      });
+    }
+  }, [visibleNodes.length, visibleEdges.length, nodes.length, edges.length, zoom.scale, isLargeDataset, onMetricsReport]);
 
   // Performance measurement
   useEffect(() => {
