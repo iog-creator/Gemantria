@@ -150,32 +150,44 @@ npm run preview
 
 The UI includes download links for temporal analysis exports (`temporal_strip.csv` and `temporal_summary.md`). To enable these downloads:
 
-1. **Generate exports** (from project root):
-   ```bash
-   make ui.temporal.summary OUTDIR=ui/out
-   ```
+#### 1. Generate the exports
 
-2. **Copy to public directory** (before build):
-   ```bash
-   # Ensure ui/out/ files are in the web server's public path
-   cp ui/out/temporal_strip.csv webui/graph/public/ui/out/
-   cp ui/out/temporal_summary.md webui/graph/public/ui/out/
+```bash
+# Export the envelope and build temporal strip
+make ui.export.temporal ENVELOPE=share/exports/envelope.json OUTDIR=ui/out
+```
 
-   # Or create symlinks for development
-   mkdir -p webui/graph/public/ui/out
-   ln -sf ../../../../ui/out/temporal_strip.csv webui/graph/public/ui/out/
-   ln -sf ../../../../ui/out/temporal_summary.md webui/graph/public/ui/out/
-   ```
+#### 2. Copy to public static folder for serving
 
-3. **Version exports** (recommended for production):
-   ```bash
-   # Tag exports with commit hash for cache busting
-   COMMIT=$(git rev-parse --short HEAD)
-   cp ui/out/temporal_strip.csv "webui/graph/public/ui/out/temporal_strip_${COMMIT}.csv"
-   cp ui/out/temporal_summary.md "webui/graph/public/ui/out/temporal_summary_${COMMIT}.md"
+```bash
+# Example: if your build deploys files under webui/build/public
+cp ui/out/temporal_strip.csv build/public/temporal_strip-v<VERSION>.csv
+cp ui/out/temporal_summary.md build/public/temporal_summary-v<VERSION>.md
+```
 
-   # Update component to use versioned paths
-   ```
+Use a version tag `<VERSION>` (e.g., commit hash, date) so that URLs change on update and old versions remain cacheable.
+
+#### 3. Serve the files under versioned URLs
+
+In the UI app (e.g., `GraphRenderer.tsx`), link to:
+
+```text
+/temporal_strip-v<VERSION>.csv
+/temporal_summary-v<VERSION>.md
+```
+
+Ensure your server or CDN applies long `Cache-Control: max-age=31536000, immutable` headers, relying on versioned filenames to bust cache when updates occur.
+
+#### 4. Deployment checklist
+
+- Increment or update `<VERSION>` each time you generate new exports.
+- Confirm the URL paths in the app reflect the new filenames.
+- Deploy build/public contents atomically so users don't see mismatched old/new files.
+- Monitor usage and caching via your CDN logs to validate that the versioned files are being cached and served.
+
+#### 5. Local/CICD note
+
+The export + copy step is hermetic and should remain in your local pipeline (i.e., no Node/CI changes required for UI). Only the static export files change.
 
 > **Note**: Download links are always visible but will fail gracefully if files don't exist. Keep exports local-only; do not commit to repository.
 
