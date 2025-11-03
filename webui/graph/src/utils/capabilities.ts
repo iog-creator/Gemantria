@@ -7,7 +7,7 @@ export const canUseWebGL = (): boolean => {
   try {
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return false;
+    if (!gl || !(gl instanceof WebGLRenderingContext)) return false;
 
     // Check for basic WebGL support
     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
