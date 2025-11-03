@@ -124,7 +124,31 @@ Phase 11 unified pipeline flow:
 
 **Extraction Script:** `scripts/extract/extract_all.py`
 **Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
-**Validation:** JSON schema enforcement + size/performance gates
+**Validation:** JSON schema enforcement + size/performance gates + COMPASS mathematical correctness (>80% score)
+
+### COMPASS: Comprehensive Pipeline Assessment Scoring System
+
+**Purpose**: Mathematical envelope validation for data integrity and correctness
+**Requirements**: >80% correctness threshold for envelope acceptance
+
+**Capabilities**:
+- Correlation weight validation (>0.5 significance threshold)
+- Edge strength blend verification (0.5*cos + 0.5*rerank calculation)
+- Temporal pattern integrity checks (monotonic timestamps, data consistency)
+- CLI scoring with detailed issue reporting
+
+**Usage**:
+```bash
+make test.compass  # Score envelope for mathematical correctness
+python scripts/compass/scorer.py share/exports/envelope.json --verbose
+```
+
+**Scoring Categories**:
+- **correlation_weights**: Edge significance validation (40% weight)
+- **edge_strength_blend**: Blend calculation accuracy (40% weight)
+- **temporal_patterns**: Time series data integrity (20% weight)
+
+**Output**: PASS/FAIL status with detailed issue breakdown
 
 ## Cursor Execution Profile (AlwaysApply)
 
