@@ -6,6 +6,8 @@ import { Circle, Line } from "@visx/shape";
 import * as d3 from "d3-force";
 import { GraphNode, GraphEdge } from "../types/graph";
 import { usePerformance } from "../hooks/usePerformance";
+import { canUseWebGL } from "../utils/capabilities";
+import WebGLRenderer from "../renderers/webgl/Renderer";
 
 interface GraphViewProps {
   nodes: GraphNode[];
@@ -66,6 +68,36 @@ export default function GraphView({
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
   const [simulationNodes, setSimulationNodes] = useState<SimulationNode[]>([]);
   const [simulationLinks, setSimulationLinks] = useState<SimulationLink[]>([]);
+
+  // WebGL escalation check (Sprint 3)
+  const [useWebGL, setUseWebGL] = useState<boolean>(() => {
+    // Check localStorage first (primary)
+    const stored = localStorage.getItem('enable_webgl_fallback');
+    if (stored !== null) {
+      return JSON.parse(stored);
+    }
+
+    // For initial state, we'll use false and update in useEffect
+    return false;
+  });
+
+  // Check escalation file on mount (async)
+  useEffect(() => {
+    if (localStorage.getItem('enable_webgl_fallback') === null) {
+      // Only check file if localStorage not set
+      fetch('/var/ui/escalation.json')
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data?.enable_webgl_fallback) {
+            setUseWebGL(true);
+            localStorage.setItem('enable_webgl_fallback', 'true');
+          }
+        })
+        .catch(() => {
+          // File doesn't exist or can't be read, stay with default
+        });
+    }
+  }, []);
 
   // Performance monitoring
   const { metrics, measureRenderTime, countDOMNodes, setContainerRef, isSlow, needsWebGL } = usePerformance();
@@ -266,6 +298,39 @@ export default function GraphView({
     };
   }, [simulationNodes, simulationLinks, measureRenderTime, countDOMNodes]);
 
+  // Conditional rendering: WebGL vs SVG (Sprint 3)
+  if (useWebGL && canUseWebGL()) {
+    return (
+      <div className="w-full h-full bg-gray-50 rounded-lg overflow-hidden relative">
+        {/* WebGL mode indicator */}
+        <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-medium z-10 shadow-lg">
+          WebGL Mode • Nodes: {nodes.length.toLocaleString()}
+        </div>
+
+        {/* Performance indicator */}
+        {isSlow && (
+          <div className="absolute top-2 right-2 bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm z-10 shadow-lg">
+            WebGL Active
+          </div>
+        )}
+
+        <WebGLRenderer
+          data={{
+            nodes: simulationNodes.map(n => ({
+              id: n.id,
+              x: n.x || 0,
+              y: n.y || 0
+            })),
+            edges: simulationLinks
+          }}
+          width={width}
+          height={height}
+        />
+      </div>
+    );
+  }
+
+  // Default SVG rendering
   return (
     <div
       ref={setContainerRef}
