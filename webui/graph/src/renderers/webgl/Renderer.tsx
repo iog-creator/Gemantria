@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { canUseWebGL } from '../../utils/capabilities';
 
 /**
@@ -6,10 +6,11 @@ import { canUseWebGL } from '../../utils/capabilities';
  * Points/lines for nodes/edges, normalized coords, context handling
  * Hot path <16ms/frame budget on static 100k datasets
  * Pan/zoom uniforms + edge opacity for interactive exploration
+ * Force simulation offloaded to WebWorker for large datasets
  */
 
 interface RendererProps {
-  data: { nodes: any[]; edges: any[] }; // Positions pre-computed
+  data: { nodes: any[]; edges: any[] }; // Positions computed via force simulation
   width: number;
   height: number;
   pan?: [number, number]; // [x, y] pan offset
@@ -26,6 +27,14 @@ const Renderer: React.FC<RendererProps> = ({
   edgeOpacity = 1.0
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [layoutNodes, setLayoutNodes] = useState(data.nodes);
+
+  useEffect(() => {
+    const worker = new Worker(new URL('../../workers/forceWorker.ts', import.meta.url));
+    worker.onmessage = (e) => setLayoutNodes(e.data.nodes);
+    worker.postMessage({ nodes: data.nodes, edges: data.edges, width, height });
+    return () => worker.terminate();
+  }, [data, width, height]);
 
   useEffect(() => {
     if (!canUseWebGL()) return; // Guard
@@ -42,7 +51,7 @@ const Renderer: React.FC<RendererProps> = ({
 
     // Points for nodes (instanced)
     const nodePos = new Float32Array(
-      data.nodes.flatMap(n => [
+      layoutNodes.flatMap(n => [
         n.x / width * 2 - 1,
         1 - n.y / height * 2
       ])
@@ -57,8 +66,8 @@ const Renderer: React.FC<RendererProps> = ({
     // Lines for edges
     const edgePos = new Float32Array(
       data.edges.flatMap(e => {
-        const source = data.nodes.find(n => n.id === e.source.id || n.id === e.source);
-        const target = data.nodes.find(n => n.id === e.target.id || n.id === e.target);
+        const source = layoutNodes.find(n => n.id === e.source.id || n.id === e.source);
+        const target = layoutNodes.find(n => n.id === e.target.id || n.id === e.target);
         if (!source || !target) return [];
 
         return [
@@ -136,7 +145,7 @@ const Renderer: React.FC<RendererProps> = ({
     // Draw points
     gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuf);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.POINTS, 0, data.nodes.length);
+    gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
 
     // Draw lines (separate program for different color)
     const lineProg = gl.createProgram();
@@ -200,7 +209,7 @@ const Renderer: React.FC<RendererProps> = ({
       gl.deleteProgram(prog);
       if (lineProg) gl.deleteProgram(lineProg);
     };
-  }, [data, width, height, pan, zoom, edgeOpacity]);
+  }, [data, width, height, pan, zoom, edgeOpacity, layoutNodes]);
 
   return <canvas ref={canvasRef} width={width} height={height} style={{ display: 'block' }} />;
 };
