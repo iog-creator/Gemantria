@@ -1,0 +1,23 @@
+id: 051
+
+name: UI Generation Standard
+
+alwaysApply: true
+
+scope:
+  paths:
+    - "ui/**"
+    - "src/**"
+    - ".github/**"
+
+rules:
+  - id: 051-1
+    description: "Default to Gemini 2.5 Pro for UI codegen; escalate to Claude Sonnet 4 after 2 iterations or for multi-file refactors/high-fidelity styling."
+  - id: 051-2
+    description: "Record model, prompt, and iteration count in PR body under 'Model Usage'."
+  - id: 051-3
+    description: "Enforce UI library defaults (React/Next, Tailwind, Recharts/React Flow) unless deviation is justified in PR."
+  - id: 051-4
+    description: "Run lint/tests (frontend) and ruff gates (backend) before merge."
+  - id: 051-5
+    description: "No Node changes in CI unless explicitly approved; UI work remains hermetic/local by default."
