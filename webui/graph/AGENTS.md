@@ -48,6 +48,28 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 - Cluster metrics (density, diversity) from backend analysis
 - Responsive grid layout with loading states
 
+#### `MetaPanel.tsx` - Performance & Metadata Display (P11 Sprint 2)
+
+**Purpose**: Show envelope metadata and performance indicators
+**Features**:
+
+- Load time performance badge (green <200ms, yellow <500ms, red ≥500ms)
+- Color-coded visual indicator with hover tooltip
+- Real-time fetch from `/var/ui/perf.json`
+- Graceful fallback for missing performance data
+- Metadata display with JSON formatting
+
+#### `MetricsDashboard.tsx` - Development Metrics Visualization (P11 Sprint 2)
+
+**Purpose**: Developer-focused metrics trends and analytics
+**Features**:
+
+- D3-powered line charts for historical metrics
+- SVG export functionality for sharing
+- Real-time data loading from `/var/ui/metrics.jsonl`
+- Configurable chart dimensions and styling
+- Error handling for missing metrics data
+
 #### `GraphDashboard.tsx` - Main Page Layout
 
 **Purpose**: Orchestrate the complete visualization experience
@@ -57,6 +79,8 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 - Error handling and loading states
 - Metadata display (node/edge counts)
 - Integration with data loading hooks
+- Performance badge integration (MetaPanel)
+- Dual views toggle (user badges + dev metrics dashboard)
 
 #### `TemporalExplorer.tsx` - Phase 8 Temporal Pattern Visualization (NEW)
 

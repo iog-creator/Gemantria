@@ -79,3 +79,15 @@ ui.temporal.comment:
 	if [ -z "$$PR" ]; then echo "No open PR found for this branch. SKIP."; exit 0; fi; \
 	if [ ! -f "$(TEMPORAL_MD)" ]; then echo "Summary not found at $(TEMPORAL_MD). Run 'make ui.temporal.summary' first."; exit 1; fi; \
 	gh pr comment $$PR -F "$(TEMPORAL_MD)"
+
+.PHONY: test.ui.smoke
+test.ui.smoke:
+	@pytest tests/ui/test_extract_smoke.py
+
+# COMPASS evaluation (mathematical correctness scoring)
+ENVELOPE ?= share/exports/envelope.json
+
+.PHONY: test.compass
+test.compass:
+	@echo ">> COMPASS evaluation on $(ENVELOPE)"
+	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
