@@ -31,3 +31,51 @@ codex.parallel:
 
 share.sync:
 	@python3 scripts/sync_share.py
+
+# --- UI acceptance (headless) ---
+
+ENVELOPE ?= share/exports/envelope.json
+MIN_NODES ?= 1
+MIN_EDGES ?= 0
+ALLOW_EMPTY ?=
+
+.PHONY: accept.ui
+accept.ui:
+	@echo ">> UI acceptance on $(ENVELOPE) ..."
+	@$(PYTHON) scripts/acceptance/check_envelope.py $(ENVELOPE) --min-nodes $(MIN_NODES) --min-edges $(MIN_EDGES) $(if $(ALLOW_EMPTY),--allow-empty,)
+
+.PHONY: accept.ui.smoke
+accept.ui.smoke:
+	@echo ">> Export + accept (smoke)"
+	@$(PYTHON) scripts/export_noun_index.py --limit 1000
+	@$(MAKE) accept.ui ENVELOPE=$(ENVELOPE) MIN_NODES=$(MIN_NODES) MIN_EDGES=$(MIN_EDGES) ALLOW_EMPTY=$(ALLOW_EMPTY)
+
+# --- UI temporal exports (CSV/PNG) ---
+
+OUTDIR ?= ui/out
+.PHONY: ui.export.temporal
+ui.export.temporal:
+	@echo ">> Temporal strip export to $(OUTDIR)"
+	@$(PYTHON) scripts/ui/export_temporal_strip.py $(ENVELOPE) --outdir $(OUTDIR) --mode point
+
+.PHONY: ui.export.temporal.span
+ui.export.temporal.span:
+	@echo ">> Temporal strip export (span mode) to $(OUTDIR)"
+	@$(PYTHON) scripts/ui/export_temporal_strip.py $(ENVELOPE) --outdir $(OUTDIR) --mode span
+
+# --- Temporal summary + PR comment ---
+
+TEMPORAL_CSV ?= $(OUTDIR)/temporal_strip.csv
+TEMPORAL_MD  ?= $(OUTDIR)/temporal_summary.md
+.PHONY: ui.temporal.summary
+ui.temporal.summary:
+	@echo ">> Temporal summary → $(TEMPORAL_MD)"
+	@$(PYTHON) scripts/ui/temporal_summary.py
+
+.PHONY: ui.temporal.comment
+ui.temporal.comment:
+	@echo ">> Comment temporal summary on current PR"
+	@PR=$$(gh pr view --json number --jq .number 2>/dev/null || echo ""); \
+	if [ -z "$$PR" ]; then echo "No open PR found for this branch. SKIP."; exit 0; fi; \
+	if [ ! -f "$(TEMPORAL_MD)" ]; then echo "Summary not found at $(TEMPORAL_MD). Run 'make ui.temporal.summary' first."; exit 1; fi; \
+	gh pr comment $$PR -F "$(TEMPORAL_MD)"
