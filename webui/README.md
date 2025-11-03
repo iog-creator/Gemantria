@@ -146,6 +146,39 @@ npm run build
 npm run preview
 ```
 
+### Temporal Export Integration
+
+The UI includes download links for temporal analysis exports (`temporal_strip.csv` and `temporal_summary.md`). To enable these downloads:
+
+1. **Generate exports** (from project root):
+   ```bash
+   make ui.temporal.summary OUTDIR=ui/out
+   ```
+
+2. **Copy to public directory** (before build):
+   ```bash
+   # Ensure ui/out/ files are in the web server's public path
+   cp ui/out/temporal_strip.csv webui/graph/public/ui/out/
+   cp ui/out/temporal_summary.md webui/graph/public/ui/out/
+
+   # Or create symlinks for development
+   mkdir -p webui/graph/public/ui/out
+   ln -sf ../../../../ui/out/temporal_strip.csv webui/graph/public/ui/out/
+   ln -sf ../../../../ui/out/temporal_summary.md webui/graph/public/ui/out/
+   ```
+
+3. **Version exports** (recommended for production):
+   ```bash
+   # Tag exports with commit hash for cache busting
+   COMMIT=$(git rev-parse --short HEAD)
+   cp ui/out/temporal_strip.csv "webui/graph/public/ui/out/temporal_strip_${COMMIT}.csv"
+   cp ui/out/temporal_summary.md "webui/graph/public/ui/out/temporal_summary_${COMMIT}.md"
+
+   # Update component to use versioned paths
+   ```
+
+> **Note**: Download links are always visible but will fail gracefully if files don't exist. Keep exports local-only; do not commit to repository.
+
 ### Integration Options
 
 - **Static Hosting**: Deploy built files to any web server
