@@ -37,6 +37,29 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Line length**: 120 characters maximum
 - **String concatenation**: Use `["cmd", *args]` instead of `["cmd"] + args`
 
+## UI / Frontend Generation (Standard)
+**Primary model:** Gemini 2.5 Pro (terminal/CLI, long context)
+**Fallback / refinement:** Claude Sonnet 4 (highest-fidelity styling, complex refactors)
+
+### Usage rules
+1) Start all UI codegen (React/Next, charts, search UI) with **Gemini 2.5 Pro**.
+2) If spec unmet after ≤2 iterations, or multi-file refactor / high-fidelity styling is required → **escalate to Claude Sonnet 4**.
+3) Minor tweaks (single-file CSS/prop changes) may use a cheaper model.
+4) Log model + prompt + iteration count in the PR body (see template).
+
+### Libraries & structure (defaults)
+- React 18+ (Next.js when SSR/SSG needed)
+- State: Zustand or React Context (keep light)
+- Viz: Recharts, D3 wrapper, React Flow (graphs)
+- Styling: Tailwind (or CSS Modules)
+- Layout: `src/components/*`, `src/hooks/*`, `src/services/*`, `src/views/*`
+
+### QA gates (always)
+- Frontend: `npm run lint && npm run test` (if present)
+- Backend: `ruff format --check . && ruff check .`
+- Security: run static checks where configured
+- PR must include "Model Usage" block (see template).
+
 ### Runbook: Postgres checkpointer
 1. Apply migration:
    ```bash
