@@ -66,9 +66,7 @@ def main() -> int:
         raise SystemExit(f"[ACCEPT] FAIL: nodes {n_nodes} < min {a.min_nodes}")
     if n_edges < a.min_edges:
         raise SystemExit(f"[ACCEPT] FAIL: edges {n_edges} < min {a.min_edges}")
-    print(
-        f"[ACCEPT] OK: nodes={n_nodes} edges={n_edges} (min_nodes={a.min_nodes} min_edges={a.min_edges})"
-    )
+    print(f"[ACCEPT] OK: nodes={n_nodes} edges={n_edges} (min_nodes={a.min_nodes} min_edges={a.min_edges})")
     return 0
 
 

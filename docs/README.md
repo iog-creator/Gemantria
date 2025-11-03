@@ -156,6 +156,24 @@ Canonical schemas include:
 - **Validation Rules**: How to verify compliance
 - **Change Process**: How to update the schema
 
+## 📊 Phase Index
+
+Current development phases and their documentation:
+
+### Active Phases
+
+| Phase | Status | Documentation | Description |
+| ----- | ------ | -------------- | ----------- |
+| **Phase 10** | ✅ Completed | `docs/phase10/` + `PHASE10_RETROSPECTIVE.md` | UI acceptance harness, headless validation, performance metrics |
+| **Phase 11** | 🚧 Sprint 1 | `PHASE11_PLAN.md` + `.cursor/plans/ui-enhancement-*.plan.md` | Unified envelope, virtual graph chunking (10k→100k) |
+
+### Phase Navigation
+
+- **Phase 10 Retrospective**: `docs/PHASE10_RETROSPECTIVE.md` - wins, learnings, follow-ups
+- **Phase 11 Breadcrumb**: `docs/PHASE11_PLAN.md` - current sprint decisions & success criteria
+- **Implementation Plans**: `.cursor/plans/` - detailed Cursor-generated development plans
+- **SSOT Schemas**: `docs/SSOT/` - contracts for unified envelope validation
+
 ## 🔍 Finding Documentation
 
 ### By Topic
@@ -165,6 +183,7 @@ Canonical schemas include:
 - **API Contracts**: SSOT files in `docs/SSOT/`
 - **Development**: AGENTS.md files in source directories
 - **Usage Examples**: README.md files throughout the codebase
+- **Current Phase**: See Phase Index above
 
 ### By Directory
 

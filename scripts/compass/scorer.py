@@ -11,7 +11,6 @@ Gates: >80% correctness threshold for envelope acceptance.
 
 import json
 import sys
-from pathlib import Path
 from typing import Dict, List, Any, Tuple
 # import sympy as sp  # Hermetic: using stdlib math for now
 # from sympy import symbols, simplify, Abs
@@ -19,7 +18,7 @@ from typing import Dict, List, Any, Tuple
 
 def load_envelope(path: str) -> Dict[str, Any]:
     """Load unified envelope from JSON file."""
-    with open(path, "r") as f:
+    with open(path) as f:
         return json.load(f)
 
 
@@ -64,7 +63,7 @@ def validate_correlation_weights(envelope: Dict[str, Any]) -> Tuple[float, List[
 
 
 def validate_edge_strength_blend(envelope: Dict[str, Any]) -> Tuple[float, List[str]]:
-    """Validate edge strength blend calculation: α*cos + (1-α)*rerank."""
+    """Validate edge strength blend calculation: 0.5*cos + 0.5*rerank."""
     issues = []
     score = 1.0
 
@@ -88,7 +87,7 @@ def validate_edge_strength_blend(envelope: Dict[str, Any]) -> Tuple[float, List[
         rerank_val = edge["rerank_score"]
         strength_val = edge["edge_strength"]
 
-        # Expected: 0.5*cos + 0.5*rerank (α=0.5)
+        # Expected: 0.5*cos + 0.5*rerank (blend=0.5)
         expected = 0.5 * cos_val + 0.5 * rerank_val
         tolerance = 0.005  # BLEND_TOL from rules
 
@@ -133,7 +132,9 @@ def validate_temporal_patterns(envelope: Dict[str, Any]) -> Tuple[float, List[st
         values = pattern["values"]
 
         if len(timestamps) != len(values):
-            issues.append(f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})")
+            issues.append(
+                f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})"
+            )
             invalid_patterns += 1
 
         # Check for monotonic timestamps (should be sorted)
@@ -200,7 +201,7 @@ def main():
     envelope_path = sys.argv[1]
     verbose = "--verbose" in sys.argv
 
-    score, results = score_envelope(envelope_path, verbose)
+    _score, results = score_envelope(envelope_path, verbose)
 
     if results.get("error"):
         print(f"ERROR: {results['error']}")
