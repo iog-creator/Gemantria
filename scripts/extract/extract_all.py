@@ -231,9 +231,7 @@ def main():
     parser = argparse.ArgumentParser(description="Phase 11 Unified Envelope Extractor")
     parser.add_argument("--size", type=int, default=1000, help="Number of nodes to extract")
     parser.add_argument("--outdir", default="ui/out", help="Output directory")
-    parser.add_argument(
-        "--graph", default="share/exports/graph_latest.json", help="Path to graph_latest.json"
-    )
+    parser.add_argument("--graph", default="share/exports/graph_latest.json", help="Path to graph_latest.json")
     parser.add_argument(
         "--temporal",
         default="share/exports/temporal_patterns.json",
@@ -249,6 +247,12 @@ def main():
         default="share/exports/correlation_weights.json",
         help="Path to correlation_weights.json",
     )
+    parser.add_argument(
+        "--real",
+        action="store_true",
+        default=False,
+        help="Load from real SSOT paths (share/exports/) instead of mocks",
+    )
 
     args = parser.parse_args()
 
@@ -256,39 +260,59 @@ def main():
 
     start_time = time.time()
 
-    # Load data sources (use mock data if not found)
-    graph_data = load_json_file(args.graph)
-    if graph_data:
-        print(f"✓ Loaded graph data from {args.graph}")
+    # Set source paths based on --real flag
+    if args.real:
+        print(">> Using real SSOT paths (share/exports/)")
+        sources = {
+            "graph": "share/exports/graph_latest.json",
+            "temporal": "share/exports/temporal_patterns.json",
+            "forecast": "share/exports/pattern_forecast.json",
+            "correlations": "share/exports/correlation_weights.json",
+        }
     else:
-        print(f"⚠️  Graph data not found at {args.graph}, using mock data")
+        print(">> Using mock data (default)")
+        sources = {
+            "graph": "mock_graph.json",
+            "temporal": "mock_temporal.json",
+            "forecast": "mock_forecast.json",
+            "correlations": "mock_correlations.json",
+        }
+
+    # Load data sources
+    graph_data = load_json_file(sources["graph"])
+    if graph_data:
+        print(f"✓ Loaded graph data from {sources['graph']}")
+    else:
+        print(f"⚠️  Graph data not found at {sources['graph']}, using mock data")
         graph_data = generate_mock_graph(args.size)
 
-    temporal_data = load_json_file(args.temporal)
+    temporal_data = load_json_file(sources["temporal"])
     if temporal_data:
-        print(f"✓ Loaded temporal data from {args.temporal}")
+        print(f"✓ Loaded temporal data from {sources['temporal']}")
     else:
-        print(f"⚠️  Temporal data not found at {args.temporal}, using mock data")
+        print(f"⚠️  Temporal data not found at {sources['temporal']}, using mock data")
         temporal_data = generate_mock_temporal(args.size)
 
-    forecast_data = load_json_file(args.forecast)
+    # Load data sources
+    forecast_data = load_json_file(sources["forecast"])
     if forecast_data:
-        print(f"✓ Loaded forecast data from {args.forecast}")
+        print(f"✓ Loaded forecast data from {sources['forecast']}")
     else:
-        print(f"⚠️  Forecast data not found at {args.forecast}, using mock data")
+        print(f"⚠️  Forecast data not found at {sources['forecast']}, using mock data")
         forecast_data = generate_mock_forecast(args.size)
 
-    correlation_data = load_json_file(args.correlations)
+    correlation_data = load_json_file(sources["correlations"])
     if correlation_data:
-        print(f"✓ Loaded correlation data from {args.correlations}")
+        print(f"✓ Loaded correlation data from {sources['correlations']}")
     else:
-        print(f"⚠️  Correlation data not found at {args.correlations}, using mock data")
+        print(f"⚠️  Correlation data not found at {sources['correlations']}, using mock data")
         correlation_data = generate_mock_correlations(args.size)
 
     # Merge into unified envelope
-    envelope = merge_data_sources(
-        graph_data, temporal_data, forecast_data, correlation_data, args.size
-    )
+    envelope = merge_data_sources(graph_data, temporal_data, forecast_data, correlation_data, args.size)
+
+    # Add source metadata for COMPASS renormalization
+    envelope["meta"]["temporal_source"] = "real" if args.real else "mock"
 
     # Save envelope
     filepath = save_envelope(envelope, args.outdir, args.size)
