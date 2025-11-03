@@ -1,10 +1,11 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { scaleOrdinal } from "@visx/scale";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import { Circle, Line } from "@visx/shape";
 import * as d3 from "d3-force";
 import { GraphNode, GraphEdge } from "../types/graph";
+import { usePerformance } from "../hooks/usePerformance";
 
 interface GraphViewProps {
   nodes: GraphNode[];
@@ -57,6 +58,34 @@ export default function GraphView({
   const [simulationNodes, setSimulationNodes] = useState<SimulationNode[]>([]);
   const [simulationLinks, setSimulationLinks] = useState<SimulationLink[]>([]);
 
+  // Performance monitoring
+  const { metrics, measureRenderTime, countDOMNodes, setContainerRef, isSlow, needsWebGL } = usePerformance();
+
+  // Zoom and pan state
+  const [zoom, setZoom] = useState({ scale: 1, x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Large dataset detection (>10k nodes triggers optimizations)
+  const isLargeDataset = nodes.length > 10000;
+  const visibleNodeCount = useMemo(() => {
+    if (!isLargeDataset) return nodes.length;
+
+    // Calculate viewport bounds
+    const viewportBounds = {
+      left: -zoom.x / zoom.scale,
+      right: (-zoom.x + width) / zoom.scale,
+      top: -zoom.y / zoom.scale,
+      bottom: (-zoom.y + height) / zoom.scale,
+    };
+
+    // Count nodes in viewport (rough estimate)
+    return simulationNodes.filter(node =>
+      node.x !== undefined && node.y !== undefined &&
+      node.x >= viewportBounds.left && node.x <= viewportBounds.right &&
+      node.y >= viewportBounds.top && node.y <= viewportBounds.bottom
+    ).length;
+  }, [simulationNodes, zoom, width, height, isLargeDataset]);
+
   const nodeMap = useMemo(() => {
     const map = new Map<string, GraphNode>();
     nodes.forEach((node) => map.set(node.id, node));
@@ -85,6 +114,74 @@ export default function GraphView({
   const edgeOpacity = useCallback((edge: GraphEdge) => {
     return Math.max(0.1, Math.min(1, edge.strength));
   }, []);
+
+  // Viewport culling: filter nodes and edges to visible area
+  const visibleNodes = useMemo(() => {
+    if (!isLargeDataset) return simulationNodes;
+
+    const viewportBounds = {
+      left: -zoom.x / zoom.scale - 50, // Add padding
+      right: (-zoom.x + width) / zoom.scale + 50,
+      top: -zoom.y / zoom.scale - 50,
+      bottom: (-zoom.y + height) / zoom.scale + 50,
+    };
+
+    return simulationNodes.filter(node =>
+      node.x !== undefined && node.y !== undefined &&
+      node.x >= viewportBounds.left && node.x <= viewportBounds.right &&
+      node.y >= viewportBounds.top && node.y <= viewportBounds.bottom
+    );
+  }, [simulationNodes, zoom, width, height, isLargeDataset]);
+
+  const visibleEdges = useMemo(() => {
+    if (!isLargeDataset) return simulationLinks;
+
+    const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
+    return simulationLinks.filter(link =>
+      visibleNodeIds.has(link.source.id) && visibleNodeIds.has(link.target.id)
+    );
+  }, [simulationLinks, visibleNodes, isLargeDataset]);
+
+  // Zoom and pan handlers
+  const handleZoom = useCallback((event: React.WheelEvent) => {
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? 0.9 : 1.1;
+    const newScale = Math.max(0.1, Math.min(5, zoom.scale * delta));
+
+    // Zoom towards mouse position
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (rect) {
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      const newX = mouseX - (mouseX - zoom.x) * (newScale / zoom.scale);
+      const newY = mouseY - (mouseY - zoom.y) * (newScale / zoom.scale);
+
+      setZoom({ scale: newScale, x: newX, y: newY });
+    }
+  }, [zoom]);
+
+  const handlePanStart = useCallback((event: React.MouseEvent) => {
+    if (event.button !== 0) return; // Only left mouse button
+
+    const startX = event.clientX - zoom.x;
+    const startY = event.clientY - zoom.y;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setZoom(prev => ({
+        ...prev,
+        x: e.clientX - startX,
+        y: e.clientY - startY,
+      }));
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, [zoom]);
 
   // Run d3-force simulation
   useEffect(() => {
@@ -137,33 +234,70 @@ export default function GraphView({
     };
   }, [nodes, edges, width, height]);
 
+  // Performance measurement
+  useEffect(() => {
+    const startTime = performance.now();
+    return () => {
+      measureRenderTime(startTime);
+      countDOMNodes();
+    };
+  }, [simulationNodes, simulationLinks, measureRenderTime, countDOMNodes]);
+
   return (
-    <div className="w-full h-full bg-gray-50 rounded-lg overflow-hidden">
-      <svg width={width} height={height}>
+    <div
+      ref={setContainerRef}
+      className="w-full h-full bg-gray-50 rounded-lg overflow-hidden relative"
+    >
+      {/* Large dataset overlay */}
+      {isLargeDataset && (
+        <div className="absolute top-2 left-2 bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-medium z-10 shadow-lg">
+          Large mode • Nodes: {nodes.length.toLocaleString()} • Visible: {visibleNodeCount}
+          {needsWebGL && (
+            <span className="ml-2 text-yellow-300">⚠️ Consider WebGL</span>
+          )}
+        </div>
+      )}
+
+      {/* Performance indicator */}
+      {isSlow && (
+        <div className="absolute top-2 right-2 bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm z-10 shadow-lg">
+          Slow: {metrics.tti.toFixed(0)}ms TTI
+        </div>
+      )}
+
+      <svg
+        ref={svgRef}
+        width={width}
+        height={height}
+        onWheel={handleZoom}
+        onMouseDown={handlePanStart}
+        style={{ cursor: 'grab' }}
+      >
+        <g transform={`translate(${zoom.x}, ${zoom.y}) scale(${zoom.scale})`}>
           <Group>
             {/* Render edges */}
-          {simulationLinks.map((link, i) => {
-            const sourceNode = link.source;
-            const targetNode = link.target;
+            {(isLargeDataset ? visibleEdges : simulationLinks).map((link, i) => {
+              const sourceNode = link.source;
+              const targetNode = link.target;
 
-            if (!sourceNode || !targetNode || !sourceNode.x || !sourceNode.y || !targetNode.x || !targetNode.y) return null;
+              if (!sourceNode || !targetNode || !sourceNode.x || !sourceNode.y || !targetNode.x || !targetNode.y) return null;
 
               return (
                 <Line
                   key={`edge-${i}`}
-                from={{ x: sourceNode.x, y: sourceNode.y }}
-                to={{ x: targetNode.x, y: targetNode.y }}
+                  from={{ x: sourceNode.x, y: sourceNode.y }}
+                  to={{ x: targetNode.x, y: targetNode.y }}
                   stroke="#999"
                   strokeWidth={Math.max(1, (link.strength || 0) * 3)}
-                strokeOpacity={edgeOpacity(link)}
+                  strokeOpacity={edgeOpacity(link)}
                 />
               );
             })}
 
             {/* Render nodes */}
-          {simulationNodes.map((node, i) => {
+            {(isLargeDataset ? visibleNodes : simulationNodes).map((node, i) => {
               const originalNode = nodeMap.get(node.id);
-            if (!originalNode || !node.x || !node.y) return null;
+              if (!originalNode || !node.x || !node.y) return null;
 
               const radius = nodeRadius(originalNode);
               const isSelected = selectedNode?.id === node.id;
@@ -172,8 +306,8 @@ export default function GraphView({
               return (
                 <Group key={`node-${i}`}>
                   <Circle
-                  cx={node.x}
-                  cy={node.y}
+                    cx={node.x}
+                    cy={node.y}
                     r={radius}
                     fill={colorScale(originalNode.cluster || 0)}
                     stroke={isSelected ? "#000" : isHovered ? "#666" : "none"}
@@ -183,22 +317,26 @@ export default function GraphView({
                     onMouseEnter={() => handleNodeHover(originalNode)}
                     onMouseLeave={() => handleNodeHover(null)}
                   />
-                  <Text
-                  x={node.x}
-                  y={node.y - radius - 5}
-                    textAnchor="middle"
-                    fontSize={10}
-                    fill="#333"
-                    style={{ pointerEvents: "none" }}
-                  >
-                    {originalNode.label.length > 10
-                      ? `${originalNode.label.substring(0, 10)}...`
-                      : originalNode.label}
-                  </Text>
+                  {/* Only show labels for selected/hovered nodes in large datasets */}
+                  {(isSelected || isHovered || !isLargeDataset) && (
+                    <Text
+                      x={node.x}
+                      y={node.y - radius - 5}
+                      textAnchor="middle"
+                      fontSize={10}
+                      fill="#333"
+                      style={{ pointerEvents: "none" }}
+                    >
+                      {originalNode.label.length > 10
+                        ? `${originalNode.label.substring(0, 10)}...`
+                        : originalNode.label}
+                    </Text>
+                  )}
                 </Group>
               );
             })}
           </Group>
+        </g>
       </svg>
 
       {/* Legend */}
