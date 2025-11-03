@@ -49,3 +49,16 @@ accept.ui.smoke:
 	@echo ">> Export + accept (smoke)"
 	@$(PYTHON) scripts/export_noun_index.py --limit 1000
 	@$(MAKE) accept.ui ENVELOPE=$(ENVELOPE) MIN_NODES=$(MIN_NODES) MIN_EDGES=$(MIN_EDGES) ALLOW_EMPTY=$(ALLOW_EMPTY)
+
+# --- UI temporal exports (CSV/PNG) ---
+
+OUTDIR ?= ui/out
+.PHONY: ui.export.temporal
+ui.export.temporal:
+	@echo ">> Temporal strip export to $(OUTDIR)"
+	@$(PYTHON) scripts/ui/export_temporal_strip.py $(ENVELOPE) --outdir $(OUTDIR) --mode point
+
+.PHONY: ui.export.temporal.span
+ui.export.temporal.span:
+	@echo ">> Temporal strip export (span mode) to $(OUTDIR)"
+	@$(PYTHON) scripts/ui/export_temporal_strip.py $(ENVELOPE) --outdir $(OUTDIR) --mode span

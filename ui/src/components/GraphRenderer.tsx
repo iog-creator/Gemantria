@@ -85,20 +85,48 @@ const GraphRenderer: React.FC<GraphRendererProps> = ({ envelope }) => {
     );
   }
 
+  if (!envelope.nodes.length) {
+    return (
+      <div className="p-6 text-sm text-gray-500">
+        No nodes found in the envelope. Export first, then load
+        <code className="mx-1">share/exports/envelope.json</code>.
+      </div>
+    );
+  }
+  // Derive simple temporal bounds for a hint (best-effort; safe if fields missing)
+  const years: number[] = []
+  envelope.nodes.slice(0, 2000).forEach((n: any) => {
+    const d = typeof n.data === 'object' && n.data ? n.data : {}
+    const y = Number.isInteger(n.year) ? n.year
+      : Number.isInteger(d?.year) ? d.year
+      : Number.isInteger(d?.start_year) ? d.start_year
+      : null
+    if (Number.isInteger(y)) years.push(Number(y))
+  })
+  const minY = years.length ? Math.min(...years) : null
+  const maxY = years.length ? Math.max(...years) : null
+
   return (
-    <div style={{ width: '100%', height: '600px', border: '1px solid #ddd' }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        fitView
-        attributionPosition="bottom-left"
-      >
-        <Controls />
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
-      </ReactFlow>
+    <div className="h-full w-full">
+      {!!years.length && (
+        <div className="px-3 py-2 text-xs text-gray-500">
+          Temporal hint: {minY} – {maxY} ({years.length} nodes with year data)
+        </div>
+      )}
+      <div style={{ width: '100%', height: '600px', border: '1px solid #ddd' }}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          fitView
+          attributionPosition="bottom-left"
+        >
+          <Controls />
+          <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
+        </ReactFlow>
+      </div>
     </div>
   );
 };
