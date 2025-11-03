@@ -31,3 +31,27 @@ codex.parallel:
 
 share.sync:
 	@python3 scripts/sync_share.py
+
+# UI temporal export targets (local-only)
+
+OUTDIR ?= ui/out
+
+ui.export.temporal.span:
+	@echo ">> Temporal strip export (span mode) to $(OUTDIR)"
+	@$(PYTHON) scripts/ui/export_temporal_strip.py $(ENVELOPE) --outdir $(OUTDIR) --mode span
+
+# --- Publish temporal artifacts to public/ with versioned names ---
+
+PUBLIC_DIR ?= webui/public
+VERSION ?=
+
+.PHONY: ui.publish.temporal
+ui.publish.temporal:
+	@echo ">> Publish temporal exports to $(PUBLIC_DIR) (version=$(VERSION))"
+	@$(PYTHON) scripts/ui/copy_exports.py --src $(OUTDIR) --dst $(PUBLIC_DIR) $(if $(VERSION),--version $(VERSION),)
+
+# --- PR metadata enforcement (local)
+
+.PHONY: pr.check.model_usage
+pr.check.model_usage:
+	@$(PYTHON) scripts/ci/check_pr_model_usage.py
