@@ -1,20 +1,40 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { canUseWebGL } from '../../utils/capabilities';
 
 /**
  * Sprint 3: Isolated WebGL renderer for escalation
  * Points/lines for nodes/edges, normalized coords, context handling
  * Hot path <16ms/frame budget on static 100k datasets
+ * Pan/zoom uniforms + edge opacity for interactive exploration
+ * Force simulation offloaded to WebWorker for large datasets
  */
 
 interface RendererProps {
-  data: { nodes: any[]; edges: any[] }; // Positions pre-computed
+  data: { nodes: any[]; edges: any[] }; // Positions computed via force simulation
   width: number;
   height: number;
+  pan?: [number, number]; // [x, y] pan offset
+  zoom?: number; // Zoom level (1.0 = default)
+  edgeOpacity?: number; // Edge opacity (0.0-1.0)
 }
 
-const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
+const Renderer: React.FC<RendererProps> = ({
+  data,
+  width,
+  height,
+  pan = [0, 0],
+  zoom = 1.0,
+  edgeOpacity = 1.0
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [layoutNodes, setLayoutNodes] = useState(data.nodes);
+
+  useEffect(() => {
+    const worker = new Worker(new URL('../../workers/forceWorker.ts', import.meta.url));
+    worker.onmessage = (e) => setLayoutNodes(e.data.nodes);
+    worker.postMessage({ nodes: data.nodes, edges: data.edges, width, height });
+    return () => worker.terminate();
+  }, [data, width, height]);
 
   useEffect(() => {
     if (!canUseWebGL()) return; // Guard
@@ -31,7 +51,7 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
 
     // Points for nodes (instanced)
     const nodePos = new Float32Array(
-      data.nodes.flatMap(n => [
+      layoutNodes.flatMap(n => [
         n.x / width * 2 - 1,
         1 - n.y / height * 2
       ])
@@ -46,8 +66,8 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
     // Lines for edges
     const edgePos = new Float32Array(
       data.edges.flatMap(e => {
-        const source = data.nodes.find(n => n.id === e.source.id || n.id === e.source);
-        const target = data.nodes.find(n => n.id === e.target.id || n.id === e.target);
+        const source = layoutNodes.find(n => n.id === e.source.id || n.id === e.source);
+        const target = layoutNodes.find(n => n.id === e.target.id || n.id === e.target);
         if (!source || !target) return [];
 
         return [
@@ -67,7 +87,17 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
     const vs = gl.createShader(gl.VERTEX_SHADER);
     if (!vs) return;
 
-    gl.shaderSource(vs, `attribute vec2 pos; void main() { gl_Position = vec4(pos, 0, 1); gl_PointSize = 5.0; }`);
+    // Updated vertex shader with pan/zoom uniforms
+    gl.shaderSource(vs, `
+      attribute vec2 pos;
+      uniform vec2 u_pan;
+      uniform float u_zoom;
+      void main() {
+        vec2 transformed = (pos + u_pan) * u_zoom;
+        gl_Position = vec4(transformed, 0, 1);
+        gl_PointSize = 5.0 * u_zoom; // Scale point size with zoom
+      }
+    `);
     gl.compileShader(vs);
 
     if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
@@ -78,7 +108,7 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
     const fs = gl.createShader(gl.FRAGMENT_SHADER);
     if (!fs) return;
 
-    gl.shaderSource(fs, `void main() { gl_FragColor = vec4(0.2, 0.4, 0.8, 1); }`); // Blue
+    gl.shaderSource(fs, `uniform float u_opacity; void main() { gl_FragColor = vec4(0.2, 0.4, 0.8, u_opacity); }`); // Blue with opacity
     gl.compileShader(fs);
 
     if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
@@ -100,13 +130,22 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
 
     gl.useProgram(prog);
 
+    // Set uniforms for pan/zoom/opacity
+    const panLoc = gl.getUniformLocation(prog, 'u_pan');
+    const zoomLoc = gl.getUniformLocation(prog, 'u_zoom');
+    const opacityLoc = gl.getUniformLocation(prog, 'u_opacity');
+
+    if (panLoc) gl.uniform2f(panLoc, pan[0], pan[1]);
+    if (zoomLoc) gl.uniform1f(zoomLoc, zoom);
+    if (opacityLoc) gl.uniform1f(opacityLoc, edgeOpacity);
+
     const loc = gl.getAttribLocation(prog, 'pos');
     gl.enableVertexAttribArray(loc);
 
     // Draw points
     gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuf);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.POINTS, 0, data.nodes.length);
+    gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
 
     // Draw lines (separate program for different color)
     const lineProg = gl.createProgram();
@@ -115,7 +154,7 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
     const lineFs = gl.createShader(gl.FRAGMENT_SHADER);
     if (!lineFs) return;
 
-    gl.shaderSource(lineFs, `void main() { gl_FragColor = vec4(0.5, 0.5, 0.5, 0.5); }`);
+    gl.shaderSource(lineFs, `uniform float u_opacity; void main() { gl_FragColor = vec4(0.5, 0.5, 0.5, u_opacity); }`); // Gray with opacity
     gl.compileShader(lineFs);
 
     if (!gl.getShaderParameter(lineFs, gl.COMPILE_STATUS)) {
@@ -133,6 +172,16 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
     }
 
     gl.useProgram(lineProg);
+
+    // Set uniforms for line program too
+    const linePanLoc = gl.getUniformLocation(lineProg, 'u_pan');
+    const lineZoomLoc = gl.getUniformLocation(lineProg, 'u_zoom');
+    const lineOpacityLoc = gl.getUniformLocation(lineProg, 'u_opacity');
+
+    if (linePanLoc) gl.uniform2f(linePanLoc, pan[0], pan[1]);
+    if (lineZoomLoc) gl.uniform1f(lineZoomLoc, zoom);
+    if (lineOpacityLoc) gl.uniform1f(lineOpacityLoc, edgeOpacity);
+
     const lineLoc = gl.getAttribLocation(lineProg, 'pos');
     gl.enableVertexAttribArray(lineLoc);
 
@@ -160,7 +209,7 @@ const Renderer: React.FC<RendererProps> = ({ data, width, height }) => {
       gl.deleteProgram(prog);
       if (lineProg) gl.deleteProgram(lineProg);
     };
-  }, [data, width, height]);
+  }, [data, width, height, pan, zoom, edgeOpacity, layoutNodes]);
 
   return <canvas ref={canvasRef} width={width} height={height} style={{ display: 'block' }} />;
 };
