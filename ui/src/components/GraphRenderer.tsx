@@ -113,6 +113,20 @@ const GraphRenderer: React.FC<GraphRendererProps> = ({ envelope }) => {
           Temporal hint: {minY} – {maxY} ({years.length} nodes with year data)
         </div>
       )}
+      {/* Download links for exports if available */}
+      <div className="px-3 py-2 text-xs text-blue-600">
+        {(() => {
+          const cvsPath = "/ui/out/temporal_strip.csv";
+          const mdPath  = "/ui/out/temporal_summary.md";
+          // Note: assumes both files are served via public/static or copied into build
+          return (
+            <span>
+              <a href={cvsPath} download className="underline mr-4">Download CSV</a>
+              <a href={mdPath} download className="underline">Download Summary</a>
+            </span>
+          );
+        })()}
+      </div>
       <div style={{ width: '100%', height: '600px', border: '1px solid #ddd' }}>
         <ReactFlow
           nodes={nodes}
