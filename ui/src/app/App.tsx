@@ -4,11 +4,14 @@ import React, { useState } from 'react';
 import { EnvelopeStats } from '../components/EnvelopeStats';
 import { FileLoader } from '../components/FileLoader';
 import { GraphRenderer } from '../components/GraphRenderer';
+import MetaPanel from '../components/MetaPanel';
+import MetricsDashboard from '../components/MetricsDashboard';
 import { Envelope } from '../types/envelope';
 
 function App() {
   const [uploadedEnvelope, setUploadedEnvelope] = useState<Envelope | null>(null);
   const [activeTab, setActiveTab] = useState<'stats' | 'graph'>('stats');
+  const [showMetrics, setShowMetrics] = useState(false);  // Dev toggle
 
   const handleFileLoad = (envelope: Envelope) => {
     setUploadedEnvelope(envelope);
@@ -54,6 +57,25 @@ function App() {
           </button>
         </div>
       )}
+
+      {uploadedEnvelope && <MetaPanel meta={uploadedEnvelope.meta} />}  {/* Badge auto-renders */}
+      {showMetrics && <MetricsDashboard />}  {/* Toggle for viz */}
+
+      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+        <button
+          onClick={() => setShowMetrics(!showMetrics)}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: showMetrics ? '#28a745' : '#6c757d',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          {showMetrics ? 'Hide Metrics (Dev)' : 'Show Metrics (Dev)'}
+        </button>
+      </div>
 
       {activeTab === 'stats' && <EnvelopeStats uploadedEnvelope={uploadedEnvelope} />}
       {activeTab === 'graph' && <GraphRenderer envelope={uploadedEnvelope} />}
