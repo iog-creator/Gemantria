@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
@@ -40,14 +40,25 @@ export default function GraphDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100">
+      {/* Skip to main content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50"
+      >
+        Skip to main content
+      </a>
+
+      <div className="p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
+          {/* Header with navigation landmark */}
+          <header className="mb-6">
+            <nav aria-label="Main navigation">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Gematria Concept Network
           </h1>
-          <div className="flex gap-4 text-sm text-gray-600">
+            </nav>
+            <div className="flex gap-4 text-sm text-gray-600" aria-label="Dataset summary">
             <span>Nodes: {data.nodes.length}</span>
             <span>Edges: {data.edges.length}</span>
             <span>
@@ -55,10 +66,10 @@ export default function GraphDashboard() {
               {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
             </span>
           </div>
-        </div>
+          </header>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <main id="main-content" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Graph View - Takes up 3/4 of the space */}
           <div className="lg:col-span-3 space-y-6">
             {/* Stats Panel */}
@@ -88,16 +99,17 @@ export default function GraphDashboard() {
           <div className="lg:col-span-1">
             <NodeDetails node={selectedNode} />
           </div>
-        </div>
+        </main>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <footer className="mt-6 text-center text-sm text-gray-500" role="contentinfo">
           <p>
             Graph data exported on{" "}
             {data.metadata?.export_timestamp
               ? new Date(data.metadata.export_timestamp).toLocaleString()
               : "Unknown"}
           </p>
+        </footer>
         </div>
       </div>
     </div>

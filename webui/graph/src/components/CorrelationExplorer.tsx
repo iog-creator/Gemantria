@@ -1,8 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
-import { AxisLeft, AxisBottom } from "@visx/axis";
-import { GridRows, GridColumns } from "@visx/grid";
 import { Circle, Line } from "@visx/shape";
 
 interface CorrelationNode {
@@ -137,7 +134,6 @@ export default function CorrelationExplorer() {
 
   const width = 600;
   const height = 400;
-  const margin = { top: 20, right: 20, bottom: 60, left: 60 };
 
   // Create a simple node-link diagram layout
   const nodes = filteredData.nodes.map((node, i) => ({
@@ -199,7 +195,7 @@ export default function CorrelationExplorer() {
             <div className="text-xs space-y-1">
               {filteredData.metadata.top_weighted_degree_nodes
                 .slice(0, 3)
-                .map((node, i) => (
+                .map((node) => (
                   <div key={node.node} className="flex justify-between">
                     <span>
                       {node.node.slice(0, 20)}
