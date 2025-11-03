@@ -1,0 +1,126 @@
+name: system-enforcement
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+      CI: "true"
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
+    # Only enforce on first-party contexts:
+    #  - push on main (internal)
+    #  - first-party PRs (not forks)
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
+        with: { python-version: "3.11" }
+      # Force fresh pre-commit environment to defeat ruff version cache drift
+      - name: Clear pre-commit cache (force ruff 0.13.0)
+        run: rm -rf ~/.cache/pre-commit
+      # PRs: run on the diff
+      - name: Pre-commit (PR diff)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: pre-commit/action@2c7b3805fd36ad8535802b9827a9958bf525d3be7
+        with:
+          extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+
+      # Pushes: run on all files
+      - name: Pre-commit (push all-files)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: pre-commit/action@2c7b3805fd36ad8535802b9827a9958bf525d3be7
+        with:
+          extra_args: --all-files
+
+      - name: Edge reclassify (non-blocking)
+        run: |
+          set -e
+          export MOCK_AI=1
+          make -s eval.edges.reclassify || true
+
+      # Example secret-dependent step: only run if secret is present
+      - name: DB-enforced checks
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        if: ${{ env.GEMATRIA_DSN != '' }}
+        run: |
+          echo "Running DB-enforced checks..."
+          make -s ci.data.verify
+
+      - name: Install guard deps
+        run: pip install jsonschema
+      - name: Rules numbering check
+        run: make rules.numbering.check
+      - name: Install psycopg (v3)
+        run: pip install "psycopg[binary]"
+      - name: Confirm DSN secret present (non-fatal)
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        run: |
+          echo "::group::Confirm DSN secret present"
+          if [ -z "${GEMATRIA_DSN}" ]; then
+            echo "HINT: enforcement skipped — GEMATRIA_DSN secret missing"
+            echo "::endgroup::"
+            exit 0
+          fi
+          echo "HINT: enforcement DB steps enabled"
+          echo "::endgroup::"
+      - name: Run rules guard (hard gate)
+        run: python scripts/rules_guard.py
+      - name: Rules audit (contiguity + docs sync)
+        run: python scripts/rules_audit.py
+      - name: Rules numbering check
+        run: make rules.numbering.check
+      - name: Install psycopg (v3)
+        run: pip install "psycopg[binary]"
+      - name: Confirm DSN secret present (non-fatal)
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        run: |
+          echo "::group::Confirm DSN secret present"
+          if [ -z "${GEMATRIA_DSN}" ]; then
+            echo "HINT: enforcement skipped — GEMATRIA_DSN secret missing"
+            echo "::endgroup::"
+            exit 0
+          fi
+          echo "HINT: enforcement DB steps enabled"
+            echo "::endgroup::"
+      - name: Refresh share mirror before checking
+        run: make -s share.sync
+      - name: Check share/ sync (flat, current)
+        run: python scripts/check_share_sync.py
+      - name: Data completeness gate (Rule 037)
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        if: ${{ env.GEMATRIA_DSN != '' }}
+        run: make ci.data.verify
+      - name: Exports smoke (Rule 038)
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+        if: ${{ env.GEMATRIA_DSN != '' }}
+        run: make ci.exports.smoke
+      - name: Share consistency check (no drift)
+        run: |
+          make go || true            # ensure build steps run; ignore share writes in CI
+          make share.sync            # run mirror generation in CI workspace
+          git status --porcelain
+          if ! git diff --quiet --exit-code -- share; then
+            echo "[share.check] Share out-of-date. Run 'make share.sync' locally and commit."
+            exit 1
+          fi
+      - name: NEXT_STEPS check
+        run: make ops.next
