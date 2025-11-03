@@ -132,9 +132,7 @@ def validate_temporal_patterns(envelope: Dict[str, Any]) -> Tuple[float, List[st
         values = pattern["values"]
 
         if len(timestamps) != len(values):
-            issues.append(
-                f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})"
-            )
+            issues.append(f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})")
             invalid_patterns += 1
 
         # Check for monotonic timestamps (should be sorted)
