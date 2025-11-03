@@ -97,9 +97,7 @@ def main():
 
     code_dirs = ("src/", "scripts/", "migrations/", "webui/")
     code_touched = any(f.startswith(code_dirs) for f in files)
-    docs_touched = any(
-        f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files
-    )
+    docs_touched = any(f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files)
 
     print(f"[rules_guard] Code touched: {code_touched}, Docs touched: {docs_touched}")
 
