@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
-      - uses: ossf/scorecard-action@v2.4.0
+      - uses: ossf/scorecard-action@v2.4.3
         with:
           results_file: results.sarif
           publish_results: true
