@@ -21,13 +21,3 @@ JOIN bible_db.verses v ON v.id = o.verse_id
 ORDER BY v.book_ord, o.verse_id, o.token_idx
 LIMIT 100;
 ```
-
-## Acceptance (headless)
-
-After exporting, verify the envelope minimally without launching the UI:
-
-```bash
-make accept.ui ENVELOPE=share/exports/envelope.json MIN_NODES=1 MIN_EDGES=0
-# Allow empty datasets (e.g., fresh DB) by setting:
-# ALLOW_EMPTY=1 make accept.ui ENVELOPE=share/exports/envelope.json
-```

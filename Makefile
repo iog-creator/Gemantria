@@ -31,3 +31,21 @@ codex.parallel:
 
 share.sync:
 	@python3 scripts/sync_share.py
+
+# --- UI acceptance (headless) ---
+
+ENVELOPE ?= share/exports/envelope.json
+MIN_NODES ?= 1
+MIN_EDGES ?= 0
+ALLOW_EMPTY ?=
+
+.PHONY: accept.ui
+accept.ui:
+	@echo ">> UI acceptance on $(ENVELOPE) ..."
+	@$(PYTHON) scripts/acceptance/check_envelope.py $(ENVELOPE) --min-nodes $(MIN_NODES) --min-edges $(MIN_EDGES) $(if $(ALLOW_EMPTY),--allow-empty,)
+
+.PHONY: accept.ui.smoke
+accept.ui.smoke:
+	@echo ">> Export + accept (smoke)"
+	@$(PYTHON) scripts/export_noun_index.py --limit 1000
+	@$(MAKE) accept.ui ENVELOPE=$(ENVELOPE) MIN_NODES=$(MIN_NODES) MIN_EDGES=$(MIN_EDGES) ALLOW_EMPTY=$(ALLOW_EMPTY)
