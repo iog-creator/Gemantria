@@ -89,11 +89,11 @@ const Renderer: React.FC<RendererProps> = ({
 
     // Updated vertex shader with pan/zoom uniforms
     gl.shaderSource(vs, `
-      attribute vec2 pos;
+      attribute vec2 aPos;
       uniform vec2 u_pan;
       uniform float u_zoom;
       void main() {
-        vec2 transformed = (pos + u_pan) * u_zoom;
+        vec2 transformed = (aPos + u_pan) * u_zoom;
         gl_Position = vec4(transformed, 0, 1);
         gl_PointSize = 5.0 * u_zoom; // Scale point size with zoom
       }
@@ -139,13 +139,26 @@ const Renderer: React.FC<RendererProps> = ({
     if (zoomLoc) gl.uniform1f(zoomLoc, zoom);
     if (opacityLoc) gl.uniform1f(opacityLoc, edgeOpacity);
 
-    const loc = gl.getAttribLocation(prog, 'pos');
-    gl.enableVertexAttribArray(loc);
-
-    // Draw points
-    gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuf);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
+    // Instanced rendering setup (points)
+    const ext = gl.getExtension('ANGLE_instanced_arrays');
+    if (ext) {
+      const instanceBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(layoutNodes.flatMap(n => [n.x, n.y])), gl.STATIC_DRAW);
+      const posLoc = gl.getAttribLocation(prog, 'aPos');
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+      ext.vertexAttribDivisorANGLE(posLoc, 1);  // Per-instance
+      // Draw instanced
+      ext.drawArraysInstancedANGLE(gl.POINTS, 0, 1, layoutNodes.length);
+    } else {
+      console.warn('Instanced rendering not supported, falling back to regular draw');
+      const loc = gl.getAttribLocation(prog, 'aPos');
+      gl.enableVertexAttribArray(loc);
+      gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuf);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
+    }
 
     // Draw lines (separate program for different color)
     const lineProg = gl.createProgram();
