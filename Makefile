@@ -83,3 +83,11 @@ ui.temporal.comment:
 .PHONY: test.ui.smoke
 test.ui.smoke:
 	@pytest tests/ui/test_extract_smoke.py
+
+# COMPASS evaluation (mathematical correctness scoring)
+ENVELOPE ?= share/exports/envelope.json
+
+.PHONY: test.compass
+test.compass:
+	@echo ">> COMPASS evaluation on $(ENVELOPE)"
+	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
