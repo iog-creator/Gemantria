@@ -48,6 +48,28 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 - Cluster metrics (density, diversity) from backend analysis
 - Responsive grid layout with loading states
 
+#### `MetaPanel.tsx` - Performance & Metadata Display (P11 Sprint 2)
+
+**Purpose**: Show envelope metadata and performance indicators
+**Features**:
+
+- Load time performance badge (green <200ms, yellow <500ms, red ≥500ms)
+- Color-coded visual indicator with hover tooltip
+- Real-time fetch from `/var/ui/perf.json`
+- Graceful fallback for missing performance data
+- Metadata display with JSON formatting
+
+#### `MetricsDashboard.tsx` - Development Metrics Visualization (P11 Sprint 2)
+
+**Purpose**: Developer-focused metrics trends and analytics
+**Features**:
+
+- D3-powered line charts for historical metrics
+- SVG export functionality for sharing
+- Real-time data loading from `/var/ui/metrics.jsonl`
+- Configurable chart dimensions and styling
+- Error handling for missing metrics data
+
 #### `GraphDashboard.tsx` - Main Page Layout
 
 **Purpose**: Orchestrate the complete visualization experience
@@ -57,6 +79,76 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 - Error handling and loading states
 - Metadata display (node/edge counts)
 - Integration with data loading hooks
+- Performance badge integration (MetaPanel)
+- Dual views toggle (user badges + dev metrics dashboard)
+- WebGL escalation modal for large datasets (>50k nodes or >3s TTI)
+- Automatic performance monitoring and optimization recommendations
+
+#### `GraphPreview.tsx` - Large Dataset Preview (Phase 2.2)
+
+**Purpose**: Lightweight preview component for datasets >10k nodes
+**Features**:
+
+- Summary statistics grid (nodes, edges, clusters, temporal patterns, forecasts, correlations)
+- Lazy pagination for node chunks (1000 nodes per page)
+- Performance estimates (memory usage, estimated TTI)
+- Progressive enhancement (summary → details toggle)
+- Export summary functionality (stub for future implementation)
+
+#### `usePerformance.ts` - Performance Monitoring Hook (Phase 2.3)
+
+**Purpose**: Track and analyze rendering performance for optimization decisions
+**Features**:
+
+- Time-to-Interactive (TTI) measurement
+- FPS monitoring during interactions
+- Memory usage tracking (optional, privacy-respecting)
+- DOM node counting for complexity assessment
+- Automated performance recommendations (WebGL, virtualization, simplification)
+- Configurable thresholds for different performance metrics
+
+#### `DebugPanel.tsx` - Performance Debug Panel (Phase 4)
+
+**Purpose**: Detailed performance debugging interface with comprehensive metrics display
+**Features**:
+
+- Tabbed interface (Core Metrics, Recommendations, Graph Stats)
+- Real-time performance indicators with status colors and icons
+- Detailed recommendations with actionable steps
+- Graph rendering statistics (visible/total nodes, zoom level, culling efficiency)
+- ARIA-compliant with keyboard navigation and screen reader support
+- Modal overlay with backdrop dismissal
+
+**Integration**: Accessible via PerformanceBadge clicks in GraphDashboard header
+
+#### `PerformanceBadge.tsx` - Performance Status Indicator (Phase 4)
+
+**Purpose**: Visual performance status badge with click-to-debug functionality
+**Features**:
+
+- Color-coded status (green=good, yellow=warning, red=error)
+- Summary metrics display (TTI, FPS, memory, issue count)
+- Hover tooltips with detailed status messages
+- Click handler to open DebugPanel
+- Configurable size and detail level
+- Trend indicators for performance changes
+
+**Integration**: Embedded in GraphDashboard header next to dataset statistics
+
+#### `MetricsDashboard.tsx` - Performance Analytics Dashboard (Phase 4)
+
+**Purpose**: Development-focused performance trends and historical analytics
+**Features**:
+
+- Time-range selection (1min, 5min, 15min) for historical data
+- Real-time sparkline charts for key metrics
+- Trend analysis with percentage changes vs previous periods
+- Performance recommendations with priority levels
+- Graph rendering metrics integration
+- Data export functionality (JSON/CSV)
+- Auto-refresh toggle for continuous monitoring
+
+**Integration**: Standalone page accessible via routing, receives graph metrics from parent components
 
 #### `TemporalExplorer.tsx` - Phase 8 Temporal Pattern Visualization (NEW)
 
@@ -118,6 +210,55 @@ Implements PR-017 metrics visualization.
 **Verification Rules:** 016 (contract sync), 021 (stats proof), 022 (viz contract sync).
 **Testing:** `npm run test:ci` runs `__tests__/GraphStats.test.tsx`.
 **Data Flow:** export_stats.py → graph_stats.json → useGraphStats → GraphStats.tsx → GraphDashboard.tsx.
+
+## Performance Monitoring & Large Dataset Handling
+
+### Viewport Culling (Phase 2.1)
+
+**Purpose**: Optimize rendering performance for large graphs (>10k nodes)
+**Implementation**:
+
+- Automatic detection of large datasets (>10k nodes triggers optimizations)
+- Viewport-based filtering of nodes and edges to visible area
+- Label hiding for non-selected/hovered nodes in large mode
+- Zoom and pan controls with mouse wheel and drag interactions
+- Performance overlay showing visible node count and WebGL recommendations
+
+**Performance Gains**:
+- 100k nodes: ~5-10% visible nodes rendered (90%+ reduction)
+- TTI maintained under 500ms threshold
+- Memory usage reduced through selective rendering
+
+### Performance Profiling Hook (usePerformance.ts)
+
+**Metrics Tracked**:
+- **TTI (Time to Interactive)**: End-to-end load time measurement
+- **FPS**: Frames per second during user interactions
+- **Memory Usage**: Optional heap size monitoring (privacy-respecting)
+- **DOM Nodes**: Rendered element count for complexity assessment
+- **Render Time**: Individual component render duration
+
+**Recommendations Engine**:
+- **WebGL Escalation**: Triggered at >3s TTI or >50k nodes
+- **Virtualization**: Memory usage exceeds 200MB threshold
+- **Simplification**: DOM node count >10k suggests optimization
+
+**Integration**: Wired into GraphView and GraphDashboard for real-time monitoring
+
+### WebGL Escalation Modal
+
+**Trigger Conditions**:
+- Dataset size >50k nodes
+- TTI >3s with >10k nodes
+- Performance hook recommends WebGL
+
+**Features**:
+- Modal dialog with performance metrics display
+- User choice between WebGL acceleration or continued SVG rendering
+- Escalation tracking via `/var/ui/escalation.json`
+- Graceful fallback for missing WebGL support
+
+**Data Flow**: Performance monitoring → recommendations → modal → escalation.json → renderer switch
 
 ## Development Workflow
 

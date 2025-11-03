@@ -37,6 +37,29 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Line length**: 120 characters maximum
 - **String concatenation**: Use `["cmd", *args]` instead of `["cmd"] + args`
 
+## UI / Frontend Generation (Standard)
+**Primary model:** Gemini 2.5 Pro (terminal/CLI, long context)
+**Fallback / refinement:** Claude Sonnet 4 (highest-fidelity styling, complex refactors)
+
+### Usage rules
+1) Start all UI codegen (React/Next, charts, search UI) with **Gemini 2.5 Pro**.
+2) If spec unmet after ≤2 iterations, or multi-file refactor / high-fidelity styling is required → **escalate to Claude Sonnet 4**.
+3) Minor tweaks (single-file CSS/prop changes) may use a cheaper model.
+4) Log model + prompt + iteration count in the PR body (see template).
+
+### Libraries & structure (defaults)
+- React 18+ (Next.js when SSR/SSG needed)
+- State: Zustand or React Context (keep light)
+- Viz: Recharts, D3 wrapper, React Flow (graphs)
+- Styling: Tailwind (or CSS Modules)
+- Layout: `src/components/*`, `src/hooks/*`, `src/services/*`, `src/views/*`
+
+### QA gates (always)
+- Frontend: `npm run lint && npm run test` (if present)
+- Backend: `ruff format --check . && ruff check .`
+- Security: run static checks where configured
+- PR must include "Model Usage" block (see template).
+
 ### Runbook: Postgres checkpointer
 1. Apply migration:
    ```bash
@@ -77,6 +100,55 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 * **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
 * **Ops verifier (local)**: `make ops.verify` prints deterministic checks confirming Phase-8 eval surfaces exist (Makefile targets, manifest version, docs header, share dir). Local-only; not wired into CI.
 * **Pipeline stabilization**: `eval.package` runs to completion with soft integrity gates; `targets.check.dupes` prevents Makefile regressions; `build_release_manifest.py` skips bundles/ for performance.
+
+## Data Extraction Lineage
+
+Phase 11 unified pipeline flow:
+
+1. **graph_latest.json** (Phase 9 output)
+   - Nodes with gematria values, Hebrew text, book/chapter/verse refs
+   - Edges with cosine similarity, rerank scores, edge_strength blend
+
+2. **temporal_patterns.json** + **pattern_forecast.json** (Phase 8 output)
+   - Time-series data for frequency trends
+   - Prophet forecasts with confidence intervals
+
+3. **correlation_weights.json** (Phase 10 output)
+   - Cross-text pattern analytics
+   - Edge classification (strong/weak thresholds)
+
+4. **unified_envelope.json** (Phase 11 output)
+   - Single integrated format with all attributes
+   - Versioned schema (`unified-v1`)
+   - Configurable size extraction (100, 1k, 10k, 100k+ nodes)
+
+**Extraction Script:** `scripts/extract/extract_all.py`
+**Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
+**Validation:** JSON schema enforcement + size/performance gates + COMPASS mathematical correctness (>80% score)
+
+### COMPASS: Comprehensive Pipeline Assessment Scoring System
+
+**Purpose**: Mathematical envelope validation for data integrity and correctness
+**Requirements**: >80% correctness threshold for envelope acceptance
+
+**Capabilities**:
+- Correlation weight validation (>0.5 significance threshold)
+- Edge strength blend verification (0.5*cos + 0.5*rerank calculation)
+- Temporal pattern integrity checks (monotonic timestamps, data consistency)
+- CLI scoring with detailed issue reporting
+
+**Usage**:
+```bash
+make test.compass  # Score envelope for mathematical correctness
+python scripts/compass/scorer.py share/exports/envelope.json --verbose
+```
+
+**Scoring Categories**:
+- **correlation_weights**: Edge significance validation (40% weight)
+- **edge_strength_blend**: Blend calculation accuracy (40% weight)
+- **temporal_patterns**: Time series data integrity (20% weight)
+
+**Output**: PASS/FAIL status with detailed issue breakdown
 
 ## Cursor Execution Profile (AlwaysApply)
 

@@ -1,0 +1,10 @@
+{
+  "ts": 1762204748.2935128,
+  "mode": "file",
+  "target": "webui/public/index.html",
+  "probe": {
+    "ok": true,
+    "ms": 0.01,
+    "bytes": 464
+  }
+}
