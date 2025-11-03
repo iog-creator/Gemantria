@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { ForceGraph2D } from "@visx/force";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { scaleOrdinal } from "@visx/scale";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import { Circle, Line } from "@visx/shape";
+import * as d3 from "d3-force";
 import { GraphNode, GraphEdge } from "../types/graph";
 
 interface GraphViewProps {
@@ -31,6 +31,20 @@ const colorScale = scaleOrdinal({
   ],
 });
 
+interface SimulationNode extends GraphNode {
+  x?: number;
+  y?: number;
+  vx?: number;
+  vy?: number;
+  fx?: number | null;
+  fy?: number | null;
+}
+
+interface SimulationLink extends GraphEdge {
+  source: SimulationNode;
+  target: SimulationNode;
+}
+
 export default function GraphView({
   nodes,
   edges,
@@ -40,6 +54,8 @@ export default function GraphView({
 }: GraphViewProps) {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+  const [simulationNodes, setSimulationNodes] = useState<SimulationNode[]>([]);
+  const [simulationLinks, setSimulationLinks] = useState<SimulationLink[]>([]);
 
   const nodeMap = useMemo(() => {
     const map = new Map<string, GraphNode>();
@@ -70,55 +86,84 @@ export default function GraphView({
     return Math.max(0.1, Math.min(1, edge.strength));
   }, []);
 
+  // Run d3-force simulation
+  useEffect(() => {
+    if (!nodes.length || !width || !height) return;
+
+    // Initialize nodes with positions
+    const initialNodes: SimulationNode[] = nodes.map((node) => ({
+      ...node,
+      x: Math.random() * width,
+      y: Math.random() * height,
+    }));
+
+    // Initialize links
+    const initialLinks: SimulationLink[] = edges.map((edge) => {
+      const source = initialNodes.find(n => n.id === (typeof edge.source === 'string' ? edge.source : edge.source.id));
+      const target = initialNodes.find(n => n.id === (typeof edge.target === 'string' ? edge.target : edge.target.id));
+      return {
+        ...edge,
+        source: source!,
+        target: target!,
+      };
+    });
+
+    // Create simulation
+    const simulation = d3.forceSimulation<SimulationNode>(initialNodes)
+      .force('link', d3.forceLink<SimulationNode, SimulationLink>(initialLinks).id(d => d.id).distance(100))
+      .force('charge', d3.forceManyBody().strength(-300))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('x', d3.forceX(width / 2).strength(0.1))
+      .force('y', d3.forceY(height / 2).strength(0.1));
+
+    // Update state on simulation tick
+    const tick = () => {
+      setSimulationNodes([...initialNodes]);
+      setSimulationLinks([...initialLinks]);
+    };
+
+    simulation.on('tick', tick);
+
+    // Run simulation for a few ticks then stop
+    simulation.tick(100);
+    simulation.stop();
+
+    // Update state with final positions
+    setSimulationNodes([...initialNodes]);
+    setSimulationLinks([...initialLinks]);
+
+    return () => {
+      simulation.stop();
+    };
+  }, [nodes, edges, width, height]);
+
   return (
     <div className="w-full h-full bg-gray-50 rounded-lg overflow-hidden">
-      <ForceGraph2D
-        graphData={{
-          nodes: nodes.map((node) => ({ ...node })),
-          links: edges.map((edge) => ({
-            source:
-              typeof edge.source === "string" ? edge.source : edge.source.id,
-            target:
-              typeof edge.target === "string" ? edge.target : edge.target.id,
-            ...edge,
-          })),
-        }}
-        width={width}
-        height={height}
-        cooldownTicks={100}
-        nodeId={(node) => node.id}
-        linkDistance={100}
-        centerAt={{ x: width / 2, y: height / 2 }}
-      >
-        {({ nodes: forceNodes, links: forceLinks }) => (
+      <svg width={width} height={height}>
           <Group>
             {/* Render edges */}
-            {forceLinks.map((link, i) => {
-              const sourceNode = forceNodes.find(
-                (n) => n.id === link.source?.id,
-              );
-              const targetNode = forceNodes.find(
-                (n) => n.id === link.target?.id,
-              );
+          {simulationLinks.map((link, i) => {
+            const sourceNode = link.source;
+            const targetNode = link.target;
 
-              if (!sourceNode || !targetNode) return null;
+            if (!sourceNode || !targetNode || !sourceNode.x || !sourceNode.y || !targetNode.x || !targetNode.y) return null;
 
               return (
                 <Line
                   key={`edge-${i}`}
-                  from={{ x: sourceNode.x || 0, y: sourceNode.y || 0 }}
-                  to={{ x: targetNode.x || 0, y: targetNode.y || 0 }}
+                from={{ x: sourceNode.x, y: sourceNode.y }}
+                to={{ x: targetNode.x, y: targetNode.y }}
                   stroke="#999"
                   strokeWidth={Math.max(1, (link.strength || 0) * 3)}
-                  strokeOpacity={edgeOpacity(link as GraphEdge)}
+                strokeOpacity={edgeOpacity(link)}
                 />
               );
             })}
 
             {/* Render nodes */}
-            {forceNodes.map((node, i) => {
+          {simulationNodes.map((node, i) => {
               const originalNode = nodeMap.get(node.id);
-              if (!originalNode) return null;
+            if (!originalNode || !node.x || !node.y) return null;
 
               const radius = nodeRadius(originalNode);
               const isSelected = selectedNode?.id === node.id;
@@ -127,8 +172,8 @@ export default function GraphView({
               return (
                 <Group key={`node-${i}`}>
                   <Circle
-                    cx={node.x || 0}
-                    cy={node.y || 0}
+                  cx={node.x}
+                  cy={node.y}
                     r={radius}
                     fill={colorScale(originalNode.cluster || 0)}
                     stroke={isSelected ? "#000" : isHovered ? "#666" : "none"}
@@ -139,8 +184,8 @@ export default function GraphView({
                     onMouseLeave={() => handleNodeHover(null)}
                   />
                   <Text
-                    x={node.x || 0}
-                    y={(node.y || 0) - radius - 5}
+                  x={node.x}
+                  y={node.y - radius - 5}
                     textAnchor="middle"
                     fontSize={10}
                     fill="#333"
@@ -154,8 +199,7 @@ export default function GraphView({
               );
             })}
           </Group>
-        )}
-      </ForceGraph2D>
+      </svg>
 
       {/* Legend */}
       <div className="absolute top-4 right-4 bg-white p-3 rounded-lg shadow-lg">

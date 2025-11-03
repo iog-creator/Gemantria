@@ -1,53 +1,39 @@
-# Phase 11 Planning Brief (Accelerated, 3 Days) — UI Edge Audit
+# Phase 11: UI Enhancement & Data Pipeline Improvement
 
-## Objective
+## Sprint 1 Fork Decisions (Breadcrumb for Future Handoffs)
 
-Hard-audit the UI for edge-cases: large datasets, low-spec devices, accessibility, export reliability, and model-workflow metrics.
+* **1d**: Unified pipeline (graph + temporal + correlations → single envelope)
+* **2a**: Modern-minimalist UI (soft blues, gradients, subtle shadows)
+* **3a**: Virtual scrolling + chunked rendering for large datasets
+* **4d**: Dual metrics views (user-facing badges + developer debug panel)
 
-## Scope
+## Success Criteria for Stub Stage
 
-- Performance with very large envelopes (>100k nodes/edges); chunked rendering/pagination and summary-only fallback.
+* Extract stub generates `unified_envelope_SIZE.json` in <2 sec for SIZE=10,000
+* GraphPreview logs "Large dataset: Chunked rendering active" for nodeCount>10,000, and renders ≤5,000 nodes
+* Badge thresholds: Green <200 ms, Yellow <500 ms, Red ≥500 ms
+* Fallback decision: if UI render time >3 sec for 50k nodes, escalate to WebGL (Sprint 3)
+* Accessibility secondary check: screen-reader + keyboard navigation for large-dataset view
 
-- Graceful handling of missing/incomplete fields (`year`, `start_year`, `end_year`).
+## Versioning and Tagging Discipline
 
-- Accessibility audit (keyboard navigation, screen reader) incl. axe/WAVE checks; mobile/low-spec performance.
+* Tag new extract format as `unified-v1` in metadata; ensure backward compatibility remains until `unified-v2`
+* Include schema version in envelope header
 
-- Export pipeline resilience: UI "safe mode" when envelope missing/empty.
+## Data Pipeline Lineage
 
-- Model workflow metrics: track Gemini vs Claude usage, iteration counts, escalation threshold review.
+See AGENTS.md section "Data Extraction Lineage" for complete flow: graph_latest → temporal_export → correlation_weights → unified_envelope
 
-## Deliverables
+## Implementation Reference
 
-- UI refactor for edge loads (chunked/summary views).
+See `.cursor/plans/ui-enhancement-18696d49.plan.md` for detailed implementation plan with 5 phases and specific file targets.
 
-- Acceptance scripts: timed load/memory checks; accessibility smoke.
+## Acceptance Criteria
 
-- Updated docs: performance guidance + fallback behaviors.
-
-- Metrics mini-dashboard: iteration counts, escalations, and benchmark-aligned facets (RACE/COMPASS).
-
-- Governance update if thresholds change (e.g., escalate after 1 iteration).
-
-## Timeline (3 Days)
-
-- **Day 1**: Kick-off; define metrics aligned to **RACE** (Readability, mAintainability, Correctness, Efficiency) and **COMPASS** (Correctness, Efficiency, Code Quality); instrument logging.
-
-- **Day 2**: Implement UI refactor for large envelopes; add acceptance scripts (perf/memory); wire accessibility smoke.
-
-- **Day 3**: Run audit on targets; team retro using "Liked/Learned/Lacked/Longed For"; finalize docs; merge.
-
-## Risks & Mitigations
-
-- Large-envelope slowdown → chunked rendering/pagination; summary view fallback.
-
-- Cost/quality drift in model usage → track iterations/escalations; adjust escalation rule.
-
-- Accessibility gaps → automated axe/WAVE + manual checks; document fixes.
-
-- Export contract break → keep JSONL + envelope stable; version if changed; deprecate with warnings.
-
-## Notes
-
-- Keep UI work hermetic/local; no CI/Node changes.
-
-- Preserve SSOT gates (`ruff format/check`) and existing Make targets.
+- [ ] `docs/PHASE11_PLAN.md` exists with Sprint 1 fork decisions documented
+- [ ] Success criteria defined: extract <2sec, chunked rendering >10k nodes
+- [ ] Badge thresholds: Green <200ms, Yellow <500ms, Red ≥500ms
+- [ ] Fallback path: >3sec@50k → WebGL escalation documented
+- [ ] Data lineage section added to `AGENTS.md`
+- [ ] `make plan` target added and functional
+- [ ] Accessibility secondary check plan documented
