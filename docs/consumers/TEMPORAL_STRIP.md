@@ -16,6 +16,10 @@ make ui.export.temporal ENVELOPE=share/exports/envelope.json OUTDIR=ui/out
 
 # 3) (Optional) Span mode uses start_year..end_year if present
 make ui.export.temporal.span ENVELOPE=share/exports/envelope.json OUTDIR=ui/out
+
+# 4) Produce a Markdown summary and (optionally) post it to the PR
+make ui.temporal.summary OUTDIR=ui/out
+make ui.temporal.comment OUTDIR=ui/out
 ```
 
 ### Notes
