@@ -1,33 +1,29 @@
-## Codex CLI example config (copy to ~/.codex/config.toml)
-## Safe defaults: stateless runs, repo-scoped writes (local only), Cursor opener.
+[general]
 
-model = "gpt-5-codex"
-model_provider = "openai"
-approval_policy = "on-request"         # ask before edits
-sandbox_mode   = "workspace-write"     # edits limited to repo root
-history = { persistence = "none" }     # fresh context per run
-file_opener = "cursor"                 # jump-to-file in Cursor
+history.persistence = "none"  # Fresh context per task
 
-[model_providers.openai]
-base_url = "https://api.openai.com/v1"
-env_key  = "OPENAI_API_KEY"
+sandbox_mode = "workspace-write"  # Repo-scoped operations
 
-[model_providers.xai]
-base_url = "https://api.x.ai/v1"
-env_key  = "XAI_API_KEY"
+approval_policy = "on-request"  # Asks before edits
+
+file_opener = "cursor"  # Opens files in Cursor
+
+
+
+[profiles.openai]
+
+# Add your OpenAI API key and other config here
+
+api_key = "your_openai_api_key"
+
+model = "gpt-4"  # Example model
+
+
 
 [profiles.grok4]
-model = "grok-4-fast"
-model_provider = "xai"
 
-# MCP Servers (Model Context Protocol)
-# Add MCP servers to extend Codex CLI capabilities
-[mcp_servers.codex-data]
-command = "npx"
-args = ["-y", "@codex-data/codex-mcp"]
+# Add your xAI Grok4 API key and other config here
 
-[mcp_servers.codex-data.env]
-CODEX_API_KEY = ""  # Set via environment variable: export CODEX_API_KEY=your-key
+api_key = "your_grok4_api_key"
 
-# Usage: codex mcp add codex-data -- npx -y @codex-data/codex-mcp
-# List: codex mcp list
+model = "grok-4"  # Example model

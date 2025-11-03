@@ -243,6 +243,14 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 
 - **Ruff-format is the single formatter.** Workflows should run `ruff format --check .` and `ruff check .`.
 
+### Codex CLI Integration
+
+- Optional, local-only tool for running terminal agents with fresh context.
+- CI-gated: Exits early unless `ALLOW_CODEX=1`.
+- No share writes, respects ruff formatting.
+- See `docs/runbooks/CODEX_CLI.md` for installation, usage, and examples.
+- Quick start: `make codex.task TASK="your instruction"`
+
 ### Runbook: PR Gating (required checks only)
 
 **Note:** Ruff formatting applied during rebase conflict resolution in PR #70.

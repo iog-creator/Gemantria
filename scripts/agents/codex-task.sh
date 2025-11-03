@@ -1,49 +1,30 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-# Optional, local-only Codex task wrapper.
-# CI guard: do nothing unless explicitly allowed.
+# Single-task wrapper for Codex CLI
+# Usage: ./codex-task.sh "your task instruction" [PROFILE=openai]
 
-IN_CI=false
-if [[ "${CI:-}" == "true" || -n "${GITHUB_ACTIONS:-}" || -n "${GITLAB_CI:-}" || -n "${BUILDKITE:-}" ]]; then IN_CI=true; fi
-
-if $IN_CI && [[ "${ALLOW_CODEX:-0}" != "1" ]]; then
-  echo "HINT[codex]: disabled in CI (set ALLOW_CODEX=1 to enable explicitly)."
+# CI guard
+if [ "$CI" = "true" ] && [ "$ALLOW_CODEX" != "1" ]; then
+  echo "HINT: Codex CLI is optional and local-only. To enable in CI, set ALLOW_CODEX=1."
   exit 0
 fi
 
-if ! command -v codex >/dev/null 2>&1; then
-  cat <<'EOF'
-LOUD FAIL
-tool: codex
-action: exec
-args: (missing)
-error: 'codex' CLI not found. Install with: npm i -g @openai/codex
-EOF
-  exit 127
+# Check for codex command
+if ! command -v codex &> /dev/null; then
+  echo "Error: 'codex' command not found. Please install Codex CLI and configure."
+  exit 1
 fi
 
-PROFILE="${PROFILE:-}"
-CWD="${CWD:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+# Default profile
+PROFILE="${PROFILE:-openai}"
 
-usage() {
-  cat <<USAGE
-Usage: PROFILE=<name> CWD=<repo> scripts/agents/codex-task.sh "task instruction"
-Env:
-  PROFILE  Optional Codex profile (e.g., 'grok4')
-  CWD      Repo root (defaults to git toplevel)
-Examples:
-  scripts/agents/codex-task.sh "List last 5 commits; propose 2-line release note."
-  PROFILE=grok4 scripts/agents/codex-task.sh "Scan pytest failures; produce minimal patches."
-USAGE
-}
-
-TASK="${*:-}"
-if [[ -z "$TASK" ]]; then usage; exit 2; fi
-
-set -x
-if [[ -n "$PROFILE" ]]; then
-  codex exec -C "$CWD" --profile "$PROFILE" "$TASK"
-else
-  codex exec -C "$CWD" "$TASK"
+# Task from arg
+if [ -z "$1" ]; then
+  echo "Usage: $0 \"task instruction\" [PROFILE=openai|grok4]"
+  exit 1
 fi
+
+TASK="$1"
+
+# Run codex with profile and task
+codex --profile "$PROFILE" --cwd "${CWD:-.}" "$TASK"

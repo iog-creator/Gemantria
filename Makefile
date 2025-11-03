@@ -7,3 +7,27 @@ ui.dev.help:
 	@echo "2) cd ui && npm create vite@latest . -- --template react-ts (or pnpm)"
 	@echo "3) Implement loader to read /tmp/p9-ingest-envelope.json"
 	@echo "4) Run: npm run dev (local only)"
+
+# Codex CLI optional targets (local-only, CI-gated)
+
+codex.task:
+	@if [ "$(CI)" = "true" ] && [ "$(ALLOW_CODEX)" != "1" ]; then \
+		echo "HINT: Codex CLI is optional and local-only. To enable in CI, set ALLOW_CODEX=1."; \
+		exit 0; \
+	fi
+	@scripts/agents/codex-task.sh "$(TASK)" PROFILE=$(PROFILE)
+
+codex.grok:
+	@make codex.task PROFILE=grok4 TASK="$(TASK)"
+
+codex.parallel:
+	@if [ "$(CI)" = "true" ] && [ "$(ALLOW_CODEX)" != "1" ]; then \
+		echo "HINT: Codex CLI is optional and local-only. To enable in CI, set ALLOW_CODEX=1."; \
+		exit 0; \
+	fi
+	@scripts/agents/codex-par.sh < tasks.txt  # Adjust as needed, e.g., pipe from stdin
+
+# Share sync (OPS v6.2 compliance)
+
+share.sync:
+	@python3 scripts/sync_share.py
