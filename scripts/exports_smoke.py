@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import os
 import sys
 
 try:
+    from src.infra.db_utils import get_connection_dsn
     from src.infra.env_loader import ensure_env_loaded  # optional; no-op if absent
 
     ensure_env_loaded()
@@ -18,7 +18,7 @@ except Exception:
     )
     sys.exit(2)
 
-DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DB_DSN") or "postgresql://localhost/gemantria"
+DSN = get_connection_dsn(fallback="postgresql://localhost/gemantria")
 
 PROBES = [
     (
