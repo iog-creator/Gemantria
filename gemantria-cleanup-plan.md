@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The Gemantria codebase is **well-structured and largely clean**, with strong governance, comprehensive documentation, and consistent patterns. This cleanup plan focuses on **opportunistic improvements** rather than critical technical debt. The codebase demonstrates excellent engineering practices with proper error handling, environment validation, and service layer abstraction.
+The Gemantria codebase demonstrates consistent patterns with proper error handling, environment validation, and service layer abstraction. This cleanup plan focuses on **opportunistic improvements** rather than critical technical debt.
 
 ### Metrics Baseline (Evidence-based)
 - **Python files**: 179 (src/, scripts/, tests/)
@@ -18,7 +18,7 @@ The Gemantria codebase is **well-structured and largely clean**, with strong gov
 - **TODOs/FIXMEs**: 4 occurrences (3 in repo_audit.py documentation, 1 actionable)
 - **Bare excepts**: 0 occurrences (already addressed per E722 tooling)
 - **Test discovery**: 136 pytest test items
-- **Ruff violations**: 187 total (broad scan including style preferences)
+- **Ruff violations**: 187 total (186 style preferences B/B9/UP/YTT, 1 actionable F401 dead import)
 - **Share drift**: None detected during analysis
 
 ### Governance Compliance Verified
@@ -140,7 +140,7 @@ def with_http_retry(attempts=3, delay=2.0, backoff=2.0):
 
 ---
 
-## Priority 2: UI Improvements
+## Priority 2: UI Improvements (No Node in CI; local-only)
 
 ### 2.1 UI Component Polish
 
@@ -224,7 +224,7 @@ def with_http_retry(attempts=3, delay=2.0, backoff=2.0):
 
 **Impact**: Significantly improves user experience
 **Effort**: 10-20 hours total
-**Risk**: Low (UI-only changes)
+**Risk**: Low (UI-only changes, local-only per UI spec MVP: file loader, counts panel, basic graph, temporal strip, exports to `ui/out/`)
 
 ### 2.2 UI Type Safety Improvements
 
@@ -528,67 +528,6 @@ edges = list(db.execute("SELECT ... FROM concept_relations"))
 4. Testing (#5.1) - **Prevent regressions**
 5. Performance (#6) - **Profile first, optimize if needed**
 
-### Implementation Plan
-
-#### Phase 1: Immediate Cleanup (Day 1)
-```bash
-# 1. Remove dead imports
-ruff check --select F401 --fix src/ scripts/ tests/
-
-# 2. Create DB utility
-# (see section 1.1)
-
-# 3. Create retry decorator
-# (see section 1.2)
-
-# 4. Add export docstrings
-# (see section 4.1)
-
-# 5. Run tests + coverage
-make lint type test.unit test.integration coverage.report
-
-# 6. Commit
-git add .
-git commit -m "refactor: centralize DB utils, retry logic, improve docs"
-```
-
-#### Phase 2: UI Polish (Day 2-3)
-```bash
-# 1. Add UI improvements
-# (see section 2.1.1)
-
-# 2. Add UI tests
-npm install -D vitest @testing-library/react
-# (see section 5.1)
-
-# 3. Test locally
-cd ui && npm run dev
-
-# 4. Commit
-git add ui/
-git commit -m "feat(ui): improve UX with drag-drop, loading states, error handling"
-```
-
-#### Phase 3: Documentation & Testing (Day 4)
-```bash
-# 1. Add service docstrings
-# (see section 4.2)
-
-# 2. Add integration tests
-# (see section 5.2)
-
-# 3. Update AGENTS.md with naming conventions
-# (see section 7.1)
-
-# 4. Run full test suite
-make lint type test.unit test.integration coverage.report
-
-# 5. Commit
-git add src/ tests/ AGENTS.md
-git commit -m "docs: add service docstrings, naming conventions; test: expand integration coverage"
-```
-
----
 
 ## Governance Compliance
 
@@ -604,8 +543,8 @@ git commit -m "docs: add service docstrings, naming conventions; test: expand in
 ---
 
 ## Tool Path Used
-**TOOL_PATH=gemini** (Codex available but TTY-limited, fell back to Gemini long-context per Rule 052)
+**TOOL_PATH=gemini** (Local+GH inventory first; Codex if interactive TTY is available; else Gemini long-context per Rule 052)
 
 ---
 
-**Next Steps**: Review this plan, prioritize based on user needs, then execute Phase 1 quick wins.
+**Next Steps**: Open PR with title "docs: add codebase cleanup plan (analysis-only)". Follow with separate PR for Phase 1 quick wins.
