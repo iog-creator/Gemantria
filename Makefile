@@ -147,3 +147,9 @@ expansion.full:
 	else \
 		echo "Expansion failed - no expanded envelope found"; \
 	fi
+
+.PHONY: generate.forest
+generate.forest:
+	@echo ">> Generate forest overview"
+	@$(PYTHON) scripts/generate_forest.py
+	@echo "Forest generated: docs/forest/overview.md updated"
