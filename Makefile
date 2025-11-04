@@ -165,3 +165,9 @@ metrics.sync:
 	@echo ">> Sync metrics views to contract"
 	@$(PYTHON) scripts/metrics_contract.py
 	@echo "Metrics sync complete"
+
+.PHONY: enforcement.check
+enforcement.check:
+	@echo ">> Check system enforcement bridge"
+	@$(PYTHON) scripts/enforcement_bridge.py
+	@echo "Enforcement bridge check complete"
