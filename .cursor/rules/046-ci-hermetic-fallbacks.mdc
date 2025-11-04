@@ -6,3 +6,4 @@ globs: []
 # 046 — Hermetic CI Fallbacks (AlwaysApply)
 - No outbound inference in CI; use deterministic mocks (e.g., `MOCK_AI=1`).
 - Nightlies/observability steps emit HINTs and continue (non-blocking).
+- **File Verification**: All file operations MUST verify existence first using explicit checks (`test -f`, `os.path.exists`, `head`) before reading/writing. Missing critical files emit LOUD FAIL per Rule-039 (no auto-creation, fail-closed).
