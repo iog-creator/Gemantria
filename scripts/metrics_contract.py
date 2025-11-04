@@ -14,7 +14,7 @@ def load_contract():
     """Load the metrics contract."""
     if not os.path.exists(METRICS_CONTRACT):
         raise FileNotFoundError(f"Metrics contract not found at {METRICS_CONTRACT}")
-    with open(METRICS_CONTRACT, "r") as f:
+    with open(METRICS_CONTRACT) as f:
         return json.load(f)
 
 
@@ -40,7 +40,7 @@ def check_sync(contract):
 
     # Threshold validation (stub - can be expanded)
     thresholds = contract.get("thresholds", {})
-    for metric, threshold in thresholds.items():
+    for _metric, _threshold in thresholds.items():
         # Add specific threshold checks here if needed
         pass
 

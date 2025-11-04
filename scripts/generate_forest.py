@@ -6,10 +6,10 @@ import datetime
 import glob
 from pathlib import Path
 
-RULES_DIR = '.cursor/rules/*.mdc'
-WORKFLOWS_DIR = '.github/workflows/*.yml'
-ADRS_DIR = 'docs/ADRs/*.md'
-OUTPUT_MD = 'docs/forest/overview.md'
+RULES_DIR = ".cursor/rules/*.mdc"
+WORKFLOWS_DIR = ".github/workflows/*.yml"
+ADRS_DIR = "docs/ADRs/*.md"
+OUTPUT_MD = "docs/forest/overview.md"
 
 
 def generate_overview():
@@ -21,14 +21,14 @@ def generate_overview():
     overview += "## Active Rules\n\n"
     rules = []
     for rule in sorted(glob.glob(RULES_DIR)):
-        with open(rule, 'r') as f:
+        with open(rule) as f:
             first_line = f.readline().strip()
-            title = first_line.lstrip('#').strip() if first_line.startswith('#') else first_line
-            rule_num = os.path.basename(rule).split('.')[0]
+            title = first_line.lstrip("#").strip() if first_line.startswith("#") else first_line
+            rule_num = os.path.basename(rule).split(".")[0]
             rules.append(f"- Rule {rule_num}: {title}")
 
     if rules:
-        overview += '\n'.join(rules) + '\n\n'
+        overview += "\n".join(rules) + "\n\n"
     else:
         overview += "No rules found.\n\n"
 
@@ -40,7 +40,7 @@ def generate_overview():
         workflows.append(f"- {wf_name}")
 
     if workflows:
-        overview += '\n'.join(workflows) + '\n\n'
+        overview += "\n".join(workflows) + "\n\n"
     else:
         overview += "No workflows found.\n\n"
 
@@ -49,22 +49,22 @@ def generate_overview():
     adrs = []
     for adr in sorted(glob.glob(ADRS_DIR)):
         try:
-            with open(adr, 'r') as f:
+            with open(adr) as f:
                 content = f.read()
                 # Extract title from first header
-                lines = content.split('\n')
+                lines = content.split("\n")
                 title = "Unknown Title"
                 for line in lines[:5]:  # Check first 5 lines
-                    if line.startswith('# '):
+                    if line.startswith("# "):
                         title = line[2:].strip()
                         break
-                adr_num = os.path.basename(adr).split('.')[0]
+                adr_num = os.path.basename(adr).split(".")[0]
                 adrs.append(f"- {adr_num}: {title}")
         except Exception as e:
             adrs.append(f"- {os.path.basename(adr)}: Error reading ({e})")
 
     if adrs:
-        overview += '\n'.join(adrs) + '\n\n'
+        overview += "\n".join(adrs) + "\n\n"
     else:
         overview += "No ADRs found.\n\n"
 
@@ -78,7 +78,7 @@ def generate_overview():
     output_path = Path(OUTPUT_MD)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_path, 'w') as f:
+    with open(output_path, "w") as f:
         f.write(overview)
 
     print(f"Forest overview generated at {OUTPUT_MD}")

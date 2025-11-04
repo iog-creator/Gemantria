@@ -27,7 +27,7 @@ jobs:
         run: |
           python scripts/ci/soft_checks.py || true
       - name: Upload soft logs (artifact)
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a
+        uses: actions/upload-artifact@v5
         with:
           name: soft-checks
           path: share/eval/soft_checks/soft_checks.log
