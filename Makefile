@@ -115,3 +115,8 @@ ci.exports.smoke:
 monitoring.badges:
 	@echo ">> Generate monitoring badges (uptime/perf)"
 	@python3 scripts/generate_badges.py --type monitoring --out share/eval/badges/
+
+.PHONY: monitoring.run
+monitoring.run:
+	@echo ">> Run monitoring stub"
+	@$(PYTHON) scripts/monitoring.py
