@@ -36,7 +36,9 @@ def export_correlation_graph():
         metadata = correlation_data.get("metadata", {})
 
         # Filter correlations |r| >= 0.4
-        filtered_correlations = [corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4]
+        filtered_correlations = [
+            corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4
+        ]
 
         if not filtered_correlations:
             LOG.info("No strong correlations found (>= 0.4), correlation graph will be empty")
@@ -81,7 +83,9 @@ def export_correlation_graph():
                 degrees = dict(G.degree(weight="weight"))
                 network_metrics.update(
                     {
-                        "avg_weighted_degree": (sum(degrees.values()) / len(degrees) if degrees else 0),
+                        "avg_weighted_degree": (
+                            sum(degrees.values()) / len(degrees) if degrees else 0
+                        ),
                         "max_weighted_degree": max(degrees.values()) if degrees else 0,
                         "avg_clustering_coeff": nx.average_clustering(G, weight="weight"),
                     }
@@ -143,7 +147,9 @@ def export_correlation_graph():
                     "metric": corr.get("metric", "unknown"),
                     "cluster_source": corr.get("cluster_source"),
                     "cluster_target": corr.get("cluster_target"),
-                    "significance": ("significant" if corr.get("p_value", 1.0) < 0.05 else "not_significant"),
+                    "significance": (
+                        "significant" if corr.get("p_value", 1.0) < 0.05 else "not_significant"
+                    ),
                 }
                 for corr in filtered_correlations
             ],
@@ -200,12 +206,21 @@ def main():
         nodes = list(
             db.execute(
                 """
-            SELECT n.concept_id, co.name, c.cluster_id,
+            SELECT n.id, COALESCE(co.hebrew_text, 'Concept ' || LEFT(n.concept_id::text, 8)), c.cluster_id,
                    ce.degree, ce.betweenness, ce.eigenvector
-            FROM concept_network n
-            LEFT JOIN concepts co ON co.id::text = n.concept_id::text
-            LEFT JOIN concept_clusters c ON c.concept_id = n.concept_id
-            LEFT JOIN concept_centrality ce ON ce.concept_id = n.concept_id
+            FROM (
+                SELECT n.*, ROW_NUMBER() OVER (ORDER BY n.id) as rn
+                FROM concept_network n
+            ) n
+            LEFT JOIN (
+                SELECT hebrew_text, ROW_NUMBER() OVER (ORDER BY id) as rn
+                FROM concepts
+                WHERE hebrew_text IS NOT NULL AND hebrew_text != ''
+                ORDER BY id
+                LIMIT 1000
+            ) co ON co.rn = n.rn
+            LEFT JOIN concept_clusters c ON c.concept_id = n.id
+            LEFT JOIN concept_centrality ce ON ce.concept_id = n.id
         """
             )
         )
@@ -240,7 +255,9 @@ def main():
                     "target": str(r[1]),
                     "cosine": float(r[2] or 0),
                     "rerank_score": float(r[3] or 0) if r[3] else None,
-                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0)) if r[3] else float(r[2] or 0),
+                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0))
+                    if r[3]
+                    else float(r[2] or 0),
                 }
                 for r in edges
             ],
