@@ -99,9 +99,9 @@ test.compass:
 .PHONY: eval.graph.calibrate.adv
 eval.graph.calibrate.adv:
 	@echo ">> Graph calibration (CI smoke - may fail without data)"
-	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose || echo "Calibration skipped (expected in CI without data)"
+	@PYTHONPATH=. python3 scripts/compass/scorer.py $(ENVELOPE) --verbose || echo "Calibration skipped (expected in CI without data)"
 
 .PHONY: ci.exports.smoke
 ci.exports.smoke:
 	@echo ">> CI exports smoke (may fail without DB)"
-	@python3 scripts/export_noun_index.py --limit 10 || echo "CI exports smoke skipped (expected without DB)"
+	@PYTHONPATH=. python3 scripts/export_noun_index.py --limit 10 || echo "CI exports smoke skipped (expected without DB)"
