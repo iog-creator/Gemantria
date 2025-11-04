@@ -31,17 +31,42 @@ const ForecastDashboard: React.FC = () => {
     const loadData = async () => {
       try {
         // Load forecast data
-        const forecastResponse = await fetch('/api/forecast');
+        const forecastResponse = await fetch('/temporal/forecast?model=naive&horizon=10');
         if (forecastResponse.ok) {
-          const forecast = await forecastResponse.json();
-          setForecastData(forecast);
+          const forecastResult = await forecastResponse.json();
+          // Transform API response to component format
+          if (forecastResult.forecasts && forecastResult.forecasts.length > 0) {
+            const first = forecastResult.forecasts[0];
+            setForecastData({
+              forecast: first.predictions || [],
+              rmse: first.metrics?.rmse || 0,
+              model: first.model || 'naive',
+              confidence_intervals: first.prediction_intervals ? [
+                first.prediction_intervals.lower || [],
+                first.prediction_intervals.upper || []
+              ] : undefined,
+            });
+          }
         }
 
         // Load temporal patterns
-        const temporalResponse = await fetch('/api/temporal-patterns');
+        const temporalResponse = await fetch('/temporal/patterns?book=Genesis');
         if (temporalResponse.ok) {
-          const temporal = await temporalResponse.json();
-          setTemporalData(temporal);
+          const temporalResult = await temporalResponse.json();
+          // Transform API response to component format
+          if (temporalResult.temporal_patterns && temporalResult.temporal_patterns.length > 0) {
+            const first = temporalResult.temporal_patterns[0];
+            setTemporalData({
+              rolling_mean: first.values || [],
+              change_points: first.change_points || [],
+              metadata: {
+                series_length: first.values?.length || 0,
+                window_size: first.window || 5,
+                volatility: 0, // Calculate if needed
+                trend_slope: 0, // Calculate if needed
+              },
+            });
+          }
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');

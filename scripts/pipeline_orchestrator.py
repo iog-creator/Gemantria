@@ -198,7 +198,9 @@ def main():
 
     # Analysis command
     analysis_parser = subparsers.add_parser("analysis", help="Analysis operations")
-    analysis_parser.add_argument("operation", choices=["graph", "export", "temporal", "all"], help="Analysis operation to perform")
+    analysis_parser.add_argument(
+        "operation", choices=["graph", "export", "temporal", "all"], help="Analysis operation to perform"
+    )
 
     # Embeddings command
     embeddings_parser = subparsers.add_parser("embeddings", help="Embeddings backfill")
