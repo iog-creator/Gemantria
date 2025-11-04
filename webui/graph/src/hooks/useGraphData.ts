@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import { GraphData, GraphNode, GraphEdge } from "../types/graph";
 
+const CACHE_KEY = 'gemantria_envelope_cache_v1';
+
 export function useGraphData(graphUrl: string = "/exports/graph_latest.json") {
   const [data, setData] = useState<GraphData>({ nodes: [], edges: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      console.log("Cache hit, loading from localStorage");
+      setData(JSON.parse(cached));
+      setLoading(false);
+      return;
+    }
+
     async function loadGraphData() {
       try {
         setLoading(true);
@@ -50,6 +60,7 @@ export function useGraphData(graphUrl: string = "/exports/graph_latest.json") {
           metadata: rawData.metadata,
         };
 
+        localStorage.setItem(CACHE_KEY, JSON.stringify(transformedData));
         setData(transformedData);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error occurred");
