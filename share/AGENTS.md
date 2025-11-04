@@ -92,6 +92,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Empty DB tolerance**: Verify scripts handle missing tables gracefully in CI (zero counts allowed when DB empty)
 - **Stats validation**: Allows zero nodes/edges when DB tables don't exist (prevents CI failures on empty databases)
 - **File tolerance**: Handles missing graph/stats files in CI by using empty defaults
+- **File Verification (Rule-046)**: All file operations verify existence first (`test -f`, `os.path.exists`, `head`). Missing critical files emit LOUD FAIL (no auto-creation, fail-closed). Critical files include SSOT artifacts, schema files, and core pipeline scripts.
 - **SSOT JSONSchema validation**: PR-diff scoped validation of JSON files against schemas (non-blocking nightly sweep)
 - **Rules audit strictness**: No ALLOW_RULES_GAP toggle; RESERVED stubs (047/048) maintain contiguous numbering
 - **Pre-commit ordering**: `share.sync` runs before `repo.audit` to ensure share/ directory is synchronized before validation
@@ -196,6 +197,7 @@ make ci.exports.smoke
 * Do **not** re-ask for repo location if `git rev-parse --show-toplevel` already succeeded in this session.
 * Do **not** re-run discovery (`gh pr list …`) more than once per handoff unless the previous output showed conflicts.
 * Do **not** propose alternative tooling (Black, isort, flake8) — SSOT is `ruff`.
+* **File Verification (Rule-046)**: All file operations MUST verify existence first using explicit checks (`test -f`, `os.path.exists`, `head`) before reading/writing. Missing critical files emit LOUD FAIL per Rule-039 (no auto-creation, fail-closed). Treat missing critical files as infra/contract breach.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**

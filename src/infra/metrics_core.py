@@ -35,6 +35,9 @@ class MetricsClient:
             log_json(LOG, 20, "metrics", **row)
         if not self._enabled:
             return
+        conn = self._conn()
+        if conn is None:
+            return
         try:
             # Convert complex types for database insertion
             db_row = {}
@@ -42,9 +45,8 @@ class MetricsClient:
                 if hasattr(v, "isoformat"):  # datetime objects
                     db_row[k] = v.isoformat()
                 elif isinstance(v, dict):
-                    import json  # noqa: E402
-
-                    db_row[k] = json.dumps(v)
+                    # Keep as dict - psycopg handles JSONB conversion automatically
+                    db_row[k] = v
                 else:
                     db_row[k] = v
 
@@ -65,7 +67,8 @@ class MetricsClient:
                 if key not in db_row:
                     db_row[key] = default_value
 
-            with self._conn().cursor() as cur:
+            # Use connection context manager properly - reuse same connection
+            with conn.cursor() as cur:
                 cur.execute(
                     """
                     INSERT INTO metrics_log
@@ -77,7 +80,7 @@ class MetricsClient:
                     """,
                     db_row,
                 )
-                self._conn().commit()
+            conn.commit()
         except Exception as e:
             # Fail-open for metrics; never break pipeline
             log_json(LOG, 30, "metrics_insert_failed", error=str(e))
