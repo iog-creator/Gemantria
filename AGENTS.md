@@ -126,6 +126,8 @@ Phase 11 unified pipeline flow:
 **Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
 **Validation:** JSON schema enforcement + size/performance gates + COMPASS mathematical correctness (>80% score)
 
+**COMPASS Usage Note:** Run COMPASS on `unified_envelope_*.json` or `share/exports/envelope.json`; **do not** pass graph exports.
+
 ### Graph Export Pipeline (Fix Nov 2025)
 
 **Purpose**: Export semantic concept network with Hebrew labels for visualization
