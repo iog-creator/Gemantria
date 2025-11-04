@@ -35,7 +35,7 @@ share.sync:
 # --- UI acceptance (headless) ---
 
 ENVELOPE ?= share/exports/envelope.json
-MIN_NODES ?= 1
+MIN_NODES ?= 200000
 MIN_EDGES ?= 0
 ALLOW_EMPTY ?=
 
@@ -47,7 +47,7 @@ accept.ui:
 .PHONY: accept.ui.smoke
 accept.ui.smoke:
 	@echo ">> Export + accept (smoke)"
-	@$(PYTHON) scripts/export_noun_index.py --limit 1000
+	@$(PYTHON) scripts/export_noun_index.py
 	@$(MAKE) accept.ui ENVELOPE=$(ENVELOPE) MIN_NODES=$(MIN_NODES) MIN_EDGES=$(MIN_EDGES) ALLOW_EMPTY=$(ALLOW_EMPTY)
 
 # --- UI temporal exports (CSV/PNG) ---
