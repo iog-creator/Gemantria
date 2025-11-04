@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useForceWorker } from './useForceWorker';
 
 interface WebGLRendererProps {
   data: { nodes: any[]; edges: any[] };
@@ -7,6 +8,7 @@ interface WebGLRendererProps {
   pan?: [number, number];
   zoom?: number;
   edgeOpacity?: number;
+  forceWorkerEnabled?: boolean;
 }
 
 export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
@@ -15,9 +17,29 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
   height,
   pan = [0, 0],
   zoom = 1.0,
-  edgeOpacity = 1.0
+  edgeOpacity = 1.0,
+  forceWorkerEnabled = false
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [layoutNodes, setLayoutNodes] = useState(data.nodes);
+  const worker = useForceWorker(forceWorkerEnabled);
+
+  // 30Hz throttle for worker updates
+  useEffect(() => {
+    if (!forceWorkerEnabled) return;
+    let rafId: number;
+    const updateLayout = () => {
+      worker.start(data.nodes, data.edges, 10, (result) => {
+        setLayoutNodes(result.nodes);
+        rafId = requestAnimationFrame(updateLayout);
+      });
+    };
+    updateLayout();
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      worker.stop();
+    };
+  }, [data, forceWorkerEnabled, worker]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,20 +93,39 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
     gl.linkProgram(program);
     gl.useProgram(program);
 
-    // Create buffer for nodes
-    const nodeBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuffer);
-    const nodeData = new Float32Array(
-      data.nodes.flatMap(n => [
-        (n.x / width) * 2 - 1,
-        1 - (n.y / height) * 2
-      ])
-    );
-    gl.bufferData(gl.ARRAY_BUFFER, nodeData, gl.STATIC_DRAW);
-
-    const posLoc = gl.getAttribLocation(program, 'aPos');
-    gl.enableVertexAttribArray(posLoc);
-    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+    // Instanced rendering setup (points)
+    const ext = gl.getExtension('ANGLE_instanced_arrays');
+    if (ext) {
+      const instanceBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(
+        layoutNodes.flatMap(n => [
+          (n.x / width) * 2 - 1,
+          1 - (n.y / height) * 2
+        ])
+      ), gl.STATIC_DRAW);
+      const posLoc = gl.getAttribLocation(program, 'aPos');
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+      ext.vertexAttribDivisorANGLE(posLoc, 1);  // Per-instance
+      // Draw instanced
+      ext.drawArraysInstancedANGLE(gl.POINTS, 0, 1, layoutNodes.length);
+    } else {
+      // Fallback to regular rendering
+      const nodeBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuffer);
+      const nodeData = new Float32Array(
+        layoutNodes.flatMap(n => [
+          (n.x / width) * 2 - 1,
+          1 - (n.y / height) * 2
+        ])
+      );
+      gl.bufferData(gl.ARRAY_BUFFER, nodeData, gl.STATIC_DRAW);
+      const posLoc = gl.getAttribLocation(program, 'aPos');
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
+    }
 
     // Set uniforms
     gl.uniform1f(gl.getUniformLocation(program, 'uPointSize'), 5.0);
@@ -92,10 +133,7 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
     gl.uniform1f(gl.getUniformLocation(program, 'u_zoom'), zoom);
     gl.uniform1f(gl.getUniformLocation(program, 'u_opacity'), edgeOpacity);
 
-    // Draw points
-    gl.drawArrays(gl.POINTS, 0, data.nodes.length);
-
-  }, [data, width, height, pan, zoom, edgeOpacity]);
+  }, [data, width, height, pan, zoom, edgeOpacity, layoutNodes]);
 
   return (
     <canvas
