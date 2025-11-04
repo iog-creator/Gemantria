@@ -20,6 +20,9 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - `PARTIAL_REASON=<string>` (required when ALLOW_PARTIAL=1)
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: LM Studio only when enabled; confidence is metadata only.
+  - **LM Studio Setup**: Run `lms server start --port 9994 --gpu=1.0` for live inference
+  - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`
+  - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
@@ -380,10 +383,16 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # id: 049_GPT5_CONTRACT_V5_2 |
-| 050 | # 050 — OPS Contract v6 (AlwaysApply) |
+| 050 | # 🧭 Gemantria — OPS Contract v6.2.3 |
 | 051 | # 051 — Cursor Insight & Handoff (AlwaysApply) |
 | 052 | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | # 053 — Idempotent Baseline (OPS v6.2.1) |
+| 054 | # Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) |
+| 055 | # 055 — Auto-Docs Sync Pass (AlwaysApply) |
+| 056 | # id: 056 |
+| 057 | # --- |
+| 058 | # --- |
+| 059 | # 059 — Context Persistence (AlwaysApply) |
 <!-- RULES_INVENTORY_END -->
 
 ---

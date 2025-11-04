@@ -1,7 +1,7 @@
 {
   "forecasts": [],
   "metadata": {
-    "generated_at": "2025-10-23T19:21:02.580105",
+    "generated_at": "2025-11-04T10:29:22.851666",
     "forecast_parameters": {
       "default_horizon": 10,
       "default_model": "sma",

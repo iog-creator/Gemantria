@@ -52,7 +52,13 @@
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
-| 050 | 050-ops-contract.mdc | # 050 — OPS Contract v6.2.3 (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | # 🧭 Gemantria — OPS Contract v6.2.3 |
 | 051 | 051-cursor-insight.mdc | # 051 — Cursor Insight & Handoff (AlwaysApply) |
 | 052 | 052-tool-priority.mdc | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | 053-idempotence.mdc | # 053 — Idempotent Baseline (OPS v6.2.1) |
+| 054 | 054-reuse-first.mdc | # Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) |
+| 055 | 055-auto-docs-sync.mdc | # 055 — Auto-Docs Sync Pass (AlwaysApply) |
+| 056 | 056-ui-generation.mdc | # id: 056 |
+| 057 | 057-embedding-consistency.mdc | # --- |
+| 058 | 058-auto-housekeeping.mdc | # --- |
+| 059 | 059-context-persistence.mdc | # 059 — Context Persistence (AlwaysApply) |

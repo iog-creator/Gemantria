@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 09:00:02
+Generated: 2025-11-04 11:36:20
 
 ## Active Rules
 
@@ -56,10 +56,14 @@ Generated: 2025-11-04 09:00:02
 - Rule 049-gpt5-contract-v5: id: 049_GPT5_CONTRACT_V5_2
 - Rule 050-ops-contract: 🧭 Gemantria — OPS Contract v6.2.3
 - Rule 051-cursor-insight: 051 — Cursor Insight & Handoff (AlwaysApply)
-- Rule 051-ui-generation: id: 051
 - Rule 052-tool-priority: 052 — Tool Priority & Context Guidance (AlwaysApply)
 - Rule 053-idempotence: 053 — Idempotent Baseline (OPS v6.2.1)
 - Rule 054-reuse-first: Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)
+- Rule 055-auto-docs-sync: 055 — Auto-Docs Sync Pass (AlwaysApply)
+- Rule 056-ui-generation: id: 056
+- Rule 057-embedding-consistency: ---
+- Rule 058-auto-housekeeping: ---
+- Rule 059-context-persistence: 059 — Context Persistence (AlwaysApply)
 
 ## CI Workflows
 
@@ -111,6 +115,9 @@ Generated: 2025-11-04 09:00:02
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
+- ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
+- ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
+- ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status
