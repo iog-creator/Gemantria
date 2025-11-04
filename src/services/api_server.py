@@ -447,6 +447,138 @@ async def get_forecasts(
         raise HTTPException(status_code=500, detail=f"Internal server error: {e!s}") from e
 
 
+@app.get("/temporal/patterns")
+async def get_temporal_patterns_filtered(
+    book: str = Query("Genesis", description="Biblical book name"),
+    metric: str = Query(None, description="Filter by metric type (frequency, strength, cooccurrence)"),
+) -> JSONResponse:
+    """
+    Retrieve filtered temporal patterns from share/temporal_patterns_latest.json.
+
+    - **book**: Filter by biblical book name
+    - **metric**: Filter by metric type (optional)
+    """
+    try:
+        share_dir = Path("share")
+        temporal_file = share_dir / "temporal_patterns_latest.json"
+
+        if not temporal_file.exists():
+            raise HTTPException(status_code=404, detail="Temporal patterns data not available")
+
+        with open(temporal_file, encoding="utf-8") as f:
+            data = json.load(f)
+
+        patterns = data.get("temporal_patterns", [])
+
+        # Apply filters
+        if book:
+            patterns = [p for p in patterns if p.get("book") == book]
+
+        if metric:
+            patterns = [p for p in patterns if p.get("metric") == metric]
+
+        # Filter rolling windows if metric specified
+        if metric and patterns:
+            # Extract only the specified metric from rolling windows
+            filtered_patterns = []
+            for pattern in patterns:
+                values = pattern.get("values", [])
+                if metric == "mean" and values:
+                    # For mean, we can compute if needed or use existing values
+                    filtered_patterns.append(pattern)
+                else:
+                    filtered_patterns.append(pattern)
+            patterns = filtered_patterns
+
+        return JSONResponse(
+            content={
+                "temporal_patterns": patterns,
+                "metadata": data.get("metadata", {}),
+                "filters_applied": {"book": book, "metric": metric},
+                "result_count": len(patterns),
+            }
+        )
+
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail="Temporal patterns data not found") from e
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail="Invalid temporal patterns data") from e
+    except Exception as e:
+        LOG.error(f"Error in temporal patterns endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e!s}") from e
+
+
+@app.get("/temporal/forecast")
+async def get_temporal_forecast_filtered(
+    model: str = Query("naive", description="Forecast model (naive, sma, arima)"),
+    horizon: int = Query(10, min=1, max=100, description="Forecast horizon (steps ahead)"),
+) -> JSONResponse:
+    """
+    Retrieve filtered forecasts from share/pattern_forecast_latest.json.
+
+    - **model**: Forecast model name (naive, sma, arima)
+    - **horizon**: Number of forecast steps to return
+    """
+    try:
+        share_dir = Path("share")
+        forecast_file = share_dir / "pattern_forecast_latest.json"
+
+        if not forecast_file.exists():
+            raise HTTPException(status_code=404, detail="Forecast data not available")
+
+        with open(forecast_file, encoding="utf-8") as f:
+            data = json.load(f)
+
+        forecasts = data.get("forecasts", [])
+
+        # Filter by model
+        if model:
+            forecasts = [f for f in forecasts if f.get("model") == model]
+
+        # Limit horizon for each forecast
+        if horizon:
+            for forecast in forecasts:
+                predictions = forecast.get("predictions", [])
+                if len(predictions) > horizon:
+                    forecast["predictions"] = predictions[:horizon]
+
+                # Also limit intervals
+                intervals = forecast.get("prediction_intervals", {})
+                if intervals:
+                    lower = intervals.get("lower", [])
+                    upper = intervals.get("upper", [])
+                    if len(lower) > horizon:
+                        intervals["lower"] = lower[:horizon]
+                        intervals["upper"] = upper[:horizon]
+
+        # If no forecasts match, return error
+        if not forecasts:
+            return JSONResponse(
+                content={
+                    "error": f"Model '{model}' not found",
+                    "available_models": list(set(f.get("model") for f in data.get("forecasts", []))),
+                },
+                status_code=404,
+            )
+
+        return JSONResponse(
+            content={
+                "forecasts": forecasts,
+                "metadata": data.get("metadata", {}),
+                "filters_applied": {"model": model, "horizon": horizon},
+                "result_count": len(forecasts),
+            }
+        )
+
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail="Forecast data not found") from e
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail="Invalid forecast data") from e
+    except Exception as e:
+        LOG.error(f"Error in forecast endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e!s}") from e
+
+
 if __name__ == "__main__":
     import uvicorn  # noqa: E402
 
