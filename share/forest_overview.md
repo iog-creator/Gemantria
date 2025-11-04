@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 11:54:06
+Generated: 2025-11-04 12:05:04
 
 ## Active Rules
 
@@ -43,27 +43,27 @@ Generated: 2025-11-04 11:54:06
 - Rule 036-temporal-visualization-spec: ---
 - Rule 037-data-persistence-completeness: ---
 - Rule 038-exports-smoke-gate: ---
-- Rule 039-execution-contract: id: 039_EXECUTION_CONTRACT
-- Rule 040-ci-triage-playbook: id: 040_CI_TRIAGE_PLAYBOOK
-- Rule 041-pr-merge-policy: id: 041_PR_MERGE_POLICY
-- Rule 042-formatter-single-source-of-truth: 042 — Formatter Single Source of Truth (AlwaysApply)
-- Rule 043-ci-db-bootstrap: 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply)
-- Rule 044-share-manifest-contract: 044 — Share Manifest Contract (AlwaysApply)
-- Rule 045-rerank-blend-SSOT: 045 — Rerank Blend is SSOT (AlwaysApply)
-- Rule 046-ci-hermetic-fallbacks: 046 — Hermetic CI Fallbacks (AlwaysApply)
+- Rule 039-execution-contract: ---
+- Rule 040-ci-triage-playbook: ---
+- Rule 041-pr-merge-policy: ---
+- Rule 042-formatter-single-source-of-truth: ---
+- Rule 043-ci-db-bootstrap: ---
+- Rule 044-share-manifest-contract: ---
+- Rule 045-rerank-blend-SSOT: ---
+- Rule 046-ci-hermetic-fallbacks: ---
 - Rule 047-reserved: ---
 - Rule 048-reserved: ---
-- Rule 049-gpt5-contract-v5: id: 049_GPT5_CONTRACT_V5_2
-- Rule 050-ops-contract: 🧭 Gemantria — OPS Contract v6.2.3
-- Rule 051-cursor-insight: 051 — Cursor Insight & Handoff (AlwaysApply)
-- Rule 052-tool-priority: 052 — Tool Priority & Context Guidance (AlwaysApply)
-- Rule 053-idempotence: 053 — Idempotent Baseline (OPS v6.2.1)
-- Rule 054-reuse-first: Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)
-- Rule 055-auto-docs-sync: 055 — Auto-Docs Sync Pass (AlwaysApply)
-- Rule 056-ui-generation: id: 056
+- Rule 049-gpt5-contract-v5: ---
+- Rule 050-ops-contract: ---
+- Rule 051-cursor-insight: ---
+- Rule 052-tool-priority: ---
+- Rule 053-idempotence: ---
+- Rule 054-reuse-first: ---
+- Rule 055-auto-docs-sync: ---
+- Rule 056-ui-generation: ---
 - Rule 057-embedding-consistency: ---
 - Rule 058-auto-housekeeping: ---
-- Rule 059-context-persistence: 059 — Context Persistence (AlwaysApply)
+- Rule 059-context-persistence: ---
 
 ## CI Workflows
 

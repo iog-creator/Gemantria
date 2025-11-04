@@ -7,6 +7,7 @@ and monitoring dashboards, focusing on key insights and health indicators.
 """
 
 import os
+import re
 
 import numpy as np
 import pandas as pd
@@ -678,9 +679,7 @@ def naive_forecast(series, horizon=10):
     std = series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
     forecast = pd.Series([last] * horizon, index=forecast_index)
-    intervals = pd.DataFrame(
-        {"lower": forecast - std, "upper": forecast + std}, index=forecast_index
-    )
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
     return {"forecast": forecast, "intervals": intervals}
 
 
@@ -704,9 +703,7 @@ def sma_forecast(series, window=5, horizon=10):
     std = rolling_std.iloc[-1] if not rolling_std.empty else series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
     forecast = pd.Series([sma] * horizon, index=forecast_index)
-    intervals = pd.DataFrame(
-        {"lower": forecast - std, "upper": forecast + std}, index=forecast_index
-    )
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
     return {"forecast": forecast, "intervals": intervals}
 
 
@@ -767,6 +764,68 @@ def detect_change_points(series, threshold=3.0):
     z_scores = np.abs((series - mean) / std)
     change_points = np.where(z_scores > threshold)[0]
     return change_points.tolist()
+
+
+def get_gematria_series(book="Genesis"):
+    """
+    Extract temporal series: SUM(gematria_value) per verse_index from concepts.
+
+    Groups concepts by book and computes sequential verse index from chapter/verse
+    references, then sums gematria values per verse.
+
+    Args:
+        book: Book name (e.g., 'Genesis')
+
+    Returns:
+        pandas Series with verse_index as index and gematria_sum as values
+    """
+    from src.infra.db import get_gematria_rw
+
+    db = get_gematria_rw()
+
+    # Query concepts grouped by book/chapter/verse, sum gematria values
+    # Primary verse format: "Book Chapter:Verse" or "Book Chapter:Verse-Verse"
+    rows = list(
+        db.execute(
+            """
+            SELECT 
+                chapter,
+                primary_verse,
+                SUM(gematria_value) as gematria_sum
+            FROM concepts
+            WHERE book = %s AND gematria_value IS NOT NULL
+            GROUP BY chapter, primary_verse
+            ORDER BY chapter, primary_verse
+            """,
+            (book,),
+        )
+    )
+
+    if not rows:
+        return pd.Series([], dtype=float, name="gematria_sum")
+
+    # Parse verse numbers and create sequential index
+    # For simplicity, use chapter*1000 + verse_number as index
+    # This creates a sequential index that respects chapter/verse ordering
+    indices = []
+    values = []
+
+    for chapter, verse_ref, gematria_sum in rows:
+        # Extract verse number from reference (e.g., "Genesis 1:1" -> 1)
+        verse_num = 1
+        if verse_ref:
+            match = re.search(r":(\d+)", verse_ref)
+            if match:
+                verse_num = int(match.group(1))
+        # Create sequential index: chapter * 1000 + verse (allows up to 999 verses per chapter)
+        verse_index = chapter * 1000 + verse_num if chapter else verse_num
+        indices.append(verse_index)
+        values.append(float(gematria_sum))
+
+    series = pd.Series(values, index=indices, name="gematria_sum")
+    # Reindex to ensure sequential ordering
+    series = series.sort_index()
+    return series
 
 
 def export_temporal_patterns(db):
