@@ -159,3 +159,9 @@ ontology.check:
 	@echo ">> Check ontology forward compatibility"
 	@$(PYTHON) scripts/ontology_compat.py
 	@echo "Ontology compatibility check complete"
+
+.PHONY: metrics.sync
+metrics.sync:
+	@echo ">> Sync metrics views to contract"
+	@$(PYTHON) scripts/metrics_contract.py
+	@echo "Metrics sync complete"
