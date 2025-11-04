@@ -9,22 +9,15 @@ analysis, and exports into a cohesive workflow.
 import argparse
 import json
 import sys
-from pathlib import Path
 from typing import Any, Dict
-
-# Add src to Python path
-script_dir = Path(__file__).parent
-project_root = script_dir.parent
-src_path = project_root / "src"
-sys.path.insert(0, str(src_path))
 
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
 
+LOG = get_logger("pipeline_orchestrator")
+
 # Load environment
 ensure_env_loaded()
-
-LOG = get_logger("pipeline_orchestrator")
 
 
 def run_full_pipeline(book: str = "Genesis", mode: str = "START") -> Dict[str, Any]:
