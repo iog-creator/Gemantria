@@ -1,3 +1,8 @@
+---
+description: Rerank Blend is SSOT
+alwaysApply: true
+globs: []
+---
 # 045 — Rerank Blend is SSOT (AlwaysApply)
 - `edge_strength = 0.5*cosine + 0.5*rerank` (or SSOT `EDGE_ALPHA`).
 - Thresholds: strong ≥ 0.90; weak ≥ 0.75; code & SSOT docs must change together.

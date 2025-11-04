@@ -1,3 +1,10 @@
+---
+description: CI DB Bootstrap & Empty-Data Handling
+alwaysApply: true
+globs: 
+  - "scripts/ci/*"
+  - ".github/workflows/*"
+---
 # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply)
 - Any workflow that queries the DB must create DB + run all migrations first.
 - Empty datasets are allowed; graph stats may report zeros; density=0; jobs must not fail on emptiness.

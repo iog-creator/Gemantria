@@ -1,2 +1,7 @@
+---
+description: Context Persistence
+alwaysApply: true
+globs: []
+---
 # 059 — Context Persistence (AlwaysApply)
 Mandatory paste prior summary/history in handoffs. Fail-closed if skipped—critical error log/CI fail.

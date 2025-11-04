@@ -41,24 +41,24 @@
 | 036 | 036-temporal-visualization-spec.mdc | # --- |
 | 037 | 037-data-persistence-completeness.mdc | # --- |
 | 038 | 038-exports-smoke-gate.mdc | # --- |
-| 039 | 039-execution-contract.mdc | # id: 039_EXECUTION_CONTRACT |
-| 040 | 040-ci-triage-playbook.mdc | # id: 040_CI_TRIAGE_PLAYBOOK |
-| 041 | 041-pr-merge-policy.mdc | # id: 041_PR_MERGE_POLICY |
-| 042 | 042-formatter-single-source-of-truth.mdc | # 042 — Formatter Single Source of Truth (AlwaysApply) |
-| 043 | 043-ci-db-bootstrap.mdc | # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) |
-| 044 | 044-share-manifest-contract.mdc | # 044 — Share Manifest Contract (AlwaysApply) |
-| 045 | 045-rerank-blend-SSOT.mdc | # 045 — Rerank Blend is SSOT (AlwaysApply) |
-| 046 | 046-ci-hermetic-fallbacks.mdc | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
+| 039 | 039-execution-contract.mdc | # --- |
+| 040 | 040-ci-triage-playbook.mdc | # --- |
+| 041 | 041-pr-merge-policy.mdc | # --- |
+| 042 | 042-formatter-single-source-of-truth.mdc | # --- |
+| 043 | 043-ci-db-bootstrap.mdc | # --- |
+| 044 | 044-share-manifest-contract.mdc | # --- |
+| 045 | 045-rerank-blend-SSOT.mdc | # --- |
+| 046 | 046-ci-hermetic-fallbacks.mdc | # --- |
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
-| 049 | 049-gpt5-contract-v5.2.mdc | # id: 049_GPT5_CONTRACT_V5_2 |
-| 050 | 050-ops-contract.mdc | # 🧭 Gemantria — OPS Contract v6.2.3 |
-| 051 | 051-cursor-insight.mdc | # 051 — Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
-| 053 | 053-idempotence.mdc | # 053 — Idempotent Baseline (OPS v6.2.1) |
-| 054 | 054-reuse-first.mdc | # Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) |
-| 055 | 055-auto-docs-sync.mdc | # 055 — Auto-Docs Sync Pass (AlwaysApply) |
-| 056 | 056-ui-generation.mdc | # id: 056 |
+| 049 | 049-gpt5-contract-v5.2.mdc | # --- |
+| 050 | 050-ops-contract.mdc | # --- |
+| 051 | 051-cursor-insight.mdc | # --- |
+| 052 | 052-tool-priority.mdc | # --- |
+| 053 | 053-idempotence.mdc | # --- |
+| 054 | 054-reuse-first.mdc | # --- |
+| 055 | 055-auto-docs-sync.mdc | # --- |
+| 056 | 056-ui-generation.mdc | # --- |
 | 057 | 057-embedding-consistency.mdc | # --- |
 | 058 | 058-auto-housekeeping.mdc | # --- |
-| 059 | 059-context-persistence.mdc | # 059 — Context Persistence (AlwaysApply) |
+| 059 | 059-context-persistence.mdc | # --- |

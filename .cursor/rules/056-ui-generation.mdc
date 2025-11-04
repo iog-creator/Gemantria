@@ -1,3 +1,10 @@
+---
+description: UI Generation Standard
+alwaysApply: true
+globs: 
+  - "ui/**"
+  - "webui/**"
+---
 id: 056
 
 name: UI Generation Standard
