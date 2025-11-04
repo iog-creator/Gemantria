@@ -5,7 +5,6 @@ Migrate cursor rules to Rule 008 YAML frontmatter format.
 Formatting-only migration (no content/semantics changes).
 """
 
-import re
 from pathlib import Path
 
 # Rule number -> (description, globs)
@@ -108,7 +107,7 @@ def main():
 
         if add_frontmatter(rule_file, description, globs):
             migrated.append(rule_file.name)
-            print(f"  ✓ Migrated")
+            print("  ✓ Migrated")
         else:
             skipped.append(rule_file.name)
 
