@@ -27,7 +27,7 @@ def main():
             for i in range(min(args.size, 1000))  # Limit for demo
         ],
         "edges": [
-            {"source": f"node_{i}", "target": f"node_{(i+1)%1000}", "strength": 0.8}
+            {"source": f"node_{i}", "target": f"node_{(i + 1) % 1000}", "strength": 0.8}
             for i in range(min(args.size, 1000))
         ],
         "meta": {
@@ -35,7 +35,7 @@ def main():
             "temporal_source": source,
             "node_count": len([{"id": f"node_{i}"} for i in range(min(args.size, 1000))]),
             "edge_count": len([{"source": f"node_{i}"} for i in range(min(args.size, 1000))]),
-        }
+        },
     }
 
     # Create output directory
