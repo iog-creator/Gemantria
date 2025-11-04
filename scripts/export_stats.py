@@ -662,25 +662,29 @@ def compute_rolling_windows(df, window=5, metrics=None):
 
 def naive_forecast(series, horizon=10):
     """
-    Naive forecast: repeat last value.
+    Naive forecast: repeat last value with prediction intervals (±std).
 
     Args:
         series: pandas Series with sequential data
         horizon: Number of steps to forecast
 
     Returns:
-        Series with forecast values
+        dict with 'forecast' (Series) and 'intervals' (DataFrame with lower/upper)
     """
     if len(series) == 0:
-        return pd.Series([], dtype=float)
+        empty_series = pd.Series([], dtype=float)
+        return {"forecast": empty_series, "intervals": pd.DataFrame()}
     last = series.iloc[-1]
+    std = series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
-    return pd.Series([last] * horizon, index=forecast_index)
+    forecast = pd.Series([last] * horizon, index=forecast_index)
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
+    return {"forecast": forecast, "intervals": intervals}
 
 
 def sma_forecast(series, window=5, horizon=10):
     """
-    Simple Moving Average forecast.
+    Simple Moving Average forecast with intervals.
 
     Args:
         series: pandas Series with sequential data
@@ -688,18 +692,23 @@ def sma_forecast(series, window=5, horizon=10):
         horizon: Number of steps to forecast
 
     Returns:
-        Series with forecast values
+        dict with 'forecast' (Series) and 'intervals' (DataFrame with lower/upper)
     """
     if len(series) == 0:
-        return pd.Series([], dtype=float)
+        empty_series = pd.Series([], dtype=float)
+        return {"forecast": empty_series, "intervals": pd.DataFrame()}
     sma = series.rolling(window=window, min_periods=1).mean().iloc[-1]
+    rolling_std = series.rolling(window=window).std()
+    std = rolling_std.iloc[-1] if not rolling_std.empty else series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
-    return pd.Series([sma] * horizon, index=forecast_index)
+    forecast = pd.Series([sma] * horizon, index=forecast_index)
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
+    return {"forecast": forecast, "intervals": intervals}
 
 
 def arima_forecast(series, order=(1, 1, 1), horizon=10):
     """
-    ARIMA forecast with statsmodels.
+    ARIMA forecast with prediction intervals.
 
     Args:
         series: pandas Series with sequential data
@@ -707,7 +716,7 @@ def arima_forecast(series, order=(1, 1, 1), horizon=10):
         horizon: Number of steps to forecast
 
     Returns:
-        Series with forecast values and optional prediction intervals
+        dict with 'forecast' (Series) and 'intervals' (DataFrame with lower/upper)
     """
     try:
         from statsmodels.tsa.arima.model import ARIMA
@@ -718,8 +727,11 @@ def arima_forecast(series, order=(1, 1, 1), horizon=10):
 
         model = ARIMA(series, order=order)
         fit = model.fit()
-        forecast = fit.forecast(steps=horizon)
-        return forecast
+        forecast_obj = fit.get_forecast(steps=horizon)
+        forecast = forecast_obj.predicted_mean
+        intervals = forecast_obj.conf_int()
+        intervals.columns = ["lower", "upper"]
+        return {"forecast": forecast, "intervals": intervals}
     except ImportError:
         LOG.warning("statsmodels not available, falling back to SMA forecast")
         return sma_forecast(series, window=5, horizon=horizon)
@@ -728,29 +740,29 @@ def arima_forecast(series, order=(1, 1, 1), horizon=10):
         return sma_forecast(series, window=5, horizon=horizon)
 
 
-def simple_change_points(series, threshold=3):
+def detect_change_points(series, threshold=3.0):
     """
-    Simple z-score based change point detection.
+    Z-score based change point detection for textual shifts.
 
     Args:
         series: pandas Series with sequential data
-        threshold: Z-score threshold for change point detection (default: 3)
+        threshold: Z-score threshold for change point detection (default: 3.0)
 
     Returns:
-        numpy array of indices where change points are detected
+        list of indices where change points are detected
     """
     if len(series) < 2:
-        return np.array([], dtype=int)
+        return []
 
     mean = series.mean()
     std = series.std()
 
     if std == 0:
-        return np.array([], dtype=int)
+        return []
 
     z_scores = np.abs((series - mean) / std)
     change_points = np.where(z_scores > threshold)[0]
-    return change_points
+    return change_points.tolist()
 
 
 def export_temporal_patterns(db):
