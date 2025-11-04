@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ErrorBoundary } from 'react-error-boundary';
 import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
@@ -22,6 +22,54 @@ const Fallback = ({error}: {error: Error}) => (
 export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [showEscalation, setShowEscalation] = useState(false);
+
+  useEffect(() => {
+    if (!data.nodes?.length) return;
+    const dataSizeMB = JSON.stringify(data).length / (1024 * 1024);
+    const canUseWebGL = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+      } catch (e) {
+        return false;
+      }
+    };
+    if (dataSizeMB > 100 || !canUseWebGL()) {
+      setShowEscalation(true);
+    }
+  }, [data]);
+
+  if (showEscalation) {
+    const dataSizeMB = JSON.stringify(data).length / (1024 * 1024);
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-8 rounded-lg shadow-xl max-w-md mx-4">
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Large Dataset Detected</h2>
+          <p className="text-gray-600 mb-6">
+            Enable WebGL for better performance? (Memory: {dataSizeMB.toFixed(1)}MB)
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                localStorage.setItem('enable_webgl', 'true');
+                setShowEscalation(false);
+              }}
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Enable WebGL
+            </button>
+            <button
+              onClick={() => setShowEscalation(false)}
+              className="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

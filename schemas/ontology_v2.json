@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "gematria_value": { "type": "integer" },
+          "hebrew_text": { "type": "string" },
+          "refs": { "type": "array", "items": { "type": "string" } },
+          "v2_metadata": { "type": "object" }
+        },
+        "required": ["id", "label", "gematria_value"]
+      }
+    },
+    "edges": { "type": "array", "items": { "type": "object" } },
+    "meta": { "type": "object", "properties": { "version": { "const": "v2" } } }
+  }
+}
