@@ -125,3 +125,8 @@ monitoring.run:
 scaling.run:
 	@echo ">> Run scaling stub"
 	@$(PYTHON) scripts/scaling.py
+
+.PHONY: optimize.run
+optimize.run:
+	@echo ">> Run optimization stub"
+	@$(PYTHON) scripts/optimize.py
