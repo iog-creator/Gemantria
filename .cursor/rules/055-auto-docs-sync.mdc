@@ -1,3 +1,8 @@
+---
+description: Auto-Docs Sync Pass
+alwaysApply: true
+globs: []
+---
 # 055 — Auto-Docs Sync Pass (AlwaysApply)
 
 After every change/PR, run comprehensive docs pass (update AGENTS.md/rules/forest/hints). Fail-closed if skipped—critical error. CI enforces via rules_guard.py.

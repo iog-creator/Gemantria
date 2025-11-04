@@ -1,3 +1,8 @@
+---
+description: Share Manifest Contract
+alwaysApply: true
+globs: []
+---
 # 044 — Share Manifest Contract (AlwaysApply)
 - New `share/**` artifacts require a manifest entry with realistic `max_bytes`.
 - Workflows refresh share before checking; optional artifacts emit HINT and skip, not fail PRs.

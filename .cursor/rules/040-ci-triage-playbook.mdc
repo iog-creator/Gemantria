@@ -1,3 +1,8 @@
+---
+description: CI Triage Playbook
+alwaysApply: true
+globs: []
+---
 id: 040_CI_TRIAGE_PLAYBOOK
 version: 1
 alwaysApply: true

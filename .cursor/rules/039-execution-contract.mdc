@@ -1,3 +1,8 @@
+---
+description: Execution Contract Enforcement
+alwaysApply: true
+globs: []
+---
 id: 039_EXECUTION_CONTRACT
 version: 1
 alwaysApply: true

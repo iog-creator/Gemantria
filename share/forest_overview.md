@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 11:50:02
+Generated: 2025-11-04 11:54:06
 
 ## Active Rules
 
@@ -56,10 +56,8 @@ Generated: 2025-11-04 11:50:02
 - Rule 049-gpt5-contract-v5: id: 049_GPT5_CONTRACT_V5_2
 - Rule 050-ops-contract: 🧭 Gemantria — OPS Contract v6.2.3
 - Rule 051-cursor-insight: 051 — Cursor Insight & Handoff (AlwaysApply)
-- Rule 051-ui-generation: id: 051
 - Rule 052-tool-priority: 052 — Tool Priority & Context Guidance (AlwaysApply)
 - Rule 053-idempotence: 053 — Idempotent Baseline (OPS v6.2.1)
-- Rule 054-embedding-consistency: ---
 - Rule 054-reuse-first: Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)
 - Rule 055-auto-docs-sync: 055 — Auto-Docs Sync Pass (AlwaysApply)
 - Rule 056-ui-generation: id: 056

@@ -1,3 +1,8 @@
+---
+description: GPT-5 Contract v5.2
+alwaysApply: true
+globs: []
+---
 id: 049_GPT5_CONTRACT_V5_2
 version: 1
 alwaysApply: true
