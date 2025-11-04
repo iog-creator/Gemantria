@@ -1,36 +1,47 @@
 ---
-description: Require forest overview & verification matrix regeneration before new PRs
+description: Enforce ADR-025 multi-temporal analytics with rolling windows, forecasting, and interactive exploration
 globs:
-  - "docs/forest/**"
-  - "docs/DECISION_LOG.md"
-  - "docs/VERIFICATION_MATRIX.md"
-  - "scripts/generate_forest.py"
+  - "scripts/temporal_analytics.py"
+  - "share/exports/temporal_patterns.json"
+  - "share/exports/forecast.json"
+  - "webui/dashboard/ForecastDashboard.tsx"
 alwaysApply: false
 ---
 
-# Rule 025 — Phase Gate & Forest Sync
+# Rule 025 — Multi-Temporal Analytics Enforcement
 
 **Purpose:**
-Prevent drift between low-level PRs and the global project state.
+Enforce ADR-025 temporal analytics implementation with pattern analysis, forecasting, and interactive exploration.
 
 ## Must Exist
-- `docs/forest/overview.md`
-- `docs/DECISION_LOG.md`
-- `docs/VERIFICATION_MATRIX.md`
-- `scripts/generate_forest.py`
+- `scripts/temporal_analytics.py` (temporal analysis engine)
+- `share/exports/temporal_patterns.json` (rolling window results)
+- `share/exports/forecast.json` (prediction results)
+- `webui/dashboard/ForecastDashboard.tsx` (interactive exploration)
 
 ## Must Run
-Developers **must run**:
+Before PRs touching temporal/forecasting:
 ```bash
-python scripts/generate_forest.py
+make temporal.analytics  # Rolling windows + change points
+make forecast.run        # ARIMA/statistical forecasting
 ```
 
-before opening or merging any new phase PR.
+## Schema Validation
+- Temporal patterns must match `docs/SSOT/temporal-patterns.schema.json`
+- Forecast results must match `docs/SSOT/pattern-forecast.schema.json`
+- RMSE must be < 0.5 for acceptable forecast quality
+
+## Interactive Requirements
+- `ForecastDashboard.tsx` must load forecast data from `/api/forecast`
+- Temporal patterns API endpoint must support filtering
+- Charts must display uncertainty intervals for forecasts
 
 ## Fails if
 
-* Any listed file missing or empty
-* overview.md not updated in past 24h
-* verification matrix missing latest rule IDs
+* Temporal analysis script missing or non-functional
+* Export files missing after `make temporal.analytics`
+* Forecast RMSE > threshold (0.5)
+* UI dashboard fails to load forecast data
+* Schema validation errors in exports
 
-**Related Rules:** 000, 006, 013, 021-024
+**Related ADRs:** 018 (Pattern Correlation), 021 (Stats Proof), 022 (Visualization), 023 (API + Dashboard)
