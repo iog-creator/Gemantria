@@ -126,6 +126,27 @@ Phase 11 unified pipeline flow:
 **Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
 **Validation:** JSON schema enforcement + size/performance gates + COMPASS mathematical correctness (>80% score)
 
+**COMPASS Usage Note:** Run COMPASS on `unified_envelope_*.json` or `share/exports/envelope.json`; **do not** pass graph exports.
+
+### Graph Export Pipeline (Fix Nov 2025)
+
+**Purpose**: Export semantic concept network with Hebrew labels for visualization
+
+**Implementation**:
+- Uses `concept_network.id` (UUID) as canonical node ID
+- Hebrew labels pulled from `concepts.hebrew_text` via CTE row number mapping
+- Centrality metrics joined on `concept_network.id`
+- Edge relations from `concept_relations` table with blend computation
+
+**Output Artifact**: `share/exports/graph_latest.json` contains readable Hebrew labels and consistent UUID keys
+
+**Validation**:
+```bash
+python3 scripts/export_graph.py
+python3 scripts/compass/scorer.py share/exports/graph_latest.json --verbose
+```
+Expected: `COMPASS Score: 100.0% (PASS)` with Hebrew node labels
+
 ### COMPASS: Comprehensive Pipeline Assessment Scoring System
 
 **Purpose**: Mathematical envelope validation for data integrity and correctness

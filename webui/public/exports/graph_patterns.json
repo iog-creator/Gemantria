@@ -1,0 +1,14 @@
+{
+  "patterns": [],
+  "metadata": {
+    "total_patterns": 0,
+    "analyzed_books": [],
+    "pattern_methods": [],
+    "generated_at": "2025-10-23T19:21:02.580105",
+    "run_id": null,
+    "analysis_parameters": {
+      "min_shared_concepts": 2,
+      "min_pattern_strength": 0.1
+    }
+  }
+}

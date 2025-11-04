@@ -150,6 +150,13 @@ def score_envelope(envelope_path: str, verbose: bool = False) -> Tuple[float, Di
     """Score envelope for mathematical correctness and data integrity."""
     try:
         envelope = load_envelope(envelope_path)
+        # Friendly guard: unify with validate_input.py behavior
+        if "meta" not in envelope or not all(k in envelope["meta"] for k in ("temporal_source", "correlation_weights")):
+            print(
+                "HINT: This file does not look like a unified envelope. "
+                "Run extract to produce ui/out/unified_envelope_*.json or use share/exports/envelope.json."
+            )
+            # Do not exit hard; we keep backward compatibility for dev experiments.
     except Exception as e:
         return 0.0, {"error": f"Failed to load envelope: {e}"}
 

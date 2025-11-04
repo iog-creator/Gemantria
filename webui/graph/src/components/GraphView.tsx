@@ -97,20 +97,35 @@ export default function GraphView({
       y: Math.random() * height,
     }));
 
-    // Initialize links
-    const initialLinks: SimulationLink[] = edges.map((edge) => {
-      const source = initialNodes.find(n => n.id === (typeof edge.source === 'string' ? edge.source : edge.source.id));
-      const target = initialNodes.find(n => n.id === (typeof edge.target === 'string' ? edge.target : edge.target.id));
-      return {
-        ...edge,
-        source: source!,
-        target: target!,
-      };
-    });
+    // Initialize links - filter out edges where source or target nodes don't exist
+    const initialLinks: SimulationLink[] = edges
+      .map((edge) => {
+        const sourceId = typeof edge.source === 'string' ? edge.source : edge.source.id;
+        const targetId = typeof edge.target === 'string' ? edge.target : edge.target.id;
+        const source = initialNodes.find(n => n.id === sourceId);
+        const target = initialNodes.find(n => n.id === targetId);
+        
+        if (!source || !target) {
+          console.warn(`Skipping edge with missing node: ${sourceId} -> ${targetId}`);
+          return null;
+        }
+        
+        return {
+          ...edge,
+          source,
+          target,
+        };
+      })
+      .filter((link): link is SimulationLink => link !== null);
 
-    // Create simulation
-    const simulation = d3.forceSimulation<SimulationNode>(initialNodes)
-      .force('link', d3.forceLink<SimulationNode, SimulationLink>(initialLinks).id(d => d.id).distance(100))
+    // Create simulation - only add link force if we have valid links
+    const simulation = d3.forceSimulation<SimulationNode>(initialNodes);
+    
+    if (initialLinks.length > 0) {
+      simulation.force('link', d3.forceLink<SimulationNode, SimulationLink>(initialLinks).distance(100));
+    }
+    
+    simulation
       .force('charge', d3.forceManyBody().strength(-300))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('x', d3.forceX(width / 2).strength(0.1))
