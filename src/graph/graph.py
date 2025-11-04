@@ -32,8 +32,8 @@ from src.nodes.network_aggregator import (
 from src.nodes.schema_validator import schema_validator_node
 from src.nodes.analysis_runner import analysis_runner_node
 from src.services.lmstudio_client import (
-    QWEN_EMBEDDING_MODEL,
-    QWEN_RERANKER_MODEL,
+    EMBEDDING_MODEL,
+    RERANKER_MODEL,
     THEOLOGY_MODEL,
     QwenHealth,
     QwenUnavailableError,
@@ -357,15 +357,15 @@ def debug_connectivity() -> dict:
     try:
         from src.services.lmstudio_client import (  # noqa: E402
             HOST,
-            QWEN_EMBEDDING_MODEL,
-            QWEN_RERANKER_MODEL,
+            EMBEDDING_MODEL,
+            RERANKER_MODEL,
             THEOLOGY_MODEL,
             assert_qwen_live,
         )
 
         results["lm_studio"]["details"]["host"] = HOST
 
-        health = assert_qwen_live([QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL, THEOLOGY_MODEL])
+        health = assert_qwen_live([EMBEDDING_MODEL, RERANKER_MODEL, THEOLOGY_MODEL])
         results["lm_studio"]["status"] = "ok" if health.ok else "error"
         results["lm_studio"]["details"].update(
             {
@@ -442,7 +442,7 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
 
     try:
         # Qwen Live Gate: Assert ALL required models are available before any work
-        required_models = [QWEN_EMBEDDING_MODEL, QWEN_RERANKER_MODEL, THEOLOGY_MODEL]
+        required_models = [EMBEDDING_MODEL, RERANKER_MODEL, THEOLOGY_MODEL]
         qwen_health = assert_qwen_live(required_models)
         log_json(
             LOG,
@@ -459,8 +459,8 @@ def run_pipeline(book: str = "Genesis", mode: str = "START") -> PipelineState:
         log_qwen_health(
             str(pipeline_run_id),
             qwen_health,
-            QWEN_EMBEDDING_MODEL,
-            QWEN_RERANKER_MODEL,
+            EMBEDDING_MODEL,
+            RERANKER_MODEL,
             THEOLOGY_MODEL,
         )
 

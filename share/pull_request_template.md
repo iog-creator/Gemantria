@@ -3,7 +3,6 @@
 
 ## Summary
 <!-- what & why in 2–4 lines -->
-<!-- Always paste full prior summary in handoff queries (e.g., 'From previous: LM setup complete, Phase-9 green'). Rule 059 -->
 
 ## References (REQUIRED)
 - **Rules cited:** <!-- e.g., 039-execution-contract; 040-ci-triage; 041-pr-merge-policy -->
@@ -19,7 +18,6 @@
 - [ ] `make ops.verify` passes (Rule-054 duplicate guard)
 - [ ] Smokes relevant to this area green
 - [ ] No new knobs or duplicate scaffolds
-- [ ] Housekeeping pass run (rules_audit/share.sync/forest; Rule 058)
 
 ## Emitted Hints (REQUIRED)
 - List the key runtime HINT lines your changes will emit (e.g., `HINT: verify: database bootstrap OK`) so CI logs are clear for both Cursor and reviewers.
