@@ -14,15 +14,15 @@ def load_rules():
     rules = []
     for file_path in glob.glob(RULES_DIR):
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
                 # Extract rule title from content
-                match = re.search(r'Rule \d+: (.*)', content)
+                match = re.search(r"Rule \d+: (.*)", content)
                 if match:
                     rules.append(match.group(1).strip())
                 else:
                     # Fallback to filename
-                    rule_name = os.path.basename(file_path).replace('.mdc', '')
+                    rule_name = os.path.basename(file_path).replace(".mdc", "")
                     rules.append(f"Rule {rule_name}")
         except Exception as e:
             print(f"Warning: Could not read rule file {file_path}: {e}")
@@ -34,13 +34,13 @@ def load_adrs():
     adr_rules = set()
     for file_path in glob.glob(ADRS_DIR):
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
                 # Extract related rules from ADR content
-                matches = re.findall(r'Related Rules?: ([^\n]+)', content, re.IGNORECASE)
+                matches = re.findall(r"Related Rules?: ([^\n]+)", content, re.IGNORECASE)
                 for match in matches:
                     # Split on commas and clean up
-                    rules = [r.strip() for r in match.split(',')]
+                    rules = [r.strip() for r in match.split(",")]
                     adr_rules.update(rules)
         except Exception as e:
             print(f"Warning: Could not read ADR file {file_path}: {e}")

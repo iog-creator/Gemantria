@@ -12,7 +12,7 @@ def load_ontology():
     """Load the ontology data."""
     if not os.path.exists(ONTOLOGY_PATH):
         raise FileNotFoundError(f"Ontology not found at {ONTOLOGY_PATH}")
-    with open(ONTOLOGY_PATH, "r") as f:
+    with open(ONTOLOGY_PATH) as f:
         return json.load(f)
 
 
