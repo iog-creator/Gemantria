@@ -1,9 +1,23 @@
 import { useState } from "react";
+import { ErrorBoundary } from 'react-error-boundary';
 import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
 import { useGraphData } from "../hooks/useGraphData";
 import { GraphNode } from "../types/graph";
+
+const Fallback = ({error}: {error: Error}) => (
+  <div className="p-8 text-red-600 border-2 border-red-200 rounded-lg bg-red-50">
+    <h2 className="text-xl font-bold mb-4">Oops – graph failed to render</h2>
+    <pre className="bg-red-100 p-4 rounded text-sm mb-4 overflow-auto">{error.message}</pre>
+    <button
+      onClick={() => window.location.reload()}
+      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+    >
+      Reload Page
+    </button>
+  </div>
+);
 
 export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
@@ -84,13 +98,15 @@ export default function GraphDashboard() {
                 Network Visualization
               </h2>
               <div className="h-96 lg:h-[600px]">
-                <GraphView
-                  nodes={data.nodes}
-                  edges={data.edges}
-                  width={800}
-                  height={600}
-                  onNodeSelect={setSelectedNode}
-                />
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <GraphView
+                    nodes={data.nodes}
+                    edges={data.edges}
+                    width={800}
+                    height={600}
+                    onNodeSelect={setSelectedNode}
+                  />
+                </ErrorBoundary>
               </div>
             </div>
           </div>
