@@ -1,0 +1,20 @@
+AGENTS.md:1:# AGENTS.md — Gemantria Agent Framework
+AGENTS.md:181:  > "Required checks are green; automated review is advisory per AGENTS.md and RULE 051."
+AGENTS.md:213:Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` contract (Rule-045).
+AGENTS.md:324:* See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
+AGENTS.md:327:* Any change to rules affecting workflows must update this AGENTS.md and ADRs in the same PR.
+AGENTS.md:386:| 053 | # 053 — Idempotent Baseline (OPS v6.2.1) |
+AGENTS.md:470:2. **Governance docs present** → `AGENTS.md` and `RULES_INDEX.md` exist.
+AGENTS.md:481:governance: Gemantria OPS v6.2
+AGENTS.md:506:* `AGENTS.md`
+AGENTS.md:508:* `.cursor/rules/050-ops-contract.mdc`
+AGENTS.md:510:* `src/**/AGENTS.md` (scoped to relevant module)
+AGENTS.md:515:governance: Gemantria OPS v6.2.3
+AGENTS.md:521:* AGENTS.md
+AGENTS.md:523:* .cursor/rules/050-ops-contract.mdc
+AGENTS.md:534:1. `AGENTS.md`
+AGENTS.md:536:3. `.cursor/rules/050-ops-contract.mdc`
+AGENTS.md:538:5. The single relevant submodule `AGENTS.md`
+AGENTS.md:573:# source: AGENTS.md + RULES_INDEX.md + .cursor/rules/050 + .cursor/rules/051
+AGENTS.md:598:> "Required checks are green; non-required automated reviews are **advisory only** per AGENTS.md and Rule 051."
+AGENTS.md:622:gh pr create --title "ci: hygiene (ruff)" --body "Automated hygiene per OPS v6.2"

@@ -1,0 +1,15 @@
+src/nodes/analysis_runner.py:7:LOG = get_logger("gematria.analysis_runner")
+src/nodes/schema_validator.py:7:LOG = get_logger("gematria.schema_validator")
+scripts/backfill_noun_embeddings.py:3:Backfill embeddings for gematria.nouns table using LM Studio.
+scripts/backfill_noun_embeddings.py:13:This creates gematria.noun_embeddings table and populates it with vectors.
+scripts/backfill_noun_embeddings.py:55:                CREATE TABLE IF NOT EXISTS gematria.noun_embeddings (
+scripts/backfill_noun_embeddings.py:56:                    noun_id       BIGINT PRIMARY KEY REFERENCES gematria.nouns(id) ON DELETE CASCADE,
+scripts/backfill_noun_embeddings.py:66:                    ON gematria.noun_embeddings USING ivfflat (embedding vector_l2_ops) WITH (lists = 100);
+scripts/backfill_noun_embeddings.py:72:                FROM gematria.nouns n
+scripts/backfill_noun_embeddings.py:73:                LEFT JOIN gematria.noun_embeddings ne ON n.id = ne.noun_id
+scripts/backfill_noun_embeddings.py:132:                            INSERT INTO gematria.noun_embeddings (noun_id, embedding, model)
+scripts/backfill_noun_embeddings.py:157:                SELECT COUNT(*) FROM gematria.nouns n
+scripts/backfill_noun_embeddings.py:158:                JOIN gematria.noun_embeddings ne ON n.id = ne.noun_id
+scripts/backfill_noun_embeddings.py:162:            cur.execute("SELECT COUNT(*) FROM gematria.nouns")
+scripts/backfill_noun_embeddings.py:169:    ap = argparse.ArgumentParser(description="Backfill embeddings for gematria.nouns")
+scripts/export_noun_index.py:13:1. Export from existing gematria.nouns + noun_occurrences tables (default)
