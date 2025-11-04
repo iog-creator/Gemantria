@@ -1,5 +1,8 @@
 
 
+# Python interpreter (for CI compatibility)
+PYTHON ?= python3
+
 ui.dev.help:
 	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
 	@echo "UI local dev instructions:"
