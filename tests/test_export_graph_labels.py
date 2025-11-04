@@ -31,7 +31,6 @@ def test_graph_labels_are_hebrew():
     uuid_pattern = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
     hebrew_count = 0
-    uuid_count = 0
 
     for node in data["nodes"]:
         label = node.get("label", "")
