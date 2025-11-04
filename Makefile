@@ -153,3 +153,9 @@ generate.forest:
 	@echo ">> Generate forest overview"
 	@$(PYTHON) scripts/generate_forest.py
 	@echo "Forest generated: docs/forest/overview.md updated"
+
+.PHONY: ontology.check
+ontology.check:
+	@echo ">> Check ontology forward compatibility"
+	@$(PYTHON) scripts/ontology_compat.py
+	@echo "Ontology compatibility check complete"
