@@ -109,7 +109,7 @@ def run_analysis(operation: str) -> Dict[str, Any]:
     """
     Run analysis operations.
 
-    Operations: graph, export, all
+    Operations: graph, export, temporal, all
     """
     log_json(LOG, 20, "analysis_start", operation=operation)
 
@@ -124,6 +124,13 @@ def run_analysis(operation: str) -> Dict[str, Any]:
 
             export_main()
             stats_main()
+        elif operation == "temporal":
+            # Run temporal analysis via analysis_runner_node
+            from src.nodes.analysis_runner import _run_temporal_analysis
+
+            state = {"operation": "temporal", "book": "Genesis"}
+            result = _run_temporal_analysis(state)
+            log_json(LOG, 20, "temporal_analysis_complete", result=result)
         elif operation == "all":
             # Run both graph analysis and exports
             from scripts.analyze_graph import main as analyze_main
@@ -191,7 +198,7 @@ def main():
 
     # Analysis command
     analysis_parser = subparsers.add_parser("analysis", help="Analysis operations")
-    analysis_parser.add_argument("operation", choices=["graph", "export", "all"], help="Analysis operation to perform")
+    analysis_parser.add_argument("operation", choices=["graph", "export", "temporal", "all"], help="Analysis operation to perform")
 
     # Embeddings command
     embeddings_parser = subparsers.add_parser("embeddings", help="Embeddings backfill")

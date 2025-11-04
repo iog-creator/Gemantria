@@ -1,0 +1,13 @@
+{
+  "temporal_patterns": [],
+  "metadata": {
+    "generated_at": "2025-11-04T12:34:49.871357",
+    "analysis_parameters": {
+      "default_unit": "chapter",
+      "default_window": 5,
+      "min_series_length": 10
+    },
+    "total_series": 0,
+    "books_analyzed": []
+  }
+}
