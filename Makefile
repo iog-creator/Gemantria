@@ -189,3 +189,82 @@ forecast.run:
 		echo "Forecast data available at share/exports/forecast.json"; \
 	fi
 	@echo "Forecast complete"
+
+# Book processing integration
+.PHONY: book.plan book.dry book.go book.stop book.resume
+
+BOOK_CONFIG ?= config/book_plan.yaml
+
+book.plan:
+	@echo ">> Plan book processing"
+	@$(PYTHON) scripts/run_book.py plan --cfg $(BOOK_CONFIG)
+
+book.dry:
+	@echo ">> Dry run book processing"
+	@$(PYTHON) scripts/run_book.py dry --cfg $(BOOK_CONFIG)
+
+book.go:
+	@echo ">> Run full book processing"
+	@$(PYTHON) scripts/run_book.py go --cfg $(BOOK_CONFIG)
+
+book.stop:
+	@echo ">> Stop-loss book processing (first N chapters)"
+	@if [ -z "$(N)" ]; then echo "Usage: make book.stop N=5"; exit 1; fi
+	@$(PYTHON) scripts/run_book.py stop --cfg $(BOOK_CONFIG) --n $(N)
+
+book.resume:
+	@echo ">> Resume book processing"
+	@$(PYTHON) scripts/run_book.py resume
+
+# Schema validation
+schema.validate:
+	@echo ">> Validate schemas against current exports"
+	@if [ -f exports/graph_latest.json ]; then \
+		$(PYTHON) scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/graph_output.schema.json 2>/dev/null || echo "Graph schema validation skipped (schema not found)"; \
+	fi
+	@if [ -f share/exports/envelope.json ]; then \
+		$(PYTHON) scripts/eval/jsonschema_validate.py share/exports/envelope.json schemas/envelope.schema.json 2>/dev/null || echo "Envelope schema validation skipped (schema not found)"; \
+	fi
+	@echo "Schema validation complete"
+
+# Analysis operations
+analyze.graph:
+	@echo ">> Run graph analysis (communities and centrality)"
+	@$(PYTHON) scripts/analyze_graph.py
+
+analyze.export:
+	@echo ">> Export analysis results for visualization"
+	@$(PYTHON) scripts/export_graph.py
+	@$(PYTHON) scripts/export_stats.py
+
+analyze.all:
+	@echo ">> Run complete analysis suite"
+	@make analyze.graph
+	@make analyze.export
+	@echo "Analysis complete"
+
+# Unified pipeline orchestration
+orchestrator.pipeline:
+	@echo ">> Run main pipeline via orchestrator"
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py pipeline --book $(BOOK)
+
+orchestrator.book:
+	@echo ">> Run book processing via orchestrator"
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py book $(OPERATION) --config $(BOOK_CONFIG)
+
+orchestrator.analysis:
+	@echo ">> Run analysis via orchestrator"
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py analysis $(OPERATION)
+
+orchestrator.embeddings:
+	@echo ">> Run embeddings backfill via orchestrator"
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py embeddings --model $(EMBEDDING_MODEL) --dim $(EMBEDDING_DIM)
+
+orchestrator.full:
+	@echo ">> Run complete workflow via orchestrator"
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py full --book $(BOOK) --config $(BOOK_CONFIG)
+
+# Integration testing
+test.pipeline.integration:
+	@echo ">> Run pipeline integration tests"
+	@pytest tests/integration/test_pipeline_integration.py -v

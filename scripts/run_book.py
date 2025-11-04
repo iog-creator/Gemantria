@@ -115,78 +115,96 @@ def _run_chapters(cfg: dict[str, Any], chapters: list[int], real: bool) -> None:
     _seed_env(int(cfg["seed"]))
     _require_services(cfg)
     book = cfg["book"]
+
+    # Import the main pipeline here to avoid circular imports
+    if real:
+        from src.graph.graph import run_pipeline
+
+    t0 = time.time()
+    if real:
+        # Call the real pipeline for this book (currently processes entire book, not individual chapters)
+        try:
+            result = run_pipeline(book=book, mode="START")
+            pipeline_success = "error" not in result
+            run_id = str(result.get("run_id", "unknown")) if "run_id" in result else "unknown"
+        except Exception as e:
+            print(f"[error] Pipeline failed for {book}: {e}")
+            pipeline_success = False
+            result = {"error": str(e)}
+            run_id = "failed"
+    else:
+        # Dry run - just validate services
+        pipeline_success = True
+        result = {"dry_run": True}
+        run_id = "dry-run"
+
+    # Log the book-level result and simulate chapter-level logs for compatibility
+    book_log_data = {
+        "book": book,
+        "chapters_requested": chapters,
+        "seed": cfg["seed"],
+        "real": real,
+        "ts": time.time(),
+        "pipeline_success": pipeline_success,
+        "duration": time.time() - t0,
+        "run_id": run_id,
+    }
+
+    # Write book-level log
+    (LOGS / f"{book}.book.json").write_text(
+        json.dumps(book_log_data, indent=2, default=str),
+        encoding="utf-8",
+    )
+
+    # Create individual chapter logs for compatibility with existing tooling
     for ch in chapters:
-        t0 = time.time()
-        # Placeholder: call your real pipeline here for (book, ch)
-        # Capture per-chapter logs:
+        chapter_log_data = {
+            "book": book,
+            "chapter": ch,
+            "seed": cfg["seed"],
+            "real": real,
+            "ts": time.time(),
+            "pipeline_success": pipeline_success,
+            "duration": time.time() - t0,  # Same duration for all chapters
+            "run_id": run_id,
+            "book_run": True,  # Indicates this was part of a book-level run
+        }
+
         (LOGS / f"{book}.ch{ch:02d}.json").write_text(
-            json.dumps(
-                {
-                    "book": book,
-                    "chapter": ch,
-                    "seed": cfg["seed"],
-                    "real": real,
-                    "ts": time.time(),
-                },
-                indent=2,
-            ),
+            json.dumps(chapter_log_data, indent=2, default=str),
             encoding="utf-8",
         )
-        print(f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s")
+        print(
+            f"[guide] chapter {ch} {'REAL' if real else 'DRY'} done in {time.time() - t0:.2f}s {'✓' if pipeline_success else '✗'}"
+        )
 
 
 def cmd_stop(args: argparse.Namespace) -> None:
     cfg = _load_yaml_or_json(Path(args.cfg))
     n = int(args.n)
     chapters = list(cfg["chapters"])[:n]
-    # For demo: skip service validation (in real use, this runs real inference)
-    # _run_chapters(cfg, chapters, real=True)
-    for ch in chapters:
-        (LOGS / f"{cfg['book']}.ch{ch:02d}.json").write_text(
-            json.dumps(
-                {
-                    "book": cfg["book"],
-                    "chapter": ch,
-                    "seed": cfg["seed"],
-                    "real": True,
-                    "ts": time.time(),
-                },
-                indent=2,
-            ),
-            encoding="utf-8",
-        )
-        print(f"[guide] chapter {ch} REAL done in 0.00s")
+    # Run real inference for the partial book
+    _run_chapters(cfg, chapters, real=True)
     # keep partial marker *out* of share to reduce churn
     _write(LOGS / "book_run.partial.json", {"run": "partial", "n": n, "ts": time.time()})
     print(f"[guide] stop-loss executed for first {n} chapter(s).")
 
 
 def cmd_resume(_args: argparse.Namespace) -> None:
-    # Naive resume: find next chapter without a log file
+    # Resume: check if book-level run exists, otherwise run the full book
     # (Assumes DEFAULT_CFG or last used cfg; users can re-run stop/dry to reset plan)
     cfg = DEFAULT_CFG
-    missing = [ch for ch in cfg["chapters"] if not (LOGS / f"{cfg['book']}.ch{ch:02d}.json").exists()]
-    if not missing:
-        print("[guide] nothing to resume — all chapters present.")
+    book_log = LOGS / f"{cfg['book']}.book.json"
+
+    if book_log.exists():
+        print(f"[guide] book {cfg['book']} already processed — nothing to resume.")
         return
-    # For demo: skip service validation (in real use, this runs real inference)
-    for ch in missing:
-        (LOGS / f"{cfg['book']}.ch{ch:02d}.json").write_text(
-            json.dumps(
-                {
-                    "book": cfg["book"],
-                    "chapter": ch,
-                    "seed": cfg["seed"],
-                    "real": True,
-                    "ts": time.time(),
-                },
-                indent=2,
-            ),
-            encoding="utf-8",
-        )
-        print(f"[guide] chapter {ch} REAL done in 0.00s")
-    _write(LOGS / "book_run.resumed.json", {"resumed": missing, "ts": time.time()})
-    print(f"[guide] resume executed for {len(missing)} chapter(s).")
+
+    # Run the full book processing
+    print(f"[guide] resuming full book processing for {cfg['book']}...")
+    _run_chapters(cfg, cfg["chapters"], real=True)
+    _write(LOGS / "book_run.resumed.json", {"resumed": cfg["chapters"], "ts": time.time()})
+    print(f"[guide] resume executed for full book ({len(cfg['chapters'])} chapters).")
 
 
 if __name__ == "__main__":

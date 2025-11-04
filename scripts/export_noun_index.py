@@ -30,32 +30,43 @@ Override with CLI flags if your names differ.
 
 from __future__ import annotations
 
-import os, json, argparse
-
+import os, json, argparse, sys
+from pathlib import Path
 from collections import defaultdict
 
-from src.infra.db_utils import get_db_connection, get_connection_dsn
+# Add src to path
+script_dir = Path(__file__).parent
+project_root = script_dir.parent
+src_path = project_root / "src"
+sys.path.insert(0, str(src_path))
+
+try:
+    from src.infra.db_utils import get_db_connection, get_connection_dsn
+except ImportError:
+    # Fallback: try direct import from absolute path
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("db_utils", src_path / "infra" / "db_utils.py")
+    db_utils = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(db_utils)
+    get_db_connection = db_utils.get_db_connection
+    get_connection_dsn = db_utils.get_connection_dsn
 
 
 OUTDIR = "share/exports"
 
 
-def extract_and_populate_nouns(conn, args):
+def extract_and_populate_nouns(bible_conn, gematria_conn, args):
     """Extract nouns from bible_db and populate gematria.nouns table."""
-    with conn.cursor() as cur:
-        # Create tables if they don't exist
+    # Create tables in gematria DB first
+    with gematria_conn.cursor() as cur:
         cur.execute(f"""
             CREATE SCHEMA IF NOT EXISTS gematria;
 
             CREATE TABLE IF NOT EXISTS {args.nouns_table} (
                 id            BIGSERIAL PRIMARY KEY,
-                book          TEXT NOT NULL,
-                chapter       INT  NOT NULL,
-                verse         INT  NOT NULL,
-                lemma         TEXT NOT NULL,
-                surface       TEXT NOT NULL,
+                lemma         TEXT NOT NULL UNIQUE,
                 language      TEXT NOT NULL DEFAULT 'he',
-                source_id     TEXT,
                 created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
             );
 
@@ -68,125 +79,140 @@ def extract_and_populate_nouns(conn, args):
             );
 
             CREATE INDEX IF NOT EXISTS idx_nouns_lemma ON {args.nouns_table}(lemma);
-            CREATE INDEX IF NOT EXISTS idx_nouns_book_chapter_verse ON {args.nouns_table}(book,chapter,verse);
             CREATE INDEX IF NOT EXISTS idx_noun_occurrences_verse_id ON {args.occ_table}(verse_id);
         """)
 
-        # Build query for extracting nouns
-        query = f"""
-            SELECT v.book, v.book_ord, v.chapter, v.verse,
-                   t.word as surface, t.lemma, t.id as token_id, t.token_idx
-            FROM {args.verses_table} v
-            JOIN {args.tokens_table} t ON v.id = t.verse_id
-            WHERE t.pos LIKE 'N%%'
-        """
+    # Extract from bible DB
+    with bible_conn.cursor() as bible_cur:
+        # Set search path to include bible schema
+        bible_cur.execute('SET search_path TO bible, public, "$user"')
 
-        params = []
+        # Build query for extracting nouns from hebrew_ot_words
+        query = """
+            SELECT v.book_name, v.chapter_num, v.verse_num, v.verse_id,
+                   t.word_text as surface, l.lemma, t.word_id as token_id, t.word_position as token_idx
+            FROM verses v
+            JOIN hebrew_ot_words t ON v.verse_id = t.verse_id
+            JOIN lemmas l ON l.strong_number = t.strongs_id
+            WHERE t.grammar_code LIKE %s  -- Hebrew nouns
+            AND t.grammar_code NOT LIKE %s  -- Exclude verbs
+            AND t.grammar_code NOT LIKE %s  -- Exclude adjectives
+        """
+        params = ["H%/N%", "%/V%", "%/A%"]
+
         if args.books:
-            books = [b.strip() for b in args.books.split(',')]
-            placeholders = ','.join(['%s'] * len(books))
-            query += f" AND v.book IN ({placeholders})"
+            books = [b.strip() for b in args.books.split(",")]
+            placeholders = ",".join(["%s"] * len(books))
+            query += f" AND v.book_name IN ({placeholders})"
             params.extend(books)
 
-        query += " ORDER BY v.book_ord, v.chapter, v.verse, t.token_idx"
+        query += " ORDER BY v.book_name, v.chapter_num, v.verse_num, t.word_position"
 
         if args.limit > 0:
             query += " LIMIT %s"
             params.append(args.limit)
 
-        cur.execute(query, params)
-        rows = cur.fetchall()
+        bible_cur.execute(query, params)
+        rows = bible_cur.fetchall()
 
         print(f"Found {len(rows)} noun tokens to process")
 
         # Group by lemma for deduplication
         lemma_occurrences = defaultdict(list)
 
-        for book, book_ord, chapter, verse, surface, lemma, token_id, token_idx in rows:
-            verse_id = f"{book_ord:02d}{chapter:03d}{verse:03d}"
-            lemma_occurrences[lemma].append({
-                'book': book,
-                'chapter': chapter,
-                'verse': verse,
-                'verse_id': verse_id,
-                'surface': surface,
-                'token_id': str(token_id),
-                'token_idx': token_idx
-            })
+        for book, chapter, verse, verse_id, surface, lemma, token_id, token_idx in rows:
+            lemma_occurrences[lemma].append(
+                {
+                    "book": book,
+                    "chapter": chapter,
+                    "verse": verse,
+                    "verse_id": verse_id,
+                    "surface": surface,
+                    "token_id": str(token_id),
+                    "token_idx": token_idx,
+                }
+            )
 
-        # Insert nouns and occurrences
-        nouns_inserted = 0
+    # Insert unique nouns and occurrences into gematria DB
+    with gematria_conn.cursor() as gematria_cur:
+        # Insert unique nouns first
+        unique_lemmas = list(lemma_occurrences.keys())
+        print(f"Inserting {len(unique_lemmas)} unique lemmas...")
+
+        for lemma in unique_lemmas:
+            gematria_cur.execute(
+                f"""
+                INSERT INTO {args.nouns_table} (lemma, language)
+                VALUES (%s, 'he')
+                ON CONFLICT (lemma) DO NOTHING
+            """,
+                (lemma,),
+            )
+
+        nouns_inserted = gematria_cur.rowcount
+        print(f"Inserted {nouns_inserted} new unique nouns")
+
+        # Now insert all occurrences
         occurrences_inserted = 0
 
         for lemma, occurrences in lemma_occurrences.items():
-            # Use first occurrence for primary noun record
-            first_occ = occurrences[0]
-
-            # Insert noun
-            cur.execute(f"""
-                INSERT INTO {args.nouns_table} (book, chapter, verse, lemma, surface, source_id)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                ON CONFLICT (book, chapter, verse, lemma) DO UPDATE SET
-                    surface = EXCLUDED.surface,
-                    source_id = EXCLUDED.source_id
-            """, (
-                first_occ['book'], first_occ['chapter'], first_occ['verse'],
-                lemma, first_occ['surface'], first_occ['token_id']
-            ))
-
             # Get the noun_id
-            cur.execute(f"""
-                SELECT id FROM {args.nouns_table}
-                WHERE book = %s AND chapter = %s AND verse = %s AND lemma = %s
-            """, (first_occ['book'], first_occ['chapter'], first_occ['verse'], lemma))
+            gematria_cur.execute(f"SELECT id FROM {args.nouns_table} WHERE lemma = %s", (lemma,))
+            noun_id = gematria_cur.fetchone()[0]
 
-            noun_id = cur.fetchone()[0]
-
-            # Insert all occurrences
+            # Insert all occurrences for this lemma
             for occ in occurrences:
-                cur.execute(f"""
+                gematria_cur.execute(
+                    f"""
                     INSERT INTO {args.occ_table} (noun_id, verse_id, token_idx)
                     VALUES (%s, %s, %s)
                     ON CONFLICT (noun_id, verse_id, token_idx) DO NOTHING
-                """, (noun_id, int(occ['verse_id']), occ['token_idx']))
+                """,
+                    (noun_id, occ["verse_id"], occ["token_idx"]),
+                )
                 occurrences_inserted += 1
 
-            nouns_inserted += 1
-
-            if nouns_inserted % 100 == 0:
-                print(f"Processed {nouns_inserted} unique lemmas...")
-
-        print(f"Inserted {nouns_inserted} unique nouns and {occurrences_inserted} occurrences")
+        print(f"Inserted {occurrences_inserted} noun occurrences")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--nouns-table", default="gematria.nouns")
     ap.add_argument("--occ-table", default="gematria.noun_occurrences")
-    ap.add_argument("--verses-table", default="bible_db.verses")
-    ap.add_argument("--tokens-table", default="bible_db.tokens")
+    ap.add_argument("--verses-table", default="bible.verses")
+    ap.add_argument("--tokens-table", default="bible.hebrew_ot_words")
     ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--extract-from-bible", action="store_true",
-                   help="Extract nouns directly from bible_db.tokens and populate gematria.nouns")
+    ap.add_argument(
+        "--extract-from-bible",
+        action="store_true",
+        help="Extract nouns directly from bible.hebrew_ot_words and populate gematria.nouns",
+    )
     ap.add_argument("--books", help="Comma-separated book names (for --extract-from-bible)")
     args = ap.parse_args()
 
     os.makedirs(OUTDIR, exist_ok=True)
-    dsn = get_connection_dsn()
-    with get_db_connection(dsn) as conn:
-        if args.extract_from_bible:
-            # Extract from bible_db and populate gematria tables
-            extract_and_populate_nouns(conn, args)
 
+    # Get both DSNs
+    bible_dsn = get_connection_dsn("BIBLE_DB_DSN")
+    gematria_dsn = get_connection_dsn("GEMATRIA_DSN")
+
+    if args.extract_from_bible:
+        print(f"DEBUG: Using bible DSN: {bible_dsn}", file=sys.stderr)
+        print(f"DEBUG: Using gematria DSN: {gematria_dsn}", file=sys.stderr)
+        with get_db_connection(bible_dsn) as bible_conn, get_db_connection(gematria_dsn) as gematria_conn:
+            extract_and_populate_nouns(bible_conn, gematria_conn, args)
+
+    # Always export from gematria DB
+    print(f"DEBUG: Using gematria DSN for export: {gematria_dsn}", file=sys.stderr)
+    with get_db_connection(gematria_dsn) as conn:
         # Export from gematria tables (whether just populated or pre-existing)
+        # Note: Simplified export without verse metadata for now
         with conn.cursor() as cur:
             sql = f"""
-              SELECT o.verse_id, v.book, v.book_ord, v.chapter, v.verse,
-                     n.lemma, o.token_idx
+              SELECT o.verse_id, n.lemma, o.token_idx
               FROM {args.occ_table} o
               JOIN {args.nouns_table} n ON n.id = o.noun_id
-              JOIN {args.verses_table} v ON CAST(v.id AS TEXT) = CAST(o.verse_id AS TEXT)
-              ORDER BY v.book_ord, o.verse_id, o.token_idx
+              ORDER BY o.verse_id, o.token_idx
             """
             if args.limit > 0:
                 sql += " LIMIT %s"
@@ -200,13 +226,9 @@ def main():
 
             jsonl_path = os.path.join(OUTDIR, "nouns.jsonl")
             with open(jsonl_path, "w", encoding="utf-8") as jf:
-                for verse_id, book, book_ord, chapter, verse, lemma, token_idx in rows:
+                for verse_id, lemma, token_idx in rows:
                     rec = {
                         "verse_id": str(verse_id),
-                        "book": book,
-                        "book_ord": book_ord,
-                        "chapter": chapter,
-                        "verse": verse,
                         "lemma": lemma,
                         "token_idx": token_idx,
                     }
@@ -214,7 +236,7 @@ def main():
 
             # Envelope (co-occurrence per verse)
             verse_to_lemmas = defaultdict(list)
-            for verse_id, _book, _bo, _c, _v, lemma, _ti in rows:
+            for verse_id, lemma, _ti in rows:
                 verse_to_lemmas[str(verse_id)].append(lemma)
 
             nodes_map, nodes, edges = {}, [], []

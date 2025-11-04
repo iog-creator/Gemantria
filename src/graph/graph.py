@@ -29,6 +29,8 @@ from src.nodes.network_aggregator import (
     NetworkAggregationError,
     network_aggregator_node,
 )
+from src.nodes.schema_validator import schema_validator_node
+from src.nodes.analysis_runner import analysis_runner_node
 from src.services.lmstudio_client import (
     QWEN_EMBEDDING_MODEL,
     QWEN_RERANKER_MODEL,
@@ -313,12 +315,22 @@ def create_graph() -> StateGraph:
         "network_aggregator",
         with_metrics(network_aggregator_node, "network_aggregator"),
     )
+    graph.add_node(
+        "schema_validator",
+        with_metrics(schema_validator_node, "schema_validator"),
+    )
+    graph.add_node(
+        "analysis_runner",
+        with_metrics(analysis_runner_node, "analysis_runner"),
+    )
 
     # Define flow
     graph.add_edge("collect_nouns", "validate_batch")
     graph.add_edge("validate_batch", "enrichment")
     graph.add_edge("enrichment", "confidence_validator")
     graph.add_edge("confidence_validator", "network_aggregator")
+    graph.add_edge("network_aggregator", "schema_validator")
+    graph.add_edge("schema_validator", "analysis_runner")
 
     # Set entry point
     graph.set_entry_point("collect_nouns")

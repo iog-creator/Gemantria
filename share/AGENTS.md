@@ -126,27 +126,6 @@ Phase 11 unified pipeline flow:
 **Makefile Target:** `make ui.extract.all SIZE=10000 OUTDIR=ui/out`
 **Validation:** JSON schema enforcement + size/performance gates + COMPASS mathematical correctness (>80% score)
 
-**COMPASS Usage Note:** Run COMPASS on `unified_envelope_*.json` or `share/exports/envelope.json`; **do not** pass graph exports.
-
-### Graph Export Pipeline (Fix Nov 2025)
-
-**Purpose**: Export semantic concept network with Hebrew labels for visualization
-
-**Implementation**:
-- Uses `concept_network.id` (UUID) as canonical node ID
-- Hebrew labels pulled from `concepts.hebrew_text` via CTE row number mapping
-- Centrality metrics joined on `concept_network.id`
-- Edge relations from `concept_relations` table with blend computation
-
-**Output Artifact**: `share/exports/graph_latest.json` contains readable Hebrew labels and consistent UUID keys
-
-**Validation**:
-```bash
-python3 scripts/export_graph.py
-python3 scripts/compass/scorer.py share/exports/graph_latest.json --verbose
-```
-Expected: `COMPASS Score: 100.0% (PASS)` with Hebrew node labels
-
 ### COMPASS: Comprehensive Pipeline Assessment Scoring System
 
 **Purpose**: Mathematical envelope validation for data integrity and correctness
@@ -239,6 +218,105 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Defaults**: `EDGE_ALPHA=0.5`, `BLEND_TOL=0.005`
 - **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
 - **Integration**: Wired into `ops.verify` as non-fatal validation step
+
+## Integrated Pipeline Architecture
+
+The Gemantria system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.
+
+### Pipeline Flow
+
+```
+Noun Extraction → Enrichment → Network Building → Schema Validation → Analysis → Export
+     ↓              ↓              ↓                    ↓             ↓         ↓
+collect_nouns → enrichment → network_aggregator → schema_validator → analysis → export_graph
+```
+
+### Core Components
+
+#### Main Pipeline (`src/graph/graph.py`)
+- **LangGraph orchestration** with 6 integrated nodes
+- **Qwen health gate** enforcement (fail-closed)
+- **State persistence** via Postgres/memory checkpointer
+- **Comprehensive logging** and error handling
+
+#### Pipeline Nodes
+1. **collect_nouns**: Extract nouns from Bible database
+2. **validate_batch**: Apply size and quality gates
+3. **enrichment**: AI-powered theological analysis
+4. **confidence_validator**: Quality threshold enforcement
+5. **network_aggregator**: Semantic embeddings and relationships
+6. **schema_validator**: JSON schema validation (NEW)
+7. **analysis_runner**: Graph analysis and export (NEW)
+
+#### Book Processing (`scripts/run_book.py`)
+- **Chapter orchestration** with stop-loss and resume
+- **Deterministic seeding** for reproducible runs
+- **Service validation** before inference
+- **Integrated with main pipeline** via orchestrator
+
+#### Unified Orchestrator (`scripts/pipeline_orchestrator.py`)
+- **Single entry point** for all pipeline operations
+- **Coordinated workflows** (pipeline → analysis → export)
+- **JSON output** for automation and monitoring
+- **Error aggregation** and status reporting
+
+### Usage Patterns
+
+#### Quick Start
+```bash
+# Run complete integrated pipeline
+make orchestrator.full BOOK=Genesis
+
+# Run main pipeline only
+make orchestrator.pipeline BOOK=Genesis
+
+# Run analysis suite
+make orchestrator.analysis OPERATION=all
+```
+
+#### Book Processing
+```bash
+# Plan book processing
+make book.plan
+
+# Dry run (validate services)
+make book.dry
+
+# Execute full book
+make book.go
+
+# Stop after N chapters
+make book.stop N=5
+
+# Resume from interruption
+make book.resume
+```
+
+#### Schema Validation
+```bash
+# Validate all schemas
+make schema.validate
+
+# Validate specific exports
+python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/graph_output.schema.json
+```
+
+### Integration Benefits
+
+- **End-to-end automation** from raw data to visualization
+- **Consistent error handling** across all components
+- **Unified logging** and monitoring
+- **Schema enforcement** prevents data corruption
+- **Modular architecture** allows component testing
+- **Orchestrator abstraction** simplifies complex workflows
+
+### Quality Gates
+
+- **Schema validation** ensures data integrity
+- **Integration tests** verify component interactions
+- **Makefile targets** provide consistent interfaces
+- **Hermetic CI** with conditional validation
+- **Comprehensive logging** enables debugging
 
 ## How agents should use rules
 

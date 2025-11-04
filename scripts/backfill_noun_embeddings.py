@@ -13,17 +13,12 @@ Usage:
 This creates gematria.noun_embeddings table and populates it with vectors.
 """
 
+# All imports must be at the very top
 import os
 import sys
 import time
 import argparse
 from pathlib import Path
-
-# Add src to path
-script_dir = Path(__file__).parent
-project_root = script_dir.parent
-src_path = project_root / "src"
-sys.path.insert(0, str(src_path))
 
 import psycopg
 from pgvector.psycopg import register_vector
@@ -31,8 +26,16 @@ from pgvector.psycopg import register_vector
 from src.infra.env_loader import ensure_env_loaded
 from src.services.lmstudio_client import get_lmstudio_client
 
+# Add src to path after all imports
+script_dir = Path(__file__).parent
+project_root = script_dir.parent
+src_path = project_root / "src"
+sys.path.insert(0, str(src_path))
 
-def backfill_noun_embeddings(dsn: str, lmstudio_base: str, model_name: str, dim: int, batch_size: int, sleep_sec: float, where_clause: str = ""):
+
+def backfill_noun_embeddings(
+    dsn: str, lmstudio_base: str, model_name: str, dim: int, batch_size: int, sleep_sec: float, where_clause: str = ""
+):
     """Backfill embeddings for nouns that don't have them yet."""
 
     # Ensure env loaded for LM Studio client
@@ -40,7 +43,7 @@ def backfill_noun_embeddings(dsn: str, lmstudio_base: str, model_name: str, dim:
 
     # Override LM Studio base URL if provided
     if lmstudio_base:
-        os.environ['LM_STUDIO_HOST'] = lmstudio_base
+        os.environ["LM_STUDIO_HOST"] = lmstudio_base
 
     with psycopg.connect(dsn) as conn:
         register_vector(conn)
@@ -117,20 +120,23 @@ def backfill_noun_embeddings(dsn: str, lmstudio_base: str, model_name: str, dim:
                         continue
 
                     # Store embeddings
-                    for noun_id, embedding in zip(noun_ids, embeddings):
+                    for noun_id, embedding in zip(noun_ids, embeddings, strict=True):
                         # Ensure embedding is a list
-                        if hasattr(embedding, 'tolist'):
+                        if hasattr(embedding, "tolist"):
                             embedding_list = embedding.tolist()
                         else:
                             embedding_list = list(embedding)
 
-                        cur.execute("""
+                        cur.execute(
+                            """
                             INSERT INTO gematria.noun_embeddings (noun_id, embedding, model)
                             VALUES (%s, %s, %s)
                             ON CONFLICT (noun_id) DO UPDATE SET
                                 embedding = EXCLUDED.embedding,
                                 model = EXCLUDED.model
-                        """, (noun_id, embedding_list, model_name))
+                        """,
+                            (noun_id, embedding_list, model_name),
+                        )
 
                     total_processed += len(batch)
                     print(f"Stored {len(batch)} embeddings (total: {total_processed}/{len(rows)})")
@@ -177,7 +183,7 @@ def main():
         dim=args.dim,
         batch_size=args.batch,
         sleep_sec=args.sleep,
-        where_clause=args.where
+        where_clause=args.where,
     )
 
 

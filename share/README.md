@@ -23,6 +23,39 @@ make cli.quickstart
 
 Key knobs (already in your env): `EDGE_STRONG`, `EDGE_WEAK`, `CANDIDATE_POLICY`, `PIPELINE_SEED`.
 
+## Integrated Pipeline
+
+The system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.
+
+### Complete Workflow
+```bash
+# Run the full integrated pipeline
+make orchestrator.full BOOK=Genesis
+
+# Or run components individually:
+make orchestrator.pipeline BOOK=Genesis    # Main pipeline
+make orchestrator.analysis OPERATION=all   # Analysis suite
+make schema.validate                      # Schema validation
+```
+
+### Pipeline Components
+1. **Noun Extraction** - Extract Hebrew nouns from Bible database
+2. **AI Enrichment** - Generate theological insights using Qwen models
+3. **Network Building** - Create semantic embeddings and relationships
+4. **Schema Validation** - Ensure data integrity with JSON schemas
+5. **Graph Analysis** - Community detection and centrality measures
+6. **Data Export** - Generate visualization-ready JSON and statistics
+
+### Book Processing
+```bash
+# Process entire books with orchestration
+make book.plan                             # Plan processing
+make book.dry                             # Dry run (validate services)
+make book.go                              # Execute full processing
+make book.stop N=5                        # Stop-loss after N chapters
+make book.resume                          # Resume interrupted processing
+```
+
 ## Project structure
 - `docs/`: ADRs and the SSOT master plan that describe the rebuild objectives.
 - `schemas/`: JSON schema placeholders for contract validation.
