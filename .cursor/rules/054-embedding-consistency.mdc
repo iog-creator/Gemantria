@@ -1,0 +1,26 @@
+---
+description: Embedding Consistency CI Checks
+globs: []
+alwaysApply: true
+---
+
+# Rule 054 — EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply)
+
+Enforce embedding dimension and model consistency across CI pipeline.
+
+- **Dimension Validation**: All embeddings must be exactly 1024-dimensional (BGE-M3 standard).
+- **Model Name Consistency**: EMBEDDING_MODEL and RERANKER_MODEL must match loaded LM Studio models.
+- **Dual Embedding Verification**: concept_network.embedding and concept_network.embedding_bge_m3 columns must both be populated and consistent.
+- **CI Gate**: Pipeline fails if embedding dimensions don't match expected values.
+- **Schema Validation**: Exported JSON schemas must enforce 1024-dim constraint.
+- **Database Integrity**: pgvector indexes must be created with correct dimensions.
+- **Health Check Integration**: assert_qwen_live() must verify embedding dimensions match BGE-M3 spec.
+- **Migration Safety**: Any embedding model changes require dimension compatibility verification.
+- **Test Coverage**: CI must verify embeddings work end-to-end with live models.
+
+# References
+- ADR-010: Qwen Integration (1024-dim embeddings)
+- ADR-026: BGE-M3 Proxy (bi-encoder implementation)
+- AGENTS.md (model configuration)
+- SHARE_MANIFEST.json
+- Makefile (CI targets)

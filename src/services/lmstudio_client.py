@@ -88,11 +88,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
     Raises:
         QwenUnavailableError: If models are not available and mocks not allowed
     """
-    # Check if Qwen embeddings are required (production mode)
-    if not _get_bool_env("USE_QWEN_EMBEDDINGS", "true"):
-        raise QwenUnavailableError("USE_QWEN_EMBEDDINGS must be true in production")
-
-    # Check for test-only mock bypass
+    # Check for test-only mock bypass first
     allow_mocks = _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false")
     if allow_mocks:
         return QwenHealth(
@@ -102,6 +98,10 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
             lat_ms_embed=0,
             lat_ms_rerank=0,
         )
+
+    # Check if Qwen embeddings are required (production mode)
+    if not _get_bool_env("USE_QWEN_EMBEDDINGS", "true"):
+        raise QwenUnavailableError("USE_QWEN_EMBEDDINGS must be true in production")
 
     try:
         # Check available models via LM Studio API
@@ -122,7 +122,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
             )
 
         # Dry-run embedding check
-        embed_model = QWEN_EMBEDDING_MODEL
+        embed_model = EMBEDDING_MODEL
         embed_start = time.time()
         embed_resp = requests.post(
             f"{HOST}/v1/embeddings",
@@ -135,7 +135,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         lat_ms_embed = int((time.time() - embed_start) * 1000)
 
         # Dry-run reranker check
-        rerank_model = QWEN_RERANKER_MODEL
+        rerank_model = RERANKER_MODEL
         rerank_start = time.time()
         rerank_resp = requests.post(
             f"{HOST}/v1/chat/completions",
@@ -220,8 +220,8 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
 
 THEOLOGY_MODEL = os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b")
 MATH_MODEL = os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")
-QWEN_EMBEDDING_MODEL = os.getenv("QWEN_EMBEDDING_MODEL", "qwen-embed")
-QWEN_RERANKER_MODEL = os.getenv("QWEN_RERANKER_MODEL", "qwen-reranker")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-bge-m3")
+RERANKER_MODEL = os.getenv("RERANKER_MODEL", "qwen-reranker")
 
 
 class LMStudioClient:
@@ -331,7 +331,7 @@ class LMStudioClient:
 
         Args:
             texts: List of text strings to embed
-            model: Model name (defaults to QWEN_EMBEDDING_MODEL)
+            model: Model name (defaults to EMBEDDING_MODEL)
 
         Returns:
             List of normalized 1024-dimensional vectors
@@ -350,7 +350,7 @@ class LMStudioClient:
                 result.append(normalized)
             return result
 
-        model = model or QWEN_EMBEDDING_MODEL
+        model = model or EMBEDDING_MODEL
         payload = {"model": model, "input": texts}
         url = f"{HOST}/v1/embeddings"
 
@@ -409,7 +409,7 @@ class LMStudioClient:
         Args:
             query: The theological theme or query string
             candidates: List of candidate document texts to rerank
-            model: Model name (defaults to QWEN_RERANKER_MODEL)
+            model: Model name (defaults to RERANKER_MODEL)
 
         Returns:
             List of relevance scores (0.0 to 1.0) for each candidate
@@ -421,7 +421,7 @@ class LMStudioClient:
             random.seed(hash(query) % 10000)
             return [random.uniform(0.1, 0.9) for _ in candidates]
 
-        model = model or QWEN_RERANKER_MODEL
+        model = model or RERANKER_MODEL
         scores = []
 
         # Process candidates in smaller batches to keep latency reasonable

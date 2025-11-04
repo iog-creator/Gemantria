@@ -51,12 +51,12 @@ ADD COLUMN rerank_at TIMESTAMPTZ DEFAULT now();
 # Enable Qwen embeddings (default: true)
 USE_QWEN_EMBEDDINGS=true
 
-# Model names in LM Studio
-QWEN_EMBEDDING_MODEL=qwen-embed
-QWEN_RERANKER_MODEL=qwen-reranker
+# Model names in LM Studio (use exact model IDs from `lms ls`)
+EMBEDDING_MODEL=text-embedding-bge-m3
+RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # LM Studio connection
-LM_STUDIO_HOST=http://localhost:1234
+LM_STUDIO_HOST=http://localhost:9994
 
 # Rerank-driven relationship configuration
 NN_TOPK=20              # KNN neighbors to retrieve for reranking
@@ -219,33 +219,55 @@ pgvector indexes optimize similarity searches:
 
 ### Model Loading Commands
 
-Start LM Studio server and load models with 4-bit quantization for optimal performance:
+**Important**: LM Studio must be running in GUI mode (not headless service) to provide the utility process needed for model loading.
 
 ```bash
-# Start LM Studio server
-lms server start
+# 1. Start LM Studio GUI (required for utility process)
+DISPLAY=:0 lm-studio &
 
-# Load Qwen3 Embedding model with GPU acceleration
-lms load Qwen/Qwen3-Embedding-0.6B-GGUF --identifier qwen-embed --gpu=1.0
+# 2. Start server on port 9994
+lms server start --port 9994
 
-# Load Qwen3 Reranker model with GPU acceleration
-lms load DevQuasar/Qwen.Qwen3-Reranker-0.6B-GGUF --identifier qwen-reranker --gpu=1.0
+# 3. Models load automatically on first use (dynamic loading)
+# Verify available models:
+lms ls
+
+# Check loaded models:
+lms ps
 ```
 
 ### Hardware Optimization
 
-- **GPU Memory**: 4-bit quantization reduces VRAM requirements
-- **GPU Offload**: `--gpu=1.0` enables full GPU acceleration
+- **GPU Memory**: 4-bit quantization reduces VRAM requirements  
+- **GPU Offload**: Enabled by default when available
 - **Concurrent Requests**: Models support parallel inference
 - **Batch Processing**: Optimize batch sizes (4-8 for reranking, 16-32 for embeddings)
+- **Dynamic Loading**: Models load on-demand when first requested via API
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Model Loading Failures**
+1. **"Utility process is not defined" Error**
 
-   - Verify exact model identifiers: `qwen-embed` and `qwen-reranker`
+   **Cause**: LM Studio running in headless mode (`--run-as-service`) doesn't spawn the utility process needed for model loading.
+   
+   **Solution**: Run LM Studio in GUI mode:
+   ```bash
+   # Kill headless service
+   pkill -f "lm-studio.*--run-as-service"
+   
+   # Start GUI (spawns utility process)
+   DISPLAY=:0 /path/to/LM-Studio.AppImage &
+   
+   # Restart server
+   lms server start --port 9994
+   ```
+
+2. **Model Not Found Errors**
+
+   - Verify model names match `lms ls` output exactly
+   - Update `.env` with correct model IDs: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen.qwen3-reranker-0.6b`
    - Check GPU memory availability for `--gpu=1.0` flag
    - Confirm LM Studio server is running on correct port
 
