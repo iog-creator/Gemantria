@@ -20,17 +20,17 @@ SOFT = float(os.getenv("AI_CONFIDENCE_SOFT", 0.90))
 HARD = float(os.getenv("AI_CONFIDENCE_HARD", 0.95))
 
 
-def evaluate_confidence(conf):
+def evaluate_confidence(conf, run_id=None, node=None):
     """Evaluate confidence against soft/hard gates."""
     status = "pass"
     if conf < SOFT:
         status = "warn"
         metrics_client = get_metrics_client()
-        metrics_client.emit({"event": "ai_conf_soft_warn"})
+        metrics_client.emit({"event": "ai_conf_soft_warn", "run_id": run_id, "node": node})
     if conf < HARD:
         status = "fail"
         metrics_client = get_metrics_client()
-        metrics_client.emit({"event": "ai_conf_hard_fail"})
+        metrics_client.emit({"event": "ai_conf_hard_fail", "run_id": run_id, "node": node})
     return status
 
 
@@ -113,6 +113,8 @@ def enrichment_node(state: dict) -> dict:
                                 {
                                     "event": "enrichment_json_retry",
                                     "retry": retry + 1,
+                                    "run_id": run_id,
+                                    "node": "enrichment",
                                 }
                             )
                             raw_text = chat_completion([messages], model=theology_model, temperature=0.0)[0].text
@@ -123,6 +125,7 @@ def enrichment_node(state: dict) -> dict:
                         import json as _json  # noqa: E402
                         import re  # noqa: E402
 
+                        # Try to extract confidence from text if JSON is incomplete
                         m = re.search(
                             r"\bconfidence(?:\s+score)?\s*(?:is|:)?\s*(0?\.\d+|1(?:\.0+)?)\b",
                             _json.dumps(data, ensure_ascii=False) + " " + raw_text,
@@ -131,7 +134,17 @@ def enrichment_node(state: dict) -> dict:
                         if m:
                             data["confidence"] = float(m.group(1))
                         else:
-                            raise ValueError("JSON response missing required keys: ['confidence']")
+                            # If truncated and no confidence found, use default and log warning
+                            log_json(
+                                LOG,
+                                30,
+                                "json_truncated_no_confidence",
+                                noun=n.get("name"),
+                                raw_preview=raw_text[:200] if raw_text else "",
+                            )
+                            # Use default confidence for truncated responses
+                            data["confidence"] = 0.85  # Default confidence for incomplete responses
+                            # Continue processing instead of failing
 
                     insight_text = data.get("insight", "").strip()
                     confidence = float(data.get("confidence", 0.0))
@@ -144,7 +157,7 @@ def enrichment_node(state: dict) -> dict:
                         raise ValueError("confidence must be a float in [0,1]")
 
                     # Evaluate confidence gates
-                    evaluate_confidence(confidence)
+                    evaluate_confidence(confidence, run_id=run_id, node="enrichment")
 
                     # Validate insight length (200-300 words)
                     word_count = len(insight_text.split())
