@@ -4,7 +4,7 @@ globs: []
 alwaysApply: true
 ---
 
-# Rule 054 — EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply)
+# Rule 057 — EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply)
 
 Enforce embedding dimension and model consistency across CI pipeline.
 

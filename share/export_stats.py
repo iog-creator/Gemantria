@@ -8,6 +8,8 @@ and monitoring dashboards, focusing on key insights and health indicators.
 
 import os
 
+import numpy as np
+import pandas as pd
 from src.graph.patterns import build_graph, compute_patterns
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
@@ -621,6 +623,136 @@ def export_patterns(db):
     return {"patterns": patterns, "metadata": metadata}
 
 
+# ============================================================================
+# Temporal Analysis Engine (ADR-025)
+# ============================================================================
+
+
+def compute_rolling_windows(df, window=5, metrics=None):
+    """
+    Compute rolling statistics on sequential data.
+
+    Args:
+        df: pandas Series or DataFrame with sequential index
+        window: Rolling window size
+        metrics: List of metrics to compute ('mean', 'std', 'sum', 'min', 'max')
+
+    Returns:
+        DataFrame with rolling statistics
+    """
+    if metrics is None:
+        metrics = ["mean", "std"]
+
+    if isinstance(df, pd.Series):
+        df = df.to_frame(name="value")
+    elif isinstance(df, pd.DataFrame) and len(df.columns) == 1:
+        df = df.copy()
+    else:
+        raise ValueError("df must be a Series or single-column DataFrame")
+
+    rolling = df.rolling(window=window, min_periods=1)
+    results = {}
+    for metric in metrics:
+        if hasattr(rolling, metric):
+            results[metric] = getattr(rolling, metric)().iloc[:, 0]
+        else:
+            LOG.warning(f"Metric '{metric}' not available in rolling window")
+    return pd.DataFrame(results)
+
+
+def naive_forecast(series, horizon=10):
+    """
+    Naive forecast: repeat last value.
+
+    Args:
+        series: pandas Series with sequential data
+        horizon: Number of steps to forecast
+
+    Returns:
+        Series with forecast values
+    """
+    if len(series) == 0:
+        return pd.Series([], dtype=float)
+    last = series.iloc[-1]
+    forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
+    return pd.Series([last] * horizon, index=forecast_index)
+
+
+def sma_forecast(series, window=5, horizon=10):
+    """
+    Simple Moving Average forecast.
+
+    Args:
+        series: pandas Series with sequential data
+        window: Moving average window size
+        horizon: Number of steps to forecast
+
+    Returns:
+        Series with forecast values
+    """
+    if len(series) == 0:
+        return pd.Series([], dtype=float)
+    sma = series.rolling(window=window, min_periods=1).mean().iloc[-1]
+    forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
+    return pd.Series([sma] * horizon, index=forecast_index)
+
+
+def arima_forecast(series, order=(1, 1, 1), horizon=10):
+    """
+    ARIMA forecast with statsmodels.
+
+    Args:
+        series: pandas Series with sequential data
+        order: ARIMA order tuple (p, d, q)
+        horizon: Number of steps to forecast
+
+    Returns:
+        Series with forecast values and optional prediction intervals
+    """
+    try:
+        from statsmodels.tsa.arima.model import ARIMA
+
+        if len(series) < 3:
+            # Fallback to naive if insufficient data
+            return naive_forecast(series, horizon)
+
+        model = ARIMA(series, order=order)
+        fit = model.fit()
+        forecast = fit.forecast(steps=horizon)
+        return forecast
+    except ImportError:
+        LOG.warning("statsmodels not available, falling back to SMA forecast")
+        return sma_forecast(series, window=5, horizon=horizon)
+    except Exception as e:
+        LOG.warning(f"ARIMA forecast failed: {e}, falling back to SMA")
+        return sma_forecast(series, window=5, horizon=horizon)
+
+
+def simple_change_points(series, threshold=3):
+    """
+    Simple z-score based change point detection.
+
+    Args:
+        series: pandas Series with sequential data
+        threshold: Z-score threshold for change point detection (default: 3)
+
+    Returns:
+        numpy array of indices where change points are detected
+    """
+    if len(series) < 2:
+        return np.array([], dtype=int)
+
+    mean = series.mean()
+    std = series.std()
+
+    if std == 0:
+        return np.array([], dtype=int)
+
+    z_scores = np.abs((series - mean) / std)
+    change_points = np.where(z_scores > threshold)[0]
+    return change_points
+
+
 def export_temporal_patterns(db):
     """
     Temporal pattern analysis using rolling windows.
@@ -738,7 +870,7 @@ def export_forecast(db):
 
         metadata["books_forecasted"] = list(set(p["book"] for p in temporal_patterns))
 
-        for pattern in temporal_patterns[:5]:  # Limit to first 5 for demo
+        for pattern in temporal_patterns[:50]:  # Limit to first 50 for performance
             series_id = pattern["series_id"]
             values = pattern["values"]
             book = pattern["book"]
@@ -746,27 +878,66 @@ def export_forecast(db):
             if len(values) < metadata["forecast_parameters"]["min_training_length"]:
                 continue
 
-            # Simple forecasting: use last value (naive) or simple moving average
             horizon = metadata["forecast_parameters"]["default_horizon"]
-            predictions = []
+            default_model = metadata["forecast_parameters"]["default_model"]
 
-            # Simple moving average forecast
-            window_size = min(3, len(values))
-            if len(values) >= window_size:
-                sma = sum(values[-window_size:]) / window_size
-                predictions = [sma] * horizon  # Simple forecast
-                model_used = "sma"
-            else:
-                # Naive forecast: repeat last value
-                last_value = values[-1] if values else 0
-                predictions = [last_value] * horizon
+            # Convert to pandas Series for temporal engine functions
+            series = pd.Series(values)
+
+            # Try forecasts in order: ARIMA (if available), SMA, then naive
+            forecast_series = None
+            model_used = None
+            predictions = []
+            prediction_intervals = None
+
+            # Try ARIMA first if requested or as default
+            if default_model == "arima" or len(values) >= 10:
+                try:
+                    forecast_series = arima_forecast(series, order=(1, 1, 1), horizon=horizon)
+                    model_used = "arima"
+                    predictions = forecast_series.tolist()
+                except Exception:
+                    # Fall through to SMA
+                    pass
+
+            # Try SMA if ARIMA failed or not requested
+            if model_used is None:
+                try:
+                    forecast_series = sma_forecast(series, window=5, horizon=horizon)
+                    model_used = "sma"
+                    predictions = forecast_series.tolist()
+                except Exception:
+                    # Fall back to naive
+                    pass
+
+            # Naive forecast as final fallback
+            if model_used is None:
+                forecast_series = naive_forecast(series, horizon=horizon)
                 model_used = "naive"
+                predictions = forecast_series.tolist()
 
             metadata["model_distribution"][model_used] += 1
 
-            # Mock error metrics
-            rmse = 2.5  # Mock RMSE
-            mae = 1.8  # Mock MAE
+            # Calculate error metrics (simple approximation for now)
+            # In production, these would be computed from held-out validation data
+            if len(values) > horizon:
+                # Use last horizon values as "test" set
+                test_values = values[-horizon:]
+                rmse = np.sqrt(np.mean([(p - t) ** 2 for p, t in zip(predictions, test_values, strict=True)]))
+                mae = np.mean([abs(p - t) for p, t in zip(predictions, test_values, strict=True)])
+            else:
+                # Estimate based on series variance
+                series_std = series.std() if len(series) > 1 else 1.0
+                rmse = series_std * 1.5
+                mae = series_std * 1.2
+
+            # Simple prediction intervals (1.96 * std for 95% confidence)
+            std_estimate = series.std() if len(series) > 1 else 1.0
+            prediction_intervals = {
+                "lower": [max(0, p - 1.96 * std_estimate) for p in predictions],
+                "upper": [p + 1.96 * std_estimate for p in predictions],
+                "confidence_level": 0.95,
+            }
 
             forecast_record = {
                 "series_id": series_id,
@@ -774,13 +945,9 @@ def export_forecast(db):
                 "model": model_used,
                 "predictions": predictions,
                 "book": book,
-                "rmse": rmse,
-                "mae": mae,
-                "prediction_intervals": {
-                    "lower": [p - 1.5 for p in predictions],  # Mock intervals
-                    "upper": [p + 1.5 for p in predictions],
-                    "confidence_level": 0.95,
-                },
+                "rmse": float(rmse),
+                "mae": float(mae),
+                "prediction_intervals": prediction_intervals,
                 "metadata": {
                     "training_length": len(values),
                     "forecast_method": model_used,
