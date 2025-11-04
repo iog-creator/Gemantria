@@ -120,3 +120,8 @@ monitoring.badges:
 monitoring.run:
 	@echo ">> Run monitoring stub"
 	@$(PYTHON) scripts/monitoring.py
+
+.PHONY: scaling.run
+scaling.run:
+	@echo ">> Run scaling stub"
+	@$(PYTHON) scripts/scaling.py
