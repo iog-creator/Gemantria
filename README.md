@@ -1,70 +1,75 @@
-# Gemantria
+# Gemantria Envelope Viewer
 
-This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
+A local-only React + Next.js dashboard for visualizing Phase-9 ingestion envelopes.
 
-## Local development
-1. Create and activate a virtual environment (for example `.venv`).
-2. Install dependencies: `pip install -r requirements.txt`.
-3. Run the lints and tests:
-   - `make lint`
-   - `make type`
-   - `make test.unit`
-   - `make coverage.report`
+## Features
 
-## Quick Start (5 minutes, hermetic)
+- **File Picker + Drag-Drop**: Load envelope JSON files without network
+- **React Flow Graph**: Pan, zoom, and explore node/edge graph
+- **Temporal Strip**: Visualize metadata and snapshot timing
+- **Metrics Panel**: View node/edge counts and graph density
+- **Smart Filtering**: Filter by label, node type, relation type, and edge weight
+- **Export**: Save filtered data as JSON (local)
+- **Type-Safe**: Full TypeScript support with Envelope schema
 
-Use the reuse-first CLI wrapper (no new logic):
+## Setup
 
-```
-python3 scripts/cli/gemantria_cli.py quickstart
-# or simply:
-make cli.quickstart
-```
+### Prerequisites
+- Node.js 18+
+- `/tmp/p9-ingest-envelope.json` (built via `make ingest.local.envelope`)
 
-Key knobs (already in your env): `EDGE_STRONG`, `EDGE_WEAK`, `CANDIDATE_POLICY`, `PIPELINE_SEED`.
+### Local Development
 
-## Project structure
-- `docs/`: ADRs and the SSOT master plan that describe the rebuild objectives.
-- `schemas/`: JSON schema placeholders for contract validation.
-- `src/`: Minimal core, graph, and infrastructure modules that drive the hello-graph runner.
-- `tests/`: Focused unit tests with a mini coverage plug-in enforcing the 98% threshold.
+\`\`\`bash
+# Install dependencies
+npm install
 
-## Quality & Trends
+# Start dev server
+npm run dev
 
-Local smoke artifacts (run via the eval tools) can render quality trends:
+# Open http://localhost:3000
+\`\`\`
 
-![Quality Trend](share/eval/badges/quality_trend.svg)
-![Current Quality](share/eval/badges/quality.svg)
+## Loading Envelope
 
-> In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
+### Option 1: File Picker (Recommended)
+1. Click "Upload Envelope" button
+2. Select your `p9-ingest-envelope.json` file
+3. Or drag-drop the file onto the upload area
 
-## Required Checks
+### Option 2: Dev HTTP (Automatic)
+1. Copy envelope to `public/envelope.json`
+2. App loads automatically on startup
 
-Main branch requires these checks to pass before merging:
+## Architecture
 
-![Ruff Format & Lint](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/enforce-ruff.yml?label=ruff&branch=main)
-![CI Build](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/ci.yml?label=ci&branch=main)
+\`\`\`
+src/
+  components/          # UI components
+  lib/
+    types.ts          # Envelope schema
+    providers.ts      # File/HTTP adapters
+    events.ts         # Event bus
+  app/
+    page.tsx          # Main dashboard
+\`\`\`
 
-> Branch protection requires: `ruff` (formatting + linting) and `build` (CI pipeline)
+## Performance
 
-## Pushing changes
-A remote is not configured by default. Add the desired remote (for example, `git remote add origin <url>`) and push normally once credentials are available.
+- Supports ~5k nodes / ~20k edges smoothly
+- Circular layout with React Flow
+- Client-side filtering (100ms budget)
+- No network or database dependencies
 
-## Developer Validation (Phase-9)
+## Events
 
-Local-only helpers (CI no-ops):
+The app emits:
+- `envelopeLoaded`: When envelope is loaded
+- `filterChanged`: When filters update
+- `selectionChanged`: When graph selection changes
 
-```bash
-make ingest.local.validate
-make ingest.local.validate.schema
-```
+## Notes
 
-See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
-
-- Snapshot prep guide: see `docs/phase9/SNAPSHOTS.md`.
-
-- Ingestion envelope fields (plan): see `docs/phase9/ENVELOPE_FIELDS.md`.
-
-- Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
-
-- UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
+- Local-only: No CI integration, no Node in CI
+- Hermetic: All data processing in-browser
+- gitignore: `ui/out/` (export directory)

@@ -1,3 +1,0 @@
-# 046 — Hermetic CI Fallbacks (AlwaysApply)
-- No outbound inference in CI; use deterministic mocks (e.g., `MOCK_AI=1`).
-- Nightlies/observability steps emit HINTs and continue (non-blocking).

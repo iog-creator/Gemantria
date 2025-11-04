@@ -1,1 +1,0 @@
-Mock WebUI build size: 245680 bytes (dist/index.html)
