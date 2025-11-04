@@ -130,3 +130,8 @@ scaling.run:
 optimize.run:
 	@echo ">> Run optimization stub"
 	@$(PYTHON) scripts/optimize.py
+
+.PHONY: expansion.run
+expansion.run:
+	@echo ">> Run expansion stub"
+	@$(PYTHON) scripts/expansion.py
