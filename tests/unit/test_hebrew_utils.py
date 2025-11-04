@@ -12,4 +12,4 @@ def test_hevel_37_after_normalization():
 
 
 def test_calc_string():
-    assert calc_string("אדם") == "א(1)+ד(4)+ם(40)=45"
+    assert calc_string("אדם") == "א(1) + ד(4) + ם(40) = 45"
