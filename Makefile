@@ -135,3 +135,15 @@ optimize.run:
 expansion.run:
 	@echo ">> Run expansion stub"
 	@$(PYTHON) scripts/expansion.py
+
+.PHONY: expansion.full
+expansion.full:
+	@echo ">> Run full expansion pipeline"
+	@make expansion.run
+	@if [ -f share/exports/expanded_envelope.json ]; then \
+		make accept.ui ENVELOPE=share/exports/expanded_envelope.json MIN_NODES=200000; \
+		make ui.temporal.summary; \
+		echo "Full expansion complete"; \
+	else \
+		echo "Expansion failed - no expanded envelope found"; \
+	fi
