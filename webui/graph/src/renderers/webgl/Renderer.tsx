@@ -9,6 +9,7 @@ interface WebGLRendererProps {
   zoom?: number;
   edgeOpacity?: number;
   forceWorkerEnabled?: boolean;
+  quadTreeWorkerEnabled?: boolean;
 }
 
 export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
@@ -18,10 +19,12 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
   pan = [0, 0],
   zoom = 1.0,
   edgeOpacity = 1.0,
-  forceWorkerEnabled = false
+  forceWorkerEnabled = false,
+  quadTreeWorkerEnabled = false
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [layoutNodes, setLayoutNodes] = useState(data.nodes);
+  const [visibleNodes, setVisibleNodes] = useState(data.nodes);
   const worker = useForceWorker(forceWorkerEnabled);
 
   // 30Hz throttle for worker updates
@@ -40,6 +43,31 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
       worker.stop();
     };
   }, [data, forceWorkerEnabled, worker]);
+
+  // Quad-tree culling for large datasets
+  useEffect(() => {
+    if (!quadTreeWorkerEnabled) {
+      setVisibleNodes(layoutNodes);
+      return;
+    }
+
+    const quadWorker = new Worker(new URL('../../workers/quadtree.worker.ts', import.meta.url));
+    const viewport = [0, 0, width, height]; // Simple viewport, could be enhanced with pan/zoom
+
+    quadWorker.onmessage = (e) => {
+      const quadtree = e.data.quadtree;
+      const culledNodes = quadtree.query(viewport);
+      setVisibleNodes(culledNodes);
+    };
+
+    quadWorker.postMessage({
+      nodes: layoutNodes,
+      bounds: [0, 0, width, height],
+      maxDepth: 8
+    });
+
+    return () => quadWorker.terminate();
+  }, [layoutNodes, width, height, quadTreeWorkerEnabled]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -99,7 +127,7 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
       const instanceBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(
-        layoutNodes.flatMap(n => [
+        visibleNodes.flatMap(n => [
           (n.x / width) * 2 - 1,
           1 - (n.y / height) * 2
         ])
@@ -109,13 +137,13 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
       gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
       ext.vertexAttribDivisorANGLE(posLoc, 1);  // Per-instance
       // Draw instanced
-      ext.drawArraysInstancedANGLE(gl.POINTS, 0, 1, layoutNodes.length);
+      ext.drawArraysInstancedANGLE(gl.POINTS, 0, 1, visibleNodes.length);
     } else {
       // Fallback to regular rendering
       const nodeBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, nodeBuffer);
       const nodeData = new Float32Array(
-        layoutNodes.flatMap(n => [
+        visibleNodes.flatMap(n => [
           (n.x / width) * 2 - 1,
           1 - (n.y / height) * 2
         ])
@@ -124,7 +152,7 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
       const posLoc = gl.getAttribLocation(program, 'aPos');
       gl.enableVertexAttribArray(posLoc);
       gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-      gl.drawArrays(gl.POINTS, 0, layoutNodes.length);
+      gl.drawArrays(gl.POINTS, 0, visibleNodes.length);
     }
 
     // Set uniforms
@@ -133,7 +161,7 @@ export const WebGLRenderer: React.FC<WebGLRendererProps> = ({
     gl.uniform1f(gl.getUniformLocation(program, 'u_zoom'), zoom);
     gl.uniform1f(gl.getUniformLocation(program, 'u_opacity'), edgeOpacity);
 
-  }, [data, width, height, pan, zoom, edgeOpacity, layoutNodes]);
+  }, [data, width, height, pan, zoom, edgeOpacity, visibleNodes]);
 
   return (
     <canvas
