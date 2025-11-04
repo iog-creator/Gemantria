@@ -34,16 +34,6 @@ interface CorrelationStats {
   };
 }
 
-interface CombinedStats {
-  graph: GraphStats;
-  correlations: CorrelationStats;
-  patterns: {
-    metadata: {
-      total_patterns: number;
-      analyzed_books: string[];
-    };
-  };
-}
 
 export default function MetricsPanel() {
   const [stats, setStats] = useState<GraphStats | null>(null);
@@ -130,10 +120,8 @@ export default function MetricsPanel() {
 
   const Sparkline = ({
     data,
-    color = "blue",
   }: {
     data: number[];
-    color?: string;
   }) => {
     const width = 80;
     const height = 20;

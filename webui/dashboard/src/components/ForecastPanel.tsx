@@ -152,8 +152,6 @@ const ForecastPanel: React.FC = () => {
                     const x = index + 10; // Offset by historical length
                     const yLower =
                       100 - ((intervals.upper[index] - minValue) / range) * 80;
-                    const yUpper =
-                      100 - ((intervals.lower[index] - minValue) / range) * 80;
                     return `${x},${yLower}`;
                   })
                   .concat(

@@ -5,6 +5,11 @@ import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
 import { useGraphData } from "../hooks/useGraphData";
 import { GraphNode } from "../types/graph";
+// Import dashboard components for integration
+import TemporalExplorer from "../../../dashboard/src/components/TemporalExplorer";
+import ForecastPanel from "../../../dashboard/src/components/ForecastPanel";
+import MetricsPanel from "../../../dashboard/src/components/MetricsPanel";
+import PatternExplorer from "../../../dashboard/src/components/PatternExplorer";
 
 const Fallback = ({error}: {error: Error}) => (
   <div className="p-8 text-red-600 border-2 border-red-200 rounded-lg bg-red-50">
@@ -23,6 +28,7 @@ export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
+  const [viewMode, setViewMode] = useState<'user' | 'dev'>('user'); // Toggle between user and dev views
 
   useEffect(() => {
     if (!data.nodes?.length) return;
@@ -164,6 +170,68 @@ export default function GraphDashboard() {
             <NodeDetails node={selectedNode} />
           </div>
         </main>
+
+        {/* Integrated Dashboard Components */}
+        <div className="mt-8 max-w-7xl mx-auto">
+          {/* View Mode Toggle */}
+          <div className="mb-6 text-center">
+            <div className="inline-flex rounded-lg bg-gray-100 p-1">
+              <button
+                onClick={() => setViewMode('user')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'user'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                User Analytics
+              </button>
+              <button
+                onClick={() => setViewMode('dev')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'dev'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Developer Metrics
+              </button>
+            </div>
+          </div>
+
+          {/* Conditional Dashboard Content */}
+          <div className="space-y-6">
+            {viewMode === 'user' ? (
+              <>
+                {/* Phase 8: Temporal Analytics */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4">Temporal Pattern Analysis</h2>
+                  <TemporalExplorer />
+                </div>
+
+                {/* Phase 8: Forecasting */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4">Predictive Forecasting</h2>
+                  <ForecastPanel />
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Developer Metrics */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4">Advanced Metrics Dashboard</h2>
+                  <MetricsPanel />
+                </div>
+
+                {/* Pattern Exploration */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4">Cross-Book Pattern Analysis</h2>
+                  <PatternExplorer />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
 
         {/* Footer */}
         <footer className="mt-6 text-center text-sm text-gray-500" role="contentinfo">
