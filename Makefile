@@ -87,6 +87,11 @@ ui.temporal.comment:
 test.ui.smoke:
 	@pytest tests/ui/test_extract_smoke.py
 
+.PHONY: deploy.prod
+deploy.prod:
+	@echo ">> Prod deploy stub"
+	@$(PYTHON) scripts/deploy.py
+
 # COMPASS evaluation (mathematical correctness scoring)
 ENVELOPE ?= share/exports/envelope.json
 
@@ -105,3 +110,8 @@ eval.graph.calibrate.adv:
 ci.exports.smoke:
 	@echo ">> CI exports smoke (may fail without DB)"
 	@PYTHONPATH=. $(PYTHON) scripts/export_noun_index.py --limit 10 || echo "CI exports smoke skipped (expected without DB)"
+
+.PHONY: monitoring.badges
+monitoring.badges:
+	@echo ">> Generate monitoring badges (uptime/perf)"
+	@python3 scripts/generate_badges.py --type monitoring --out share/eval/badges/
