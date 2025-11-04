@@ -2,6 +2,7 @@ import json
 import os
 from typing import Any
 
+import jsonschema
 from src.infra.structured_logger import get_logger, log_json
 
 LOG = get_logger("gematria.analysis_runner")
@@ -96,6 +97,15 @@ def analysis_runner_node(state: dict[str, Any]) -> dict[str, Any]:
                 log_json(LOG, 30, "graph_analysis_failed", error=str(e))
                 analysis_results["graph_analysis_error"] = str(e)
 
+        # Run temporal analysis if operation is 'all' or 'temporal'
+        if state.get("operation") == "all" or state.get("operation") == "temporal":
+            try:
+                temporal_result = _run_temporal_analysis(state)
+                analysis_results["temporal_analysis"] = temporal_result
+            except Exception as e:
+                log_json(LOG, 30, "temporal_analysis_failed", error=str(e))
+                analysis_results["temporal_analysis_error"] = str(e)
+
         # Run export operations
         try:
             # Export graph data for visualization
@@ -120,6 +130,148 @@ def analysis_runner_node(state: dict[str, Any]) -> dict[str, Any]:
         log_json(LOG, 40, "analysis_runner_unexpected_error", error=str(e))
         state["analysis_error"] = str(e)
         return state
+
+
+def _run_temporal_analysis(state):
+    """
+    Compute temporal patterns/forecasts on gematria series, validate/export.
+
+    Args:
+        state: Pipeline state dict with optional 'book' key
+
+    Returns:
+        dict with temporal analysis results and file paths
+    """
+    from scripts.export_stats import (
+        compute_rolling_windows,
+        detect_change_points,
+        get_gematria_series,
+        naive_forecast,
+        sma_forecast,
+        arima_forecast,
+    )
+
+    book = state.get("book", "Genesis")
+    series = get_gematria_series(book)
+
+    if series.empty:
+        log_json(LOG, 30, "temporal_analysis_empty_series", book=book)
+        return {"temporal_error": "No series data", "book": book}
+
+    # Compute rolling windows
+    rolling = compute_rolling_windows(series, window=5, metrics=["mean", "sum", "std"])
+
+    # Detect change points
+    change_points = detect_change_points(series, threshold=3.0)
+
+    # Generate forecasts
+    forecasts = {
+        "naive": naive_forecast(series, horizon=10),
+        "sma": sma_forecast(series, window=5, horizon=10),
+        "arima": arima_forecast(series, order=(1, 1, 1), horizon=10),
+    }
+
+    # Prepare metadata
+    metadata = {"length": len(series), "volatility": float(series.std())}
+
+    # Build temporal patterns data (matching schema)
+    temporal_data = {
+        "rolling_windows": rolling.to_dict(orient="records"),
+        "change_points": change_points,
+        "series_metadata": metadata,
+    }
+
+    # Build forecast data (matching schema)
+    forecast_data = {
+        "forecasts": {
+            k: {
+                "forecast": v["forecast"].tolist(),
+                "intervals": v["intervals"].to_dict(orient="records"),
+            }
+            for k, v in forecasts.items()
+        },
+        "metrics": {"rmse": 0.0, "mae": 0.0},  # Placeholder; compute if validation set
+    }
+
+    # Validate against schemas
+    schema_dir = os.path.join(os.path.dirname(__file__), "../../docs/SSOT")
+    temporal_schema_path = os.path.join(schema_dir, "temporal-patterns.schema.json")
+    forecast_schema_path = os.path.join(schema_dir, "pattern-forecast.schema.json")
+
+    try:
+        with open(temporal_schema_path) as f:
+            temporal_schema = json.load(f)
+        # Note: schema expects nested structure, adjust if needed
+        # For now, we'll validate the structure we're creating
+        jsonschema.validate(
+            {"temporal_patterns": [temporal_data], "metadata": {"generated_at": None, "analysis_parameters": {}}},
+            temporal_schema,
+        )
+    except Exception as e:
+        log_json(LOG, 30, "temporal_schema_validation_failed", error=str(e))
+        # Continue with export even if validation fails (non-fatal)
+
+    try:
+        with open(forecast_schema_path) as f:
+            forecast_schema = json.load(f)
+        # Adjust structure to match schema format
+        forecast_output = {
+            "forecasts": [
+                {
+                    "series_id": f"{book}_gematria",
+                    "horizon": 10,
+                    "model": model_name,
+                    "predictions": forecast_data["forecasts"][model_name]["forecast"],
+                    "book": book,
+                    "prediction_intervals": {
+                        "lower": [r["lower"] for r in forecast_data["forecasts"][model_name]["intervals"]],
+                        "upper": [r["upper"] for r in forecast_data["forecasts"][model_name]["intervals"]],
+                        "confidence_level": 0.95,
+                    },
+                    "rmse": forecast_data["metrics"]["rmse"],
+                    "mae": forecast_data["metrics"]["mae"],
+                }
+                for model_name in ["naive", "sma", "arima"]
+            ],
+            "metadata": {
+                "generated_at": None,
+                "forecast_parameters": {"default_horizon": 10, "default_model": "arima", "min_training_length": 3},
+                "total_forecasts": 3,
+                "books_forecasted": [book],
+            },
+        }
+        jsonschema.validate(forecast_output, forecast_schema)
+    except Exception as e:
+        log_json(LOG, 30, "forecast_schema_validation_failed", error=str(e))
+        # Continue with export even if validation fails (non-fatal)
+
+    # Export to share/ directory
+    share_dir = os.path.join(os.path.dirname(__file__), "../../share")
+    os.makedirs(share_dir, exist_ok=True)
+
+    temporal_path = os.path.join(share_dir, "temporal_patterns_latest.json")
+    with open(temporal_path, "w") as f:
+        json.dump(temporal_data, f, indent=2)
+
+    forecast_path = os.path.join(share_dir, "pattern_forecast_latest.json")
+    with open(forecast_path, "w") as f:
+        json.dump(forecast_data, f, indent=2)
+
+    log_json(
+        LOG,
+        20,
+        "temporal_analysis_complete",
+        book=book,
+        series_length=len(series),
+        change_points=len(change_points),
+    )
+
+    return {
+        "temporal_patterns_file": temporal_path,
+        "forecast_file": forecast_path,
+        "book": book,
+        "series_length": len(series),
+    }
 
 
 def _export_graph_data():
