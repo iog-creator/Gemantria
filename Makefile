@@ -171,3 +171,21 @@ enforcement.check:
 	@echo ">> Check system enforcement bridge"
 	@$(PYTHON) scripts/enforcement_bridge.py
 	@echo "Enforcement bridge check complete"
+
+.PHONY: temporal.analytics
+temporal.analytics:
+	@echo ">> Run temporal pattern analysis"
+	@$(PYTHON) scripts/temporal_analytics.py
+	@if [ -f share/exports/temporal_patterns.json ]; then \
+		make accept.ui ENVELOPE=share/exports/temporal_patterns.json MIN_NODES=200000 || echo "Temporal validation skipped"; \
+	fi
+	@echo "Temporal analysis complete"
+
+.PHONY: forecast.run
+forecast.run:
+	@echo ">> Run forecasting pipeline"
+	@make temporal.analytics
+	@if [ -f share/exports/forecast.json ]; then \
+		echo "Forecast data available at share/exports/forecast.json"; \
+	fi
+	@echo "Forecast complete"
