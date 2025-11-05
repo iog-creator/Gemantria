@@ -8,7 +8,7 @@ import psycopg
 
 from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
-from src.services.lmstudio_client import chat_completion
+from src.services.inference_client import InferenceClient
 from src.utils.json_sanitize import parse_llm_json
 
 LOG = get_logger("gemantria.enrichment")
@@ -36,9 +36,12 @@ def evaluate_confidence(conf, run_id=None, node=None):
 
 def enrichment_node(state: dict) -> dict:
     # Pipeline-level Qwen Live Gate already verified all required models are available
-    theology_model = os.getenv("THEOLOGY_MODEL")
+    theology_model = os.getenv("THEOLOGY_MODEL", "sleepdeprived3/Christian-Bible-Expert-v2.0-12B")
     if not theology_model:
         raise ValueError("THEOLOGY_MODEL environment variable required")
+
+    # Initialize inference client (supports both vLLM and LM Studio)
+    inference_client = InferenceClient()
 
     nouns = state.get("validated_nouns", [])
     if not nouns:
@@ -82,9 +85,9 @@ def enrichment_node(state: dict) -> dict:
             for n in chunk
         ]
 
-        # Call LM Studio with batched requests
+        # Call inference client (vLLM or LM Studio) with batched requests
         try:
-            outs = chat_completion(messages_batch, model=theology_model, temperature=0.0)
+            outs = inference_client.chat_completions(messages_batch, model=theology_model, temperature=0.0)
             batch_lat_ms = int((time.time() - batch_start) * 1000)
 
             # Process responses
@@ -117,7 +120,9 @@ def enrichment_node(state: dict) -> dict:
                                     "node": "enrichment",
                                 }
                             )
-                            raw_text = chat_completion([messages], model=theology_model, temperature=0.0)[0].text
+                            raw_text = inference_client.chat_completions(
+                                [messages], model=theology_model, temperature=0.0
+                            )[0].text
                             retry += 1
 
                     # enforce required keys; extract confidence if needed

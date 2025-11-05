@@ -71,6 +71,7 @@ class Colors:
 # Log file locations
 LOG_DIR = Path("logs")
 ORCHESTRATOR_LOG = Path("/tmp/orchestrator_venv.log")  # Background process log
+PIPELINE_RESTART_LOG = Path("/tmp/pipeline_restart.log")  # Current run log (if started with redirect)
 PIPELINE_LOG = LOG_DIR / "pipeline_orchestrator.log"
 GRAPH_LOG = LOG_DIR / "graph.log"
 
@@ -269,6 +270,18 @@ def extract_errors(log_lines: List[str]) -> List[Dict[str, Any]]:
 
 def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Extract pipeline stage status from log lines. Returns (stage_status, stage_timings)."""
+    # First, identify the most recent run_id to avoid double-counting across runs
+    active_run_id = None
+    latest_timestamp = 0
+    for line in log_lines:
+        parsed = parse_log_line(line)
+        if parsed and "run_id" in parsed:
+            run_id = parsed.get("run_id")
+            ts = parsed.get("ts", 0)
+            if ts > latest_timestamp:
+                latest_timestamp = ts
+                active_run_id = run_id
+
     stages = {
         "collect_nouns": {"status": "pending", "count": 0, "last_event": None, "start_time": None, "duration_ms": None},
         "validate_batch": {
@@ -318,10 +331,13 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
 
     orchestrator_stage = {"status": "pending", "operation": None, "last_event": None, "start_time": None}
 
-    # First pass: find total noun count and collect_nouns count
+    # First pass: find total noun count and collect_nouns count (from active run only)
     for line in reversed(log_lines):
         parsed = parse_log_line(line)
         if parsed:
+            # Skip if this entry is from a different run
+            if active_run_id and "run_id" in parsed and parsed.get("run_id") != active_run_id:
+                continue
             # Find enrichment_start with noun_count (this is the authoritative total)
             if parsed.get("msg") == "enrichment_start" and "noun_count" in parsed:
                 total_count = parsed.get("noun_count", 0)
@@ -334,10 +350,39 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
                 break  # Found it, stop looking
 
     # Second pass: process all events and track timings
+    # Only process events from the most recent run_id to avoid double-counting
+    # Use a set to deduplicate events that appear in multiple log files
+    processed_events = set()
     for line in log_lines:
         parsed = parse_log_line(line)
         if not parsed:
             continue
+
+        # Skip events from other runs (unless no active_run_id identified)
+        if active_run_id and "run_id" in parsed:
+            if parsed.get("run_id") != active_run_id:
+                continue
+
+        # Create a unique signature for this event to deduplicate across log files
+        # Use run_id + timestamp + msg + node + event + items_out (if present)
+        event_sig_parts = [
+            str(parsed.get("run_id", "")),
+            str(parsed.get("ts", "")),
+            str(parsed.get("msg", "")),
+            str(parsed.get("node", "")),
+            str(parsed.get("event", "")),
+        ]
+        # For batch_processed events, include items_out to make them unique
+        if parsed.get("event") == "batch_processed":
+            event_sig_parts.append(str(parsed.get("items_out", "")))
+        # For noun_enriched, include the noun to make them unique
+        elif "noun_enriched" in str(parsed.get("msg", "")):
+            event_sig_parts.append(str(parsed.get("noun", "")))
+
+        event_sig = "|".join(event_sig_parts)
+        if event_sig in processed_events:
+            continue  # Skip duplicate event
+        processed_events.add(event_sig)
 
         msg = parsed.get("msg", "")
         event_time = parsed.get("time", "")
@@ -364,21 +409,25 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
             stages["enrichment"]["last_event"] = event_time
             if not stages["enrichment"]["start_time"]:
                 stages["enrichment"]["start_time"] = event_time
-        elif "noun_enriched" in msg:
-            stages["enrichment"]["status"] = "running"
-            stages["enrichment"]["count"] += 1
-            stages["enrichment"]["last_event"] = event_time
         elif (
             parsed.get("msg") == "metrics"
             and parsed.get("node") == "enrichment"
             and parsed.get("event") == "batch_processed"
         ):
+            # Use items_out from batch_processed as authoritative cumulative count
             stages["enrichment"]["status"] = "running"
             items_out = parsed.get("items_out", 0)
             stages["enrichment"]["count"] = max(stages["enrichment"]["count"], items_out)
             stages["enrichment"]["last_event"] = event_time
             if duration_ms:
                 stages["enrichment"]["duration_ms"] = duration_ms
+        elif "noun_enriched" in msg:
+            # Only use noun_enriched if we don't have batch_processed data yet
+            # (batch_processed is more reliable as it's cumulative)
+            if stages["enrichment"]["count"] == 0:
+                stages["enrichment"]["status"] = "running"
+                stages["enrichment"]["count"] += 1
+                stages["enrichment"]["last_event"] = event_time
 
         # Collect nouns
         if stages["enrichment"]["status"] == "running":
@@ -503,13 +552,33 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
     progress_pct = round((enriched / total * 100), 1) if total > 0 else 0
     metrics["enrichment"]["progress_pct"] = progress_pct
 
-    # Calculate rate from log timestamps
-    log_lines = scan_log_file(ORCHESTRATOR_LOG, max_lines=1000)
+    # Calculate rate from log timestamps (check both orchestrator logs)
+    # Only use events from the most recent run to avoid mixing rates across runs
+    log_lines = []
+    for log_path in [PIPELINE_RESTART_LOG, ORCHESTRATOR_LOG]:
+        if log_path.exists():
+            log_lines.extend(scan_log_file(log_path, max_lines=1000))
+
+    # Find the most recent run_id for rate calculation
+    active_run_id = None
+    latest_timestamp = 0
+    for line in log_lines:
+        parsed = parse_log_line(line)
+        if parsed and "run_id" in parsed:
+            run_id = parsed.get("run_id")
+            ts = parsed.get("ts", 0)
+            if ts > latest_timestamp:
+                latest_timestamp = ts
+                active_run_id = run_id
+
     batch_times = []
     batch_sizes = []
     for line in reversed(log_lines[-500:]):
         parsed = parse_log_line(line)
         if parsed and parsed.get("event") == "batch_processed" and parsed.get("node") == "enrichment":
+            # Only count batches from the active run
+            if active_run_id and parsed.get("run_id") != active_run_id:
+                continue
             duration_ms = parsed.get("duration_ms", 0)
             items_in = parsed.get("items_in", 0)  # Use items_in for batch size
             if duration_ms > 0:
@@ -996,8 +1065,12 @@ def handle_menu_choice(choice: str, status: Dict[str, Any], errors: List[Dict[st
         return True
     elif choice == "7":
         print(f"\n{Colors.BRIGHT_YELLOW}Last 50 lines of orchestrator log:{Colors.RESET}\n")
-        if ORCHESTRATOR_LOG.exists():
-            log_lines = scan_log_file(ORCHESTRATOR_LOG, max_lines=50)
+        # Check both orchestrator log locations
+        log_lines = []
+        for log_path in [PIPELINE_RESTART_LOG, ORCHESTRATOR_LOG]:
+            if log_path.exists():
+                log_lines.extend(scan_log_file(log_path, max_lines=50))
+        if log_lines:
             for line in log_lines:
                 print(line.rstrip())
         else:
@@ -1073,11 +1146,12 @@ def get_keypress(timeout: float = 0.1) -> str | None:
 def monitor_once(pid: int | None = None) -> Dict[str, Any]:
     """Run a single monitoring cycle."""
     # Scan all log files - use larger limit for enrichment_start which is early in the log
+    # Prioritize PIPELINE_RESTART_LOG (current run) over ORCHESTRATOR_LOG (old runs)
     log_lines = []
-    for log_path in [ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG]:
+    for log_path in [PIPELINE_RESTART_LOG, ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG]:
         if log_path.exists():
-            # Read more lines for ORCHESTRATOR_LOG to find enrichment_start
-            max_lines = 5000 if log_path == ORCHESTRATOR_LOG else 500
+            # Read more lines for orchestrator logs to find enrichment_start
+            max_lines = 5000 if log_path in (ORCHESTRATOR_LOG, PIPELINE_RESTART_LOG) else 500
             log_lines.extend(scan_log_file(log_path, max_lines=max_lines))
 
     # Extract stage status and timings
