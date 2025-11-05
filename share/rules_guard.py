@@ -175,6 +175,32 @@ def main():
 
     print("[rules_guard] ✓ Critical Check 4 PASSED: Rule-054 reuse-first compliance")
 
+    # CRITICAL CHECK 5: Hints envelope validation (Rule-026 enforcement bridge)
+    print("[rules_guard] Critical Check 5: Hints envelope in exports")
+    graph_export_path = ROOT / "exports" / "graph_latest.json"
+    if graph_export_path.exists():
+        try:
+            graph_data = load_json(graph_export_path)
+            metadata = graph_data.get("metadata", {})
+            hints = metadata.get("hints")
+            if hints:
+                # Validate envelope structure
+                if isinstance(hints, dict) and hints.get("type") == "hints_envelope":
+                    hint_count = hints.get("count", len(hints.get("items", [])))
+                    print(f"[rules_guard] ✓ Critical Check 5 PASSED: Hints envelope found ({hint_count} hints)")
+                else:
+                    print(
+                        "[rules_guard] WARNING: Hints present but not in envelope format. Expected type='hints_envelope'",
+                        file=sys.stderr,
+                    )
+            else:
+                # Non-fatal: hints are encouraged but not required for empty/new pipelines
+                print("[rules_guard] HINT: No hints envelope in graph export (encouraged for PRs per Rule-026)")
+        except Exception as e:
+            print(f"[rules_guard] Warning: Could not validate hints in graph export: {e}")
+    else:
+        print("[rules_guard] HINT: graph_latest.json not found (skipping hints validation)")
+
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 
 

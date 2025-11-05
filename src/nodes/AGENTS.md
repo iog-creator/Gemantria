@@ -51,6 +51,20 @@ The `src/nodes/` directory contains the individual LangGraph node implementation
 - **KNN + rerank** relationship discovery with configurable alpha blending
 - **All pairs reranked** (not just top-K) with batch processing
 
+### `analysis_runner.py` - Analysis and Export Node
+
+**Purpose**: Run graph analysis operations and export visualization-ready data
+**Key Functions**:
+
+- `_export_graph_data()` - Export nodes, edges, and metadata to JSON
+- `_export_stats()` - Export graph statistics and metrics
+- `_run_temporal_analysis()` - Compute temporal patterns and forecasts
+  **Requirements**:
+- **Graph export**: Includes nodes, edges, and metadata with hints envelope when available
+- **Hints persistence**: Hints from pipeline state included in `graph_latest.json` metadata
+- **Schema validation**: Exports validated against JSON schemas when available
+- **Temporal analysis**: Time-series patterns and Prophet forecasts exported separately
+
 ## Node Architecture
 
 ### State Management
@@ -63,7 +77,9 @@ Each node receives and returns a `PipelineState` dict containing:
     "nouns": List[dict],     # Input noun batch
     "enriched_nouns": List[dict],  # Post-enrichment results
     "network_summary": dict, # Aggregation statistics
-    "qwen_health": dict      # Model health verification
+    "qwen_health": dict,     # Model health verification
+    "hints": List[str],      # Runtime hints collected during execution
+    "enveloped_hints": dict  # Hints wrapped in envelope structure for persistence
 }
 ```
 

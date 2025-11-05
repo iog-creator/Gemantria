@@ -9,44 +9,16 @@
       "dst": "share/README.md"
     },
     {
-      "src": "docs/SSOT/MASTER_PLAN.md",
-      "dst": "share/SSOT_MASTER_PLAN.md"
-    },
-    {
       "src": "docs/SSOT/RULES_INDEX.md",
       "dst": "share/RULES_INDEX.md"
     },
     {
-      "src": "docs/SSOT/graph-stats.schema.json",
-      "dst": "share/SSOT_graph-stats.schema.json"
-    },
-    {
-      "src": "docs/SSOT/graph-patterns.schema.json",
-      "dst": "share/SSOT_graph-patterns.schema.json"
-    },
-    {
-      "src": "docs/SSOT/temporal-patterns.schema.json",
-      "dst": "share/SSOT_temporal-patterns.schema.json"
-    },
-    {
-      "src": "docs/SSOT/pattern-forecast.schema.json",
-      "dst": "share/SSOT_pattern-forecast.schema.json"
+      "src": "docs/SSOT/MASTER_PLAN.md",
+      "dst": "share/SSOT_MASTER_PLAN.md"
     },
     {
       "src": "docs/forest/overview.md",
       "dst": "share/forest_overview.md"
-    },
-    {
-      "src": "src/infra/env_loader.py",
-      "dst": "share/env_loader.py"
-    },
-    {
-      "src": "scripts/generate_report.py",
-      "dst": "share/generate_report.py"
-    },
-    {
-      "src": "scripts/export_stats.py",
-      "dst": "share/export_stats.py"
     },
     {
       "src": "scripts/rules_guard.py",
@@ -57,32 +29,16 @@
       "dst": "share/pull_request_template.md"
     },
     {
-      "src": ".github/workflows/system-enforcement.yml",
-      "dst": "share/system-enforcement.yml"
-    },
-    {
       "src": ".pre-commit-config.yaml",
       "dst": "share/pre-commit-config.yaml"
     },
     {
-      "src": "NEXT_STEPS.md",
-      "dst": "share/NEXT_STEPS.template.md"
+      "src": "docs/SSOT/graph-stats.schema.json",
+      "dst": "share/SSOT_graph-stats.schema.json"
     },
     {
       "src": "exports/graph_stats.json",
       "dst": "share/graph_stats.head.json",
-      "generate": "head_json",
-      "max_bytes": 4096
-    },
-    {
-      "src": "exports/pattern_forecast.json",
-      "dst": "share/pattern_forecast.head.json",
-      "generate": "head_json",
-      "max_bytes": 4096
-    },
-    {
-      "src": "exports/temporal_patterns.json",
-      "dst": "share/temporal_patterns.head.json",
       "generate": "head_json",
       "max_bytes": 4096
     }
