@@ -408,6 +408,172 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 
 ---
 
+## Agentic Pipeline Framework
+
+**Goal:** Take raw biblical text → discover nouns (AI-first) → enrich theology → build/score graph → verify against SSOT → export analytics/report → ship to UI, with self-healing guards and governance.
+
+### Core Agents (Production Path)
+
+#### 1. Ingestion Agent (Text→Shards)
+- **Purpose:** Pulls raw Hebrew text, splits into stable shards/chunks, dedups, stamps source refs
+- **Reads:** Corpus store or DB
+- **Writes:** `share/corpus/{book}/shards.jsonl`
+- **Requirements:** Deterministic chunking; include `ref`, `offset`, `text`
+- **System Prompt:**
+  > You split source text into semantically coherent shards with stable offsets. Never interpret. Output JSONL with fields: {ref, offset, text}. No omissions. Max shard ~1k chars.
+- **Task Prompt:**
+  > Split the attached {BOOK} raw text into shards. Keep verse boundaries.
+- **Make Target:** `make ai.ingest`
+
+#### 2. AI-Noun Discovery Agent (Organic Nouns)
+- **Purpose:** Discovers significant nouns from shards; outputs SSOT **ai-nouns** envelope
+- **Reads:** `shards.jsonl`
+- **Writes:** `exports/ai_nouns.json` (schema `gemantria/ai-nouns.v1`)
+- **Requirements:** Populate `noun_id (uuid)`, `surface`, `letters[]`, `gematria`, `class`, `sources[]`, `analysis`
+- **System Prompt:**
+  > Discover Hebrew nouns directly from shards. Produce only nouns with clear lexical evidence. Return interim reasoning in `analysis`, but keep `surface/letters/gematria/class/sources` factual. Conform to JSON Schema gemantria/ai-nouns.v1 exactly; never add extra fields.
+- **Task Prompt:**
+  > From these shards for {BOOK}, find significant nouns; compute letters & gematria; classify person/place/thing; attach `{ref,offset}` sources. Emit one JSON object: {schema:"gemantria/ai-nouns.v1",book,generated_at,nodes:[...]}.
+- **Make Target:** `make ai.nouns`
+
+#### 3. Enrichment Agent (Theology & Context)
+- **Purpose:** Expands each noun with theological context, cross-refs, motifs
+- **Reads:** `exports/ai_nouns.json`
+- **Writes:** `exports/ai_nouns.enriched.json` (same schema + `analysis.theology` block)
+- **Requirements:** Never mutate identifiers; add only under `analysis`
+- **System Prompt:**
+  > Enrich each noun with concise, citable theological notes. Do not invent sources; describe patterns and canonical motifs. Add to `analysis.theology` with fields {themes[], cross_refs[], notes}.
+- **Task Prompt:**
+  > For each noun in {BOOK}, add `analysis.theology` with 1–3 themes and short notes. Keep JSON valid and schema-conformant.
+- **Make Target:** `make ai.enrich`
+
+#### 4. Graph Builder Agent (Edges from Nouns)
+- **Purpose:** Turns nouns/enrichment into a typed relation set; writes a single **graph** envelope
+- **Reads:** `ai_nouns.enriched.json`
+- **Writes:** `exports/graph_latest.json` (nodes/edges schema `gemantria/graph.v1`)
+- **Requirements:** Node keys = `noun_id`; edge types = `semantic|cooccur|theology|other`; weight ∈ [0,1]
+- **System Prompt:**
+  > Build a concept graph from nouns and enrichment. Node id is noun_id. Create typed edges with rationale in `analysis.edge_reason` (kept internal if not exported). Normalize weights to [0,1].
+- **Task Prompt:**
+  > For {BOOK}, output {schema:"gemantria/graph.v1",nodes:[{id,lemma?,surface,book}],edges:[{src,dst,type,weight}]} using only noun_ids present.
+- **Make Target:** `make graph.build`
+
+#### 5. Rerank/Edge-Strength Agent
+- **Purpose:** Computes cosine/rrf/rerank score and blends to edge strength
+- **Reads:** `graph_latest.json`
+- **Writes:** `exports/graph_latest.scored.json`
+- **Requirements:** `edge_strength = α*cosine + (1-α)*rerank_score`, thresholds: strong ≥0.90, weak ≥0.75
+- **System Prompt:**
+  > Score edges using embeddings+reranker. Output same graph with added {cosine, rerank_score, class}.
+- **Task Prompt:**
+  > Score edges for {BOOK} with α={ALPHA}. Classify into strong/weak/very_weak.
+- **Make Target:** `make graph.score`
+
+#### 6. Analytics & Report Agent
+- **Purpose:** Stats, patterns, temporal, forecast + Markdown report
+- **Reads:** `graph_latest.scored.json`
+- **Writes:** `exports/graph_stats.json`, `graph_patterns.json`, `temporal_patterns.json`, `pattern_forecast.json`, `report.md`
+- **System Prompt:**
+  > Produce concise analytics JSONs per SSOT schemas; generate a short Markdown report for humans. Never change upstream data.
+- **Task Prompt:**
+  > Compute degree/betweenness histograms, top-k concepts, motif patterns, and a naive forecast. Emit JSON files + a 1-page report.
+- **Make Target:** `make analytics.export`
+
+#### 7. Guard/Compliance Agent (Fail-Closed)
+- **Purpose:** Validates schema conformance, Hebrew fields, orphan checks, ADR mention
+- **Reads:** All exports + PR body context
+- **Writes:** Status only; blocks on failure
+- **System Prompt:**
+  > You are the policy gate. If any JSON violates its schema, any edge orphaned, Hebrew missing, or PR lacks ADR note when touching infra/data, return a single FAILURE line with details. Otherwise return GUARD_OK.
+- **Task Prompt:**
+  > Validate {list of files} against schemas and invariants. Print GUARD_OK or specific FAIL_* lines.
+- **Make Target:** `make guards.all`
+
+#### 8. Release/Operator Agent
+- **Purpose:** Assembles artifacts, updates CHANGELOG, tags release, posts summary
+- **Reads:** All export JSONs + report
+- **Writes:** Git tag/release notes with artifact manifest
+- **System Prompt:**
+  > Prepare release notes with artifacts and checksums. Summarize notable graph changes and known limitations. No speculation.
+- **Task Prompt:**
+  > Create notes for {BOOK} including artifact list and acceptance checklist.
+- **Make Target:** `make release.prepare`
+
+### Support Agents (Resilience & Governance)
+
+#### 9. Incident Triage Agent
+- **Purpose:** Watches logs/guards; files issues with minimal repro
+- **System Prompt:** Detect root cause; propose 1-shot fix or open issue with repro, scope, impact.
+
+#### 10. Data Steward Agent
+- **Purpose:** Curates source catalogs/refs; manages alignment table to bible_db (optional)
+- **System Prompt:** Ensure `sources[]` are consistent, resolvable, and deduped; maintain mapping tables with confidence.
+
+#### 11. Performance/Batching Agent
+- **Purpose:** Tunes batch sizes, caching, and provider selection under constraints
+- **System Prompt:** Maximize throughput while keeping deterministic outputs; never change output shape.
+
+#### 12. ADR Scribe Agent
+- **Purpose:** Writes/updates ADRs when architecture or contracts change
+- **System Prompt:** Produce succinct ADRs with Context/Decision/Consequences/Verification; link PRs; update index.
+
+### Agentic Workflow Architecture
+
+#### Observe → Decide → Act Loops
+- **Immutable Handoff Artifacts:**
+  - `shards.jsonl` → `ai_nouns.json` → `ai_nouns.enriched.json` → `graph_latest.json` → `graph_latest.scored.json` → analytics JSONs + `report.md`
+- **Single SSOT per Stage:** `gemantria/ai-nouns.v1`, `gemantria/graph.v1`, analytics schemas in `docs/SSOT/`
+- **Fail-Closed Guards:** Schema validation + invariants + orphan checks between every stage
+
+#### Governance & Quality Gates
+- **ADR Required:** On contract changes; guards run in CI and locally via `make`
+- **Idempotence:** Reruns on same inputs produce identical outputs (timestamps excluded)
+- **Explicit Handoffs:** Each agent writes complete envelope; next agent only reads that envelope
+- **Observability:** Each agent logs machine-readable summary to `share/evidence/`
+- **Recovery:** Triage agent opens issue and suggests exact `make` target to rerun failed stage
+
+### Make Targets (Agent Entry Points)
+
+```makefile
+ai.ingest:                 # Ingestion Agent (shards)
+ai.nouns:                  # Discovery Agent → ai_nouns.json
+ai.enrich:                 # Enrichment Agent → ai_nouns.enriched.json
+graph.build:               # Graph Builder → graph_latest.json
+graph.score:               # Reranker → graph_latest.scored.json
+analytics.export:          # Stats/Patterns/Temporal/Forecast + report.md
+guards.all:                # Schema + invariants + Hebrew + orphans + ADR
+release.prepare:           # Pack artifacts + release notes
+```
+
+### Handoff Contracts
+
+- **Discovery → Enrichment:** `exports/ai_nouns.json` (ai-nouns.v1)
+- **Enrichment → Graph:** `exports/ai_nouns.enriched.json` (same schema + theology block)
+- **Graph → Rerank:** `exports/graph_latest.json` (graph.v1)
+- **Rerank → Analytics:** `exports/graph_latest.scored.json`
+- **Analytics → Release/UI:** `exports/{graph_stats,graph_patterns,temporal_patterns,pattern_forecast}.json` + `report.md`
+
+### Universal Agent Contract
+
+**System Prelude (attach to every agent):**
+> You are the {AGENT_NAME}. You must produce outputs that exactly match the declared SSOT schema. Never change field names or shapes. If a requirement cannot be met, stop and state a single clear reason. Do not proceed with partial/invalid outputs.
+
+### Acceptance Checklist
+
+- [ ] Each agent has a **system** and **task** prompt (above), plus a single `make` target
+- [ ] SSOT schemas exist for ai-nouns and graph; analytics schemas pinned
+- [ ] Guards pass locally and in CI (`guards.all`)
+- [ ] Handoffs are **only** the SSOT envelopes; no hidden side-channels
+- [ ] ADR updated if any schema/contract changes
+
+### Now / Next / Later
+
+- **Now:** Wire the `make` targets to current scripts; add `guards.all` chaining all validations
+- **Next:** Flip enrichment + graph stages to consume strictly from `ai_nouns(.enriched).json`
+- **Later:** Work ADR-032 roadmap (bible_db SSOT) with compat views + dual-export, without touching AI path
+
+---
+
 ## Editor Baseline (Cursor 2.0)
 
 **Purpose:** speed up surgical PR work while preserving SSOT governance.

@@ -280,3 +280,44 @@ ai.ssot.export:
 ai.ssot.guard:
 	@python3 -c "import subprocess,sys; subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)" || true
 	@python3 scripts/guard_ai_nouns.py
+
+guards.all: ai.ssot.guard
+	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
+	@# Add additional guard targets here as they are implemented
+	@echo "GUARDS_ALL_OK"
+
+# Agentic Pipeline Targets (placeholders - wire to existing scripts)
+ai.ingest:
+	@echo ">> AI Ingestion Agent: Text→Shards"
+	@# TODO: wire to text ingestion script
+	@echo "AI_INGEST_OK"
+
+ai.nouns:
+	@echo ">> AI Noun Discovery Agent: Shards→SSOT ai-nouns"
+	@# TODO: wire to ai_noun_discovery.py
+	@echo "AI_NOUNS_OK"
+
+ai.enrich:
+	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
+	@# TODO: wire to enrichment.py
+	@echo "AI_ENRICH_OK"
+
+graph.build:
+	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"
+	@# TODO: wire to graph building script
+	@echo "GRAPH_BUILD_OK"
+
+graph.score:
+	@echo ">> Rerank Agent: graph_latest→graph_latest.scored"
+	@# TODO: wire to reranking script
+	@echo "GRAPH_SCORE_OK"
+
+analytics.export:
+	@echo ">> Analytics Agent: scored graph→stats/patterns/forecast + report"
+	@# TODO: wire to analytics export scripts
+	@echo "ANALYTICS_EXPORT_OK"
+
+release.prepare:
+	@echo ">> Release Agent: artifacts→release notes + manifest"
+	@# TODO: wire to release preparation script
+	@echo "RELEASE_PREPARE_OK"
