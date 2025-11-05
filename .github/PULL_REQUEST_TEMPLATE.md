@@ -1,25 +1,23 @@
-## Summary
+## Description
+[Brief description of changes]
 
-- What changed and why (1–3 lines)
+## Files Changed
+[List of files modified/added]
 
-## Model Usage (required for UI work)
+## Tests
+[Testing performed or N/A]
 
-- Model: [ ] Gemini 2.5 Pro  [ ] Claude Sonnet 4  [ ] Other: ______
+## Acceptance Criteria
+- [ ] Code quality (ruff format/check pass)
+- [ ] Tests pass (if applicable)
+- [ ] Documentation updated
+- [ ] ADR created for architectural changes (if applicable)
 
-- Iterations: <number>
+## Related Issues/PRs
+[Link to related issues or PRs]
 
-- Prompt (last effective):
-
-```
-<paste final prompt to the model here>
-```
-
-## Checks
-
-* [ ] Frontend lint/tests (if present): `npm run lint && npm run test`
-* [ ] Backend SSOT: `ruff format --check . && ruff check .`
-* [ ] Deviations from UI defaults documented (if any)
-
-## Screens/Artifacts
-
-* (Optional) screenshots, GIFs, or PNG exports
+## Checklist
+- [ ] Self-reviewed code
+- [ ] Added tests for new functionality
+- [ ] Updated documentation
+- [ ] Considered backwards compatibility
