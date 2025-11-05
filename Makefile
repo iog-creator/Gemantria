@@ -196,7 +196,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume
+.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -281,9 +281,8 @@ ai.ssot.guard:
 	@python3 -c "import subprocess,sys; subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)" || true
 	@python3 scripts/guard_ai_nouns.py
 
-guards.all: ai.ssot.guard
+guards.all: ai.ssot.guard exports.guard.hebrew
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
-	@# Add additional guard targets here as they are implemented
 	@echo "GUARDS_ALL_OK"
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
@@ -294,13 +293,11 @@ ai.ingest:
 
 ai.nouns:
 	@echo ">> AI Noun Discovery Agent: Shards→SSOT ai-nouns"
-	@# TODO: wire to ai_noun_discovery.py
-	@echo "AI_NOUNS_OK"
+	@PYTHONPATH=. BOOK=$${BOOK:-Genesis} python3 scripts/ai_noun_discovery.py
 
 ai.enrich:
 	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
-	@# TODO: wire to enrichment.py
-	@echo "AI_ENRICH_OK"
+	@PYTHONPATH=. INPUT=$${INPUT:-exports/ai_nouns.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/ai_enrichment.py
 
 graph.build:
 	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"

@@ -7,6 +7,7 @@ calculate gematria values, and classify as person/place/thing.
 """
 
 import json
+import os
 import re
 from typing import Any, Dict, List
 from pathlib import Path
@@ -15,7 +16,7 @@ from src.core.books import normalize_book
 from src.infra.db import get_bible_ro
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
-from src.services.lmstudio_client import LMStudioClient
+from src.services.lmstudio_client import chat_completion
 
 LOG = get_logger("ai_noun_discovery")
 
@@ -24,7 +25,6 @@ class AINounDiscovery:
     """AI-powered organic noun discovery from Hebrew text."""
 
     def __init__(self):
-        self.client = LMStudioClient()
         self.book_map = {
             "Genesis": "Gen",
             "Exodus": "Exo",
@@ -69,17 +69,19 @@ class AINounDiscovery:
     def _get_raw_hebrew_text(self, db_book: str) -> str:
         """Extract raw Hebrew text for the book."""
         try:
-            with get_bible_ro() as conn, conn.cursor() as cur:
-                cur.execute("""
-                    SELECT string_agg(hw.word_text, ' ' ORDER BY v.verse_id, hw.position)
-                    FROM bible.hebrew_ot_words hw
-                    JOIN bible.verses v ON hw.verse_id = v.verse_id
-                    WHERE v.book_name = %s
-                      AND LEFT(hw.strongs_id, 1) = 'H'
-                """, (db_book,))
+            # BibleReadOnly.execute() handles connection internally
+            rows = list(get_bible_ro().execute("""
+                SELECT hw.word_text
+                FROM bible.hebrew_ot_words hw
+                JOIN bible.verses v ON hw.verse_id = v.verse_id
+                WHERE v.book_name = %s
+                  AND LEFT(hw.strongs_id, 1) = 'H'
+                ORDER BY v.verse_id, hw.word_position
+            """, (db_book,)))
 
-                result = cur.fetchone()
-                return result[0] if result and result[0] else ""
+            # Join all words with spaces
+            text = ' '.join(row[0] for row in rows)
+            return text
         except Exception as e:
             log_json(LOG, 40, "raw_text_extraction_error", book=db_book, error=str(e))
             return ""
@@ -124,14 +126,21 @@ class AINounDiscovery:
         """
 
         try:
-            response = self.client.chat_completion(
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,  # Low creativity for consistent analysis
-                max_tokens=4000
-            )
+            # Use the discovery model from environment
+            discovery_model = os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b")
 
-            content = response["choices"][0]["message"]["content"]
-            result = self._parse_ai_response(content)
+            messages_batch = [[
+                {"role": "system", "content": "You are a Hebrew language expert specializing in biblical text analysis."},
+                {"role": "user", "content": prompt}
+            ]]
+
+            results = chat_completion(messages_batch, model=discovery_model, temperature=0.1)
+
+            if results and len(results) > 0:
+                content = results[0].text
+                result = self._parse_ai_response(content)
+            else:
+                result = {"nouns": []}
 
             # Validate and enhance with frequency data
             validated_nouns = self._validate_and_enhance_nouns(result.get("nouns", []), hebrew_text)
