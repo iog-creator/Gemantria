@@ -28,40 +28,23 @@
 
         "properties": {
 
-          "noun_id": { "type": "string" },             # stable UUID from discovery
-
-          "surface": { "type": "string", "minLength": 1 },   # Hebrew noun surface
-
-          "lemma": { "type": ["string","null"] },      # optional (not required by AI path)
-
+          "noun_id": { "type": "string" },
+          "surface": { "type": "string", "minLength": 1 },
+          "lemma": { "type": ["string","null"] },
           "letters": {
-
             "type":"array","minItems":1,
-
             "items":{"type":"string","minLength":1,"maxLength":1}
-
           },
-
           "gematria": { "type":"integer","minimum":0 },
-
           "class": { "type":"string","enum":["person","place","thing","other"] },
-
           "ai_discovered": { "type":"boolean","const": true },
-
-          "analysis": { "type":"object" },             # free-form AI notes, scrubbed for control chars
-
+          "analysis": { "type":"object" },
           "sources": {
-
             "type":"array","minItems":1,
-
             "items":{"type":"object","required":["ref"],"properties":{
-
-              "ref":{"type":"string"},    # where in text
-
+              "ref":{"type":"string"},
               "offset":{"type":["integer","null"]}
-
             }}
-
           }
 
         }

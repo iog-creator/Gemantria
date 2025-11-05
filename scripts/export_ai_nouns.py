@@ -1,5 +1,16 @@
 import os, json, re, sys, uuid, datetime, psycopg
 
+# Load environment variables from .env file
+try:
+    with open('.env', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=', 1)
+                os.environ[key] = value
+except FileNotFoundError:
+    pass  # .env file not found, use existing env vars
+
 BAD = re.compile(r'[\u0000-\u0008\u000B\u000C\u000E-\u001F]')
 
 def scrub(x):
@@ -8,7 +19,7 @@ def scrub(x):
     if isinstance(x,dict): return {k:scrub(v) for k,v in x.items()}
     return x
 
-dsn = os.environ.get("DSN")
+dsn = os.environ.get("DSN") or os.environ.get("GEMATRIA_DSN")
 book = os.environ.get("BOOK","Genesis")
 outp = os.environ.get("OUT","exports/ai_nouns.json")
 

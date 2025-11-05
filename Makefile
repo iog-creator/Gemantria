@@ -275,11 +275,8 @@ test.pipeline.integration:
 	@pytest tests/integration/test_pipeline_integration.py -v
 
 ai.ssot.export:
-	@BOOK=$${BOOK:-Genesis} DSN=$$DSN python3 scripts/export_ai_nouns.py
+	@python3 scripts/export_ai_nouns.py
 
 ai.ssot.guard:
-	@python3 - <<'EOF' || true
-import subprocess,sys
-subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)
-EOF
+	@python3 -c "import subprocess,sys; subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)" || true
 	@python3 scripts/guard_ai_nouns.py
