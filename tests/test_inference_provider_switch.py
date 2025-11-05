@@ -1,5 +1,3 @@
-import os
-
 from src.services.inference_client import InferenceClient
 
 
