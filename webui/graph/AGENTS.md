@@ -288,6 +288,23 @@ npm run preview
 | ForecastPanel.tsx    | ADR-023 (Visualization API Spec)                  |
 | useGraphStats.ts     | ADR-016 (Metrics Contract)                        |
 
+## Housekeeping (Rule 058)
+
+After ANY code changes in this directory, run comprehensive housekeeping:
+
+```bash
+# Rule 058 mandatory housekeeping checklist
+python3 scripts/rules_audit.py
+make share.sync
+python3 scripts/generate_forest.py
+ruff format --check . && ruff check .
+# Frontend: npm run lint && npm run test
+# Check if ADR needed/updated (Rule 029)
+# Verify docs updated (AGENTS.md, SSOT, README)
+```
+
+**DO NOT SKIP ANY STEP.** See [Rule 058](../../../.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
+
 ## Future Enhancements
 
 ### Planned Features

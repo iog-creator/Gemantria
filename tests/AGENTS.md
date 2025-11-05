@@ -4,6 +4,24 @@
 
 The `tests/` directory contains comprehensive test suites that validate the correctness, reliability, and performance of the Gemantria pipeline. Tests are organized by scope and testing strategy.
 
+## Housekeeping (Rule 058)
+
+After ANY code changes in this directory, run comprehensive housekeeping:
+
+```bash
+# Rule 058 mandatory housekeeping checklist
+python3 scripts/rules_audit.py
+make share.sync
+python3 scripts/generate_forest.py
+ruff format --check . && ruff check .
+# Check if ADR needed/updated (Rule 029)
+PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
+# Verify docs updated (AGENTS.md, SSOT, README)
+```
+
+**DO NOT SKIP ANY STEP.** See [Rule 058](../.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
+
+
 ## Testing Strategy Overview
 
 ### Test Pyramid Structure
