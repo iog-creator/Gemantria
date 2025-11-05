@@ -21,6 +21,15 @@ ensure_env_loaded()
 
 LOG = get_logger("export_stats")
 
+_BAD = re.compile(r'[\u0000-\u0008\u000B\u000C\u000E-\u001F]')
+
+
+def scrub(v):
+    if isinstance(v, str): return _BAD.sub('', v)
+    if isinstance(v, list): return [scrub(x) for x in v]
+    if isinstance(v, dict): return {k:scrub(x) for k,x in v.items()}
+    return v
+
 
 def calculate_graph_stats(db):
     """Calculate comprehensive graph statistics."""
@@ -1166,7 +1175,7 @@ def main():
                 sys.exit(2)
 
         # Output JSON to stdout
-        print(json.dumps(stats, indent=2))
+        print(json.dumps(scrub(stats), indent=2))
 
         # Also write static files for UI consumption
         out_dir = os.getenv("EXPORT_DIR", "exports")

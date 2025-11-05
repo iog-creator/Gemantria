@@ -111,6 +111,11 @@ ci.exports.smoke:
 	@echo ">> CI exports smoke (may fail without DB)"
 	@PYTHONPATH=. $(PYTHON) scripts/export_noun_index.py --limit 10 || echo "CI exports smoke skipped (expected without DB)"
 
+exports.guard.hebrew:
+	@mkdir -p share/evidence
+	@echo ">> Hebrew export integrity guard"
+	@psql $$DSN -f scripts/sql/guard_hebrew_export.sql | tee share/evidence/guard_hebrew_export.out && awk "NR>1{sum+=$$2} END{exit (sum!=0)}" share/evidence/guard_hebrew_export.out
+
 .PHONY: monitoring.badges
 monitoring.badges:
 	@echo ">> Generate monitoring badges (uptime/perf)"
@@ -234,8 +239,8 @@ analyze.graph:
 
 analyze.export:
 	@echo ">> Export analysis results for visualization"
-	@$(PYTHON) scripts/export_graph.py
-	@$(PYTHON) scripts/export_stats.py
+	@PYTHONPATH=. $(PYTHON) scripts/export_graph.py
+	@PYTHONPATH=. $(PYTHON) scripts/export_stats.py
 
 analyze.all:
 	@echo ">> Run complete analysis suite"
@@ -262,7 +267,7 @@ orchestrator.embeddings:
 
 orchestrator.full:
 	@echo ">> Run complete workflow via orchestrator"
-	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py full --book $(BOOK) --config $(BOOK_CONFIG)
+	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py full --book $(BOOK) --config $(BOOK_CONFIG) 2>&1 | tee /tmp/orchestrator_venv.log
 
 # Integration testing
 test.pipeline.integration:
