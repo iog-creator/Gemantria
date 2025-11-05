@@ -224,6 +224,14 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
 - **Integration**: Wired into `ops.verify` as non-fatal validation step
 
+### Hints Envelope (Enforcement Bridge - Rule-026)
+Runtime hints are collected and wrapped in structured envelopes for persistence and auditability.
+- **Collection**: Hints collected in `PipelineState.hints` during pipeline execution
+- **Wrapping**: `wrap_hints_node` wraps hints into envelope structure: `{type: "hints_envelope", version: "1.0", items: [...], count: N}`
+- **Persistence**: Hints envelope included in `graph_latest.json` metadata for export validation
+- **Validation**: `rules_guard.py` validates hints envelope structure in exports (non-fatal, encouraged for PRs)
+- **Purpose**: Enables determinism and auditability without breaking resumable pipeline design
+
 ## Integrated Pipeline Architecture
 
 The Gemantria system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.

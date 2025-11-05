@@ -108,8 +108,8 @@ def analysis_runner_node(state: dict[str, Any]) -> dict[str, Any]:
 
         # Run export operations
         try:
-            # Export graph data for visualization
-            _export_graph_data()
+            # Export graph data for visualization (pass state to include hints)
+            _export_graph_data(state)
             analysis_results["graph_export"] = "completed"
 
             # Export stats
@@ -215,7 +215,7 @@ def _run_temporal_analysis(state):
     }
 
 
-def _export_graph_data():
+def _export_graph_data(state: dict[str, Any] | None = None):
     """Export graph data for visualization."""
     try:
         from src.infra.db import get_gematria_rw
@@ -311,18 +311,38 @@ def _export_graph_data():
                 }
             )
 
+        # Collect hints from state if available
+        hints_envelope = None
+        if state:
+            # Prefer enveloped_hints if available, otherwise wrap hints from state
+            if state.get("enveloped_hints"):
+                hints_envelope = state["enveloped_hints"]
+            elif state.get("hints"):
+                # Wrap hints if not already enveloped
+                hints_envelope = {
+                    "type": "hints_envelope",
+                    "version": "1.0",
+                    "items": state["hints"],
+                    "count": len(state["hints"]),
+                }
+
         # Write to exports
         os.makedirs("exports", exist_ok=True)
+        metadata = {
+            "node_count": len(nodes),
+            "edge_count": len(edges),
+            "export_timestamp": None,  # Will be set by calling code
+        }
+        # Include hints envelope in metadata if available
+        if hints_envelope:
+            metadata["hints"] = hints_envelope
+
         with open("exports/graph_latest.json", "w", encoding="utf-8") as f:
             json.dump(
                 {
                     "nodes": nodes,
                     "edges": edges,
-                    "metadata": {
-                        "node_count": len(nodes),
-                        "edge_count": len(edges),
-                        "export_timestamp": None,  # Will be set by calling code
-                    },
+                    "metadata": metadata,
                 },
                 f,
                 ensure_ascii=False,

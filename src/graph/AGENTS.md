@@ -19,10 +19,12 @@ The `src/graph/` directory contains the main LangGraph pipeline orchestration, e
 - `create_graph()` - Build the LangGraph with all nodes and edges
 - `run_pipeline()` - Execute pipeline with error handling and observability
 - `log_qwen_health()` - Persist Qwen model health checks to database
+- `wrap_hints_node()` - Wrap runtime hints into envelope structure for persistence
   **Requirements**:
 - **Fail-closed** if Qwen models unavailable (hard stop)
 - Comprehensive error handling and logging
 - State persistence via checkpointer (Postgres/Memory)
+- **Hints envelope**: Runtime hints collected and wrapped in structured envelope for export and validation
 
 ### `batch_processor.py` - Batch Processing Logic
 
@@ -55,7 +57,7 @@ The `src/graph/` directory contains the main LangGraph pipeline orchestration, e
 ### Node Sequence
 
 ```
-collect_nouns → validate_batch → enrichment → confidence_validator → network_aggregator → [optional: analyze_patterns]
+collect_nouns → validate_batch → enrichment → confidence_validator → network_aggregator → schema_validator → analysis_runner → wrap_hints
 ```
 
 ### Relations & Pattern Discovery (NEW)
@@ -70,6 +72,7 @@ collect_nouns → validate_batch → enrichment → confidence_validator → net
 - **PipelineState** dict with run_id, nouns, enriched_nouns, network_summary
 - **Checkpointer** persists state between runs (Postgres for production)
 - **Metadata** includes Qwen health verification and run configuration
+- **Hints**: Runtime hints collected in `state.hints` and wrapped in `state.enveloped_hints` for persistence
 
 ### Error Handling
 

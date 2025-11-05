@@ -39,6 +39,11 @@ from src.services.lmstudio_client import (
     QwenUnavailableError,
     assert_qwen_live,
 )
+from src.services.planner_agent import plan_processing
+from src.services.math_model_client import verify_gematria_calculation
+from src.services.semantic_agent import extract_semantic_features
+from src.services.expert_agent import analyze_theological
+from src.utils.json_sanitize import parse_llm_json
 
 # Load environment variables from .env file
 ensure_env_loaded()
@@ -212,6 +217,8 @@ class PipelineState(TypedDict, total=False):
     conflicts: list[dict[str, Any]]
     predictions: dict[str, Any]
     metadata: dict[str, Any]
+    hints: list[str]  # Runtime hints emitted during pipeline execution
+    enveloped_hints: dict[str, Any]  # Hints wrapped in envelope structure for persistence
 
 
 def with_metrics(
@@ -299,6 +306,113 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
         return {**state, "batch_result": None, "error": str(e)}
 
 
+def planner_node(state: PipelineState) -> PipelineState:
+    """Plan processing sequence for nouns."""
+    nouns = state.get("validated_nouns", [])
+    if not nouns:
+        return {**state, "planned_nouns": []}
+    plans = []
+    for noun in nouns:
+        try:
+            plan_result = plan_processing(noun)
+            plan_text = plan_result.get("text", "")
+            plan_data = parse_llm_json(plan_text) if plan_text else {}
+            plans.append({**noun, "plan": plan_data})
+        except Exception as e:
+            log_json(LOG, 30, "planner_error", noun_id=noun.get("noun_id"), error=str(e))
+            plans.append({**noun, "plan": {"needs_math": False, "needs_semantic": False, "needs_expert": False}})
+    return {**state, "planned_nouns": plans}
+
+
+def math_agent_node(state: PipelineState) -> PipelineState:
+    """Verify gematria calculations using math model."""
+    nouns = state.get("planned_nouns", [])
+    if not nouns:
+        return {**state, "math_verified_nouns": []}
+    verified = []
+    for noun in nouns:
+        plan = noun.get("plan", {})
+        if plan.get("needs_math", False):
+            try:
+                result = verify_gematria_calculation(noun, noun.get("gematria", 0))
+                verified.append({**noun, "math_verification": result})
+            except Exception as e:
+                log_json(LOG, 30, "math_agent_error", noun_id=noun.get("noun_id"), error=str(e))
+                verified.append(noun)
+        else:
+            verified.append(noun)
+    return {**state, "math_verified_nouns": verified}
+
+
+def semantic_agent_node(state: PipelineState) -> PipelineState:
+    """Extract semantic features."""
+    nouns = state.get("math_verified_nouns", [])
+    if not nouns:
+        return {**state, "semantic_nouns": []}
+    semantic = []
+    for noun in nouns:
+        plan = noun.get("plan", {})
+        if plan.get("needs_semantic", False):
+            try:
+                features = extract_semantic_features(noun)
+                semantic.append({**noun, "semantic_features": features})
+            except Exception as e:
+                log_json(LOG, 30, "semantic_agent_error", noun_id=noun.get("noun_id"), error=str(e))
+                semantic.append(noun)
+        else:
+            semantic.append(noun)
+    return {**state, "semantic_nouns": semantic}
+
+
+def expert_agent_node(state: PipelineState) -> PipelineState:
+    """Apply expert theological analysis."""
+    nouns = state.get("semantic_nouns", [])
+    if not nouns:
+        return {**state, "enriched_nouns": []}
+    expert = []
+    for noun in nouns:
+        plan = noun.get("plan", {})
+        if plan.get("needs_expert", False):
+            try:
+                analysis = analyze_theological(noun)
+                expert.append({**noun, "expert_analysis": analysis})
+            except Exception as e:
+                log_json(LOG, 30, "expert_agent_error", noun_id=noun.get("noun_id"), error=str(e))
+                expert.append(noun)
+        else:
+            expert.append(noun)
+    return {**state, "enriched_nouns": expert}
+
+
+def wrap_hints_node(state: PipelineState) -> PipelineState:
+    """
+    Wrap hints emitted during pipeline execution into envelope structure for persistence.
+
+    Collects hints from state.hints (if present) and wraps them in a structured envelope
+    that can be persisted in exports and validated by rules_guard.py.
+    """
+    hints = state.get("hints", [])
+
+    # Create envelope structure for hints
+    envelope = {
+        "type": "hints_envelope",
+        "version": "1.0",
+        "items": hints,
+        "count": len(hints),
+    }
+
+    # Also collect hints from metadata if they were stored there
+    metadata_hints = state.get("metadata", {}).get("hints", [])
+    if metadata_hints and isinstance(metadata_hints, list):
+        all_hints = list(hints) + [h for h in metadata_hints if h not in hints]
+        envelope["items"] = all_hints
+        envelope["count"] = len(all_hints)
+
+    log_json(LOG, 20, "hints_enveloped", hint_count=envelope["count"])
+
+    return {**state, "enveloped_hints": envelope}
+
+
 def create_graph() -> StateGraph:
     """Create the LangGraph pipeline with batch processing, AI enrichment, confidence validation, and network aggregation."""  # noqa: E501
     graph = StateGraph(PipelineState)
@@ -323,14 +437,30 @@ def create_graph() -> StateGraph:
         "analysis_runner",
         with_metrics(analysis_runner_node, "analysis_runner"),
     )
+    graph.add_node("wrap_hints", with_metrics(wrap_hints_node, "wrap_hints"))
+    # Agent nodes (optional - can be enabled via USE_AGENTS env var)
+    graph.add_node("planner", with_metrics(planner_node, "planner"))
+    graph.add_node("math_agent", with_metrics(math_agent_node, "math_agent"))
+    graph.add_node("semantic_agent", with_metrics(semantic_agent_node, "semantic_agent"))
+    graph.add_node("expert_agent", with_metrics(expert_agent_node, "expert_agent"))
 
     # Define flow
     graph.add_edge("collect_nouns", "validate_batch")
-    graph.add_edge("validate_batch", "enrichment")
-    graph.add_edge("enrichment", "confidence_validator")
+    # Conditional: use agents if USE_AGENTS=true, otherwise use existing enrichment
+    use_agents = os.getenv("USE_AGENTS", "false").lower() == "true"
+    if use_agents:
+        graph.add_edge("validate_batch", "planner")
+        graph.add_edge("planner", "math_agent")
+        graph.add_edge("math_agent", "semantic_agent")
+        graph.add_edge("semantic_agent", "expert_agent")
+        graph.add_edge("expert_agent", "confidence_validator")
+    else:
+        graph.add_edge("validate_batch", "enrichment")
+        graph.add_edge("enrichment", "confidence_validator")
     graph.add_edge("confidence_validator", "network_aggregator")
     graph.add_edge("network_aggregator", "schema_validator")
     graph.add_edge("schema_validator", "analysis_runner")
+    graph.add_edge("analysis_runner", "wrap_hints")
 
     # Set entry point
     graph.set_entry_point("collect_nouns")
