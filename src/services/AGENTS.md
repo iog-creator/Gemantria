@@ -67,9 +67,26 @@ Describes service-level integrations (database + LM Studio) that provide externa
 - **Type Safety**: Strong typing for all configuration values
 - **Production Safety**: ALLOW_MOCKS_FOR_TESTS=0 enforced in production
 
+## Housekeeping (Rule 058)
+
+After ANY code changes in this directory, run comprehensive housekeeping:
+
+```bash
+# Rule 058 mandatory housekeeping checklist
+python3 scripts/rules_audit.py
+make share.sync
+python3 scripts/generate_forest.py
+ruff format --check . && ruff check .
+# Check if ADR needed/updated (Rule 029)
+PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
+# Verify docs updated (AGENTS.md, SSOT, README)
+```
+
+**DO NOT SKIP ANY STEP.** See [Rule 058](../../.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
+
 ## Related Documentation
 
 - **Parent**: [AGENTS.md](../AGENTS.md) - Repository overview
-- **Rules**: [.cursor/rules/011-production-safety.mdc](../../.cursor/rules/011-production-safety.mdc)
+- **Rules**: [.cursor/rules/011-production-safety.mdc](../../.cursor/rules/011-production-safety.mdc), [.cursor/rules/058-auto-housekeeping.mdc](../../.cursor/rules/058-auto-housekeeping.mdc)
 - **SSOT**: [docs/SSOT/](../../docs/SSOT/) - Service contracts
 * See .cursor/rules/050-ops-contract.mdc (AlwaysApply).

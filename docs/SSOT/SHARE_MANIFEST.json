@@ -5,6 +5,10 @@
       "dst": "share/AGENTS.md"
     },
     {
+      "src": "docs/MODEL_MANIFEST.md",
+      "dst": "share/MODEL_MANIFEST.md"
+    },
+    {
       "src": "README.md",
       "dst": "share/README.md"
     },

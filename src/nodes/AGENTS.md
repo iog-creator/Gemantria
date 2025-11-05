@@ -137,9 +137,26 @@ Each node receives and returns a `PipelineState` dict containing:
 - **Infrastructure**: Database connectivity and metrics
 - **External**: NumPy for embedding operations
 
+## Housekeeping (Rule 058)
+
+After ANY code changes in this directory, run comprehensive housekeeping:
+
+```bash
+# Rule 058 mandatory housekeeping checklist
+python3 scripts/rules_audit.py
+make share.sync
+python3 scripts/generate_forest.py
+ruff format --check . && ruff check .
+# Check if ADR needed/updated (Rule 029)
+PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
+# Verify docs updated (AGENTS.md, SSOT, README)
+```
+
+**DO NOT SKIP ANY STEP.** See [Rule 058](../../.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
+
 ## Related Documentation
 
 - **Parent**: [AGENTS.md](../AGENTS.md) - Repository overview
 - **Graph orchestration**: [../graph/AGENTS.md](../graph/AGENTS.md) - Pipeline coordination
-- **Rules**: [.cursor/rules/003-graph-and-batch.mdc](../../.cursor/rules/003-graph-and-batch.mdc)
+- **Rules**: [.cursor/rules/003-graph-and-batch.mdc](../../.cursor/rules/003-graph-and-batch.mdc), [.cursor/rules/058-auto-housekeeping.mdc](../../.cursor/rules/058-auto-housekeeping.mdc)
 - **SSOT**: [docs/SSOT/](../../docs/SSOT/) - Node state schemas

@@ -13,21 +13,43 @@ alwaysApply: true
 
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)
 
-Mandatory run `rules_audit.py`/`share.sync`/`forest regen` after every change/PR. Fail-closed if skipped—critical error log/CI fail.
+Mandatory comprehensive housekeeping after every change/PR. Includes rules audit, docs sync, forest regen, code quality checks, ADR coverage, and tests. Fail-closed if skipped—critical error log/CI fail.
 
 ## Requirements
 
-**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run housekeeping commands:
+**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run ALL housekeeping commands in sequence:
 
 ```bash
-# Rule compliance audit
+# 1. Rule compliance audit (validates rule numbering + docs sync)
 python3 scripts/rules_audit.py
 
-# Documentation synchronization  
+# 2. Documentation synchronization  
 make share.sync
 
-# Forest overview regeneration
+# 3. Forest overview regeneration
 python3 scripts/generate_forest.py
+
+# 4. Code quality checks (formatting + linting)
+ruff format --check . && ruff check .
+
+# 5. ADR coverage check (Rule 029 - creates/updates ADR if needed)
+# - If code changes add new features/architecture → create/update ADR
+# - If rules/migrations change → ADR required
+# - Check: docs/ADRs/ for relevant ADRs to update
+
+# 6. Test execution (run relevant tests for changed code)
+# - New features: Write tests first (Rule 004)
+# - Existing features: Run affected test suites
+PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
+
+# 7. Documentation sync validation (Rule 027)
+# - Verify relevant AGENTS.md files updated if code changes:
+#   * Root AGENTS.md: Workflow/environment/global changes
+#   * Directory AGENTS.md: Changes affecting that directory (src/, scripts/, webui/, etc.)
+#   * See Rule 006 (AGENTS.md Governance) and Rule 017 (Agent docs presence)
+# - Verify SSOT docs updated if schemas/contracts change
+# - Verify README.md updated if user-facing features change
+# - Verify ADR updated if architectural decisions made (Rule 029)
 ```
 
 **FAIL-CLOSED DESIGN**: If housekeeping skipped, operations fail with critical error logs:
@@ -48,8 +70,44 @@ Evidence: Modified files detected without housekeeping completion
 - **Git hooks**: Pre-commit validation of housekeeping status
 - **Status indicators**: Clear visual feedback on housekeeping state
 
+## Complete Housekeeping Checklist
+
+After ANY code change, verify ALL of the following:
+
+- [ ] Rules audit: `python3 scripts/rules_audit.py` → PASS
+- [ ] Share sync: `make share.sync` → OK
+- [ ] Forest regen: `python3 scripts/generate_forest.py` → Complete
+- [ ] Code format: `ruff format --check .` → No files would reformat
+- [ ] Code lint: `ruff check .` → All checks passed
+- [ ] ADR coverage: Check if ADR needed/updated (Rule 029)
+- [ ] Tests: Run relevant test suites → All passing
+- [ ] Docs sync: Verify relevant AGENTS.md files updated (Rule 027, Rule 006, Rule 017)
+  - Root AGENTS.md: Workflow/environment/global changes
+  - Directory AGENTS.md: Changes in that directory (src/, scripts/, webui/, docs/, etc.)
+  - Required files: src/AGENTS.md, src/services/AGENTS.md, webui/graph/AGENTS.md (Rule 017)
+- [ ] SSOT docs: Verify schemas/contracts updated if changed
+- [ ] README.md: Verify updated if user-facing features change
+
+**DO NOT SKIP ANY STEP.** If any step fails, fix the issue before proceeding.
+
+## AGENTS.md Update Requirements
+
+When code changes affect a directory, update the relevant AGENTS.md file(s):
+
+- **Directory-specific AGENTS.md**: Update when code changes affect that directory's behavior/workflows
+- **Root AGENTS.md**: Update when global workflows, environment, or cross-cutting concerns change
+- **Required files** (Rule 017): `src/AGENTS.md`, `src/services/AGENTS.md`, `webui/graph/AGENTS.md` must exist and be maintained
+- **Content requirements** (Rule 006): Include workflow, environment, safety rules, and related ADRs
+- **Housekeeping section**: All AGENTS.md files should reference Rule 058 for post-change validation
+
+**Example**: If you modify `src/services/inference_client.py`, verify `src/services/AGENTS.md` documents the inference client changes.
+
 ## Related Rules
 
-- **Rule 027**: Docs sync gate (housekeeping includes docs sync)
+- **Rule 027**: Docs sync gate (housekeeping includes docs sync validation)
+- **Rule 029**: ADR coverage (housekeeping includes ADR check/update)
+- **Rule 004**: PR workflow (housekeeping includes test execution)
+- **Rule 006**: AGENTS.md Governance (how to maintain AGENTS.md files)
+- **Rule 017**: Agent docs presence (required AGENTS.md files and content)
+- **Rule 042**: Formatter SSOT (housekeeping includes ruff format/check)
 - **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
-- **Rule 017**: Agent docs presence (housekeeping validates coverage)

@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 16:21:34
+Generated: 2025-11-04 20:03:32
 
 ## Active Rules
 
@@ -119,6 +119,7 @@ Generated: 2025-11-04 16:21:34
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
+- ADR-058-vllm-integration: ADR-058: vLLM Provider Integration for Theology Model
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

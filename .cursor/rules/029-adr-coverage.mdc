@@ -5,4 +5,23 @@ alwaysApply: false
 ---
 
 # Rule 029 — ADR Coverage
-If rules or migrations change, an ADR must be added/updated. Enforcement via rules_guard.py.
+
+If rules, migrations, or significant architectural changes occur, an ADR must be added/updated.
+
+## When ADR Required
+
+- **New features/architecture**: Major code changes that introduce new patterns or systems
+- **Rules changes**: Any modification to `.cursor/rules/` files
+- **Migrations**: New database migrations or schema changes
+- **Provider/integration changes**: New external services or API integrations
+
+## Enforcement
+
+- **Rule 058**: ADR coverage check is part of mandatory housekeeping workflow
+- **rules_guard.py**: Automated validation in CI/pre-commit
+- **Manual verification**: Check during housekeeping if ADR needed/updated
+
+## Related Rules
+
+- **Rule 058**: Auto-housekeeping (includes ADR coverage check)
+- **Rule 027**: Docs sync gate (ADRs are part of documentation)

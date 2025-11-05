@@ -9,4 +9,24 @@ alwaysApply: false
 ---
 
 # Rule 027 — Docs Sync Gate
-Code changes must update AGENTS.md/ADR/SSOT. Enforcement via rules_guard.py + system-enforcement.yml.
+
+Code changes must update AGENTS.md/ADR/SSOT. Documentation must stay in sync with code changes.
+
+## Documentation Updates Required
+
+- **AGENTS.md**: Update when code changes affect agent behavior or workflows
+- **ADRs**: Create/update when architectural decisions are made (see Rule 029)
+- **SSOT docs**: Update when schemas, contracts, or interfaces change
+- **README.md**: Update when user-facing features or usage changes
+
+## Enforcement
+
+- **Rule 058**: Docs sync validation is part of mandatory housekeeping workflow
+- **rules_guard.py**: Automated validation in CI/pre-commit
+- **Manual verification**: Verify docs updated during housekeeping checklist
+
+## Related Rules
+
+- **Rule 058**: Auto-housekeeping (includes docs sync validation)
+- **Rule 029**: ADR coverage (ADRs are part of documentation)
+- **Rule 055**: Auto-docs sync pass (enforced via housekeeping)

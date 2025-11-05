@@ -6,6 +6,7 @@ import uuid
 from typing import Any
 
 import psycopg
+from psycopg.types.json import Jsonb
 
 from .structured_logger import get_logger, log_json
 
@@ -45,8 +46,11 @@ class MetricsClient:
                 if hasattr(v, "isoformat"):  # datetime objects
                     db_row[k] = v.isoformat()
                 elif isinstance(v, dict):
-                    # Keep as dict - psycopg handles JSONB conversion automatically
-                    db_row[k] = v
+                    # Explicitly convert dict to Jsonb for psycopg3
+                    db_row[k] = Jsonb(v)
+                elif isinstance(v, list):
+                    # Convert lists to Jsonb as well (may contain dicts)
+                    db_row[k] = Jsonb(v)
                 else:
                     db_row[k] = v
 
