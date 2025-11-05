@@ -574,6 +574,148 @@ release.prepare:           # Pack artifacts + release notes
 
 ---
 
+## Model Routing & Configuration
+
+### 🔧 **Model Routing Map (Who Handles What)**
+
+| Agent                       | Primary model                                            | Why / Purpose                               | Fallback                                  | Non-LLM deps      |
+| --------------------------- | -------------------------------------------------------- | ------------------------------------------- | ----------------------------------------- | ----------------- |
+| **Ingestion (Text→Shards)** | **none** (code)                                          | deterministic parsing/splitting             | —                                         | —                 |
+| **AI-Noun Discovery**       | **christian-bible-expert-v2.0-12b**                      | excels at theological Hebrew noun reasoning | `Qwen2.5-14B-Instruct-GGUF` (general alt) | —                 |
+| **Enrichment (Theology)**   | **christian-bible-expert-v2.0-12b**                      | deep doctrinal and contextual enrichment    | `Qwen2.5-14B-Instruct-GGUF`               | —                 |
+| **Graph Builder**           | **none** (code)                                          | deterministic edge creation                 | —                                         | —                 |
+| **Rerank / Edge Strength**  | **text-embedding-bge-m3** + **qwen.qwen3-reranker-0.6b** | numeric, deterministic rerank blend         | —                                         | cosine + reranker |
+| **Analytics & Report**      | **none** (code)                                          | programmatic stats & forecasts              | —                                         | —                 |
+| **Guard / Compliance**      | **none** (code)                                          | schema + invariants                         | —                                         | —                 |
+| **Release / Operator**      | **none** (code)                                          | changelog + checksum generation             | —                                         | —                 |
+| **Incident Triage**         | **Qwen2.5-14B-Instruct-GGUF**                            | broader context understanding for fixes     | `christian-bible-expert-v2.0-12b`         | —                 |
+| **Math / Verification**     | **self-certainty-qwen3-1.7b-base-math**                  | numerical & gematria verification           | —                                         | —                 |
+| **ADR / Scribe**            | **Qwen2.5-14B-Instruct-GGUF**                            | structured ADR drafting                     | —                                         | —                 |
+
+### 🧩 **Concrete Model Bindings (LM Studio Local)**
+
+```yaml
+models:
+  provider: lmstudio
+  theology: christian-bible-expert-v2.0-12b
+  general: Qwen2.5-14B-Instruct-GGUF
+  math: self-certainty-qwen3-1.7b-base-math
+  embedding: text-embedding-bge-m3
+  reranker: qwen.qwen3-reranker-0.6b
+
+routing:
+  ingestion: none
+  discovery: theology
+  enrichment: theology
+  graph_build: none
+  rerank: [embedding, reranker]
+  analytics: none
+  guard: none
+  release: none
+  triage: general
+  math: math
+  adr: general
+```
+
+### ⚙️ **Agent Settings**
+
+```yaml
+agent_settings:
+  defaults:
+    max_tokens: 1024
+    temperature: 0.2
+    stop: ["```json", "</json>", "\n\n###"]
+    seed: 42
+
+  discovery:
+    model: ${models.theology}
+    temperature: 0.15
+    system: >
+      Discover Hebrew nouns organically from canonical text shards.
+      Emit ai-nouns.v1 JSON only; preserve Hebrew; compute letters + gematria deterministically.
+    task: >
+      From shards for {BOOK}, output {"schema":"gemantria/ai-nouns.v1","book":...,"nodes":[...]}.
+      Each node: {noun_id, surface, letters[], gematria, class, ai_discovered:true, sources[], analysis:{notes}}.
+
+  enrichment:
+    model: ${models.theology}
+    temperature: 0.35
+    system: >
+      Add concise, citable Christian-theology context. Do not alter identifiers or base fields.
+      Write only to analysis.theology: {themes[], cross_refs[], notes}.
+    task: >
+      Enrich each noun in ai_nouns.json for {BOOK}. Keep JSON valid; never add top-level keys.
+
+  rerank:
+    embed_model: ${models.embedding}
+    reranker_model: ${models.reranker}
+    formula: "edge_strength = EDGE_ALPHA*cosine + (1-EDGE_ALPHA)*rerank_score"
+    classes: {"strong": ">=0.90", "weak": ">=0.75", "very_weak": "else"}
+
+  math:
+    model: ${models.math}
+    temperature: 0.0
+    system: >
+      Verify gematria and numeric relationships deterministically.
+      Return verified values or corrections only.
+
+  guard:
+    impl: code
+    checks:
+      - "jsonschema: ai-nouns.v1, graph.v1, analytics schemas"
+      - "no orphan edges"
+      - "hebrew fields non-empty"
+      - "assert_qwen_live passes when ENFORCE_QWEN_LIVE=1"
+
+  release:
+    impl: code
+    notes:
+      include: ["artifacts list", "sha256", "models used", "ADRs touched"]
+
+  adr:
+    model: ${models.general}
+    temperature: 0.2
+    system: >
+      Write ADRs with Context, Decision, Consequences, Verification. Link PRs and schemas.
+```
+
+### 🧾 **Minimal .env Keys**
+
+```dotenv
+INFERENCE_PROVIDER=lmstudio
+ENFORCE_QWEN_LIVE=1
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+EMBEDDING_MODEL=text-embedding-bge-m3
+RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+ANSWERER_MODEL_PRIMARY=christian-bible-expert-v2.0-12b
+ANSWERER_MODEL_ALT=Qwen2.5-14B-Instruct-GGUF
+EDGE_ALPHA=0.5
+```
+
+### 🔍 **Command-to-Function Mapping**
+
+| Command                 | Function                    | Model                            |
+| ----------------------- | --------------------------- | -------------------------------- |
+| `make ai.nouns`         | `discover_nouns_for_book()` | THEOLOGY_MODEL                   |
+| `make ai.enrich`        | enrichment loop             | THEOLOGY_MODEL                   |
+| `make graph.build`      | edge creation               | code                             |
+| `make graph.score`      | rerank blend                | EMBEDDING_MODEL + RERANKER_MODEL |
+| `make math.verify`      | numeric proof               | MATH_MODEL                       |
+| `make analytics.export` | reports                     | code                             |
+| `make guards.all`       | schema checks               | code                             |
+| `make release.build`    | artifact summary            | code                             |
+
+### ✅ **Acceptance Checklist**
+
+- [ ] `.env` keys match live models above
+- [ ] `assert_qwen_live()` passes for all four models
+- [ ] AI-noun + Enrichment schemas validate (guards green)
+- [ ] Rerank outputs `edge_strength` + `class`
+- [ ] Release notes list model versions used
+
+---
+
 ## Editor Baseline (Cursor 2.0)
 
 **Purpose:** speed up surgical PR work while preserving SSOT governance.
