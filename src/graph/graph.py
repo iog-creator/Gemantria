@@ -19,7 +19,7 @@ from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.metrics_core import NodeTimer, get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
-from src.nodes.collect_nouns_db import collect_nouns_for_book
+from src.nodes.ai_noun_discovery import discover_nouns_for_book
 from src.nodes.confidence_validator import (
     ConfidenceValidationError,
     confidence_validator_node,
@@ -258,16 +258,30 @@ def with_metrics(
 
 
 def collect_nouns_node(state: PipelineState) -> PipelineState:
-    """Collect nouns from bible_db for the requested book."""
+    """AI-driven organic noun discovery from Hebrew text."""
     book = state.get("book_name", "Genesis")
-    nouns = collect_nouns_for_book(book)
+    nouns = discover_nouns_for_book(book)
     return {**state, "nouns": nouns}
 
 
 def validate_batch_node(state: PipelineState) -> PipelineState:
     """Process nouns through validation pipeline."""
     nouns = state.get("nouns", [])
-    batch_config = BatchConfig.from_env()
+
+    # For AI-discovered nouns, skip strict batch size validation
+    # Allow organic discovery without artificial limits
+    is_ai_discovered = any(noun.get("ai_discovered", False) for noun in nouns)
+
+    if is_ai_discovered:
+        # AI-driven discovery: validate but don't enforce batch size limits
+        log_json(LOG, 20, "ai_nouns_validation_start", noun_count=len(nouns))
+        batch_config = BatchConfig.from_env()
+        # Temporarily allow partial batches for AI discovery
+        batch_config.allow_partial = True
+        batch_config.partial_reason = "AI organic noun discovery"
+    else:
+        # Legacy database-driven: enforce batch size rules
+        batch_config = BatchConfig.from_env()
 
     # Extract hebrew strings for batch processing
     hebrew_strings = [noun["hebrew"] for noun in nouns]
@@ -292,7 +306,8 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
             "batch_result": batch_result,
             "validated_nouns": validated_nouns,
         }
-        log_json(LOG, 20, "validate_batch_complete", validated_count=len(validated_nouns))
+        log_json(LOG, 20, "validate_batch_complete",
+                validated_count=len(validated_nouns), ai_discovered=is_ai_discovered)
         return result_state
     except BatchAbortError as e:
         # Handle batch abort specifically
