@@ -19,6 +19,7 @@ except ImportError:
 # Load environment variables from .env file
 try:
     from src.infra.env_loader import ensure_env_loaded
+
     ensure_env_loaded()
 except ImportError:
     # Fallback: try to load .env manually
@@ -33,6 +34,7 @@ except ImportError:
 # Use environment variable or default
 DB_DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
 
+
 def run_audit():
     """Run the Genesis database audit."""
     print("🔍 Starting Genesis Database Audit...")
@@ -40,9 +42,9 @@ def run_audit():
 
     try:
         with psycopg.connect(DB_DSN) as conn, conn.cursor() as cur:
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print("📈 BASIC COUNTS")
-            print("="*60)
+            print("=" * 60)
 
             # Concept network counts
             cur.execute("SELECT COUNT(*) FROM concept_network")
@@ -64,9 +66,9 @@ def run_audit():
             metadata_count = cur.fetchone()[0]
             print(f"📋 Concept Metadata: {metadata_count} entries")
 
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print("🔍 SAMPLE DATA (First 5)")
-            print("="*60)
+            print("=" * 60)
 
             # Sample concept network (without joins)
             if network_count > 0:
@@ -82,9 +84,13 @@ def run_audit():
             if concepts_count > 0:
                 print("\n📚 Concepts Sample:")
                 try:
-                    cur.execute("SELECT id, name, hebrew_text, book FROM concepts WHERE name IS NOT NULL ORDER BY id LIMIT 5")
+                    cur.execute(
+                        "SELECT id, name, hebrew_text, book FROM concepts WHERE name IS NOT NULL ORDER BY id LIMIT 5"
+                    )
                     for row in cur.fetchall():
-                        print(f"  ID:{row[0]} | Name:{row[1] or 'N/A'} | Hebrew:{row[2] or 'N/A'} | Book:{row[3] or 'N/A'}")
+                        print(
+                            f"  ID:{row[0]} | Name:{row[1] or 'N/A'} | Hebrew:{row[2] or 'N/A'} | Book:{row[3] or 'N/A'}"
+                        )
                 except Exception as e:
                     print(f"  ⚠️  Could not sample concepts: {e}")
 
@@ -92,15 +98,19 @@ def run_audit():
             if relations_count > 0:
                 print("\n🔗 Concept Relations Sample:")
                 try:
-                    cur.execute("SELECT id, src_concept_id, dst_concept_id, relation_type, weight, cosine FROM concept_relations ORDER BY id LIMIT 5")
+                    cur.execute(
+                        "SELECT id, src_concept_id, dst_concept_id, relation_type, weight, cosine FROM concept_relations ORDER BY id LIMIT 5"
+                    )
                     for row in cur.fetchall():
-                        print(f"  ID:{row[0]} | Src:{row[1]} → Dst:{row[2]} | Type:{row[3]} | Weight:{row[4]:.3f} | Cosine:{row[5] or 'N/A'}")
+                        print(
+                            f"  ID:{row[0]} | Src:{row[1]} → Dst:{row[2]} | Type:{row[3]} | Weight:{row[4]:.3f} | Cosine:{row[5] or 'N/A'}"
+                        )
                 except Exception as e:
                     print(f"  ⚠️  Could not sample concept_relations: {e}")
 
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print("⚠️  INTEGRITY CHECKS")
-            print("="*60)
+            print("=" * 60)
 
             # Initialize variables
             null_concept_ids = 0
@@ -123,7 +133,9 @@ def run_audit():
 
             # Check for NULL source/target in relations
             try:
-                cur.execute("SELECT COUNT(*) FROM concept_relations WHERE src_concept_id IS NULL OR dst_concept_id IS NULL")
+                cur.execute(
+                    "SELECT COUNT(*) FROM concept_relations WHERE src_concept_id IS NULL OR dst_concept_id IS NULL"
+                )
                 null_relations = cur.fetchone()[0]
                 if null_relations > 0:
                     print(f"❌ CRITICAL: {null_relations} NULL source/target IDs in concept_relations")
@@ -174,11 +186,18 @@ def run_audit():
             except Exception as e:
                 print(f"⚠️  Could not check relation types: {e}")
 
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print("📊 SUMMARY")
-            print("="*60)
+            print("=" * 60)
 
-            critical_issues = null_concept_ids + null_relations + orphaned_relations + invalid_weights + invalid_cosines + len(invalid_types)
+            critical_issues = (
+                null_concept_ids
+                + null_relations
+                + orphaned_relations
+                + invalid_weights
+                + invalid_cosines
+                + len(invalid_types)
+            )
 
             print(f"📊 Nodes: {network_count}")
             print(f"🔗 Edges: {relations_count}")
@@ -195,6 +214,7 @@ def run_audit():
     except Exception as e:
         print(f"❌ AUDIT ERROR: {e}", file=sys.stderr)
         return False
+
 
 if __name__ == "__main__":
     success = run_audit()
