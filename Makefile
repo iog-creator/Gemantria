@@ -268,3 +268,6 @@ orchestrator.full:
 test.pipeline.integration:
 	@echo ">> Run pipeline integration tests"
 	@pytest tests/integration/test_pipeline_integration.py -v
+
+models.verify:
+	@python3 scripts/models_verify.py

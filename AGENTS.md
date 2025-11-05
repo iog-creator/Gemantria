@@ -24,17 +24,19 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
 - Inference Providers: Support for vLLM (HF/Transformers) and LM Studio (GGUF) via OpenAI-compatible client selector.
+  - **SSOT**: See `docs/MODEL_MANIFEST.md` for authoritative model configurations (Rule 018)
   - **Provider Selection**: `INFERENCE_PROVIDER=vllm|lmstudio` (default: `lmstudio`)
-  - **vLLM Configuration**:
+  - **vLLM Configuration**: SHELVED due to 16GB hardware limitation - LM Studio exclusive
     - `VLLM_BASE_URL` (default: `http://127.0.0.1:8001/v1`)
-    - `THEOLOGY_MODEL` (HF id, e.g., `sleepdeprived3/Christian-Bible-Expert-v2.0-12B`)
-    - Run vLLM server: `HF_MODEL=sleepdeprived3/Christian-Bible-Expert-v2.0-12B VLLM_PORT=8001 python scripts/vllm_serve.py`
-  - **LM Studio Configuration** (legacy):
-    - `OPENAI_BASE_URL` (default: `http://127.0.0.1:1234/v1`)
+    - `THEOLOGY_MODEL` (HF id, e.g., `sleepdeprived3/Reformed-Christian-Bible-Expert-12B`)
+    - Run vLLM server: `HF_MODEL=sleepdeprived3/Reformed-Christian-Bible-Expert-12B VLLM_PORT=8001 python scripts/vllm_serve.py`
+  - **LM Studio Configuration** (current/active):
+    - `OPENAI_BASE_URL` (default: `http://127.0.0.1:9994/v1`)
     - `THEOLOGY_MODEL` (LM Studio model name, e.g., `christian-bible-expert-v2.0-12b`)
   - **Embeddings & Reranker** (HF models):
     - `EMBEDDING_MODEL=BAAI/bge-m3` (1024-dim)
     - `RERANKER_MODEL=Qwen/Qwen3-Reranker-8B`
+    - `MATH_MODEL` (LM Studio model name, see `docs/MODEL_MANIFEST.md` for current value)
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
