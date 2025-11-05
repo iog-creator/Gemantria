@@ -43,9 +43,13 @@ ruff format --check . && ruff check .
 PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
 
 # 7. Documentation sync validation (Rule 027)
-# - Verify AGENTS.md updated if code changes
+# - Verify relevant AGENTS.md files updated if code changes:
+#   * Root AGENTS.md: Workflow/environment/global changes
+#   * Directory AGENTS.md: Changes affecting that directory (src/, scripts/, webui/, etc.)
+#   * See Rule 006 (AGENTS.md Governance) and Rule 017 (Agent docs presence)
 # - Verify SSOT docs updated if schemas/contracts change
 # - Verify README.md updated if user-facing features change
+# - Verify ADR updated if architectural decisions made (Rule 029)
 ```
 
 **FAIL-CLOSED DESIGN**: If housekeeping skipped, operations fail with critical error logs:
@@ -77,15 +81,33 @@ After ANY code change, verify ALL of the following:
 - [ ] Code lint: `ruff check .` → All checks passed
 - [ ] ADR coverage: Check if ADR needed/updated (Rule 029)
 - [ ] Tests: Run relevant test suites → All passing
-- [ ] Docs sync: Verify AGENTS.md/SSOT/README updated (Rule 027)
+- [ ] Docs sync: Verify relevant AGENTS.md files updated (Rule 027, Rule 006, Rule 017)
+  - Root AGENTS.md: Workflow/environment/global changes
+  - Directory AGENTS.md: Changes in that directory (src/, scripts/, webui/, docs/, etc.)
+  - Required files: src/AGENTS.md, src/services/AGENTS.md, webui/graph/AGENTS.md (Rule 017)
+- [ ] SSOT docs: Verify schemas/contracts updated if changed
+- [ ] README.md: Verify updated if user-facing features change
 
 **DO NOT SKIP ANY STEP.** If any step fails, fix the issue before proceeding.
+
+## AGENTS.md Update Requirements
+
+When code changes affect a directory, update the relevant AGENTS.md file(s):
+
+- **Directory-specific AGENTS.md**: Update when code changes affect that directory's behavior/workflows
+- **Root AGENTS.md**: Update when global workflows, environment, or cross-cutting concerns change
+- **Required files** (Rule 017): `src/AGENTS.md`, `src/services/AGENTS.md`, `webui/graph/AGENTS.md` must exist and be maintained
+- **Content requirements** (Rule 006): Include workflow, environment, safety rules, and related ADRs
+- **Housekeeping section**: All AGENTS.md files should reference Rule 058 for post-change validation
+
+**Example**: If you modify `src/services/inference_client.py`, verify `src/services/AGENTS.md` documents the inference client changes.
 
 ## Related Rules
 
 - **Rule 027**: Docs sync gate (housekeeping includes docs sync validation)
 - **Rule 029**: ADR coverage (housekeeping includes ADR check/update)
 - **Rule 004**: PR workflow (housekeeping includes test execution)
+- **Rule 006**: AGENTS.md Governance (how to maintain AGENTS.md files)
+- **Rule 017**: Agent docs presence (required AGENTS.md files and content)
 - **Rule 042**: Formatter SSOT (housekeeping includes ruff format/check)
 - **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
-- **Rule 017**: Agent docs presence (housekeeping validates coverage)
