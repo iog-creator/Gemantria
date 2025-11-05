@@ -6,3 +6,7 @@
 - Phase 4 adapters for Web UI (no new components)
 - Phase 5 quality gates: reranker adapter + thresholds smoke
 - Phase 6 CLI: Typer wrapper + quickstart
+
+### Fixes
+
+- **Confidence validator threshold**: Now runtime (env-respected); default lowered to **0.80** (uniform 0.85 artifact). See `AGENTS.md#environment`.
