@@ -109,7 +109,15 @@ def main():
     for export_name, export_func in exports.items():
         try:
             data = export_func()
-            output_file = Path("exports") / f"graph_{export_name}.json"
+            # Handle filename mapping for consistency
+            filename_map = {
+                "graph_stats": "graph_stats.json",
+                "correlations": "graph_correlations.json",
+                "patterns": "graph_patterns.json",
+                "temporal_patterns": "temporal_patterns.json",
+                "forecast": "pattern_forecast.json"
+            }
+            output_file = Path("exports") / filename_map.get(export_name, f"{export_name}.json")
 
             with open(output_file, "w") as f:
                 json.dump(data, f, indent=2, default=str)
