@@ -272,3 +272,6 @@ test.pipeline.integration:
 exports.stats:
 	@python3 scripts/export_stats.py | tee exports/graph_stats.json
 
+reports.generate:
+	@python3 scripts/generate_report.py --run-id aggregated_recent | tee exports/report.md
+
