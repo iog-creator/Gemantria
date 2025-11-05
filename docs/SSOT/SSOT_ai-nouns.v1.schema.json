@@ -1,0 +1,75 @@
+{
+
+  "$id": "gemantria:ssot:ai-nouns:v1",
+
+  "title": "AI Nouns SSOT",
+
+  "type": "object",
+
+  "required": ["schema","book","generated_at","nodes"],
+
+  "properties": {
+
+    "schema": { "const": "gemantria/ai-nouns.v1" },
+
+    "book": { "type": "string" },
+
+    "generated_at": { "type": "string", "format": "date-time" },
+
+    "nodes": {
+
+      "type": "array",
+
+      "items": {
+
+        "type": "object",
+
+        "required": ["noun_id","surface","letters","gematria","class","ai_discovered","sources"],
+
+        "properties": {
+
+          "noun_id": { "type": "string" },             # stable UUID from discovery
+
+          "surface": { "type": "string", "minLength": 1 },   # Hebrew noun surface
+
+          "lemma": { "type": ["string","null"] },      # optional (not required by AI path)
+
+          "letters": {
+
+            "type":"array","minItems":1,
+
+            "items":{"type":"string","minLength":1,"maxLength":1}
+
+          },
+
+          "gematria": { "type":"integer","minimum":0 },
+
+          "class": { "type":"string","enum":["person","place","thing","other"] },
+
+          "ai_discovered": { "type":"boolean","const": true },
+
+          "analysis": { "type":"object" },             # free-form AI notes, scrubbed for control chars
+
+          "sources": {
+
+            "type":"array","minItems":1,
+
+            "items":{"type":"object","required":["ref"],"properties":{
+
+              "ref":{"type":"string"},    # where in text
+
+              "offset":{"type":["integer","null"]}
+
+            }}
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

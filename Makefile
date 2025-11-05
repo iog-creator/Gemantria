@@ -114,7 +114,7 @@ ci.exports.smoke:
 exports.guard.hebrew:
 	@mkdir -p share/evidence
 	@echo ">> Hebrew export integrity guard"
-	@psql $$DSN -f scripts/sql/guard_hebrew_export.sql | tee share/evidence/guard_hebrew_export.out && awk "NR>1{sum+=$$2} END{exit (sum!=0)}" share/evidence/guard_hebrew_export.out
+	@psql $$GEMATRIA_DSN -f scripts/sql/guard_hebrew_export.sql | tee share/evidence/guard_hebrew_export.out && awk "NR>1{sum+=$$2} END{exit (sum!=0)}" share/evidence/guard_hebrew_export.out
 
 .PHONY: monitoring.badges
 monitoring.badges:
@@ -273,3 +273,13 @@ orchestrator.full:
 test.pipeline.integration:
 	@echo ">> Run pipeline integration tests"
 	@pytest tests/integration/test_pipeline_integration.py -v
+
+ai.ssot.export:
+	@BOOK=$${BOOK:-Genesis} DSN=$$DSN python3 scripts/export_ai_nouns.py
+
+ai.ssot.guard:
+	@python3 - <<'EOF' || true
+import subprocess,sys
+subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)
+EOF
+	@python3 scripts/guard_ai_nouns.py
