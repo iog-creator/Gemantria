@@ -1,136 +1,48 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://gemantria.ai/schemas/temporal-patterns",
-  "title": "Temporal Pattern Analytics Schema",
-  "description": "JSON schema for temporal pattern analysis across biblical texts using rolling window computations",
+  "$id": "https://gemantria.org/schemas/temporal-patterns.schema.json",
+  "title": "Temporal Patterns Schema",
+  "description": "Schema for temporal pattern analysis including time-series data",
   "type": "object",
   "properties": {
-    "temporal_patterns": {
+    "period": {
+      "type": "string",
+      "description": "Analysis period (daily, weekly, monthly)"
+    },
+    "data_points": {
+      "type": "integer",
+      "description": "Number of data points",
+      "minimum": 0
+    },
+    "patterns": {
       "type": "array",
-      "description": "Array of temporal pattern records for concepts/clusters over time",
+      "description": "Temporal patterns detected",
       "items": {
         "type": "object",
-        "required": [
-          "series_id",
-          "unit",
-          "window",
-          "start_index",
-          "end_index",
-          "metric",
-          "values",
-          "method",
-          "book"
-        ],
         "properties": {
-          "series_id": {
+          "pattern_type": {
             "type": "string",
-            "description": "Identifier for the concept or cluster (concept_id or cluster_id)"
+            "description": "Type of temporal pattern"
           },
-          "unit": {
-            "type": "string",
-            "enum": ["verse", "chapter"],
-            "description": "Time unit for analysis (verse or chapter index)"
+          "frequency": {
+            "type": "number",
+            "description": "Pattern frequency"
           },
-          "window": {
-            "type": "integer",
-            "minimum": 1,
-            "description": "Rolling window size for temporal analysis"
-          },
-          "start_index": {
-            "type": "integer",
+          "confidence": {
+            "type": "number",
+            "description": "Pattern confidence score",
             "minimum": 0,
-            "description": "Starting index in the biblical text"
+            "maximum": 1
           },
-          "end_index": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Ending index in the biblical text"
-          },
-          "metric": {
+          "trend": {
             "type": "string",
-            "enum": ["frequency", "strength", "cooccurrence"],
-            "description": "Type of metric being tracked over time"
-          },
-          "values": {
-            "type": "array",
-            "items": {
-              "type": "number"
-            },
-            "description": "Array of computed values for each window position"
-          },
-          "method": {
-            "type": "string",
-            "enum": ["rolling_mean", "rolling_sum"],
-            "description": "Computation method used for the rolling window"
-          },
-          "book": {
-            "type": "string",
-            "description": "Biblical book this series belongs to"
-          },
-          "zscore_values": {
-            "type": "array",
-            "items": {
-              "type": "number"
-            },
-            "description": "Z-score normalized values for anomaly detection"
-          },
-          "change_points": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            },
-            "description": "Indices where significant changes occur in the series"
-          },
-          "seasonality": {
-            "type": "string",
-            "description": "Detected seasonal pattern (e.g., 'weekly', 'monthly')"
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Additional metadata about the temporal analysis"
-          }
-        }
-      }
-    },
-    "metadata": {
-      "type": "object",
-      "required": ["generated_at", "analysis_parameters"],
-      "properties": {
-        "generated_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp when analysis was generated"
-        },
-        "analysis_parameters": {
-          "type": "object",
-          "properties": {
-            "default_unit": {
-              "type": "string",
-              "enum": ["verse", "chapter"]
-            },
-            "default_window": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "min_series_length": {
-              "type": "integer",
-              "minimum": 1
-            }
+            "enum": ["increasing", "decreasing", "stable", "cyclic"],
+            "description": "Trend direction"
           }
         },
-        "total_series": {
-          "type": "integer",
-          "description": "Total number of temporal series analyzed"
-        },
-        "books_analyzed": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of biblical books included in analysis"
-        }
+        "required": ["pattern_type", "frequency", "confidence"]
       }
     }
   },
-  "required": ["temporal_patterns", "metadata"]
+  "required": ["period", "data_points"]
 }

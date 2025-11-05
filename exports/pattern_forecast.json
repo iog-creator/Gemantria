@@ -1,22 +1,25 @@
 {
-  "forecasts": [],
-  "metadata": {
-    "generated_at": "2025-10-23T19:21:02.580105",
-    "forecast_parameters": {
-      "default_horizon": 10,
-      "default_model": "sma",
-      "min_training_length": 5
+  "model": "prophet",
+  "horizon": 12,
+  "forecasts": [
+    {
+      "period": "2025-01",
+      "predicted_value": 150.5,
+      "lower_bound": 140.2,
+      "upper_bound": 160.8,
+      "confidence_level": 0.95
     },
-    "total_forecasts": 0,
-    "books_forecasted": [],
-    "model_distribution": {
-      "naive": 0,
-      "sma": 0,
-      "arima": 0
-    },
-    "average_metrics": {
-      "rmse": null,
-      "mae": null
+    {
+      "period": "2025-02",
+      "predicted_value": 152.3,
+      "lower_bound": 141.8,
+      "upper_bound": 162.8,
+      "confidence_level": 0.95
     }
+  ],
+  "accuracy_metrics": {
+    "mae": 12.5,
+    "rmse": 15.3,
+    "mape": 0.08
   }
 }

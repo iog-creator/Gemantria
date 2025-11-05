@@ -1,22 +1,95 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "GraphStats",
+  "$id": "https://gemantria.org/schemas/graph-stats.schema.json",
+  "title": "Graph Statistics Schema",
+  "description": "Schema for graph statistics exports including centrality, clustering, and connectivity metrics",
   "type": "object",
-  "required": ["nodes", "edges", "clusters", "density", "centrality"],
   "properties": {
-    "nodes": { "type": "integer", "minimum": 0 },
-    "edges": { "type": "integer", "minimum": 0 },
-    "clusters": { "type": "integer", "minimum": 0 },
-    "density": { "type": "number", "minimum": 0, "maximum": 1 },
+    "nodes": {
+      "type": "integer",
+      "description": "Total number of nodes in the graph",
+      "minimum": 0
+    },
+    "edges": {
+      "type": "integer",
+      "description": "Total number of edges in the graph",
+      "minimum": 0
+    },
+    "clusters": {
+      "type": "integer",
+      "description": "Number of detected clusters/communities",
+      "minimum": 0
+    },
     "centrality": {
       "type": "object",
-      "required": ["avg_degree", "avg_betweenness"],
+      "description": "Centrality measures",
       "properties": {
-        "avg_degree": { "type": "number", "minimum": 0, "maximum": 1 },
-        "avg_betweenness": { "type": "number", "minimum": 0 }
+        "avg_degree": {
+          "type": "number",
+          "description": "Average degree centrality"
+        },
+        "max_degree": {
+          "type": "number",
+          "description": "Maximum degree centrality"
+        },
+        "avg_betweenness": {
+          "type": "number",
+          "description": "Average betweenness centrality"
+        },
+        "max_betweenness": {
+          "type": "number",
+          "description": "Maximum betweenness centrality"
+        },
+        "avg_eigenvector": {
+          "type": "number",
+          "description": "Average eigenvector centrality"
+        },
+        "max_eigenvector": {
+          "type": "number",
+          "description": "Maximum eigenvector centrality"
+        }
       },
-      "additionalProperties": true
+      "required": ["avg_degree", "max_degree"]
+    },
+    "edge_distribution": {
+      "type": "object",
+      "description": "Edge strength distribution",
+      "properties": {
+        "strong_edges": {
+          "type": "integer",
+          "description": "Number of strong edges (≥0.90)",
+          "minimum": 0
+        },
+        "weak_edges": {
+          "type": "integer",
+          "description": "Number of weak edges (0.75-0.89)",
+          "minimum": 0
+        },
+        "very_weak_edges": {
+          "type": "integer",
+          "description": "Number of very weak edges (<0.75)",
+          "minimum": 0
+        },
+        "avg_cosine": {
+          "type": "number",
+          "description": "Average cosine similarity",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "min_cosine": {
+          "type": "number",
+          "description": "Minimum cosine similarity",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "max_cosine": {
+          "type": "number",
+          "description": "Maximum cosine similarity",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
     }
   },
-  "additionalProperties": true
+  "required": ["nodes", "edges"]
 }

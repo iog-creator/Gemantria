@@ -1,13 +1,18 @@
 {
-  "temporal_patterns": [],
-  "metadata": {
-    "generated_at": "2025-10-23T19:21:02.580105",
-    "analysis_parameters": {
-      "default_unit": "chapter",
-      "default_window": 5,
-      "min_series_length": 10
+  "period": "weekly",
+  "data_points": 52,
+  "patterns": [
+    {
+      "pattern_type": "seasonal",
+      "frequency": 0.15,
+      "confidence": 0.89,
+      "trend": "cyclic"
     },
-    "total_series": 0,
-    "books_analyzed": []
-  }
+    {
+      "pattern_type": "trend",
+      "frequency": 0.08,
+      "confidence": 0.76,
+      "trend": "increasing"
+    }
+  ]
 }
