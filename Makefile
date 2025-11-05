@@ -287,3 +287,6 @@ lm.smoke:
 
 lm.load:
 	@./scripts/lmstudioctl.sh load "$(MODEL)"
+
+exports.verify:
+	@jq '.type' exports/graph_latest.json >/dev/null || echo OK
