@@ -271,3 +271,19 @@ test.pipeline.integration:
 
 models.verify:
 	@python3 scripts/models_verify.py
+
+# LM Studio controls (deterministic)
+lm.health:
+	@./scripts/lmstudioctl.sh health
+
+lm.models:
+	@./scripts/lmstudioctl.sh models
+
+lm.ps:
+	@./scripts/lmstudioctl.sh ps
+
+lm.smoke:
+	@./scripts/lmstudioctl.sh smoke
+
+lm.load:
+	@./scripts/lmstudioctl.sh load "$(MODEL)"

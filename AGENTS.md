@@ -37,6 +37,19 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
     - `EMBEDDING_MODEL=BAAI/bge-m3` (1024-dim)
     - `RERANKER_MODEL=Qwen/Qwen3-Reranker-8B`
     - `MATH_MODEL` (LM Studio model name, see `docs/MODEL_MANIFEST.md` for current value)
+
+### LM Studio — Deterministic Bring-up (SSOT aligned)
+Use these commands so we always start the same way:
+```bash
+make models.verify          # env matches docs/MODEL_MANIFEST.md
+make lm.health              # endpoint up?
+make lm.models              # confirm models list
+make lm.smoke               # theology + math quick test
+```
+- Headless/GUI start: `./scripts/lmstudioctl.sh start` (guidance text).
+- To check processes: `make lm.ps`.
+- If not reachable, MCP fails closed with a clear error (see src/mcp/server.py).
+
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
