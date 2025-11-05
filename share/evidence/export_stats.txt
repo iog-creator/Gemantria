@@ -1,0 +1,143 @@
+{
+  "nodes": 3702,
+  "edges": 1855,
+  "clusters": 26,
+  "centrality": {
+    "avg_degree": 0.0,
+    "max_degree": 0.0,
+    "avg_betweenness": 0.0,
+    "max_betweenness": 0.0,
+    "avg_eigenvector": 0.0,
+    "max_eigenvector": 0.0
+  },
+  "edge_distribution": {
+    "strong_edges": 741,
+    "weak_edges": 422,
+    "very_weak_edges": 692,
+    "avg_cosine": 0.8289037911724175,
+    "min_cosine": 0.5594565000328404,
+    "max_cosine": 1.0
+  },
+  "cluster_sizes": [
+    {
+      "cluster_id": 23,
+      "size": 2
+    },
+    {
+      "cluster_id": 24,
+      "size": 2
+    },
+    {
+      "cluster_id": 19,
+      "size": 2
+    },
+    {
+      "cluster_id": 25,
+      "size": 2
+    },
+    {
+      "cluster_id": 21,
+      "size": 2
+    },
+    {
+      "cluster_id": 22,
+      "size": 2
+    },
+    {
+      "cluster_id": 20,
+      "size": 2
+    },
+    {
+      "cluster_id": 18,
+      "size": 2
+    },
+    {
+      "cluster_id": 0,
+      "size": 1
+    },
+    {
+      "cluster_id": 14,
+      "size": 1
+    },
+    {
+      "cluster_id": 3,
+      "size": 1
+    },
+    {
+      "cluster_id": 17,
+      "size": 1
+    },
+    {
+      "cluster_id": 15,
+      "size": 1
+    },
+    {
+      "cluster_id": 6,
+      "size": 1
+    },
+    {
+      "cluster_id": 13,
+      "size": 1
+    },
+    {
+      "cluster_id": 10,
+      "size": 1
+    },
+    {
+      "cluster_id": 9,
+      "size": 1
+    },
+    {
+      "cluster_id": 7,
+      "size": 1
+    },
+    {
+      "cluster_id": 1,
+      "size": 1
+    },
+    {
+      "cluster_id": 5,
+      "size": 1
+    },
+    {
+      "cluster_id": 11,
+      "size": 1
+    },
+    {
+      "cluster_id": 8,
+      "size": 1
+    },
+    {
+      "cluster_id": 12,
+      "size": 1
+    },
+    {
+      "cluster_id": 2,
+      "size": 1
+    },
+    {
+      "cluster_id": 4,
+      "size": 1
+    },
+    {
+      "cluster_id": 16,
+      "size": 1
+    }
+  ],
+  "largest_cluster": {
+    "id": 23,
+    "size": 2
+  },
+  "density": 0.00027078113862665935,
+  "cluster_metrics": {
+    "avg_cluster_density": null,
+    "avg_cluster_diversity": null
+  },
+  "health": {
+    "has_nodes": true,
+    "has_edges": true,
+    "has_clusters": true,
+    "density_reasonable": false
+  },
+  "export_timestamp": "2025-11-04T19:48:49.885591"
+}

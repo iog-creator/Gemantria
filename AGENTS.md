@@ -768,3 +768,9 @@ PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
 
 **DO NOT SKIP ANY STEP.** See [Rule 058](.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
 
+
+
+## Pipeline Runs
+
+
+> **Genesis pipeline** — completed 2025-11-04 19:52 — export: `exports/graph_latest.json`
