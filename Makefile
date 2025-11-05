@@ -268,3 +268,7 @@ orchestrator.full:
 test.pipeline.integration:
 	@echo ">> Run pipeline integration tests"
 	@pytest tests/integration/test_pipeline_integration.py -v
+
+exports.stats:
+	@python3 scripts/export_stats.py | tee exports/graph_stats.json
+

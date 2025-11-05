@@ -716,6 +716,13 @@ Merges are permitted only when **all** are true:
 * **Failure:** LOUD FAIL v6.2
 * **Chain:** 039→041→046→050→051→052→**053**
 
+### Data Analytics Commands (added by PR-016/017)
+
+| Target | Description |
+|--------|--------------|
+| `make exports.stats` | Exports graph statistics and correlations |
+| `make reports.generate` | Generates markdown/JSON pipeline report |
+
 ## Cursor-Specific Guidelines
 
 - Respond in plain English; no structured OPS formats or Governance headers.
