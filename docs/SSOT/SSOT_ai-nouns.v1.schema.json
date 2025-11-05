@@ -10,7 +10,7 @@
 
   "properties": {
 
-    "schema": { "const": "gemantria/ai-nouns.v1" },
+    "schema": { "const": "gematria/ai-nouns.v1" },
 
     "book": { "type": "string" },
 
