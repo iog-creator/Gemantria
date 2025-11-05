@@ -1,0 +1,16 @@
+Graph Preview - Genesis Pipeline Results
+=====================================
+
+Nodes: 3702
+Edges: 1855
+Clusters: 19
+
+Top 5 nodes by ID (sample):
+000c3115-3c57-40e6-bdd4-c9eb8459336d
+000f4acd-dfba-4d49-8815-dc4e5a294ae0
+00174389-ae86-4fa3-9528-e4155f61afe5
+00175144-de3c-4f12-b270-2cef814d032a
+00196370-1164-492b-9529-56a2753f37a6
+
+Edge types distribution:
+null: 1855

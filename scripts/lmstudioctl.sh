@@ -58,9 +58,7 @@ die(){ echo "ERR:" "$@" >&2; exit 1; }
 
 health(){
 
-  curl -fsS --max-time "$TIMEOUT" "$BASE_URL/models" >/dev/null \
-
-    && echo "OK: $BASE_URL reachable" || die "LM Studio not reachable at $BASE_URL"
+  curl -fsS --max-time "$TIMEOUT" "$BASE_URL/models" >/dev/null && echo "OK: $BASE_URL reachable" || die "LM Studio not reachable at $BASE_URL"
 
 }
 
@@ -113,6 +111,13 @@ load(){
 
 
 smoke(){
+
+  # Load environment if .env.local exists
+  if [ -f ".env.local" ]; then
+    set -a
+    source .env.local
+    set +a
+  fi
 
   : "${THEOLOGY_MODEL:?THEOLOGY_MODEL required}"
 

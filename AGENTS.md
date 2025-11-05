@@ -271,6 +271,40 @@ Noun Extraction → Enrichment → Network Building → Schema Validation → An
 collect_nouns → enrichment → network_aggregator → schema_validator → analysis → export_graph
 ```
 
+### Data Integrity & Staging Infrastructure
+
+Following the Genesis data corruption incident (ADR-029), the pipeline now includes **fail-closed data integrity protection** through staging validation:
+
+#### Staging Schema Layer
+- `staging.*_norm` tables with strict constraints (NOT NULL, CHECK constraints, FK relationships)
+- Pre-validation of all data before production writes
+- Atomic promotion with backup snapshots
+
+#### JSON Export Normalization
+- `scripts/normalize_exports.py` canonicalizes field mappings across export variants
+- Handles `source`/`src`, `target`/`dst`, `weight`/`strength`/`edge_strength` variations
+- Produces `exports/graph_latest.normalized.json` for consistent processing
+
+#### Runtime Insertion Guards
+- `scripts/guard_relations_insert.py` validates relations before DB insertion
+- Checks for NULL endpoints, invalid weights (0.0-1.0), proper field presence
+- Fails fast on integrity violations with clear error messages
+
+#### Makefile Integration
+```bash
+make schemas.normalize  # Canonical JSON export normalization
+make exports.guard      # Pre-insertion validation
+```
+
+#### Usage in Pipelines
+```bash
+# Safe pipeline execution with integrity checks
+make orchestrator.full BOOK=Genesis
+# Automatically runs: schemas.normalize → exports.guard → staging validation → production promotion
+```
+
+This infrastructure prevents future column misalignment, NULL reference, and data type corruption issues.
+
 ### Core Components
 
 #### Main Pipeline (`src/graph/graph.py`)
@@ -772,5 +806,9 @@ PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
 
 ## Pipeline Runs
 
+### 📊 Current Status Badges
+[![Nodes](https://img.shields.io/badge/nodes-3,702-brightgreen)](exports/graph_latest.json)
+[![Edges](https://img.shields.io/badge/edges-1,855-blue)](exports/graph_latest.json)
+[![Strong Edges](https://img.shields.io/badge/strong_edges-741-yellow)](exports/graph_latest.json)
 
 > **Genesis pipeline** — completed 2025-11-04 19:52 — export: `exports/graph_latest.json`

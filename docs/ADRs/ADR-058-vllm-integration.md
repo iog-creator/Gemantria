@@ -39,7 +39,7 @@ Add vLLM as an alternative inference provider for the theology model with the fo
 #### vLLM Server Launcher (`scripts/vllm_serve.py`)
 
 - **Configuration**: Environment variables for model, port, GPU utilization
-- **Model Support**: HF Transformers models (e.g., `sleepdeprived3/Christian-Bible-Expert-v2.0-12B`)
+- **Model Support**: HF Transformers models (e.g., `sleepdeprived3/Reformed-Christian-Bible-Expert-12B`)
 - **Performance Tuning**: Configurable GPU memory utilization, max model length
 
 #### Enrichment Node Updates (`src/nodes/enrichment.py`)
@@ -56,7 +56,7 @@ INFERENCE_PROVIDER=vllm  # or lmstudio
 
 # vLLM configuration
 VLLM_BASE_URL=http://127.0.0.1:8001/v1
-THEOLOGY_MODEL=sleepdeprived3/Christian-Bible-Expert-v2.0-12B
+THEOLOGY_MODEL=sleepdeprived3/Reformed-Christian-Bible-Expert-12B
 
 # LM Studio configuration (legacy)
 OPENAI_BASE_URL=http://127.0.0.1:1234/v1
@@ -71,7 +71,7 @@ RERANKER_MODEL=Qwen/Qwen3-Reranker-8B
 
 ```bash
 # Start vLLM server
-HF_MODEL=sleepdeprived3/Christian-Bible-Expert-v2.0-12B \
+HF_MODEL=sleepdeprived3/Reformed-Christian-Bible-Expert-12B \
 VLLM_PORT=8001 VLLM_GPU_UTIL=0.90 VLLM_MAXLEN=3072 \
 python scripts/vllm_serve.py
 ```
@@ -134,6 +134,28 @@ python scripts/vllm_serve.py
 - Full pipeline with vLLM provider
 - Full pipeline with LM Studio provider
 - Provider switching without pipeline restart
+
+## Implementation Status (2025-11-04)
+
+### Architecture Freeze: LM Studio Exclusive
+
+Due to hardware limitations (16GB GPU insufficient for 12B parameter models), vLLM integration has been **shelved indefinitely**. The system now uses **LM Studio exclusively** for all inference tasks:
+
+- **Embeddings**: `text-embedding-bge-m3` (1024-dim)
+- **Reranker**: `qwen3-reranker-8b`
+- **Theology**: `christian-bible-expert-v2.0-12b`
+- **Math**: `qwen/qwen3-14b`
+
+**Rationale for Freeze:**
+- 12B parameter model requires ~24GB VRAM (BF16)
+- Current hardware: 16GB total, ~1.8GB used by LM Studio processes
+- Remaining ~9.8GB insufficient for vLLM + model weights
+- LM Studio provides reliable GGUF inference for all required models
+
+**Code Preservation:**
+- vLLM integration code remains for future hardware upgrades
+- Provider switching logic intact (`INFERENCE_PROVIDER` variable)
+- Model manifest documents both providers for future reference
 
 ## Future Considerations
 

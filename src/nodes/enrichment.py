@@ -36,7 +36,7 @@ def evaluate_confidence(conf, run_id=None, node=None):
 
 def enrichment_node(state: dict) -> dict:
     # Pipeline-level Qwen Live Gate already verified all required models are available
-    theology_model = os.getenv("THEOLOGY_MODEL", "sleepdeprived3/Christian-Bible-Expert-v2.0-12B")
+    theology_model = os.getenv("THEOLOGY_MODEL", "sleepdeprived3/Reformed-Christian-Bible-Expert-12B")
     if not theology_model:
         raise ValueError("THEOLOGY_MODEL environment variable required")
 

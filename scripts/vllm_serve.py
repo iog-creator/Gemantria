@@ -2,7 +2,7 @@
 """Lightweight vLLM server launcher for theology model.
 
 Usage:
-    HF_MODEL=sleepdeprived3/Christian-Bible-Expert-v2.0-12B \
+    HF_MODEL=sleepdeprived3/Reformed-Christian-Bible-Expert-12B \
     VLLM_PORT=8001 VLLM_GPU_UTIL=0.90 VLLM_MAXLEN=3072 \
     python scripts/vllm_serve.py
 """
@@ -11,7 +11,7 @@ import os
 import subprocess
 import sys
 
-HF_MODEL = os.getenv("HF_MODEL", "sleepdeprived3/Christian-Bible-Expert-v2.0-12B")
+HF_MODEL = os.getenv("HF_MODEL", "sleepdeprived3/Reformed-Christian-Bible-Expert-12B")
 PORT = os.getenv("VLLM_PORT", "8001")
 GPU_UTIL = os.getenv("VLLM_GPU_UTIL", "0.90")  # 90% VRAM target
 MAXLEN = os.getenv("VLLM_MAXLEN", "3072")

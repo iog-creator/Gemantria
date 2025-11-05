@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 18:19:57
+Generated: 2025-11-04 20:08:09
 
 ## Active Rules
 
@@ -116,6 +116,7 @@ Generated: 2025-11-04 18:19:57
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
+- ADR-029-schema-normalization-staging: ADR-029: Schema Normalization & Staging Infrastructure
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement

@@ -289,4 +289,21 @@ lm.load:
 	@./scripts/lmstudioctl.sh load "$(MODEL)"
 
 exports.verify:
-	@jq '.type' exports/graph_latest.json >/dev/null || echo OK
+	@echo "🔍 Verifying exports..."
+	@test -f exports/graph_latest.json || (echo "❌ exports/graph_latest.json not found"; exit 1)
+	@test -f exports/graph_stats.json || (echo "❌ exports/graph_stats.json not found"; exit 1)
+	@jq '.type' exports/graph_latest.json >/dev/null 2>&1 || (echo "❌ Invalid JSON in graph_latest.json"; exit 1)
+	@jq '.nodes | length > 0' exports/graph_latest.json | grep -q true || (echo "❌ No nodes in graph export"; exit 1)
+	@jq '.edges | length > 0' exports/graph_latest.json | grep -q true || (echo "❌ No edges in graph export"; exit 1)
+	@jq 'all(.nodes[]; .id != null)' exports/graph_latest.json | grep -q true || (echo "❌ Null node IDs found"; exit 1)
+	@jq 'all(.edges[]; .source != null and .target != null)' exports/graph_latest.json | grep -q true || (echo "❌ Null edge source/target found"; exit 1)
+	@jq '.nodes | length' exports/graph_latest.json | xargs -I {} sh -c 'echo "✅ Found {} nodes"'
+	@jq '.edges | length' exports/graph_latest.json | xargs -I {} sh -c 'echo "✅ Found {} edges"'
+	@echo "✅ Schema validation passed"
+	@echo "🎯 exports.verify: SUCCESS"
+
+schemas.normalize:
+	@python3 scripts/normalize_exports.py
+
+exports.guard:
+	@python3 scripts/guard_relations_insert.py

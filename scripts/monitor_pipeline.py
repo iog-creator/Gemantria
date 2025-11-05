@@ -349,6 +349,9 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
                     stages["validate_batch"]["count"] = total_count
                 break  # Found it, stop looking
 
+    # Check for completed artifacts (for when logs are truncated)
+    completed_artifacts = check_completed_artifacts()
+
     # Second pass: process all events and track timings
     # Only process events from the most recent run_id to avoid double-counting
     # Use a set to deduplicate events that appear in multiple log files
@@ -409,6 +412,14 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
             stages["enrichment"]["last_event"] = event_time
             if not stages["enrichment"]["start_time"]:
                 stages["enrichment"]["start_time"] = event_time
+        elif msg == "enrichment_complete":
+            # Use enrichment_complete as the most authoritative count
+            stages["enrichment"]["status"] = "complete"
+            enriched_count = parsed.get("enriched_count", 0)
+            stages["enrichment"]["count"] = max(stages["enrichment"]["count"], enriched_count)
+            stages["enrichment"]["last_event"] = event_time
+            if duration_ms:
+                stages["enrichment"]["duration_ms"] = duration_ms
         elif (
             parsed.get("msg") == "metrics"
             and parsed.get("node") == "enrichment"
@@ -422,8 +433,8 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
             if duration_ms:
                 stages["enrichment"]["duration_ms"] = duration_ms
         elif "noun_enriched" in msg:
-            # Only use noun_enriched if we don't have batch_processed data yet
-            # (batch_processed is more reliable as it's cumulative)
+            # Only use noun_enriched if we don't have batch_processed or enrichment_complete data yet
+            # (those are more reliable as they're cumulative)
             if stages["enrichment"]["count"] == 0:
                 stages["enrichment"]["status"] = "running"
                 stages["enrichment"]["count"] += 1
@@ -527,7 +538,35 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
             stages["analysis_runner"]["status"] = "failed"
             stages["analysis_runner"]["last_event"] = event_time
 
+    # Override status based on completed artifacts (for truncated logs)
+    # If artifacts exist, mark stages as completed even if completion logs are missing
+    for stage_name, has_artifact in completed_artifacts.items():
+        if has_artifact and stages[stage_name]["status"] in ["running", "pending"]:
+            stages[stage_name]["status"] = "complete"
+            # Set a reasonable completion time if missing
+            if not stages[stage_name]["last_event"] and orchestrator_stage.get("last_event"):
+                stages[stage_name]["last_event"] = orchestrator_stage["last_event"]
+
+    # Special logic for stages that complete together
+    if completed_artifacts["enrichment"]:
+        stages["collect_nouns"]["status"] = "complete"
+        stages["validate_batch"]["status"] = "complete"
+
     return {"stages": stages, "orchestrator": orchestrator_stage}, {"stages": stages}
+
+
+def check_completed_artifacts() -> Dict[str, bool]:
+    """Check for completed artifacts to determine stage completion when logs are truncated."""
+    artifacts = {
+        "collect_nouns": False,  # Always completed if any later stage ran
+        "validate_batch": False,  # Always completed if enrichment started
+        "enrichment": Path("exports/graph_latest.json").exists(),  # Check for final export
+        "confidence_validator": Path("exports/graph_latest.json").exists(),  # Part of final export
+        "network_aggregator": Path("exports/graph_latest.json").exists() and Path("exports/graph_stats.json").exists(),
+        "schema_validator": Path("exports/graph_latest.json").exists(),
+        "analysis_runner": Path("exports/graph_latest.json").exists() and Path("reports/graph_analysis.md").exists(),
+    }
+    return artifacts
 
 
 def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any]) -> Dict[str, Any]:

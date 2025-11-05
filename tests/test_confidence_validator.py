@@ -138,4 +138,3 @@ def test_gematria_gate_independent_of_ai(mock_connect, monkeypatch, mock_db_conn
     assert len(exc_info.value.low_confidence_nouns) == 1
     assert exc_info.value.low_confidence_nouns[0]["gematria_confidence"] == 0.0
     assert exc_info.value.low_confidence_nouns[0]["ai_confidence"] == 0.99
-

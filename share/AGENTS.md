@@ -24,17 +24,32 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
   - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
 - Inference Providers: Support for vLLM (HF/Transformers) and LM Studio (GGUF) via OpenAI-compatible client selector.
+  - **SSOT**: See `docs/MODEL_MANIFEST.md` for authoritative model configurations (Rule 018)
   - **Provider Selection**: `INFERENCE_PROVIDER=vllm|lmstudio` (default: `lmstudio`)
-  - **vLLM Configuration**:
+  - **vLLM Configuration**: SHELVED due to 16GB hardware limitation - LM Studio exclusive
     - `VLLM_BASE_URL` (default: `http://127.0.0.1:8001/v1`)
-    - `THEOLOGY_MODEL` (HF id, e.g., `sleepdeprived3/Christian-Bible-Expert-v2.0-12B`)
-    - Run vLLM server: `HF_MODEL=sleepdeprived3/Christian-Bible-Expert-v2.0-12B VLLM_PORT=8001 python scripts/vllm_serve.py`
-  - **LM Studio Configuration** (legacy):
-    - `OPENAI_BASE_URL` (default: `http://127.0.0.1:1234/v1`)
+    - `THEOLOGY_MODEL` (HF id, e.g., `sleepdeprived3/Reformed-Christian-Bible-Expert-12B`)
+    - Run vLLM server: `HF_MODEL=sleepdeprived3/Reformed-Christian-Bible-Expert-12B VLLM_PORT=8001 python scripts/vllm_serve.py`
+  - **LM Studio Configuration** (current/active):
+    - `OPENAI_BASE_URL` (default: `http://127.0.0.1:9994/v1`)
     - `THEOLOGY_MODEL` (LM Studio model name, e.g., `christian-bible-expert-v2.0-12b`)
   - **Embeddings & Reranker** (HF models):
     - `EMBEDDING_MODEL=BAAI/bge-m3` (1024-dim)
     - `RERANKER_MODEL=Qwen/Qwen3-Reranker-8B`
+    - `MATH_MODEL` (LM Studio model name, see `docs/MODEL_MANIFEST.md` for current value)
+
+### LM Studio — Deterministic Bring-up (SSOT aligned)
+Use these commands so we always start the same way:
+```bash
+make models.verify          # env matches docs/MODEL_MANIFEST.md
+make lm.health              # endpoint up?
+make lm.models              # confirm models list
+make lm.smoke               # theology + math quick test
+```
+- Headless/GUI start: `./scripts/lmstudioctl.sh start` (guidance text).
+- To check processes: `make lm.ps`.
+- If not reachable, MCP fails closed with a clear error (see src/mcp/server.py).
+
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
@@ -255,6 +270,40 @@ Noun Extraction → Enrichment → Network Building → Schema Validation → An
      ↓              ↓              ↓                    ↓             ↓         ↓
 collect_nouns → enrichment → network_aggregator → schema_validator → analysis → export_graph
 ```
+
+### Data Integrity & Staging Infrastructure
+
+Following the Genesis data corruption incident (ADR-029), the pipeline now includes **fail-closed data integrity protection** through staging validation:
+
+#### Staging Schema Layer
+- `staging.*_norm` tables with strict constraints (NOT NULL, CHECK constraints, FK relationships)
+- Pre-validation of all data before production writes
+- Atomic promotion with backup snapshots
+
+#### JSON Export Normalization
+- `scripts/normalize_exports.py` canonicalizes field mappings across export variants
+- Handles `source`/`src`, `target`/`dst`, `weight`/`strength`/`edge_strength` variations
+- Produces `exports/graph_latest.normalized.json` for consistent processing
+
+#### Runtime Insertion Guards
+- `scripts/guard_relations_insert.py` validates relations before DB insertion
+- Checks for NULL endpoints, invalid weights (0.0-1.0), proper field presence
+- Fails fast on integrity violations with clear error messages
+
+#### Makefile Integration
+```bash
+make schemas.normalize  # Canonical JSON export normalization
+make exports.guard      # Pre-insertion validation
+```
+
+#### Usage in Pipelines
+```bash
+# Safe pipeline execution with integrity checks
+make orchestrator.full BOOK=Genesis
+# Automatically runs: schemas.normalize → exports.guard → staging validation → production promotion
+```
+
+This infrastructure prevents future column misalignment, NULL reference, and data type corruption issues.
 
 ### Core Components
 
@@ -753,3 +802,13 @@ PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
 
 **DO NOT SKIP ANY STEP.** See [Rule 058](.cursor/rules/058-auto-housekeeping.mdc) for complete checklist.
 
+
+
+## Pipeline Runs
+
+### 📊 Current Status Badges
+[![Nodes](https://img.shields.io/badge/nodes-3,702-brightgreen)](exports/graph_latest.json)
+[![Edges](https://img.shields.io/badge/edges-1,855-blue)](exports/graph_latest.json)
+[![Strong Edges](https://img.shields.io/badge/strong_edges-741-yellow)](exports/graph_latest.json)
+
+> **Genesis pipeline** — completed 2025-11-04 19:52 — export: `exports/graph_latest.json`

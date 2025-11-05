@@ -1,5 +1,11 @@
 # Gemantria
 
+[![Nodes](https://img.shields.io/badge/nodes-3,702-brightgreen)](https://github.com/your-repo/gemantria)
+[![Edges](https://img.shields.io/badge/edges-1,855-blue)](https://github.com/your-repo/gemantria)
+[![Strong Edges](https://img.shields.io/badge/strong_edges-741-yellow)](https://github.com/your-repo/gemantria)
+
+**Latest Pipeline**: Genesis completed 2025-11-04 — export: `exports/graph_latest.json`
+
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
 
 ## Local development

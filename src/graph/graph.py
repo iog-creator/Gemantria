@@ -80,9 +80,7 @@ def _check_env_precedence():
     if conflicts:
         print(f"[ENV WARNING] .env.local overrides {len(conflicts)} vars: {', '.join(conflicts)}")
         LOG.warning(
-            "env_precedence_conflict",
-            conflicts=conflicts,
-            message=".env.local overrides .env",
+            f"env_precedence_conflict: {conflicts} - .env.local overrides .env",
         )
 
 
