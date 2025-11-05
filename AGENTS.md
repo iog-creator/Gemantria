@@ -395,6 +395,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 057 | # --- |
 | 058 | # --- |
 | 059 | # --- |
+| 060 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---
@@ -706,3 +707,11 @@ Merges are permitted only when **all** are true:
 * **Output:** 4 blocks
 * **Failure:** LOUD FAIL v6.2
 * **Chain:** 039→041→046→050→051→052→**053**
+
+## Cursor-Specific Guidelines
+
+- Respond in plain English; no structured OPS formats or Governance headers.
+- Use tool calls for verification (e.g., read_file for existence checks).
+- Paste file contents/head/tail when requested for state confirmation.
+- Do not assume—verify first, fail-closed on missing critical files.
+- For edits, provide patches/diffs only; no auto-apply without user confirmation.

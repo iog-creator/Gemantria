@@ -62,3 +62,4 @@
 | 057 | 057-embedding-consistency.mdc | # --- |
 | 058 | 058-auto-housekeeping.mdc | # --- |
 | 059 | 059-context-persistence.mdc | # --- |
+| 060 | 060-response-style.mdc | # --- |

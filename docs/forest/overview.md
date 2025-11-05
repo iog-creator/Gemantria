@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 12:59:38
+Generated: 2025-11-04 16:08:37
 
 ## Active Rules
 
@@ -64,6 +64,7 @@ Generated: 2025-11-04 12:59:38
 - Rule 057-embedding-consistency: ---
 - Rule 058-auto-housekeeping: ---
 - Rule 059-context-persistence: ---
+- Rule 060-response-style: ---
 
 ## CI Workflows
 

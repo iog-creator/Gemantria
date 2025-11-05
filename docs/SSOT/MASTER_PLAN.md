@@ -128,25 +128,26 @@
 | 036 | # --- |
 | 037 | # --- |
 | 038 | # --- |
-| 039 | # id: 039_EXECUTION_CONTRACT |
-| 040 | # id: 040_CI_TRIAGE_PLAYBOOK |
-| 041 | # id: 041_PR_MERGE_POLICY |
-| 042 | # 042 — Formatter Single Source of Truth (AlwaysApply) |
-| 043 | # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) |
-| 044 | # 044 — Share Manifest Contract (AlwaysApply) |
-| 045 | # 045 — Rerank Blend is SSOT (AlwaysApply) |
-| 046 | # 046 — Hermetic CI Fallbacks (AlwaysApply) |
+| 039 | # --- |
+| 040 | # --- |
+| 041 | # --- |
+| 042 | # --- |
+| 043 | # --- |
+| 044 | # --- |
+| 045 | # --- |
+| 046 | # --- |
 | 047 | # --- |
 | 048 | # --- |
-| 049 | # id: 049_GPT5_CONTRACT_V5_2 |
-| 050 | # 🧭 Gemantria — OPS Contract v6.2.3 |
-| 051 | # 051 — Cursor Insight & Handoff (AlwaysApply) |
-| 052 | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
-| 053 | # 053 — Idempotent Baseline (OPS v6.2.1) |
-| 054 | # Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) |
-| 055 | # 055 — Auto-Docs Sync Pass (AlwaysApply) |
-| 056 | # id: 056 |
+| 049 | # --- |
+| 050 | # --- |
+| 051 | # --- |
+| 052 | # --- |
+| 053 | # --- |
+| 054 | # --- |
+| 055 | # --- |
+| 056 | # --- |
 | 057 | # --- |
 | 058 | # --- |
-| 059 | # 059 — Context Persistence (AlwaysApply) |
+| 059 | # --- |
+| 060 | # --- |
 <!-- RULES_TABLE_END -->
