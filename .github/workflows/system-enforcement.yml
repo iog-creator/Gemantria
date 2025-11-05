@@ -80,7 +80,7 @@ jobs:
           echo "HINT: enforcement DB steps enabled"
           echo "::endgroup::"
       - name: Run rules guard (hard gate)
-        run: python scripts/rules_guard.py
+        run: PR_BODY="$PR_BODY" python scripts/rules_guard.py
       - name: Rules audit (contiguity + docs sync)
         run: python scripts/rules_audit.py
       - name: Rules numbering check
