@@ -13,21 +13,39 @@ alwaysApply: true
 
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)
 
-Mandatory run `rules_audit.py`/`share.sync`/`forest regen` after every change/PR. Fail-closed if skipped—critical error log/CI fail.
+Mandatory comprehensive housekeeping after every change/PR. Includes rules audit, docs sync, forest regen, code quality checks, ADR coverage, and tests. Fail-closed if skipped—critical error log/CI fail.
 
 ## Requirements
 
-**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run housekeeping commands:
+**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run ALL housekeeping commands in sequence:
 
 ```bash
-# Rule compliance audit
+# 1. Rule compliance audit (validates rule numbering + docs sync)
 python3 scripts/rules_audit.py
 
-# Documentation synchronization  
+# 2. Documentation synchronization  
 make share.sync
 
-# Forest overview regeneration
+# 3. Forest overview regeneration
 python3 scripts/generate_forest.py
+
+# 4. Code quality checks (formatting + linting)
+ruff format --check . && ruff check .
+
+# 5. ADR coverage check (Rule 029 - creates/updates ADR if needed)
+# - If code changes add new features/architecture → create/update ADR
+# - If rules/migrations change → ADR required
+# - Check: docs/ADRs/ for relevant ADRs to update
+
+# 6. Test execution (run relevant tests for changed code)
+# - New features: Write tests first (Rule 004)
+# - Existing features: Run affected test suites
+PYTHONPATH=. python3 -m pytest tests/ -v --tb=short
+
+# 7. Documentation sync validation (Rule 027)
+# - Verify AGENTS.md updated if code changes
+# - Verify SSOT docs updated if schemas/contracts change
+# - Verify README.md updated if user-facing features change
 ```
 
 **FAIL-CLOSED DESIGN**: If housekeeping skipped, operations fail with critical error logs:
@@ -48,8 +66,26 @@ Evidence: Modified files detected without housekeeping completion
 - **Git hooks**: Pre-commit validation of housekeeping status
 - **Status indicators**: Clear visual feedback on housekeeping state
 
+## Complete Housekeeping Checklist
+
+After ANY code change, verify ALL of the following:
+
+- [ ] Rules audit: `python3 scripts/rules_audit.py` → PASS
+- [ ] Share sync: `make share.sync` → OK
+- [ ] Forest regen: `python3 scripts/generate_forest.py` → Complete
+- [ ] Code format: `ruff format --check .` → No files would reformat
+- [ ] Code lint: `ruff check .` → All checks passed
+- [ ] ADR coverage: Check if ADR needed/updated (Rule 029)
+- [ ] Tests: Run relevant test suites → All passing
+- [ ] Docs sync: Verify AGENTS.md/SSOT/README updated (Rule 027)
+
+**DO NOT SKIP ANY STEP.** If any step fails, fix the issue before proceeding.
+
 ## Related Rules
 
-- **Rule 027**: Docs sync gate (housekeeping includes docs sync)
+- **Rule 027**: Docs sync gate (housekeeping includes docs sync validation)
+- **Rule 029**: ADR coverage (housekeeping includes ADR check/update)
+- **Rule 004**: PR workflow (housekeeping includes test execution)
+- **Rule 042**: Formatter SSOT (housekeeping includes ruff format/check)
 - **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
 - **Rule 017**: Agent docs presence (housekeeping validates coverage)

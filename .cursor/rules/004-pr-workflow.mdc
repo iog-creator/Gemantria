@@ -6,7 +6,15 @@ alwaysApply: false
 - One focused goal per PR. Write tests first.
 - Run: make lint type test.unit test.int coverage.report
 - Keep coverage ≥98%. No mocks.
+- **Run Rule 058 housekeeping** (includes all quality checks) before opening PR
 - Commit & push; open PR with Goal/Files/Tests/Acceptance.
+
+## Related Rules
+
+- **Rule 058**: Auto-housekeeping (includes lint, format, tests - run before PR)
+- **Rule 042**: Formatter SSOT (ruff format/check)
+- **Rule 027**: Docs sync gate (verify docs updated)
+- **Rule 029**: ADR coverage (verify ADR if needed)
 
 # References
 - RULES_INDEX.md
