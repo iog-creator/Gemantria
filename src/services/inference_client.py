@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import requests
 
-from src.infra.structured_logger import get_logger
+from src.infra.structured_logger import get_logger, log_json
 
 LOG = get_logger("gemantria.inference_client")
 
@@ -28,7 +28,7 @@ class InferenceClient:
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "dummy")
         self._session = requests.Session()
         self._timeout = 60.0
-        LOG.info("inference_client_init", provider=provider, base_url=self.base_url)
+        log_json(LOG, 20, "inference_client_init", provider=provider, base_url=self.base_url)
 
     def chat_completions(
         self,
@@ -78,7 +78,7 @@ class InferenceClient:
                 content = data["choices"][0]["message"]["content"]
                 results.append(SimpleNamespace(text=content))
             except Exception as e:
-                LOG.error("chat_completion_failed", error=str(e), url=url, model=model)
+                log_json(LOG, 40, "chat_completion_failed", error=str(e), url=url, model=model)
                 raise
 
         # Always return list for compatibility with batched usage
