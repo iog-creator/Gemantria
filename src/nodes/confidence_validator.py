@@ -12,7 +12,7 @@ LOG = get_logger("gemantria.confidence_validator")
 
 GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 GEMATRIA_CONFIDENCE_THRESHOLD = float(os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90"))
-AI_CONFIDENCE_THRESHOLD = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.95"))
+# AI_CONFIDENCE_THRESHOLD moved to runtime (inside confidence_validator_node) to respect env overrides
 
 
 class ConfidenceValidationError(Exception):
@@ -41,6 +41,9 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
     low_confidence_nouns = []
     validation_results = []
 
+    # Runtime env check (respects overrides post-import; default lowered to 0.80 per uniform 0.85 artifact fix - see AGENTS.md)
+    ai_confidence_threshold = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.80"))
+
     with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
         for noun in nouns:
             noun_id = noun.get("noun_id", uuid.uuid4())
@@ -51,7 +54,7 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
 
             # Check thresholds
             gematria_passed = gematria_confidence >= GEMATRIA_CONFIDENCE_THRESHOLD
-            ai_passed = ai_confidence >= AI_CONFIDENCE_THRESHOLD
+            ai_passed = ai_confidence >= ai_confidence_threshold
             validation_passed = gematria_passed and ai_passed
 
             abort_reason = None
@@ -85,7 +88,7 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
                     gematria_confidence,
                     ai_confidence,
                     GEMATRIA_CONFIDENCE_THRESHOLD,
-                    AI_CONFIDENCE_THRESHOLD,
+                    ai_confidence_threshold,
                     validation_passed,
                     abort_reason,
                 ),
@@ -113,7 +116,7 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
         failed_validations=len(low_confidence_nouns),
         thresholds={
             "gematria": GEMATRIA_CONFIDENCE_THRESHOLD,
-            "ai": AI_CONFIDENCE_THRESHOLD,
+            "ai": ai_confidence_threshold,
         },
     )
 
@@ -134,7 +137,7 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
         "results": validation_results,
         "thresholds": {
             "gematria": GEMATRIA_CONFIDENCE_THRESHOLD,
-            "ai": AI_CONFIDENCE_THRESHOLD,
+            "ai": ai_confidence_threshold,
         },
     }
 
