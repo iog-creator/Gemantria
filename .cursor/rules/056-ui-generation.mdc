@@ -1,23 +1,14 @@
 ---
 description: UI Generation Standard
-alwaysApply: true
-globs: 
+alwaysApply: false
+globs:
   - "ui/**"
   - "webui/**"
+  - "src/**"
+  - ".github/**"
 ---
-id: 056
 
-name: UI Generation Standard
-
-alwaysApply: true
-
-scope:
-  paths:
-    - "ui/**"
-    - "src/**"
-    - ".github/**"
-
-rules:
+# 056 — UI Generation Standard
   - id: 056-1
     description: "Default to Gemini 2.5 Pro for UI codegen; escalate to Claude Sonnet 4 after 2 iterations or for multi-file refactors/high-fidelity styling."
   - id: 056-2

@@ -3,10 +3,8 @@ description: GPT-5 Contract v5.2
 alwaysApply: true
 globs: []
 ---
-id: 049_GPT5_CONTRACT_V5_2
-version: 1
-alwaysApply: true
-title: GPT-5 Contract v5.2 - Drive, Don't Ask
+
+# 049 — GPT-5 Contract v5.2 (Always Apply - Core Governance)
 description: |
   GPT-5 orchestrates; Cursor executes. Evidence-first, no back-and-forth.
 policy:

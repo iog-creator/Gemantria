@@ -1,8 +1,9 @@
 ---
 description: Infrastructure and checkpointer safety
+alwaysApply: true
 globs:
-  - src/infra/**/*
-alwaysApply: false
+  - "src/infra/**/*"
+  - "src/persist/**/*"
 ---
 
 - Checkpointer factory validates CHECKPOINTER env var; defaults to memory for unknown values.

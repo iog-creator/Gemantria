@@ -1,9 +1,10 @@
 ---
 description: DB safety and SQL discipline
+alwaysApply: true
 globs:
-  - src/infra/db.py
-  - db/migrations/**/*
-alwaysApply: false
+  - "src/infra/db.py"
+  - "db/migrations/**/*"
+  - "migrations/**/*"
 ---
 
 # Related ADR: ADR-001 (Two-DB Safety)

@@ -1,0 +1,15 @@
+id: 060
+title: "Pipeline Node Sequence (ALWAYS APPLY)"
+description: |
+  Enforce the canonical node order for the Gemantria pipeline. Cursor MUST follow this order
+  in any edits, reviews, or code generation. If code and docs differ, update both in the same PR.
+alwaysApply: true
+rules:
+  - "The pipeline MUST call nodes in this exact order:
+     1) collect_nouns → 2) validate_batch → 3) enrichment → 4) confidence_validator →
+     5) network_aggregator → 6) schema_validator → 7) analysis_runner → 8) wrap_hints."
+  - "If any node is added/removed/reordered, you MUST update src/graph/AGENTS.md (MUST section) and RULES_INDEX.md (Rule-060) in the same change and run `make housekeeping`."
+  - "Refuse PRs or changes that alter the sequence without the doc+rule updates and passing guard: test.pipeline.sequence."
+hints:
+  - "PROCESS_HINTS_ENVELOPE_IMMEDIATELY"
+  - "AGENT_STOP_AND_PAY_ATTENTION"

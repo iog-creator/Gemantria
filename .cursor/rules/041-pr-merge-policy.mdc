@@ -3,10 +3,8 @@ description: PR Merge Policy
 alwaysApply: true
 globs: []
 ---
-id: 041_PR_MERGE_POLICY
-version: 1
-alwaysApply: false
-title: PR Merge Policy (no green, no merge)
+
+# 041 — PR Merge Policy (Always Apply - Safety Critical)
 policy:
   - Do not merge if any required check fails.
   - Use squash merge. Delete head branch after merge.
