@@ -510,3 +510,25 @@ pipeline.e2e:
 	@echo ">> E2E: jq evidence line"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
 	@echo "OK: pipeline.e2e (local hermetic) PASS"
+
+.PHONY: env.validate
+env.validate:
+	@echo ">> Validating environment setup…"
+	@if [ ! -f ".env" ]; then \
+		echo "ERROR: .env file not found - copy from env_example.txt"; \
+		exit 1; \
+	fi
+	@if [ -z "$$VIRTUAL_ENV" ]; then \
+		echo "ERROR: Virtual environment not active - run: source .venv/bin/activate"; \
+		exit 1; \
+	fi
+	@if ! grep -q "^GEMATRIA_DSN=" .env; then \
+		echo "ERROR: GEMATRIA_DSN not configured in .env"; \
+		exit 1; \
+	fi
+	@echo "✅ Environment validation passed"
+
+.PHONY: pipeline.from_db.pg
+pipeline.from_db.pg: env.validate
+	@echo ">> DB-backed pipeline with Postgres checkpointer (requires GEMATRIA_DSN)…"
+	PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline

@@ -9,8 +9,13 @@ except Exception:
 DSN = os.getenv("GEMATRIA_DSN")
 RUN_ID = os.getenv("RUN_ID", "ledger-smoke")
 if not DSN:
-    print("OK: empty-DB tolerated (no DSN).")
-    sys.exit(0)
+    print("ERROR: GEMATRIA_DSN not configured in environment.", file=sys.stderr)
+    print("Please ensure:", file=sys.stderr)
+    print("1. .env file exists (copy from env_example.txt)", file=sys.stderr)
+    print("2. GEMATRIA_DSN is set in .env", file=sys.stderr)
+    print("3. Virtual environment is active: source .venv/bin/activate", file=sys.stderr)
+    print("4. Run environment validation: make env.validate", file=sys.stderr)
+    sys.exit(2)
 with psycopg.connect(DSN) as c, c.cursor() as cur:
     cur.execute("SELECT to_regclass('gematria.runs_ledger')")
     if cur.fetchone()[0] is None:

@@ -1,0 +1,33 @@
+name: nightly
+
+on:
+  workflow_dispatch: {}
+  # OPS v6.2.3: hermetic nightly enabled - runs pipeline.e2e only
+  schedule:
+    - cron: "37 7 * * *" # daily 07:37 UTC (after other nightlies would have run)
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: { fetch-depth: 0 }
+
+      - name: Setup Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
+        with: { python-version: "3.11" }
+
+      - name: Setup Node.js
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de649
+        with: { node-version: "18" }
+
+      # Hermetic: no external dependencies
+      - name: Run hermetic E2E pipeline test
+        run: make pipeline.e2e
+
+      - name: Verify evidence bundle intact
+        run: make evidence.bundle

@@ -38,6 +38,8 @@ data/**
 
 .git/**
 
+!.vscode/settings.json
+!.vscode/launch.json
 .vscode/**
 
 .idea/**
