@@ -86,9 +86,7 @@ class EvidenceLogger:
         level = "INFO" if passed else "ERROR"
         self.log_evidence("validation", data, level)
 
-    def log_agent_result(
-        self, success: bool, output_summary: Dict[str, Any], error_details: str | None = None
-    ) -> None:
+    def log_agent_result(self, success: bool, output_summary: Dict[str, Any], error_details: str | None = None) -> None:
         """
         Log the final result of an agent execution.
 

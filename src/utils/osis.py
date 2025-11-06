@@ -4,7 +4,7 @@ OSIS (Open Scripture Information Standard) utilities for verse reference extract
 """
 
 import re
-from typing import List, Dict, Any, Optional
+from typing import List, Dict
 
 
 def extract_verse_references(text: str) -> List[Dict[str, str]]:
@@ -22,9 +22,9 @@ def extract_verse_references(text: str) -> List[Dict[str, str]]:
     # Common patterns for verse references
     patterns = [
         # Book Chapter:Verse (e.g., "Psalm 30:5")
-        r'([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+):(\d+)',
+        r"([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+):(\d+)",
         # Book Chapter (e.g., "Genesis 1")
-        r'([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+)',
+        r"([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+)",
     ]
 
     for pattern in patterns:
@@ -44,15 +44,12 @@ def extract_verse_references(text: str) -> List[Dict[str, str]]:
                     osis_ref = f"{osis_book}.{chapter}"
                     label = f"{book_name} {chapter}"
 
-                references.append({
-                    'label': label,
-                    'osis': osis_ref
-                })
+                references.append({"label": label, "osis": osis_ref})
 
     return references
 
 
-def normalize_book_to_osis(book_name: str) -> Optional[str]:
+def normalize_book_to_osis(book_name: str) -> str | None:
     """
     Normalize a book name to OSIS abbreviation.
 
@@ -64,74 +61,74 @@ def normalize_book_to_osis(book_name: str) -> Optional[str]:
     """
     # Common mappings - this is a simplified version
     book_mappings = {
-        'genesis': 'Gen',
-        'exodus': 'Exod',
-        'leviticus': 'Lev',
-        'numbers': 'Num',
-        'deuteronomy': 'Deut',
-        'joshua': 'Josh',
-        'judges': 'Judg',
-        'ruth': 'Ruth',
-        '1 samuel': '1Sam',
-        '2 samuel': '2Sam',
-        '1 kings': '1Kgs',
-        '2 kings': '2Kgs',
-        '1 chronicles': '1Chr',
-        '2 chronicles': '2Chr',
-        'ezra': 'Ezra',
-        'nehemiah': 'Neh',
-        'esther': 'Esth',
-        'job': 'Job',
-        'psalms': 'Ps',
-        'psalm': 'Ps',
-        'proverbs': 'Prov',
-        'ecclesiastes': 'Eccl',
-        'song of solomon': 'Song',
-        'song of songs': 'Song',
-        'isaiah': 'Isa',
-        'jeremiah': 'Jer',
-        'lamentations': 'Lam',
-        'ezekiel': 'Ezek',
-        'daniel': 'Dan',
-        'hosea': 'Hos',
-        'joel': 'Joel',
-        'amos': 'Amos',
-        'obadiah': 'Obad',
-        'jonah': 'Jonah',
-        'micah': 'Mic',
-        'nahum': 'Nah',
-        'habakkuk': 'Hab',
-        'zephaniah': 'Zeph',
-        'haggai': 'Hag',
-        'zechariah': 'Zech',
-        'malachi': 'Mal',
-        'matthew': 'Matt',
-        'mark': 'Mark',
-        'luke': 'Luke',
-        'john': 'John',
-        'acts': 'Acts',
-        'romans': 'Rom',
-        '1 corinthians': '1Cor',
-        '2 corinthians': '2Cor',
-        'galatians': 'Gal',
-        'ephesians': 'Eph',
-        'philippians': 'Phil',
-        'colossians': 'Col',
-        '1 thessalonians': '1Thess',
-        '2 thessalonians': '2Thess',
-        '1 timothy': '1Tim',
-        '2 timothy': '2Tim',
-        'titus': 'Titus',
-        'philemon': 'Phlm',
-        'hebrews': 'Heb',
-        'james': 'Jas',
-        '1 peter': '1Pet',
-        '2 peter': '2Pet',
-        '1 john': '1John',
-        '2 john': '2John',
-        '3 john': '3John',
-        'jude': 'Jude',
-        'revelation': 'Rev'
+        "genesis": "Gen",
+        "exodus": "Exod",
+        "leviticus": "Lev",
+        "numbers": "Num",
+        "deuteronomy": "Deut",
+        "joshua": "Josh",
+        "judges": "Judg",
+        "ruth": "Ruth",
+        "1 samuel": "1Sam",
+        "2 samuel": "2Sam",
+        "1 kings": "1Kgs",
+        "2 kings": "2Kgs",
+        "1 chronicles": "1Chr",
+        "2 chronicles": "2Chr",
+        "ezra": "Ezra",
+        "nehemiah": "Neh",
+        "esther": "Esth",
+        "job": "Job",
+        "psalms": "Ps",
+        "psalm": "Ps",
+        "proverbs": "Prov",
+        "ecclesiastes": "Eccl",
+        "song of solomon": "Song",
+        "song of songs": "Song",
+        "isaiah": "Isa",
+        "jeremiah": "Jer",
+        "lamentations": "Lam",
+        "ezekiel": "Ezek",
+        "daniel": "Dan",
+        "hosea": "Hos",
+        "joel": "Joel",
+        "amos": "Amos",
+        "obadiah": "Obad",
+        "jonah": "Jonah",
+        "micah": "Mic",
+        "nahum": "Nah",
+        "habakkuk": "Hab",
+        "zephaniah": "Zeph",
+        "haggai": "Hag",
+        "zechariah": "Zech",
+        "malachi": "Mal",
+        "matthew": "Matt",
+        "mark": "Mark",
+        "luke": "Luke",
+        "john": "John",
+        "acts": "Acts",
+        "romans": "Rom",
+        "1 corinthians": "1Cor",
+        "2 corinthians": "2Cor",
+        "galatians": "Gal",
+        "ephesians": "Eph",
+        "philippians": "Phil",
+        "colossians": "Col",
+        "1 thessalonians": "1Thess",
+        "2 thessalonians": "2Thess",
+        "1 timothy": "1Tim",
+        "2 timothy": "2Tim",
+        "titus": "Titus",
+        "philemon": "Phlm",
+        "hebrews": "Heb",
+        "james": "Jas",
+        "1 peter": "1Pet",
+        "2 peter": "2Pet",
+        "1 john": "1John",
+        "2 john": "2John",
+        "3 john": "3John",
+        "jude": "Jude",
+        "revelation": "Rev",
     }
 
     # Normalize the input

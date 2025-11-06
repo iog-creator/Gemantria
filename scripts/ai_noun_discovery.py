@@ -20,8 +20,8 @@ src_dir = project_root / "src"
 # Always add src to path
 sys.path.insert(0, str(src_dir))
 
-from src.nodes.ai_noun_discovery import discover_nouns_for_book
-from src.infra.env_loader import ensure_env_loaded
+from src.nodes.ai_noun_discovery import discover_nouns_for_book  # noqa: E402
+from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 
 
 def main():
