@@ -27,6 +27,7 @@ from src.infra.runs_ledger import (
     get_model_versions,
     get_schema_version,
 )
+from src.persist.runs_ledger import mark_run_started, mark_run_finished
 
 # Load environment variables from .env file
 ensure_env_loaded()
@@ -144,6 +145,12 @@ def run_pipeline(
     }
     run_id = create_run(book, versions)
 
+    # Optional: record run start (tolerant if DSN missing)
+    try:
+        mark_run_started(run_id, book, notes="langgraph pipeline")
+    except Exception as e:
+        print(f"[runs_ledger.start] WARN: {e}")
+
     # Create initial state
     initial_state: PipelineState = {
         "run_id": run_id,
@@ -170,6 +177,12 @@ def run_pipeline(
 
         update_run_status(run_id, "completed", finished_at=datetime.utcnow())
 
+        # Finish marker (always tolerant)
+        try:
+            mark_run_finished(run_id, notes="ok")
+        except Exception as e:
+            print(f"[runs_ledger.finish] WARN: {e}")
+
         # Return results
         return {
             "run_id": final_state.get("run_id"),
@@ -185,6 +198,11 @@ def run_pipeline(
     except Exception as e:
         # Update run status to failed
         update_run_status(run_id, "failed")
+        # Optional: mark run finished with error (tolerant)
+        try:
+            mark_run_finished(run_id, notes=f"error: {str(e)[:100]}")
+        except Exception as finish_e:
+            print(f"[runs_ledger.finish] WARN: {finish_e}")
         return {
             "run_id": initial_state.get("run_id"),
             "book": book,

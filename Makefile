@@ -132,6 +132,11 @@ eval.graph.calibrate.adv:
 	@PYTHONPATH=. python3 scripts/guards/guard_ci_empty_db.py
 	@echo ">> Calibration step skipped or tolerated in empty-DB CI."
 
+.PHONY: db.runs_ledger.smoke
+db.runs_ledger.smoke:
+	@echo ">> runs_ledger smoke (tolerant)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_runs_ledger.py
+
 .PHONY: ci.exports.smoke
 ci.exports.smoke:
 	@echo ">> CI exports smoke (empty-DB tolerant)…"
