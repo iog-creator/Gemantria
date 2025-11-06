@@ -20,6 +20,21 @@ ensure_env_loaded()
 LOG = get_logger("export_graph")
 
 
+def _node_payload(noun: dict) -> dict:
+    out = {
+        "id": noun["noun_id"],
+        "surface": noun.get("surface"),
+        "class": noun.get("class"),
+        "analysis": noun.get("analysis", {}),
+    }
+    # Expose enrichment cross-references to UI as external_refs (optional)
+    enr = noun.get("enrichment") or {}
+    xrefs = enr.get("crossrefs") or []
+    if xrefs:
+        out["external_refs"] = [{"label": xr.get("label"), "osis": xr.get("osis")} for xr in xrefs if xr.get("osis")]
+    return out
+
+
 def export_correlation_graph():
     """Export correlation network as viz-ready JSON for correlation analysis."""
     try:
@@ -194,45 +209,69 @@ def main():
         out_dir = os.getenv("EXPORT_DIR", "exports")
         os.makedirs(out_dir, exist_ok=True)
 
-        db = get_gematria_rw()
+        # Try to read ai_nouns.json for enriched node data (prioritize over database)
+        ai_nouns_path = os.path.join("exports", "ai_nouns.json")
+        nodes_data = []
+        use_ai_nouns = False
+        if os.path.exists(ai_nouns_path):
+            with open(ai_nouns_path, encoding="utf-8") as f:
+                ai_nouns_data = json.load(f)
+                nodes_data = ai_nouns_data.get("nodes", [])
+            LOG.info(f"Loaded {len(nodes_data)} nodes from ai_nouns.json")
+            use_ai_nouns = len(nodes_data) > 0
+        else:
+            LOG.warning("ai_nouns.json not found, falling back to database nodes")
 
-        # Fetch nodes with cluster and centrality data
-        nodes = list(
-            db.execute(
-                """
-            SELECT n.concept_id, co.name, c.cluster_id,
-                   ce.degree, ce.betweenness, ce.eigenvector
-            FROM concept_network n
-            LEFT JOIN concepts co ON co.id::text = n.concept_id::text
-            LEFT JOIN concept_clusters c ON c.concept_id = n.concept_id
-            LEFT JOIN concept_centrality ce ON ce.concept_id = n.concept_id
-        """
+        if not use_ai_nouns:
+            # Fallback to database nodes if ai_nouns.json doesn't exist or is empty
+            db = get_gematria_rw()
+            db_nodes = list(
+                db.execute(
+                    """
+                SELECT n.concept_id, co.name, c.cluster_id,
+                       ce.degree, ce.betweenness, ce.eigenvector
+                FROM concept_network n
+                LEFT JOIN concepts co ON co.id::text = n.concept_id::text
+                LEFT JOIN concept_clusters c ON c.concept_id = n.concept_id
+                LEFT JOIN concept_centrality ce ON ce.concept_id = n.concept_id
+            """
+                )
             )
-        )
-
-        # Fetch edges
-        edges = list(
-            db.execute(
-                """
-            SELECT source_id, target_id, cosine, rerank_score, decided_yes
-            FROM concept_relations
-        """
-            )
-        )
-
-        # Build graph structure
-        graph = {
-            "nodes": [
+            nodes_data = [
                 {
-                    "id": str(r[0]),
-                    "label": r[1] or str(r[0]),
+                    "noun_id": str(r[0]),
+                    "surface": r[1] or str(r[0]),
                     "cluster": r[2],
                     "degree": float(r[3] or 0),
                     "betweenness": float(r[4] or 0),
                     "eigenvector": float(r[5] or 0),
                 }
-                for r in nodes
-            ],
+                for r in db_nodes
+            ]
+
+        # Build nodes using _node_payload function
+        nodes = [_node_payload(noun) for noun in nodes_data]
+
+        # Always need db connection for edges
+        db = get_gematria_rw()
+
+        # Fetch edges
+        try:
+            edges_result = db.execute(
+                """
+            SELECT source_id, target_id, cosine, rerank_score, decided_yes
+            FROM concept_relations
+            """
+            )
+            edges = list(edges_result)
+            LOG.info(f"Fetched {len(edges)} edges, first edge: {edges[0] if edges else 'No edges'}")
+        except Exception as e:
+            LOG.warning(f"Could not fetch edges: {e}, using empty edges list")
+            edges = []
+
+        # Build graph structure
+        graph = {
+            "nodes": nodes,
             # SSOT field names (Rule-045); validators depend on exact keys.
             "edges": [
                 {
@@ -247,7 +286,7 @@ def main():
             "metadata": {
                 "node_count": len(nodes),
                 "edge_count": len(edges),
-                "cluster_count": len(set(r[2] for r in nodes if r[2] is not None)),
+                "cluster_count": len(set(n.get("cluster") for n in nodes_data if n.get("cluster") is not None)),
                 "export_timestamp": str(next(iter(db.execute("SELECT now()")))[0]),
             },
         }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, json, sys
 import psycopg
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 DSN = os.getenv("BIBLE_DB_DSN")
 if not DSN:
@@ -63,7 +63,7 @@ def main(limit=None, out_path="exports/ai_nouns.db_morph.json"):
     envelope = {
         "schema": "gemantria/ai-nouns.v1",
         "source": "bible_db.v_morph_tokens",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "nodes": nouns,
     }
 

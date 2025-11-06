@@ -1,0 +1,15 @@
+name: repo-layout-smoke
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  layout-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run repo layout guard
+        run: python3 scripts/guards/guard_repo_layout.py

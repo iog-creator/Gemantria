@@ -1,0 +1,22 @@
+name: crossrefs-smoke
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  seed-and-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Install deps
+        run: pip install -r requirements.txt || true
+      - name: Seed sample and run guards
+        run: |
+          make test.seed.crossrefs
+          python3 scripts/guards/guard_enrichment_details.py exports/ai_nouns.json
+          python3 scripts/guards/guard_crossrefs_extracted.py exports/ai_nouns.json

@@ -10,11 +10,9 @@ import json
 import os
 import re
 from typing import Any, Dict, List
-from pathlib import Path
 
 from src.core.books import normalize_book
 from src.infra.db import get_bible_ro
-from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
 from src.services.lmstudio_client import chat_completion
 
@@ -61,8 +59,7 @@ class AINounDiscovery:
         # Use AI to discover and analyze nouns
         discovered_nouns = self._ai_discover_nouns(raw_text, book)
 
-        log_json(LOG, 20, "ai_noun_discovery_complete",
-                book=book, nouns_discovered=len(discovered_nouns))
+        log_json(LOG, 20, "ai_noun_discovery_complete", book=book, nouns_discovered=len(discovered_nouns))
 
         return discovered_nouns
 
@@ -70,17 +67,22 @@ class AINounDiscovery:
         """Extract raw Hebrew text for the book."""
         try:
             # BibleReadOnly.execute() handles connection internally
-            rows = list(get_bible_ro().execute("""
+            rows = list(
+                get_bible_ro().execute(
+                    """
                 SELECT hw.word_text
                 FROM bible.hebrew_ot_words hw
                 JOIN bible.verses v ON hw.verse_id = v.verse_id
                 WHERE v.book_name = %s
                   AND LEFT(hw.strongs_id, 1) = 'H'
                 ORDER BY v.verse_id, hw.word_position
-            """, (db_book,)))
+            """,
+                    (db_book,),
+                )
+            )
 
             # Join all words with spaces
-            text = ' '.join(row[0] for row in rows)
+            text = " ".join(row[0] for row in rows)
             return text
         except Exception as e:
             log_json(LOG, 40, "raw_text_extraction_error", book=db_book, error=str(e))
@@ -129,10 +131,15 @@ class AINounDiscovery:
             # Use the discovery model from environment
             discovery_model = os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b")
 
-            messages_batch = [[
-                {"role": "system", "content": "You are a Hebrew language expert specializing in biblical text analysis."},
-                {"role": "user", "content": prompt}
-            ]]
+            messages_batch = [
+                [
+                    {
+                        "role": "system",
+                        "content": "You are a Hebrew language expert specializing in biblical text analysis.",
+                    },
+                    {"role": "user", "content": prompt},
+                ]
+            ]
 
             results = chat_completion(messages_batch, model=discovery_model, temperature=0.1)
 
@@ -159,11 +166,11 @@ class AINounDiscovery:
         # Take samples from beginning, middle, and end
         chunk_size = max_length // 3
         return (
-            text[:chunk_size] +
-            " ... " +
-            text[len(text)//2:len(text)//2 + chunk_size] +
-            " ... " +
-            text[-chunk_size:]
+            text[:chunk_size]
+            + " ... "
+            + text[len(text) // 2 : len(text) // 2 + chunk_size]
+            + " ... "
+            + text[-chunk_size:]
         )
 
     def _parse_ai_response(self, content: str) -> Dict[str, Any]:
@@ -173,7 +180,7 @@ class AINounDiscovery:
             return json.loads(content)
         except json.JSONDecodeError:
             # Try to extract JSON from markdown or text
-            json_match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
+            json_match = re.search(r"```json\s*(.*?)\s*```", content, re.DOTALL)
             if json_match:
                 try:
                     return json.loads(json_match.group(1))

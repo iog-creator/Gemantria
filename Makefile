@@ -375,6 +375,8 @@ guards.all:
 	@$(MAKE) ssot.verify
 	@echo ">> Validating db ingest envelope…"
 	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json || (echo "db ingest guard failed"; exit 2)
+	@echo ">> Canonical repo layout present…"
+	@python3 scripts/guards/guard_repo_layout.py
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:

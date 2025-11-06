@@ -1,9 +1,1948 @@
 {
-  "nodes": [],
-  "edges": [],
+  "nodes": [
+    {
+      "id": "seed-ps30-isa43",
+      "surface": "\u05d1\u05b9\u05bc\u05e7\u05b6\u05e8",
+      "class": "thing",
+      "analysis": {
+        "lemma": "morning"
+      },
+      "external_refs": [
+        {
+          "label": "Psalm 30:5",
+          "osis": "Ps.30.5"
+        },
+        {
+          "label": "Isaiah 43:2",
+          "osis": "Isa.43.2"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "27b2d17b-c026-4b66-90d8-c0de967e1076",
+      "target": "13c09d94-9813-426f-aba2-182832ae09ed",
+      "cosine": 0.7946311235427856,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8973155617713928
+    },
+    {
+      "source": "13c09d94-9813-426f-aba2-182832ae09ed",
+      "target": "27b2d17b-c026-4b66-90d8-c0de967e1076",
+      "cosine": 0.7946311235427856,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8973155617713928
+    },
+    {
+      "source": "d2561da7-e70e-4edd-9758-e1c7fdf08f0d",
+      "target": "c9e5f677-23b4-498d-88c9-8f26693923ac",
+      "cosine": 0.7807366716523908,
+      "rerank_score": 0.7899456232865965,
+      "edge_strength": 0.7853411474694936
+    },
+    {
+      "source": "c9e5f677-23b4-498d-88c9-8f26693923ac",
+      "target": "d2561da7-e70e-4edd-9758-e1c7fdf08f0d",
+      "cosine": 0.7807366716523908,
+      "rerank_score": 0.7899456232865965,
+      "edge_strength": 0.7853411474694936
+    },
+    {
+      "source": "b02191cc-a612-40f8-98a7-041e624e3de9",
+      "target": "6d36cfcd-a085-4c53-ba12-f804c4939a71",
+      "cosine": 0.7040189836074331,
+      "rerank_score": 0.7662394545191533,
+      "edge_strength": 0.7351292190632932
+    },
+    {
+      "source": "6d36cfcd-a085-4c53-ba12-f804c4939a71",
+      "target": "b02191cc-a612-40f8-98a7-041e624e3de9",
+      "cosine": 0.7040190730111966,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8520095365055983
+    },
+    {
+      "source": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "target": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "cosine": 0.7442276314557448,
+      "rerank_score": 0.774180426134441,
+      "edge_strength": 0.759204028795093
+    },
+    {
+      "source": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "target": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "cosine": 0.7286108257465094,
+      "rerank_score": 0.7997984096728783,
+      "edge_strength": 0.7642046177096938
+    },
+    {
+      "source": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "target": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "cosine": 0.7543983391427346,
+      "rerank_score": 0.8084323985927475,
+      "edge_strength": 0.781415368867741
+    },
+    {
+      "source": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "target": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "cosine": 0.7420607123015379,
+      "rerank_score": 0.84015473170154,
+      "edge_strength": 0.791107722001539
+    },
+    {
+      "source": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "target": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "cosine": 0.7369847707921033,
+      "rerank_score": 0.7655170572678778,
+      "edge_strength": 0.7512509140299906
+    },
+    {
+      "source": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "target": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "cosine": 0.7261348416050699,
+      "rerank_score": 0.8186128284335246,
+      "edge_strength": 0.7723738350192972
+    },
+    {
+      "source": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "target": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "cosine": 0.7286108257465094,
+      "rerank_score": 0.7997984096728783,
+      "edge_strength": 0.7642046177096938
+    },
+    {
+      "source": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "target": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "cosine": 0.7029004678594408,
+      "rerank_score": 0.844908921575452,
+      "edge_strength": 0.7739046947174464
+    },
+    {
+      "source": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "target": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "cosine": 0.674716441474794,
+      "rerank_score": 0.7730305910873326,
+      "edge_strength": 0.7238735162810633
+    },
+    {
+      "source": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "target": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "cosine": 0.764902862754805,
+      "rerank_score": 0.792731433293402,
+      "edge_strength": 0.7788171480241035
+    },
+    {
+      "source": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "target": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "cosine": 0.7261348416050699,
+      "rerank_score": 0.8186128284335246,
+      "edge_strength": 0.7723738350192972
+    },
+    {
+      "source": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "target": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "cosine": 0.719494755229525,
+      "rerank_score": 0.7818614168559609,
+      "edge_strength": 0.7506780860427429
+    },
+    {
+      "source": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "target": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "cosine": 0.7802029301827536,
+      "rerank_score": 0.7594698976140531,
+      "edge_strength": 0.7698364138984033
+    },
+    {
+      "source": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "target": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "cosine": 0.764902862754805,
+      "rerank_score": 0.792731433293402,
+      "edge_strength": 0.7788171480241035
+    },
+    {
+      "source": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "target": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "cosine": 0.7442276314557448,
+      "rerank_score": 0.774180426134441,
+      "edge_strength": 0.759204028795093
+    },
+    {
+      "source": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "target": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "cosine": 0.723051910694458,
+      "rerank_score": 0.7894787148455494,
+      "edge_strength": 0.7562653127700036
+    },
+    {
+      "source": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "target": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "cosine": 0.7748912020223138,
+      "rerank_score": 0.7962982078123441,
+      "edge_strength": 0.7855947049173289
+    },
+    {
+      "source": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "target": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "cosine": 0.7369847707921033,
+      "rerank_score": 0.7655170572678778,
+      "edge_strength": 0.7512509140299906
+    },
+    {
+      "source": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "target": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "cosine": 0.723051910694458,
+      "rerank_score": 0.7894787148455494,
+      "edge_strength": 0.7562653127700036
+    },
+    {
+      "source": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "target": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "cosine": 0.719494755229525,
+      "rerank_score": 0.7818614168559609,
+      "edge_strength": 0.7506780860427429
+    },
+    {
+      "source": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "target": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "cosine": 0.674716441474794,
+      "rerank_score": 0.7730305910873326,
+      "edge_strength": 0.7238735162810633
+    },
+    {
+      "source": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "target": "5d21cf90-20ee-4258-bd8f-9eb8c44a3d6b",
+      "cosine": 0.7748912110989578,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8874456055494788
+    },
+    {
+      "source": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "target": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "cosine": 0.7688662180642452,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8844331090321226
+    },
+    {
+      "source": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "target": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "cosine": 0.7420607362949423,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8710303681474711
+    },
+    {
+      "source": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "target": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "cosine": 0.7349609136581421,
+      "rerank_score": 1.0,
+      "edge_strength": 0.867480456829071
+    },
+    {
+      "source": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "target": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "cosine": 0.7802030313136014,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8901015156568006
+    },
+    {
+      "source": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "target": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "cosine": 0.7349609136581421,
+      "rerank_score": 1.0,
+      "edge_strength": 0.867480456829071
+    },
+    {
+      "source": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "target": "ded9609c-5ab0-43dc-9ebf-56a963febbb3",
+      "cosine": 0.7688662180642452,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8844331090321226
+    },
+    {
+      "source": "d8582a6e-634f-472d-9262-bb8ace1a11e5",
+      "target": "92995c9c-0d64-4e8b-b26c-98fc48f7c1c0",
+      "cosine": 0.7029005498558449,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8514502749279225
+    },
+    {
+      "source": "12de2c96-fa3e-4cc2-9fa4-dc4f0733c718",
+      "target": "eab6a027-82ea-4d35-816e-7f61963e8967",
+      "cosine": 0.7543983313082667,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8771991656541334
+    },
+    {
+      "source": "0916a05d-32f5-456e-aa1b-171a59a0a0cc",
+      "target": "d7c2e0fa-14cf-45ee-8baa-71a27f099488",
+      "cosine": 0.7641597139040434,
+      "rerank_score": 0.7559666788285538,
+      "edge_strength": 0.7600631963662986
+    },
+    {
+      "source": "d7c2e0fa-14cf-45ee-8baa-71a27f099488",
+      "target": "0916a05d-32f5-456e-aa1b-171a59a0a0cc",
+      "cosine": 0.7641597139040434,
+      "rerank_score": 0.7559666788285538,
+      "edge_strength": 0.7600631963662986
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9937635485281523,
+      "rerank_score": 0.7926171580783858,
+      "edge_strength": 0.893190353303269
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.8291542515438488,
+      "rerank_score": 0.7784297613967965,
+      "edge_strength": 0.8037920064703227
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.7799537838305812,
+      "rerank_score": 0.7949378149414691,
+      "edge_strength": 0.7874457993860251
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.778748525731876,
+      "rerank_score": 0.7563189883731524,
+      "edge_strength": 0.7675337570525143
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.7772689935641175,
+      "rerank_score": 0.8078178156180118,
+      "edge_strength": 0.7925434045910646
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7770690803112628,
+      "rerank_score": 0.770151451175534,
+      "edge_strength": 0.7736102657433983
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.7770193955084386,
+      "rerank_score": 0.7934793991929006,
+      "edge_strength": 0.7852493973506696
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.7763178307495147,
+      "rerank_score": 0.790539701517466,
+      "edge_strength": 0.7834287661334903
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7759510919950289,
+      "rerank_score": 0.7593543690205091,
+      "edge_strength": 0.7676527305077689
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "cosine": 0.9508355114104462,
+      "rerank_score": 0.7604892711713918,
+      "edge_strength": 0.8556623912909189
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "cosine": 0.7174368637122094,
+      "rerank_score": 0.7568363341788755,
+      "edge_strength": 0.7371365989455425
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.7000506570253081,
+      "rerank_score": 0.749671421756917,
+      "edge_strength": 0.7248610393911126
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.6999412119449654,
+      "rerank_score": 0.752467462399957,
+      "edge_strength": 0.7262043371724611
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.6993606508564196,
+      "rerank_score": 0.8125833489184737,
+      "edge_strength": 0.7559719998874467
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.697356361124438,
+      "rerank_score": 0.7308921558268415,
+      "edge_strength": 0.7141242584756398
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.6956008847511322,
+      "rerank_score": 0.808712532347577,
+      "edge_strength": 0.7521567085493546
+    },
+    {
+      "source": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.6949084596728664,
+      "rerank_score": 0.7707973004892128,
+      "edge_strength": 0.7328528800810397
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "cosine": 0.8291542515438488,
+      "rerank_score": 0.7784297613967965,
+      "edge_strength": 0.8037920064703227
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.8202186328963121,
+      "rerank_score": 0.8274626364113842,
+      "edge_strength": 0.8238406346538482
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.803431380881872,
+      "rerank_score": 0.7988962566310897,
+      "edge_strength": 0.8011638187564809
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7969529610913204,
+      "rerank_score": 0.840313286671346,
+      "edge_strength": 0.8186331238813331
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "cosine": 0.7883219771291438,
+      "rerank_score": 0.8293028605413125,
+      "edge_strength": 0.8088124188352281
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7877760509081447,
+      "rerank_score": 0.8155634659871387,
+      "edge_strength": 0.8016697584476418
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7876200966246706,
+      "rerank_score": 0.7210594542298532,
+      "edge_strength": 0.7543397754272618
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.7839092901942433,
+      "rerank_score": 0.8395880214780265,
+      "edge_strength": 0.8117486558361349
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9863972375210601,
+      "rerank_score": 0.7040509091950372,
+      "edge_strength": 0.8452240733580487
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9858813064708875,
+      "rerank_score": 0.7312695335906667,
+      "edge_strength": 0.8585754200307771
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "cosine": 0.9508355114104462,
+      "rerank_score": 0.7604892711713918,
+      "edge_strength": 0.8556623912909189
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7447548868235547,
+      "rerank_score": 0.8577569112613047,
+      "edge_strength": 0.8012558990424297
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7425092604305291,
+      "rerank_score": 0.8237491439987252,
+      "edge_strength": 0.7831292022146272
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "cosine": 0.7361219950309184,
+      "rerank_score": 0.8170950592735443,
+      "edge_strength": 0.7766085271522314
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "cosine": 0.7323922976656876,
+      "rerank_score": 0.7954176188404929,
+      "edge_strength": 0.7639049582530902
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.7262234754795018,
+      "rerank_score": 0.7629563994769056,
+      "edge_strength": 0.7445899374782037
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7259271281341058,
+      "rerank_score": 0.7992561594450339,
+      "edge_strength": 0.7625916437895699
+    },
+    {
+      "source": "35b22f83-5641-4bea-84c9-0dae8843a519",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.7255585708340735,
+      "rerank_score": 0.8096123016223126,
+      "edge_strength": 0.7675854362281931
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.8282137754419667,
+      "rerank_score": 0.7554902209547099,
+      "edge_strength": 0.7918519981983383
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.82416638648377,
+      "rerank_score": 0.7627392367576411,
+      "edge_strength": 0.7934528116207056
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.8040483199738309,
+      "rerank_score": 0.8053662692901125,
+      "edge_strength": 0.8047072946319717
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7991854875264774,
+      "rerank_score": 0.7576983188323689,
+      "edge_strength": 0.7784419031794232
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.7979215939284088,
+      "rerank_score": 0.7461921824885326,
+      "edge_strength": 0.7720568882084706
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7939251499355221,
+      "rerank_score": 0.8255436701824911,
+      "edge_strength": 0.8097344100590066
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.786961267989283,
+      "rerank_score": 0.7622806850718025,
+      "edge_strength": 0.7746209765305427
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7464904193447414,
+      "rerank_score": 0.7217389481285555,
+      "edge_strength": 0.7341146837366485
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9863972375210601,
+      "rerank_score": 0.7040509091950372,
+      "edge_strength": 0.8452240733580487
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9704968086086201,
+      "rerank_score": 0.8199441033496958,
+      "edge_strength": 0.8952204559791579
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.8982402946696878,
+      "rerank_score": 0.7811327311610899,
+      "edge_strength": 0.8396865129153889
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.803431380881872,
+      "rerank_score": 0.7988962566310897,
+      "edge_strength": 0.8011638187564809
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7966951194421473,
+      "rerank_score": 0.7993609931332015,
+      "edge_strength": 0.7980280562876745
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7941877511147705,
+      "rerank_score": 0.7677752984559184,
+      "edge_strength": 0.7809815247853444
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.786961267989283,
+      "rerank_score": 0.7622806850718025,
+      "edge_strength": 0.7746209765305427
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.7756011885781381,
+      "rerank_score": 0.7819272042012174,
+      "edge_strength": 0.7787641963896778
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7746875519892384,
+      "rerank_score": 0.8146378259684144,
+      "edge_strength": 0.7946626889788264
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7742766407164972,
+      "rerank_score": 0.7086905384943506,
+      "edge_strength": 0.7414835896054239
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.8025479436335319,
+      "rerank_score": 0.7791817280728114,
+      "edge_strength": 0.7908648358531716
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.7991854875264774,
+      "rerank_score": 0.7576983188323689,
+      "edge_strength": 0.7784419031794232
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.7990063555745279,
+      "rerank_score": 0.7625513459423671,
+      "edge_strength": 0.7807788507584474
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.795365661326138,
+      "rerank_score": 0.7989760508420407,
+      "edge_strength": 0.7971708560840893
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7941877511147705,
+      "rerank_score": 0.7677752984559184,
+      "edge_strength": 0.7809815247853444
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7871910633153356,
+      "rerank_score": 0.7322778403417028,
+      "edge_strength": 0.7597344518285192
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.7840183983768619,
+      "rerank_score": 0.7607615229346095,
+      "edge_strength": 0.7723899606557357
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.9972424917381637,
+      "rerank_score": 0.7984606481723399,
+      "edge_strength": 0.8978515699552518
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.8498101655807266,
+      "rerank_score": 0.7943726286113082,
+      "edge_strength": 0.8220913970960174
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.8488592051524546,
+      "rerank_score": 0.7802033703321656,
+      "edge_strength": 0.8145312877423101
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.82416638648377,
+      "rerank_score": 0.7627392367576411,
+      "edge_strength": 0.7934528116207056
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7990063555745279,
+      "rerank_score": 0.7625513459423671,
+      "edge_strength": 0.7807788507584474
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7796527644603986,
+      "rerank_score": 0.8135248717186444,
+      "edge_strength": 0.7965888180895215
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7721783159754387,
+      "rerank_score": 0.8170271929253737,
+      "edge_strength": 0.7946027544504062
+    },
+    {
+      "source": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.721360763410606,
+      "rerank_score": 0.7358172275655736,
+      "edge_strength": 0.7285889954880898
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.8510866924558952,
+      "rerank_score": 0.7565337800372359,
+      "edge_strength": 0.8038102362465656
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.8488592051524546,
+      "rerank_score": 0.7802033703321656,
+      "edge_strength": 0.8145312877423101
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.7979215939284088,
+      "rerank_score": 0.7461921824885326,
+      "edge_strength": 0.7720568882084706
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7785378953756683,
+      "rerank_score": 0.8026486520145867,
+      "edge_strength": 0.7905932736951276
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.749034632351073,
+      "rerank_score": 0.7879511640019127,
+      "edge_strength": 0.7684928981764929
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7453257286216247,
+      "rerank_score": 0.8003283805273751,
+      "edge_strength": 0.7728270545745
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7396203913150842,
+      "rerank_score": 0.7964785908556536,
+      "edge_strength": 0.7680494910853689
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7969529610913204,
+      "rerank_score": 0.840313286671346,
+      "edge_strength": 0.8186331238813331
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.795365661326138,
+      "rerank_score": 0.7989760508420407,
+      "edge_strength": 0.7971708560840893
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.7939251499355221,
+      "rerank_score": 0.8255436701824911,
+      "edge_strength": 0.8097344100590066
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7931755188544367,
+      "rerank_score": 0.8407601124392693,
+      "edge_strength": 0.816967815646853
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.7852554214998558,
+      "rerank_score": 0.787381485439404,
+      "edge_strength": 0.7863184534696299
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.7796527644603986,
+      "rerank_score": 0.8135248717186444,
+      "edge_strength": 0.7965888180895215
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "cosine": 0.7667457177686628,
+      "rerank_score": 0.8438933743996488,
+      "edge_strength": 0.8053195460841558
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9963843305627937,
+      "rerank_score": 0.8279146762822754,
+      "edge_strength": 0.9121495034225346
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9950526535121613,
+      "rerank_score": 0.677786523033288,
+      "edge_strength": 0.8364195882727247
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9851624454034116,
+      "rerank_score": 0.7761403825165736,
+      "edge_strength": 0.8806514139599926
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "cosine": 0.7403593702301632,
+      "rerank_score": 0.7318090438887647,
+      "edge_strength": 0.736084207059464
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7300754505341793,
+      "rerank_score": 0.7169291910125878,
+      "edge_strength": 0.7235023207733835
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7284590971967098,
+      "rerank_score": 0.74245924303545,
+      "edge_strength": 0.7354591701160799
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7184497482445863,
+      "rerank_score": 0.7798654594015326,
+      "edge_strength": 0.7491576038230594
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.7096227001237632,
+      "rerank_score": 0.7403716143277788,
+      "edge_strength": 0.724997157225771
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7078813768833652,
+      "rerank_score": 0.6889832078593762,
+      "edge_strength": 0.6984322923713706
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.707553305946347,
+      "rerank_score": 0.7158480110506459,
+      "edge_strength": 0.7117006584984964
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7068725615399375,
+      "rerank_score": 0.7934980367441663,
+      "edge_strength": 0.7501852991420519
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.8202186328963121,
+      "rerank_score": 0.8274626364113842,
+      "edge_strength": 0.8238406346538482
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7966951194421473,
+      "rerank_score": 0.7993609931332015,
+      "edge_strength": 0.7980280562876745
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7931755188544367,
+      "rerank_score": 0.8407601124392693,
+      "edge_strength": 0.816967815646853
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "cosine": 0.7630701296664877,
+      "rerank_score": 0.8059428866153217,
+      "edge_strength": 0.7845065081409046
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "cosine": 0.7432531357488688,
+      "rerank_score": 0.8264326337232161,
+      "edge_strength": 0.7848428847360425
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7432364747922118,
+      "rerank_score": 0.7781006855601151,
+      "edge_strength": 0.7606685801761635
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.7431734902023909,
+      "rerank_score": 0.807279708854324,
+      "edge_strength": 0.7752265995283574
+    },
+    {
+      "source": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.7414453488208781,
+      "rerank_score": 0.7871996151641425,
+      "edge_strength": 0.7643224819925103
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.9937635485281523,
+      "rerank_score": 0.7926171580783858,
+      "edge_strength": 0.893190353303269
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9858813064708875,
+      "rerank_score": 0.7312695335906667,
+      "edge_strength": 0.8585754200307771
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7883219771291438,
+      "rerank_score": 0.8293028605413125,
+      "edge_strength": 0.8088124188352281
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7669518888770477,
+      "rerank_score": 0.7407593886386403,
+      "edge_strength": 0.753855638757844
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7639598897380322,
+      "rerank_score": 0.7857653962238698,
+      "edge_strength": 0.774862642980951
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7630701296664877,
+      "rerank_score": 0.8059428866153217,
+      "edge_strength": 0.7845065081409046
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.7616227478388917,
+      "rerank_score": 0.8173394346683833,
+      "edge_strength": 0.7894810912536375
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.7522695327749643,
+      "rerank_score": 0.7856219637238833,
+      "edge_strength": 0.7689457482494237
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7521054250815199,
+      "rerank_score": 0.8186379840555554,
+      "edge_strength": 0.7853717045685377
+    },
+    {
+      "source": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.7516185873692849,
+      "rerank_score": 0.8155585707816194,
+      "edge_strength": 0.7835885790754522
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.8519808867013904,
+      "rerank_score": 0.8089315037324455,
+      "edge_strength": 0.8304561952169179
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.8510866924558952,
+      "rerank_score": 0.7565337800372359,
+      "edge_strength": 0.8038102362465656
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.8282137754419667,
+      "rerank_score": 0.7554902209547099,
+      "edge_strength": 0.7918519981983383
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.8025479436335319,
+      "rerank_score": 0.7791817280728114,
+      "edge_strength": 0.7908648358531716
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7852554214998558,
+      "rerank_score": 0.787381485439404,
+      "edge_strength": 0.7863184534696299
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7756011885781381,
+      "rerank_score": 0.7819272042012174,
+      "edge_strength": 0.7787641963896778
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.7308324820240055,
+      "rerank_score": 0.7457154074560256,
+      "edge_strength": 0.7382739447400155
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.9957862071929542,
+      "rerank_score": 0.7199012028838424,
+      "edge_strength": 0.8578437050383982
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "cosine": 0.8519808867013904,
+      "rerank_score": 0.8089315037324455,
+      "edge_strength": 0.8304561952169179
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.8498101655807266,
+      "rerank_score": 0.7943726286113082,
+      "edge_strength": 0.8220913970960174
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "cosine": 0.8040483199738309,
+      "rerank_score": 0.8053662692901125,
+      "edge_strength": 0.8047072946319717
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.7548728001643825,
+      "rerank_score": 0.7442917530184723,
+      "edge_strength": 0.7495822765914274
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.752414661202677,
+      "rerank_score": 0.8077008085391005,
+      "edge_strength": 0.7800577348708888
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "f2bc9aaa-f02c-4259-8f19-40caeb923728",
+      "cosine": 0.7431734902023909,
+      "rerank_score": 0.807279708854324,
+      "edge_strength": 0.7752265995283574
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.993923008441925,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9969615042209625
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9879721403121948,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9939860701560974
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.985849737277613,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9929248686388066
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9850399494171143,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9925199747085571
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.9828042670611421,
+      "rerank_score": 1.0,
+      "edge_strength": 0.991402133530571
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9692931175231934,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9846465587615967
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8969995379447937,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9484997689723969
+    },
+    {
+      "source": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7769898772239685,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8884949386119843
+    },
+    {
+      "source": "67d11fed-82c0-4e20-9d5a-d88d815aaa27",
+      "target": "aa17fe6f-344c-4d75-9203-347be3c6f8ae",
+      "cosine": 0.7183029865712821,
+      "rerank_score": 1.0,
+      "edge_strength": 0.859151493285641
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.7778099775314331,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8889049887657166
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.7749732732772827,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8874866366386414
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.7745618089772363,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8872809044886181
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.741969883441925,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8709849417209625
+    },
+    {
+      "source": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7227769063248107,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8613884531624054
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9953351020812988,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9976675510406494
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.9950525757701758,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9975262878850879
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.9850399494171143,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9925199747085571
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.98004713476126,
+      "rerank_score": 1.0,
+      "edge_strength": 0.99002356738063
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9702274799346924,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9851137399673462
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8945229649543762,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9472614824771881
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.787191105652387,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8935955528261935
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.6972198070752748,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8486099035376373
+    },
+    {
+      "source": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.6939226571367599,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8469613285683799
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.983372537795238,
+      "rerank_score": 1.0,
+      "edge_strength": 0.991686268897619
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.9828042670611421,
+      "rerank_score": 1.0,
+      "edge_strength": 0.991402133530571
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9807983310220143,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9903991655110072
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9807337207258133,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9903668603629067
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.980680850249656,
+      "rerank_score": 1.0,
+      "edge_strength": 0.990340425124828
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.98004713476126,
+      "rerank_score": 1.0,
+      "edge_strength": 0.99002356738063
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9672305256632479,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9836152628316239
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8884840209916884,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9442420104958442
+    },
+    {
+      "source": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7732440924564714,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8866220462282357
+    },
+    {
+      "source": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a",
+      "target": "22c2db1b-346a-4083-ac21-47485b0f7e5a",
+      "cosine": 0.6732765442082179,
+      "rerank_score": 1.0,
+      "edge_strength": 0.836638272104109
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9985205530238499,
+      "rerank_score": 1.0,
+      "edge_strength": 0.999260276511925
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.993923008441925,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9969615042209625
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9869822263717651,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9934911131858826
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.9854108086473249,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9927054043236625
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.9807337207258133,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9903668603629067
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9713349342346191,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9856674671173096
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8982402086257935,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9491201043128967
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7757330074469456,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8878665037234728
+    },
+    {
+      "source": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7749732732772827,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8874866366386414
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.9963845012417156,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9981922506208578
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9953351020812988,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9976675510406494
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.9879721403121948,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9939860701560974
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9869822263717651,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9934911131858826
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9868490092068337,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9934245046034169
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.983372537795238,
+      "rerank_score": 1.0,
+      "edge_strength": 0.991686268897619
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8974934816360474,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9487467408180237
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7840184102047452,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8920092051023726
+    },
+    {
+      "source": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.6910295074564524,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8455147537282262
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.8991413652385111,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9495706826192556
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.8974934816360474,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9487467408180237
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.8969995379447937,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9484997689723969
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.8960114059455057,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9480057029727529
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.8945229649543762,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9472614824771881
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.8927654027938843,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9463827013969421
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.8884840209916884,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9442420104958442
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.741969883441925,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8709849417209625
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.6725375847496053,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8362687923748027
+    },
+    {
+      "source": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "target": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "cosine": 0.666242619380796,
+      "rerank_score": 1.0,
+      "edge_strength": 0.833121309690398
+    },
+    {
+      "source": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.9528583572166672,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9764291786083337
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.7871729731559809,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8935864865779904
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.7799515986500265,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8899757993250133
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.7773646248957752,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8886823124478875
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.7757330074469456,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8878665037234728
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.7746171489586159,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8873085744793079
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.7741944424568037,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8870972212284018
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.7739250659942682,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8869625329971341
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.7384597218954742,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8692298609477371
+    },
+    {
+      "source": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7227769063248107,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8613884531624054
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "cosine": 0.9957863097445595,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9978931548722798
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7177453805359983,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8588726902679992
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.6815241575241138,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8407620787620569
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.6803250503346306,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8401625251673153
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.6762539349870141,
+      "rerank_score": 1.0,
+      "edge_strength": 0.838126967493507
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.6674593885267157,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8337296942633579
+    },
+    {
+      "source": "41e0386e-b049-430e-b895-d6afd4e758cd",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.666242619380796,
+      "rerank_score": 1.0,
+      "edge_strength": 0.833121309690398
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.9528583572166672,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9764291786083337
+    },
+    {
+      "source": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "target": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "cosine": 0.7064103309160681,
+      "rerank_score": 1.0,
+      "edge_strength": 0.853205165458034
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.985849737277613,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9929248686388066
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9854108086473249,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9927054043236625
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.980680850249656,
+      "rerank_score": 1.0,
+      "edge_strength": 0.990340425124828
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9686073642139073,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9843036821069536
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8960114059455057,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9480057029727529
+    },
+    {
+      "source": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7871729731559809,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8935864865779904
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "5de7db48-120a-45df-972a-1d9d6d12c48e",
+      "cosine": 0.7064103309160681,
+      "rerank_score": 1.0,
+      "edge_strength": 0.853205165458034
+    },
+    {
+      "source": "4e6c44a7-c026-465c-b86d-29e7d15cba60",
+      "target": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa",
+      "cosine": 0.6973804858965119,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8486902429482559
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9713349342346191,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9856674671173096
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.9712930900629234,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9856465450314618
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9704967737197876,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9852483868598938
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53",
+      "cosine": 0.9702274799346924,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9851137399673462
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.9692931175231934,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9846465587615967
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.9686073642139073,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9843036821069536
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.9672305256632479,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9836152628316239
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8927654027938843,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9463827013969421
+    },
+    {
+      "source": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7778099775314331,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8889049887657166
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "8ca20245-e8c0-4e21-a341-92edd4fd5712",
+      "cosine": 0.9985205530238499,
+      "rerank_score": 1.0,
+      "edge_strength": 0.999260276511925
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1",
+      "cosine": 0.9868490092068337,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9934245046034169
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "7335fbd5-c170-4ddd-afda-d687ed698a1a",
+      "cosine": 0.985162494798004,
+      "rerank_score": 1.0,
+      "edge_strength": 0.992581247399002
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "10fd6e51-0190-4152-a0c7-cb96586c056c",
+      "cosine": 0.9807983310220143,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9903991655110072
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.9712930900629234,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9856465450314618
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.8991413652385111,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9495706826192556
+    },
+    {
+      "source": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7739250659942682,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8869625329971341
+    },
+    {
+      "source": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0",
+      "target": "bd012c33-7f30-4994-86e0-dc9ef7c82df4",
+      "cosine": 0.9972424804342537,
+      "rerank_score": 1.0,
+      "edge_strength": 0.9986212402171268
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9",
+      "cosine": 0.7799515986500265,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8899757993250133
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1",
+      "cosine": 0.7216503786057021,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8608251893028511
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "2192e54f-6dce-46cc-b3a3-acf74bd67564",
+      "cosine": 0.6850439906120349,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8425219953060175
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01",
+      "cosine": 0.6847748348251096,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8423874174125547
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "2acb9a80-9deb-498b-95e8-469cab828dd4",
+      "cosine": 0.6725375847496053,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8362687923748027
+    },
+    {
+      "source": "fb623408-ca11-447c-8791-b2c457d5c061",
+      "target": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2",
+      "cosine": 0.6711314516585212,
+      "rerank_score": 1.0,
+      "edge_strength": 0.8355657258292606
+    }
+  ],
   "metadata": {
-    "node_count": 0,
-    "edge_count": 0,
-    "export_timestamp": null
+    "node_count": 1,
+    "edge_count": 274,
+    "cluster_count": 0,
+    "export_timestamp": "2025-11-06 11:49:50.067069-08:00"
   }
 }
