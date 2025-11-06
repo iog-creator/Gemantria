@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from typing import Any, TypedDict, Dict, List
 
-from langgraph.graph import StateGraph
 
 from src.infra.env_loader import ensure_env_loaded
 from src.graph.state import PipelineState
@@ -23,7 +22,6 @@ from src.ssot.noun_adapter import adapt_ai_noun
 from src.infra.runs_ledger import (
     create_run,
     update_run_status,
-    save_checkpoint,
     get_model_versions,
     get_schema_version,
 )
@@ -58,8 +56,6 @@ def build_graph(nouns: List[Dict]) -> Dict:
         )
     edges = []  # existing edge derivation unchanged
     return {"schema": "gemantria/graph.v1", "nodes": nodes, "edges": edges}
-
-
 
 
 def run_pipeline(
@@ -165,9 +161,9 @@ def run_pipeline(
 
         # Persist centrality if present (tolerant to missing keys)
         try:
-            from typing import Any, Dict
             import psycopg  # type: ignore
-            if os.getenv("CHECKPOINTER","memory").lower() == "postgres" and os.getenv("GEMATRIA_DSN"):
+
+            if os.getenv("CHECKPOINTER", "memory").lower() == "postgres" and os.getenv("GEMATRIA_DSN"):
                 central = state.get("centrality") or (state.get("stats") or {}).get("centrality")
                 if central and isinstance(central, dict):
                     dsn = os.getenv("GEMATRIA_DSN")
@@ -176,7 +172,13 @@ def run_pipeline(
                             cur.execute(
                                 "INSERT INTO gematria.concept_centrality(concept_id, degree, betweenness, eigenvector, run_id) "
                                 "VALUES (%s,%s,%s,%s,%s)",
-                                (cid, vals.get("degree"), vals.get("betweenness"), vals.get("eigenvector"), run_id_for_saver),
+                                (
+                                    cid,
+                                    vals.get("degree"),
+                                    vals.get("betweenness"),
+                                    vals.get("eigenvector"),
+                                    run_id_for_saver,
+                                ),
                             )
         except Exception:
             # non-fatal; analysis still usable even if persistence is skipped
