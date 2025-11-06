@@ -1,0 +1,36 @@
+{"level": "INFO", "ts": 1762407551533, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_start", "book": "Genesis", "mode": "START", "nouns_provided": true}
+/home/mccoy/Projects/Gemantria.v2/src/graph/graph.py:17: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+  from src.nodes import network_aggregator
+/home/mccoy/Projects/Gemantria.v2/src/nodes/network_aggregator.py:35: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+  from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
+{"level": "INFO", "ts": 1762407553217, "logger": "gemantria.enrichment", "msg": "enrichment_start", "noun_count": 82800}
+{"level": "WARNING", "ts": 1762407584684, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407584696, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407584696, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407584702, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407584702, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407584708, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407584708, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407584714, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "INFO", "ts": 1762407584714, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "19a4c547-3291-4038-b697-1c16ea9ad55d", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 4, "duration_ms": 31442}
+{"level": "WARNING", "ts": 1762407584716, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762407623007, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407623020, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407623021, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407623026, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407623026, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407623032, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407623032, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407623038, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "INFO", "ts": 1762407623038, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "19a4c547-3291-4038-b697-1c16ea9ad55d", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 8, "duration_ms": 38291}
+{"level": "WARNING", "ts": 1762407623040, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762407659355, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407659366, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407659366, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407659373, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407659373, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407659378, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "WARNING", "ts": 1762407659378, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 81, "expected": "200-300"}
+{"level": "INFO", "ts": 1762407659384, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": null, "confidence": 0.95, "tokens": 152}
+{"level": "INFO", "ts": 1762407659384, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "19a4c547-3291-4038-b697-1c16ea9ad55d", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 12, "duration_ms": 36314}
+{"level": "WARNING", "ts": 1762407659386, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}

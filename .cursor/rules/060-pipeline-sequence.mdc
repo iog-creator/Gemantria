@@ -1,9 +1,10 @@
-id: 060
-title: "Pipeline Node Sequence (ALWAYS APPLY)"
-description: |
-  Enforce the canonical node order for the Gemantria pipeline. Cursor MUST follow this order
-  in any edits, reviews, or code generation. If code and docs differ, update both in the same PR.
+---
+description: Pipeline Node Sequence (Always-Apply)
 alwaysApply: true
+globs: []
+---
+
+# 060 · Pipeline Node Sequence (Always-Apply)
 rules:
   - "The pipeline MUST call nodes in this exact order:
      1) collect_nouns → 2) validate_batch → 3) enrichment → 4) confidence_validator →

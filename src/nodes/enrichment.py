@@ -101,9 +101,7 @@ def enrichment_node(state: dict) -> dict:
             )
 
         full_prompt = (
-            base_info +
-            ai_analysis +
-            f"Task: {task_desc} "
+            base_info + ai_analysis + f"Task: {task_desc} "
             "Provide a comprehensive 200-300 word scholarly analysis. "
             'Return JSON: {{"insight": "...detailed analysis...", "confidence": <0.90-1.0>}}'
         )
@@ -129,18 +127,12 @@ def enrichment_node(state: dict) -> dict:
                 # Use the corresponding prompt from our pre-built prompts array
                 prompt_idx = i + j  # Global index in the prompts array
                 content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
-                messages_batch.append([
-                    {"role": "system", "content": sys_msg},
-                    {"role": "user", "content": content}
-                ])
+                messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
                 log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
                 # Fallback: use basic format
                 content = f"Noun: {n.get('name', 'Unknown')}\nHebrew: {n.get('hebrew', '')}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
-                messages_batch.append([
-                    {"role": "system", "content": sys_msg},
-                    {"role": "user", "content": content}
-                ])
+                messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
         # Call LM Studio with batched requests
         try:
@@ -161,7 +153,9 @@ def enrichment_node(state: dict) -> dict:
                             if retry >= 2:
                                 raise
                             # Re-prompt this single item with stricter instruction
-                            retry_prompt = build_enrichment_prompt(n) + "\nReturn only valid JSON; previous reply was invalid."
+                            retry_prompt = (
+                                build_enrichment_prompt(n) + "\nReturn only valid JSON; previous reply was invalid."
+                            )
                             messages = [
                                 {"role": "system", "content": sys_msg},
                                 {

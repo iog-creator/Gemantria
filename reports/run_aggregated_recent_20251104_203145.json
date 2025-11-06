@@ -1,0 +1,29 @@
+{
+  "run_id": "aggregated_recent",
+  "generated_at": "2025-11-05T04:31:45.789405+00:00",
+  "metrics": {
+    "node_metrics": [],
+    "ai_metrics": {
+      "total_enrichments": 0,
+      "avg_confidence": 0,
+      "avg_tokens": 0
+    },
+    "confidence_metrics": {
+      "total_validations": 0,
+      "passed": 0,
+      "failed": 0,
+      "avg_gematria_confidence": 0,
+      "avg_ai_confidence": 0
+    },
+    "network_metrics": {
+      "total_nodes": 3702,
+      "strong_edges": 741,
+      "weak_edges": 422,
+      "embeddings_generated": 3702,
+      "similarity_computations": 1855,
+      "rerank_calls": 0,
+      "avg_edge_strength": 0.8289037911724175,
+      "rerank_yes_ratio": 0.0
+    }
+  }
+}

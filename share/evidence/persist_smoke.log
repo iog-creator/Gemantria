@@ -1,0 +1,454 @@
+{"level": "INFO", "ts": 1762408764873, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_start", "book": "Genesis", "mode": "START", "nouns_provided": true}
+/home/mccoy/Projects/Gemantria.v2/src/graph/graph.py:17: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+  from src.nodes import network_aggregator
+/home/mccoy/Projects/Gemantria.v2/src/nodes/network_aggregator.py:35: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+  from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
+{"level": "INFO", "ts": 1762408765344, "logger": "gemantria.enrichment", "msg": "enrichment_start", "noun_count": 82800}
+{"level": "WARNING", "ts": 1762408775772, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 107, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408775784, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֑ים", "confidence": 0.95, "tokens": 191}
+{"level": "WARNING", "ts": 1762408775784, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 117, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408775790, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 200}
+{"level": "WARNING", "ts": 1762408775790, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 111, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408775796, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֣י", "confidence": 0.95, "tokens": 201}
+{"level": "WARNING", "ts": 1762408775796, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408775802, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תְה֑וֹם", "confidence": 0.95, "tokens": 248}
+{"level": "INFO", "ts": 1762408775802, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 4, "duration_ms": 10382}
+{"level": "WARNING", "ts": 1762408787129, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 145, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408787140, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֥י", "confidence": 0.95, "tokens": 246}
+{"level": "WARNING", "ts": 1762408787140, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 145, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408787146, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תֹ֙הוּ֙", "confidence": 0.98, "tokens": 246}
+{"level": "WARNING", "ts": 1762408787146, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 114, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408787152, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 194}
+{"level": "WARNING", "ts": 1762408787152, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 129, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408787158, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "א֑וֹר", "confidence": 0.95, "tokens": 221}
+{"level": "INFO", "ts": 1762408787158, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 8, "duration_ms": 11320}
+{"level": "INFO", "ts": 1762408797916, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408800510, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408802981, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 34 (char 33)", "raw_response": "{\"insight\":\"The Hebrew noun אֽוֹר\\׃ (Or) signifies 'light' in Genesis 1:3, marking a pivotal moment in creation. The verse, 'God said, “Let there be light,” and there was light,' underscores the divin"}
+{"level": "WARNING", "ts": 1762408802981, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 108, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408802993, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֛ים", "confidence": 0.95, "tokens": 183}
+{"level": "WARNING", "ts": 1762408802993, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 172, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408803000, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 277}
+{"level": "WARNING", "ts": 1762408803000, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 126, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408803005, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.97, "tokens": 213}
+{"level": "INFO", "ts": 1762408803006, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 11, "duration_ms": 10752}
+{"level": "WARNING", "ts": 1762408814374, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 134, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408814387, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֤ים\\׀", "confidence": 0.95, "tokens": 220}
+{"level": "WARNING", "ts": 1762408814387, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 161, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408814393, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֔וֹם", "confidence": 0.95, "tokens": 269}
+{"level": "WARNING", "ts": 1762408814393, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 106, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408814399, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "לָ֑יְלָה", "confidence": 0.95, "tokens": 199}
+{"level": "WARNING", "ts": 1762408814400, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 167, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408814405, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 281}
+{"level": "INFO", "ts": 1762408814406, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 15, "duration_ms": 11362}
+{"level": "WARNING", "ts": 1762408824644, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 98, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408824656, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.97, "tokens": 179}
+{"level": "WARNING", "ts": 1762408824656, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 101, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408824662, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 167}
+{"level": "WARNING", "ts": 1762408824662, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 174, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408824668, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "רָקִ֖יעַ", "confidence": 0.95, "tokens": 304}
+{"level": "WARNING", "ts": 1762408824668, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408824673, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מַ֖יִם", "confidence": 0.95, "tokens": 234}
+{"level": "INFO", "ts": 1762408824673, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 19, "duration_ms": 10232}
+{"level": "WARNING", "ts": 1762408835990, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 184, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408835997, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֮", "confidence": 0.95, "tokens": 306}
+{"level": "WARNING", "ts": 1762408835997, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 131, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408836002, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֛ים", "confidence": 0.95, "tokens": 219}
+{"level": "WARNING", "ts": 1762408836002, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 117, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408836008, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שָׁמָ֑יִם", "confidence": 0.95, "tokens": 218}
+{"level": "WARNING", "ts": 1762408836008, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 116, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408836013, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.95, "tokens": 200}
+{"level": "INFO", "ts": 1762408836013, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 23, "duration_ms": 11311}
+{"level": "WARNING", "ts": 1762408846487, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 119, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408846499, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 208}
+{"level": "WARNING", "ts": 1762408846499, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 156, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408846505, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.95, "tokens": 260}
+{"level": "WARNING", "ts": 1762408846505, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 99, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408846511, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 164}
+{"level": "WARNING", "ts": 1762408846511, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 126, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408846517, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מָק֣וֹם", "confidence": 0.95, "tokens": 226}
+{"level": "INFO", "ts": 1762408846517, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 27, "duration_ms": 10467}
+{"level": "WARNING", "ts": 1762408856095, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 96, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408856107, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 159}
+{"level": "WARNING", "ts": 1762408856107, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 103, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408856113, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֤ים\\׀", "confidence": 0.95, "tokens": 171}
+{"level": "WARNING", "ts": 1762408856113, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 140, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408856119, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֶ֔רֶץ", "confidence": 0.95, "tokens": 245}
+{"level": "WARNING", "ts": 1762408856119, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 109, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408856125, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יַמִּ֑ים", "confidence": 0.95, "tokens": 205}
+{"level": "INFO", "ts": 1762408856125, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 31, "duration_ms": 9572}
+{"level": "WARNING", "ts": 1762408867521, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 145, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408867534, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "דֶּ֔שֶׁא", "confidence": 0.95, "tokens": 264}
+{"level": "WARNING", "ts": 1762408867534, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 109, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408867540, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 183}
+{"level": "WARNING", "ts": 1762408867541, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun עֵ֚שֶׂב (ʾē·ṣeb), translated as 'herb' or 'plant', is a key term in the creation narrative of Genesis 1:11-12, where God commands, 'Let the earth sprout vegetation: plants "}
+{"level": "INFO", "ts": 1762408867541, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408867547, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408867553, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 154, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408867559, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֚שֶׂב", "confidence": 0.85, "tokens": 258}
+{"level": "WARNING", "ts": 1762408867559, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 136, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408867564, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "זֶ֔רַע", "confidence": 0.98, "tokens": 229}
+{"level": "INFO", "ts": 1762408867565, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 35, "duration_ms": 11389}
+{"level": "WARNING", "ts": 1762408877265, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 127, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408877278, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֣ץ", "confidence": 0.95, "tokens": 232}
+{"level": "WARNING", "ts": 1762408877278, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 117, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408877284, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּרִ֞י", "confidence": 0.95, "tokens": 206}
+{"level": "WARNING", "ts": 1762408877285, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 89, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408877290, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּרִי֙", "confidence": 0.95, "tokens": 171}
+{"level": "INFO", "ts": 1762408877291, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408879469, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408883213, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 37 (char 36)", "raw_response": "{\"insight\":\"The Hebrew noun זַרְע/וֹ\\־ (zārə‘ō), derived from the root zarā‘, signifies 'seed' or 'sowing', carrying profound theological implications in Genesis 1:11. In the context of creation, it s"}
+{"level": "INFO", "ts": 1762408883213, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 38, "duration_ms": 9694}
+{"level": "WARNING", "ts": 1762408892693, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 138, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408892706, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "דֶּ֠שֶׁא", "confidence": 0.95, "tokens": 247}
+{"level": "WARNING", "ts": 1762408892706, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 118, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408892713, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֣שֶׂב", "confidence": 0.95, "tokens": 222}
+{"level": "WARNING", "ts": 1762408892713, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 82, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408892719, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "זֶ֙רַע֙", "confidence": 0.97, "tokens": 157}
+{"level": "WARNING", "ts": 1762408892719, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 105, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408892725, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּרִ֛י", "confidence": 0.95, "tokens": 191}
+{"level": "INFO", "ts": 1762408892725, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 42, "duration_ms": 9467}
+{"level": "INFO", "ts": 1762408905046, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408907211, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408910037, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 37 (char 36)", "raw_response": "{\"insight\":\"The Hebrew noun זַרְע/וֹ\\־ (zārə‘ō), derived from the root zarā‘, signifies 'seed' or 'sowing', carrying profound theological implications throughout the Old Testament. In Genesis 1:12, Go"}
+{"level": "WARNING", "ts": 1762408910037, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 138, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408910050, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.97, "tokens": 223}
+{"level": "WARNING", "ts": 1762408910050, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 144, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408910057, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 244}
+{"level": "WARNING", "ts": 1762408910057, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun עֶ֥רֶב (ereb) is a rich term with profound theological significance, particularly in the context of Genesis 1:13. Literally meaning 'evening', it carries symbolic and tempo"}
+{"level": "INFO", "ts": 1762408910057, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408910063, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408910069, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 185, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408910075, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.85, "tokens": 307}
+{"level": "INFO", "ts": 1762408910075, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 45, "duration_ms": 12315}
+{"level": "WARNING", "ts": 1762408921354, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 135, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408921367, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.95, "tokens": 237}
+{"level": "WARNING", "ts": 1762408921367, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 168, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408921373, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 268}
+{"level": "WARNING", "ts": 1762408921373, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 135, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408921379, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מְאֹרֹת֙", "confidence": 0.95, "tokens": 242}
+{"level": "WARNING", "ts": 1762408921379, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 151, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408921384, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 247}
+{"level": "INFO", "ts": 1762408921384, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 49, "duration_ms": 11273}
+{"level": "WARNING", "ts": 1762408932158, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 162, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408932171, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 264}
+{"level": "WARNING", "ts": 1762408932171, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 108, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408932178, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 177}
+{"level": "WARNING", "ts": 1762408932178, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408932184, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 227}
+{"level": "WARNING", "ts": 1762408932184, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408932190, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.95, "tokens": 226}
+{"level": "INFO", "ts": 1762408932190, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 53, "duration_ms": 10767}
+{"level": "WARNING", "ts": 1762408944178, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 129, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408944191, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.97, "tokens": 222}
+{"level": "INFO", "ts": 1762408944197, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "רְקִ֥יעַ", "confidence": 0.95, "tokens": 365}
+{"level": "WARNING", "ts": 1762408944197, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 103, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408944203, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 175}
+{"level": "WARNING", "ts": 1762408944203, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 131, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408944209, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שֶׁ֖רֶץ", "confidence": 0.95, "tokens": 224}
+{"level": "INFO", "ts": 1762408944209, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 57, "duration_ms": 11981}
+{"level": "WARNING", "ts": 1762408956382, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 182, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408956395, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נֶ֣פֶשׁ", "confidence": 0.95, "tokens": 302}
+{"level": "WARNING", "ts": 1762408956395, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 176, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408956401, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֖י", "confidence": 0.95, "tokens": 291}
+{"level": "INFO", "ts": 1762408956401, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408959079, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408962142, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing 247 times in the Old Testament, often emphasizing totality and comprehensiveness. In Gen.1:21, it's used to describe G"}
+{"level": "WARNING", "ts": 1762408962142, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun אֱלֹהִ֔ים (Elohim) is a plural form of the root אלה (El), a Canaanite deity later syncretized with the God of Israel. In Genesis 1:21, Elohim's creative power is evident as"}
+{"level": "INFO", "ts": 1762408962142, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408962155, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408962161, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 131, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408962167, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.85, "tokens": 227}
+{"level": "INFO", "ts": 1762408962167, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 60, "duration_ms": 12166}
+{"level": "WARNING", "ts": 1762408976330, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 143, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408976337, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נֶ֣פֶשׁ", "confidence": 0.95, "tokens": 254}
+{"level": "INFO", "ts": 1762408976337, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408979062, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408982127, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing 247 times in the Old Testament, often emphasizing totality and comprehensiveness. In Gen.1:21, it's used to describe G"}
+{"level": "INFO", "ts": 1762408982140, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "ע֤וֹף", "confidence": 0.95, "tokens": 375}
+{"level": "INFO", "ts": 1762408982146, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "כָּנָף֙", "confidence": 0.95, "tokens": 332}
+{"level": "INFO", "ts": 1762408982146, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 63, "duration_ms": 14154}
+{"level": "WARNING", "ts": 1762408992102, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun אֱלֹהִים (Elohim) is a key term in the Old Testament, appearing over 2500 times and often translated as 'God'. In its primary occurrence at Gen.1:21, Elohim is used to refe"}
+{"level": "INFO", "ts": 1762408992102, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762408992118, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762408992125, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 140, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408992131, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.85, "tokens": 219}
+{"level": "WARNING", "ts": 1762408992131, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 123, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408992137, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 207}
+{"level": "WARNING", "ts": 1762408992138, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 112, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408992143, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.95, "tokens": 195}
+{"level": "WARNING", "ts": 1762408992143, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 114, "expected": "200-300"}
+{"level": "INFO", "ts": 1762408992149, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.98, "tokens": 202}
+{"level": "INFO", "ts": 1762408992149, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 67, "duration_ms": 9950}
+{"level": "WARNING", "ts": 1762409004405, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 169, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409004411, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.95, "tokens": 275}
+{"level": "WARNING", "ts": 1762409004411, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409004417, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֶ֖רֶץ", "confidence": 0.97, "tokens": 266}
+{"level": "WARNING", "ts": 1762409004417, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 131, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409004423, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 221}
+{"level": "WARNING", "ts": 1762409004423, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 152, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409004429, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נֶ֤פֶשׁ", "confidence": 0.98, "tokens": 261}
+{"level": "INFO", "ts": 1762409004429, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 71, "duration_ms": 12250}
+{"level": "WARNING", "ts": 1762409017038, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 177, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409017043, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בְּהֵמָ֥ה", "confidence": 0.95, "tokens": 307}
+{"level": "WARNING", "ts": 1762409017043, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 169, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409017049, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֩", "confidence": 0.97, "tokens": 289}
+{"level": "INFO", "ts": 1762409017049, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409019297, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409021838, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen. 1:25 as part of the divine assessment, 'God saw all that he had made, and it was very good'. This phrase marks"}
+{"level": "WARNING", "ts": 1762409021838, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 148, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409021851, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "רֶ֥מֶשׂ", "confidence": 0.97, "tokens": 269}
+{"level": "INFO", "ts": 1762409021851, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 74, "duration_ms": 12603}
+{"level": "WARNING", "ts": 1762409035136, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 175, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409035149, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 286}
+{"level": "WARNING", "ts": 1762409035149, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 130, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409035155, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיַּ֨ת", "confidence": 0.95, "tokens": 234}
+{"level": "INFO", "ts": 1762409035162, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 335}
+{"level": "WARNING", "ts": 1762409035162, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 191, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409035168, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אָדָ֛ם", "confidence": 0.95, "tokens": 331}
+{"level": "INFO", "ts": 1762409035168, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 78, "duration_ms": 13278}
+{"level": "WARNING", "ts": 1762409046241, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 99, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409046254, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 182}
+{"level": "WARNING", "ts": 1762409046255, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 121, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409046261, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֤ים\\׀", "confidence": 0.95, "tokens": 201}
+{"level": "WARNING", "ts": 1762409046261, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 188, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409046267, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיָּ֖ה", "confidence": 0.95, "tokens": 305}
+{"level": "WARNING", "ts": 1762409046267, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 138, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409046273, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 238}
+{"level": "INFO", "ts": 1762409046273, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 82, "duration_ms": 11067}
+{"level": "WARNING", "ts": 1762409057218, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409057229, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֒", "confidence": 0.95, "tokens": 236}
+{"level": "WARNING", "ts": 1762409057229, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun זָ֑רַע (zā·rā·ʾ), translated as 'seed', holds profound theological significance in the opening chapters of Genesis, particularly in Gen. 1:29. In ancient Near Eastern cultu"}
+{"level": "INFO", "ts": 1762409057229, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409057236, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409057242, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 134, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409057248, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "זָ֑רַע", "confidence": 0.85, "tokens": 232}
+{"level": "WARNING", "ts": 1762409057248, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 134, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409057254, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְרִי\\־", "confidence": 0.97, "tokens": 246}
+{"level": "INFO", "ts": 1762409057254, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409059992, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409063075, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 165, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409063089, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "כָּל\\־", "confidence": 0.95, "tokens": 271}
+{"level": "INFO", "ts": 1762409063089, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 86, "duration_ms": 10937}
+{"level": "INFO", "ts": 1762409073501, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409076720, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409079890, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 34 (char 33)", "raw_response": "{\"insight\":\"The Hebrew prefix כָל\\-(kol) in Gen.1.29, 'Be fruitful and multiply, fill the earth and subdue it,' signifies totality and universality. It echoes God's intent for humanity to exercise dom"}
+{"level": "WARNING", "ts": 1762409079890, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 154, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409079901, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֣י", "confidence": 0.95, "tokens": 266}
+{"level": "WARNING", "ts": 1762409079901, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 115, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409079907, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "זֶ֗רַע", "confidence": 0.95, "tokens": 210}
+{"level": "INFO", "ts": 1762409079907, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409082459, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 134, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409082465, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "כָּל\\־", "confidence": 0.95, "tokens": 271}
+{"level": "INFO", "ts": 1762409082465, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 89, "duration_ms": 10405}
+{"level": "WARNING", "ts": 1762409092580, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 117, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409092593, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֣שֶׂב\\׀", "confidence": 0.95, "tokens": 214}
+{"level": "WARNING", "ts": 1762409092593, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 119, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409092602, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֗ים", "confidence": 0.95, "tokens": 204}
+{"level": "WARNING", "ts": 1762409092602, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 126, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409092609, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֖ץ", "confidence": 0.95, "tokens": 220}
+{"level": "WARNING", "ts": 1762409092609, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 131, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409092615, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "ע֨וֹף", "confidence": 0.95, "tokens": 228}
+{"level": "INFO", "ts": 1762409092615, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 93, "duration_ms": 10109}
+{"level": "WARNING", "ts": 1762409104842, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 139, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409104855, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֖שֶׂב", "confidence": 0.95, "tokens": 237}
+{"level": "WARNING", "ts": 1762409104855, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 146, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409104862, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יֶ֥רֶק", "confidence": 0.95, "tokens": 252}
+{"level": "WARNING", "ts": 1762409104862, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 160, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409104868, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיַּ֣ת", "confidence": 0.95, "tokens": 284}
+{"level": "WARNING", "ts": 1762409104868, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409104873, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נֶ֣פֶשׁ", "confidence": 0.95, "tokens": 284}
+{"level": "INFO", "ts": 1762409104873, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 97, "duration_ms": 12221}
+{"level": "INFO", "ts": 1762409116455, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409118984, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409122207, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen. 1:30, describing God's provision for living creatures: 'And to all the beasts of the earth and to every bird o"}
+{"level": "INFO", "ts": 1762409122207, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409124686, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 116, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409124699, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "כָּל\\־", "confidence": 0.95, "tokens": 233}
+{"level": "WARNING", "ts": 1762409124699, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 152, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409124705, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֙", "confidence": 0.95, "tokens": 254}
+{"level": "WARNING", "ts": 1762409124705, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 165, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409124711, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.95, "tokens": 271}
+{"level": "INFO", "ts": 1762409124711, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 100, "duration_ms": 11575}
+{"level": "WARNING", "ts": 1762409136064, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 122, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409136077, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 207}
+{"level": "WARNING", "ts": 1762409136077, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 122, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409136083, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.95, "tokens": 208}
+{"level": "INFO", "ts": 1762409136084, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409138763, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409141374, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 38 (char 37)", "raw_response": "{\"insight\":\"The Hebrew noun צְבָאָֽ/ם\\׃ (tsava'ah) in Gen.2:1, derived from the root צָבָא (tsavah), signifies 'host' or 'army', often used to describe celestial bodies as God's heavenly host (e.g., 1"}
+{"level": "WARNING", "ts": 1762409141374, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 171, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409141387, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֙", "confidence": 0.95, "tokens": 294}
+{"level": "INFO", "ts": 1762409141387, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 103, "duration_ms": 11347}
+{"level": "WARNING", "ts": 1762409151638, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 123, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409151651, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מְלַאכְתּ֖/וֹ", "confidence": 0.95, "tokens": 219}
+{"level": "WARNING", "ts": 1762409151651, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 113, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409151657, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מְלַאכְתּ֖/וֹ", "confidence": 0.95, "tokens": 209}
+{"level": "WARNING", "ts": 1762409151657, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 134, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409151663, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 231}
+{"level": "WARNING", "ts": 1762409151664, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 112, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409151669, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֙", "confidence": 0.95, "tokens": 181}
+{"level": "INFO", "ts": 1762409151670, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 107, "duration_ms": 10245}
+{"level": "WARNING", "ts": 1762409162808, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 112, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409162820, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֣וֹם", "confidence": 0.97, "tokens": 200}
+{"level": "WARNING", "ts": 1762409162821, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 155, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409162827, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מְלַאכְתּ֔/וֹ", "confidence": 0.95, "tokens": 273}
+{"level": "WARNING", "ts": 1762409162827, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409162833, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 258}
+{"level": "WARNING", "ts": 1762409162833, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 108, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409162839, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תוֹלְד֧וֹת", "confidence": 0.95, "tokens": 214}
+{"level": "INFO", "ts": 1762409162839, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 111, "duration_ms": 11132}
+{"level": "WARNING", "ts": 1762409174633, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 133, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409174646, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֥ה", "confidence": 0.95, "tokens": 242}
+{"level": "WARNING", "ts": 1762409174646, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 146, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409174653, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֶ֥רֶץ", "confidence": 0.95, "tokens": 244}
+{"level": "WARNING", "ts": 1762409174653, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 156, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409174659, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֙", "confidence": 0.95, "tokens": 249}
+{"level": "WARNING", "ts": 1762409174659, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 165, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409174664, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שִׂ֣יחַ", "confidence": 0.95, "tokens": 273}
+{"level": "INFO", "ts": 1762409174664, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 115, "duration_ms": 11787}
+{"level": "WARNING", "ts": 1762409186076, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 186, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409186088, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֥שֶׂב", "confidence": 0.98, "tokens": 315}
+{"level": "WARNING", "ts": 1762409186088, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 122, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409186093, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֤ה", "confidence": 0.95, "tokens": 220}
+{"level": "WARNING", "ts": 1762409186094, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 142, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409186099, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אַ֔יִן", "confidence": 0.95, "tokens": 235}
+{"level": "INFO", "ts": 1762409186099, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409188513, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409191000, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen.2:6, 'And a mist went up from the earth and watered all the face of the ground.' This verse is part of the Prie"}
+{"level": "INFO", "ts": 1762409191000, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 118, "duration_ms": 11406}
+{"level": "INFO", "ts": 1762409204413, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409206867, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409209235, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 36 (char 35)", "raw_response": "{\"insight\":\"The Hebrew noun 'פְּנֵי\\־' (panim) primarily denotes 'face', but in biblical context, it often symbolizes presence, power, and divine interaction. In Gen.2:6, 'וַיָּבֹא עָלֶיהָ מִיַּעְקֵץ "}
+{"level": "WARNING", "ts": 1762409209235, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 143, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409209248, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֨ה", "confidence": 0.95, "tokens": 250}
+{"level": "WARNING", "ts": 1762409209248, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 186, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409209254, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיִּ֑ים", "confidence": 0.95, "tokens": 298}
+{"level": "WARNING", "ts": 1762409209254, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 183, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409209260, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נִשְׁמַ֣ת", "confidence": 0.95, "tokens": 303}
+{"level": "INFO", "ts": 1762409209260, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 121, "duration_ms": 13400}
+{"level": "WARNING", "ts": 1762409220876, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 143, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409220889, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עָפָר֙", "confidence": 0.95, "tokens": 248}
+{"level": "WARNING", "ts": 1762409220889, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 113, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409220895, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֜ים", "confidence": 0.97, "tokens": 197}
+{"level": "WARNING", "ts": 1762409220895, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 180, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409220900, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֧ה", "confidence": 0.95, "tokens": 295}
+{"level": "WARNING", "ts": 1762409220901, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 139, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409220906, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "גַּן\\־", "confidence": 0.97, "tokens": 241}
+{"level": "INFO", "ts": 1762409220906, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 125, "duration_ms": 11608}
+{"level": "WARNING", "ts": 1762409231620, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 125, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409231626, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֛ים", "confidence": 0.97, "tokens": 216}
+{"level": "WARNING", "ts": 1762409231626, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 137, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409231636, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֤ה", "confidence": 0.95, "tokens": 243}
+{"level": "WARNING", "ts": 1762409231636, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 166, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409231641, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֛ץ", "confidence": 0.95, "tokens": 282}
+{"level": "INFO", "ts": 1762409231641, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409234166, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409236382, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen.2.9, 'And God said, Behold, I have given you every plant yielding seed...'. Theologically, it underscores God's"}
+{"level": "INFO", "ts": 1762409236382, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 128, "duration_ms": 10707}
+{"level": "WARNING", "ts": 1762409249061, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 139, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409249074, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֙", "confidence": 0.95, "tokens": 222}
+{"level": "WARNING", "ts": 1762409249074, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun רָאשִֽׁים (rā·šîm) in Genesis 2:10, translated as 'heads,' is a critical component of the biblical narrative's cosmology and theology. It refers to the two primary sources "}
+{"level": "INFO", "ts": 1762409249074, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409249081, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409249087, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 170, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409249092, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "רָאשִֽׁים\\׃", "confidence": 0.85, "tokens": 285}
+{"level": "WARNING", "ts": 1762409249092, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 129, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409249098, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שֵׁ֥ם", "confidence": 0.95, "tokens": 216}
+{"level": "WARNING", "ts": 1762409249098, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun אֶ֣רֶץ (erets) in Gen. 2:11, translated as 'land' or 'earth,' carries profound theological significance. It's not merely geographical but symbolic of God's creation and hum"}
+{"level": "INFO", "ts": 1762409249098, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409249103, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409249114, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֶ֣רֶץ", "confidence": 0.85, "tokens": 332}
+{"level": "INFO", "ts": 1762409249114, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 132, "duration_ms": 12673}
+{"level": "INFO", "ts": 1762409259172, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409261274, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409263682, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen. 2:11, describing the four rivers of Eden as 'one source'. This phrase echoes God's creation of 'everything' (G"}
+{"level": "WARNING", "ts": 1762409263683, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 142, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409263689, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פִּישׁ֑וֹן", "confidence": 0.95, "tokens": 248}
+{"level": "WARNING", "ts": 1762409263689, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 175, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409263696, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֶ֥רֶץ", "confidence": 0.95, "tokens": 305}
+{"level": "WARNING", "ts": 1762409263696, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 85, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409263703, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "גִּיח֑וֹן", "confidence": 0.95, "tokens": 159}
+{"level": "INFO", "ts": 1762409263703, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 135, "duration_ms": 10052}
+{"level": "INFO", "ts": 1762409274343, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409276811, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409279275, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen.2:13 as 'every tree'. Theologically, it underscores God's comprehensive provision and the garden's abundance, r"}
+{"level": "INFO", "ts": 1762409279275, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409281815, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409283881, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 36 (char 35)", "raw_response": "{\"insight\":\"The Hebrew noun כּֽוּשׁ\\׃ (Kush) in Genesis 2:13 refers to the land of Cush, a region south of Egypt, often associated with modern-day Sudan and Ethiopia. Theologically, it signifies the s"}
+{"level": "WARNING", "ts": 1762409283881, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 126, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409283893, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "קִדְמַ֣ת", "confidence": 0.95, "tokens": 223}
+{"level": "WARNING", "ts": 1762409283893, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun חִדֶּ֔קֶל (chideqel) in Genesis 2:14, translated as 'east,' holds significant theological and symbolic meaning. It derives from the root verb חָדַק (chadaq), meaning 'to be"}
+{"level": "INFO", "ts": 1762409283893, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409283899, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409283905, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 145, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409283911, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חִדֶּ֔קֶל", "confidence": 0.85, "tokens": 242}
+{"level": "INFO", "ts": 1762409283911, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 137, "duration_ms": 10633}
+{"level": "WARNING", "ts": 1762409294899, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 94, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409294910, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְרָֽת\\׃", "confidence": 0.95, "tokens": 165}
+{"level": "WARNING", "ts": 1762409294910, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 168, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409294917, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אַשּׁ֑וּר", "confidence": 0.95, "tokens": 287}
+{"level": "WARNING", "ts": 1762409294917, "logger": "gemantria.enrichment", "msg": "json_truncated_no_confidence", "noun": null, "raw_preview": "{\"insight\":\"The Hebrew noun עֵ֔דֶן (eden) in Genesis 2:15 is of significant theological importance, denoting the lush garden where humanity was first placed by God. Eden's etymology is uncertain but m"}
+{"level": "INFO", "ts": 1762409294917, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_soft_warn", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409294923, "logger": "gemantria.metrics", "msg": "metrics", "event": "ai_conf_hard_fail", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409294929, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 128, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409294935, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֔דֶן", "confidence": 0.85, "tokens": 230}
+{"level": "WARNING", "ts": 1762409294936, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 162, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409294941, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 265}
+{"level": "INFO", "ts": 1762409294942, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 141, "duration_ms": 10982}
+{"level": "WARNING", "ts": 1762409307103, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 133, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409307116, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֥ה", "confidence": 0.95, "tokens": 238}
+{"level": "WARNING", "ts": 1762409307117, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 159, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409307123, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵֽץ\\־", "confidence": 0.95, "tokens": 268}
+{"level": "WARNING", "ts": 1762409307123, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 150, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409307129, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 258}
+{"level": "WARNING", "ts": 1762409307129, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 161, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409307134, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֣ה", "confidence": 0.95, "tokens": 279}
+{"level": "INFO", "ts": 1762409307134, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 145, "duration_ms": 12156}
+{"level": "WARNING", "ts": 1762409319068, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 109, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409319075, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֖זֶר", "confidence": 0.95, "tokens": 201}
+{"level": "WARNING", "ts": 1762409319075, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 121, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409319081, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 218}
+{"level": "WARNING", "ts": 1762409319081, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 141, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409319086, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֣ה", "confidence": 0.97, "tokens": 265}
+{"level": "WARNING", "ts": 1762409319086, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 188, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409319092, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיַּ֤ת", "confidence": 0.95, "tokens": 293}
+{"level": "INFO", "ts": 1762409319092, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 149, "duration_ms": 11928}
+{"level": "INFO", "ts": 1762409331770, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "נֶ֥פֶשׁ", "confidence": 0.95, "tokens": 352}
+{"level": "WARNING", "ts": 1762409331770, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 123, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409331776, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שְׁמֽ/וֹ\\׃", "confidence": 0.97, "tokens": 221}
+{"level": "WARNING", "ts": 1762409331776, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 178, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409331782, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "ע֣וֹף", "confidence": 0.95, "tokens": 305}
+{"level": "INFO", "ts": 1762409331783, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409334169, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409336770, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen.2:19, where God presents all the animals to Adam for naming, symbolizing humanity's initial dominion and stewar"}
+{"level": "INFO", "ts": 1762409336770, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 152, "duration_ms": 12657}
+{"level": "INFO", "ts": 1762409349066, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409351489, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409353702, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 35 (char 34)", "raw_response": "{\"insight\":\"The Hebrew prefix כָּל\\־ (kol-) signifies 'all' or 'every', appearing in Gen.2:19, where God presents all the animals to Adam for naming, reflecting humanity's original dominion and stewar"}
+{"level": "WARNING", "ts": 1762409353702, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 120, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409353715, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֜ים", "confidence": 0.95, "tokens": 220}
+{"level": "WARNING", "ts": 1762409353715, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 189, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409353721, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֨ה", "confidence": 0.95, "tokens": 314}
+{"level": "WARNING", "ts": 1762409353721, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 191, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409353727, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֵ֖זֶר", "confidence": 0.95, "tokens": 314}
+{"level": "INFO", "ts": 1762409353727, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 155, "duration_ms": 12282}
+{"level": "WARNING", "ts": 1762409366008, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 135, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409366021, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "חַיַּ֣ת", "confidence": 0.98, "tokens": 226}
+{"level": "WARNING", "ts": 1762409366021, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 161, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409366028, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שֵׁמ֗וֹת", "confidence": 0.95, "tokens": 274}
+{"level": "WARNING", "ts": 1762409366028, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 145, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409366034, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "יְהוָ֨ה", "confidence": 0.95, "tokens": 238}
+{"level": "WARNING", "ts": 1762409366034, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 184, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409366039, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תַּרְדֵּמָ֛ה", "confidence": 0.95, "tokens": 313}
+{"level": "INFO", "ts": 1762409366039, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 159, "duration_ms": 12274}
+{"level": "WARNING", "ts": 1762409377139, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 141, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409377152, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בָּשָׂ֖ר", "confidence": 0.95, "tokens": 240}
+{"level": "INFO", "ts": 1762409377152, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "INFO", "ts": 1762409380611, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762409384022, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": null, "error": "Invalid \\escape: line 1 column 43 (char 42)", "raw_response": "{\"insight\":\"The Hebrew noun תַּחְתֶּֽ/נָּה\\׃ (tachtenah) in Genesis 2:21, derived from the root חטן (chatan), signifies 'deep sleep' or 'trance'. This state is not merely physical but spiritually sign"}
+{"level": "WARNING", "ts": 1762409384022, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 114, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409384034, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֧ים\\׀", "confidence": 0.95, "tokens": 198}
+{"level": "WARNING", "ts": 1762409384034, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 129, "expected": "200-300"}
+{"level": "INFO", "ts": 1762409384040, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֧ים\\׀", "confidence": 0.95, "tokens": 222}
+{"level": "INFO", "ts": 1762409384040, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "612968ba-74d2-4f6a-a4fb-11109d643c0c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 162, "duration_ms": 11093}

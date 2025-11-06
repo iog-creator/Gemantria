@@ -8,11 +8,11 @@ Provides type-safe model resolution with fallbacks and validation.
 """
 
 import os
-from typing import Dict, List, Optional, Union
+from typing import Dict, List
 from dataclasses import dataclass
 
 import sys
-import os
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from infra.env_loader import ensure_env_loaded
@@ -21,8 +21,9 @@ from infra.env_loader import ensure_env_loaded
 @dataclass
 class ModelConfig:
     """Configuration for a model with name and optional fallback."""
+
     name: str
-    fallback: Optional[str] = None
+    fallback: str | None = None
 
 
 class ModelRouter:
@@ -38,41 +39,35 @@ class ModelRouter:
 
         # Core models from .env
         self._models = {
-            'theology': ModelConfig(
-                name=os.getenv('THEOLOGY_MODEL', 'christian-bible-expert-v2.0-12b'),
-                fallback=os.getenv('ANSWERER_MODEL_ALT', 'Qwen2.5-14B-Instruct-GGUF')
+            "theology": ModelConfig(
+                name=os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b"),
+                fallback=os.getenv("ANSWERER_MODEL_ALT", "Qwen2.5-14B-Instruct-GGUF"),
             ),
-            'general': ModelConfig(
-                name=os.getenv('ANSWERER_MODEL_ALT', 'Qwen2.5-14B-Instruct-GGUF'),
-                fallback=os.getenv('THEOLOGY_MODEL', 'christian-bible-expert-v2.0-12b')
+            "general": ModelConfig(
+                name=os.getenv("ANSWERER_MODEL_ALT", "Qwen2.5-14B-Instruct-GGUF"),
+                fallback=os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b"),
             ),
-            'math': ModelConfig(
-                name=os.getenv('MATH_MODEL', 'self-certainty-qwen3-1.7b-base-math')
-            ),
-            'embedding': ModelConfig(
-                name=os.getenv('EMBEDDING_MODEL', 'text-embedding-bge-m3')
-            ),
-            'reranker': ModelConfig(
-                name=os.getenv('RERANKER_MODEL', 'qwen.qwen3-reranker-0.6b')
-            )
+            "math": ModelConfig(name=os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")),
+            "embedding": ModelConfig(name=os.getenv("EMBEDDING_MODEL", "text-embedding-bge-m3")),
+            "reranker": ModelConfig(name=os.getenv("RERANKER_MODEL", "qwen.qwen3-reranker-0.6b")),
         }
 
         # Agent-to-model routing (matches AGENTS.md routing table)
         self._routing = {
-            'ingestion': None,
-            'discovery': 'theology',
-            'enrichment': 'theology',
-            'graph_build': None,
-            'rerank': ['embedding', 'reranker'],  # Dual model for rerank
-            'analytics': None,
-            'guard': None,
-            'release': None,
-            'triage': 'general',
-            'math': 'math',
-            'adr': 'general'
+            "ingestion": None,
+            "discovery": "theology",
+            "enrichment": "theology",
+            "graph_build": None,
+            "rerank": ["embedding", "reranker"],  # Dual model for rerank
+            "analytics": None,
+            "guard": None,
+            "release": None,
+            "triage": "general",
+            "math": "math",
+            "adr": "general",
         }
 
-    def get_model(self, logical_name: str) -> Optional[str]:
+    def get_model(self, logical_name: str) -> str | None:
         """
         Get concrete model name for a logical model identifier.
 
@@ -113,7 +108,7 @@ class ModelRouter:
         else:
             raise ValueError(f"No model available for {logical_name} (no primary or fallback)")
 
-    def get_agent_model(self, agent_name: str) -> Union[str, List[str], None]:
+    def get_agent_model(self, agent_name: str) -> str | List[str] | None:
         """
         Get model(s) for a specific agent.
 
@@ -131,7 +126,7 @@ class ModelRouter:
         else:
             return self.get_model(logical_name)
 
-    def get_agent_models_dict(self) -> Dict[str, Union[str, List[str], None]]:
+    def get_agent_models_dict(self) -> Dict[str, str | List[str] | None]:
         """
         Get all agent-to-model mappings as a dictionary.
 
@@ -163,15 +158,16 @@ class ModelRouter:
 
     def get_provider(self) -> str:
         """Get the inference provider (currently always lmstudio)."""
-        return os.getenv('INFERENCE_PROVIDER', 'lmstudio')
+        return os.getenv("INFERENCE_PROVIDER", "lmstudio")
 
     def is_live_enforced(self) -> bool:
         """Check if ENFORCE_QWEN_LIVE=1 (fail-closed mode)."""
-        return os.getenv('ENFORCE_QWEN_LIVE', '0') == '1'
+        return os.getenv("ENFORCE_QWEN_LIVE", "0") == "1"
 
 
 # Global router instance
 _router = None
+
 
 def get_router() -> ModelRouter:
     """Get the global model router instance."""
@@ -180,7 +176,8 @@ def get_router() -> ModelRouter:
         _router = ModelRouter()
     return _router
 
-def get_model_for_agent(agent_name: str) -> Union[str, List[str], None]:
+
+def get_model_for_agent(agent_name: str) -> str | List[str] | None:
     """
     Convenience function to get model(s) for an agent.
 
@@ -191,6 +188,7 @@ def get_model_for_agent(agent_name: str) -> Union[str, List[str], None]:
         Model name(s) or None for code-only agents
     """
     return get_router().get_agent_model(agent_name)
+
 
 def validate_model_routing() -> List[str]:
     """

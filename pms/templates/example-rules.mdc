@@ -1,0 +1,166 @@
+# Example Cursor Rules for PMS Projects
+
+These are example .mdc rule files that you can adapt for your project.
+Copy them to your `.cursor/rules/` directory and customize as needed.
+
+## 001-project-safety.mdc
+
+```markdown
+# Rule 001 — Project Safety (Critical)
+
+**Enforcement Level:** CRITICAL - Pipeline abort if violated
+
+## Requirements
+
+- No secrets or credentials in source code
+- All database operations use parameterized queries
+- File operations validate existence before access
+- Network calls have timeout and error handling
+
+## Validation
+
+- Pre-commit: Secret scanning
+- CI: Static analysis for security issues
+- Manual: Security review checklist
+
+## Exceptions
+
+None. Safety violations require immediate fix.
+```
+
+## 002-code-quality.mdc
+
+```markdown
+# Rule 002 — Code Quality Standards
+
+**Enforcement Level:** HIGH - PR block if violated
+
+## Requirements
+
+- Code coverage ≥90%
+- Cyclomatic complexity ≤10
+- No critical linting issues
+- All functions have docstrings
+
+## Validation
+
+- CI: Automated quality gates
+- Pre-commit: Fast quality checks
+- PR: Quality review checklist
+
+## Auto-fixes
+
+- Format: `ruff format`
+- Lint: `ruff check --fix`
+```
+
+## 003-deployment-rules.mdc
+
+```markdown
+# Rule 003 — Deployment Safety
+
+**Enforcement Level:** CRITICAL - Blocks deployment if violated
+
+## Requirements
+
+- All tests pass in CI
+- No critical security vulnerabilities
+- Database migrations are backward compatible
+- Rollback plan documented
+
+## Validation
+
+- CI: Full test suite + security scan
+- Pre-deploy: Manual checklist
+- Post-deploy: Health checks
+
+## Rollback Requirements
+
+- Zero-downtime rollback capability
+- Data migration reversibility
+- Feature flags for gradual rollout
+```
+
+## 004-documentation-sync.mdc
+
+```markdown
+# Rule 004 — Documentation Synchronization
+
+**Enforcement Level:** MEDIUM - Warning if violated
+
+## Requirements
+
+- Code changes update relevant documentation
+- API changes update specifications
+- Breaking changes update migration guides
+
+## Validation
+
+- CI: Documentation completeness check
+- PR: Documentation review
+- Manual: Documentation audit
+
+## Auto-sync Commands
+
+```bash
+make share.sync                    # Sync documentation
+python scripts/rules_audit.py     # Update rules inventory
+python scripts/generate_forest.py # Update project overview
+```
+```
+
+## 005-hints-envelope-integrity.mdc
+
+```markdown
+# Rule 005 — Hints Envelope Integrity
+
+**Enforcement Level:** CRITICAL - Agents cannot ignore
+
+## Requirements
+
+- Hints envelopes have valid JSON structure
+- Imperative commands are properly formatted
+- Envelope processing is logged and auditable
+- Critical commands abort pipeline if failed
+
+## Validation
+
+- Runtime: Envelope processor validation
+- CI: Envelope structure tests
+- Manual: Envelope audit
+
+## Imperative Commands
+
+Agents **MUST** execute these commands:
+
+- `AGENT_STOP_AND_PAY_ATTENTION`
+- `PROCESS_HINTS_ENVELOPE_IMMEDIATELY`
+- `CHECK_METADATA_REQUIREMENTS`
+- `VALIDATE_ENVELOPE_CONTENTS`
+- `ENFORCE_PROJECT_GOVERNANCE`
+- `ABORT_IF_CRITICAL_ISSUES`
+```
+
+## Usage Instructions
+
+1. **Copy to your project:**
+   ```bash
+   mkdir -p .cursor/rules
+   cp pms/templates/example-rules.mdc .cursor/rules/
+   # Edit and split into individual .mdc files
+   ```
+
+2. **Customize for your project:**
+   - Adjust enforcement levels
+   - Add project-specific requirements
+   - Modify validation commands
+
+3. **Validate rules:**
+   ```bash
+   python pms/scripts/validate_pms.py
+   ```
+
+4. **Integration:**
+   - Rules are automatically enforced by PMS
+   - Cursor will show rule violations
+   - CI validates rule compliance

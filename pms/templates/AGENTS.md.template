@@ -1,0 +1,91 @@
+# 🏗️ [PROJECT_NAME] Governance Document
+
+> **Purpose**: Project governance and agent coordination
+> **Related Rules**: Rule-017 (Agent Docs Presence), Rule-050 (OPS Contract)
+> **Related ADRs**: ADR-032 (Organic AI Discovery), ADR-019 (Data Contracts)
+
+## 🎯 Project Mission
+
+[Describe your project's core mission and value proposition]
+
+## 👥 Team Structure
+
+### Technical Lead
+- **Responsibilities**:
+  - Architecture decisions
+  - Code review gatekeeper
+  - PMS maintenance
+
+### Developers
+- **Responsibilities**:
+  - Feature implementation
+  - Test coverage
+  - Documentation updates
+
+### QA/Test
+- **Responsibilities**:
+  - Test automation
+  - Quality gate enforcement
+  - Bug triage
+
+## 📋 Critical Processes
+
+### Code Review Process
+1. **Automated Checks**: Must pass CI quality gates
+2. **Peer Review**: Required for all changes
+3. **Technical Lead**: Final approval for critical changes
+
+### Deployment Process
+1. **Quality Gates**: All tests pass, security scan clean
+2. **Review**: Deployment plan reviewed by technical lead
+3. **Rollback**: Zero-downtime rollback capability tested
+
+## 🔧 Development Standards
+
+### Code Quality
+- **Coverage**: ≥90%
+- **Complexity**: ≤10 cyclomatic complexity
+- **Style**: Ruff formatting enforced
+
+### Documentation
+- **API Docs**: 100% coverage required
+- **User Guides**: Updated with feature changes
+- **Architecture**: ADRs for significant changes
+
+## 🚨 Emergency Procedures
+
+### Critical Issues
+1. **Stop Deployment**: Halt all deployments immediately
+2. **Assess Impact**: Evaluate scope and severity
+3. **Communication**: Notify all stakeholders
+4. **Recovery**: Execute rollback or hotfix plan
+
+### Security Incidents
+1. **Isolate**: Contain affected systems
+2. **Assess**: Determine breach scope and data exposure
+3. **Notify**: Alert security team and legal
+4. **Recovery**: Restore from clean backups
+
+## 📈 Success Metrics
+
+### Quality Metrics
+- **Defect Rate**: <1 per 1000 lines of code
+- **Test Coverage**: ≥95%
+- **Performance**: Meet all SLAs
+
+### Delivery Metrics
+- **Lead Time**: <1 week for feature delivery
+- **Deployment Frequency**: Weekly minimum
+- **Change Failure Rate**: <5%
+
+---
+
+## Rules Inventory
+
+<!-- RULES_INVENTORY_START -->
+| # | Title |
+|---:|-------|
+<!-- RULES_INVENTORY_END -->
+
+**Last Updated**: [DATE]
+**PMS Version**: 2.0

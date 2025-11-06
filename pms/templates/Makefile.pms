@@ -1,0 +1,185 @@
+# PMS (Project Management System) Makefile Targets
+# Include this in your main Makefile with: include pms/templates/Makefile.pms
+
+## PMS Core Commands
+
+.PHONY: pms.init
+pms.init: ## Initialize PMS system in current project
+	@echo "🏗️ Initializing PMS system..."
+	@chmod +x pms/scripts/deploy.sh
+	@./pms/scripts/deploy.sh
+
+.PHONY: pms.validate
+pms.validate: ## Validate PMS system health
+	@echo "🔍 Validating PMS system..."
+	@source .venv/bin/activate && python pms/scripts/validate_pms.py
+
+.PHONY: pms.status
+pms.status: ## Show PMS system status
+	@echo "📊 PMS System Status"
+	@echo "==================="
+	@echo "📁 PMS Directory: $(shell pwd)/pms"
+	@echo "📋 Master Plan: $(shell test -f PROJECT_MASTER_PLAN.md && echo "✅ Found" || echo "❌ Missing")"
+	@echo "🏛️ Governance: $(shell test -f AGENTS.md && echo "✅ Active" || echo "❌ Missing")"
+	@echo "📬 Envelopes: $(shell find exports -name "*hints_envelope*.json" 2>/dev/null | wc -l) files"
+	@echo "📏 Rules: $(shell find .cursor/rules -name "*.mdc" 2>/dev/null | wc -l) .mdc files"
+	@echo "🔧 Metadata: $(shell python pms/scripts/enforce_metadata.py --count 2>/dev/null || echo "Check failed")"
+
+## Envelope Management
+
+.PHONY: envelope.process
+envelope.process: ## Process all pending hints envelopes
+	@echo "📬 Processing hints envelopes..."
+	@source .venv/bin/activate && python pms/scripts/envelope_processor.py --process-pending
+
+.PHONY: envelope.create-test
+envelope.create-test: ## Create a test hints envelope
+	@echo "🧪 Creating test hints envelope..."
+	@source .venv/bin/activate && python pms/scripts/envelope_processor.py --create-test-envelope
+
+.PHONY: envelope.validate
+envelope.validate: ## Validate all hints envelopes
+	@echo "🔍 Validating hints envelopes..."
+	@source .venv/bin/activate && python pms/core/envelope_error_system.py
+
+## Metadata Management
+
+.PHONY: metadata.check
+metadata.check: ## Check metadata requirements on staged files
+	@echo "📋 Checking metadata requirements..."
+	@source .venv/bin/activate && python pms/scripts/enforce_metadata.py --staged
+
+.PHONY: metadata.fix
+metadata.fix: ## Auto-fix metadata issues on staged files
+	@echo "🔧 Auto-fixing metadata issues..."
+	@source .venv/bin/activate && python pms/scripts/enforce_metadata.py --staged --fix
+
+.PHONY: metadata.validate
+metadata.validate: ## Validate metadata across all source files
+	@echo "🔍 Validating all file metadata..."
+	@source .venv/bin/activate && python pms/scripts/enforce_metadata.py --all
+
+## Governance & Rules
+
+.PHONY: rules.audit
+rules.audit: ## Audit and update rules inventory
+	@echo "📋 Auditing project rules..."
+	@source .venv/bin/activate && python scripts/rules_audit.py
+
+.PHONY: rules.validate
+rules.validate: ## Validate .mdc rule files
+	@echo "📏 Validating .mdc rule files..."
+	@source .venv/bin/activate && python pms/scripts/validate_pms.py --rules-only
+
+.PHONY: governance.enforce
+governance.enforce: ## Enforce all governance rules
+	@echo "🏛️ Enforcing project governance..."
+	@source .venv/bin/activate && python scripts/rules_audit.py
+	@source .venv/bin/activate && make share.sync
+	@source .venv/bin/activate && python scripts/generate_forest.py
+	@source .venv/bin/activate && python pms/scripts/envelope_processor.py --process-pending
+
+## Documentation Sync
+
+.PHONY: docs.sync
+docs.sync: share.sync ## Sync all documentation
+	@echo "📚 Documentation synchronized"
+
+.PHONY: docs.validate
+docs.validate: ## Validate documentation completeness
+	@echo "📖 Validating documentation..."
+	@source .venv/bin/activate && python pms/scripts/validate_pms.py --docs-only
+
+## Quality Gates
+
+.PHONY: quality.gate
+quality.gate: ## Run all quality gates
+	@echo "🚧 Running quality gates..."
+	@source .venv/bin/activate && ruff format --check .
+	@source .venv/bin/activate && ruff check .
+	@source .venv/bin/activate && python pms/scripts/validate_pms.py
+	@source .venv/bin/activate && make test.unit 2>/dev/null || echo "⚠️  Unit tests not configured"
+
+.PHONY: quality.fix
+quality.fix: ## Auto-fix quality issues
+	@echo "🔧 Auto-fixing quality issues..."
+	@source .venv/bin/activate && ruff format .
+	@source .venv/bin/activate && ruff check --fix
+	@source .venv/bin/activate && python pms/scripts/enforce_metadata.py --staged --fix
+
+## Housekeeping (PMS Core)
+
+.PHONY: housekeeping
+housekeeping: ## Run complete PMS housekeeping
+	@echo "🧹 Running PMS housekeeping..."
+	@source .venv/bin/activate && python scripts/rules_audit.py
+	@source .venv/bin/activate && make share.sync
+	@source .venv/bin/activate && python scripts/generate_forest.py
+	@source .venv/bin/activate && python pms/scripts/envelope_processor.py --process-pending
+	@echo "✅ Housekeeping complete"
+
+## PMS Maintenance
+
+.PHONY: pms.update
+pms.update: ## Update PMS system to latest version
+	@echo "⬆️ Updating PMS system..."
+	@cd pms && git pull origin main 2>/dev/null || echo "PMS not a git repo, manual update needed"
+
+.PHONY: pms.backup
+pms.backup: ## Backup PMS configuration
+	@echo "💾 Backing up PMS configuration..."
+	@mkdir -p backups
+	@tar -czf backups/pms_config_$(shell date +%Y%m%d_%H%M%S).tar.gz \
+		AGENTS.md \
+		PROJECT_MASTER_PLAN.md \
+		.cursor/rules/ \
+		pms/ \
+		exports/*hints_envelope*.json 2>/dev/null || true
+	@echo "✅ PMS configuration backed up"
+
+.PHONY: pms.restore
+pms.restore: ## Restore PMS configuration from backup
+	@echo "🔄 Select backup to restore:"
+	@ls -la backups/pms_config_*.tar.gz 2>/dev/null || echo "No backups found"
+	@echo "Run: tar -xzf backups/[backup_file].tar.gz"
+
+## Help
+
+.PHONY: pms.help
+pms.help: ## Show PMS-specific help
+	@echo "🏗️ Project Management System (PMS) v2.0 Commands"
+	@echo "=============================================="
+	@echo ""
+	@echo "Core Commands:"
+	@echo "  make pms.init         Initialize PMS in project"
+	@echo "  make pms.validate     Validate PMS system health"
+	@echo "  make pms.status       Show PMS system status"
+	@echo ""
+	@echo "Envelope Management:"
+	@echo "  make envelope.process Process pending hints envelopes"
+	@echo "  make envelope.create-test Create test envelope"
+	@echo "  make envelope.validate Validate all envelopes"
+	@echo ""
+	@echo "Metadata Management:"
+	@echo "  make metadata.check   Check metadata on staged files"
+	@echo "  make metadata.fix     Auto-fix metadata issues"
+	@echo "  make metadata.validate Validate all file metadata"
+	@echo ""
+	@echo "Governance:"
+	@echo "  make rules.audit      Audit and update rules"
+	@echo "  make rules.validate   Validate .mdc rule files"
+	@echo "  make governance.enforce Enforce all governance"
+	@echo ""
+	@echo "Quality:"
+	@echo "  make quality.gate     Run all quality gates"
+	@echo "  make quality.fix      Auto-fix quality issues"
+	@echo ""
+	@echo "Housekeeping:"
+	@echo "  make housekeeping     Complete PMS housekeeping"
+	@echo ""
+	@echo "Maintenance:"
+	@echo "  make pms.update       Update PMS system"
+	@echo "  make pms.backup       Backup PMS configuration"
+	@echo "  make pms.restore      Restore from backup"
+	@echo ""
+	@echo "For full help: make help"

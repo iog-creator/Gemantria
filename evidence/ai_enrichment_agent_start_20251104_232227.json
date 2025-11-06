@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-05T07:22:27.815534+00:00",
+  "agent": "ai_enrichment",
+  "event_type": "agent_start",
+  "level": "INFO",
+  "data": {
+    "book": "Genesis",
+    "input_file": "exports/ai_nouns.json",
+    "output_file": "exports/ai_nouns.enriched.json",
+    "agent": "ai_enrichment",
+    "resume_from": null
+  }
+}

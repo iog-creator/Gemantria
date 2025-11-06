@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-11-05T07:55:46.980085+00:00",
+  "agent": "ai_noun_discovery",
+  "event_type": "agent_result",
+  "level": "INFO",
+  "data": {
+    "success": true,
+    "output_summary": {
+      "nouns_discovered": 0,
+      "output_file": "exports/ai_nouns.json",
+      "book": "Genesis",
+      "resume_from": null,
+      "only": null,
+      "cache_hit": false,
+      "run_sig": "798c29e74de5e9e9",
+      "ai_call_count": 0,
+      "timing_p50_ms": 0,
+      "timing_p95_ms": 0,
+      "timing_p99_ms": 0,
+      "total_timing_samples": 0,
+      "run_mode": "dry",
+      "writes_committed": false
+    },
+    "execution_time_ms": 60.76550483703613,
+    "models_used": {
+      "theology": "christian-bible-expert-v2.0-12b",
+      "general": "Qwen2.5-14B-Instruct-GGUF",
+      "math": "self-certainty-qwen3-1.7b-base-math",
+      "embedding": "text-embedding-bge-m3",
+      "reranker": "qwen.qwen3-reranker-0.6b"
+    },
+    "run": {
+      "dry_run": true,
+      "budget_strict": true
+    }
+  }
+}

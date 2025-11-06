@@ -1,0 +1,28 @@
+{
+  "ts": 1762328987,
+  "artifacts": {
+    "graph_latest": null,
+    "graph_last_good": null,
+    "summary_latest": "share/evidence/guard_all_summary_20251104_234947.json"
+  },
+  "graph": {
+    "nodes": null,
+    "edges": null,
+    "last_good_nodes": null,
+    "last_good_edges": null,
+    "delta_nodes": null,
+    "delta_edges": null
+  },
+  "latency_tokens": {
+    "p50_ms": null,
+    "p95_ms": null,
+    "p99_ms": null,
+    "tps": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "tokens_total": null
+  },
+  "models_used": {},
+  "run_flags": null,
+  "budget_breach": null
+}

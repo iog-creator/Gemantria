@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-11-05T07:22:27.815664+00:00",
+  "agent": "ai_enrichment",
+  "event_type": "input_loaded",
+  "level": "INFO",
+  "data": {
+    "input_file": "exports/ai_nouns.json",
+    "nouns_loaded": 0
+  }
+}

@@ -1,0 +1,15 @@
+# Example CI artifact upload configuration
+# Add this step to your .github/workflows/rc-smokes.yml after guards
+
+- name: Upload evidence artifacts
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: evidence-${{ github.run_id }}
+    path: |
+      share/evidence/*summary_*.json
+      share/evidence/*result_*.json
+      share/evidence/*start_*.json
+      share/exports/graph_latest.json
+    if-no-files-found: warn
+    retention-days: 7

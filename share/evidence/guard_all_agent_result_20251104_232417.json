@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-11-05T07:24:17.117698+00:00",
+  "agent": "guard_all",
+  "event_type": "agent_result",
+  "level": "INFO",
+  "data": {
+    "success": true,
+    "output_summary": {
+      "total_guards": 3,
+      "passed": 3,
+      "failed": 0,
+      "success": true,
+      "guard_results": [
+        {
+          "success": true,
+          "message": "AI_NOUNS_GUARD_OK",
+          "script": "scripts/guard_ai_nouns.py",
+          "description": "AI Nouns SSOT Schema Validation"
+        },
+        {
+          "success": true,
+          "message": "GRAPH_SCHEMA_OK: 3702 nodes, 1855 edges validated",
+          "script": "scripts/guard_graph_schema.py",
+          "description": "Graph SSOT Schema Validation"
+        },
+        {
+          "success": true,
+          "message": "SQL guard passed: no issues found",
+          "script": "scripts/sql/guard_hebrew_export.sql",
+          "description": "Hebrew Export Integrity (SQL)"
+        }
+      ]
+    },
+    "execution_time_ms": 158.94150733947754
+  }
+}

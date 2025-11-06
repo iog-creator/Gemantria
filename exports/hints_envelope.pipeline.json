@@ -1,0 +1,19 @@
+{
+  "type": "hints_envelope",
+  "version": 1,
+  "commands": [
+    "AGENT_STOP_AND_PAY_ATTENTION",
+    "PROCESS_HINTS_ENVELOPE_IMMEDIATELY"
+  ],
+  "expected_node_sequence": [
+    "collect_nouns",
+    "validate_batch",
+    "enrichment",
+    "confidence_validator",
+    "network_aggregator",
+    "schema_validator",
+    "analysis_runner",
+    "wrap_hints"
+  ],
+  "generated_at": "2025-11-06T05:11:51Z"
+}

@@ -1,0 +1,5 @@
+# Example CI release gate configuration
+# Add this step to your .github/workflows/rc-smokes.yml after guards
+
+- name: Release gate
+  run: make release.gate

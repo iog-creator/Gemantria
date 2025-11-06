@@ -7,11 +7,10 @@ in share/evidence/ for external monitoring and auditing.
 """
 
 import json
-import os
 import time
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from src.infra.env_loader import ensure_env_loaded
 
@@ -46,11 +45,11 @@ class EvidenceLogger:
             level: Log level (INFO, WARN, ERROR)
         """
         evidence_entry = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "agent": self.agent_name,
             "event_type": event_type,
             "level": level,
-            "data": data
+            "data": data,
         }
 
         self.evidence.append(evidence_entry)
@@ -58,7 +57,7 @@ class EvidenceLogger:
         # Also write to individual evidence file
         self._write_evidence_file(event_type, evidence_entry)
 
-    def log_performance(self, operation: str, duration_ms: float, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def log_performance(self, operation: str, duration_ms: float, metadata: Dict[str, Any] | None = None) -> None:
         """
         Log performance metrics for an operation.
 
@@ -67,11 +66,7 @@ class EvidenceLogger:
             duration_ms: Duration in milliseconds
             metadata: Additional performance metadata
         """
-        data = {
-            "operation": operation,
-            "duration_ms": duration_ms,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+        data = {"operation": operation, "duration_ms": duration_ms, "timestamp": datetime.now(UTC).isoformat()}
         if metadata:
             data.update(metadata)
 
@@ -86,16 +81,14 @@ class EvidenceLogger:
             passed: Whether validation passed
             details: Validation details and error messages
         """
-        data = {
-            "validation_type": validation_type,
-            "passed": passed,
-            "details": details
-        }
+        data = {"validation_type": validation_type, "passed": passed, "details": details}
 
         level = "INFO" if passed else "ERROR"
         self.log_evidence("validation", data, level)
 
-    def log_agent_result(self, success: bool, output_summary: Dict[str, Any], error_details: Optional[str] = None) -> None:
+    def log_agent_result(
+        self, success: bool, output_summary: Dict[str, Any], error_details: str | None = None
+    ) -> None:
         """
         Log the final result of an agent execution.
 
@@ -107,7 +100,7 @@ class EvidenceLogger:
         data = {
             "success": success,
             "output_summary": output_summary,
-            "execution_time_ms": (time.time() - self.start_time) * 1000
+            "execution_time_ms": (time.time() - self.start_time) * 1000,
         }
 
         if error_details:
@@ -145,7 +138,7 @@ class EvidenceLogger:
             "total_duration_ms": total_duration,
             "validations_passed": validations_passed,
             "validations_total": validations_total,
-            "execution_time_ms": (time.time() - self.start_time) * 1000
+            "execution_time_ms": (time.time() - self.start_time) * 1000,
         }
 
     def _write_evidence_file(self, event_type: str, evidence_entry: Dict[str, Any]) -> None:
@@ -161,13 +154,13 @@ class EvidenceLogger:
         filepath = EVIDENCE_DIR / filename
 
         try:
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(evidence_entry, f, indent=2, ensure_ascii=False)
         except Exception as e:
             # Fallback to simple text file if JSON fails
-            txt_filepath = filepath.with_suffix('.txt')
+            txt_filepath = filepath.with_suffix(".txt")
             try:
-                with open(txt_filepath, 'w', encoding='utf-8') as f:
+                with open(txt_filepath, "w", encoding="utf-8") as f:
                     f.write(f"Evidence logging failed: {e}\n")
                     f.write(json.dumps(evidence_entry, indent=2, ensure_ascii=False))
             except Exception:
@@ -181,11 +174,11 @@ class EvidenceLogger:
 
         # Write summary evidence
         summary_entry = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "agent": self.agent_name,
             "event_type": "evidence_summary",
             "level": "INFO",
-            "data": summary
+            "data": summary,
         }
 
         self._write_evidence_file("summary", summary_entry)
@@ -219,7 +212,7 @@ def finalize_all_evidence() -> None:
     _active_loggers.clear()
 
 
-def get_evidence_summary(agent_name: Optional[str] = None) -> Dict[str, Any]:
+def get_evidence_summary(agent_name: str | None = None) -> Dict[str, Any]:
     """
     Get evidence summary for an agent or all agents.
 

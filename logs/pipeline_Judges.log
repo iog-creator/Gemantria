@@ -1,0 +1,23 @@
+>> Run main pipeline via orchestrator
+{"level": "INFO", "ts": 1762370366318, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_start", "book": "Judges", "mode": "START"}
+{"level": "WARNING", "ts": 1762370366764, "logger": "ai_noun_discovery", "msg": "no_hebrew_text", "book": "Judges"}
+{"level": "INFO", "ts": 1762370366764, "logger": "gemantria.enrichment", "msg": "enrichment_start", "noun_count": 0, "message": "No nouns to enrich"}
+{"level": "INFO", "ts": 1762370366764, "logger": "gemantria.network_aggregator", "msg": "network_aggregation_skipped", "reason": "no_nouns"}
+{"level": "INFO", "ts": 1762370366764, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_complete", "success": true, "run_id": "f1422331-1771-4742-b89e-a8669b1cfd0f", "book": "Judges"}
+{
+  "success": true,
+  "run_id": "f1422331-1771-4742-b89e-a8669b1cfd0f",
+  "book": "Judges",
+  "result": {
+    "run_id": "f1422331-1771-4742-b89e-a8669b1cfd0f",
+    "book": "Judges",
+    "mode": "START",
+    "success": true,
+    "nouns_count": 0,
+    "graph_nodes": 0,
+    "graph_edges": 0,
+    "metrics": {
+      "ai_call_latencies_ms": []
+    }
+  }
+}

@@ -32,12 +32,12 @@ from src.infra.metrics_queries import (
 ensure_env_loaded()
 
 # Control character scrubber for JSON safety
-_BAD_JSON_CHARS = re.compile(r'[\u0000-\u0008\u000B\u000C\u000E-\u001F]')
+_BAD_JSON_CHARS = re.compile(r"[\u0000-\u0008\u000B\u000C\u000E-\u001F]")
 
 
 def _scrub(s: str) -> str:
     """Scrub control characters that break JSON parsers."""
-    return _BAD_JSON_CHARS.sub('', s) if isinstance(s, str) else s
+    return _BAD_JSON_CHARS.sub("", s) if isinstance(s, str) else s
 
 
 def get_recent_runs(limit: int = 5) -> list[dict[str, Any]]:
@@ -1213,11 +1213,15 @@ def main():
             "generated_at": datetime.now(UTC).isoformat(),
             "metrics": metrics,
         }
+
         # Scrub problematic control characters that break JSON parsers
         def _walk(x):
-            if isinstance(x, dict):  return {k:_walk(_scrub(v)) for k,v in x.items()}
-            if isinstance(x, list):  return [_walk(v) for v in x]
+            if isinstance(x, dict):
+                return {k: _walk(_scrub(v)) for k, v in x.items()}
+            if isinstance(x, list):
+                return [_walk(v) for v in x]
             return _scrub(x)
+
         clean = _walk(json_content)
         json_file = output_dir / f"{base_filename}.json"
         json_file.write_text(

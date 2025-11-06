@@ -1,0 +1,56 @@
+{
+  "enriched_nouns": [
+    {
+      "noun_id": null,
+      "surface": "אֱלֹהִ֑ים",
+      "hebrew_text": "אֱלֹהִ֑ים",
+      "letters": [],
+      "gematria_value": 0,
+      "class": "thing",
+      "semantic_features": {},
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (יהוה \"LORD\" H3068G) "
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.1"
+        }
+      ],
+      "confidence": 0.95,
+      "insights": "The Hebrew noun אֱלֹהִ֑ים (Elōhîm) is a plural form of the root word אֵל (ēl), signifying 'god'. It appears 2,574 times in the Old Testament, often referring to Yahweh. The use of a plural noun for a singular God reflects ancient Near Eastern polytheism's influence and emphasizes God's majesty and power. Its theological implications include the understanding of God as transcendent yet immanent, and the concept of God's unity amidst plurality (Deuteronomy 6:4)."
+    },
+    {
+      "noun_id": null,
+      "surface": "פְּנֵ֣י",
+      "hebrew_text": "פְּנֵ֣י",
+      "letters": [],
+      "gematria_value": 0,
+      "class": "thing",
+      "semantic_features": {},
+      "analysis": {
+        "lemma": "face: before",
+        "pos": "NOUN",
+        "morph": "HNcmpc",
+        "strongs_id": "H6440",
+        "transliteration": "pe.Nei",
+        "gloss": "[the] surface of",
+        "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ],
+      "confidence": 0.95,
+      "insights": "פְּנֵי (panim) signifies 'faces' in Hebrew, symbolizing presence, direction, and divine encounter. In Exodus 33:14-15, God promises, 'My face will go with you,' signifying constant guidance and protection. Theologically, it underscores God's immanence and covenantal faithfulness."
+    }
+  ]
+}
