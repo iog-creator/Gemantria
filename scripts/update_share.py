@@ -98,8 +98,8 @@ def main():
     spec = json.loads(MANIFEST.read_text())
     items = spec.get("items", [])
     # Optional safety: enforce low file count
-    if len(items) > 25:
-        print("[update_share] ERROR: more than 25 items; trim manifest.", file=sys.stderr)
+    if len(items) > 100:
+        print("[update_share] ERROR: more than 100 items; trim manifest.", file=sys.stderr)
         sys.exit(2)
 
     # Ensure share/ exists; **flat** layout only

@@ -5,12 +5,24 @@
       "dst": "share/AGENTS.md"
     },
     {
+      "src": "docs/SSOT/RULES_INDEX.md",
+      "dst": "share/RULES_INDEX.md"
+    },
+    {
       "src": "README.md",
       "dst": "share/README.md"
     },
     {
-      "src": "docs/SSOT/RULES_INDEX.md",
-      "dst": "share/RULES_INDEX.md"
+      "src": "Makefile",
+      "dst": "share/Makefile"
+    },
+    {
+      "src": "pyproject.toml",
+      "dst": "share/pyproject.toml"
+    },
+    {
+      "src": "scripts/rules_guard.py",
+      "dst": "share/rules_guard.py"
     },
     {
       "src": "docs/SSOT/MASTER_PLAN.md",
@@ -21,26 +33,60 @@
       "dst": "share/forest_overview.md"
     },
     {
-      "src": "scripts/rules_guard.py",
-      "dst": "share/rules_guard.py"
+      "src": "docs/SSOT/graph-stats.schema.json",
+      "dst": "share/graph-stats.schema.json"
+    },
+    {
+      "src": "docs/SSOT/SSOT_ai-nouns.v1.schema.json",
+      "dst": "share/ai-nouns.v1.schema.json"
+    },
+    {
+      "src": "docs/SSOT/SSOT_graph.v1.schema.json",
+      "dst": "share/graph.v1.schema.json"
+    },
+    {
+      "src": ".cursor/rules/000-ssot-index.mdc",
+      "dst": "share/cursor-000-ssot-index.mdc"
+    },
+    {
+      "src": ".cursor/rules/039-execution-contract.mdc",
+      "dst": "share/cursor-039-execution-contract.mdc"
+    },
+    {
+      "src": ".cursor/rules/041-pr-merge-policy.mdc",
+      "dst": "share/cursor-041-pr-merge-policy.mdc"
+    },
+    {
+      "src": ".cursor/rules/049-gpt5-contract-v5.2.mdc",
+      "dst": "share/cursor-049-gpt5-contract-v5.2.mdc"
+    },
+    {
+      "src": ".cursor/rules/050-ops-contract.mdc",
+      "dst": "share/cursor-050-ops-contract.mdc"
+    },
+    {
+      "src": ".cursor/rules/051-cursor-insight.mdc",
+      "dst": "share/cursor-051-cursor-insight.mdc"
+    },
+    {
+      "src": ".cursor/rules/052-tool-priority.mdc",
+      "dst": "share/cursor-052-tool-priority.mdc"
+    },
+    {
+      "src": "mypy.ini",
+      "dst": "share/mypy.ini"
+    },
+    {
+      "src": "ruff.toml",
+      "dst": "share/ruff.toml"
     },
     {
       "src": ".github/pull_request_template.md",
       "dst": "share/pull_request_template.md"
     },
     {
-      "src": ".pre-commit-config.yaml",
-      "dst": "share/pre-commit-config.yaml"
-    },
-    {
-      "src": "docs/SSOT/graph-stats.schema.json",
-      "dst": "share/SSOT_graph-stats.schema.json"
-    },
-    {
-      "src": "exports/graph_stats.json",
-      "dst": "share/graph_stats.head.json",
-      "generate": "head_json",
-      "max_bytes": 4096
+      "src": ".cursor/rules/README.md",
+      "dst": "share/cursor-rules-README.md"
     }
   ]
 }

@@ -63,4 +63,5 @@
 | 058 | 058-auto-housekeeping.mdc | # --- |
 | 059 | 059-context-persistence.mdc | # --- |
 | 060 | 060-pipeline-sequence.mdc | # --- |
-| 061 | 061-response-style.mdc | # --- |
+| 061 | 061-cursor-bootstrap.mdc | # --- |
+| 062 | 062-response-style.mdc | # --- |

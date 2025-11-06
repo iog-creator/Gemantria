@@ -1,6 +1,7 @@
 ---
 description: How to author Cursor rules (.mdc) correctly (agent-requested)
 alwaysApply: false
+globs: []
 ---
 
 # Cursor Rule Authoring Guide

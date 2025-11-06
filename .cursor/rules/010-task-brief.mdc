@@ -1,6 +1,6 @@
 ---
 description: SHORT BRIEF format for all interactions
-alwaysApply: true
+alwaysApply: false
 ---
 
 # SHORT BRIEF Format (Always Required)

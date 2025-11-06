@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import time
 import uuid
+import json
 
 import psycopg
 
@@ -32,6 +33,14 @@ def evaluate_confidence(conf, run_id=None, node=None):
         metrics_client = get_metrics_client()
         metrics_client.emit({"event": "ai_conf_hard_fail", "run_id": run_id, "node": node})
     return status
+
+
+# --- Add a single source of truth for "noun name" resolution ---
+def _resolve_noun_name(n: dict) -> tuple[str, str]:
+    """Return (name, hebrew_surface). Never returns empty/None name."""
+    heb = (n.get("surface") or n.get("hebrew_text") or n.get("hebrew") or "").strip()
+    name = (n.get("name") or heb or (n.get("analysis", {}) or {}).get("lemma") or "Unknown").strip() or "Unknown"
+    return name, heb
 
 
 def enrichment_node(state: dict) -> dict:
@@ -71,10 +80,10 @@ def enrichment_node(state: dict) -> dict:
 
     def build_enrichment_prompt(noun):
         """Build enrichment prompt, leveraging AI-discovered analysis when available."""
+        # Resolve once for prompt building
+        name, hebrew = _resolve_noun_name(noun)
         base_info = (
-            f"Noun: {noun.get('name', 'Unknown')}\n"
-            f"Hebrew: {escape_hebrew(noun.get('hebrew', ''))}\n"
-            f"Primary Verse: {noun.get('primary_verse', 'Unknown')}\n"
+            f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {noun.get('primary_verse', 'Unknown')}\n"
         )
 
         # Leverage AI-discovered analysis if available
@@ -123,15 +132,17 @@ def enrichment_node(state: dict) -> dict:
         # Build message batches using pre-built prompts
         messages_batch = []
         for j, n in enumerate(chunk):
+            # Resolve name once for this noun
+            name, heb = _resolve_noun_name(n)
             try:
                 # Use the corresponding prompt from our pre-built prompts array
                 prompt_idx = i + j  # Global index in the prompts array
                 content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
-                log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
+                log_json(LOG, 40, "template_format_error", noun=name, error=str(e))
                 # Fallback: use basic format
-                content = f"Noun: {n.get('name', 'Unknown')}\nHebrew: {n.get('hebrew', '')}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
+                content = f"Noun: {name}\nHebrew: {heb}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
         # Call LM Studio with batched requests
@@ -141,6 +152,8 @@ def enrichment_node(state: dict) -> dict:
 
             # Process responses
             for n, out in zip(chunk, outs, strict=False):
+                # Resolve name once for this noun's processing
+                name, heb = _resolve_noun_name(n)
                 try:
                     # Parse and validate JSON response with repair + retry up to 2
                     retry = 0
@@ -193,7 +206,7 @@ def enrichment_node(state: dict) -> dict:
                                 LOG,
                                 30,
                                 "json_truncated_no_confidence",
-                                noun=n.get("name"),
+                                noun=name,
                                 raw_preview=raw_text[:200] if raw_text else "",
                             )
                             # Use default confidence for truncated responses
@@ -268,7 +281,7 @@ def enrichment_node(state: dict) -> dict:
                         LOG,
                         20,
                         "noun_enriched",
-                        noun=n.get("name"),
+                        noun=name,
                         confidence=confidence,
                         tokens=tokens_used,
                     )
@@ -278,7 +291,7 @@ def enrichment_node(state: dict) -> dict:
                         LOG,
                         30,
                         "noun_enrichment_failed",
-                        noun=n.get("name"),
+                        noun=name,
                         error=str(e),
                         raw_response=out.text[:200],
                     )

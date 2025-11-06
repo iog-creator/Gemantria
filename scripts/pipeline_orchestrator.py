@@ -45,7 +45,7 @@ def run_full_pipeline(
         from src.graph.graph import run_pipeline
 
         # Run the main pipeline
-        result = run_pipeline(book=book, mode=mode, nouns=nouns)
+        result = run_pipeline(book=book, nouns=nouns)
 
         # Extract results
         success = "error" not in result

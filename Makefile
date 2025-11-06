@@ -3,6 +3,9 @@
 # Python interpreter (for CI compatibility)
 PYTHON ?= python3
 
+# Default book for safety (Rule-062: Big-run Guard)
+BOOK ?= Genesis
+
 ui.dev.help:
 	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
 	@echo "UI local dev instructions:"
@@ -52,7 +55,7 @@ handoff.update:
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
-housekeeping: share.sync adr.housekeeping handoff.update
+housekeeping: share.sync adr.housekeeping handoff.update cursor.hints
 	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + handoff)"
 	@$(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
@@ -221,7 +224,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes
+.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes safety.quarantine.bigfile pipeline.from_db pipeline.from_file book.go
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -245,6 +248,13 @@ book.stop:
 book.resume:
 	@echo ">> Resume book processing"
 	@$(PYTHON) scripts/run_book.py resume
+
+# Safety quarantine for big files (Rule-062: Big-run Guard)
+.PHONY: safety.quarantine.bigfile
+safety.quarantine.bigfile:
+	@mkdir -p share/backups
+	@[ -f exports/ai_nouns.db_morph.json ] && mv -f exports/ai_nouns.db_morph.json share/backups/ai_nouns.db_morph.full.$(shell date +%Y%m%d_%H%M%S).json || true
+	@echo "Quarantined any full-bible nouns file to share/backups/"
 
 # Schema validation
 schema.validate:
@@ -360,13 +370,29 @@ evidence.index:
 # --- Bible DB ingestion (read-only) ---
 .PHONY: db.ingest.morph
 db.ingest.morph:
-	@echo ">> Ingesting morphology nouns from bible_db (read-only)…"
-	@python3 scripts/ingest_bible_db_morphology.py --out exports/ai_nouns.db_morph.json
+	@echo ">> Ingesting morphology nouns from bible_db (read-only) for $(BOOK)…"
+	@python3 scripts/ingest_bible_db_morphology.py $(if $(DB_INGEST_LIMIT),--limit $(DB_INGEST_LIMIT)) --out exports/ai_nouns.db_morph.$(shell python3 -c "book='$(BOOK)'; m={'Genesis':'Gen','Exodus':'Exod','Leviticus':'Lev','Numbers':'Num','Deuteronomy':'Deut'}; print(m.get(book,book))").json
 
 .PHONY: pipeline.from_db
-pipeline.from_db: db.ingest.morph
-	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
-	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
+pipeline.from_db:
+	@echo ">> Running pipeline from DB-ingested nouns (file-input path) for $(BOOK)…"
+	@OSIS_CODE=$$(python3 -c "book='$(BOOK)'; m={'Genesis':'Gen','Exodus':'Exod','Leviticus':'Lev','Numbers':'Num','Deuteronomy':'Deut'}; print(m.get(book,book))"); \
+	FILE=exports/ai_nouns.db_morph.$$OSIS_CODE.json; \
+	python3 scripts/guards/guard_big_run.py "$$FILE" && \
+	PYTHONPATH=. python3 scripts/pipeline_orchestrator.py pipeline --book "$(BOOK)" --nouns-json "$$FILE"
+
+.PHONY: pipeline.from_file
+pipeline.from_file:
+	@echo ">> Running pipeline from explicit nouns file (guarded)…"
+	@test -n "$(FILE)" || (echo "Set FILE=<path to nouns.json>"; exit 2)
+	python3 scripts/guards/guard_big_run.py "$(FILE)"
+	PYTHONPATH=. python3 scripts/pipeline_orchestrator.py pipeline --nouns-json "$(FILE)"
+
+.PHONY: book.go
+book.go:
+	@echo ">> Genesis-safe run (db ingest -> pipeline) …"
+	$(MAKE) db.ingest.morph BOOK=$(BOOK) DB_INGEST_LIMIT=$(if $(DB_INGEST_LIMIT),$(DB_INGEST_LIMIT),25)
+	$(MAKE) pipeline.from_db BOOK=$(BOOK)
 
 .PHONY: pipeline.from_db.pg
 pipeline.from_db.pg: db.ingest.morph
@@ -379,14 +405,22 @@ guards.all:
 	@-$(MAKE) models.verify  # Skip if models not available (development)
 	@PYTHONPATH=$(shell pwd) python3 scripts/guard_all.py
 	@$(MAKE) ssot.verify
+	@echo ">> Big-run guard is present…"
+	@test -f scripts/guards/guard_big_run.py || (echo "missing guard_big_run.py"; exit 2)
+	@echo ">> No-HTML in analysis (sanitized)…"
+	@test -f exports/ai_nouns.db_morph.Gen.json && python3 scripts/guards/guard_analysis_no_html.py exports/ai_nouns.db_morph.Gen.json || true
 	@echo ">> Validating db ingest envelope…"
 	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json || (echo "db ingest guard failed"; exit 2)
 	@echo ">> Enrichment name guard (no 'Unknown')…"
 	@python3 scripts/guards/guard_enrichment_names.py share/evidence/e2e_smoke.log || (echo "enrichment names guard failed"; exit 2)
 	@echo ">> Hebrew nouns sanity guard…"
 	@python3 scripts/guards/guard_nouns_hebrew_sanity.py exports/ai_nouns.db_morph.json || (echo "hebrew nouns sanity guard failed"; exit 2)
+	@echo ">> Book scope guard…"
+	@test -f exports/ai_nouns.db_morph.Gen.json && python3 scripts/guards/guard_book_scope.py exports/ai_nouns.db_morph.Gen.json Gen. || true
 	@echo ">> Checkpointer (postgres) guard…"
 	@python3 scripts/guards/guard_checkpointer_postgres.py || true
+	@echo ">> Cursor surfaces present…"
+	@python3 scripts/guards/guard_cursor_surfaces.py || (echo "cursor surfaces guard failed"; exit 2)
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
@@ -441,6 +475,10 @@ release.enforce:
 
 ssot.verify:
 	@python3 scripts/guard_ssot.py
+
+.PHONY: cursor.hints
+cursor.hints:
+	@python3 scripts/hints/make_cursor_bootstrap.py
 
 .PHONY: doctor.db
 doctor.db:

@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 16:31:25
+Generated: 2025-11-05 22:09:39
 
 ## Active Rules
 
@@ -64,12 +64,15 @@ Generated: 2025-11-04 16:31:25
 - Rule 057-embedding-consistency: ---
 - Rule 058-auto-housekeeping: ---
 - Rule 059-context-persistence: ---
-- Rule 060-response-style: ---
+- Rule 060-pipeline-sequence: ---
+- Rule 061-response-style: ---
 
 ## CI Workflows
 
+- ci-artifacts-example.yml
 - ci-main.yml
 - ci-pr.yml
+- ci-release-gate-example.yml
 - coverage-nightly.yml
 - enforce-ruff.yml
 - graph-nightly.yml
@@ -116,9 +119,37 @@ Generated: 2025-11-04 16:31:25
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
+- ADR-032-bibledb-as-SSOT-roadmap: ADR-032: bible_db as Single Source of Truth (Roadmap)
+- ADR-033-ai-nouns-ssot-contract: ADR-033: AI Nouns SSOT Contract (v1)
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
+- ADR-058-project-management-system-v2: ADR-058: Project Management System (PMS) v2.0
+- ADR-059-hints-envelope-architecture: ADR-059: Hints Envelope Architecture
+- ADR-060-automated-metadata-enforcement: ADR-060: Automated Metadata Enforcement
+- ADR-061-imperative-command-protocol: ADR-061: Imperative Command Protocol
+- ADR-062-agentic-pipeline-framework-implementation: ADR-062: Agentic Pipeline Framework Implementation
+- ADR-063-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-063: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-064-agentic-pipeline-framework-implementation: ADR-064: Agentic Pipeline Framework Implementation
+- ADR-065-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-065: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-066-agentic-pipeline-framework-implementation: ADR-066: Agentic Pipeline Framework Implementation
+- ADR-067-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-067: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-068-agentic-pipeline-framework-implementation: ADR-068: Agentic Pipeline Framework Implementation
+- ADR-069-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-069: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-070-agentic-pipeline-framework-implementation: ADR-070: Agentic Pipeline Framework Implementation
+- ADR-071-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-071: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-072-agentic-pipeline-framework-implementation: ADR-072: Agentic Pipeline Framework Implementation
+- ADR-073-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-073: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-074-agentic-pipeline-framework-implementation: ADR-074: Agentic Pipeline Framework Implementation
+- ADR-075-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-075: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-076-agentic-pipeline-framework-implementation: ADR-076: Agentic Pipeline Framework Implementation
+- ADR-077-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-077: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-078-agentic-pipeline-framework-implementation: ADR-078: Agentic Pipeline Framework Implementation
+- ADR-079-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-079: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-080-agentic-pipeline-framework-implementation: ADR-080: Agentic Pipeline Framework Implementation
+- ADR-081-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-081: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
+- ADR-082-agentic-pipeline-framework-implementation: ADR-082: Agentic Pipeline Framework Implementation
+- ADR-083-rule-58--auto-housekeeping-post-change--alwaysapply: ADR-083: Rule 58: Auto-Housekeeping Post-Change (AlwaysApply)
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

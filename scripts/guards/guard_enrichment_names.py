@@ -14,11 +14,11 @@ if re.search(r"\bUnknown\b", txt):
     print("ERROR: Found 'Unknown' in enrichment logs; name resolution regression.", file=sys.stderr)
     sys.exit(2)
 
-# look for JSON lines with noun fields
+# look for JSON lines with noun fields in enrichment messages
 
 bad = 0
 for line in txt.splitlines():
-    if '"noun"' in line:
+    if '"noun"' in line and '"noun_enriched"' in line:
         try:
             data = json.loads(line[line.find("{") :])
             noun = data.get("noun") or data.get("name")

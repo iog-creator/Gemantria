@@ -23,7 +23,7 @@
 ### **Pipeline Health**
 - **ETL Status:** ✅ **FULLY OPERATIONAL**
 - **Last Test:** Successfully processed Genesis text → 2 nouns discovered → enriched → network built → exported
-- **Artifacts:** 11 export files generated (graphs, stats, patterns, correlations)
+- **Artifacts:** 18 export files generated (graphs, stats, patterns, correlations)
 - **Database:** PostgreSQL client not installed
 
 ### **Recent Achievements**
@@ -51,13 +51,13 @@
 
 ### **Source 3: .mdc Rules**
 - **Purpose:** Enforceable Cursor workspace rules
-- **Location:** `.cursor/rules/*.mdc` (62 rules currently)
+- **Location:** `.cursor/rules/*.mdc` (63 rules currently)
 - **Status:** Rule-058 (auto-housekeeping) active and enforced
 - **Updates:** Automatic via housekeeping when architectural changes detected
 
 ### **Source 4: ADRs**
 - **Purpose:** Architectural Decision Records
-- **Location:** `docs/ADRs/` (58 ADRs, auto-managed)
+- **Location:** `docs/ADRs/` (60 ADRs, auto-managed)
 - **Automation:** Created automatically via `make housekeeping`
 - **Coverage:** Complete documentation of all major architectural decisions
 
@@ -202,5 +202,5 @@ python3 scripts/compass/scorer.py exports/graph_latest.json --verbose
 
 *Document generated: November 05, 2025*
 *Last pipeline test: Genesis processing successful*
-*ADR count: 58 (auto-managed)*
+*ADR count: 60 (auto-managed)*
 *Governance status: 4-source framework active*

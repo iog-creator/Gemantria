@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, json, sys
+import os, json, sys, re, html, pathlib
 import psycopg
 from datetime import datetime, UTC
 
@@ -7,6 +7,47 @@ DSN = os.getenv("BIBLE_DB_DSN")
 if not DSN:
     print("ERROR: BIBLE_DB_DSN not set", file=sys.stderr)
     sys.exit(2)
+
+OVERRIDES_PATH = pathlib.Path("configs/strongs_class_overrides.json")
+_OVERRIDE_MAP = {}
+if OVERRIDES_PATH.exists():
+    try:
+        _OVERRIDE_MAP = json.loads(OVERRIDES_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        _OVERRIDE_MAP = {}
+
+
+def _norm_strongs(s: str | None) -> str:
+    if not s:
+        return ""
+    s = s.strip().upper()
+    # Keep leading letter (H/G), normalize zero-padding to 4+ digits.
+    m = re.match(r"^([A-Z])\s*0*([0-9]+)$", s)
+    if m:
+        return f"{m.group(1)}{int(m.group(2)):04d}"
+    return s
+
+
+def _sanitize_definition(s: str | None) -> str | None:
+    if not s:
+        return s
+    # Normalize HTML line breaks to spaces/newlines, strip tags, unescape entities.
+    t = s.replace("<BR>", "\n").replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
+    t = re.sub(r"</?i>", "", t)  # drop italics tags, keep content
+    t = re.sub(r"<[^>]+>", " ", t)  # remove any remaining tags
+    t = html.unescape(t)
+    return re.sub(r"\s+\n", "\n", t).strip()
+
+
+def _class_from(pos: str | None, lemma: str | None, strongs_id: str | None) -> str:
+    sid = _norm_strongs(strongs_id)
+    # Configurable overrides first (e.g., "H0430": "person")
+    if sid in _OVERRIDE_MAP:
+        return _OVERRIDE_MAP[sid]
+    # Basic POS mapping fallback (keeps current behavior)
+    if (pos or "").startswith("NOUN"):
+        return "thing"
+    return "other"
 
 
 # SSOT noun adapter (tolerant to legacy fields)
@@ -19,13 +60,12 @@ def to_ssot_noun(row):
     translit = row.get("transliteration")
     gloss = row.get("gloss")
     defi = row.get("definition")
-    klass = "person" if pos == "NOUN-PROP" else ("thing" if pos.startswith("NOUN") else "other")
 
     return {
         "surface": surface,
         "letters": None,  # calculated downstream
         "gematria_value": None,  # calculated downstream
-        "class": klass,
+        "class": _class_from(pos, lemma, strongs),
         "analysis": {
             "lemma": lemma,
             "pos": pos,
@@ -33,7 +73,7 @@ def to_ssot_noun(row):
             "strongs_id": strongs,
             "transliteration": translit,
             "gloss": gloss,
-            "definition": defi,
+            "definition": _sanitize_definition(defi),
         },
         "sources": [{"name": "bible_db.v_morph_tokens", "ref": row["osis_ref"]}],
     }
