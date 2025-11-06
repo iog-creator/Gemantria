@@ -46,3 +46,10 @@ jobs:
       - run: make share.sync
       - run: make eval.graph.calibrate.adv || echo "Graph calibration skipped (expected in CI without data)"
       - run: make ci.exports.smoke || echo "CI exports smoke skipped (expected without DB)"
+      - name: Validate db ingest envelope (shape only if present)
+        run: |
+          if [ -f exports/ai_nouns.db_morph.json ]; then
+            python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json
+          else
+            echo "No db_ingest artifact present; skipping."
+          fi
