@@ -35,6 +35,31 @@ codex.parallel:
 share.sync:
 	@python3 scripts/sync_share.py
 
+# ADR housekeeping (Rule-058 compliance)
+
+adr.housekeeping:
+	@echo ">> Running ADR housekeeping (4 information sources)"
+	@$(PYTHON) scripts/adr_housekeeping.py
+	@echo "ADR housekeeping complete"
+
+# Handoff document generation
+
+handoff.update:
+	@echo ">> Updating project handoff document"
+	@$(PYTHON) scripts/generate_handoff.py
+	@echo "Handoff document updated"
+
+# Complete housekeeping (Rule-058: mandatory post-change)
+
+.PHONY: housekeeping
+housekeeping: share.sync adr.housekeeping handoff.update
+	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + handoff)"
+	@$(PYTHON) scripts/rules_audit.py
+	@echo "Rules audit complete"
+	@$(PYTHON) scripts/generate_forest.py
+	@echo "Forest generation complete"
+	@echo "✅ Complete housekeeping finished (Rule-058)"
+
 # --- UI acceptance (headless) ---
 
 ENVELOPE ?= share/exports/envelope.json
@@ -196,7 +221,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all
+.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -269,6 +294,45 @@ orchestrator.full:
 	@echo ">> Run complete workflow via orchestrator"
 	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py full --book $(BOOK) --config $(BOOK_CONFIG) 2>&1 | tee /tmp/orchestrator_venv.log
 
+# Multi-book executor
+.PHONY: run.books
+run.books:
+	@if [ -z "$(BOOKS)" ]; then \
+		echo "Error: BOOKS variable required (e.g., BOOKS='Genesis,Exodus')"; \
+		exit 1; \
+	fi
+	@echo ">> Running multi-book executor: $(BOOKS)"
+	@$(PYTHON) scripts/run_books.py --books "$(BOOKS)"
+	@echo "Multi-book processing complete"
+
+# Database migration
+.PHONY: db.migrate
+db.migrate:
+	@echo ">> Applying database migrations"
+	@if [ -z "$$GEMATRIA_DSN" ]; then \
+		echo "Error: GEMATRIA_DSN not set"; \
+		exit 1; \
+	fi
+	@for f in migrations/*.sql; do \
+		echo "Applying $$f..."; \
+		psql "$$GEMATRIA_DSN" -f $$f || exit 1; \
+	done
+	@echo "Migrations complete"
+
+# UI envelope generation
+.PHONY: ui.envelope
+ui.envelope:
+	@echo ">> Creating unified UI envelope"
+	@$(PYTHON) scripts/create_ui_envelope.py --output exports/ui_envelope.json --report exports/report.md
+	@echo "UI envelope created: exports/ui_envelope.json"
+
+# Release preparation
+.PHONY: release.prepare
+release.prepare:
+	@echo ">> Preparing release artifacts"
+	@$(PYTHON) scripts/create_ui_envelope.py --output exports/ui_envelope.json --report exports/report.md --include-artifacts
+	@echo "Release artifacts prepared in exports/"
+
 # Integration testing
 test.pipeline.integration:
 	@echo ">> Run pipeline integration tests"
@@ -281,9 +345,36 @@ ai.ssot.guard:
 	@python3 -c "import subprocess,sys; subprocess.run(['python3','-m','pip','install','jsonschema'],check=False)" || true
 	@python3 scripts/guard_ai_nouns.py
 
-guards.all: ai.ssot.guard exports.guard.hebrew
+models.verify:
+	@python3 -c "import os,sys; names=['THEOLOGY_MODEL','MATH_MODEL','EMBEDDING_MODEL','RERANKER_MODEL']; missing=[n for n in names if not os.getenv(n)]; (sys.exit(f'MODELS_VERIFY_FAIL missing: {missing}') if missing else print('MODELS_VERIFY_OK'))"
+
+ops.report:
+	@mkdir -p share/reports
+	@PYTHONPATH=$(shell pwd) python3 scripts/ops_report.py > share/reports/operator.json
+	@echo "Operator report → share/reports/operator.json"
+
+evidence.index:
+	@PYTHONPATH=$(shell pwd) python3 scripts/evidence_index.py > share/evidence/index.json
+	@echo "Evidence index → share/evidence/index.json"
+
+# --- Bible DB ingestion (read-only) ---
+.PHONY: db.ingest.morph
+db.ingest.morph:
+	@echo ">> Ingesting morphology nouns from bible_db (read-only)…"
+	@python3 scripts/ingest_bible_db_morphology.py --out exports/ai_nouns.db_morph.json
+
+.PHONY: pipeline.from_db
+pipeline.from_db: db.ingest.morph
+	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
+	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
+
+guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
-	@echo "GUARDS_ALL_OK"
+	@-$(MAKE) models.verify  # Skip if models not available (development)
+	@PYTHONPATH=$(shell pwd) python3 scripts/guard_all.py
+	@$(MAKE) ssot.verify
+	@echo ">> Validating db ingest envelope…"
+	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json || (echo "db ingest guard failed"; exit 2)
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
@@ -293,16 +384,15 @@ ai.ingest:
 
 ai.nouns:
 	@echo ">> AI Noun Discovery Agent: Shards→SSOT ai-nouns"
-	@PYTHONPATH=. BOOK=$${BOOK:-Genesis} python3 scripts/ai_noun_discovery.py
+	@PYTHONPATH=$(shell pwd) BOOK=$${BOOK:-Genesis} python3 scripts/ai_noun_discovery.py $${RESUME_FROM:+--resume-from $${RESUME_FROM}}
 
 ai.enrich:
 	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
-	@PYTHONPATH=. INPUT=$${INPUT:-exports/ai_nouns.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/ai_enrichment.py
+	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/ai_enrichment.py
 
 graph.build:
 	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"
-	@# TODO: wire to graph building script
-	@echo "GRAPH_BUILD_OK"
+	@PYTHONPATH=$(shell pwd) python3 scripts/build_graph_from_ai_nouns.py
 
 graph.score:
 	@echo ">> Rerank Agent: graph_latest→graph_latest.scored"
@@ -318,3 +408,73 @@ release.prepare:
 	@echo ">> Release Agent: artifacts→release notes + manifest"
 	@# TODO: wire to release preparation script
 	@echo "RELEASE_PREPARE_OK"
+
+evidence.clean:
+	find share/evidence -type f -mtime +14 -delete || true
+
+guards.smoke:
+	PYTHONPATH=$(shell pwd) python3 -m scripts.guard_ai_nouns
+	PYTHONPATH=$(shell pwd) python3 -m scripts.guard_graph_schema
+	python3 scripts/guard_graph_drift.py
+	python3 scripts/guard_last_good.py
+
+release.notes:
+	python3 scripts/release_notes.py
+
+release.gate:
+	python3 scripts/release_gate.py
+
+release.enforce:
+	python3 scripts/release_notes_enforcer.py
+
+ssot.verify:
+	@python3 scripts/guard_ssot.py
+
+.PHONY: doctor.db
+doctor.db:
+	@PYTHONPATH=$(shell pwd) python3 scripts/doctor_db.py
+
+ai.nouns.resume:
+	python3 scripts/ai_noun_discovery.py --resume-from $(RESUME_FROM)
+
+ai.nouns.only:
+	$(MAKE) ai.nouns BOOK=$(BOOK) RESUME_FROM= ONLY=$(ONLY)
+
+ai.enrich.only:
+	BOOK=$(BOOK) ONLY=$(ONLY) PYTHONPATH=$(shell pwd) python3 scripts/ai_enrichment.py --only $(ONLY)
+
+# Canary targets - end-to-end smoke tests for specific books
+.PHONY: canary.genesis canary.exodus
+
+canary.genesis:
+	$(MAKE) ai.nouns BOOK=Genesis && \
+	$(MAKE) ai.enrich BOOK=Genesis && \
+	EDGE_ALPHA=$${EDGE_ALPHA:-0.5} $(MAKE) graph.score BOOK=Genesis && \
+	$(MAKE) guards.all && \
+	$(MAKE) share.pin
+
+canary.exodus:
+	$(MAKE) ai.nouns BOOK=Exodus && \
+	$(MAKE) ai.enrich BOOK=Exodus && \
+	EDGE_ALPHA=$${EDGE_ALPHA:-0.5} $(MAKE) graph.score BOOK=Exodus && \
+	$(MAKE) guards.all && \
+	$(MAKE) share.pin
+
+# Dry-run versions (no writes, full evidence)
+.PHONY: canary.genesis.dry canary.exodus.dry
+
+canary.genesis.dry:
+	DRY_RUN=1 $(MAKE) canary.genesis
+
+canary.exodus.dry:
+	DRY_RUN=1 $(MAKE) canary.exodus
+
+# Last-good snapshot and pin
+.PHONY: share.pin
+
+share.pin:
+	@echo "Creating last-good snapshot..."
+	@mkdir -p share/exports share/evidence/last_good
+	@cp share/exports/graph_latest.json share/exports/graph_last_good.json 2>/dev/null || echo "No graph_latest.json to pin"
+	@ls -1 share/evidence/*ai_enrichment*summary_*.json | tail -3 | xargs -I {} cp {} share/evidence/last_good/ 2>/dev/null || echo "No enrichment summaries to pin"
+	@echo "Last-good snapshot created"

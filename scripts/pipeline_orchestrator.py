@@ -8,8 +8,9 @@ analysis, and exports into a cohesive workflow.
 
 import argparse
 import json
+import os
 import sys
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
@@ -20,24 +21,31 @@ LOG = get_logger("pipeline_orchestrator")
 ensure_env_loaded()
 
 
-def run_full_pipeline(book: str = "Genesis", mode: str = "START") -> Dict[str, Any]:
+def run_full_pipeline(
+    book: str = "Genesis", mode: str = "START", nouns: List[Dict[str, Any]] | None = None
+) -> Dict[str, Any]:
     """
     Run the complete integrated pipeline.
 
     This orchestrates:
-    1. Noun extraction from Bible database
+    1. Noun extraction from Bible database (or use provided nouns)
     2. Gematria calculation and enrichment
     3. Semantic network building with embeddings
     4. Schema validation
     5. Graph analysis and export
+
+    Args:
+        book: The book name to process
+        mode: Processing mode (START, RESUME, etc.)
+        nouns: Optional list of nouns to use instead of AI discovery
     """
-    log_json(LOG, 20, "pipeline_orchestrator_start", book=book, mode=mode)
+    log_json(LOG, 20, "pipeline_orchestrator_start", book=book, mode=mode, nouns_provided=nouns is not None)
 
     try:
         from src.graph.graph import run_pipeline
 
         # Run the main pipeline
-        result = run_pipeline(book=book, mode=mode)
+        result = run_pipeline(book=book, mode=mode, nouns=nouns)
 
         # Extract results
         success = "error" not in result
@@ -189,6 +197,12 @@ def main():
     pipeline_parser = subparsers.add_parser("pipeline", help="Run main pipeline")
     pipeline_parser.add_argument("--book", default="Genesis", help="Book to process")
     pipeline_parser.add_argument("--mode", default="START", help="Pipeline mode")
+    pipeline_parser.add_argument(
+        "--nouns-json",
+        dest="nouns_json",
+        default=None,
+        help="Optional path to ai-nouns envelope; skips discovery if supplied.",
+    )
 
     # Book processing command
     book_parser = subparsers.add_parser("book", help="Book processing operations")
@@ -223,7 +237,16 @@ def main():
 
     try:
         if args.command == "pipeline":
-            result = run_full_pipeline(book=args.book, mode=args.mode)
+            nouns = None
+            if args.nouns_json:
+                if not os.path.exists(args.nouns_json):
+                    raise FileNotFoundError(f"Nouns file not found: {args.nouns_json}")
+                with open(args.nouns_json, encoding="utf-8") as f:
+                    envelope = json.load(f)
+                if "nodes" not in envelope or not isinstance(envelope["nodes"], list):
+                    raise ValueError("Invalid nouns envelope: missing 'nodes' list")
+                nouns = envelope["nodes"]
+            result = run_full_pipeline(book=args.book, mode=args.mode, nouns=nouns)
 
         elif args.command == "book":
             # Store stop_n for use in run_book_processing
@@ -241,8 +264,19 @@ def main():
             # Run complete workflow: pipeline -> analysis -> exports
             log_json(LOG, 20, "full_workflow_start", book=args.book)
 
+            # Load nouns if provided
+            nouns = None
+            if args.nouns_json:
+                if not os.path.exists(args.nouns_json):
+                    raise FileNotFoundError(f"Nouns file not found: {args.nouns_json}")
+                with open(args.nouns_json, encoding="utf-8") as f:
+                    envelope = json.load(f)
+                if "nodes" not in envelope or not isinstance(envelope["nodes"], list):
+                    raise ValueError("Invalid nouns envelope: missing 'nodes' list")
+                nouns = envelope["nodes"]
+
             # 1. Run main pipeline
-            pipeline_result = run_full_pipeline(book=args.book)
+            pipeline_result = run_full_pipeline(book=args.book, nouns=nouns)
             if not pipeline_result["success"]:
                 result = {"success": False, "error": "Pipeline failed", "stage": "pipeline"}
             else:
