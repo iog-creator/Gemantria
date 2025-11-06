@@ -124,3 +124,16 @@ jobs:
           fi
       - name: NEXT_STEPS check
         run: make ops.next
+  ai-nouns-ssot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install jsonschema
+        run: python3 -m pip install jsonschema psycopg
+      - name: Export (Genesis)
+        env: { DSN: ${{ secrets.GEMATRIA_DSN }}, BOOK: Genesis }
+        run: make ai.ssot.export
+      - name: Guard
+        run: make ai.ssot.guard

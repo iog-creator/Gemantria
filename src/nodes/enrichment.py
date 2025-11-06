@@ -56,13 +56,62 @@ def enrichment_node(state: dict) -> dict:
         "You are an expert biblical scholar with deep theological insight. Provide a comprehensive 200-300 word theological analysis and a confidence score (0.0-1.0). You have sufficient context length to provide detailed analysis. Return only valid JSON with keys 'insight' and 'confidence'. "  # noqa: E501
         'When a node expects JSON, respond with only minified JSON on one line, no markdown, matching the provided schema; include "confidence" as a float in [0,1].'  # noqa: E501
     )
-    tmpl = (
-        "Noun: {name}\nHebrew: {hebrew}\nPrimary Verse: {primary_verse}\n"
-        "Task: Provide a detailed theological analysis (200-300 words) exploring biblical significance, "
-        "historical context, symbolic meanings, theological implications, and connections to broader biblical themes. "
-        "Be comprehensive and scholarly in your analysis. "
-        'Return JSON: {{"insight": "...detailed 200-300 word analysis...", "confidence": <0.90-1.0>}}'
-    )
+
+    # Escape Hebrew text to prevent JSON parsing issues
+    import json
+    import re
+
+    def escape_hebrew(text):
+        """Escape Hebrew text for safe inclusion in prompts."""
+        if not text:
+            return ""
+        # First escape backslashes, then use JSON escaping for Unicode
+        text = text.replace("\\", "\\\\")  # Escape literal backslashes
+        return json.dumps(text)[1:-1]  # JSON escape Unicode but remove quotes
+
+    def build_enrichment_prompt(noun):
+        """Build enrichment prompt, leveraging AI-discovered analysis when available."""
+        base_info = (
+            f"Noun: {noun.get('name', 'Unknown')}\n"
+            f"Hebrew: {escape_hebrew(noun.get('hebrew', ''))}\n"
+            f"Primary Verse: {noun.get('primary_verse', 'Unknown')}\n"
+        )
+
+        # Leverage AI-discovered analysis if available
+        if noun.get("ai_discovered"):
+            ai_analysis = (
+                f"AI Analysis:\n"
+                f"- Letters: {', '.join(noun.get('letters', []))}\n"
+                f"- Gematria Value: {noun.get('gematria', 'Unknown')}\n"
+                f"- Classification: {noun.get('classification', 'Unknown')} (person/place/thing)\n"
+                f"- Initial Meaning: {noun.get('meaning', 'Not analyzed')}\n"
+            )
+            task_desc = (
+                "This noun was discovered and initially analyzed by AI. "
+                "Build upon this analysis to provide deeper theological insight. "
+                "Explore how the Hebrew letters, gematria value, and classification "
+                "contribute to the noun's biblical significance, symbolic meanings, "
+                "and connections to broader theological themes. "
+            )
+        else:
+            ai_analysis = ""
+            task_desc = (
+                "Provide a detailed theological analysis exploring biblical significance, "
+                "historical context, symbolic meanings, and theological implications. "
+            )
+
+        full_prompt = (
+            base_info +
+            ai_analysis +
+            f"Task: {task_desc} "
+            "Provide a comprehensive 200-300 word scholarly analysis. "
+            'Return JSON: {{"insight": "...detailed analysis...", "confidence": <0.90-1.0>}}'
+        )
+
+        return full_prompt
+
+    # Build prompts for each noun
+    prompts = [build_enrichment_prompt(noun) for noun in nouns]
 
     # 2) Process in batches of 4 to avoid overwhelming LM Studio
     batch_size = 4
@@ -73,14 +122,25 @@ def enrichment_node(state: dict) -> dict:
         chunk = nouns[i : i + batch_size]
         batch_start = time.time()
 
-        # Build message batches
-        messages_batch = [
-            [
-                {"role": "system", "content": sys_msg},
-                {"role": "user", "content": tmpl.format(**n)},
-            ]
-            for n in chunk
-        ]
+        # Build message batches using pre-built prompts
+        messages_batch = []
+        for j, n in enumerate(chunk):
+            try:
+                # Use the corresponding prompt from our pre-built prompts array
+                prompt_idx = i + j  # Global index in the prompts array
+                content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
+                messages_batch.append([
+                    {"role": "system", "content": sys_msg},
+                    {"role": "user", "content": content}
+                ])
+            except Exception as e:
+                log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
+                # Fallback: use basic format
+                content = f"Noun: {n.get('name', 'Unknown')}\nHebrew: {n.get('hebrew', '')}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
+                messages_batch.append([
+                    {"role": "system", "content": sys_msg},
+                    {"role": "user", "content": content}
+                ])
 
         # Call LM Studio with batched requests
         try:
@@ -101,12 +161,12 @@ def enrichment_node(state: dict) -> dict:
                             if retry >= 2:
                                 raise
                             # Re-prompt this single item with stricter instruction
+                            retry_prompt = build_enrichment_prompt(n) + "\nReturn only valid JSON; previous reply was invalid."
                             messages = [
                                 {"role": "system", "content": sys_msg},
                                 {
                                     "role": "user",
-                                    "content": tmpl.format(**n)
-                                    + "\nReturn only valid JSON; previous reply was invalid.",
+                                    "content": retry_prompt,
                                 },
                             ]
                             metrics_client.emit(
