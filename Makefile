@@ -383,6 +383,8 @@ guards.all:
 	@python3 scripts/guards/guard_overrides_schema.py || (echo "overrides schema guard failed"; exit 2)
 	@echo ">> Validating db ingest envelope…"
 	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.Gen.json || (echo "db ingest guard failed"; exit 2)
+	@echo ">> Enrichment details preserved (insight + confidence when present)…"
+	test -f exports/ai_nouns.json && python3 scripts/guards/guard_enrichment_details.py exports/ai_nouns.json || true
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:

@@ -204,8 +204,9 @@ def enrichment_node(state: dict) -> dict:
                     insight_text = data.get("insight", "").strip()
                     confidence = float(data.get("confidence", 0.0))
 
-                    # Extract cross-references from insight text
-                    crossrefs = extract_verse_references(insight_text)
+                    # Extract cross-references from insight text (accept both 'insight' and 'insights')
+                    free_text = data.get("insight") or data.get("insights") or ""
+                    crossrefs = extract_verse_references(free_text)
 
                     # Hard schema checks
                     missing = [k for k in ("insight", "confidence") if k not in data]
@@ -274,6 +275,12 @@ def enrichment_node(state: dict) -> dict:
                             {"label": ref["label"], "osis": ref["osis"]} for ref in crossrefs
                         ]
 
+                    # Normalize but NEVER drop originals:
+                    # - If model used 'insights', keep it and mirror into 'insight' for downstream readers.
+                    if "insights" in data and "insight" not in data and isinstance(data["insights"], str):
+                        enriched_noun["insights"] = data["insights"]  # Keep original
+                        enriched_noun["insight"] = data["insights"]  # Mirror for compatibility
+
                     enriched_nouns.append(enriched_noun)
 
                     log_json(
@@ -328,4 +335,4 @@ def enrichment_node(state: dict) -> dict:
     )
     state["enriched_nouns"] = enriched_nouns
     state["ai_enrichments_generated"] = len(enriched_nouns)
-    return state
+    return state, None
