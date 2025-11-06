@@ -22,5 +22,12 @@
 ## Emitted Hints (REQUIRED)
 - List the key runtime HINT lines your changes will emit (e.g., `HINT: verify: database bootstrap OK`) so CI logs are clear for both Cursor and reviewers.
 
-## Evidence tails
-<!-- paste decisive tails or failing tails -->
+## Evidence (paste outputs)
+Run locally and paste these four lines (from `make evidence.bundle`):
+
+- `OK: canonical repo layout present.`
+- `OK: enrichment details preserved on N nodes.`
+- `OK: crossrefs extracted for X/Y verse-mentioning nouns.`
+- One `jq` JSON line showing `confidence` plus two OSIS refs.
+
+Also confirm: **UI build finished without TS errors**.
