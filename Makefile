@@ -497,3 +497,16 @@ evidence.bundle:
 	npm --prefix webui/graph run build
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
+
+.PHONY: pipeline.e2e
+pipeline.e2e:
+	@echo ">> E2E: hermetic, no-DB required"
+	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
+	PYTHONPATH=$(shell pwd) python3 scripts/guards/guard_enrichment_details.py
+	PYTHONPATH=$(shell pwd) python3 scripts/guards/guard_crossrefs_extracted.py
+	@echo ">> E2E: UI sanity build"
+	npm --prefix webui/graph ci
+	npm --prefix webui/graph run build
+	@echo ">> E2E: jq evidence line"
+	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
+	@echo "OK: pipeline.e2e (local hermetic) PASS"

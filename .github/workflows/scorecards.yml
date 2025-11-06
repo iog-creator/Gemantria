@@ -1,8 +1,8 @@
 name: ossf-scorecard
 
 on:
-  schedule: [{ cron: "15 3 * * *" }]
-  workflow_dispatch:
+  workflow_dispatch: {}
+  # OPS v6.2.3: schedule disabled to stop failing nightlies. Run manually when needed.
 
 permissions:
   contents: read

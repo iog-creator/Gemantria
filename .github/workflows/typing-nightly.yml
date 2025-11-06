@@ -1,8 +1,7 @@
 name: typing-nightly
 on:
-  schedule:
-    - cron: "17 7 * * *" # daily 07:17 UTC
   workflow_dispatch: {}
+  # OPS v6.2.3: schedule disabled to stop failing nightlies. Run manually when needed.
 permissions:
   contents: read
   actions: read

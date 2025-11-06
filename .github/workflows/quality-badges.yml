@@ -1,8 +1,7 @@
 name: quality-badges
 on:
-  schedule:
-    - cron: "37 7 * * *"
   workflow_dispatch: {}
+  # OPS v6.2.3: schedule disabled to stop failing nightlies. Run manually when needed.
 permissions:
   contents: write    # used only when ALLOW_BADGE_COMMITS=true on first-party runs
   actions: read
