@@ -26,6 +26,12 @@ The `src/graph/` directory contains the main LangGraph pipeline orchestration, e
 - State persistence via checkpointer (Postgres/Memory)
 - **Hints envelope**: Runtime hints collected and wrapped in structured envelope for export and validation
 
+### Environment Variables
+
+- `CHECKPOINTER` = `memory` (default) or `postgres` - Choose persistence backend
+- `GEMATRIA_DSN` (required when `CHECKPOINTER=postgres`) - PostgreSQL connection string
+- `CHECKPOINT_PAYLOAD` = `summary` (default) or `full` - Payload size for checkpoints
+
 ### `batch_processor.py` - Batch Processing Logic
 
 **Purpose**: Handle batch semantics, validation, and size management
@@ -59,6 +65,8 @@ The `src/graph/` directory contains the main LangGraph pipeline orchestration, e
 ```
 collect_nouns → validate_batch → enrichment → confidence_validator → network_aggregator → schema_validator → analysis_runner → wrap_hints
 ```
+
+Note: When `CHECKPOINTER=postgres`, each node must snapshot via saver; centrality may be persisted after `analysis_runner` (advisory check).
 
 ### Relations & Pattern Discovery (NEW)
 

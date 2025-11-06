@@ -56,3 +56,5 @@
 | 051 | 051-cursor-insight.mdc | # 051 — Cursor Insight & Handoff (AlwaysApply) |
 | 052 | 052-tool-priority.mdc | # 052 — Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | 053-idempotence.mdc | # 053 — Idempotent Baseline (OPS v6.2.1) |
+| 060 | 060-pipeline-sequence.mdc | # 060 · Pipeline Node Sequence (Always-Apply) — enforce node order; requires docs+rules in same PR; guard: `test.pipeline.sequence` |
+  - Note: When `CHECKPOINTER=postgres`, each node must snapshot via saver; centrality may be persisted after `analysis_runner` (advisory check).
