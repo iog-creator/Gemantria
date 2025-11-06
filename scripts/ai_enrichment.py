@@ -19,8 +19,8 @@ src_dir = project_root / "src"
 # Always add src to path
 sys.path.insert(0, str(src_dir))
 
-from src.nodes.enrichment import enrichment_node
-from src.infra.env_loader import ensure_env_loaded
+from src.nodes.enrichment import enrichment_node  # noqa: E402
+from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 
 
 def main():

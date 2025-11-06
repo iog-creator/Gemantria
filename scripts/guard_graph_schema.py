@@ -8,12 +8,10 @@ Checks for required fields, data types, and referential integrity.
 
 import json
 import sys
-import pathlib
 
 
 def main():
     """Validate graph_latest.json against business rules."""
-    root = pathlib.Path(".")
 
     # Load the graph data
     try:

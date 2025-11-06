@@ -150,7 +150,7 @@ class AINounDiscovery:
                 result = {"nouns": []}
 
             # Validate and enhance with frequency data
-            validated_nouns = self._validate_and_enhance_nouns(result.get("nouns", []), hebrew_text)
+            validated_nouns = self._validate_and_enhance_nouns(result.get("nouns", []), hebrew_text, book)
 
             return validated_nouns
 
@@ -191,7 +191,9 @@ class AINounDiscovery:
             log_json(LOG, 30, "ai_response_parse_error", content_preview=content[:200])
             return {"nouns": []}
 
-    def _validate_and_enhance_nouns(self, ai_nouns: List[Dict[str, Any]], full_text: str) -> List[Dict[str, Any]]:
+    def _validate_and_enhance_nouns(
+        self, ai_nouns: List[Dict[str, Any]], full_text: str, book: str
+    ) -> List[Dict[str, Any]]:
         """Validate AI-discovered nouns and enhance with frequency data."""
         validated = []
 

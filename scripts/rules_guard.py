@@ -206,9 +206,11 @@ def main():
     # Require ADR mention when sensitive areas change
     touched = subprocess.check_output(["git", "diff", "--name-only", "origin/main...HEAD"], text=True).splitlines()
     needs_adr = any(
-        p.startswith(x)
-        for p in (".github/workflows/", "scripts/", "docs/SSOT/", "migrations/", "src/infra/")
-        for x in [p]
+        any(
+            t.startswith(prefix)
+            for prefix in [".github/workflows/", "scripts/", "docs/SSOT/", "migrations/", "src/infra/"]
+        )
+        for t in touched
     )
     if needs_adr:
         pr_body = os.environ.get("PR_BODY", "")  # set by CI step or fallback to empty
