@@ -368,6 +368,12 @@ pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
 
+.PHONY: pipeline.from_db.pg
+pipeline.from_db.pg: db.ingest.morph
+	@echo ">> Running pipeline with Postgres checkpointer…"
+	CHECKPOINTER=postgres GEMATRIA_DSN=$${GEMATRIA_DSN} \
+	  python3 scripts/pipeline_orchestrator.py --nouns-json exports/ai_nouns.db_morph.json
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
@@ -375,6 +381,12 @@ guards.all:
 	@$(MAKE) ssot.verify
 	@echo ">> Validating db ingest envelope…"
 	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json || (echo "db ingest guard failed"; exit 2)
+	@echo ">> Enrichment name guard (no 'Unknown')…"
+	@python3 scripts/guards/guard_enrichment_names.py share/evidence/e2e_smoke.log || (echo "enrichment names guard failed"; exit 2)
+	@echo ">> Hebrew nouns sanity guard…"
+	@python3 scripts/guards/guard_nouns_hebrew_sanity.py exports/ai_nouns.db_morph.json || (echo "hebrew nouns sanity guard failed"; exit 2)
+	@echo ">> Checkpointer (postgres) guard…"
+	@python3 scripts/guards/guard_checkpointer_postgres.py || true
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
