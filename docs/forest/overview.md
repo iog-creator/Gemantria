@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-04 16:31:25
+Generated: 2025-11-06 14:28:59
 
 ## Active Rules
 
@@ -71,13 +71,16 @@ Generated: 2025-11-04 16:31:25
 - ci-main.yml
 - ci-pr.yml
 - coverage-nightly.yml
+- crossrefs-smoke.yml
 - enforce-ruff.yml
 - graph-nightly.yml
 - lint-nightly.yml
+- nightly.yml
 - policy-gate.yml
 - pr-comment.yml
 - quality-badges.yml
 - rc-smokes.yml
+- repo-layout-smoke.yml
 - reusable-ci.yml
 - scorecards.yml
 - soft-checks.yml
@@ -116,9 +119,12 @@ Generated: 2025-11-04 16:31:25
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
+- ADR-032-bibledb-as-SSOT-roadmap: ADR-032: bible_db as Single Source of Truth (Roadmap)
+- ADR-033-ai-nouns-ssot-contract: ADR-033: AI Nouns SSOT Contract (v1)
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
+- ADR-xxxx-uuid-key-evolution: ADR: UUID Key Evolution and FK Realignment
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

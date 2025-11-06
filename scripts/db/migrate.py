@@ -20,7 +20,12 @@ if not DSN:
 
 
 def main():
-    files = sorted(glob.glob("migrations/*.sql"))
+    wl = "scripts/db/migrate_whitelist.txt"
+    if os.path.exists(wl):
+        with open(wl, encoding="utf-8") as fh:
+            files = [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
+    else:
+        files = sorted(glob.glob("migrations/*.sql"))
     if not files:
         print("No migrations found; nothing to do.")
         return

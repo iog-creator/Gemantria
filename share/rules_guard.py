@@ -201,6 +201,23 @@ def main():
     else:
         print("[rules_guard] HINT: graph_latest.json not found (skipping hints validation)")
 
+    # CRITICAL CHECK 6: ADR mention on infra/data PRs (Rule-029)
+    print("[rules_guard] Critical Check 6: ADR mention required for infra/data changes")
+    # Require ADR mention when sensitive areas change
+    touched = subprocess.check_output(["git", "diff", "--name-only", "origin/main...HEAD"], text=True).splitlines()
+    needs_adr = any(
+        any(
+            t.startswith(prefix)
+            for prefix in [".github/workflows/", "scripts/", "docs/SSOT/", "migrations/", "src/infra/"]
+        )
+        for t in touched
+    )
+    if needs_adr:
+        pr_body = os.environ.get("PR_BODY", "")  # set by CI step or fallback to empty
+        if "ADR-" not in pr_body:
+            require(False, "ADR mention required for infra/data changes (Rule-029).")
+    print("[rules_guard] ✓ Critical Check 6 PASSED: ADR mention check complete")
+
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 
 
