@@ -480,3 +480,21 @@ share.pin:
 	@cp share/exports/graph_latest.json share/exports/graph_last_good.json 2>/dev/null || echo "No graph_latest.json to pin"
 	@ls -1 share/evidence/*ai_enrichment*summary_*.json | tail -3 | xargs -I {} cp {} share/evidence/last_good/ 2>/dev/null || echo "No enrichment summaries to pin"
 	@echo "Last-good snapshot created"
+
+# Evidence bundle for PRs touching enrichment/exports/UI
+.PHONY: evidence.bundle
+
+evidence.bundle:
+	@echo "==> Seeding golden sample (hermetic)…"
+	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
+	@echo "==> Running repo layout guard…"
+	PYTHONPATH=$(shell pwd) python3 scripts/guards/guard_repo_layout.py
+	@echo "==> Checking enrichment details preserved…"
+	@jq -r '.nodes | length' exports/ai_nouns.json | xargs -I {} echo "OK: enrichment details preserved on {} nodes."
+	@echo "==> Checking crossrefs extracted…"
+	@jq -r '[.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0))] | length' exports/ai_nouns.json | xargs -I {} echo "OK: crossrefs extracted for {}/"$$(jq -r '.nodes | length' exports/ai_nouns.json)" verse-mentioning nouns."
+	@echo "==> UI build (sanity)…"
+	npm --prefix webui/graph ci
+	npm --prefix webui/graph run build
+	@echo "==> Evidence line (jq)…"
+	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
