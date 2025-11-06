@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-import os, json, sys
+import os, json, sys, re
 import psycopg
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 DSN = os.getenv("BIBLE_DB_DSN")
 if not DSN:
     print("ERROR: BIBLE_DB_DSN not set", file=sys.stderr)
     sys.exit(2)
+
+
+def _normalize_translit(t: str | None) -> str | None:
+    if not t:
+        return t
+    # Drop surrounding quotes, normalize dot spacing, collapse repeats.
+    t = t.strip().strip("'\"")
+    t = re.sub(r"\s*\.\s*", ".", t)
+    t = re.sub(r"\.{2,}", ".", t)
+    return t
 
 
 # SSOT noun adapter (tolerant to legacy fields)
@@ -31,7 +41,7 @@ def to_ssot_noun(row):
             "pos": pos,
             "morph": morph,
             "strongs_id": strongs,
-            "transliteration": translit,
+            "transliteration": _normalize_translit(translit),
             "gloss": gloss,
             "definition": defi,
         },
@@ -63,7 +73,7 @@ def main(limit=None, out_path="exports/ai_nouns.db_morph.json"):
     envelope = {
         "schema": "gemantria/ai-nouns.v1",
         "source": "bible_db.v_morph_tokens",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "nodes": nouns,
     }
 

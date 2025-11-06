@@ -8,6 +8,7 @@ Related ADRs: ADR-032 (Organic AI Discovery), ADR-019 (Data Contracts)
 
 from __future__ import annotations
 
+import os
 from typing import Any, TypedDict, Dict, List
 
 from langgraph.graph import StateGraph
@@ -20,6 +21,7 @@ from src.nodes.ai_noun_discovery import discover_nouns_for_book
 from src.nodes.graph_scorer import graph_scorer_node
 from src.services.expert_agent import analyze_theological
 from src.ssot.noun_adapter import adapt_ai_noun
+from src.persist.crossref_writer import write_crossrefs
 from src.infra.runs_ledger import (
     create_run,
     update_run_status,
@@ -84,6 +86,12 @@ def main(state: PipelineState) -> PipelineState:
 
     # 3. Enrich nouns with theological insights
     state, _ = enrichment_node(state)
+
+    # Persist cross-references if enabled
+    if os.getenv("PERSIST_CROSSREFS", "0") == "1":
+        enriched_nouns = state.get("enriched_nouns", [])
+        crossref_count = write_crossrefs(run_id, enriched_nouns)
+        state["crossrefs_persisted"] = crossref_count
 
     # Normalize enriched nouns using SSOT adapter at enrichment boundary
     state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", [])]

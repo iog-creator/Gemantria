@@ -1,0 +1,21 @@
+{
+  "type": "hints_envelope",
+  "version": 1,
+  "commands": [
+    "AGENT_STOP_AND_PAY_ATTENTION",
+    "PROCESS_HINTS_ENVELOPE_IMMEDIATELY",
+    "ENFORCE_PROJECT_GOVERNANCE"
+  ],
+  "read_these_first": [
+    ".cursor/rules/000-ssot-index.mdc",
+    "RULES_INDEX.md",
+    "AGENTS.md",
+    "src/graph/AGENTS.md",
+    "src/nodes/AGENTS.md",
+    ".cursor/rules/050-ops-contract.mdc",
+    ".cursor/rules/051-cursor-insight.mdc",
+    ".cursor/rules/052-tool-priority.mdc",
+    ".cursor/rules/060-pipeline-sequence.mdc"
+  ],
+  "generated_at": "2025-11-06T18:49:15Z"
+}

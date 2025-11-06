@@ -1,0 +1,13 @@
+---
+description: PR Merge Policy
+alwaysApply: true
+globs: []
+---
+
+# 041 — PR Merge Policy (Always Apply - Safety Critical)
+policy:
+  - Do not merge if any required check fails.
+  - Use squash merge. Delete head branch after merge.
+  - Stacked PRs labeled 'stacked-on-<base>' merge only after base merges.
+acceptance:
+  - Checks green in GitHub UI; merge confirmation posted as evidence.

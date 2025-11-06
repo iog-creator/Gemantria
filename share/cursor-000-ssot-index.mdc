@@ -1,0 +1,35 @@
+---
+description: SSOT Index (READ FIRST)
+alwaysApply: true
+---
+
+# 000 — SSOT Index (READ FIRST)
+
+Cursor MUST read these files before proposing or applying changes. This is the single entrypoint to the project's governance surfaces and pipeline contracts.
+
+## Primary governance
+
+- "RULES_INDEX.md"
+- "AGENTS.md"
+
+## Pipeline-specific governance
+
+- "src/graph/AGENTS.md"
+- "src/nodes/AGENTS.md"
+
+## Core Cursor rules (contracts)
+
+- ".cursor/rules/050-ops-contract.mdc"
+- ".cursor/rules/051-cursor-insight.mdc"
+- ".cursor/rules/052-tool-priority.mdc"
+- ".cursor/rules/039-execution-contract.mdc"
+- ".cursor/rules/041-pr-merge-policy.mdc"
+- ".cursor/rules/049-gpt5-contract-v5.2.mdc"
+
+## Pipeline sequence enforcement
+
+- ".cursor/rules/060-pipeline-sequence.mdc"
+
+## Notes
+
+- "If any file above is missing, STOP and ask for repair before editing code."

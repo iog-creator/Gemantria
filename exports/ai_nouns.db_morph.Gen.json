@@ -1,0 +1,532 @@
+{
+  "schema": "gemantria/ai-nouns.v1",
+  "source": "bible_db.v_morph_tokens",
+  "generated_at": "2025-11-06T18:49:30.508182+00:00",
+  "nodes": [
+    {
+      "surface": "אֱלֹהִ֑ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.1"
+        }
+      ]
+    },
+    {
+      "surface": "תֹ֙הוּ֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "formlessness",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H8414",
+        "transliteration": "to.hu",
+        "gloss": "formlessness",
+        "definition": "1) formlessness, confusion, unreality, emptiness\n1a) formlessness (of primeval earth)\n1a1) nothingness, empty space\n1b) that which is empty or unreal (of idols) (fig)\n1c) wasteland, wilderness (of solitary places)\n1d) place of chaos\n1e) vanity"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ]
+    },
+    {
+      "surface": "פְּנֵ֣י",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "face: before",
+        "pos": "NOUN",
+        "morph": "HNcmpc",
+        "strongs_id": "H6440",
+        "transliteration": "pe.Nei",
+        "gloss": "[the] surface of",
+        "definition": ": before/to/front\n1) face\n1a) face, faces\n1b) presence, person\n1c) face (of seraphim or cherubim)\n1d) face (of animals)\n1e) face, surface (of ground)\n1f) as adv of loc/temp\n1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before\n1g) with prep\n1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ]
+    },
+    {
+      "surface": "תְה֑וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "abyss",
+        "pos": "NOUN",
+        "morph": "HNcfsa",
+        "strongs_id": "H8415",
+        "transliteration": "te.Hom",
+        "gloss": "[the] deep",
+        "definition": "1) deep, depths, deep places, abyss, the deep, sea\n1a) deep (of subterranean waters)\n1b) deep, sea, abysses (of sea)\n1c) primeval ocean, deep\n1d) deep, depth (of river)\n1e) abyss, the grave"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֔ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ]
+    },
+    {
+      "surface": "פְּנֵ֥י",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "face: before",
+        "pos": "NOUN",
+        "morph": "HNcmpc",
+        "strongs_id": "H6440",
+        "transliteration": "pe.Nei",
+        "gloss": "[the] surface of",
+        "definition": ": before/to/front\n1) face\n1a) face, faces\n1b) presence, person\n1c) face (of seraphim or cherubim)\n1d) face (of animals)\n1e) face, surface (of ground)\n1f) as adv of loc/temp\n1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before\n1g) with prep\n1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.2"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֖ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.3"
+        }
+      ]
+    },
+    {
+      "surface": "א֑וֹר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "light",
+        "pos": "NOUN",
+        "morph": "HNcfsa",
+        "strongs_id": "H0216",
+        "transliteration": "'or",
+        "gloss": "light",
+        "definition": "1) light\n1a) light of day\n1b) light of heavenly luminaries (moon, sun, stars)\n1c) day-break, dawn, morning light\n1d) daylight\n1e) lightning\n1f) light of lamp\n1g) light of life\n1h) light of prosperity\n1i) light of instruction\n1j) light of face (fig.)\n1k) Jehovah as Israel's light"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.3"
+        }
+      ]
+    },
+    {
+      "surface": "אֽוֹר\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "light",
+        "pos": "NOUN",
+        "morph": "HNcfsa",
+        "strongs_id": "H0216",
+        "transliteration": "'or",
+        "gloss": "light",
+        "definition": "1) light\n1a) light of day\n1b) light of heavenly luminaries (moon, sun, stars)\n1c) day-break, dawn, morning light\n1d) daylight\n1e) lightning\n1f) light of lamp\n1g) light of life\n1h) light of prosperity\n1i) light of instruction\n1j) light of face (fig.)\n1k) Jehovah as Israel's light"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.3"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֛ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.4"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֔ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.4"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֤ים\\׀",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "י֔וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "day",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H3117",
+        "transliteration": "Yom",
+        "gloss": "day",
+        "definition": ": day/when/time/period\n1) day, time, year\n1a) day (as opposed to night)\n1b) day (24 hour period)\n1b1) as defined by evening and morning in Genesis 1\n1b2) as a division of time\n1b2a) a working day, a day's journey\n1c) days, lifetime (pl.)\n1d) time, period (general)\n1e) year\n1f) temporal references\n1f1) today\n1f2) yesterday\n1f3) tomorrow"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "לָ֑יְלָה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "night",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H3915",
+        "transliteration": "Lai.lah",
+        "gloss": "night",
+        "definition": "1) night\n1a) night (as opposed to day)\n1b) of gloom, protective shadow (fig.)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "עֶ֥רֶב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "evening",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H6153",
+        "transliteration": "'E.rev",
+        "gloss": "evening",
+        "definition": "1) evening, night, sunset\n1a) evening, sunset\n1b) night"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "בֹ֖קֶר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "morning",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H1242",
+        "transliteration": "Vo.ker",
+        "gloss": "morning",
+        "definition": "1) morning, break of day\n1a) morning\n1a1) of end of night\n1a2) of coming of daylight\n1a3) of coming of sunrise\n1a4) of beginning of day\n1a5) of bright joy after night of distress (fig.)\n1b) morrow, next day, next morning"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "י֥וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "day",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H3117",
+        "transliteration": "Yom",
+        "gloss": "day",
+        "definition": ": day/when/time/period\n1) day, time, year\n1a) day (as opposed to night)\n1b) day (24 hour period)\n1b1) as defined by evening and morning in Genesis 1\n1b2) as a division of time\n1b2a) a working day, a day's journey\n1c) days, lifetime (pl.)\n1d) time, period (general)\n1e) year\n1f) temporal references\n1f1) today\n1f2) yesterday\n1f3) tomorrow"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.5"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֔ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.6"
+        }
+      ]
+    },
+    {
+      "surface": "רָקִ֖יעַ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "expanse",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H7549",
+        "transliteration": "ra.Ki.a'",
+        "gloss": "a firmament",
+        "definition": "1) extended surface (solid), expanse, firmament\n1a) expanse (flat as base, support)\n1b) firmament (of vault of heaven supporting waters above)\n1b1) considered by Hebrews as solid and supporting 'waters' above"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.6"
+        }
+      ]
+    },
+    {
+      "surface": "מַ֖יִם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "water",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H4325",
+        "transliteration": "Ma.yim",
+        "gloss": "waters",
+        "definition": "1) water, waters\n1a) water\n1b) water of the feet, urine\n1c) of danger, violence, transitory things, refreshment (fig.)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.6"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִים֮",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.7"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֛ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "person",
+      "analysis": {
+        "lemma": "God",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H0430",
+        "transliteration": "'E.lo.Him",
+        "gloss": "God",
+        "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"\nAnother name of ye.ho.vah (יהוה \"LORD\" H3068G)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.8"
+        }
+      ]
+    },
+    {
+      "surface": "שָׁמָ֑יִם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "heaven",
+        "pos": "NOUN",
+        "morph": "HNcmpa",
+        "strongs_id": "H8064",
+        "transliteration": "sha.Ma.yim",
+        "gloss": "heaven",
+        "definition": "1) heaven, heavens, sky\n1a) visible heavens, sky\n1a1) as abode of the stars\n1a2) as the visible universe, the sky, atmosphere, etc\n1b) Heaven (as the abode of God)\nAramaic equivalent: sha.ma.yin (שָׁמַ֫יִן \"heaven\" H8065)"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.8"
+        }
+      ]
+    },
+    {
+      "surface": "עֶ֥רֶב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "evening",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H6153",
+        "transliteration": "'E.rev",
+        "gloss": "evening",
+        "definition": "1) evening, night, sunset\n1a) evening, sunset\n1b) night"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.8"
+        }
+      ]
+    },
+    {
+      "surface": "בֹ֖קֶר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "thing",
+      "analysis": {
+        "lemma": "morning",
+        "pos": "NOUN",
+        "morph": "HNcmsa",
+        "strongs_id": "H1242",
+        "transliteration": "Vo.ker",
+        "gloss": "morning",
+        "definition": "1) morning, break of day\n1a) morning\n1a1) of end of night\n1a2) of coming of daylight\n1a3) of coming of sunrise\n1a4) of beginning of day\n1a5) of bright joy after night of distress (fig.)\n1b) morrow, next day, next morning"
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_morph_tokens",
+          "ref": "Gen.1.8"
+        }
+      ]
+    }
+  ]
+}

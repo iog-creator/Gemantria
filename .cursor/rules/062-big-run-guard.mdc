@@ -1,0 +1,10 @@
+id: 062
+title: "Big-run Guard (Confirmation Required)"
+description: |
+  Any pipeline execution that reads > BIGRUN_THRESHOLD_NOUNS nouns MUST require confirmation.
+  Use the guard script and set CONFIRM_BIGRUN=YES to proceed; otherwise, refuse the edit/run.
+alwaysApply: true
+files:
+  - "scripts/guards/guard_big_run.py"
+notes:
+  - "Environment: BIGRUN_THRESHOLD_NOUNS (default 2000), CONFIRM_BIGRUN=YES to override."

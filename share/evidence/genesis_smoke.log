@@ -1,0 +1,3721 @@
+{"level": "INFO", "ts": 1762411142918, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_start", "book": "Genesis", "mode": "START", "nouns_provided": true}
+{"level": "INFO", "ts": 1762411143120, "logger": "gematria.collect_nouns", "msg": "nouns_provided", "count": 25}
+{"level": "INFO", "ts": 1762411143120, "logger": "gematria.collect_nouns", "msg": "nouns_collected", "count": 25}
+{"level": "INFO", "ts": 1762411143120, "logger": "gematria.validate_batch", "msg": "batch_validated", "count": 25, "filtered": 0}
+{"level": "INFO", "ts": 1762411143120, "logger": "gemantria.enrichment", "msg": "enrichment_start", "noun_count": 25}
+{"level": "WARNING", "ts": 1762411163301, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 111, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411163314, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֑ים", "confidence": 0.95, "tokens": 183}
+{"level": "WARNING", "ts": 1762411163314, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 130, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411163320, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תֹ֙הוּ֙", "confidence": 0.95, "tokens": 220}
+{"level": "INFO", "ts": 1762411163321, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762411163323, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411168771, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 68, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411168783, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֣י", "confidence": 0.95, "tokens": 189}
+{"level": "WARNING", "ts": 1762411168783, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 110, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411168789, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "תְה֑וֹם", "confidence": 0.95, "tokens": 188}
+{"level": "INFO", "ts": 1762411168789, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 4, "duration_ms": 20180}
+{"level": "WARNING", "ts": 1762411168790, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411192634, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411192647, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 272}
+{"level": "WARNING", "ts": 1762411192647, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 128, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411192654, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "פְּנֵ֥י", "confidence": 0.95, "tokens": 220}
+{"level": "WARNING", "ts": 1762411192654, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 156, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411192660, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֖ים", "confidence": 0.95, "tokens": 257}
+{"level": "WARNING", "ts": 1762411192660, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 124, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411192665, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "א֑וֹר", "confidence": 0.95, "tokens": 203}
+{"level": "INFO", "ts": 1762411192665, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 8, "duration_ms": 23844}
+{"level": "WARNING", "ts": 1762411192665, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "INFO", "ts": 1762411214800, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 1, "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762411214800, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "INFO", "ts": 1762411220436, "logger": "gemantria.metrics", "msg": "metrics", "event": "enrichment_json_retry", "retry": 2, "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment"}
+{"level": "WARNING", "ts": 1762411220436, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411225874, "logger": "gemantria.enrichment", "msg": "noun_enrichment_failed", "noun": "אֽוֹר\\׃", "error": "Invalid \\escape: line 1 column 34 (char 33)", "raw_response": "{\"insight\":\"The Hebrew noun אֽוֹר\\׃ (Or) signifies 'light' in both literal and metaphorical senses, permeating biblical theology. In Genesis 1:3-5, God commands, 'Let there be light,' establishing the"}
+{"level": "WARNING", "ts": 1762411225875, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 110, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411225888, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֛ים", "confidence": 0.95, "tokens": 188}
+{"level": "WARNING", "ts": 1762411225888, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411225895, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 272}
+{"level": "WARNING", "ts": 1762411225895, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 153, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411225901, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֤ים\\׀", "confidence": 0.95, "tokens": 261}
+{"level": "INFO", "ts": 1762411225901, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 11, "duration_ms": 22134}
+{"level": "WARNING", "ts": 1762411225901, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411248828, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 126, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411248841, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֔וֹם", "confidence": 0.95, "tokens": 210}
+{"level": "WARNING", "ts": 1762411248841, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 132, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411248847, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "לָ֑יְלָה", "confidence": 0.95, "tokens": 225}
+{"level": "WARNING", "ts": 1762411248847, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 167, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411248853, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.95, "tokens": 294}
+{"level": "WARNING", "ts": 1762411248853, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 179, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411248859, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 292}
+{"level": "INFO", "ts": 1762411248859, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 15, "duration_ms": 22926}
+{"level": "WARNING", "ts": 1762411248859, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411269600, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 112, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411269613, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "י֥וֹם", "confidence": 0.97, "tokens": 196}
+{"level": "WARNING", "ts": 1762411269614, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 163, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411269621, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֔ים", "confidence": 0.95, "tokens": 272}
+{"level": "WARNING", "ts": 1762411269621, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 108, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411269626, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "רָקִ֖יעַ", "confidence": 0.95, "tokens": 191}
+{"level": "WARNING", "ts": 1762411269626, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 108, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411269632, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "מַ֖יִם", "confidence": 0.95, "tokens": 191}
+{"level": "INFO", "ts": 1762411269632, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 19, "duration_ms": 20740}
+{"level": "WARNING", "ts": 1762411269632, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411293324, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 130, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411293338, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִים֮", "confidence": 0.95, "tokens": 214}
+{"level": "WARNING", "ts": 1762411293338, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 110, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411293345, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "אֱלֹהִ֛ים", "confidence": 0.95, "tokens": 188}
+{"level": "WARNING", "ts": 1762411293345, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 153, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411293351, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "שָׁמָ֑יִם", "confidence": 0.97, "tokens": 254}
+{"level": "WARNING", "ts": 1762411293351, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 167, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411293356, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "עֶ֥רֶב", "confidence": 0.95, "tokens": 294}
+{"level": "INFO", "ts": 1762411293356, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 4, "items_out": 23, "duration_ms": 23691}
+{"level": "WARNING", "ts": 1762411293357, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "WARNING", "ts": 1762411299444, "logger": "gemantria.enrichment", "msg": "insight_length_warning", "noun": null, "word_count": 179, "expected": "200-300"}
+{"level": "INFO", "ts": 1762411299457, "logger": "gemantria.enrichment", "msg": "noun_enriched", "noun": "בֹ֖קֶר", "confidence": 0.95, "tokens": 292}
+{"level": "INFO", "ts": 1762411299457, "logger": "gemantria.metrics", "msg": "metrics", "run_id": "4b43c536-384c-470d-bc7c-d5fb800a075c", "node": "enrichment", "event": "batch_processed", "items_in": 1, "items_out": 24, "duration_ms": 6087}
+{"level": "WARNING", "ts": 1762411299457, "logger": "gemantria.metrics", "msg": "metrics_insert_failed", "error": "cannot adapt type 'dict' using placeholder '%s' (format: AUTO)"}
+{"level": "INFO", "ts": 1762411299457, "logger": "gemantria.enrichment", "msg": "enrichment_complete", "enriched_count": 24, "total_tokens": 5566}
+{"level": "INFO", "ts": 1762411299467, "logger": "gemantria.confidence_validator", "msg": "confidence_validation_complete", "total_nouns": 24, "passed_validations": 24, "failed_validations": 0, "thresholds": {"gematria": 0.9, "ai": 0.8}}
+{"level": "INFO", "ts": 1762411299467, "logger": "gemantria.network_aggregator", "msg": "network_aggregation_start", "noun_count": 24}
+{"level": "INFO", "ts": 1762411301386, "logger": "gemantria.network_aggregator", "msg": "concept_network_upsert_batch", "batch_size": 16, "vector_dim": 1024}
+{"level": "INFO", "ts": 1762411301391, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "203dd15d-d501-4599-9b33-56f253aec208", "noun_name": null, "network_id": "92272e5d-0df9-4bd3-ad4a-bd0628d70a01"}
+{"level": "INFO", "ts": 1762411301392, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368", "noun_name": null, "network_id": "67d11fed-82c0-4e20-9d5a-d88d815aaa27"}
+{"level": "INFO", "ts": 1762411301394, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2", "noun_name": null, "network_id": "22c2db1b-346a-4083-ac21-47485b0f7e5a"}
+{"level": "INFO", "ts": 1762411301395, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "noun_name": null, "network_id": "b59edefd-aaaf-4b4c-a2d2-500a58fefeb1"}
+{"level": "INFO", "ts": 1762411301396, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "3568535a-782a-48c2-9e50-7882c360c547", "noun_name": null, "network_id": "c5254e6b-80bd-4e7a-8456-1d3bd94daf53"}
+{"level": "INFO", "ts": 1762411301397, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741", "noun_name": null, "network_id": "35b22f83-5641-4bea-84c9-0dae8843a519"}
+{"level": "INFO", "ts": 1762411301399, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "noun_name": null, "network_id": "10fd6e51-0190-4152-a0c7-cb96586c056c"}
+{"level": "INFO", "ts": 1762411301400, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "bada7742-186f-4381-ba82-202400b54a5e", "noun_name": null, "network_id": "a49964d9-beb3-4ebd-8bb8-a8d659481d0a"}
+{"level": "INFO", "ts": 1762411301401, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "noun_name": null, "network_id": "8ca20245-e8c0-4e21-a341-92edd4fd5712"}
+{"level": "INFO", "ts": 1762411301402, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "noun_name": null, "network_id": "ccbeb548-e19b-4cc1-9b43-b3edd0584fb1"}
+{"level": "INFO", "ts": 1762411301404, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "noun_name": null, "network_id": "2acb9a80-9deb-498b-95e8-469cab828dd4"}
+{"level": "INFO", "ts": 1762411301406, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168", "noun_name": null, "network_id": "70f2bcca-42a4-4520-9c5e-2c9e91ee3daa"}
+{"level": "INFO", "ts": 1762411301407, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "noun_name": null, "network_id": "a6fafcd7-4706-4271-895c-cc6f3b2dc5f9"}
+{"level": "INFO", "ts": 1762411301409, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089", "noun_name": null, "network_id": "bd012c33-7f30-4994-86e0-dc9ef7c82df4"}
+{"level": "INFO", "ts": 1762411301410, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "noun_name": null, "network_id": "41e0386e-b049-430e-b895-d6afd4e758cd"}
+{"level": "INFO", "ts": 1762411301412, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0", "noun_name": null, "network_id": "5de7db48-120a-45df-972a-1d9d6d12c48e"}
+{"level": "INFO", "ts": 1762411301590, "logger": "gemantria.network_aggregator", "msg": "concept_network_upsert_batch", "batch_size": 8, "vector_dim": 1024}
+{"level": "INFO", "ts": 1762411301592, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "noun_name": null, "network_id": "7335fbd5-c170-4ddd-afda-d687ed698a1a"}
+{"level": "INFO", "ts": 1762411301595, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11", "noun_name": null, "network_id": "4e6c44a7-c026-465c-b86d-29e7d15cba60"}
+{"level": "INFO", "ts": 1762411301598, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf", "noun_name": null, "network_id": "f2bc9aaa-f02c-4259-8f19-40caeb923728"}
+{"level": "INFO", "ts": 1762411301601, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "noun_name": null, "network_id": "c76204ad-c12c-4f3d-8b6e-bb790c5c4fa2"}
+{"level": "INFO", "ts": 1762411301604, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "noun_name": null, "network_id": "2192e54f-6dce-46cc-b3a3-acf74bd67564"}
+{"level": "INFO", "ts": 1762411301606, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58", "noun_name": null, "network_id": "aa17fe6f-344c-4d75-9203-347be3c6f8ae"}
+{"level": "INFO", "ts": 1762411301608, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b", "noun_name": null, "network_id": "d08c9b7f-5ee2-4075-9f9c-f5e141a660c0"}
+{"level": "INFO", "ts": 1762411301610, "logger": "gemantria.network_aggregator", "msg": "embedding_stored", "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9", "noun_name": null, "network_id": "fb623408-ca11-447c-8791-b2c457d5c061"}
+{"level": "INFO", "ts": 1762411301612, "logger": "gemantria.network_aggregator", "msg": "knn_pairs_computed", "batch_size": 24, "pairs_found": 192, "k": 8, "similarity_range": [0.6534094115190876, 1.0]}
+{"level": "INFO", "ts": 1762411597555, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 8, "yes_ratio": 0.6666666666666666, "lat_ms": 289794.9}
+{"level": "INFO", "ts": 1762411597556, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.9939, "rerank_score": 1.0, "edge_strength": 0.997, "type": "strong"}
+{"level": "INFO", "ts": 1762411597556, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.988, "rerank_score": 1.0, "edge_strength": 0.994, "type": "strong"}
+{"level": "INFO", "ts": 1762411597556, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9858, "rerank_score": 1.0, "edge_strength": 0.9929, "type": "strong"}
+{"level": "INFO", "ts": 1762411597557, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "3568535a-782a-48c2-9e50-7882c360c547", "cosine": 0.985, "rerank_score": 1.0, "edge_strength": 0.9925, "type": "strong"}
+{"level": "INFO", "ts": 1762411597557, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9828, "rerank_score": 1.0, "edge_strength": 0.9914, "type": "strong"}
+{"level": "INFO", "ts": 1762411597557, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9693, "rerank_score": 1.0, "edge_strength": 0.9846, "type": "strong"}
+{"level": "INFO", "ts": 1762411597557, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.897, "rerank_score": 1.0, "edge_strength": 0.9485, "type": "strong"}
+{"level": "INFO", "ts": 1762411597557, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "203dd15d-d501-4599-9b33-56f253aec208", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.777, "rerank_score": 1.0, "edge_strength": 0.8885, "type": "weak"}
+{"level": "INFO", "ts": 1762411599029, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 1, "yes_ratio": 1.0, "lat_ms": 1471.7}
+{"level": "INFO", "ts": 1762411599030, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bb5e1f07-4e94-4884-b0c1-d55954e71368", "target": "fe0b123f-2049-481a-9e52-a62aa80f9d58", "cosine": 0.7183, "rerank_score": 1.0, "edge_strength": 0.8592, "type": "weak"}
+{"level": "INFO", "ts": 1762411600947, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 0, "yes_ratio": 0.0, "lat_ms": 1916.5}
+{"level": "INFO", "ts": 1762411834012, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 6, "yes_ratio": 0.5, "lat_ms": 233064.9}
+{"level": "INFO", "ts": 1762411834013, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.7778, "rerank_score": 1.0, "edge_strength": 0.8889, "type": "weak"}
+{"level": "INFO", "ts": 1762411834013, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.775, "rerank_score": 1.0, "edge_strength": 0.8875, "type": "weak"}
+{"level": "INFO", "ts": 1762411834013, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.7746, "rerank_score": 1.0, "edge_strength": 0.8873, "type": "weak"}
+{"level": "INFO", "ts": 1762411834013, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.742, "rerank_score": 1.0, "edge_strength": 0.871, "type": "weak"}
+{"level": "INFO", "ts": 1762411834013, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.7228, "rerank_score": 1.0, "edge_strength": 0.8614, "type": "weak"}
+{"level": "INFO", "ts": 1762412049526, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 215511.8}
+{"level": "INFO", "ts": 1762412049526, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.9953, "rerank_score": 1.0, "edge_strength": 0.9977, "type": "strong"}
+{"level": "INFO", "ts": 1762412049526, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9951, "rerank_score": 1.0, "edge_strength": 0.9975, "type": "strong"}
+{"level": "INFO", "ts": 1762412049526, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.985, "rerank_score": 1.0, "edge_strength": 0.9925, "type": "strong"}
+{"level": "INFO", "ts": 1762412049526, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.98, "rerank_score": 1.0, "edge_strength": 0.99, "type": "strong"}
+{"level": "INFO", "ts": 1762412049527, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9702, "rerank_score": 1.0, "edge_strength": 0.9851, "type": "strong"}
+{"level": "INFO", "ts": 1762412049527, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8945, "rerank_score": 1.0, "edge_strength": 0.9473, "type": "strong"}
+{"level": "INFO", "ts": 1762412049527, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.7872, "rerank_score": 1.0, "edge_strength": 0.8936, "type": "weak"}
+{"level": "INFO", "ts": 1762412049527, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "b0daa02c-9978-4572-82f5-1607324558e9", "cosine": 0.6972, "rerank_score": 1.0, "edge_strength": 0.8486, "type": "weak"}
+{"level": "INFO", "ts": 1762412049527, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "3568535a-782a-48c2-9e50-7882c360c547", "target": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "cosine": 0.6939, "rerank_score": 1.0, "edge_strength": 0.847, "type": "weak"}
+{"level": "INFO", "ts": 1762412291410, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 10, "yes_ratio": 0.8333333333333334, "lat_ms": 241882.5}
+{"level": "INFO", "ts": 1762412291410, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.9834, "rerank_score": 1.0, "edge_strength": 0.9917, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.9828, "rerank_score": 1.0, "edge_strength": 0.9914, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.9808, "rerank_score": 1.0, "edge_strength": 0.9904, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.9807, "rerank_score": 1.0, "edge_strength": 0.9904, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9807, "rerank_score": 1.0, "edge_strength": 0.9903, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "3568535a-782a-48c2-9e50-7882c360c547", "cosine": 0.98, "rerank_score": 1.0, "edge_strength": 0.99, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9672, "rerank_score": 1.0, "edge_strength": 0.9836, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8885, "rerank_score": 1.0, "edge_strength": 0.9442, "type": "strong"}
+{"level": "INFO", "ts": 1762412291411, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.7732, "rerank_score": 1.0, "edge_strength": 0.8866, "type": "weak"}
+{"level": "INFO", "ts": 1762412325195, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 1, "yes_ratio": 1.0, "lat_ms": 33783.5}
+{"level": "INFO", "ts": 1762412325195, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bada7742-186f-4381-ba82-202400b54a5e", "target": "23951450-b22d-4bd5-ab69-17904329d7d2", "cosine": 0.6733, "rerank_score": 1.0, "edge_strength": 0.8366, "type": "weak"}
+{"level": "INFO", "ts": 1762412669477, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 344281.7}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.9985, "rerank_score": 1.0, "edge_strength": 0.9993, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.9939, "rerank_score": 1.0, "edge_strength": 0.997, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.987, "rerank_score": 1.0, "edge_strength": 0.9935, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9854, "rerank_score": 1.0, "edge_strength": 0.9927, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9807, "rerank_score": 1.0, "edge_strength": 0.9904, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9713, "rerank_score": 1.0, "edge_strength": 0.9857, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8982, "rerank_score": 1.0, "edge_strength": 0.9491, "type": "strong"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.7757, "rerank_score": 1.0, "edge_strength": 0.8879, "type": "weak"}
+{"level": "INFO", "ts": 1762412669478, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.775, "rerank_score": 1.0, "edge_strength": 0.8875, "type": "weak"}
+{"level": "INFO", "ts": 1762413067389, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 397910.7}
+{"level": "INFO", "ts": 1762413067390, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9964, "rerank_score": 1.0, "edge_strength": 0.9982, "type": "strong"}
+{"level": "INFO", "ts": 1762413067390, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "3568535a-782a-48c2-9e50-7882c360c547", "cosine": 0.9953, "rerank_score": 1.0, "edge_strength": 0.9977, "type": "strong"}
+{"level": "INFO", "ts": 1762413067390, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.988, "rerank_score": 1.0, "edge_strength": 0.994, "type": "strong"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.987, "rerank_score": 1.0, "edge_strength": 0.9935, "type": "strong"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.9868, "rerank_score": 1.0, "edge_strength": 0.9934, "type": "strong"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9834, "rerank_score": 1.0, "edge_strength": 0.9917, "type": "strong"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8975, "rerank_score": 1.0, "edge_strength": 0.9487, "type": "strong"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.784, "rerank_score": 1.0, "edge_strength": 0.892, "type": "weak"}
+{"level": "INFO", "ts": 1762413067391, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "target": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "cosine": 0.691, "rerank_score": 1.0, "edge_strength": 0.8455, "type": "weak"}
+{"level": "INFO", "ts": 1762413311874, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 244482.7}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.8991, "rerank_score": 1.0, "edge_strength": 0.9496, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.8975, "rerank_score": 1.0, "edge_strength": 0.9487, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.897, "rerank_score": 1.0, "edge_strength": 0.9485, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.896, "rerank_score": 1.0, "edge_strength": 0.948, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "3568535a-782a-48c2-9e50-7882c360c547", "cosine": 0.8945, "rerank_score": 1.0, "edge_strength": 0.9473, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.8928, "rerank_score": 1.0, "edge_strength": 0.9464, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.8885, "rerank_score": 1.0, "edge_strength": 0.9442, "type": "strong"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.742, "rerank_score": 1.0, "edge_strength": 0.871, "type": "weak"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "b0daa02c-9978-4572-82f5-1607324558e9", "cosine": 0.6725, "rerank_score": 1.0, "edge_strength": 0.8363, "type": "weak"}
+{"level": "INFO", "ts": 1762413311875, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "target": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "cosine": 0.6662, "rerank_score": 1.0, "edge_strength": 0.8331, "type": "weak"}
+{"level": "INFO", "ts": 1762413331327, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 2, "kept": 1, "yes_ratio": 0.5, "lat_ms": 19451.6}
+{"level": "INFO", "ts": 1762413331327, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168", "target": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0", "cosine": 0.9529, "rerank_score": 1.0, "edge_strength": 0.9764, "type": "strong"}
+{"level": "INFO", "ts": 1762413826795, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 12, "yes_ratio": 1.0, "lat_ms": 495467.0}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.7872, "rerank_score": 1.0, "edge_strength": 0.8936, "type": "weak"}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "b0daa02c-9978-4572-82f5-1607324558e9", "cosine": 0.78, "rerank_score": 1.0, "edge_strength": 0.89, "type": "weak"}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.7774, "rerank_score": 1.0, "edge_strength": 0.8887, "type": "weak"}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.7757, "rerank_score": 1.0, "edge_strength": 0.8879, "type": "weak"}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.7746, "rerank_score": 1.0, "edge_strength": 0.8873, "type": "weak"}
+{"level": "INFO", "ts": 1762413826796, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.7742, "rerank_score": 1.0, "edge_strength": 0.8871, "type": "weak"}
+{"level": "INFO", "ts": 1762413826797, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.7739, "rerank_score": 1.0, "edge_strength": 0.887, "type": "weak"}
+{"level": "INFO", "ts": 1762413826797, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.7385, "rerank_score": 1.0, "edge_strength": 0.8692, "type": "weak"}
+{"level": "INFO", "ts": 1762413826797, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.7228, "rerank_score": 1.0, "edge_strength": 0.8614, "type": "weak"}
+{"level": "INFO", "ts": 1762413828243, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 1, "yes_ratio": 1.0, "lat_ms": 1445.7}
+{"level": "INFO", "ts": 1762414248318, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 420074.2}
+{"level": "INFO", "ts": 1762414248318, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "b0daa02c-9978-4572-82f5-1607324558e9", "cosine": 0.9958, "rerank_score": 1.0, "edge_strength": 0.9979, "type": "strong"}
+{"level": "INFO", "ts": 1762414248318, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.7177, "rerank_score": 1.0, "edge_strength": 0.8589, "type": "weak"}
+{"level": "INFO", "ts": 1762414248319, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.6815, "rerank_score": 1.0, "edge_strength": 0.8408, "type": "weak"}
+{"level": "INFO", "ts": 1762414248319, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.6803, "rerank_score": 1.0, "edge_strength": 0.8402, "type": "weak"}
+{"level": "INFO", "ts": 1762414248319, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.6763, "rerank_score": 1.0, "edge_strength": 0.8381, "type": "weak"}
+{"level": "INFO", "ts": 1762414248319, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.6675, "rerank_score": 1.0, "edge_strength": 0.8337, "type": "weak"}
+{"level": "INFO", "ts": 1762414248319, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "30d7a214-ec71-4515-8e8f-5a5e6181072c", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.6662, "rerank_score": 1.0, "edge_strength": 0.8331, "type": "weak"}
+{"level": "INFO", "ts": 1762414314593, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 2, "kept": 2, "yes_ratio": 1.0, "lat_ms": 66273.8}
+{"level": "INFO", "ts": 1762414314594, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0", "target": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168", "cosine": 0.9529, "rerank_score": 1.0, "edge_strength": 0.9764, "type": "strong"}
+{"level": "INFO", "ts": 1762414314594, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0", "target": "35a72bd4-50ea-4073-bd56-87527567ef11", "cosine": 0.7064, "rerank_score": 1.0, "edge_strength": 0.8532, "type": "weak"}
+{"level": "INFO", "ts": 1762414468866, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 7, "yes_ratio": 0.5833333333333334, "lat_ms": 154271.5}
+{"level": "INFO", "ts": 1762414468866, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.9858, "rerank_score": 1.0, "edge_strength": 0.9929, "type": "strong"}
+{"level": "INFO", "ts": 1762414468867, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.9854, "rerank_score": 1.0, "edge_strength": 0.9927, "type": "strong"}
+{"level": "INFO", "ts": 1762414468867, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9807, "rerank_score": 1.0, "edge_strength": 0.9903, "type": "strong"}
+{"level": "INFO", "ts": 1762414468867, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9686, "rerank_score": 1.0, "edge_strength": 0.9843, "type": "strong"}
+{"level": "INFO", "ts": 1762414468867, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.896, "rerank_score": 1.0, "edge_strength": 0.948, "type": "strong"}
+{"level": "INFO", "ts": 1762414468867, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.7872, "rerank_score": 1.0, "edge_strength": 0.8936, "type": "weak"}
+{"level": "INFO", "ts": 1762414506072, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 2, "kept": 2, "yes_ratio": 1.0, "lat_ms": 37204.9}
+{"level": "INFO", "ts": 1762414506073, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "35a72bd4-50ea-4073-bd56-87527567ef11", "target": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0", "cosine": 0.7064, "rerank_score": 1.0, "edge_strength": 0.8532, "type": "weak"}
+{"level": "INFO", "ts": 1762414506073, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "35a72bd4-50ea-4073-bd56-87527567ef11", "target": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168", "cosine": 0.6974, "rerank_score": 1.0, "edge_strength": 0.8487, "type": "weak"}
+{"level": "INFO", "ts": 1762414748195, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 11, "yes_ratio": 0.9166666666666666, "lat_ms": 242121.1}
+{"level": "INFO", "ts": 1762414748196, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.9713, "rerank_score": 1.0, "edge_strength": 0.9857, "type": "strong"}
+{"level": "INFO", "ts": 1762414748196, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.9713, "rerank_score": 1.0, "edge_strength": 0.9856, "type": "strong"}
+{"level": "INFO", "ts": 1762414748196, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.9705, "rerank_score": 1.0, "edge_strength": 0.9852, "type": "strong"}
+{"level": "INFO", "ts": 1762414748196, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "3568535a-782a-48c2-9e50-7882c360c547", "cosine": 0.9702, "rerank_score": 1.0, "edge_strength": 0.9851, "type": "strong"}
+{"level": "INFO", "ts": 1762414748197, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.9693, "rerank_score": 1.0, "edge_strength": 0.9846, "type": "strong"}
+{"level": "INFO", "ts": 1762414748197, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9686, "rerank_score": 1.0, "edge_strength": 0.9843, "type": "strong"}
+{"level": "INFO", "ts": 1762414748197, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9672, "rerank_score": 1.0, "edge_strength": 0.9836, "type": "strong"}
+{"level": "INFO", "ts": 1762414748197, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8928, "rerank_score": 1.0, "edge_strength": 0.9464, "type": "strong"}
+{"level": "INFO", "ts": 1762414748197, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.7778, "rerank_score": 1.0, "edge_strength": 0.8889, "type": "weak"}
+{"level": "INFO", "ts": 1762414903497, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 8, "yes_ratio": 0.6666666666666666, "lat_ms": 155299.6}
+{"level": "INFO", "ts": 1762414903498, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516", "cosine": 0.9985, "rerank_score": 1.0, "edge_strength": 0.9993, "type": "strong"}
+{"level": "INFO", "ts": 1762414903498, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f", "cosine": 0.9868, "rerank_score": 1.0, "edge_strength": 0.9934, "type": "strong"}
+{"level": "INFO", "ts": 1762414903499, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "116f06bc-e792-4c2d-b9c5-bfd449580dcf", "cosine": 0.9852, "rerank_score": 1.0, "edge_strength": 0.9926, "type": "strong"}
+{"level": "INFO", "ts": 1762414903499, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb", "cosine": 0.9808, "rerank_score": 1.0, "edge_strength": 0.9904, "type": "strong"}
+{"level": "INFO", "ts": 1762414903499, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.9713, "rerank_score": 1.0, "edge_strength": 0.9856, "type": "strong"}
+{"level": "INFO", "ts": 1762414903499, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.8991, "rerank_score": 1.0, "edge_strength": 0.9496, "type": "strong"}
+{"level": "INFO", "ts": 1762414903499, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.7739, "rerank_score": 1.0, "edge_strength": 0.887, "type": "weak"}
+{"level": "INFO", "ts": 1762414997592, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 1, "yes_ratio": 1.0, "lat_ms": 94092.7}
+{"level": "INFO", "ts": 1762414998920, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 1, "kept": 1, "yes_ratio": 1.0, "lat_ms": 1326.8}
+{"level": "INFO", "ts": 1762414998920, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "1962633f-9ca5-48a7-a8f2-a211589b0e3b", "target": "452f9149-97d3-45eb-b0a3-158169b33089", "cosine": 0.9972, "rerank_score": 1.0, "edge_strength": 0.9986, "type": "strong"}
+{"level": "INFO", "ts": 1762415404886, "logger": "gemantria.network_aggregator", "msg": "rerank_batch", "model": "qwen-reranker", "k": 12, "kept": 7, "yes_ratio": 0.5833333333333334, "lat_ms": 405965.3}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "d120614e-a618-4734-a9a1-69a6ec21d0ba", "cosine": 0.78, "rerank_score": 1.0, "edge_strength": 0.89, "type": "weak"}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "ecdea223-df7d-4b3c-80df-6e10d0871ffe", "cosine": 0.7217, "rerank_score": 1.0, "edge_strength": 0.8608, "type": "weak"}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "9f7bd4ec-4d81-4e06-acde-2b278376c83a", "cosine": 0.685, "rerank_score": 1.0, "edge_strength": 0.8425, "type": "weak"}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "203dd15d-d501-4599-9b33-56f253aec208", "cosine": 0.6848, "rerank_score": 1.0, "edge_strength": 0.8424, "type": "weak"}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738", "cosine": 0.6725, "rerank_score": 1.0, "edge_strength": 0.8363, "type": "weak"}
+{"level": "INFO", "ts": 1762415404887, "logger": "gemantria.network_aggregator", "msg": "relation_created", "source": "b0daa02c-9978-4572-82f5-1607324558e9", "target": "e99b1f0d-5005-43c2-851c-1d09f03a43cd", "cosine": 0.6711, "rerank_score": 1.0, "edge_strength": 0.8356, "type": "weak"}
+{"level": "INFO", "ts": 1762415404899, "logger": "gemantria.network_aggregator", "msg": "network_aggregation_complete", "summary": {"total_nodes": 24, "strong_edges": 65, "weak_edges": 46, "embeddings_generated": 24, "similarity_computations": 0, "rerank_calls": 172, "avg_edge_strength": 1.0653712065006264, "rerank_yes_ratio": 0.7976190476190477, "edges_persisted": 192}}
+Eigenvector centrality error: `eigenvector_centrality_numpy` does not give consistent results for disconnected graphs, using zeros
+{"level": "INFO", "ts": 1762415404964, "logger": "gematria.analysis_runner", "msg": "graph_analysis_complete", "clusters": 84, "centrality": 84, "communities": 53}
+{"level": "WARNING", "ts": 1762415404965, "logger": "gematria.analysis_runner", "msg": "graph_export_failed", "error": "'generator' object has no attribute 'fetchall'"}
+{"level": "WARNING", "ts": 1762415404965, "logger": "gematria.analysis_runner", "msg": "export_operations_failed", "error": "'generator' object has no attribute 'fetchall'"}
+{"level": "INFO", "ts": 1762415404965, "logger": "gematria.analysis_runner", "msg": "analysis_runner_complete", "results": {"graph_analysis": {"clusters_stored": 84, "centrality_measures_stored": 84, "communities_found": 53}, "export_error": "'generator' object has no attribute 'fetchall'"}}
+{"level": "INFO", "ts": 1762415404965, "logger": "gematria.wrap_hints", "msg": "no_hints_to_wrap"}
+{"level": "INFO", "ts": 1762415404965, "logger": "pipeline_orchestrator", "msg": "pipeline_orchestrator_complete", "success": true, "run_id": "unknown", "book": "Genesis"}
+{
+  "success": true,
+  "run_id": "unknown",
+  "book": "Genesis",
+  "result": {
+    "book": "Genesis",
+    "nouns": [
+      {
+        "noun_id": "203dd15d-d501-4599-9b33-56f253aec208",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0591",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.1"
+          }
+        ]
+      },
+      {
+        "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368",
+        "surface": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "hebrew_text": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "letters": [
+          "\u05ea",
+          "\u05b9",
+          "\u0599",
+          "\u05d4",
+          "\u05d5",
+          "\u05bc",
+          "\u0599"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "formlessness",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H8414",
+          "transliteration": "to.hu",
+          "gloss": "formlessness",
+          "definition": "1) formlessness, confusion, unreality, emptiness<br>1a) formlessness (of primeval earth)<br>1a1) nothingness, empty space<br>1b) that which is empty or unreal (of idols) (fig)<br>1c) wasteland, wilderness (of solitary places)<br>1d) place of chaos<br>1e) vanity"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a3",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe",
+        "surface": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05ea",
+          "\u05b0",
+          "\u05d4",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "abyss",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H8415",
+          "transliteration": "te.Hom",
+          "gloss": "[the] deep",
+          "definition": "1) deep, depths, deep places, abyss, the deep, sea<br>1a) deep (of subterranean waters)<br>1b) deep, sea, abysses (of sea)<br>1c) primeval ocean, deep<br>1d) deep, depth (of river)<br>1e) abyss, the grave"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "3568535a-782a-48c2-9e50-7882c360c547",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a5",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "bada7742-186f-4381-ba82-202400b54a5e",
+        "surface": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "hebrew_text": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "letters": [
+          "\u05d0",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "e68593cb-7a29-4934-aafa-bbfc6eff61dd",
+        "surface": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "hebrew_text": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "letters": [
+          "\u05d0",
+          "\u05bd",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05a4",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168",
+        "surface": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u0594",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba",
+        "surface": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "hebrew_text": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "letters": [
+          "\u05dc",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b0",
+          "\u05dc",
+          "\u05b8",
+          "\u05d4"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "night",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3915",
+          "transliteration": "Lai.lah",
+          "gloss": "night",
+          "definition": "1) night<br>1a) night (as opposed to day)<br>1b) of gloom, protective shadow (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0",
+        "surface": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u05a5",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11",
+        "surface": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "hebrew_text": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "letters": [
+          "\u05e8",
+          "\u05b8",
+          "\u05e7",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05e2",
+          "\u05b7"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "expanse",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H7549",
+          "transliteration": "ra.Ki.a'",
+          "gloss": "a firmament",
+          "definition": "1) extended surface (solid), expanse, firmament<br>1a) expanse (flat as base, support)<br>1b) firmament (of vault of heaven supporting waters above)<br>1b1) considered by Hebrews as solid and supporting 'waters' above"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf",
+        "surface": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05de",
+          "\u05b7",
+          "\u0596",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "water",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H4325",
+          "transliteration": "Ma.yim",
+          "gloss": "waters",
+          "definition": "1) water, waters<br>1a) water<br>1b) water of the feet, urine<br>1c) of danger, violence, transitory things, refreshment (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05d9",
+          "\u05dd",
+          "\u05ae"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.7"
+          }
+        ]
+      },
+      {
+        "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58",
+        "surface": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05e9",
+          "\u05b8",
+          "\u05c1",
+          "\u05de",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "heaven",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H8064",
+          "transliteration": "sha.Ma.yim",
+          "gloss": "heaven",
+          "definition": "1) heaven, heavens, sky<br>1a) visible heavens, sky<br>1a1) as abode of the stars<br>1a2) as the visible universe, the sky, atmosphere, etc<br>1b) Heaven (as the abode of God)<BR>Aramaic equivalent: <i>sha.ma.yin</i> (\u05e9\u05c1\u05b8\u05de\u05b7\u05ab\u05d9\u05b4\u05df \"heaven\" H8065)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ai_call_latencies_ms": []
+    },
+    "weighted_nouns": [
+      {
+        "noun_id": "203dd15d-d501-4599-9b33-56f253aec208",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0591",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.1"
+          }
+        ]
+      },
+      {
+        "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368",
+        "surface": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "hebrew_text": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "letters": [
+          "\u05ea",
+          "\u05b9",
+          "\u0599",
+          "\u05d4",
+          "\u05d5",
+          "\u05bc",
+          "\u0599"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "formlessness",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H8414",
+          "transliteration": "to.hu",
+          "gloss": "formlessness",
+          "definition": "1) formlessness, confusion, unreality, emptiness<br>1a) formlessness (of primeval earth)<br>1a1) nothingness, empty space<br>1b) that which is empty or unreal (of idols) (fig)<br>1c) wasteland, wilderness (of solitary places)<br>1d) place of chaos<br>1e) vanity"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a3",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe",
+        "surface": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05ea",
+          "\u05b0",
+          "\u05d4",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "abyss",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H8415",
+          "transliteration": "te.Hom",
+          "gloss": "[the] deep",
+          "definition": "1) deep, depths, deep places, abyss, the deep, sea<br>1a) deep (of subterranean waters)<br>1b) deep, sea, abysses (of sea)<br>1c) primeval ocean, deep<br>1d) deep, depth (of river)<br>1e) abyss, the grave"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "3568535a-782a-48c2-9e50-7882c360c547",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a5",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "bada7742-186f-4381-ba82-202400b54a5e",
+        "surface": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "hebrew_text": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "letters": [
+          "\u05d0",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "e68593cb-7a29-4934-aafa-bbfc6eff61dd",
+        "surface": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "hebrew_text": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "letters": [
+          "\u05d0",
+          "\u05bd",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05a4",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168",
+        "surface": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u0594",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba",
+        "surface": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "hebrew_text": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "letters": [
+          "\u05dc",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b0",
+          "\u05dc",
+          "\u05b8",
+          "\u05d4"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "night",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3915",
+          "transliteration": "Lai.lah",
+          "gloss": "night",
+          "definition": "1) night<br>1a) night (as opposed to day)<br>1b) of gloom, protective shadow (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0",
+        "surface": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u05a5",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11",
+        "surface": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "hebrew_text": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "letters": [
+          "\u05e8",
+          "\u05b8",
+          "\u05e7",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05e2",
+          "\u05b7"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "expanse",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H7549",
+          "transliteration": "ra.Ki.a'",
+          "gloss": "a firmament",
+          "definition": "1) extended surface (solid), expanse, firmament<br>1a) expanse (flat as base, support)<br>1b) firmament (of vault of heaven supporting waters above)<br>1b1) considered by Hebrews as solid and supporting 'waters' above"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf",
+        "surface": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05de",
+          "\u05b7",
+          "\u0596",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "water",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H4325",
+          "transliteration": "Ma.yim",
+          "gloss": "waters",
+          "definition": "1) water, waters<br>1a) water<br>1b) water of the feet, urine<br>1c) of danger, violence, transitory things, refreshment (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05d9",
+          "\u05dd",
+          "\u05ae"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.7"
+          }
+        ]
+      },
+      {
+        "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58",
+        "surface": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05e9",
+          "\u05b8",
+          "\u05c1",
+          "\u05de",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "heaven",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H8064",
+          "transliteration": "sha.Ma.yim",
+          "gloss": "heaven",
+          "definition": "1) heaven, heavens, sky<br>1a) visible heavens, sky<br>1a1) as abode of the stars<br>1a2) as the visible universe, the sky, atmosphere, etc<br>1b) Heaven (as the abode of God)<BR>Aramaic equivalent: <i>sha.ma.yin</i> (\u05e9\u05c1\u05b8\u05de\u05b7\u05ab\u05d9\u05b4\u05df \"heaven\" H8065)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      }
+    ],
+    "validated_nouns": [
+      {
+        "noun_id": "203dd15d-d501-4599-9b33-56f253aec208",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0591",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.1"
+          }
+        ]
+      },
+      {
+        "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368",
+        "surface": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "hebrew_text": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "letters": [
+          "\u05ea",
+          "\u05b9",
+          "\u0599",
+          "\u05d4",
+          "\u05d5",
+          "\u05bc",
+          "\u0599"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "formlessness",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H8414",
+          "transliteration": "to.hu",
+          "gloss": "formlessness",
+          "definition": "1) formlessness, confusion, unreality, emptiness<br>1a) formlessness (of primeval earth)<br>1a1) nothingness, empty space<br>1b) that which is empty or unreal (of idols) (fig)<br>1c) wasteland, wilderness (of solitary places)<br>1d) place of chaos<br>1e) vanity"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a3",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe",
+        "surface": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05ea",
+          "\u05b0",
+          "\u05d4",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "abyss",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H8415",
+          "transliteration": "te.Hom",
+          "gloss": "[the] deep",
+          "definition": "1) deep, depths, deep places, abyss, the deep, sea<br>1a) deep (of subterranean waters)<br>1b) deep, sea, abysses (of sea)<br>1c) primeval ocean, deep<br>1d) deep, depth (of river)<br>1e) abyss, the grave"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "3568535a-782a-48c2-9e50-7882c360c547",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a5",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ]
+      },
+      {
+        "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "bada7742-186f-4381-ba82-202400b54a5e",
+        "surface": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "hebrew_text": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "letters": [
+          "\u05d0",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "e68593cb-7a29-4934-aafa-bbfc6eff61dd",
+        "surface": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "hebrew_text": "\u05d0\u05bd\u05d5\u05b9\u05e8\\\u05c3",
+        "letters": [
+          "\u05d0",
+          "\u05bd",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ]
+      },
+      {
+        "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ]
+      },
+      {
+        "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05a4",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168",
+        "surface": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u0594",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba",
+        "surface": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "hebrew_text": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "letters": [
+          "\u05dc",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b0",
+          "\u05dc",
+          "\u05b8",
+          "\u05d4"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "night",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3915",
+          "transliteration": "Lai.lah",
+          "gloss": "night",
+          "definition": "1) night<br>1a) night (as opposed to day)<br>1b) of gloom, protective shadow (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0",
+        "surface": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u05a5",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ]
+      },
+      {
+        "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11",
+        "surface": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "hebrew_text": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "letters": [
+          "\u05e8",
+          "\u05b8",
+          "\u05e7",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05e2",
+          "\u05b7"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "expanse",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H7549",
+          "transliteration": "ra.Ki.a'",
+          "gloss": "a firmament",
+          "definition": "1) extended surface (solid), expanse, firmament<br>1a) expanse (flat as base, support)<br>1b) firmament (of vault of heaven supporting waters above)<br>1b1) considered by Hebrews as solid and supporting 'waters' above"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf",
+        "surface": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05de",
+          "\u05b7",
+          "\u0596",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "water",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H4325",
+          "transliteration": "Ma.yim",
+          "gloss": "waters",
+          "definition": "1) water, waters<br>1a) water<br>1b) water of the feet, urine<br>1c) of danger, violence, transitory things, refreshment (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ]
+      },
+      {
+        "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05d9",
+          "\u05dd",
+          "\u05ae"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.7"
+          }
+        ]
+      },
+      {
+        "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58",
+        "surface": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05e9",
+          "\u05b8",
+          "\u05c1",
+          "\u05de",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "heaven",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H8064",
+          "transliteration": "sha.Ma.yim",
+          "gloss": "heaven",
+          "definition": "1) heaven, heavens, sky<br>1a) visible heavens, sky<br>1a1) as abode of the stars<br>1a2) as the visible universe, the sky, atmosphere, etc<br>1b) Heaven (as the abode of God)<BR>Aramaic equivalent: <i>sha.ma.yin</i> (\u05e9\u05c1\u05b8\u05de\u05b7\u05ab\u05d9\u05b4\u05df \"heaven\" H8065)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      },
+      {
+        "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ]
+      }
+    ],
+    "enriched_nouns": [
+      {
+        "noun_id": "203dd15d-d501-4599-9b33-56f253aec208",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0591",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.1"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0591\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple deities, yet in biblical monotheism, it signifies the one true God. Theologically, El\u014dh\u00eem represents the transcendent, creator God who is distinct from His creation (Isa 40:28). It also underscores God's plurality within unity, hinting at the Trinity (Gen 1:26; 11:7). Historically, it reflects a shift from polytheistic to monotheistic thought. Confidence: 0.95."
+      },
+      {
+        "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368",
+        "surface": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "hebrew_text": "\u05ea\u05b9\u0599\u05d4\u05d5\u05bc\u0599",
+        "letters": [
+          "\u05ea",
+          "\u05b9",
+          "\u0599",
+          "\u05d4",
+          "\u05d5",
+          "\u05bc",
+          "\u0599"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "formlessness",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H8414",
+          "transliteration": "to.hu",
+          "gloss": "formlessness",
+          "definition": "1) formlessness, confusion, unreality, emptiness<br>1a) formlessness (of primeval earth)<br>1a1) nothingness, empty space<br>1b) that which is empty or unreal (of idols) (fig)<br>1c) wasteland, wilderness (of solitary places)<br>1d) place of chaos<br>1e) vanity"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05ea\u05b9\u05d4\u05d5\u05bc (tohu) is derived from the root verb \u05d4\u05b8\u05d9\u05b8\u05d4 (hayah), meaning 'to be' or 'to exist'. It appears 20 times in the Old Testament, primarily in Genesis and Isaiah, often paired with \u05d1\u05b9\u05d4\u05d5\u05bc (bohu), another formless state. Tohu signifies chaos, emptiness, and nothingness, echoing ancient Near Eastern creation myths where gods battle chaos monsters. In Genesis 1:2, 'the earth was without form and void; it was tohu and bohu', reflecting a primordial state awaiting divine order (bereshith). Isaiah uses tohu to describe judgment (Isa 34:11), symbolizing God's power over chaos. Theologically, tohu underscores creation ex nihilo, God's sovereignty over chaos, and the transformative power of His word (Gen 1:3). It also hints at eschatological restoration (Isa 65:17), where 'the former things' will pass away, including chaos itself."
+      },
+      {
+        "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a3\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a3",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05d9 (peney) is a Hebrew noun derived from the root \u05e4\u05b8\u05e0\u05b8\u05d4 (pana), meaning 'to turn' or 'face'. In biblical context, it primarily signifies 'faces', but also symbolizes presence, direction, and attention. Theologically, faces represent individuals' relationship with God (Psalm 24:6). Historically, face-to-face encounters signified covenantal intimacy (Exodus 33:11), while turning away denoted rebellion (Isaiah 59:2). In the New Testament, Christ's 'face' embodies divine revelation and salvation (Matthew 24:30)."
+      },
+      {
+        "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe",
+        "surface": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05ea",
+          "\u05b0",
+          "\u05d4",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "abyss",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H8415",
+          "transliteration": "te.Hom",
+          "gloss": "[the] deep",
+          "definition": "1) deep, depths, deep places, abyss, the deep, sea<br>1a) deep (of subterranean waters)<br>1b) deep, sea, abysses (of sea)<br>1c) primeval ocean, deep<br>1d) deep, depth (of river)<br>1e) abyss, the grave"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05ea\u05b0\u05d4\u0591\u05d5\u05b9\u05dd (teh\u00f4m) is derived from the root \u05d4\u05b8\u05de\u05b7\u05dd (hammam), meaning 'to be deep' or 'to roar', suggesting a primal, chaotic force. In Genesis 1:2, it's personified as 'the deep', symbolizing the pre-creation void and chaos, echoing Babylonian Tiamat myths. Theologically, teh\u00f4m represents the antithesis of God's order (t\u00f4wd\u00e2b\u00f4t), embodying the 'waters above' (Gen 1:7) that await divine command to be separated and ordered. Its chaotic nature is tamed by the Spirit of God (ruakh elohim) hovering over it, foreshadowing the Spirit's role in creation and redemption (Isa 44:2-3). The confidence score is high (0.95), given the noun's clear biblical usage and scholarly consensus on its symbolic significance."
+      },
+      {
+        "noun_id": "3568535a-782a-48c2-9e50-7882c360c547",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple gods, yet in biblical monotheism, it signifies the one true God in His multifaceted nature. The term's use in creation (Gen 1:1) underscores God's sovereignty and power over all things. Its application to human rulers (Ps 82:6-7) implies a reflection of divine qualities, while its association with angels (Ps 8:5) highlights the hierarchy within the divine realm. Theologically, El\u014dh\u00eem emphasizes God's transcendence (Exod 15:11), immanence (Ps 34:18), and unity (Deut 6:4). Its plural form hints at a Trinitarian understanding, predating Christian doctrine but echoing in the New Testament (Matt 28:19). Confidence is high due to extensive biblical usage and scholarly consensus on its significance."
+      },
+      {
+        "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741",
+        "surface": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "hebrew_text": "\u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9",
+        "letters": [
+          "\u05e4",
+          "\u05b0",
+          "\u05bc",
+          "\u05e0",
+          "\u05b5",
+          "\u05a5",
+          "\u05d9"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "face: before",
+          "pos": "NOUN",
+          "morph": "HNcmpc",
+          "strongs_id": "H6440",
+          "transliteration": "pe.Nei",
+          "gloss": "[the] surface of",
+          "definition": ": before/to/front<br>1) face<br>1a) face, faces<br>1b) presence, person<br>1c) face (of seraphim or cherubim)<br>1d) face (of animals)<br>1e) face, surface (of ground)<br>1f) as adv of loc/temp<br>1f1) before and behind, toward, in front of, forward, formerly, from beforetime, before<br>1g) with prep<br>1g1) in front of, before, to the front of, in the presence of, in the face of, at the face or front of, from the presence of, from before, from before the face of"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.2"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05e4\u05bc\u05b0\u05e0\u05b5\u05a5\u05d9 (peney), derived from the root \u05e4\u05b8\u05e0\u05b8\u05d4 (pana), meaning 'to turn' or 'face', carries profound theological significance throughout the Old Testament. Primarily denoting 'faces', it often symbolizes presence, direction, and relationship with God. In Genesis 32:30, Jacob's encounter with God results in his renaming to Israel, reflecting a transformed identity and divine presence ('I have seen God face to face'). Psalm 17:15 uses the term to express longing for God's presence in heaven, while Proverbs 29:8 warns against those who 'face' bribes. In the New Testament, John 6:40 reveals Jesus as the one who will 'see' (face) God and receive eternal life, underscoring His unique relationship with the Father. Theologically, peney signifies the human desire for divine encounter and the transformative power of God's presence."
+      },
+      {
+        "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0596\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its usage is complex and multifaceted. In the Priestly source (P), it primarily refers to the God of Israel, YHWH, emphasizing His transcendent power and sovereignty (e.g., Gen 1:1). However, in other sources like Deuteronomy, it can denote divine beings in general (Deut 32:8-9) or even pagan deities (Ps 86:8). Theologically, El\u014dh\u00eem signifies the biblical concept of God as a plural entity (e.g., Gen 1:26), reflecting the later Christian doctrine of the Trinity. Its usage also underscores the biblical tension between monotheism and henotheism, with El\u014dh\u00eem often serving as the head of a divine council (Ps 89:7). In historical context, the term's evolution reflects ancient Near Eastern influences and Israel's struggle to define its unique faith amidst polytheistic cultures."
+      },
+      {
+        "noun_id": "bada7742-186f-4381-ba82-202400b54a5e",
+        "surface": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "hebrew_text": "\u05d0\u0591\u05d5\u05b9\u05e8",
+        "letters": [
+          "\u05d0",
+          "\u0591",
+          "\u05d5",
+          "\u05b9",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "light",
+          "pos": "NOUN",
+          "morph": "HNcfsa",
+          "strongs_id": "H0216",
+          "transliteration": "'or",
+          "gloss": "light",
+          "definition": "1) light<br>1a) light of day<br>1b) light of heavenly luminaries (moon, sun, stars)<br>1c) day-break, dawn, morning light<br>1d) daylight<br>1e) lightning<br>1f) light of lamp<br>1g) light of life<br>1h) light of prosperity<br>1i) light of instruction<br>1j) light of face (fig.)<br>1k) Jehovah as Israel's light"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.3"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u0591\u05d5\u05b9\u05e8 (Or) translates to 'light' and holds profound theological significance throughout the Old Testament. In Genesis 1, God commands, 'Let there be light,' establishing Or as a symbol of divine creation and order amidst chaos. Numerically, it's associated with the first day, signifying new beginnings and hope. Psalm 27:1 uses Or to represent God's presence and guidance, 'The Lord is my light and my salvation.' In Isaiah 9:2, it heralds the coming of the Messiah, 'Those who dwell in a land of deep darkness have seen a great light.' Historically, Or reflects ancient Near Eastern cosmology where light was personified as a god (e.g., Egyptian Aten). Theologically, it underscores God's revelation and redemption, with Christ being 'the true Light' (John 1:9)."
+      },
+      {
+        "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple deities, yet in biblical monotheism, it signifies the one true God. Theologically, El\u014dh\u00eem represents the transcendent, creator God who is distinct from His creation (Isa 40:28). It also underscores God's plurality within unity, hinting at the Trinity (Gen 18:2-3). Historically, it reflects a shift from polytheistic to monotheistic understanding. Confidence: 0.95"
+      },
+      {
+        "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.4"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple gods, yet in biblical monotheism, it signifies the one true God in His multifaceted nature. The term's use in creation (Gen 1:1) underscores God's sovereignty and power over all things. Its application to human rulers (Ps 82:6-7) implies a reflection of divine qualities, while its association with angels (Ps 8:5) highlights the hierarchy within the divine realm. Theologically, El\u014dh\u00eem emphasizes God's transcendence (Exod 15:11), immanence (Ps 34:18), and unity (Deut 6:4). Its plural form hints at a Trinitarian understanding, predating Christian doctrine but echoing in the New Testament (Matt 28:19). Confidence is high due to extensive biblical usage and scholarly consensus on its significance."
+      },
+      {
+        "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05a4\u05d9\u05dd\\\u05c0",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05a4",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd (El\u014dh\u012bm) is a plural form of the root word \u05d0\u05b5\u05dc (\u0113l), meaning 'god'. Its usage in the Tanakh reflects a complex theological evolution, from its initial polytheistic connotations to its later monotheistic interpretation. In early texts like Genesis 1:26 ('Let us make man...'), it denotes a plural council of divine beings, reflecting ancient Near Eastern polytheism. However, by the time of the prophets (e.g., Isaiah 45:5-6), El\u014dh\u012bm is clearly understood as the one true God, distinct from pagan deities. Theologically, this shift mirrors Israel's growing monotheistic consciousness. Symbolically, the plural form may hint at God's multifaceted nature or the divine council concept in ancient Near Eastern religion. Its usage also underscores the Hebraic understanding of God as a personal being who relates to humanity ('Let us make man...'). The confidence score is 0.95 due to the extensive scholarly consensus on these interpretations and the clear textual evidence supporting them."
+      },
+      {
+        "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168",
+        "surface": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u0594\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u0594",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d9\u0594\u05d5\u05b9\u05dd (y\u00f4m) translates to 'day' and carries profound theological significance throughout the Old Testament. It often symbolizes a period of time, but also represents divine presence and activity. In Genesis 1, each y\u00f4m marks a creative act by God, culminating in the Sabbath, a day of rest and sanctification (Exodus 20:8-11). The term is used in key historical events like the Exodus (Deuteronomy 16:3), and prophetic visions (Isaiah 58:13). In Psalms, y\u00f4m signifies human life's brevity (Psalm 90:4) and God's eternal nature. It also appears in eschatological contexts, such as the 'day of the Lord' (Joel 2:31), a day of judgment and salvation. Theologically, y\u00f4m underscores God's sovereignty over time and history, His involvement in human affairs, and the ultimate hope for redemption."
+      },
+      {
+        "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba",
+        "surface": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "hebrew_text": "\u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4",
+        "letters": [
+          "\u05dc",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b0",
+          "\u05dc",
+          "\u05b8",
+          "\u05d4"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "night",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3915",
+          "transliteration": "Lai.lah",
+          "gloss": "night",
+          "definition": "1) night<br>1a) night (as opposed to day)<br>1b) of gloom, protective shadow (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05dc\u05b8\u0591\u05d9\u05b0\u05dc\u05b8\u05d4 (laylah) signifies 'night' and carries profound theological significance throughout the Old Testament. In Genesis, night is created on the first day alongside light, symbolizing God's sovereignty over time and His role as the source of both illumination and rest. Psalm 74:16 uses laylah to describe God's protection during Israel's exile, highlighting His constant presence even in darkness. In Isaiah 21:11-12, night represents judgment on Babylon, illustrating God's use of laylah as a metaphor for divine retribution. Theologically, laylah underscores the duality of God's nature - He is both the giver of light and the bringer of rest, yet also the one who uses darkness to reveal His power. Its historical context ranges from creation to exile, reflecting a consistent theme of God's providence and judgment throughout Israel's history."
+      },
+      {
+        "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05e2\u05b6\u05a5\u05e8\u05b6\u05d1 (ereb) translates to 'evening' or 'twilight', holding significant theological implications throughout the Old Testament. In Genesis 1:5, God separates 'evening and morning' (ereb va-boker), signifying the creation of time and order, echoing the ancient Near Eastern cosmogonic myths but distinctively attributing it to Yahweh's sovereignty. Psalm 30:5 uses ereb to reflect on the transience of life ('Weeping may endure for a night [ereb], but joy cometh in the morning'), mirroring Job's lament (Job 7:4) and underscoring hope amidst suffering. In Isaiah 58:8, 'thy light shall break forth as the morning' after 'evening' (ereb), symbolizing deliverance from exile and restoration, echoing the Exodus narrative. Theologically, ereb signifies transition, judgment (Amos 4:7), and hope (Micah 2:13). It's also used in the Passover ritual (Exodus 12:6), where the lamb is to be killed 'between the evenings' (bein ha-arbayim), symbolizing the transition from slavery to freedom, and prefiguring Christ's atoning sacrifice. The confidence score is high (0.95) due to the extensive biblical usage and clear theological themes."
+      },
+      {
+        "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 (boqer) translates to 'morning' or 'dawn', holding significant theological implications throughout the Old Testament. In Genesis 1:5, God separates light from darkness and calls the morning 'day' and the evening 'night', establishing a cosmic order that reflects His sovereignty over time and creation. Psalm 30:5 uses \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 to symbolize deliverance from distress, as the psalmist exclaims, 'Weeping may endure for a night, but joy comes in the morning.' This metaphor underscores God's faithfulness and the promise of hope after trials. In Isaiah 43:2, the prophet declares, 'When you pass through the waters, I will be with you; and through the rivers, they shall not overwhelm you; when you walk through fire, you shall not be burned, and the flame shall not consume you,' followed by 'for I am the Lord your God, the Holy One of Israel, your Savior.' Here, \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 signifies deliverance from judgment, with the morning representing a new beginning in God's presence. Theologically, \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 embodies renewal, hope, and divine intervention, echoing God's promise to bring light out of darkness (2 Corinthians 4:6)."
+      },
+      {
+        "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0",
+        "surface": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "hebrew_text": "\u05d9\u05a5\u05d5\u05b9\u05dd",
+        "letters": [
+          "\u05d9",
+          "\u05a5",
+          "\u05d5",
+          "\u05b9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "day",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H3117",
+          "transliteration": "Yom",
+          "gloss": "day",
+          "definition": ": day/when/time/period<br>1) day, time, year<br>1a) day (as opposed to night)<br>1b) day (24 hour period)<br>1b1) as defined by evening and morning in Genesis 1<br>1b2) as a division of time<br>1b2a) a working day, a day's journey<br>1c) days, lifetime (pl.)<br>1d) time, period (general)<br>1e) year<br>1f) temporal references<br>1f1) today<br>1f2) yesterday<br>1f3) tomorrow "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.5"
+          }
+        ],
+        "confidence": 0.97,
+        "insights": "The Hebrew noun \u05d9\u05d5\u05b9\u05dd (yom) translates to 'day' and carries profound theological significance throughout the Old Testament. It often symbolizes a period of time, but also represents divine presence and activity. In Genesis 1, each 'day' (yom) marks a stage in creation, culminating in God's rest on the seventh day, establishing the Sabbath principle (Exodus 20:8-11). Psalm 95:7-11 uses yom to warn against rebellion, echoing Israel's wilderness journey where each 'day' brought both provision and judgment. In Isaiah 65:17-25, a new 'day' (yom) signifies the messianic era, when 'the former things have passed away.' Theologically, yom underscores God's sovereignty over time, His providential care, and the eschatological hope of a transformed reality."
+      },
+      {
+        "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u0594",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u0594\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple gods, yet in biblical monotheism, it signifies the one true God in His multifaceted nature. The term's use in creation (Gen 1:1) underscores God's sovereignty and power over all things. Its application to human rulers (Ps 82:6-7) implies a reflection of divine qualities, while its association with angels (Ps 8:5) highlights the hierarchy within the divine realm. Theologically, El\u014dh\u00eem emphasizes God's transcendence (Exod 15:11), immanence (Ps 34:18), and unity (Deut 6:4). Its plural form hints at a Trinitarian understanding, predating Christian doctrine but echoing in the New Testament (Matt 28:19). Confidence is high due to extensive biblical usage and scholarly consensus on its significance."
+      },
+      {
+        "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11",
+        "surface": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "hebrew_text": "\u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7",
+        "letters": [
+          "\u05e8",
+          "\u05b8",
+          "\u05e7",
+          "\u05b4",
+          "\u0596",
+          "\u05d9",
+          "\u05e2",
+          "\u05b7"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "expanse",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H7549",
+          "transliteration": "ra.Ki.a'",
+          "gloss": "a firmament",
+          "definition": "1) extended surface (solid), expanse, firmament<br>1a) expanse (flat as base, support)<br>1b) firmament (of vault of heaven supporting waters above)<br>1b1) considered by Hebrews as solid and supporting 'waters' above"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05e8\u05b8\u05e7\u05b4\u0596\u05d9\u05e2\u05b7 (raqiya'), translated as 'firmament' or 'expanse', is a key term in the creation account of Genesis 1:6-8, where God separates the waters to create the sky. Theologically, it signifies God's ordering and structuring of the cosmos, reflecting His sovereignty over nature. Historically, it echoes ancient Near Eastern cosmogonies, yet distinctively portrays God as the sole creator, not a deified force. Symbolically, the raqiya' represents the boundary between heaven and earth, mirroring God's holiness and transcendence while also indicating His immanence in creation. Theologically, it underscores the biblical worldview that the physical universe is not divine but created by God for His glory (Psalm 19:1)."
+      },
+      {
+        "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf",
+        "surface": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05de\u05b7\u0596\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05de",
+          "\u05b7",
+          "\u0596",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "water",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H4325",
+          "transliteration": "Ma.yim",
+          "gloss": "waters",
+          "definition": "1) water, waters<br>1a) water<br>1b) water of the feet, urine<br>1c) of danger, violence, transitory things, refreshment (fig.)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.6"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05de\u05b7\u05d9\u05b4\u05dd (mayim) primarily signifies 'waters' and is rich in biblical symbolism. In Genesis, waters represent chaos before creation (Gen 1:2), echoing ancient Near Eastern cosmogonies. In the flood narrative (Gen 6-9), waters symbolize judgment and destruction, yet also redemption as Noah's ark floats on them. Psalms often use mayim to depict God's provision (Ps 36:8) or human transience (Ps 147:15-18). In Isaiah, the 'waters' of Babylon will not overwhelm Israel (Isa 43:2), while in Revelation, they represent peoples and multitudes (Rev 17:15). Theologically, mayim underscores God's sovereignty over chaos, provision in scarcity, and judgment on sin. It also foreshadows baptismal themes of death and resurrection."
+      },
+      {
+        "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd\u05ae",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u05d9",
+          "\u05dd",
+          "\u05ae"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.7"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, appearing over 2500 times in the Old Testament. It is derived from the root verb \u05d0\u05b8\u05dc\u05b7\u05d4 (\u0101lah), meaning 'to be strong' or 'powerful'. In its plural form, it often refers to the God of Israel, emphasizing His majesty and power. Historically, it was used in Canaanite culture for various deities, but in biblical monotheism, it is exclusively applied to Yahweh. Theologically, El\u014dh\u00eem signifies a transcendent, omnipotent deity who created (Gen 1:1) and sustains the universe. It also reflects God's plurality within unity, hinting at the Trinity (cf. Gen 18:2). In the context of covenantal theology, it underscores God's sovereignty and faithfulness to His promises (e.g., Gen 17:1-8). Confidence is high due to extensive scholarly consensus on these points."
+      },
+      {
+        "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a",
+        "surface": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "hebrew_text": "\u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd",
+        "letters": [
+          "\u05d0",
+          "\u05b1",
+          "\u05dc",
+          "\u05b9",
+          "\u05d4",
+          "\u05b4",
+          "\u059b",
+          "\u05d9",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "God",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H0430",
+          "transliteration": "'E.lo.Him",
+          "gloss": "God",
+          "definition": "This name means  \"gods\" (plural intensive-singular meaning), \"God\"<BR>Another name of <i>ye.ho.vah</i> (\u05d9\u05d4\u05d5\u05d4 \"LORD\" H3068G) "
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d0\u05b1\u05dc\u05b9\u05d4\u05b4\u059b\u05d9\u05dd (El\u014dh\u00eem) is a key term in biblical theology, derived from the root \u05d0\u05dc\u05d4 (\u02be\u0101l\u00e2), meaning 'to be strong' or 'powerful'. It appears 2570 times in the Old Testament, often translated as 'God', but its plural form (e.g., Gen 1:26) suggests a complex understanding of divinity. In ancient Near Eastern context, it could refer to multiple deities, yet in biblical monotheism, it signifies the one true God. Theologically, El\u014dh\u00eem represents the transcendent, creator God who is distinct from His creation (Isa 40:28). It also underscores God's plurality within unity, hinting at the Trinity (Gen 18:2-3). Historically, it reflects a shift from polytheistic to monotheistic understanding. Confidence: 0.95"
+      },
+      {
+        "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58",
+        "surface": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "hebrew_text": "\u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd",
+        "letters": [
+          "\u05e9",
+          "\u05b8",
+          "\u05c1",
+          "\u05de",
+          "\u05b8",
+          "\u0591",
+          "\u05d9",
+          "\u05b4",
+          "\u05dd"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "heaven",
+          "pos": "NOUN",
+          "morph": "HNcmpa",
+          "strongs_id": "H8064",
+          "transliteration": "sha.Ma.yim",
+          "gloss": "heaven",
+          "definition": "1) heaven, heavens, sky<br>1a) visible heavens, sky<br>1a1) as abode of the stars<br>1a2) as the visible universe, the sky, atmosphere, etc<br>1b) Heaven (as the abode of God)<BR>Aramaic equivalent: <i>sha.ma.yin</i> (\u05e9\u05c1\u05b8\u05de\u05b7\u05ab\u05d9\u05b4\u05df \"heaven\" H8065)"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ],
+        "confidence": 0.97,
+        "insights": "The Hebrew noun \u05e9\u05c1\u05b8\u05de\u05b8\u0591\u05d9\u05b4\u05dd (shamayim) is derived from the root verb \u05e9\u05c1\u05b8\u05de\u05b7\u05e2 (shama'), meaning 'to hear' or 'listen', suggesting a connection to the divine realm where God's voice is heard. In biblical context, shamayim refers not just to the physical sky but the heavens as a cosmic entity encompassing both the visible sky and the spiritual realm of God's dwelling place (Isaiah 66:1). It symbolizes God's transcendence over creation (Psalm 115:3) while also representing His immanence, as rain comes from the heavens to nourish the earth (Deuteronomy 11:11). Theologically, shamayim underscores the biblical worldview where heaven is not merely a physical location but a spiritual reality where God's throne is established (Psalm 2:4), and where the righteous will be gathered after death (Matthew 5:12). Its historical context in ancient Near Eastern cultures reveals a shift from polytheistic sky gods to the monotheistic understanding of YHWH as the sole creator and ruler of heaven."
+      },
+      {
+        "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b",
+        "surface": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "hebrew_text": "\u05e2\u05b6\u05a5\u05e8\u05b6\u05d1",
+        "letters": [
+          "\u05e2",
+          "\u05b6",
+          "\u05a5",
+          "\u05e8",
+          "\u05b6",
+          "\u05d1"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "evening",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H6153",
+          "transliteration": "'E.rev",
+          "gloss": "evening",
+          "definition": "1) evening, night, sunset<br>1a) evening, sunset<br>1b) night"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05e2\u05b6\u05a5\u05e8\u05b6\u05d1 (ereb) translates to 'evening' or 'twilight', holding significant theological implications throughout the Old Testament. In Genesis 1:5, God separates 'evening and morning' (ereb va-boker), signifying the creation of time and order, echoing the ancient Near Eastern cosmogonic myths but distinctively attributing it to Yahweh's sovereignty. Psalm 30:5 uses ereb to reflect on the transience of life ('Weeping may endure for a night [ereb], but joy cometh in the morning'), mirroring Job's lament (Job 7:4) and underscoring hope amidst suffering. In Isaiah 58:8, 'thy light shall break forth as the morning' after 'evening' (ereb), symbolizing deliverance from exile and restoration, echoing the Exodus narrative. Theologically, ereb signifies transition, judgment (Amos 4:7), and hope (Micah 2:13). It's also used in the Passover ritual (Exodus 12:6), where the lamb is to be killed 'between the evenings' (bein ha-arbayim), symbolizing the transition from slavery to freedom, and prefiguring Christ's atoning sacrifice. The confidence score is high (0.95) due to the extensive biblical usage and clear theological themes."
+      },
+      {
+        "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9",
+        "surface": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "hebrew_text": "\u05d1\u05b9\u0596\u05e7\u05b6\u05e8",
+        "letters": [
+          "\u05d1",
+          "\u05b9",
+          "\u0596",
+          "\u05e7",
+          "\u05b6",
+          "\u05e8"
+        ],
+        "gematria_value": 0,
+        "class": "thing",
+        "semantic_features": {},
+        "analysis": {
+          "lemma": "morning",
+          "pos": "NOUN",
+          "morph": "HNcmsa",
+          "strongs_id": "H1242",
+          "transliteration": "Vo.ker",
+          "gloss": "morning",
+          "definition": "1) morning, break of day<br>1a) morning<br>1a1) of end of night<br>1a2) of coming of daylight<br>1a3) of coming of sunrise<br>1a4) of beginning of day<br>1a5) of bright joy after night of distress (fig.)<br>1b) morrow, next day, next morning"
+        },
+        "sources": [
+          {
+            "name": "bible_db.v_morph_tokens",
+            "ref": "Gen.1.8"
+          }
+        ],
+        "confidence": 0.95,
+        "insights": "The Hebrew noun \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 (boqer) translates to 'morning' or 'dawn', holding significant theological implications throughout the Old Testament. In Genesis 1:5, God separates light from darkness and calls the morning 'day' and the evening 'night', establishing a cosmic order that reflects His sovereignty over time and creation. Psalm 30:5 uses \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 to symbolize deliverance from distress, as the psalmist exclaims, 'Weeping may endure for a night, but joy comes in the morning.' This metaphor underscores God's faithfulness and the promise of hope after trials. In Isaiah 43:2, the prophet declares, 'When you pass through the waters, I will be with you; and through the rivers, they shall not overwhelm you; when you walk through fire, you shall not be burned, and the flame shall not consume you,' followed by 'for I am the Lord your God, the Holy One of Israel, your Savior.' Here, \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 signifies deliverance from judgment, with the morning representing a new beginning in God's presence. Theologically, \u05d1\u05b9\u05bc\u05e7\u05b6\u05e8 embodies renewal, hope, and divine intervention, echoing God's promise to bring light out of darkness (2 Corinthians 4:6)."
+      }
+    ],
+    "ai_enrichments_generated": 24,
+    "confidence_validation": {
+      "passed": true,
+      "results": [
+        {
+          "noun_id": "203dd15d-d501-4599-9b33-56f253aec208",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "bb5e1f07-4e94-4884-b0c1-d55954e71368",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "23951450-b22d-4bd5-ab69-17904329d7d2",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "ecdea223-df7d-4b3c-80df-6e10d0871ffe",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "3568535a-782a-48c2-9e50-7882c360c547",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "ce9d400e-5155-4ff2-926b-ee3b53d3b741",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "5d62d15d-f3f4-45d7-8f3a-af4256979aeb",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "bada7742-186f-4381-ba82-202400b54a5e",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "cb5cedd2-da06-4ce4-8cbb-328cafa1c516",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "bfa95bd8-195d-42b4-92e9-ac0c002dea4f",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "8b99dbdd-1ef0-4aec-a07e-e71ba8380738",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "4ff5fa1b-a6b6-45e8-bf8c-3b478b0a3168",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "d120614e-a618-4734-a9a1-69a6ec21d0ba",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "452f9149-97d3-45eb-b0a3-158169b33089",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "30d7a214-ec71-4515-8e8f-5a5e6181072c",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "dc9eac94-4ea3-4ba4-ab86-27a5877b58f0",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.97,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "116f06bc-e792-4c2d-b9c5-bfd449580dcf",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "35a72bd4-50ea-4073-bd56-87527567ef11",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "5ace0892-b7cb-4ac2-912b-b58907df7ccf",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "e99b1f0d-5005-43c2-851c-1d09f03a43cd",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "9f7bd4ec-4d81-4e06-acde-2b278376c83a",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "fe0b123f-2049-481a-9e52-a62aa80f9d58",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.97,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "1962633f-9ca5-48a7-a8f2-a211589b0e3b",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        },
+        {
+          "noun_id": "b0daa02c-9978-4572-82f5-1607324558e9",
+          "noun": "unknown",
+          "gematria_confidence": 1.0,
+          "ai_confidence": 0.95,
+          "validation_passed": true
+        }
+      ],
+      "thresholds": {
+        "gematria": 0.9,
+        "ai": 0.8
+      }
+    },
+    "network_summary": {
+      "total_nodes": 24,
+      "strong_edges": 65,
+      "weak_edges": 46,
+      "embeddings_generated": 24,
+      "similarity_computations": 0,
+      "rerank_calls": 172,
+      "avg_edge_strength": 1.0653712065006264,
+      "rerank_yes_ratio": 0.7976190476190477,
+      "edges_persisted": 192
+    },
+    "analysis_results": {
+      "graph_analysis": {
+        "clusters_stored": 84,
+        "centrality_measures_stored": 84,
+        "communities_found": 53
+      },
+      "export_error": "'generator' object has no attribute 'fetchall'"
+    },
+    "enveloped_hints": {
+      "type": "hints_envelope",
+      "version": "1.0",
+      "items": [],
+      "count": 0
+    }
+  }
+}

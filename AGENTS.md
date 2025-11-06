@@ -32,6 +32,19 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
 
+## Enrichment: OSIS Cross-Reference Capture (Genesis scope)
+
+The enrichment node extracts verse cross-references from model insights and normalizes to OSIS (e.g., `Ps.30.5`).
+
+- **Utility**: `src/utils/osis.py` performs label→OSIS normalization and de-duping.
+- **Node wiring**: `src/nodes/enrichment.py` attaches `enrichment.crossrefs=[{label, osis}]`.
+- **Persistence (opt-in)**: `migrations/017_enrichment_crossrefs.sql` creates table `gematria.enrichment_crossrefs`; writer in `src/persist/crossref_writer.py`.
+- **Guards**:
+  - `scripts/guards/guard_crossrefs_extracted.py` — if an insight mentions verses, we expect crossrefs present.
+  - `scripts/guards/guard_crossrefs_db_count.py` — optional DB row count check per `RUN_ID`.
+
+Runtime knobs: `PERSIST_ENRICHMENTS=1 PERSIST_CROSSREFS=1 CHECKPOINTER=postgres`.
+
 ## Code Quality Standards
 - **Formatting**: Ruff format (single source of truth)
 - **Linting**: Ruff check with zero tolerance for style issues
@@ -404,6 +417,9 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 058 | # --- |
 | 059 | # --- |
 | 060 | # --- |
+| 061 | # --- |
+| 062 | # id: 062 |
+| 063 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

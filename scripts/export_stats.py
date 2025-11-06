@@ -21,13 +21,16 @@ ensure_env_loaded()
 
 LOG = get_logger("export_stats")
 
-_BAD = re.compile(r'[\u0000-\u0008\u000B\u000C\u000E-\u001F]')
+_BAD = re.compile(r"[\u0000-\u0008\u000B\u000C\u000E-\u001F]")
 
 
 def scrub(v):
-    if isinstance(v, str): return _BAD.sub('', v)
-    if isinstance(v, list): return [scrub(x) for x in v]
-    if isinstance(v, dict): return {k:scrub(x) for k,x in v.items()}
+    if isinstance(v, str):
+        return _BAD.sub("", v)
+    if isinstance(v, list):
+        return [scrub(x) for x in v]
+    if isinstance(v, dict):
+        return {k: scrub(x) for k, x in v.items()}
     return v
 
 

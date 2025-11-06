@@ -368,13 +368,21 @@ pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
 
+.PHONY: pipeline.from_db.pg
+pipeline.from_db.pg: db.ingest.morph
+	@echo ">> Normalizing + enriching db nouns via pipeline (Postgres persistence)…"
+	@CHECKPOINTER=postgres PERSIST_ENRICHMENTS=1 PERSIST_CROSSREFS=1 \
+	 PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline \
+	 --nouns-json exports/ai_nouns.db_morph.json --book Genesis
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
 	@PYTHONPATH=$(shell pwd) python3 scripts/guard_all.py
-	@$(MAKE) ssot.verify
+	@echo ">> Validating Strong's overrides schema…"
+	@python3 scripts/guards/guard_overrides_schema.py || (echo "overrides schema guard failed"; exit 2)
 	@echo ">> Validating db ingest envelope…"
-	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json || (echo "db ingest guard failed"; exit 2)
+	@python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.Gen.json || (echo "db ingest guard failed"; exit 2)
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:

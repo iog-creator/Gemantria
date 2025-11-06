@@ -1,0 +1,15 @@
+---
+description: Cursor Bootstrap (Load SSOT → Enforce Contracts)
+alwaysApply: true
+---
+
+# 061 — Cursor Bootstrap (Load SSOT → Enforce Contracts)
+
+Bootstrap procedure for Cursor: (1) Open 000-ssot-index.mdc; (2) Open every file listed there; (3) Confirm Rule-060 node order; (4) Only then propose edits. If any step fails, refuse changes.
+
+## Files
+
+- ".cursor/rules/000-ssot-index.mdc"
+- ".cursor/rules/060-pipeline-sequence.mdc"
+- "src/graph/AGENTS.md"
+- "AGENTS.md"

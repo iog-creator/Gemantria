@@ -9,14 +9,14 @@ and data integrity across the entire pipeline.
 import os
 import sys
 import subprocess
-import json
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from infra.evidence_logger import get_evidence_logger, finalize_all_evidence
+
 
 def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
     """
@@ -30,12 +30,7 @@ def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
         Dict with success status and details
     """
     try:
-        result = subprocess.run(
-            [sys.executable, script_path],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
+        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True, timeout=30)
 
         success = result.returncode == 0
         output = result.stdout.strip()
@@ -46,27 +41,23 @@ def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
         else:
             message = error or output or f"{description} failed"
 
-        return {
-            "success": success,
-            "message": message,
-            "script": script_path,
-            "description": description
-        }
+        return {"success": success, "message": message, "script": script_path, "description": description}
 
     except subprocess.TimeoutExpired:
         return {
             "success": False,
             "message": f"{description} timed out after 30 seconds",
             "script": script_path,
-            "description": description
+            "description": description,
         }
     except Exception as e:
         return {
             "success": False,
-            "message": f"{description} error: {str(e)}",
+            "message": f"{description} error: {e!s}",
             "script": script_path,
-            "description": description
+            "description": description,
         }
+
 
 def main():
     """Run all comprehensive guards."""
@@ -74,10 +65,7 @@ def main():
     evidence = get_evidence_logger("guard_all")
 
     try:
-        evidence.log_evidence("guards_start", {
-            "agent": "guard_all",
-            "purpose": "Comprehensive SSOT validation"
-        })
+        evidence.log_evidence("guards_start", {"agent": "guard_all", "purpose": "Comprehensive SSOT validation"})
 
         # Define all guards to run
         guards = [
@@ -99,7 +87,7 @@ def main():
         for script_path, description in guards:
             print(f"Running: {description}", file=sys.stderr)
 
-            if script_path.endswith('.sql'):
+            if script_path.endswith(".sql"):
                 # SQL-based guard - run via psql
                 result = run_sql_guard(script_path, description)
             else:
@@ -128,7 +116,7 @@ def main():
             "passed": passed,
             "failed": failed,
             "success": success,
-            "guard_results": results
+            "guard_results": results,
         }
 
         if success:
@@ -148,6 +136,7 @@ def main():
     finally:
         finalize_all_evidence()
 
+
 def run_sql_guard(sql_path: str, description: str) -> Dict[str, Any]:
     """
     Run a SQL-based guard script.
@@ -161,33 +150,28 @@ def run_sql_guard(sql_path: str, description: str) -> Dict[str, Any]:
     """
     try:
         # Get DSN from environment
-        dsn = os.environ.get('GEMATRIA_DSN')
+        dsn = os.environ.get("GEMATRIA_DSN")
         if not dsn:
             return {
                 "success": False,
                 "message": "GEMATRIA_DSN not set for SQL guard",
                 "script": sql_path,
-                "description": description
+                "description": description,
             }
 
         # Run psql command
-        result = subprocess.run(
-            ["psql", dsn, "-f", sql_path],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
+        result = subprocess.run(["psql", dsn, "-f", sql_path], capture_output=True, text=True, timeout=30)
 
         # Parse psql output - look for errors or empty_hebrew counts
-        output_lines = result.stdout.strip().split('\n')
+        output_lines = result.stdout.strip().split("\n")
         error_lines = [line for line in output_lines if line.strip()]
 
         if result.returncode == 0:
             # Check if there are any error counts > 0
             has_errors = False
             for line in error_lines:
-                if line.startswith('empty_hebrew'):
-                    parts = line.split('|')
+                if line.startswith("empty_hebrew"):
+                    parts = line.split("|")
                     if len(parts) >= 3:
                         try:
                             count = int(parts[2].strip())
@@ -202,37 +186,38 @@ def run_sql_guard(sql_path: str, description: str) -> Dict[str, Any]:
                     "success": False,
                     "message": f"SQL guard found integrity issues: {'; '.join(error_lines)}",
                     "script": sql_path,
-                    "description": description
+                    "description": description,
                 }
             else:
                 return {
                     "success": True,
                     "message": f"SQL guard passed: {'; '.join(error_lines) if error_lines else 'no issues found'}",
                     "script": sql_path,
-                    "description": description
+                    "description": description,
                 }
         else:
             return {
                 "success": False,
                 "message": f"SQL guard failed: {result.stderr.strip()}",
                 "script": sql_path,
-                "description": description
+                "description": description,
             }
 
     except subprocess.TimeoutExpired:
         return {
             "success": False,
-            "message": f"SQL guard timed out after 30 seconds",
+            "message": "SQL guard timed out after 30 seconds",
             "script": sql_path,
-            "description": description
+            "description": description,
         }
     except Exception as e:
         return {
             "success": False,
-            "message": f"SQL guard error: {str(e)}",
+            "message": f"SQL guard error: {e!s}",
             "script": sql_path,
-            "description": description
+            "description": description,
         }
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(main())
