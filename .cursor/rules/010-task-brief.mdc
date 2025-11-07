@@ -19,9 +19,22 @@ alwaysApply: true
 **Tests/checks**: make models.verify; make models.swap
 **Share sync**: make share.sync
 
+## Automatic Housekeeping Integration
+- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
+- **MANDATORY**: Include `make ssot.verify` in Tests/checks for any database operations
+- **MANDATORY**: Check `share/evidence/` for new hint envelopes after operations
+- **AUTOMATIC**: Validate all referenced .mdc rules exist and are properly formatted
+
 ## Enforcement
 - Always start responses with SHORT BRIEF
 - Keep goals focused and achievable
 - Reference SSOT sources explicitly
 - Include verification steps
 - End with share sync if docs/code changed
+
+## Mandatory Cross-References
+- **Rule 006**: AGENTS.md governance (read before any multi-step task)
+- **Rule 058**: Auto-housekeeping (mandatory after modifications)
+- **Rule 061**: AI learning tracking (emit hints for violations)
+- **docs/SSOT/GPT_SYSTEM_PROMPT.md**: AI operational governance
+- **share/evidence/**: Hint envelope directory for validation
