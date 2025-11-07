@@ -48,13 +48,13 @@ class AILearningTracker:
         self,
         session_id: str,
         interaction_type: str,
-        user_query: str = None,
-        ai_response: str = None,
-        tools_used: List[str] = None,
-        context: Dict = None,
-        execution_time_ms: int = None,
+        user_query: str | None = None,
+        ai_response: str | None = None,
+        tools_used: List[str] | None = None,
+        context: Dict | None = None,
+        execution_time_ms: int | None = None,
         success: bool = True,
-        error_details: str = None,
+        error_details: str | None = None,
     ):
         """Log an AI interaction event."""
         with self.get_connection() as conn:
@@ -96,8 +96,8 @@ class AILearningTracker:
         generation_type: str,
         target_file: str,
         generated_code: str,
-        complexity_score: int = None,
-        context: Dict = None,
+        complexity_score: int | None = None,
+        context: Dict | None = None,
     ):
         """Log a code generation event."""
         with self.get_connection() as conn:
@@ -127,9 +127,9 @@ class AILearningTracker:
         session_id: str,
         feedback_type: str,
         rating: int,
-        feedback_text: str = None,
-        suggestions: str = None,
-        tags: List[str] = None,
+        feedback_text: str | None = None,
+        suggestions: str | None = None,
+        tags: List[str] | None = None,
     ):
         """Log user feedback."""
         with self.get_connection() as conn:
@@ -148,7 +148,7 @@ class AILearningTracker:
                 print(f"✅ Logged {rating}/5 {feedback_type} feedback for session {session_id}")
 
     def log_context_awareness(
-        self, session_id: str, context_type: str, context_data: Dict, relevance_score: float = None
+        self, session_id: str, context_type: str, context_data: Dict, relevance_score: float | None = None
     ):
         """Log context awareness event."""
         with self.get_connection() as conn:
@@ -171,8 +171,8 @@ class AILearningTracker:
         trigger_event: Dict,
         learning_outcome: str,
         confidence_score: float,
-        applied_successfully: bool = None,
-        improvement_metrics: Dict = None,
+        applied_successfully: bool | None = None,
+        improvement_metrics: Dict | None = None,
     ):
         """Log an AI learning event."""
         with self.get_connection() as conn:
@@ -334,7 +334,7 @@ class AILearningTracker:
                     for insight in insights:
                         print(f"  • {insight['title']}: {insight['description'][:100]}...")
 
-    def export_learning_data(self, output_file: str = None):
+    def export_learning_data(self, output_file: str | None = None):
         """Export learning data for analysis."""
         if not output_file:
             output_file = f"ai_learning_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

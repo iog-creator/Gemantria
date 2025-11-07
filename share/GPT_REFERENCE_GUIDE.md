@@ -1,6 +1,6 @@
 # GPT Reference Guide - Gemantria Project Files
 
-This guide explains the 20 essential files available for GPT analysis of the Gemantria project.
+This guide explains the 21 curated files available for GPT analysis of the Gemantria project.
 
 ## Core Project Documentation
 
@@ -10,7 +10,7 @@ This guide explains the 20 essential files available for GPT analysis of the Gem
 
 **MASTER_PLAN.md** - High-level project roadmap and goals. Strategic vision and phase planning.
 
-**RULES_INDEX.md** - Complete index of all project rules. Governance framework with 60+ numbered rules for compliance.
+**RULES_INDEX.md** - Complete index of all project rules. Governance framework with 61+ numbered rules for compliance.
 
 ## Configuration & Setup
 
@@ -63,4 +63,36 @@ This guide explains the 20 essential files available for GPT analysis of the Gem
 
 ## File Limits
 
-This curated set of 20 files stays within GPT's 22-file upload limit while providing comprehensive project understanding.
+This curated set of 21 files stays within GPT's 22-file upload limit while providing comprehensive project understanding.
+
+## GPT System Prompt Requirements
+
+**Session Initialization (MANDATORY):**
+```bash
+cd /home/mccoy/Projects/Gemantria.v2
+source activate_venv.sh
+make ssot.verify
+```
+
+**Validation Checklist:**
+- ✅ Virtual environment active (.venv)
+- ✅ Environment variables loaded
+- ✅ Governance docs present (AGENTS.md, RULES_INDEX.md, GEMATRIA_MASTER_REFERENCE.md)
+- ✅ Quality SSOT verified (ruff checks pass)
+- ✅ Database accessible (PostgreSQL gematria and bible_db)
+- ✅ Share folder curated (21 files under 22-file GPT limit)
+
+**Response Protocol:**
+1. **Goal** — One sentence describing objective
+2. **Commands** — Exact shell commands, top to bottom
+3. **Evidence to return** — Which outputs to paste back
+4. **Next gate** — What happens once evidence returned
+
+**Tool Priority:**
+1. local+gh (git, make, gh pr)
+2. codex (if available, else "Codex disabled (401)")
+3. gemini/mcp (for long docs)
+
+## Governance Reference
+
+**ADR-058**: GPT System Prompt Requirements as Operational Governance - Establishes GPT system prompt requirements as part of the operational governance framework.

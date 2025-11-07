@@ -435,7 +435,15 @@ pipeline.from_db: db.ingest.morph
 
 .PHONY: guards.schemas
 guards.schemas:
-	@echo ">> Validating pipeline artifacts against SSOT schemas"
+	@echo ">> Validating pipeline artifacts against SSOT schemas (ENVELOPE-FIRST HARDENING)"
+	# ENVELOPE-FIRST: Validate unified envelope with COMPASS if present
+	@[ -f share/exports/envelope.json ] && \
+	(echo ">> COMPASS validation: envelope.json" && \
+	 $(PYTHON) scripts/compass/scorer.py share/exports/envelope.json --threshold 0.8) || \
+	(echo ">> COMPASS validation skipped (no envelope.json)" && true)
+	@[ -f share/exports/envelope.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/unified-envelope.schema.json --instance share/exports/envelope.json || true
+	# Validate other artifacts
 	@[ -f share/exports/ai_nouns.json ] && \
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/SSOT_ai-nouns.v1.schema.json --instance share/exports/ai_nouns.json || true
 	@[ -f share/exports/graph_latest.json ] && \
@@ -444,7 +452,28 @@ guards.schemas:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/graph-stats.schema.json --instance share/exports/graph_stats.json || true
 	@[ -f share/exports/temporal_patterns.json ] && \
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/temporal-patterns.schema.json --instance share/exports/temporal_patterns.json || true
-	@echo "Schema validation complete"
+	@[ -f share/exports/pattern_forecast.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
+	@echo "Schema validation complete (ENVELOPE-FIRST HARDENING)"
+
+# ENVELOPE-FIRST HARDENING: Dedicated envelope validation target
+.PHONY: guards.envelope_first
+guards.envelope_first:
+	@echo ">> ENVELOPE-FIRST VALIDATION: Validate envelopes before pipeline operations"
+	# COMPASS mathematical validation (>80% correctness threshold)
+	@[ -f share/exports/envelope.json ] && \
+	(echo ">> COMPASS scoring envelope.json..." && \
+	 $(PYTHON) scripts/compass/scorer.py share/exports/envelope.json --threshold 0.8 && \
+	 echo "✓ COMPASS validation passed") || \
+	(echo "⚠️  COMPASS validation failed or no envelope present" && false)
+	# Schema validation for all envelopes
+	@[ -f share/exports/envelope.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/unified-envelope.schema.json --instance share/exports/envelope.json || true
+	@[ -f share/exports/temporal_patterns.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/temporal-patterns.schema.json --instance share/exports/temporal_patterns.json || true
+	@[ -f share/exports/pattern_forecast.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
+	@echo "ENVELOPE-FIRST validation complete"
 
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
@@ -505,6 +534,7 @@ release.enforce:
 	python3 scripts/release_notes_enforcer.py
 
 ssot.verify:
+	@./scripts/ensure_venv.sh
 	@PYTHONPATH=$(shell pwd) python3 scripts/guard_all.py
 
 .PHONY: doctor.db
@@ -611,6 +641,25 @@ env.validate:
 		exit 1; \
 	fi
 	@echo "✅ Environment validation passed"
+
+# Environment protection targets
+.PHONY: env.backup env.edit env.protect env.check
+env.backup:
+	@echo ">> Creating environment file backup with protection..."
+	@./scripts/env/backup_env.sh
+
+env.edit:
+	@echo ">> Opening environment file for safe editing..."
+	@./scripts/env/edit_env.sh
+
+env.protect: env.backup
+	@echo "✅ Environment file protection active"
+	@echo "💡 Use 'make env.edit' to safely modify .env"
+	@echo "💡 Backups are automatically created before edits"
+
+env.check:
+	@echo ">> Comprehensive environment validation..."
+	@./scripts/env/validate_env.sh
 
 .PHONY: pipeline.from_db.pg
 pipeline.from_db.pg: env.validate

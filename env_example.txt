@@ -107,6 +107,9 @@ DB_DEBUG=false
 DB_POOL_SIZE=5
 DB_MAX_OVERFLOW=10
 
+# Virtual Environment Safety (prevent pip installs outside venv)
+PIP_REQUIRE_VENV=true
+
 # ============================================================================
 # OPTIONAL: ADVANCED SETTINGS
 # ============================================================================

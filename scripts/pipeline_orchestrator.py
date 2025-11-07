@@ -21,18 +21,171 @@ LOG = get_logger("pipeline_orchestrator")
 ensure_env_loaded()
 
 
+def _validate_envelope_first() -> Dict[str, Any]:
+    """
+    ENVELOPE-FIRST HARDENING: Validate any existing envelopes before pipeline operations.
+
+    This implements the envelope-first principle by checking envelope integrity
+    before allowing any downstream processing. Uses COMPASS mathematical validation
+    and schema validation to ensure data quality gates are met.
+
+    Returns:
+        Dict with validation results:
+        {
+            "passed": bool,
+            "errors": List[str],
+            "compass_score": float (optional),
+            "schema_valid": bool (optional)
+        }
+    """
+    validation_result = {
+        "passed": True,
+        "errors": [],
+        "envelopes_checked": [],
+    }
+
+    try:
+        import os
+        from pathlib import Path
+
+        # Check for unified envelope
+        envelope_path = Path("share/exports/envelope.json")
+        if envelope_path.exists():
+            validation_result["envelopes_checked"].append("unified_envelope")
+
+            # Try COMPASS mathematical validation
+            try:
+                from scripts.compass.scorer import score_envelope
+
+                compass_score = score_envelope(str(envelope_path))
+                validation_result["compass_score"] = compass_score
+
+                # COMPASS gate: >80% correctness threshold
+                if compass_score < 0.8:
+                    validation_result["passed"] = False
+                    validation_result["errors"].append(
+                        f"COMPASS validation failed: {compass_score:.1%} < 80% threshold"
+                    )
+
+                log_json(LOG, 20, "compass_validation_complete", score=compass_score)
+
+            except Exception as e:
+                log_json(LOG, 30, "compass_validation_failed", error=str(e))
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"COMPASS validation error: {e}")
+
+            # Try schema validation
+            try:
+                import jsonschema
+
+                schema_path = Path("docs/SSOT/unified-envelope.schema.json")
+                if schema_path.exists():
+                    with open(envelope_path) as f:
+                        envelope_data = json.load(f)
+                    with open(schema_path) as f:
+                        schema = json.load(f)
+
+                    jsonschema.validate(envelope_data, schema)
+                    validation_result["schema_valid"] = True
+                    log_json(LOG, 20, "envelope_schema_validation_passed")
+                else:
+                    validation_result["errors"].append("Envelope schema file not found")
+
+            except jsonschema.ValidationError as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Envelope schema validation failed: {e.message}")
+            except Exception as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Envelope validation error: {e}")
+
+        else:
+            # No envelope exists - this is acceptable for fresh runs
+            log_json(LOG, 20, "no_envelope_present", note="Acceptable for fresh pipeline runs")
+
+        # Check for temporal analysis envelopes
+        temporal_path = Path("share/exports/temporal_patterns.json")
+        if temporal_path.exists():
+            validation_result["envelopes_checked"].append("temporal_patterns")
+
+            try:
+                import jsonschema
+
+                schema_path = Path("docs/SSOT/temporal-patterns.schema.json")
+                if schema_path.exists():
+                    with open(temporal_path) as f:
+                        temporal_data = json.load(f)
+                    with open(schema_path) as f:
+                        schema = json.load(f)
+
+                    jsonschema.validate(temporal_data, schema)
+                    log_json(LOG, 20, "temporal_schema_validation_passed")
+                else:
+                    validation_result["errors"].append("Temporal schema file not found")
+
+            except jsonschema.ValidationError as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Temporal schema validation failed: {e.message}")
+            except Exception as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Temporal validation error: {e}")
+
+        # Check for forecast envelope
+        forecast_path = Path("share/exports/pattern_forecast.json")
+        if forecast_path.exists():
+            validation_result["envelopes_checked"].append("pattern_forecast")
+
+            try:
+                import jsonschema
+
+                schema_path = Path("docs/SSOT/pattern-forecast.schema.json")
+                if schema_path.exists():
+                    with open(forecast_path) as f:
+                        forecast_data = json.load(f)
+                    with open(schema_path) as f:
+                        schema = json.load(f)
+
+                    jsonschema.validate(forecast_data, schema)
+                    log_json(LOG, 20, "forecast_schema_validation_passed")
+                else:
+                    validation_result["errors"].append("Forecast schema file not found")
+
+            except jsonschema.ValidationError as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Forecast schema validation failed: {e.message}")
+            except Exception as e:
+                validation_result["passed"] = False
+                validation_result["errors"].append(f"Forecast validation error: {e}")
+
+        log_json(
+            LOG,
+            20 if validation_result["passed"] else 40,
+            "envelope_first_validation_complete",
+            passed=validation_result["passed"],
+            envelopes_checked=validation_result["envelopes_checked"],
+            error_count=len(validation_result["errors"]),
+        )
+
+    except Exception as e:
+        log_json(LOG, 40, "envelope_first_validation_unexpected_error", error=str(e))
+        validation_result["passed"] = False
+        validation_result["errors"].append(f"Unexpected validation error: {e}")
+
+    return validation_result
+
+
 def run_full_pipeline(
     book: str = "Genesis", mode: str = "START", nouns: List[Dict[str, Any]] | None = None
 ) -> Dict[str, Any]:
     """
-    Run the complete integrated pipeline.
+    Run the complete integrated pipeline with envelope-first hardening.
 
     This orchestrates:
-    1. Noun extraction from Bible database (or use provided nouns)
-    2. Gematria calculation and enrichment
-    3. Semantic network building with embeddings
-    4. Schema validation
-    5. Graph analysis and export
+    1. Envelope-first validation (COMPASS + schema gates)
+    2. Noun extraction from Bible database (or use provided nouns)
+    3. Gematria calculation and enrichment
+    4. Semantic network building with embeddings
+    5. Schema validation
+    6. Graph analysis and export
 
     Args:
         book: The book name to process
@@ -42,6 +195,17 @@ def run_full_pipeline(
     log_json(LOG, 20, "pipeline_orchestrator_start", book=book, mode=mode, nouns_provided=nouns is not None)
 
     try:
+        # ENVELOPE-FIRST HARDENING: Validate any existing envelopes before proceeding
+        envelope_validation = _validate_envelope_first()
+        if not envelope_validation["passed"]:
+            log_json(LOG, 40, "envelope_validation_failed", errors=envelope_validation["errors"])
+            return {
+                "success": False,
+                "book": book,
+                "error": f"Envelope validation failed: {envelope_validation['errors']}",
+                "envelope_validation": envelope_validation,
+            }
+
         from src.graph.graph import run_pipeline
 
         # Run the main pipeline

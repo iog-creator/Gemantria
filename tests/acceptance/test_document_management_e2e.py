@@ -12,12 +12,8 @@ import tempfile
 import subprocess
 from pathlib import Path
 
-
-# Load environment variables
+# Add src to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
-from infra.env_loader import ensure_env_loaded
-
-ensure_env_loaded()
 
 import psycopg
 

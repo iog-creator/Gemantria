@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-07 09:27:41
+Generated: 2025-11-07 10:12:58
 
 ## Active Rules
 
@@ -126,6 +126,7 @@ Generated: 2025-11-07 09:27:41
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
+- ADR-058-gpt-system-prompt-governance: ADR-058: GPT System Prompt Requirements as Operational Governance
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

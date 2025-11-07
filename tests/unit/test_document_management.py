@@ -10,24 +10,20 @@ import sys
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-
-# Load environment variables
+# Add src to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
-from infra.env_loader import ensure_env_loaded
 
-ensure_env_loaded()
-
+from scripts.manage_document_sections import (
+    find_missing_sections,
+    get_document_hierarchy,
+    get_section_stats,
+    suggest_missing_sections,
+)
 from scripts.populate_document_sections import (
-    parse_markdown_sections,
     calculate_content_hash,
     count_words,
     extract_section_content,
-)
-from scripts.manage_document_sections import (
-    get_document_hierarchy,
-    find_missing_sections,
-    get_section_stats,
-    suggest_missing_sections,
+    parse_markdown_sections,
 )
 
 
@@ -171,12 +167,6 @@ class TestDocumentAnalysis:
 
     def test_find_missing_sections(self):
         """Test finding missing required sections."""
-        existing_sections = [
-            {"name": "Introduction"},
-            {"name": "Setup"},
-            {"name": "Usage"},
-        ]
-
         required = ["Introduction", "Setup", "Usage", "Configuration", "Troubleshooting"]
 
         missing = find_missing_sections("test.md", required)
