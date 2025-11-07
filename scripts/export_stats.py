@@ -1191,7 +1191,7 @@ def main():
         print(json.dumps(scrub(stats), indent=2))
 
         # Also write static files for UI consumption
-        out_dir = os.getenv("EXPORT_DIR", "exports")
+        out_dir = os.getenv("EXPORT_DIR", "share/exports")
         os.makedirs(out_dir, exist_ok=True)
 
         # Write stats
