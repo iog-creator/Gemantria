@@ -13,8 +13,16 @@
           "osis": "Ps.30.5"
         },
         {
-          "label": "Isaiah 43:2",
+          "label": "See also Isaiah 43:2",
           "osis": "Isa.43.2"
+        },
+        {
+          "label": "Psalm 30",
+          "osis": "Ps.30"
+        },
+        {
+          "label": "See also Isaiah 43",
+          "osis": "Isa.43"
         }
       ]
     }
@@ -1943,6 +1951,6 @@
     "node_count": 1,
     "edge_count": 274,
     "cluster_count": 0,
-    "export_timestamp": "2025-11-06 11:49:50.067069-08:00"
+    "export_timestamp": "2025-11-06 18:11:32.447425-08:00"
   }
 }
