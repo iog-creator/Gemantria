@@ -1,0 +1,43 @@
+{
+  "schema": "gematria/unified-envelope.v1",
+  "book": "Genesis",
+  "generated_at": "2025-11-07T02:17:35.731790+00:00",
+  "sources": {
+    "ai_nouns": "share/exports/ai_nouns.json",
+    "graph_latest": "share/exports/graph_latest.json",
+    "graph_stats": "share/exports/graph_stats.json",
+    "temporal_patterns": "share/exports/temporal_patterns.json",
+    "pattern_forecast": "share/exports/pattern_forecast.json",
+    "edge_class_counts": "share/exports/edge_class_counts.json",
+    "blend_ssot_report": "share/eval/edges/blend_ssot_report.json"
+  },
+  "ai_nouns": {
+    "nodes": []
+  },
+  "graph": {
+    "nodes": [],
+    "edges": []
+  },
+  "stats": {},
+  "temporal": {
+    "temporal_patterns": {
+      "patterns": [],
+      "metadata": {}
+    },
+    "forecast": {}
+  },
+  "correlation": {
+    "edge_class_counts": {
+      "strong": 0,
+      "weak": 0,
+      "other": 0
+    },
+    "blend_ssot_report": {
+      "pass": null
+    }
+  },
+  "meta": {
+    "pipeline": "langgraph.unified",
+    "run_id": "local"
+  }
+}
