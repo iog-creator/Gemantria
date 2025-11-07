@@ -1,0 +1,15 @@
+{
+  "temporal_patterns": [],
+  "metadata": {
+    "generated_at": "2025-11-07T01:12:16.385879+00:00",
+    "analysis_parameters": {
+      "default_unit": "position",
+      "default_window": 10,
+      "min_series_length": 3
+    },
+    "total_series": 0,
+    "books_analyzed": [
+      "Genesis"
+    ]
+  }
+}

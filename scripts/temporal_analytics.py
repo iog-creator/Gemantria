@@ -9,7 +9,7 @@ capabilities per MASTER_PLAN.md Phase-8 requirements.
 import json
 import os
 import sys
-from datetime import datetime
+import datetime
 from typing import Dict, Any
 
 from src.infra.env_loader import ensure_env_loaded
@@ -19,7 +19,7 @@ ensure_env_loaded()
 
 
 def _iso_now():
-    return datetime.now(datetime.timezone.utc).isoformat()
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
 def _write_json(path, obj):
@@ -274,7 +274,7 @@ def run_phase8_analysis(book: str = "Genesis") -> Dict[str, Any]:
     results = {
         "success": True,
         "book": book,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "temporal_patterns": temporal_patterns,
         "forecast": forecast,
     }

@@ -227,6 +227,7 @@ def main():
     full_parser = subparsers.add_parser("full", help="Run complete workflow")
     full_parser.add_argument("--book", default="Genesis", help="Book to process")
     full_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
+    full_parser.add_argument("--nouns-json", dest="nouns_json", help="Path to nouns JSON file")
     full_parser.add_argument("--skip-analysis", action="store_true", help="Skip analysis step")
 
     args = parser.parse_args()

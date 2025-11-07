@@ -1,5 +1,7 @@
 {
   "schema": "pattern-forecast.v1",
-  "error": "Insufficient data for forecasting (need at least 3 data points)",
-  "forecast_steps": 5
+  "generated_at": "2025-11-07T01:12:16.386002+00:00",
+  "forecast_steps": 5,
+  "notes": "Insufficient data → placeholder forecast (schema not enforced)",
+  "error": "Insufficient data for forecasting (need at least 3 data points)"
 }

@@ -631,17 +631,17 @@ ui.mirror.temporal:
 .PHONY: ui.smoke.temporal
 # Require Phase-8 artifacts first; prevents silent hangs on missing files
 ui.smoke.temporal: phase8.temporal ui.mirror.temporal
-	@set -euo pipefail; python3 - <<'PY'
+	@python3 -c "
 import json, pathlib, sys
-paths = ["ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"]
+paths = ['ui/out/temporal_patterns.json','ui/out/pattern_forecast.json']
 missing = [p for p in paths if not pathlib.Path(p).exists()]
 if missing:
-    print(f"[ui.smoke.temporal] MISSING: {missing}", file=sys.stderr)
+    print(f'[ui.smoke.temporal] MISSING: {missing}', file=sys.stderr)
     sys.exit(2)
 for p in paths:
-    with open(p,"r",encoding="utf-8") as f: json.load(f)
-print("[ui.smoke.temporal] OK")
-PY
+    with open(p,'r',encoding='utf-8') as f: json.load(f)
+print('[ui.smoke.temporal] OK')
+"
 
 .PHONY: ui.build
 ui.build:
