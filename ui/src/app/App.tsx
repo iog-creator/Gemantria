@@ -1,102 +1,20 @@
-// P10-UI-02: File loader + counts panel + minimal graph render
+import React from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import TemporalPage from "../views/TemporalPage";
 
-import React, { useState } from 'react';
-import { EnvelopeStats } from '../components/EnvelopeStats';
-import { FileLoader } from '../components/FileLoader';
-import { GraphRenderer } from '../components/GraphRenderer';
-import MetaPanel from '../components/MetaPanel';
-import MetricsDashboard from '../components/MetricsDashboard';
-import TemporalPage from '../views/TemporalPage';  // New import for temporal view
-import { Envelope } from '../types/envelope';
-
-function App() {
-  const [uploadedEnvelope, setUploadedEnvelope] = useState<Envelope | null>(null);
-  const [activeTab, setActiveTab] = useState<'stats' | 'graph' | 'temporal'>('stats');  // Add 'temporal' to type
-  const [showMetrics, setShowMetrics] = useState(false);  // Dev toggle
-
-  const handleFileLoad = (envelope: Envelope) => {
-    setUploadedEnvelope(envelope);
-  };
-
+export default function App() {
   return (
-    <div className="App" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <header style={{ marginBottom: '30px' }}>
-        <h1>Gemantria Dashboard (P10-UI-02)</h1>
-        <p>Local-only visualization: File loader + enhanced counts panel + minimal graph render</p>
-      </header>
-
-      <FileLoader onFileLoad={handleFileLoad} loading={false} />
-
-      {uploadedEnvelope && (
-        <div style={{ marginTop: '30px', marginBottom: '20px' }}>
-          <button
-            onClick={() => setActiveTab('stats')}
-            style={{
-              padding: '10px 20px',
-              marginRight: '10px',
-              backgroundColor: activeTab === 'stats' ? '#007bff' : '#f8f9fa',
-              color: activeTab === 'stats' ? 'white' : 'black',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Statistics
-          </button>
-          <button
-            onClick={() => setActiveTab('graph')}
-            style={{
-              padding: '10px 20px',
-              marginRight: '10px',
-              backgroundColor: activeTab === 'graph' ? '#007bff' : '#f8f9fa',
-              color: activeTab === 'graph' ? 'white' : 'black',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Graph View
-          </button>
-          <button  // New button for temporal
-            onClick={() => setActiveTab('temporal')}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: activeTab === 'temporal' ? '#007bff' : '#f8f9fa',
-              color: activeTab === 'temporal' ? 'white' : 'black',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Temporal Analytics
-          </button>
-        </div>
-      )}
-
-      {uploadedEnvelope && <MetaPanel meta={uploadedEnvelope.meta} />}  {/* Badge auto-renders */}
-      {showMetrics && <MetricsDashboard />}  {/* Toggle for viz */}
-
-      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <button
-          onClick={() => setShowMetrics(!showMetrics)}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: showMetrics ? '#28a745' : '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          {showMetrics ? 'Hide Metrics (Dev)' : 'Show Metrics (Dev)'}
-        </button>
+    <BrowserRouter>
+      <div className="p-4">
+        <nav className="mb-4 flex gap-4 text-sm">
+          <Link to="/">Home</Link>
+          <Link to="/temporal">Temporal</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<div>Home</div>} />
+          <Route path="/temporal" element={<TemporalPage />} />
+        </Routes>
       </div>
-
-      {activeTab === 'stats' && <EnvelopeStats uploadedEnvelope={uploadedEnvelope} />}
-      {activeTab === 'graph' && <GraphRenderer envelope={uploadedEnvelope} />}
-      {activeTab === 'temporal' && <TemporalPage />}  // New conditional render
-    </div>
+    </BrowserRouter>
   );
 }
-
-export default App;
