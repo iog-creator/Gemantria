@@ -629,16 +629,28 @@ ui.mirror.temporal:
 	@ls -l ui/out | sed -n '1,8p'
 
 .PHONY: ui.smoke.temporal
-ui.smoke.temporal:
-	@python3 - <<'PY'
-	import json, pathlib
-	for p in ("ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"):
-	    path=pathlib.Path(p); assert path.exists(), f"missing {p}"
-	    json.load(open(path,"r",encoding="utf-8"))
-	print("[ui.smoke.temporal] OK")
-	PY
+# Require Phase-8 artifacts first; prevents silent hangs on missing files
+ui.smoke.temporal: phase8.temporal ui.mirror.temporal
+	@set -euo pipefail; python3 - <<'PY'
+import json, pathlib, sys
+paths = ["ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"]
+missing = [p for p in paths if not pathlib.Path(p).exists()]
+if missing:
+    print(f"[ui.smoke.temporal] MISSING: {missing}", file=sys.stderr)
+    sys.exit(2)
+for p in paths:
+    with open(p,"r",encoding="utf-8") as f: json.load(f)
+print("[ui.smoke.temporal] OK")
+PY
 
 .PHONY: ui.build
 ui.build:
 	@[ -d ui ] || { echo "ui/ folder missing"; exit 1; }
 	cd ui && npm ci && npm run build
+
+.PHONY: dev.dummies.temporal
+dev.dummies.temporal:
+	@echo ">> Creating TEMPORARY dev dummies (schema-conformant, for local UI only)"
+	mkdir -p share/exports
+	printf '{\n  "patterns": [],\n  "metadata": {"total_patterns":0,"analyzed_books":["${BOOK:-Genesis}"],"generated_at":"now"}\n}\n' > share/exports/temporal_patterns.json
+	printf '{\n  "schema": "pattern-forecast.v1",\n  "generated_at": "now",\n  "forecast_steps": 0\n}\n' > share/exports/pattern_forecast.json
