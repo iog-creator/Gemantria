@@ -80,13 +80,8 @@ handoff.update:
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
-<<<<<<< HEAD
-housekeeping: share.sync adr.housekeeping handoff.update
-	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + docs + handoff)"
-=======
 housekeeping: share.sync adr.housekeeping governance.housekeeping handoff.update
 	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + governance + handoff)"
->>>>>>> feat/pipeline-phase8-integration
 	@$(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
 	@$(PYTHON) scripts/generate_forest.py
