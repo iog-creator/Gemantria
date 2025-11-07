@@ -2,7 +2,8 @@
 
 import os, json, pathlib, datetime, sys
 BASE = pathlib.Path(".")
-E = BASE / "share" / "exports"
+EXPORTS = BASE / "exports"  # Source: pipeline artifacts
+SHARE_EXPORTS = BASE / "share" / "exports"  # Destination: unified envelope
 V = BASE / "share" / "eval" / "edges"
 
 def load(p):
@@ -16,12 +17,12 @@ def iso_now():
 def main():
     book = os.getenv("BOOK", "Genesis")
     sources = {
-        "ai_nouns": str(E / "ai_nouns.json"),
-        "graph_latest": str(E / "graph_latest.json"),
-        "graph_stats": str(E / "graph_stats.json"),
-        "temporal_patterns": str(E / "temporal_patterns.json"),
-        "pattern_forecast": str(E / "pattern_forecast.json"),
-        "edge_class_counts": str(E / "edge_class_counts.json"),
+        "ai_nouns": str(EXPORTS / "ai_nouns.json"),
+        "graph_latest": str(EXPORTS / "graph_latest.json"),
+        "graph_stats": str(EXPORTS / "graph_stats.json"),
+        "temporal_patterns": str(EXPORTS / "temporal_patterns.json"),
+        "pattern_forecast": str(EXPORTS / "pattern_forecast.json"),
+        "edge_class_counts": str(EXPORTS / "edge_class_counts.json"),
         "blend_ssot_report": str(V / "blend_ssot_report.json")
     }
     # Load (tolerate empty but existing JSONs)
@@ -45,7 +46,7 @@ def main():
         "correlation": {"edge_class_counts": counts, "blend_ssot_report": blend},
         "meta": {"pipeline": "langgraph.unified", "run_id": os.getenv("WORKFLOW_ID","local")}
     }
-    dump(E / "unified_envelope.json", envelope)
+    dump(SHARE_EXPORTS / "unified_envelope.json", envelope)
 
     print("[unified] wrote share/exports/unified_envelope.json")
 
