@@ -102,27 +102,30 @@ See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 
 - UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
 
-## Temporal Analytics (Phase-8)
+## 📊 Temporal Analytics (Phase-8)
 
-**Generate artifacts**
+**Purpose**
+Implements rolling-window and forecast analytics for noun/graph evolution (see `MASTER_PLAN.md`, Phase-8).
 
+**Usage**
 ```bash
 export BOOK=Genesis
 make orchestrator.full BOOK="$BOOK"
 make phase8.temporal
 make guards.schemas
-```
-
-**Mirror to UI and smoke**
-
-```bash
 make ui.mirror.temporal
 make ui.smoke.temporal
-make ui.build   # optional, if the ui/ app is scaffolded
+make ui.build
 ```
+
+**Governance References**
+
+- AGENTS.md §4.1 (UI Agents: Cursor/Frontend)
+- RULES_INDEX.md Rule-050 (OPS Contract), Rule-051 (Response Format), Rule-052 (Tool Priority)
+- MASTER_PLAN.md Phase-8 Temporal → Phase-10 Correlation transition
 
 **Notes**
 
-- Real runs require LM Studio live with models (`christian-bible-expert-v2.0-12b`, `text-embedding-bge-m3`, `qwen.qwen3-reranker-0.6b`).
-- Set `ENFORCE_QWEN_LIVE=0` for dev-only runs without live models.
-- Temporal page is available at `/temporal`.
+- Requires LM Studio live with models `christian-bible-expert-v2.0-12b`, `text-embedding-bge-m3`, `qwen.qwen3-reranker-0.6b`.
+- For dev/testing, set `ENFORCE_QWEN_LIVE=0`.
+- Temporal UI available at `/temporal`.
