@@ -319,7 +319,7 @@ def main():
 
                         graph_file = "exports/graph_latest.json"
                         if os.path.exists(graph_file):
-                            with open(graph_file, "r", encoding="utf-8") as f:
+                            with open(graph_file, encoding="utf-8") as f:
                                 graph_data = json.load(f)
                         else:
                             graph_data = {}

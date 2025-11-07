@@ -3,7 +3,7 @@ import json
 
 
 def _j(p):
-    with open(p, "r", encoding="utf-8") as f:
+    with open(p, encoding="utf-8") as f:
         return json.load(f)
 
 

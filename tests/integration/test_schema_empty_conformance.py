@@ -1,13 +1,10 @@
 import json
-import os
 import pathlib
 
 
 def _j(p):
-    import pathlib
-
     assert pathlib.Path(p).exists(), f"missing {p}"
-    return json.loads(open(p, "r", encoding="utf-8").read())
+    return json.loads(open(p, encoding="utf-8").read())
 
 
 def test_ai_nouns_has_required_fields():

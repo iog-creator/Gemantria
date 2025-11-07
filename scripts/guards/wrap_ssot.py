@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-import json, sys, datetime, os, pathlib
+import json, sys, datetime, pathlib
 
 from typing import Any, Dict
 
 
 def iso_now() -> str:
-    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+    return datetime.datetime.now(datetime.UTC).isoformat()
 
 
 def write_json(p: str, obj: Dict[str, Any]) -> None:
@@ -16,7 +16,7 @@ def write_json(p: str, obj: Dict[str, Any]) -> None:
 
 
 def load_json(p: str) -> Dict[str, Any]:
-    with open(p, "r", encoding="utf-8") as f:
+    with open(p, encoding="utf-8") as f:
         return json.load(f)
 
 
