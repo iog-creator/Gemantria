@@ -1,7 +1,7 @@
 ---
 description: Embedding Consistency CI Checks
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 057 — EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply)

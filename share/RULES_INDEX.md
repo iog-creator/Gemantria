@@ -63,3 +63,4 @@
 | 058 | 058-auto-housekeeping.mdc | # --- |
 | 059 | 059-context-persistence.mdc | # --- |
 | 060 | 060-response-style.mdc | # --- |
+| 061 | 061-ai-learning-tracking.mdc | # --- |

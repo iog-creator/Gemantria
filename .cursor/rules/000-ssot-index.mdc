@@ -14,8 +14,40 @@ alwaysApply: true
 - Qwen Live Gate: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation; otherwise fail-closed. Pipeline must abort unless LM Studio models verified live.
 - Schema/algorithm changes require ADR + tests (+ migrations if DB) in the same PR.
 
-# References
-- RULES_INDEX.md
-- AGENTS.md
-- SHARE_MANIFEST.json
-- Makefile (relevant targets)
+# Rule Index References (for Cursor search/navigation)
+## Core Governance
+- .cursor/rules/050-ops-contract.mdc (execution contract)
+- .cursor/rules/051-cursor-insight.mdc (response format)
+- .cursor/rules/052-tool-priority.mdc (tool selection guidance)
+
+## Database & Data
+- .cursor/rules/001-db-safety.mdc (SQL discipline)
+- .cursor/rules/002-gematria-validation.mdc (Hebrew processing)
+- .cursor/rules/003-graph-and-batch.mdc (batch semantics)
+- .cursor/rules/007-infrastructure.mdc (checkpointer safety)
+- .cursor/rules/037-data-persistence-completeness.mdc (data completeness)
+
+## AI & Learning
+- .cursor/rules/049-gpt5-contract-v5.2.mdc (AI model contracts)
+- .cursor/rules/053-idempotence.mdc (deterministic execution)
+- .cursor/rules/061-ai-learning-tracking.mdc (learning system)
+
+## Tools & Testing
+- .cursor/rules/039-execution-contract.mdc (execution patterns)
+- .cursor/rules/042-formatter-single-source-of-truth.mdc (code formatting)
+- .cursor/rules/046-ci-hermetic-fallbacks.mdc (CI hermeticity)
+
+## Documentation & Sync
+- .cursor/rules/009-documentation-sync.mdc (docs maintenance)
+- .cursor/rules/027-docs-sync-gate.mdc (docs gates)
+- .cursor/rules/055-auto-docs-sync.mdc (auto-sync)
+
+## Visualization & UI
+- .cursor/rules/033-visualization-api-validation.mdc (viz validation)
+- .cursor/rules/056-ui-generation.mdc (UI generation standards)
+
+## Project References
+- RULES_INDEX.md (complete rule catalog)
+- AGENTS.md (agent framework)
+- SHARE_MANIFEST.json (export manifest)
+- Makefile (build targets)

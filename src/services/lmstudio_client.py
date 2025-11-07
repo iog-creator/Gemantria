@@ -75,9 +75,15 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
     """
     Assert that Qwen models are live and functional.
 
+    Implements Rule-011 (Production Safety) - Qwen Live Gate Required.
+    Implements Rule-046 (Hermetic CI Fallbacks) - No outbound inference in CI.
+    Used by src/services/AGENTS.md Qwen Live Gate requirements.
+
     Performs health checks on LM Studio to ensure embedding and reranker models
     are loaded and responding correctly. This is called before any production
     pipeline work to prevent accidental use of mock embeddings.
+
+    Emits LOUD HINTS for Rule-011, Rule-046, and agent requirements.
 
     Args:
         required_models: List of model names that must be available
@@ -87,7 +93,18 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
 
     Raises:
         QwenUnavailableError: If models are not available and mocks not allowed
+
+    Related Rules: Rule-011 (Production Safety), Rule-046 (Hermetic CI Fallbacks)
+    Related Agents: src/services/AGENTS.md Qwen Live Gate Requirements
     """
+    print("🔥🔥🔥 LOUD HINT: Rule-011 (Production Safety) - Qwen Live Gate Required 🔥🔥🔥")
+    print(
+        "🔥🔥🔥 LOUD HINT: Rule-046 (Hermetic CI Fallbacks) - No outbound inference in CI; use deterministic mocks 🔥🔥🔥"
+    )
+    print(
+        "🔥🔥🔥 LOUD HINT: src/services/AGENTS.md - Qwen Live Gate: Must call assert_qwen_live() before network aggregation 🔥🔥🔥"
+    )
+    print("🔥🔥🔥 LOUD HINT: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation 🔥🔥🔥")
     # Check for test-only mock bypass first
     allow_mocks = _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false")
     if allow_mocks:

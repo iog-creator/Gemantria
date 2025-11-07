@@ -1,3 +1,51 @@
+---
+archived_at: 2025-11-06
+archived_by: automated-cleanup
+reason: codebase-maintenance
+status: archived
+---
+
+# Archive Directory
+
+This directory contains files that have been archived from the main codebase during cleanup operations.
+
+## Archived Content Categories
+
+### Debug and Development Files
+- `debug_mcp_cursor.md` - MCP server debugging guide (2025-11-06)
+- `check_mcp_status.py` - MCP status checking script (2025-11-06)
+- `.env.backup` - Environment configuration backup (2025-11-06)
+
+### Temporary Evidence Files
+- `_evidence.*` - Temporary pipeline evidence data (2025-11-06)
+
+### Experimental Code
+- `_quarantine/` - Phase 2 experimental pipeline code (2025-11-06)
+
+### Old Reports and Logs
+- `reports/run_*` - Old pipeline execution reports from 2024 (2025-11-06)
+- `_reports/` - CI triage reports from 2024 (2025-11-06)
+
+### Planning and Documentation
+- `gemantria-cleanup-plan.md` - Previous cleanup analysis (2025-11-06)
+- `Improving the Bible QA RAG System with Advanced Techniques.docx` - Research document (2025-11-06)
+
+### Legacy Files
+- Various files from early development phases (pre-2024)
+
+## Retention Policy
+
+Files in this archive are retained for:
+- Historical reference
+- Debugging past issues
+- Compliance and audit purposes
+
+## Access
+
+These files are not part of the active codebase but may be referenced for historical context.
+
+---
+
 # Archive Directory
 
 This directory contains legacy files and artifacts that have been superseded by current project structure.

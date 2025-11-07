@@ -6,19 +6,28 @@
 
 BEGIN;
 
--- Create concept_correlations view
+-- Create concept_correlations view with conditional joins
 -- Computes cosine similarity between concept embeddings
+-- Supports multiple table naming patterns and optional cluster tables
 CREATE OR REPLACE VIEW concept_correlations AS
 SELECT
     -- Source concept information
     cn1.concept_id AS source,
-    c1.name AS source_name,
-    COALESCE(cc1.cluster_id, -1) AS cluster_source,
+    COALESCE(c1.name, 'concept_'||LEFT(cast(cn1.concept_id AS TEXT), 8)) AS source_name,
+    CASE
+        WHEN cc1.cluster_id IS NOT NULL THEN cc1.cluster_id
+        WHEN EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'concept_clusters') THEN -1
+        ELSE NULL
+    END AS cluster_source,
 
     -- Target concept information
     cn2.concept_id AS target,
-    c2.name AS target_name,
-    COALESCE(cc2.cluster_id, -1) AS cluster_target,
+    COALESCE(c2.name, 'concept_'||LEFT(cast(cn2.concept_id AS TEXT), 8)) AS target_name,
+    CASE
+        WHEN cc2.cluster_id IS NOT NULL THEN cc2.cluster_id
+        WHEN EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'concept_clusters') THEN -1
+        ELSE NULL
+    END AS cluster_target,
 
     -- Similarity analysis
     (cn1.embedding <=> cn2.embedding) AS similarity,
@@ -41,10 +50,17 @@ FROM concept_network cn1
 JOIN concept_network cn2
     ON cn1.id < cn2.id  -- Avoid duplicate pairs and self-correlations
     AND cn1.concept_id != cn2.concept_id  -- Ensure different concepts
-LEFT JOIN concept_clusters cc1 ON cn1.id = cc1.concept_id
-LEFT JOIN concept_clusters cc2 ON cn2.id = cc2.concept_id
-JOIN concepts c1 ON cn1.concept_id = c1.id
-JOIN concepts c2 ON cn2.concept_id = c2.id
+-- Conditional joins for optional tables
+LEFT JOIN concept_clusters cc1 ON EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_name = 'concept_clusters'
+) AND cn1.id = cc1.concept_id
+LEFT JOIN concept_clusters cc2 ON EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_name = 'concept_clusters'
+) AND cn2.id = cc2.concept_id
+LEFT JOIN concepts c1 ON cn1.concept_id = c1.id
+LEFT JOIN concepts c2 ON cn2.concept_id = c2.id
 
 -- Only compute similarities for concepts with embeddings
 WHERE cn1.embedding IS NOT NULL
@@ -60,11 +76,20 @@ Provides cosine similarity scores between concept embeddings with
 statistical significance estimates. Used by export_stats.py for similarity
 analysis and pattern discovery.';
 
--- Create index for performance (optional but recommended for large networks)
+-- Create indexes for performance (conditional on table existence)
 CREATE INDEX IF NOT EXISTS idx_concept_correlations_source
-    ON concept_network(concept_id);
+    ON concept_network(concept_id)
+WHERE EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_name = 'concept_network'
+);
 
-CREATE INDEX IF NOT EXISTS idx_concept_clusters_cluster_id
-    ON concept_clusters(cluster_id);
+-- Only create cluster index if table exists
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'concept_clusters') THEN
+        EXECUTE 'CREATE INDEX IF NOT EXISTS idx_concept_clusters_cluster_id ON concept_clusters(cluster_id)';
+    END IF;
+END$$;
 
 COMMIT;

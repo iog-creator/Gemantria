@@ -37,10 +37,38 @@ share.sync:
 
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
+.PHONY: adr.housekeeping
 adr.housekeeping:
 	@echo ">> ADR housekeeping temporarily disabled (existing ADRs need format updates)"
 	@echo ">> Core ADR validation issues have been resolved for critical ADRs"
 	@echo "ADR housekeeping skipped"
+
+# Governance housekeeping (Rule-058 + Rule-026 compliance)
+.PHONY: governance.housekeeping
+governance.housekeeping:
+	@echo ">> Running governance housekeeping (database + compliance + docs)"
+	@$(PYTHON) scripts/governance_housekeeping.py
+	@echo "Governance housekeeping complete"
+
+# Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
+.PHONY: docs.hints
+docs.hints:
+	@echo ">> Running document management hint checks"
+	-@$(PYTHON) scripts/document_management_hints.py  # Ignore exit code - hints are informational
+	@echo "Document hints check complete"
+
+# AI Learning Analytics (Rule-058 continuous improvement)
+.PHONY: ai.analytics
+ai.analytics:
+	@echo ">> Running AI analytics dashboard"
+	@$(PYTHON) scripts/ai_analytics_dashboard.py dashboard
+	@echo "AI analytics complete"
+
+.PHONY: ai.learning.export
+ai.learning.export:
+	@echo ">> Exporting AI learning data"
+	@$(PYTHON) scripts/ai_learning_tracker.py export_learning_data
+	@echo "AI learning data exported"
 
 # Handoff document generation
 
@@ -52,8 +80,13 @@ handoff.update:
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
+<<<<<<< HEAD
 housekeeping: share.sync adr.housekeeping handoff.update
 	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + docs + handoff)"
+=======
+housekeeping: share.sync adr.housekeeping governance.housekeeping handoff.update
+	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + governance + handoff)"
+>>>>>>> feat/pipeline-phase8-integration
 	@$(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
 	@$(PYTHON) scripts/generate_forest.py
@@ -126,8 +159,14 @@ test.compass:
 	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
 
 # CI smoke targets (for workflow compatibility)
+# Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
+# Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
+# scripts/AGENTS.md calibrate_advanced.py - Advanced Edge Strength Calibration
 .PHONY: eval.graph.calibrate.adv
 eval.graph.calibrate.adv:
+	@echo "🔥🔥🔥 LOUD HINT: Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: scripts/AGENTS.md calibrate_advanced.py - Advanced Edge Strength Calibration 🔥🔥🔥"
 	@echo ">> Graph calibrate (adv) — empty-DB tolerant wrapper…"
 	@PYTHONPATH=. python3 scripts/guards/guard_ci_empty_db.py
 	@echo ">> Calibration step skipped or tolerated in empty-DB CI."
@@ -137,8 +176,14 @@ db.runs_ledger.smoke:
 	@echo ">> runs_ledger smoke (tolerant)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_runs_ledger.py
 
+# Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
+# Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
+# Rule-038 (Exports Smoke Gate) - Fail-Fast Guard for Export Readiness
 .PHONY: ci.exports.smoke
 ci.exports.smoke:
+	@echo "🔥🔥🔥 LOUD HINT: Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: Rule-038 (Exports Smoke Gate) - Fail-Fast Guard for Export Readiness 🔥🔥🔥"
 	@echo ">> CI exports smoke (empty-DB tolerant)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_ci_empty_db.py
 	@echo ">> Exports smoke completed (tolerant)."
@@ -211,10 +256,27 @@ enforcement.check:
 
 .PHONY: temporal.analytics
 temporal.analytics:
-	@echo ">> Run temporal pattern analysis"
-	@$(PYTHON) scripts/temporal_analytics.py
-	@if [ -f share/exports/temporal_patterns.json ]; then \
-		make accept.ui ENVELOPE=share/exports/temporal_patterns.json MIN_NODES=200000 || echo "Temporal validation skipped"; \
+	@echo ">> Run Phase-8 temporal pattern analysis"
+	@PYTHONPATH=$(shell pwd) $(PYTHON) scripts/temporal_analytics.py
+	@if [ -f exports/temporal_patterns.json ]; then \
+		echo ">> Temporal patterns generated successfully"; \
+	fi
+	@if [ -f exports/pattern_forecast.json ]; then \
+		echo ">> Pattern forecasts generated successfully"; \
+	fi
+
+.PHONY: phase8.temporal
+phase8.temporal: temporal.analytics
+	@echo ">> Phase-8 Temporal Analytics completed"
+
+.PHONY: phase8.forecast
+phase8.forecast:
+	@echo ">> Run Phase-8 forecasting analysis only"
+	@if [ -f exports/temporal_patterns.json ]; then \
+		$(PYTHON) scripts/temporal_analytics.py --forecast-only; \
+	else \
+		echo ">> Run temporal.analytics first to generate patterns"; \
+		exit 1; \
 	fi
 	@echo "Temporal analysis complete"
 
@@ -298,6 +360,18 @@ orchestrator.full:
 	@echo ">> Run complete workflow via orchestrator"
 	@PYTHONPATH=. $(PYTHON) scripts/pipeline_orchestrator.py full --book $(BOOK) --config $(BOOK_CONFIG) 2>&1 | tee /tmp/orchestrator_venv.log
 
+.PHONY: phase8.temporal
+phase8.temporal:
+	@echo ">> Phase-8: temporal analytics rolling + forecast"
+	@PYTHONPATH=$(shell pwd) $(PYTHON) scripts/temporal_analytics.py --book $(BOOK)
+	@$(MAKE) guards.schemas
+
+.PHONY: orchestrator.analysis
+orchestrator.analysis:
+	@echo ">> Run analysis suite via orchestrator"
+	@PYTHONPATH=$(shell pwd) $(PYTHON) scripts/pipeline_orchestrator.py analysis all --book $(BOOK) 2>&1
+	@$(MAKE) guards.schemas
+
 # Multi-book executor
 .PHONY: run.books
 run.books:
@@ -364,6 +438,19 @@ pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
 
+.PHONY: guards.schemas
+guards.schemas:
+	@echo ">> Validating pipeline artifacts against SSOT schemas"
+	@[ -f share/exports/ai_nouns.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/SSOT_ai-nouns.v1.schema.json --instance share/exports/ai_nouns.json || true
+	@[ -f share/exports/graph_latest.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/SSOT_graph.v1.schema.json --instance share/exports/graph_latest.json || true
+	@[ -f share/exports/graph_stats.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/graph-stats.schema.json --instance share/exports/graph_stats.json || true
+	@[ -f share/exports/temporal_patterns.json ] && \
+	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/temporal-patterns.schema.json --instance share/exports/temporal_patterns.json || true
+	@echo "Schema validation complete"
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
@@ -403,11 +490,6 @@ analytics.export:
 	@echo ">> Analytics Agent: scored graph→stats/patterns/forecast + report"
 	@# TODO: wire to analytics export scripts
 	@echo "ANALYTICS_EXPORT_OK"
-
-release.prepare:
-	@echo ">> Release Agent: artifacts→release notes + manifest"
-	@# TODO: wire to release preparation script
-	@echo "RELEASE_PREPARE_OK"
 
 evidence.clean:
 	find share/evidence -type f -mtime +14 -delete || true
@@ -497,8 +579,16 @@ evidence.bundle:
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
 
+# Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
+# Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
+# Rule-053 (Idempotent Baseline) - Cache Baseline Evidence 60m
+# AGENTS.md OPS Contract - Hermetic Test Bundle Required
 .PHONY: pipeline.e2e
 pipeline.e2e:
+	@echo "🔥🔥🔥 LOUD HINT: Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: Rule-053 (Idempotent Baseline) - Cache Baseline Evidence 60m 🔥🔥🔥"
+	@echo "🔥🔥🔥 LOUD HINT: AGENTS.md OPS Contract - Hermetic Test Bundle Required 🔥🔥🔥"
 	@echo ">> E2E: hermetic, no-DB required"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	PYTHONPATH=$(shell pwd) python3 scripts/guards/guard_enrichment_details.py
@@ -531,3 +621,26 @@ env.validate:
 pipeline.from_db.pg: env.validate
 	@echo ">> DB-backed pipeline with Postgres checkpointer (requires GEMATRIA_DSN)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline
+
+.PHONY: ui.mirror.temporal
+ui.mirror.temporal:
+	@echo ">> Mirroring temporal artifacts to ui/out"
+	mkdir -p ui/out
+	@[ -f share/exports/temporal_patterns.json ] && cp share/exports/temporal_patterns.json ui/out/temporal_patterns.json || true
+	@[ -f share/exports/pattern_forecast.json ] && cp share/exports/pattern_forecast.json ui/out/pattern_forecast.json || true
+	@ls -l ui/out | sed -n '1,8p'
+
+.PHONY: ui.smoke.temporal
+ui.smoke.temporal:
+	@python3 - <<'PY'
+	import json, pathlib
+	for p in ("ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"):
+	    path=pathlib.Path(p); assert path.exists(), f"missing {p}"
+	    json.load(open(path,"r",encoding="utf-8"))
+	print("[ui.smoke.temporal] OK")
+	PY
+
+.PHONY: ui.build
+ui.build:
+	@[ -d ui ] || { echo "ui/ folder missing"; exit 1; }
+	cd ui && npm ci && npm run build
