@@ -1,6 +1,57 @@
 # ADR-018: Pattern Correlation Engine
 
-Status: Implemented
+## Status
+
+Accepted
+
+## Context
+
+The project needs to identify meaningful relationships between concepts beyond simple co-occurrence. While basic network analysis shows connections, correlation analysis reveals statistically significant patterns in embedding spaces that indicate conceptual relationships. This enables deeper insights into thematic connections and semantic structures within the biblical text.
+
+## Decision
+
+Implement a pattern correlation engine that analyzes relationships between concept embeddings using statistical correlation methods, with both database-optimized and Python fallback implementations.
+
+## Rationale
+
+- **Statistical Rigor**: Correlation analysis provides mathematically grounded relationship detection
+- **Semantic Depth**: Embedding correlations reveal conceptual similarities beyond surface connections
+- **Scalability**: Database implementation for performance, Python fallback for flexibility
+- **Validation**: Statistical significance testing ensures meaningful relationships
+- **Integration**: Seamless integration with existing export and visualization pipelines
+
+## Alternatives Considered
+
+1. **Cosine Similarity Only**: Simple vector similarity without statistical testing
+   - Pros: Simpler implementation, faster computation
+   - Cons: No statistical significance, potentially misleading results
+
+2. **Graph-based Correlations**: Network analysis without embedding correlations
+   - Pros: Works with existing graph structure
+   - Cons: Misses semantic relationships not captured in graph edges
+
+3. **External ML Services**: Cloud-based correlation analysis
+   - Pros: Advanced algorithms, managed infrastructure
+   - Cons: External dependencies, data privacy concerns, cost
+
+## Consequences
+
+### Implementation Requirements
+- Create database view for correlation calculations
+- Implement Python fallback using scipy.stats.pearsonr
+- Add correlation export and reporting functions
+- Integrate with existing pipeline and validation
+
+### Positive Outcomes
+- Enhanced pattern discovery capabilities
+- Statistically validated concept relationships
+- Improved visualization and analysis insights
+- Robust fallback mechanisms for reliability
+
+### Risks and Mitigations
+- **Performance**: Correlation calculations on large datasets (mitigated by database optimization)
+- **Statistical Assumptions**: Pearson correlation assumptions (mitigated by validation and alternatives)
+- **Complexity**: Dual implementation maintenance (mitigated by clear abstraction layers)
 
 ## Related Rules
 

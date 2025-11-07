@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 
 from src.graph.patterns import build_graph, compute_patterns
-from src.infra.db import get_conn
+from src.infra.db import get_gematria_rw
 from src.nodes.network_aggregator import build_relations
 
 
@@ -18,9 +18,8 @@ class TestRelationsAndPatternsIntegration:
     @pytest.fixture
     def db_connection(self):
         """Get database connection for tests."""
-        conn = get_conn()
-        yield conn
-        conn.close()
+        # Return the connection manager object (no explicit close needed)
+        yield get_gematria_rw()
 
     def test_build_relations_disabled(self, db_connection):
         """Test build_relations when relations are disabled."""

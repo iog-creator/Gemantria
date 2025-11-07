@@ -1,11 +1,11 @@
 ---
 description: CI Triage Playbook
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 id: 040_CI_TRIAGE_PLAYBOOK
 version: 1
-alwaysApply: true
+alwaysApply: false
 title: CI Triage Playbook (surgical)
 policy:
   - Minimal fixes only, within current PR scope.

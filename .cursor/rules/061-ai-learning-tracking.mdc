@@ -1,0 +1,59 @@
+---
+description: AI learning and interaction tracking system
+globs:
+  - "migrations/016_create_ai_learning_tracking.sql"
+  - "scripts/ai_learning_tracker.py"
+  - "scripts/ai_session_monitor.py"
+  - "scripts/ai_analytics_dashboard.py"
+  - "docs/AI_LEARNING_SYSTEM.md"
+alwaysApply: false
+---
+
+# Rule 061 — AI Learning Tracking (AlwaysApply: false, but recommended)
+
+**Purpose:** Establish comprehensive AI learning and interaction tracking to enable continuous improvement and personalization.
+
+**Scope:**
+- `migrations/016_create_ai_learning_tracking.sql` - Database schema for AI learning
+- `scripts/ai_learning_tracker.py` - Core learning data management
+- `scripts/ai_session_monitor.py` - Real-time session monitoring
+- `scripts/ai_analytics_dashboard.py` - Performance analytics and insights
+- `docs/AI_LEARNING_SYSTEM.md` - Complete system documentation
+
+**Requirements:**
+
+## Database Schema (016 Migration)
+Must include all required tables:
+- `ai_interactions` - Track all AI-user interactions
+- `tool_usage_analytics` - Tool performance metrics
+- `code_generation_events` - Code generation tracking
+- `user_feedback` - Satisfaction and improvement feedback
+- `learning_events` - AI learning moments
+- `model_performance_metrics` - AI model performance
+- `ai_performance_insights` - Automated insights
+
+## Tracking Functions
+Core functions must exist and work:
+- `log_ai_interaction()` - Log AI interactions
+- `log_user_feedback()` - Record user satisfaction
+- `update_tool_usage()` - Track tool performance
+- `generate_daily_satisfaction_metrics()` - Daily metrics
+
+## Analytics Views
+Required database views:
+- `ai_performance_summary` - Daily performance metrics
+- `tool_effectiveness_ranking` - Tool success rankings
+- `code_generation_quality` - Code generation metrics
+- `learning_insights_summary` - Learning effectiveness
+
+## Integration Requirements
+- Must integrate with `make housekeeping` workflow
+- Must include in `rules_guard.py` validation
+- Must have comprehensive documentation
+- Must maintain data privacy and ethics
+
+**Enforcement:**
+- CI validates AI learning system functionality
+- Rules guard checks for proper schema and functions
+- Housekeeping maintains data integrity
+- Performance alerts for AI system health

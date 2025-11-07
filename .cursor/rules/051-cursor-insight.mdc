@@ -1,6 +1,6 @@
 ---
 description: Cursor Insight & Handoff
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 051 — Cursor Insight & Handoff (AlwaysApply)

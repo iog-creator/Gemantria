@@ -87,7 +87,101 @@ def validate_json_schema(instance_path: Path, schema_path: Path):
         require(False, f"Schema validation failed for {instance_path}: {e}")
 
 
+def validate_hints_governance():
+    """
+    Validate that LOUD HINTS system is properly implemented per Rule-026.
+
+    Checks:
+    - hint.sh exists and emits LOUD HINTS
+    - Key functions have proper Related Rules/Agents in docstrings
+    - Hint emissions are connected to MDC rules
+    - Metadata backing is comprehensive
+    """
+    print("[rules_guard]   Checking hint.sh existence and LOUD format...")
+
+    # Check hint.sh exists and works
+    hint_script = ROOT / "scripts" / "hint.sh"
+    if not hint_script.exists():
+        require(False, "CRITICAL: scripts/hint.sh missing (Rule-026 LOUD HINTS requirement)")
+
+    # Test hint.sh emits LOUD format
+    try:
+        result = subprocess.run([str(hint_script), "test"], capture_output=True, text=True, timeout=5)
+        if "🔥🔥🔥 LOUD HINT:" not in result.stdout:
+            require(False, "CRITICAL: hint.sh not emitting LOUD HINTS format (Rule-026)")
+    except Exception as e:
+        require(False, f"CRITICAL: hint.sh execution failed: {e}")
+
+    print("[rules_guard]   ✓ hint.sh exists and emits LOUD HINTS")
+
+    # Check key functions have governance metadata
+    print("[rules_guard]   Checking function docstrings for governance metadata...")
+
+    governance_functions = [
+        ("src.graph.graph.run_pipeline", ["Related Rules:", "Related Agents:"]),
+        ("src.graph.graph.wrap_hints_node", ["Related Rules:", "Related Agents:"]),
+        ("src.services.lmstudio_client.assert_qwen_live", ["Related Rules:", "Related Agents:"]),
+    ]
+
+    for func_path, required_sections in governance_functions:
+        try:
+            module_path, func_name = func_path.rsplit(".", 1)
+            module = __import__(module_path, fromlist=[func_name])
+            func = getattr(module, func_name)
+            docstring = func.__doc__ or ""
+
+            missing_sections = []
+            for section in required_sections:
+                if section not in docstring:
+                    missing_sections.append(section)
+
+            if missing_sections:
+                require(
+                    False,
+                    f"CRITICAL: {func_path} docstring missing governance sections: {', '.join(missing_sections)} (Rule-026)",
+                )
+
+        except Exception as e:
+            require(False, f"CRITICAL: Failed to validate {func_path} governance metadata: {e}")
+
+    print("[rules_guard]   ✓ Function docstrings include governance metadata")
+
+    # Check hints registry documentation exists
+    print("[rules_guard]   Checking hints registry documentation...")
+    hints_registry = DOCS / "hints_registry.md"
+    if not hints_registry.exists():
+        require(False, "CRITICAL: docs/hints_registry.md missing (Rule-026 documentation requirement)")
+
+    with open(hints_registry) as f:
+        content = f.read()
+        if "METADATA BACKING" not in content:
+            require(False, "CRITICAL: hints_registry.md missing METADATA BACKING section (Rule-026)")
+
+    print("[rules_guard]   ✓ Hints registry documentation complete")
+
+
 def main():
+    """
+    Main entry point for rules enforcement validation.
+
+    Implements Rule-026 (System Enforcement Bridge) - Pre-commit + CI + Branch Protection.
+    Implements Rule-027 (Docs Sync Gate) - Require docs/ADR/SSOT updates for code changes.
+    Implements Rule-058 (Auto-Housekeeping Post-Change) - Run rules_audit.py/share.sync/forest regen.
+
+    Emits LOUD HINTS for Rule-026, Rule-027, Rule-058, and system enforcement requirements.
+
+    Returns:
+        None (exits with appropriate status code)
+
+    Related Rules: Rule-026, Rule-027, Rule-058
+    Related Agents: scripts/rules_guard.py System-level Enforcement
+    """
+    print("🔥🔥🔥 LOUD HINT: Rule-026 (System Enforcement Bridge) - Pre-commit + CI + Branch Protection 🔥🔥🔥")
+    print("🔥🔥🔥 LOUD HINT: Rule-027 (Docs Sync Gate) - Require docs/ADR/SSOT updates for code changes 🔥🔥🔥")
+    print(
+        "🔥🔥🔥 LOUD HINT: Rule-058 (Auto-Housekeeping Post-Change) - Run rules_audit.py/share.sync/forest regen 🔥🔥🔥"
+    )
+    print("🔥🔥🔥 LOUD HINT: scripts/rules_guard.py - System-level enforcement so rules aren't just words 🔥🔥🔥")
     print("[rules_guard] Starting critical validation checks...")
     files = changed_files()
     print(f"[rules_guard] Found {len(files)} changed files")
@@ -217,6 +311,11 @@ def main():
         if "ADR-" not in pr_body:
             require(False, "ADR mention required for infra/data changes (Rule-029).")
     print("[rules_guard] ✓ Critical Check 6 PASSED: ADR mention check complete")
+
+    # CRITICAL CHECK 7: LOUD HINTS governance compliance (Rule-026)
+    print("[rules_guard] Critical Check 7: LOUD HINTS governance compliance")
+    validate_hints_governance()
+    print("[rules_guard] ✓ Critical Check 7 PASSED: LOUD HINTS governance compliant")
 
     print("[rules_guard] ALL CRITICAL CHECKS PASSED - Ready for commit")
 

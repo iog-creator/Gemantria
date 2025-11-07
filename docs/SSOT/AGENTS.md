@@ -77,5 +77,5 @@ The `docs/SSOT/` directory contains Single Source of Truth documents that define
 |----------|--------------|-------------|
 | graph-patterns.schema.json | ADR-016 | Graph pattern analysis specification |
 | temporal-patterns.schema.json | ADR-034 | Temporal pattern analysis framework |
-| pattern-forecast.schema.json | ADR-035 | Forecasting model specifications |
+| pattern-forecast.schema.json | ADR-025 | Forecasting model specifications |
 | webui-contract.md | ADR-022 | Backend-frontend visualization contract |

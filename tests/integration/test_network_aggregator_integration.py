@@ -7,7 +7,13 @@ import unittest
 import uuid
 
 import psycopg
-from pgvector.psycopg import register_vector
+
+# Check if pgvector is available (required for these tests)
+try:
+    from pgvector.psycopg import register_vector
+except ImportError:
+    # If pgvector is not available, tests will fail naturally
+    pass
 
 # Set up mock environment to avoid LM Studio dependencies
 os.environ["LM_STUDIO_MOCK"] = "true"

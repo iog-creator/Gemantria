@@ -1,6 +1,6 @@
 ---
 description: Formatter Single Source of Truth
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 042 — Formatter Single Source of Truth (AlwaysApply)

@@ -10,7 +10,13 @@ import os
 import re
 
 import numpy as np
-import pandas as pd
+
+try:
+    import pandas as pd
+
+    HAS_PANDAS = True
+except ImportError:
+    HAS_PANDAS = False
 from src.graph.patterns import build_graph, compute_patterns
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
@@ -849,6 +855,8 @@ def export_temporal_patterns(db):
     - Writes exports/temporal_patterns.json
     - Validates against temporal-patterns.schema.json
     """
+    if not HAS_PANDAS:
+        raise RuntimeError("pandas not available - cannot perform temporal pattern analysis")
     import statistics  # noqa: E402
 
     patterns = []
@@ -936,6 +944,8 @@ def export_forecast(db):
     - Writes exports/pattern_forecast.json
     - Validates against pattern-forecast.schema.json
     """
+    if not HAS_PANDAS:
+        raise RuntimeError("pandas not available - cannot perform forecasting")
     forecasts = []
     metadata = {
         "generated_at": None,
@@ -1181,7 +1191,7 @@ def main():
         print(json.dumps(scrub(stats), indent=2))
 
         # Also write static files for UI consumption
-        out_dir = os.getenv("EXPORT_DIR", "exports")
+        out_dir = os.getenv("EXPORT_DIR", "share/exports")
         os.makedirs(out_dir, exist_ok=True)
 
         # Write stats

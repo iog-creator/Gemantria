@@ -1,6 +1,6 @@
 ---
 description: Share Manifest Contract
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 044 — Share Manifest Contract (AlwaysApply)

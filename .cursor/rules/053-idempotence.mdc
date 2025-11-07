@@ -1,6 +1,6 @@
 ---
 description: Idempotent Baseline
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 053 — Idempotent Baseline (OPS v6.2.1)

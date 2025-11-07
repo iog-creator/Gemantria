@@ -1,13 +1,16 @@
 {
-  "temporal_patterns": [],
-  "metadata": {
-    "generated_at": "2025-10-23T19:21:02.580105",
-    "analysis_parameters": {
-      "default_unit": "chapter",
-      "default_window": 5,
-      "min_series_length": 10
-    },
-    "total_series": 0,
-    "books_analyzed": []
+  "schema": "temporal-patterns.v1",
+  "analysis_timestamp": "2025-11-07T00:42:26.063600",
+  "window_size": 10,
+  "total_nodes": 0,
+  "rolling_statistics": [],
+  "trends": [],
+  "summary": {
+    "avg_window_gematria": 0,
+    "max_trend_change": 0,
+    "trend_directions": {
+      "increasing": 0,
+      "decreasing": 0
+    }
   }
 }

@@ -33,6 +33,10 @@ class PipelineState(TypedDict):
     # Agent configuration
     use_agents: bool
 
+    # Runtime hints and envelopes
+    hints: List[str]
+    enveloped_hints: Dict[str, Any]
+
 
 class Graph(TypedDict):
     """Graph structure for analysis."""

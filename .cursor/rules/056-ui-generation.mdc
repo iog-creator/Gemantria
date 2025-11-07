@@ -1,15 +1,13 @@
 ---
 description: UI Generation Standard
-alwaysApply: true
-globs: 
+alwaysApply: false
+globs:
   - "ui/**"
   - "webui/**"
 ---
 id: 056
 
 name: UI Generation Standard
-
-alwaysApply: true
 
 scope:
   paths:

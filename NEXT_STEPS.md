@@ -1,3 +1,4 @@
+<!-- Handoff updated: 2025-11-06T16:42:48.077160 -->
 # NEXT_STEPS v6.2.3 (Governance + CI + Guards Hardened)
 
 ## Status

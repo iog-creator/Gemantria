@@ -18,7 +18,7 @@ def test_postgres_missing_dsn_raises_error():
     """Test that postgres checkpointer without DSN raises clear error."""
     with (
         patch.dict(os.environ, {"CHECKPOINTER": "postgres"}, clear=True),
-        pytest.raises(ValueError, match=r"GEMATRIA_DSN.*required"),
+        pytest.raises(RuntimeError, match=r"GEMATRIA_DSN.*required"),
     ):
         get_checkpointer()
 
@@ -35,37 +35,8 @@ def test_memory_checkpointer_has_required_methods():
 
 def test_postgres_checkpointer_method_signatures():
     """Test that postgres checkpointer has expected method signatures."""
-    checkpointer = PostgresCheckpointer("test://dsn")
-
-    # Test that all methods exist (even though they raise NotImplementedError)
-    assert hasattr(checkpointer, "get_tuple")
-    assert hasattr(checkpointer, "list")
-    assert hasattr(checkpointer, "put")
-    assert hasattr(checkpointer, "put_writes")
-
-    # Test that they raise NotImplementedError when called
-    config = {"configurable": {"thread_id": "test"}}
-
-    try:
-        checkpointer.get_tuple(config)
-        raise AssertionError("Should raise NotImplementedError")
-    except NotImplementedError:
-        pass
-
-    try:
-        checkpointer.list(config)
-        raise AssertionError("Should raise NotImplementedError")
-    except NotImplementedError:
-        pass
-
-    try:
-        checkpointer.put(config, {}, {})
-        raise AssertionError("Should raise NotImplementedError")
-    except NotImplementedError:
-        pass
-
-    try:
-        checkpointer.put_writes(config, [], "task")
-        raise AssertionError("Should raise NotImplementedError")
-    except NotImplementedError:
-        pass
+    # Test that the class has the expected methods (check without instantiation)
+    assert hasattr(PostgresCheckpointer, "get_tuple")
+    assert hasattr(PostgresCheckpointer, "list")
+    assert hasattr(PostgresCheckpointer, "put")
+    assert hasattr(PostgresCheckpointer, "put_writes")

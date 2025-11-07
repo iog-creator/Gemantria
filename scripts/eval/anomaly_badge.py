@@ -18,8 +18,26 @@ OUT = BADGES / "anomaly.svg"
 
 
 def emit_hint(msg: str) -> None:
-    """Emit a standardized hint for CI visibility."""
-    print(f"HINT: {msg}")
+    """
+    Emit a standardized hint for CI visibility.
+
+    Uses scripts/hint.sh for LOUD HINT emission per Rule-026 (System Enforcement Bridge).
+    Related to scripts/AGENTS.md anomaly_badge.py - Edge Anomaly Visualization Badge.
+
+    Args:
+        msg: Hint message to emit
+
+    Related Rules: Rule-026 (System Enforcement Bridge)
+    Related Agents: scripts/AGENTS.md anomaly_badge.py
+    """
+    import subprocess
+    import os
+
+    hint_script = os.path.join(os.path.dirname(__file__), "..", "hint.sh")
+    if os.path.exists(hint_script) and os.access(hint_script, os.X_OK):
+        subprocess.run([hint_script, msg], check=False)
+    else:
+        print(f"HINT: {msg}")
 
 
 def badge(count: int) -> str:

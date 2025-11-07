@@ -1,6 +1,6 @@
 ---
 description: Reuse-First, No-Scaffold-When-Exists
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)

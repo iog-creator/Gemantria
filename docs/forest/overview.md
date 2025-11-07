@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-06 14:28:59
+Generated: 2025-11-06 16:42:48
 
 ## Active Rules
 
@@ -65,6 +65,7 @@ Generated: 2025-11-06 14:28:59
 - Rule 058-auto-housekeeping: ---
 - Rule 059-context-persistence: ---
 - Rule 060-response-style: ---
+- Rule 061-ai-learning-tracking: ---
 
 ## CI Workflows
 
@@ -121,10 +122,10 @@ Generated: 2025-11-06 14:28:59
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
 - ADR-032-bibledb-as-SSOT-roadmap: ADR-032: bible_db as Single Source of Truth (Roadmap)
 - ADR-033-ai-nouns-ssot-contract: ADR-033: AI Nouns SSOT Contract (v1)
+- ADR-034-uuid-key-evolution: ADR-034: UUID Key Evolution and FK Realignment
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
-- ADR-xxxx-uuid-key-evolution: ADR: UUID Key Evolution and FK Realignment
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

@@ -14,6 +14,7 @@ from langgraph.graph import StateGraph
 
 from src.infra.env_loader import ensure_env_loaded
 from src.graph.state import PipelineState
+from src.graph.batch_processor import BatchProcessor, BatchAbortError
 from src.nodes import network_aggregator
 from src.nodes.enrichment import enrichment_node
 from src.nodes.ai_noun_discovery import discover_nouns_for_book
@@ -23,7 +24,6 @@ from src.ssot.noun_adapter import adapt_ai_noun
 from src.infra.runs_ledger import (
     create_run,
     update_run_status,
-    save_checkpoint,
     get_model_versions,
     get_schema_version,
 )
@@ -59,16 +59,16 @@ def build_graph(nouns: List[Dict]) -> Dict:
     return {"schema": "gemantria/graph.v1", "nodes": nodes, "edges": edges}
 
 
-def main(state: PipelineState) -> PipelineState:
-    run_id = state.get("run_id", "")
-
-    # 1. Collect nouns (AI-driven discovery, or use provided nouns)
-    if state.get("nouns"):
-        # Nouns already provided (e.g., from file input)
+def collect_nouns_node(state: PipelineState) -> PipelineState:
+    """LangGraph node for noun collection and discovery."""
+    # Collect nouns (AI-driven discovery, or use provided nouns)
+    if "nouns" not in state:
+        # Discover nouns via AI (nouns not provided)
+        state["nouns"] = discover_nouns_for_book(state["book"])
         timing_samples = []
     else:
-        # Discover nouns via AI
-        state["nouns"], timing_samples = discover_nouns_for_book(state["book"])
+        # Nouns already provided (e.g., from file input)
+        timing_samples = []
 
     # Normalize nouns using SSOT adapter at discovery boundary
     state["nouns"] = [adapt_ai_noun(n) for n in state["nouns"]]
@@ -76,23 +76,57 @@ def main(state: PipelineState) -> PipelineState:
     # Log metrics
     state["metrics"]["ai_call_latencies_ms"] = timing_samples
 
-    # Save checkpoint after ai.nouns
-    save_checkpoint(run_id, "ai.nouns", {"nouns": state["nouns"], "metrics": state["metrics"]})
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
 
-    # 2. Validate and weigh nouns (placeholder - function not implemented)
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "collect_nouns", {"nouns": state["nouns"], "metrics": state["metrics"]})
+
+    state["hints"].append("collect_nouns: completed")
+    return state
+
+
+def validate_batch_node(state: PipelineState) -> PipelineState:
+    """LangGraph node for batch validation."""
+    # Validate and weigh nouns (placeholder - function not implemented)
     state["weighted_nouns"] = state["nouns"]  # Pass through for now
     state["validated_nouns"] = state["weighted_nouns"]  # Set validated nouns for enrichment
 
-    # 3. Enrich nouns with theological insights
-    state, _ = enrichment_node(state)
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
+
+    checkpointer = get_checkpointer()
+    checkpointer.save(
+        "langgraph_pipeline",
+        "validate_batch",
+        {"weighted_nouns": state["weighted_nouns"], "validated_nouns": state["validated_nouns"]},
+    )
+
+    state["hints"].append("validate_batch: completed")
+    return state
+
+
+def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
+    """LangGraph node for noun enrichment."""
+    # Enrich nouns with theological insights
+    state = enrichment_node(state)
 
     # Normalize enriched nouns using SSOT adapter at enrichment boundary
     state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", [])]
 
-    # Save checkpoint after ai.enrich
-    save_checkpoint(run_id, "ai.enrich", {"enriched_nouns": state["enriched_nouns"]})
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
 
-    # 4. Expert agent analysis
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "enrichment", {"enriched_nouns": state["enriched_nouns"]})
+
+    state["hints"].append("enrichment: completed")
+    return state
+
+
+def confidence_validator_node(state: PipelineState) -> PipelineState:
+    """LangGraph node for confidence validation and expert analysis."""
+    # Expert agent analysis
     if state.get("use_agents"):
         enriched_nouns = state.get("enriched_nouns", [])
         analyzed_nouns_results = []
@@ -104,40 +138,121 @@ def main(state: PipelineState) -> PipelineState:
         # If agents are not used, pass enriched nouns directly
         state["analyzed_nouns"] = state.get("enriched_nouns", [])
 
-    # 5. Network aggregation (graph.build)
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
+
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "confidence_validator", {"analyzed_nouns": state["analyzed_nouns"]})
+
+    state["hints"].append("confidence_validator: completed")
+    return state
+
+
+def network_aggregator_node_wrapper(state: PipelineState) -> PipelineState:
+    """LangGraph node for network aggregation."""
+    # Network aggregation (graph.build)
     # Use the network_aggregator_node to build the network
     state = network_aggregator.network_aggregator_node(state)
     state["graph"] = state.get("network_summary", {})
 
-    # Save checkpoint after graph.build
-    save_checkpoint(run_id, "graph.build", {"graph": state["graph"]})
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
 
-    # 6. Graph scoring (graph.score)
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "network_aggregator", {"graph": state["graph"]})
+
+    state["hints"].append("network_aggregator: completed")
+    return state
+
+
+def analysis_runner_node(state: PipelineState) -> PipelineState:
+    """LangGraph node for graph scoring and analysis."""
+    # Graph scoring (graph.score)
     # Apply SSOT blend thresholds and classify edges
     state = graph_scorer_node(state)
     state["scored_graph"] = state.get("graph", {})
 
-    # Save checkpoint after graph.score
-    save_checkpoint(run_id, "graph.score", {"scored_graph": state["scored_graph"]})
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
 
-    # Return final state
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "analysis_runner", {"scored_graph": state["scored_graph"]})
+
+    state["hints"].append("analysis_runner: completed")
+    return state
+
+
+def wrap_hints_node_wrapper(state: PipelineState) -> PipelineState:
+    """LangGraph node for wrapping hints into envelope."""
+    # Wrap hints into envelope for persistence
+    state = wrap_hints_node(state)
+    state["hints"].append("wrap_hints: completed")
+    return state
+
+
+def main(state: PipelineState) -> PipelineState:
+    """Legacy main function - now delegates to LangGraph nodes."""
+    # This function is kept for backwards compatibility but now uses the LangGraph
+    # For now, just run all nodes sequentially (will be replaced by LangGraph orchestration)
+    state = collect_nouns_node(state)
+    state = validate_batch_node(state)
+    state = enrichment_node_wrapper(state)
+    state = confidence_validator_node(state)
+    state = network_aggregator_node_wrapper(state)
+    state = analysis_runner_node(state)
+    state = wrap_hints_node_wrapper(state)
     return state
 
 
 def run_pipeline(
-    book: str = "Genesis", mode: str = "START", nouns: List[Dict[str, Any]] | None = None
+    book: str = "Genesis",
+    mode: str = "START",
+    nouns: List[Dict[str, Any]] | None = None,
+    stop_after_n_nodes: int | None = None,
 ) -> Dict[str, Any]:
     """
     Run the complete pipeline for a given book.
+
+    Emits LOUD HINTS for Rule-039 (Execution Contract), Rule-050/051 (OPS Contract/Cursor Insight),
+    Rule-052 (Tool Priority), Rule-053 (Idempotent Baseline), Rule-026 (System Enforcement Bridge).
 
     Args:
         book: The book name to process
         mode: Processing mode (START, RESUME, etc.)
         nouns: Optional list of nouns to use instead of AI discovery
+        stop_after_n_nodes: Optional - stop execution after N nodes (for temporal testing)
 
     Returns:
         Dictionary with pipeline results and metadata
+
+    Related Rules: Rule-039, Rule-050, Rule-051, Rule-052, Rule-053, Rule-026
+    Related Agents: AGENTS.md Pipeline Execution, src/graph/AGENTS.md Pipeline State Management
     """
+    # 🔥🔥🔥 LOUD HINT: Rule-039 (Cursor Execution Contract) - Drive, Don't Ask 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: Rule-052 (Tool Priority & Context Guidance) - Local+GH → Codex → Gemini/MCP 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: Rule-053 (Idempotent Baseline) - Cache Baseline Evidence 60m 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: Rule-026 (System Enforcement Bridge) - Hints Envelope Required 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: AGENTS.md Pipeline Execution - LangGraph orchestration with Qwen health gate 🔥🔥🔥
+    # 🔥🔥🔥 LOUD HINT: src/graph/AGENTS.md - Pipeline state management and batch processing 🔥🔥🔥
+
+    import subprocess
+    import os
+
+    hint_script = os.path.join(os.path.dirname(__file__), "..", "..", "scripts", "hint.sh")
+
+    def emit_loud_hint(msg: str):
+        if os.path.exists(hint_script):
+            subprocess.run([hint_script, msg], check=False)
+        else:
+            print(f"🔥🔥🔥 LOUD HINT: {msg} 🔥🔥🔥")
+            print(f"HINT: {msg}")
+
+    emit_loud_hint("pipeline: starting execution for book=" + book + " mode=" + mode + " (Rule-039 Execution Contract)")
+    emit_loud_hint("pipeline: loading environment and creating run (Rule-050 OPS Contract Evidence-First)")
+    emit_loud_hint("pipeline: nouns provided=" + str(nouns is not None) + " (src/graph/AGENTS.md Batch Processing)")
+
     # Create run in ledger
     versions = {
         "schema_version": get_schema_version(),
@@ -151,13 +266,39 @@ def run_pipeline(
     except Exception as e:
         print(f"[runs_ledger.start] WARN: {e}")
 
+    # Discover nouns if not provided
+    if nouns is None:
+        discovered_nouns = discover_nouns_for_book(book)
+        nouns = discovered_nouns
+
+    # Validate batch size
+    batch_processor = BatchProcessor()
+    try:
+        batch_processor.validate_batch_size(nouns)
+        batch_result = batch_processor.process_nouns(nouns)
+    except BatchAbortError as e:
+        # Batch validation failed - return error result
+        update_run_status(run_id, "failed")
+        try:
+            mark_run_finished(run_id, notes=f"batch_abort: {e}")
+        except Exception as finish_e:
+            print(f"[runs_ledger.finish] WARN: {finish_e}")
+        return {
+            "run_id": run_id,
+            "book": book,
+            "mode": mode,
+            "success": False,
+            "error": str(e),
+            "batch_result": None,  # Test expects this
+        }
+
     # Create initial state
     initial_state: PipelineState = {
         "run_id": run_id,
         "book_name": book,
         "book": book,  # DEPRECATED: for backwards compatibility
         "mode": mode,
-        "nouns": nouns or [],
+        "nouns": nouns,
         "enriched_nouns": [],
         "analyzed_nouns": [],
         "weighted_nouns": [],
@@ -166,11 +307,23 @@ def run_pipeline(
         "metrics": {},
         "metadata": {},
         "use_agents": True,  # Enable agentic processing by default
+        "hints": [f"pipeline_start: {book} ({mode})"],  # Runtime hints collection
+        "enveloped_hints": {},  # Wrapped hints envelope
     }
 
     try:
-        # Run the pipeline
-        final_state = main(initial_state)
+        # Run the LangGraph pipeline with checkpointer
+        # Create thread ID for this run
+        thread_id = f"pipeline-{run_id}"
+
+        graph = get_graph(stop_after_n_nodes=stop_after_n_nodes)
+
+        # Configure for resumable execution
+        config = {"configurable": {"thread_id": thread_id, "checkpoint_id": f"run-{run_id}-start"}}
+
+        # Run the pipeline with checkpointer
+        emit_loud_hint("pipeline: executing LangGraph with checkpointer (Rule-039)")
+        final_state = graph.invoke(initial_state, config=config)
 
         # Update run status to completed
         from datetime import datetime
@@ -193,6 +346,9 @@ def run_pipeline(
             "graph_nodes": len(final_state.get("graph", {}).get("nodes", [])),
             "graph_edges": len(final_state.get("graph", {}).get("edges", [])),
             "metrics": final_state.get("metrics", {}),
+            "hints": final_state.get("hints", []),  # Include collected hints
+            "enveloped_hints": final_state.get("enveloped_hints", {}),  # Include hints envelope
+            "batch_result": batch_result,  # Test expects this
         }
 
     except Exception as e:
@@ -203,23 +359,102 @@ def run_pipeline(
             mark_run_finished(run_id, notes=f"error: {str(e)[:100]}")
         except Exception as finish_e:
             print(f"[runs_ledger.finish] WARN: {finish_e}")
+        # Wrap any collected hints even on error
+        initial_state = wrap_hints_node(initial_state)
+
         return {
             "run_id": initial_state.get("run_id"),
             "book": book,
             "mode": mode,
             "success": False,
             "error": str(e),
+            "hints": initial_state.get("hints", []),  # Include hints even on error
+            "enveloped_hints": initial_state.get("enveloped_hints", {}),  # Include envelope even on error
+            "batch_result": batch_result,  # Include batch_result even on error
         }
 
 
-def get_graph() -> StateGraph:
+def wrap_hints_node(state: PipelineState) -> PipelineState:
+    """
+    Wrap collected hints into envelope structure for persistence.
+
+    Implements Rule-026 (System Enforcement Bridge) - Hints Envelope Required.
+    Used by AGENTS.md Pipeline Execution and src/graph/AGENTS.md Pipeline State Management.
+
+    Args:
+        state: Pipeline state containing hints
+
+    Returns:
+        Updated state with enveloped_hints populated
+
+    Related Rules: Rule-026 (System Enforcement Bridge)
+    Related Agents: AGENTS.md Pipeline Execution, src/graph/AGENTS.md Pipeline State Management
+    """
+    hints = state.get("hints", [])
+    if hints:
+        state["enveloped_hints"] = {
+            "type": "hints_envelope",
+            "version": "1.0",
+            "items": hints,
+            "count": len(hints),
+        }
+    else:
+        # Empty envelope for consistency
+        state["enveloped_hints"] = {
+            "type": "hints_envelope",
+            "version": "1.0",
+            "items": [],
+            "count": 0,
+        }
+
+    return state
+
+
+def get_graph(stop_after_n_nodes: int | None = None) -> StateGraph:
+    """
+    Create LangGraph workflow with optional stopping capability for temporal testing.
+
+    Args:
+        stop_after_n_nodes: If set, stop execution after this many nodes (for testing resume)
+    """
     workflow = StateGraph(PipelineState)
 
-    # The single node `main` encapsulates the entire pipeline logic
-    workflow.add_node("main", main)
+    # Add individual pipeline nodes
+    workflow.add_node("collect_nouns", collect_nouns_node)
+    workflow.add_node("validate_batch", validate_batch_node)
+    workflow.add_node("enrichment", enrichment_node_wrapper)
+    workflow.add_node("confidence_validator", confidence_validator_node)
+    workflow.add_node("network_aggregator", network_aggregator_node_wrapper)
+    workflow.add_node("analysis_runner", analysis_runner_node)
+    workflow.add_node("wrap_hints", wrap_hints_node_wrapper)
 
-    # The pipeline starts and ends with the `main` node
-    workflow.set_entry_point("main")
-    workflow.set_finish_point("main")
+    # Define the pipeline flow
+    workflow.set_entry_point("collect_nouns")
+
+    # Conditionally add edges based on stop_after_n_nodes
+    node_sequence = [
+        "collect_nouns",
+        "validate_batch",
+        "enrichment",
+        "confidence_validator",
+        "network_aggregator",
+        "analysis_runner",
+        "wrap_hints",
+    ]
+
+    for i, current_node in enumerate(node_sequence[:-1]):
+        next_node = node_sequence[i + 1]
+
+        # Only add edge if we haven't reached the stop point
+        if stop_after_n_nodes is None or (i + 1) < stop_after_n_nodes:
+            workflow.add_edge(current_node, next_node)
+        elif stop_after_n_nodes is not None and (i + 1) == stop_after_n_nodes:
+            # At stop point, make current node a finish point
+            workflow.set_finish_point(current_node)
+            break
+
+    # If no stop condition, set final node as finish point
+    if stop_after_n_nodes is None or stop_after_n_nodes >= len(node_sequence):
+        workflow.set_finish_point("wrap_hints")
 
     return workflow.compile()

@@ -6,11 +6,12 @@ import { FileLoader } from '../components/FileLoader';
 import { GraphRenderer } from '../components/GraphRenderer';
 import MetaPanel from '../components/MetaPanel';
 import MetricsDashboard from '../components/MetricsDashboard';
+import TemporalPage from '../views/TemporalPage';  // New import for temporal view
 import { Envelope } from '../types/envelope';
 
 function App() {
   const [uploadedEnvelope, setUploadedEnvelope] = useState<Envelope | null>(null);
-  const [activeTab, setActiveTab] = useState<'stats' | 'graph'>('stats');
+  const [activeTab, setActiveTab] = useState<'stats' | 'graph' | 'temporal'>('stats');  // Add 'temporal' to type
   const [showMetrics, setShowMetrics] = useState(false);  // Dev toggle
 
   const handleFileLoad = (envelope: Envelope) => {
@@ -46,6 +47,7 @@ function App() {
             onClick={() => setActiveTab('graph')}
             style={{
               padding: '10px 20px',
+              marginRight: '10px',
               backgroundColor: activeTab === 'graph' ? '#007bff' : '#f8f9fa',
               color: activeTab === 'graph' ? 'white' : 'black',
               border: '1px solid #ddd',
@@ -54,6 +56,19 @@ function App() {
             }}
           >
             Graph View
+          </button>
+          <button  // New button for temporal
+            onClick={() => setActiveTab('temporal')}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: activeTab === 'temporal' ? '#007bff' : '#f8f9fa',
+              color: activeTab === 'temporal' ? 'white' : 'black',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Temporal Analytics
           </button>
         </div>
       )}
@@ -79,6 +94,7 @@ function App() {
 
       {activeTab === 'stats' && <EnvelopeStats uploadedEnvelope={uploadedEnvelope} />}
       {activeTab === 'graph' && <GraphRenderer envelope={uploadedEnvelope} />}
+      {activeTab === 'temporal' && <TemporalPage />}  // New conditional render
     </div>
   );
 }

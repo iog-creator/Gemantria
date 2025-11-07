@@ -1,6 +1,6 @@
 ---
 description: Rerank Blend is SSOT
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 045 — Rerank Blend is SSOT (AlwaysApply)

@@ -1,6 +1,6 @@
 ---
 description: Context Persistence
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 059 — Context Persistence (AlwaysApply)

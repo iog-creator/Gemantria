@@ -100,7 +100,7 @@ Replace the problematic reranker implementation with a **bi-encoder proxy** that
 - **ADR-010**: Qwen Integration - Original reranker implementation
 - **ADR-014**: Relations and Pattern Discovery - Relationship building logic
 - **ADR-015**: JSON-LD and Visualization - Network export format
-- **ADR-037**: [Future] Native LM Studio Rerank API Migration
+- **[Future ADR]**: Native LM Studio Rerank API Migration
 
 ## Notes
 

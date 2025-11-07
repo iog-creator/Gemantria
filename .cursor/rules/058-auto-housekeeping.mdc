@@ -8,7 +8,7 @@ globs:
   - "docs/**"
   - "AGENTS.md"
   - ".cursor/rules/**"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)

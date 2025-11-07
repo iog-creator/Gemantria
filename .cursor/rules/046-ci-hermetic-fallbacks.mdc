@@ -1,6 +1,6 @@
 ---
 description: Hermetic CI Fallbacks
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 046 — Hermetic CI Fallbacks (AlwaysApply)
