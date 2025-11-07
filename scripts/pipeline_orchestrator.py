@@ -280,19 +280,60 @@ def main():
             if not pipeline_result["success"]:
                 result = {"success": False, "error": "Pipeline failed", "stage": "pipeline"}
             else:
+                # Wrap raw exports to SSOT if raw files exist (assume run_pipeline writes raw)
+                import subprocess
+
+                book = args.book
+                if os.path.exists("exports/ai_nouns.raw.json"):
+                    subprocess.check_call(
+                        [
+                            "python3",
+                            "scripts/guards/wrap_ssot.py",
+                            "ai-nouns",
+                            "exports/ai_nouns.raw.json",
+                            "share/exports/ai_nouns.json",
+                            book,
+                        ]
+                    )
+                if os.path.exists("exports/graph_latest.raw.json"):
+                    subprocess.check_call(
+                        [
+                            "python3",
+                            "scripts/guards/wrap_ssot.py",
+                            "graph",
+                            "exports/graph_latest.raw.json",
+                            "share/exports/graph_latest.json",
+                            book,
+                        ]
+                    )
+
                 # 2. Run analysis (unless skipped)
                 if not args.skip_analysis:
                     analysis_result = run_analysis("all")
                     if not analysis_result["success"]:
                         result = {"success": False, "error": "Analysis failed", "stage": "analysis"}
                     else:
-                        # 3. NEW: Phase-8 temporal analytics (rolling windows + forecast)
+                        # 3. Phase-8 temporal analytics (rolling windows + forecast)
                         print("[phase8] running temporal analytics...")
+                        import json
+
+                        graph_file = "exports/graph_latest.json"
+                        if os.path.exists(graph_file):
+                            with open(graph_file, "r", encoding="utf-8") as f:
+                                graph_data = json.load(f)
+                        else:
+                            graph_data = {}
                         from scripts.temporal_analytics import analyze_temporal_patterns, generate_forecast
-                        tp = analyze_temporal_patterns()   # emits share/exports/temporal_patterns.json
-                        fc = generate_forecast(tp)         # emits share/exports/pattern_forecast.json
+
+                        tp = analyze_temporal_patterns(graph_data)
+                        fc = generate_forecast(tp)
                         print("[phase8] temporal analytics complete")
-                        result = {"success": True, "pipeline": pipeline_result, "analysis": analysis_result, "temporal": {"patterns": tp, "forecast": fc}}
+                        result = {
+                            "success": True,
+                            "pipeline": pipeline_result,
+                            "analysis": analysis_result,
+                            "temporal": {"patterns": tp, "forecast": fc},
+                        }
                 else:
                     result = {"success": True, "pipeline": pipeline_result}
 

@@ -18,19 +18,29 @@ from src.infra.env_loader import ensure_env_loaded
 ensure_env_loaded()
 
 
+def _iso_now():
+    return datetime.now(datetime.timezone.utc).isoformat()
+
+
+def _write_json(path, obj):
+    import pathlib
+
+    pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(obj, f, ensure_ascii=False, indent=2)
+
+
 def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10) -> Dict[str, Any]:
     """
     Analyze temporal patterns in concept network data.
-
     Implements Phase-8 rolling window analytics with trend detection.
-
     Args:
         graph_data: Graph data with nodes and edges
         window_size: Size of rolling analysis window
-
     Returns:
         Temporal analysis results
     """
+    book = os.getenv("BOOK", "Genesis")
     nodes = graph_data.get("nodes", [])
     edges = graph_data.get("edges", [])
 
@@ -93,113 +103,141 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
         }
         trends.append(trend)
 
-    return {
-        "schema": "temporal-patterns.v1",
-        "analysis_timestamp": datetime.utcnow().isoformat(),
-        "window_size": window_size,
-        "total_nodes": len(nodes),
-        "rolling_statistics": rolling_stats,
-        "trends": trends,
-        "summary": {
-            "avg_window_gematria": sum(s["mean_gematria"] for s in rolling_stats) / len(rolling_stats)
-            if rolling_stats
-            else 0,
-            "max_trend_change": max(abs(t["gematria_trend"]) for t in trends) if trends else 0,
-            "trend_directions": {
-                "increasing": len([t for t in trends if t["direction"] == "increasing"]),
-                "decreasing": len([t for t in trends if t["direction"] == "decreasing"]),
+    # Transform to temporal schema format
+    temporal_patterns_list = []
+    if rolling_stats:
+        # Aggregate series for gematria mean over positions
+        values = [s["mean_gematria"] for s in rolling_stats]
+        change_points = detect_change_points(pd.Series(values)) if "detect_change_points" in globals() else []
+        temporal_pattern = {
+            "series_id": "aggregate_gematria",
+            "unit": "position",
+            "window": window_size,
+            "start_index": min([s["window_start"] for s in rolling_stats]) if rolling_stats else 0,
+            "end_index": max([s["window_end"] for s in rolling_stats]) if rolling_stats else 0,
+            "metric": "gematria",
+            "values": values,
+            "method": "rolling_mean",
+            "book": book,
+            "zscore_values": [],  # Could compute if needed
+            "change_points": change_points,
+            "seasonality": "none",  # Placeholder
+            "metadata": {
+                "total_nodes": len(nodes),
+                "window_count": len(rolling_stats),
+                "trend_summary": {
+                    "increasing": len([t for t in trends if t["direction"] == "increasing"]),
+                    "decreasing": len([t for t in trends if t["direction"] == "decreasing"]),
+                    "max_change": max([abs(t["gematria_trend"]) for t in trends]) if trends else 0,
+                },
             },
-        },
+        }
+        temporal_patterns_list.append(temporal_pattern)
+
+    metadata = {
+        "generated_at": _iso_now(),
+        "analysis_parameters": {"default_unit": "position", "default_window": window_size, "min_series_length": 3},
+        "total_series": len(temporal_patterns_list),
+        "books_analyzed": [book],
     }
+
+    tp = {"temporal_patterns": temporal_patterns_list, "metadata": metadata}
+
+    _write_json("share/exports/temporal_patterns.json", tp)
+    return tp
 
 
 def generate_forecast(temporal_patterns: Dict[str, Any], forecast_steps: int = 5) -> Dict[str, Any]:
     """
     Generate simple forecasting predictions based on temporal patterns.
-
     Implements Phase-8 forecasting baseline with naive extrapolation.
-
     Args:
         temporal_patterns: Output from analyze_temporal_patterns
         forecast_steps: Number of steps to forecast
-
     Returns:
         Forecast results with predictions and confidence intervals
     """
-    rolling_stats = temporal_patterns.get("rolling_statistics", [])
+    rolling_stats = temporal_patterns.get(
+        "rolling_statistics", []
+    )  # Note: now it's patterns, but keep for compatibility
 
     if len(rolling_stats) < 3:
-        return {
+        fc = {
             "schema": "pattern-forecast.v1",
-            "error": "Insufficient data for forecasting (need at least 3 data points)",
+            "generated_at": _iso_now(),
             "forecast_steps": forecast_steps,
+            "notes": "Insufficient data → placeholder forecast (schema not enforced)",
+            "error": "Insufficient data for forecasting (need at least 3 data points)",
+        }
+    else:
+        # Simple linear regression for forecasting
+        positions = [s["position"] for s in rolling_stats]
+        values = [s["mean_gematria"] for s in rolling_stats]
+
+        # Calculate slope and intercept
+        n = len(positions)
+        sum_x = sum(positions)
+        sum_y = sum(values)
+        sum_xy = sum(x * y for x, y in zip(positions, values))
+        sum_xx = sum(x * x for x in positions)
+
+        slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
+        intercept = (sum_y - slope * sum_x) / n
+
+        # Generate forecasts
+        last_position = max(positions)
+        position_step = (max(positions) - min(positions)) / len(positions) if len(positions) > 1 else 1
+
+        forecasts = []
+        for i in range(1, forecast_steps + 1):
+            forecast_pos = last_position + (position_step * i)
+            predicted_value = slope * forecast_pos + intercept
+
+            # Simple confidence interval (placeholder - could be improved)
+            confidence_range = abs(slope) * position_step * 0.5  # Rough estimate
+
+            forecasts.append(
+                {
+                    "step": i,
+                    "position": forecast_pos,
+                    "predicted_gematria": predicted_value,
+                    "confidence_lower": predicted_value - confidence_range,
+                    "confidence_upper": predicted_value + confidence_range,
+                    "confidence_interval": confidence_range * 2,
+                }
+            )
+
+        # Calculate forecast quality metrics
+        residuals = []
+        for actual, predicted_pos in zip(values, positions):
+            predicted = slope * predicted_pos + intercept
+            residuals.append(actual - predicted)
+
+        mse = sum(r**2 for r in residuals) / len(residuals) if residuals else 0
+        rmse = mse**0.5 if mse >= 0 else 0
+
+        fc = {
+            "schema": "pattern-forecast.v1",
+            "generated_at": _iso_now(),
+            "forecast_steps": forecast_steps,
+            "model": "linear_regression",
+            "training_points": len(rolling_stats),
+            "slope": slope,
+            "intercept": intercept,
+            "forecasts": forecasts,
+            "quality_metrics": {
+                "mse": mse,
+                "rmse": rmse,
+                "r_squared": 1 - (sum(r**2 for r in residuals) / sum((y - sum_y / n) ** 2 for y in values))
+                if values
+                else 0,
+            },
+            "trend_direction": "increasing" if slope > 0 else "decreasing",
+            "trend_strength": abs(slope),
         }
 
-    # Simple linear regression for forecasting
-    positions = [s["position"] for s in rolling_stats]
-    values = [s["mean_gematria"] for s in rolling_stats]
-
-    # Calculate slope and intercept
-    n = len(positions)
-    sum_x = sum(positions)
-    sum_y = sum(values)
-    sum_xy = sum(x * y for x, y in zip(positions, values))
-    sum_xx = sum(x * x for x in positions)
-
-    slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
-    intercept = (sum_y - slope * sum_x) / n
-
-    # Generate forecasts
-    last_position = max(positions)
-    position_step = (max(positions) - min(positions)) / len(positions) if len(positions) > 1 else 1
-
-    forecasts = []
-    for i in range(1, forecast_steps + 1):
-        forecast_pos = last_position + (position_step * i)
-        predicted_value = slope * forecast_pos + intercept
-
-        # Simple confidence interval (placeholder - could be improved)
-        confidence_range = abs(slope) * position_step * 0.5  # Rough estimate
-
-        forecasts.append(
-            {
-                "step": i,
-                "position": forecast_pos,
-                "predicted_gematria": predicted_value,
-                "confidence_lower": predicted_value - confidence_range,
-                "confidence_upper": predicted_value + confidence_range,
-                "confidence_interval": confidence_range * 2,
-            }
-        )
-
-    # Calculate forecast quality metrics
-    residuals = []
-    for actual, predicted_pos in zip(values, positions):
-        predicted = slope * predicted_pos + intercept
-        residuals.append(actual - predicted)
-
-    mse = sum(r**2 for r in residuals) / len(residuals) if residuals else 0
-    rmse = mse**0.5 if mse >= 0 else 0
-
-    return {
-        "schema": "pattern-forecast.v1",
-        "forecast_timestamp": datetime.utcnow().isoformat(),
-        "model": "linear_regression",
-        "training_points": len(rolling_stats),
-        "slope": slope,
-        "intercept": intercept,
-        "forecast_steps": forecast_steps,
-        "forecasts": forecasts,
-        "quality_metrics": {
-            "mse": mse,
-            "rmse": rmse,
-            "r_squared": 1 - (sum(r**2 for r in residuals) / sum((y - sum_y / n) ** 2 for y in values))
-            if values
-            else 0,
-        },
-        "trend_direction": "increasing" if slope > 0 else "decreasing",
-        "trend_strength": abs(slope),
-    }
+    _write_json("share/exports/pattern_forecast.json", fc)
+    return fc
 
 
 def run_phase8_analysis(book: str = "Genesis") -> Dict[str, Any]:
