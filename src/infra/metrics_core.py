@@ -45,8 +45,9 @@ class MetricsClient:
                 if hasattr(v, "isoformat"):  # datetime objects
                     db_row[k] = v.isoformat()
                 elif isinstance(v, dict):
-                    # Keep as dict - psycopg handles JSONB conversion automatically
-                    db_row[k] = v
+                    # psycopg 3 requires explicit JSON serialization for dicts
+                    import json
+                    db_row[k] = json.dumps(v)
                 else:
                     db_row[k] = v
 
