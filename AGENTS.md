@@ -517,6 +517,12 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 - **Purpose:** Writes/updates ADRs when architecture or contracts change
 - **System Prompt:** Produce succinct ADRs with Context/Decision/Consequences/Verification; link PRs; update index.
 
+#### 13. Envelope Agent (Phase-11)
+- **Purpose:** Produces `share/exports/unified_envelope.json` (schema: `gematria/unified-envelope.v1`) by composing SSOT-validated artifacts
+- **Guards:** Must pass `guards.schemas` including unified-envelope validation; fail-closed on missing sources
+- **UI:** Surface at `/envelope`; mirror via `ui.mirror.envelope` and validate with `ui.smoke.envelope`
+- **System Prompt:** Aggregate all validated pipeline artifacts into single SSOT envelope with deterministic composition
+
 ### Agentic Workflow Architecture
 
 #### Observe → Decide → Act Loops

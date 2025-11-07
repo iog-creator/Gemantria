@@ -128,3 +128,22 @@ make ui.build
 - Shows edge class counts (strong/weak/very-weak) with configurable thresholds
 - Displays SSOT blend badge: `edge_strength = EDGE_ALPHA*cosine + (1-EDGE_ALPHA)*rerank_score`
 - Correlation UI available at `/correlation`.
+
+## 📨 Unified Envelope (Phase-11)
+
+**Purpose**
+Aggregates all validated artifacts into single SSOT envelope (see `MASTER_PLAN.md`, Phase-11).
+
+**Usage**
+```bash
+export BOOK=Genesis
+make envelope.build
+make ui.mirror.envelope
+make ui.smoke.envelope
+```
+
+Artifacts:
+- `share/exports/unified_envelope.json` → `ui/out/unified_envelope.json`
+Route: `/envelope`
+
+Governance: RULES_INDEX §039-041-046-050-051-052; AGENTS.md §4.2

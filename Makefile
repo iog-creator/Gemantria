@@ -325,17 +325,22 @@ ui.envelope:
 	@$(PYTHON) scripts/create_ui_envelope.py --output exports/ui_envelope.json --report exports/report.md
 	@echo "UI envelope created: exports/ui_envelope.json"
 
-.PHONY: ui.mirror.correlation
-ui.mirror.correlation:
-	@echo ">> Mirroring correlation artifacts to ui/out/"
-	@mkdir -p ui/out
-	@cp exports/graph_stats.json ui/out/ 2>/dev/null || echo "graph_stats.json not found, skipping"
-	@cp exports/graph_correlations.json ui/out/ 2>/dev/null || echo "graph_correlations.json not found, skipping"
-	@echo "Correlation artifacts mirrored to ui/out/"
+.PHONY: envelope.build
+envelope.build:
+	@echo ">> Building unified envelope (Phase-11)"
+	python3 scripts/build_unified_envelope.py
+	@$(MAKE) guards.schemas
 
-.PHONY: ui.smoke.correlation
-ui.smoke.correlation:
-	@python3 -c 'import json, pathlib; [json.load(open(p)) for p in ["ui/out/graph_stats.json","ui/out/graph_correlations.json"] if pathlib.Path(p).exists()]; print("[ui.smoke.correlation] OK")'
+.PHONY: ui.mirror.envelope
+ui.mirror.envelope:
+	@echo ">> Mirroring unified envelope to ui/out"
+	mkdir -p ui/out
+	@[ -f share/exports/unified_envelope.json ] && cp share/exports/unified_envelope.json ui/out/unified_envelope.json || true
+	@ls -l ui/out | sed -n '1,12p'
+
+.PHONY: ui.smoke.envelope
+ui.smoke.envelope: envelope.build ui.mirror.envelope
+	@python3 -c 'import json, pathlib; p = pathlib.Path("ui/out/unified_envelope.json"); assert p.exists(), "missing unified_envelope.json"; json.load(open(p, "r", encoding="utf-8")); print("[ui.smoke.envelope] OK")'
 
 # Release preparation
 .PHONY: release.prepare
@@ -385,6 +390,21 @@ guards.all:
 	@PYTHONPATH=$(shell pwd) python3 scripts/guard_all.py
 	@$(MAKE) ssot.verify
 	@echo ">> Validating db ingest envelope (optional)…"
+
+.PHONY: guards.schemas
+guards.schemas:
+	@echo ">> Validating pipeline artifacts against SSOT schemas"
+	@[ -f share/exports/ai_nouns.json ] && \
+	python3 scripts/eval/jsonschema_validate.py --schema docs/SSOT/ai-nouns.v1.schema.json --instance share/exports/ai_nouns.json || true
+	@[ -f share/exports/graph_latest.json ] && \
+	python3 scripts/eval/jsonschema_validate.py --schema docs/SSOT/graph.v1.schema.json --instance share/exports/graph_latest.json || true
+	@[ -f share/exports/graph_stats.json ] && \
+	python3 scripts/eval/jsonschema_validate.py --schema docs/SSOT/graph-stats.schema.json --instance share/exports/graph_stats.json || true
+	@[ -f share/exports/temporal_patterns.json ] && \
+	python3 scripts/eval/jsonschema_validate.py --schema docs/SSOT/temporal-patterns.schema.json --instance share/exports/temporal_patterns.json || true
+	@[ -f share/exports/unified_envelope.json ] && \
+	python3 scripts/eval/jsonschema_validate.py --schema docs/SSOT/unified-envelope.schema.json --instance share/exports/unified_envelope.json || true
+	@echo "Schema validation complete"
 	@-python3 scripts/guards/guard_db_ingest.py exports/ai_nouns.db_morph.json 2>/dev/null || echo "db ingest guard skipped (file not found)"
 	@echo ">> Canonical repo layout present…"
 	@python3 scripts/guards/guard_repo_layout.py

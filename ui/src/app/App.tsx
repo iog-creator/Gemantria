@@ -7,7 +7,7 @@ import { FileLoader } from '../components/FileLoader';
 import { GraphRenderer } from '../components/GraphRenderer';
 import MetaPanel from '../components/MetaPanel';
 import MetricsDashboard from '../components/MetricsDashboard';
-import CorrelationPanel from '../components/CorrelationPanel';
+import EnvelopePage from '../views/EnvelopePage';
 import { Envelope } from '../types/envelope';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
       <div className="App" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
         <nav style={{ marginBottom: '20px', padding: '10px', borderBottom: '1px solid #ddd' }}>
           <Link to="/" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Dashboard</Link>
-          <Link to="/correlation" style={{ textDecoration: 'none', color: '#007bff' }}>Correlation</Link>
+          <Link to="/envelope" style={{ textDecoration: 'none', color: '#007bff' }}>Envelope</Link>
         </nav>
 
         <Routes>
@@ -92,7 +92,7 @@ function App() {
               {activeTab === 'graph' && <GraphRenderer envelope={uploadedEnvelope} />}
             </>
           } />
-          <Route path="/correlation" element={<CorrelationPanel />} />
+          <Route path="/envelope" element={<EnvelopePage />} />
         </Routes>
       </div>
     </BrowserRouter>

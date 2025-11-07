@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "unified-envelope.v1",
+  "type": "object",
+  "required": ["schema","book","generated_at","sources","ai_nouns","graph","stats","temporal","correlation"],
+  "properties": {
+    "schema": { "const": "gematria/unified-envelope.v1" },
+    "book": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "sources": {
+      "type": "object",
+      "required": ["ai_nouns","graph_latest","graph_stats","temporal_patterns","pattern_forecast","edge_class_counts","blend_ssot_report"],
+      "properties": {
+        "ai_nouns": { "type": "string" },
+        "graph_latest": { "type": "string" },
+        "graph_stats": { "type": "string" },
+        "temporal_patterns": { "type": "string" },
+        "pattern_forecast": { "type": "string" },
+        "edge_class_counts": { "type": "string" },
+        "blend_ssot_report": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ai_nouns": { "type": "object" },
+    "graph": { "type": "object" },
+    "stats": { "type": "object" },
+    "temporal": {
+      "type": "object",
+      "required": ["temporal_patterns","forecast"],
+      "properties": {
+        "temporal_patterns": { "type": "object" },
+        "forecast": { "type": "object" }
+      }
+    },
+    "correlation": {
+      "type": "object",
+      "required": ["edge_class_counts","blend_ssot_report"],
+      "properties": {
+        "edge_class_counts": { "type": "object" },
+        "blend_ssot_report": { "type": "object" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "pipeline": { "type": "string" },
+        "run_id": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}
