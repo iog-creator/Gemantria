@@ -391,6 +391,18 @@ ui.envelope:
 	@$(PYTHON) scripts/create_ui_envelope.py --output exports/ui_envelope.json --report exports/report.md
 	@echo "UI envelope created: exports/ui_envelope.json"
 
+.PHONY: ui.mirror.correlation
+ui.mirror.correlation:
+	@echo ">> Mirroring correlation artifacts to ui/out/"
+	@mkdir -p ui/out
+	@cp exports/graph_stats.json ui/out/ 2>/dev/null || echo "graph_stats.json not found, skipping"
+	@cp exports/graph_correlations.json ui/out/ 2>/dev/null || echo "graph_correlations.json not found, skipping"
+	@echo "Correlation artifacts mirrored to ui/out/"
+
+.PHONY: ui.smoke.correlation
+ui.smoke.correlation:
+	@python3 -c 'import json, pathlib; [json.load(open(p)) for p in ["ui/out/graph_stats.json","ui/out/graph_correlations.json"] if pathlib.Path(p).exists()]; print("[ui.smoke.correlation] OK")'
+
 # Release preparation
 .PHONY: release.prepare
 release.prepare:

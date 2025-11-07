@@ -101,3 +101,30 @@ See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 - Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
 
 - UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
+
+## 🔗 Correlation UI (Phase-10)
+
+**Purpose**
+Displays cross-text pattern analytics and edge strength distributions for graph validation (see `MASTER_PLAN.md`, Phase-10).
+
+**Usage**
+```bash
+export BOOK=Genesis
+make orchestrator.full BOOK="$BOOK"
+make analyze.export
+make ui.mirror.correlation
+make ui.smoke.correlation
+make ui.build
+```
+
+**Governance References**
+
+- AGENTS.md §4.1 (UI Agents: Cursor/Frontend)
+- RULES_INDEX.md Rule-050 (OPS Contract), Rule-051 (Response Format), Rule-052 (Tool Priority)
+- MASTER_PLAN.md Phase-10 Correlation → Phase-11 Unified Envelope transition
+
+**Notes**
+
+- Shows edge class counts (strong/weak/very-weak) with configurable thresholds
+- Displays SSOT blend badge: `edge_strength = EDGE_ALPHA*cosine + (1-EDGE_ALPHA)*rerank_score`
+- Correlation UI available at `/correlation`.
