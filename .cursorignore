@@ -4,7 +4,7 @@ share/**
 
 _artifacts/**
 
-# Environments / vendors / caches
+# Environments / vendors / caches (not indexed but accessible)
 
 .venv/**
 
@@ -18,7 +18,7 @@ node_modules/**
 
 **/__pycache__/**
 
-# Heavy or binary data (agents shouldn't ingest)
+# Heavy or binary data (not indexed but accessible)
 
 **/*.parquet
 

@@ -261,7 +261,7 @@ def main():
             result = run_embeddings_backfill(model=args.model, dim=args.dim)
 
         elif args.command == "full":
-            # Run complete workflow: pipeline -> analysis -> exports
+            # Run complete workflow: pipeline -> analysis -> temporal analytics -> exports
             log_json(LOG, 20, "full_workflow_start", book=args.book)
 
             # Load nouns if provided
@@ -286,7 +286,13 @@ def main():
                     if not analysis_result["success"]:
                         result = {"success": False, "error": "Analysis failed", "stage": "analysis"}
                     else:
-                        result = {"success": True, "pipeline": pipeline_result, "analysis": analysis_result}
+                        # 3. NEW: Phase-8 temporal analytics (rolling windows + forecast)
+                        print("[phase8] running temporal analytics...")
+                        from scripts.temporal_analytics import analyze_temporal_patterns, generate_forecast
+                        tp = analyze_temporal_patterns()   # emits share/exports/temporal_patterns.json
+                        fc = generate_forecast(tp)         # emits share/exports/pattern_forecast.json
+                        print("[phase8] temporal analytics complete")
+                        result = {"success": True, "pipeline": pipeline_result, "analysis": analysis_result, "temporal": {"patterns": tp, "forecast": fc}}
                 else:
                     result = {"success": True, "pipeline": pipeline_result}
 

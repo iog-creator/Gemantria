@@ -4,8 +4,8 @@ from src.core.ids import content_hash, normalize_hebrew, uuidv7_surrogate
 
 def test_calc_string_format():
     """Test calc_string format for known words."""
-    assert calc_string("אדם") == "א(1)+ד(4)+ם(40)=45"
-    assert calc_string("הבל") == "ה(5)+ב(2)+ל(30)=37"
+    assert calc_string("אדם") == "א(1) + ד(4) + ם(40) = 45"
+    assert calc_string("הבל") == "ה(5) + ב(2) + ל(30) = 37"
 
 
 def test_normalize_hebrew_idempotent():

@@ -1,6 +1,6 @@
 ---
 description: CI DB Bootstrap & Empty-Data Handling
-alwaysApply: true
+alwaysApply: false
 globs: 
   - "scripts/ci/*"
   - ".github/workflows/*"

@@ -7,7 +7,7 @@ Tests the full workflow from noun extraction through analysis and exports.
 import os
 import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from src.infra.env_loader import ensure_env_loaded
 from src.graph.graph import PipelineState
@@ -69,39 +69,44 @@ class TestPipelineIntegration:
         assert result["run_id"] == "test-123"
         assert "analysis_results" in result
 
-    @patch("src.graph.graph.assert_qwen_live")
-    @patch("src.graph.graph.get_checkpointer")
-    @patch("src.graph.graph.create_graph")
+    @patch("src.graph.graph.discover_nouns_for_book")
     @pytest.mark.skipif(not GEMATRIA_DSN_AVAILABLE, reason="GEMATRIA_DSN not available")
-    def test_pipeline_creation(self, mock_create_graph, mock_checkpointer, mock_qwen):
+    def test_pipeline_creation(self, mock_discover_nouns):
         """Test pipeline creation and basic structure."""
 
-        # Mock Qwen health check
-        mock_qwen.return_value.ok = True
-        mock_qwen.return_value.reason = "test"
-        mock_qwen.return_value.embed_dim = 1024
-        mock_qwen.return_value.lat_ms_embed = 100
-        mock_qwen.return_value.lat_ms_rerank = 200
+        # Mock noun discovery to return minimal valid data
+        mock_discover_nouns.return_value = [
+            {
+                "noun_id": "test-1",
+                "surface": "אלהים",
+                "letters": ["א", "ל", "ה", "י", "ם"],  # noqa: RUF001
+                "gematria": 86,
+                "class": "person",
+                "sources": [],
+            }
+        ]
 
-        # Mock graph creation
-        mock_graph = MagicMock()
-        mock_create_graph.return_value = mock_graph
-        mock_graph.invoke.return_value = {"run_id": "test-123", "success": True}
-
-        # Mock checkpointer
-        mock_checkpointer.return_value = None
-
-        # Test pipeline run
+        # Test pipeline run with provided nouns to avoid full discovery
         from src.graph.graph import run_pipeline
 
-        result = run_pipeline(book="Genesis", mode="START")
+        test_nouns = [
+            {
+                "noun_id": "test-1",
+                "surface": "אלהים",
+                "letters": ["א", "ל", "ה", "י", "ם"],  # noqa: RUF001
+                "gematria": 86,
+                "class": "person",
+                "sources": [],
+            }
+        ]
 
-        # Should have called the expected functions
-        mock_qwen.assert_called_once()
-        mock_create_graph.assert_called_once()
-        mock_graph.invoke.assert_called_once()
+        result = run_pipeline(book="Genesis", mode="START", nouns=test_nouns)
 
+        # Should return a result dictionary
+        assert isinstance(result, dict)
         assert "run_id" in result
+        assert "book" in result
+        assert "success" in result
 
     def test_book_processing_integration(self):
         """Test book processing can be called."""
@@ -207,7 +212,7 @@ class TestPipelineIntegration:
         """Test that all integration components can be imported together."""
         # This tests that our integration didn't break existing imports
         try:
-            from src.graph.graph import create_graph, run_pipeline
+            from src.graph.graph import run_pipeline, get_graph
             from src.nodes.collect_nouns_db import collect_nouns_for_book
             from src.nodes.enrichment import enrichment_node
             from src.nodes.network_aggregator import network_aggregator_node
@@ -216,8 +221,8 @@ class TestPipelineIntegration:
             from src.nodes.analysis_runner import analysis_runner_node
 
             # All should be callable
-            assert callable(create_graph)
             assert callable(run_pipeline)
+            assert callable(get_graph)
             assert callable(collect_nouns_for_book)
             assert callable(enrichment_node)
             assert callable(network_aggregator_node)

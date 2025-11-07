@@ -22,15 +22,16 @@ HARD = float(os.getenv("AI_CONFIDENCE_HARD", 0.95))
 
 def evaluate_confidence(conf, run_id=None, node=None):
     """Evaluate confidence against soft/hard gates."""
-    status = "pass"
     if conf < SOFT:
-        status = "warn"
-        metrics_client = get_metrics_client()
-        metrics_client.emit({"event": "ai_conf_soft_warn", "run_id": run_id, "node": node})
-    if conf < HARD:
         status = "fail"
         metrics_client = get_metrics_client()
         metrics_client.emit({"event": "ai_conf_hard_fail", "run_id": run_id, "node": node})
+    elif conf < HARD:
+        status = "warn"
+        metrics_client = get_metrics_client()
+        metrics_client.emit({"event": "ai_conf_soft_warn", "run_id": run_id, "node": node})
+    else:
+        status = "pass"
     return status
 
 

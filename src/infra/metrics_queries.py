@@ -13,9 +13,10 @@ DSN = os.getenv("GEMATRIA_DSN")
 
 
 def _q(sql: str, *params) -> list[tuple]:
-    if not DSN:
+    dsn = os.getenv("GEMATRIA_DSN")
+    if not dsn:
         raise RuntimeError("GEMATRIA_DSN is not set")
-    with psycopg.connect(DSN) as conn, conn.cursor() as cur:
+    with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute(sql, params or None)
         return cur.fetchall()
 

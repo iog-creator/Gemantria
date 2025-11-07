@@ -404,6 +404,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 058 | # --- |
 | 059 | # --- |
 | 060 | # --- |
+| 061 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

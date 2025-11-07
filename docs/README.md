@@ -267,3 +267,46 @@ Current development phases and their documentation:
 - **AGENTS.md**: AI assistant development guide (this directory)
 - **ADR-013**: Documentation synchronization requirements
 - **SSOT Directory**: Schema and contract definitions
+
+## Architectural Decision Records
+
+# Architectural Decision Records (ADRs)
+
+Total ADRs: 33
+
+| ADR | Title | Status | Date |
+|-----|-------|--------|------|
+| [docs/ADRs/ADR-000-langgraph.md](docs/ADRs/ADR-000-langgraph.md) | ADR-000: Orchestration via LangGraph (StateGraph) | Accepted | Unknown |
+| [docs/ADRs/ADR-001-two-db.md](docs/ADRs/ADR-001-two-db.md) | ADR-001: Two-DB Safety (bible_db RO; gematria RW) | Accepted | Unknown |
+| [docs/ADRs/ADR-002-gematria-rules.md](docs/ADRs/ADR-002-gematria-rules.md) | ADR-002: Gematria and Normalization Rules | Accepted | Unknown |
+| [docs/ADRs/ADR-003-batch-semantics.md](docs/ADRs/ADR-003-batch-semantics.md) | ADR-003: Batch Semantics & Validation Gates | Unknown | Unknown |
+| [docs/ADRs/ADR-004-postgres-checkpointer.md](docs/ADRs/ADR-004-postgres-checkpointer.md) | ADR-004: Postgres Checkpointer with BaseCheckpointSaver Interface | Unknown | Unknown |
+| [docs/ADRs/ADR-005-metrics-logging.md](docs/ADRs/ADR-005-metrics-logging.md) | ADR-005: Metrics & Structured Logging | Accepted | Unknown |
+| [docs/ADRs/ADR-006-observability-dashboards.md](docs/ADRs/ADR-006-observability-dashboards.md) | ADR-006: Observability Dashboards & Queries | Accepted | Unknown |
+| [docs/ADRs/ADR-007-llm-integration.md](docs/ADRs/ADR-007-llm-integration.md) | ADR-007: LLM Integration and Confidence Metadata | Accepted | Unknown |
+| [docs/ADRs/ADR-008-confidence-validation.md](docs/ADRs/ADR-008-confidence-validation.md) | ADR-008: Confidence-Aware Batch Validation | Accepted | Unknown |
+| [docs/ADRs/ADR-009-semantic-aggregation.md](docs/ADRs/ADR-009-semantic-aggregation.md) | ADR-009: Semantic Aggregation & Network Analysis | Accepted | Unknown |
+| [docs/ADRs/ADR-010-qwen-integration.md](docs/ADRs/ADR-010-qwen-integration.md) | ADR-010: Qwen3 Integration for Real Semantic Intelligence | Accepted | Unknown |
+| [docs/ADRs/ADR-011-concept-network-verification.md](docs/ADRs/ADR-011-concept-network-verification.md) | ADR-011: Concept Network Health Verification Views | Accepted | Unknown |
+| [docs/ADRs/ADR-012-concept-network-dimension-fix.md](docs/ADRs/ADR-012-concept-network-dimension-fix.md) | ADR-012: Concept Network Vector Dimension Correction | Accepted | Unknown |
+| [docs/ADRs/ADR-013-documentation-sync-enhancement.md](docs/ADRs/ADR-013-documentation-sync-enhancement.md) | ADR-013: Comprehensive Documentation Synchronization Enhancement | Accepted | Unknown |
+| [docs/ADRs/ADR-014-relations-and-pattern-discovery.md](docs/ADRs/ADR-014-relations-and-pattern-discovery.md) | ADR-014: Relations & Pattern Discovery | Accepted | Unknown |
+| [docs/ADRs/ADR-015-jsonld-and-visualization.md](docs/ADRs/ADR-015-jsonld-and-visualization.md) | ADR-015: JSON-LD & RDF Graph Exports + Visualization Interface | Proposed | Unknown |
+| [docs/ADRs/ADR-016-insight-metrics-and-ontology.md](docs/ADRs/ADR-016-insight-metrics-and-ontology.md) | ADR-016: Insight Metrics & Ontology Enrichment | Accepted | Unknown |
+| [docs/ADRs/ADR-017-agent-documentation-presence.md](docs/ADRs/ADR-017-agent-documentation-presence.md) | ADR-017: Agent Documentation Presence Enforcement | Accepted | Unknown |
+| [docs/ADRs/ADR-018-pattern-correlation.md](docs/ADRs/ADR-018-pattern-correlation.md) | ADR-018: Pattern Correlation Engine | Accepted | Unknown |
+| [docs/ADRs/ADR-019-forest-governance.md](docs/ADRs/ADR-019-forest-governance.md) | ADR-019: Forest Governance & Phase Gate System | Accepted | Unknown |
+| [docs/ADRs/ADR-020-ontology-forward-compatibility.md](docs/ADRs/ADR-020-ontology-forward-compatibility.md) | ADR-020: Ontology Forward Compatibility | Accepted | Unknown |
+| [docs/ADRs/ADR-021-metrics-contract-synchronization.md](docs/ADRs/ADR-021-metrics-contract-synchronization.md) | ADR-021: Metrics Contract Synchronization | Accepted | Unknown |
+| [docs/ADRs/ADR-022-cross-text-pattern-analysis.md](docs/ADRs/ADR-022-cross-text-pattern-analysis.md) | ADR-022: Cross-Text Pattern Analysis | Accepted | Unknown |
+| [docs/ADRs/ADR-022-system-enforcement-bridge.md](docs/ADRs/ADR-022-system-enforcement-bridge.md) | ADR-022: System Enforcement Bridge | Accepted | Unknown |
+| [docs/ADRs/ADR-023-visualization-api-and-dashboard.md](docs/ADRs/ADR-023-visualization-api-and-dashboard.md) | ADR-023: Visualization API and Dashboard | Accepted | Unknown |
+| [docs/ADRs/ADR-025-multi-temporal-analytics.md](docs/ADRs/ADR-025-multi-temporal-analytics.md) | ADR-025: Multi-Temporal Analytics & Predictive Patterns | Accepted | Unknown |
+| [docs/ADRs/ADR-026-reranker-bi-encoder-proxy.md](docs/ADRs/ADR-026-reranker-bi-encoder-proxy.md) | ADR-026: Reranker Bi-Encoder Proxy Implementation | Accepted | Unknown |
+| [docs/ADRs/ADR-032-bibledb-as-SSOT-roadmap.md](docs/ADRs/ADR-032-bibledb-as-SSOT-roadmap.md) | ADR-032: bible_db as Single Source of Truth (Roadmap) | Proposed | Unknown |
+| [docs/ADRs/ADR-033-ai-nouns-ssot-contract.md](docs/ADRs/ADR-033-ai-nouns-ssot-contract.md) | ADR-033: AI Nouns SSOT Contract (v1) | Accepted | Unknown |
+| [docs/ADRs/ADR-034-uuid-key-evolution.md](docs/ADRs/ADR-034-uuid-key-evolution.md) | ADR-034: UUID Key Evolution and FK Realignment | Proposed | Unknown |
+| [docs/ADRs/ADR-055-auto-docs-sync-ci.md](docs/ADRs/ADR-055-auto-docs-sync-ci.md) | ADR-055: Auto-Docs Sync CI Enforcement | Proposed | Unknown |
+| [docs/ADRs/ADR-056-auto-housekeeping-ci.md](docs/ADRs/ADR-056-auto-housekeeping-ci.md) | ADR-056: Auto-Housekeeping CI Enforcement | Proposed | Unknown |
+| [docs/ADRs/ADR-057-context-persistence-ci.md](docs/ADRs/ADR-057-context-persistence-ci.md) | ADR-057: Context Persistence CI Enforcement | Proposed | Unknown |
+

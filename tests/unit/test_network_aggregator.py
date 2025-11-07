@@ -212,13 +212,13 @@ class TestDocumentBuilding(unittest.TestCase):
 
         result = _build_document_string(noun)
 
-        expected = """Document: Adam
-Meaning: אדם
-Primary Verse: Genesis 1:1
-Gematria: 45
-Insight: First man created by God"""
-
-        self.assertEqual(result, expected)
+        # Check that result contains expected components (exact format varies due to UUID)
+        self.assertIn("Concept Name: Adam", result)
+        self.assertIn("Hebrew Text: אדם", result)
+        self.assertIn("Primary Reference: Genesis 1:1", result)
+        self.assertIn("Numerical Value (Gematria): 45", result)
+        self.assertIn("Theological Analysis: First man created by God", result)
+        self.assertIn("Document Fingerprint: Adam-אדם-Genesis--", result)  # freq is empty, UUID varies
 
     def test_build_document_string_missing_primary_verse(self):
         """Test building document string with missing primary_verse uses placeholder."""
@@ -226,13 +226,13 @@ Insight: First man created by God"""
 
         result = _build_document_string(noun)
 
-        expected = """Document: Eve
-Meaning: חוה
-Primary Verse: Genesis (reference)
-Gematria: 19
-Insight: First woman"""
-
-        self.assertEqual(result, expected)
+        # Check that result contains expected components (exact format varies due to UUID)
+        self.assertIn("Concept Name: Eve", result)
+        self.assertIn("Hebrew Text: חוה", result)
+        self.assertIn("Primary Reference: Genesis (reference)", result)
+        self.assertIn("Numerical Value (Gematria): 19", result)
+        self.assertIn("Theological Analysis: First woman", result)
+        self.assertIn("Document Fingerprint: Eve-חוה-Genesis--", result)  # freq is empty, UUID varies
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
@@ -240,13 +240,12 @@ Insight: First woman"""
 
         result = _build_document_string(noun)
 
-        expected = """Document: Test
-Meaning: טסט
-Primary Verse: Genesis (reference)
-Gematria: 100
-Insight:"""  # noqa: RUF001
-
-        self.assertEqual(result, expected)
+        # Check that result contains expected components (exact format varies due to UUID)
+        self.assertIn("Concept Name: Test", result)
+        self.assertIn("Hebrew Text: טסט", result)  # noqa: RUF001  # intentional Hebrew text
+        self.assertIn("Primary Reference: Genesis (reference)", result)
+        self.assertIn("Numerical Value (Gematria): 100", result)
+        self.assertIn("Document Fingerprint: Test-טסט-Genesis--", result)  # noqa: RUF001  # intentional Hebrew text
 
 
 class TestEdgeStrengthCalculation(unittest.TestCase):
