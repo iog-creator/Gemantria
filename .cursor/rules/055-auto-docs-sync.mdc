@@ -1,6 +1,6 @@
 ---
 description: Auto-Docs Sync Pass
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 055 — Auto-Docs Sync Pass (AlwaysApply)

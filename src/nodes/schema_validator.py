@@ -85,19 +85,47 @@ def schema_validator_node(state: dict[str, Any]) -> dict[str, Any]:
                 except Exception as e:
                     validation_errors.append(f"envelope.json validation error: {e}")
 
+        # ENVELOPE-FIRST HARDENING: Add COMPASS mathematical validation for envelopes
+        compass_results = []
+        if Path("share/exports/envelope.json").exists():
+            try:
+                from scripts.compass.scorer import score_envelope
+
+                compass_score = score_envelope("share/exports/envelope.json")
+                compass_results.append(
+                    {
+                        "file": "envelope.json",
+                        "compass_score": compass_score,
+                        "passed": compass_score >= 0.8,  # >80% correctness threshold
+                    }
+                )
+
+                if compass_score < 0.8:
+                    validation_errors.append(
+                        f"COMPASS validation failed: envelope.json score {compass_score:.1%} < 80% threshold"
+                    )
+
+                log_json(LOG, 20, "compass_validation_integrated", score=compass_score, passed=compass_score >= 0.8)
+
+            except Exception as e:
+                log_json(LOG, 30, "compass_integration_failed", error=str(e))
+                validation_errors.append(f"COMPASS integration error: {e}")
+
         # If there were validation errors, raise an exception
         if validation_errors:
-            log_json(LOG, 40, "schema_validation_failed", errors=validation_errors)
+            log_json(LOG, 40, "schema_validation_failed", errors=validation_errors, compass_results=compass_results)
             raise SchemaValidationError(validation_errors)
 
         # Log successful validation
-        if schemas_validated:
+        if schemas_validated or compass_results:
             log_json(
                 LOG,
                 20,
                 "schema_validation_complete",
                 validated_count=len(schemas_validated),
                 validated_files=schemas_validated,
+                compass_validated=len(compass_results),
+                compass_results=compass_results,
             )
 
         return state

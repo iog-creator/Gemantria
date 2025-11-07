@@ -19,8 +19,26 @@ OUT = EVAL / "edge_audit.json"
 
 
 def emit_hint(msg: str) -> None:
-    """Emit a standardized hint for CI visibility."""
-    print(f"HINT: {msg}")
+    """
+    Emit a standardized hint for CI visibility.
+
+    Uses scripts/hint.sh for LOUD HINT emission per Rule-026 (System Enforcement Bridge).
+    Related to scripts/AGENTS.md edge_audit.py - Edge Anomaly Detection.
+
+    Args:
+        msg: Hint message to emit
+
+    Related Rules: Rule-026 (System Enforcement Bridge)
+    Related Agents: scripts/AGENTS.md edge_audit.py
+    """
+    import subprocess
+    import os
+
+    hint_script = os.path.join(os.path.dirname(__file__), "..", "hint.sh")
+    if os.path.exists(hint_script) and os.access(hint_script, os.X_OK):
+        subprocess.run([hint_script, msg], check=False)
+    else:
+        print(f"HINT: {msg}")
 
 
 def compute_zscore_outliers(values: list[float], threshold: float = 3.0) -> dict[str, Any]:

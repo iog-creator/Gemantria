@@ -1,27 +1,24 @@
-# NEXT_STEPS v6.2.3 (Governance + CI + Guards Hardened)
+<!-- Handoff updated: 2025-11-07T10:12:58.696387 -->
+# NEXT_STEPS v6.2.3 (Operational Status - Phases Complete)
 
 ## Status
-✅ Phase 0 complete: Governance v6.2.3, internal guardrails active, infra tagged `infra/v6.2.3`
+✅ **All Core Phases Complete** - Pipeline operational with unified envelope
+- Phase 0: Governance v6.2.3 ✅
+- Phase 1: Data Layer (DB foundation) ✅
+- Phase 2: Pipeline Core (LangGraph) ✅
+- Phase 3: Exports & Badges ✅
+- Phase 5: UI Polish ✅
+- Phase 8: Temporal Analytics Suite ✅
+- Phase 9: Graph Latest ✅
+- Phase 10: Correlation Visualization ✅
+- Phase 11: Unified Envelope ✅
 
-## Active Development Tracks
+## Current Operational Focus
 
-### Phase 1 — Data Layer (DB foundation)
-**Branch:** `dev/p1-db-schema` (PR #138)
-**Scope:** Finalize schemas (`concepts`, `concept_relations`, `concept_centrality`), migrations, seed/fixtures, RO `bible_db` vs RW `gematria`
-**Exit:** `make db.migrate` green; CI smoke tolerates empty DB; schema docs exported
-**Status:** ⏳ Ready for development
-
-### Phase 2 — Pipeline Core (LangGraph)
-**Branch:** `dev/p2-pipeline` (PR #139)
-**Scope:** Noun extraction → gematria → enrichment → aggregation; checkpointer; deterministic IDs; retries
-**Exit:** `make pipeline.smoke` local + CI `SKIP_DB` green; envelope-first logs; deterministic seeds
-**Status:** ⏳ Ready for development
-
-### Phase 3 — Exports & Badges
-**Branch:** `dev/p3-exports` (PR #140)
-**Scope:** CSV/JSONL exports, stats, badges; no writes to `share/` in CI; validate export schemas only when data present
-**Exit:** `ci.exports.smoke` passes with data and with empty DB (conditional validation)
-**Status:** ⏳ Ready for development
+### Phase 11+ — Production Operations
+**Branch:** `feat/p11-unified-envelope` (current)
+**Scope:** Unified envelope operations, COMPASS validation, UI integration, production hardening
+**Status:** 🔄 **Active** - Branch diverged, needs reconciliation
 
 ## Development Workflow (v6.2.3)
 

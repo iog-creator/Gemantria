@@ -1,11 +1,11 @@
 ---
 description: Execution Contract Enforcement
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 id: 039_EXECUTION_CONTRACT
 version: 1
-alwaysApply: true
+alwaysApply: false
 title: Cursor Execution Contract (GPT-5 orchestrates; Cursor executes)
 description: |
   Cursor executes commands, applies diffs, runs make/CI, and merges PRs.

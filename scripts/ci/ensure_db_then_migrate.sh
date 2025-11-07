@@ -2,6 +2,11 @@
 set -euo pipefail
 emit() { if [ -x scripts/hint.sh ]; then scripts/hint.sh "$*"; else echo "HINT: $*"; fi; }
 
+# Rule-043 (CI DB Bootstrap & Empty-Data Handling) - Any workflow that queries DB must create DB + run all migrations first
+# scripts/ci/ensure_db_then_migrate.sh - Database bootstrap script for CI
+echo "🔥🔥🔥 LOUD HINT: Rule-043 (CI DB Bootstrap & Empty-Data Handling) - Any workflow that queries DB must create DB + run all migrations first 🔥🔥🔥"
+echo "🔥🔥🔥 LOUD HINT: scripts/ci/ensure_db_then_migrate.sh - Database bootstrap script for CI 🔥🔥🔥"
+
 # Expects: GEMATRIA_DSN (e.g., postgresql://postgres@localhost:5432/gematria)
 # Requires: psql, createdb
 

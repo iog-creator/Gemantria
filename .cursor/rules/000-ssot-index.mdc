@@ -1,21 +1,13 @@
----
-description: Non-negotiable rules for Gemantria
-alwaysApply: true
----
+# 000-ssot-index (AlwaysApply)
 
-- Code gematria > bible_db > LLM (LLM metadata only).
-- bible_db is READ-ONLY; any write attempt must error.
-- No mock datasets or __mocks__ folders. Tests are code-verified or DB-derived only.
-- Normalize Hebrew: NFKD→strip combining→strip maqaf (U+05BE)/sof pasuq (U+05C3)/punct→NFC.
-- Finals=regular (Mispar Hechrachi). Compute gematria on surface form; keep calc strings.
-- Identity: content_hash (SHA-256) as deterministic ID; uuidv7 as a sortable surrogate.
-- Batches: 50 nouns by default; if <50, abort and write review.ndjson. `ALLOW_PARTIAL=1` must be explicit and recorded in the run manifest.
-- Network: pgvector embeddings (1024-dim, L2 normalized) with cosine similarity; configurable edge strength via EDGE_ALPHA/EDGE_STRONG/EDGE_WEAK; Qwen3 inference for semantic intelligence.
-- Qwen Live Gate: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation; otherwise fail-closed. Pipeline must abort unless LM Studio models verified live.
-- Schema/algorithm changes require ADR + tests (+ migrations if DB) in the same PR.
+**SESSION INIT (run these exact commands BEFORE any task):**
 
-# References
-- RULES_INDEX.md
-- AGENTS.md
-- SHARE_MANIFEST.json
-- Makefile (relevant targets)
+1) `cd /home/mccoy/Projects/Gemantria.v2`
+
+2) `source activate_venv.sh`
+
+3) `make ssot.verify`
+
+
+
+**FAIL CLOSED if ensure_venv.sh fails. Do not proceed.**

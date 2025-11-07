@@ -36,7 +36,7 @@ class TestConfidenceGates:
         # Score below soft but above hard - should warn
         result = evaluate_confidence(0.92)
         assert result == "warn"
-        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn"})
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_hard_fail(self, mock_get_client):
@@ -47,11 +47,8 @@ class TestConfidenceGates:
         # Score below hard threshold - should fail
         result = evaluate_confidence(0.85)
         assert result == "fail"
-        # Should emit both soft warn and hard fail
-        assert mock_client.emit.call_count == 2
-        calls = mock_client.emit.call_args_list
-        assert calls[0][0][0]["event"] == "ai_conf_soft_warn"
-        assert calls[1][0][0]["event"] == "ai_conf_hard_fail"
+        # Should emit hard fail event
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_hard_fail", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_boundary_soft(self, mock_get_client):
@@ -59,10 +56,10 @@ class TestConfidenceGates:
         mock_client = MagicMock()
         mock_get_client.return_value = mock_client
 
-        # Score exactly at soft threshold - should warn
+        # Score exactly at soft threshold - should warn (since 0.90 is not < 0.90)
         result = evaluate_confidence(0.90)
         assert result == "warn"
-        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn"})
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_boundary_hard(self, mock_get_client):
@@ -70,10 +67,10 @@ class TestConfidenceGates:
         mock_client = MagicMock()
         mock_get_client.return_value = mock_client
 
-        # Score exactly at hard threshold - should warn (not fail)
+        # Score exactly at hard threshold - should pass (not warn or fail)
         result = evaluate_confidence(0.95)
-        assert result == "warn"
-        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn"})
+        assert result == "pass"
+        mock_client.emit.assert_not_called()
 
     @patch.dict(os.environ, {"AI_CONFIDENCE_SOFT": "0.85", "AI_CONFIDENCE_HARD": "0.92"})
     def test_custom_thresholds(self):

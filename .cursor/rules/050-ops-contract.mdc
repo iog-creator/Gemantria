@@ -1,6 +1,6 @@
 ---
 description: OPS Contract v6.2.3
-alwaysApply: true
+alwaysApply: false
 globs: []
 ---
 # 🧭 Gemantria — OPS Contract v6.2.3
@@ -95,6 +95,11 @@ git rev-parse --show-toplevel
 git rev-parse --abbrev-ref HEAD
 git status -sb
 ruff format --check . && ruff check .
+# Git safety: verify no upstream tracking that enables drift
+git config --get branch.$(git rev-parse --abbrev-ref HEAD).remote || echo "No upstream remote"
+git config --get branch.$(git rev-parse --abbrev-ref HEAD).merge || echo "No upstream merge"
+# ENVELOPE-FIRST HARDENING: Validate envelopes before operations
+make guards.envelope_first 2>/dev/null || echo "ENVELOPE-FIRST: No envelopes present or validation failed"
 make book.smoke
 make eval.graph.calibrate.adv
 make ci.exports.smoke

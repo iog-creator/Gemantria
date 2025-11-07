@@ -1,5 +1,1 @@
-{"noun": "\u05d0\u05b8\u05d3\u05b8\u05dd", "status": "pending_review"}
-{"noun": "\u05d4\u05b6\u05d1\u05b6\u05dc", "status": "pending_review"}
-{"noun": "\u05e0\u05b9\u05d7\u05b7", "status": "pending_review"}
-{"noun": "\u05d0\u05d5\u05b9\u05e8", "status": "pending_review"}
-{"noun": "\u05d0\u05b6\u05e8\u05b6\u05e5", "status": "pending_review"}
+{"noun": {"noun_id": "test-1", "surface": "\u05d0\u05dc\u05d4\u05d9\u05dd", "letters": ["\u05d0", "\u05dc", "\u05d4", "\u05d9", "\u05dd"], "gematria": 86, "class": "person", "sources": []}, "status": "pending_review"}
