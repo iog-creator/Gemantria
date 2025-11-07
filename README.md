@@ -101,3 +101,28 @@ See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
 - Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
 
 - UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
+
+## Temporal Analytics (Phase-8)
+
+**Generate artifacts**
+
+```bash
+export BOOK=Genesis
+make orchestrator.full BOOK="$BOOK"
+make phase8.temporal
+make guards.schemas
+```
+
+**Mirror to UI and smoke**
+
+```bash
+make ui.mirror.temporal
+make ui.smoke.temporal
+make ui.build   # optional, if the ui/ app is scaffolded
+```
+
+**Notes**
+
+- Real runs require LM Studio live with models (`christian-bible-expert-v2.0-12b`, `text-embedding-bge-m3`, `qwen.qwen3-reranker-0.6b`).
+- Set `ENFORCE_QWEN_LIVE=0` for dev-only runs without live models.
+- Temporal page is available at `/temporal`.

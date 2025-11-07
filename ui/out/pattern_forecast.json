@@ -1,0 +1,5 @@
+{
+  "schema": "pattern-forecast.v1",
+  "error": "Insufficient data for forecasting (need at least 3 data points)",
+  "forecast_steps": 5
+}

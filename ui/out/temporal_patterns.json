@@ -1,0 +1,16 @@
+{
+  "schema": "temporal-patterns.v1",
+  "analysis_timestamp": "2025-11-07T00:42:26.063600",
+  "window_size": 10,
+  "total_nodes": 0,
+  "rolling_statistics": [],
+  "trends": [],
+  "summary": {
+    "avg_window_gematria": 0,
+    "max_trend_change": 0,
+    "trend_directions": {
+      "increasing": 0,
+      "decreasing": 0
+    }
+  }
+}
