@@ -631,12 +631,12 @@ ui.mirror.temporal:
 .PHONY: ui.smoke.temporal
 ui.smoke.temporal:
 	@python3 - <<'PY'
-import json, pathlib
-for p in ("ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"):
-    path=pathlib.Path(p); assert path.exists(), f"missing {p}"
-    json.load(open(path,"r",encoding="utf-8"))
-print("[ui.smoke.temporal] OK")
-PY
+	import json, pathlib
+	for p in ("ui/out/temporal_patterns.json","ui/out/pattern_forecast.json"):
+	    path=pathlib.Path(p); assert path.exists(), f"missing {p}"
+	    json.load(open(path,"r",encoding="utf-8"))
+	print("[ui.smoke.temporal] OK")
+	PY
 
 .PHONY: ui.build
 ui.build:

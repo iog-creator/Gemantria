@@ -108,7 +108,7 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
     if rolling_stats:
         # Aggregate series for gematria mean over positions
         values = [s["mean_gematria"] for s in rolling_stats]
-        change_points = detect_change_points(pd.Series(values)) if 'detect_change_points' in globals() else []
+        change_points = detect_change_points(pd.Series(values)) if "detect_change_points" in globals() else []
         temporal_pattern = {
             "series_id": "aggregate_gematria",
             "unit": "position",
@@ -128,27 +128,20 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
                 "trend_summary": {
                     "increasing": len([t for t in trends if t["direction"] == "increasing"]),
                     "decreasing": len([t for t in trends if t["direction"] == "decreasing"]),
-                    "max_change": max([abs(t["gematria_trend"]) for t in trends]) if trends else 0
-                }
-            }
+                    "max_change": max([abs(t["gematria_trend"]) for t in trends]) if trends else 0,
+                },
+            },
         }
         temporal_patterns_list.append(temporal_pattern)
 
     metadata = {
         "generated_at": _iso_now(),
-        "analysis_parameters": {
-            "default_unit": "position",
-            "default_window": window_size,
-            "min_series_length": 3
-        },
+        "analysis_parameters": {"default_unit": "position", "default_window": window_size, "min_series_length": 3},
         "total_series": len(temporal_patterns_list),
-        "books_analyzed": [book]
+        "books_analyzed": [book],
     }
 
-    tp = {
-        "temporal_patterns": temporal_patterns_list,
-        "metadata": metadata
-    }
+    tp = {"temporal_patterns": temporal_patterns_list, "metadata": metadata}
 
     _write_json("share/exports/temporal_patterns.json", tp)
     return tp
