@@ -1083,3 +1083,72 @@ Merges are permitted only when **all** are true:
 - CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
 
 > **Always-Apply:** 050 (OPS/SSOT LOUD-FAIL), 051 (Required-checks advisory), 052 (Tool-priority & evidence-first)
+
+<!-- RULES_INVENTORY:BEGIN -->
+| ID | File | Title | Status |
+|---:|:-----|:------|:-------|
+| 000 | `000-ssot-index.mdc` | 000-ssot-index (AlwaysApply) | **Default-Apply** |
+| 001 | `001-db-safety.mdc` | Related ADR: ADR-001 (Two-DB Safety) | **Default-Apply** |
+| 002 | `002-gematria-validation.mdc` | gematria validation | **Default-Apply** |
+| 003 | `003-graph-and-batch.mdc` | graph and batch | **Default-Apply** |
+| 004 | `004-pr-workflow.mdc` | References | **Default-Apply** |
+| 005 | `005-github-operations.mdc` | References | **Default-Apply** |
+| 006 | `006-agents-md-governance.mdc` | AGENTS.md Governance — How agents must use and maintain AGENTS.md | **Default-Apply** |
+| 007 | `007-infrastructure.mdc` | infrastructure | **Default-Apply** |
+| 008 | `008-cursor-rule-authoring.mdc` | Cursor Rule Authoring Guide | **Default-Apply** |
+| 009 | `009-documentation-sync.mdc` | documentation sync | **Default-Apply** |
+| 010 | `010-task-brief.mdc` | SHORT BRIEF Format (Always Required) | **Default-Apply** |
+| 011 | `011-production-safety.mdc` | Rule 011 — DEPRECATED | **Default-Apply** |
+| 012 | `012-connectivity-troubleshooting.mdc` | connectivity troubleshooting | **Default-Apply** |
+| 013 | `013-report-generation-verification.mdc` | report generation verification | **Default-Apply** |
+| 014 | `014-governance-index.mdc` | Rule 014 — Governance Index (Reserved) | **Default-Apply** |
+| 015 | `015-semantic-export-compliance.mdc` | Related ADRs: ADR-015 (JSON-LD & RDF Graph Exports + Visualization Interface) | **Default-Apply** |
+| 016 | `016-visualization-contract-sync.mdc` | Rule 016 — DEPRECATED | **Default-Apply** |
+| 017 | `017-agent-docs-presence.mdc` | Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement) | **Default-Apply** |
+| 018 | `018-ssot-linkage.mdc` | Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement) | **Default-Apply** |
+| 019 | `019-metrics-contract-sync.mdc` | Metrics Contract Synchronization Rule | **Default-Apply** |
+| 020 | `020-ontology-forward-compat.mdc` | Ontology Forward Compatibility Rule | **Default-Apply** |
+| 021 | `021-stats-proof.mdc` | Rule 021 — Stats Proof (PR-016/017) | **Default-Apply** |
+| 022 | `022-visualization-contract-sync.mdc` | Rule 022 — Visualization Contract Sync | **Default-Apply** |
+| 023 | `023-visualization-api-spec.mdc` | Rule 023 — Visualization API Spec | **Default-Apply** |
+| 024 | `024-dashboard-ui-spec.mdc` | Rule 024 — Dashboard UI Spec | **Default-Apply** |
+| 025 | `025-phase-gate.mdc` | Rule 025 — Multi-Temporal Analytics Enforcement | **Default-Apply** |
+| 026 | `026-system-enforcement-bridge.mdc` | Rule 026 — System Enforcement Bridge | **Default-Apply** |
+| 027 | `027-docs-sync-gate.mdc` | Rule 027 — Docs Sync Gate | **Default-Apply** |
+| 028 | `028-phase-freshness.mdc` | Rule 028 — Phase Freshness | **Default-Apply** |
+| 029 | `029-adr-coverage.mdc` | Rule 029 — ADR Coverage | **Default-Apply** |
+| 030 | `030-share-sync.mdc` | Share Directory Synchronization (Always Required) | **Default-Apply** |
+| 031 | `031-correlation-visualization-validation.mdc` | Rule 031 — Correlation Visualization Validation | **Default-Apply** |
+| 032 | `032-pattern-integrity-validation.mdc` | Rule 032 — Pattern Integrity Validation | **Default-Apply** |
+| 033 | `033-visualization-api-validation.mdc` | Rule 033 — Visualization API Validation | **Default-Apply** |
+| 034 | `034-temporal-suite.mdc` | Rule 034 — Temporal Analytics Suite (Phase 8) | **Default-Apply** |
+| 035 | `035-forecasting-spec.mdc` | Rule 035 — Forecasting Spec (DEPRECATED) | **Default-Apply** |
+| 036 | `036-temporal-visualization-spec.mdc` | Rule 036 — Temporal Visualization Spec (DEPRECATED) | **Default-Apply** |
+| 037 | `037-data-persistence-completeness.mdc` | Rule 037 — Data Persistence Completeness | **Default-Apply** |
+| 038 | `038-exports-smoke-gate.mdc` | Rule 038 — Exports Smoke Gate | **Default-Apply** |
+| 039 | `039-execution-contract.mdc` | execution contract | **Default-Apply** |
+| 040 | `040-ci-triage-playbook.mdc` | ci triage playbook | **Default-Apply** |
+| 041 | `041-pr-merge-policy.mdc` | pr merge policy | **Default-Apply** |
+| 042 | `042-formatter-single-source-of-truth.mdc` | 042 — Formatter Single Source of Truth (AlwaysApply) | **Default-Apply** |
+| 043 | `043-ci-db-bootstrap.mdc` | 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply) | **Default-Apply** |
+| 044 | `044-share-manifest-contract.mdc` | 044 — Share Manifest Contract (AlwaysApply) | **Default-Apply** |
+| 045 | `045-rerank-blend-SSOT.mdc` | 045 — Rerank Blend is SSOT (AlwaysApply) | **Default-Apply** |
+| 046 | `046-ci-hermetic-fallbacks.mdc` | 046 — Hermetic CI Fallbacks (AlwaysApply) | **Default-Apply** |
+| 047 | `047-reserved.mdc` | reserved | **Default-Apply** |
+| 048 | `048-reserved.mdc` | reserved | **Default-Apply** |
+| 049 | `049-gpt5-contract-v5.2.mdc` | gpt5 contract v5.2 | **Default-Apply** |
+| 050 | `050-ops-contract.mdc` | 🧭 Gemantria — OPS Contract v6.2.3 | **Always-Apply** |
+| 051 | `051-cursor-insight.mdc` | 051 — Cursor Insight & Handoff (AlwaysApply) | **Always-Apply** |
+| 052 | `052-tool-priority.mdc` | 052 — Tool Priority & Context Guidance (AlwaysApply) | **Always-Apply** |
+| 053 | `053-idempotence.mdc` | 053 — Idempotent Baseline (OPS v6.2.1) | **Default-Apply** |
+| 054 | `054-reuse-first.mdc` | Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) | **Default-Apply** |
+| 055 | `055-auto-docs-sync.mdc` | 055 — Auto-Docs Sync Pass (AlwaysApply) | **Default-Apply** |
+| 056 | `056-ui-generation.mdc` | ui generation | **Default-Apply** |
+| 057 | `057-embedding-consistency.mdc` | Rule 057 — EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply) | **Default-Apply** |
+| 058 | `058-auto-housekeeping.mdc` | Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply) | **Default-Apply** |
+| 059 | `059-context-persistence.mdc` | 059 — Context Persistence (AlwaysApply) | **Default-Apply** |
+| 060 | `060-response-style.mdc` | Rule-060: Response Style | **Default-Apply** |
+| 061 | `061-ai-learning-tracking.mdc` | Rule 061 — AI Learning Tracking (AlwaysApply: false, but recommended) | **Default-Apply** |
+| 062 | `062-environment-validation.mdc` | Environment Validation (Always Required) | **Default-Apply** |
+| 063 | `063-git-safety.mdc` | Git Safety (No Destructive Operations) | **Default-Apply** |
+<!-- RULES_INVENTORY:END -->

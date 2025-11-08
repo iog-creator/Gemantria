@@ -55,8 +55,10 @@ globs:
   - tests/AGENTS.md
   - migrations/AGENTS.md
   - scripts/AGENTS.md
-alwaysApply: true
+alwaysApply: false
 ---
+
+> **NOTE:** As of 2025-11-08, only Rules 050/051/052 (the Always-Apply triad) have `alwaysApply: true`. Rule 009 (this rule) is Default-Apply.
 ```
 
 ### Report Generation Integration

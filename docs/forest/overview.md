@@ -69,8 +69,8 @@ Generated: 2025-11-08 10:24:44
 - Rule 059-context-persistence: ---
 - Rule 060-response-style: ---
 - Rule 061-ai-learning-tracking: ---
-- Rule 062-environment-validation: ---
-- Rule 063-git-safety: ---
+- Rule 062-environment-validation: (Default-Apply, formerly alwaysApply)
+- Rule 063-git-safety: (Default-Apply, formerly alwaysApply)
 
 ## CI Workflows
 
