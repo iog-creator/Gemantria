@@ -62,7 +62,8 @@ try:
             )
             return cur.fetchone() is not None
 
-        req = ["gematria.ai_interactions", "gematria.governance_artifacts"]
+        # AI tracking tables are in public schema (created by migrations 015/016)
+        req = ["public.ai_interactions", "public.governance_artifacts"]
         have = {t: exists(t) for t in req}
         missing = [t for t, v in have.items() if not v]
 
@@ -74,18 +75,18 @@ try:
             sys.exit(0)
 
         # Optional stats (non-fatal)
-        cur.execute("select count(*) from gematria.ai_interactions")
+        cur.execute("select count(*) from public.ai_interactions")
         ai = int(cur.fetchone()[0])
-        cur.execute("select count(*) from gematria.governance_artifacts")
+        cur.execute("select count(*) from public.governance_artifacts")
         ga = int(cur.fetchone()[0])
 
         print(
             json.dumps(
                 {
                     "ok": True,
-                    "note": "AI tracking bound to gematria",
+                    "note": "AI tracking bound to gematria DB (public schema)",
                     "same_db": True,
-                    "tables": {"ai_interactions": True, "governance_artifacts": True},
+                    "tables": {"public.ai_interactions": True, "public.governance_artifacts": True},
                     "counts": {"ai_interactions": ai, "governance_artifacts": ga},
                 },
                 indent=2,

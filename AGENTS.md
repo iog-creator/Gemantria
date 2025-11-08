@@ -18,8 +18,8 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 ### 3-Role DB Contract (OPS v6.2.3)
 **Extraction DB**: `GEMATRIA_DSN` → database `gematria`  
 **SSOT DB**: `BIBLE_DB_DSN` → database `bible_db` (read-only)  
-**AI Tracking**: **lives in `gematria`**; `AI_AUTOMATION_DSN` **must equal** `GEMATRIA_DSN`.  
-Guards: `guard.rules.alwaysapply.dbmirror` (triad), `guard.ai.tracking_contract` (tables `gematria.ai_interactions`, `gematria.governance_artifacts`).  
+**AI Tracking**: **lives in `gematria` DB**, `public` schema; `AI_AUTOMATION_DSN` **must equal** `GEMATRIA_DSN`.  
+Guards: `guard.rules.alwaysapply.dbmirror` (triad), `guard.ai.tracking` (tables `public.ai_interactions`, `public.governance_artifacts`).  
 CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`.
 - Batch & overrides:
   - `BATCH_SIZE=50` (default noun batch size)
