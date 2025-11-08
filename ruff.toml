@@ -40,5 +40,5 @@ ignore = [
 "src/infra/**/*.py" = ["E402","UP028"]
 "src/graph/**/*.py" = ["I001","RUF022"]
 
-# Nodes: import ordering
-"src/nodes/**/*.py" = ["UP035"]
+# Nodes: import ordering + Hebrew characters in gematria mappings
+"src/nodes/**/*.py" = ["UP035", "RUF001"]
