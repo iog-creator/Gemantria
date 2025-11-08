@@ -814,11 +814,22 @@ ops.enrichment.xrefs.light:
 	@$(MAKE) -s guard.ai_nouns.xrefs >/dev/null || true
 	@test -f evidence/guard_ai_nouns_xrefs.json && cat evidence/guard_ai_nouns_xrefs.json | jq '{mode, min_ratio, total, with_xrefs, ratio}' || echo '{"note":"guard not run"}'
 
+.PHONY: ui.xrefs.index
+ui.xrefs.index:
+	@echo ">> Building UI cross-reference index"
+	@python3 scripts/ops/build_ui_xrefs_index.py | tee evidence/ui_xrefs_index.log
+
 .PHONY: guard.ai_nouns.xrefs
 guard.ai_nouns.xrefs:
 	@echo ">> Checking cross-reference extraction ratio (HINT mode)"
 	@mkdir -p evidence
 	@python3 scripts/guards/guard_ai_nouns_xrefs.py | tee evidence/guard_ai_nouns_xrefs.json
+
+.PHONY: guard.ui.xrefs.index
+guard.ui.xrefs.index:
+	@echo ">> Checking UI xrefs index integrity (HINT mode)"
+	@mkdir -p evidence
+	@python3 scripts/guards/guard_ui_xrefs_index.py | tee evidence/guard_ui_xrefs_index.json
 
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
