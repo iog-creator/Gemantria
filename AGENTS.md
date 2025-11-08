@@ -165,7 +165,7 @@ python scripts/compass/scorer.py share/exports/envelope.json --verbose
 
 **Output**: PASS/FAIL status with detailed issue breakdown
 
-## Cursor Execution Profile (AlwaysApply)
+## Cursor Execution Profile (Default-Apply)
 
 This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and human operators can continue from any point.
 
@@ -1081,3 +1081,5 @@ Merges are permitted only when **all** are true:
   - Forbidden flag: `--limit`; use book-scoped runs.
 
 - CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
+
+> **Always-Apply:** 050 (OPS/SSOT LOUD-FAIL), 051 (Required-checks advisory), 052 (Tool-priority & evidence-first)

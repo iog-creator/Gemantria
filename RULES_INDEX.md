@@ -5,7 +5,7 @@
 | # | File | Title |
 |---:|------|-------|
 | 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |
-| 000 | 000-ssot-index.mdc.tmp | # --- |
+| 000 | 000-ssot-index.mdc.tmp | # (Default-Apply) |
 | 001 | 001-db-safety.mdc | DB safety and SQL discipline |
 | 002 | 002-gematria-validation.mdc | Hebrew normalization and gematria validation |
 | 003 | 003-graph-and-batch.mdc | Graph batch semantics and validation gates |
@@ -16,7 +16,7 @@
 | 008 | 008-cursor-rule-authoring.mdc | How to author Cursor rules (.mdc) correctly (agent-requested) |
 | 009 | 009-documentation-sync.mdc | Documentation synchronization requirements |
 | 010 | 010-task-brief.mdc | SHORT BRIEF format for all interactions |
-| 010 | 010-task-brief.mdc.tmp | # --- |
+| 010 | 010-task-brief.mdc.tmp | # (Default-Apply) |
 | 011 | 011-production-safety.mdc | Deprecated alias of Rule 000 |
 | 012 | 012-connectivity-troubleshooting.mdc | Connectivity troubleshooting and external service handling |
 | 013 | 013-report-generation-verification.mdc | Report generation verification and template validation |
@@ -37,7 +37,7 @@
 | 028 | 028-phase-freshness.mdc | Forest must be regenerated within 24h before PR |
 | 029 | 029-adr-coverage.mdc | Any new rules/migrations require ADR delta |
 | 030 | 030-share-sync.mdc | Always sync share directory after changes |
-| 030 | 030-share-sync.mdc.tmp | # --- |
+| 030 | 030-share-sync.mdc.tmp | # (Default-Apply) |
 | 031 | 031-correlation-visualization-validation.mdc | Validate correlation visualization exports and reporting |
 | 032 | 032-pattern-integrity-validation.mdc | Validate cross-text pattern analytics exports and schema |
 | 033 | 033-visualization-api-validation.mdc | Validate visualization API + dashboard presence |
