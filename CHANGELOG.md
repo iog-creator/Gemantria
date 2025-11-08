@@ -1,3 +1,4 @@
+2025-11-08 — OPS: Land light xref extractor (HINT guard; schema preserved) [8b23eaf4]
 2025-11-08 — OPS: Lock 3-role DB contract; AI-tracking guard (HINT on PRs, STRICT gated by vars.STRICT_DB_MIRROR_CI) [6ddce6ee]
 # Changelog
 
