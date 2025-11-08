@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export AI tracking data from automation.ai_sessions and automation.ai_calls"""
+"""Export AI tracking data from gematria.ai_interactions and gematria.governance_artifacts"""
 
 import os
 import sys
