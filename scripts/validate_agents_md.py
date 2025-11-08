@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Validate all AGENTS.md files are present and up-to-date (Rule 017 + Rule 058)"""
 
-import os
 import sys
 from pathlib import Path
 
