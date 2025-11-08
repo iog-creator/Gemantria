@@ -10,9 +10,7 @@ import sys
 from pathlib import Path
 
 # RFC3339 pattern: YYYY-MM-DDTHH:MM:SS[.fraction]Z or [+-]HH:MM
-RFC3339_PATTERN = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$"
-)
+RFC3339_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$")
 
 STATS_PATH = Path("exports/graph_stats.json")
 
@@ -65,4 +63,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
