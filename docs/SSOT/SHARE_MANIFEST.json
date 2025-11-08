@@ -90,5 +90,8 @@
       "generate": "head_json",
       "max_bytes": 4096
     }
+  ],
+  "evidence": [
+    "share/evidence/rfc3339-fastlane/20251108T184418Z/"
   ]
 }

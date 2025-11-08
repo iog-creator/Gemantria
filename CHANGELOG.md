@@ -1,5 +1,7 @@
 # Changelog
 
+### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
+
 ## v0.1.0-rc1
 
 - Phases 1–3 merged under reuse-first (schemas, pipeline, exports)

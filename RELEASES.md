@@ -1,5 +1,9 @@
 # Release Process
 
+## infra/v6.2.3 — RFC3339 fast-lane (2025-11-08)
+- STRICT guard on release tags; HINT on main/PRs
+- Normalization step added for legacy epoch exports
+
 This document outlines the standardized release process for Gemantria.
 
 ## Overview
