@@ -541,6 +541,17 @@ guard.ai.tracking:
 guard.ai.tracking.strict:
 	@STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
 
+# Cross-reference preservation guard (HINT locally/PRs)
+.PHONY: guard.ai_nouns.xrefs
+guard.ai_nouns.xrefs:
+	@mkdir -p evidence
+	@python3 scripts/guards/guard_ai_nouns_xrefs.py | tee evidence/guard_ai_nouns_xrefs.json
+
+# Optional STRICT mode: STRICT_XREFS=1 MIN_XREF_RATIO=0.25 make -s guard.ai_nouns.xrefs
+.PHONY: guard.ai_nouns.xrefs.strict
+guard.ai_nouns.xrefs.strict:
+	@STRICT_XREFS=1 python3 scripts/guards/guard_ai_nouns_xrefs.py
+
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
 guard.docs.consistency:
