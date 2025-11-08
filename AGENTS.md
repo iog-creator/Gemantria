@@ -441,6 +441,7 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
 - Applies to: `exports/graph_latest.json` and `exports/graph_stats.json`.
 - Fast-lane metadata: `"source": "fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
 - Guard: stats timestamp is verified RFC3339; graph export is covered by schema guard and will emit a HINT if missing.
+- `guards.all` includes `guard.graph.generated_at` (HINT by default; set `STRICT_RFC3339=1` for strict).
 
 ### TS Sandbox PoC (ADR-063)
 - Gated by `CODE_EXEC_TS=0` (default = OFF). Python/LangGraph remains the operative path.
