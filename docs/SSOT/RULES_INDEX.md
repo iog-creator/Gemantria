@@ -2,7 +2,7 @@
 
 | # | File | Title |
 |---:|------|-------|
-| 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |
+| 000 | 000-ssot-index.mdc | # 000-ssot-index (AlwaysApply) |
 | 001 | 001-db-safety.mdc | # --- |
 | 002 | 002-gematria-validation.mdc | # --- |
 | 003 | 003-graph-and-batch.mdc | # --- |
@@ -52,9 +52,9 @@
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # --- |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | # --- |
+| 051 | 051-cursor-insight.mdc | # --- |
+| 052 | 052-tool-priority.mdc | # --- |
 | 053 | 053-idempotence.mdc | # --- |
 | 054 | 054-reuse-first.mdc | # --- |
 | 055 | 055-auto-docs-sync.mdc | # --- |
