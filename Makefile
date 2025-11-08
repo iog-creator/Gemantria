@@ -819,6 +819,10 @@ ui.xrefs.index:
 	@echo ">> Building UI cross-reference index"
 	@python3 scripts/ops/build_ui_xrefs_index.py | tee evidence/ui_xrefs_index.log
 
+.PHONY: ui.verses.cache
+ui.verses.cache:
+	@python3 scripts/ops/build_verses_local_cache.py | tee evidence/ui_verses_cache.log
+
 .PHONY: guard.ai_nouns.xrefs
 guard.ai_nouns.xrefs:
 	@echo ">> Checking cross-reference extraction ratio (HINT mode)"

@@ -1,7 +1,8 @@
 // Cross-reference side panel - verse detail viewer
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { XrefReference, XrefNode } from '../types/xrefs';
+import { getVerseText } from '../lib/verseProvider';
 
 interface XrefSidePanelProps {
   selectedXref: XrefReference | null;
@@ -14,6 +15,21 @@ const XrefSidePanel: React.FC<XrefSidePanelProps> = ({
   node,
   onClose,
 }) => {
+  const [verseText, setVerseText] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    if (selectedXref) {
+      setLoading(true);
+      setError('');
+      getVerseText(selectedXref)
+        .then((txt) => setVerseText(txt || '(no text available)'))
+        .catch(() => setError('Failed to load verse text'))
+        .finally(() => setLoading(false));
+    }
+  }, [selectedXref]);
+
   if (!selectedXref || !node) {
     return null;
   }
@@ -69,9 +85,16 @@ const XrefSidePanel: React.FC<XrefSidePanelProps> = ({
         <div style={{ fontWeight: '600', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
           {selectedXref.ref}
         </div>
-        <div style={{ fontSize: '0.85rem', color: '#666' }}>
+        <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '0.5rem' }}>
           {selectedXref.book} {selectedXref.chapter}:{selectedXref.verse}
         </div>
+        {loading && <div style={{ fontSize: '0.9rem', color: '#666', fontStyle: 'italic' }}>Loading verse…</div>}
+        {error && <div style={{ fontSize: '0.9rem', color: '#d32f2f' }}>{error}</div>}
+        {!loading && !error && verseText && (
+          <div style={{ fontSize: '0.9rem', color: '#333', marginTop: '0.5rem', whiteSpace: 'pre-wrap' }}>
+            {verseText}
+          </div>
+        )}
       </div>
 
       {/* Source noun details */}
