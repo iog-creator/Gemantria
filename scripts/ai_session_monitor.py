@@ -27,7 +27,7 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 # Import our AI learning tracker
 sys.path.insert(0, str(Path(__file__).parent))
@@ -46,7 +46,7 @@ class AISessionMonitor:
         self.current_session = None
         self.session_start_time = None
 
-    def start_session(self, session_id: str, context: Dict = None):
+    def start_session(self, session_id: str, context: Dict[str, Any] | None = None):
         """Start monitoring an AI development session."""
         self.current_session = session_id
         self.session_start_time = time.time()
@@ -66,7 +66,9 @@ class AISessionMonitor:
                 session_id=session_id, context_type="session_start", context_data=context, relevance_score=1.0
             )
 
-    def log_tool_usage(self, tool_name: str, success: bool, execution_time_ms: int = None, error_details: str = None):
+    def log_tool_usage(
+        self, tool_name: str, success: bool, execution_time_ms: int | None = None, error_details: str | None = None
+    ):
         """Log tool usage during the session."""
         if not self.current_session:
             print("⚠️  No active session - tool usage not logged")
@@ -84,7 +86,13 @@ class AISessionMonitor:
 
         print(f"🔧 Logged tool usage: {tool_name} ({'✅' if success else '❌'})")
 
-    def log_code_generation(self, file_path: str, generation_type: str, code_content: str = None, context: Dict = None):
+    def log_code_generation(
+        self,
+        file_path: str,
+        generation_type: str,
+        code_content: str | None = None,
+        context: Dict[str, Any] | None = None,
+    ):
         """Log code generation event."""
         if not self.current_session:
             print("⚠️  No active session - code generation not logged")
@@ -106,7 +114,11 @@ class AISessionMonitor:
         print(f"💻 Logged code generation: {generation_type} → {file_path}")
 
     def log_user_query(
-        self, query: str, response: str = None, tools_used: List[str] = None, execution_time_ms: int = None
+        self,
+        query: str,
+        response: str | None = None,
+        tools_used: List[str] | None = None,
+        execution_time_ms: int | None = None,
     ):
         """Log a user query and AI response."""
         if not self.current_session:
@@ -135,14 +147,14 @@ class AISessionMonitor:
         try:
             result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, cwd=ROOT)
             context["git_status"] = result.stdout.strip()
-        except:
+        except Exception:
             context["git_status"] = "unknown"
 
         # Get current branch
         try:
             result = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, cwd=ROOT)
             context["git_branch"] = result.stdout.strip()
-        except:
+        except Exception:
             context["git_branch"] = "unknown"
 
         # Get recent files (last 10 modified)
@@ -175,7 +187,7 @@ class AISessionMonitor:
                 cwd=ROOT,
             )
             context["recent_files"] = result.stdout.strip().split("\n")
-        except:
+        except Exception:
             context["recent_files"] = []
 
         # Log context awareness
@@ -197,7 +209,9 @@ class AISessionMonitor:
 
         print(f"🧠 Logged learning event: {learning_type}")
 
-    def end_session(self, feedback_rating: int = None, feedback_text: str = None, tags: List[str] = None):
+    def end_session(
+        self, feedback_rating: int | None = None, feedback_text: str | None = None, tags: List[str] | None = None
+    ):
         """End the monitoring session."""
         if not self.current_session:
             print("⚠️  No active session to end")
@@ -225,7 +239,7 @@ class AISessionMonitor:
         # Run pattern analysis
         self.tracker.analyze_patterns()
 
-        print(f"Session ended. Duration: {duration:.1f} minutes")
+        print(f"Session ended. Duration: {session_duration / 60:.1f} minutes")
         self.current_session = None
         self.session_start_time = None
 
