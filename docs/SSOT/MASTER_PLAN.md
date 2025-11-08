@@ -263,7 +263,7 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 <!-- RULES_TABLE_START -->
 | # | Title |
 |---:|-------|
-| 000 | # --- |
+| 000 | # 000-ssot-index (AlwaysApply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -325,4 +325,6 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 059 | # --- |
 | 060 | # --- |
 | 061 | # --- |
+| 062 | # --- |
+| 063 | # --- |
 <!-- RULES_TABLE_END -->

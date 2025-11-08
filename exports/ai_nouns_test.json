@@ -1,0 +1,104 @@
+{
+  "schema": "gemantria/ai-nouns.v1",
+  "source": "bible_db.v_hebrew_tokens",
+  "book": "Genesis",
+  "generated_at": "2025-11-08T04:12:15.552945+00:00",
+  "nodes": [
+    {
+      "surface": "וְ/אֵ֥ת",
+      "hebrew": "וְ/אֵ֥ת",
+      "name": "וְ/אֵ֥ת",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וְ/אֵ֥ת",
+        "primary_verse": "Genesis 1:1",
+        "freq": 985
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יֹּ֥אמֶר",
+      "hebrew": "וַ/יֹּ֥אמֶר",
+      "name": "וַ/יֹּ֥אמֶר",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וַ/יֹּ֥אמֶר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 582
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֶל\\־",
+      "hebrew": "אֶל\\־",
+      "name": "אֶל\\־",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "אֶל\\־",
+        "primary_verse": "Genesis 1:1",
+        "freq": 465
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֲשֶׁ֖ר",
+      "hebrew": "אֲשֶׁ֖ר",
+      "name": "אֲשֶׁ֖ר",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "אֲשֶׁ֖ר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 404
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    }
+  ]
+}

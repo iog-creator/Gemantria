@@ -239,27 +239,29 @@ The Gemantria system now features a fully integrated pipeline that coordinates a
 ### Pipeline Flow
 
 ```
-Noun Extraction → Enrichment → Network Building → Schema Validation → Analysis → Export
-     ↓              ↓              ↓                    ↓             ↓         ↓
-collect_nouns → enrichment → network_aggregator → schema_validator → analysis → export_graph
+Noun Extraction → Enrichment → Math Verification → Network Building → Schema Validation → Analysis → Export
+     ↓              ↓              ↓                    ↓                    ↓             ↓         ↓
+collect_nouns → enrichment → math_verifier → network_aggregator → schema_validator → analysis → export_graph
 ```
 
 ### Core Components
 
 #### Main Pipeline (`src/graph/graph.py`)
-- **LangGraph orchestration** with 6 integrated nodes
+- **LangGraph orchestration** with 8 integrated nodes (includes math_verifier)
 - **Qwen health gate** enforcement (fail-closed)
 - **State persistence** via Postgres/memory checkpointer
 - **Comprehensive logging** and error handling
+- **Math verification** runs automatically after enrichment to verify gematria calculations
 
 #### Pipeline Nodes
 1. **collect_nouns**: Extract nouns from Bible database
 2. **validate_batch**: Apply size and quality gates
 3. **enrichment**: AI-powered theological analysis
-4. **confidence_validator**: Quality threshold enforcement
-5. **network_aggregator**: Semantic embeddings and relationships
-6. **schema_validator**: JSON schema validation (NEW)
-7. **analysis_runner**: Graph analysis and export (NEW)
+4. **math_verifier**: Numeric verification of gematria calculations using MATH_MODEL (NEW)
+5. **confidence_validator**: Quality threshold enforcement
+6. **network_aggregator**: Semantic embeddings and relationships
+7. **schema_validator**: JSON schema validation
+8. **analysis_runner**: Graph analysis and export
 
 #### Book Processing (`scripts/run_book.py`)
 - **Chapter orchestration** with stop-loss and resume
@@ -343,7 +345,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 <!-- RULES_INVENTORY_START -->
 | # | Title |
 |---:|-------|
-| 000 | # --- |
+| 000 | # 000-ssot-index (AlwaysApply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -405,6 +407,8 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 059 | # --- |
 | 060 | # --- |
 | 061 | # --- |
+| 062 | # --- |
+| 063 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---
@@ -659,6 +663,10 @@ agent_settings:
     system: >
       Verify gematria and numeric relationships deterministically.
       Return verified values or corrections only.
+    integration: >
+      Math verifier runs automatically in the pipeline after enrichment.
+      Standalone: `make ai.verify.math` (reads exports/ai_nouns.enriched.json).
+      Adds math_check to each noun: {ok, local_sum, claimed, model, confidence}.
 
   guard:
     impl: code
@@ -700,9 +708,9 @@ EDGE_ALPHA=0.5
 | ----------------------- | --------------------------- | -------------------------------- |
 | `make ai.nouns`         | `discover_nouns_for_book()` | THEOLOGY_MODEL                   |
 | `make ai.enrich`        | enrichment loop             | THEOLOGY_MODEL                   |
+| `make ai.verify.math`   | gematria verification       | MATH_MODEL                       |
 | `make graph.build`      | edge creation               | code                             |
 | `make graph.score`      | rerank blend                | EMBEDDING_MODEL + RERANKER_MODEL |
-| `make math.verify`      | numeric proof               | MATH_MODEL                       |
 | `make analytics.export` | reports                     | code                             |
 | `make guards.all`       | schema checks               | code                             |
 | `make release.build`    | artifact summary            | code                             |

@@ -139,7 +139,9 @@ class BatchProcessor:
         # Sort nouns deterministically - handle both dict and str types
         if nouns and isinstance(nouns[0], dict):
             # For dict nouns, sort by surface/hebrew field
-            sort_key = lambda n: n.get("surface", n.get("hebrew", str(n)))
+            def sort_key(n):
+                return n.get("surface", n.get("hebrew", str(n)))
+
             sorted_nouns = sorted(nouns, key=sort_key)
         else:
             # For string nouns, sort directly

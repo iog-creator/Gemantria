@@ -108,7 +108,8 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
     if rolling_stats:
         # Aggregate series for gematria mean over positions
         values = [s["mean_gematria"] for s in rolling_stats]
-        change_points = detect_change_points(pd.Series(values)) if "detect_change_points" in globals() else []
+        # Note: detect_change_points would require pandas - disabled for now
+        change_points = []
         temporal_pattern = {
             "series_id": "aggregate_gematria",
             "unit": "position",
@@ -178,7 +179,7 @@ def generate_forecast(temporal_patterns: Dict[str, Any], forecast_steps: int = 5
         n = len(positions)
         sum_x = sum(positions)
         sum_y = sum(values)
-        sum_xy = sum(x * y for x, y in zip(positions, values))
+        sum_xy = sum(x * y for x, y in zip(positions, values, strict=True))
         sum_xx = sum(x * x for x in positions)
 
         slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
@@ -209,7 +210,7 @@ def generate_forecast(temporal_patterns: Dict[str, Any], forecast_steps: int = 5
 
         # Calculate forecast quality metrics
         residuals = []
-        for actual, predicted_pos in zip(values, positions):
+        for actual, predicted_pos in zip(values, positions, strict=True):
             predicted = slope * predicted_pos + intercept
             residuals.append(actual - predicted)
 
