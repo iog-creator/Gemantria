@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate RULES_INVENTORY table in AGENTS.md from .cursor/rules/*.mdc files."""
+
 from pathlib import Path
 import re
 
@@ -53,7 +54,4 @@ agents.write_text(new, encoding="utf-8")
 
 # summary to stdout
 triad_true = [r for r in rows if r[4] == "Always-Apply"]
-print(
-    f"inventory_rows={len(rows)} always_apply_ids={[r[1] for r in triad_true]}"
-)
-
+print(f"inventory_rows={len(rows)} always_apply_ids={[r[1] for r in triad_true]}")
