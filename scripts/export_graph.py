@@ -8,6 +8,9 @@ for UI consumption and visualization tools.
 
 import json
 import os
+import pathlib
+import sys
+import time
 
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
@@ -204,6 +207,47 @@ def export_correlation_graph():
 def main():
     """Main export function."""
     log_json(LOG, 20, "export_start")
+
+    fast_lane = pathlib.Path("exports/graph_latest.json")
+    if fast_lane.exists():
+        try:
+            payload = json.loads(fast_lane.read_text())
+            nodes = len(payload.get("nodes", []))
+            edges = len(payload.get("edges", []))
+            stats_path = pathlib.Path("exports/graph_stats.json")
+            if not stats_path.exists():
+                density = (2.0 * edges) / (nodes * (nodes - 1)) if nodes > 1 else 0.0
+                stats_path.write_text(
+                    json.dumps(
+                        {
+                            "book": payload.get("book"),
+                            "nodes": nodes,
+                            "edges": edges,
+                            "density": round(density, 6),
+                            "generated_at": time.time(),
+                        },
+                        ensure_ascii=False,
+                        indent=2,
+                    )
+                    + "\n"
+                )
+            print(">> analytics.export: fast-lane file detected (exports/graph_latest.json), skipping DB.", flush=True)
+            log_json(
+                LOG,
+                20,
+                "export_fast_lane_used",
+                nodes=nodes,
+                edges=edges,
+                stats_exists=stats_path.exists(),
+            )
+            return
+        except Exception as exc:
+            print(
+                f">> analytics.export: fast-lane present but unreadable: {exc}; falling back to DB.",
+                file=sys.stderr,
+                flush=True,
+            )
+            log_json(LOG, 30, "export_fast_lane_failed", error=str(exc))
 
     try:
         out_dir = os.getenv("EXPORT_DIR", "exports")

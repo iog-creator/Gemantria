@@ -15,8 +15,16 @@ def graph_scorer_node(state: PipelineState) -> PipelineState:
     Applies edge_strength = a*cosine + (1-a)*rerank_score
     and classifies edges as strong/weak/other.
     """
-    graph = state.get("graph", {})
-    edges = graph.get("edges", [])
+    ts = state.get("ts")
+    graph = dict(state.get("graph", {}) or {})
+    edges = list(graph.get("edges", []) or [])
+
+    if not edges:
+        # Ensure we keep a stable graph structure while preserving ts metadata.
+        state["graph"] = {**graph, "edges": []}
+        if ts is not None:
+            state["ts"] = ts
+        return state
 
     scored_edges = []
     for edge in edges:
@@ -45,5 +53,7 @@ def graph_scorer_node(state: PipelineState) -> PipelineState:
         **graph,
         "edges": scored_edges,
     }
+    if ts is not None:
+        state["ts"] = ts
 
     return state

@@ -7,9 +7,9 @@ analysis, and exports into a cohesive workflow.
 """
 
 import argparse
-import json
 import os
 import sys
+import json
 from typing import Any, Dict, List
 
 from src.infra.env_loader import ensure_env_loaded
@@ -353,6 +353,8 @@ def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", 
 
 def main():
     """Main CLI entry point."""
+    import json
+
     parser = argparse.ArgumentParser(description="Unified Pipeline Orchestrator")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 

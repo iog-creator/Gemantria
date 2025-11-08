@@ -221,41 +221,80 @@ def _export_graph_data(state: dict[str, Any] | None = None):
         from src.infra.db import get_gematria_rw
         from src.rerank.blender import blend_strength
 
-        db = get_gematria_rw()
+        fallback_graph = (state or {}).get("graph") or {}
+        fallback_used = False
 
-        # Get concepts with their metadata
-        concepts = db.execute("""
-            SELECT
-                c.concept_id,
-                c.name,
-                c.hebrew_text,
-                c.gematria_value,
-                c.primary_verse,
-                c.book,
-                c.chapter,
-                c.freq,
-                cc.cluster_id,
-                cen.degree,
-                cen.betweenness,
-                cen.eigenvector
-            FROM concepts c
-            LEFT JOIN concept_clusters cc ON c.concept_id = cc.concept_id
-            LEFT JOIN concept_centrality cen ON c.concept_id = cen.concept_id
-        """).fetchall()
+        concepts = []
+        relationships = []
 
-        # Get relationships
-        relationships = db.execute("""
-            SELECT
-                cn1.concept_id as source_id,
-                cn2.concept_id as target_id,
-                r.weight as cosine,
-                r.evidence->>'rerank_score' as rerank_score,
-                r.evidence->>'edge_strength' as edge_strength
-            FROM concept_relations r
-            JOIN concept_network cn1 ON r.src_concept_id = cn1.concept_id
-            JOIN concept_network cn2 ON r.dst_concept_id = cn2.concept_id
-            WHERE r.relation_type = 'semantic_similarity'
-        """).fetchall()
+        try:
+            db = get_gematria_rw()
+
+            # Get concepts with their metadata
+            concepts = db.execute("""
+                SELECT
+                    c.concept_id,
+                    c.name,
+                    c.hebrew_text,
+                    c.gematria_value,
+                    c.primary_verse,
+                    c.book,
+                    c.chapter,
+                    c.freq,
+                    cc.cluster_id,
+                    cen.degree,
+                    cen.betweenness,
+                    cen.eigenvector
+                FROM concepts c
+                LEFT JOIN concept_clusters cc ON c.concept_id = cc.concept_id
+                LEFT JOIN concept_centrality cen ON c.concept_id = cen.concept_id
+            """).fetchall()
+
+            # Get relationships
+            relationships = db.execute("""
+                SELECT
+                    cn1.concept_id as source_id,
+                    cn2.concept_id as target_id,
+                    r.weight as cosine,
+                    r.evidence->>'rerank_score' as rerank_score,
+                    r.evidence->>'edge_strength' as edge_strength
+                FROM concept_relations r
+                JOIN concept_network cn1 ON r.src_concept_id = cn1.concept_id
+                JOIN concept_network cn2 ON r.dst_concept_id = cn2.concept_id
+                WHERE r.relation_type = 'semantic_similarity'
+            """).fetchall()
+        except Exception as db_error:
+            log_json(LOG, 30, "graph_export_db_fallback", error=str(db_error))
+
+        if (not concepts or not relationships) and fallback_graph.get("nodes"):
+            fallback_used = True
+            concepts = [
+                (
+                    node.get("id"),
+                    node.get("label") or node.get("surface"),
+                    node.get("hebrew"),
+                    node.get("gematria"),
+                    node.get("primary_verse"),
+                    node.get("book"),
+                    node.get("chapter"),
+                    node.get("frequency"),
+                    node.get("cluster"),
+                    node.get("degree"),
+                    node.get("betweenness"),
+                    node.get("eigenvector"),
+                )
+                for node in fallback_graph.get("nodes", [])
+            ]
+            relationships = [
+                (
+                    edge.get("source"),
+                    edge.get("target"),
+                    edge.get("cosine"),
+                    edge.get("rerank_score"),
+                    edge.get("edge_strength"),
+                )
+                for edge in fallback_graph.get("edges", [])
+            ]
 
         # Build nodes
         nodes = []
@@ -332,6 +371,7 @@ def _export_graph_data(state: dict[str, Any] | None = None):
             "node_count": len(nodes),
             "edge_count": len(edges),
             "export_timestamp": None,  # Will be set by calling code
+            "source": "state_graph" if fallback_used else "database",
         }
         # Include hints envelope in metadata if available
         if hints_envelope:

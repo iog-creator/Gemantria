@@ -9,6 +9,11 @@ Related ADRs: ADR-032 (Organic AI Discovery), ADR-019 (Data Contracts)
 from __future__ import annotations
 
 from typing import Any, TypedDict, Dict, List
+from datetime import datetime, UTC
+import json
+import os
+import pathlib
+import time
 
 from langgraph.graph import StateGraph
 
@@ -37,6 +42,34 @@ ensure_env_loaded()
 class Graph(TypedDict):
     nodes: list[dict[str, Any]]
     edges: list[dict[str, Any]]
+
+
+def _save_checkpoint(node_name: str, state: PipelineState, values: dict[str, Any]) -> None:
+    """
+    Persist a checkpoint for the current node in a checkpointer-agnostic way.
+    Supports both PostgresCheckpointer (requires metadata and checkpoint_id) and MemorySaver.
+    """
+    try:
+        from src.infra.checkpointer import get_checkpointer
+    except Exception:
+        return
+    try:
+        checkpointer = get_checkpointer()
+        ts = state.get("ts", datetime.now(UTC).isoformat())
+        run_id = state.get("run_id", "unknown")
+        thread_id = f"pipeline-{run_id}"
+        checkpoint_id = f"{node_name}-{run_id}-{int(datetime.now(UTC).timestamp())}"
+        config = {"configurable": {"thread_id": thread_id, "checkpoint_id": checkpoint_id}}
+        checkpoint = {"ts": ts, "values": values}
+        metadata = {"ts": ts, "node": node_name}
+        try:
+            checkpointer.put(config, checkpoint, metadata)
+        except TypeError:
+            # Fallback for implementations that use 2-arg signature
+            checkpointer.put(config, checkpoint)
+    except Exception:
+        # Never let checkpoint persistence break the pipeline
+        return
 
 
 def build_graph(nouns: List[Dict]) -> Dict:
@@ -77,11 +110,8 @@ def collect_nouns_node(state: PipelineState) -> PipelineState:
     # Log metrics
     state["metrics"]["ai_call_latencies_ms"] = timing_samples
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "collect_nouns", {"nouns": state["nouns"], "metrics": state["metrics"]})
+    # Auto-save checkpoint after node completion (tolerant across implementations)
+    _save_checkpoint("collect_nouns", state, {"nouns": state["nouns"], "metrics": state["metrics"]})
 
     state["hints"].append("collect_nouns: completed")
     return state
@@ -94,12 +124,9 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
     state["validated_nouns"] = state["weighted_nouns"]  # Set validated nouns for enrichment
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save(
-        "langgraph_pipeline",
+    _save_checkpoint(
         "validate_batch",
+        state,
         {"weighted_nouns": state["weighted_nouns"], "validated_nouns": state["validated_nouns"]},
     )
 
@@ -109,6 +136,13 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
 
 def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
     """LangGraph node for noun enrichment."""
+    if state.get("resume_from_enriched"):
+        # Pre-enriched nouns supplied; ensure they remain normalized.
+        state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", state.get("nouns", []))]
+        _save_checkpoint("enrichment", state, {"enriched_nouns": state["enriched_nouns"]})
+        state["hints"].append("enrichment: skipped (pre-enriched)")
+        return state
+
     # Enrich nouns with theological insights
     state = enrichment_node(state)
 
@@ -116,10 +150,7 @@ def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
     state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", [])]
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "enrichment", {"enriched_nouns": state["enriched_nouns"]})
+    _save_checkpoint("enrichment", state, {"enriched_nouns": state["enriched_nouns"]})
 
     state["hints"].append("enrichment: completed")
     return state
@@ -131,10 +162,7 @@ def math_verifier_node_wrapper(state: PipelineState) -> PipelineState:
     state = math_verifier_node(state)
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "math_verifier", {"enriched_nouns": state["enriched_nouns"]})
+    _save_checkpoint("math_verifier", state, {"enriched_nouns": state["enriched_nouns"]})
 
     state["hints"].append("math_verifier: completed")
     return state
@@ -155,10 +183,7 @@ def confidence_validator_node(state: PipelineState) -> PipelineState:
         state["analyzed_nouns"] = state.get("enriched_nouns", [])
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "confidence_validator", {"analyzed_nouns": state["analyzed_nouns"]})
+    _save_checkpoint("confidence_validator", state, {"analyzed_nouns": state["analyzed_nouns"]})
 
     state["hints"].append("confidence_validator: completed")
     return state
@@ -169,13 +194,11 @@ def network_aggregator_node_wrapper(state: PipelineState) -> PipelineState:
     # Network aggregation (graph.build)
     # Use the network_aggregator_node to build the network
     state = network_aggregator.network_aggregator_node(state)
-    state["graph"] = state.get("network_summary", {})
+    if not state.get("graph"):
+        state["graph"] = {"schema": "gemantria/graph.v1", "nodes": [], "edges": []}
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "network_aggregator", {"graph": state["graph"]})
+    _save_checkpoint("network_aggregator", state, {"graph": state["graph"]})
 
     state["hints"].append("network_aggregator: completed")
     return state
@@ -189,10 +212,7 @@ def analysis_runner_node(state: PipelineState) -> PipelineState:
     state["scored_graph"] = state.get("graph", {})
 
     # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "analysis_runner", {"scored_graph": state["scored_graph"]})
+    _save_checkpoint("analysis_runner", state, {"scored_graph": state["scored_graph"]})
 
     state["hints"].append("analysis_runner: completed")
     return state
@@ -254,7 +274,6 @@ def run_pipeline(
     # 🔥🔥🔥 LOUD HINT: src/graph/AGENTS.md - Pipeline state management and batch processing 🔥🔥🔥
 
     import subprocess
-    import os
 
     hint_script = os.path.join(os.path.dirname(__file__), "..", "..", "scripts", "hint.sh")
 
@@ -282,39 +301,64 @@ def run_pipeline(
     except Exception as e:
         print(f"[runs_ledger.start] WARN: {e}")
 
+    provided_adapted: list[Dict[str, Any]] = []
+    resume_from_enriched = False
+
     # Discover nouns if not provided
     if nouns is None:
         discovered_nouns = discover_nouns_for_book(book)
-        nouns = discovered_nouns
+        nouns_to_process = discovered_nouns
+    else:
+        provided_adapted = [adapt_ai_noun(n) for n in nouns]
 
-    # Validate batch size
+        def _has_enrichment(noun: Dict[str, Any]) -> bool:
+            analysis = noun.get("analysis")
+            if isinstance(analysis, dict):
+                if analysis.get("theology") or analysis.get("math_check"):
+                    return True
+            return bool(noun.get("insights") or noun.get("analysis"))
+
+        unenriched_nouns = [
+            adapted for raw, adapted in zip(nouns, provided_adapted, strict=False) if not _has_enrichment(raw)
+        ]
+        if len(unenriched_nouns) < len(provided_adapted):
+            emit_loud_hint(f"pipeline: resuming enrichment for {len(unenriched_nouns)} of {len(nouns)} nouns")
+        nouns_to_process = unenriched_nouns
+        resume_from_enriched = len(unenriched_nouns) == 0 and len(provided_adapted) > 0
+
+    # Validate batch size only if there are nouns to process
     batch_processor = BatchProcessor()
-    try:
-        batch_processor.validate_batch_size(nouns)
-        batch_result = batch_processor.process_nouns(nouns)
-    except BatchAbortError as e:
-        # Batch validation failed - return error result
-        update_run_status(run_id, "failed")
+    batch_result = None
+    if nouns_to_process:
         try:
-            mark_run_finished(run_id, notes=f"batch_abort: {e}")
-        except Exception as finish_e:
-            print(f"[runs_ledger.finish] WARN: {finish_e}")
-        return {
-            "run_id": run_id,
-            "book": book,
-            "mode": mode,
-            "success": False,
-            "error": str(e),
-            "batch_result": None,  # Test expects this
-        }
+            batch_processor.validate_batch_size(nouns_to_process)
+            batch_result = batch_processor.process_nouns(nouns_to_process)
+        except BatchAbortError as e:
+            # Batch validation failed - return error result
+            update_run_status(run_id, "failed")
+            try:
+                mark_run_finished(run_id, notes=f"batch_abort: {e}")
+            except Exception as finish_e:
+                print(f"[runs_ledger.finish] WARN: {finish_e}")
+            return {
+                "run_id": run_id,
+                "book": book,
+                "mode": mode,
+                "success": False,
+                "error": str(e),
+                "batch_result": None,  # Test expects this
+            }
 
     # Create initial state
+    from datetime import datetime
+
     initial_state: PipelineState = {
         "run_id": run_id,
         "book_name": book,
         "book": book,  # DEPRECATED: for backwards compatibility
         "mode": mode,
-        "nouns": nouns,
+        "ts": datetime.now(UTC).isoformat(),
+        "nouns": nouns_to_process,
         "enriched_nouns": [],
         "analyzed_nouns": [],
         "weighted_nouns": [],
@@ -326,6 +370,16 @@ def run_pipeline(
         "hints": [f"pipeline_start: {book} ({mode})"],  # Runtime hints collection
         "enveloped_hints": {},  # Wrapped hints envelope
     }
+
+    if provided_adapted:
+        initial_state["nouns"] = provided_adapted
+
+    if resume_from_enriched:
+        initial_state["resume_from_enriched"] = True
+        initial_state["enriched_nouns"] = provided_adapted
+        initial_state["validated_nouns"] = provided_adapted
+        initial_state["weighted_nouns"] = provided_adapted
+        initial_state["analyzed_nouns"] = provided_adapted
 
     try:
         # Run the LangGraph pipeline with checkpointer
@@ -341,6 +395,9 @@ def run_pipeline(
         emit_loud_hint("pipeline: executing LangGraph with checkpointer (Rule-039)")
         final_state = graph.invoke(initial_state, config=config)
 
+        if os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback" or os.getenv("EXPORT_GRAPH_ALWAYS") == "1":
+            _persist_graph_exports(final_state.get("graph") or {}, book)
+
         # Update run status to completed
         from datetime import datetime
 
@@ -351,6 +408,9 @@ def run_pipeline(
             mark_run_finished(run_id, notes="ok")
         except Exception as e:
             print(f"[runs_ledger.finish] WARN: {e}")
+
+        if "enveloped_hints" not in final_state:
+            final_state = wrap_hints_node(final_state)
 
         # Return results
         return {
@@ -388,6 +448,51 @@ def run_pipeline(
             "enveloped_hints": initial_state.get("enveloped_hints", {}),  # Include envelope even on error
             "batch_result": batch_result,  # Include batch_result even on error
         }
+
+
+def _persist_graph_exports(graph: dict[str, Any], book: str) -> None:
+    """
+    Persist fallback graph outputs directly to exports/ for analytics fast-lane.
+    Safe no-op when the graph is empty.
+    """
+
+    nodes = graph.get("nodes") or []
+    edges = graph.get("edges") or []
+
+    export_dir = pathlib.Path("exports")
+    export_dir.mkdir(exist_ok=True)
+
+    export_timestamp = datetime.now(UTC).isoformat()
+
+    payload = {
+        "schema": "gematria/graph.v1",
+        "book": book,
+        "generated_at": export_timestamp,
+        "nodes": nodes,
+        "edges": edges,
+        "metadata": {
+            "node_count": len(nodes),
+            "edge_count": len(edges),
+            "export_timestamp": export_timestamp,
+            "source": "fallback_fast_lane",
+        },
+    }
+    (export_dir / "graph_latest.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+
+    node_count = len(nodes)
+    edge_count = len(edges)
+    density = 0.0
+    if node_count > 1:
+        density = round((2.0 * edge_count) / (node_count * (node_count - 1)), 6)
+
+    stats = {
+        "book": book,
+        "nodes": node_count,
+        "edges": edge_count,
+        "density": density,
+        "generated_at": time.time(),
+    }
+    (export_dir / "graph_stats.json").write_text(json.dumps(stats, ensure_ascii=False, indent=2) + "\n")
 
 
 def wrap_hints_node(state: PipelineState) -> PipelineState:

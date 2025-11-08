@@ -40,6 +40,16 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - **Line length**: 120 characters maximum
 - **String concatenation**: Use `["cmd", *args]` instead of `["cmd"] + args`
 
+### Debugging Workflow State Issues
+
+If a script behaves unexpectedly or seems to be running an old version:
+
+1.  **Clean the environment:** Run `make clean` to remove all Python cache and temporary files.
+2.  **Verify Git status:** Ensure your working directory is clean with `git status -sb`.
+3.  **Re-run the command:** Execute your command again from a fresh terminal.
+
+This process eliminates stale bytecode as a source of errors.
+
 ## UI / Frontend Generation (Standard)
 **Primary model:** Gemini 2.5 Pro (terminal/CLI, long context)
 **Fallback / refinement:** Claude Sonnet 4 (highest-fidelity styling, complex refactors)
