@@ -35,6 +35,13 @@ const XrefChips: React.FC<XrefChipsProps> = ({
           onClick={() => onChipClick?.(xref)}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onChipClick?.(xref);
+            }
+          }}
+          aria-label={`Open cross reference ${xref.ref}`}
           style={{
             padding: '0.25rem 0.5rem',
             fontSize: '0.75rem',
@@ -46,6 +53,14 @@ const XrefChips: React.FC<XrefChipsProps> = ({
             transition: 'all 0.2s ease',
             fontWeight: hoveredIndex === index ? '600' : '400',
             whiteSpace: 'nowrap',
+            outline: 'none',
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.outline = '2px solid #01579b';
+            e.currentTarget.style.outlineOffset = '2px';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
           }}
           title={`${xref.book} ${xref.chapter}:${xref.verse}`}
         >
