@@ -5,7 +5,16 @@ update_share.py — refresh a flat share/ folder with current canonical files.
 - Reads share/SHARE_MANIFEST.json
 - Copies/overwrites each item into share/ (flat)
 - For large JSON exports, writes a small head preview as valid JSON when possible
-- Exits nonzero on errors
+- Reports which files were changed
+- Exits nonzero if files were changed (useful for CI/change detection)
+
+USAGE:
+  python scripts/update_share.py          # Sync and report changes
+  make share.sync                        # Same via Makefile
+
+HOUSEKEEPING CHANGE DETECTION:
+  To see what changed since last housekeeping, run:
+    make housekeeping 2>&1 | grep -A 50 "HOUSEKEEPING CHANGE LOG"
 """
 
 import json
@@ -107,6 +116,7 @@ def main():
 
     copied_count = 0
     total_count = 0
+    changed_files = []
 
     for it in items:
         src_rel = it.get("src")
@@ -125,6 +135,7 @@ def main():
             src = ROOT / src_rel
             if head_json(src, dst, max_bytes):
                 copied_count += 1
+                changed_files.append(str(dst.relative_to(ROOT)))
             continue
 
         if not src_rel:
@@ -138,12 +149,21 @@ def main():
 
         if copy_file(src, dst):
             copied_count += 1
+            changed_files.append(str(dst.relative_to(ROOT)))
 
     if copied_count == 0:
         print("[update_share] OK — share/ up to date (no changes)")
     else:
         print(f"[update_share] OK — share/ refreshed ({copied_count}/{total_count} files updated)")
+        print("[update_share] CHANGED FILES:")
+        for f in changed_files:
+            print(f"  - {f}")
+
+    # Return exit code based on whether files were changed (useful for CI)
+    return copied_count > 0
 
 
 if __name__ == "__main__":
-    main()
+    # Exit with code indicating if files were changed
+    changed = main()
+    sys.exit(0 if not changed else 1)

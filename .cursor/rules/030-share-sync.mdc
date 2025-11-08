@@ -8,6 +8,12 @@ alwaysApply: true
 ## Purpose
 Keep `share/` directory synchronized with main codebase for documentation and tooling access.
 
+## Automatic Housekeeping Integration
+- **MANDATORY**: Run `make share.sync` IMMEDIATELY after ANY changes to docs, scripts, rules, or SHARE_MANIFEST.json
+- **MANDATORY**: Check `share/evidence/` directory for new hint envelopes after sync operations
+- **AUTOMATIC**: Validate all files in SHARE_MANIFEST.json exist and are accessible
+- **AUTOMATIC**: Emit LOUD hints if share sync fails or produces unexpected results
+
 ## Requirements
 - Run `make share.sync` after any changes to docs, scripts, or rules
 - Share contains mirrored copies of key files for external access
@@ -19,11 +25,20 @@ Keep `share/` directory synchronized with main codebase for documentation and to
 - Rule changes (.cursor/rules/*.mdc)
 - Makefile target additions
 - SSOT schema updates
+- Hint envelope generation (share/evidence/*.json)
 
 ## Verification
 - `make share.sync` completes without errors
 - Output shows "OK — share/ refreshed"
 - Git status shows share/ changes ready for commit
+- Check `share/evidence/` for new hint envelopes
+
+## Mandatory Cross-References
+- **Rule 006**: AGENTS.md governance (read before share operations)
+- **Rule 058**: Auto-housekeeping (includes share sync validation)
+- **Rule 061**: AI learning tracking (hint envelope detection)
+- **docs/SSOT/SHARE_MANIFEST.json**: Share synchronization manifest
+- **share/evidence/**: Hint envelope directory
 
 ## References
 - docs/SSOT/SHARE_MANIFEST.json

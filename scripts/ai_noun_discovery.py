@@ -45,16 +45,17 @@ def main():
     }
 
     for noun in nouns:
+        # Map from discovery function fields to ai-nouns.v1 schema
         node = {
-            "noun_id": str(noun.get("noun_id", f"ai-{book.lower()}-{hash(noun.get('hebrew', ''))}")),
-            "surface": noun.get("hebrew", ""),
+            "noun_id": str(noun.get("noun_id", f"ai-{book.lower()}-{hash(noun.get('surface', ''))}")),
+            "surface": noun.get("surface", ""),
             "lemma": noun.get("lemma", None),
             "letters": noun.get("letters", []),
             "gematria": noun.get("gematria", 0),
-            "class": noun.get("classification", "thing"),
-            "ai_discovered": True,
-            "analysis": {"meaning": noun.get("meaning", ""), "freq": noun.get("freq", 1)},
-            "sources": [{"ref": noun.get("primary_verse", f"{book} unknown"), "offset": None}],
+            "class": noun.get("class", "thing"),
+            "ai_discovered": noun.get("ai_discovered", True),
+            "analysis": noun.get("analysis", f"Hebrew noun: {noun.get('surface', '')}"),
+            "sources": noun.get("sources", [{"ref": f"{book} unknown", "offset": None}]),
         }
         data["nodes"].append(node)
 

@@ -1,0 +1,112 @@
+---
+description: Environment validation and venv management (always-on)
+alwaysApply: true
+---
+
+# Environment Validation (Always Required)
+
+## Purpose
+Prevent catastrophic failures by ensuring correct environment before any operations.
+
+## Critical Environment Checks (MANDATORY)
+
+### 1. Virtual Environment Validation
+**BEFORE ANY COMMAND**: Always verify correct venv activation:
+
+```bash
+# Must show: /home/mccoy/Projects/Gemantria.v2/.venv/bin/python
+which python && python --version
+
+# Must show: /home/mccoy/Projects/Gemantria.v2/.venv
+echo $VIRTUAL_ENV
+
+# If not correct: source activate_venv.sh
+```
+
+**LOUD FAILURE if not in correct venv:**
+```
+🚨 ENVIRONMENT FAILURE 🚨
+Expected venv: /home/mccoy/Projects/Gemantria.v2/.venv
+Current venv: $VIRTUAL_ENV
+Current python: $(which python)
+ACTION REQUIRED: source activate_venv.sh
+🚨 DO NOT PROCEED 🚨
+```
+
+### 2. LM Studio Configuration Validation
+**BEFORE ANY AI OPERATIONS**: Verify LM Studio connectivity:
+
+```bash
+export LM_STUDIO_HOST="http://127.0.0.1:9994"
+export RERANKER_MODEL="qwen.qwen3-reranker-0.6b"
+export THEOLOGY_MODEL="christian-bible-expert-v2.0-12b"
+export EMBEDDING_MODEL="text-embedding-bge-m3"
+
+# Test health check
+python -c "from src.services.lmstudio_client import assert_qwen_live; result = assert_qwen_live(['christian-bible-expert-v2.0-12b']); print(f'Health: {result.ok} - {result.reason}')"
+```
+
+### 3. Database Configuration Validation
+**BEFORE ANY DB OPERATIONS**: Verify database connections:
+
+```bash
+# Check if DSNs are set
+echo "GEMATRIA_DSN: $GEMATRIA_DSN"
+echo "BIBLE_DB_DSN: $BIBLE_DB_DSN"
+
+# If not set, use defaults from env_example.txt
+export GEMATRIA_DSN="postgresql://mccoy@/gematria?host=/var/run/postgresql"
+export BIBLE_DB_DSN="postgresql://postgres@/bible_db?host=/var/run/postgresql"
+```
+
+## Environment Persistence Requirements
+
+### 1. Automatic Environment Loading
+All scripts and commands MUST load environment automatically:
+
+```bash
+# Every script must start with:
+source activate_venv.sh
+export LM_STUDIO_HOST="http://127.0.0.1:9994"
+export RERANKER_MODEL="qwen.qwen3-reranker-0.6b"
+export THEOLOGY_MODEL="christian-bible-expert-v2.0-12b"
+export EMBEDDING_MODEL="text-embedding-bge-m3"
+```
+
+### 2. Environment State Preservation
+**MANDATORY**: Preserve environment state across sessions:
+
+- Store environment variables in `.env` file
+- Include environment validation in all Makefiles
+- Add environment checks to CI/CD pipelines
+
+## Failure Protocol
+
+### If Environment Check Fails:
+1. **STOP ALL OPERATIONS IMMEDIATELY**
+2. **EMIT LOUD FAILURE MESSAGE**
+3. **WAIT FOR USER APPROVAL** before proceeding
+4. **DOCUMENT THE FAILURE** for future prevention
+
+### Environment Recovery Commands:
+```bash
+# Complete environment reset
+source activate_venv.sh
+export LM_STUDIO_HOST="http://127.0.0.1:9994"
+export RERANKER_MODEL="qwen.qwen3-reranker-0.6b"
+export THEOLOGY_MODEL="christian-bible-expert-v2.0-12b"
+export EMBEDDING_MODEL="text-embedding-bge-m3"
+
+# Validate everything works
+python -c "import psycopg; from src.services import lmstudio_client; print('✅ Environment ready')"
+```
+
+## Related Rules
+- **Rule 011**: Production Safety (Qwen Live Gate)
+- **Rule 046**: Hermetic CI Fallbacks
+- **Rule 063**: Git Safety (no destructive operations)
+
+## Mandatory Cross-References
+- **AGENTS.md**: Environment setup section
+- **env_example.txt**: Complete environment configuration
+- **activate_venv.sh**: Virtual environment activation script

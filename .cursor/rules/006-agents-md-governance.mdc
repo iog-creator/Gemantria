@@ -1,6 +1,6 @@
 ---
 description: Governance for AGENTS.md (always-on)
-alwaysApply: false
+alwaysApply: true
 ---
 
 # AGENTS.md Governance — How agents must use and maintain AGENTS.md
@@ -8,6 +8,13 @@ alwaysApply: false
 ## Read-before-act
 - Before performing any multi-step or repo-wide task (scaffold, DB work, CI edits, PR ops), READ `AGENTS.md` and follow its workflow, priorities, and gates.
 - If a needed instruction is missing, propose a patch to `AGENTS.md` in the same PR (DoR/DoD below).
+
+## Automatic Housekeeping Enforcement
+- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
+- **MANDATORY**: Run `make ssot.verify` before any database operations
+- **MANDATORY**: Emit LOUD hints for any governance violations (see Rule 061)
+- **AUTOMATIC**: Check for new hint envelopes in `share/evidence/` directory
+- **AUTOMATIC**: Validate all .mdc rules are properly formatted and cross-referenced
 
 ## Canonical sections required in AGENTS.md
 - Mission & priorities (e.g., Code > bible_db > LLM; determinism; safety).
@@ -27,6 +34,13 @@ alwaysApply: false
 - Commands shown in AGENTS.md are executable (no typos).
 - Coverage threshold matches CI config.
 - PR template in AGENTS.md includes Goal/Files/Tests/Acceptance and links to ADRs/rules touched.
+
+## Mandatory Cross-References
+- **Rule 030**: Share directory synchronization (always run after changes)
+- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
+- **Rule 061**: AI learning tracking (emit hints for violations)
+- **docs/SSOT/GPT_SYSTEM_PROMPT.md**: AI operational governance
+- **docs/SSOT/SHARE_MANIFEST.json**: Share synchronization manifest
 
 ## Minimal PR template (to embed in PR body)
 - Goal:

@@ -1,0 +1,200 @@
+---
+description: Git safety - no destructive operations (always-on)
+alwaysApply: true
+---
+
+# Git Safety (No Destructive Operations)
+
+## Purpose
+Prevent catastrophic data loss from destructive git operations.
+
+## 🚨 BANNED COMMANDS (NEVER EXECUTE)
+
+### Destructive Reset Operations
+```bash
+# NEVER RUN THESE - THEY DESTROY WORK
+git reset --hard HEAD~N    # Destroys N commits
+git reset --hard <commit>  # Destroys all work after commit
+git reset --hard origin/main  # Overwrites local work
+git reset --soft HEAD~N   # Still dangerous, loses staging
+
+# NEVER RUN THESE EITHER
+git checkout -- <files>   # Overwrites local changes
+git clean -fd            # Deletes untracked files
+```
+
+### Dangerous Rebase Operations
+```bash
+# NEVER RUN THESE - THEY REWRITE HISTORY
+git rebase -i HEAD~N     # Interactive rebase (dangerous)
+git rebase origin/main   # Rebases onto main (loses local history)
+git rebase --onto <new> <old>  # Complex rebases
+git pull --rebase        # Dangerous rebase on pull
+```
+
+### Dangerous Pull Operations
+```bash
+# NEVER RUN THESE - THEY OVERWRITE LOCAL WORK
+git pull --force         # Forces overwrite
+git pull --no-ff         # Can cause conflicts
+git pull origin main     # Pulls without branch specification
+```
+
+### Dangerous Push Operations
+```bash
+# NEVER RUN THESE - THEY FORCE PUSH
+git push --force         # Forces push (overwrites remote)
+git push --force-with-lease  # Still dangerous
+git push origin main --force  # Forces to main branch
+```
+
+### Dangerous Merge Operations
+```bash
+# NEVER RUN THESE - THEY CAN CAUSE DATA LOSS
+git merge --no-ff --no-commit  # Leaves in weird state
+git merge --squash        # Loses individual commit history
+```
+
+## ✅ SAFE COMMANDS (USE THESE INSTEAD)
+
+### Safe Status/Info Commands
+```bash
+git status -sb           # Safe status check
+git log --oneline -5     # Recent commits
+git branch -v            # Branch info
+git remote -v            # Remote info
+git diff --cached        # Staged changes
+```
+
+### Safe Pull Commands
+```bash
+git fetch origin         # Safe fetch only
+git pull --ff-only       # Only fast-forward (safe)
+```
+
+### Safe Push Commands
+```bash
+git push -u origin <branch>  # Push new branch
+git push                    # Push existing branch
+```
+
+### Safe Merge Commands
+```bash
+git merge origin/main     # Normal merge
+git merge --abort         # Abort failed merge
+```
+
+## Automatic State Backup Requirements
+
+### 1. Pre-Operation Backup (MANDATORY)
+**BEFORE ANY GIT OPERATION**: Create backup:
+
+```bash
+# Create timestamped backup branch
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+git branch backup_$TIMESTAMP
+
+# Stash any uncommitted work
+git stash push -m "backup_$TIMESTAMP"
+```
+
+### 2. State Preservation
+**ALWAYS PRESERVE**:
+- Current branch: `git rev-parse --abbrev-ref HEAD`
+- Current commit: `git rev-parse HEAD`
+- Uncommitted changes: `git status --porcelain`
+- Stash list: `git stash list`
+
+### 3. Recovery Commands
+**IF SOMETHING GOES WRONG**:
+```bash
+# Restore from backup branch
+git checkout backup_$TIMESTAMP
+git merge --strategy=ours HEAD@{1}  # Keep backup version
+
+# Or restore stash
+git stash pop
+```
+
+## Git Workflow Policy
+
+### 1. Branch-Based Development
+```bash
+# Always work on feature branches
+git checkout -b feature/my-work
+# Do work...
+git add .
+git commit -m "feat: my changes"
+git push -u origin feature/my-work
+```
+
+### 2. Merge-Only Policy
+```bash
+# NEVER rebase - ALWAYS merge
+git checkout main
+git merge feature/my-work  # Creates merge commit
+```
+
+### 3. Pull Request Workflow
+```bash
+# Use GitHub CLI for safe operations
+gh pr create --fill
+gh pr merge --squash --delete-branch
+```
+
+## Emergency Recovery Protocol
+
+### If Data Loss Occurs:
+1. **STOP ALL OPERATIONS IMMEDIATELY**
+2. **CHECK BACKUP BRANCHES**: `git branch | grep backup`
+3. **RESTORE FROM STASH**: `git stash list && git stash pop`
+4. **CHECK REFLOG**: `git reflog --oneline -10`
+5. **EMIT LOUD FAILURE MESSAGE**
+
+### Recovery Commands:
+```bash
+# Find lost commits
+git reflog --oneline -20
+
+# Restore lost commit
+git checkout <lost-commit-hash>
+
+# Create recovery branch
+git checkout -b recovery_branch
+```
+
+## Detection and Prevention
+
+### 1. Command Interception
+All git commands must be validated before execution:
+- Check against banned command list
+- Require explicit user confirmation for risky operations
+- Log all git operations for audit
+
+### 2. Pre-Command Hooks
+```bash
+# Install pre-commit hook to block dangerous commands
+#!/bin/bash
+if [[ "$1" == "reset" && "$2" == "--hard" ]]; then
+    echo "🚨 DANGER: git reset --hard blocked by safety policy"
+    exit 1
+fi
+```
+
+### 3. Environment Variables
+```bash
+export GIT_SAFETY_ENABLED=1
+export BLOCK_RESET_HARD=1
+export BLOCK_REBASE=1
+export REQUIRE_BACKUPS=1
+```
+
+## Related Rules
+- **Rule 011**: Production Safety
+- **Rule 050**: OPS Contract (evidence-first workflow)
+- **Rule 062**: Environment Validation
+
+## Mandatory Cross-References
+- **AGENTS.md**: Git workflow section
+- **.gitignore**: Exclude backup branches
+- **scripts/git_safety.sh**: Command validation script

@@ -10,3 +10,8 @@ ui/package-lock.json
 ui/pnpm-lock.yaml
 ui/yarn.lock
 .codex/config.toml
+
+# Large backup files
+backup-safety-rules-*.tar.gz
+backup-safety-rules-*.bundle
+backups/codebase/backup-safety-rules-*.tar.gz
