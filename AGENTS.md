@@ -436,8 +436,15 @@ Set `NETWORK_AGGREGATOR_MODE=fallback` to build a graph without LM/pgvector.
 The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.json` directly from memory.  
 `make analytics.export` prefers this fast-lane file when present; otherwise it falls back to the DB export.
 
-### Code-Exec PoC (ADR-063)
-This PoC is gated by `CODE_EXEC_TS=0` (default). Python/LangGraph remains the default pipeline. No schema/DB changes.
+### Timestamp Standard (RFC3339 / ISO-8601)
+- All exported artifacts MUST use RFC3339 timestamps in `generated_at`.
+- Applies to: `exports/graph_latest.json` and `exports/graph_stats.json`.
+- Fast-lane metadata: `"source": "fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
+- Guard: stats timestamp is verified RFC3339; graph export is covered by schema guard and will emit a HINT if missing.
+
+### TS Sandbox PoC (ADR-063)
+- Gated by `CODE_EXEC_TS=0` (default = OFF). Python/LangGraph remains the operative path.
+- `make sandbox.smoke` is gate-aware and runs hermetically when enabled; otherwise clearly SKIPs.
 
 **Goal:** Take raw biblical text → discover nouns (AI-first) → enrich theology → build/score graph → verify against SSOT → export analytics/report → ship to UI, with self-healing guards and governance.
 
