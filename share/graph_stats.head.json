@@ -1,1 +1,33 @@
-{"preview_head": "{\n  \"nodes\": "}
+{
+  "nodes": 46,
+  "edges": 274,
+  "clusters": 0,
+  "centrality": {
+    "avg_degree": 0.0,
+    "max_degree": 0.0,
+    "avg_betweenness": 0.0,
+    "max_betweenness": 0.0,
+    "avg_eigenvector": 0.0,
+    "max_eigenvector": 0.0
+  },
+  "edge_distribution": {
+    "strong_edges": 64,
+    "weak_edges": 129,
+    "very_weak_edges": 81,
+    "avg_cosine": 0.8183769405024446,
+    "min_cosine": 0.666242619380796,
+    "max_cosine": 0.9985205530238499
+  },
+  "density": 0.2647342995169082,
+  "cluster_metrics": {
+    "avg_cluster_density": null,
+    "avg_cluster_diversity": null
+  },
+  "health": {
+    "has_nodes": true,
+    "has_edges": true,
+    "has_clusters": false,
+    "density_reasonable": false
+  },
+  "export_timestamp": "2025-11-06T18:11:32.995110"
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 import uuid
 
@@ -48,6 +49,27 @@ def enrichment_node(state: dict) -> dict:
         state["ai_enrichments_generated"] = 0
         return state
 
+    # Filter out nouns without valid Hebrew text (known issue: "Unknown" nouns)
+    valid_nouns = []
+    for noun in nouns:
+        hebrew = noun.get("hebrew", noun.get("surface", noun.get("name", "")))
+        # Skip empty, null, or "Unknown" Hebrew
+        if not hebrew or not hebrew.strip() or hebrew.strip().lower() in ("unknown", "null", "none"):
+            log_json(LOG, 20, "skipping_invalid_hebrew", noun=noun.get("name"), hebrew=hebrew)
+            continue
+        # Skip Strong's numbers (H#### format) - these aren't Hebrew text
+        if re.match(r"^H\d+$", hebrew.strip(), re.IGNORECASE):
+            log_json(LOG, 20, "skipping_strongs_number", noun=noun.get("name"), hebrew=hebrew)
+            continue
+        valid_nouns.append(noun)
+
+    nouns = valid_nouns
+    if not nouns:
+        log_json(LOG, 20, "enrichment_start", noun_count=0, message="No valid nouns to enrich after filtering")
+        state["enriched_nouns"] = []
+        state["ai_enrichments_generated"] = 0
+        return state
+
     log_json(LOG, 20, "enrichment_start", noun_count=len(nouns))
     metrics_client = get_metrics_client()
     run_id = state.get("run_id", uuid.uuid4())
@@ -60,7 +82,6 @@ def enrichment_node(state: dict) -> dict:
 
     # Escape Hebrew text to prevent JSON parsing issues
     import json
-    import re
 
     def escape_hebrew(text):
         """Escape Hebrew text for safe inclusion in prompts."""
@@ -178,7 +199,6 @@ def enrichment_node(state: dict) -> dict:
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
                         import json as _json  # noqa: E402
-                        import re  # noqa: E402
 
                         # Try to extract confidence from text if JSON is incomplete
                         m = re.search(
