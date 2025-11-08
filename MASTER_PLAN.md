@@ -4,6 +4,8 @@
 
 Rebuild the complete Gematria system from scratch using existing assets in a clean, maintainable architecture.
 
+> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+
 ## Single-Sitting Development Plan
 
 ### P0.1: Project Setup & Documentation (30 min)

@@ -31,6 +31,7 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Coverage ≥98%.
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
+- Always run `make housekeeping` after any docs, scripts, or rules change before requesting review (Rule 058).
 
 ## Code Quality Standards
 - **Formatting**: Ruff format (single source of truth)
@@ -430,7 +431,8 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 - Granular `make graph.build` / `graph.score` targets remain as compatibility shims and call the orchestrator.
 - Resuming from enriched nouns is supported; the network aggregator now prefers `enriched_nouns` and preserves pipeline `ts`.
 - Use `CHECKPOINTER=memory` for local deterministic runs; Postgres checkpointer requires `GEMATRIA_DSN`.
-- **Note:** The orchestrator does **not** accept `--limit`; use book-scoped runs for smaller workloads.
+- **Note:** The orchestrator does **not** accept this flag.
+  - Forbidden flag: `--limit`; use book-scoped runs for smaller workloads.
 
 **Fallback mode**  
 Set `NETWORK_AGGREGATOR_MODE=fallback` to build a graph without LM/pgvector.  
@@ -438,9 +440,9 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
 `make analytics.export` prefers this fast-lane file when present; otherwise it falls back to the DB export.
 
 ### Timestamp Standard (RFC3339 / ISO-8601)
-- All exported artifacts MUST use RFC3339 timestamps in `generated_at`.
+- All exported artifacts MUST stamp `generated_at` as RFC3339 timestamps.
 - Applies to: `exports/graph_latest.json` and `exports/graph_stats.json`.
-- Fast-lane metadata: `"source": "fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
+- Fast-lane metadata: `metadata.source="fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
 - Guard: stats timestamp is verified RFC3339; graph export is covered by schema guard and will emit a HINT if missing.
 - `guards.all` includes `guard.graph.generated_at` (HINT by default; set `STRICT_RFC3339=1` for strict).
 - CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
@@ -1074,3 +1076,8 @@ Merges are permitted only when **all** are true:
 - Paste file contents/head/tail when requested for state confirmation.
 - Do not assume—verify first, fail-closed on missing critical files.
 - For edits, provide patches/diffs only; no auto-apply without user confirmation.
+
+- **Note:** The orchestrator does **not** accept this flag.
+  - Forbidden flag: `--limit`; use book-scoped runs.
+
+- CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
