@@ -11,6 +11,27 @@ ui.dev.help:
 	@echo "3) Implement loader to read /tmp/p9-ingest-envelope.json"
 	@echo "4) Run: npm run dev (local only)"
 
+.PHONY: help clean
+
+help:
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
+clean: ## 🧹 Clean Python cache and build artifacts
+	@echo "🧹 Cleaning Python cache and build artifacts..."
+	@find . -type d -name "__pycache__" -exec rm -rf {} +
+	@find . -type f -name "*.pyc" -delete
+	@find . -type f -name "*.pyo" -delete
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} +
+	@find . -type d -name ".mypy_cache" -exec rm -rf {} +
+	@echo "✅ Clean complete."
+
+# ==============================================================================
+#  deps
+# ==============================================================================
+
 # Codex CLI optional targets (local-only, CI-gated)
 
 codex.task:
