@@ -39,7 +39,8 @@ def main():
         print(f"OK: graph_latest.generated_at RFC3339 = {ts}", flush=True)
 
     # Optional metadata friendliness
-    src = data.get("source")
+    metadata = data.get("metadata", {})
+    src = metadata.get("source") if isinstance(metadata, dict) else None
     if src == "fallback_fast_lane":
         print("OK: metadata.source=fallback_fast_lane present.", flush=True)
     else:

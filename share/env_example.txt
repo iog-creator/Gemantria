@@ -130,3 +130,5 @@ PIP_REQUIRE_VENV=true
 # - Bible DB should remain read-only
 # - Use strong database passwords in production
 # - LM Studio models are local (no cloud credentials needed)
+
+CODE_EXEC_TS=0

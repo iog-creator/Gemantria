@@ -423,7 +423,29 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 
 ---
 
-## Agentic Pipeline Framework
+## Agentic Pipeline Framework (Orchestrator-Only)
+
+**Canonical path:** `python3 scripts/pipeline_orchestrator.py pipeline --book "$BOOK" [--nouns-json ...]`
+
+- Granular `make graph.build` / `graph.score` targets remain as compatibility shims and call the orchestrator.
+- Resuming from enriched nouns is supported; the network aggregator now prefers `enriched_nouns` and preserves pipeline `ts`.
+- Use `CHECKPOINTER=memory` for local deterministic runs; Postgres checkpointer requires `GEMATRIA_DSN`.
+
+**Fallback mode**  
+Set `NETWORK_AGGREGATOR_MODE=fallback` to build a graph without LM/pgvector.  
+The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.json` directly from memory.  
+`make analytics.export` prefers this fast-lane file when present; otherwise it falls back to the DB export.
+
+### Timestamp Standard (RFC3339 / ISO-8601)
+- All exported artifacts MUST use RFC3339 timestamps in `generated_at`.
+- Applies to: `exports/graph_latest.json` and `exports/graph_stats.json`.
+- Fast-lane metadata: `"source": "fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
+- Guard: stats timestamp is verified RFC3339; graph export is covered by schema guard and will emit a HINT if missing.
+- `guards.all` includes `guard.graph.generated_at` (HINT by default; set `STRICT_RFC3339=1` for strict).
+
+### TS Sandbox PoC (ADR-063)
+- Gated by `CODE_EXEC_TS=0` (default = OFF). Python/LangGraph remains the operative path.
+- `make sandbox.smoke` is gate-aware and runs hermetically when enabled; otherwise clearly SKIPs.
 
 **Goal:** Take raw biblical text → discover nouns (AI-first) → enrich theology → build/score graph → verify against SSOT → export analytics/report → ship to UI, with self-healing guards and governance.
 
