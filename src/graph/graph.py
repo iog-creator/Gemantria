@@ -490,7 +490,7 @@ def _persist_graph_exports(graph: dict[str, Any], book: str) -> None:
         "nodes": node_count,
         "edges": edge_count,
         "density": density,
-        "generated_at": time.time(),
+        "generated_at": datetime.now(UTC).isoformat(),
     }
     (export_dir / "graph_stats.json").write_text(json.dumps(stats, ensure_ascii=False, indent=2) + "\n")
 

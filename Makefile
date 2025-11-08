@@ -513,6 +513,11 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
+guards.all: guard.stats.rfc3339
+guard.stats.rfc3339:
+	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
+	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
