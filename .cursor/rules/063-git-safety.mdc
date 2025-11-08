@@ -1,6 +1,6 @@
 ---
 description: Git safety - no destructive operations (always-on)
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Git Safety (No Destructive Operations)

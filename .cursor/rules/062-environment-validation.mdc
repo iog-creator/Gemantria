@@ -1,6 +1,6 @@
 ---
 description: Environment validation and venv management (always-on)
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Environment Validation (Always Required)

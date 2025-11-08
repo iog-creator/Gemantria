@@ -1,6 +1,6 @@
 ---
 description: OPS Contract v6.2.3
-alwaysApply: false
+alwaysApply: true
 globs: []
 ---
 # 🧭 Gemantria — OPS Contract v6.2.3
