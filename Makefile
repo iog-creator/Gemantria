@@ -771,5 +771,20 @@ ui.build:
 	@[ -d ui ] || { echo "ui/ folder missing"; exit 1; }
 	cd ui && npm ci && npm run build
 
+
 agents.md.lint:
 	@scripts/guards/agents_md_lint.sh
+
+# OPS verification suite (Rule 050/051/052 compliance)
+ops.verify: agents.md.lint guards.all
+	@echo "[ops.verify] All operational guards passed"
+
+# Optional DB index for AGENTS.md search/telemetry (docs remain SSOT)
+agents.md.index:
+	@echo "[agents.md.index] building index (skip if GEMATRIA_DSN unset)"
+	@[ -n "$$GEMATRIA_DSN" ] || { echo "SKIP: GEMATRIA_DSN not set"; exit 0; }
+	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c 'CREATE TABLE IF NOT EXISTS ai.agent_docs_index(path text PRIMARY KEY, sha256_12 text NOT NULL, excerpt jsonb NOT NULL, updated_at timestamptz NOT NULL DEFAULT now())'
+	@python3 scripts/guards/index_agents_md.py
+	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "TRUNCATE ai.agent_docs_index"
+	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "\copy ai.agent_docs_index (path,sha256_12,excerpt) FROM program 'jq -cr \".[]|[.path,.sha256_12,(.excerpt|tojson)]|@tsv\" tmp.agent_docs_index.json' WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b')"
+	@psql "$$GEMATRIA_DSN" -c "SELECT count(*) AS indexed, min(updated_at) AS first_at, max(updated_at) AS last_at FROM ai.agent_docs_index"
