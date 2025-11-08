@@ -311,7 +311,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
+.PHONY: book.plan book.dry book.go book.stop book.resume book.smoke ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -522,6 +522,11 @@ guard.stats.rfc3339:
 guard.graph.generated_at:
 	@echo ">> Validating graph exports generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_graph_generated_at.py
+
+# --- Local posture smoke: empty-DB tolerant ---
+.PHONY: book.smoke
+book.smoke:
+	@python3 scripts/smokes/book_smoke.py
 
 .PHONY: guard.tests
 guard.tests:
