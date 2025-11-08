@@ -31,8 +31,9 @@ class BatchConfig:
     def from_env(cls) -> BatchConfig:
         """Load configuration from environment variables."""
         batch_size = int(os.getenv("BATCH_SIZE", DEFAULT_BATCH_SIZE))
-        allow_partial = os.getenv("ALLOW_PARTIAL", "0") == "1"
-        partial_reason = os.getenv("PARTIAL_REASON") if allow_partial else None
+        allow_partial_str = os.getenv("ALLOW_PARTIAL", "0")
+        allow_partial = allow_partial_str.strip().lower() in {"1", "true", "yes"}
+        partial_reason = os.getenv("PARTIAL_REASON", "").strip() or None
 
         return cls(
             batch_size=batch_size,
@@ -83,19 +84,20 @@ class BatchProcessor:
     def __init__(self, config: BatchConfig | None = None):
         self.config = config or BatchConfig.from_env()
 
-    def validate_batch_size(self, nouns: list[str]) -> None:
+    def validate_batch_size(self, nouns: list[dict] | list[str]) -> None:
         """Validate that we have enough nouns for processing."""
-        if len(nouns) < self.config.batch_size and not self.config.allow_partial:
-            # Write review file for triage
-            review_file = Path("review.ndjson")
-            with review_file.open("w") as f:
-                for noun in nouns:
-                    json.dump({"noun": noun, "status": "pending_review"}, f)
-                    f.write("\n")
+        n = len(nouns)
+        if n < self.config.batch_size:
+            if self.config.allow_partial:
+                # Log-but-allow; downstream guards keep SSOT integrity (AGENTS.md batch rules)
+                print(
+                    f"HINT: proceeding with partial batch {n}/{self.config.batch_size} "
+                    f"(ALLOW_PARTIAL=1 reason={self.config.partial_reason!r})"
+                )
+                return
+            raise BatchAbortError(n, self.config.batch_size, Path("review.ndjson"))
 
-            raise BatchAbortError(len(nouns), self.config.batch_size, review_file)
-
-    def process_nouns(self, nouns: list[str]) -> BatchResult:
+    def process_nouns(self, nouns: list[dict] | list[str]) -> BatchResult:
         """Process a batch of nouns through validation pipeline."""
         self.validate_batch_size(nouns)
 
@@ -131,16 +133,38 @@ class BatchProcessor:
             created_at=datetime.now(UTC),
         )
 
-    def _generate_batch_id(self, nouns: list[str]) -> str:
+    def _generate_batch_id(self, nouns: list[dict] | list[str]) -> str:
         """Generate a deterministic batch ID based on noun content."""
         combined_hash = hashlib.sha256()
-        for noun in sorted(nouns):  # Sort for deterministic ordering
-            combined_hash.update(noun.encode("utf-8"))
+        # Sort nouns deterministically - handle both dict and str types
+        if nouns and isinstance(nouns[0], dict):
+            # For dict nouns, sort by surface/hebrew field
+            sort_key = lambda n: n.get("surface", n.get("hebrew", str(n)))
+            sorted_nouns = sorted(nouns, key=sort_key)
+        else:
+            # For string nouns, sort directly
+            sorted_nouns = sorted(nouns)
+
+        for noun in sorted_nouns:
+            if isinstance(noun, dict):
+                # Convert dict to stable string representation
+                noun_str = json.dumps(noun, sort_keys=True, ensure_ascii=False)
+            else:
+                noun_str = str(noun)
+            combined_hash.update(noun_str.encode("utf-8"))
         return combined_hash.hexdigest()[:16]  # Short ID for readability
 
-    def _create_manifest(self, batch_id: str, input_nouns: list[str], results: list[dict[str, Any]]) -> dict[str, Any]:
+    def _create_manifest(
+        self, batch_id: str, input_nouns: list[dict] | list[str], results: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """Create manifest with hash proofs and processing metadata."""
-        input_hashes = [hashlib.sha256(noun.encode("utf-8")).hexdigest() for noun in input_nouns]
+        input_hashes = []
+        for noun in input_nouns:
+            if isinstance(noun, dict):
+                noun_str = json.dumps(noun, sort_keys=True, ensure_ascii=False)
+            else:
+                noun_str = str(noun)
+            input_hashes.append(hashlib.sha256(noun_str.encode("utf-8")).hexdigest())
         result_hashes = [hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest() for r in results]  # noqa: E501
 
         return {

@@ -39,41 +39,57 @@ def write_rules_index(entries):
     lines = ["# RULES_INDEX\n", "| # | File | Title |", "|---:|------|-------|"]
     for num, fname, title in entries:
         lines.append(f"| {num:03d} | {fname} | {title} |")
-    INDEX.write_text("\n".join(lines) + "\n")
+    new_content = "\n".join(lines) + "\n"
+
+    if INDEX.exists():
+        old_content = INDEX.read_text()
+        if old_content == new_content:
+            return False  # No change
+
+    INDEX.write_text(new_content)
+    return True  # Changed
 
 
 def inject_agents_table(entries):
     if not AGENTS.exists():
-        return
-    text = AGENTS.read_text()
+        return False
+    old_text = AGENTS.read_text()
     start = "<!-- RULES_INVENTORY_START -->"
     end = "<!-- RULES_INVENTORY_END -->"
     table = ["| # | Title |", "|---:|-------|"]
     for num, _, title in entries:
         table.append(f"| {num:03d} | {title} |")
     block = start + "\n" + "\n".join(table) + "\n" + end
-    if start in text and end in text:
-        text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S)
+    if start in old_text and end in old_text:
+        new_text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, old_text, flags=re.S)
     else:
-        text += "\n\n" + block + "\n"
-    AGENTS.write_text(text)
+        new_text = old_text + "\n\n" + block + "\n"
+
+    if new_text != old_text:
+        AGENTS.write_text(new_text)
+        return True  # Changed
+    return False  # No change
 
 
 def inject_plan_rules(entries):
     if not PLAN.exists():
-        return
-    text = PLAN.read_text()
+        return False
+    old_text = PLAN.read_text()
     start = "<!-- RULES_TABLE_START -->"
     end = "<!-- RULES_TABLE_END -->"
     table = ["| # | Title |", "|---:|-------|"]
     for num, _, title in entries:
         table.append(f"| {num:03d} | {title} |")
     block = start + "\n" + "\n".join(table) + "\n" + end
-    if start in text and end in text:
-        text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, text, flags=re.S)
+    if start in old_text and end in old_text:
+        new_text = re.sub(rf"{re.escape(start)}.*?{re.escape(end)}", block, old_text, flags=re.S)
     else:
-        text += "\n\n" + block + "\n"
-    PLAN.write_text(text)
+        new_text = old_text + "\n\n" + block + "\n"
+
+    if new_text != old_text:
+        PLAN.write_text(new_text)
+        return True  # Changed
+    return False  # No change
 
 
 def main():
@@ -123,14 +139,26 @@ def main():
     if unresolved:
         print(f"[rules_audit] Tolerating {len(unresolved)} missing numbers (reserved markers present): {unresolved}")
 
+    changed_files = []
+
     print(f"[rules_audit] Generating {INDEX}...")
-    write_rules_index(entries)
+    if write_rules_index(entries):
+        changed_files.append(str(INDEX.relative_to(ROOT)))
 
     print(f"[rules_audit] Injecting rules table into {AGENTS}...")
-    inject_agents_table(entries)
+    if inject_agents_table(entries):
+        changed_files.append(str(AGENTS.relative_to(ROOT)))
 
     print(f"[rules_audit] Injecting rules table into {PLAN}...")
-    inject_plan_rules(entries)
+    if inject_plan_rules(entries):
+        changed_files.append(str(PLAN.relative_to(ROOT)))
+
+    if changed_files:
+        print("[rules_audit] CHANGED FILES:")
+        for f in changed_files:
+            print(f"  - {f}")
+    else:
+        print("[rules_audit] No files changed")
 
     print("[rules_audit] PASS - Rules numbering contiguous, docs updated")
 

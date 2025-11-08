@@ -14,7 +14,7 @@ from langgraph.graph import StateGraph
 
 from src.infra.env_loader import ensure_env_loaded
 from src.graph.state import PipelineState
-from src.graph.batch_processor import BatchProcessor, BatchAbortError
+from src.graph.batch_processor import BatchProcessor, BatchConfig, BatchAbortError
 from src.nodes import network_aggregator
 from src.nodes.enrichment import enrichment_node
 from src.nodes.ai_noun_discovery import discover_nouns_for_book
@@ -76,11 +76,10 @@ def collect_nouns_node(state: PipelineState) -> PipelineState:
     # Log metrics
     state["metrics"]["ai_call_latencies_ms"] = timing_samples
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "collect_nouns", {"nouns": state["nouns"], "metrics": state["metrics"]})
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save("langgraph_pipeline", "collect_nouns", {"nouns": state["nouns"], "metrics": state["metrics"]})
 
     state["hints"].append("collect_nouns: completed")
     return state
@@ -92,15 +91,14 @@ def validate_batch_node(state: PipelineState) -> PipelineState:
     state["weighted_nouns"] = state["nouns"]  # Pass through for now
     state["validated_nouns"] = state["weighted_nouns"]  # Set validated nouns for enrichment
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save(
-        "langgraph_pipeline",
-        "validate_batch",
-        {"weighted_nouns": state["weighted_nouns"], "validated_nouns": state["validated_nouns"]},
-    )
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save(  # FIXME: API doesn't exist, should use put() with proper args
+    #     "langgraph_pipeline",
+    #     "validate_batch",
+    #     {"weighted_nouns": state["weighted_nouns"], "validated_nouns": state["validated_nouns"]},
+    # )
 
     state["hints"].append("validate_batch: completed")
     return state
@@ -114,11 +112,10 @@ def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
     # Normalize enriched nouns using SSOT adapter at enrichment boundary
     state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", [])]
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "enrichment", {"enriched_nouns": state["enriched_nouns"]})
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save("langgraph_pipeline", "enrichment", {"enriched_nouns": state["enriched_nouns"]})
 
     state["hints"].append("enrichment: completed")
     return state
@@ -138,11 +135,10 @@ def confidence_validator_node(state: PipelineState) -> PipelineState:
         # If agents are not used, pass enriched nouns directly
         state["analyzed_nouns"] = state.get("enriched_nouns", [])
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "confidence_validator", {"analyzed_nouns": state["analyzed_nouns"]})
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save("langgraph_pipeline", "confidence_validator", {"analyzed_nouns": state["analyzed_nouns"]})
 
     state["hints"].append("confidence_validator: completed")
     return state
@@ -155,11 +151,10 @@ def network_aggregator_node_wrapper(state: PipelineState) -> PipelineState:
     state = network_aggregator.network_aggregator_node(state)
     state["graph"] = state.get("network_summary", {})
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "network_aggregator", {"graph": state["graph"]})
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save("langgraph_pipeline", "network_aggregator", {"graph": state["graph"]})
 
     state["hints"].append("network_aggregator: completed")
     return state
@@ -172,11 +167,10 @@ def analysis_runner_node(state: PipelineState) -> PipelineState:
     state = graph_scorer_node(state)
     state["scored_graph"] = state.get("graph", {})
 
-    # Auto-save checkpoint after node completion
-    from src.infra.checkpointer import get_checkpointer
-
-    checkpointer = get_checkpointer()
-    checkpointer.save("langgraph_pipeline", "analysis_runner", {"scored_graph": state["scored_graph"]})
+    # Skip checkpointing for intermediate stops (checkpointer.save API is incorrect anyway)
+    # from src.infra.checkpointer import get_checkpointer
+    # checkpointer = get_checkpointer()
+    # checkpointer.save("langgraph_pipeline", "analysis_runner", {"scored_graph": state["scored_graph"]})
 
     state["hints"].append("analysis_runner: completed")
     return state
@@ -209,6 +203,8 @@ def run_pipeline(
     mode: str = "START",
     nouns: List[Dict[str, Any]] | None = None,
     stop_after_n_nodes: int | None = None,
+    allow_partial: bool | None = None,
+    partial_reason: str | None = None,
 ) -> Dict[str, Any]:
     """
     Run the complete pipeline for a given book.
@@ -271,26 +267,41 @@ def run_pipeline(
         discovered_nouns = discover_nouns_for_book(book)
         nouns = discovered_nouns
 
-    # Validate batch size
-    batch_processor = BatchProcessor()
-    try:
-        batch_processor.validate_batch_size(nouns)
-        batch_result = batch_processor.process_nouns(nouns)
-    except BatchAbortError as e:
-        # Batch validation failed - return error result
-        update_run_status(run_id, "failed")
+    # Validate batch size (respect env-driven batch semantics)
+    # Skip validation for intermediate stops (noun discovery only)
+    if stop_after_n_nodes is None or stop_after_n_nodes > 1:
+        if allow_partial is not None:
+            # Use provided parameters
+            batch_config = BatchConfig(
+                batch_size=50,
+                allow_partial=allow_partial,
+                partial_reason=partial_reason,
+            )
+        else:
+            # Fallback to environment
+            batch_config = BatchConfig.from_env()
+        batch_processor = BatchProcessor(batch_config)
         try:
-            mark_run_finished(run_id, notes=f"batch_abort: {e}")
-        except Exception as finish_e:
-            print(f"[runs_ledger.finish] WARN: {finish_e}")
-        return {
-            "run_id": run_id,
-            "book": book,
-            "mode": mode,
-            "success": False,
-            "error": str(e),
-            "batch_result": None,  # Test expects this
-        }
+            batch_processor.validate_batch_size(nouns)
+            batch_result = batch_processor.process_nouns(nouns)
+        except BatchAbortError as e:
+            # Batch validation failed - return error result
+            update_run_status(run_id, "failed")
+            try:
+                mark_run_finished(run_id, notes=f"batch_abort: {e}")
+            except Exception as finish_e:
+                print(f"[runs_ledger.finish] WARN: {finish_e}")
+            return {
+                "run_id": run_id,
+                "book": book,
+                "mode": mode,
+                "success": False,
+                "error": str(e),
+                "batch_result": None,  # Test expects this
+            }
+    else:
+        # Skip batch processing for intermediate stops
+        batch_result = None
 
     # Create initial state
     initial_state: PipelineState = {

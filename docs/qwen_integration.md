@@ -244,6 +244,42 @@ lms ps
 - **Batch Processing**: Optimize batch sizes (4-8 for reranking, 16-32 for embeddings)
 - **Dynamic Loading**: Models load on-demand when first requested via API
 
+## AI Noun Discovery JSON Prompting Issues
+
+### Problem: AI Returns Natural Language Instead of JSON
+
+**Symptoms:**
+- AI noun discovery returns natural language explanations instead of structured JSON
+- Pipeline fails with "ai_response_parse_error"
+- Nouns discovered = 0
+
+**Root Cause:**
+- The theology model (`christian-bible-expert-v2.0-12b`) interprets complex Hebrew text analysis as a natural language task
+- Despite strict "Return ONLY JSON" instructions, the model responds with explanatory text
+
+**Solutions:**
+
+1. **Mock Mode Fallback (Recommended for now):**
+   ```bash
+   export LM_STUDIO_MOCK=true
+   # This provides deterministic mock nouns for development/testing
+   ```
+
+2. **Alternative Models:**
+   - Try `qwen/qwen3-14b` for better structured output (may not support theology tasks)
+   - Test different models for JSON extraction vs theological reasoning
+
+3. **Prompt Engineering:**
+   - Use simpler, more direct prompts
+   - Separate task description from output format
+   - Test with minimal Hebrew text samples
+
+### Current Status
+
+- ✅ Mock fallback implemented in `src/nodes/ai_noun_discovery.py`
+- ✅ Pipeline works with `LM_STUDIO_MOCK=true`
+- 🔄 JSON prompting refinement ongoing
+
 ## Troubleshooting
 
 ### Common Issues

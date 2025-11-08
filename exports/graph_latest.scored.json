@@ -1,0 +1,94 @@
+{
+  "schema": "gematria/graph.v1",
+  "book": "Genesis",
+  "generated_at": "2025-11-07T22:20:01.192203+00:00",
+  "nodes": [
+    {
+      "id": "ai-genesis-4801164412166910793",
+      "surface": "אלהים",
+      "hebrew": "אלהים",
+      "gematria": 46,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: אלהים"
+    },
+    {
+      "id": "ai-genesis-7710999074404465072",
+      "surface": "שמים",
+      "hebrew": "שמים",
+      "gematria": 350,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: שמים"
+    },
+    {
+      "id": "ai-genesis--8643510926402138906",
+      "surface": "ארץ",
+      "hebrew": "ארץ",
+      "gematria": 201,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: ארץ"
+    },
+    {
+      "id": "ai-genesis--1230719068798201762",
+      "surface": "נחש",
+      "hebrew": "נחש",
+      "gematria": 358,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: נחש"
+    },
+    {
+      "id": "ai-genesis-1795019832518959966",
+      "surface": "עוף",
+      "hebrew": "עוף",
+      "gematria": 76,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: עוף"
+    },
+    {
+      "id": "ai-genesis--8446470118900555418",
+      "surface": "מין",
+      "hebrew": "מין",
+      "gematria": 50,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: מין"
+    },
+    {
+      "id": "ai-genesis-2353926623364701480",
+      "surface": "דם",
+      "hebrew": "דם",
+      "gematria": 4,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: דם"
+    },
+    {
+      "id": "ai-genesis--6054969655677979496",
+      "surface": "נפש",
+      "hebrew": "נפש",
+      "gematria": 430,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: נפש"
+    },
+    {
+      "id": "ai-genesis--8912269589112308028",
+      "surface": "חיה",
+      "hebrew": "חיה",
+      "gematria": 23,
+      "class": "unknown",
+      "book": "Unknown",
+      "analysis": "Hebrew noun: חיה"
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "node_count": 9,
+    "edge_count": 0,
+    "source": "ai_enriched_nouns"
+  }
+}

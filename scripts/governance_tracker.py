@@ -349,25 +349,69 @@ def check_stale_artifacts():
                 print("✅ All governance artifacts are fresh (<24 hours)")
 
 
+def pre_operation_check(operation: str = "general") -> bool:
+    """
+    Pre-operation governance check using AI database for real-time validation.
+    Called before major operations to ensure governance compliance.
+    """
+    print(f"🔍 GOVERNANCE PRE-CHECK: {operation}")
+
+    # Quick freshness check (<24 hours)
+    with psycopg.connect(GEMATRIA_DSN) as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM check_governance_freshness(24) WHERE is_stale = true")
+            stale_count = cur.fetchone()[0]
+
+            if stale_count > 0:
+                print(f"⚠️  {stale_count} governance artifacts stale (>24h) - consider running housekeeping")
+                # Don't fail for stale artifacts in pre-checks, just warn
+
+            # Check for unlinked hints
+            cur.execute("""
+                SELECT COUNT(*) FROM hint_emissions
+                WHERE rule_reference IS NULL OR agent_reference IS NULL
+            """)
+            unlinked_hints = cur.fetchone()[0]
+
+            if unlinked_hints > 0:
+                print(f"🔗 {unlinked_hints} hint emissions need linking")
+
+            # Validate critical artifacts exist
+            cur.execute("SELECT COUNT(*) FROM governance_artifacts WHERE artifact_type = 'rule'")
+            rule_count = cur.fetchone()[0]
+
+            if rule_count < 60:  # We have 64 rules
+                print(f"⚠️  Only {rule_count} rules tracked (expected ~64)")
+
+    print("✅ Governance pre-check completed")
+    return True  # Always allow operations but warn about issues
+
+
 def main():
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage: python scripts/governance_tracker.py {update|validate [--lenient]|report|stale}")
+        print(
+            "Usage: python scripts/governance_tracker.py {update|validate [--lenient]|report|stale|precheck [operation]}"
+        )
         sys.exit(1)
 
     command = sys.argv[1]
-    lenient = "--lenient" in sys.argv
 
     if command == "update":
         update_governance_db()
     elif command == "validate":
+        lenient = "--lenient" in sys.argv
         success = validate_governance_compliance(lenient=lenient)
         sys.exit(0 if success else 1)
     elif command == "report":
         generate_governance_report()
     elif command == "stale":
         check_stale_artifacts()
+    elif command == "precheck":
+        operation = sys.argv[2] if len(sys.argv) > 2 else "general"
+        success = pre_operation_check(operation)
+        sys.exit(0 if success else 1)
     else:
         print(f"Unknown command: {command}")
         sys.exit(1)

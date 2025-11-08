@@ -47,6 +47,7 @@ class MetricsClient:
                 elif isinstance(v, dict):
                     # psycopg 3 requires explicit JSON serialization for dicts
                     import json
+
                     db_row[k] = json.dumps(v)
                 else:
                     db_row[k] = v

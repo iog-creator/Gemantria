@@ -343,7 +343,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 <!-- RULES_INVENTORY_START -->
 | # | Title |
 |---:|-------|
-| 000 | # --- |
+| 000 | # 000-ssot-index (AlwaysApply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -405,6 +405,8 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 059 | # --- |
 | 060 | # --- |
 | 061 | # --- |
+| 062 | # --- |
+| 063 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---
