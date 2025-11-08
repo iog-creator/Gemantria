@@ -8,9 +8,6 @@ Uses self-certainty-qwen3-1.7b-base-math to verify arithmetic correctness.
 from __future__ import annotations
 
 import os
-import json
-import re
-from typing import Any, Dict, List
 
 from src.core.hebrew_utils import MAP, calculate_gematria
 from src.infra.metrics_core import get_metrics_client
