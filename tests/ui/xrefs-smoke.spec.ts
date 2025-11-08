@@ -23,6 +23,8 @@ test('xrefs page renders chips and opens side panel', async ({ page }) => {
   // Click to open side panel and screenshot
   await chip.click();
   await page.waitForSelector('[class*="SidePanel"], [class*="side-panel"], text=/Close/i', { timeout: 3000 });
+  // Expect verse text (sample provides Genesis 1:1 / Romans 1:20)
+  await page.waitForSelector('text=/In the beginning God created the heaven and the earth|clearly seen/', { timeout: 3000 });
   await page.screenshot({ path: 'evidence/ui/xrefs_sidepanel.png', fullPage: true });
 });
 
