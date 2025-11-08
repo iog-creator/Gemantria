@@ -93,11 +93,11 @@ def enrichment_node(state: dict) -> dict:
 
     def build_enrichment_prompt(noun):
         """Build enrichment prompt, leveraging AI-discovered analysis when available."""
-        base_info = (
-            f"Noun: {noun.get('name', 'Unknown')}\n"
-            f"Hebrew: {escape_hebrew(noun.get('hebrew', ''))}\n"
-            f"Primary Verse: {noun.get('primary_verse', 'Unknown')}\n"
-        )
+        # Get fields with empty string fallbacks (not "Unknown") since we filter invalid nouns
+        name = noun.get("name", noun.get("hebrew", noun.get("surface", "")))
+        hebrew = noun.get("hebrew", noun.get("surface", ""))
+        verse = noun.get("primary_verse", "")
+        base_info = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\n"
 
         # Leverage AI-discovered analysis if available
         if noun.get("ai_discovered"):
@@ -152,8 +152,11 @@ def enrichment_node(state: dict) -> dict:
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
                 log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
-                # Fallback: use basic format
-                content = f"Noun: {n.get('name', 'Unknown')}\nHebrew: {n.get('hebrew', '')}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
+                # Fallback: use basic format (no "Unknown" fallbacks)
+                name = n.get("name", n.get("hebrew", n.get("surface", "")))
+                hebrew = n.get("hebrew", n.get("surface", ""))
+                verse = n.get("primary_verse", "")
+                content = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\nTask: Provide theological analysis. Return JSON with insight and confidence."
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
         # Call LM Studio with batched requests
