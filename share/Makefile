@@ -311,7 +311,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
+.PHONY: book.plan book.dry book.go book.stop book.resume book.smoke ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -513,7 +513,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -522,6 +522,27 @@ guard.stats.rfc3339:
 guard.graph.generated_at:
 	@echo ">> Validating graph exports generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_graph_generated_at.py
+
+.PHONY: guard.rules.alwaysapply
+guard.rules.alwaysapply:
+	@$(PYTHON) scripts/guards/guard_alwaysapply_triage.py
+
+.PHONY: guard.rules.alwaysapply.dbmirror
+guard.rules.alwaysapply.dbmirror:
+	@$(PYTHON) scripts/guards/guard_alwaysapply_dbmirror.py
+
+# Documentation governance
+.PHONY: guard.docs.consistency docs.fix.headers docs.audit
+guard.docs.consistency:
+	@python3 scripts/guards/guard_docs_consistency.py
+docs.fix.headers:
+	@python3 scripts/docs/apply_ops_header.py
+docs.audit: guard.docs.consistency
+
+# --- Local posture smoke: empty-DB tolerant ---
+.PHONY: book.smoke
+book.smoke:
+	@python3 scripts/smokes/book_smoke.py
 
 .PHONY: guard.tests
 guard.tests:

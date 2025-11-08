@@ -2,6 +2,8 @@
 
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
 
+> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+
 ## Local development
 1. Create and activate a virtual environment (for example `.venv`).
 2. Install dependencies: `pip install -r requirements.txt`.
