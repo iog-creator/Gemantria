@@ -1,6 +1,6 @@
 ---
 description: Tool Priority & Context Guidance
-alwaysApply: false
+alwaysApply: true
 globs: []
 ---
 # 052 — Tool Priority & Context Guidance (AlwaysApply)

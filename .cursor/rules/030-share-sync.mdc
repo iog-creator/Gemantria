@@ -1,6 +1,6 @@
 ---
 description: Always sync share directory after changes
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Share Directory Synchronization (Always Required)

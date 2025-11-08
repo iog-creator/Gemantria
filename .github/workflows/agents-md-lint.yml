@@ -1,0 +1,23 @@
+name: agents-md-lint
+
+on:
+  pull_request:
+  push:
+    tags: ['v*', 'infra/*', 'ops/*']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - name: HINT (PRs) — agents.md.lint
+        if: ${{ github.event_name == 'pull_request' }}
+        run: make -s agents.md.lint || true
+      - name: STRICT (tags) — agents.md.lint
+        if: startsWith(github.ref, 'refs/tags/')
+        run: make -s agents.md.lint

@@ -103,9 +103,9 @@ Share:
 
 **Core rules** (AlwaysApply):
 
-* `039-execution-contract.mdc` — GPT-5 orchestrates; Cursor executes; evidence tails required
-* `040-ci-triage-playbook.mdc` — surgical fixes only; within PR scope
-* `041-pr-merge-policy.mdc` — no green, no merge; squash; delete branch
+* `050-ops-contract.mdc` — OPS/SSOT LOUD-FAIL + governance posture
+* `051-cursor-insight.mdc` — Cursor reply format, evidence-first handoffs
+* `052-tool-priority.mdc` — Tool ordering, SSOT usage, guardrails for automation
 
 **Templates (required)**:
 

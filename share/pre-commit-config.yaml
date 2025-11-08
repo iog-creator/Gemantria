@@ -6,3 +6,11 @@ repos:
         args: ["--force-exclude","--config","pyproject.toml"]
       - id: ruff-format
         args: ["--config","pyproject.toml"]
+  - repo: local
+    hooks:
+      - id: agents_md_lint
+        name: agents.md lint (root no-bloat)
+        entry: scripts/guards/agents_md_lint.sh
+        language: system
+        pass_filenames: false
+        stages: [commit]

@@ -21,6 +21,7 @@ This directory contains SQL migration scripts for the Gemantria database schema.
 - `013_fix_ai_enrichment_schema.sql` - AI enrichment schema fixes
 - `014_relations_and_patterns.sql` - Concept relations and patterns
 - `015_graph_metadata.sql` - Graph metadata tables
+- `039_create_ai_policy_view.sql` - Always-Apply policy view for automation guards
 
 ## Usage
 
