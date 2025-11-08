@@ -63,7 +63,7 @@
 | 055 | 055-auto-docs-sync.mdc | Auto-Docs Sync Pass |
 | 056 | 056-ui-generation.mdc | UI Generation Standard |
 | 057 | 057-embedding-consistency.mdc | Embedding Consistency CI Checks |
-| 058 | 058-auto-housekeeping.mdc | Mandatory run rules_audit.py/share.sync/forest regen after every change/PR. Fail-closed if skipped—critical error log/CI fail. |
+| 058 | 058-auto-housekeeping.mdc | Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail. Includes share.sync, governance, ADRs, rules audit, forest regen, and evidence archiving. |
 | 059 | 059-context-persistence.mdc | Context Persistence |
 | 060 | 060-response-style.mdc | Response Style Enforcement |
 | 061 | 061-ai-learning-tracking.mdc | AI learning and interaction tracking system |
