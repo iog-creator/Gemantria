@@ -101,12 +101,16 @@ def enrichment_node(state: dict) -> dict:
 
         # Leverage AI-discovered analysis if available
         if noun.get("ai_discovered"):
+            letters = noun.get("letters", [])
+            gematria = noun.get("gematria", noun.get("gematria_value", ""))
+            classification = noun.get("classification", noun.get("class", ""))
+            meaning = noun.get("meaning", "Not analyzed")
             ai_analysis = (
                 f"AI Analysis:\n"
-                f"- Letters: {', '.join(noun.get('letters', []))}\n"
-                f"- Gematria Value: {noun.get('gematria', 'Unknown')}\n"
-                f"- Classification: {noun.get('classification', 'Unknown')} (person/place/thing)\n"
-                f"- Initial Meaning: {noun.get('meaning', 'Not analyzed')}\n"
+                f"- Letters: {', '.join(letters) if letters else 'Not provided'}\n"
+                f"- Gematria Value: {gematria if gematria else 'Not calculated'}\n"
+                f"- Classification: {classification if classification else 'Not classified'} (person/place/thing)\n"
+                f"- Initial Meaning: {meaning}\n"
             )
             task_desc = (
                 "This noun was discovered and initially analyzed by AI. "
