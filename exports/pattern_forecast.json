@@ -1,7 +1,22 @@
 {
-  "schema": "pattern-forecast.v1",
-  "generated_at": "2025-11-07T03:13:34.924999+00:00",
-  "forecast_steps": 5,
-  "notes": "Insufficient data → placeholder forecast (schema not enforced)",
-  "error": "Insufficient data for forecasting (need at least 3 data points)"
+  "forecasts": [],
+  "metadata": {
+    "generated_at": "2025-11-08T18:31:37.250474+00:00",
+    "forecast_parameters": {
+      "default_horizon": 10,
+      "default_model": "sma",
+      "min_training_length": 5
+    },
+    "total_forecasts": 0,
+    "books_forecasted": [],
+    "model_distribution": {
+      "naive": 0,
+      "sma": 0,
+      "arima": 0
+    },
+    "average_metrics": {
+      "rmse": null,
+      "mae": null
+    }
+  }
 }

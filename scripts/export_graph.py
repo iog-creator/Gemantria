@@ -10,7 +10,6 @@ import json
 import os
 import pathlib
 import sys
-import time
 from datetime import datetime, UTC
 
 from src.infra.db import get_gematria_rw

@@ -4,7 +4,6 @@ from typing import Any
 
 import jsonschema
 from src.infra.structured_logger import get_logger, log_json
-from datetime import UTC
 
 LOG = get_logger("gematria.analysis_runner")
 
