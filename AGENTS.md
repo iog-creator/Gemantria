@@ -423,7 +423,21 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 
 ---
 
-## Agentic Pipeline Framework
+## Agentic Pipeline Framework (Orchestrator-Only)
+
+**Canonical path:** `python3 scripts/pipeline_orchestrator.py pipeline --book "$BOOK" [--nouns-json ...]`
+
+- Granular `make graph.build` / `graph.score` targets remain as compatibility shims and call the orchestrator.
+- Resuming from enriched nouns is supported; the network aggregator now prefers `enriched_nouns` and preserves pipeline `ts`.
+- Use `CHECKPOINTER=memory` for local deterministic runs; Postgres checkpointer requires `GEMATRIA_DSN`.
+
+**Fallback mode**  
+Set `NETWORK_AGGREGATOR_MODE=fallback` to build a graph without LM/pgvector.  
+The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.json` directly from memory.  
+`make analytics.export` prefers this fast-lane file when present; otherwise it falls back to the DB export.
+
+### Code-Exec PoC (ADR-063)
+This PoC is gated by `CODE_EXEC_TS=0` (default). Python/LangGraph remains the default pipeline. No schema/DB changes.
 
 **Goal:** Take raw biblical text → discover nouns (AI-first) → enrich theology → build/score graph → verify against SSOT → export analytics/report → ship to UI, with self-healing guards and governance.
 
