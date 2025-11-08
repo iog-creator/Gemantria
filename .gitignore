@@ -20,3 +20,6 @@ backups/codebase/backup-safety-rules-*.tar.gz
 __pycache__/
 *.pyc
 exports/ai_nouns.enriched.json
+**/__pycache__/
+evidence/
+share/evidence/

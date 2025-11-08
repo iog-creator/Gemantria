@@ -775,8 +775,11 @@ ui.build:
 agents.md.lint:
 	@scripts/guards/agents_md_lint.sh
 
+rules_inventory_check:
+	@scripts/guards/rules_inventory_check.sh
+
 # OPS verification suite (Rule 050/051/052 compliance)
-ops.verify: agents.md.lint guards.all
+ops.verify: agents.md.lint rules_inventory_check guards.all
 	@echo "[ops.verify] All operational guards passed"
 
 # Optional DB index for AGENTS.md search/telemetry (docs remain SSOT)

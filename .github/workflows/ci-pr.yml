@@ -22,14 +22,20 @@ jobs:
       - name: RC-freeze gate (enforce label on PRs during stabilization)
         if: ${{ github.event_name == 'pull_request' }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          : "${GITHUB_TOKEN:?GITHUB_TOKEN is required}"
           repo="${GITHUB_REPOSITORY}"
-          # Is RC stabilization issue open?
-          open_rc=$(curl -sSf -H "Authorization: Bearer ${GH_TOKEN}" \
-            "https://api.github.com/search/issues?q=repo:${repo}+state:open+in:title+\"RC%20Stabilization%20—%20v0.1.0-rc1\"" \
-            | jq '.total_count')
+          # Build a simpler ASCII search to avoid em-dash pitfalls and ensure proper URL encoding.
+          q="repo:${repo} state:open in:title \"RC Stabilization\""
+          encoded_q=$(printf '%s' "$q" | jq -sRr @uri)
+          open_rc=$(
+            curl -sSf -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+              "https://api.github.com/search/issues?q=${encoded_q}" \
+            | jq '.total_count'
+          )
+          echo "RC stabilization issues open: ${open_rc}"
           if [ "${open_rc}" -gt 0 ]; then
             # Require rc-freeze label on the PR
             have=$(jq -r '.pull_request.labels[].name' < "${GITHUB_EVENT_PATH}" | grep -cx 'rc-freeze' || true)
@@ -37,6 +43,8 @@ jobs:
               echo "::error title=RC freeze active::Add 'rc-freeze' label to this PR during stabilization."
               exit 1
             fi
+          else
+            echo "No RC stabilization window open; skipping rc-freeze requirement."
           fi
       - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b6
         with:
