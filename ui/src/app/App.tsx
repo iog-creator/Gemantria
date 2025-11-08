@@ -7,11 +7,12 @@ import { GraphRenderer } from '../components/GraphRenderer';
 import MetaPanel from '../components/MetaPanel';
 import MetricsDashboard from '../components/MetricsDashboard';
 import TemporalPage from '../views/TemporalPage';  // New import for temporal view
+import XrefDemoPage from '../views/XrefDemoPage';  // New import for xref explorer
 import { Envelope } from '../types/envelope';
 
 function App() {
   const [uploadedEnvelope, setUploadedEnvelope] = useState<Envelope | null>(null);
-  const [activeTab, setActiveTab] = useState<'stats' | 'graph' | 'temporal'>('stats');  // Add 'temporal' to type
+  const [activeTab, setActiveTab] = useState<'stats' | 'graph' | 'temporal' | 'xrefs'>('stats');  // Add tab types
   const [showMetrics, setShowMetrics] = useState(false);  // Dev toggle
 
   const handleFileLoad = (envelope: Envelope) => {
@@ -61,6 +62,7 @@ function App() {
             onClick={() => setActiveTab('temporal')}
             style={{
               padding: '10px 20px',
+              marginRight: '10px',
               backgroundColor: activeTab === 'temporal' ? '#007bff' : '#f8f9fa',
               color: activeTab === 'temporal' ? 'white' : 'black',
               border: '1px solid #ddd',
@@ -69,6 +71,19 @@ function App() {
             }}
           >
             Temporal Analytics
+          </button>
+          <button  // New button for xrefs
+            onClick={() => setActiveTab('xrefs')}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: activeTab === 'xrefs' ? '#007bff' : '#f8f9fa',
+              color: activeTab === 'xrefs' ? 'white' : 'black',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Cross-References
           </button>
         </div>
       )}
@@ -95,6 +110,7 @@ function App() {
       {activeTab === 'stats' && <EnvelopeStats uploadedEnvelope={uploadedEnvelope} />}
       {activeTab === 'graph' && <GraphRenderer envelope={uploadedEnvelope} />}
       {activeTab === 'temporal' && <TemporalPage />}  // New conditional render
+      {activeTab === 'xrefs' && <XrefDemoPage />}  // New xref explorer
     </div>
   );
 }
