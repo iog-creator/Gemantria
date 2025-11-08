@@ -1165,10 +1165,20 @@ def monitor_once(pid: int | None = None) -> Dict[str, Any]:
     """Run a single monitoring cycle."""
     # Scan all log files - use larger limit for enrichment_start which is early in the log
     log_lines = []
-    for log_path in [ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG]:
+    
+    # Add enrichment-specific logs to the scan list
+    enrichment_logs = [
+        Path("/tmp/enrichment.log"),
+        Path("logs/enrichment.log"),
+        Path("logs/gemantria.enrichment.log"),
+    ]
+    
+    all_logs = [ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG] + enrichment_logs
+
+    for log_path in all_logs:
         if log_path.exists():
             # Read more lines for ORCHESTRATOR_LOG to find enrichment_start
-            max_lines = 5000 if log_path == ORCHESTRATOR_LOG else 500
+            max_lines = 5000 if log_path in [ORCHESTRATOR_LOG, Path("/tmp/enrichment.log")] else 500
             log_lines.extend(scan_log_file(log_path, max_lines=max_lines))
 
     # Extract stage status and timings
