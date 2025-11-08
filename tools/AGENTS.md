@@ -1,5 +1,9 @@
 # AGENTS.md — Tools (Headless Orchestration & Smoke Tests)
 
+## Directory Purpose
+
+The `tools/` directory contains headless orchestration tools and smoke tests for LM Studio integration, enforcing fail-fast gates and verifying readiness before running the pipeline.
+
 ## Purpose
 
 Define the tooling used to orchestrate LM Studio in headless mode, enforce fail-fast gates, and verify readiness via smoke tests before running the pipeline.

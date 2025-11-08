@@ -1,5 +1,9 @@
 # AGENTS.md — Service Layer Agents
 
+## Directory Purpose
+
+The `src/services/` directory contains service-level integrations (database + LM Studio) that provide external dependencies for the Gematria pipeline. This document ensures consistent interface contracts and safety policies across all service interactions.
+
 ## Purpose
 
 Describes service-level integrations (database + LM Studio) that provide external dependencies for the Gematria pipeline. This document ensures consistent interface contracts and safety policies across all service interactions.

@@ -1,5 +1,9 @@
 # AGENTS.md — Gemantria Agent Framework
 
+## Directory Purpose
+
+The root `AGENTS.md` serves as the primary agent framework documentation for the Gemantria repository, defining mission, priorities, environment, workflows, and governance for all agentic operations across the codebase.
+
 ## Mission
 Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and viz-ready artifacts.
 
