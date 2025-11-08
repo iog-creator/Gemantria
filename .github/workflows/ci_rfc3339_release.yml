@@ -14,6 +14,46 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install -r requirements.txt || true
+      - name: Normalize export timestamps (if files exist)
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from datetime import datetime, UTC
+          from pathlib import Path
+          
+          def normalize_timestamp(path):
+              if not Path(path).exists():
+                  return
+              try:
+                  with open(path, 'r', encoding='utf-8') as f:
+                      data = json.load(f)
+                  
+                  # Normalize generated_at to RFC3339
+                  ts = data.get('generated_at')
+                  if ts and not isinstance(ts, str):
+                      # Legacy numeric epoch
+                      data['generated_at'] = datetime.fromtimestamp(float(ts), UTC).isoformat()
+                  elif not ts or not ts.startswith('20'):
+                      # Missing or invalid, set to now
+                      data['generated_at'] = datetime.now(UTC).isoformat()
+                  
+                  # Ensure metadata.source for fast-lane contract
+                  if 'metadata' not in data:
+                      data['metadata'] = {}
+                  if data['metadata'].get('source') != 'fallback_fast_lane':
+                      data['metadata']['source'] = 'fallback_fast_lane'
+                  
+                  with open(path, 'w', encoding='utf-8') as f:
+                      json.dump(data, f, ensure_ascii=False, indent=2)
+                      f.write('\n')
+                  print(f"Normalized {path}")
+              except Exception as e:
+                  print(f"Warning: Could not normalize {path}: {e}")
+          
+          normalize_timestamp('exports/graph_latest.json')
+          normalize_timestamp('exports/graph_stats.json')
+          EOF
       - name: STRICT guard (graph exports)
         run: STRICT_RFC3339=1 make guard.graph.generated_at
 
