@@ -1,0 +1,1 @@
+../docs/SSOT/MASTER_PLAN.md
