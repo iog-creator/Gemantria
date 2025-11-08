@@ -1,0 +1,26 @@
+name: dbmirror-guard
+
+on:
+  pull_request:
+  push:
+    tags: ["*"]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install deps (minimal)
+        run: python -m pip install -U pip && pip install -r requirements.txt || true
+      - name: DB mirror (HINT on PRs)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: make -s guard.rules.alwaysapply.dbmirror || true
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+      - name: DB mirror (STRICT on tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: STRICT_DB_MIRROR=1 make -s guard.rules.alwaysapply.dbmirror
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
