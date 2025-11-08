@@ -1,5 +1,5 @@
 ---
-description: Mandatory run rules_audit.py/share.sync/forest regen after every change/PR. Fail-closed if skipped—critical error log/CI fail.
+description: Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail. Includes share.sync, governance, ADRs, rules audit, forest regen, and evidence archiving.
 globs:
   - "src/**"
   - "scripts/**"
@@ -13,21 +13,32 @@ alwaysApply: false
 
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)
 
-Mandatory run `rules_audit.py`/`share.sync`/`forest regen` after every change/PR. Fail-closed if skipped—critical error log/CI fail.
+Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail.
 
 ## Requirements
 
-**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run housekeeping commands:
+**MANDATORY EXECUTION**: After ANY codebase change (code/docs/rules), developers MUST run:
 
 ```bash
-# Rule compliance audit
-python3 scripts/rules_audit.py
+# Unified housekeeping command (runs all steps)
+make housekeeping
+```
 
-# Documentation synchronization  
-make share.sync
+The `make housekeeping` target executes:
+1. **Share synchronization** (`make share.sync`) — mirrors docs/scripts/rules to `share/`
+2. **ADR housekeeping** (`adr.housekeeping`) — validates ADR format and cross-references
+3. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
+4. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
+5. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
+6. **Forest generation** (`python3 scripts/generate_forest.py`) — regenerates forest overview
 
-# Forest overview regeneration
-python3 scripts/generate_forest.py
+**Individual commands** (if needed separately):
+```bash
+make share.sync                    # Documentation synchronization
+python3 scripts/governance_housekeeping.py  # Governance compliance
+python3 scripts/generate_handoff.py         # Handoff document
+python3 scripts/rules_audit.py              # Rule compliance audit
+python3 scripts/generate_forest.py          # Forest overview regeneration
 ```
 
 **FAIL-CLOSED DESIGN**: If housekeeping skipped, operations fail with critical error logs:
@@ -48,8 +59,34 @@ Evidence: Modified files detected without housekeeping completion
 - **Git hooks**: Pre-commit validation of housekeeping status
 - **Status indicators**: Clear visual feedback on housekeeping state
 
+## Additional Housekeeping Contexts
+
+### Evidence Archiving
+- **Evidence bundles**: Archive workflow logs, guard results, and validation proofs in `share/evidence/`
+- **RFC3339 fast-lane**: Evidence archived at `share/evidence/rfc3339-fastlane/<timestamp>/`
+- **Guard evidence**: Guard runs generate evidence files in `share/evidence/guard_all_*.json`
+
+### Guard Validation
+- **Export validation**: Run `make guard.tests` to validate RFC3339 timestamps and metadata
+- **Comprehensive guards**: Run `STRICT_RFC3339=0 make guards.all` for full validation suite
+- **Guard evidence**: Guard runs automatically generate evidence files for audit
+
+### Documentation Updates
+- **ADR creation**: New ADRs must be added to `docs/adr/` and cross-referenced
+- **RELEASES.md**: Update with version entries for significant changes
+- **CHANGELOG.md**: Add entries for user-facing changes
+- **SHARE_MANIFEST.json**: Link evidence bundles and new artifacts
+
+### Working Tree Reconciliation
+- **Generator drift**: Run `make guard.tests` and `make share.sync` to fix export/share drift
+- **Untracked files**: Review and commit evidence files or add to `.gitignore`
+- **Tracked changes**: Commit intentional changes via hygiene PRs
+
 ## Related Rules
 
 - **Rule 027**: Docs sync gate (housekeeping includes docs sync)
+- **Rule 030**: Share sync (mandatory after docs/scripts/rules changes)
 - **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
 - **Rule 017**: Agent docs presence (housekeeping validates coverage)
+- **Rule 051**: Cursor insight (evidence-first workflow)
+- **Rule 061**: AI learning tracking (hint envelope detection)
