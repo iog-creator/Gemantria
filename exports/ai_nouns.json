@@ -2,7 +2,7 @@
   "schema": "gemantria/ai-nouns.v1",
   "source": "bible_db.v_hebrew_tokens",
   "book": "Genesis",
-  "generated_at": "2025-11-08T04:24:40.230899+00:00",
+  "generated_at": "2025-11-08T04:30:38.357898+00:00",
   "nodes": [
     {
       "surface": "וְ/אֵ֥ת",
@@ -581,9 +581,9 @@
       ]
     },
     {
-      "surface": "י֥וֹם",
-      "hebrew": "י֥וֹם",
-      "name": "י֥וֹם",
+      "surface": "י֔וֹם",
+      "hebrew": "י֔וֹם",
+      "name": "י֔וֹם",
       "primary_verse": "Genesis 1:1",
       "ai_discovered": false,
       "letters": [],
@@ -593,7 +593,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "י֥וֹם",
+        "lemma": "י֔וֹם",
         "primary_verse": "Genesis 1:1",
         "freq": 151
       },
@@ -725,9 +725,9 @@
       ]
     },
     {
-      "surface": "פְּנֵ֥י",
-      "hebrew": "פְּנֵ֥י",
-      "name": "פְּנֵ֥י",
+      "surface": "פְּנֵ֣י",
+      "hebrew": "פְּנֵ֣י",
+      "name": "פְּנֵ֣י",
       "primary_verse": "Genesis 1:1",
       "ai_discovered": false,
       "letters": [],
@@ -737,7 +737,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "פְּנֵ֥י",
+        "lemma": "פְּנֵ֣י",
         "primary_verse": "Genesis 1:1",
         "freq": 131
       },
@@ -797,9 +797,9 @@
       ]
     },
     {
-      "surface": "וַ/יִּקְרָ֨א",
-      "hebrew": "וַ/יִּקְרָ֨א",
-      "name": "וַ/יִּקְרָ֨א",
+      "surface": "קָ֣רָא",
+      "hebrew": "קָ֣רָא",
+      "name": "קָ֣רָא",
       "primary_verse": "Genesis 1:1",
       "ai_discovered": false,
       "letters": [],
@@ -809,7 +809,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וַ/יִּקְרָ֨א",
+        "lemma": "קָ֣רָא",
         "primary_verse": "Genesis 1:1",
         "freq": 109
       },
@@ -941,9 +941,9 @@
       ]
     },
     {
-      "surface": "פַּרְעֹ֑ה",
-      "hebrew": "פַּרְעֹ֑ה",
-      "name": "פַּרְעֹ֑ה",
+      "surface": "פַרְעֹ֔ה",
+      "hebrew": "פַרְעֹ֔ה",
+      "name": "פַרְעֹ֔ה",
       "primary_verse": "Genesis 12:1",
       "ai_discovered": false,
       "letters": [],
@@ -953,7 +953,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "פַּרְעֹ֑ה",
+        "lemma": "פַרְעֹ֔ה",
         "primary_verse": "Genesis 12:1",
         "freq": 94
       },
@@ -1541,9 +1541,9 @@
       ]
     },
     {
-      "surface": "שֽׁוּבְ/ךָ֙",
-      "hebrew": "שֽׁוּבְ/ךָ֙",
-      "name": "שֽׁוּבְ/ךָ֙",
+      "surface": "תָּשֽׁוּב\\׃",
+      "hebrew": "תָּשֽׁוּב\\׃",
+      "name": "תָּשֽׁוּב\\׃",
       "primary_verse": "Genesis 3:2",
       "ai_discovered": false,
       "letters": [],
@@ -1553,7 +1553,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "שֽׁוּבְ/ךָ֙",
+        "lemma": "תָּשֽׁוּב\\׃",
         "primary_verse": "Genesis 3:2",
         "freq": 65
       },
@@ -1565,9 +1565,9 @@
       ]
     },
     {
-      "surface": "אָכֹ֥ל",
-      "hebrew": "אָכֹ֥ל",
-      "name": "אָכֹ֥ל",
+      "surface": "תֹּאכֵֽל\\׃",
+      "hebrew": "תֹּאכֵֽל\\׃",
+      "name": "תֹּאכֵֽל\\׃",
       "primary_verse": "Genesis 2:1",
       "ai_discovered": false,
       "letters": [],
@@ -1577,7 +1577,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אָכֹ֥ל",
+        "lemma": "תֹּאכֵֽל\\׃",
         "primary_verse": "Genesis 2:1",
         "freq": 64
       },
@@ -2045,9 +2045,9 @@
       ]
     },
     {
-      "surface": "זֹ֣את",
-      "hebrew": "זֹ֣את",
-      "name": "זֹ֣את",
+      "surface": "זֹּֽאת\\׃",
+      "hebrew": "זֹּֽאת\\׃",
+      "name": "זֹּֽאת\\׃",
       "primary_verse": "Genesis 2:3",
       "ai_discovered": false,
       "letters": [],
@@ -2057,7 +2057,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "זֹ֣את",
+        "lemma": "זֹּֽאת\\׃",
         "primary_verse": "Genesis 2:3",
         "freq": 52
       },
@@ -2069,9 +2069,9 @@
       ]
     },
     {
-      "surface": "לָבָ֑ן",
-      "hebrew": "לָבָ֑ן",
-      "name": "לָבָ֑ן",
+      "surface": "לָבָ֧ן",
+      "hebrew": "לָבָ֧ן",
+      "name": "לָבָ֧ן",
       "primary_verse": "Genesis 24:1",
       "ai_discovered": false,
       "letters": [],
@@ -2081,7 +2081,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לָבָ֑ן",
+        "lemma": "לָבָ֧ן",
         "primary_verse": "Genesis 24:1",
         "freq": 51
       },
@@ -2405,9 +2405,9 @@
       ]
     },
     {
-      "surface": "אַלּוּפֵ֣י",
-      "hebrew": "אַלּוּפֵ֣י",
-      "name": "אַלּוּפֵ֣י",
+      "surface": "אַלּ֥וּף",
+      "hebrew": "אַלּ֥וּף",
+      "name": "אַלּ֥וּף",
       "primary_verse": "Genesis 36:15",
       "ai_discovered": false,
       "letters": [],
@@ -2417,7 +2417,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אַלּוּפֵ֣י",
+        "lemma": "אַלּ֥וּף",
         "primary_verse": "Genesis 36:15",
         "freq": 43
       },
@@ -2501,9 +2501,9 @@
       ]
     },
     {
-      "surface": "מֶ֥לֶךְ",
-      "hebrew": "מֶ֥לֶךְ",
-      "name": "מֶ֥לֶךְ",
+      "surface": "מֶ֣לֶךְ",
+      "hebrew": "מֶ֣לֶךְ",
+      "name": "מֶ֣לֶךְ",
       "primary_verse": "Genesis 14:1",
       "ai_discovered": false,
       "letters": [],
@@ -2513,7 +2513,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מֶ֥לֶךְ",
+        "lemma": "מֶ֣לֶךְ",
         "primary_verse": "Genesis 14:1",
         "freq": 41
       },
@@ -2957,9 +2957,9 @@
       ]
     },
     {
-      "surface": "לָ/כֶ֜ם",
-      "hebrew": "לָ/כֶ֜ם",
-      "name": "לָ/כֶ֜ם",
+      "surface": "לָ/כֶ֥ם",
+      "hebrew": "לָ/כֶ֥ם",
+      "name": "לָ/כֶ֥ם",
       "primary_verse": "Genesis 1:1",
       "ai_discovered": false,
       "letters": [],
@@ -2969,7 +2969,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לָ/כֶ֜ם",
+        "lemma": "לָ/כֶ֥ם",
         "primary_verse": "Genesis 1:1",
         "freq": 31
       },
@@ -3125,9 +3125,9 @@
       ]
     },
     {
-      "surface": "וּ/רְב֗וּ",
-      "hebrew": "וּ/רְב֗וּ",
-      "name": "וּ/רְב֗וּ",
+      "surface": "יִ֥רֶב",
+      "hebrew": "יִ֥רֶב",
+      "name": "יִ֥רֶב",
       "primary_verse": "Genesis 1:1",
       "ai_discovered": false,
       "letters": [],
@@ -3137,7 +3137,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וּ/רְב֗וּ",
+        "lemma": "יִ֥רֶב",
         "primary_verse": "Genesis 1:1",
         "freq": 29
       },
@@ -3245,9 +3245,9 @@
       ]
     },
     {
-      "surface": "הַ/גּוֹיִם֙",
-      "hebrew": "הַ/גּוֹיִם֙",
-      "name": "הַ/גּוֹיִם֙",
+      "surface": "בְּ/גוֹיֵ/הֶֽם\\׃",
+      "hebrew": "בְּ/גוֹיֵ/הֶֽם\\׃",
+      "name": "בְּ/גוֹיֵ/הֶֽם\\׃",
       "primary_verse": "Genesis 10:1",
       "ai_discovered": false,
       "letters": [],
@@ -3257,7 +3257,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "הַ/גּוֹיִם֙",
+        "lemma": "בְּ/גוֹיֵ/הֶֽם\\׃",
         "primary_verse": "Genesis 10:1",
         "freq": 27
       },
@@ -3821,9 +3821,9 @@
       ]
     },
     {
-      "surface": "בְּאֵ֥ר",
-      "hebrew": "בְּאֵ֥ר",
-      "name": "בְּאֵ֥ר",
+      "surface": "שָֽׁבַע\\׃",
+      "hebrew": "שָֽׁבַע\\׃",
+      "name": "שָֽׁבַע\\׃",
       "primary_verse": "Genesis 21:1",
       "ai_discovered": false,
       "letters": [],
@@ -3833,7 +3833,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בְּאֵ֥ר",
+        "lemma": "שָֽׁבַע\\׃",
         "primary_verse": "Genesis 21:1",
         "freq": 22
       },
@@ -5981,9 +5981,9 @@
       ]
     },
     {
-      "surface": "וּ/סְפֹר֙",
-      "hebrew": "וּ/סְפֹר֙",
-      "name": "וּ/סְפֹר֙",
+      "surface": "לִ/סְפֹּ֣ר",
+      "hebrew": "לִ/סְפֹּ֣ר",
+      "name": "לִ/סְפֹּ֣ר",
       "primary_verse": "Genesis 15:5",
       "ai_discovered": false,
       "letters": [],
@@ -5993,7 +5993,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וּ/סְפֹר֙",
+        "lemma": "לִ/סְפֹּ֣ר",
         "primary_verse": "Genesis 15:5",
         "freq": 12
       },
@@ -6797,9 +6797,9 @@
       ]
     },
     {
-      "surface": "חֲנֽוֹךְ\\׃",
-      "hebrew": "חֲנֽוֹךְ\\׃",
-      "name": "חֲנֽוֹךְ\\׃",
+      "surface": "חֲנ֑וֹךְ",
+      "hebrew": "חֲנ֑וֹךְ",
+      "name": "חֲנ֑וֹךְ",
       "primary_verse": "Genesis 4:4",
       "ai_discovered": false,
       "letters": [],
@@ -6809,7 +6809,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "חֲנֽוֹךְ\\׃",
+        "lemma": "חֲנ֑וֹךְ",
         "primary_verse": "Genesis 4:4",
         "freq": 11
       },
@@ -8117,9 +8117,9 @@
       ]
     },
     {
-      "surface": "בְּאֵ֥ר",
-      "hebrew": "בְּאֵ֥ר",
-      "name": "בְּאֵ֥ר",
+      "surface": "לַחַ֖י",
+      "hebrew": "לַחַ֖י",
+      "name": "לַחַ֖י",
       "primary_verse": "Genesis 16:11",
       "ai_discovered": false,
       "letters": [],
@@ -8129,7 +8129,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בְּאֵ֥ר",
+        "lemma": "לַחַ֖י",
         "primary_verse": "Genesis 16:11",
         "freq": 9
       },
@@ -8741,9 +8741,9 @@
       ]
     },
     {
-      "surface": "הֵֽנָּה\\׃",
-      "hebrew": "הֵֽנָּה\\׃",
-      "name": "הֵֽנָּה\\׃",
+      "surface": "הֵ֑נָּה",
+      "hebrew": "הֵ֑נָּה",
+      "name": "הֵ֑נָּה",
       "primary_verse": "Genesis 15:5",
       "ai_discovered": false,
       "letters": [],
@@ -8753,7 +8753,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "הֵֽנָּה\\׃",
+        "lemma": "הֵ֑נָּה",
         "primary_verse": "Genesis 15:5",
         "freq": 8
       },
@@ -8957,9 +8957,9 @@
       ]
     },
     {
-      "surface": "תֵיטִ֔יב",
-      "hebrew": "תֵיטִ֔יב",
-      "name": "תֵיטִ֔יב",
+      "surface": "תֵּיטִיב֙",
+      "hebrew": "תֵּיטִיב֙",
+      "name": "תֵּיטִיב֙",
       "primary_verse": "Genesis 4:7",
       "ai_discovered": false,
       "letters": [],
@@ -8969,7 +8969,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "תֵיטִ֔יב",
+        "lemma": "תֵּיטִיב֙",
         "primary_verse": "Genesis 4:7",
         "freq": 8
       },
@@ -9413,9 +9413,9 @@
       ]
     },
     {
-      "surface": "וְ/לִ֙ינוּ֙",
-      "hebrew": "וְ/לִ֙ינוּ֙",
-      "name": "וְ/לִ֙ינוּ֙",
+      "surface": "נָלִֽין\\׃",
+      "hebrew": "נָלִֽין\\׃",
+      "name": "נָלִֽין\\׃",
       "primary_verse": "Genesis 19:2",
       "ai_discovered": false,
       "letters": [],
@@ -9425,7 +9425,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וְ/לִ֙ינוּ֙",
+        "lemma": "נָלִֽין\\׃",
         "primary_verse": "Genesis 19:2",
         "freq": 7
       },
@@ -9581,9 +9581,9 @@
       ]
     },
     {
-      "surface": "גָ֑ל",
-      "hebrew": "גָ֑ל",
-      "name": "גָ֑ל",
+      "surface": "הַ/גָּֽל\\׃",
+      "hebrew": "הַ/גָּֽל\\׃",
+      "name": "הַ/גָּֽל\\׃",
       "primary_verse": "Genesis 31:46",
       "ai_discovered": false,
       "letters": [],
@@ -9593,7 +9593,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "גָ֑ל",
+        "lemma": "הַ/גָּֽל\\׃",
         "primary_verse": "Genesis 31:46",
         "freq": 7
       },
@@ -9797,9 +9797,9 @@
       ]
     },
     {
-      "surface": "מִלְכָּ֖ה",
-      "hebrew": "מִלְכָּ֖ה",
-      "name": "מִלְכָּ֖ה",
+      "surface": "מִלְכָּ֔ה",
+      "hebrew": "מִלְכָּ֔ה",
+      "name": "מִלְכָּ֔ה",
       "primary_verse": "Genesis 11:15",
       "ai_discovered": false,
       "letters": [],
@@ -9809,7 +9809,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מִלְכָּ֖ה",
+        "lemma": "מִלְכָּ֔ה",
         "primary_verse": "Genesis 11:15",
         "freq": 7
       },
@@ -9917,9 +9917,9 @@
       ]
     },
     {
-      "surface": "מֵֽ/עֲצָמַ֔/י",
-      "hebrew": "מֵֽ/עֲצָמַ֔/י",
-      "name": "מֵֽ/עֲצָמַ֔/י",
+      "surface": "עֶ֚צֶם",
+      "hebrew": "עֶ֚צֶם",
+      "name": "עֶ֚צֶם",
       "primary_verse": "Genesis 2:13",
       "ai_discovered": false,
       "letters": [],
@@ -9929,7 +9929,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מֵֽ/עֲצָמַ֔/י",
+        "lemma": "עֶ֚צֶם",
         "primary_verse": "Genesis 2:13",
         "freq": 7
       },
@@ -10085,9 +10085,9 @@
       ]
     },
     {
-      "surface": "וַ/יָּנֻ֛סוּ",
-      "hebrew": "וַ/יָּנֻ֛סוּ",
-      "name": "וַ/יָּנֻ֛סוּ",
+      "surface": "נָּֽסוּ\\׃",
+      "hebrew": "נָּֽסוּ\\׃",
+      "name": "נָּֽסוּ\\׃",
       "primary_verse": "Genesis 14:10",
       "ai_discovered": false,
       "letters": [],
@@ -10097,7 +10097,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וַ/יָּנֻ֛סוּ",
+        "lemma": "נָּֽסוּ\\׃",
         "primary_verse": "Genesis 14:10",
         "freq": 7
       },
@@ -10829,9 +10829,9 @@
       ]
     },
     {
-      "surface": "א֑וֹר",
-      "hebrew": "א֑וֹר",
-      "name": "א֑וֹר",
+      "surface": "אֽוֹר\\׃",
+      "hebrew": "אֽוֹר\\׃",
+      "name": "אֽוֹר\\׃",
       "primary_verse": "Genesis 1:3",
       "ai_discovered": false,
       "letters": [],
@@ -10841,7 +10841,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "א֑וֹר",
+        "lemma": "אֽוֹר\\׃",
         "primary_verse": "Genesis 1:3",
         "freq": 6
       },
@@ -11261,9 +11261,9 @@
       ]
     },
     {
-      "surface": "וְ/טָל֥וּא",
-      "hebrew": "וְ/טָל֥וּא",
-      "name": "וְ/טָל֥וּא",
+      "surface": "וְ/טָל֗וּא",
+      "hebrew": "וְ/טָל֗וּא",
+      "name": "וְ/טָל֗וּא",
       "primary_verse": "Genesis 30:32",
       "ai_discovered": false,
       "letters": [],
@@ -11273,7 +11273,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וְ/טָל֥וּא",
+        "lemma": "וְ/טָל֗וּא",
         "primary_verse": "Genesis 30:32",
         "freq": 6
       },
@@ -11453,9 +11453,9 @@
       ]
     },
     {
-      "surface": "אַמָּ֗ה",
-      "hebrew": "אַמָּ֗ה",
-      "name": "אַמָּ֗ה",
+      "surface": "אַמָּ֖ה",
+      "hebrew": "אַמָּ֖ה",
+      "name": "אַמָּ֖ה",
       "primary_verse": "Genesis 6:15",
       "ai_discovered": false,
       "letters": [],
@@ -11465,7 +11465,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אַמָּ֗ה",
+        "lemma": "אַמָּ֖ה",
         "primary_verse": "Genesis 6:15",
         "freq": 5
       },
@@ -12197,9 +12197,9 @@
       ]
     },
     {
-      "surface": "הִמָּלֵ֣ט",
-      "hebrew": "הִמָּלֵ֣ט",
-      "name": "הִמָּלֵ֣ט",
+      "surface": "הִמָּלֵ֖ט",
+      "hebrew": "הִמָּלֵ֖ט",
+      "name": "הִמָּלֵ֖ט",
       "primary_verse": "Genesis 19:17",
       "ai_discovered": false,
       "letters": [],
@@ -12209,7 +12209,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "הִמָּלֵ֣ט",
+        "lemma": "הִמָּלֵ֖ט",
         "primary_verse": "Genesis 19:17",
         "freq": 5
       },
@@ -12749,9 +12749,9 @@
       ]
     },
     {
-      "surface": "טָרֹ֥ף",
-      "hebrew": "טָרֹ֥ף",
-      "name": "טָרֹ֥ף",
+      "surface": "טֹרַ֖ף",
+      "hebrew": "טֹרַ֖ף",
+      "name": "טֹרַ֖ף",
       "primary_verse": "Genesis 37:27",
       "ai_discovered": false,
       "letters": [],
@@ -12761,7 +12761,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "טָרֹ֥ף",
+        "lemma": "טֹרַ֖ף",
         "primary_verse": "Genesis 37:27",
         "freq": 5
       },
@@ -12845,9 +12845,9 @@
       ]
     },
     {
-      "surface": "וְ/כ֥וֹס",
-      "hebrew": "וְ/כ֥וֹס",
-      "name": "וְ/כ֥וֹס",
+      "surface": "כּ֣וֹס",
+      "hebrew": "כּ֣וֹס",
+      "name": "כּ֣וֹס",
       "primary_verse": "Genesis 40:11",
       "ai_discovered": false,
       "letters": [],
@@ -12857,7 +12857,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וְ/כ֥וֹס",
+        "lemma": "כּ֣וֹס",
         "primary_verse": "Genesis 40:11",
         "freq": 5
       },
@@ -13253,9 +13253,9 @@
       ]
     },
     {
-      "surface": "בְּ/קִרְיַ֥ת",
-      "hebrew": "בְּ/קִרְיַ֥ת",
-      "name": "בְּ/קִרְיַ֥ת",
+      "surface": "אַרְבַּ֛ע",
+      "hebrew": "אַרְבַּ֛ע",
+      "name": "אַרְבַּ֛ע",
       "primary_verse": "Genesis 23:2",
       "ai_discovered": false,
       "letters": [],
@@ -13265,7 +13265,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בְּ/קִרְיַ֥ת",
+        "lemma": "אַרְבַּ֛ע",
         "primary_verse": "Genesis 23:2",
         "freq": 4
       },
@@ -13493,9 +13493,9 @@
       ]
     },
     {
-      "surface": "קַ֔יִן",
-      "hebrew": "קַ֔יִן",
-      "name": "קַ֔יִן",
+      "surface": "תּ֣וּבַל",
+      "hebrew": "תּ֣וּבַל",
+      "name": "תּ֣וּבַל",
       "primary_verse": "Genesis 4:22",
       "ai_discovered": false,
       "letters": [],
@@ -13505,7 +13505,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "קַ֔יִן",
+        "lemma": "תּ֣וּבַל",
         "primary_verse": "Genesis 4:22",
         "freq": 4
       },
@@ -13901,9 +13901,9 @@
       ]
     },
     {
-      "surface": "לַ/אֲלֻמָּתִֽ/י\\׃",
-      "hebrew": "לַ/אֲלֻמָּתִֽ/י\\׃",
-      "name": "לַ/אֲלֻמָּתִֽ/י\\׃",
+      "surface": "אֲלֻמֹּ֣תֵי/כֶ֔ם",
+      "hebrew": "אֲלֻמֹּ֣תֵי/כֶ֔ם",
+      "name": "אֲלֻמֹּ֣תֵי/כֶ֔ם",
       "primary_verse": "Genesis 37:7",
       "ai_discovered": false,
       "letters": [],
@@ -13913,7 +13913,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לַ/אֲלֻמָּתִֽ/י\\׃",
+        "lemma": "אֲלֻמֹּ֣תֵי/כֶ֔ם",
         "primary_verse": "Genesis 37:7",
         "freq": 4
       },
@@ -14645,9 +14645,9 @@
       ]
     },
     {
-      "surface": "וַ/יִּגָּמַ֑ל",
-      "hebrew": "וַ/יִּגָּמַ֑ל",
-      "name": "וַ/יִּגָּמַ֑ל",
+      "surface": "הִגָּמֵ֥ל",
+      "hebrew": "הִגָּמֵ֥ל",
+      "name": "הִגָּמֵ֥ל",
       "primary_verse": "Genesis 21:8",
       "ai_discovered": false,
       "letters": [],
@@ -14657,7 +14657,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וַ/יִּגָּמַ֑ל",
+        "lemma": "הִגָּמֵ֥ל",
         "primary_verse": "Genesis 21:8",
         "freq": 4
       },
@@ -15653,9 +15653,9 @@
       ]
     },
     {
-      "surface": "אֵ֖ל",
-      "hebrew": "אֵ֖ל",
-      "name": "אֵ֖ל",
+      "surface": "אֵ֑ל",
+      "hebrew": "אֵ֑ל",
+      "name": "אֵ֑ל",
       "primary_verse": "Genesis 35:7",
       "ai_discovered": false,
       "letters": [],
@@ -15665,7 +15665,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אֵ֖ל",
+        "lemma": "אֵ֑ל",
         "primary_verse": "Genesis 35:7",
         "freq": 3
       },
@@ -15677,9 +15677,9 @@
       ]
     },
     {
-      "surface": "מֵ/אָ֣לָתִ֔/י",
-      "hebrew": "מֵ/אָ֣לָתִ֔/י",
-      "name": "מֵ/אָ֣לָתִ֔/י",
+      "surface": "מֵ/אָלָתִֽ/י\\׃",
+      "hebrew": "מֵ/אָלָתִֽ/י\\׃",
+      "name": "מֵ/אָלָתִֽ/י\\׃",
       "primary_verse": "Genesis 24:28",
       "ai_discovered": false,
       "letters": [],
@@ -15689,7 +15689,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מֵ/אָ֣לָתִ֔/י",
+        "lemma": "מֵ/אָלָתִֽ/י\\׃",
         "primary_verse": "Genesis 24:28",
         "freq": 3
       },
@@ -16349,9 +16349,9 @@
       ]
     },
     {
-      "surface": "וְ/חֵ֙לֶק֙",
-      "hebrew": "וְ/חֵ֙לֶק֙",
-      "name": "וְ/חֵ֙לֶק֙",
+      "surface": "חֶלְקָֽ/ם\\׃\\ \\ס",
+      "hebrew": "חֶלְקָֽ/ם\\׃\\ \\ס",
+      "name": "חֶלְקָֽ/ם\\׃\\ \\ס",
       "primary_verse": "Genesis 14:14",
       "ai_discovered": false,
       "letters": [],
@@ -16361,7 +16361,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וְ/חֵ֙לֶק֙",
+        "lemma": "חֶלְקָֽ/ם\\׃\\ \\ס",
         "primary_verse": "Genesis 14:14",
         "freq": 3
       },
@@ -17021,9 +17021,9 @@
       ]
     },
     {
-      "surface": "מוֹאָ֑ב",
-      "hebrew": "מוֹאָ֑ב",
-      "name": "מוֹאָ֑ב",
+      "surface": "מוֹאָ֖ב",
+      "hebrew": "מוֹאָ֖ב",
+      "name": "מוֹאָ֖ב",
       "primary_verse": "Genesis 19:35",
       "ai_discovered": false,
       "letters": [],
@@ -17033,7 +17033,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מוֹאָ֑ב",
+        "lemma": "מוֹאָ֖ב",
         "primary_verse": "Genesis 19:35",
         "freq": 3
       },
@@ -18101,9 +18101,9 @@
       ]
     },
     {
-      "surface": "קְבֻרָתָ֑/הּ",
-      "hebrew": "קְבֻרָתָ֑/הּ",
-      "name": "קְבֻרָתָ֑/הּ",
+      "surface": "קְבֻֽרַת\\־",
+      "hebrew": "קְבֻֽרַת\\־",
+      "name": "קְבֻֽרַת\\־",
       "primary_verse": "Genesis 35:20",
       "ai_discovered": false,
       "letters": [],
@@ -18113,7 +18113,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "קְבֻרָתָ֑/הּ",
+        "lemma": "קְבֻֽרַת\\־",
         "primary_verse": "Genesis 35:20",
         "freq": 3
       },
@@ -18221,9 +18221,9 @@
       ]
     },
     {
-      "surface": "קְדֵשָֽׁה\\׃",
-      "hebrew": "קְדֵשָֽׁה\\׃",
-      "name": "קְדֵשָֽׁה\\׃",
+      "surface": "הַ/קְּדֵשָׁ֛ה",
+      "hebrew": "הַ/קְּדֵשָׁ֛ה",
+      "name": "הַ/קְּדֵשָׁ֛ה",
       "primary_verse": "Genesis 38:21",
       "ai_discovered": false,
       "letters": [],
@@ -18233,7 +18233,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "קְדֵשָֽׁה\\׃",
+        "lemma": "הַ/קְּדֵשָׁ֛ה",
         "primary_verse": "Genesis 38:21",
         "freq": 3
       },
@@ -18965,9 +18965,9 @@
       ]
     },
     {
-      "surface": "שֹׁפֵךְ֙",
-      "hebrew": "שֹׁפֵךְ֙",
-      "name": "שֹׁפֵךְ֙",
+      "surface": "יִשָּׁפֵ֑ךְ",
+      "hebrew": "יִשָּׁפֵ֑ךְ",
+      "name": "יִשָּׁפֵ֑ךְ",
       "primary_verse": "Genesis 9:6",
       "ai_discovered": false,
       "letters": [],
@@ -18977,7 +18977,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "שֹׁפֵךְ֙",
+        "lemma": "יִשָּׁפֵ֑ךְ",
         "primary_verse": "Genesis 9:6",
         "freq": 3
       },
@@ -19205,9 +19205,9 @@
       ]
     },
     {
-      "surface": "זָהָֽב\\׃",
-      "hebrew": "זָהָֽב\\׃",
-      "name": "זָהָֽב\\׃",
+      "surface": "מֵ֥י",
+      "hebrew": "מֵ֥י",
+      "name": "מֵ֥י",
       "primary_verse": "Genesis 36:39",
       "ai_discovered": false,
       "letters": [],
@@ -19217,7 +19217,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "זָהָֽב\\׃",
+        "lemma": "מֵ֥י",
         "primary_verse": "Genesis 36:39",
         "freq": 2
       },
@@ -19397,9 +19397,9 @@
       ]
     },
     {
-      "surface": "לְ/ח֥וֹף",
-      "hebrew": "לְ/ח֥וֹף",
-      "name": "לְ/ח֥וֹף",
+      "surface": "לְ/ח֣וֹף",
+      "hebrew": "לְ/ח֣וֹף",
+      "name": "לְ/ח֣וֹף",
       "primary_verse": "Genesis 49:13",
       "ai_discovered": false,
       "letters": [],
@@ -19409,7 +19409,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לְ/ח֥וֹף",
+        "lemma": "לְ/ח֣וֹף",
         "primary_verse": "Genesis 49:13",
         "freq": 2
       },
@@ -19469,9 +19469,9 @@
       ]
     },
     {
-      "surface": "הָעֵ֣ד",
-      "hebrew": "הָעֵ֣ד",
-      "name": "הָעֵ֣ד",
+      "surface": "הֵעִד֩",
+      "hebrew": "הֵעִד֩",
+      "name": "הֵעִד֩",
       "primary_verse": "Genesis 43:3",
       "ai_discovered": false,
       "letters": [],
@@ -19481,7 +19481,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "הָעֵ֣ד",
+        "lemma": "הֵעִד֩",
         "primary_verse": "Genesis 43:3",
         "freq": 2
       },
@@ -20141,9 +20141,9 @@
       ]
     },
     {
-      "surface": "רַעְמָ֖ה",
-      "hebrew": "רַעְמָ֖ה",
-      "name": "רַעְמָ֖ה",
+      "surface": "וְ/רַעְמָ֖ה",
+      "hebrew": "וְ/רַעְמָ֖ה",
+      "name": "וְ/רַעְמָ֖ה",
       "primary_verse": "Genesis 10:7",
       "ai_discovered": false,
       "letters": [],
@@ -20153,7 +20153,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "רַעְמָ֖ה",
+        "lemma": "וְ/רַעְמָ֖ה",
         "primary_verse": "Genesis 10:7",
         "freq": 2
       },
@@ -20381,9 +20381,9 @@
       ]
     },
     {
-      "surface": "אֲרַ֥ם",
-      "hebrew": "אֲרַ֥ם",
-      "name": "אֲרַ֥ם",
+      "surface": "נַֽהֲרַ֖יִם",
+      "hebrew": "נַֽהֲרַ֖יִם",
+      "name": "נַֽהֲרַ֖יִם",
       "primary_verse": "Genesis 24:10",
       "ai_discovered": false,
       "letters": [],
@@ -20393,7 +20393,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אֲרַ֥ם",
+        "lemma": "נַֽהֲרַ֖יִם",
         "primary_verse": "Genesis 24:10",
         "freq": 2
       },
@@ -20741,9 +20741,9 @@
       ]
     },
     {
-      "surface": "אַרְיֵה֙",
-      "hebrew": "אַרְיֵה֙",
-      "name": "אַרְיֵה֙",
+      "surface": "כְּ/אַרְיֵ֛ה",
+      "hebrew": "כְּ/אַרְיֵ֛ה",
+      "name": "כְּ/אַרְיֵ֛ה",
       "primary_verse": "Genesis 49:9",
       "ai_discovered": false,
       "letters": [],
@@ -20753,7 +20753,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אַרְיֵה֙",
+        "lemma": "כְּ/אַרְיֵ֛ה",
         "primary_verse": "Genesis 49:9",
         "freq": 2
       },
@@ -21053,9 +21053,9 @@
       ]
     },
     {
-      "surface": "יָגֻ֥ד",
-      "hebrew": "יָגֻ֥ד",
-      "name": "יָגֻ֥ד",
+      "surface": "יְגוּדֶ֑/נּוּ",
+      "hebrew": "יְגוּדֶ֑/נּוּ",
+      "name": "יְגוּדֶ֑/נּוּ",
       "primary_verse": "Genesis 49:19",
       "ai_discovered": false,
       "letters": [],
@@ -21065,7 +21065,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "יָגֻ֥ד",
+        "lemma": "יְגוּדֶ֑/נּוּ",
         "primary_verse": "Genesis 49:19",
         "freq": 2
       },
@@ -21149,9 +21149,9 @@
       ]
     },
     {
-      "surface": "תָּקַ֤ע",
-      "hebrew": "תָּקַ֤ע",
-      "name": "תָּקַ֤ע",
+      "surface": "תָּקַ֥ע",
+      "hebrew": "תָּקַ֥ע",
+      "name": "תָּקַ֥ע",
       "primary_verse": "Genesis 31:25",
       "ai_discovered": false,
       "letters": [],
@@ -21161,7 +21161,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "תָּקַ֤ע",
+        "lemma": "תָּקַ֥ע",
         "primary_verse": "Genesis 31:25",
         "freq": 2
       },
@@ -21413,9 +21413,9 @@
       ]
     },
     {
-      "surface": "תְּשׁוּפֶ֥/נּוּ",
-      "hebrew": "תְּשׁוּפֶ֥/נּוּ",
-      "name": "תְּשׁוּפֶ֥/נּוּ",
+      "surface": "יְשׁוּפְ/ךָ֣",
+      "hebrew": "יְשׁוּפְ/ךָ֣",
+      "name": "יְשׁוּפְ/ךָ֣",
       "primary_verse": "Genesis 3:15",
       "ai_discovered": false,
       "letters": [],
@@ -21425,7 +21425,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "תְּשׁוּפֶ֥/נּוּ",
+        "lemma": "יְשׁוּפְ/ךָ֣",
         "primary_verse": "Genesis 3:15",
         "freq": 2
       },
@@ -21821,9 +21821,9 @@
       ]
     },
     {
-      "surface": "וַ/יְבַתֵּ֤ר",
-      "hebrew": "וַ/יְבַתֵּ֤ר",
-      "name": "וַ/יְבַתֵּ֤ר",
+      "surface": "בָתָֽר\\׃",
+      "hebrew": "בָתָֽר\\׃",
+      "name": "בָתָֽר\\׃",
       "primary_verse": "Genesis 15:10",
       "ai_discovered": false,
       "letters": [],
@@ -21833,7 +21833,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וַ/יְבַתֵּ֤ר",
+        "lemma": "בָתָֽר\\׃",
         "primary_verse": "Genesis 15:10",
         "freq": 2
       },
@@ -22469,9 +22469,9 @@
       ]
     },
     {
-      "surface": "בְרִיעָ֔ה",
-      "hebrew": "בְרִיעָ֔ה",
-      "name": "בְרִיעָ֔ה",
+      "surface": "וּ/בְרִיעָ֖ה",
+      "hebrew": "וּ/בְרִיעָ֖ה",
+      "name": "וּ/בְרִיעָ֖ה",
       "primary_verse": "Genesis 46:17",
       "ai_discovered": false,
       "letters": [],
@@ -22481,7 +22481,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בְרִיעָ֔ה",
+        "lemma": "וּ/בְרִיעָ֖ה",
         "primary_verse": "Genesis 46:17",
         "freq": 2
       },
@@ -22541,9 +22541,9 @@
       ]
     },
     {
-      "surface": "אַלּ֥וֹן",
-      "hebrew": "אַלּ֥וֹן",
-      "name": "אַלּ֥וֹן",
+      "surface": "בָּכֽוּת\\׃\\ \\פ",
+      "hebrew": "בָּכֽוּת\\׃\\ \\פ",
+      "name": "בָּכֽוּת\\׃\\ \\פ",
       "primary_verse": "Genesis 35:8",
       "ai_discovered": false,
       "letters": [],
@@ -22553,7 +22553,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "אַלּ֥וֹן",
+        "lemma": "בָּכֽוּת\\׃\\ \\פ",
         "primary_verse": "Genesis 35:8",
         "freq": 2
       },
@@ -23141,9 +23141,9 @@
       ]
     },
     {
-      "surface": "פָּארָ֔ן",
-      "hebrew": "פָּארָ֔ן",
-      "name": "פָּארָ֔ן",
+      "surface": "אֵ֣יל",
+      "hebrew": "אֵ֣יל",
+      "name": "אֵ֣יל",
       "primary_verse": "Genesis 14:6",
       "ai_discovered": false,
       "letters": [],
@@ -23153,7 +23153,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "פָּארָ֔ן",
+        "lemma": "אֵ֣יל",
         "primary_verse": "Genesis 14:6",
         "freq": 2
       },
@@ -23309,9 +23309,9 @@
       ]
     },
     {
-      "surface": "סֻכֹּ֔תָ/ה",
-      "hebrew": "סֻכֹּ֔תָ/ה",
-      "name": "סֻכֹּ֔תָ/ה",
+      "surface": "סֻכּֽוֹת\\׃\\ \\ס",
+      "hebrew": "סֻכּֽוֹת\\׃\\ \\ס",
+      "name": "סֻכּֽוֹת\\׃\\ \\ס",
       "primary_verse": "Genesis 33:17",
       "ai_discovered": false,
       "letters": [],
@@ -23321,7 +23321,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "סֻכֹּ֔תָ/ה",
+        "lemma": "סֻכּֽוֹת\\׃\\ \\ס",
         "primary_verse": "Genesis 33:17",
         "freq": 2
       },
@@ -23453,9 +23453,9 @@
       ]
     },
     {
-      "surface": "לְ/מִגְדַּל\\־",
-      "hebrew": "לְ/מִגְדַּל\\־",
-      "name": "לְ/מִגְדַּל\\־",
+      "surface": "עֵֽדֶר\\׃",
+      "hebrew": "עֵֽדֶר\\׃",
+      "name": "עֵֽדֶר\\׃",
       "primary_verse": "Genesis 35:21",
       "ai_discovered": false,
       "letters": [],
@@ -23465,7 +23465,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לְ/מִגְדַּל\\־",
+        "lemma": "עֵֽדֶר\\׃",
         "primary_verse": "Genesis 35:21",
         "freq": 2
       },
@@ -24341,9 +24341,9 @@
       ]
     },
     {
-      "surface": "בֶּן\\־",
-      "hebrew": "בֶּן\\־",
-      "name": "בֶּן\\־",
+      "surface": "עַמִּ֑י",
+      "hebrew": "עַמִּ֑י",
+      "name": "עַמִּ֑י",
       "primary_verse": "Genesis 19:38",
       "ai_discovered": false,
       "letters": [],
@@ -24353,7 +24353,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בֶּן\\־",
+        "lemma": "עַמִּ֑י",
         "primary_verse": "Genesis 19:38",
         "freq": 2
       },
@@ -24533,9 +24533,9 @@
       ]
     },
     {
-      "surface": "בָּֽ/עֲשִׂירִי֙",
-      "hebrew": "בָּֽ/עֲשִׂירִי֙",
-      "name": "בָּֽ/עֲשִׂירִי֙",
+      "surface": "הָֽ/עֲשִׂירִ֑י",
+      "hebrew": "הָֽ/עֲשִׂירִ֑י",
+      "name": "הָֽ/עֲשִׂירִ֑י",
       "primary_verse": "Genesis 8:5",
       "ai_discovered": false,
       "letters": [],
@@ -24545,7 +24545,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "בָּֽ/עֲשִׂירִי֙",
+        "lemma": "הָֽ/עֲשִׂירִ֑י",
         "primary_verse": "Genesis 8:5",
         "freq": 2
       },
@@ -24917,9 +24917,9 @@
       ]
     },
     {
-      "surface": "קַרְנַ֔יִם",
-      "hebrew": "קַרְנַ֔יִם",
-      "name": "קַרְנַ֔יִם",
+      "surface": "בְּ/עַשְׁתְּרֹ֣ת",
+      "hebrew": "בְּ/עַשְׁתְּרֹ֣ת",
+      "name": "בְּ/עַשְׁתְּרֹ֣ת",
       "primary_verse": "Genesis 14:5",
       "ai_discovered": false,
       "letters": [],
@@ -24929,7 +24929,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "קַרְנַ֔יִם",
+        "lemma": "בְּ/עַשְׁתְּרֹ֣ת",
         "primary_verse": "Genesis 14:5",
         "freq": 2
       },
@@ -24941,9 +24941,9 @@
       ]
     },
     {
-      "surface": "נִכְסַ֖פְתָּה",
-      "hebrew": "נִכְסַ֖פְתָּה",
-      "name": "נִכְסַ֖פְתָּה",
+      "surface": "נִכְסֹ֥ף",
+      "hebrew": "נִכְסֹ֥ף",
+      "name": "נִכְסֹ֥ף",
       "primary_verse": "Genesis 31:30",
       "ai_discovered": false,
       "letters": [],
@@ -24953,7 +24953,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "נִכְסַ֖פְתָּה",
+        "lemma": "נִכְסֹ֥ף",
         "primary_verse": "Genesis 31:30",
         "freq": 2
       },
@@ -25013,9 +25013,9 @@
       ]
     },
     {
-      "surface": "מִצְרַ֔יִם",
-      "hebrew": "מִצְרַ֔יִם",
-      "name": "מִצְרַ֔יִם",
+      "surface": "אָבֵ֣ל",
+      "hebrew": "אָבֵ֣ל",
+      "name": "אָבֵ֣ל",
       "primary_verse": "Genesis 50:11",
       "ai_discovered": false,
       "letters": [],
@@ -25025,7 +25025,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "מִצְרַ֔יִם",
+        "lemma": "אָבֵ֣ל",
         "primary_verse": "Genesis 50:11",
         "freq": 2
       },
@@ -25157,9 +25157,9 @@
       ]
     },
     {
-      "surface": "וַ/יֵּעָ֤תֶר",
-      "hebrew": "וַ/יֵּעָ֤תֶר",
-      "name": "וַ/יֵּעָ֤תֶר",
+      "surface": "וַ/יֶּעְתַּ֨ר",
+      "hebrew": "וַ/יֶּעְתַּ֨ר",
+      "name": "וַ/יֶּעְתַּ֨ר",
       "primary_verse": "Genesis 25:21",
       "ai_discovered": false,
       "letters": [],
@@ -25169,7 +25169,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "וַ/יֵּעָ֤תֶר",
+        "lemma": "וַ/יֶּעְתַּ֨ר",
         "primary_verse": "Genesis 25:21",
         "freq": 2
       },
@@ -25517,9 +25517,9 @@
       ]
     },
     {
-      "surface": "יְגַ֖ר",
-      "hebrew": "יְגַ֖ר",
-      "name": "יְגַ֖ר",
+      "surface": "שָׂהֲדוּתָ֑א",
+      "hebrew": "שָׂהֲדוּתָ֑א",
+      "name": "שָׂהֲדוּתָ֑א",
       "primary_verse": "Genesis 31:47",
       "ai_discovered": false,
       "letters": [],
@@ -25529,7 +25529,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "יְגַ֖ר",
+        "lemma": "שָׂהֲדוּתָ֑א",
         "primary_verse": "Genesis 31:47",
         "freq": 2
       },
@@ -25709,9 +25709,9 @@
       ]
     },
     {
-      "surface": "לְבֵנִ֔ים",
-      "hebrew": "לְבֵנִ֔ים",
-      "name": "לְבֵנִ֔ים",
+      "surface": "הַ/לְּבֵנָה֙",
+      "hebrew": "הַ/לְּבֵנָה֙",
+      "name": "הַ/לְּבֵנָה֙",
       "primary_verse": "Genesis 11:3",
       "ai_discovered": false,
       "letters": [],
@@ -25721,7 +25721,7 @@
       "classification": null,
       "meaning": null,
       "analysis": {
-        "lemma": "לְבֵנִ֔ים",
+        "lemma": "הַ/לְּבֵנָה֙",
         "primary_verse": "Genesis 11:3",
         "freq": 2
       },

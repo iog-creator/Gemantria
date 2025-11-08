@@ -267,6 +267,59 @@ def extract_errors(log_lines: List[str]) -> List[Dict[str, Any]]:
     return errors[-10:]  # Return last 10 errors
 
 
+def check_file_progress() -> Dict[str, Any]:
+    """Check progress by reading actual output files."""
+    progress = {}
+
+    # Check enrichment progress
+    input_file = Path("exports/ai_nouns.json")
+    output_file = Path("exports/ai_nouns.enriched.json")
+
+    if input_file.exists():
+        try:
+            with open(input_file, encoding="utf-8") as f:
+                input_data = json.load(f)
+            total = len(input_data.get("nodes", []))
+
+            enriched_with_theology = 0
+            enriched_with_insights = 0
+            count = 0
+
+            # Check output file if it exists
+            if output_file.exists():
+                try:
+                    with open(output_file, encoding="utf-8") as f:
+                        output_data = json.load(f)
+                    enriched_nodes = output_data.get("nodes", [])
+                    count = len(enriched_nodes)
+
+                    # Check if enrichment is actually happening
+                    # Look for analysis.theology OR insights field (both indicate enrichment)
+                    for n in enriched_nodes:
+                        if n.get("analysis", {}).get("theology"):
+                            enriched_with_theology += 1
+                        if n.get("insights") or n.get("confidence"):
+                            enriched_with_insights += 1
+
+                    # Use the higher count (either theology or insights)
+                    enriched_count = max(enriched_with_theology, enriched_with_insights)
+                except Exception:
+                    pass
+            else:
+                enriched_count = 0
+
+            progress["enrichment"] = {
+                "total": total,
+                "count": count,
+                "enriched_count": enriched_count,
+                "file_exists": output_file.exists(),
+            }
+        except Exception:
+            pass
+
+    return progress
+
+
 def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Extract pipeline stage status from log lines. Returns (stage_status, stage_timings)."""
     stages = {
@@ -318,19 +371,94 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
 
     orchestrator_stage = {"status": "pending", "operation": None, "last_event": None, "start_time": None}
 
-    # First pass: find total noun count and collect_nouns count
+    # Check for running enrichment process
+    enrichment_pid = None
+    try:
+        result = subprocess.run(
+            ["pgrep", "-f", "python.*ai_enrichment.py"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            # Enrichment process is running
+            enrichment_pid = int(result.stdout.strip().split()[0])
+            stages["enrichment"]["status"] = "running"
+    except Exception:
+        pass
+
+    # Read enrichment progress from metrics database
+    if enrichment_pid or stages["enrichment"]["status"] == "running":
+        try:
+            # Ensure environment is loaded
+            from src.infra.env_loader import ensure_env_loaded
+
+            ensure_env_loaded()
+
+            import psycopg
+
+            dsn = os.getenv("GEMATRIA_DSN")
+            if dsn:
+                with psycopg.connect(dsn) as conn:
+                    with conn.cursor() as cur:
+                        # Get latest batch_processed event for enrichment to get cumulative count
+                        # The items_out field in batch_processed is cumulative (total enriched so far)
+                        # Filter to last 1 hour to get current run
+                        cur.execute("""
+                            SELECT items_out, 
+                                   items_in,
+                                   started_at
+                            FROM metrics_log
+                            WHERE node = 'enrichment' 
+                              AND event = 'batch_processed'
+                              AND started_at >= NOW() - INTERVAL '1 hour'
+                            ORDER BY started_at DESC
+                            LIMIT 1
+                        """)
+                        row = cur.fetchone()
+                        if row and row[0] is not None:
+                            items_out = int(row[0])
+                            stages["enrichment"]["count"] = max(stages["enrichment"]["count"], items_out)
+                            stages["enrichment"]["last_event"] = row[2].isoformat() if row[2] else None
+        except Exception:
+            # Silently fail - metrics might not be available
+            pass
+
+    # Check file-based progress as fallback (always check if enrichment is running)
+    file_progress = check_file_progress()
+    if file_progress.get("enrichment"):
+        enrichment_file = file_progress["enrichment"]
+        if enrichment_file.get("total", 0) > 0:
+            stages["enrichment"]["total"] = enrichment_file["total"]
+            enriched_count = enrichment_file.get("enriched_count", enrichment_file.get("count", 0))
+            # Always update count from file if enrichment is running
+            if stages["enrichment"]["status"] == "running":
+                stages["enrichment"]["count"] = enriched_count
+            # If we have progress, mark as running
+            if enriched_count > 0 and enriched_count < enrichment_file["total"]:
+                stages["enrichment"]["status"] = "running"
+            elif enriched_count >= enrichment_file["total"]:
+                stages["enrichment"]["status"] = "complete"
+            # Set collect_nouns and validate_batch counts if not set
+            if stages["collect_nouns"]["count"] == 0:
+                stages["collect_nouns"]["count"] = enrichment_file["total"]
+            if stages["validate_batch"]["count"] == 0:
+                stages["validate_batch"]["count"] = enrichment_file["total"]
+
+    # First pass: find total noun count and collect_nouns count from logs
     for line in reversed(log_lines):
         parsed = parse_log_line(line)
         if parsed:
             # Find enrichment_start with noun_count (this is the authoritative total)
             if parsed.get("msg") == "enrichment_start" and "noun_count" in parsed:
                 total_count = parsed.get("noun_count", 0)
-                stages["enrichment"]["total"] = total_count
-                # Also set collect_nouns and validate_batch counts if not set
-                if stages["collect_nouns"]["count"] == 0:
-                    stages["collect_nouns"]["count"] = total_count
-                if stages["validate_batch"]["count"] == 0:
-                    stages["validate_batch"]["count"] = total_count
+                if total_count > 0:
+                    stages["enrichment"]["total"] = total_count
+                    # Also set collect_nouns and validate_batch counts if not set
+                    if stages["collect_nouns"]["count"] == 0:
+                        stages["collect_nouns"]["count"] = total_count
+                    if stages["validate_batch"]["count"] == 0:
+                        stages["validate_batch"]["count"] = total_count
                 break  # Found it, stop looking
 
     # Second pass: process all events and track timings
@@ -368,6 +496,14 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
             stages["enrichment"]["status"] = "running"
             stages["enrichment"]["count"] += 1
             stages["enrichment"]["last_event"] = event_time
+        # Also check file progress periodically if no log updates
+        elif stages["enrichment"]["status"] == "running":
+            # Update from file if we haven't seen a log update recently
+            file_progress = check_file_progress()
+            if file_progress.get("enrichment"):
+                enrichment_file = file_progress["enrichment"]
+                if enrichment_file.get("enriched_count", 0) > stages["enrichment"]["count"]:
+                    stages["enrichment"]["count"] = enrichment_file["enriched_count"]
         elif (
             parsed.get("msg") == "metrics"
             and parsed.get("node") == "enrichment"
@@ -483,71 +619,129 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
 
 def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any]) -> Dict[str, Any]:
     """Calculate progress metrics and ETA for all stages."""
-    enrichment = stage_status["stages"].get("enrichment", {})
-    total = enrichment.get("total", 0)
-    enriched = enrichment.get("count", 0)
+    stages = stage_status["stages"]
+    metrics = {}
 
-    metrics = {
-        "enrichment": {
+    # Calculate metrics for each stage
+    for stage_name, stage_data in stages.items():
+        count = stage_data.get("count", 0)
+        total = stage_data.get("total", 0)
+
+        stage_metrics = {
             "progress_pct": 0,
             "eta_minutes": None,
-            "rate_nouns_per_sec": None,
+            "rate_per_sec": None,
             "batches_completed": 0,
-        },
-        "other_stages": {},
-    }
+        }
 
-    if total == 0:
-        return metrics
+        # Calculate progress percentage if we have total
+        if total > 0:
+            progress_pct = round((count / total * 100), 1) if total > 0 else 0
+            stage_metrics["progress_pct"] = progress_pct
 
-    progress_pct = round((enriched / total * 100), 1) if total > 0 else 0
-    metrics["enrichment"]["progress_pct"] = progress_pct
+        # For enrichment, calculate rate and ETA from batch processing
+        if stage_name == "enrichment" and total > 0 and stage_data.get("status") == "running":
+            batch_times = []
+            batch_sizes = []
 
-    # Calculate rate from log timestamps
-    log_lines = scan_log_file(ORCHESTRATOR_LOG, max_lines=1000)
-    batch_times = []
-    batch_sizes = []
-    for line in reversed(log_lines[-500:]):
-        parsed = parse_log_line(line)
-        if parsed and parsed.get("event") == "batch_processed" and parsed.get("node") == "enrichment":
-            duration_ms = parsed.get("duration_ms", 0)
-            items_in = parsed.get("items_in", 0)  # Use items_in for batch size
-            if duration_ms > 0:
-                batch_times.append(duration_ms)
-                if items_in > 0:
-                    batch_sizes.append(items_in)
+            # Try to get batch timing from metrics database first
+            try:
+                from src.infra.env_loader import ensure_env_loaded
 
-    rate = None
-    eta_minutes = None
+                ensure_env_loaded()
+                import psycopg
 
-    if batch_times and len(batch_times) >= 2:
-        # Average of last 5 batches
-        avg_ms = sum(batch_times[-5:]) / min(5, len(batch_times))
-        # Use actual batch size if available, otherwise default to 4
-        avg_batch_size = sum(batch_sizes[-5:]) / min(5, len(batch_sizes)) if batch_sizes else 4
-        rate = avg_batch_size / (avg_ms / 1000.0)
+                dsn = os.getenv("GEMATRIA_DSN")
+                if dsn:
+                    with psycopg.connect(dsn) as conn:
+                        with conn.cursor() as cur:
+                            # Get last 10 batch_processed events for enrichment
+                            cur.execute("""
+                                SELECT items_in, duration_ms, started_at
+                                FROM metrics_log
+                                WHERE node = 'enrichment' 
+                                  AND event = 'batch_processed'
+                                  AND started_at >= NOW() - INTERVAL '1 hour'
+                                  AND duration_ms IS NOT NULL
+                                  AND duration_ms > 0
+                                ORDER BY started_at DESC
+                                LIMIT 10
+                            """)
+                            rows = cur.fetchall()
+                            for row in rows:
+                                items_in, duration_ms, _ = row
+                                if duration_ms and duration_ms > 0:
+                                    batch_times.append(float(duration_ms))
+                                    if items_in and items_in > 0:
+                                        batch_sizes.append(int(items_in))
+            except Exception:
+                # Fallback to log file parsing
+                pass
 
-        if total > enriched and rate > 0:
-            remaining = total - enriched
-            eta_sec = remaining / rate
-            eta_minutes = round(eta_sec / 60, 1)
+            # Fallback: try to read from log files if database didn't work
+            if not batch_times:
+                # Check orchestrator log
+                log_lines = scan_log_file(ORCHESTRATOR_LOG, max_lines=1000)
+                # Also check enrichment-specific logs
+                enrichment_logs = [
+                    Path("/tmp/enrichment.log"),
+                    Path("logs/enrichment.log"),
+                    Path("logs/gemantria.enrichment.log"),
+                ]
+                for log_path in enrichment_logs:
+                    if log_path.exists():
+                        log_lines.extend(scan_log_file(log_path, max_lines=500))
 
-    metrics["enrichment"]["eta_minutes"] = eta_minutes
-    metrics["enrichment"]["rate_nouns_per_sec"] = round(rate, 3) if rate else None
-    metrics["enrichment"]["batches_completed"] = len(batch_times)
+                for line in reversed(log_lines[-500:]):
+                    parsed = parse_log_line(line)
+                    if parsed and parsed.get("event") == "batch_processed" and parsed.get("node") == "enrichment":
+                        duration_ms = parsed.get("duration_ms", 0)
+                        items_in = parsed.get("items_in", 0)
+                        if duration_ms and duration_ms > 0:
+                            batch_times.append(float(duration_ms))
+                            if items_in and items_in > 0:
+                                batch_sizes.append(int(items_in))
 
-    # Calculate ETAs for other stages based on historical data
-    stages = stage_timings["stages"]
-    for stage_name, stage_data in stages.items():
-        if stage_name == "enrichment":
-            continue
+            # Calculate rate and ETA if we have batch timing data
+            if batch_times and len(batch_times) >= 1:
+                # Use last 5 batches for average (or all if less than 5)
+                recent_times = batch_times[:5] if len(batch_times) >= 5 else batch_times
+                avg_ms = sum(recent_times) / len(recent_times)
 
-        if stage_data.get("status") == "running" and stage_data.get("start_time"):
-            # Estimate based on similar stages or historical data
-            # For now, we'll use a simple heuristic
-            metrics["other_stages"][stage_name] = {
-                "eta_minutes": None,  # Will be calculated if we have duration data
-            }
+                # Calculate average batch size (default to 4 if not available)
+                if batch_sizes:
+                    recent_sizes = batch_sizes[:5] if len(batch_sizes) >= 5 else batch_sizes
+                    avg_batch_size = sum(recent_sizes) / len(recent_sizes)
+                else:
+                    avg_batch_size = 4  # Default batch size
+
+                # Calculate rate (nouns per second)
+                rate = avg_batch_size / (avg_ms / 1000.0)
+                stage_metrics["rate_per_sec"] = round(rate, 3)
+
+                # Calculate ETA
+                if total > count and rate > 0:
+                    remaining = total - count
+                    eta_sec = remaining / rate
+                    stage_metrics["eta_minutes"] = round(eta_sec / 60, 1)
+
+            stage_metrics["batches_completed"] = len(batch_times) if batch_times else 0
+
+        # For other stages with count/total, estimate progress
+        elif total > 0 and stage_data.get("status") == "running":
+            # Use duration if available to estimate rate
+            duration_ms = stage_data.get("duration_ms")
+            if duration_ms and duration_ms > 0:
+                elapsed_sec = duration_ms / 1000.0
+                if elapsed_sec > 0:
+                    rate = count / elapsed_sec
+                    stage_metrics["rate_per_sec"] = round(rate, 2)
+                    if total > count and rate > 0:
+                        remaining = total - count
+                        eta_sec = remaining / rate
+                        stage_metrics["eta_minutes"] = round(eta_sec / 60, 1)
+
+        metrics[stage_name] = stage_metrics
 
     return metrics
 
@@ -723,57 +917,62 @@ def format_status_report(
         "PENDING": Colors.DIM,
     }
 
-    enrichment_metrics = metrics.get("enrichment", {})
-
     for i, stage_name in enumerate(stage_order):
         stage = stages.get(stage_name, {})
         status = stage.get("status", "pending").upper()
         icon = status_icons.get(status, "?")
         color = status_colors.get(status, Colors.RESET)
         display_name = stage_name.replace("_", " ").title()
+        stage_metrics = metrics.get(stage_name, {})
 
         # Stage header
         lines.append(f"  {icon} {Colors.BOLD}{display_name}:{Colors.RESET} {color}{status}{Colors.RESET}")
 
-        # Stage-specific details
-        if stage_name == "enrichment":
-            count = stage.get("count", 0)
-            total = stage.get("total", 0)
-            if total > 0:
-                progress_pct = (count / total * 100) if total > 0 else 0
-                lines.append(
-                    f"      {Colors.BRIGHT_CYAN}Progress:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET} / {Colors.BRIGHT_MAGENTA}{total:,}{Colors.RESET} ({progress_pct:.1f}%)"
-                )
-                lines.append(f"      {format_progress_bar(progress_pct)}")
+        # Show progress for any stage with count/total
+        count = stage.get("count", 0)
+        total = stage.get("total", 0)
 
-                # ETA and rate
-                if enrichment_metrics.get("rate_nouns_per_sec"):
-                    rate = enrichment_metrics["rate_nouns_per_sec"]
-                    lines.append(
-                        f"      {Colors.DIM}Rate:{Colors.RESET} {Colors.BRIGHT_CYAN}{rate:.3f}{Colors.RESET} nouns/sec"
-                    )
-                if enrichment_metrics.get("eta_minutes"):
-                    eta = enrichment_metrics["eta_minutes"]
-                    hours = int(eta // 60)
-                    mins = int(eta % 60)
-                    lines.append(
-                        f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.BRIGHT_YELLOW}~{hours}h {mins}m{Colors.RESET} ({eta:.1f} minutes)"
-                    )
-                elif status == "RUNNING":
-                    lines.append(f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.DIM}Calculating...{Colors.RESET}")
-            elif count > 0:
-                lines.append(f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET}")
-        elif stage.get("count", 0) > 0:
-            lines.append(
-                f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{stage['count']:,}{Colors.RESET}"
-            )
-        elif stage.get("status") == "complete" and stage_name in ["collect_nouns", "validate_batch"]:
-            # For completed stages, show count from enrichment total if available
+        # For stages without explicit total, try to infer from enrichment total
+        if total == 0 and stage_name in ["collect_nouns", "validate_batch"]:
             enrichment_total = stages.get("enrichment", {}).get("total", 0)
             if enrichment_total > 0:
-                lines.append(
-                    f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{enrichment_total:,}{Colors.RESET}"
-                )
+                total = enrichment_total
+                # Update count if not set
+                if count == 0 and status == "COMPLETE":
+                    count = total
+
+        if total > 0:
+            progress_pct = stage_metrics.get("progress_pct", (count / total * 100) if total > 0 else 0)
+            lines.append(
+                f"      {Colors.BRIGHT_CYAN}Progress:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET} / {Colors.BRIGHT_MAGENTA}{total:,}{Colors.RESET} ({progress_pct:.1f}%)"
+            )
+            lines.append(f"      {format_progress_bar(progress_pct)}")
+
+            # ETA and rate for running stages
+            if status == "RUNNING":
+                rate = stage_metrics.get("rate_per_sec")
+                if rate:
+                    unit = "nouns/sec" if stage_name == "enrichment" else "items/sec"
+                    lines.append(
+                        f"      {Colors.DIM}Rate:{Colors.RESET} {Colors.BRIGHT_CYAN}{rate:.3f}{Colors.RESET} {unit}"
+                    )
+
+                eta = stage_metrics.get("eta_minutes")
+                if eta:
+                    hours = int(eta // 60)
+                    mins = int(eta % 60)
+                    if hours > 0:
+                        lines.append(
+                            f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.BRIGHT_YELLOW}~{hours}h {mins}m{Colors.RESET} ({eta:.1f} minutes)"
+                        )
+                    else:
+                        lines.append(
+                            f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.BRIGHT_YELLOW}~{mins}m{Colors.RESET} ({eta:.1f} minutes)"
+                        )
+                elif total > count:
+                    lines.append(f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.DIM}Calculating...{Colors.RESET}")
+        elif count > 0:
+            lines.append(f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET}")
 
         # Last run timestamp
         if stage.get("last_event"):
@@ -863,7 +1062,8 @@ def format_status_report(
     lines.append(format_box_edge(width, top=False, color=Colors.CYAN))
     lines.append("")
 
-    # Progress metrics summary (if enrichment is running)
+    # Progress metrics summary (if any stage is running with batches)
+    enrichment_metrics = metrics.get("enrichment", {})
     if enrichment_metrics.get("batches_completed", 0) > 0:
         lines.append(format_box_edge(width, top=True, color=Colors.CYAN))
         lines.append(format_box_line("Progress Summary", width, color=Colors.CYAN))
@@ -871,9 +1071,9 @@ def format_status_report(
         lines.append(
             f"  {Colors.DIM}Batches completed:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{enrichment_metrics.get('batches_completed', 0)}{Colors.RESET}"
         )
-        if enrichment_metrics.get("rate_nouns_per_sec"):
+        if enrichment_metrics.get("rate_per_sec"):
             lines.append(
-                f"  {Colors.DIM}Processing rate:{Colors.RESET} {Colors.BRIGHT_CYAN}{enrichment_metrics['rate_nouns_per_sec']:.3f}{Colors.RESET} nouns/sec"
+                f"  {Colors.DIM}Processing rate:{Colors.RESET} {Colors.BRIGHT_CYAN}{enrichment_metrics['rate_per_sec']:.3f}{Colors.RESET} nouns/sec"
             )
         lines.append(format_box_edge(width, top=False, color=Colors.CYAN))
 
@@ -1072,6 +1272,17 @@ def get_keypress(timeout: float = 0.1) -> str | None:
 
 def monitor_once(pid: int | None = None) -> Dict[str, Any]:
     """Run a single monitoring cycle."""
+    # Check for active processes first
+    if pid:
+        try:
+            import psutil
+
+            proc = psutil.Process(pid)
+            if not proc.is_running():
+                pid = None
+        except Exception:
+            pass
+
     # Scan all log files - use larger limit for enrichment_start which is early in the log
     log_lines = []
     for log_path in [ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG]:
@@ -1079,6 +1290,15 @@ def monitor_once(pid: int | None = None) -> Dict[str, Any]:
             # Read more lines for ORCHESTRATOR_LOG to find enrichment_start
             max_lines = 5000 if log_path == ORCHESTRATOR_LOG else 500
             log_lines.extend(scan_log_file(log_path, max_lines=max_lines))
+
+    # Also check for enrichment-specific log files
+    enrichment_logs = [
+        Path("logs/enrichment.log"),
+        Path("logs/gemantria.enrichment.log"),
+    ]
+    for log_path in enrichment_logs:
+        if log_path.exists():
+            log_lines.extend(scan_log_file(log_path, max_lines=1000))
 
     # Extract stage status and timings
     stage_status, stage_timings = extract_stage_status(log_lines)
@@ -1109,7 +1329,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Comprehensive Pipeline Monitor")
     parser.add_argument("--pid", type=int, help="Process ID to monitor")
-    parser.add_argument("--watch", action="store_true", help="Watch mode (update every 60s)")
+    parser.add_argument("--watch", action="store_true", help="Watch mode (update every 10s)")
     parser.add_argument("--json", action="store_true", help="Output JSON format")
     parser.add_argument("--interactive", action="store_true", help="Interactive menu mode")
     args = parser.parse_args()
@@ -1156,15 +1376,15 @@ def main():
                     if args.interactive:
                         show_interactive_menu(status, status["errors"])
                         # Wait for keypress with timeout
-                        key = get_keypress(timeout=60.0)
+                        key = get_keypress(timeout=10.0)
                         if key:
                             if key == "\x03":  # Ctrl+C
                                 raise KeyboardInterrupt
                             if not handle_menu_choice(key, status, status["errors"]):
                                 break
                     else:
-                        print(f"\n{Colors.DIM}🔄 Next update in 60 seconds... (Iteration #{iteration}){Colors.RESET}")
-                        time.sleep(60)
+                        print(f"\n{Colors.DIM}🔄 Next update in 10 seconds... (Iteration #{iteration}){Colors.RESET}")
+                        time.sleep(10)
         except KeyboardInterrupt:
             print(f"\n\n{Colors.BRIGHT_YELLOW}Monitoring stopped.{Colors.RESET}")
     else:

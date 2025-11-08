@@ -15,3 +15,8 @@ ui/yarn.lock
 backup-safety-rules-*.tar.gz
 backup-safety-rules-*.bundle
 backups/codebase/backup-safety-rules-*.tar.gz
+
+# Dev artifacts
+__pycache__/
+*.pyc
+exports/ai_nouns.enriched.json

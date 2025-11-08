@@ -198,6 +198,11 @@ monitoring.run:
 	@echo ">> Run monitoring stub"
 	@$(PYTHON) scripts/monitoring.py
 
+.PHONY: monitor.pipeline
+monitor.pipeline:
+	@echo ">> Pipeline Monitor (refreshes every 10s, shows progress for all stages)"
+	@PYTHONPATH=$(shell pwd) python3 scripts/monitor_pipeline.py --watch
+
 .PHONY: scaling.run
 scaling.run:
 	@echo ">> Run scaling stub"

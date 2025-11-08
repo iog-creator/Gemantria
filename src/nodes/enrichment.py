@@ -36,7 +36,7 @@ def evaluate_confidence(conf, run_id=None, node=None):
     return status
 
 
-def enrichment_node(state: dict) -> dict:
+def enrichment_node(state: dict, progress_callback=None) -> dict:
     # Pipeline-level Qwen Live Gate already verified all required models are available
     theology_model = os.getenv("THEOLOGY_MODEL")
     if not theology_model:
@@ -334,6 +334,13 @@ def enrichment_node(state: dict) -> dict:
                     "duration_ms": batch_lat_ms,
                 }
             )
+
+            # Call progress callback if provided (for incremental writes)
+            if progress_callback:
+                try:
+                    progress_callback(enriched_nouns.copy())
+                except Exception as e:
+                    log_json(LOG, 30, "progress_callback_failed", error=str(e))
 
         except Exception as e:
             log_json(

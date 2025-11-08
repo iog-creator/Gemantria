@@ -45,7 +45,6 @@ def _validate_envelope_first() -> Dict[str, Any]:
     }
 
     try:
-        import os
         from pathlib import Path
 
         # Check for unified envelope
