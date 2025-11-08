@@ -8,7 +8,6 @@ If enabled, runs a hermetic Node/TS hello-world in a sandboxed process.
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 CODE_EXEC_TS = os.getenv("CODE_EXEC_TS", "0")
 
