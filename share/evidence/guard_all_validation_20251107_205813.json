@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-08T04:58:13.989222+00:00",
+  "agent": "guard_all",
+  "event_type": "validation",
+  "level": "ERROR",
+  "data": {
+    "validation_type": "AI Nouns SSOT Schema Validation",
+    "passed": false,
+    "details": {
+      "message": "FAIL_SCHEMA: 'gematria/ai-nouns.v1' was expected"
+    }
+  }
+}
