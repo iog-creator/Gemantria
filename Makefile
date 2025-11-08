@@ -513,7 +513,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -530,6 +530,14 @@ guard.rules.alwaysapply:
 .PHONY: guard.rules.alwaysapply.dbmirror
 guard.rules.alwaysapply.dbmirror:
 	@$(PYTHON) scripts/guards/guard_alwaysapply_dbmirror.py
+
+.PHONY: guard.ai.tracking
+guard.ai.tracking:
+	@python3 scripts/guards/guard_ai_tracking_contract.py
+
+.PHONY: guard.ai.tracking.strict
+guard.ai.tracking.strict:
+	@STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -596,6 +604,24 @@ analytics.export:
 	@echo ">> Analytics Agent: scored graph→stats/patterns/forecast + report"
 	@# TODO: wire to analytics export scripts
 	@echo "ANALYTICS_EXPORT_OK"
+
+# --- Analytics exports (DB-first; tolerant stubs when DSN missing) ---
+.PHONY: analytics.export.db
+analytics.export.db:
+	@python3 scripts/analytics/export_from_db.py
+
+.PHONY: analytics.verify
+analytics.verify:
+	@python3 scripts/analytics/verify_export.py
+
+# AI Tracking exports (sessions/calls telemetry)
+.PHONY: analytics.ai.export
+analytics.ai.export:
+	@python3 scripts/analytics/export_ai_tracking.py
+
+.PHONY: analytics.ai.verify
+analytics.ai.verify:
+	@python3 scripts/analytics/verify_ai_tracking.py
 
 evidence.clean:
 	find share/evidence -type f -mtime +14 -delete || true
@@ -791,3 +817,14 @@ agents.md.index:
 	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "TRUNCATE ai.agent_docs_index"
 	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "\copy ai.agent_docs_index (path,sha256_12,excerpt) FROM program 'jq -cr \".[]|[.path,.sha256_12,(.excerpt|tojson)]|@tsv\" tmp.agent_docs_index.json' WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b')"
 	@psql "$$GEMATRIA_DSN" -c "SELECT count(*) AS indexed, min(updated_at) AS first_at, max(updated_at) AS last_at FROM ai.agent_docs_index"
+
+# Rerank smoke test (stub for now)
+.PHONY: rerank.smoke
+rerank.smoke:
+	@echo "[rerank.smoke] Checking rerank components..."
+	@python3 scripts/analytics/rerank_smoke.py
+
+# Rerank smoke test
+.PHONY: rerank.smoke
+rerank.smoke:
+	@python3 scripts/analytics/rerank_smoke.py

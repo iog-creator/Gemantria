@@ -19,8 +19,20 @@ jobs:
         run: make -s guard.rules.alwaysapply.dbmirror || true
         env:
           GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+      - name: AI tracking contract (HINT on PRs)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: make -s guard.ai.tracking || true
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+          AI_AUTOMATION_DSN: ${{ secrets.GEMATRIA_DSN }}
       - name: DB mirror (STRICT on tags)
         if: startsWith(github.ref, 'refs/tags/')
         run: STRICT_DB_MIRROR=1 make -s guard.rules.alwaysapply.dbmirror
         env:
           GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+      - name: AI tracking contract (STRICT on tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: make -s guard.ai.tracking.strict
+        env:
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+          AI_AUTOMATION_DSN: ${{ secrets.GEMATRIA_DSN }}

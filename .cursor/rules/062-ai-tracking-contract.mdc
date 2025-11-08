@@ -1,0 +1,7 @@
+id: "062"
+title: "AI-tracking in gematria (DSN congruence)"
+alwaysApply: false
+body: |
+  - AI tracking tables **must** live in `gematria` DB (migrations 015/016).
+  - `AI_AUTOMATION_DSN` **must equal** `GEMATRIA_DSN` (same host/port/db).
+  - Guards: `guard.ai.tracking` (HINT), `guard.ai.tracking.strict` (STRICT on tags).

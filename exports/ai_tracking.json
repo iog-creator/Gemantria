@@ -1,0 +1,1207 @@
+{
+  "schema": "gemantria/ai-tracking.v1",
+  "generated_at": "2025-11-08T21:24:26.408123Z",
+  "totals": {
+    "interactions": 1,
+    "governance_artifacts": 79
+  },
+  "interactions": [
+    {
+      "id": 2,
+      "session_id": "session_1762542709",
+      "interaction_type": "session_start",
+      "user_query": null,
+      "ai_response": null,
+      "tools_used": null,
+      "context_provided": {
+        "context": {},
+        "start_time": "2025-11-07T11:11:49.731149",
+        "session_type": "development"
+      },
+      "execution_time_ms": null,
+      "success": true,
+      "error_details": null,
+      "created_at": "2025-11-07 11:11:49.732991-08:00"
+    }
+  ],
+  "governance_artifacts": [
+    {
+      "id": 2401,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-063",
+      "file_path": ".cursor/rules/063-git-safety.mdc",
+      "rule_references": [
+        "Rule-063"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-07 11:55:05.994724-08:00",
+      "checksum": "2ba4fe35f9c7880ba5ffb48f51bf4aa49ef200b64aaae4e804afd67f78ee9eb9",
+      "validation_status": "valid",
+      "created_at": "2025-11-07 11:55:05.994724-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 2410,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-062",
+      "file_path": ".cursor/rules/062-environment-validation.mdc",
+      "rule_references": [
+        "Rule-062"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-07 11:55:05.994724-08:00",
+      "checksum": "ba5e2969c19513340be93429e9443bac4b71b0fa60e550bc046974417607521e",
+      "validation_status": "valid",
+      "created_at": "2025-11-07 11:55:05.994724-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 1044,
+      "artifact_type": "hint_emission",
+      "artifact_name": "src/graph/graph.py:pipeline: executing LangGraph with checkpointer (R...",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [
+        "Rule-039"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 16:42:47.535881-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 16:42:47.535881-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 579,
+      "artifact_type": "agent_file",
+      "artifact_name": "scripts/manage_document_sections.py",
+      "file_path": "scripts/manage_document_sections.py",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 16:10:06.837950-08:00",
+      "checksum": "6fb34c676b1062bca7fe3895030b3a9a6c01ea9f57ef4e07ba4b10aa5f6bee86",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 16:10:06.837950-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 580,
+      "artifact_type": "agent_file",
+      "artifact_name": "scripts/populate_document_sections.py",
+      "file_path": "scripts/populate_document_sections.py",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 16:10:06.837950-08:00",
+      "checksum": "f575d1c7c2cf6842beed1bb0fa0d681cba92c173d6370cc612a1e972cf7ad86b",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 16:10:06.837950-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 581,
+      "artifact_type": "agent_file",
+      "artifact_name": "scripts/document_management_hints.py",
+      "file_path": "scripts/document_management_hints.py",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 16:10:06.837950-08:00",
+      "checksum": "24ce0339a7522daa3840e5548f305a4eb72f188c71291d7c04bda1970b639623",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 16:10:06.837950-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 62,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-005",
+      "file_path": ".cursor/rules/005-github-operations.mdc",
+      "rule_references": [
+        "Rule-005"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "3e395705f6f7b8a2d739813b1e6c0258d685c95bab935cef3aae2cbe90900a8a",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 63,
+      "artifact_type": "agent_file",
+      "artifact_name": "AGENTS.md",
+      "file_path": "AGENTS.md",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "24027fca93f5ac2731df8929f35ec64aceeb740011e2099a6c201a02cfba7b66",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 65,
+      "artifact_type": "agent_file",
+      "artifact_name": "src/services/AGENTS.md",
+      "file_path": "src/services/AGENTS.md",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "c08edfd9731c860a5ea5a461a6e91c69b5fa325d86894a8dc96c4dbfabef3213",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 66,
+      "artifact_type": "agent_file",
+      "artifact_name": "scripts/AGENTS.md",
+      "file_path": "scripts/AGENTS.md",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "549a8fd362f90e971fd2e76edd5a8fd69de272192c8b8c56869de2e986967b9b",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 67,
+      "artifact_type": "agent_file",
+      "artifact_name": "docs/AGENTS.md",
+      "file_path": "docs/AGENTS.md",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "cbeae6681ea236a4cb6cb4586685e29af02a8feef1f135bdd2bf097de0b85548",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 68,
+      "artifact_type": "metadata_reference",
+      "artifact_name": "src.graph.graph.run_pipeline",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [
+        "Rule-039",
+        "Rule-050",
+        "Rule-058"
+      ],
+      "agent_references": [
+        "AGENTS.md",
+        "src/graph/AGENTS.md"
+      ],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 69,
+      "artifact_type": "metadata_reference",
+      "artifact_name": "src.graph.graph.wrap_hints_node",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [
+        "Rule-039",
+        "Rule-050",
+        "Rule-058"
+      ],
+      "agent_references": [
+        "AGENTS.md",
+        "src/graph/AGENTS.md"
+      ],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 7,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-049",
+      "file_path": ".cursor/rules/049-gpt5-contract-v5.2.mdc",
+      "rule_references": [
+        "Rule-049"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "8f3fad644d5e03c745e50a24ec1dfbea2ea4f812c595deb9f89aa57c02624375",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 8,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-056",
+      "file_path": ".cursor/rules/056-ui-generation.mdc",
+      "rule_references": [
+        "Rule-056"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "416d4fb35f41781e5a9716b8402c4b4dcbbd782c19ec0780d4bed55191da68df",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 9,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-046",
+      "file_path": ".cursor/rules/046-ci-hermetic-fallbacks.mdc",
+      "rule_references": [
+        "Rule-046"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "9cd524169a1d27e9321ec49ae7c51e4aae277b708605909bffcd16bb1ca55cfb",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 10,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-053",
+      "file_path": ".cursor/rules/053-idempotence.mdc",
+      "rule_references": [
+        "Rule-053"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "934410890e6729541bd895fcd09096a2e338f52a1916d13376fbfe014a0721dd",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 11,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-002",
+      "file_path": ".cursor/rules/002-gematria-validation.mdc",
+      "rule_references": [
+        "Rule-002"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "627c91b8c93a9faf773438b6946c43441ec6d68e62e7935e6a7168bbad138d51",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 12,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-039",
+      "file_path": ".cursor/rules/039-execution-contract.mdc",
+      "rule_references": [
+        "Rule-039"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "022fc9886b15056d2de98013b66ae4d55154ea50a5baae62fd4a1c5a23c3a4cb",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 13,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-008",
+      "file_path": ".cursor/rules/008-cursor-rule-authoring.mdc",
+      "rule_references": [
+        "Rule-008"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f86671714c9a133f9db6f7f162d6370dbe468557d309504f3bcc17bd8c8ffed5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 14,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-036",
+      "file_path": ".cursor/rules/036-temporal-visualization-spec.mdc",
+      "rule_references": [
+        "Rule-036"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f445dd897ec7b44f892c9f8f9d8ba4a19823241a07a1c1f761c344bfbb30e1b6",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 15,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-061",
+      "file_path": ".cursor/rules/061-ai-learning-tracking.mdc",
+      "rule_references": [
+        "Rule-061"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "62f029b2518a20d1c86114f0027fb88a5b6aa168c9ef328b705f5ed0be752ad5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 16,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-022",
+      "file_path": ".cursor/rules/022-visualization-contract-sync.mdc",
+      "rule_references": [
+        "Rule-022"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "4e77ebed172be4c08ded6efa5895c3b8fbbd2f627645354e4d57a1281e877646",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 17,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-045",
+      "file_path": ".cursor/rules/045-rerank-blend-SSOT.mdc",
+      "rule_references": [
+        "Rule-045"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "8cbe129d5a768037c6d9838d1dd4515ad4de195ebfe30b3cdef56ac5768b8cc0",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 18,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-055",
+      "file_path": ".cursor/rules/055-auto-docs-sync.mdc",
+      "rule_references": [
+        "Rule-055"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f729f794fe84baae22720d7f90ed98810d8d60ebea7b1eae91b9bf822fa9af8b",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 70,
+      "artifact_type": "metadata_reference",
+      "artifact_name": "src.services.lmstudio_client.assert_qwen_live",
+      "file_path": "src/services/lmstudio_client.py",
+      "rule_references": [
+        "Rule-011",
+        "Rule-046"
+      ],
+      "agent_references": [
+        "src/services/AGENTS.md"
+      ],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "477bbcf9c3d9b2bdd2cd1b8de06dec7ae0b776b87686cfcd068bba735e516210",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 71,
+      "artifact_type": "hint_emission",
+      "artifact_name": "src/graph/graph.py:pipeline: starting execution for book=...",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 72,
+      "artifact_type": "hint_emission",
+      "artifact_name": "src/graph/graph.py:pipeline: loading environment and creating run (Ru...",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [
+        "Rule-050"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 73,
+      "artifact_type": "hint_emission",
+      "artifact_name": "src/graph/graph.py:pipeline: nouns provided=...",
+      "file_path": "src/graph/graph.py",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1102797c8f2d9adadc042ac38476064d53a3db32d87aaa04cba46d4f9243eb03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 1,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-033",
+      "file_path": ".cursor/rules/033-visualization-api-validation.mdc",
+      "rule_references": [
+        "Rule-033"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "b294274958c1784d1ad71bb1aa937e186f0acf24279a59620a44ca4a9aaa3db3",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 2,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-050",
+      "file_path": ".cursor/rules/050-ops-contract.mdc",
+      "rule_references": [
+        "Rule-050"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "7427179ed72fba111c46e54d674af8e67bb272ee5c85e6281029ec9d30864f63",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 3,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-052",
+      "file_path": ".cursor/rules/052-tool-priority.mdc",
+      "rule_references": [
+        "Rule-052"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "50df6a645df111ae9f2dcfabb2cdf97d66e3afc29411411185cb34ebd5de3ce3",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 4,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-035",
+      "file_path": ".cursor/rules/035-forecasting-spec.mdc",
+      "rule_references": [
+        "Rule-035"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "2acbf4f562a5108630382081f1b43938667d29cc41ef50a8a14a7ac56121b3fa",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 5,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-007",
+      "file_path": ".cursor/rules/007-infrastructure.mdc",
+      "rule_references": [
+        "Rule-007"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "b1d8314e5e0c831439aebffc574cf522a539ba6357e4dbf597e2f94e41ae6818",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 6,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-037",
+      "file_path": ".cursor/rules/037-data-persistence-completeness.mdc",
+      "rule_references": [
+        "Rule-037"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "6c6c4f20666233da0098ce630d281b71dd487ee11b77faf46d6fc32cf679a5f5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 35,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-014",
+      "file_path": ".cursor/rules/014-governance-index.mdc",
+      "rule_references": [
+        "Rule-014"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "b293a89c5306e83eb2b9461dad2c332d2c866c432950b1839abacde04a91fa72",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 36,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-044",
+      "file_path": ".cursor/rules/044-share-manifest-contract.mdc",
+      "rule_references": [
+        "Rule-044"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "db53c46399c41e09fef920511330a4ff3888c9b25e88f4a9237607838c4bf7f9",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 37,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-025",
+      "file_path": ".cursor/rules/025-phase-gate.mdc",
+      "rule_references": [
+        "Rule-025"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "acd987f022f81844f8b8dd363252008a409bcbefb05dcdcca35ab39aeb32b8a7",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 38,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-021",
+      "file_path": ".cursor/rules/021-stats-proof.mdc",
+      "rule_references": [
+        "Rule-021"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "d9f13a075a9905e892de4a75cd9027be44cc986e36fe4337b2bce74e350b914a",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 39,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-013",
+      "file_path": ".cursor/rules/013-report-generation-verification.mdc",
+      "rule_references": [
+        "Rule-013"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f818780f9759678f3460fda2fe0174411a5380110a509fc75f2b1d4ccad0b3ea",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 40,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-051",
+      "file_path": ".cursor/rules/051-cursor-insight.mdc",
+      "rule_references": [
+        "Rule-051"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "6f8582f3141b4180ef94024e7715f6fe79f857bd6000ff885f13aadf48b764c6",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 41,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-003",
+      "file_path": ".cursor/rules/003-graph-and-batch.mdc",
+      "rule_references": [
+        "Rule-003"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "81d63802728258a043c96b26dc6c67c3b6b958ee21ebb48cbe37c0649138bd11",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 42,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-041",
+      "file_path": ".cursor/rules/041-pr-merge-policy.mdc",
+      "rule_references": [
+        "Rule-041"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1d7f0a1c8b900019df2d4c8ada0a688a0fc31ad4b352d49de08cd07994bae7b5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 31,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-006",
+      "file_path": ".cursor/rules/006-agents-md-governance.mdc",
+      "rule_references": [
+        "Rule-006"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "919d2bece50f859991b5be6a86b9727dfec6e839b78538502350e16e912524ff",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 32,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-040",
+      "file_path": ".cursor/rules/040-ci-triage-playbook.mdc",
+      "rule_references": [
+        "Rule-040"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "b6753c5bc4c3ca8e83a2f2da48991e28367a4871b4cf6916805dcc643bfda45a",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 33,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-059",
+      "file_path": ".cursor/rules/059-context-persistence.mdc",
+      "rule_references": [
+        "Rule-059"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "653114572413ccb55e668664f9eaa9c621ab3efb49181d76872b34ad6b7eb2c2",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 34,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-019",
+      "file_path": ".cursor/rules/019-metrics-contract-sync.mdc",
+      "rule_references": [
+        "Rule-019"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "5f61adb5fce448236aef6e5c07beb24ff533e84388e5c2f57b4a4e1a54fb6a96",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 64,
+      "artifact_type": "agent_file",
+      "artifact_name": "src/graph/AGENTS.md",
+      "file_path": "src/graph/AGENTS.md",
+      "rule_references": [],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "81590617fe9eeef4f4524b9e62d916e031168e0baf30fbac77e6c079053c5e53",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 19,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-034",
+      "file_path": ".cursor/rules/034-temporal-suite.mdc",
+      "rule_references": [
+        "Rule-034"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "ddd4349da7bb8387df50a324255b957a1c8d856394df56c82842803e69b74a80",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 20,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-030",
+      "file_path": ".cursor/rules/030-share-sync.mdc",
+      "rule_references": [
+        "Rule-030"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "72db0435c33cde2b675a851e85be22ccb93f8430a117503af61dfe62915dffa4",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 21,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-018",
+      "file_path": ".cursor/rules/018-ssot-linkage.mdc",
+      "rule_references": [
+        "Rule-018"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "26cfd3f5fb93b407c764eecd8c3cdf71991da05f50e00c0cd5ac3fb3a069c9b3",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 22,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-028",
+      "file_path": ".cursor/rules/028-phase-freshness.mdc",
+      "rule_references": [
+        "Rule-028"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f6f6450d00990f3d15eb03bb0c6d0717c50108be1cb738e4c542d73ffbbe50c6",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 23,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-032",
+      "file_path": ".cursor/rules/032-pattern-integrity-validation.mdc",
+      "rule_references": [
+        "Rule-032"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "f190738a2c8907bd629f10f5d8ce24c71d97713b6b440a62713c15163b71c897",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 24,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-016",
+      "file_path": ".cursor/rules/016-visualization-contract-sync.mdc",
+      "rule_references": [
+        "Rule-016"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "941582d829060443b7de5f6b9a8a43cd4dc70d3ebc159c3d1f6d62047ac90ffa",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 25,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-060",
+      "file_path": ".cursor/rules/060-response-style.mdc",
+      "rule_references": [
+        "Rule-060"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "ca89a6653202a64258fa6a1f970da70142353b90a61d83d537ca31197edbb443",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 26,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-038",
+      "file_path": ".cursor/rules/038-exports-smoke-gate.mdc",
+      "rule_references": [
+        "Rule-038"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1d78f3ab2d5dfafba12cc6bccf59ecc4d56d50bfea858ee59c87f48f3ac51455",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 27,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-015",
+      "file_path": ".cursor/rules/015-semantic-export-compliance.mdc",
+      "rule_references": [
+        "Rule-015"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "354644010afbb8a6cf726e5faf9c5e5a14ad2ee4ec5fda312750e1e311eba894",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 28,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-010",
+      "file_path": ".cursor/rules/010-task-brief.mdc",
+      "rule_references": [
+        "Rule-010"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "ebc25011915ca0e723e87a53558e414dddc6ef6be1948fa6484ff7726beb7009",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 46,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-027",
+      "file_path": ".cursor/rules/027-docs-sync-gate.mdc",
+      "rule_references": [
+        "Rule-027"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "400a2d8ce7a8cf6216becde26a31a8e42eba46c3d493d0a5a390f983536e6666",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 47,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-057",
+      "file_path": ".cursor/rules/057-embedding-consistency.mdc",
+      "rule_references": [
+        "Rule-057"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "2ebb85ec1450f89a67e66a3edc1846c9d1acd1e60faf67f07c747bbfe4933412",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 48,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-004",
+      "file_path": ".cursor/rules/004-pr-workflow.mdc",
+      "rule_references": [
+        "Rule-004"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "31d911207ffbf6ad361b0dbf33cba37779d7b6d9003cb9e68a8dfb3dcafaf403",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 49,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-031",
+      "file_path": ".cursor/rules/031-correlation-visualization-validation.mdc",
+      "rule_references": [
+        "Rule-031"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "82a791f3440b5cd81a10bae979317add4743ecd575d79d58d6154291bd76c1e6",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 50,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-012",
+      "file_path": ".cursor/rules/012-connectivity-troubleshooting.mdc",
+      "rule_references": [
+        "Rule-012"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "03656e4aadea2fa6f7002980d1eb6e6a81cbf5a53719d5dec868d9217e101e7b",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 51,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-017",
+      "file_path": ".cursor/rules/017-agent-docs-presence.mdc",
+      "rule_references": [
+        "Rule-017"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "d730ef3e090d917804030afafa1048a623bfc424ab0957ec1115a61881eae9c7",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 52,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-058",
+      "file_path": ".cursor/rules/058-auto-housekeeping.mdc",
+      "rule_references": [
+        "Rule-058"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "ce9ee777fcdc19e674f735502c1a9a804763a499cf737527124121de5cb3ce10",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 53,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-047",
+      "file_path": ".cursor/rules/047-reserved.mdc",
+      "rule_references": [
+        "Rule-047"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "cd3832b6123c6ffa9ed98e68226081a6b8876cc200031e4201525962fb3a5a30",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 54,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-026",
+      "file_path": ".cursor/rules/026-system-enforcement-bridge.mdc",
+      "rule_references": [
+        "Rule-026"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "e195cb2f8bbb746bcfe85fe8088f8f8adae3c2ae9bbc5c0d276535102a5798f5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 55,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-009",
+      "file_path": ".cursor/rules/009-documentation-sync.mdc",
+      "rule_references": [
+        "Rule-009"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "2e199a5bebf012e2db001b0dc4d34fa975d161c737d591af42fe71d3b642294e",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 56,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-020",
+      "file_path": ".cursor/rules/020-ontology-forward-compat.mdc",
+      "rule_references": [
+        "Rule-020"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "b4a44ba01408a038d44e19fcf8bc264052e5cc4ae720dbf3b35f09abe482ddee",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 57,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-001",
+      "file_path": ".cursor/rules/001-db-safety.mdc",
+      "rule_references": [
+        "Rule-001"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "01f808443135c957fadccf84511e7cc42e0b3277dd9b2f7e7a6d0a249bcfdf7e",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 58,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-023",
+      "file_path": ".cursor/rules/023-visualization-api-spec.mdc",
+      "rule_references": [
+        "Rule-023"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "013b299f03e733f126f33b1902cd534cd36c627f52e1e58be0172471abd79c23",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 44,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-048",
+      "file_path": ".cursor/rules/048-reserved.mdc",
+      "rule_references": [
+        "Rule-048"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "426495e38a11b5b92882e0700940ca0683daf9d0e9915f62cc5fc63aa19c7c03",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 29,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-011",
+      "file_path": ".cursor/rules/011-production-safety.mdc",
+      "rule_references": [
+        "Rule-011"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "48033c64e8f556af335cb9c9575953a52f3e1e5ec8dee165a9ce61ff1b6e6c15",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 45,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-054",
+      "file_path": ".cursor/rules/054-reuse-first.mdc",
+      "rule_references": [
+        "Rule-054"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "6c9d28e0392e1a9f0860a2e6c7220173bb53c8106356c000fcc38fbdef0178d2",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 30,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-024",
+      "file_path": ".cursor/rules/024-dashboard-ui-spec.mdc",
+      "rule_references": [
+        "Rule-024"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "3871be0f38ddb546eb2ecfbcbf734f6271ef64d61561c8760b14cf805e0fce25",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 43,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-029",
+      "file_path": ".cursor/rules/029-adr-coverage.mdc",
+      "rule_references": [
+        "Rule-029"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "9f91de96c21e70360c514c3f2af0716fb570430891b4afc1d908e396d5cbd78d",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 59,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-042",
+      "file_path": ".cursor/rules/042-formatter-single-source-of-truth.mdc",
+      "rule_references": [
+        "Rule-042"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "a034dcd247d1115315b1ea5e89bc2a8307cf366a39e54ab4852b8684bf145be9",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 60,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-043",
+      "file_path": ".cursor/rules/043-ci-db-bootstrap.mdc",
+      "rule_references": [
+        "Rule-043"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "67014fdfd187f6e601b4b12410cae1d68c8d4bf54ebea96ffc99d70e508596c5",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    },
+    {
+      "id": 61,
+      "artifact_type": "rule",
+      "artifact_name": "Rule-000",
+      "file_path": ".cursor/rules/000-ssot-index.mdc",
+      "rule_references": [
+        "Rule-000"
+      ],
+      "agent_references": [],
+      "last_updated": "2025-11-06 15:24:37.078024-08:00",
+      "checksum": "1138043d1b735f1c4693a8b284eed5cbf47190bb41c10c080fdbed0f25c08a36",
+      "validation_status": "valid",
+      "created_at": "2025-11-06 15:24:37.078024-08:00",
+      "updated_at": "2025-11-08 10:51:03.579988-08:00"
+    }
+  ]
+}
