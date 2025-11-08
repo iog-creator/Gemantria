@@ -14,6 +14,7 @@ class PipelineState(TypedDict):
     run_id: str
     book_name: str
     book: str  # DEPRECATED: for backwards compatibility
+    ts: str
 
     # Execution mode
     mode: str
