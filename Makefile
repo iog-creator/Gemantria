@@ -770,3 +770,6 @@ ui.smoke.temporal:
 ui.build:
 	@[ -d ui ] || { echo "ui/ folder missing"; exit 1; }
 	cd ui && npm ci && npm run build
+
+agents.md.lint:
+	@scripts/guards/agents_md_lint.sh

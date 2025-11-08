@@ -29,24 +29,37 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def get_required_directories() -> dict[str, list[str]]:
     """Get directories that require AGENTS.md files, grouped by type."""
+    # Directories to exclude from AGENTS.md requirement
+    EXCLUDED_DIRS = {
+        "__pycache__",  # Python bytecode cache
+        ".git",  # Git metadata
+        "node_modules",  # Node.js dependencies
+        ".venv",  # Python virtual environment
+        "venv",  # Python virtual environment (alternate)
+        ".pytest_cache",  # Pytest cache
+        ".mypy_cache",  # Mypy cache
+        ".ruff_cache",  # Ruff cache
+        "__pypackages__",  # PDM packages
+    }
+
     required = {
         "source": [],  # src/*/
         "tools": ["scripts", "migrations", "tests"],  # Tool directories
         "docs": [],  # docs/*/
     }
 
-    # Add all src subdirectories
+    # Add all src subdirectories (excluding cache/generated dirs)
     src_dir = ROOT / "src"
     if src_dir.exists():
         for subdir in src_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith("."):
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required["source"].append(f"src/{subdir.name}")
 
-    # Add all docs subdirectories
+    # Add all docs subdirectories (excluding cache/generated dirs)
     docs_dir = ROOT / "docs"
     if docs_dir.exists():
         for subdir in docs_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith("."):
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required["docs"].append(f"docs/{subdir.name}")
 
     return required
