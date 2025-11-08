@@ -110,10 +110,27 @@ log_json(LOG, 20, "enrichment_start", noun_count=len(nouns), run_id=str(run_id))
 
 ### Environment Variables
 
-- `GEMATRIA_DSN` - Application database connection
-- `BIBLE_DB_DSN` - Bible database connection (read-only)
+- `GEMATRIA_DSN` - Application database connection (read/write)
+- `BIBLE_DB_DSN` - Bible database connection (read-only, enforced)
+- `AI_AUTOMATION_DSN` - AI tracking database connection (**must equal GEMATRIA_DSN** per Rule 064)
 - `CHECKPOINTER` - postgres|memory persistence mode
 - `METRICS_ENABLED` - Enable/disable metrics collection
+
+### 3-Role DB Contract (OPS v6.2.3 - Rule 064)
+
+**Extraction DB**: `GEMATRIA_DSN` → database `gematria` (read/write pipeline data)
+**SSOT DB**: `BIBLE_DB_DSN` → database `bible_db` (read-only source text)
+**AI Tracking**: Lives in `gematria` DB, `public` schema; `AI_AUTOMATION_DSN` **must equal** `GEMATRIA_DSN`
+
+**Tables** (created by migrations 015/016):
+- `public.ai_interactions` - AI learning events and interactions
+- `public.governance_artifacts` - Rules, docs, and compliance tracking
+- `public.hint_emissions` - Runtime hints for observability
+
+**Guards**:
+- `guard.ai.tracking` (HINT mode - tolerant, for PRs)
+- `guard.ai.tracking.strict` (STRICT mode - fail-closed, for tags)
+- CI: HINT on PRs, STRICT on tags (gated by `vars.STRICT_DB_MIRROR_CI`)
 
 ### Service Dependencies
 

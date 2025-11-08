@@ -31,6 +31,44 @@ Notes:
 - Requires servers running (headless): `lms server start --port 9994 [--port 9991/9993]`
 - Script loads `.env` via `ensure_env_loaded()` and uses `/v1` endpoints.
 
+### `guards/guard_ai_tracking_contract.py` — AI Tracking DB Contract Guard (NEW - Rule 064)
+
+**Purpose:** Enforce 3-role DB contract: AI tracking tables must live in gematria DB (public schema)
+
+**Requirements:**
+- **DSN Congruence**: `AI_AUTOMATION_DSN` must equal `GEMATRIA_DSN` (same host/port/db)
+- **Table Presence**: Validates `public.ai_interactions` and `public.governance_artifacts` exist
+- **Fail-Closed**: STRICT mode fails if contract violated; HINT mode warns only
+
+**Usage:**
+```bash
+make guard.ai.tracking              # HINT mode (tolerant, for PRs)
+make guard.ai.tracking.strict       # STRICT mode (fail-closed, for tags)
+STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "note": "AI tracking bound to gematria DB (public schema)",
+  "same_db": true,
+  "tables": {
+    "public.ai_interactions": true,
+    "public.governance_artifacts": true
+  },
+  "counts": {
+    "ai_interactions": 1,
+    "governance_artifacts": 79
+  }
+}
+```
+
+**Related:**
+- **Rule 064**: AI-tracking in gematria (DSN congruence)
+- **Migrations**: 015 (governance_artifacts), 016 (ai_interactions)
+- **CI**: HINT on PRs, STRICT on tags (gated by `vars.STRICT_DB_MIRROR_CI`)
+
 ### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
 
 **Purpose:** Emit standardized `HINT:` lines for clear CI log visibility and Cursor runtime tracking.
