@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-08 13:35:41
+Generated: 2025-11-08 13:39:56
 
 ## Active Rules
 
@@ -66,9 +66,9 @@ Generated: 2025-11-08 13:35:41
 - Rule 059-context-persistence: ---
 - Rule 060-response-style: ---
 - Rule 061-ai-learning-tracking: ---
-- Rule 062-ai-tracking-contract: id: "062"
 - Rule 062-environment-validation: ---
 - Rule 063-git-safety: ---
+- Rule 064-ai-tracking-contract: id: "064"
 
 ## CI Workflows
 

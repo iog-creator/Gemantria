@@ -102,7 +102,9 @@ handoff.update:
 
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping handoff.update
-	@echo ">> Running complete housekeeping (rules audit + forest + ADRs + governance + handoff)"
+	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + handoff)"
+	@$(PYTHON) scripts/validate_agents_md.py
+	@echo "AGENTS.md validation complete"
 	@$(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
 	@$(PYTHON) scripts/generate_forest.py

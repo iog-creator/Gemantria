@@ -26,7 +26,7 @@ make housekeeping
 
 The `make housekeeping` target executes:
 1. **Share synchronization** (`make share.sync`) — mirrors docs/scripts/rules to `share/`
-2. **ADR housekeeping** (`adr.housekeeping`) — validates ADR format and cross-references
+2. **AGENTS.md validation** (`python3 scripts/validate_agents_md.py`) — ensures all subdirectory AGENTS.md files exist and are valid
 3. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
 4. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
 5. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
