@@ -823,6 +823,13 @@ ui.xrefs.index:
 ui.verses.cache:
 	@python3 scripts/ops/build_verses_local_cache.py | tee evidence/ui_verses_cache.log
 
+.PHONY: ui.publish.xrefs
+ui.publish.xrefs:
+	@mkdir -p ui/public/xrefs
+	@test -f ui/out/xrefs_index.v1.json && cp -f ui/out/xrefs_index.v1.json ui/public/xrefs/xrefs_index.v1.json || true
+	@test -f ui/out/verses.local.json   && cp -f ui/out/verses.local.json   ui/public/xrefs/verses.local.json   || true
+	@echo "Published xref artifacts to ui/public/xrefs"
+
 .PHONY: guard.ai_nouns.xrefs
 guard.ai_nouns.xrefs:
 	@echo ">> Checking cross-reference extraction ratio (HINT mode)"
