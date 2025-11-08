@@ -10,7 +10,7 @@ async function loadLocal(): Promise<Record<string, string>> {
   if (localCache) return localCache;
   try {
     // prefer generated file if present (vite will copy from ui/out)
-    const gen = await fetch('/xrefs/verses.local.json');
+    const gen = await fetch('/xrefs/verses.local.json', { cache: 'no-store' });
     if (gen.ok) {
       localCache = await gen.json();
       return localCache!;
