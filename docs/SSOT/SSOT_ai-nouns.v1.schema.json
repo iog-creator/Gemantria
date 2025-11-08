@@ -45,6 +45,18 @@
               "ref":{"type":"string"},
               "offset":{"type":["integer","null"]}
             }}
+          },
+          "xrefs": {
+            "type": "array",
+            "description": "Cross-references preserved from model output.",
+            "items": { "$ref": "#/$defs/xref" },
+            "default": []
+          },
+          "links": {
+            "type": "array",
+            "description": "Legacy/alias for xrefs; will be normalized downstream.",
+            "items": { "$ref": "#/$defs/xref" },
+            "default": []
           }
 
         }
@@ -53,6 +65,20 @@
 
     }
 
+  },
+
+  "$defs": {
+    "xref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "book": { "type": "string" },
+        "chapter": { "type": "integer", "minimum": 1 },
+        "verse": { "type": "integer", "minimum": 1 },
+        "ref": { "type": "string", "description": "Optional human-readable ref (e.g., Genesis 1:1)" }
+      },
+      "required": ["book","chapter","verse"]
+    }
   }
 
 }
