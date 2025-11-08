@@ -4,7 +4,10 @@ Generated: 2025-11-08 10:24:44
 
 ## Active Rules
 
-- Rule 000-ssot-index: 000-ssot-index (AlwaysApply)
+- Rule 000-ssot-index: 000-ssot-index (Default-Apply)
+- Rule 050-ops-contract: OPS Contract v6.2.3 (AlwaysApply)
+- Rule 051-cursor-insight: Cursor Insight & Handoff (AlwaysApply)
+- Rule 052-tool-priority: Tool Priority & Context Guidance (AlwaysApply)
 - Rule 001-db-safety: ---
 - Rule 002-gematria-validation: ---
 - Rule 003-graph-and-batch: ---

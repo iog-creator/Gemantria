@@ -346,7 +346,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 
 ## How agents should use rules
 
-* Global constraints live in `.cursor/rules/000-always-apply.mdc`.
+* Always-Apply triad lives in `.cursor/rules/050-ops-contract.mdc`, `.cursor/rules/051-cursor-insight.mdc`, and `.cursor/rules/052-tool-priority.mdc`.
 * See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
@@ -356,7 +356,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 <!-- RULES_INVENTORY_START -->
 | # | Title |
 |---:|-------|
-| 000 | # 000-ssot-index (AlwaysApply) |
+| 000 | # 000-ssot-index (Default-Apply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -406,9 +406,9 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # --- |
-| 050 | # --- |
-| 051 | # --- |
-| 052 | # --- |
+| 050 | # 050-ops-contract (AlwaysApply) |
+| 051 | # 051-cursor-insight (AlwaysApply) |
+| 052 | # 052-tool-priority (AlwaysApply) |
 | 053 | # --- |
 | 054 | # --- |
 | 055 | # --- |
