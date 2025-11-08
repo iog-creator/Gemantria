@@ -1,0 +1,11 @@
+{
+  "clients": {
+    "gemantria-ops": {
+      "transport": {
+        "type": "stdio",
+        "command": "python",
+        "args": ["~/mcp/gemantria-ops/server.py"]
+      }
+    }
+  }
+}
