@@ -523,6 +523,11 @@ guard.graph.generated_at:
 	@echo ">> Validating graph exports generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_graph_generated_at.py
 
+.PHONY: guard.tests
+guard.tests:
+	@echo ">> guard.tests (STRICT_RFC3339=1)"
+	@STRICT_RFC3339=1 $(PYTHON) scripts/guards/guard_graph_generated_at.py
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
