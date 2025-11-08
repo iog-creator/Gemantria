@@ -41785,6 +41785,110 @@
       ],
       "confidence": 0.95,
       "insights": "The Hebrew verb הִשִּׁיאַ/נִי (his̄si'ah/nî) in Genesis 3:13, translated as 'blame/shifted blame,' is a pivotal moment in biblical narrative and theology. It marks the first instance of human responsibility and guilt, setting a precedent for the rest of Scripture. The verb's root, שׂוּא (sûa'), connotes 'to push, shove, or shift,' implying a physical act of blame-shifting, reflecting humanity's fall from innocence to culpability. Historically, this verse is significant as it establishes the concept of human sin and its consequences, foreshadowing the need for redemption—a theme central to biblical theology. Theologically, it underscores the doctrine of original sin, humanity's inherent tendency towards guilt and separation from God. The serpent's question, 'Did God really say...?' (v.1), highlights the temptation to doubt or twist divine commands, a recurring theme in Scripture. The confidence score is 0.95 due to the verb's clear meaning, historical context, and theological implications."
+    },
+    {
+      "surface": "וַ/יַּשֵּׁ֥ב",
+      "hebrew": "וַ/יַּשֵּׁ֥ב",
+      "name": "וַ/יַּשֵּׁ֥ב",
+      "primary_verse": "Genesis 15:11",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וַ/יַּשֵּׁ֥ב",
+        "primary_verse": "Genesis 15:11",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 15:11"
+        }
+      ],
+      "confidence": 0.97,
+      "insights": "The Hebrew verb וַיַּשֵּׁב (vayyashshēb) in Genesis 15:11, 'he brought him outside,' signifies a significant shift in Abram's spiritual journey. The root שָׁב (šāḇ), meaning 'to turn' or 'return,' carries profound theological implications. It often denotes a change of direction, both physically and spiritually. Here, it marks the beginning of God's covenantal revelation to Abram, moving him from his tent (a symbol of human limitation) to the outdoors (a symbol of divine expansiveness). This action parallels other biblical 'exoduses' where individuals encounter God in open spaces (e.g., Moses at the burning bush, Exodus 3:1-4:17). The historical context is crucial; this event occurs after Abram's initial covenantal promise (Genesis 15:1-6), suggesting a deepening of his relationship with God. Symbolically, 'bringing outside' signifies Abram's spiritual growth and preparation for receiving God's covenantal instructions under the stars (v. 5). Theologically, it underscores God's initiative in revelation, actively leading humanity into deeper understanding and communion. This verb's usage here is consistent with its broader biblical context, where it often signals divine guidance and human response in the journey of faith."
+    },
+    {
+      "surface": "וְ/חַגִּ֖י",
+      "hebrew": "וְ/חַגִּ֖י",
+      "name": "וְ/חַגִּ֖י",
+      "primary_verse": "Genesis 46:16",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וְ/חַגִּ֖י",
+        "primary_verse": "Genesis 46:16",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 46:16"
+        }
+      ],
+      "confidence": 0.95,
+      "insights": "The Hebrew phrase 'v'chag-gi', derived from the root 'chagag', signifies a festival or celebration, deeply rooted in ancient Near Eastern culture and Israel's history. In Genesis 46:16, it refers to the sons of Bilhah, Jacob's concubine, born during the journey to Egypt, symbolizing the continuation of God's promise despite complex family dynamics (Genesis 29-30). Theologically, this 'chag-gi' represents the joy and celebration of God's faithfulness in the midst of human imperfection, foreshadowing the feasts and festivals that would later commemorate Israel's deliverance from Egypt. It underscores the biblical theme of God's covenantal love extending to all members of His people, even those born out of wedlock (Exodus 12:48-49). The phrase also hints at the future unity of these diverse families in worship and celebration, a prophetic glimpse into the New Testament church where 'every tribe and language and people and nation' gather to praise God (Revelation 7:9)."
+    },
+    {
+      "surface": "נַשַּׁ֤/נִי",
+      "hebrew": "נַשַּׁ֤/נִי",
+      "name": "נַשַּׁ֤/נִי",
+      "primary_verse": "Genesis 41:51",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "נַשַּׁ֤/נִי",
+        "primary_verse": "Genesis 41:51",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 41:51"
+        }
+      ],
+      "confidence": 0.98,
+      "insights": "The Hebrew noun נַשַּׁ֤/נִי (nashshî/nî) in Genesis 41:51, translated as 'snake' or 'serpent,' holds profound theological significance. In the context of Pharaoh's dream, it symbolizes evil and chaos, echoing the serpent in Eden (Genesis 3). The name given to the second son of Jacob, 'Snake' (nashshî), is a play on words with the Hebrew verb for 'to strike or attack,' implying that this child would be a source of conflict. Historically, serpents were revered and feared in ancient Near Eastern cultures, often associated with royalty and power. Theologically, the serpent represents humanity's fallen nature (Romans 5:14) and the presence of evil in the world. Yet, paradoxically, it also points to God's redemptive plan, as the serpent on a pole was a symbol of healing and deliverance from death (Numbers 21:9), foreshadowing Christ's victory over sin and death (John 3:14-15). The confidence in this analysis is high (0.98) due to the extensive biblical and historical context supporting these interpretations."
+    },
+    {
+      "surface": "חֲגֹרֹֽת\\׃",
+      "hebrew": "חֲגֹרֹֽת\\׃",
+      "name": "חֲגֹרֹֽת\\׃",
+      "primary_verse": "Genesis 3:7",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "חֲגֹרֹֽת\\׃",
+        "primary_verse": "Genesis 3:7",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 3:7"
+        }
+      ],
+      "confidence": 0.95,
+      "insights": "The Hebrew noun חֲגֹרֹֽת (chagorot) in Genesis 3:7, derived from the root חגר (chagar), signifies 'coverings' or 'garments'. Theologically, it marks a pivotal moment in humanity's spiritual journey. After eating the forbidden fruit, Adam and Eve suddenly felt their nakedness (v.7), indicating a newfound awareness of sin and shame. The 'coverings' they fashioned from fig leaves symbolize their initial attempt at self-atonement, a futile effort as it precedes God's provision of animal skins (v.21), foreshadowing the need for a blood sacrifice to cover sin. Historically, this event underscores the ancient Near Eastern understanding of nakedness as vulnerability and shame. Theologically, it illustrates humanity's innate recognition of sin's consequences and the inadequacy of human efforts to rectify them, pointing towards the divine provision of salvation."
     }
   ]
 }
