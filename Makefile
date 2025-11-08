@@ -311,7 +311,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes
+.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -542,6 +542,10 @@ ai.enrich:
 ai.verify.math:
 	@echo ">> Math Verifier Agent (gematria sanity via MATH_MODEL=$${MATH_MODEL:-self-certainty-qwen3-1.7b-base-math})"
 	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/math_verifier.py
+
+sandbox.smoke:
+	@echo ">> TS Sandbox Smoke (PoC, gate-aware, hermetic hello-world)"
+	@$(PYTHON) scripts/sandbox_smoke_check.py
 
 graph.build:
 	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"
