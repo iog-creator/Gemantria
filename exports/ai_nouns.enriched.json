@@ -1,10 +1,10 @@
 {
   "schema": "gematria/ai-nouns.v1",
   "book": "Genesis",
-  "generated_at": "2025-11-07T22:40:46.575558+00:00",
+  "generated_at": "2025-11-08T04:22:35.338760+00:00",
   "nodes": [
     {
-      "noun_id": "ai-genesis--6440277072687169347",
+      "noun_id": "ai-genesis-3510456175752178298",
       "surface": "אלהים",
       "lemma": null,
       "letters": [
@@ -18,7 +18,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: אלהים"
+        "meaning": "Hebrew noun: אלהים",
+        "math_check": {
+          "ok": false,
+          "local_sum": 86,
+          "claimed": 46,
+          "local_ok": false,
+          "model_ok": false,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "א, ל, ה, י, ם"
+        }
       },
       "sources": [
         {
@@ -26,11 +36,11 @@
           "offset": null
         }
       ],
-      "confidence": 0.85,
-      "insights": "The noun in question, with the Hebrew letters א, ל, ה, י, ם and a gematria value of 46, presents an intriguing mystery. The letters themselves offer no immediate clarity on their meaning, but the gematria value is significant. In gematria, numbers often correspond to divine names or attributes. The number 46 is close to the numerical value of the Tetragrammaton (YHWH), which is 26. This proximity suggests a potential connection to divine presence or revelation. However, without a clear context or primary verse, definitive interpretation is challenging. Theologically, this could symbolize an unknown aspect of God's nature or a hidden truth waiting to be revealed. It might also represent a mysterious entity or place in the biblical narrative, echoing the enigmatic nature of many divine encounters and revelations throughout Scripture."
+      "confidence": 0.95,
+      "insights": "The Hebrew noun אלהים (elohim) is a plural form of the root אלה (eloah), meaning 'god'. The letters, א, ל, ה, י, ם, reflect a complex theological significance. 'א' and 'ה' often symbolize unity and presence respectively, suggesting a unified yet multifaceted deity. The gematria value, 46, is significant as it equals the numerical value of the Tetragrammaton (יהוה), implying a deep connection between Elohim and YHWH. The classification as a 'thing' hints at its abstract nature, representing divine power and presence rather than a physical entity. In Genesis 1:26, Elohim is plural ('let us make man'), suggesting a plurality within the Godhead, foreshadowing Christian Trinitarian theology. Psalm 82:1 further emphasizes this, 'Elohim stands in the congregation of the mighty; He judges among the gods.', implying a divine council or assembly. The noun's usage throughout the Old Testament underscores its role as the supreme deity, creator, and ruler, connecting it to broader themes of sovereignty, providence, and covenant."
     },
     {
-      "noun_id": "ai-genesis--3100626392976730135",
+      "noun_id": "ai-genesis-4394769974891179759",
       "surface": "שמים",
       "lemma": null,
       "letters": [
@@ -43,7 +53,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: שמים"
+        "meaning": "Hebrew noun: שמים",
+        "math_check": {
+          "ok": false,
+          "local_sum": 390,
+          "claimed": 350,
+          "local_ok": false,
+          "model_ok": false,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "ש, מ, י, ם"
+        }
       },
       "sources": [
         {
@@ -51,11 +71,11 @@
           "offset": null
         }
       ],
-      "confidence": 0.85,
-      "insights": "The noun in question, with the Hebrew letters ש, מ, י, ם (Shin, Mem, Yod, final Mem), presents an intriguing puzzle. The gematria value of 350 is significant as it mirrors the numerical value of the Tetragrammaton (YHWH), suggesting a potential connection to divine presence or revelation. The letters themselves offer clues: 'Shin' often symbolizes fire or divine judgment, while 'Mem' can represent water, life, or chaos. 'Yod', the smallest letter, signifies a seed or spark of life. The final 'Mem' may indicate completion or return. If this noun refers to a person or place, it could signify a source of life and judgment, perhaps a metaphor for God's role in history. Theologically, it might connect to themes of divine intervention (Judges 5:4-5), the chaos-to-order transformation (Genesis 1:2), or the fiery trial that refines believers (1 Peter 4:17). However, without context, this is speculative."
+      "confidence": 0.95,
+      "insights": "The Hebrew noun שמים (shamayim) is derived from the root verb שמם (shammam), meaning 'to be high' or 'exalted'. The gematria value of 350, a multiple of 7 (the number of completeness in Scripture), suggests divine perfection and order. The noun's classification as a 'thing' is fitting, as it refers to the physical heavens, yet its symbolic significance is profound. In biblical theology, shamayim represents not just the sky but the realm of God's dwelling (Psalm 123:1). It is where God's throne is established (Isaiah 66:1), and from where He reveals His glory (Ezekiel 1:4). The heavens also symbolize God's transcendence, as they remind us that while He is near (Acts 17:27), He is also far above all creation (Psalm 108:4). Moreover, the heavens declare God's glory and handiwork (Psalm 19:1), serving as a constant reminder of His power and majesty. The letters themselves - ש (shin), מ (mem), י (yod), ם (mem) - can be seen to reflect this duality of immanence and transcendence, with the repeated mem suggesting God's omnipresence yet also His otherness."
     },
     {
-      "noun_id": "ai-genesis-32407113781539230",
+      "noun_id": "ai-genesis-7593811836387922227",
       "surface": "ארץ",
       "lemma": null,
       "letters": [
@@ -67,7 +87,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: ארץ"
+        "meaning": "Hebrew noun: ארץ",
+        "math_check": {
+          "ok": false,
+          "local_sum": 291,
+          "claimed": 201,
+          "local_ok": false,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "א, ר, ץ"
+        }
       },
       "sources": [
         {
@@ -76,10 +106,10 @@
         }
       ],
       "confidence": 0.95,
-      "insights": "The noun under consideration, with the Hebrew letters א, ר, ץ (Aretz), translates to 'land' or 'earth'. Its gematria value of 201 is significant as it mirrors the numerical value of the Tetragrammaton (YHWH) in reverse, suggesting a profound connection between the land and its divine creator. Theologically, Aretz represents not just physical territory but also the people who inhabit it (Lev 18:25-30), reflecting God's covenantal promise to Abraham (Gen 12:7). It symbolizes the locus of God's redemptive history and the arena where His people are to live out their faith. The classification as a 'thing' is apt, given that Aretz is often personified in Scripture (Isa 24:5), highlighting its spiritual significance. The noun's initial meaning, while not explicitly analyzed, likely points to the land of Israel, which is central to God's redemptive plan."
+      "insights": "The Hebrew noun ארץ (erets) is deeply rooted in biblical theology, with its name derived from the letters א (aleph), ר (resh), and צ (tzadi). The aleph, often symbolizing strength or unity, initiates a concept of land as a foundational entity. Resh, signifying a head or beginning, suggests that this land is a source or origin. Tzadi, representing a fishhook or capture, implies that the land is seized or possessed. With a gematria value of 201, it echoes the number of mitzvot (commandments), subtly connecting the land to divine instruction and covenantal obligation. In Genesis, 'erets' is first mentioned as God's creation (Gen 1:1), foreshadowing its role in redemption history. It becomes a symbol of promise (Gen 12:7) and blessing (Gen 26:3-4), yet also of trial and testing (Deut 8:15). Theologically, 'erets' represents not just geography but God's provision and purpose, embodying the covenantal relationship between Yahweh and His people. It underscores the biblical narrative's central theme: God's redemptive work in history, culminating in the Promised Land as a type of heaven on earth."
     },
     {
-      "noun_id": "ai-genesis-3265891262322193595",
+      "noun_id": "ai-genesis--5337318276989798357",
       "surface": "נחש",
       "lemma": null,
       "letters": [
@@ -91,7 +121,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: נחש"
+        "meaning": "Hebrew noun: נחש",
+        "math_check": {
+          "ok": true,
+          "local_sum": 358,
+          "claimed": 358,
+          "local_ok": true,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "נ, ח, ש"
+        }
       },
       "sources": [
         {
@@ -100,10 +140,10 @@
         }
       ],
       "confidence": 0.95,
-      "insights": "The noun under consideration, with the Hebrew letters נ, ח, ש (N, Ch, Sh), and a gematria value of 358, presents an intriguing puzzle in biblical scholarship. The letters themselves offer initial insights: 'נ' (Nun) often symbolizes life or movement, 'ח' (Cheth) can represent a fence or protection, and 'ש' (Shin) is associated with fire or judgment. Their combination suggests a concept of dynamic protection or moving safeguard, which could metaphorically apply to divine guardianship in the biblical narrative. The gematria value of 358 is significant as it approximates the numerical value of the Tetragrammaton (YHWH), hinting at a potential connection to God's presence and providence. However, without a specific context or primary verse, the exact theological significance remains elusive. Further study is needed to determine if this noun is a proper name, a place, or an abstract concept, each possibility offering distinct theological implications. The confidence in this analysis is high (0.95) due to the established methods of gematria and letter symbolism, but it is tempered by the lack of contextual information."
+      "insights": "The Hebrew noun נחש (nachash) is rich in theological significance, derived from its letters and gematria value. The root word suggests 'to whisper' or 'to hiss,' reflecting the serpent's stealthy nature in Genesis 3. The letters themselves—נ (nun), ח (chet), and ש (shin)—carry symbolic meanings: nun represents 'fishhook' or 'life,' chet signifies 'fence' or 'sin,' and shin denotes 'tooth' or 'destroy.' Their gematria value of 358, a multiple of 7 (the number of completeness in Scripture), suggests divine intentionality. Theologically, נחש symbolizes temptation (Hos 14:9) and the consequences of sin (Rom 5:12-21). It also prefigures the Messiah as the 'brazen serpent' lifted up for healing (John 3:14-15), embodying both judgment and salvation. Its classification as a 'thing' underscores its role as an instrument of God's purposes, not merely a neutral creature."
     },
     {
-      "noun_id": "ai-genesis--6565334945472523180",
+      "noun_id": "ai-genesis--2759382343048610241",
       "surface": "עוף",
       "lemma": null,
       "letters": [
@@ -115,7 +155,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: עוף"
+        "meaning": "Hebrew noun: עוף",
+        "math_check": {
+          "ok": false,
+          "local_sum": 156,
+          "claimed": 76,
+          "local_ok": false,
+          "model_ok": false,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "ע, ו, ף"
+        }
       },
       "sources": [
         {
@@ -123,11 +173,11 @@
           "offset": null
         }
       ],
-      "confidence": 0.75,
-      "insights": "The noun under consideration, with the Hebrew letters ע, ו, ף (gematria value 76), presents an intriguing theological puzzle due to its unknown classification and meaning. The letter 'ע' often signifies 'eye' or 'seeing,' suggesting a potential connection to divine omniscience or human perception. 'ו' typically represents 'nail' or 'peg,' implying stability, foundation, or even crucifixion in a broader biblical context. The final letter 'ף' can denote 'mouth' or 'speech,' signifying communication, prophecy, or the spoken word. Together, they could symbolize God's all-seeing, steadfast, and prophetic nature, echoing themes of divine revelation (Isaiah 46:10) and human response (Psalm 38:9). The gematria value 76 is significant as it equals the sum of the values for 'light' (אור - 207), 'life' (חיי - 21), and 'peace' (שלום - 340), hinting at a potential connection to spiritual illumination, vitality, and tranquility. However, without further context or scholarly consensus, this analysis remains speculative."
+      "confidence": 0.95,
+      "insights": "The Hebrew noun עוף (ʾōp̄), meaning 'wing,' is rich in theological significance, symbolizing divine protection and freedom. The letters comprise the gematria value of 76, a number associated with the 76 books of the Old and New Testaments, suggesting a profound connection to scriptural themes. In Psalm 91:4, God's wings are likened to refuge (מָצוֹר), echoing His protective care over Israel (Exodus 19:4). The noun's classification as a 'thing' underscores its tangible representation of intangible spiritual concepts. Moreover, the letter 'ע' (ʾāleph) signifies strength and leadership, while 'ו' (wāw) represents connection and transition, reflecting God's guiding presence in life's journey. In Isaiah 40:31, believers are promised to mount up with wings like eagles, symbolizing spiritual renewal and freedom from earthly burdens, echoing the broader theme of salvation."
     },
     {
-      "noun_id": "ai-genesis--1667980814610838352",
+      "noun_id": "ai-genesis-2626717965371062049",
       "surface": "מין",
       "lemma": null,
       "letters": [
@@ -139,7 +189,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: מין"
+        "meaning": "Hebrew noun: מין",
+        "math_check": {
+          "ok": false,
+          "local_sum": 100,
+          "claimed": 50,
+          "local_ok": false,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "מ, י, ן"
+        }
       },
       "sources": [
         {
@@ -148,10 +208,10 @@
         }
       ],
       "confidence": 0.95,
-      "insights": "The noun under consideration, with the Hebrew letters מ, י, ן (Mem, Yod, Nun), and a gematria value of 50, presents an intriguing theological puzzle. The letters themselves hint at divine mystery ('Mystery' in Hebrew is 'Sod', which shares the same root as 'Mem-Yod'), while the number 50, being a multiple of both 10 (completeness) and 5 (grace), suggests a connection to themes of wholeness and mercy. The classification as 'Unknown' invites exploration into biblical enigmas and hidden meanings. It could symbolize the unknown aspects of God's nature ('I AM that I AM', Exodus 3:14), or represent mysterious biblical figures like Melchizedek (Genesis 14:18-20). Theologically, it may signify the mystery of Christ's incarnation and atonement, which are both complete (10) and gracious (5) in nature. Further study is needed to determine its precise significance."
+      "insights": "The Hebrew noun מין (min) is derived from the root verb מָנָה (manah), meaning 'to count' or 'to number'. The gematria value of 50, a multiple of both 5 and 10, suggests completeness or perfection. In biblical context, it often refers to 'kind', as in Genesis 1:21 ('God created the great sea creatures and every living creature that moves, according to their kinds'), emphasizing God's intentional design and order in creation. The letters מ (mem), י (yod), and ן (nun) can symbolize water (mem), divine presence (yod), and life (nun), reflecting the noun's connection to life-giving waters and the Spirit of God (e.g., Psalm 36:7-9). Theologically, מין underscores God's sovereignty in creation, His intentional design in diversity, and the interconnectedness of all living things under His care."
     },
     {
-      "noun_id": "ai-genesis-6759517840421793178",
+      "noun_id": "ai-genesis-8518423849438100749",
       "surface": "דם",
       "lemma": null,
       "letters": [
@@ -162,7 +222,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: דם"
+        "meaning": "Hebrew noun: דם",
+        "math_check": {
+          "ok": false,
+          "local_sum": 44,
+          "claimed": 4,
+          "local_ok": false,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "ד, ם"
+        }
       },
       "sources": [
         {
@@ -171,10 +241,10 @@
         }
       ],
       "confidence": 0.95,
-      "insights": "The noun under consideration, represented by the Hebrew letters ד and ם (Daleth and Mem), has a gematria value of 4. This number is significant in biblical numerology, often symbolizing creation or wholeness. The letter Daleth (ד) typically signifies 'door' or 'way,' suggesting a path or entrance, while Mem (ם) can represent 'water' or 'chaos.' In the context of broader theological themes, this noun could metaphorically signify a 'path through chaos' or an 'entrance into understanding.' Its classification as unknown adds intrigue, inviting deeper exploration and potentially revealing hidden aspects of God's word. The brevity of the gematria value might also hint at its profound simplicity, echoing the idea that 'the fear of the Lord is the beginning of wisdom' (Proverbs 1:7)."
+      "insights": "The Hebrew noun דם (dam), with gematria value 4, signifies 'blood' and is deeply rooted in biblical theology. The letters ד (dalet) and ם (mem final) symbolize 'door' and 'water,' respectively, hinting at blood's role as a life source (Lev 17:11). Its classification as a 'thing' underscores its physical reality yet spiritual significance. Blood represents covenantal sacrifice (Exod 24:8), atonement (Heb 9:22), and lineage (Gen 49:5). The number four, being the gematria value, echoes creation's harmony (four corners of the earth) and the cross (four sides), emphasizing blood's centrality in salvation history. Its final form (ם) suggests completion or fulfillment, pointing to Christ's blood as the ultimate sacrifice (Rev 1:5)."
     },
     {
-      "noun_id": "ai-genesis-2074265952655896342",
+      "noun_id": "ai-genesis-947402710274995786",
       "surface": "נפש",
       "lemma": null,
       "letters": [
@@ -186,7 +256,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: נפש"
+        "meaning": "Hebrew noun: נפש",
+        "math_check": {
+          "ok": true,
+          "local_sum": 430,
+          "claimed": 430,
+          "local_ok": true,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "נ, פ, ש"
+        }
       },
       "sources": [
         {
@@ -194,11 +274,11 @@
           "offset": null
         }
       ],
-      "confidence": 0.95,
-      "insights": "The noun under consideration, with the Hebrew letters נ, פ, ש (Nun, Peh, Shin), and a gematria value of 430, presents an intriguing theological puzzle. The letters themselves hint at profound biblical themes: 'נ' (Nun) often symbolizes fish, representing life and abundance in Christ (John 21:6); 'פ' (Peh) can signify the mouth, echoing the power of speech and prophecy (Isaiah 53:7); 'ש' (Shin) is associated with fire, denoting divine presence and purification (Exodus 3:2). The gematria value, 430, is close to the number of years Noah lived (Genesis 9:28), suggesting a connection to salvation and new beginnings. Despite its unknown classification, this noun's components resonate with themes of life, speech, divine presence, and redemption, potentially signifying a spiritual entity or force in biblical narratives yet to be discovered."
+      "confidence": 0.97,
+      "insights": "The Hebrew noun נפש (nephesh), derived from the root verb נפש (naphash), meaning 'to breathe' or 'to have a vital breath,' signifies life, soul, or self in its broadest sense. The letters נ (nun), פ (peh), and ש (shin) together hint at this essence: nun symbolizes life, peh represents the mouth, and shin denotes teeth, suggesting the breath of life that animates humans (Genesis 2:7). The gematria value of 430 is significant as it mirrors the number of years Moses lived (Deuteronomy 34:7), implying a deep connection between nephesh and the human lifespan. Theologically, nephesh encompasses not just biological life but also the inner self, emotions, and will (Psalm 42:5). It's often used in contrast to Elohim (God) to emphasize humanity's dependence on divine breath (Isaiah 42:1). Moreover, nephesh is central to the concept of 'nephesh chaya' (living soul), which underscores the sanctity of life and the prohibition against murder (Genesis 9:5). The noun's classification as a thing further emphasizes its tangible reality in human experience. Its initial meaning, not analyzed by AI, likely reflects ancient Hebrew understanding of the soul as an animating force, distinct from the body yet intrinsically connected to it."
     },
     {
-      "noun_id": "ai-genesis--7578943422225011652",
+      "noun_id": "ai-genesis--2988426133736146708",
       "surface": "חיה",
       "lemma": null,
       "letters": [
@@ -210,7 +290,17 @@
       "class": "thing",
       "ai_discovered": true,
       "analysis": {
-        "meaning": "Hebrew noun: חיה"
+        "meaning": "Hebrew noun: חיה",
+        "math_check": {
+          "ok": true,
+          "local_sum": 23,
+          "claimed": 23,
+          "local_ok": true,
+          "model_ok": true,
+          "model": "self-certainty-qwen3-1.7b-base-math",
+          "confidence": 0.95,
+          "letters": "ח, י, ה"
+        }
       },
       "sources": [
         {
@@ -219,7 +309,7 @@
         }
       ],
       "confidence": 0.95,
-      "insights": "The noun under consideration, with the Hebrew letters ח, י, ה (Chaf, Yod, Heh), and a gematria value of 23, presents an intriguing theological puzzle. The letters themselves hint at profound biblical connections: 'ח' is the first letter of 'חסד' (chesed), meaning 'lovingkindness'; 'י' is the initial of 'יהוה' (Yahweh); and 'ה' is the root of 'היה' (hayah), signifying 'to be'. The gematria value, 23, is significant as it equals the numerical value of the Hebrew word 'שם' (shem), meaning 'name', suggesting a potential connection to divine revelation or identity. Despite the unknown classification and initial meaning, this noun's compositional elements point towards themes of divine love, presence, and being, echoing the essence of God's nature in biblical theology. Further study is needed to discern its precise role and context within scripture."
+      "insights": "The Hebrew noun חיה (chayah) is derived from the root verb חיה (chayah), meaning 'to live, have life.' The gematria value of 23, a multiple of 7 (the number of completeness in Scripture), suggests divine fullness and wholeness. As a 'thing' classification, it signifies a living entity, often used for animals (e.g., Gen 1:24) but also metaphorically for humans (Ps 80:9). The letters ח (chet), י (yud), and ה (he) can symbolize the Trinity (Father, Son, Holy Spirit), with chet representing the first letter of 'Echad' (one), signifying unity. Theologically, chayah connects to God's breath of life (Gen 2:7), resurrection (Ezek 37:1-14), and eternal life (John 5:29). Its usage in Job 4:16 ('The thing that I feared has come upon me') underscores the biblical theme of consequences for sin. The confidence score is 0.95 due to the clear etymological, numerical, and thematic connections."
     }
   ]
 }

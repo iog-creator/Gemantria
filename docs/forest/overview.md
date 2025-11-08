@@ -1,10 +1,10 @@
 # Forest Overview
 
-Generated: 2025-11-07 10:12:58
+Generated: 2025-11-07 20:01:50
 
 ## Active Rules
 
-- Rule 000-ssot-index: ---
+- Rule 000-ssot-index: 000-ssot-index (AlwaysApply)
 - Rule 001-db-safety: ---
 - Rule 002-gematria-validation: ---
 - Rule 003-graph-and-batch: ---
@@ -66,6 +66,8 @@ Generated: 2025-11-07 10:12:58
 - Rule 059-context-persistence: ---
 - Rule 060-response-style: ---
 - Rule 061-ai-learning-tracking: ---
+- Rule 062-environment-validation: ---
+- Rule 063-git-safety: ---
 
 ## CI Workflows
 

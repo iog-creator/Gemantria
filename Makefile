@@ -513,6 +513,10 @@ ai.enrich:
 	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
 	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/ai_enrichment.py
 
+ai.verify.math:
+	@echo ">> Math Verifier Agent (gematria sanity via MATH_MODEL=$${MATH_MODEL:-self-certainty-qwen3-1.7b-base-math})"
+	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/math_verifier.py
+
 graph.build:
 	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"
 	@PYTHONPATH=$(shell pwd) python3 scripts/build_graph_from_ai_nouns.py
