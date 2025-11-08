@@ -523,6 +523,14 @@ guard.graph.generated_at:
 	@echo ">> Validating graph exports generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_graph_generated_at.py
 
+# Documentation governance
+.PHONY: guard.docs.consistency docs.fix.headers docs.audit
+guard.docs.consistency:
+	@python3 scripts/guards/guard_docs_consistency.py
+docs.fix.headers:
+	@python3 scripts/docs/apply_ops_header.py
+docs.audit: guard.docs.consistency
+
 # --- Local posture smoke: empty-DB tolerant ---
 .PHONY: book.smoke
 book.smoke:

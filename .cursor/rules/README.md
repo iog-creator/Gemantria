@@ -2,6 +2,8 @@
 
 This directory contains Cursor IDE configuration rules that enforce development standards, code quality, and project-specific policies. These rules automatically apply to relevant files and provide real-time guidance during development.
 
+> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+
 ## 🎯 Purpose
 
 The rules directory serves as the enforcement layer for:
