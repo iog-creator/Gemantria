@@ -3,6 +3,7 @@ import os
 import time
 import uuid
 from collections import defaultdict
+from itertools import pairwise
 from typing import Any, Dict, List
 
 # Dependency check for pgvector
@@ -289,7 +290,7 @@ def _build_graph_from_nouns(nouns: List[Dict[str, Any]]) -> Dict[str, Any]:
         if len(noun_ids) < 2:
             continue
         ordered = sorted(noun_ids)
-        for src, dst in zip(ordered, ordered[1:]):
+        for src, dst in pairwise(ordered):
             edges.append(
                 {
                     "source": src,
@@ -302,7 +303,7 @@ def _build_graph_from_nouns(nouns: List[Dict[str, Any]]) -> Dict[str, Any]:
             )
 
     if not edges and len(nodes) > 1:
-        for left, right in zip(nodes, nodes[1:]):
+        for left, right in pairwise(nodes):
             edges.append(
                 {
                     "source": left["id"],

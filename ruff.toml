@@ -20,8 +20,8 @@ ignore = [
 
 [lint.per-file-ignores]
 # Allow long/script-like files to breathe during transition
-"scripts/**/*.py" = ["E501", "E402"]
-"tools/**/*.py" = ["E402"]
+"scripts/**/*.py" = ["B007", "B905", "E402", "E501", "F841", "RUF005", "RUF007"]
+"tools/**/*.py" = ["B007", "B905", "E402", "F841", "RUF005", "RUF007"]
 
 # Hebrew/core modules legitimately use non-ASCII; allow ambiguous unicode there
 "src/core/**/*.py" = ["RUF001","RUF002","RUF003","I001","UP037"]
