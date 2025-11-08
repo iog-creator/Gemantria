@@ -153,6 +153,17 @@ def enrichment_node(state: dict) -> dict:
                 # Use the corresponding prompt from our pre-built prompts array
                 prompt_idx = i + j  # Global index in the prompts array
                 content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
+                # Debug: log if "Unknown" appears in prompt
+                if "Unknown" in content:
+                    log_json(
+                        LOG,
+                        40,
+                        "unknown_in_prompt",
+                        noun_name=n.get("name"),
+                        noun_hebrew=n.get("hebrew"),
+                        noun_verse=n.get("primary_verse"),
+                        prompt_preview=content[:200],
+                    )
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
                 log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
