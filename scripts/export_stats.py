@@ -8,6 +8,7 @@ and monitoring dashboards, focusing on key insights and health indicators.
 
 import os
 import re
+from datetime import datetime, UTC
 
 import numpy as np
 
@@ -28,6 +29,11 @@ ensure_env_loaded()
 LOG = get_logger("export_stats")
 
 _BAD = re.compile(r"[\u0000-\u0008\u000B\u000C\u000E-\u001F]")
+
+
+def now_rfc3339():
+    """Return RFC3339 timestamp in UTC with timezone offset."""
+    return datetime.now(UTC).isoformat()
 
 
 def scrub(v):
@@ -385,9 +391,7 @@ def export_correlations(db):
         metadata["significant_correlations"] = sum(1 for c in correlations if c.get("p_value", 1.0) < 0.05)
         metadata["correlation_methods"] = list(set(c.get("metric", "unknown") for c in correlations))
 
-    import datetime  # noqa: E402
-
-    metadata["generated_at"] = datetime.datetime.now().isoformat()
+    metadata["generated_at"] = now_rfc3339()
 
     # Try to get run_id from recent pipeline runs
     try:
@@ -1092,10 +1096,8 @@ def main():
         # Export forecasts (Phase 8)
         forecasts = export_forecast(db)
 
-        # Add timestamp
-        import datetime  # noqa: E402
-
-        now = datetime.datetime.now().isoformat()
+        # Add timestamp (RFC3339 UTC)
+        now = now_rfc3339()
 
         stats["export_timestamp"] = now
         correlations["metadata"]["generated_at"] = now
@@ -1196,6 +1198,22 @@ def main():
 
         # Write stats
         stats_path = os.path.join(out_dir, "graph_stats.json")
+
+        # Normalize legacy numeric epochs to RFC3339 and stamp fast-lane source
+        if "generated_at" in stats:
+            generated_at = stats["generated_at"]
+            if isinstance(generated_at, (int, float)):
+                # Legacy numeric epoch -> RFC3339 UTC with offset
+                stats["generated_at"] = datetime.fromtimestamp(generated_at, tz=UTC).isoformat()
+            elif not generated_at or not isinstance(generated_at, str):
+                stats["generated_at"] = now_rfc3339()
+        else:
+            stats["generated_at"] = now_rfc3339()
+
+        # Fast-lane contract: stamp metadata.source when in fallback mode
+        if os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback":
+            stats.setdefault("metadata", {})["source"] = "fallback_fast_lane"
+
         with open(stats_path, "w", encoding="utf-8") as f:
             json.dump(stats, f, indent=2, ensure_ascii=False)
 
