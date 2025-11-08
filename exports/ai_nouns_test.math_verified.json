@@ -1,0 +1,104 @@
+{
+  "schema": "gemantria/ai-nouns.v1",
+  "source": "bible_db.v_hebrew_tokens",
+  "book": "Genesis",
+  "generated_at": "2025-11-08T04:12:15.552945+00:00",
+  "nodes": [
+    {
+      "surface": "וְ/אֵ֥ת",
+      "hebrew": "וְ/אֵ֥ת",
+      "name": "וְ/אֵ֥ת",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וְ/אֵ֥ת",
+        "primary_verse": "Genesis 1:1",
+        "freq": 985,
+        "math_check": {
+          "ok": false,
+          "reason": "no_claimed_gematria",
+          "local_sum": 407,
+          "model": "self-certainty-qwen3-1.7b-base-math"
+        }
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ],
+      "confidence": 0.97,
+      "insights": "The Hebrew prefix 've-' (וְ) and the particle 'et' (אֵ֥ת) in Genesis 1:1, 'In the beginning God created the heavens and the earth,' are crucial for understanding biblical creation theology. 'Ve-' signifies a sequential action, connecting the act of creation to the initial state of chaos ('tohu va-vohu'). 'Et' emphasizes the object upon which the action is performed, here denoting the primordial substance from which the world was formed. Theologically, this suggests God's intentionality and sovereignty over creation, with the universe emerging from a pre-existent, formless entity. Historically, these particles reflect ancient Near Eastern cosmogonies while uniquely affirming God's singular role in creation ex nihilo (Psalm 50:12). Symbolically, 've-' and 'et' underscore the dynamic relationship between God and creation, with the latter existing for and through the former (Colossians 1:16)."
+    },
+    {
+      "surface": "וַ/יֹּ֥אמֶר",
+      "hebrew": "וַ/יֹּ֥אמֶר",
+      "name": "וַ/יֹּ֥אמֶר",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "וַ/יֹּ֥אמֶר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 582,
+        "math_check": {
+          "ok": false,
+          "reason": "no_claimed_gematria",
+          "local_sum": 257,
+          "model": "self-certainty-qwen3-1.7b-base-math"
+        }
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ],
+      "confidence": 0.97,
+      "insights": "The Hebrew verb וַיֹּ֥אמֶר (va·yō·mêr) in Genesis 1:1, 'And God said,' is a pivotal phrase that underscores the power of divine speech in creation. In ancient Near Eastern cosmology, gods often spoke to create, but the biblical account uniquely emphasizes God's sovereignty and simplicity. The verb's perfect tense suggests completed action, indicating that God's word was immediately effective (Psalm 33:9). The phrase also foreshadows God's ongoing communication with humanity through revelation. Historically, it reflects a monotheistic worldview distinct from polytheistic neighbors, where multiple gods spoke to create. Theologically, it underscores the doctrine of creation ex nihilo, affirming that God's word brought order from chaos (Isaiah 45:18). The confidence score is high (0.97) due to the verb's centrality in the creation narrative and its clear theological implications."
+    },
+    {
+      "surface": "אֲשֶׁ֖ר",
+      "hebrew": "אֲשֶׁ֖ר",
+      "name": "אֲשֶׁ֖ר",
+      "primary_verse": "Genesis 1:1",
+      "ai_discovered": false,
+      "letters": [],
+      "gematria": null,
+      "gematria_value": null,
+      "class": "other",
+      "classification": null,
+      "meaning": null,
+      "analysis": {
+        "lemma": "אֲשֶׁ֖ר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 404,
+        "math_check": {
+          "ok": false,
+          "reason": "no_claimed_gematria",
+          "local_sum": 501,
+          "model": "self-certainty-qwen3-1.7b-base-math"
+        }
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ],
+      "confidence": 0.95,
+      "insights": "The Hebrew noun אֲשֶׁ֖ר (ashar), meaning 'which' or 'that', is a demonstrative pronoun that plays a pivotal role in Genesis 1:1, 'In the beginning God created the heavens and the earth - which (ashar) were without form and void.' This verse sets the stage for the entire biblical narrative. The use of ashar emphasizes the distinction between what was created (the heavens and the earth) and their initial state of chaos and emptiness. Theologically, it underscores God's sovereignty over creation, His ability to bring order from disorder, and the idea that even before creation, God had a purpose for it. Historically, this verse has been a centerpiece in debates about creation ex nihilo (out of nothing) versus creation ex materia (out of pre-existing matter), with ashar often interpreted as a hint towards the former. The symbolic meaning lies in the contrast between the named 'heavens and earth' and the undefined 'which', suggesting that God's creative power is not limited to what is known or defined, but extends into the unknown and formless."
+    }
+  ]
+}

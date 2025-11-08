@@ -4,6 +4,7 @@ AI Enrichment Script
 
 Wrapper script for the enrichment agent.
 Reads exports/ai_nouns.json, enriches nouns, writes to exports/ai_nouns.enriched.json
+Writes incrementally after each batch for real-time progress monitoring.
 """
 
 import os
@@ -23,8 +24,23 @@ from src.nodes.enrichment import enrichment_node  # noqa: E402
 from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 
 
+def write_incremental_output(output_file: Path, input_data: dict, enriched_nouns: list) -> None:
+    """Write output file incrementally with current enriched nouns."""
+    output_data = input_data.copy()
+    output_data["nodes"] = enriched_nouns
+
+    # Ensure output directory exists
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write JSON atomically (write to temp file then rename)
+    temp_file = output_file.with_suffix(".tmp.json")
+    with open(temp_file, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2)
+    temp_file.replace(output_file)
+
+
 def main():
-    """Run AI enrichment on discovered nouns."""
+    """Run AI enrichment on discovered nouns with incremental writes."""
     ensure_env_loaded()
 
     input_file = os.environ.get("INPUT", "exports/ai_nouns.json")
@@ -44,21 +60,22 @@ def main():
     # Convert to pipeline state format
     state = {"book_name": book, "validated_nouns": input_data.get("nodes", [])}
 
-    # Run enrichment
-    enriched_state = enrichment_node(state)
+    # Initialize output file with empty enriched list
+    write_incremental_output(Path(output_file), input_data, [])
 
-    # Convert back to SSOT format (same schema but with enrichment)
-    output_data = input_data.copy()
-    output_data["nodes"] = enriched_state.get("enriched_nouns", [])
+    # Create progress callback to write incrementally after each batch
+    def progress_callback(enriched_nouns_list: list):
+        """Write output file after each batch with current enriched nouns."""
+        write_incremental_output(Path(output_file), input_data, enriched_nouns_list)
 
-    # Ensure output directory exists
-    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
+    # Run enrichment with incremental write callback
+    enriched_state = enrichment_node(state, progress_callback=progress_callback)
+    enriched_nouns = enriched_state.get("enriched_nouns", [])
 
-    # Write JSON
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
+    # Write final output (in case callback wasn't called for last batch)
+    write_incremental_output(Path(output_file), input_data, enriched_nouns)
 
-    enriched_count = len(output_data.get("nodes", []))
+    enriched_count = len(enriched_nouns)
     print(f"AI_ENRICHMENT_WRITTEN {enriched_count} enriched nouns to {output_file}")
 
 

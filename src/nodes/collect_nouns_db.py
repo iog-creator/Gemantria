@@ -8,7 +8,7 @@ from src.infra.db import get_bible_ro
 
 DEFAULT_SQL = """
 SELECT
-  lemma,
+  (array_agg(word ORDER BY book, chapter, verse))[1] AS hebrew_text,
   MIN(book)||' '||MIN(chapter)||':'||MIN(verse) AS primary_verse,
   COUNT(*) AS freq
 FROM v_hebrew_tokens
@@ -41,11 +41,11 @@ def collect_nouns_for_book(book: str) -> list[dict[str, Any]]:
     sql = _get_sql()
     out: list[dict[str, Any]] = []
     rows = get_bible_ro().execute(sql, (b,))
-    for lemma, primary_verse, freq in rows:
+    for hebrew_text, primary_verse, freq in rows:
         out.append(
             {
-                "hebrew": lemma,
-                "name": lemma,
+                "hebrew": hebrew_text,
+                "name": hebrew_text,
                 "value": None,
                 "primary_verse": primary_verse,
                 "freq": int(freq),

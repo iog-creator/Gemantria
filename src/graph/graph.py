@@ -19,6 +19,7 @@ from src.nodes import network_aggregator
 from src.nodes.enrichment import enrichment_node
 from src.nodes.ai_noun_discovery import discover_nouns_for_book
 from src.nodes.graph_scorer import graph_scorer_node
+from src.nodes.math_verifier import math_verifier_node
 from src.services.expert_agent import analyze_theological
 from src.ssot.noun_adapter import adapt_ai_noun
 from src.infra.runs_ledger import (
@@ -121,6 +122,21 @@ def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
     checkpointer.save("langgraph_pipeline", "enrichment", {"enriched_nouns": state["enriched_nouns"]})
 
     state["hints"].append("enrichment: completed")
+    return state
+
+
+def math_verifier_node_wrapper(state: PipelineState) -> PipelineState:
+    """LangGraph node for math verification (gematria sanity checks via MATH_MODEL)."""
+    # Verify gematria calculations using MATH_MODEL
+    state = math_verifier_node(state)
+
+    # Auto-save checkpoint after node completion
+    from src.infra.checkpointer import get_checkpointer
+
+    checkpointer = get_checkpointer()
+    checkpointer.save("langgraph_pipeline", "math_verifier", {"enriched_nouns": state["enriched_nouns"]})
+
+    state["hints"].append("math_verifier: completed")
     return state
 
 
@@ -423,6 +439,7 @@ def get_graph(stop_after_n_nodes: int | None = None) -> StateGraph:
     workflow.add_node("collect_nouns", collect_nouns_node)
     workflow.add_node("validate_batch", validate_batch_node)
     workflow.add_node("enrichment", enrichment_node_wrapper)
+    workflow.add_node("math_verifier", math_verifier_node_wrapper)
     workflow.add_node("confidence_validator", confidence_validator_node)
     workflow.add_node("network_aggregator", network_aggregator_node_wrapper)
     workflow.add_node("analysis_runner", analysis_runner_node)
@@ -436,6 +453,7 @@ def get_graph(stop_after_n_nodes: int | None = None) -> StateGraph:
         "collect_nouns",
         "validate_batch",
         "enrichment",
+        "math_verifier",
         "confidence_validator",
         "network_aggregator",
         "analysis_runner",

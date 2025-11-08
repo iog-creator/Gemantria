@@ -2,7 +2,7 @@
 
 | # | File | Title |
 |---:|------|-------|
-| 000 | 000-ssot-index.mdc | # --- |
+| 000 | 000-ssot-index.mdc | # 000-ssot-index (AlwaysApply) |
 | 001 | 001-db-safety.mdc | # --- |
 | 002 | 002-gematria-validation.mdc | # --- |
 | 003 | 003-graph-and-batch.mdc | # --- |
@@ -64,3 +64,5 @@
 | 059 | 059-context-persistence.mdc | # --- |
 | 060 | 060-response-style.mdc | # --- |
 | 061 | 061-ai-learning-tracking.mdc | # --- |
+| 062 | 062-environment-validation.mdc | # --- |
+| 063 | 063-git-safety.mdc | # --- |

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 import uuid
 
@@ -35,7 +36,7 @@ def evaluate_confidence(conf, run_id=None, node=None):
     return status
 
 
-def enrichment_node(state: dict) -> dict:
+def enrichment_node(state: dict, progress_callback=None) -> dict:
     # Pipeline-level Qwen Live Gate already verified all required models are available
     theology_model = os.getenv("THEOLOGY_MODEL")
     if not theology_model:
@@ -44,6 +45,27 @@ def enrichment_node(state: dict) -> dict:
     nouns = state.get("validated_nouns", [])
     if not nouns:
         log_json(LOG, 20, "enrichment_start", noun_count=0, message="No nouns to enrich")
+        state["enriched_nouns"] = []
+        state["ai_enrichments_generated"] = 0
+        return state
+
+    # Filter out nouns without valid Hebrew text (known issue: "Unknown" nouns)
+    valid_nouns = []
+    for noun in nouns:
+        hebrew = noun.get("hebrew", noun.get("surface", noun.get("name", "")))
+        # Skip empty, null, or "Unknown" Hebrew
+        if not hebrew or not hebrew.strip() or hebrew.strip().lower() in ("unknown", "null", "none"):
+            log_json(LOG, 20, "skipping_invalid_hebrew", noun=noun.get("name"), hebrew=hebrew)
+            continue
+        # Skip Strong's numbers (H#### format) - these aren't Hebrew text
+        if re.match(r"^H\d+$", hebrew.strip(), re.IGNORECASE):
+            log_json(LOG, 20, "skipping_strongs_number", noun=noun.get("name"), hebrew=hebrew)
+            continue
+        valid_nouns.append(noun)
+
+    nouns = valid_nouns
+    if not nouns:
+        log_json(LOG, 20, "enrichment_start", noun_count=0, message="No valid nouns to enrich after filtering")
         state["enriched_nouns"] = []
         state["ai_enrichments_generated"] = 0
         return state
@@ -60,7 +82,6 @@ def enrichment_node(state: dict) -> dict:
 
     # Escape Hebrew text to prevent JSON parsing issues
     import json
-    import re
 
     def escape_hebrew(text):
         """Escape Hebrew text for safe inclusion in prompts."""
@@ -72,20 +93,24 @@ def enrichment_node(state: dict) -> dict:
 
     def build_enrichment_prompt(noun):
         """Build enrichment prompt, leveraging AI-discovered analysis when available."""
-        base_info = (
-            f"Noun: {noun.get('name', 'Unknown')}\n"
-            f"Hebrew: {escape_hebrew(noun.get('hebrew', ''))}\n"
-            f"Primary Verse: {noun.get('primary_verse', 'Unknown')}\n"
-        )
+        # Get fields with empty string fallbacks (not "Unknown") since we filter invalid nouns
+        name = noun.get("name", noun.get("hebrew", noun.get("surface", "")))
+        hebrew = noun.get("hebrew", noun.get("surface", ""))
+        verse = noun.get("primary_verse", "")
+        base_info = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\n"
 
         # Leverage AI-discovered analysis if available
         if noun.get("ai_discovered"):
+            letters = noun.get("letters", [])
+            gematria = noun.get("gematria", noun.get("gematria_value", ""))
+            classification = noun.get("classification", noun.get("class", ""))
+            meaning = noun.get("meaning", "Not analyzed")
             ai_analysis = (
                 f"AI Analysis:\n"
-                f"- Letters: {', '.join(noun.get('letters', []))}\n"
-                f"- Gematria Value: {noun.get('gematria', 'Unknown')}\n"
-                f"- Classification: {noun.get('classification', 'Unknown')} (person/place/thing)\n"
-                f"- Initial Meaning: {noun.get('meaning', 'Not analyzed')}\n"
+                f"- Letters: {', '.join(letters) if letters else 'Not provided'}\n"
+                f"- Gematria Value: {gematria if gematria else 'Not calculated'}\n"
+                f"- Classification: {classification if classification else 'Not classified'} (person/place/thing)\n"
+                f"- Initial Meaning: {meaning}\n"
             )
             task_desc = (
                 "This noun was discovered and initially analyzed by AI. "
@@ -128,11 +153,25 @@ def enrichment_node(state: dict) -> dict:
                 # Use the corresponding prompt from our pre-built prompts array
                 prompt_idx = i + j  # Global index in the prompts array
                 content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
+                # Debug: log if "Unknown" appears in prompt
+                if "Unknown" in content:
+                    log_json(
+                        LOG,
+                        40,
+                        "unknown_in_prompt",
+                        noun_name=n.get("name"),
+                        noun_hebrew=n.get("hebrew"),
+                        noun_verse=n.get("primary_verse"),
+                        prompt_preview=content[:200],
+                    )
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
                 log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
-                # Fallback: use basic format
-                content = f"Noun: {n.get('name', 'Unknown')}\nHebrew: {n.get('hebrew', '')}\nPrimary Verse: {n.get('primary_verse', '')}\nTask: Provide theological analysis. Return JSON with insight and confidence."
+                # Fallback: use basic format (no "Unknown" fallbacks)
+                name = n.get("name", n.get("hebrew", n.get("surface", "")))
+                hebrew = n.get("hebrew", n.get("surface", ""))
+                verse = n.get("primary_verse", "")
+                content = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\nTask: Provide theological analysis. Return JSON with insight and confidence."
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
         # Call LM Studio with batched requests
@@ -178,7 +217,6 @@ def enrichment_node(state: dict) -> dict:
                     # enforce required keys; extract confidence if needed
                     if "confidence" not in data:
                         import json as _json  # noqa: E402
-                        import re  # noqa: E402
 
                         # Try to extract confidence from text if JSON is incomplete
                         m = re.search(
@@ -296,6 +334,13 @@ def enrichment_node(state: dict) -> dict:
                     "duration_ms": batch_lat_ms,
                 }
             )
+
+            # Call progress callback if provided (for incremental writes)
+            if progress_callback:
+                try:
+                    progress_callback(enriched_nouns.copy())
+                except Exception as e:
+                    log_json(LOG, 30, "progress_callback_failed", error=str(e))
 
         except Exception as e:
             log_json(
