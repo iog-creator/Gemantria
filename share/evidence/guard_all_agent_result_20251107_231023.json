@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-11-08T07:10:23.056329+00:00",
+  "agent": "guard_all",
+  "event_type": "agent_result",
+  "level": "ERROR",
+  "data": {
+    "success": false,
+    "output_summary": {
+      "total_guards": 3,
+      "passed": 2,
+      "failed": 1,
+      "success": false,
+      "guard_results": [
+        {
+          "success": false,
+          "message": "FAIL_SCHEMA: 'gematria/ai-nouns.v1' was expected",
+          "script": "scripts/guard_ai_nouns.py",
+          "description": "AI Nouns SSOT Schema Validation"
+        },
+        {
+          "success": true,
+          "message": "GRAPH_SCHEMA_OK: 0 nodes, 0 edges validated",
+          "script": "scripts/guard_graph_schema.py",
+          "description": "Graph SSOT Schema Validation"
+        },
+        {
+          "success": true,
+          "message": "SQL guard passed: no issues found",
+          "script": "scripts/sql/guard_hebrew_export.sql",
+          "description": "Hebrew Export Integrity (SQL)"
+        }
+      ]
+    },
+    "execution_time_ms": 197.48425483703613,
+    "error_details": "1 guards failed"
+  }
+}

@@ -11,6 +11,7 @@ import os
 import pathlib
 import sys
 import time
+from datetime import datetime, UTC
 
 from src.infra.db import get_gematria_rw
 from src.infra.env_loader import ensure_env_loaded
@@ -224,7 +225,7 @@ def main():
                             "nodes": nodes,
                             "edges": edges,
                             "density": round(density, 6),
-                            "generated_at": time.time(),
+                            "generated_at": datetime.now(UTC).isoformat(),
                         },
                         ensure_ascii=False,
                         indent=2,
