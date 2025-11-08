@@ -831,6 +831,14 @@ guard.ui.xrefs.index:
 	@mkdir -p evidence
 	@python3 scripts/guards/guard_ui_xrefs_index.py | tee evidence/guard_ui_xrefs_index.json
 
+.PHONY: ui.dev
+ui.dev:
+	@cd ui && npm ci && npm run dev
+
+.PHONY: ui.smoke.browser
+ui.smoke.browser:
+	@UI_URL=${UI_URL:-http://localhost:5173} bash scripts/ui/smoke_playwright.sh
+
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
 	@echo "[ops.verify] All operational guards passed"
