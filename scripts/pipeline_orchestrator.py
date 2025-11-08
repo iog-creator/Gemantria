@@ -45,6 +45,7 @@ def _validate_envelope_first() -> Dict[str, Any]:
     }
 
     try:
+        import os
         from pathlib import Path
 
         # Check for unified envelope
@@ -173,12 +174,7 @@ def _validate_envelope_first() -> Dict[str, Any]:
 
 
 def run_full_pipeline(
-    book: str = "Genesis",
-    mode: str = "START",
-    nouns: List[Dict[str, Any]] | None = None,
-    stop_after: str | None = None,
-    allow_partial: bool = False,
-    partial_reason: str = "",
+    book: str = "Genesis", mode: str = "START", nouns: List[Dict[str, Any]] | None = None
 ) -> Dict[str, Any]:
     """
     Run the complete integrated pipeline with envelope-first hardening.
@@ -196,64 +192,24 @@ def run_full_pipeline(
         mode: Processing mode (START, RESUME, etc.)
         nouns: Optional list of nouns to use instead of AI discovery
     """
-    # Set batch configuration from arguments
-    import os
-
-    if allow_partial:
-        os.environ["ALLOW_PARTIAL"] = "1"
-        if partial_reason:
-            os.environ["PARTIAL_REASON"] = partial_reason
-    # Map node names to numeric positions for stop_after_n_nodes
-    node_map = {
-        "collect_nouns": 1,
-        "validate_batch": 2,
-        "enrichment": 3,
-        "confidence_validator": 4,
-        "network_aggregator": 5,
-        "analysis_runner": 6,
-        "graph_scorer": 6,  # alias for analysis_runner
-        "wrap_hints": 7,
-    }
-    stop_after_n_nodes = node_map.get(stop_after) if stop_after else None
-
-    log_json(
-        LOG,
-        20,
-        "pipeline_orchestrator_start",
-        book=book,
-        mode=mode,
-        nouns_provided=nouns is not None,
-        stop_after=stop_after,
-        stop_after_n_nodes=stop_after_n_nodes,
-    )
+    log_json(LOG, 20, "pipeline_orchestrator_start", book=book, mode=mode, nouns_provided=nouns is not None)
 
     try:
         # ENVELOPE-FIRST HARDENING: Validate any existing envelopes before proceeding
-        # Skip validation for intermediate steps (when stop_after is set)
-        if stop_after is None:
-            envelope_validation = _validate_envelope_first()
-            if not envelope_validation["passed"]:
-                log_json(LOG, 40, "envelope_validation_failed", errors=envelope_validation["errors"])
-                return {
-                    "success": False,
-                    "book": book,
-                    "error": f"Envelope validation failed: {envelope_validation['errors']}",
-                    "envelope_validation": envelope_validation,
-                }
-        else:
-            log_json(LOG, 20, "envelope_validation_skipped", reason="intermediate_step", stop_after=stop_after)
+        envelope_validation = _validate_envelope_first()
+        if not envelope_validation["passed"]:
+            log_json(LOG, 40, "envelope_validation_failed", errors=envelope_validation["errors"])
+            return {
+                "success": False,
+                "book": book,
+                "error": f"Envelope validation failed: {envelope_validation['errors']}",
+                "envelope_validation": envelope_validation,
+            }
 
         from src.graph.graph import run_pipeline
 
         # Run the main pipeline
-        result = run_pipeline(
-            book=book,
-            mode=mode,
-            nouns=nouns,
-            stop_after_n_nodes=stop_after_n_nodes,
-            allow_partial=allow_partial,
-            partial_reason=partial_reason,
-        )
+        result = run_pipeline(book=book, mode=mode, nouns=nouns)
 
         # Extract results
         success = "error" not in result
@@ -321,13 +277,13 @@ def run_book_processing(config_path: str, operation: str) -> Dict[str, Any]:
         return {"success": False, "operation": operation, "error": str(e)}
 
 
-def run_analysis(operation: str, book: str = "Genesis") -> Dict[str, Any]:
+def run_analysis(operation: str) -> Dict[str, Any]:
     """
     Run analysis operations.
 
     Operations: graph, export, temporal, all
     """
-    log_json(LOG, 20, "analysis_start", operation=operation, book=book)
+    log_json(LOG, 20, "analysis_start", operation=operation)
 
     try:
         if operation == "graph":
@@ -411,34 +367,6 @@ def main():
         default=None,
         help="Optional path to ai-nouns envelope; skips discovery if supplied.",
     )
-    pipeline_parser.add_argument(
-        "--stop-after",
-        dest="stop_after",
-        default=None,
-        choices=[
-            "collect_nouns",
-            "validate_batch",
-            "enrichment",
-            "confidence_validator",
-            "network_aggregator",
-            "analysis_runner",
-            "graph_scorer",
-            "wrap_hints",
-        ],
-        help="Stop pipeline execution after this node (for testing/debugging)",
-    )
-    pipeline_parser.add_argument(
-        "--allow-partial",
-        dest="allow_partial",
-        action="store_true",
-        help="Allow partial batches (for development/testing)",
-    )
-    pipeline_parser.add_argument(
-        "--partial-reason",
-        dest="partial_reason",
-        default="",
-        help="Reason for allowing partial batch",
-    )
 
     # Book processing command
     book_parser = subparsers.add_parser("book", help="Book processing operations")
@@ -451,7 +379,6 @@ def main():
     analysis_parser.add_argument(
         "operation", choices=["graph", "export", "temporal", "all"], help="Analysis operation to perform"
     )
-    analysis_parser.add_argument("--book", default="Genesis", help="Book name (for context/logging)")
 
     # Embeddings command
     embeddings_parser = subparsers.add_parser("embeddings", help="Embeddings backfill")
@@ -465,20 +392,12 @@ def main():
     full_parser.add_argument("--book", default="Genesis", help="Book to process")
     full_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
     full_parser.add_argument("--skip-analysis", action="store_true", help="Skip analysis step")
-    full_parser.add_argument(
-        "--nouns-json",
-        dest="nouns_json",
-        default=None,
-        help="Optional path to ai-nouns envelope; skips discovery if supplied.",
-    )
 
     args = parser.parse_args()
 
     if not args.command:
         parser.print_help()
         return
-
-    result = {"success": False, "error": "Unknown command"}
 
     try:
         if args.command == "pipeline":
@@ -491,14 +410,7 @@ def main():
                 if "nodes" not in envelope or not isinstance(envelope["nodes"], list):
                     raise ValueError("Invalid nouns envelope: missing 'nodes' list")
                 nouns = envelope["nodes"]
-            result = run_full_pipeline(
-                book=args.book,
-                mode=args.mode,
-                nouns=nouns,
-                stop_after=args.stop_after,
-                allow_partial=args.allow_partial,
-                partial_reason=args.partial_reason,
-            )
+            result = run_full_pipeline(book=args.book, mode=args.mode, nouns=nouns)
 
         elif args.command == "book":
             # Store stop_n for use in run_book_processing
@@ -507,7 +419,7 @@ def main():
             result = run_book_processing(args.config, args.operation)
 
         elif args.command == "analysis":
-            result = run_analysis(args.operation, book=args.book)
+            result = run_analysis(args.operation)
 
         elif args.command == "embeddings":
             result = run_embeddings_backfill(model=args.model, dim=args.dim)
@@ -567,6 +479,7 @@ def main():
                     else:
                         # 3. Phase-8 temporal analytics (rolling windows + forecast)
                         print("[phase8] running temporal analytics...")
+                        import json
 
                         graph_file = "exports/graph_latest.json"
                         if os.path.exists(graph_file):
@@ -598,15 +511,11 @@ def main():
 
     except KeyboardInterrupt:
         log_json(LOG, 30, "orchestrator_interrupted")
-        import json as json_module
-
-        print(json_module.dumps({"success": False, "error": "Interrupted by user"}))
+        print(json.dumps({"success": False, "error": "Interrupted by user"}))
         sys.exit(130)
     except Exception as e:
         log_json(LOG, 50, "orchestrator_unexpected_error", error=str(e))
-        import json as json_module
-
-        print(json_module.dumps({"success": False, "error": str(e)}))
+        print(json.dumps({"success": False, "error": str(e)}))
         sys.exit(1)
 
 

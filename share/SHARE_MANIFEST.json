@@ -25,10 +25,6 @@
       "dst": "share/GEMATRIA_MASTER_REFERENCE.md"
     },
     {
-      "src": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
-      "dst": "share/GPT_SYSTEM_PROMPT.md"
-    },
-    {
       "src": "pyproject.toml",
       "dst": "share/pyproject.toml"
     },

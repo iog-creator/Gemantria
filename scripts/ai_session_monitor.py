@@ -320,7 +320,7 @@ def main():
     # End session
     end_parser = subparsers.add_parser("end_session", help="End session monitoring")
     end_parser.add_argument("--feedback", type=int, choices=range(1, 6), help="Session satisfaction 1-5")
-    end_parser.add_argument("--text", help="Feedback text")
+    end_parser.add_parser("--text", help="Feedback text")
     end_parser.add_argument("--tags", nargs="*", help="Feedback tags")
 
     args = parser.parse_args()

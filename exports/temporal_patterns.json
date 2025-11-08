@@ -1,13 +1,15 @@
 {
   "temporal_patterns": [],
   "metadata": {
-    "generated_at": "2025-11-07T17:40:24.648237",
+    "generated_at": "2025-11-07T03:13:34.924858+00:00",
     "analysis_parameters": {
-      "default_unit": "chapter",
-      "default_window": 5,
-      "min_series_length": 10
+      "default_unit": "verse",
+      "default_window": 10,
+      "min_series_length": 3
     },
     "total_series": 0,
-    "books_analyzed": []
+    "books_analyzed": [
+      "Genesis"
+    ]
   }
 }
