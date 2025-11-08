@@ -57,9 +57,13 @@ def main():
             "hebrew": hebrew,  # Set hebrew field for enrichment filter
             "name": hebrew,  # Set name field as fallback
             "primary_verse": noun.get("primary_verse", ""),  # Set primary_verse for enrichment prompt
-            "letters": None,  # calculated downstream
+            "ai_discovered": False,  # Mark as DB-seeded, not AI-discovered (prevents "Unknown" in AI analysis section)
+            "letters": [],  # Empty list (not None) to avoid "Unknown" in prompt
+            "gematria": None,  # Will be calculated downstream
             "gematria_value": None,  # calculated downstream
             "class": "other",  # will be enriched downstream
+            "classification": None,  # Will be enriched downstream
+            "meaning": None,  # Will be enriched downstream
             "analysis": {
                 "lemma": noun.get("name", hebrew),
                 "primary_verse": noun.get("primary_verse"),
