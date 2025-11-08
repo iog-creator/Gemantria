@@ -430,6 +430,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 - Granular `make graph.build` / `graph.score` targets remain as compatibility shims and call the orchestrator.
 - Resuming from enriched nouns is supported; the network aggregator now prefers `enriched_nouns` and preserves pipeline `ts`.
 - Use `CHECKPOINTER=memory` for local deterministic runs; Postgres checkpointer requires `GEMATRIA_DSN`.
+- **Note:** The orchestrator does **not** accept `--limit`; use book-scoped runs for smaller workloads.
 
 **Fallback mode**  
 Set `NETWORK_AGGREGATOR_MODE=fallback` to build a graph without LM/pgvector.  
@@ -442,6 +443,7 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
 - Fast-lane metadata: `"source": "fallback_fast_lane"` is required when the orchestrator persists graph without DB round-trip.
 - Guard: stats timestamp is verified RFC3339; graph export is covered by schema guard and will emit a HINT if missing.
 - `guards.all` includes `guard.graph.generated_at` (HINT by default; set `STRICT_RFC3339=1` for strict).
+- CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
 
 ### TS Sandbox PoC (ADR-063)
 - Gated by `CODE_EXEC_TS=0` (default = OFF). Python/LangGraph remains the operative path.
