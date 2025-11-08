@@ -535,13 +535,14 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
     # For enrichment, calculate rate and ETA from batch processing
     batch_times = []
     batch_sizes = []
-    
+
     # Try to get batch timing from metrics database first
     try:
         from src.infra.env_loader import ensure_env_loaded
+
         ensure_env_loaded()
         import psycopg
-        
+
         dsn = os.getenv("GEMATRIA_DSN")
         if dsn:
             with psycopg.connect(dsn) as conn:
@@ -565,11 +566,11 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
                             batch_times.append(float(duration_ms))
                             if items_in and items_in > 0:
                                 batch_sizes.append(int(items_in))
-    except Exception as e:
+    except Exception:
         # Fallback to log file parsing
         # Silently fail - log parsing will handle it
         pass
-    
+
     # Fallback: try to read from log files if database didn't work
     if not batch_times:
         # Prioritize enrichment-specific logs for enrichment metrics
@@ -582,11 +583,11 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         for log_path in enrichment_logs:
             if log_path.exists():
                 log_lines.extend(scan_log_file(log_path, max_lines=1000))
-        
+
         # Also check orchestrator log as fallback
         if ORCHESTRATOR_LOG.exists():
             log_lines.extend(scan_log_file(ORCHESTRATOR_LOG, max_lines=1000))
-        
+
         # Parse all log lines for enrichment batch_processed events
         for line in reversed(log_lines[-1000:]):  # Check more lines
             parsed = parse_log_line(line)
@@ -606,14 +607,14 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         # Use last 5 batches for average (or all if less than 5)
         recent_times = batch_times[:5] if len(batch_times) >= 5 else batch_times
         avg_ms = sum(recent_times) / len(recent_times)
-        
+
         # Calculate average batch size (default to 4 if not available)
         if batch_sizes:
             recent_sizes = batch_sizes[:5] if len(batch_sizes) >= 5 else batch_sizes
             avg_batch_size = sum(recent_sizes) / len(recent_sizes)
         else:
             avg_batch_size = 4  # Default batch size
-        
+
         # Calculate rate (nouns per second)
         rate = avg_batch_size / (avg_ms / 1000.0)
 
@@ -1165,14 +1166,14 @@ def monitor_once(pid: int | None = None) -> Dict[str, Any]:
     """Run a single monitoring cycle."""
     # Scan all log files - use larger limit for enrichment_start which is early in the log
     log_lines = []
-    
+
     # Add enrichment-specific logs to the scan list
     enrichment_logs = [
         Path("/tmp/enrichment.log"),
         Path("logs/enrichment.log"),
         Path("logs/gemantria.enrichment.log"),
     ]
-    
+
     all_logs = [ORCHESTRATOR_LOG, PIPELINE_LOG, GRAPH_LOG] + enrichment_logs
 
     for log_path in all_logs:
