@@ -54,6 +54,9 @@ def main():
 
         ssot_noun = {
             "surface": hebrew,
+            "hebrew": hebrew,  # Set hebrew field for enrichment filter
+            "name": hebrew,  # Set name field as fallback
+            "primary_verse": noun.get("primary_verse", ""),  # Set primary_verse for enrichment prompt
             "letters": None,  # calculated downstream
             "gematria_value": None,  # calculated downstream
             "class": "other",  # will be enriched downstream
