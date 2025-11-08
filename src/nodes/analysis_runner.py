@@ -4,6 +4,7 @@ from typing import Any
 
 import jsonschema
 from src.infra.structured_logger import get_logger, log_json
+from datetime import UTC
 
 LOG = get_logger("gematria.analysis_runner")
 
@@ -367,23 +368,33 @@ def _export_graph_data(state: dict[str, Any] | None = None):
 
         # Write to exports
         os.makedirs("exports", exist_ok=True)
+
+        # Fast-lane contract: when NETWORK_AGGREGATOR_MODE=fallback, stamp source + RFC3339
+        is_fast_lane = os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback"
+
         metadata = {
             "node_count": len(nodes),
             "edge_count": len(edges),
             "export_timestamp": None,  # Will be set by calling code
-            "source": "state_graph" if fallback_used else "database",
+            "source": "fallback_fast_lane" if is_fast_lane else ("state_graph" if fallback_used else "database"),
         }
         # Include hints envelope in metadata if available
         if hints_envelope:
             metadata["hints"] = hints_envelope
 
+        # Ensure RFC3339 timestamp per AGENTS.md Timestamp Standard
+        from datetime import datetime, UTC
+
+        graph_data = {
+            "nodes": nodes,
+            "edges": edges,
+            "metadata": metadata,
+            "generated_at": datetime.now(UTC).isoformat(),
+        }
+
         with open("exports/graph_latest.json", "w", encoding="utf-8") as f:
             json.dump(
-                {
-                    "nodes": nodes,
-                    "edges": edges,
-                    "metadata": metadata,
-                },
+                graph_data,
                 f,
                 ensure_ascii=False,
                 indent=2,
@@ -420,21 +431,36 @@ def _export_stats():
 
         # Write stats
         os.makedirs("exports", exist_ok=True)
+
+        # Fast-lane contract: when NETWORK_AGGREGATOR_MODE=fallback, stamp source + RFC3339
+        is_fast_lane = os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback"
+
+        # Ensure RFC3339 timestamp per AGENTS.md Timestamp Standard
+        from datetime import datetime, UTC
+
+        stats_data = {
+            "nodes": concept_count,
+            "edges": relation_count,
+            "clusters": cluster_count,
+            "centrality": {
+                "avg_degree": float(centrality_stats[0] or 0),
+                "max_degree": float(centrality_stats[1] or 0),
+                "avg_betweenness": float(centrality_stats[2] or 0),
+                "avg_eigenvector": float(centrality_stats[3] or 0),
+            },
+            "generated_at": datetime.now(UTC).isoformat(),
+        }
+
+        # Add metadata.source for fast-lane
+        if is_fast_lane:
+            stats_data.setdefault("metadata", {})["source"] = "fallback_fast_lane"
+
         with open("exports/graph_stats.json", "w", encoding="utf-8") as f:
             json.dump(
-                {
-                    "nodes": concept_count,
-                    "edges": relation_count,
-                    "clusters": cluster_count,
-                    "centrality": {
-                        "avg_degree": float(centrality_stats[0] or 0),
-                        "max_degree": float(centrality_stats[1] or 0),
-                        "avg_betweenness": float(centrality_stats[2] or 0),
-                        "avg_eigenvector": float(centrality_stats[3] or 0),
-                    },
-                },
+                stats_data,
                 f,
                 indent=2,
+                ensure_ascii=False,
             )
 
         log_json(LOG, 20, "stats_exported", nodes=concept_count, edges=relation_count, clusters=cluster_count)

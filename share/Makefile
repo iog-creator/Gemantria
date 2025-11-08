@@ -311,7 +311,7 @@ forecast.run:
 	@echo "Forecast complete"
 
 # Book processing integration
-.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes
+.PHONY: book.plan book.dry book.go book.stop book.resume ai.ingest ai.nouns ai.enrich guards.all evidence.clean guards.smoke release.notes sandbox.smoke
 
 BOOK_CONFIG ?= config/book_plan.yaml
 
@@ -513,6 +513,16 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
+guards.all: guard.stats.rfc3339 guard.graph.generated_at
+guard.stats.rfc3339:
+	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
+	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
+
+.PHONY: guard.graph.generated_at
+guard.graph.generated_at:
+	@echo ">> Validating graph_latest.json generated_at (RFC3339)…"
+	@$(PYTHON) scripts/guards/guard_graph_generated_at.py exports/graph_latest.json
+
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
 	@-$(MAKE) models.verify  # Skip if models not available (development)
@@ -542,6 +552,10 @@ ai.enrich:
 ai.verify.math:
 	@echo ">> Math Verifier Agent (gematria sanity via MATH_MODEL=$${MATH_MODEL:-self-certainty-qwen3-1.7b-base-math})"
 	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/math_verifier.py
+
+sandbox.smoke:
+	@echo ">> TS Sandbox Smoke (PoC, gate-aware, hermetic hello-world)"
+	@$(PYTHON) scripts/sandbox_smoke_check.py
 
 graph.build:
 	@echo ">> Graph Builder Agent: enriched nouns→graph_latest"
