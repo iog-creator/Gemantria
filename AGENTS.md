@@ -363,7 +363,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 <!-- RULES_INVENTORY_START -->
 | # | Title |
 |---:|-------|
-| 000 | # 000-ssot-index (Default-Apply) |
+| 000 | # 000-ssot-index (AlwaysApply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -413,9 +413,9 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # --- |
-| 050 | # 050-ops-contract (AlwaysApply) |
-| 051 | # 051-cursor-insight (AlwaysApply) |
-| 052 | # 052-tool-priority (AlwaysApply) |
+| 050 | # --- |
+| 051 | # --- |
+| 052 | # --- |
 | 053 | # --- |
 | 054 | # --- |
 | 055 | # --- |
@@ -427,6 +427,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 061 | # --- |
 | 062 | # --- |
 | 063 | # --- |
+| 064 | # id: "064" |
 <!-- RULES_INVENTORY_END -->
 
 ---

@@ -1,13 +1,10 @@
 # Forest Overview
 
-Generated: 2025-11-08 10:24:44
+Generated: 2025-11-08 13:35:41
 
 ## Active Rules
 
-- Rule 000-ssot-index: 000-ssot-index (Default-Apply)
-- Rule 050-ops-contract: OPS Contract v6.2.3 (AlwaysApply)
-- Rule 051-cursor-insight: Cursor Insight & Handoff (AlwaysApply)
-- Rule 052-tool-priority: Tool Priority & Context Guidance (AlwaysApply)
+- Rule 000-ssot-index: 000-ssot-index (AlwaysApply)
 - Rule 001-db-safety: ---
 - Rule 002-gematria-validation: ---
 - Rule 003-graph-and-batch: ---
@@ -69,15 +66,19 @@ Generated: 2025-11-08 10:24:44
 - Rule 059-context-persistence: ---
 - Rule 060-response-style: ---
 - Rule 061-ai-learning-tracking: ---
-- Rule 062-environment-validation: (Default-Apply, formerly alwaysApply)
-- Rule 063-git-safety: (Default-Apply, formerly alwaysApply)
+- Rule 062-ai-tracking-contract: id: "062"
+- Rule 062-environment-validation: ---
+- Rule 063-git-safety: ---
 
 ## CI Workflows
 
+- agents-md-lint.yml
 - ci-main.yml
 - ci-pr.yml
+- ci_rfc3339_release.yml
 - coverage-nightly.yml
 - crossrefs-smoke.yml
+- dbmirror.yml
 - enforce-ruff.yml
 - graph-nightly.yml
 - lint-nightly.yml
@@ -88,6 +89,7 @@ Generated: 2025-11-08 10:24:44
 - rc-smokes.yml
 - repo-layout-smoke.yml
 - reusable-ci.yml
+- rules-inventory-nightly.yml
 - scorecards.yml
 - soft-checks.yml
 - ssot-nightly.yml
