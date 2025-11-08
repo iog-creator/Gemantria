@@ -806,6 +806,20 @@ agents.md.lint:
 rules_inventory_check:
 	@scripts/guards/rules_inventory_check.sh
 
+.PHONY: ops.enrichment.xrefs.light
+ops.enrichment.xrefs.light:
+	@echo ">> Light cross-reference extractor from analysis text"
+	@mkdir -p evidence
+	@python3 scripts/ops/extract_xrefs_from_analysis.py | tee evidence/xrefs_light_extractor.json
+	@$(MAKE) -s guard.ai_nouns.xrefs >/dev/null || true
+	@test -f evidence/guard_ai_nouns_xrefs.json && cat evidence/guard_ai_nouns_xrefs.json | jq '{mode, min_ratio, total, with_xrefs, ratio}' || echo '{"note":"guard not run"}'
+
+.PHONY: guard.ai_nouns.xrefs
+guard.ai_nouns.xrefs:
+	@echo ">> Checking cross-reference extraction ratio (HINT mode)"
+	@mkdir -p evidence
+	@python3 scripts/guards/guard_ai_nouns_xrefs.py | tee evidence/guard_ai_nouns_xrefs.json
+
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
 	@echo "[ops.verify] All operational guards passed"
