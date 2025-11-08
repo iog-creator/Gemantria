@@ -513,10 +513,15 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339
+guards.all: guard.stats.rfc3339 guard.graph.generated_at
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
+
+.PHONY: guard.graph.generated_at
+guard.graph.generated_at:
+	@echo ">> Validating graph_latest.json generated_at (RFC3339)…"
+	@$(PYTHON) scripts/guards/guard_graph_generated_at.py exports/graph_latest.json
 
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
