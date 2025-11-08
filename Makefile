@@ -520,8 +520,8 @@ guard.stats.rfc3339:
 
 .PHONY: guard.graph.generated_at
 guard.graph.generated_at:
-	@echo ">> Validating graph_latest.json generated_at (RFC3339)…"
-	@$(PYTHON) scripts/guards/guard_graph_generated_at.py exports/graph_latest.json
+	@echo ">> Validating graph exports generated_at (RFC3339)…"
+	@$(PYTHON) scripts/guards/guard_graph_generated_at.py
 
 guards.all:
 	@echo ">> Running comprehensive guards (schema + invariants + Hebrew + orphans + ADR)"
