@@ -57,9 +57,9 @@
 | 047 | 047-reserved.mdc | RESERVED |
 | 048 | 048-reserved.mdc | RESERVED |
 | 049 | 049-gpt5-contract-v5.2.mdc | GPT-5 Contract v5.2 |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance |
+| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
+| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
+| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | 053-idempotence.mdc | Idempotent Baseline |
 | 054 | 054-reuse-first.mdc | Reuse-First, No-Scaffold-When-Exists |
 | 055 | 055-auto-docs-sync.mdc | Auto-Docs Sync Pass |
