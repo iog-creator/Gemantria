@@ -1,0 +1,24 @@
+```mermaid
+graph TD
+  %% Dependencies - Module Structure
+  subgraph SOURCE[Source Code]
+    SRC["src/"]:::blue
+    SCRIPTS["scripts/"]:::blue
+    TESTS["tests/"]:::blue
+  end
+  subgraph MODULES[Core Modules]
+    GRAPH["graph/"]:::green
+    NODES["nodes/"]:::green
+    INFRA["infra/"]:::green
+    SERVICES["services/"]:::green
+  end
+  SRC --> GRAPH
+  SRC --> NODES
+  SRC --> INFRA
+  SRC --> SERVICES
+  SCRIPTS --> SRC
+  click GRAPH "/evidence/dependencies.html" "View graph module"
+  click NODES "/evidence/dependencies.html" "View nodes module"
+  classDef blue fill:#dbeafe,stroke:#1e40af,color:#1e3a8a,stroke-width:1px;
+  classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;
+```

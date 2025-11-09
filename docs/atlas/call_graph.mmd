@@ -1,0 +1,23 @@
+```mermaid
+graph LR
+  %% Call Graph - Execution Flow
+  subgraph PIPELINE[LangGraph Pipeline]
+    COLLECTNOUNS["collect_nouns()"]:::blue
+    COLLECTNOUNS --> VALIDATEBATCH
+    VALIDATEBATCH["validate_batch()"]:::blue
+    VALIDATEBATCH --> ENRICHMENT
+    ENRICHMENT["enrichment()"]:::blue
+    ENRICHMENT --> MATHVERIFIER
+    MATHVERIFIER["math_verifier()"]:::blue
+    MATHVERIFIER --> CONFIDENCEVALIDATOR
+    CONFIDENCEVALIDATOR["confidence_validator()"]:::blue
+    CONFIDENCEVALIDATOR --> NETWORKAGGREGATOR
+    NETWORKAGGREGATOR["network_aggregator()"]:::blue
+    NETWORKAGGREGATOR --> SCHEMAVALIDATOR
+    SCHEMAVALIDATOR["schema_validator()"]:::blue
+    SCHEMAVALIDATOR --> ANALYSISRUNNER
+    ANALYSISRUNNER["analysis_runner()"]:::blue
+  end
+  click collect_nouns "/evidence/call_graph.html" "View call details"
+  classDef blue fill:#dbeafe,stroke:#1e40af,color:#1e3a8a,stroke-width:1px;
+```

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gemantria — Atlas</title>
+  <script src="../vendor/mermaid.min.js"></script>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;padding:0 1rem 3rem}
+    header{position:sticky;top:0;background:#111;color:#fff;padding:0.75rem;border-bottom:2px solid #444}
+    header h1{margin:.25rem 0;font-size:1.1rem}
+    .gloss{font-size:.85rem;opacity:.85}
+    nav a{margin-right:.75rem;color:#60a5fa;text-decoration:none}
+    nav a:hover{text-decoration:underline}
+    .wrap{display:grid;grid-template-columns:260px 1fr;gap:1rem;margin-top:1rem}
+    aside{position:sticky;top:4.5rem;height:calc(100vh - 5rem);overflow:auto;border-right:1px solid #ddd;padding-right:.5rem}
+    aside h3{margin-top:1rem;margin-bottom:.5rem;font-size:.9rem;color:#666}
+    aside ul{list-style:none;padding:0;margin:0}
+    aside li{margin:.25rem 0}
+    aside a{color:#2563eb;text-decoration:none;display:block;padding:.25rem .5rem;border-radius:3px}
+    aside a:hover{background:#f3f4f6}
+    aside a.active{background:#dbeafe;font-weight:600}
+    main{min-height:60vh}
+    pre{background:#0b1020;color:#e7ecff;padding:1rem;border-radius:.5rem;overflow:auto}
+    .warn{background:#fff3cd;border:1px solid #ffe69c;color:#7f6511;padding:.5rem .75rem;border-radius:.375rem;margin:.5rem 0}
+    .ok{background:#e6ffed;border:1px solid #9ae6b4;color:#03543f;padding:.5rem .75rem;border-radius:.375rem;margin:.5rem 0}
+    .mermaid{text-align:center;margin:2rem 0}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gemantria — Telemetry-Driven Atlas</h1>
+    <div class="gloss">PR = fast checks · Tag = frozen proof · Badge = visual pass/fail · Verdict = JSON pass/fail</div>
+    <nav>
+      <a href="../README.md">README</a>
+      <a href="../CHANGELOG.md">CHANGELOG</a>
+    </nav>
+  </header>
+  <div class="wrap">
+    <aside>
+      <h3>Views</h3>
+      <ul>
+        <li><a data-mmd="execution_live.mmd" href="#">Now</a></li>
+        <li><a data-mmd="pipeline_flow_historical.mmd" href="#">Historical</a></li>
+        <li><a data-mmd="kpis.mmd" href="#">KPIs</a></li>
+        <li><a data-mmd="dependencies.mmd" href="#">Dependencies</a></li>
+        <li><a data-mmd="call_graph.mmd" href="#">Call Graph</a></li>
+        <li><a data-mmd="class_diagram.mmd" href="#">Class Diagram</a></li>
+        <li><a data-mmd="knowledge_graph.mmd" href="#">Knowledge Graph</a></li>
+      </ul>
+      <h3>Artifacts</h3>
+      <ul>
+        <li><a href="../evidence/execution_live.html">Execution Live Summary</a></li>
+        <li><a href="../evidence/pipeline_flow_historical.html">Pipeline Flow Summary</a></li>
+        <li><a href="../evidence/kpis.html">KPIs Summary</a></li>
+      </ul>
+    </aside>
+    <main>
+      <div id="diagram-container">
+        <p>Select a view from the sidebar to load a diagram.</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Initialize Mermaid
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true
+        },
+        securityLevel: 'loose'
+      });
+    }
+
+    // Load Mermaid diagram
+    async function loadDiagram(mmdFile) {
+      const container = document.getElementById('diagram-container');
+      try {
+        const response = await fetch(mmdFile);
+        if (!response.ok) {
+          container.innerHTML = `<div class="warn">Failed to load ${mmdFile}: ${response.statusText}</div>`;
+          return;
+        }
+        const mmdContent = await response.text();
+        
+        // Extract mermaid code from markdown code block if present
+        let mermaidCode = mmdContent;
+        if (mmdContent.includes('```mermaid')) {
+          const match = mmdContent.match(/```mermaid\n([\s\S]*?)\n```/);
+          if (match) {
+            mermaidCode = match[1];
+          }
+        }
+        
+        // Clear container
+        container.innerHTML = '<div class="mermaid">' + mermaidCode + '</div>';
+        
+        // Render with Mermaid
+        if (typeof mermaid !== 'undefined') {
+          mermaid.init(undefined, container.querySelector('.mermaid'));
+        } else {
+          container.innerHTML = '<div class="warn">Mermaid library not loaded. Please ensure ../vendor/mermaid.min.js exists.</div>';
+        }
+      } catch (error) {
+        container.innerHTML = `<div class="warn">Error loading diagram: ${error.message}</div>`;
+      }
+    }
+
+    // Set up navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('aside a[data-mmd]');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const mmdFile = this.getAttribute('data-mmd');
+          
+          // Update active state
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Load diagram
+          loadDiagram(mmdFile);
+        });
+      });
+      
+      // Load first diagram by default
+      if (navLinks.length > 0) {
+        navLinks[0].click();
+      }
+    });
+
+    // Handle Mermaid click events
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('[data-click]');
+      if (target) {
+        const url = target.getAttribute('data-click');
+        if (url) {
+          window.open(url, '_blank');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+

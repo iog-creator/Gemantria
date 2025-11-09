@@ -16,6 +16,8 @@
 
 **Visual Atlas:** see [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (clickable nodes → human summaries)
 
+**Telemetry Dashboard:** [Atlas Dashboard](docs/atlas/index.html) · [Now](docs/atlas/execution_live.mmd) · [Historical](docs/atlas/pipeline_flow_historical.mmd)
+
 ### Project Status (evidence-driven)
 
 > **PR** = proposal to merge change · **Tag** = frozen proof snapshot · **Badge** = visual pass/fail marker
