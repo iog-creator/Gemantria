@@ -126,18 +126,23 @@ def main() -> int:
         }
     verdict["ok"] = len(errors) == 0
 
-    # Always write machine-readable verdict
-    VERDICT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with VERDICT_PATH.open("w", encoding="utf-8") as fh:
-        json.dump(verdict, fh, ensure_ascii=False, separators=(",", ":"))
-    print(f"HINT: exports_json: wrote verdict → {VERDICT_PATH}", file=sys.stderr)
-
     for h in hints:
         print("HINT: exports.json:", h, file=sys.stderr)
     if errors:
         for e in errors:
             print("ERROR: exports.json:", e, file=sys.stderr)
+        # Write verdict with final status before exit
+        VERDICT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with VERDICT_PATH.open("w", encoding="utf-8") as fh:
+            json.dump(verdict, fh, ensure_ascii=False, separators=(",", ":"))
+        print(f"HINT: exports_json: wrote verdict → {VERDICT_PATH}", file=sys.stderr)
         return 2
+
+    # No errors: write verdict and continue
+    VERDICT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with VERDICT_PATH.open("w", encoding="utf-8") as fh:
+        json.dump(verdict, fh, ensure_ascii=False, separators=(",", ":"))
+    print(f"HINT: exports_json: wrote verdict → {VERDICT_PATH}", file=sys.stderr)
 
     # Preserve compact HINT-mode console object (unchanged shape for callers)
     print(
