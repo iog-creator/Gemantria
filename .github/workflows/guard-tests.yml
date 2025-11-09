@@ -1,0 +1,21 @@
+name: guard-tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  guard-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pytest (minimal)
+        run: python -m pip install --upgrade pip && pip install pytest
+      - name: Run schema-backed guard tests
+        run: pytest -q tests/unit/guards/test_exports_guard_schema.py tests/unit/guards/test_exports_guard_negative.py
