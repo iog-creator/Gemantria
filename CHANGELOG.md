@@ -22,6 +22,12 @@
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
 
+## v0.1.0 — stable
+
+- Fixtures-posture STRICT gate proven with **truth v2 ≥25** on tag (rc20); production-path STRICT re-proof captured (rc21).
+- Attached tag guard artifact in the v0.1.0 Release (see assets); repo vars restored to fixtures default.
+- Notes auto-generated per **RELEASES.md**; badges and CI validated on tag.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
