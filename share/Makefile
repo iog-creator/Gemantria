@@ -194,8 +194,15 @@ eval.xrefs.badges:
 	@python3 scripts/eval/xrefs_badges.py
 
 .PHONY: eval.package
-eval.package: eval.graph.calibrate.adv eval.xrefs.badges share.sync
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank share.sync
 	@echo "[eval.package] OK"
+
+# --- eval: rerank quality badge (from blend report) ---
+.PHONY: eval.badges.rerank
+eval.badges.rerank:
+	@python scripts/analytics/rerank_blend_report.py
+	@python scripts/badges/make_rerank_quality_badge.py
+	@ls -1 share/eval/badges | grep -E 'rerank_quality\.svg' || true
 
 .PHONY: db.runs_ledger.smoke
 db.runs_ledger.smoke:
@@ -523,7 +530,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -556,6 +563,14 @@ guard.ui.xrefs.badges:
 	else \
 	  python3 scripts/guards/guard_xrefs_badges.py || true; \
 	fi
+
+.PHONY: schema.smoke
+schema.smoke:
+	@python scripts/guards/guard_schema_smoke.py
+
+.PHONY: guard.rerank.thresholds
+guard.rerank.thresholds:
+	@python scripts/guards/guard_rerank_thresholds.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -619,9 +634,20 @@ graph.score:
 	@echo "GRAPH_SCORE_OK"
 
 analytics.export:
-	@echo ">> Analytics Agent: scored graph→stats/patterns/forecast + report"
-	@# TODO: wire to analytics export scripts
-	@echo "ANALYTICS_EXPORT_OK"
+	@echo "HINT: analytics: starting (file-first)"
+	@if test -f exports/graph_latest.scored.json || test -f exports/graph_latest.json; then \
+		echo "HINT: analytics: using graph JSON in exports/"; \
+		python scripts/analytics/graph_stats_from_json.py; \
+	else \
+		echo "HINT: analytics: no local graph JSON; deferring to DB exporters"; \
+		python scripts/analytics/export_graph.py || true; \
+	fi
+	@python scripts/analytics/export_patterns.py || true
+	@echo "[analytics.export] OK"
+
+.PHONY: analytics.rerank.blend
+analytics.rerank.blend:
+	@python scripts/analytics/rerank_blend_report.py
 
 # --- Analytics exports (DB-first; tolerant stubs when DSN missing) ---
 .PHONY: analytics.export.db
@@ -749,6 +775,11 @@ evidence.bundle: evidence.badges ## build operator evidence bundle (now includes
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
 	@python3 scripts/evidence/ensure_badges_manifest.py || true
+	@# Include rerank blend + thresholds guard outputs
+	@mkdir -p evidence
+	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
+	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
+	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
