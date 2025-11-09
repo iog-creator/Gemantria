@@ -33,6 +33,10 @@
 - STRICT tag workflow for **v0.1.0**: ✅ green (see run `19203434209`); artifact attached to Release.
 - README badges checked; docs mirrored to `share/`.
 
+## v0.1.1-dev — open
+
+- Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
