@@ -21,6 +21,7 @@ HOUSEKEEPING CHANGE DETECTION:
 """
 
 import json
+import os
 import shutil
 import sys
 import hashlib
@@ -30,9 +31,104 @@ ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "docs" / "SSOT" / "SHARE_MANIFEST.json"
 SHARE = ROOT / "share"
 
+# Database integration (optional - hermetic behavior per Rule 046)
+try:
+    import psycopg
+
+    GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+    DB_AVAILABLE = bool(GEMATRIA_DSN)
+except ImportError:
+    DB_AVAILABLE = False
+    GEMATRIA_DSN = None
+
 
 def ensure_dir(p: Path):
     p.parent.mkdir(parents=True, exist_ok=True)
+
+
+def check_db_available() -> bool:
+    """Check if database is available for tracking."""
+    if not DB_AVAILABLE:
+        return False
+    try:
+        with psycopg.connect(GEMATRIA_DSN, connect_timeout=2) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT 1")
+        return True
+    except (psycopg.OperationalError, psycopg.Error):
+        return False
+
+
+def get_file_checksum(filepath: Path) -> str | None:
+    """Calculate SHA-256 checksum of a file."""
+    try:
+        if not filepath.exists():
+            return None
+        with open(filepath, "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except Exception:
+        return None
+
+
+def track_share_item(
+    item_id: str,
+    src_path: str,
+    dst_path: str,
+    generate_type: str | None,
+    max_bytes: int | None,
+    checksum: str | None,
+    src_checksum: str | None,
+    sync_status: str,
+    error_message: str | None = None,
+):
+    """Track share manifest item in database."""
+    if not check_db_available():
+        return
+
+    try:
+        with psycopg.connect(GEMATRIA_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT update_share_manifest_item(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    (
+                        item_id,
+                        src_path,
+                        dst_path,
+                        generate_type,
+                        max_bytes,
+                        checksum,
+                        src_checksum,
+                        sync_status,
+                        error_message,
+                    ),
+                )
+                conn.commit()
+    except Exception as e:
+        # Hermetic: don't fail if DB tracking fails
+        print(f"HINT: share.tracking: Database tracking failed (hermetic behavior): {e}", file=sys.stderr)
+
+
+def track_manifest_metadata(
+    manifest_path: str,
+    manifest_checksum: str,
+    total_items: int,
+    evidence_paths: list[str],
+):
+    """Track share manifest metadata in database."""
+    if not check_db_available():
+        return
+
+    try:
+        with psycopg.connect(GEMATRIA_DSN) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT update_share_manifest_metadata(%s, %s, %s, %s)",
+                    (manifest_path, manifest_checksum, total_items, evidence_paths),
+                )
+                conn.commit()
+    except Exception as e:
+        # Hermetic: don't fail if DB tracking fails
+        print(f"HINT: share.tracking: Database metadata tracking failed (hermetic behavior): {e}", file=sys.stderr)
 
 
 def files_differ(src: Path, dst: Path) -> bool:
@@ -107,12 +203,25 @@ def main():
         print(f"[update_share] Missing manifest: {MANIFEST}", file=sys.stderr)
         sys.exit(2)
 
-    spec = json.loads(MANIFEST.read_text())
+    # Track manifest metadata
+    manifest_content = MANIFEST.read_text()
+    manifest_checksum = hashlib.sha256(manifest_content.encode()).hexdigest()
+    spec = json.loads(manifest_content)
     items = spec.get("items", [])
+    evidence_paths = spec.get("evidence", [])
+
     # Optional safety: enforce low file count
     if len(items) > 25:
         print("[update_share] ERROR: more than 25 items; trim manifest.", file=sys.stderr)
         sys.exit(2)
+
+    # Track manifest metadata in database
+    track_manifest_metadata(
+        str(MANIFEST.relative_to(ROOT)),
+        manifest_checksum,
+        len(items),
+        evidence_paths,
+    )
 
     # Ensure share/ exists; **flat** layout only
     SHARE.mkdir(parents=True, exist_ok=True)
@@ -134,11 +243,53 @@ def main():
         dst = ROOT / dst_rel
         total_count += 1
 
+        # Generate unique item ID for tracking
+        item_id = f"{src_rel}:{dst_rel}" if src_rel else dst_rel
+
         if gen == "head_json":
-            src = ROOT / src_rel
-            if head_json(src, dst, max_bytes):
-                copied_count += 1
-                changed_files.append(str(dst.relative_to(ROOT)))
+            src = ROOT / src_rel if src_rel else None
+            if src and src.exists():
+                src_checksum = get_file_checksum(src)
+                if head_json(src, dst, max_bytes):
+                    copied_count += 1
+                    changed_files.append(str(dst.relative_to(ROOT)))
+                    dst_checksum = get_file_checksum(dst)
+                    track_share_item(
+                        item_id,
+                        src_rel or "",
+                        dst_rel,
+                        gen,
+                        max_bytes,
+                        dst_checksum,
+                        src_checksum,
+                        "synced",
+                    )
+                else:
+                    # File unchanged, but still track
+                    dst_checksum = get_file_checksum(dst)
+                    track_share_item(
+                        item_id,
+                        src_rel or "",
+                        dst_rel,
+                        gen,
+                        max_bytes,
+                        dst_checksum,
+                        src_checksum,
+                        "synced",
+                    )
+            else:
+                # Source missing
+                track_share_item(
+                    item_id,
+                    src_rel or "",
+                    dst_rel,
+                    gen,
+                    max_bytes,
+                    None,
+                    None,
+                    "missing_source",
+                    f"Source file not found: {src_rel}",
+                )
             continue
 
         if not src_rel:
@@ -148,11 +299,47 @@ def main():
         src = ROOT / src_rel
         if not src.exists():
             print(f"[update_share] ERROR: source not found: {src}", file=sys.stderr)
-            sys.exit(2)
+            track_share_item(
+                item_id,
+                src_rel,
+                dst_rel,
+                None,
+                None,
+                None,
+                None,
+                "missing_source",
+                f"Source file not found: {src_rel}",
+            )
+            continue
 
+        src_checksum = get_file_checksum(src)
         if copy_file(src, dst):
             copied_count += 1
             changed_files.append(str(dst.relative_to(ROOT)))
+            dst_checksum = get_file_checksum(dst)
+            track_share_item(
+                item_id,
+                src_rel,
+                dst_rel,
+                None,
+                None,
+                dst_checksum,
+                src_checksum,
+                "synced",
+            )
+        else:
+            # File unchanged, but still track
+            dst_checksum = get_file_checksum(dst)
+            track_share_item(
+                item_id,
+                src_rel,
+                dst_rel,
+                None,
+                None,
+                dst_checksum,
+                src_checksum,
+                "synced",
+            )
 
     if copied_count == 0:
         print("[update_share] OK — share/ up to date (no changes)")

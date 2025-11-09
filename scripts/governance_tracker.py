@@ -200,6 +200,52 @@ def scan_governance_artifacts() -> List[Dict]:
 
     artifacts.extend(hint_emissions)
 
+    # Scan share manifest items
+    manifest_path = ROOT / "docs" / "SSOT" / "SHARE_MANIFEST.json"
+    if manifest_path.exists():
+        try:
+            import json
+
+            manifest_content = manifest_path.read_text()
+            manifest_checksum = get_file_checksum(str(manifest_path))
+            spec = json.loads(manifest_content)
+            items = spec.get("items", [])
+
+            # Track the manifest itself
+            artifacts.append(
+                {
+                    "type": "share_manifest",
+                    "name": "SHARE_MANIFEST.json",
+                    "file_path": str(manifest_path.relative_to(ROOT)),
+                    "rule_refs": ["Rule-044", "Rule-030"],
+                    "agent_refs": ["scripts/update_share.py", "scripts/sync_share.py"],
+                    "checksum": manifest_checksum,
+                }
+            )
+
+            # Track individual manifest items (summary)
+            for item in items:
+                src = item.get("src", "")
+                dst = item.get("dst", "")
+                if src and dst:
+                    item_id = f"{src}:{dst}"
+                    src_path = ROOT / src
+                    if src_path.exists():
+                        item_checksum = get_file_checksum(str(src_path))
+                        artifacts.append(
+                            {
+                                "type": "share_manifest_item",
+                                "name": item_id,
+                                "file_path": src,
+                                "rule_refs": ["Rule-044"],
+                                "agent_refs": ["scripts/update_share.py"],
+                                "checksum": item_checksum,
+                            }
+                        )
+        except Exception as e:
+            # Don't fail if manifest parsing fails
+            print(f"HINT: governance.tracker: Failed to scan share manifest: {e}", file=sys.stderr)
+
     return artifacts
 
 
