@@ -31,7 +31,6 @@ jobs:
         run: |
           mkdir -p evidence
           python3 scripts/guards/guard_extraction_accuracy.py
-          cat evidence/guard_extraction_accuracy.json
           test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
 
       - name: Upload guard evidence artifact
