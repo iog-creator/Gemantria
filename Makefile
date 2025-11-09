@@ -558,7 +558,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -588,6 +588,10 @@ guard.ai.tracking.strict:
 guard.exports.json:
 	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_json.py
 
+.PHONY: guard.exports.rfc3339
+guard.exports.rfc3339:
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_rfc3339.py
+
 # --- Export guard evidence + badge ---
 .PHONY: guard.exports.json.evidence
 guard.exports.json.evidence:
@@ -607,6 +611,11 @@ evidence.exports.badge: guard.exports.json.evidence
 evidence.exports.verdict.md: guard.exports.json.evidence
 	@python3 scripts/tools/render_exports_verdict_md.py >/dev/null
 	@test -f evidence/exports_guard.verdict.md
+
+.PHONY: evidence.exports.rfc3339.verdict
+evidence.exports.rfc3339.verdict:
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_rfc3339.py >/dev/null 2>&1 || true
+	@test -f evidence/exports_rfc3339.verdict.json || echo '[bundle] exports_rfc3339.verdict.json missing' >> evidence/bundle.log
 
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
@@ -844,7 +853,7 @@ evidence.badges:
 	done
 
 .PHONY: evidence.bundle
-evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md ## build operator evidence bundle (now includes xref metrics & badges if present)
+evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md evidence.exports.rfc3339.verdict ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
