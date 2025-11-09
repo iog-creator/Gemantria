@@ -35,6 +35,9 @@ def emit(ok: bool, note: str, missing: list[str]):
 
 
 def main() -> int:
+    # Fast no-op: let CI tell us to skip this check entirely on PRs
+    if os.environ.get("CI_XREF_BADGES_SKIP", "0") == "1":
+        return emit(True, "skipped by CI (paths do not affect xref badges)", [])
     # If no xref index, HINT-ok (nothing to check).
     if not XREF_INDEX.exists():
         return emit(True, "xref index not present; skipping badge check (HINT).", [])

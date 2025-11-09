@@ -19,6 +19,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          fetch-depth: 0
+      - name: Detect changed paths (PR-only)
+        if: github.event_name == 'pull_request'
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.sha }}"
+          echo "Comparing $BASE_SHA..$HEAD_SHA"
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed.txt
+          echo "Changed files:"
+          cat changed.txt
+          # Match UI or xref-related files
+          if grep -qE '^(ui/|scripts/eval/xrefs_badges.py|scripts/guards/guard_xrefs_badges.py)' changed.txt; then
+            echo "UI_CHANGED=1" >> $GITHUB_ENV
+          else
+            echo "UI_CHANGED=0" >> $GITHUB_ENV
+          fi
       - name: RC-freeze gate (enforce label on PRs during stabilization)
         if: ${{ github.event_name == 'pull_request' }}
         env:
@@ -61,3 +78,10 @@ jobs:
           else
             echo "No db_ingest artifact present; skipping."
           fi
+      - name: Run xref badge guard (path-aware)
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ "${UI_CHANGED:-0}" = "0" ]; then
+            export CI_XREF_BADGES_SKIP=1
+          fi
+          python3 scripts/guards/guard_xrefs_badges.py
