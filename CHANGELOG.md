@@ -45,6 +45,10 @@
 
 - Tag **rc1** ran with exports JSON guard (STRICT); logs archived at `evidence/rc1_tag.log`.
 
+### ops: exports JSON guard — rc2 (shape checks enforced)
+
+- Tag **rc2** confirmed STRICT enforcement including minimal shape validation; logs archived at `evidence/rc2_tag.log`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
