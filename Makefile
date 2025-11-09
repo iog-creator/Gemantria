@@ -856,6 +856,7 @@ evidence.bundle: evidence.badges evidence.exports.badge ## build operator eviden
 	@if test -d share/eval/badges; then cp -f share/eval/badges/rerank_quality.svg evidence/ 2>/dev/null || true; fi
 	@if test -d share/eval/badges; then cp -f share/eval/badges/patterns_badge.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
+	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
 

@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-import json, os, sys, pathlib
+import json, os, sys, pathlib, datetime
 from jsonschema_min import validate as _validate_schema
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EXPORTS = ROOT / "exports"
+VERDICT_PATH = ROOT / "evidence" / "exports_guard.verdict.json"
 TARGETS = [
     ("graph_latest.scored.json", "graph.schema.json"),
     ("ai_nouns.json", "ai-nouns.schema.json"),
@@ -44,16 +45,35 @@ def main() -> int:
     schema_pass = 0
     schema_fail = 0
     checked = []
+    verdict = {
+        "schema": "guard.exports-json.v1",
+        "generated_at": datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+        "strict": bool(strict),
+        "files": {},
+        "ok": False,
+    }
     for fname, schema_name in TARGETS:
         f = EXPORTS / fname
         checked.append(fname)
-        if not f.exists():
+        exists = f.exists()
+        json_ok = False
+        schema_ok = False
+        err = None
+        if not exists:
+            err = "missing"
             msg = f"missing: exports/{fname}"
             (errors if strict else hints).append(msg)
+            verdict["files"][fname] = {
+                "exists": False,
+                "json_ok": False,
+                "schema_ok": False,
+                "error": err,
+            }
             continue
         try:
             with f.open("r", encoding="utf-8") as fh:
                 obj = json.load(fh)  # basic JSON validity
+            json_ok = True
             # --- Minimal shape checks (dependency-free) ---
             if fname == "ai_nouns.json":
                 if not isinstance(obj, dict) or "nodes" not in obj or not isinstance(obj["nodes"], list):
@@ -90,18 +110,46 @@ def main() -> int:
                             (errors if strict else hints).append(msg)
                         else:
                             schema_pass += 1
+                            schema_ok = True
                     except Exception as e:
                         (errors if strict else hints).append(f"schema: {schema_name} invalid or unreadable: {e}")
         except Exception as e:
             msg = f"invalid json: exports/{fname}: {e}"
+            err = f"json:{type(e).__name__}"
             (errors if strict else hints).append(msg)
+
+        verdict["files"][fname] = {
+            "exists": bool(exists),
+            "json_ok": bool(json_ok),
+            "schema_ok": bool(schema_ok),
+            "error": err,
+        }
+    verdict["ok"] = len(errors) == 0
+
+    # Always write machine-readable verdict
+    VERDICT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with VERDICT_PATH.open("w", encoding="utf-8") as fh:
+        json.dump(verdict, fh, ensure_ascii=False, separators=(",", ":"))
+    print(f"HINT: exports_json: wrote verdict → {VERDICT_PATH}", file=sys.stderr)
+
     for h in hints:
         print("HINT: exports.json:", h, file=sys.stderr)
     if errors:
         for e in errors:
             print("ERROR: exports.json:", e, file=sys.stderr)
         return 2
-    print(json.dumps({"ok": True, "strict": strict, "checked": checked, "schema_checks":{"passed": schema_pass, "failed": schema_fail}}))
+
+    # Preserve compact HINT-mode console object (unchanged shape for callers)
+    print(
+        json.dumps(
+            {
+                "ok": verdict["ok"],
+                "strict": strict,
+                "checked": checked,
+                "schema_checks": {"passed": schema_pass, "failed": schema_fail},
+            }
+        )
+    )
     return 0
 
 
