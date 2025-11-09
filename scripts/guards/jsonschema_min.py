@@ -4,12 +4,14 @@ import typing as _t
 
 _J = _t.Dict[str, _t.Any]
 
+
 class SchemaError(Exception): ...
+
 
 def _type_ok(x, t: str) -> bool:
     return {
         "object": isinstance(x, dict),
-        "array":  isinstance(x, list),
+        "array": isinstance(x, list),
         "string": isinstance(x, str),
         "integer": isinstance(x, int) and not isinstance(x, bool),
         "number": isinstance(x, (int, float)) and not isinstance(x, bool),
@@ -17,8 +19,10 @@ def _type_ok(x, t: str) -> bool:
         "null": x is None,
     }.get(t, False)
 
+
 def _validate(obj, schema: _J, path="$", errs=None):
-    if errs is None: errs = []
+    if errs is None:
+        errs = []
     st = schema.get("type")
     if isinstance(st, list):
         if not any(_type_ok(obj, t) for t in st):
@@ -55,6 +59,7 @@ def _validate(obj, schema: _J, path="$", errs=None):
                 if i < len(obj):
                     _validate(obj[i], sch, f"{path}[{i}]", errs)
     return errs
+
 
 def validate(obj, schema: _J) -> _t.List[str]:
     if not isinstance(schema, dict):
