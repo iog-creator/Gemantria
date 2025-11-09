@@ -20,6 +20,7 @@ ATLAS_DSN=
 # HINT/STRICT switches (default HINT in CI; opt-in STRICT locally/tags)
 STRICT_ATLAS_DSN=0
 STRICT_ALWAYS_APPLY=0
+STRICT_GOVERNANCE=0
 
 # ============================================================================
 # LM STUDIO CONFIGURATION
