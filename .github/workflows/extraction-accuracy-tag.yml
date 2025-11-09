@@ -19,35 +19,13 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build production graph (real extractor)
-        if: ${{ vars.STRICT_REAL_EXTRACTION == '1' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "::group::build-production-extraction"
-          python3 --version
-          # Must write exports/graph_latest.scored.json
-          python3 scripts/analytics/build_graph_real.py
-          echo "::endgroup::"
-          echo "::group::post-build-preflight"
-          ls -la exports || true
-          test -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }
-          echo "::endgroup::"
 
-      - name: Build real extraction graph (repo fixtures, hermetic)
-        if: ${{ vars.STRICT_REAL_EXTRACTION != '1' }}
-        shell: bash
+      - name: Build extraction graph (fixtures default)
         run: |
-          set -euo pipefail
-          echo "::group::build-real-extraction(fixtures)"
-          python3 --version
           python3 scripts/analytics/build_graph_from_repo_fixtures.py
-          echo "::endgroup::"
-          echo "::group::post-build-preflight"
-          ls -la exports || true
-          test -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }
-          echo "::endgroup::"
-      - name: Guard: extraction accuracy (STRICT)
+          test -s exports/graph_latest.scored.json
+
+      - name: Guard extraction accuracy STRICT
         env:
           STRICT_EXTRACTION_ACCURACY: "1"
         run: |
@@ -56,3 +34,13 @@ jobs:
           cat evidence/guard_extraction_accuracy.json
           test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
 
+      - name: Upload guard evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guard_extraction_accuracy
+          path: |
+            evidence/guard_extraction_accuracy.json
+            evidence/guard_extraction_accuracy.stdout.log
+          if-no-files-found: warn
+          retention-days: 7
