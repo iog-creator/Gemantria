@@ -77,6 +77,11 @@
 
 > Note: Branch protection is OFF in this repository, so PR checks are not enforced by GitHub. Our Rule-051 posture applies: checks are advisory unless marked required in repo settings.
 
+### v0.1.1-rc8 — fixtures tag with RFC3339 guard
+
+- Tag CI: **STRICT** green; RFC3339 timestamp guard enforced on all exports.
+- Release assets: guard artifact, exports verdict JSON, RFC3339 verdict JSON, badge SVG, badges manifest.
+
 ## v0.1.1 — stable
 
 - JSON-Schema validation **PASS** for all four exports (see `schemas/`).
