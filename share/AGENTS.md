@@ -246,6 +246,13 @@ Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` c
 - **Artifacts**: `share/eval/edges/blend_ssot_report.json` and `.md` (deterministic)
 - **Integration**: Wired into `ops.verify` as non-fatal validation step
 
+### Rerank & Blend (SSOT)
+- Blend thresholds are enforced via HINT on main and STRICT on tags.
+- Config: `configs/rerank_blend.json` (env overrides `RERANK_THRESHOLD_HINT/STRICT`)
+- Guard: `guard.rerank.thresholds` (HINT on main; STRICT when `STRICT_RERANK_THRESH=1`)
+- Artifacts: `share/eval/rerank_blend_report.json`, `evidence/guard_rerank_thresholds.json`
+- CI: STRICT step gated by `vars.STRICT_DB_MIRROR_CI` (same switch as dbmirror/AI-tracking).
+
 ### Hints Envelope (Enforcement Bridge - Rule-026)
 Runtime hints are collected and wrapped in structured envelopes for persistence and auditability.
 - **Collection**: Hints collected in `PipelineState.hints` during pipeline execution

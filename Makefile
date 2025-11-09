@@ -194,8 +194,15 @@ eval.xrefs.badges:
 	@python3 scripts/eval/xrefs_badges.py
 
 .PHONY: eval.package
-eval.package: eval.graph.calibrate.adv eval.xrefs.badges share.sync
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank share.sync
 	@echo "[eval.package] OK"
+
+# --- eval: rerank quality badge (from blend report) ---
+.PHONY: eval.badges.rerank
+eval.badges.rerank:
+	@python scripts/analytics/rerank_blend_report.py
+	@python scripts/badges/make_rerank_quality_badge.py
+	@ls -1 share/eval/badges | grep -E 'rerank_quality\.svg' || true
 
 .PHONY: db.runs_ledger.smoke
 db.runs_ledger.smoke:
