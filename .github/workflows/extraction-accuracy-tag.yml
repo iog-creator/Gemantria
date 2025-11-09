@@ -30,7 +30,7 @@ jobs:
           STRICT_EXTRACTION_ACCURACY: "1"
         run: |
           mkdir -p evidence
-          python3 scripts/guards/guard_extraction_accuracy.py > evidence/guard_extraction_accuracy.json
+          python3 scripts/guards/guard_extraction_accuracy.py
           cat evidence/guard_extraction_accuracy.json
           test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
 
