@@ -59,6 +59,12 @@
 - Release assets include: `exports_json.svg` badge, `badges_manifest.json`, and `guard_extraction_accuracy.json` (attached after CI).
 - Logs archived at `evidence/v0.1.1-rc3_tag.log`.
 
+### v0.1.1-rc5 — fixtures tag with machine-readable exports verdict
+
+- Exports guard now emits `evidence/exports_guard.verdict.json` (HINT & STRICT).
+- Evidence bundle includes verdict JSON for dashboards/release assets.
+- Tag CI: STRICT green; artifact(s) archived to `evidence/`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
