@@ -1,5 +1,14 @@
 # Gematria v2.0 Master Plan
 
+#### Governance Triad (Always-Apply)
+
+Active rules: **050**, **051**, **052**.  
+- 050: LOUD FAIL when SSOT/governance absent or red  
+- 051: Required checks gate merges (advisory checks non-blocking)  
+- 052: Tool-priority order enforced (local+gh → codex (401) → gemini/mcp)
+
+<!-- guard.alwaysapply sentinel: 050 051 052 -->
+
 ## Vision
 
 Rebuild the complete Gematria system from scratch using existing assets in a clean, maintainable architecture.
