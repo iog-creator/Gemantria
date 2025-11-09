@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import time
@@ -27,7 +28,7 @@ def check_file(path: pathlib.Path, prefixes: tuple[str, ...]) -> dict:
     ts = str(data.get("generated_at", ""))
     schema_ok = any(sch.startswith(p) for p in prefixes)
     ts_ok = bool(RFC3339_Z.match(ts))
-    return {
+    res = {
         "file": str(path),
         "present": True,
         "schema": sch,
@@ -36,6 +37,23 @@ def check_file(path: pathlib.Path, prefixes: tuple[str, ...]) -> dict:
         "schema_ok": schema_ok,
         "ts_ok": ts_ok,
     }
+    # Extra sanity for patterns.json (non-fatal; HINT only)
+    if path.name == "patterns.json":
+        counts = data.get("counts", {})
+        edges = int(counts.get("edges", 0) or 0)
+        top = int(counts.get("top", 0) or 0)
+        min_top = int(os.getenv("PATTERNS_MIN_TOP", "5") or 5)
+        # Constraints: 0 <= top <= edges; if edges>0 then top>=min( min_top, edges )
+        le_ok = 0 <= top <= max(edges, 0)
+        floor_ok = True if edges == 0 else (top >= min(min_top, edges))
+        res.update(
+            {
+                "counts_ok": bool(le_ok and floor_ok),
+                "counts": {"edges": edges, "top": top, "min_top_req": min_top},
+            }
+        )
+        # keep res["ok"] as schema+timestamp only; counts_ok is advisory here
+    return res
 
 
 def main() -> int:
