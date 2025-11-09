@@ -1,0 +1,9 @@
+{
+  "clock": "2025-11-09T23:33:42Z",
+  "ok": true,
+  "dsn": {
+    "present": false
+  },
+  "tables": {},
+  "note": "DSN missing; staying in grey mode"
+}

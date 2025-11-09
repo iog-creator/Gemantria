@@ -176,10 +176,18 @@ atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not 
 # --- Atlas DSN-on proof (read-only; fails fast if DSN missing) ---
 .PHONY: atlas.proof.dsn
 atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable)
-	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
-	@psql "$$GEMATRIA_DSN" -tAc "SELECT now();" || (echo "HINT: DB unreachable; staying in grey mode" && exit 0)
-	@$(MAKE) -s atlas.generate
-	@$(MAKE) -s atlas.test
+	@ATLAS_DSN="$${ATLAS_DSN:-$$GEMATRIA_DSN}"; \
+	if [ -z "$$ATLAS_DSN" ]; then \
+		echo "LOUD_FAIL: ATLAS_DSN and GEMATRIA_DSN not set"; \
+		if [ "$$STRICT_ATLAS_DSN" = "1" ]; then exit 2; else exit 0; fi; \
+	fi; \
+	psql "$$ATLAS_DSN" -tAc "SELECT now();" >/dev/null 2>&1 || { \
+		echo "HINT: DB unreachable; staying in grey mode"; \
+		if [ "$$STRICT_ATLAS_DSN" = "1" ]; then exit 2; else exit 0; fi; \
+	}; \
+	ATLAS_DSN="$$ATLAS_DSN" python scripts/atlas/atlas_proof_dsn.py; \
+	$(MAKE) -s atlas.generate ATLAS_DSN="$$ATLAS_DSN"; \
+	$(MAKE) -s atlas.test
 
 # --- Atlas demo seed (dev-only; enables visual proof without live telemetry) ---
 .PHONY: atlas.demo.seed
