@@ -582,13 +582,13 @@ guard.ai.tracking.strict:
 
 .PHONY: guard.exports.json
 guard.exports.json:
-	@python3 scripts/guards/guard_exports_json.py
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_json.py
 
 # --- Export guard evidence + badge ---
 .PHONY: guard.exports.json.evidence
 guard.exports.json.evidence:
 	@mkdir -p evidence
-	@$(PY_RUN) scripts/guards/guard_exports_json.py > evidence/guard_exports_json.verdict.json 2> evidence/guard_exports_json.stderr.txt || true
+	@PYTHONPATH=scripts/guards $(PY_RUN) scripts/guards/guard_exports_json.py > evidence/guard_exports_json.verdict.json 2> evidence/guard_exports_json.stderr.txt || true
 	@jq -r '.ok' evidence/guard_exports_json.verdict.json >/dev/null 2>&1 || echo '{"ok":false}' > evidence/guard_exports_json.verdict.json
 
 .PHONY: evidence.exports.badge

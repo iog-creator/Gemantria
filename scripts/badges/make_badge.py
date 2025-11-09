@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, sys
+import argparse
 
 TPL = """<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{label}: {text}">
   <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-opacity=".1"/><stop offset=".9" stop-opacity=".3"/><stop offset="1" stop-opacity=".5"/></linearGradient>
@@ -16,12 +16,14 @@ TPL = """<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="i
   </g>
 </svg>"""
 
+
 def badge(label: str, text: str):
-    color = "#e05d44" if text.lower()=="fail" else "#4c1"
-    lw = max(60, 6*len(label))    # crude text fit
-    rw = max(50, 7*len(text))
-    w  = lw + rw
-    return TPL.format(w=w,lw=lw,rw=rw,lx=lw/2,rx=lw+rw/2,label=label,text=text,color=color)
+    color = "#e05d44" if text.lower() == "fail" else "#4c1"
+    lw = max(60, 6 * len(label))  # crude text fit
+    rw = max(50, 7 * len(text))
+    w = lw + rw
+    return TPL.format(w=w, lw=lw, rw=rw, lx=lw / 2, rx=lw + rw / 2, label=label, text=text, color=color)
+
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
