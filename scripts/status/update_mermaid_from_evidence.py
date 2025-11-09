@@ -109,12 +109,10 @@ def node(id_: str, label: str, summary_md: Path, status: str, base_url: str = ""
     display = f"{label}<br/>({summary_md.relative_to(REPO)})"
     line = f'    {id_}["{display}"]{cls(status)}\n'
     if summary_md.exists():
-        rel_path = summary_md.relative_to(REPO)
-        # Use web server URL if base_url provided, otherwise use file://
-        if base_url:
-            click_url = f"{base_url}/{rel_path.as_posix()}"
-        else:
-            click_url = f"file://{summary_md.resolve().as_posix()}"
+        rel_path = summary_md.relative_to(REPO).as_posix()
+        # Always use relative paths for GitHub/IDE compatibility
+        # base_url is only used for HTML preview in browser
+        click_url = rel_path
         line += f'    click {id_} "{click_url}" "Open {label} summary"\n'
     return line
 
@@ -172,11 +170,8 @@ def build_mermaid(tag: str, statuses: dict[str, str], base_url: str = "") -> str
     parts.append(f'  TAG["{tag}<br/>(STRICT proof)"]{tag_cls}\n')
     if CHANGELOG.exists():
         rel_changelog = CHANGELOG.relative_to(REPO).as_posix()
-        if base_url:
-            changelog_url = f"{base_url}/{rel_changelog}"
-        else:
-            changelog_url = f"file://{CHANGELOG.resolve().as_posix()}"
-        parts.append(f'  click TAG "{changelog_url}" "Open CHANGELOG"\n')
+        # Always use relative paths for GitHub/IDE compatibility
+        parts.append(f'  click TAG "{rel_changelog}" "Open CHANGELOG"\n')
 
     parts.append('  subgraph GUARDS["Guards & Verdicts"]\n')
     parts.append(node("EJSON", "Exports JSON", EVIDENCE_DOCS / "exports_json.md", statuses["exports_json"], base_url))
@@ -244,23 +239,21 @@ def build_html(mermaid_content: str, tag: str, base_url: str = "") -> str:
         // Handle click events on Mermaid nodes using callback
         const callback = function(id) {{
             // Map node IDs to summary URLs (human-readable pages)
+            // Use base_url for browser preview, relative paths for GitHub/IDE
+            const base = '{base_url}' || '';
             const urlMap = {{
-                'TAG': '{base_url}/CHANGELOG.md',
-                'EJSON': '{base_url}/docs/evidence/exports_json.md',
-                'ERFC': '{base_url}/docs/evidence/exports_rfc3339.md',
-                'EACC': '{base_url}/docs/evidence/extraction_accuracy.md',
-                'XREF': '{base_url}/docs/evidence/xrefs_metrics.md',
-                'BMAN': '{base_url}/docs/evidence/badges_manifest.md',
-                'BEXP': '{base_url}/docs/evidence/exports_json_badge.md'
+                'TAG': base ? base + '/CHANGELOG.md' : 'CHANGELOG.md',
+                'EJSON': base ? base + '/docs/evidence/exports_json.md' : 'docs/evidence/exports_json.md',
+                'ERFC': base ? base + '/docs/evidence/exports_rfc3339.md' : 'docs/evidence/exports_rfc3339.md',
+                'EACC': base ? base + '/docs/evidence/extraction_accuracy.md' : 'docs/evidence/extraction_accuracy.md',
+                'XREF': base ? base + '/docs/evidence/xrefs_metrics.md' : 'docs/evidence/xrefs_metrics.md',
+                'BMAN': base ? base + '/docs/evidence/badges_manifest.md' : 'docs/evidence/badges_manifest.md',
+                'BEXP': base ? base + '/docs/evidence/exports_json_badge.md' : 'docs/evidence/exports_json_badge.md'
             }};
             
             const url = urlMap[id];
             if (url) {{
-                if (url.startsWith('http://') || url.startsWith('https://')) {{
-                    window.open(url, '_blank');
-                }} else {{
-                    window.open(url, '_blank');
-                }}
+                window.open(url, '_blank');
             }}
         }};
         

@@ -2,23 +2,23 @@
 flowchart LR
   %% Evidence-driven status (auto-generated)
   TAG["v0.1.1-rc8<br/>(STRICT proof)"]:::green
-  click TAG "http://localhost:8888/CHANGELOG.md" "Open CHANGELOG"
+  click TAG "CHANGELOG.md" "Open CHANGELOG"
   subgraph GUARDS["Guards & Verdicts"]
     EJSON["Exports JSON<br/>(docs/evidence/exports_json.md)"]:::green
-    click EJSON "http://localhost:8888/docs/evidence/exports_json.md" "Open Exports JSON summary"
+    click EJSON "docs/evidence/exports_json.md" "Open Exports JSON summary"
     ERFC["RFC3339 timestamps<br/>(docs/evidence/exports_rfc3339.md)"]:::green
-    click ERFC "http://localhost:8888/docs/evidence/exports_rfc3339.md" "Open RFC3339 timestamps summary"
+    click ERFC "docs/evidence/exports_rfc3339.md" "Open RFC3339 timestamps summary"
     EACC["Extraction accuracy<br/>(docs/evidence/extraction_accuracy.md)"]:::green
-    click EACC "http://localhost:8888/docs/evidence/extraction_accuracy.md" "Open Extraction accuracy summary"
+    click EACC "docs/evidence/extraction_accuracy.md" "Open Extraction accuracy summary"
     XREF["Xrefs metrics<br/>(docs/evidence/xrefs_metrics.md)"]:::green
-    click XREF "http://localhost:8888/docs/evidence/xrefs_metrics.md" "Open Xrefs metrics summary"
+    click XREF "docs/evidence/xrefs_metrics.md" "Open Xrefs metrics summary"
   end
 
   subgraph BADGES["Badges (visual pass/fail)"]
     BMAN["Badges manifest<br/>(docs/evidence/badges_manifest.md)"]:::green
-    click BMAN "http://localhost:8888/docs/evidence/badges_manifest.md" "Open Badges manifest summary"
+    click BMAN "docs/evidence/badges_manifest.md" "Open Badges manifest summary"
     BEXP["exports_json.svg<br/>(docs/evidence/exports_json_badge.md)"]:::green
-    click BEXP "http://localhost:8888/docs/evidence/exports_json_badge.md" "Open exports_json.svg summary"
+    click BEXP "docs/evidence/exports_json_badge.md" "Open exports_json.svg summary"
   end
 
   TAG --> EJSON
