@@ -37,6 +37,10 @@
 
 - Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
 
+### ops: add exports JSON guard
+
+- New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
