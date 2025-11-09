@@ -1,5 +1,8 @@
 
 
+# Node modules (all directories)
+node_modules/
+
 # UI (local-only) build artifacts
 ui/node_modules/
 ui/dist/
