@@ -168,6 +168,14 @@ atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not 
 	@echo "Watching for changes (local-only, press Ctrl+C to stop)..."
 	@echo "HINT: File watcher not implemented yet; use 'make atlas.generate' manually"
 
+# --- Atlas DSN-on proof (read-only; fails fast if DSN missing) ---
+.PHONY: atlas.proof.dsn
+atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable)
+	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
+	@psql "$$GEMATRIA_DSN" -tAc "SELECT now();" || (echo "HINT: DB unreachable; staying in grey mode" && exit 0)
+	@$(MAKE) -s atlas.generate
+	@$(MAKE) -s atlas.test
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
