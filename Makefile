@@ -523,7 +523,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -556,6 +556,10 @@ guard.ui.xrefs.badges:
 	else \
 	  python3 scripts/guards/guard_xrefs_badges.py || true; \
 	fi
+
+.PHONY: schema.smoke
+schema.smoke:
+	@python scripts/guards/guard_schema_smoke.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -629,6 +633,10 @@ analytics.export:
 	fi
 	@python scripts/analytics/export_patterns.py || true
 	@echo "[analytics.export] OK"
+
+.PHONY: analytics.rerank.blend
+analytics.rerank.blend:
+	@python scripts/analytics/rerank_blend_report.py
 
 # --- Analytics exports (DB-first; tolerant stubs when DSN missing) ---
 .PHONY: analytics.export.db

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import pathlib
 import time
@@ -26,6 +27,7 @@ def main() -> int:
     out = {
         "schema": "graph-stats.v1",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "pipeline_version": os.getenv("PIPELINE_VERSION", "dev"),
         "nodes": n,
         "edges": m,
         "clusters": 0,
