@@ -41,6 +41,10 @@
 
 - New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).
 
+### ops: exports JSON guard — rc1 evidence
+
+- Tag **rc1** ran with exports JSON guard (STRICT); logs archived at `evidence/rc1_tag.log`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.

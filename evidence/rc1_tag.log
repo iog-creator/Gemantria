@@ -1,0 +1,245 @@
+extraction-accuracy	Set up job	﻿2025-11-09T04:43:26.6841808Z Current runner version: '2.329.0'
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6865385Z ##[group]Runner Image Provisioner
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6866328Z Hosted Compute Agent
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6867180Z Version: 20251016.436
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6868377Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6869666Z Build Date: 2025-10-15T20:44:12Z
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6870534Z ##[endgroup]
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6871370Z ##[group]Operating System
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6872151Z Ubuntu
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6872600Z 24.04.3
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6873132Z LTS
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6873586Z ##[endgroup]
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6874082Z ##[group]Runner Image
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6874637Z Image: ubuntu-24.04
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6875170Z Version: 20251102.99.1
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6876194Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251102.99/images/ubuntu/Ubuntu2404-Readme.md
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6877720Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251102.99
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6878917Z ##[endgroup]
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6879948Z ##[group]GITHUB_TOKEN Permissions
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6882246Z Contents: read
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6882873Z Metadata: read
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6883350Z ##[endgroup]
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6885610Z Secret source: Actions
+extraction-accuracy	Set up job	2025-11-09T04:43:26.6886476Z Prepare workflow directory
+extraction-accuracy	Set up job	2025-11-09T04:43:26.7203203Z Prepare all required actions
+extraction-accuracy	Set up job	2025-11-09T04:43:26.7240186Z Getting action download info
+extraction-accuracy	Set up job	2025-11-09T04:43:27.0190957Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+extraction-accuracy	Set up job	2025-11-09T04:43:27.2934506Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+extraction-accuracy	Set up job	2025-11-09T04:43:27.3291689Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+extraction-accuracy	Set up job	2025-11-09T04:43:27.5221374Z Complete job name: extraction-accuracy
+extraction-accuracy	Setup Python	﻿2025-11-09T04:43:27.5900044Z ##[group]Run actions/setup-python@v5
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5900931Z with:
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5901332Z   python-version: 3.11
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5901769Z   check-latest: false
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5902335Z   token: ***
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5902735Z   update-environment: true
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5903199Z   allow-prereleases: false
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5903636Z   freethreaded: false
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.5904239Z ##[endgroup]
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.7694872Z ##[group]Installed versions
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.8114163Z Successfully set up CPython (3.11.14)
+extraction-accuracy	Setup Python	2025-11-09T04:43:27.8115610Z ##[endgroup]
+extraction-accuracy	Checkout	﻿2025-11-09T04:43:27.8348264Z ##[group]Run actions/checkout@v4
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8348798Z with:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8349190Z   repository: iog-creator/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8349825Z   token: ***
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8350209Z   ssh-strict: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8350601Z   ssh-user: git
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8350997Z   persist-credentials: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8351439Z   clean: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8351843Z   sparse-checkout-cone-mode: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8352318Z   fetch-depth: 1
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8352741Z   fetch-tags: false
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8353159Z   show-progress: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8353550Z   lfs: false
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8353916Z   submodules: false
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8354310Z   set-safe-directory: true
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8354727Z env:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8355190Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8355977Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8356734Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8357732Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8358431Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8359123Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+extraction-accuracy	Checkout	2025-11-09T04:43:27.8359700Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9384484Z Syncing repository: iog-creator/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9385516Z ##[group]Getting Git version info
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9386156Z Working directory is '/home/runner/work/Gemantria/Gemantria'
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9453963Z [command]/usr/bin/git version
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9580433Z git version 2.51.2
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9605934Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9625831Z Temporarily overriding HOME='/home/runner/work/_temp/4ee0aaa9-ec2f-49e9-bec9-8de6328c2da2' before making global git config changes
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9628086Z Adding repository directory to the temporary git global config as a safe directory
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9630794Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Gemantria/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9667187Z Deleting the contents of '/home/runner/work/Gemantria/Gemantria'
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9670629Z ##[group]Initializing the repository
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9674479Z [command]/usr/bin/git init /home/runner/work/Gemantria/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9789832Z hint: Using 'master' as the name for the initial branch. This default branch name
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9791044Z hint: is subject to change. To configure the initial branch name to use in all
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9792045Z hint: of your new repositories, which will suppress this warning, call:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9792781Z hint:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9793277Z hint: 	git config --global init.defaultBranch <name>
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9793904Z hint:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9794675Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9796216Z hint: 'development'. The just-created branch can be renamed via this command:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9797595Z hint:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9798185Z hint: 	git branch -m <name>
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9798653Z hint:
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9799219Z hint: Disable this message with "git config set advice.defaultBranchName false"
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9800399Z Initialized empty Git repository in /home/runner/work/Gemantria/Gemantria/.git/
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9806267Z [command]/usr/bin/git remote add origin https://github.com/iog-creator/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9839272Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9840458Z ##[group]Disabling automatic garbage collection
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9844219Z [command]/usr/bin/git config --local gc.auto 0
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9873074Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9874273Z ##[group]Setting up auth
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9881205Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+extraction-accuracy	Checkout	2025-11-09T04:43:27.9911995Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0253398Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0283923Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0505832Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0540707Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0549122Z ##[group]Fetching the repository
+extraction-accuracy	Checkout	2025-11-09T04:43:28.0551283Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e8164be31313a8653dd4c82bf493534ab2d834f8:refs/tags/v0.1.1-rc1
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6061298Z From https://github.com/iog-creator/Gemantria
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6064264Z  * [new ref]         e8164be31313a8653dd4c82bf493534ab2d834f8 -> v0.1.1-rc1
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6090277Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6090831Z ##[group]Determining the checkout info
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6092580Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6098073Z [command]/usr/bin/git sparse-checkout disable
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6137809Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6165303Z ##[group]Checking out the ref
+extraction-accuracy	Checkout	2025-11-09T04:43:30.6169232Z [command]/usr/bin/git checkout --progress --force refs/tags/v0.1.1-rc1
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6181326Z Note: switching to 'refs/tags/v0.1.1-rc1'.
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6182251Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6182765Z You are in 'detached HEAD' state. You can look around, make experimental
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6184001Z changes and commit them, and you can discard any commits you make in this
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6185169Z state without impacting any branches by switching back to a branch.
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6185928Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6186355Z If you want to create a new branch to retain commits you create, you may
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6187447Z do so (now or later) by using -c with the switch command. Example:
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6187780Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6187939Z   git switch -c <new-branch-name>
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6188154Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6188294Z Or undo this operation with:
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6188484Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6188594Z   git switch -
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6188775Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6189062Z Turn off this advice by setting config variable advice.detachedHead to false
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6189426Z 
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6189765Z HEAD is now at e8164be ops: add exports JSON guard (HINT on main, STRICT on tags) and wire into guards.all (#319)
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6223848Z ##[endgroup]
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6262433Z [command]/usr/bin/git log -1 --format=%H
+extraction-accuracy	Checkout	2025-11-09T04:43:31.6284180Z e8164be31313a8653dd4c82bf493534ab2d834f8
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	﻿2025-11-09T04:43:31.6414741Z ##[group]Run set -euo pipefail
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6415159Z [36;1mset -euo pipefail[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6415488Z [36;1mecho "::group::build-real-extraction(fixtures)"[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6415827Z [36;1mpython3 --version[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6416183Z [36;1mpython3 scripts/analytics/build_graph_from_repo_fixtures.py[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6416560Z [36;1mecho "::endgroup::"[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6417124Z [36;1mecho "::group::post-build-preflight"[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6417487Z [36;1mls -la exports || true[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6417997Z [36;1mtest -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6418525Z [36;1mecho "::endgroup::"[0m
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6456392Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6457042Z env:
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6457370Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6457822Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6458315Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6458708Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6459091Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6459488Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6459809Z ##[endgroup]
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.6532505Z ##[group]build-real-extraction(fixtures)
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:31.7474485Z Python 3.11.14
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0669750Z [real-extract] wrote exports/graph_latest.scored.json (nodes=37)
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0708587Z ##[endgroup]
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0709250Z ##[group]post-build-preflight
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0725746Z total 4868
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0726283Z drwxr-xr-x  2 runner runner    4096 Nov  9 04:43 .
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0727092Z drwxr-xr-x 34 runner runner    4096 Nov  9 04:43 ..
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0727702Z -rw-r--r--  1 runner runner    8162 Nov  9 04:43 README.md
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0728480Z -rw-r--r--  1 runner runner 3948235 Nov  9 04:43 ai_nouns.enriched.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0729206Z -rw-r--r--  1 runner runner    1113 Nov  9 04:43 ai_nouns.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0729913Z -rw-r--r--  1 runner runner    4955 Nov  9 04:43 ai_nouns_test.enriched.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0730854Z -rw-r--r--  1 runner runner    2507 Nov  9 04:43 ai_nouns_test.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0731603Z -rw-r--r--  1 runner runner    5513 Nov  9 04:43 ai_nouns_test.math_verified.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0732336Z -rw-r--r--  1 runner runner   43156 Nov  9 04:43 ai_tracking.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0733589Z -rw-r--r--  1 runner runner  678044 Nov  9 04:43 bible_nouns_genesis.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0734889Z -rw-r--r--  1 runner runner     466 Nov  9 04:43 graph_correlation_network.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0735724Z -rw-r--r--  1 runner runner     249 Nov  9 04:43 graph_correlations.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0736415Z -rw-r--r--  1 runner runner     178 Nov  9 04:43 graph_latest.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0737353Z -rw-r--r--  1 runner runner   11182 Nov  9 04:43 graph_latest.scored.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0738086Z -rw-r--r--  1 runner runner     296 Nov  9 04:43 graph_patterns.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0738757Z -rw-r--r--  1 runner runner   16340 Nov  9 04:43 graph_repaired.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0739496Z -rw-r--r--  1 runner runner   16340 Nov  9 04:43 graph_repaired_20251025205829.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0740234Z -rw-r--r--  1 runner runner    6158 Nov  9 04:43 graph_sanitized.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0741145Z -rw-r--r--  1 runner runner    6158 Nov  9 04:43 graph_sanitized_20251025122752.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0741886Z -rw-r--r--  1 runner runner     307 Nov  9 04:43 graph_stats.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0742583Z -rw-r--r--  1 runner runner     433 Nov  9 04:43 pattern_forecast.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0743275Z -rw-r--r--  1 runner runner     280 Nov  9 04:43 temporal_patterns.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0744026Z -rw-r--r--  1 runner runner  176744 Nov  9 04:43 unified_envelope_1000.json
+extraction-accuracy	Build real extraction graph (repo fixtures, hermetic)	2025-11-09T04:43:32.0745281Z ##[endgroup]
+extraction-accuracy	Guard extraction accuracy STRICT	﻿2025-11-09T04:43:32.0843454Z ##[group]Run mkdir -p evidence
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0844023Z [36;1mmkdir -p evidence[0m
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0844564Z [36;1mpython3 scripts/guards/guard_extraction_accuracy.py[0m
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0845301Z [36;1mtest "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"[0m
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0884009Z shell: /usr/bin/bash -e {0}
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0884267Z env:
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0884520Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0884934Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0885353Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0885691Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0886035Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0886383Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0886684Z   STRICT_EXTRACTION_ACCURACY: 1
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.0887114Z ##[endgroup]
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.1163787Z HINT: extraction_accuracy: using truth=v2 file=tests/truth/extraction_accuracy.v2.json
+extraction-accuracy	Guard extraction accuracy STRICT	2025-11-09T04:43:32.1170288Z {"schema": "guard.extraction-accuracy.v1", "generated_at": "2025-11-09T04:43:32Z", "mode": "STRICT", "source": {"mode": "file_first", "input": "exports/graph_latest.scored.json"}, "fixture_missing": false, "ok": true, "totals": {"cases": 0, "correct": 0}, "details": []}
+extraction-accuracy	Upload guard evidence artifact	﻿2025-11-09T04:43:32.1305102Z ##[group]Run actions/upload-artifact@v4
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1305400Z with:
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1305590Z   name: guard_extraction_accuracy
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1306006Z   path: evidence/guard_extraction_accuracy.json
+extraction-accuracy	Upload guard evidence artifact	evidence/guard_extraction_accuracy.stdout.log
+extraction-accuracy	Upload guard evidence artifact	
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1306435Z   if-no-files-found: warn
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1306635Z   retention-days: 7
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1307067Z   compression-level: 6
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1307267Z   overwrite: false
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1307461Z   include-hidden-files: false
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1307668Z env:
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1307897Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1308300Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1308686Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1309030Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1309368Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1309744Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.1310030Z ##[endgroup]
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.3496631Z Multiple search paths detected. Calculating the least common ancestor of all paths
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.3500709Z The least common ancestor is /home/runner/work/Gemantria/Gemantria/evidence. This will be the root directory of the artifact
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.3502028Z With the provided path, there will be 1 file uploaded
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.3508186Z Artifact name is valid!
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.3509522Z Root directory input is valid!
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.4560546Z Beginning upload of artifact content to blob storage
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.5480206Z Uploaded bytes 386
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.5774687Z Finished uploading artifact content to blob storage!
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.5778062Z SHA256 digest of uploaded artifact zip is 62d418a25422da8516b00297236bf20e7055b8d637922f69da511b7f51016bf6
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.5780154Z Finalizing artifact upload
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.6563107Z Artifact guard_extraction_accuracy.zip successfully finalized. Artifact ID 4510414469
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.6564816Z Artifact guard_extraction_accuracy has been successfully uploaded! Final size is 386 bytes. Artifact ID is 4510414469
+extraction-accuracy	Upload guard evidence artifact	2025-11-09T04:43:32.6573185Z Artifact download URL: https://github.com/iog-creator/Gemantria/actions/runs/19203503556/artifacts/4510414469
+extraction-accuracy	Post Checkout	﻿2025-11-09T04:43:32.6713240Z Post job cleanup.
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7640779Z [command]/usr/bin/git version
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7675781Z git version 2.51.2
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7718910Z Temporarily overriding HOME='/home/runner/work/_temp/bb02c0d3-8d51-49cb-b38f-5f8ec10dd332' before making global git config changes
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7720289Z Adding repository directory to the temporary git global config as a safe directory
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7725271Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Gemantria/Gemantria
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7766345Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.7798139Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.8044350Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.8065452Z http.https://github.com/.extraheader
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.8078043Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+extraction-accuracy	Post Checkout	2025-11-09T04:43:32.8108643Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+extraction-accuracy	Post Setup Python	﻿2025-11-09T04:43:32.8457771Z Post job cleanup.
+extraction-accuracy	Complete job	﻿2025-11-09T04:43:33.0032647Z Cleaning up orphan processes
