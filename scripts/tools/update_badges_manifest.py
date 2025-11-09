@@ -11,8 +11,10 @@ MAN.parent.mkdir(parents=True, exist_ok=True)
 doc = {"badges": []}
 
 if MAN.exists():
-    try: doc = json.loads(MAN.read_text())
-    except Exception: doc = {"badges":[]}
+    try:
+        doc = json.loads(MAN.read_text())
+    except Exception:
+        doc = {"badges": []}
 
 # ensure badges key exists
 if "badges" not in doc:

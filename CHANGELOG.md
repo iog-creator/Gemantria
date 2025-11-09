@@ -41,6 +41,10 @@
 
 - New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).
 
+### ops: exports guard — JSON-Schema validation
+
+- Guard now validates exports against repo JSON Schemas (subset: type/required/properties/items/additionalProperties). HINT on main/PR; STRICT on tags.
+
 ### ops: exports JSON guard — rc1 evidence
 
 - Tag **rc1** ran with exports JSON guard (STRICT); logs archived at `evidence/rc1_tag.log`.
