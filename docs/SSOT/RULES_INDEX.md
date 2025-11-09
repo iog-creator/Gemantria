@@ -67,3 +67,4 @@
 | 062 | 062-environment-validation.mdc | # --- |
 | 063 | 063-git-safety.mdc | # --- |
 | 064 | 064-ai-tracking-contract.mdc | # id: "064" |
+| 065 | 065-gpt-docs-sync.mdc | # --- |

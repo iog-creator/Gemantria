@@ -51,6 +51,13 @@ Before any code changes:
 - Schema validation against docs/SSOT/*.schema.json
 - ADR/rule compliance for architectural changes
 
+## Hermetic Behavior (DB/Service Availability)
+- **DB Unavailability**: Scripts must handle missing/unavailable databases gracefully
+- **HINTs on Failure**: When DB unavailable, emit HINTs (not errors) and continue
+- **Housekeeping**: `make housekeeping` must pass even when DB unavailable (Rule 046)
+- **Graceful Degradation**: DB-dependent operations should check availability first, skip with HINTs if unavailable
+- **Per AGENTS.md**: "If DB/services down → 'correct hermetic behavior.'"
+
 ## Emergency Protocols
 If operations fail:
 1. Preserve all evidence (logs, outputs, error messages)
@@ -83,12 +90,13 @@ If operations fail:
 - [ ] References current development phase from NEXT_STEPS.md
 
 ## Version Control
-- **Version**: 1.0 (ADR-058 compliant)
-- **Last Updated**: P11 Unified Envelope Integration
-- **Governance**: Rule 059 (Context Persistence), Rule 061 (AI Learning Tracking)
+- **Version**: 1.1 (ADR-058 compliant, Rule 046 hermetic behavior)
+- **Last Updated**: v0.1.1-dev (DB unavailability handling)
+- **Governance**: Rule 046 (Hermetic CI Fallbacks), Rule 059 (Context Persistence), Rule 061 (AI Learning Tracking)
 
 ## Related Governance
 - **ADR-058**: GPT System Prompt Requirements as Operational Governance
+- **Rule 046**: Hermetic CI Fallbacks (DB unavailability handling)
 - **Rule 050**: OPS Contract (evidence-first workflow)
 - **Rule 051**: Cursor Insight & Handoff (structured responses)
 - **Rule 059**: Context Persistence (maintain operational context)

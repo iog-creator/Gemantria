@@ -33,6 +33,76 @@
 - STRICT tag workflow for **v0.1.0**: ✅ green (see run `19203434209`); artifact attached to Release.
 - README badges checked; docs mirrored to `share/`.
 
+## v0.1.1-dev — open
+
+- Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
+
+### ops: Atlas — evidence-driven status visualization
+
+- New `make atlas.update` target generates Mermaid diagram from existing evidence files.
+- Reads: `evidence/exports_guard.verdict.json`, `exports_rfc3339.verdict.json`, `guard_extraction_accuracy.json`, `xrefs_metrics.json`, `badges_manifest.json`, `share/eval/badges/exports_json.svg`.
+- Outputs: `docs/atlas/status.mmd` with green/red/grey nodes and click-through links to evidence files.
+- No DB/network dependencies; evidence-only visualization for OPS handoffs.
+
+### ops: add exports JSON guard
+
+- New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).
+
+### ops: exports guard — JSON-Schema validation
+
+- Guard now validates exports against repo JSON Schemas (subset: type/required/properties/items/additionalProperties). HINT on main/PR; STRICT on tags.
+
+### ops: exports JSON guard — rc1 evidence
+
+- Tag **rc1** ran with exports JSON guard (STRICT); logs archived at `evidence/rc1_tag.log`.
+
+### ops: exports JSON guard — rc2 (shape checks enforced)
+
+- Tag **rc2** confirmed STRICT enforcement including minimal shape validation; logs archived at `evidence/rc2_tag.log`.
+
+### v0.1.1-rc3 — fixtures tag with evidence badge
+
+- Tag CI: **STRICT** green (exports JSON guard incl. shape checks).
+- Release assets include: `exports_json.svg` badge, `badges_manifest.json`, and `guard_extraction_accuracy.json` (attached after CI).
+- Logs archived at `evidence/v0.1.1-rc3_tag.log`.
+
+### v0.1.1-rc5 — fixtures tag with machine-readable exports verdict
+
+- Exports guard now emits `evidence/exports_guard.verdict.json` (HINT & STRICT).
+- Evidence bundle includes verdict JSON for dashboards/release assets.
+- Tag CI: STRICT green; artifact(s) archived to `evidence/`.
+
+### v0.1.1-rc6 — fixtures tag with JSON-Schema PASS
+
+- Export schemas committed under `schemas/`; guard now finds and validates all four exports.
+- Tag CI: **STRICT** green with **schema_ok=✅**; verdict/badge/manifest archived in `evidence/`.
+
+### v0.1.1-rc7 — fixtures tag post–required-tests
+
+- Tag CI: **STRICT** green; `guard-tests` workflow runs on PRs (**advisory**; branch protection currently disabled).
+- Release assets: guard artifact, exports verdict JSON, badge SVG, badges manifest.
+
+> Note: Branch protection is OFF in this repository, so PR checks are not enforced by GitHub. Our Rule-051 posture applies: checks are advisory unless marked required in repo settings.
+
+### v0.1.1-rc8 — fixtures tag with RFC3339 guard
+
+- Tag CI: **STRICT** green; RFC3339 timestamp guard enforced on all exports.
+- Release assets: guard artifact, exports verdict JSON, RFC3339 verdict JSON, badge SVG, badges manifest.
+
+## v0.1.1 — stable
+
+- JSON-Schema validation **PASS** for all four exports (see `schemas/`).
+- Release assets: `exports_guard.verdict.json`, `exports_json.svg`, `badges_manifest.json`, and `guard_extraction_accuracy.json`.
+- Posture held at fixtures (`STRICT_REAL_EXTRACTION=0`); STRICT remains enforced on tags.
+
+## v0.1.1-dev — open
+
+- Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
+
+### tests: exports guard — schema-backed
+
+- Added pytest covering HINT and STRICT (tag-sim) modes; asserts `schema_ok` for ai-nouns, graph, graph-stats, graph-patterns.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.

@@ -79,7 +79,7 @@ make ssot.verify
 - ✅ Environment variables loaded
 - ✅ Governance docs present (AGENTS.md, RULES_INDEX.md, GEMATRIA_MASTER_REFERENCE.md)
 - ✅ Quality SSOT verified (ruff checks pass)
-- ✅ Database accessible (PostgreSQL gematria and bible_db)
+- ✅ Database accessible (PostgreSQL gematria and bible_db) - **Note**: Scripts handle DB unavailability gracefully (hermetic behavior per Rule 046)
 - ✅ Share folder curated (21 files under 22-file GPT limit)
 
 **Response Protocol:**
@@ -93,6 +93,18 @@ make ssot.verify
 2. codex (if available, else "Codex disabled (401)")
 3. gemini/mcp (for long docs)
 
+## Hermetic Behavior (DB/Service Availability)
+
+**Rule 046**: Hermetic CI Fallbacks - Scripts must handle missing/unavailable databases gracefully:
+- DB-dependent operations check availability first
+- Emit HINTs (not errors) when DB unavailable
+- Housekeeping passes even when DB unavailable
+- Per AGENTS.md: "If DB/services down → 'correct hermetic behavior.'"
+
+**Example**: `governance_tracker.py` checks DB availability, emits HINTs, and returns success when DB unavailable, allowing `make housekeeping` to pass.
+
 ## Governance Reference
 
 **ADR-058**: GPT System Prompt Requirements as Operational Governance - Establishes GPT system prompt requirements as part of the operational governance framework.
+
+**Rule 046**: Hermetic CI Fallbacks - Defines graceful handling of unavailable services/databases.
