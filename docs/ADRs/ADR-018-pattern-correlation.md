@@ -56,7 +56,22 @@ Implement a pattern correlation engine that analyzes relationships between conce
 ## Related Rules
 
 000 (Always-Apply), 006 (AGENTS.md Governance), 013 (Report Verification), 021 (Stats Proof), 022 (Viz Contract Sync), 030 (Pattern Correlation Validation)
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 ## Implementation Summary
 
 ### Phase 5-A (Infrastructure) - COMPLETED

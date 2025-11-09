@@ -365,6 +365,10 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 ## How agents should use rules
 
 * Always-Apply triad lives in `.cursor/rules/050-ops-contract.mdc`, `.cursor/rules/051-cursor-insight.mdc`, and `.cursor/rules/052-tool-priority.mdc`.
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 * See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
@@ -1110,7 +1114,10 @@ Merges are permitted only when **all** are true:
 - CI policy: **HINT-only** (`STRICT_RFC3339=0`) on main/PRs; **STRICT** (`STRICT_RFC3339=1`) on release tags/branches.
 
 > **Always-Apply:** 050 (OPS/SSOT LOUD-FAIL), 051 (Required-checks advisory), 052 (Tool-priority & evidence-first)
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 <!-- RULES_INVENTORY:BEGIN -->
 | ID | File | Title | Status |
 |---:|:-----|:------|:-------|
@@ -1165,8 +1172,20 @@ Merges are permitted only when **all** are true:
 | 048 | `048-reserved.mdc` | reserved | **Default-Apply** |
 | 049 | `049-gpt5-contract-v5.2.mdc` | gpt5 contract v5.2 | **Default-Apply** |
 | 050 | `050-ops-contract.mdc` | 🧭 Gemantria — OPS Contract v6.2.3 | **Always-Apply** |
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 | 051 | `051-cursor-insight.mdc` | 051 — Cursor Insight & Handoff (AlwaysApply) | **Always-Apply** |
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 | 052 | `052-tool-priority.mdc` | 052 — Tool Priority & Context Guidance (AlwaysApply) | **Always-Apply** |
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 | 053 | `053-idempotence.mdc` | 053 — Idempotent Baseline (OPS v6.2.1) | **Default-Apply** |
 | 054 | `054-reuse-first.mdc` | Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) | **Default-Apply** |
 | 055 | `055-auto-docs-sync.mdc` | 055 — Auto-Docs Sync Pass (AlwaysApply) | **Default-Apply** |

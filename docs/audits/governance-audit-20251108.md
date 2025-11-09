@@ -9,7 +9,22 @@
 ## Executive Summary
 
 The governance system is **operationally correct** with the Always-Apply triad properly locked to Rules 050/051/052. Three minor documentation discrepancies were found that require updates to maintain consistency:
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 1. **ADR-013** contains outdated `alwaysApply: true` reference (actual rule file is correct)
 2. **docs/forest/overview.md** doesn't note status change for Rules 062/063
 3. **Root AGENTS.md** rules inventory shows "---" placeholders instead of actual rule status
@@ -19,7 +34,22 @@ The governance system is **operationally correct** with the Always-Apply triad p
 ## ✅ Verified Correct
 
 ### 1. Always-Apply Triad (050/051/052)
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 **Status:** ✅ CORRECT
 
 All three rules properly configured:
@@ -38,12 +68,58 @@ alwaysApply: true  ✅
 **References in root AGENTS.md:**
 - Line 196: "automated review is advisory per AGENTS.md and RULE 051." ✅
 - Line 349: "Always-Apply triad lives in `.cursor/rules/050...051...052.mdc`" ✅
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 - Lines 409-411: Rules inventory correctly shows triad as "AlwaysApply" ✅
 - Line 836: "Authority chain: Rules 039 → 041 → 046 → 050 → 051 → 052" ✅
 - Line 1085: "Always-Apply: 050 (OPS/SSOT), 051 (Required-checks), 052 (Tool-priority)" ✅
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 ### 2. Former Always-Apply Rules (006, 010, 030, 062, 063)
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 **Status:** ✅ CORRECT
 
 All five rules properly set to `alwaysApply: false`:
@@ -135,7 +211,22 @@ alwaysApply: false  ✅ CORRECT
 ```
 
 **Recommendation:** Update ADR-013 to reflect that Rule 009 is now Default-Apply, not Always-Apply. Add a note that the triad (050/051/052) are the only Always-Apply rules.
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 **Impact:** LOW — Documentation drift only; actual rule behavior is correct.
 
 ---
@@ -197,6 +288,22 @@ alwaysApply: false  ✅ CORRECT
 ### Immediate (Before Next PR)
 
 1. **Update ADR-013** to note Rule 009 is Default-Apply, not Always-Apply
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 2. **Regenerate forest overview** with proper status for Rules 062/063
 3. **Update root AGENTS.md rules inventory** with actual rule status (not "---" placeholders)
 
