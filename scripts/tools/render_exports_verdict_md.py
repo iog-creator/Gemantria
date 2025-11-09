@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-import json, sys, pathlib, datetime
+import json, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 VERDICT = ROOT / "evidence" / "exports_guard.verdict.json"
 OUT = ROOT / "evidence" / "exports_guard.verdict.md"
 
-def tick(b: bool) -> str: return "✅" if b else "❌"
+
+def tick(b: bool) -> str:
+    return "✅" if b else "❌"
+
 
 def main():
     if not VERDICT.exists():
@@ -32,13 +35,16 @@ def main():
     lines.append("|---|:---:|:---:|:---:|")
     for name in sorted(files.keys()):
         f = files[name] or {}
-        lines.append(f"| `{name}` | {tick(f.get('exists', False))} | {tick(f.get('json_ok', False))} | {tick(f.get('schema_ok', False))} |")
+        lines.append(
+            f"| `{name}` | {tick(f.get('exists', False))} | {tick(f.get('json_ok', False))} | {tick(f.get('schema_ok', False))} |"
+        )
     lines.append("")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(lines), encoding="utf-8")
     print(f"WROTE {OUT}")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
