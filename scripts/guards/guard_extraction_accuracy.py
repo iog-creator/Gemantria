@@ -16,10 +16,13 @@ if TRUTH_V2.exists():
         _v2 = json.loads(TRUTH_V2.read_text())
         if len(_v2.get("cases", [])) >= 25:
             TRUTH = TRUTH_V2
+            print(f"HINT: extraction_accuracy: using truth=v2 file={TRUTH}", file=sys.stderr)
         else:
             print("HINT: extraction_accuracy: v2 present but <25 cases; using v1", file=sys.stderr)
     except Exception:
         print("HINT: extraction_accuracy: v2 unreadable; using v1", file=sys.stderr)
+if TRUTH == TRUTH_V1:
+    print(f"HINT: extraction_accuracy: using truth=v1 file={TRUTH}", file=sys.stderr)
 
 
 def load_graph():
