@@ -27,3 +27,7 @@ exports/ai_nouns.enriched.json
 evidence/
 share/evidence/
 ui/out/
+
+# Allow orchestrator summaries to be committed (generated from evidence)
+!docs/evidence/
+!docs/evidence/*.md
