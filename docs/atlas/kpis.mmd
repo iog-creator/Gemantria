@@ -1,0 +1,16 @@
+```mermaid
+flowchart TD
+  %% KPIs - Key Performance Indicators
+  subgraph KPIS[Key Metrics]
+    ACTIVE["Active Runs: 0"]:::green
+    ERRORS["Errors (24h): 0"]:::green
+    SLOWEST["Slowest p90: N/A"]:::grey
+  end
+  click ACTIVE "/evidence/kpis.html" "View active runs"
+  click ERRORS "/evidence/kpis.html" "View errors"
+  click SLOWEST "/evidence/kpis.html" "View latency details"
+  classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;
+  classDef red fill:#fecaca,stroke:#7f1d1d,color:#111827,stroke-width:1px;
+  classDef yellow fill:#fef3c7,stroke:#92400e,color:#78350f,stroke-width:1px;
+  classDef grey fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-width:1px;
+```

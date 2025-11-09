@@ -1,0 +1,22 @@
+```mermaid
+classDiagram
+  %% Class Diagram - Data Structures
+  class PipelineState {
+    +run_id: UUID
+    +nouns: List[Noun]
+    +enriched_nouns: List[EnrichedNoun]
+    +graph: Graph
+  }
+  class Noun {
+    +noun_id: UUID
+    +surface: str
+    +gematria: int
+  }
+  class EnrichedNoun {
+    +noun_id: UUID
+    +analysis: Dict
+  }
+  PipelineState --> Noun
+  PipelineState --> EnrichedNoun
+  click PipelineState "/evidence/class_diagram.html" "View class details"
+```

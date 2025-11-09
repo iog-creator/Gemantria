@@ -1,0 +1,14 @@
+```mermaid
+graph LR
+  %% Knowledge Graph - Semantic Relationships
+  subgraph CONCEPTS[Concepts]
+    C1["Concept A"]:::green
+    C2["Concept B"]:::green
+    C3["Concept C"]:::green
+  end
+  C1 -->|semantic| C2
+  C2 -->|cooccur| C3
+  C1 -->|theology| C3
+  click C1 "/evidence/knowledge_graph.html" "View concept details"
+  classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;
+```

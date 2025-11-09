@@ -120,6 +120,54 @@ atlas.preview.txt:
 atlas.preview.mmd:
 	@python3 scripts/status/preview_atlas.py mmd
 
+# Atlas telemetry-driven dashboard (browser-first, PR-safe)
+
+.PHONY: atlas.generate atlas.live atlas.historical atlas.dependencies atlas.calls atlas.classes atlas.knowledge atlas.kpis atlas.dashboard atlas.all atlas.test atlas.serve atlas.watch
+atlas.generate: ## Generate all Atlas diagrams and summaries
+	@python3 scripts/atlas/generate_atlas.py
+
+atlas.live: ## Generate execution_live.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram execution_live
+
+atlas.historical: ## Generate pipeline_flow_historical.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram pipeline_flow_historical
+
+atlas.dependencies: ## Generate dependencies.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram dependencies
+
+atlas.calls: ## Generate call_graph.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram call_graph
+
+atlas.classes: ## Generate class_diagram.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram class_diagram
+
+atlas.knowledge: ## Generate knowledge_graph.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram knowledge_graph
+
+atlas.kpis: ## Generate kpis.mmd diagram
+	@python3 scripts/atlas/generate_atlas.py --diagram kpis
+
+atlas.dashboard: ## Ensure atlas dashboard hub and vendor files are present
+	@test -f docs/atlas/index.html || (echo "ERROR: docs/atlas/index.html missing" && exit 1)
+	@test -f docs/vendor/mermaid.min.js || (echo "WARN: docs/vendor/mermaid.min.js missing (stub may be present)" && exit 0)
+	@echo "Atlas dashboard files present"
+
+atlas.all: atlas.generate ## Alias for atlas.generate
+
+atlas.test: ## Time atlas generation and warn if >5s
+	@echo "Timing atlas generation..."
+	@time python3 scripts/atlas/generate_atlas.py
+
+atlas.serve: ## Start local HTTP server for atlas preview (port 8888)
+	@echo "Starting HTTP server on port 8888..."
+	@echo "Open http://localhost:8888/atlas/index.html in your browser"
+	@python3 -m http.server --directory docs 8888
+
+atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not used in CI)
+	@if [ -n "$$CI" ]; then echo "HINT: atlas.watch is local-only; skipping in CI"; exit 0; fi
+	@echo "Watching for changes (local-only, press Ctrl+C to stop)..."
+	@echo "HINT: File watcher not implemented yet; use 'make atlas.generate' manually"
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping

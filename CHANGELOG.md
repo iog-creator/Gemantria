@@ -44,6 +44,25 @@
 - Outputs: `docs/atlas/status.mmd` with green/red/grey nodes and click-through links to evidence files.
 - No DB/network dependencies; evidence-only visualization for OPS handoffs.
 
+### ops: Atlas — telemetry-driven dashboard (browser-first, PR-safe)
+
+- New browser-first Atlas dashboard at `docs/atlas/index.html` with vendored Mermaid (no CDN).
+- Telemetry query layer (`scripts/atlas/telemetry_queries.py`) with read-only DB access, empty-DB tolerant.
+- Diagram generator (`scripts/atlas/generate_atlas.py`) creates 7 diagram types:
+  - `execution_live.mmd` - Currently executing pipelines
+  - `pipeline_flow_historical.mmd` - Historical pipeline flow
+  - `kpis.mmd` - Key performance indicators
+  - `dependencies.mmd` - Module dependencies
+  - `call_graph.mmd` - Function call relationships
+  - `class_diagram.mmd` - UML class relationships
+  - `knowledge_graph.mmd` - Semantic concept relationships
+- Human-readable summaries (`.md` and `.html`) for each diagram in `docs/evidence/`.
+- PR lane: Grey scaffolds when no DSN (no secrets, CI-safe).
+- Tag lane: Populated from DB when `GEMATRIA_DSN` present.
+- Makefile targets: `atlas.generate`, `atlas.live`, `atlas.historical`, `atlas.kpis`, `atlas.dependencies`, `atlas.calls`, `atlas.classes`, `atlas.knowledge`, `atlas.dashboard`, `atlas.all`, `atlas.test`, `atlas.serve`.
+- Environment knobs: `ATLAS_WINDOW` (24h|7d), `ATLAS_MAX_ROWS` (500), `ATLAS_ENABLE_DEEP_SCAN` (0|1), `ATLAS_HIDE_MISSING` (0|1).
+- Hermetic: Works without database (emits HINTs, never fails per Rule 046).
+
 ### ops: add exports JSON guard
 
 - New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).
