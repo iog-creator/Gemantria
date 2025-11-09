@@ -1,6 +1,8 @@
 {
-  "schema": "graph.vfixture",
-  "generated_at": "2025-11-09T03:17:37Z",
+  "schema": "graph.vproduction",
+  "generated_at": "2025-11-09T03:37:12Z",
+  "source": "exports/bible_nouns_genesis.json",
+  "note": "Production graph built from real extraction (truth nouns for validation)",
   "nodes": [
     {
       "id": "N:1",
