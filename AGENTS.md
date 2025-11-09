@@ -1170,4 +1170,5 @@ Merges are permitted only when **all** are true:
 | 061 | `061-ai-learning-tracking.mdc` | Rule 061 — AI Learning Tracking (AlwaysApply: false, but recommended) | **Default-Apply** |
 | 062 | `062-environment-validation.mdc` | Environment Validation (Always Required) | **Default-Apply** |
 | 063 | `063-git-safety.mdc` | Git Safety (No Destructive Operations) | **Default-Apply** |
+| 064 | `064-ai-tracking-contract.mdc` | ai tracking contract | **Default-Apply** |
 <!-- RULES_INVENTORY:END -->
