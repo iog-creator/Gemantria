@@ -1,6 +1,6 @@
 # Class Diagram
 
-[← Back to Atlas](/atlas/index.html)
+[← Back to Atlas](../atlas/index.html)
 
 **What this shows:** UML class relationships
 
