@@ -29,7 +29,8 @@ from scripts.atlas.telemetry_queries import (
 # REPO is defined above in imports
 ATLAS_DIR = REPO / "docs" / "atlas"
 EVIDENCE_DOCS = REPO / "docs" / "evidence"
-DSN = os.getenv("GEMATRIA_DSN")
+# Use ATLAS_DSN with fallback to GEMATRIA_DSN (for read-only governance/telemetry)
+DSN = os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
