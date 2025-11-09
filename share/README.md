@@ -1,5 +1,10 @@
 # Gemantria
 
+<div align="left">
+  <img alt="xref coverage" src="share/eval/badges/xrefs_coverage.svg" />
+  <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
+</div>
+
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
 
 > Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
@@ -70,6 +75,17 @@ Local smoke artifacts (run via the eval tools) can render quality trends:
 
 ![Quality Trend](share/eval/badges/quality_trend.svg)
 ![Current Quality](share/eval/badges/quality.svg)
+
+### XRef Coverage & Rate (HINT-only)
+
+The operator dashboard includes lightweight badges derived from the published xref index:
+
+![XRef Coverage](share/eval/badges/xrefs_coverage.svg)
+![XRef Rate](share/eval/badges/xrefs_rate.svg)
+
+> Generated from `ui/public/xrefs/xrefs_index.v1.json` during `make eval.package`. In main/PR contexts these run in **HINT-only** mode; they do not affect the SSOT/guards.
+
+> **CI behavior:** On PRs, the xref badge guard is path-aware and skips unless `ui/**` or the guard/badge scripts change. On tags, it runs in STRICT mode (release `v*` requires the index).
 
 > In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
 

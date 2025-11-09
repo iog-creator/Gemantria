@@ -1,3 +1,9 @@
+2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); add pip cache; require xref index on **release tags** (v*); main/PR remain HINT-only
+2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
+2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
+2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]
+2025-11-08 — OPS: UI xrefs index landed (HINT integrity guard) [fe7bded1]
+2025-11-08 — OPS: Land light xref extractor (HINT guard; schema preserved) [8b23eaf4]
 2025-11-08 — OPS: Lock 3-role DB contract; AI-tracking guard (HINT on PRs, STRICT gated by vars.STRICT_DB_MIRROR_CI) [6ddce6ee]
 # Changelog
 

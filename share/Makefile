@@ -189,6 +189,14 @@ eval.graph.calibrate.adv:
 	@PYTHONPATH=. python3 scripts/guards/guard_ci_empty_db.py
 	@echo ">> Calibration step skipped or tolerated in empty-DB CI."
 
+.PHONY: eval.xrefs.badges
+eval.xrefs.badges:
+	@python3 scripts/eval/xrefs_badges.py
+
+.PHONY: eval.package
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges share.sync
+	@echo "[eval.package] OK"
+
 .PHONY: db.runs_ledger.smoke
 db.runs_ledger.smoke:
 	@echo ">> runs_ledger smoke (tolerant)…"
@@ -515,7 +523,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -540,6 +548,14 @@ guard.ai.tracking:
 .PHONY: guard.ai.tracking.strict
 guard.ai.tracking.strict:
 	@STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
+
+.PHONY: guard.ui.xrefs.badges
+guard.ui.xrefs.badges:
+	@if [ "$${CI_XREF_BADGES_SKIP:-0}" = "1" ]; then \
+	  printf '{ "guard":"guard_xrefs_badges","ok":true,"note":"skipped by CI (paths do not affect xref badges)"}\n'; \
+	else \
+	  python3 scripts/guards/guard_xrefs_badges.py || true; \
+	fi
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -697,9 +713,28 @@ share.pin:
 	@echo "Last-good snapshot created"
 
 # Evidence bundle for PRs touching enrichment/exports/UI
-.PHONY: evidence.bundle
+.PHONY: evidence.badges
+evidence.badges:
+	@mkdir -p evidence/badges
+	@# xref metrics JSON (optional)
+	@if [ -f share/eval/xrefs_metrics.json ]; then \
+	  cp -f share/eval/xrefs_metrics.json evidence/; \
+	  echo "evidence: + evidence/xrefs_metrics.json"; \
+	else \
+	  echo "HINT: share/eval/xrefs_metrics.json not found; skipping"; \
+	fi
+	@# badge SVGs (optional)
+	@for f in xrefs_coverage.svg xrefs_rate.svg; do \
+	  if [ -f "share/eval/badges/$$f" ]; then \
+	    cp -f "share/eval/badges/$$f" evidence/badges/; \
+	    echo "evidence: + evidence/badges/$$f"; \
+	  else \
+	    echo "HINT: share/eval/badges/$$f not found; skipping"; \
+	  fi; \
+	done
 
-evidence.bundle:
+.PHONY: evidence.bundle
+evidence.bundle: evidence.badges ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
@@ -713,6 +748,7 @@ evidence.bundle:
 	npm --prefix webui/graph run build
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
+	@python3 scripts/evidence/ensure_badges_manifest.py || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
@@ -805,6 +841,50 @@ agents.md.lint:
 
 rules_inventory_check:
 	@scripts/guards/rules_inventory_check.sh
+
+.PHONY: ops.enrichment.xrefs.light
+ops.enrichment.xrefs.light:
+	@echo ">> Light cross-reference extractor from analysis text"
+	@mkdir -p evidence
+	@python3 scripts/ops/extract_xrefs_from_analysis.py | tee evidence/xrefs_light_extractor.json
+	@$(MAKE) -s guard.ai_nouns.xrefs >/dev/null || true
+	@test -f evidence/guard_ai_nouns_xrefs.json && cat evidence/guard_ai_nouns_xrefs.json | jq '{mode, min_ratio, total, with_xrefs, ratio}' || echo '{"note":"guard not run"}'
+
+.PHONY: ui.xrefs.index
+ui.xrefs.index:
+	@echo ">> Building UI cross-reference index"
+	@python3 scripts/ops/build_ui_xrefs_index.py | tee evidence/ui_xrefs_index.log
+
+.PHONY: ui.verses.cache
+ui.verses.cache:
+	@python3 scripts/ops/build_verses_local_cache.py | tee evidence/ui_verses_cache.log
+
+.PHONY: ui.publish.xrefs
+ui.publish.xrefs:
+	@mkdir -p ui/public/xrefs
+	@test -f ui/out/xrefs_index.v1.json && cp -f ui/out/xrefs_index.v1.json ui/public/xrefs/xrefs_index.v1.json || true
+	@test -f ui/out/verses.local.json   && cp -f ui/out/verses.local.json   ui/public/xrefs/verses.local.json   || true
+	@echo "Published xref artifacts to ui/public/xrefs"
+
+.PHONY: guard.ai_nouns.xrefs
+guard.ai_nouns.xrefs:
+	@echo ">> Checking cross-reference extraction ratio (HINT mode)"
+	@mkdir -p evidence
+	@python3 scripts/guards/guard_ai_nouns_xrefs.py | tee evidence/guard_ai_nouns_xrefs.json
+
+.PHONY: guard.ui.xrefs.index
+guard.ui.xrefs.index:
+	@echo ">> Checking UI xrefs index integrity (HINT mode)"
+	@mkdir -p evidence
+	@python3 scripts/guards/guard_ui_xrefs_index.py | tee evidence/guard_ui_xrefs_index.json
+
+.PHONY: ui.dev
+ui.dev:
+	@cd ui && npm ci && npm run dev
+
+.PHONY: ui.smoke.browser
+ui.smoke.browser:
+	@UI_URL=${UI_URL:-http://localhost:5173} bash scripts/ui/smoke_playwright.sh
 
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
