@@ -1,0 +1,28 @@
+name: extraction-accuracy (STRICT on tags)
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  extraction-accuracy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build fixture graph (deterministic)
+        run: |
+          python3 scripts/analytics/build_fixture_graph.py
+      - name: Guard: extraction accuracy (STRICT)
+        env:
+          STRICT_EXTRACTION_ACCURACY: "1"
+        run: |
+          mkdir -p evidence
+          python3 scripts/guards/guard_extraction_accuracy.py > evidence/guard_extraction_accuracy.json
+          cat evidence/guard_extraction_accuracy.json
+          test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
+

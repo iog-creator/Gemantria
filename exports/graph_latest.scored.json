@@ -1,94 +1,104 @@
 {
-  "schema": "gematria/graph.v1",
-  "book": "Genesis",
-  "generated_at": "2025-11-07T22:20:01.192203+00:00",
+  "schema": "graph.vfixture",
+  "generated_at": "2025-11-09T01:12:58Z",
   "nodes": [
     {
-      "id": "ai-genesis-4801164412166910793",
-      "surface": "אלהים",
-      "hebrew": "אלהים",
-      "gematria": 46,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: אלהים"
+      "id": "N:1",
+      "verse_id": "GEN.1.1",
+      "nouns": [
+        "God",
+        "heavens",
+        "earth"
+      ]
     },
     {
-      "id": "ai-genesis-7710999074404465072",
-      "surface": "שמים",
-      "hebrew": "שמים",
-      "gematria": 350,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: שמים"
+      "id": "N:2",
+      "verse_id": "GEN.1.2",
+      "nouns": [
+        "earth",
+        "darkness",
+        "deep",
+        "Spirit",
+        "waters"
+      ]
     },
     {
-      "id": "ai-genesis--8643510926402138906",
-      "surface": "ארץ",
-      "hebrew": "ארץ",
-      "gematria": 201,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: ארץ"
+      "id": "N:3",
+      "verse_id": "GEN.1.3",
+      "nouns": [
+        "God",
+        "light"
+      ]
     },
     {
-      "id": "ai-genesis--1230719068798201762",
-      "surface": "נחש",
-      "hebrew": "נחש",
-      "gematria": 358,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: נחש"
+      "id": "N:4",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "God",
+        "light",
+        "darkness",
+        "day",
+        "night"
+      ]
     },
     {
-      "id": "ai-genesis-1795019832518959966",
-      "surface": "עוף",
-      "hebrew": "עוף",
-      "gematria": 76,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: עוף"
+      "id": "N:5",
+      "verse_id": "GEN.1.5",
+      "nouns": [
+        "evening",
+        "morning",
+        "day"
+      ]
     },
     {
-      "id": "ai-genesis--8446470118900555418",
-      "surface": "מין",
-      "hebrew": "מין",
-      "gematria": 50,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: מין"
+      "id": "N:6",
+      "verse_id": "GEN.1.6",
+      "nouns": [
+        "God",
+        "expanse",
+        "waters"
+      ]
     },
     {
-      "id": "ai-genesis-2353926623364701480",
-      "surface": "דם",
-      "hebrew": "דם",
-      "gematria": 4,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: דם"
+      "id": "N:7",
+      "verse_id": "GEN.1.7",
+      "nouns": [
+        "God",
+        "expanse",
+        "waters"
+      ]
     },
     {
-      "id": "ai-genesis--6054969655677979496",
-      "surface": "נפש",
-      "hebrew": "נפש",
-      "gematria": 430,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: נפש"
+      "id": "N:8",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "God",
+        "heaven",
+        "evening",
+        "morning",
+        "day"
+      ]
     },
     {
-      "id": "ai-genesis--8912269589112308028",
-      "surface": "חיה",
-      "hebrew": "חיה",
-      "gematria": 23,
-      "class": "unknown",
-      "book": "Unknown",
-      "analysis": "Hebrew noun: חיה"
+      "id": "N:9",
+      "verse_id": "GEN.1.9",
+      "nouns": [
+        "God",
+        "waters",
+        "place",
+        "dry land"
+      ]
+    },
+    {
+      "id": "N:10",
+      "verse_id": "GEN.1.10",
+      "nouns": [
+        "God",
+        "earth",
+        "seas",
+        "good"
+      ]
     }
   ],
-  "edges": [],
-  "metadata": {
-    "node_count": 9,
-    "edge_count": 0,
-    "source": "ai_enriched_nouns"
-  }
+  "edges": []
 }
