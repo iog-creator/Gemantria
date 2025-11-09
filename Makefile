@@ -530,7 +530,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -571,6 +571,10 @@ schema.smoke:
 .PHONY: guard.rerank.thresholds
 guard.rerank.thresholds:
 	@python scripts/guards/guard_rerank_thresholds.py
+
+.PHONY: guard.badges.inventory
+guard.badges.inventory:
+	@python scripts/guards/guard_badges_inventory.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -777,9 +781,11 @@ evidence.bundle: evidence.badges ## build operator evidence bundle (now includes
 	@python3 scripts/evidence/ensure_badges_manifest.py || true
 	@# Include rerank blend + thresholds guard outputs
 	@mkdir -p evidence
+	@# Include rerank quality badge if present
+	@if test -d share/eval/badges; then cp -f share/eval/badges/rerank_quality.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
-	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report' || true
+	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
