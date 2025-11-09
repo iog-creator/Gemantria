@@ -37,6 +37,13 @@
 
 - Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
 
+### ops: Atlas — evidence-driven status visualization
+
+- New `make atlas.update` target generates Mermaid diagram from existing evidence files.
+- Reads: `evidence/exports_guard.verdict.json`, `exports_rfc3339.verdict.json`, `guard_extraction_accuracy.json`, `xrefs_metrics.json`, `badges_manifest.json`, `share/eval/badges/exports_json.svg`.
+- Outputs: `docs/atlas/status.mmd` with green/red/grey nodes and click-through links to evidence files.
+- No DB/network dependencies; evidence-only visualization for OPS handoffs.
+
 ### ops: add exports JSON guard
 
 - New guard verifies presence + JSON validity of core exports (HINT on main/PR; STRICT on tags).

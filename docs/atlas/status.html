@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemantria Atlas - Tag v0.1.1-rc8</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            securityLevel: 'loose'
+        });
+        
+        // Handle click events on Mermaid nodes using callback
+        const callback = function(id) {
+            // Map node IDs to summary URLs (human-readable pages)
+            // Use base_url for browser preview, relative paths for GitHub/IDE
+            const base = 'http://localhost:8888' || '';
+            const urlMap = {
+                'TAG': base ? base + '/CHANGELOG.md' : 'CHANGELOG.md',
+                'EJSON': base ? base + '/docs/evidence/exports_json.md' : 'docs/evidence/exports_json.md',
+                'ERFC': base ? base + '/docs/evidence/exports_rfc3339.md' : 'docs/evidence/exports_rfc3339.md',
+                'EACC': base ? base + '/docs/evidence/extraction_accuracy.md' : 'docs/evidence/extraction_accuracy.md',
+                'XREF': base ? base + '/docs/evidence/xrefs_metrics.md' : 'docs/evidence/xrefs_metrics.md',
+                'BMAN': base ? base + '/docs/evidence/badges_manifest.md' : 'docs/evidence/badges_manifest.md',
+                'BEXP': base ? base + '/docs/evidence/exports_json_badge.md' : 'docs/evidence/exports_json_badge.md'
+            };
+            
+            const url = urlMap[id];
+            if (url) {
+                window.open(url, '_blank');
+            }
+        };
+        
+        // Set up click handler after Mermaid renders
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const svg = document.querySelector('.mermaid svg');
+                if (svg) {
+                    // Add click handlers to all node groups
+                    const nodeGroups = svg.querySelectorAll('g.node');
+                    nodeGroups.forEach(function(group) {
+                        const nodeId = group.id;
+                        if (nodeId && ['TAG', 'EJSON', 'ERFC', 'EACC', 'XREF', 'BMAN', 'BEXP'].includes(nodeId)) {
+                            group.style.cursor = 'pointer';
+                            group.addEventListener('click', function() {
+                                callback(nodeId);
+                            });
+                        }
+                    });
+                }
+            }, 1500);
+        });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .diagram {
+            text-align: center;
+        }
+        .mermaid {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Gemantria Atlas</h1>
+        <div class="subtitle">Evidence-driven status for tag v0.1.1-rc8</div>
+        <div class="diagram">
+            <pre class="mermaid">flowchart LR
+  %% Evidence-driven status (auto-generated)
+  TAG["v0.1.1-rc8<br/>(STRICT proof)"]:::green
+  click TAG "CHANGELOG.md" "Open CHANGELOG"
+  subgraph GUARDS["Guards & Verdicts"]
+    EJSON["Exports JSON<br/>(docs/evidence/exports_json.md)"]:::green
+    click EJSON "docs/evidence/exports_json.md" "Open Exports JSON summary"
+    ERFC["RFC3339 timestamps<br/>(docs/evidence/exports_rfc3339.md)"]:::green
+    click ERFC "docs/evidence/exports_rfc3339.md" "Open RFC3339 timestamps summary"
+    EACC["Extraction accuracy<br/>(docs/evidence/extraction_accuracy.md)"]:::green
+    click EACC "docs/evidence/extraction_accuracy.md" "Open Extraction accuracy summary"
+    XREF["Xrefs metrics<br/>(docs/evidence/xrefs_metrics.md)"]:::green
+    click XREF "docs/evidence/xrefs_metrics.md" "Open Xrefs metrics summary"
+  end
+
+  subgraph BADGES["Badges (visual pass/fail)"]
+    BMAN["Badges manifest<br/>(docs/evidence/badges_manifest.md)"]:::green
+    click BMAN "docs/evidence/badges_manifest.md" "Open Badges manifest summary"
+    BEXP["exports_json.svg<br/>(docs/evidence/exports_json_badge.md)"]:::green
+    click BEXP "docs/evidence/exports_json_badge.md" "Open exports_json.svg summary"
+  end
+
+  TAG --> EJSON
+  TAG --> ERFC
+  TAG --> EACC
+  TAG --> XREF
+  TAG --> BADGES
+
+  %% Color classes
+  classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;
+  classDef red   fill:#fecaca,stroke:#7f1d1d,color:#111827,stroke-width:1px;
+  classDef grey  fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-width:1px;</pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -71,6 +71,13 @@ governance.housekeeping:
 	@$(PYTHON) scripts/governance_housekeeping.py
 	@echo "Governance housekeeping complete"
 
+# Governance docs hints (Rule-026 + Rule-065 compliance)
+.PHONY: governance.docs.hints
+governance.docs.hints:
+	@echo ">> Checking for governance docs/rule changes and emitting hints"
+	@$(PYTHON) scripts/governance_docs_hints.py || true
+	@echo "Governance docs hints check complete"
+
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
 .PHONY: docs.hints
 docs.hints:
@@ -116,8 +123,8 @@ atlas.preview.mmd:
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
-housekeeping: share.sync adr.housekeeping governance.housekeeping handoff.update
-	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + handoff)"
+housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
+	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
 	@$(PYTHON) scripts/validate_agents_md.py
 	@echo "AGENTS.md validation complete"
 	@$(PYTHON) scripts/rules_audit.py

@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-08 20:17:51
+Generated: 2025-11-09 14:12:28
 
 ## Active Rules
 
@@ -69,6 +69,7 @@ Generated: 2025-11-08 20:17:51
 - Rule 062-environment-validation: ---
 - Rule 063-git-safety: ---
 - Rule 064-ai-tracking-contract: id: "064"
+- Rule 065-gpt-docs-sync: ---
 
 ## CI Workflows
 
@@ -82,6 +83,7 @@ Generated: 2025-11-08 20:17:51
 - enforce-ruff.yml
 - extraction-accuracy-tag.yml
 - graph-nightly.yml
+- guard-tests.yml
 - lint-nightly.yml
 - nightly.yml
 - policy-gate.yml

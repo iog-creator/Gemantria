@@ -78,11 +78,27 @@ When operational changes occur, update:
 - Update "Validation Checklist" in `GPT_REFERENCE_GUIDE.md`
 - Update version and date
 
+## Hints for Documentation/Rule Changes
+
+Per Rule 026 (Hints Envelope), changes to rules or documentation automatically emit hints:
+
+- **Automatic Detection**: `scripts/governance_docs_hints.py` runs during `make housekeeping`
+- **Hints Envelope**: Changes are tracked in `evidence/governance_docs_hints.json` (file-based, no DB required)
+- **Hermetic**: Works without database (Rule 046 compliance)
+- **Detection**: Monitors `.cursor/rules/`, `docs/SSOT/`, `AGENTS.md`, `RULES_INDEX.md` for modifications
+- **GPT Docs**: Specifically detects updates to GPT documentation files (Rule 065 trigger)
+
+Hints are emitted as:
+- `governance.docs: N rule/doc file(s) modified`
+- `governance.rules: New rule detected: <rule-name>`
+- `governance.gpt: GPT documentation updated: <filename> (Rule 065)`
+
 ## Enforcement
 
 - **Pre-commit**: Check if operational changes require GPT docs updates
 - **PR Review**: Verify GPT docs are updated when operational contracts change
 - **Housekeeping**: Include GPT docs sync in `make housekeeping` validation
+- **Hints**: Automatic hint emission via `governance.docs.hints` target (integrated into `make housekeeping`)
 
 ## Related Rules
 
