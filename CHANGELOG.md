@@ -2,6 +2,7 @@
 2025-11-09 — ops: archive rc16 STRICT-tag (prod path) artifact; record in CHANGELOG; reset to fixtures default
 2025-11-09 — ops: expand extraction truth-suite to 25 cases (fixtures path); add derive tool; guard prefers v2≥25
 2025-11-09 — ops: archive rc17 STRICT-tag (fixtures) artifact; record in CHANGELOG
+2025-11-09 — ops: promote extraction truth-suite to **v2** (≥25 cases); guard now prefers v2 when available
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]

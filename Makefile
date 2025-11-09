@@ -137,6 +137,14 @@ truth.expand:
 	@test -f tests/truth/extraction_accuracy.v1.json
 	@echo "cases=$$(jq '.cases | length' tests/truth/extraction_accuracy.v1.json)"
 
+# --- Promote truth to v2 (preferential format for guard; requires ≥25) ---
+
+.PHONY: truth.promote.v2
+truth.promote.v2:
+	@python3 scripts/tools/promote_truth_v2.py
+	@test -f tests/truth/extraction_accuracy.v2.json
+	@jq -r '"version=" + .version + ", cases=" + ((.cases|length)|tostring)' tests/truth/extraction_accuracy.v2.json
+
 # --- UI temporal exports (CSV/PNG) ---
 
 OUTDIR ?= ui/out

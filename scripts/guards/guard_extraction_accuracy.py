@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import sys
 import time
 
 GRAPH = [pathlib.Path("exports/graph_latest.scored.json"), pathlib.Path("exports/graph_latest.json")]

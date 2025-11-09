@@ -129,6 +129,14 @@ accept.ui.smoke:
 	@$(PYTHON) scripts/export_noun_index.py
 	@$(MAKE) accept.ui ENVELOPE=$(ENVELOPE) MIN_NODES=$(MIN_NODES) MIN_EDGES=$(MIN_EDGES) ALLOW_EMPTY=$(ALLOW_EMPTY)
 
+# --- Truth-suite helper (fixtures → truth cases) ---
+
+.PHONY: truth.expand
+truth.expand:
+	@python3 scripts/tools/derive_truth_cases.py
+	@test -f tests/truth/extraction_accuracy.v1.json
+	@echo "cases=$$(jq '.cases | length' tests/truth/extraction_accuracy.v1.json)"
+
 # --- UI temporal exports (CSV/PNG) ---
 
 OUTDIR ?= ui/out
