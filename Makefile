@@ -713,9 +713,28 @@ share.pin:
 	@echo "Last-good snapshot created"
 
 # Evidence bundle for PRs touching enrichment/exports/UI
-.PHONY: evidence.bundle
+.PHONY: evidence.badges
+evidence.badges:
+	@mkdir -p evidence/badges
+	@# xref metrics JSON (optional)
+	@if [ -f share/eval/xrefs_metrics.json ]; then \
+	  cp -f share/eval/xrefs_metrics.json evidence/; \
+	  echo "evidence: + evidence/xrefs_metrics.json"; \
+	else \
+	  echo "HINT: share/eval/xrefs_metrics.json not found; skipping"; \
+	fi
+	@# badge SVGs (optional)
+	@for f in xrefs_coverage.svg xrefs_rate.svg; do \
+	  if [ -f "share/eval/badges/$$f" ]; then \
+	    cp -f "share/eval/badges/$$f" evidence/badges/; \
+	    echo "evidence: + evidence/badges/$$f"; \
+	  else \
+	    echo "HINT: share/eval/badges/$$f not found; skipping"; \
+	  fi; \
+	done
 
-evidence.bundle:
+.PHONY: evidence.bundle
+evidence.bundle: evidence.badges ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
@@ -729,6 +748,7 @@ evidence.bundle:
 	npm --prefix webui/graph run build
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
+	@python3 scripts/evidence/ensure_badges_manifest.py || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
