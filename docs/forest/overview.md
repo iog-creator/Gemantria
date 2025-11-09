@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-08 16:41:40
+Generated: 2025-11-08 20:10:01
 
 ## Active Rules
 
@@ -80,6 +80,7 @@ Generated: 2025-11-08 16:41:40
 - crossrefs-smoke.yml
 - dbmirror.yml
 - enforce-ruff.yml
+- extraction-accuracy-tag.yml
 - graph-nightly.yml
 - lint-nightly.yml
 - nightly.yml

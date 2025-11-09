@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, os, pathlib, subprocess, sys
+import os, pathlib, subprocess, sys
 
 OUT = pathlib.Path("exports/graph_latest.scored.json")
+
 
 def main() -> int:
     cmd = os.getenv("REAL_EXTRACT_CMD")
@@ -18,6 +19,7 @@ def main() -> int:
         return 3
     print(f"[build_graph_real] OK: {OUT} present")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

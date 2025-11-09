@@ -1,4 +1,5 @@
 2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); add pip cache; require xref index on **release tags** (v*); main/PR remain HINT-only
+2025-11-09 — ops: archive rc16 STRICT-tag (prod path) artifact; record in CHANGELOG; reset to fixtures default
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]
@@ -14,6 +15,12 @@
 - Enforce **folder-scoped AGENTS.md** pattern; mirror to **share/**; tag **ops/agents-md-inventory-sync** to trigger STRICT agents-lint.
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
+
+## [pre] v0.1.0-rc16 — tag-only STRICT (production path) proof
+
+- Hardened tag workflow (fail-fast, preflight, grouped logs, always-upload) ran on **production path** via repo vars.
+- **Run ID**: 19203122465 · **Verdict**: `ok:true`, totals `{"cases":10,"correct":10}` (artifact: `evidence/guard_extraction_accuracy.json`).
+- Repo vars at proof time: `STRICT_REAL_EXTRACTION=1`, `REAL_EXTRACT_CMD="python3 scripts/analytics/build_graph_from_repo_fixtures.py"`.
 
 ## v0.1.0-rc1
 
