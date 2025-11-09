@@ -76,6 +76,14 @@
 - Release assets: `exports_guard.verdict.json`, `exports_json.svg`, `badges_manifest.json`, and `guard_extraction_accuracy.json`.
 - Posture held at fixtures (`STRICT_REAL_EXTRACTION=0`); STRICT remains enforced on tags.
 
+## v0.1.1-dev — open
+
+- Begin next development cycle under OPS triad (050/051/052). Fixtures posture by default; STRICT on tags remains enforced.
+
+### tests: exports guard — schema-backed
+
+- Added pytest covering HINT and STRICT (tag-sim) modes; asserts `schema_ok` for ai-nouns, graph, graph-stats, graph-patterns.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
