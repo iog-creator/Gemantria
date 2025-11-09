@@ -98,6 +98,21 @@ handoff.update:
 	@$(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
+# Atlas status diagram generation
+
+.PHONY: atlas.update atlas.preview.html atlas.preview.txt atlas.preview.mmd
+atlas.update:
+	@python3 scripts/status/update_mermaid_from_evidence.py
+
+atlas.preview.html:
+	@python3 scripts/status/preview_atlas.py html
+
+atlas.preview.txt:
+	@python3 scripts/status/preview_atlas.py txt
+
+atlas.preview.mmd:
+	@python3 scripts/status/preview_atlas.py mmd
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping

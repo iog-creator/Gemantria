@@ -12,6 +12,12 @@
 | Exports JSON | <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" /> | [verdict JSON](evidence/exports_guard.verdict.json) · [rendered MD](evidence/exports_guard.verdict.md) |
 | PR Checks (guard-tests) | **Advisory** (branch protection off) | [.github/workflows/guard-tests.yml](.github/workflows/guard-tests.yml) |
 
+### Project Status (evidence-driven)
+
+> **PR** = proposal to merge change · **Tag** = frozen proof snapshot · **Badge** = visual pass/fail marker
+
+> Open the visual map: [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (Mermaid) · [HTML preview](docs/atlas/status.html) · [Text view](docs/atlas/status.txt)
+
 </div>
 
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
