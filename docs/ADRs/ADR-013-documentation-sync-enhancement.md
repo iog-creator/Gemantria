@@ -59,6 +59,22 @@ alwaysApply: false
 ---
 
 > **NOTE:** As of 2025-11-08, only Rules 050/051/052 (the Always-Apply triad) have `alwaysApply: true`. Rule 009 (this rule) is Default-Apply.
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 ```
 
 ### Report Generation Integration
@@ -121,7 +137,22 @@ alwaysApply: false
 - **Decision**: Overkill for current scale, internal solution preferred
 
 ### Option 3: Selective Always-Apply
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 - **Pro**: Granular control over when rules apply
 - **Con**: Inconsistent enforcement, rule complexity
 - **Decision**: Always-applied provides clarity and consistency

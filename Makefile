@@ -660,7 +660,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -677,6 +677,28 @@ guard.rules.alwaysapply:
 .PHONY: guard.rules.alwaysapply.dbmirror
 guard.rules.alwaysapply.dbmirror:
 	@$(PYTHON) scripts/guards/guard_alwaysapply_dbmirror.py
+
+# Always-Apply triad enforcement (HINT by default; STRICT with env)
+.PHONY: guard.alwaysapply.triad
+guard.alwaysapply.triad:
+	@python scripts/guards/guard_alwaysapply_triage.py || true
+	@echo "wrote evidence/guard_alwaysapply_triad.json"
+
+# DB-first mirror (HINT by default; STRICT when STRICT_ALWAYS_APPLY=1)
+.PHONY: guard.alwaysapply.dbmirror
+guard.alwaysapply.dbmirror:
+	@python scripts/guards/sync_alwaysapply_from_db.py || true
+	@echo "wrote evidence/guard_alwaysapply_dbmirror.json"
+
+# Apply DB-backed autofix (WRITE=1); still HINT unless STRICT_ALWAYS_APPLY=1
+.PHONY: guard.alwaysapply.autofix
+guard.alwaysapply.autofix:
+	@WRITE=1 python scripts/guards/sync_alwaysapply_from_db.py || true
+	@echo "wrote evidence/guard_alwaysapply_dbmirror.json (autofix)"
+
+# --- Back-compat aliases (one release) ---
+.PHONY: guard.rules.alwaysapply.autofix
+guard.rules.alwaysapply.autofix: guard.alwaysapply.autofix
 
 .PHONY: guard.ai.tracking
 guard.ai.tracking:

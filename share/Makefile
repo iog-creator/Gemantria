@@ -160,8 +160,8 @@ atlas.test: ## Time atlas generation and warn if >5s
 
 .PHONY: atlas.test.backlink
 atlas.test.backlink: ## Verify "Back to Atlas" links exist in evidence pages
-	@grep -q '<a href="/atlas/index.html">' docs/evidence/*.html && echo "ok: backlink in HTML" || (echo "FAIL: backlink missing in HTML"; exit 1)
-	@grep -q '\[← Back to Atlas](/atlas/index.html)' docs/evidence/*.md && echo "ok: backlink in Markdown" || (echo "FAIL: backlink missing in Markdown"; exit 1)
+	@grep -q '<a href="../atlas/index.html">' docs/evidence/*.html && echo "ok: backlink in HTML" || (echo "FAIL: backlink missing in HTML"; exit 1)
+	@grep -q '\[← Back to Atlas](\.\./atlas/index\.html)' docs/evidence/*.md && echo "ok: backlink in Markdown" || (echo "FAIL: backlink missing in Markdown"; exit 1)
 
 atlas.serve: ## Start local HTTP server for atlas preview (port 8888)
 	@echo "Starting HTTP server on port 8888..."

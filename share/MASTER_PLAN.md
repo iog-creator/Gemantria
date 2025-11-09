@@ -176,7 +176,22 @@ collect_nouns → enrichment → network_aggregator → schema_validator → ana
 ## Governance & Operations
 
 ### Governance: Always-Apply Triad
-
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
+<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
+- Rule-050
+- Rule-051
+- Rule-052
 This plan assumes and re-affirms the triad:
 
 **050 (LOUD FAIL)**, **051 (Required Checks Gate)**, **052 (Tool-Priority: local+gh → codex (401) → gemini/mcp)**.
