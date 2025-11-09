@@ -214,6 +214,12 @@ atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMA
 governance.smoke: ## Fail if any Always-Apply block lacks a sentinel or has duplicates
 	@python3 scripts/guards/governance_smoke.py
 
+# --- Prompt SSOT guard (enforce canonical prompt structure) ---
+.PHONY: guard.prompt.ssot
+guard.prompt.ssot: ## Enforce GPT System Prompt SSOT structure
+	@python3 scripts/guards/guard_prompt_ssot.py || true
+	@echo "wrote prompt SSOT guard report to stdout (non-fatal in HINT)"
+
 # --- Tag proof (STRICT DSN tracks) ---
 .PHONY: ops.tagproof
 ops.tagproof: ## Tag proof (STRICT): DSN + Always-Apply + Atlas
@@ -682,7 +688,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
