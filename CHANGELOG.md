@@ -72,8 +72,10 @@
 
 ### v0.1.1-rc7 — fixtures tag post–required-tests
 
-- Tag CI: **STRICT** green; repo protected with required `guard-tests` on PRs.
+- Tag CI: **STRICT** green; `guard-tests` workflow runs on PRs (**advisory**; branch protection currently disabled).
 - Release assets: guard artifact, exports verdict JSON, badge SVG, badges manifest.
+
+> Note: Branch protection is OFF in this repository, so PR checks are not enforced by GitHub. Our Rule-051 posture applies: checks are advisory unless marked required in repo settings.
 
 ## v0.1.1 — stable
 

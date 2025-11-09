@@ -10,6 +10,7 @@
 | Check | Status | Evidence |
 |---|---|---|
 | Exports JSON | <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" /> | [verdict JSON](evidence/exports_guard.verdict.json) · [rendered MD](evidence/exports_guard.verdict.md) |
+| PR Checks (guard-tests) | **Advisory** (branch protection off) | [.github/workflows/guard-tests.yml](.github/workflows/guard-tests.yml) |
 
 </div>
 
