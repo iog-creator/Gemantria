@@ -194,7 +194,7 @@ eval.xrefs.badges:
 	@python3 scripts/eval/xrefs_badges.py
 
 .PHONY: eval.package
-eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank share.sync
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank eval.badges.patterns share.sync
 	@echo "[eval.package] OK"
 
 # --- eval: rerank quality badge (from blend report) ---
@@ -203,6 +203,13 @@ eval.badges.rerank:
 	@python scripts/analytics/rerank_blend_report.py
 	@python scripts/badges/make_rerank_quality_badge.py
 	@ls -1 share/eval/badges | grep -E 'rerank_quality\.svg' || true
+
+# --- eval: patterns badge (optional)
+.PHONY: eval.badges.patterns
+eval.badges.patterns:
+	@python scripts/analytics/export_patterns_from_json.py
+	@python scripts/badges/make_patterns_badge.py
+	@ls -1 share/eval/badges | grep -E 'patterns_badge\.svg' || true
 
 .PHONY: db.runs_ledger.smoke
 db.runs_ledger.smoke:
@@ -530,7 +537,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -580,6 +587,10 @@ guard.badges.inventory:
 .PHONY: guard.book.extraction
 guard.book.extraction:
 	@python scripts/smokes/book_extraction_correctness.py
+
+.PHONY: guard.extraction.accuracy
+guard.extraction.accuracy:
+	@python scripts/guards/guard_extraction_accuracy.py || true
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -795,9 +806,10 @@ evidence.bundle: evidence.badges ## build operator evidence bundle (now includes
 	@mkdir -p evidence
 	@# Include rerank quality badge if present
 	@if test -d share/eval/badges; then cp -f share/eval/badges/rerank_quality.svg evidence/ 2>/dev/null || true; fi
+	@if test -d share/eval/badges; then cp -f share/eval/badges/patterns_badge.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
-	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg' || true
+	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
