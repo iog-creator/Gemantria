@@ -176,6 +176,23 @@ atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-o
 	@$(MAKE) -s atlas.generate
 	@$(MAKE) -s atlas.test
 
+# --- Atlas demo seed (dev-only; enables visual proof without live telemetry) ---
+.PHONY: atlas.demo.seed
+atlas.demo.seed: ## Seed demo telemetry data for Atlas visual proof (dev-only; requires GEMATRIA_DSN)
+	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
+	@psql "$$GEMATRIA_DSN" -f scripts/atlas/demo_seed.sql
+
+.PHONY: atlas.demo.reset
+atlas.demo.reset: ## Remove demo telemetry data (dev-only; requires GEMATRIA_DSN)
+	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
+	@psql "$$GEMATRIA_DSN" -tAc "DELETE FROM public.metrics_log WHERE run_id LIKE 'demo-%';"
+	@psql "$$GEMATRIA_DSN" -tAc "DELETE FROM public.checkpointer_state WHERE pipeline_id LIKE 'demo-%';"
+
+.PHONY: atlas.demo.proof
+atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMATRIA_DSN)
+	@$(MAKE) -s atlas.demo.seed
+	@$(MAKE) -s atlas.proof.dsn
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
