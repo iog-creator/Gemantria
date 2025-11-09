@@ -71,6 +71,15 @@ Local smoke artifacts (run via the eval tools) can render quality trends:
 ![Quality Trend](share/eval/badges/quality_trend.svg)
 ![Current Quality](share/eval/badges/quality.svg)
 
+### XRef Coverage & Rate (HINT-only)
+
+The operator dashboard includes lightweight badges derived from the published xref index:
+
+![XRef Coverage](share/eval/badges/xrefs_coverage.svg)
+![XRef Rate](share/eval/badges/xrefs_rate.svg)
+
+> Generated from `ui/public/xrefs/xrefs_index.v1.json` during `make eval.package`. In main/PR contexts these run in **HINT-only** mode; they do not affect the SSOT/guards.
+
 > In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
 
 ## Required Checks

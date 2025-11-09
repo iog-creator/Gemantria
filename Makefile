@@ -189,6 +189,14 @@ eval.graph.calibrate.adv:
 	@PYTHONPATH=. python3 scripts/guards/guard_ci_empty_db.py
 	@echo ">> Calibration step skipped or tolerated in empty-DB CI."
 
+.PHONY: eval.xrefs.badges
+eval.xrefs.badges:
+	@python3 scripts/eval/xrefs_badges.py
+
+.PHONY: eval.package
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges share.sync
+	@echo "[eval.package] OK"
+
 .PHONY: db.runs_ledger.smoke
 db.runs_ledger.smoke:
 	@echo ">> runs_ledger smoke (tolerant)…"
