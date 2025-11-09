@@ -551,7 +551,11 @@ guard.ai.tracking.strict:
 
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
-	@python3 scripts/guards/guard_xrefs_badges.py || true
+	@if [ "$${CI_XREF_BADGES_SKIP:-0}" = "1" ]; then \
+	  printf '{ "guard":"guard_xrefs_badges","ok":true,"note":"skipped by CI (paths do not affect xref badges)"}\n'; \
+	else \
+	  python3 scripts/guards/guard_xrefs_badges.py || true; \
+	fi
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
