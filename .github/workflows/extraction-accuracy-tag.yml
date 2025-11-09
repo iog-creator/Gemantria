@@ -17,12 +17,25 @@ jobs:
       - name: Build fixture graph (deterministic)
         run: |
           python3 scripts/analytics/build_fixture_graph.py
-      - name: Guard: extraction accuracy (STRICT)
+      - name: Guard: extraction accuracy (STRICT, Python assert)
         env:
           STRICT_EXTRACTION_ACCURACY: "1"
         run: |
           mkdir -p evidence
           python3 scripts/guards/guard_extraction_accuracy.py > evidence/guard_extraction_accuracy.json
           cat evidence/guard_extraction_accuracy.json
-          test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
+          python3 - <<'PY'
+import json, sys
+with open("evidence/guard_extraction_accuracy.json","r",encoding="utf-8") as f:
+    ok = bool(json.load(f).get("ok"))
+print(ok)
+sys.exit(0 if ok else 1)
+PY
+      - name: Upload guard evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guard_extraction_accuracy
+          path: evidence/guard_extraction_accuracy.json
+          if-no-files-found: error
+          retention-days: 7
 
