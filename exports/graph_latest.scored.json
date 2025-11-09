@@ -1,105 +1,561 @@
 {
-  "schema": "graph.vproduction",
-  "generated_at": "2025-11-09T03:37:12Z",
-  "source": "exports/bible_nouns_genesis.json",
-  "note": "Production graph built from real extraction (truth nouns for validation)",
+  "schema": "graph.vreal-fixtures",
+  "generated_at": "2025-11-09T03:50:03Z",
   "nodes": [
     {
       "id": "N:1",
+      "surface": "God",
+      "lemma": "God",
       "verse_id": "GEN.1.1",
       "nouns": [
-        "God",
-        "heavens",
-        "earth"
-      ]
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:2",
-      "verse_id": "GEN.1.2",
+      "surface": "heavens",
+      "lemma": "heavens",
+      "verse_id": "GEN.1.1",
       "nouns": [
-        "earth",
-        "darkness",
-        "deep",
-        "Spirit",
-        "waters"
-      ]
+        "heavens"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:3",
-      "verse_id": "GEN.1.3",
+      "surface": "earth",
+      "lemma": "earth",
+      "verse_id": "GEN.1.1",
       "nouns": [
-        "God",
-        "light"
-      ]
+        "earth"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:4",
-      "verse_id": "GEN.1.4",
+      "surface": "earth",
+      "lemma": "earth",
+      "verse_id": "GEN.1.2",
       "nouns": [
-        "God",
-        "light",
-        "darkness",
-        "day",
-        "night"
-      ]
+        "earth"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:5",
-      "verse_id": "GEN.1.5",
+      "surface": "darkness",
+      "lemma": "darkness",
+      "verse_id": "GEN.1.2",
       "nouns": [
-        "evening",
-        "morning",
-        "day"
-      ]
+        "darkness"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:6",
-      "verse_id": "GEN.1.6",
+      "surface": "deep",
+      "lemma": "deep",
+      "verse_id": "GEN.1.2",
       "nouns": [
-        "God",
-        "expanse",
-        "waters"
-      ]
+        "deep"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:7",
-      "verse_id": "GEN.1.7",
+      "surface": "Spirit",
+      "lemma": "Spirit",
+      "verse_id": "GEN.1.2",
       "nouns": [
-        "God",
-        "expanse",
-        "waters"
-      ]
+        "Spirit"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:8",
-      "verse_id": "GEN.1.8",
+      "surface": "waters",
+      "lemma": "waters",
+      "verse_id": "GEN.1.2",
       "nouns": [
-        "God",
-        "heaven",
-        "evening",
-        "morning",
-        "day"
-      ]
+        "waters"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:9",
-      "verse_id": "GEN.1.9",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.3",
       "nouns": [
-        "God",
-        "waters",
-        "place",
-        "dry land"
-      ]
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     },
     {
       "id": "N:10",
+      "surface": "light",
+      "lemma": "light",
+      "verse_id": "GEN.1.3",
+      "nouns": [
+        "light"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:11",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:12",
+      "surface": "light",
+      "lemma": "light",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "light"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:13",
+      "surface": "darkness",
+      "lemma": "darkness",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "darkness"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:14",
+      "surface": "day",
+      "lemma": "day",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "day"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:15",
+      "surface": "night",
+      "lemma": "night",
+      "verse_id": "GEN.1.4",
+      "nouns": [
+        "night"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:16",
+      "surface": "evening",
+      "lemma": "evening",
+      "verse_id": "GEN.1.5",
+      "nouns": [
+        "evening"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:17",
+      "surface": "morning",
+      "lemma": "morning",
+      "verse_id": "GEN.1.5",
+      "nouns": [
+        "morning"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:18",
+      "surface": "day",
+      "lemma": "day",
+      "verse_id": "GEN.1.5",
+      "nouns": [
+        "day"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:19",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.6",
+      "nouns": [
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:20",
+      "surface": "expanse",
+      "lemma": "expanse",
+      "verse_id": "GEN.1.6",
+      "nouns": [
+        "expanse"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:21",
+      "surface": "waters",
+      "lemma": "waters",
+      "verse_id": "GEN.1.6",
+      "nouns": [
+        "waters"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:22",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.7",
+      "nouns": [
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:23",
+      "surface": "expanse",
+      "lemma": "expanse",
+      "verse_id": "GEN.1.7",
+      "nouns": [
+        "expanse"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:24",
+      "surface": "waters",
+      "lemma": "waters",
+      "verse_id": "GEN.1.7",
+      "nouns": [
+        "waters"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:25",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:26",
+      "surface": "heaven",
+      "lemma": "heaven",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "heaven"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:27",
+      "surface": "evening",
+      "lemma": "evening",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "evening"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:28",
+      "surface": "morning",
+      "lemma": "morning",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "morning"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:29",
+      "surface": "day",
+      "lemma": "day",
+      "verse_id": "GEN.1.8",
+      "nouns": [
+        "day"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:30",
+      "surface": "God",
+      "lemma": "God",
+      "verse_id": "GEN.1.9",
+      "nouns": [
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:31",
+      "surface": "waters",
+      "lemma": "waters",
+      "verse_id": "GEN.1.9",
+      "nouns": [
+        "waters"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:32",
+      "surface": "place",
+      "lemma": "place",
+      "verse_id": "GEN.1.9",
+      "nouns": [
+        "place"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:33",
+      "surface": "dry land",
+      "lemma": "dry land",
+      "verse_id": "GEN.1.9",
+      "nouns": [
+        "dry land"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:34",
+      "surface": "God",
+      "lemma": "God",
       "verse_id": "GEN.1.10",
       "nouns": [
-        "God",
-        "earth",
-        "seas",
+        "God"
+      ],
+      "class": "proper",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:35",
+      "surface": "earth",
+      "lemma": "earth",
+      "verse_id": "GEN.1.10",
+      "nouns": [
+        "earth"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:36",
+      "surface": "seas",
+      "lemma": "seas",
+      "verse_id": "GEN.1.10",
+      "nouns": [
+        "seas"
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
+    },
+    {
+      "id": "N:37",
+      "surface": "good",
+      "lemma": "good",
+      "verse_id": "GEN.1.10",
+      "nouns": [
         "good"
-      ]
+      ],
+      "class": "common",
+      "freq": 1,
+      "cosine": 0.5,
+      "rerank_score": 0.5,
+      "edge_strength": 0.5,
+      "edge_class": "weak"
     }
   ],
   "edges": []

@@ -12,52 +12,17 @@ jobs:
   extraction-accuracy:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build fixture graph (deterministic)
-        shell: bash
+      - name: Build real extraction graph (repo fixtures, hermetic)
         run: |
-          set -euo pipefail
-          echo "::group::build-fixture-graph"
-          python3 --version
-          python3 scripts/analytics/build_fixture_graph.py
-          echo "::endgroup::"
-          echo "::group::post-build-preflight"
-          ls -la exports || true
-          test -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }
-          echo "::endgroup::"
-      - name: Guard: extraction accuracy (STRICT, Python assert)
+          python3 scripts/analytics/build_graph_from_repo_fixtures.py
+      - name: Guard: extraction accuracy (STRICT)
         env:
           STRICT_EXTRACTION_ACCURACY: "1"
-        shell: bash
         run: |
-          set -euo pipefail
-          echo "::group::guard-run"
           mkdir -p evidence
-          test -s exports/graph_latest.scored.json || { echo "::error::graph missing before guard"; ls -la exports || true; exit 1; }
-          python3 scripts/guards/guard_extraction_accuracy.py | tee evidence/guard_extraction_accuracy.stdout.log
-          test -s evidence/guard_extraction_accuracy.json
-          python3 - <<'PY'
-import json, sys, pathlib
-p = pathlib.Path("evidence/guard_extraction_accuracy.json")
-d = json.loads(p.read_text(encoding="utf-8"))
-print(f"guard.ok={d.get('ok')}")
-print(f"guard.totals={d.get('totals')}")
-sys.exit(0 if d.get("ok") else 1)
-PY
-          echo "::endgroup::"
-      - name: Upload guard evidence artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: guard_extraction_accuracy
-          path: |
-            evidence/guard_extraction_accuracy.json
-            evidence/guard_extraction_accuracy.stdout.log
-          if-no-files-found: warn
-          retention-days: 7
+          python3 scripts/guards/guard_extraction_accuracy.py > evidence/guard_extraction_accuracy.json
+          cat evidence/guard_extraction_accuracy.json
+          test "$(jq -r '.ok' evidence/guard_extraction_accuracy.json)" = "true"
 

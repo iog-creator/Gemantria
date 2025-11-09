@@ -596,6 +596,10 @@ guard.extraction.accuracy:
 graph.fixture.from.truth:
 	@python scripts/analytics/build_fixture_graph.py
 
+.PHONY: graph.real.from.fixtures
+graph.real.from.fixtures:
+	@python scripts/analytics/build_graph_from_repo_fixtures.py
+
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
 guard.docs.consistency:
