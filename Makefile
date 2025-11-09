@@ -214,6 +214,14 @@ atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMA
 governance.smoke: ## Fail if any Always-Apply block lacks a sentinel or has duplicates
 	@python3 scripts/guards/governance_smoke.py
 
+# --- Tag proof (STRICT DSN tracks) ---
+.PHONY: ops.tagproof
+ops.tagproof: ## Tag proof (STRICT): DSN + Always-Apply + Atlas
+	@echo "Tag proof (STRICT): DSN + Always-Apply + Atlas"
+	@STRICT_ALWAYS_APPLY=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s guard.alwaysapply.dbmirror
+	@STRICT_ATLAS_DSN=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s atlas.proof.dsn
+	@$(MAKE) -s governance.smoke
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
