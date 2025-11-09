@@ -49,6 +49,12 @@
 
 - Tag **rc2** confirmed STRICT enforcement including minimal shape validation; logs archived at `evidence/rc2_tag.log`.
 
+### v0.1.1-rc3 — fixtures tag with evidence badge
+
+- Tag CI: **STRICT** green (exports JSON guard incl. shape checks).
+- Release assets include: `exports_json.svg` badge, `badges_manifest.json`, and `guard_extraction_accuracy.json` (attached after CI).
+- Logs archived at `evidence/v0.1.1-rc3_tag.log`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
