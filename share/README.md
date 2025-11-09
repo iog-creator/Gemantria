@@ -3,6 +3,25 @@
 <div align="left">
   <img alt="xref coverage" src="share/eval/badges/xrefs_coverage.svg" />
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
+  <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
+<img alt="RFC3339" src="share/eval/badges/rfc3339.svg" />
+
+#### Operator Status
+
+| Check | Status | Evidence |
+|---|---|---|
+| Exports JSON | <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" /> | [verdict JSON](evidence/exports_guard.verdict.json) · [rendered MD](evidence/exports_guard.verdict.md) |
+| RFC3339 Timestamps | <img alt="RFC3339" src="share/eval/badges/rfc3339.svg" /> | [verdict JSON](evidence/exports_rfc3339.verdict.json) · [rendered MD](evidence/exports_rfc3339.verdict.md) |
+| PR Checks (guard-tests) | **Advisory** (branch protection off) | [.github/workflows/guard-tests.yml](.github/workflows/guard-tests.yml) |
+
+**Visual Atlas:** see [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (clickable nodes → human summaries)
+
+### Project Status (evidence-driven)
+
+> **PR** = proposal to merge change · **Tag** = frozen proof snapshot · **Badge** = visual pass/fail marker
+
+> Open the visual map: [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (Mermaid) · [HTML preview](docs/atlas/status.html) · [Text view](docs/atlas/status.txt)
+
 </div>
 
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.

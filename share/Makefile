@@ -98,6 +98,21 @@ handoff.update:
 	@$(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
+# Atlas status diagram generation
+
+.PHONY: atlas.update atlas.preview.html atlas.preview.txt atlas.preview.mmd
+atlas.update:
+	@python3 scripts/status/update_mermaid_from_evidence.py
+
+atlas.preview.html:
+	@python3 scripts/status/preview_atlas.py html
+
+atlas.preview.txt:
+	@python3 scripts/status/preview_atlas.py txt
+
+atlas.preview.mmd:
+	@python3 scripts/status/preview_atlas.py mmd
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
@@ -117,6 +132,7 @@ ENVELOPE ?= share/exports/envelope.json
 MIN_NODES ?= 200000
 MIN_EDGES ?= 0
 ALLOW_EMPTY ?=
+BADGES_DIR ?= share/eval/badges
 
 .PHONY: accept.ui
 accept.ui:
@@ -191,6 +207,10 @@ ENVELOPE ?= share/exports/envelope.json
 test.compass:
 	@echo ">> COMPASS evaluation on $(ENVELOPE)"
 	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
+
+.PHONY: test.guard
+test.guard:
+	@pytest -q tests/unit/guards/test_exports_guard_schema.py
 
 # CI smoke targets (for workflow compatibility)
 # Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
@@ -553,7 +573,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -578,6 +598,53 @@ guard.ai.tracking:
 .PHONY: guard.ai.tracking.strict
 guard.ai.tracking.strict:
 	@STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
+
+.PHONY: guard.exports.json
+guard.exports.json:
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_json.py
+
+.PHONY: guard.exports.rfc3339
+guard.exports.rfc3339:
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_rfc3339.py
+
+# --- Export guard evidence + badge ---
+.PHONY: guard.exports.json.evidence
+guard.exports.json.evidence:
+	@mkdir -p evidence
+	@PYTHONPATH=scripts/guards $(PY_RUN) scripts/guards/guard_exports_json.py > evidence/guard_exports_json.verdict.json 2> evidence/guard_exports_json.stderr.txt || true
+	@jq -r '.ok' evidence/guard_exports_json.verdict.json >/dev/null 2>&1 || echo '{"ok":false}' > evidence/guard_exports_json.verdict.json
+
+.PHONY: evidence.exports.badge
+evidence.exports.badge: guard.exports.json.evidence
+	@mkdir -p $(BADGES_DIR)
+	@STATUS=$$(test "$$(jq -r .ok evidence/guard_exports_json.verdict.json)" = "true" && echo PASS || echo FAIL); \
+	python3 scripts/badges/make_badge.py --label "Exports JSON" --status $$STATUS --out $(BADGES_DIR)/exports_json.svg >/dev/null; \
+	echo "badge=$(BADGES_DIR)/exports_json.svg status=$$STATUS"
+	@python3 scripts/tools/update_badges_manifest.py "exports_json" "$(BADGES_DIR)/exports_json.svg" "Exports JSON guard verdict"
+
+.PHONY: evidence.rfc3339.badge
+evidence.rfc3339.badge:
+	@mkdir -p $(BADGES_DIR) evidence
+	@$(PY_RUN) scripts/guards/guard_exports_rfc3339.py >/dev/null 2>&1 || true
+	@STATUS=$$(test "$$(jq -r '.ok' evidence/exports_rfc3339.verdict.json)" = "true" && echo PASS || echo FAIL); \
+	python3 scripts/badges/make_badge.py --label "RFC3339" --status $$STATUS --out $(BADGES_DIR)/rfc3339.svg >/dev/null; \
+	echo "badge=$(BADGES_DIR)/rfc3339.svg status=$$STATUS"
+	@python3 scripts/tools/update_badges_manifest.py "rfc3339" "$(BADGES_DIR)/rfc3339.svg" "RFC3339 timestamps guard verdict"
+
+.PHONY: evidence.exports.verdict.md
+evidence.exports.verdict.md: guard.exports.json.evidence
+	@python3 scripts/tools/render_exports_verdict_md.py >/dev/null
+	@test -f evidence/exports_guard.verdict.md
+
+.PHONY: evidence.exports.rfc3339.verdict
+evidence.exports.rfc3339.verdict:
+	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_rfc3339.py >/dev/null 2>&1 || true
+	@test -f evidence/exports_rfc3339.verdict.json || echo '[bundle] exports_rfc3339.verdict.json missing' >> evidence/bundle.log
+
+.PHONY: evidence.rfc3339.verdict.md
+evidence.rfc3339.verdict.md: evidence.exports.rfc3339.verdict
+	@python3 scripts/tools/render_rfc3339_verdict_md.py >/dev/null 2>&1 || true
+	@test -f evidence/exports_rfc3339.verdict.md || echo '[bundle] exports_rfc3339.verdict.md missing' >> evidence/bundle.log
 
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
@@ -815,7 +882,7 @@ evidence.badges:
 	done
 
 .PHONY: evidence.bundle
-evidence.bundle: evidence.badges ## build operator evidence bundle (now includes xref metrics & badges if present)
+evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md evidence.rfc3339.badge evidence.rfc3339.verdict.md evidence.exports.rfc3339.verdict ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
@@ -836,6 +903,7 @@ evidence.bundle: evidence.badges ## build operator evidence bundle (now includes
 	@if test -d share/eval/badges; then cp -f share/eval/badges/rerank_quality.svg evidence/ 2>/dev/null || true; fi
 	@if test -d share/eval/badges; then cp -f share/eval/badges/patterns_badge.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
+	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
 
