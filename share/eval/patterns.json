@@ -1,0 +1,13 @@
+{
+  "schema": "patterns.v1",
+  "generated_at": "2025-11-09T01:03:38Z",
+  "source": {
+    "mode": "file_first",
+    "input": "exports/graph_latest.scored.json"
+  },
+  "top_pairs": [],
+  "counts": {
+    "edges": 0,
+    "top": 0
+  }
+}

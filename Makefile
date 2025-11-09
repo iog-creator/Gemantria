@@ -530,7 +530,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -575,6 +575,11 @@ guard.rerank.thresholds:
 .PHONY: guard.badges.inventory
 guard.badges.inventory:
 	@python scripts/guards/guard_badges_inventory.py
+
+# --- guard: book extraction correctness (HINT-only)
+.PHONY: guard.book.extraction
+guard.book.extraction:
+	@python scripts/smokes/book_extraction_correctness.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -652,6 +657,13 @@ analytics.export:
 .PHONY: analytics.rerank.blend
 analytics.rerank.blend:
 	@python scripts/analytics/rerank_blend_report.py
+
+# --- analytics: patterns export (file-first)
+.PHONY: analytics.patterns.file
+analytics.patterns.file:
+	@python scripts/analytics/export_patterns_from_json.py
+	@head -n 20 share/eval/patterns.json || true
+	@echo "[analytics.patterns.file] OK"
 
 # --- Analytics exports (DB-first; tolerant stubs when DSN missing) ---
 .PHONY: analytics.export.db
