@@ -561,6 +561,10 @@ guard.ui.xrefs.badges:
 schema.smoke:
 	@python scripts/guards/guard_schema_smoke.py
 
+.PHONY: guard.rerank.thresholds
+guard.rerank.thresholds:
+	@python scripts/guards/guard_rerank_thresholds.py
+
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
 guard.docs.consistency:
@@ -764,6 +768,11 @@ evidence.bundle: evidence.badges ## build operator evidence bundle (now includes
 	@echo "==> Evidence line (jq)…"
 	jq -r '.nodes[] | select(.enrichment.crossrefs!=null and (.enrichment.crossrefs|length>0)) | {surface,ref:(.sources[0].ref),confidence:(.enrichment.confidence // .confidence), crossrefs:.enrichment.crossrefs,insight:.enrichment.insight} | @json' exports/ai_nouns.json | head -n 1
 	@python3 scripts/evidence/ensure_badges_manifest.py || true
+	@# Include rerank blend + thresholds guard outputs
+	@mkdir -p evidence
+	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
+	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
+	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
