@@ -3,7 +3,9 @@ name: xref-badges (STRICT on tags)
 on:
   push:
     tags:
-      - '*'
+      - '**'        # match tags with slashes (e.g., ops/xref-badges-proof-*)
+      - 'v*'        # common release tags still matched explicitly
+  workflow_dispatch: {}  # manual backstop if needed
 
 jobs:
   xref_badges_strict:
