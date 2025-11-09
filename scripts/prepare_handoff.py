@@ -11,7 +11,6 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 # Try to import clipboard library, fallback to platform-specific commands
 try:
@@ -50,7 +49,7 @@ def get_git_info() -> dict[str, str]:
     }
 
 
-def get_active_pr() -> Optional[dict]:
+def get_active_pr() -> dict | None:
     """Get active PR information if on a PR branch."""
     git_info = get_git_info()
     branch = git_info["branch"]
@@ -101,12 +100,12 @@ def generate_handoff_content() -> str:
         "",
         "### 1. Repository Information",
         "```bash",
-        f"git rev-parse --show-toplevel",
+        "git rev-parse --show-toplevel",
         "```",
         f"**Output:** `{git_info['repo_root']}`",
         "",
         "```bash",
-        f"git rev-parse --abbrev-ref HEAD",
+        "git rev-parse --abbrev-ref HEAD",
         "```",
         f"**Output:** `{git_info['branch']}`",
         "",
