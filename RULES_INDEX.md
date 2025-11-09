@@ -61,6 +61,7 @@
 | 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
 | 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | 053-idempotence.mdc | Idempotent Baseline |
+| 062 | (inline) | Rerank thresholds: HINT on main, STRICT on tags; SSOT in `configs/rerank_blend.json`; guard `guard.rerank.thresholds` |
 | 054 | 054-reuse-first.mdc | Reuse-First, No-Scaffold-When-Exists |
 | 055 | 055-auto-docs-sync.mdc | Auto-Docs Sync Pass |
 | 056 | 056-ui-generation.mdc | UI Generation Standard |

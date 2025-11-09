@@ -36,3 +36,18 @@ jobs:
         env:
           GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
           AI_AUTOMATION_DSN: ${{ secrets.GEMATRIA_DSN }}
+      - name: Rerank thresholds (STRICT on tags)
+        if: startsWith(github.ref, 'refs/tags/') && vars.STRICT_DB_MIRROR_CI == '1'
+        env:
+          STRICT_RERANK_THRESH: "1"
+          RERANK_THRESHOLD_STRICT: ${{ vars.RERANK_THRESHOLD_STRICT || '0.90' }}
+        run: |
+          python --version
+          make -s analytics.rerank.blend
+          make -s guard.rerank.thresholds | tee evidence/guard_rerank_thresholds.strict.json
+      - name: Upload rerank guard evidence
+        if: startsWith(github.ref, 'refs/tags/') && vars.STRICT_DB_MIRROR_CI == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rerank-thresholds-strict
+          path: evidence/guard_rerank_thresholds.strict.json
