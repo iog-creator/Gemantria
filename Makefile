@@ -117,6 +117,7 @@ ENVELOPE ?= share/exports/envelope.json
 MIN_NODES ?= 200000
 MIN_EDGES ?= 0
 ALLOW_EMPTY ?=
+BADGES_DIR ?= share/eval/badges
 
 .PHONY: accept.ui
 accept.ui:
@@ -583,6 +584,21 @@ guard.ai.tracking.strict:
 guard.exports.json:
 	@python3 scripts/guards/guard_exports_json.py
 
+# --- Export guard evidence + badge ---
+.PHONY: guard.exports.json.evidence
+guard.exports.json.evidence:
+	@mkdir -p evidence
+	@$(PY_RUN) scripts/guards/guard_exports_json.py > evidence/guard_exports_json.verdict.json 2> evidence/guard_exports_json.stderr.txt || true
+	@jq -r '.ok' evidence/guard_exports_json.verdict.json >/dev/null 2>&1 || echo '{"ok":false}' > evidence/guard_exports_json.verdict.json
+
+.PHONY: evidence.exports.badge
+evidence.exports.badge: guard.exports.json.evidence
+	@mkdir -p $(BADGES_DIR)
+	@STATUS=$$(test "$$(jq -r .ok evidence/guard_exports_json.verdict.json)" = "true" && echo PASS || echo FAIL); \
+	python3 scripts/badges/make_badge.py --label "Exports JSON" --status $$STATUS --out $(BADGES_DIR)/exports_json.svg >/dev/null; \
+	echo "badge=$(BADGES_DIR)/exports_json.svg status=$$STATUS"
+	@python3 scripts/tools/update_badges_manifest.py "exports_json" "$(BADGES_DIR)/exports_json.svg" "Exports JSON guard verdict"
+
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
 	@if [ "$${CI_XREF_BADGES_SKIP:-0}" = "1" ]; then \
@@ -819,7 +835,7 @@ evidence.badges:
 	done
 
 .PHONY: evidence.bundle
-evidence.bundle: evidence.badges ## build operator evidence bundle (now includes xref metrics & badges if present)
+evidence.bundle: evidence.badges evidence.exports.badge ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
