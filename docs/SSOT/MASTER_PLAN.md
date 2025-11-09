@@ -175,6 +175,16 @@ collect_nouns → enrichment → network_aggregator → schema_validator → ana
 
 ## Governance & Operations
 
+### Governance: Always-Apply Triad
+
+This plan assumes and re-affirms the triad:
+
+**050 (LOUD FAIL)**, **051 (Required Checks Gate)**, **052 (Tool-Priority: local+gh → codex (401) → gemini/mcp)**.
+
+These are active on every branch/state and are not pruned or downgraded.
+
+<!-- guard.alwaysapply sentinel: 050 051 052 -->
+
 ### Rules Framework
 - **Rule 001-061** — Complete governance rule set
 - **OPS Contract v6.2.3** — Execution discipline
@@ -263,7 +273,7 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 <!-- RULES_TABLE_START -->
 | # | Title |
 |---:|-------|
-| 000 | Non-negotiable rules for Gemantria |
+| 000 | # 000-ssot-index (Default-Apply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
