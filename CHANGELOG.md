@@ -22,6 +22,12 @@
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
 
+## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
+
+- Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
+- **Run ID**: 19203400031 · Artifact: `evidence/guard_extraction_accuracy.json` (expected `ok:true` with non-null totals).
+- Posture restored to fixtures after proof.
+
 ## [pre] v0.1.0-rc20 — tag STRICT (fixtures) with **v2≥25 enforced**
 
 - Hardened guard active on tag CI; fixtures path passed and HINT confirms `truth=v2`.
