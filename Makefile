@@ -193,6 +193,10 @@ test.compass:
 	@echo ">> COMPASS evaluation on $(ENVELOPE)"
 	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
 
+.PHONY: test.guard
+test.guard:
+	@pytest -q tests/unit/guards/test_exports_guard_schema.py
+
 # CI smoke targets (for workflow compatibility)
 # Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
