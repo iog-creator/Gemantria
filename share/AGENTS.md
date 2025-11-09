@@ -562,6 +562,10 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
 - **Before tagging, run the Atlas DSN-on proof:**
   - `make atlas.proof.dsn` (read-only; stays grey/HINT if DB is unreachable)
   - Tag only after diagrams populate from real telemetry and tests pass.
+- **Dev-only demo data for Atlas visual proof:**
+  - Seed+proof: `DEMO_DB=1 make atlas.demo.proof` (requires `GEMATRIA_DSN`, writes demo rows)
+  - Cleanup: `DEMO_DB=1 make atlas.demo.reset`
+  - Safety: DEMO seed is **dev-only**; CI/release must **not** invoke these targets.
 
 ### Support Agents (Resilience & Governance)
 

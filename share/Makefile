@@ -158,6 +158,11 @@ atlas.test: ## Time atlas generation and warn if >5s
 	@echo "Timing atlas generation..."
 	@time python3 scripts/atlas/generate_atlas.py
 
+.PHONY: atlas.test.backlink
+atlas.test.backlink: ## Verify "Back to Atlas" links exist in evidence pages
+	@grep -q '<a href="/atlas/index.html">' docs/evidence/*.html && echo "ok: backlink in HTML" || (echo "FAIL: backlink missing in HTML"; exit 1)
+	@grep -q '\[← Back to Atlas](/atlas/index.html)' docs/evidence/*.md && echo "ok: backlink in Markdown" || (echo "FAIL: backlink missing in Markdown"; exit 1)
+
 atlas.serve: ## Start local HTTP server for atlas preview (port 8888)
 	@echo "Starting HTTP server on port 8888..."
 	@echo "Open http://localhost:8888/atlas/index.html in your browser"
@@ -175,6 +180,25 @@ atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-o
 	@psql "$$GEMATRIA_DSN" -tAc "SELECT now();" || (echo "HINT: DB unreachable; staying in grey mode" && exit 0)
 	@$(MAKE) -s atlas.generate
 	@$(MAKE) -s atlas.test
+
+# --- Atlas demo seed (dev-only; enables visual proof without live telemetry) ---
+.PHONY: atlas.demo.seed
+atlas.demo.seed: ## Seed demo telemetry data for Atlas visual proof (dev-only; requires GEMATRIA_DSN and DEMO_DB=1)
+	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
+	@[ "$$DEMO_DB" = "1" ] || (echo "LOUD_FAIL: set DEMO_DB=1 to seed demo data (dev-only)"; exit 2)
+	@psql "$$GEMATRIA_DSN" -f scripts/atlas/demo_seed.sql
+
+.PHONY: atlas.demo.reset
+atlas.demo.reset: ## Remove demo telemetry data (dev-only; requires GEMATRIA_DSN and DEMO_DB=1)
+	@[ -n "$$GEMATRIA_DSN" ] || (echo "LOUD_FAIL: GEMATRIA_DSN not set"; exit 2)
+	@[ "$$DEMO_DB" = "1" ] || (echo "LOUD_FAIL: set DEMO_DB=1 to delete demo data (dev-only)"; exit 2)
+	@psql "$$GEMATRIA_DSN" -tAc "DELETE FROM public.metrics_log WHERE run_id LIKE 'demo-%';"
+	@psql "$$GEMATRIA_DSN" -tAc "DELETE FROM public.checkpointer_state WHERE pipeline_id LIKE 'demo-%';"
+
+.PHONY: atlas.demo.proof
+atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMATRIA_DSN and DEMO_DB=1)
+	@$(MAKE) -s atlas.demo.seed DEMO_DB=1
+	@$(MAKE) -s atlas.proof.dsn
 
 # Complete housekeeping (Rule-058: mandatory post-change)
 
