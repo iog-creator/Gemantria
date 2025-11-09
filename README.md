@@ -4,6 +4,13 @@
   <img alt="xref coverage" src="share/eval/badges/xrefs_coverage.svg" />
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
   <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
+
+#### Operator Status
+
+| Check | Status | Evidence |
+|---|---|---|
+| Exports JSON | <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" /> | [verdict JSON](evidence/exports_guard.verdict.json) · [rendered MD](evidence/exports_guard.verdict.md) |
+
 </div>
 
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.

@@ -599,6 +599,11 @@ evidence.exports.badge: guard.exports.json.evidence
 	echo "badge=$(BADGES_DIR)/exports_json.svg status=$$STATUS"
 	@python3 scripts/tools/update_badges_manifest.py "exports_json" "$(BADGES_DIR)/exports_json.svg" "Exports JSON guard verdict"
 
+.PHONY: evidence.exports.verdict.md
+evidence.exports.verdict.md: guard.exports.json.evidence
+	@python3 scripts/tools/render_exports_verdict_md.py >/dev/null
+	@test -f evidence/exports_guard.verdict.md
+
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
 	@if [ "$${CI_XREF_BADGES_SKIP:-0}" = "1" ]; then \
@@ -835,7 +840,7 @@ evidence.badges:
 	done
 
 .PHONY: evidence.bundle
-evidence.bundle: evidence.badges evidence.exports.badge ## build operator evidence bundle (now includes xref metrics & badges if present)
+evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
