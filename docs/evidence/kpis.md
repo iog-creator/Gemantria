@@ -1,5 +1,7 @@
 # KPIs
 
+[← Back to Atlas](/atlas/index.html)
+
 **What this shows:** Key performance indicators
 
 **Status:** LIVE (populated from database)

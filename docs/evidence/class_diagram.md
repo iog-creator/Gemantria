@@ -1,5 +1,7 @@
 # Class Diagram
 
+[← Back to Atlas](/atlas/index.html)
+
 **What this shows:** UML class relationships
 
 **Status:** LIVE (populated from database)
