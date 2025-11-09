@@ -619,9 +619,16 @@ graph.score:
 	@echo "GRAPH_SCORE_OK"
 
 analytics.export:
-	@echo ">> Analytics Agent: scored graph→stats/patterns/forecast + report"
-	@# TODO: wire to analytics export scripts
-	@echo "ANALYTICS_EXPORT_OK"
+	@echo "HINT: analytics: starting (file-first)"
+	@if test -f exports/graph_latest.scored.json || test -f exports/graph_latest.json; then \
+		echo "HINT: analytics: using graph JSON in exports/"; \
+		python scripts/analytics/graph_stats_from_json.py; \
+	else \
+		echo "HINT: analytics: no local graph JSON; deferring to DB exporters"; \
+		python scripts/analytics/export_graph.py || true; \
+	fi
+	@python scripts/analytics/export_patterns.py || true
+	@echo "[analytics.export] OK"
 
 # --- Analytics exports (DB-first; tolerant stubs when DSN missing) ---
 .PHONY: analytics.export.db

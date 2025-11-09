@@ -13,6 +13,17 @@
 ## Scope (files only)
 <!-- exact list; no others -->
 
+## Visual QA (Cursor Browser) — REQUIRED (HINT)
+- [ ] I ran `npm run dev` in `/ui` and opened the app with Cursor's **Browser** tool
+- [ ] I navigated to the **Cross-References** page and verified:
+  - Chips render (first 5 + "+N more")
+  - Hover styles apply
+  - Clicking a chip opens the **Side Panel**; close works
+  - Search filters by Hebrew/gematria
+- [ ] I added screenshots in a PR comment titled **"Cursor Browser QA — XRef Visualization"**
+
+> Runbook: `docs/runbooks/CURSOR_BROWSER_QA.md`
+
 ## Acceptance (governance v6.2.3)
 - [ ] ruff format/check green (SSOT)
 - [ ] `make ops.verify` passes (Rule-054 duplicate guard)

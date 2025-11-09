@@ -1,8 +1,20 @@
 # RULES_INDEX
 
+## Always-Apply Governance Triad
+
+The following rules are **Always-Apply** across `main`, PRs, and tags:
+
+| Rule | Name (short)                 | Purpose (1-line)                       |
+|-----:|------------------------------|----------------------------------------|
+| **050** | **LOUD FAIL**                | Refuse/stop when SSOT or governance is missing/misconfigured |
+| **051** | **Required Checks Gate**     | Merge only when **required** checks are green; advisory checks don't block |
+| **052** | **Tool-Priority (local+gh)** | Enforce tool order: local+gh → codex (401) → gemini/mcp |
+
+<!-- guard.alwaysapply sentinel: 050 051 052 -->
+
 | # | File | Title |
 |---:|------|-------|
-| 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |
+| 000 | 000-ssot-index.mdc | # 000-ssot-index (Default-Apply) |
 | 001 | 001-db-safety.mdc | # --- |
 | 002 | 002-gematria-validation.mdc | # --- |
 | 003 | 003-graph-and-batch.mdc | # --- |
