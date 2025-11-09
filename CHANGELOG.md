@@ -28,6 +28,11 @@
 - Attached tag guard artifact in the v0.1.0 Release (see assets); repo vars restored to fixtures default.
 - Notes auto-generated per **RELEASES.md**; badges and CI validated on tag.
 
+### v0.1.0 — CI verification
+
+- STRICT tag workflow for **v0.1.0**: ✅ green (see run `19203434209`); artifact attached to Release.
+- README badges checked; docs mirrored to `share/`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
