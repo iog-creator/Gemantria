@@ -22,6 +22,12 @@
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
 
+## [pre] v0.1.0-rc20 — tag STRICT (fixtures) with **v2≥25 enforced**
+
+- Hardened guard active on tag CI; fixtures path passed and HINT confirms `truth=v2`.
+- **Run ID**: 19203390058 · Artifact: `evidence/guard_extraction_accuracy.json` (expected `ok:true`; totals may be null on fixtures).
+- Posture: `STRICT_REAL_EXTRACTION=0`.
+
 ## [pre] v0.1.0-rc19 — tag-only STRICT (fixtures, v2) with guard HINT
 
 - Guard now emits a **HINT** indicating which truth file/version is used; tag logs confirm `truth=v2`.
