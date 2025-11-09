@@ -3,6 +3,7 @@
 <div align="left">
   <img alt="xref coverage" src="share/eval/badges/xrefs_coverage.svg" />
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
+  <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
 </div>
 
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
