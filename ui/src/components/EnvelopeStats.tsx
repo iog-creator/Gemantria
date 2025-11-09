@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Envelope } from '../types/envelope';
 import { loadEnvelope, getEnvelopeStats, saveEnvelopeArtifact } from '../lib/loadEnvelope';
+import GraphPanel from './GraphPanel';
 
 interface EnvelopeStatsProps {
   uploadedEnvelope?: Envelope | null;
@@ -49,6 +50,8 @@ export function EnvelopeStats({ uploadedEnvelope }: EnvelopeStatsProps) {
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc', margin: '20px', borderRadius: '8px' }}>
       <h3>📊 Envelope Statistics</h3>
+
+      <GraphPanel />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '15px' }}>
         <div style={{ padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '6px' }}>

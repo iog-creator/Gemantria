@@ -12,6 +12,7 @@ TARGETS = [
     ("exports/graph_latest.json", ("graph.", "graph-v", "graph_latest")),
     ("exports/graph_latest.scored.json", ("graph.", "graph-v", "graph_latest")),
     ("share/eval/rerank_blend_report.json", ("rerank-blend.",)),
+    ("share/eval/patterns.json", ("patterns.",)),
 ]
 
 
