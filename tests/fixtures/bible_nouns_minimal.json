@@ -1,0 +1,1419 @@
+{
+  "schema": "bible-nouns.minimal.v1",
+  "source": "bible_db.v_hebrew_tokens",
+  "book": "Genesis",
+  "generated_at": "2025-11-08T04:03:52.446641+00:00",
+  "nodes": [
+    {
+      "surface": "וְ/אֵ֥ת",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/אֵ֥ת",
+        "primary_verse": "Genesis 1:1",
+        "freq": 985
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יֹּ֥אמֶר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יֹּ֥אמֶר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 582
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֶל\\־",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אֶל\\־",
+        "primary_verse": "Genesis 1:1",
+        "freq": 465
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֲשֶׁ֖ר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אֲשֶׁ֖ר",
+        "primary_verse": "Genesis 1:1",
+        "freq": 404
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "כָּל\\־",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "כָּל\\־",
+        "primary_verse": "Genesis 1:1",
+        "freq": 339
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "הָיְתָ֥ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הָיְתָ֥ה",
+        "primary_verse": "Genesis 1:1",
+        "freq": 313
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "הָ/אָֽרֶץ\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הָ/אָֽרֶץ\\׃",
+        "primary_verse": "Genesis 1:1",
+        "freq": 309
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "עַל\\־",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "עַל\\־",
+        "primary_verse": "Genesis 1:1",
+        "freq": 301
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "כִּי\\־",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "כִּי\\־",
+        "primary_verse": "Genesis 1:1",
+        "freq": 279
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֱלֹהִ֑ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אֱלֹהִ֑ים",
+        "primary_verse": "Genesis 1:1",
+        "freq": 213
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וְ/שָׁנִֽים\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/שָׁנִֽים\\׃",
+        "primary_verse": "Genesis 1:1",
+        "freq": 161
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "ב֖/וֹ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "ב֖/וֹ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 152
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יַּ֣עַשׂ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יַּ֣עַשׂ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 152
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "י֔וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "י֔וֹם",
+        "primary_verse": "Genesis 1:1",
+        "freq": 151
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יִּתֵּ֥ן",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יִּתֵּ֥ן",
+        "primary_verse": "Genesis 1:2",
+        "freq": 149
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יַּ֧רְא",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יַּ֧רְא",
+        "primary_verse": "Genesis 1:1",
+        "freq": 137
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "פְּנֵ֥י",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "פְּנֵ֥י",
+        "primary_verse": "Genesis 1:1",
+        "freq": 131
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "הִנֵּה֩",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הִנֵּה֩",
+        "primary_verse": "Genesis 1:1",
+        "freq": 116
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יִּקְרָ֨א",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יִּקְרָ֨א",
+        "primary_verse": "Genesis 1:1",
+        "freq": 109
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/תּוֹצֵ֨א",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/תּוֹצֵ֨א",
+        "primary_verse": "Genesis 1:1",
+        "freq": 79
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וּ/בֵ֥ין",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וּ/בֵ֥ין",
+        "primary_verse": "Genesis 1:1",
+        "freq": 74
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יְבָ֧רֶךְ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יְבָ֧רֶךְ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 70
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "חַיָּ֑ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "חַיָּ֑ה",
+        "primary_verse": "Genesis 1:1",
+        "freq": 66
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "שְׁנֵ֥י",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "שְׁנֵ֥י",
+        "primary_verse": "Genesis 1:1",
+        "freq": 59
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "זַרְע/וֹ\\־",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "זַרְע/וֹ\\־",
+        "primary_verse": "Genesis 1:3",
+        "freq": 58
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "כֵֽן\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "כֵֽן\\׃",
+        "primary_verse": "Genesis 1:3",
+        "freq": 55
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/מָּֽיִם\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/מָּֽיִם\\׃",
+        "primary_verse": "Genesis 1:1",
+        "freq": 54
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "לָ/הֶ֜ם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "לָ/הֶ֜ם",
+        "primary_verse": "Genesis 1:1",
+        "freq": 49
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אֶחָֽד\\׃\\ \\פ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אֶחָֽד\\׃\\ \\פ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 45
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "אָדָ֛ם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אָדָ֛ם",
+        "primary_verse": "Genesis 1:1",
+        "freq": 45
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "מָק֣וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "מָק֣וֹם",
+        "primary_verse": "Genesis 1:3",
+        "freq": 44
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "הָֽ/אֲדָמָ֖ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הָֽ/אֲדָמָ֖ה",
+        "primary_verse": "Genesis 1:1",
+        "freq": 43
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "נֶ֣פֶשׁ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "נֶ֣פֶשׁ",
+        "primary_verse": "Genesis 1:3",
+        "freq": 42
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/שָּׁמַ֖יִם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/שָּׁמַ֖יִם",
+        "primary_verse": "Genesis 1:1",
+        "freq": 41
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "מְאֹ֑ד",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "מְאֹ֑ד",
+        "primary_verse": "Genesis 1:1",
+        "freq": 37
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "ט֖וֹב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "ט֖וֹב",
+        "primary_verse": "Genesis 1:2",
+        "freq": 34
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/גָּדֹל֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/גָּדֹל֙",
+        "primary_verse": "Genesis 1:1",
+        "freq": 33
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "לָ/כֶ֜ם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "לָ/כֶ֜ם",
+        "primary_verse": "Genesis 1:1",
+        "freq": 31
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "מִ/תַּ֣חַת",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "מִ/תַּ֣חַת",
+        "primary_verse": "Genesis 1:2",
+        "freq": 31
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "עֵ֣ץ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "עֵ֣ץ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 30
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "יִ֥רֶב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "יִ֥רֶב",
+        "primary_verse": "Genesis 1:1",
+        "freq": 29
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וְ/עוֹף֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/עוֹף֙",
+        "primary_verse": "Genesis 1:2",
+        "freq": 22
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "לָ֑יְלָה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "לָ֑יְלָה",
+        "primary_verse": "Genesis 1:2",
+        "freq": 22
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "בְּהֵמָ֥ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בְּהֵמָ֥ה",
+        "primary_verse": "Genesis 1:1",
+        "freq": 21
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/קָּטֹן֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/קָּטֹן֙",
+        "primary_verse": "Genesis 1:2",
+        "freq": 20
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "בֹ֖קֶר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בֹ֖קֶר",
+        "primary_verse": "Genesis 1:3",
+        "freq": 18
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "בְּ/ת֣וֹךְ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בְּ/ת֣וֹךְ",
+        "primary_verse": "Genesis 1:2",
+        "freq": 17
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וּ/מִלְא֤וּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וּ/מִלְא֤וּ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 16
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "פְּר֣וּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "פְּר֣וּ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 15
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "זָכָ֥ר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "זָכָ֥ר",
+        "primary_verse": "Genesis 1:2",
+        "freq": 14
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "עֶ֥רֶב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "עֶ֥רֶב",
+        "primary_verse": "Genesis 1:1",
+        "freq": 13
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "יַמִּ֑ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "יַמִּ֑ים",
+        "primary_verse": "Genesis 1:2",
+        "freq": 12
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "שֵׁנִֽי\\׃\\ \\פ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "שֵׁנִֽי\\׃\\ \\פ",
+        "primary_verse": "Genesis 1:5",
+        "freq": 12
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:5"
+        }
+      ]
+    },
+    {
+      "surface": "וְ/ר֣וּחַ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/ר֣וּחַ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 11
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "בָּרָ֣א",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בָּרָ֣א",
+        "primary_verse": "Genesis 1:1",
+        "freq": 11
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "וָ/רֶ֛מֶשׂ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וָ/רֶ֛מֶשׂ",
+        "primary_verse": "Genesis 1:3",
+        "freq": 10
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "הָֽ/רֹמֶ֡שֶׂת",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הָֽ/רֹמֶ֡שֶׂת",
+        "primary_verse": "Genesis 1:2",
+        "freq": 10
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "רָקִ֖יעַ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "רָקִ֖יעַ",
+        "primary_verse": "Genesis 1:6",
+        "freq": 9
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:6"
+        }
+      ]
+    },
+    {
+      "surface": "פְּרִ֞י",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "פְּרִ֞י",
+        "primary_verse": "Genesis 1:2",
+        "freq": 9
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וְ/לִ/מְשֹׁל֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/לִ/מְשֹׁל֙",
+        "primary_verse": "Genesis 1:2",
+        "freq": 8
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "שְׁלִישִֽׁי\\׃\\ \\פ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "שְׁלִישִֽׁי\\׃\\ \\פ",
+        "primary_verse": "Genesis 1:4",
+        "freq": 8
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:4"
+        }
+      ]
+    },
+    {
+      "surface": "ט֑וֹב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "ט֑וֹב",
+        "primary_verse": "Genesis 1:4",
+        "freq": 7
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:4"
+        }
+      ]
+    },
+    {
+      "surface": "עֵ֚שֶׂב",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "עֵ֚שֶׂב",
+        "primary_verse": "Genesis 1:3",
+        "freq": 7
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "וּ/נְקֵבָ֖ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וּ/נְקֵבָ֖ה",
+        "primary_verse": "Genesis 1:2",
+        "freq": 6
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "אֽוֹר\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "אֽוֹר\\׃",
+        "primary_verse": "Genesis 1:3",
+        "freq": 6
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "וַ/יַּבְדֵּ֣ל",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וַ/יַּבְדֵּ֣ל",
+        "primary_verse": "Genesis 1:4",
+        "freq": 5
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:4"
+        }
+      ]
+    },
+    {
+      "surface": "יִשְׁרְצ֣וּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "יִשְׁרְצ֣וּ",
+        "primary_verse": "Genesis 1:7",
+        "freq": 5
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:7"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/כּוֹכָבִֽים\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/כּוֹכָבִֽים\\׃",
+        "primary_verse": "Genesis 1:4",
+        "freq": 5
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:4"
+        }
+      ]
+    },
+    {
+      "surface": "בְּ/צַלְמֵ֖/נוּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בְּ/צַלְמֵ֖/נוּ",
+        "primary_verse": "Genesis 1:3",
+        "freq": 5
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "וְ/חֹ֖שֶׁךְ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וְ/חֹ֖שֶׁךְ",
+        "primary_verse": "Genesis 1:2",
+        "freq": 4
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וּ/לְ/מ֣וֹעֲדִ֔ים",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וּ/לְ/מ֣וֹעֲדִ֔ים",
+        "primary_verse": "Genesis 1:2",
+        "freq": 4
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "לְ/אָכְלָֽה\\׃",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "לְ/אָכְלָֽה\\׃",
+        "primary_verse": "Genesis 1:3",
+        "freq": 4
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "תְה֑וֹם",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "תְה֑וֹם",
+        "primary_verse": "Genesis 1:2",
+        "freq": 4
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "לְ/הָאִ֖יר",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "לְ/הָאִ֖יר",
+        "primary_verse": "Genesis 1:3",
+        "freq": 3
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "כִּ/דְמוּתֵ֑/נוּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "כִּ/דְמוּתֵ֑/נוּ",
+        "primary_verse": "Genesis 1:1",
+        "freq": 3
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "בְּ/רֵאשִׁ֖ית",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "בְּ/רֵאשִׁ֖ית",
+        "primary_verse": "Genesis 1:1",
+        "freq": 3
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:1"
+        }
+      ]
+    },
+    {
+      "surface": "יֶ֥רֶק",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "יֶ֥רֶק",
+        "primary_verse": "Genesis 1:3",
+        "freq": 2
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:3"
+        }
+      ]
+    },
+    {
+      "surface": "יִקָּו֨וּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "יִקָּו֨וּ",
+        "primary_verse": "Genesis 1:9",
+        "freq": 2
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:9"
+        }
+      ]
+    },
+    {
+      "surface": "הַ/יַּבָּשָׁ֑ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "הַ/יַּבָּשָׁ֑ה",
+        "primary_verse": "Genesis 1:9",
+        "freq": 2
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:9"
+        }
+      ]
+    },
+    {
+      "surface": "תֹ֙הוּ֙",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "תֹ֙הוּ֙",
+        "primary_verse": "Genesis 1:2",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וָ/בֹ֔הוּ",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וָ/בֹ֔הוּ",
+        "primary_verse": "Genesis 1:2",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "מְרַחֶ֖פֶת",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "מְרַחֶ֖פֶת",
+        "primary_verse": "Genesis 1:2",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:2"
+        }
+      ]
+    },
+    {
+      "surface": "וּ/לְ/מִקְוֵ֥ה",
+      "letters": null,
+      "gematria_value": null,
+      "class": "other",
+      "analysis": {
+        "lemma": "וּ/לְ/מִקְוֵ֥ה",
+        "primary_verse": "Genesis 1:10",
+        "freq": 1
+      },
+      "sources": [
+        {
+          "name": "bible_db.v_hebrew_tokens",
+          "ref": "Genesis 1:10"
+        }
+      ]
+    }
+  ]
+}

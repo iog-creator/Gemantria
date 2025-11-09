@@ -14,6 +14,7 @@ import time
 
 TRUTH = pathlib.Path("tests/fixtures/extraction_truth.json")
 BIBLE_NOUNS = pathlib.Path("exports/bible_nouns_genesis.json")
+BIBLE_NOUNS_MINIMAL = pathlib.Path("tests/fixtures/bible_nouns_minimal.json")
 OUT = pathlib.Path("exports/graph_latest.scored.json")
 
 # Map verse IDs to Genesis 1 verse numbers
@@ -36,8 +37,15 @@ def main() -> int:
         print(f"[prod-graph] ERROR: truth fixtures not found: {TRUTH}")
         return 1
 
-    if not BIBLE_NOUNS.exists():
-        print("[prod-graph] WARNING: bible_nouns not found, falling back to fixture mode")
+    # Prefer full bible_nouns (local), fall back to minimal fixture (CI)
+    if BIBLE_NOUNS.exists():
+        bible_path = BIBLE_NOUNS
+        print(f"[prod-graph] Using {bible_path} (production)")
+    elif BIBLE_NOUNS_MINIMAL.exists():
+        bible_path = BIBLE_NOUNS_MINIMAL
+        print(f"[prod-graph] Using {bible_path} (CI fixture)")
+    else:
+        print("[prod-graph] ERROR: No bible_nouns data found, falling back to fixture mode")
         # Fallback to fixture mode
         import sys
 
@@ -51,7 +59,7 @@ def main() -> int:
     expected_verses = {item["verse_id"]: item["nouns"] for item in truth_data.get("items", [])}
 
     # Load bible nouns
-    bible_data = json.loads(BIBLE_NOUNS.read_text(encoding="utf-8"))
+    bible_data = json.loads(bible_path.read_text(encoding="utf-8"))
     nodes_by_verse = {}
 
     # Group nouns by verse reference
@@ -83,7 +91,7 @@ def main() -> int:
     graph = {
         "schema": "graph.vproduction",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "source": "bible_nouns_genesis.json",
+        "source": str(bible_path),
         "note": "Production graph built from real extraction (truth nouns for validation)",
         "nodes": items,
         "edges": [],
