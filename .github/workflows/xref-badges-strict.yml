@@ -1,0 +1,33 @@
+name: xref-badges (STRICT on tags)
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  xref_badges_strict:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Activate venv & deps (hermetic-friendly)
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r requirements.txt || true
+      - name: Set STRICT_XREF_BADGES
+        run: echo "STRICT_XREF_BADGES=1" >> "$GITHUB_ENV"
+      - name: Build badge artifacts (safe if missing index)
+        run: |
+          . .venv/bin/activate
+          make -s eval.package || true
+      - name: Enforce xref badges presence (STRICT)
+        run: |
+          . .venv/bin/activate
+          python scripts/guards/guard_xrefs_badges.py
+
