@@ -559,6 +559,9 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
 - **Task Prompt:**
   > Create notes for {BOOK} including artifact list and acceptance checklist.
 - **Make Target:** `make release.prepare`
+- **Before tagging, run the Atlas DSN-on proof:**
+  - `make atlas.proof.dsn` (read-only; stays grey/HINT if DB is unreachable)
+  - Tag only after diagrams populate from real telemetry and tests pass.
 
 ### Support Agents (Resilience & Governance)
 
