@@ -85,6 +85,8 @@ The operator dashboard includes lightweight badges derived from the published xr
 
 > Generated from `ui/public/xrefs/xrefs_index.v1.json` during `make eval.package`. In main/PR contexts these run in **HINT-only** mode; they do not affect the SSOT/guards.
 
+> **CI behavior:** On PRs, the xref badge guard is path-aware and skips unless `ui/**` or the guard/badge scripts change. On tags, it runs in STRICT mode (release `v*` requires the index).
+
 > In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
 
 ## Required Checks
