@@ -65,6 +65,11 @@
 - Evidence bundle includes verdict JSON for dashboards/release assets.
 - Tag CI: STRICT green; artifact(s) archived to `evidence/`.
 
+### v0.1.1-rc6 — fixtures tag with JSON-Schema PASS
+
+- Export schemas committed under `schemas/`; guard now finds and validates all four exports.
+- Tag CI: **STRICT** green with **schema_ok=✅**; verdict/badge/manifest archived in `evidence/`.
+
 ## [pre] v0.1.0-rc21 — tag STRICT (production path) proof
 
 - Ran with `STRICT_REAL_EXTRACTION=1` and real extractor; STRICT guard passed on production path.
