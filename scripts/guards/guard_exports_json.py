@@ -34,7 +34,24 @@ def main() -> int:
             continue
         try:
             with f.open("r", encoding="utf-8") as fh:
-                json.load(fh)  # basic JSON validity; schema validation optional later
+                obj = json.load(fh)  # basic JSON validity
+            # --- Minimal shape checks (dependency-free) ---
+            if fname == "ai_nouns.json":
+                if not isinstance(obj, dict) or "nodes" not in obj or not isinstance(obj["nodes"], list):
+                    (errors if strict else hints).append("ai_nouns.json: expected object with list 'nodes'")
+            elif fname == "graph_stats.json":
+                if not isinstance(obj, dict) or not all(k in obj for k in ("nodes","edges")):
+                    (errors if strict else hints).append("graph_stats.json: expected object with numeric 'nodes' and 'edges'")
+                else:
+                    n, e = obj["nodes"], obj["edges"]
+                    if not (isinstance(n, int) and n >= 0 and isinstance(e, int) and e >= 0):
+                        (errors if strict else hints).append("graph_stats.json: 'nodes'/'edges' must be non-negative integers")
+            elif fname == "graph_patterns.json":
+                if not ((isinstance(obj, list)) or (isinstance(obj, dict) and isinstance(obj.get("patterns"), list))):
+                    (errors if strict else hints).append("graph_patterns.json: expected list or object{patterns: list}")
+            elif fname == "graph_latest.scored.json":
+                if not isinstance(obj, dict):
+                    (errors if strict else hints).append("graph_latest.scored.json: expected top-level object")
         except Exception as e:
             msg = f"invalid json: exports/{fname}: {e}"
             (errors if strict else hints).append(msg)
