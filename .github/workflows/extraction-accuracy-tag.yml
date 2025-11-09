@@ -20,10 +20,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build extraction graph (fixtures default)
+      - name: Build production graph (real extractor)
+        if: ${{ vars.STRICT_REAL_EXTRACTION == '1' }}
+        shell: bash
         run: |
+          set -euo pipefail
+          echo "::group::build-production-extraction"
+          python3 --version
+          # Must write exports/graph_latest.scored.json
+          python3 scripts/analytics/build_graph_real.py
+          echo "::endgroup::"
+          echo "::group::post-build-preflight"
+          ls -la exports || true
+          test -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }
+          echo "::endgroup::"
+
+      - name: Build real extraction graph (repo fixtures, hermetic)
+        if: ${{ vars.STRICT_REAL_EXTRACTION != '1' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::group::build-real-extraction(fixtures)"
+          python3 --version
           python3 scripts/analytics/build_graph_from_repo_fixtures.py
-          test -s exports/graph_latest.scored.json
+          echo "::endgroup::"
+          echo "::group::post-build-preflight"
+          ls -la exports || true
+          test -s exports/graph_latest.scored.json || { echo "::error::missing exports/graph_latest.scored.json"; exit 1; }
+          echo "::endgroup::"
 
       - name: Guard extraction accuracy STRICT
         env:
