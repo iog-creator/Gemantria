@@ -33,6 +33,8 @@ DSN = os.getenv("GEMATRIA_DSN")
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
+BACK_LINK_HTML = '<p style="margin:0 0 16px"><a href="/atlas/index.html">← Back to Atlas</a></p>\n'
+
 
 def _hint(msg: str) -> None:
     """Emit HINT to stderr."""
@@ -280,6 +282,8 @@ def _generate_summary_md(diagram_name: str, title: str, description: str, data: 
     """Generate human-readable Markdown summary."""
     lines = [f"# {title}"]
     lines.append("")
+    lines.append("[← Back to Atlas](/atlas/index.html)")
+    lines.append("")
     lines.append(f"**What this shows:** {description}")
     lines.append("")
 
@@ -324,7 +328,7 @@ def _generate_summary_html(md_content: str) -> str:
     </style>
 </head>
 <body>
-{md_content.replace(chr(10), "<br>").replace("```json", "<pre><code>").replace("```", "</code></pre>")}
+{BACK_LINK_HTML}{md_content.replace(chr(10), "<br>").replace("```json", "<pre><code>").replace("```", "</code></pre>")}
 </body>
 </html>"""
     return html

@@ -1,5 +1,7 @@
 # Call Graph
 
+[← Back to Atlas](/atlas/index.html)
+
 **What this shows:** Function and method call relationships
 
 **Status:** LIVE (populated from database)

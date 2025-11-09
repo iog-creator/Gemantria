@@ -1,5 +1,7 @@
 # Pipeline Flow Historical
 
+[← Back to Atlas](/atlas/index.html)
+
 **What this shows:** Historical pipeline execution flow
 
 **Status:** LIVE (populated from database)

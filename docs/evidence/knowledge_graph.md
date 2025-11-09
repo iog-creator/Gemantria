@@ -1,5 +1,7 @@
 # Knowledge Graph
 
+[← Back to Atlas](/atlas/index.html)
+
 **What this shows:** Semantic concept relationships
 
 **Status:** LIVE (populated from database)
