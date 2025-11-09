@@ -600,6 +600,10 @@ graph.fixture.from.truth:
 graph.real.from.fixtures:
 	@python scripts/analytics/build_graph_from_repo_fixtures.py
 
+.PHONY: graph.real.production
+graph.real.production:
+	@python scripts/analytics/build_graph_real.py
+
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
 guard.docs.consistency:
