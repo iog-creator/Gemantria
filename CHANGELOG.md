@@ -5,6 +5,7 @@
 2025-11-09 — ops: promote extraction truth-suite to **v2** (≥25 cases); guard now prefers v2 when available
 2025-11-09 — ops: archive rc18 STRICT-tag (fixtures, v2) artifact; record in CHANGELOG
 2025-11-09 — ops: archive rc19 STRICT-tag (fixtures,v2,with HINT) + logs; record in CHANGELOG
+2025-11-09 — ops: guard hardening — STRICT-on-tags requires **truth v2 ≥25** (HINT-only on main/PR)
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]

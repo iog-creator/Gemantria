@@ -10,11 +10,22 @@ import time
 GRAPH = [pathlib.Path("exports/graph_latest.scored.json"), pathlib.Path("exports/graph_latest.json")]
 TRUTH_V1 = pathlib.Path("tests/truth/extraction_accuracy.v1.json")
 TRUTH_V2 = pathlib.Path("tests/truth/extraction_accuracy.v2.json")
+
+# Detect tag context (GitHub Actions) or explicit override
+_is_tag_ctx = (
+    os.getenv("GITHUB_REF_TYPE", "").lower() == "tag"
+    or os.getenv("GITHUB_REF", "").startswith("refs/tags/")
+    or os.getenv("STRICT_TAG_CONTEXT") == "1"
+)
+
+# Choose truth file with v2 preference
 TRUTH = TRUTH_V1
+v2_cases = None
 if TRUTH_V2.exists():
     try:
         _v2 = json.loads(TRUTH_V2.read_text())
-        if len(_v2.get("cases", [])) >= 25:
+        v2_cases = len(_v2.get("cases", []))
+        if v2_cases >= 25:
             TRUTH = TRUTH_V2
             print(f"HINT: extraction_accuracy: using truth=v2 file={TRUTH}", file=sys.stderr)
         else:
@@ -23,6 +34,12 @@ if TRUTH_V2.exists():
         print("HINT: extraction_accuracy: v2 unreadable; using v1", file=sys.stderr)
 if TRUTH == TRUTH_V1:
     print(f"HINT: extraction_accuracy: using truth=v1 file={TRUTH}", file=sys.stderr)
+
+# STRICT-on-tags hardening: require v2 with ≥25 cases
+if _is_tag_ctx:
+    if TRUTH != TRUTH_V2 or (v2_cases or 0) < 25:
+        print("ERROR: STRICT(tag): requires truth=v2 with ≥25 cases; failing gate.", file=sys.stderr)
+        sys.exit(2)
 
 
 def load_graph():

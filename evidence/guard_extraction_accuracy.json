@@ -1,6 +1,6 @@
 {
   "schema": "guard.extraction-accuracy.v1",
-  "generated_at": "2025-11-09T04:28:19Z",
+  "generated_at": "2025-11-09T04:30:06Z",
   "mode": "STRICT",
   "source": {
     "mode": "file_first",
