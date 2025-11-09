@@ -32,7 +32,10 @@ def main() -> int:
 
     txt = SSOT.read_text(encoding="utf-8", errors="ignore")
     has_box = re.search(r"```text\s*\[SYSTEM PROMPT", txt) is not None
-    has_tutor = re.search(r"^##\s*Tutor notes", txt, flags=re.M) is not None
+    has_tutor = (
+        re.search(r"^##\s+Tutor Notes", txt, flags=re.M | re.I) is not None
+        or re.search(r"^##\s+Tutor Notes \(", txt, flags=re.M | re.I) is not None
+    )
     report["sections"] = {"system_box": has_box, "tutor_notes": has_tutor}
 
     report["hashes"]["root"] = sha(ROOT)
