@@ -33,7 +33,9 @@ DSN = os.getenv("GEMATRIA_DSN")
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
-BACK_LINK_HTML = '<p style="margin:0 0 16px"><a href="/atlas/index.html">← Back to Atlas</a></p>\n'
+# Evidence pages live in docs/evidence/*.html; Atlas lives in docs/atlas/index.html
+# Use a relative href so GitHub Pages under /<user>/<repo>/ works correctly.
+BACK_LINK_HTML = '<p style="margin:0 0 16px"><a href="../atlas/index.html">← Back to Atlas</a></p>\n'
 
 
 def _hint(msg: str) -> None:
@@ -282,7 +284,8 @@ def _generate_summary_md(diagram_name: str, title: str, description: str, data: 
     """Generate human-readable Markdown summary."""
     lines = [f"# {title}"]
     lines.append("")
-    lines.append("[← Back to Atlas](/atlas/index.html)")
+    # Markdown evidence lives in docs/evidence/*.md → link back to ../atlas/index.html
+    lines.append("[← Back to Atlas](../atlas/index.html)")
     lines.append("")
     lines.append(f"**What this shows:** {description}")
     lines.append("")
