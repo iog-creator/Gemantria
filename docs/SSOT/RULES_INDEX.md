@@ -1,20 +1,8 @@
 # RULES_INDEX
 
-## Always-Apply Governance Triad
-
-The following rules are **Always-Apply** across `main`, PRs, and tags:
-
-| Rule | Name (short)                 | Purpose (1-line)                       |
-|-----:|------------------------------|----------------------------------------|
-| **050** | **LOUD FAIL**                | Refuse/stop when SSOT or governance is missing/misconfigured |
-| **051** | **Required Checks Gate**     | Merge only when **required** checks are green; advisory checks don't block |
-| **052** | **Tool-Priority (local+gh)** | Enforce tool order: local+gh → codex (401) → gemini/mcp |
-
-<!-- guard.alwaysapply sentinel: 050 051 052 -->
-
 | # | File | Title |
 |---:|------|-------|
-| 000 | 000-ssot-index.mdc | # 000-ssot-index (Default-Apply) |
+| 000 | 000-ssot-index.mdc | # 000-ssot-index (AlwaysApply) |
 | 001 | 001-db-safety.mdc | # --- |
 | 002 | 002-gematria-validation.mdc | # --- |
 | 003 | 003-graph-and-batch.mdc | # --- |
@@ -64,9 +52,9 @@ The following rules are **Always-Apply** across `main`, PRs, and tags:
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # --- |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | # --- |
+| 051 | 051-cursor-insight.mdc | # --- |
+| 052 | 052-tool-priority.mdc | # --- |
 | 053 | 053-idempotence.mdc | # --- |
 | 054 | 054-reuse-first.mdc | # --- |
 | 055 | 055-auto-docs-sync.mdc | # --- |

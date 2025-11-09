@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-08 14:07:04
+Generated: 2025-11-08 16:41:40
 
 ## Active Rules
 
@@ -96,6 +96,7 @@ Generated: 2025-11-08 14:07:04
 - system-enforcement.yml
 - typing-nightly.yml
 - verify-stats.yml
+- xref-badges-strict.yml
 
 ## ADRs
 
