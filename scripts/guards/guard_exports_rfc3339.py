@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json, os, re, sys, pathlib, datetime, zoneinfo
+import json, os, re, sys, pathlib, datetime
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -41,7 +41,7 @@ def main() -> int:
 
     verdict = {
         "schema": "guard.exports-rfc3339.v1",
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
+        "generated_at": datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat(),
         "strict": bool(strict),
         "files": {},
         "ok": False,

@@ -98,6 +98,21 @@ handoff.update:
 	@$(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
+# Atlas status diagram generation
+
+.PHONY: atlas.update atlas.preview.html atlas.preview.txt atlas.preview.mmd
+atlas.update:
+	@python3 scripts/status/update_mermaid_from_evidence.py
+
+atlas.preview.html:
+	@python3 scripts/status/preview_atlas.py html
+
+atlas.preview.txt:
+	@python3 scripts/status/preview_atlas.py txt
+
+atlas.preview.mmd:
+	@python3 scripts/status/preview_atlas.py mmd
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
@@ -607,6 +622,15 @@ evidence.exports.badge: guard.exports.json.evidence
 	echo "badge=$(BADGES_DIR)/exports_json.svg status=$$STATUS"
 	@python3 scripts/tools/update_badges_manifest.py "exports_json" "$(BADGES_DIR)/exports_json.svg" "Exports JSON guard verdict"
 
+.PHONY: evidence.rfc3339.badge
+evidence.rfc3339.badge:
+	@mkdir -p $(BADGES_DIR) evidence
+	@$(PY_RUN) scripts/guards/guard_exports_rfc3339.py >/dev/null 2>&1 || true
+	@STATUS=$$(test "$$(jq -r '.ok' evidence/exports_rfc3339.verdict.json)" = "true" && echo PASS || echo FAIL); \
+	python3 scripts/badges/make_badge.py --label "RFC3339" --status $$STATUS --out $(BADGES_DIR)/rfc3339.svg >/dev/null; \
+	echo "badge=$(BADGES_DIR)/rfc3339.svg status=$$STATUS"
+	@python3 scripts/tools/update_badges_manifest.py "rfc3339" "$(BADGES_DIR)/rfc3339.svg" "RFC3339 timestamps guard verdict"
+
 .PHONY: evidence.exports.verdict.md
 evidence.exports.verdict.md: guard.exports.json.evidence
 	@python3 scripts/tools/render_exports_verdict_md.py >/dev/null
@@ -616,6 +640,11 @@ evidence.exports.verdict.md: guard.exports.json.evidence
 evidence.exports.rfc3339.verdict:
 	@PYTHONPATH=scripts/guards python3 scripts/guards/guard_exports_rfc3339.py >/dev/null 2>&1 || true
 	@test -f evidence/exports_rfc3339.verdict.json || echo '[bundle] exports_rfc3339.verdict.json missing' >> evidence/bundle.log
+
+.PHONY: evidence.rfc3339.verdict.md
+evidence.rfc3339.verdict.md: evidence.exports.rfc3339.verdict
+	@python3 scripts/tools/render_rfc3339_verdict_md.py >/dev/null 2>&1 || true
+	@test -f evidence/exports_rfc3339.verdict.md || echo '[bundle] exports_rfc3339.verdict.md missing' >> evidence/bundle.log
 
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
@@ -853,7 +882,7 @@ evidence.badges:
 	done
 
 .PHONY: evidence.bundle
-evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md evidence.exports.rfc3339.verdict ## build operator evidence bundle (now includes xref metrics & badges if present)
+evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict.md evidence.rfc3339.badge evidence.rfc3339.verdict.md evidence.exports.rfc3339.verdict ## build operator evidence bundle (now includes xref metrics & badges if present)
 	@echo "==> Seeding golden sample (hermetic)…"
 	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
 	@echo "==> Running repo layout guard…"
