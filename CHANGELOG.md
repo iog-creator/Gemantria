@@ -70,6 +70,11 @@
 - Export schemas committed under `schemas/`; guard now finds and validates all four exports.
 - Tag CI: **STRICT** green with **schema_ok=✅**; verdict/badge/manifest archived in `evidence/`.
 
+### v0.1.1-rc7 — fixtures tag post–required-tests
+
+- Tag CI: **STRICT** green; repo protected with required `guard-tests` on PRs.
+- Release assets: guard artifact, exports verdict JSON, badge SVG, badges manifest.
+
 ## v0.1.1 — stable
 
 - JSON-Schema validation **PASS** for all four exports (see `schemas/`).
