@@ -1,0 +1,1 @@
+HINT: extraction_accuracy: using truth=v2 file=tests/truth/extraction_accuracy.v2.json

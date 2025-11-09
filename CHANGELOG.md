@@ -4,6 +4,7 @@
 2025-11-09 — ops: archive rc17 STRICT-tag (fixtures) artifact; record in CHANGELOG
 2025-11-09 — ops: promote extraction truth-suite to **v2** (≥25 cases); guard now prefers v2 when available
 2025-11-09 — ops: archive rc18 STRICT-tag (fixtures, v2) artifact; record in CHANGELOG
+2025-11-09 — ops: archive rc19 STRICT-tag (fixtures,v2,with HINT) + logs; record in CHANGELOG
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]
@@ -19,6 +20,12 @@
 - Enforce **folder-scoped AGENTS.md** pattern; mirror to **share/**; tag **ops/agents-md-inventory-sync** to trigger STRICT agents-lint.
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
+
+## [pre] v0.1.0-rc19 — tag-only STRICT (fixtures, v2) with guard HINT
+
+- Guard now emits a **HINT** indicating which truth file/version is used; tag logs confirm `truth=v2`.
+- **Run ID**: 19203349054 · Artifact: `evidence/guard_extraction_accuracy.json` (expected `ok:true`; totals may be null on fixtures path).
+- Posture: `STRICT_REAL_EXTRACTION=0` (fixtures default).
 
 ## [pre] v0.1.0-rc18 — tag-only STRICT (fixtures, v2) proof
 
