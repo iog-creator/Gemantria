@@ -1,3 +1,4 @@
+2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); main/PR remain HINT-only
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]
