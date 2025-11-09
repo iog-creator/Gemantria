@@ -1,0 +1,274 @@
+{
+  "version": "v1",
+  "generated_at": "2025-11-09T04:15:17Z",
+  "source": "fixtures",
+  "cases": [
+    {
+      "surface": "ר֫וּחַ",
+      "letters": [
+        "ר֫",
+        "וּ",
+        "חַ"
+      ],
+      "gematria": 214,
+      "ref": "Gen.1.2"
+    },
+    {
+      "surface": "חַיִּים",
+      "letters": [
+        "חַ",
+        "יִּ",
+        "י",
+        "ם"
+      ],
+      "gematria": 28,
+      "ref": "Gen.2.9"
+    },
+    {
+      "surface": "עֵץ",
+      "letters": [
+        "עֵ",
+        "ץ"
+      ],
+      "gematria": 160,
+      "ref": "Gen.2.9"
+    },
+    {
+      "surface": "בֹּקֶר",
+      "letters": [
+        "ב",
+        "ֹ",
+        "ּ",
+        "ק",
+        "ֶ",
+        "ר"
+      ],
+      "gematria": 222,
+      "ref": "Gen.1.5"
+    },
+    {
+      "surface": "בֹּקֶר",
+      "letters": [
+        "ב",
+        "ֹ",
+        "ּ",
+        "ק",
+        "ֶ",
+        "ר"
+      ],
+      "gematria": 222,
+      "ref": "Gen.1.5"
+    },
+    {
+      "surface": "גָּן",
+      "letters": [
+        "גָּ",
+        "ן"
+      ],
+      "gematria": 53,
+      "ref": "Gen.2.8"
+    },
+    {
+      "surface": "דַּעַת",
+      "letters": [
+        "דַּ",
+        "עַ",
+        "ת"
+      ],
+      "gematria": 474,
+      "ref": "Gen.2.9"
+    },
+    {
+      "surface": "מַיִם",
+      "letters": [
+        "מַ",
+        "יִ",
+        "ם"
+      ],
+      "gematria": 90,
+      "ref": "Gen.1.2"
+    },
+    {
+      "surface": "יוֹם",
+      "letters": [
+        "י",
+        "וֹ",
+        "ם"
+      ],
+      "gematria": 56,
+      "ref": "Gen.1.5"
+    },
+    {
+      "surface": "נָהָר",
+      "letters": [
+        "נָ",
+        "הָ",
+        "ר"
+      ],
+      "gematria": 255,
+      "ref": "Gen.2.10"
+    },
+    {
+      "surface": "אָדָם",
+      "letters": [
+        "אָ",
+        "דָ",
+        "ם"
+      ],
+      "gematria": 45,
+      "ref": "Gen.2.7"
+    },
+    {
+      "surface": "אוֹר",
+      "letters": [
+        "א",
+        "וֹ",
+        "ר"
+      ],
+      "gematria": 207,
+      "ref": "Gen.1.3"
+    },
+    {
+      "surface": "יַמִּים",
+      "letters": [
+        "יַ",
+        "מִּ",
+        "י",
+        "ם"
+      ],
+      "gematria": 100,
+      "ref": "Gen.1.10"
+    },
+    {
+      "surface": "תְּהוֹם",
+      "letters": [
+        "תְּ",
+        "ה",
+        "וֹ",
+        "ם"
+      ],
+      "gematria": 452,
+      "ref": "Gen.1.2"
+    },
+    {
+      "surface": "לַיְלָה",
+      "letters": [
+        "לַ",
+        "יְ",
+        "לָ",
+        "ה"
+      ],
+      "gematria": 75,
+      "ref": "Gen.1.5"
+    },
+    {
+      "surface": "אֱלֹהִים",
+      "letters": [
+        "א",
+        "ֱ",
+        "לֹ",
+        "ה",
+        "ִ",
+        "י",
+        "ם"
+      ],
+      "gematria": 86,
+      "ref": "Gen.1.1"
+    },
+    {
+      "surface": "מָקוֹם",
+      "letters": [
+        "מָ",
+        "קוֹ",
+        "ם"
+      ],
+      "gematria": 186,
+      "ref": "Gen.1.9"
+    },
+    {
+      "surface": "שָׁמַיִם",
+      "letters": [
+        "שָׁ",
+        "מַ",
+        "יִ",
+        "ם"
+      ],
+      "gematria": 390,
+      "ref": "Gen.1.1"
+    },
+    {
+      "surface": "רָקִיעַ",
+      "letters": [
+        "רָ",
+        "קִ",
+        "י",
+        "עַ"
+      ],
+      "gematria": 350,
+      "ref": "Gen.1.6"
+    },
+    {
+      "surface": "חֹשֶׁךְ",
+      "letters": [
+        "חֹ",
+        "שֶׁ",
+        "ךְ"
+      ],
+      "gematria": 329,
+      "ref": "Gen.1.2"
+    },
+    {
+      "surface": "עֵזֶר",
+      "letters": [
+        "עֵ",
+        "זֶ",
+        "ר"
+      ],
+      "gematria": 177,
+      "ref": "Gen.2.18"
+    },
+    {
+      "surface": "אִשָּׁה",
+      "letters": [
+        "אִ",
+        "שָּׁ",
+        "ה"
+      ],
+      "gematria": 311,
+      "ref": "Gen.2.18"
+    },
+    {
+      "surface": "אֶרֶץ",
+      "letters": [
+        "א",
+        "ֶ",
+        "ר",
+        "ֶ",
+        "ץ"
+      ],
+      "gematria": 296,
+      "ref": "Gen.1.1"
+    },
+    {
+      "surface": "יַבָּשָׁה",
+      "letters": [
+        "יַ",
+        "בָּ",
+        "שָׁ",
+        "ה"
+      ],
+      "gematria": 317,
+      "ref": "Gen.1.9"
+    },
+    {
+      "surface": "טוֹב",
+      "letters": [
+        "ט",
+        "וֹ",
+        "ב"
+      ],
+      "gematria": 17,
+      "ref": "Gen.1.10"
+    }
+  ]
+}

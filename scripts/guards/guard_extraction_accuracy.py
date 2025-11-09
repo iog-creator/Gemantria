@@ -7,7 +7,18 @@ import pathlib
 import time
 
 GRAPH = [pathlib.Path("exports/graph_latest.scored.json"), pathlib.Path("exports/graph_latest.json")]
-TRUTH = pathlib.Path("tests/fixtures/extraction_truth.json")
+TRUTH_V1 = pathlib.Path("tests/truth/extraction_accuracy.v1.json")
+TRUTH_V2 = pathlib.Path("tests/truth/extraction_accuracy.v2.json")
+TRUTH = TRUTH_V1
+if TRUTH_V2.exists():
+    try:
+        _v2 = json.loads(TRUTH_V2.read_text())
+        if len(_v2.get("cases", [])) >= 25:
+            TRUTH = TRUTH_V2
+        else:
+            print("HINT: extraction_accuracy: v2 present but <25 cases; using v1", file=sys.stderr)
+    except Exception:
+        print("HINT: extraction_accuracy: v2 unreadable; using v1", file=sys.stderr)
 
 
 def load_graph():
