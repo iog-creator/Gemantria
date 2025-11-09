@@ -1,0 +1,21 @@
+{
+  "schema": "rerank-blend.v1",
+  "generated_at": "2025-11-09T00:52:52Z",
+  "source": {
+    "mode": "file_first",
+    "input": "exports/graph_latest.json"
+  },
+  "thresholds": {
+    "hint": 0.8,
+    "strict": 0.9
+  },
+  "below": {
+    "hint": 0,
+    "strict": 0
+  },
+  "ok": {
+    "hint": 0,
+    "strict": 0
+  },
+  "total_edges": 0
+}
