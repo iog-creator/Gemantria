@@ -1,17 +1,21 @@
+# ruff: noqa: RUF001
+
 #!/usr/bin/env python3
 
 from __future__ import annotations
 
-import json, os, sys, hashlib, datetime, pathlib, itertools
+import json, sys, hashlib, datetime, pathlib, itertools
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 EXPORTS = ROOT / "exports"
 OUTFILE = ROOT / "tests" / "truth" / "extraction_accuracy.v1.json"
 
+
 def _canon_key(node):
     # deterministic order: stable hash of surface text (fallback empty)
     s = (node.get("surface") or "") + "|" + (node.get("lemma") or "")
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
 
 def main(limit: int = 25) -> int:
     # Try multiple sources in order of preference
@@ -28,8 +32,7 @@ def main(limit: int = 25) -> int:
                 src_nodes = data.get("nodes", [])
                 # Filter for nodes with gematria and are proper nouns
                 filtered_nodes = [
-                    n for n in src_nodes
-                    if n.get("gematria") is not None or n.get("gematria_value") is not None
+                    n for n in src_nodes if n.get("gematria") is not None or n.get("gematria_value") is not None
                 ]
                 if filtered_nodes:
                     nodes.extend(filtered_nodes)
@@ -46,15 +49,15 @@ def main(limit: int = 25) -> int:
         nodes.extend(synthetic_cases)
 
     if not nodes:
-        print('HINT: derive_truth_cases: no valid noun sources found with gematria data', file=sys.stderr)
+        print("HINT: derive_truth_cases: no valid noun sources found with gematria data", file=sys.stderr)
         return 0
 
     nodes.sort(key=_canon_key)
     out = {
         "version": "v1",
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds").replace('+00:00', 'Z'),
+        "generated_at": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "source": "fixtures",
-        "cases": []
+        "cases": [],
     }
     for node in itertools.islice(nodes, 0, limit):
         # Handle both field naming conventions
@@ -67,15 +70,12 @@ def main(limit: int = 25) -> int:
 
         # Only include if we have the minimal required fields
         if gematria is not None:
-            out["cases"].append({
-                "surface": node.get("surface"),
-                "letters": node.get("letters", None),
-                "gematria": gematria,
-                "ref": ref
-            })
+            out["cases"].append(
+                {"surface": node.get("surface"), "letters": node.get("letters", None), "gematria": gematria, "ref": ref}
+            )
 
     if not out["cases"]:
-        print('HINT: derive_truth_cases: no cases generated (missing gematria data)', file=sys.stderr)
+        print("HINT: derive_truth_cases: no cases generated (missing gematria data)", file=sys.stderr)
         return 0
 
     OUTFILE.parent.mkdir(parents=True, exist_ok=True)
@@ -87,7 +87,7 @@ def main(limit: int = 25) -> int:
 def _create_synthetic_cases(count: int) -> list[dict]:
     """Create deterministic synthetic test cases for truth suite expansion."""
     # Genesis nouns with their gematria values - expanded beyond the original 10
-    synthetic_data = [
+    synthetic_data = [  # noqa: RUF001
         {"surface": "בֹּקֶר", "letters": ["ב", "ֹ", "ּ", "ק", "ֶ", "ר"], "gematria": 222, "ref": "Gen.1.5"},
         {"surface": "אֱלֹהִים", "letters": ["א", "ֱ", "לֹ", "ה", "ִ", "י", "ם"], "gematria": 86, "ref": "Gen.1.1"},
         {"surface": "אֶרֶץ", "letters": ["א", "ֶ", "ר", "ֶ", "ץ"], "gematria": 296, "ref": "Gen.1.1"},
@@ -121,7 +121,16 @@ def _create_synthetic_cases(count: int) -> list[dict]:
     ]
 
     # Return the first 'count' synthetic cases
-    return [{"gematria": case["gematria"], "surface": case["surface"], "letters": case["letters"], "sources": [{"ref": case["ref"]}]} for case in synthetic_data[:count]]
+    return [
+        {
+            "gematria": case["gematria"],
+            "surface": case["surface"],
+            "letters": case["letters"],
+            "sources": [{"ref": case["ref"]}],
+        }
+        for case in synthetic_data[:count]
+    ]
+
 
 if __name__ == "__main__":
     sys.exit(main())
