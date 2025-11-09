@@ -68,7 +68,7 @@ const XrefChips: React.FC<XrefChipsProps> = ({
         </button>
       ))}
       {remainingCount > 0 && (
-        <div
+        <span
           style={{
             padding: '0.25rem 0.5rem',
             fontSize: '0.75rem',
@@ -78,9 +78,11 @@ const XrefChips: React.FC<XrefChipsProps> = ({
             borderRadius: '12px',
             whiteSpace: 'nowrap',
           }}
+          aria-label={`plus ${remainingCount} more cross-references`}
+          role="note"
         >
           +{remainingCount} more
-        </div>
+        </span>
       )}
     </div>
   );

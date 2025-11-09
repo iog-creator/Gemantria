@@ -70,6 +70,29 @@ const XrefDemoPage: React.FC = () => {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Skip link */}
+      <a
+        href="#xref-main"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: '0',
+          zIndex: 999,
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.left = '0';
+          e.currentTarget.style.padding = '0.5rem 1rem';
+          e.currentTarget.style.backgroundColor = '#01579b';
+          e.currentTarget.style.color = '#fff';
+          e.currentTarget.style.textDecoration = 'underline';
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.left = '-9999px';
+        }}
+      >
+        Skip to results
+      </a>
+
       {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ marginBottom: '0.5rem', color: '#01579b' }}>
@@ -88,6 +111,7 @@ const XrefDemoPage: React.FC = () => {
         <input
           type="text"
           placeholder="Search by Hebrew text or gematria value..."
+          aria-label="Search Hebrew text or gematria value"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
@@ -101,7 +125,11 @@ const XrefDemoPage: React.FC = () => {
       </div>
 
       {/* Node cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1rem' }}>
+      <div
+        id="xref-main"
+        role="main"
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1rem' }}
+      >
         {filteredNodes.map((node, index) => (
           <div
             key={`${node.he}-${node.gm}-${index}`}

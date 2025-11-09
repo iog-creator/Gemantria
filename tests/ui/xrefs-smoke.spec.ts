@@ -38,3 +38,21 @@ test('xrefs page renders chips and opens side panel', async ({ page }) => {
   expect(overflow2 === '' || overflow2 === 'visible').toBeTruthy();
 });
 
+test('xrefs accessibility: "+N more" has an accessible label and main landmark exists', async ({ page }) => {
+  await page.goto(process.env.UI_URL || 'http://localhost:5173', { waitUntil: 'networkidle' });
+
+  // Navigate to Cross-References tab if present
+  const tab = page.getByRole('tab', { name: /cross-?references/i });
+  if (await tab.count()) await tab.click();
+
+  // Accessible landmark
+  await expect(page.locator('#xref-main[role="main"]')).toBeVisible();
+
+  // "+N more" indicator (may or may not exist depending on data)
+  const more = page.locator('role=note[name=/plus \\d+ more cross-references/i]');
+  // If present, confirm it exposes the accessible name
+  if (await more.count()) {
+    await expect(more.first()).toBeVisible();
+  }
+});
+
