@@ -1,6 +1,17 @@
 {
   "schema": "extraction-truth.v1",
-  "note": "Populate with deterministic verse->nouns fixtures to graduate STRICT on tags.",
-  "items": []
+  "note": "Starter fixtures; tag CI generates a minimal graph from these and enforces STRICT.",
+  "items": [
+    {"verse_id": "GEN.1.1", "nouns": ["God","heavens","earth"]},
+    {"verse_id": "GEN.1.2", "nouns": ["earth","darkness","deep","Spirit","waters"]},
+    {"verse_id": "GEN.1.3", "nouns": ["God","light"]},
+    {"verse_id": "GEN.1.4", "nouns": ["God","light","darkness","day","night"]},
+    {"verse_id": "GEN.1.5", "nouns": ["evening","morning","day"]},
+    {"verse_id": "GEN.1.6", "nouns": ["God","expanse","waters"]},
+    {"verse_id": "GEN.1.7", "nouns": ["God","expanse","waters"]},
+    {"verse_id": "GEN.1.8", "nouns": ["God","heaven","evening","morning","day"]},
+    {"verse_id": "GEN.1.9", "nouns": ["God","waters","place","dry land"]},
+    {"verse_id": "GEN.1.10", "nouns": ["God","earth","seas","good"]}
+  ]
 }
 

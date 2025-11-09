@@ -592,6 +592,10 @@ guard.book.extraction:
 guard.extraction.accuracy:
 	@python scripts/guards/guard_extraction_accuracy.py || true
 
+.PHONY: graph.fixture.from.truth
+graph.fixture.from.truth:
+	@python scripts/analytics/build_fixture_graph.py
+
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
 guard.docs.consistency:
