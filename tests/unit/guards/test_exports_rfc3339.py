@@ -15,9 +15,7 @@ def _run(env=None):
     if env:
         e.update(env)
 
-    return subprocess.run(
-        [sys.executable, str(SCRIPT)], cwd=str(ROOT), env=e, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-    )
+    return subprocess.run([sys.executable, str(SCRIPT)], cwd=str(ROOT), env=e, capture_output=True, text=True)
 
 
 def _load():
@@ -37,7 +35,7 @@ def test_hint_mode_passes_and_writes_verdict():
 
     assert v["ok"] is True
 
-    for k, f in v["files"].items():
+    for _k, f in v["files"].items():
         assert f["exists"] is True
 
         assert f["has_generated_at"] is True
