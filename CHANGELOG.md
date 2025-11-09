@@ -1,6 +1,7 @@
 2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); add pip cache; require xref index on **release tags** (v*); main/PR remain HINT-only
 2025-11-09 — ops: archive rc16 STRICT-tag (prod path) artifact; record in CHANGELOG; reset to fixtures default
 2025-11-09 — ops: expand extraction truth-suite to 25 cases (fixtures path); add derive tool; guard prefers v2≥25
+2025-11-09 — ops: archive rc17 STRICT-tag (fixtures) artifact; record in CHANGELOG
 2025-11-08 — ops: add xref coverage/rate badges (HINT-only) to operator dashboard; wire into `eval.package`
 2025-11-08 — webui: xref a11y — ARIA for +N more; main landmark; smoke asserts [a251b135]
 2025-11-08 — webui: xref UX polish — keyboard chips, Esc to close, focus trap, scroll-lock [468d2088]
@@ -16,6 +17,12 @@
 - Enforce **folder-scoped AGENTS.md** pattern; mirror to **share/**; tag **ops/agents-md-inventory-sync** to trigger STRICT agents-lint.
 
 ### ci: enforce RFC3339 on tag builds; add normalization step (PR #262)
+
+## [pre] v0.1.0-rc17 — tag-only STRICT (fixtures path) proof
+
+- Truth-suite expanded to **25** deterministic cases; STRICT guard passes on fixtures.
+- **Run ID**: 19203285597 · Artifact: `evidence/guard_extraction_accuracy.json` (expected `ok:true`, fixtures posture).
+- Repo vars: default fixtures posture (`STRICT_REAL_EXTRACTION=0`).
 
 ## [pre] v0.1.0-rc16 — tag-only STRICT (production path) proof
 
