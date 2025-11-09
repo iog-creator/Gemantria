@@ -105,6 +105,16 @@ make eval.graph.calibrate.adv
 make ci.exports.smoke
 ```
 
+**After making ANY changes, Cursor MUST complete this checklist:**
+
+1. **Run housekeeping**: `make housekeeping` (Rule 058 - MANDATORY)
+2. **Check hints**: If rule/docs changed, verify hints emitted (Rule 026)
+3. **Verify share sync**: Check `share/` updated (Rule 030)
+4. **Check related rules**: Review "Related Rules" sections for updates needed
+5. **Commit generated files**: Share sync, evidence, forest updates, etc.
+
+**DO NOT** commit changes without completing this checklist. This is non-negotiable.
+
 For PR work:
 
 ```bash

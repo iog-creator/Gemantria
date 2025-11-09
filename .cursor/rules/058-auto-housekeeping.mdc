@@ -11,6 +11,8 @@ globs:
 alwaysApply: false
 ---
 
+**CRITICAL CURSOR ENFORCEMENT**: After ANY file edit in this repository, Cursor MUST automatically run `make housekeeping` before committing. This is non-negotiable. Do not proceed without running housekeeping.
+
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)
 
 Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail.

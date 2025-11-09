@@ -77,3 +77,15 @@ alwaysApply: false
 * If auto-attached, `globs` are correct and minimal.
 * If behavior affects gates or workflows, update `AGENTS.md` and ADRs in the same PR.
 * Add/adjust tests that rely on the rule (e.g., CI scripts, contract tests).
+
+## Pre-Finalization Checklist (Cursor MUST follow)
+
+Before finalizing any rule change, Cursor MUST:
+
+- [ ] Check all "Related Rules" sections for updates needed
+- [ ] Verify `alwaysApply` frontmatter matches rule intent
+- [ ] Add hints emission if rule affects operational behavior (Rule 026)
+- [ ] Update `RULES_INDEX.md` if rule number/name changes
+- [ ] Run `make housekeeping` after rule changes (Rule 058 - MANDATORY)
+- [ ] Verify share sync updated (Rule 030)
+- [ ] Check if GPT docs need updates (Rule 065) if operational behavior changes
