@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -36,7 +37,7 @@ SHARE = ROOT / "share"
 try:
     import psycopg
 
-    GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+    GEMATRIA_DSN = get_rw_dsn()
     DB_AVAILABLE = bool(GEMATRIA_DSN)
 except ImportError:
     DB_AVAILABLE = False
