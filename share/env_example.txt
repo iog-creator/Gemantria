@@ -17,6 +17,10 @@ BIBLE_DB_DSN=postgresql://postgres@/bible_db?host=/var/run/postgresql
 # Example: postgres://atlas_ro:***@localhost:5432/gemantria?sslmode=disable
 ATLAS_DSN=
 
+# Read-write DSN for writers, telemetry, HNSW (preferred if available)
+# Falls back to GEMATRIA_DSN if unset
+ATLAS_DSN_RW=
+
 # HINT/STRICT switches (default HINT in CI; opt-in STRICT locally/tags)
 STRICT_ATLAS_DSN=0
 STRICT_ALWAYS_APPLY=0
@@ -28,6 +32,14 @@ STRICT_GOVERNANCE=0
 
 # LM Studio Server Host
 LM_STUDIO_HOST=http://192.168.1.119:1234
+
+# === Local AI (LM Studio / OpenAI-compatible) ===
+# OpenAI-compatible API base URL (defaults to LM Studio on port 9994 per AGENTS.md)
+OPENAI_BASE_URL=http://127.0.0.1:9994/v1
+# API key (any non-empty string works for local servers; SDK requires it)
+OPENAI_API_KEY=sk-local-placeholder
+# Embedding model name (must match a model loaded in LM Studio)
+LM_EMBED_MODEL=text-embedding-bge-m3
 
 # Model Configuration
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b

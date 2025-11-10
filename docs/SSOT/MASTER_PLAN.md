@@ -300,7 +300,7 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 <!-- RULES_TABLE_START -->
 | # | Title |
 |---:|-------|
-| 000 | # 000-ssot-index |
+| 000 | # 000-ssot-index (AlwaysApply) |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -350,9 +350,9 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # --- |
-| 050 | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | # --- |
+| 051 | # --- |
+| 052 | # --- |
 | 053 | # --- |
 | 054 | # --- |
 | 055 | # --- |
@@ -366,4 +366,5 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 063 | # --- |
 | 064 | # id: "064" |
 | 065 | # --- |
+| 066 | # --- |
 <!-- RULES_TABLE_END -->

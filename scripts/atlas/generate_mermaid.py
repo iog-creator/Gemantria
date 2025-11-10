@@ -13,7 +13,7 @@ import os
 import pathlib
 import sys
 import datetime as dt
-from typing import Iterable, Tuple, Dict, Any
+from typing import Tuple, Dict, Any, List
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs" / "atlas"
@@ -122,35 +122,78 @@ def _strict_write(conn, window: str):
             g.append(f"  Runs_{d} :done, {d}, 1d")
         (DOCS / "pipeline_flow_historical.mmd").write_text("\n".join(g) + "\n")
 
-        # 3) dependencies: best-effort from checkpointer_state (parent->child) if present
-        dep = ["%% generated (STRICT) " + now_iso(), "flowchart LR"]
+        # 3) dependencies: TRUE DAG with error-rate coloring
+        # Expected tables:
+        #   checkpointer_state(parent_node, child_node)
+        #   metrics_log(node_name, status, started_at)
+        # We color edge A->B by the error rate of executions of node B in the window.
+        dep_lines: List[str] = ["%% generated (STRICT) " + now_iso(), "flowchart LR"]
+        class_defs = [
+            "classDef err-low  stroke:#999,stroke-width:1px;",
+            "classDef err-med  stroke:#E3A008,stroke-width:2px;",
+            "classDef err-high stroke:#D64545,stroke-width:3px;",
+        ]
         try:
-            # Try to extract node relationships from checkpoint JSONB metadata
-            # Fallback: use workflow/thread_id ordering as proxy
+            # Pull unique edges
             cur.execute(
-                f"""
-              select distinct workflow, thread_id
+                """
+              select distinct parent_node, child_node
               from checkpointer_state
-              where created_at >= now() - {win_expr}
-              order by created_at
-              limit 100
+              where parent_node is not null and child_node is not null
+              limit 2000
             """
             )
-            pairs: Iterable[Tuple[str, str]] = cur.fetchall()
+            edges: List[Tuple[str, str]] = [(a or "∅", b or "∅") for a, b in cur.fetchall()]
+            # Pull error stats for child nodes in window
+            cur.execute(
+                f"""
+              with w as (
+                select node_name, status
+                from metrics_log
+                where started_at >= now() - {win_expr}
+              )
+              select node_name,
+                     sum(case when status='error'   then 1 else 0 end)::int as err,
+                     sum(case when status='success' then 1 else 0 end)::int as ok
+              from w
+              group by 1
+            """
+            )
+            counts: Dict[str, Tuple[int, int]] = {r[0]: (int(r[1]), int(r[2])) for r in cur.fetchall()}
+
+            # Helper: choose class by error rate
+            def edge_class(child: str) -> str:
+                err, ok = counts.get(child, (0, 0))
+                total = err + ok
+                rate = (err / total) if total else 0.0
+                if rate >= 0.20:
+                    return "err-high"
+                if rate >= 0.05:
+                    return "err-med"
+                return "err-low"
+
+            # Emit edges + per-edge class assignment
             seen = set()
-            for a, b in pairs:
-                a = (a or "∅").replace('"', "")
-                b = (b or "∅").replace('"', "")
+            for a, b in edges:
+                a = a.replace('"', "")
+                b = b.replace('"', "")
                 key = (a, b)
                 if key in seen:
                     continue
                 seen.add(key)
-                dep.append(f'  "{a}" --> "{b}"')
-            if not seen:
-                dep.append('  "Deps" --> "No data"')
+                dep_lines.append(f'  "{a}" --> "{b}":::${{CLASS:{b}}}')
+            # Replace placeholders with concrete class names
+            out: List[str] = []
+            for line in dep_lines:
+                if ":::${CLASS:" in line:
+                    child = line.split("${CLASS:")[1].split("}")[0]
+                    out.append(line.replace(f":::${{CLASS:{child}}}", f":::{edge_class(child)}"))
+                else:
+                    out.append(line)
+            out.extend(class_defs)
         except Exception:
-            dep.append('  "Deps" --> "No data"')
-        (DOCS / "dependencies.mmd").write_text("\n".join(dep) + "\n")
+            out = dep_lines + ['  "Deps" --> "No data"'] + class_defs
+        (DOCS / "dependencies.mmd").write_text("\n".join(out) + "\n")
 
         # 4) kpis: successes vs errors in window
         cur.execute(

@@ -1,18 +1,8 @@
 # RULES_INDEX
 
-## Always-Apply Triad (050/051/052)
-
-The repository operates under the **Always-Apply Triad**:
-
-- **Rule-050 — LOUD FAIL**: Activation + SSOT gates must pass before any action proceeds.
-- **Rule-051 — CI/Required-Checks Posture**: Required checks gate merges; advisory checks are noted but not blockers.
-- **Rule-052 — Tool-Priority**: local+gh → codex → gemini/mcp (fall back only as allowed).
-
-These are mirrored by file and DB guards and must be referenced in core governance docs.
-
 | # | File | Title |
 |---:|------|-------|
-| 000 | 000-ssot-index.mdc | # 000-ssot-index |
+| 000 | 000-ssot-index.mdc | # 000-ssot-index (AlwaysApply) |
 | 001 | 001-db-safety.mdc | # --- |
 | 002 | 002-gematria-validation.mdc | # --- |
 | 003 | 003-graph-and-batch.mdc | # --- |
@@ -62,9 +52,9 @@ These are mirrored by file and DB guards and must be referenced in core governan
 | 047 | 047-reserved.mdc | # --- |
 | 048 | 048-reserved.mdc | # --- |
 | 049 | 049-gpt5-contract-v5.2.mdc | # --- |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | # --- |
+| 051 | 051-cursor-insight.mdc | # --- |
+| 052 | 052-tool-priority.mdc | # --- |
 | 053 | 053-idempotence.mdc | # --- |
 | 054 | 054-reuse-first.mdc | # --- |
 | 055 | 055-auto-docs-sync.mdc | # --- |
@@ -78,3 +68,4 @@ These are mirrored by file and DB guards and must be referenced in core governan
 | 063 | 063-git-safety.mdc | # --- |
 | 064 | 064-ai-tracking-contract.mdc | # id: "064" |
 | 065 | 065-gpt-docs-sync.mdc | # --- |
+| 066 | 066-lm-studio-appimage-update.mdc | # --- |

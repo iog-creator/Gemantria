@@ -2,6 +2,31 @@
 
 # Python interpreter (for CI compatibility)
 PYTHON ?= python3
+export PYTHON
+
+# ---- Guard: python runner regression ----------------------------------------
+.PHONY: guard.python.runner
+guard.python.runner:
+	@bash scripts/guards/guard_python_runner.sh
+
+# ---- Guard: DSN centralization ----------------------------------------------
+.PHONY: guard.dsn.centralized
+guard.dsn.centralized:
+	@bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.json >/dev/null
+
+.PHONY: guard.dsn.centralized.strict
+guard.dsn.centralized.strict:
+	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
+
+.PHONY: guard.secrets.mask
+guard.secrets.mask:
+	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null
+
+# === Auto-resolve DSNs from centralized loader (available to all targets) ===
+ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
+GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
+export ATLAS_DSN
+export GEMATRIA_DSN
 
 ui.dev.help:
 	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
@@ -211,7 +236,34 @@ atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not 
 
 # --- Atlas DSN-on proof (read-only; fails fast if DSN missing) ---
 .PHONY: atlas.proof.dsn
-atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable)
+atlas.proof.dsn: ## DSN proof: generate masked JSON + HTML with backlink (HINT by default; STRICT with STRICT_ATLAS_DSN=1)
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/ops/atlas_proof_dsn.py | tee evidence/atlas.proof.dsn.json >/dev/null
+
+## Generate Atlas Mermaid artifacts (HINT if STRICT_ATLAS_DSN!=1 or DSN/libs missing)
+.PHONY: atlas.generate.mermaid atlas.generate.7d atlas.generate.30d
+atlas.generate.mermaid:
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window $${ATLAS_WINDOW:-24h} | tee evidence/atlas.generate.mermaid.json >/dev/null
+
+atlas.generate.7d:
+	@cd $(CURDIR) && ATLAS_WINDOW=7d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 7d | tee evidence/atlas.generate.7d.json >/dev/null
+
+atlas.generate.30d:
+	@cd $(CURDIR) && ATLAS_WINDOW=30d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 30d | tee evidence/atlas.generate.30d.json >/dev/null
+
+# Convenience: open a local viewer (no network) for screenshots
+.PHONY: atlas.serve.mermaid
+atlas.serve.mermaid:
+	@python3 -m http.server 8000 >/dev/null 2>&1 &
+	@echo $$! > .server.pid
+	@sleep 1
+	@echo "Serving docs at http://localhost:8000/docs/atlas/index.html"
+
+.PHONY: atlas.serve.mermaid.stop
+atlas.serve.mermaid.stop:
+	@test -f .server.pid && kill $$(cat .server.pid) && rm .server.pid || true
+
+.PHONY: atlas.proof.dsn.old
+atlas.proof.dsn.old: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable) [DEPRECATED - use atlas.proof.dsn]
 	@ATLAS_DSN="$${ATLAS_DSN:-$$GEMATRIA_DSN}"; \
 	if [ -z "$$ATLAS_DSN" ]; then \
 		echo "LOUD_FAIL: ATLAS_DSN and GEMATRIA_DSN not set"; \
@@ -258,11 +310,17 @@ guard.prompt.ssot: ## Enforce GPT System Prompt SSOT structure
 
 # --- Tag proof (STRICT DSN tracks) ---
 .PHONY: ops.tagproof
-ops.tagproof: ## Tag proof (STRICT): DSN + Always-Apply + Atlas
-	@echo "Tag proof (STRICT): DSN + Always-Apply + Atlas"
-	@STRICT_ALWAYS_APPLY=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s guard.alwaysapply.dbmirror
-	@STRICT_ATLAS_DSN=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s atlas.proof.dsn
+ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
+	@echo "[tagproof] STRICT triad (DB mirror)"
+	@STRICT_ALWAYS_APPLY=1 $(MAKE) -s guard.alwaysapply.dbmirror
+	@echo "[tagproof] STRICT prompt SSOT"
+	@STRICT_PROMPT_SSOT=1 $(MAKE) -s guard.prompt.ssot
+	@echo "[tagproof] governance smoke"
 	@$(MAKE) -s governance.smoke
+	@echo "[tagproof] STRICT DSN centralization"
+	@$(MAKE) -s guard.dsn.centralized.strict
+	@echo "[tagproof] STRICT Atlas DSN proof"
+	@STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.proof.dsn
 
 # Complete housekeeping (Rule-058: mandatory post-change)
 
@@ -358,6 +416,10 @@ ENVELOPE ?= share/exports/envelope.json
 test.compass:
 	@echo ">> COMPASS evaluation on $(ENVELOPE)"
 	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
+
+.PHONY: test.env.loader
+test.env.loader:
+	@pytest -q tests/test_env_loader.py | tee evidence/test.env.loader.txt >/dev/null
 
 .PHONY: test.guard
 test.guard:
@@ -746,7 +808,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -911,6 +973,13 @@ guards.all:
 	@python3 scripts/guards/guard_repo_layout.py
 	@echo ">> DB FK type mismatches (advisory in CI; strict locally)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_fk_types.py || true
+	@echo ">> Validating env usage (no direct os.getenv)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_env_usage.py | tee evidence/guard_env_usage.txt || true
+	@echo ">> Validating schema contract (class not kind, no meta)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_schema_contract.py | tee evidence/guard_schema_contract.txt || true
+	@$(MAKE) -s guard.python.runner
+	@$(MAKE) -s guard.dsn.centralized
+	@$(MAKE) -s guard.secrets.mask
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
