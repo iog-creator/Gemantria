@@ -24,6 +24,7 @@ from pgvector.psycopg import register_vector  # noqa: E402
 
 from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Load environment
 ensure_env_loaded()
@@ -32,7 +33,7 @@ ensure_env_loaded()
 def backfill_bge_embeddings():
     """Backfill BGE-M3 embeddings for nodes that have Qwen3 embeddings."""
 
-    dsn = os.getenv("GEMATRIA_DSN")
+    dsn = get_rw_dsn()
     if not dsn:
         raise RuntimeError("GEMATRIA_DSN not set")
 

@@ -19,6 +19,8 @@ except ImportError:
     print("ERROR: psycopg required. Install with: pip install 'psycopg[binary]'", file=sys.stderr)
     sys.exit(1)
 
+from scripts.config.env import get_rw_dsn
+
 # Load environment variables from .env file
 try:
     from src.infra.env_loader import ensure_env_loaded
@@ -35,7 +37,7 @@ except ImportError:
                 os.environ[key.strip()] = value.strip()
 
 # Use environment variable or default
-DB_DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
+DB_DSN = get_rw_dsn() or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
 
 
 def run_audit():
