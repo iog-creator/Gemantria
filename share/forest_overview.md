@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-09 18:05:00
+Generated: 2025-11-10 12:19:55
 
 ## Active Rules
 
@@ -70,6 +70,7 @@ Generated: 2025-11-09 18:05:00
 - Rule 063-git-safety: ---
 - Rule 064-ai-tracking-contract: id: "064"
 - Rule 065-gpt-docs-sync: ---
+- Rule 066-lm-studio-appimage-update: ---
 
 ## CI Workflows
 
@@ -97,6 +98,7 @@ Generated: 2025-11-09 18:05:00
 - soft-checks.yml
 - ssot-nightly.yml
 - system-enforcement.yml
+- tagproof.yml
 - typing-nightly.yml
 - verify-stats.yml
 - xref-badges-strict.yml

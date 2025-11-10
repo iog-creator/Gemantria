@@ -455,6 +455,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 063 | # --- |
 | 064 | # id: "064" |
 | 065 | # --- |
+| 066 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

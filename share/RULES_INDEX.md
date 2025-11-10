@@ -68,3 +68,4 @@
 | 063 | 063-git-safety.mdc | # --- |
 | 064 | 064-ai-tracking-contract.mdc | # id: "064" |
 | 065 | 065-gpt-docs-sync.mdc | # --- |
+| 066 | 066-lm-studio-appimage-update.mdc | # --- |

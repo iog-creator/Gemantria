@@ -5,6 +5,7 @@
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
   <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
 <img alt="RFC3339" src="share/eval/badges/rfc3339.svg" />
+[![Tagproof](https://github.com/iog-creator/Gemantria/actions/workflows/tagproof.yml/badge.svg)](../../actions/workflows/tagproof.yml)
 
 #### Operator Status
 
@@ -18,6 +19,9 @@
 
 **Telemetry Dashboard:** [Atlas Dashboard](docs/atlas/index.html) · [Now](docs/atlas/execution_live.mmd) · [Historical](docs/atlas/pipeline_flow_historical.mmd)
 
+- Atlas evidence pages live under `docs/evidence/`.
+- The Atlas Mermaid generator writes `.mmd` files to `docs/atlas/` (flows, deps, KPIs).
+
 ### Project Status (evidence-driven)
 
 > **PR** = proposal to merge change · **Tag** = frozen proof snapshot · **Badge** = visual pass/fail marker
@@ -29,6 +33,16 @@
 This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
 
 > Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+
+### Always-Apply Triad (Governance)
+
+The following rules are **Always-Apply** in this repo and must be referenced in the governance docs and enforced by guards:
+
+- **Rule-050** — LOUD FAIL (activation + SSOT gates)
+- **Rule-051** — Required-checks/CI gating posture
+- **Rule-052** — Tool-priority (local+gh → codex → gemini/mcp)
+
+These three rules are treated as the **050/051/052 triad** and are mirrored in DB/file guards.
 
 ## Local development
 1. Create and activate a virtual environment (for example `.venv`).

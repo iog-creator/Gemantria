@@ -14,6 +14,10 @@
 2025-11-08 — OPS: Lock 3-role DB contract; AI-tracking guard (HINT on PRs, STRICT gated by vars.STRICT_DB_MIRROR_CI) [6ddce6ee]
 # Changelog
 
+## Unreleased
+
+- ops: standardize Python runner to **python3** across Makefiles and scripts; re-prove STRICT triad + guards (PR #346)
+
 ## 2025-11-08 — Triad Enforcement Finalization
 
 - Merge **PR #272**: lock Always-Apply triad to **050/051/052** only.

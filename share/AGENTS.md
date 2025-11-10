@@ -1,6 +1,8 @@
 # AGENTS.md — Gemantria Agent Framework
 <!-- alwaysapply.sentinel: 050,051,052 source=ai_interactions -->
 
+> **Always-Apply Triad**: We operate under **Rule-050 (LOUD FAIL)**, **Rule-051 (CI gating)**, and **Rule-052 (tool-priority)**. The guards ensure this 050/051/052 triad is present in docs and mirrored in DB checks.
+
 ## Directory Purpose
 
 The root `AGENTS.md` serves as the primary agent framework documentation for the Gemantria repository, defining mission, priorities, environment, workflows, and governance for all agentic operations across the codebase.
@@ -453,6 +455,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 063 | # --- |
 | 064 | # id: "064" |
 | 065 | # --- |
+| 066 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---
