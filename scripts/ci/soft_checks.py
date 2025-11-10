@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "share" / "eval" / "soft_checks"
@@ -46,7 +47,7 @@ for name, cmd, tag in CMDS:
 LOG.write_text(json.dumps(results, indent=2), encoding="utf-8")
 print("HINT: soft_checks.log saved at " + str(LOG))
 
-if not os.environ.get("GEMATRIA_DSN"):
+if not get_rw_dsn():
     print("HINT: env.GEMATRIA_DSN missing - DB-related checks were not executed (soft)")
 
 sys.exit(0)
