@@ -25,12 +25,12 @@ EVIDENCE_DIR = ATLAS_DIR.parent / "evidence"
 def _load_kpis() -> Dict[str, Any]:
     """Load KPIs JSON if available."""
     if not KPIS_JSON.exists():
-        return {}
+        return {"nodes": []}
     try:
         with KPIS_JSON.open("r", encoding="utf-8") as fh:
             return json.load(fh)
     except Exception:
-        return {}
+        return {"nodes": []}
 
 
 def _extract_nodes_from_mermaid(content: str) -> Set[str]:
