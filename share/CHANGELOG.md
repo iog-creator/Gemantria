@@ -17,22 +17,6 @@
 ## 2025-11-08 — Triad Enforcement Finalization
 
 - Merge **PR #272**: lock Always-Apply triad to **050/051/052** only.
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 - Regenerate **RULES_INVENTORY** from `.cursor/rules/*.mdc`; add guard to **ops.verify**.
 - Enforce **folder-scoped AGENTS.md** pattern; mirror to **share/**; tag **ops/agents-md-inventory-sync** to trigger STRICT agents-lint.
 

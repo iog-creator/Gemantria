@@ -11,6 +11,17 @@ GEMATRIA_DSN=postgresql://mccoy@/gematria?host=/var/run/postgresql
 # Bible Database (read-only) - Reference database with biblical text
 BIBLE_DB_DSN=postgresql://postgres@/bible_db?host=/var/run/postgresql
 
+# --- Atlas / Governance DSN (read-only recommended) ---
+# Prefer a minimally-privileged, read-only role for docs sync & telemetry proofs.
+# ATLAS_DSN falls back to GEMATRIA_DSN if unset.
+# Example: postgres://atlas_ro:***@localhost:5432/gemantria?sslmode=disable
+ATLAS_DSN=
+
+# HINT/STRICT switches (default HINT in CI; opt-in STRICT locally/tags)
+STRICT_ATLAS_DSN=0
+STRICT_ALWAYS_APPLY=0
+STRICT_GOVERNANCE=0
+
 # ============================================================================
 # LM STUDIO CONFIGURATION
 # ============================================================================

@@ -369,18 +369,6 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 - Rule-050
 - Rule-051
 - Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 * See .cursor/rules/049-gpt5-contract-v5.2.mdc (alwaysApply).
 * Path-scoped rules auto-attach via `globs`.
 * One-off procedures live as agent-requested rules (invoke by referencing their `description` in the prompt).
@@ -1130,18 +1118,6 @@ Merges are permitted only when **all** are true:
 - Rule-050
 - Rule-051
 - Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 <!-- RULES_INVENTORY:BEGIN -->
 | ID | File | Title | Status |
 |---:|:-----|:------|:-------|
@@ -1200,48 +1176,12 @@ Merges are permitted only when **all** are true:
 - Rule-050
 - Rule-051
 - Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 | 051 | `051-cursor-insight.mdc` | 051 — Cursor Insight & Handoff (AlwaysApply) | **Always-Apply** |
 <!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
 - Rule-050
 - Rule-051
 - Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 | 052 | `052-tool-priority.mdc` | 052 — Tool Priority & Context Guidance (AlwaysApply) | **Always-Apply** |
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
-<!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
-- Rule-050
-- Rule-051
-- Rule-052
 <!-- alwaysapply.sentinel: 050,051,052 source=fallback-default -->
 - Rule-050
 - Rule-051

@@ -84,6 +84,11 @@ make book.stop N=5                        # Stop-loss after N chapters
 make book.resume                          # Resume interrupted processing
 ```
 
+## Documentation
+
+- **System Prompt (SSOT)**: see [`docs/SSOT/GPT_SYSTEM_PROMPT.md`](docs/SSOT/GPT_SYSTEM_PROMPT.md)  
+  (Defines how GPT (PM) provides instructions to Cursor (executor) for the human operator. Includes a copy-paste code box for Cursor and tutor notes for operators.)
+
 ## Project structure
 - `docs/`: ADRs and the SSOT master plan that describe the rebuild objectives.
 - `schemas/`: JSON schema placeholders for contract validation.
