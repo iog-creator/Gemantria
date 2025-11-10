@@ -1,0 +1,21 @@
+<section id="kpis" style="margin-top:1rem">
+  <h2>KPIs</h2>
+  <div><strong>Window:</strong> <span id="kpis-window">—</span></div>
+  <div><strong>Success:</strong> <span id="kpis-success">0</span></div>
+  <div><strong>Error:</strong> <span id="kpis-error">0</span></div>
+  <script>
+    async function loadKPIs() {
+      try {
+        const r = await fetch('./_kpis.json', {cache:'no-store'});
+        const j = await r.json();
+        document.getElementById('kpis-window').textContent = j.window || '24h';
+        document.getElementById('kpis-success').textContent = j.success ?? 0;
+        document.getElementById('kpis-error').textContent = j.error ?? 0;
+      } catch(e) {
+        console.warn('kpis load failed', e);
+      }
+    }
+    loadKPIs();
+  </script>
+</section>
+
