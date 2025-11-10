@@ -1,57 +1,79 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Enforces DSN centralization:
+#  - Only Python files are in scope.
+#  - The ONLY file allowed to touch DSN env vars is: src/gemantria/dsn.py
+#  - Everything else must call dsn_ro/dsn_rw/dsn_atlas from that module.
+#  - Flags: direct os.getenv/os.environ with DSN keys, hardcoded postgres:// strings
 
-# Mode: HINT by default (ok: true with counts), STRICT if STRICT_DSN_CENTRAL=1 (fail on offenders not in allowlist)
-STRICT="${STRICT_DSN_CENTRAL:-0}"
-ALLOWLIST_FILE="scripts/guards/.dsn_direct.allowlist"
+ROOT="${ROOT:-$(git rev-parse --show-toplevel)}"
+ALLOW="${ROOT}/scripts/guards/.dsn_direct.allowlist"
 
-# Canonical exceptions (files allowed to touch DSN envs directly)
-ALLOWED_CANON='(scripts/config/env\.py|scripts/ops/dsn_resolve\.py)'
-ROOTS='src|scripts'
-DSN_KEYS='GEMATRIA_DSN|RW_DSN|AI_AUTOMATION_DSN|BIBLE_RO_DSN|RO_DSN|ATLAS_DSN|ATLAS_DSN_RW|ATLAS_DSN_RO|BIBLE_DB_DSN'
-BAD_PY='os\.getenv\(\s*"(?:'"$DSN_KEYS"')'
-BAD_PY2='os\.environ\.get\(\s*"(?:'"$DSN_KEYS"')'
-BAD_SH='(^|[^A-Za-z0-9_])('"$DSN_KEYS"')([[:space:]]|[^A-Za-z0-9_])'
+# Scope: Python files under src/ and scripts/ (skip tests/vendors if present)
+mapfile -t CANDIDATES < <(
+  git ls-files \
+    | grep -E '^(src|scripts)/.*\.py$' \
+    | grep -Ev '(^tests/|/vendor/|/site-packages/)'
+)
 
-# Gather offenders (Python)
-rg -n --no-heading -g '!**/.venv/**' -g '!**/tests/**' -g '!**/*.md' -g '!**/*.json' \
-   -e "$BAD_PY|$BAD_PY2" src scripts | rg -v "$ALLOWED_CANON" || true > /tmp/dsn_bad_py.txt
-# Gather offenders (Shell/Make)
-rg -n --no-heading -g '!**/.venv/**' -g '!**/tests/**' -g '!**/*.md' -g '!**/*.json' \
-   -e "$BAD_SH" src scripts \
- | rg -v "$ALLOWED_CANON" \
- | rg -v 'dsn\.test\.(ro|rw)|dsn_resolve\.py|psql.*(BIBLE_RO_DSN|GEMATRIA_DSN|RW_DSN|AI_AUTOMATION_DSN)' \
- || true > /tmp/dsn_bad_sh.txt
+SHIM="src/gemantria/dsn.py"
 
-# Apply project allowlist (legacy scripts migrating over time)
-touch "$ALLOWLIST_FILE"
-grep -v '^\s*$' "$ALLOWLIST_FILE" | grep -v '^\s*#' || true > /tmp/dsn_allow.txt
-filter_allowlist() {
-  if [ -s /tmp/dsn_allow.txt ]; then
-    # Keep only lines not matching any allowlist glob
-    # Convert globs to ripgrep alternation
-    local rgpat
-    rgpat="$(sed 's/[].[^$*+?(){|\\]/\\&/g;s/\*/.*/g' /tmp/dsn_allow.txt | paste -sd'|' -)"
-    if [ -n "${rgpat:-}" ]; then
-      rg -v "(${rgpat})" || true
-    else
-      cat
-    fi
-  else
-    cat
+bad=()
+for f in "${CANDIDATES[@]}"; do
+  # The shim is allowed to access env directly; everyone else must not.
+  if [[ "$f" == "$SHIM" ]]; then
+    continue
   fi
-}
-cat /tmp/dsn_bad_py.txt | filter_allowlist > /tmp/dsn_bad_py.eff.txt
-cat /tmp/dsn_bad_sh.txt | filter_allowlist > /tmp/dsn_bad_sh.eff.txt
+  
+  # Check for direct DSN env access (os.getenv/os.environ with DSN keys)
+  if grep -E -n \
+      -e 'os\.getenv\([^)]*["'\''](GEMATRIA_DSN|RW_DSN|AI_AUTOMATION_DSN|BIBLE_RO_DSN|RO_DSN|ATLAS_DSN|ATLAS_DSN_RW|ATLAS_DSN_RO|BIBLE_DB_DSN)' \
+      -e 'os\.environ\[[^\]]*["'\''](GEMATRIA_DSN|RW_DSN|AI_AUTOMATION_DSN|BIBLE_RO_DSN|RO_DSN|ATLAS_DSN|ATLAS_DSN_RW|ATLAS_DSN_RO|BIBLE_DB_DSN)' \
+      -e 'os\.environ\.get\([^)]*["'\''](GEMATRIA_DSN|RW_DSN|AI_AUTOMATION_DSN|BIBLE_RO_DSN|RO_DSN|ATLAS_DSN|ATLAS_DSN_RW|ATLAS_DSN_RO|BIBLE_DB_DSN)' \
+      -- "$f" >/dev/null; then
+    bad+=("$f")
+    continue
+  fi
+  
+  # Check for hardcoded postgres:// DSN strings (but allow comments and docstrings)
+  if grep -E -n \
+      -e 'postgres(ql)?://[^"'\''\s)]+' \
+      -- "$f" | grep -vE '^\s*#|"""|'\'''\''|^[^:]*:.*#.*postgres' >/dev/null; then
+    bad+=("$f")
+    continue
+  fi
+done
 
-bad_py_count=$(wc -l < /tmp/dsn_bad_py.eff.txt || echo 0)
-bad_sh_count=$(wc -l < /tmp/dsn_bad_sh.eff.txt || echo 0)
-total=$(( bad_py_count + bad_sh_count ))
+# Apply allowlist if present
+if [ -f "$ALLOW" ] && [ -s "$ALLOW" ]; then
+  ALLOWED=()
+  while IFS= read -r line; do
+    # Skip comments and empty lines
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "${line// }" ]] && continue
+    # Extract file path (first word)
+    ALLOWED+=("$(echo "$line" | awk '{print $1}')")
+  done < "$ALLOW"
+  
+  # Filter out allowed files
+  FILTERED=()
+  for f in "${bad[@]}"; do
+    ALLOWED_FLAG=0
+    for a in "${ALLOWED[@]}"; do
+      if [[ "$f" == "$a" ]] || [[ "$f" == *"$a"* ]]; then
+        ALLOWED_FLAG=1
+        break
+      fi
+    done
+    [ "$ALLOWED_FLAG" = "0" ] && FILTERED+=("$f")
+  done
+  bad=("${FILTERED[@]}")
+fi
 
-if [ "$STRICT" = "1" ] && [ "$total" -gt 0 ]; then
-  echo '{ "ok": false, "mode": "STRICT", "bad_py": '"$bad_py_count"', "bad_sh": '"$bad_sh_count"' }'
-  echo "---- Python offenders (effective) ----" >&2; cat /tmp/dsn_bad_py.eff.txt >&2 || true
-  echo "---- Shell offenders (effective) -----" >&2; cat /tmp/dsn_bad_sh.eff.txt >&2 || true
+if ((${#bad[@]})); then
+  printf '{ "ok": false, "violations": %s }\n' "$(printf '%s\n' "${bad[@]}" | jq -R . | jq -s .)"
   exit 1
 fi
-echo '{ "ok": true, "mode": "HINT", "bad_py": '"$bad_py_count"', "bad_sh": '"$bad_sh_count"' }'
+
+printf '{ "ok": true, "violations": [] }\n'
+exit 0

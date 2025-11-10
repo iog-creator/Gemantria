@@ -105,5 +105,10 @@
 | 059 | 059-context-persistence.mdc | Context Persistence |
 | 060 | 060-response-style.mdc | Response Style Enforcement |
 | 061 | 061-ai-learning-tracking.mdc | AI learning and interaction tracking system |
+| 062 | 062-environment-validation.mdc | Environment validation and venv management (always-on) |
+| 063 | 063-git-safety.mdc | Git safety - no destructive operations (always-on) |
+| 064 | 064-ai-tracking-contract.mdc | AI tracking contract |
+| 065 | 065-gpt-docs-sync.mdc | GPT Documentation Sync (AlwaysApply) |
+| 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
 
 ---

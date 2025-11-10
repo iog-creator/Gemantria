@@ -1,5 +1,3 @@
-from scripts.config.env import get_rw_dsn
-
 #!/usr/bin/env python3
 """
 Atlas DSN Proof - Generate evidence JSON for DSN connectivity and table counts.
@@ -15,13 +13,16 @@ import sys
 import time
 import urllib.parse
 from pathlib import Path
+from gemantria.dsn import dsn_rw
 
 # Add scripts directory to path
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
 EVIDENCE_DIR = REPO / "docs" / "evidence"
-DSN = get_rw_dsn() or get_rw_dsn()
+DSN = dsn_rw()
+# STRICT_ATLAS_DSN is a flag, not a DSN, so we keep os.getenv for it
+# TODO: Consider adding a helper to the shim for non-DSN env vars
 STRICT = os.getenv("STRICT_ATLAS_DSN", "0") == "1"
 
 

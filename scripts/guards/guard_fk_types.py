@@ -2,7 +2,7 @@
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
 #!/usr/bin/env python3
-import os, sys
+import sys
 from scripts.config.env import get_rw_dsn
 
 try:

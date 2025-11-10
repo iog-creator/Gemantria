@@ -294,7 +294,7 @@ lms ps
    pkill -f "lm-studio.*--run-as-service"
    
    # Start GUI (spawns utility process)
-   DISPLAY=:0 /path/to/LM-Studio.AppImage &
+   DISPLAY=:0 ~/.local/bin/lm-studio &
    
    # Restart server
    lms server start --port 9994

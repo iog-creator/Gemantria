@@ -10,7 +10,6 @@ This script reads existing concepts with Qwen3 embeddings and generates
 corresponding BGE-M3 embeddings, storing them in the embedding_bge_m3 column.
 """
 
-import os
 import sys
 from pathlib import Path
 

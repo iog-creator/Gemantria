@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from typing import Any
 
 from scripts.config.env import get_bible_db_dsn, get_rw_dsn
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 try:
     # psycopg 3 preferred
