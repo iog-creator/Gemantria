@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "share" / "eval" / "soft_checks"
