@@ -35,6 +35,7 @@ except ImportError:
                 os.environ[key.strip()] = value.strip()
 
 # Use centralized DSN shim
+from gemantria.dsn import dsn_rw
 
 DB_DSN = dsn_rw()
 
