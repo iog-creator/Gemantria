@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -28,7 +29,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from infra.env_loader import ensure_env_loaded
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 ensure_env_loaded()
 
