@@ -1,8 +1,8 @@
 {
   "error": 3,
-  "generated": "2025-11-10T20:22:27Z",
+  "generated": "2025-11-10T20:52:36Z",
   "mode": "HINT",
   "ok": true,
   "success": 42,
-  "window": "30d"
+  "window": "24h"
 }
