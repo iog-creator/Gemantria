@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -17,7 +18,6 @@ from typing import Any, Dict, List
 
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 LOG = get_logger("pipeline_orchestrator")
 
