@@ -20,6 +20,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
 from scripts.atlas.telemetry_queries import (
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
     q_active_runs,
     q_errors,
     q_latency_p90,
@@ -30,7 +31,7 @@ from scripts.atlas.telemetry_queries import (
 ATLAS_DIR = REPO / "docs" / "atlas"
 EVIDENCE_DOCS = REPO / "docs" / "evidence"
 # Use ATLAS_DSN with fallback to GEMATRIA_DSN (for read-only governance/telemetry)
-DSN = os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn() or get_rw_dsn()
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
