@@ -18,6 +18,10 @@ guard.dsn.centralized:
 guard.dsn.centralized.strict:
 	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
 
+.PHONY: guard.secrets.mask
+guard.secrets.mask:
+	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -952,6 +956,7 @@ guards.all:
 	@PYTHONPATH=. python3 scripts/guards/guard_schema_contract.py | tee evidence/guard_schema_contract.txt || true
 	@$(MAKE) -s guard.python.runner
 	@$(MAKE) -s guard.dsn.centralized
+	@$(MAKE) -s guard.secrets.mask
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
