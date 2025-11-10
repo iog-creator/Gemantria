@@ -23,11 +23,8 @@ scripts/governance_housekeeping.py
 scripts/governance_tracker.py
 scripts/guard_all.py
 scripts/guards/guard_ai_tracking_contract.py
-scripts/guards/guard_alwaysapply_dbmirror.py
 scripts/guards/guard_ci_empty_db.py
 scripts/guards/guard_dsn_centralized.sh
-scripts/guards/guard_fk_types.py
-scripts/guards/guard_runs_ledger.py
 scripts/guards/sync_alwaysapply_from_db.py
 scripts/ingest_bible_db_morphology.py
 scripts/ingest/check_env.py
