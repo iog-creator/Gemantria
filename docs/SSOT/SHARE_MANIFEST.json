@@ -85,6 +85,10 @@
       "dst": "share/GPT_REFERENCE_GUIDE.md"
     },
     {
+      "src": "docs/forest/overview.md",
+      "dst": "share/forest_overview.md"
+    },
+    {
       "src": "exports/graph_stats.json",
       "dst": "share/graph_stats.head.json",
       "generate": "head_json",
