@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -546,7 +547,7 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         ensure_env_loaded()
         import psycopg
 
-        dsn = os.getenv("GEMATRIA_DSN")
+        dsn = get_rw_dsn()
         if dsn:
             with psycopg.connect(dsn) as conn:
                 with conn.cursor() as cur:

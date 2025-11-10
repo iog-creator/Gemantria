@@ -3,6 +3,7 @@ import json
 import os
 import sys
 from urllib.parse import urlsplit, parse_qs
+from scripts.config.env import get_rw_dsn
 
 STRICT = os.getenv("STRICT_AI_TRACKING", "0") == "1"
 
@@ -27,8 +28,8 @@ def die(msg, extra=None, code=1):
     sys.exit(code)
 
 
-g = os.getenv("GEMATRIA_DSN")
-a = os.getenv("AI_AUTOMATION_DSN")
+g = get_rw_dsn()
+a = get_rw_dsn()
 Gs, As = san(g), san(a)
 info = {"dsn_envs": {"GEMATRIA_DSN": bool(g), "AI_AUTOMATION_DSN": bool(a)}}
 
