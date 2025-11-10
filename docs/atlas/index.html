@@ -56,6 +56,7 @@
       </ul>
     </aside>
     <main>
+      <div id="atlas-status" style="margin:.5rem 0;font-size:14px;">Mermaid status: initializing…</div>
       <div id="diagram-container">
         <p>Select a view from the sidebar to load a diagram.</p>
       </div>
@@ -142,6 +143,24 @@
         }
       }
     });
+  </script>
+  <script>
+(function(){
+  var s=document.createElement('script');
+  s.src="../vendor/mermaid.min.js"; s.defer=true;
+  s.onload=function(){
+    try{
+      if(window.mermaid){ window.mermaid.initialize({startOnLoad:false}); }
+      var el=document.getElementById('atlas-status');
+      if(el) el.textContent="Mermaid loaded — local rendering enabled.";
+    }catch(e){}
+  };
+  s.onerror=function(){
+    var el=document.getElementById('atlas-status');
+    if(el) el.textContent="Mermaid not loaded (vendor missing).";
+  };
+  document.currentScript.parentNode.appendChild(s);
+})();
   </script>
 </body>
 </html>
