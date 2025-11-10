@@ -98,6 +98,42 @@ ai.learning.export:
 	@$(PYTHON) scripts/ai_learning_tracker.py export_learning_data
 	@echo "AI learning data exported"
 
+# AI readiness and embeddings (LM Studio integration)
+.PHONY: ai.readiness ai.embed.sample ai.search.demo
+ai.readiness:
+	@# Resolve base_url: LMSTUDIO_BASE_URL (if set) else LM_STUDIO_HOST + '/v1'
+	@base_url=""; \
+	if [ -n "$${LMSTUDIO_BASE_URL:-}" ]; then base_url="$$LMSTUDIO_BASE_URL"; \
+	elif [ -n "$${LM_STUDIO_HOST:-}" ]; then base_url="$${LM_STUDIO_HOST%/}/v1"; \
+	fi; \
+	if [ -z "$$base_url" ]; then echo "HINT: set LM_STUDIO_HOST (e.g., http://127.0.0.1:1234) or LMSTUDIO_BASE_URL (.../v1)"; else \
+	  echo "AI: probing $$base_url/models"; \
+	  curl -sS "$$base_url/models" | head -c 400 || true; echo; fi
+	@if command -v psql >/dev/null 2>&1 && [ -n "$${ATLAS_DSN:-$${GEMATRIA_DSN:-}}" ]; then \
+	  psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -tAc "select 'vector='||(select extname from pg_extension where extname='vector')" || true; \
+	fi
+
+ai.embed.sample:
+	@if [ -z "$${ATLAS_DSN_RW:-}" ]; then echo "NO-GO: ATLAS_DSN_RW (restricted RW) required for writes"; exit 1; fi
+	@if [ -z "$${LM_EMBED_MODEL:-}" ]; then echo "NO-GO: set LM_EMBED_MODEL"; exit 1; fi
+	python3 scripts/ai/embeddings_upsert.py "Covenant" "Prophecy" "Wisdom" "Temple" "Exodus"
+
+ai.search.demo:
+	@if [ -z "$${LM_EMBED_MODEL:-}" ]; then echo "NO-GO: set LM_EMBED_MODEL"; exit 1; fi
+	python3 scripts/ai/search_demo.py "covenant wisdom"
+
+.PHONY: writers.smoke
+writers.smoke:
+	@if [ -z "$${ATLAS_DSN_RW:-}" ]; then echo "NO-GO: ATLAS_DSN_RW required"; exit 1; fi
+	python3 scripts/smokes/writers_smoke.py | tee evidence/writers.smoke.json >/dev/null
+
+.PHONY: telemetry.smoke
+telemetry.smoke:
+	@if [ -z "$${ATLAS_DSN_RW:-}" ]; then echo "NO-GO: ATLAS_DSN_RW required"; exit 1; fi
+	psql "$$ATLAS_DSN_RW" -v ON_ERROR_STOP=1 -f scripts/sql/pg/095_grants_fix.sql
+	python3 scripts/smokes/telemetry_smoke.py | tee evidence/telemetry.smoke.json >/dev/null
+	STRICT_ATLAS_DSN=1 make -s atlas.proof.dsn | tee evidence/atlas.proof.strict.tail.txt >/dev/null
+
 # Handoff document generation
 
 handoff.update:
@@ -584,6 +620,28 @@ run.books:
 db.migrate:
 	@echo ">> Running P1-DB migrate…"
 	@PYTHONPATH=. python3 scripts/db/migrate.py
+
+# --- DB plan / readiness (HINT posture; no secrets) ---
+.PHONY: db.plan db.readiness db.apply.hint
+db.plan:
+	@echo "ADR: docs/ADRs/ADR-065-postgres-ssot.md"
+	@ls -1 scripts/sql/pg 2>/dev/null | sed 's/^/sql: scripts\/sql\/pg\//' || echo "HINT: scripts/sql/pg/ directory not found (SQL skeletons not yet created)"
+
+db.readiness:
+	@if [ -z "$${ATLAS_DSN:-$${GEMATRIA_DSN:-}}" ]; then \
+	  echo "HINT: No DSN set (ATLAS_DSN/GEMATRIA_DSN). Readiness will skip live checks."; \
+	else \
+	  psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -c "select version()"; \
+	  psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -c "select extname from pg_extension where extname in ('vector','pg_trgm','pg_stat_statements','citext','pgcrypto') order by 1"; \
+	fi
+
+# Apply core SQL (safe to run repeatedly). Requires DSN env.
+db.apply.hint:
+	@if [ -z "$${ATLAS_DSN:-$${GEMATRIA_DSN:-}}" ]; then \
+	  echo "HINT: set ATLAS_DSN (RO for proofs, RW for DDL) to apply."; exit 0; \
+	else \
+	  for f in scripts/sql/pg/*.sql; do echo "-- $$f" && psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -f $$f; done; \
+	fi
 
 # UI envelope generation
 .PHONY: ui.envelope

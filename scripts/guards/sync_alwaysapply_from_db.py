@@ -27,10 +27,11 @@ FILES = [
 pat_block = re.compile(r"(?is)^[^\n]*Always[ -]Apply[^\n]*$\n(?:.*?\n)*?(?=^#|^\S|\Z)", re.M)
 pat_ruleline = re.compile(r"^(?P<prefix>\s*[-*]\s*)(?P<rule>Rule-(?P<num>\d{3}))(?P<rest>.*)$", re.M)
 # Optional sentinel comment we maintain inside the block (or immediately after its title line)
-SENTINEL_FMT = "<!-- alwaysapply.sentinel: {triad} source={source} -->"
 pat_sentinel = re.compile(r"<!--\s*alwaysapply\.sentinel:\s*([0-9,\s]+)\s*source=([a-z_]+)\s*-->", re.I)
 # Also match old format: <!-- guard.alwaysapply sentinel: ... -->
 pat_sentinel_old = re.compile(r"<!--\s*guard\.alwaysapply\s+sentinel:\s*[0-9,\s]+\s*-->", re.I)
+
+SENTINEL_FMT = "<!-- alwaysapply.sentinel: {triad} source={source} -->"
 
 
 def redact_dsn(dsn: str | None) -> dict:
@@ -54,12 +55,13 @@ def redact_dsn(dsn: str | None) -> dict:
 
 
 def _connect(dsn: str):
-    """Connect to database using psycopg or psycopg2."""
+    """Connect to database using psycopg 3 (preferred) or psycopg2 (fallback only)."""
     try:
         import psycopg  # type: ignore
 
         return psycopg.connect(dsn, autocommit=True, connect_timeout=5)
-    except Exception:
+    except ImportError:
+        # Fallback to psycopg2 only if psycopg 3 is unavailable
         import psycopg2  # type: ignore
 
         return psycopg2.connect(dsn, connect_timeout=5)
