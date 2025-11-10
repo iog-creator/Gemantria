@@ -18,16 +18,16 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
 import psycopg
+from scripts.config.env import get_rw_dsn
 
 # Database connection
-GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+GEMATRIA_DSN = get_rw_dsn()
 if not GEMATRIA_DSN:
     print("ERROR: GEMATRIA_DSN environment variable required")
     exit(1)

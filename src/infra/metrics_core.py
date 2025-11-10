@@ -10,12 +10,12 @@ from typing import Any
 
 import psycopg
 
+from scripts.config.env import get_rw_dsn
 from .structured_logger import get_logger, log_json
 
 LOG = get_logger("gemantria.metrics")
 
 METRICS_ENABLED = os.getenv("METRICS_ENABLED", "1") not in ("0", "false", "False")
-GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 WORKFLOW_ID = os.getenv("WORKFLOW_ID", "gemantria.v1")
 
 
@@ -179,4 +179,4 @@ class NodeTimer:
 
 
 def get_metrics_client() -> MetricsClient:
-    return MetricsClient(GEMATRIA_DSN)
+    return MetricsClient(get_rw_dsn())

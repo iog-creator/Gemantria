@@ -3,11 +3,12 @@
 
 from __future__ import annotations
 
-import os
 import re
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from typing import Any
+
+from scripts.config.env import get_bible_db_dsn, get_rw_dsn
 
 try:
     # psycopg 3 preferred
@@ -77,8 +78,8 @@ class GematriaRW:
 
 
 def get_bible_ro() -> BibleReadOnly:
-    return BibleReadOnly(dsn=os.getenv("BIBLE_DB_DSN"))
+    return BibleReadOnly(dsn=get_bible_db_dsn())
 
 
 def get_gematria_rw() -> GematriaRW:
-    return GematriaRW(dsn=os.getenv("GEMATRIA_DSN"))
+    return GematriaRW(dsn=get_rw_dsn())

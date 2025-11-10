@@ -23,13 +23,13 @@ Usage:
 """
 
 import argparse
-import os
 from pathlib import Path
 
 import psycopg
+from scripts.config.env import get_rw_dsn
 
 # Database connection
-GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+GEMATRIA_DSN = get_rw_dsn()
 if not GEMATRIA_DSN:
     print("ERROR: GEMATRIA_DSN environment variable required")
     exit(1)

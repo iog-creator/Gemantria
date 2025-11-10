@@ -9,6 +9,8 @@ from collections import defaultdict
 from itertools import pairwise
 from typing import Any, Dict, List
 
+from scripts.config.env import get_rw_dsn
+
 # Dependency check for pgvector
 try:
     import psycopg
@@ -42,7 +44,6 @@ from src.ssot.noun_adapter import adapt_ai_noun  # noqa: E402
 
 LOG = get_logger("gemantria.network_aggregator")
 
-GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 VECTOR_DIM = int(os.getenv("VECTOR_DIM", "1024"))
 
 # Rerank configuration
@@ -376,7 +377,10 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
             "rerank_yes_ratio": 0.0,
         }
 
-        with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
+        dsn = get_rw_dsn()
+        if not dsn:
+            raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
             # Register pgvector
             register_vector(conn)
 

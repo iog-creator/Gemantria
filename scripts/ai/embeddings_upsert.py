@@ -9,9 +9,10 @@ from openai import OpenAI
 import psycopg
 
 from scripts.ai.lmstudio_resolver import base_url
+from scripts.config.env import get_rw_dsn
 
 embed_model = os.environ.get("LM_EMBED_MODEL")
-dsn = os.environ.get("ATLAS_DSN_RW") or os.environ.get("GEMATRIA_DSN")
+dsn = get_rw_dsn() or get_rw_dsn()
 
 if not embed_model:
     print("NO-GO: LM_EMBED_MODEL not set", file=sys.stderr)

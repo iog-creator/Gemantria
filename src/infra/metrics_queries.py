@@ -3,20 +3,17 @@
 
 from __future__ import annotations
 
-import os
-
 import psycopg
 
+from scripts.config.env import get_rw_dsn
 from .env_loader import ensure_env_loaded
 
 # Ensure environment variables are loaded
 ensure_env_loaded()
 
-DSN = os.getenv("GEMATRIA_DSN")
-
 
 def _q(sql: str, *params) -> list[tuple]:
-    dsn = os.getenv("GEMATRIA_DSN")
+    dsn = get_rw_dsn()
     if not dsn:
         raise RuntimeError("GEMATRIA_DSN is not set")
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
