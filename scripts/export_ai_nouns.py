@@ -2,7 +2,7 @@
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
 import os, json, re, datetime, psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 # Load environment variables from .env file
 try:
