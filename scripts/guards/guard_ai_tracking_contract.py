@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from urllib.parse import urlsplit, parse_qs
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 STRICT = os.getenv("STRICT_AI_TRACKING", "0") == "1"
 
