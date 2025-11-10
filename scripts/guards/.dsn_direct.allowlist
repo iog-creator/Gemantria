@@ -19,8 +19,6 @@ scripts/guard_all.py
 scripts/guards/guard_ai_tracking_contract.py
 scripts/guards/guard_ci_empty_db.py
 scripts/guards/guard_dsn_centralized.sh
-scripts/guards/guard_fk_types.py
-scripts/guards/guard_runs_ledger.py
 scripts/guards/sync_alwaysapply_from_db.py
 scripts/monitor_pipeline.py
 scripts/ops/create_ro_dsn.sh
