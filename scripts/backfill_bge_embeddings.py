@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -32,7 +33,7 @@ ensure_env_loaded()
 def backfill_bge_embeddings():
     """Backfill BGE-M3 embeddings for nodes that have Qwen3 embeddings."""
 
-    dsn = os.getenv("GEMATRIA_DSN")
+    dsn = get_rw_dsn()
     if not dsn:
         raise RuntimeError("GEMATRIA_DSN not set")
 

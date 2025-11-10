@@ -4,6 +4,7 @@ import sys
 import json
 import datetime
 from pathlib import Path
+from scripts.config.env import get_rw_dsn
 
 # Load .env if present
 env_file = Path(".env")
@@ -23,7 +24,7 @@ def rfc3339_now() -> str:
 
 
 def _dsn() -> str | None:
-    return os.getenv("GEMATRIA_DSN") or os.getenv("AI_AUTOMATION_DSN")
+    return get_rw_dsn() or get_rw_dsn()
 
 
 def _try_import_psycopg():
@@ -43,6 +44,7 @@ def _first_existing_table(cur, candidates) -> str | None:
             """
             select 1
             from information_schema.tables
+
             where table_schema=%s and table_name=%s
             limit 1
         """,
