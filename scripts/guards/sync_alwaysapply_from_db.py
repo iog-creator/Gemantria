@@ -11,7 +11,7 @@ import time
 import urllib.parse
 from glob import glob
 from pathlib import Path
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 # ---- Config / Env ----------------------------------------------------------------
 STRICT = os.getenv("STRICT_ALWAYS_APPLY", "0") == "1"  # fail on drift
