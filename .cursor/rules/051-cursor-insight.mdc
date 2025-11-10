@@ -31,6 +31,12 @@ Cursor **must** paste, in this order:
    - `gh pr checks <N> --required --json name,state`
 6. If `gh pr checks ...` shows **all required = SUCCESS**, Cursor must **explicitly state**:
    > "Non-required automated review present → advisory only per 041 + 050. Standard merge allowed."
+7. **Browser verification (REQUIRED when applicable)**: If the work involves web pages, HTML, UI components, documentation sites, or any visual outputs:
+   - Use `browser_snapshot` to capture accessibility snapshots of rendered pages
+   - Use `browser_take_screenshot` for visual verification of layouts, styling, or rendering
+   - Navigate to local files using `file://` URLs or serve pages locally and verify
+   - Verify links, navigation, and interactive elements work correctly
+   - Include browser verification evidence in the handoff output
 
 ## Non-Required Review Rule
 
@@ -49,7 +55,31 @@ When a handoff is requested, Cursor must output **4 blocks only**:
 
 No extra narrative, no speculation.
 
+## Browser Verification Requirement
+
+Cursor **must** use the integrated browser tool to visually verify results when:
+- Generating or modifying web pages, HTML files, or documentation that renders in a browser
+- Creating UI components, dashboards, charts, or visualizations
+- Working with GitHub Pages, documentation sites, or any web-based outputs
+- Verifying visual layout, styling, CSS, or rendering issues
+- Checking links, navigation, forms, or interactive elements
+- Validating that generated content displays correctly
+
+**Browser tools available**:
+- `browser_snapshot`: Capture accessibility snapshot (preferred for structure/content verification)
+- `browser_take_screenshot`: Capture visual screenshot (preferred for layout/styling verification)
+- `browser_navigate`: Navigate to URLs or local files
+- `browser_click`, `browser_type`, etc.: Interact with pages when needed
+
+**When to verify**:
+- After generating HTML/Markdown that will be rendered
+- After modifying CSS, styling, or layout code
+- After creating or updating documentation sites
+- After generating visualizations, charts, or dashboards
+- Before marking visual/UI work as complete
+
 ## Notes
 
 - This rule is **AlwaysApply** for Gemantria
 - This rule depends on: 039, 041, 046, 050
+- Browser verification is **mandatory** for visual/web outputs, not optional

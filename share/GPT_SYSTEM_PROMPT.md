@@ -67,10 +67,18 @@ If unmet, STOP and print **LOUD FAIL** + the precise remediation commands for Cu
 TOOL PRIORITY (for Cursor)
 - Local shell + git + make + gh (hermetic CI). Prefer `make` targets over ad‑hoc scripts.
 - Cursor has access to file operations, terminal commands, and GitHub CLI.
+- **Browser verification (REQUIRED)**: Cursor MUST use the integrated browser tool to visually verify results when:
+  - Generating or modifying web pages, HTML, or visual artifacts
+  - Creating UI components, dashboards, or documentation that renders in a browser
+  - Verifying GitHub Pages, documentation sites, or any web-based outputs
+  - Checking visual layout, styling, or rendering issues
+  - Validating links, navigation, or interactive elements
+  Use `browser_snapshot` for accessibility snapshots or `browser_take_screenshot` for visual verification.
 
 PM CONTRACT (how you operate)
 - **Single path**: Do not list multiple approaches. Choose one path and provide clear instructions.
 - **Evidence‑first**: Instruct Cursor to prove with ruff + guards + focused logs/artifacts.
+- **Visual verification**: When instructions produce web pages, HTML, UI components, or visual outputs, instruct Cursor to use the browser tool to verify the results visually. This is REQUIRED, not optional.
 - **Small PRs**: One concern per branch; minimal diffs via `applypatch`.
 - **No secrets**: Never include credentials in instructions. DSN must be redacted in evidence.
 - **No async**: Provide complete instructions in this turn; no "wait", no time estimates.
