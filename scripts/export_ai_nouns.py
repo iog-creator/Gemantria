@@ -2,6 +2,7 @@
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
 import os, json, re, datetime, psycopg
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Load environment variables from .env file
 try:
@@ -27,7 +28,7 @@ def scrub(x):
     return x
 
 
-dsn = os.environ.get("DSN") or os.environ.get("GEMATRIA_DSN")
+dsn = os.environ.get("DSN") or get_rw_dsn()
 book = os.environ.get("BOOK", "Genesis")
 outp = os.environ.get("OUT", "exports/ai_nouns.json")
 
