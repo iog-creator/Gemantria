@@ -70,7 +70,9 @@ def _generate_execution_live() -> str:
         lines.append("  subgraph ACTIVE[Active Pipeline Runs]")
         for i, (run_id, started_at) in enumerate(active_runs[:10]):  # Limit to 10
             node_id = f"RUN{i}"
-            lines.append(f'    {node_id}["{run_id[:8]}...<br/>{started_at}"]:::green')
+            # Convert run_id to string if it's a UUID object
+            run_id_str = str(run_id)[:8] if run_id else "unknown"
+            lines.append(f'    {node_id}["{run_id_str}...<br/>{started_at}"]:::green')
             lines.append(f'    click {node_id} "/evidence/execution_live.html" "View run details"')
         lines.append("  end")
         lines.append("  classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;")
@@ -119,8 +121,10 @@ def _generate_pipeline_flow_historical() -> str:
         lines.append("  subgraph RECENT[Recent Runs]")
         for i, (run_id, started_at, finished_at, duration_ms) in enumerate(runs[:5]):
             run_node = f"R{i}"
-            duration_s = duration_ms / 1000.0 if duration_ms else 0
-            lines.append(f'    {run_node}["{run_id[:8]}...<br/>{duration_s:.1f}s"]:::green')
+            duration_s = float(duration_ms) / 1000.0 if duration_ms else 0
+            # Convert run_id to string if it's a UUID object
+            run_id_str = str(run_id)[:8] if run_id else "unknown"
+            lines.append(f'    {run_node}["{run_id_str}...<br/>{duration_s:.1f}s"]:::green')
         lines.append("  end")
         lines.append("  RECENT --> PIPELINE")
 
