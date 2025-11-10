@@ -7,7 +7,6 @@ import os
 
 import psycopg
 from fastapi import FastAPI, Response
-
 from scripts.config.env import get_rw_dsn
 
 PROM_EXPORTER_ENABLED = os.getenv("PROM_EXPORTER_ENABLED", "0") not in (

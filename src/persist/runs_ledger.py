@@ -2,7 +2,6 @@
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
 import psycopg
-
 from scripts.config.env import get_rw_dsn
 
 

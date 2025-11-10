@@ -8,7 +8,6 @@ import uuid
 from collections import defaultdict
 from itertools import pairwise
 from typing import Any, Dict, List
-
 from scripts.config.env import get_rw_dsn
 
 # Dependency check for pgvector

@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import psycopg
 
-from scripts.config.env import get_rw_dsn
 from .env_loader import ensure_env_loaded
+from scripts.config.env import get_rw_dsn
 
 # Ensure environment variables are loaded
 ensure_env_loaded()

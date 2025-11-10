@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -24,7 +25,6 @@ from pathlib import Path
 from typing import Dict, List
 
 import psycopg
-from scripts.config.env import get_rw_dsn
 
 # Database connection
 GEMATRIA_DSN = get_rw_dsn()

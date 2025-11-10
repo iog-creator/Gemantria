@@ -10,11 +10,11 @@ import uuid
 
 import psycopg
 
-from scripts.config.env import get_rw_dsn
 from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
 from src.services.lmstudio_client import chat_completion
 from src.utils.json_sanitize import parse_llm_json
+from scripts.config.env import get_rw_dsn
 
 LOG = get_logger("gemantria.enrichment")
 

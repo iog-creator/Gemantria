@@ -10,8 +10,8 @@ from typing import Any
 
 import psycopg
 
-from scripts.config.env import get_rw_dsn
 from .structured_logger import get_logger, log_json
+from scripts.config.env import get_rw_dsn
 
 LOG = get_logger("gemantria.metrics")
 

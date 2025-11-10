@@ -9,8 +9,8 @@ from typing import Any
 
 import psycopg
 
-from scripts.config.env import get_rw_dsn
 from src.infra.structured_logger import get_logger, log_json
+from scripts.config.env import get_rw_dsn
 
 LOG = get_logger("gemantria.confidence_validator")
 GEMATRIA_CONFIDENCE_THRESHOLD = float(os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90"))

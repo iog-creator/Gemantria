@@ -1,3 +1,5 @@
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+
 #!/usr/bin/env python3
 """
 Refactors Python files to use centralized DSN loader:
