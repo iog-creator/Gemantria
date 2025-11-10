@@ -16,12 +16,9 @@ scripts/ci/ensure_db_then_migrate.sh
 scripts/ci/soft_checks.py
 scripts/db/migrate.py
 scripts/db/migrate.sh
-scripts/document_management_hints.py
-scripts/echo_env.py
 scripts/env/validate_env.sh
 scripts/env_validate.sh
 scripts/export_ai_nouns.py
-scripts/export_noun_index.py
 scripts/governance_housekeeping.py
 scripts/governance_tracker.py
 scripts/guard_all.py
