@@ -21,10 +21,16 @@
   ro_dsn = get_bible_db_dsn()
   ```
 - DSN precedence:
-  - **RW DSN**: `ATLAS_DSN_RW` → `GEMATRIA_DSN`
+  - **RW DSN**: `GEMATRIA_DSN` → `RW_DSN` → `AI_AUTOMATION_DSN` → `ATLAS_DSN_RW` → `ATLAS_DSN`
   - **RO DSN**: `ATLAS_DSN` → (fallback to RW)
-  - **Bible DB DSN**: `BIBLE_DB_DSN` (direct)
+  - **Bible DB DSN**: `BIBLE_RO_DSN` → `RO_DSN` → `ATLAS_DSN_RO` → `ATLAS_DSN`
 - This policy is enforced by the **DSN centralization guard** (`guard.dsn.centralized`).
+
+### Centralization guard (policy)
+
+- Guard: `guard.dsn.centralized` (HINT by default) and `guard.dsn.centralized.strict` (fails on violations).
+- Temporary allowlist for legacy scripts: `scripts/guards/.dsn_direct.allowlist` (glob per line). Offenders must be removed from this list as they're migrated.
+- Tests set `DISABLE_DOTENV=1` to prevent `.env` from influencing DSN precedence.
 
 | # | File | Title |
 |---:|------|-------|

@@ -6,7 +6,16 @@ import json
 import re
 from typing import Callable, TypeVar
 
-from dotenv import load_dotenv, find_dotenv
+# Optional dotenv support, disabled when DISABLE_DOTENV=1
+try:
+    if os.environ.get("DISABLE_DOTENV", "0") != "1":
+        from dotenv import load_dotenv, find_dotenv  # type: ignore
+    else:
+        load_dotenv = None
+        find_dotenv = None
+except Exception:
+    load_dotenv = None
+    find_dotenv = None
 
 _T = TypeVar("_T")
 _REDACT = re.compile(r"://[^@]*@")
@@ -17,10 +26,11 @@ _LOADED = False
 def _ensure_loaded() -> None:
     global _LOADED
     if not _LOADED:
-        # Load nearest .env if present (non-fatal)
-        path = find_dotenv(usecwd=True)
-        if path:
-            load_dotenv(path, override=False)
+        # Load nearest .env if present (non-fatal) and not disabled
+        if load_dotenv is not None and find_dotenv is not None:
+            path = find_dotenv(usecwd=True)
+            if path:
+                load_dotenv(path, override=False)
         _LOADED = True
 
 
@@ -44,13 +54,32 @@ def env(
 
 
 def get_rw_dsn() -> str | None:
-    """Write-enabled DSN preference: ATLAS_DSN_RW → GEMATRIA_DSN."""
-    return env("ATLAS_DSN_RW") or env("GEMATRIA_DSN")
+    """
+    Write-enabled DSN precedence: GEMATRIA_DSN → RW_DSN → AI_AUTOMATION_DSN → ATLAS_DSN_RW → ATLAS_DSN.
+    Set DISABLE_DOTENV=1 in tests to prevent .env from affecting resolution.
+    """
+    for key in ("GEMATRIA_DSN", "RW_DSN", "AI_AUTOMATION_DSN", "ATLAS_DSN_RW", "ATLAS_DSN"):
+        value = env(key)
+        if value:
+            return value
+    return None
 
 
 def get_ro_dsn() -> str | None:
     """Read DSN preference: ATLAS_DSN → (fallback) RW."""
     return env("ATLAS_DSN") or get_rw_dsn()
+
+
+def get_bible_db_dsn() -> str | None:
+    """
+    Bible database DSN (read-only) precedence: BIBLE_RO_DSN → RO_DSN → ATLAS_DSN_RO → ATLAS_DSN.
+    Set DISABLE_DOTENV=1 in tests to prevent .env from affecting resolution.
+    """
+    for key in ("BIBLE_RO_DSN", "RO_DSN", "ATLAS_DSN_RO", "ATLAS_DSN"):
+        value = env(key)
+        if value:
+            return value
+    return None
 
 
 def openai_cfg() -> dict:
