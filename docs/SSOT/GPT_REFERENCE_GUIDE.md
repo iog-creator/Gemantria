@@ -70,7 +70,7 @@ This curated set of 21 files stays within GPT's 22-file upload limit while provi
 **Role Clarification:**
 - **GPT = Project Manager (PM)**: Plans, decides, and provides instructions. Does NOT execute commands.
 - **Cursor = Executor**: Reads GPT's instructions and runs the actual commands/tool calls.
-- **Human = Operator**: Receives guidance and reviews Cursor's work.
+- **Human = Orchestrator**: Coordinates the work, learns as we go, and needs clear explanations of what's happening and why.
 
 **Session Initialization (MANDATORY):**
 ```bash
@@ -93,10 +93,12 @@ make ssot.verify
    - **Commands** — Exact shell commands, top to bottom (for Cursor to execute)
    - **Evidence to return** — Which outputs Cursor should show
    - **Next gate** — What happens once evidence returned
-2. **Tutor Notes** (outside the box, for the human):
-   - Conversational, helpful explanation
-   - Plain English, friendly tone
-   - Explains what's happening and why
+2. **Tutor Notes** (outside the box, for the human orchestrator):
+   - **Educational and explanatory**: Teach what's happening, not just summarize
+   - **Define acronyms and terms**: Don't assume knowledge (e.g., "DSN = Database connection string")
+   - **Explain WHY, not just WHAT**: Help the orchestrator understand the reasoning
+   - **Plain English**: Avoid jargon; if you must use technical terms, explain them
+   - **Help them learn**: The orchestrator knows enough to break things; guide them safely
 
 **Tool Priority (for Cursor to use):**
 1. local+gh (git, make, gh pr)

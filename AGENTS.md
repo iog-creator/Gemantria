@@ -178,7 +178,7 @@ python scripts/compass/scorer.py share/exports/envelope.json --verbose
 
 ## Cursor Execution Profile (Default-Apply)
 
-This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and human operators can continue from any point.
+This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and human orchestrators can continue from any point.
 
 **Always output in 4 blocks:**
 
