@@ -1,4 +1,4 @@
-from scripts.config.env import get_rw_dsn
+from gemantria.dsn import dsn_rw
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -547,7 +547,7 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         ensure_env_loaded()
         import psycopg
 
-        dsn = get_rw_dsn()
+        dsn = dsn_rw()
         if dsn:
             with psycopg.connect(dsn) as conn:
                 with conn.cursor() as cur:
@@ -1112,7 +1112,7 @@ def handle_menu_choice(choice: str, status: Dict[str, Any], errors: List[Dict[st
         # Check DB
         try:
             result = subprocess.run(
-                ["psql", os.environ.get("GEMATRIA_DSN", ""), "-c", "SELECT 1"],
+                ["psql", dsn_rw(), "-c", "SELECT 1"],
                 capture_output=True,
                 text=True,
                 timeout=3,

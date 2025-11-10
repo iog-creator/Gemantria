@@ -13,12 +13,12 @@ Never fails CI for missing DB; this is a posture proof, not a migration.
 
 from __future__ import annotations
 
-import os
 import sys
+from gemantria.dsn import dsn_rw
 
 
 def main() -> int:
-    dsn = os.getenv("GEMATRIA_DSN", "")
+    dsn = dsn_rw()
 
     try:
         import psycopg  # type: ignore

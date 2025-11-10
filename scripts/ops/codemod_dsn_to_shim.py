@@ -38,17 +38,17 @@ def choose_func(text: str) -> str:
 
 def ensure_import(lines: list[str]) -> list[str]:
     hdr = "from gemantria.dsn import dsn_ro, dsn_rw, dsn_atlas"
-    for i, l in enumerate(lines[:30]):
-        if "from gemantria.dsn import" in l:
+    for i, line in enumerate(lines[:30]):
+        if "from gemantria.dsn import" in line:
             return lines
         # Remove old imports
-        if "from scripts.config.env import" in l:
+        if "from scripts.config.env import" in line:
             lines[i] = hdr + "\n"
             return lines
     # insert after first future/import block if present
     ins = 0
-    for i, l in enumerate(lines[:40]):
-        if l.startswith("from __future__") or l.startswith("import ") or l.startswith("from "):
+    for i, line in enumerate(lines[:40]):
+        if line.startswith("from __future__") or line.startswith("import ") or line.startswith("from "):
             ins = i + 1
     lines.insert(ins, hdr + "\n")
     return lines
