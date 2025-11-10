@@ -78,6 +78,19 @@ Cursor **must** use the integrated browser tool to visually verify results when:
 - After generating visualizations, charts, or dashboards
 - Before marking visual/UI work as complete
 
+**Visual verification workflow**:
+1. Start local HTTP server if needed: `python3 -m http.server 8000`
+2. Navigate with cache-busting: `?nocache=$(date +%s)` to avoid stale content
+3. Use `browser_snapshot` for structure/content verification
+4. Use `browser_take_screenshot` for visual layout verification
+5. Verify all expected content is visible (check DOM length, element presence)
+6. Save screenshots to `evidence/` directory
+7. Clean up server: `kill $(cat .server.pid) && rm .server.pid`
+
+**Runbooks**:
+- Atlas visual verification: `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md`
+- General browser QA: `docs/runbooks/CURSOR_BROWSER_QA.md`
+
 ## Notes
 
 - This rule is **AlwaysApply** for Gemantria
