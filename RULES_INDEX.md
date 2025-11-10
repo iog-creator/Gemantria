@@ -9,6 +9,23 @@
 - Never invoke bare `python ` in shell scripts or Makefiles — use `$(PYTHON)` or `python3`.  
 - This policy is covered by the **python runner guard** and is part of the Always-Apply posture (050/051/052).
 
+## DSN Policy
+
+- All DSN access must go through the centralized loader in `scripts/config/env.py`.
+- Never call `os.getenv("GEMATRIA_DSN")`, `os.getenv("BIBLE_DB_DSN")`, etc. directly in `src/` or `scripts/`.
+- Use the canonical import pattern:
+  ```python
+  from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+  
+  rw_dsn = get_rw_dsn()
+  ro_dsn = get_bible_db_dsn()
+  ```
+- DSN precedence:
+  - **RW DSN**: `ATLAS_DSN_RW` → `GEMATRIA_DSN`
+  - **RO DSN**: `ATLAS_DSN` → (fallback to RW)
+  - **Bible DB DSN**: `BIBLE_DB_DSN` (direct)
+- This policy is enforced by the **DSN centralization guard** (`guard.dsn.centralized`).
+
 | # | File | Title |
 |---:|------|-------|
 | 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |

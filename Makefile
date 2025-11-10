@@ -9,6 +9,11 @@ export PYTHON
 guard.python.runner:
 	@bash scripts/guards/guard_python_runner.sh
 
+# ---- Guard: DSN centralization ----------------------------------------------
+.PHONY: guard.dsn.centralized
+guard.dsn.centralized:
+	@bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.json >/dev/null
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -370,6 +375,10 @@ ENVELOPE ?= share/exports/envelope.json
 test.compass:
 	@echo ">> COMPASS evaluation on $(ENVELOPE)"
 	@python3 scripts/compass/scorer.py $(ENVELOPE) --verbose
+
+.PHONY: test.env.loader
+test.env.loader:
+	@pytest -q tests/test_env_loader.py | tee evidence/test.env.loader.txt >/dev/null
 
 .PHONY: test.guard
 test.guard:
@@ -928,6 +937,7 @@ guards.all:
 	@echo ">> Validating schema contract (class not kind, no meta)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_schema_contract.py | tee evidence/guard_schema_contract.txt || true
 	@$(MAKE) -s guard.python.runner
+	@$(MAKE) -s guard.dsn.centralized
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
