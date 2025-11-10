@@ -9,10 +9,17 @@ from openai import OpenAI
 import psycopg
 
 from scripts.ai.lmstudio_resolver import base_url
+<<<<<<< HEAD
+from scripts.config.env import get_rw_dsn
+
+embed_model = os.environ.get("LM_EMBED_MODEL")
+dsn = get_rw_dsn() or get_rw_dsn()
+=======
 from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 embed_model = os.environ.get("LM_EMBED_MODEL")
 dsn = get_rw_dsn()
+>>>>>>> origin/main
 
 if not embed_model:
     print("NO-GO: LM_EMBED_MODEL not set", file=sys.stderr)

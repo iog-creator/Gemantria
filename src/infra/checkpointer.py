@@ -10,6 +10,7 @@ from typing import Any
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import MemorySaver
+from scripts.config.env import get_rw_dsn
 
 try:
     import psycopg
@@ -221,7 +222,8 @@ def _get_memory_checkpointer() -> MemorySaver:
 
 def _get_postgres_checkpointer() -> PostgresCheckpointer:
     """Get Postgres checkpointer (full implementation)."""
-    dsn = os.getenv("GEMATRIA_DSN")
+
+    dsn = get_rw_dsn()
     if not dsn:
         raise RuntimeError("GEMATRIA_DSN environment variable required for postgres checkpointer")
 

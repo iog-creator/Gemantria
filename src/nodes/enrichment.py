@@ -14,10 +14,9 @@ from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
 from src.services.lmstudio_client import chat_completion
 from src.utils.json_sanitize import parse_llm_json
+from scripts.config.env import get_rw_dsn
 
 LOG = get_logger("gemantria.enrichment")
-
-GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 
 # Confidence gates
 SOFT = float(os.getenv("AI_CONFIDENCE_SOFT", 0.90))
@@ -272,10 +271,11 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                     total_tokens += tokens_used
 
                     # Persist to database (optional for testing)
-                    if GEMATRIA_DSN:
+                    dsn = get_rw_dsn()
+                    if dsn:
                         try:
                             with (
-                                psycopg.connect(GEMATRIA_DSN) as conn,
+                                psycopg.connect(dsn) as conn,
                                 conn.cursor() as cur,
                             ):
                                 cur.execute(

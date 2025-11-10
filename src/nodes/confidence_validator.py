@@ -10,10 +10,9 @@ from typing import Any
 import psycopg
 
 from src.infra.structured_logger import get_logger, log_json
+from scripts.config.env import get_rw_dsn
 
 LOG = get_logger("gemantria.confidence_validator")
-
-GEMATRIA_DSN = os.getenv("GEMATRIA_DSN")
 GEMATRIA_CONFIDENCE_THRESHOLD = float(os.getenv("GEMATRIA_CONFIDENCE_THRESHOLD", "0.90"))
 # AI_CONFIDENCE_THRESHOLD moved to runtime (inside confidence_validator_node) to respect env overrides
 
@@ -47,7 +46,10 @@ def confidence_validator_node(state: dict[str, Any]) -> dict[str, Any]:
     # Runtime env check (respects overrides post-import; default lowered to 0.80 per uniform 0.85 artifact fix - see AGENTS.md)
     ai_confidence_threshold = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.80"))
 
-    with psycopg.connect(GEMATRIA_DSN) as conn, conn.cursor() as cur:
+    dsn = get_rw_dsn()
+    if not dsn:
+        raise RuntimeError("GEMATRIA_DSN not set; cannot execute query")
+    with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         for noun in nouns:
             noun_id = noun.get("noun_id", uuid.uuid4())
 

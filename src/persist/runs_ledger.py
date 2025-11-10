@@ -1,11 +1,12 @@
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
-import os, psycopg
+import psycopg
+from scripts.config.env import get_rw_dsn
 
 
 def _dsn() -> str | None:
-    dsn = os.getenv("GEMATRIA_DSN")
+    dsn = get_rw_dsn()
     if not dsn:
         raise RuntimeError(
             "GEMATRIA_DSN not configured in environment.\n"

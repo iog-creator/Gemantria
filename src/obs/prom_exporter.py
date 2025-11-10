@@ -7,6 +7,7 @@ import os
 
 import psycopg
 from fastapi import FastAPI, Response
+from scripts.config.env import get_rw_dsn
 
 PROM_EXPORTER_ENABLED = os.getenv("PROM_EXPORTER_ENABLED", "0") not in (
     "0",
@@ -14,15 +15,15 @@ PROM_EXPORTER_ENABLED = os.getenv("PROM_EXPORTER_ENABLED", "0") not in (
     "False",
 )
 PROM_EXPORTER_PORT = int(os.getenv("PROM_EXPORTER_PORT", "9108"))
-DSN = os.getenv("GEMATRIA_DSN")
 
 app = FastAPI(title="Gemantria Metrics Exporter")
 
 
 def _fetch():
-    if not DSN:
+    dsn = get_rw_dsn()
+    if not dsn:
         return {}
-    with psycopg.connect(DSN) as conn, conn.cursor() as cur:
+    with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute("SELECT node, calls, avg_ms, p50_ms, p90_ms, p95_ms, p99_ms FROM v_node_latency_7d")
         latency = cur.fetchall()
         cur.execute("SELECT node, COALESCE(SUM(items_out),0) FROM v_node_throughput_24h GROUP BY node")
