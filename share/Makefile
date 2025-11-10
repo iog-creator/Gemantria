@@ -2,6 +2,7 @@
 
 # Python interpreter (for CI compatibility)
 PYTHON ?= python3
+export PYTHON
 
 ui.dev.help:
 	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
@@ -221,7 +222,7 @@ atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-o
 		echo "HINT: DB unreachable; staying in grey mode"; \
 		if [ "$$STRICT_ATLAS_DSN" = "1" ]; then exit 2; else exit 0; fi; \
 	}; \
-	ATLAS_DSN="$$ATLAS_DSN" python scripts/atlas/atlas_proof_dsn.py; \
+	ATLAS_DSN="$$ATLAS_DSN" 1000 4 24 27 30 46 100 115 125 981 1000 1001PYTHON) scripts/atlas/atlas_proof_dsn.py; \
 	$(MAKE) -s atlas.generate ATLAS_DSN="$$ATLAS_DSN"; \
 	$(MAKE) -s atlas.test
 
@@ -779,7 +780,7 @@ guard.alwaysapply.dbmirror:
 # Apply DB-backed autofix (WRITE=1); still HINT unless STRICT_ALWAYS_APPLY=1
 .PHONY: guard.alwaysapply.autofix
 guard.alwaysapply.autofix:
-	@WRITE=1 python scripts/guards/sync_alwaysapply_from_db.py || true
+	@WRITE=1 1000 4 24 27 30 46 100 115 125 981 1000 1001PYTHON) scripts/guards/sync_alwaysapply_from_db.py || true
 	@echo "wrote evidence/guard_alwaysapply_dbmirror.json (autofix)"
 
 # --- Back-compat aliases (one release) ---
@@ -947,10 +948,10 @@ analytics.export:
 	@echo "HINT: analytics: starting (file-first)"
 	@if test -f exports/graph_latest.scored.json || test -f exports/graph_latest.json; then \
 		echo "HINT: analytics: using graph JSON in exports/"; \
-		python scripts/analytics/graph_stats_from_json.py; \
+		1000 4 24 27 30 46 100 115 125 981 1000 1001PYTHON) scripts/analytics/graph_stats_from_json.py; \
 	else \
 		echo "HINT: analytics: no local graph JSON; deferring to DB exporters"; \
-		python scripts/analytics/export_graph.py || true; \
+		1000 4 24 27 30 46 100 115 125 981 1000 1001PYTHON) scripts/analytics/export_graph.py || true; \
 	fi
 	@python scripts/analytics/export_patterns.py || true
 	@echo "[analytics.export] OK"
@@ -1099,7 +1100,7 @@ evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict
 	@if test -d share/eval/badges; then cp -f share/eval/badges/patterns_badge.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
 	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
-	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
+	@if test -f evidence/guard_rerank_thresholds.json; then :; else 1000 4 24 27 30 46 100 115 125 981 1000 1001PYTHON) scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
