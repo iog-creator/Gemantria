@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -35,7 +36,6 @@ SHARE = ROOT / "share"
 # Database integration (optional - hermetic behavior per Rule 046)
 try:
     import psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
     GEMATRIA_DSN = get_rw_dsn()
     DB_AVAILABLE = bool(GEMATRIA_DSN)

@@ -8,7 +8,7 @@ import uuid
 import datetime as dt
 
 import psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 run_id = f"telemetry-smoke-{uuid.uuid4()}"
 dsn = get_rw_dsn()
