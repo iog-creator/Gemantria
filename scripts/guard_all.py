@@ -19,6 +19,7 @@ from typing import Dict, Any
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from infra.evidence_logger import get_evidence_logger, finalize_all_evidence
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 
 def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
@@ -153,7 +154,7 @@ def run_sql_guard(sql_path: str, description: str) -> Dict[str, Any]:
     """
     try:
         # Get DSN from environment
-        dsn = os.environ.get("GEMATRIA_DSN")
+        dsn = get_rw_dsn()
         if not dsn:
             return {
                 "success": False,

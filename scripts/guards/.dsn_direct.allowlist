@@ -19,9 +19,6 @@ scripts/db/migrate.sh
 scripts/env/validate_env.sh
 scripts/env_validate.sh
 scripts/export_ai_nouns.py
-scripts/governance_housekeeping.py
-scripts/governance_tracker.py
-scripts/guard_all.py
 scripts/guards/guard_ai_tracking_contract.py
 scripts/guards/guard_alwaysapply_dbmirror.py
 scripts/guards/guard_ci_empty_db.py
