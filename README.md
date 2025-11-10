@@ -5,6 +5,7 @@
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
   <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
 <img alt="RFC3339" src="share/eval/badges/rfc3339.svg" />
+[![Tagproof](https://github.com/iog-creator/Gemantria/actions/workflows/tagproof.yml/badge.svg)](../../actions/workflows/tagproof.yml)
 
 #### Operator Status
 
