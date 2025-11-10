@@ -1,7 +1,4 @@
 scripts/AGENTS.md
-scripts/ai_analytics_dashboard.py
-scripts/ai/embeddings_upsert.py
-scripts/ai_learning_tracker.py
 scripts/ai/search_demo.py
 scripts/ai_session_monitor.py
 scripts/analytics/export_ai_tracking.py

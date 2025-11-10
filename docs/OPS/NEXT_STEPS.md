@@ -4,6 +4,7 @@
 
 ## A. DSN Centralization (burn-down)
 
+- [x] PR: ops/dsn-burndown-1 — migrated first batch of Python offenders to centralized loader (see evidence: dsn.burndown-1.changed.txt).
 - [ ] Migrate 3–5 paths from `scripts/guards/.dsn_direct.allowlist` per PR until empty.
 - [ ] When empty: add `guard.dsn.centralized.strict` to `ops.tagproof` (if not already present).
 - [ ] Add a short ADR after de-allowlisting (why centralization, precedence, guards).
