@@ -32,6 +32,11 @@
 - Temporary allowlist for legacy scripts: `scripts/guards/.dsn_direct.allowlist` (glob per line). Offenders must be removed from this list as they're migrated.
 - Tests set `DISABLE_DOTENV=1` to prevent `.env` from influencing DSN precedence.
 
+### Atlas DSN proof
+
+- Make target: `atlas.proof.dsn` — writes `docs/evidence/atlas_proof_dsn.json` (masked) and `docs/evidence/atlas_proof_dsn.html` with a backlink to `../atlas/index.html`.
+  - **HINT** by default; set `STRICT_ATLAS_DSN=1` (in tag lane) to require a real RW DSN.
+
 | # | File | Title |
 |---:|------|-------|
 | 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |

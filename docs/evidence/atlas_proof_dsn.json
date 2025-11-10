@@ -1,9 +1,16 @@
 {
-  "clock": "2025-11-09T23:33:42Z",
   "ok": true,
-  "dsn": {
-    "present": false
-  },
-  "tables": {},
-  "note": "DSN missing; staying in grey mode"
+  "mode": "HINT",
+  "ts_utc": "2025-11-10T03:41:23Z",
+  "git_sha": "ba465592",
+  "dsns": {
+    "rw": {
+      "set": true,
+      "masked": "postgresql://****@/gematria?host=/var/run/postgresql"
+    },
+    "ro": {
+      "set": true,
+      "masked": "postgresql://****@/gematria?host=/var/run/postgresql"
+    }
+  }
 }

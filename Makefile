@@ -232,7 +232,11 @@ atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not 
 
 # --- Atlas DSN-on proof (read-only; fails fast if DSN missing) ---
 .PHONY: atlas.proof.dsn
-atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable)
+atlas.proof.dsn: ## DSN proof: generate masked JSON + HTML with backlink (HINT by default; STRICT with STRICT_ATLAS_DSN=1)
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/ops/atlas_proof_dsn.py | tee evidence/atlas.proof.dsn.json >/dev/null
+
+.PHONY: atlas.proof.dsn.old
+atlas.proof.dsn.old: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable) [DEPRECATED - use atlas.proof.dsn]
 	@ATLAS_DSN="$${ATLAS_DSN:-$$GEMATRIA_DSN}"; \
 	if [ -z "$$ATLAS_DSN" ]; then \
 		echo "LOUD_FAIL: ATLAS_DSN and GEMATRIA_DSN not set"; \
