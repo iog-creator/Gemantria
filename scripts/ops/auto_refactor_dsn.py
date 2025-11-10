@@ -1,5 +1,3 @@
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
-
 #!/usr/bin/env python3
 """
 Refactors Python files to use centralized DSN loader:
@@ -13,7 +11,7 @@ Also ensures: from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 Usage: auto_refactor_dsn.py file1.py file2.py ...
 """
 
-import re, sys, pathlib as p
+import io, os, re, sys, pathlib as p
 
 RW_KEYS = ["GEMATRIA_DSN", "RW_DSN", "AI_AUTOMATION_DSN", "ATLAS_DSN_RW", "ATLAS_DSN"]
 RO_KEYS = ["BIBLE_RO_DSN", "RO_DSN", "ATLAS_DSN_RO", "ATLAS_DSN"]
