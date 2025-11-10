@@ -28,12 +28,9 @@ scripts/guards/guard_dsn_centralized.sh
 scripts/guards/guard_fk_types.py
 scripts/guards/guard_runs_ledger.py
 scripts/guards/sync_alwaysapply_from_db.py
-scripts/manage_document_sections.py
-scripts/monitor_pipeline.py
 scripts/ops/create_ro_dsn.sh
 scripts/ops/create_rw_role.sh
 scripts/ops/strict_flip_on_dsn.sh
-scripts/pipeline_orchestrator.py
 scripts/populate_document_sections.py
 scripts/README.md
 scripts/set_env.sh

@@ -38,6 +38,7 @@ import tty
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 
 # ANSI color codes
@@ -546,7 +547,7 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         ensure_env_loaded()
         import psycopg
 
-        dsn = os.getenv("GEMATRIA_DSN")
+        dsn = get_rw_dsn()
         if dsn:
             with psycopg.connect(dsn) as conn:
                 with conn.cursor() as cur:

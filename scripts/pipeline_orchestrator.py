@@ -17,6 +17,7 @@ from typing import Any, Dict, List
 
 from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger, log_json
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 LOG = get_logger("pipeline_orchestrator")
 
@@ -334,7 +335,7 @@ def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", 
         import os
 
         # Get DSN from environment
-        dsn = os.getenv("GEMATRIA_DSN")
+        dsn = get_rw_dsn()
         if not dsn:
             raise ValueError("GEMATRIA_DSN environment variable not set")
 
