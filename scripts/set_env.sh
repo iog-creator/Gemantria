@@ -42,3 +42,4 @@ echo "💡 TIP: Add 'source scripts/set_env.sh' to your shell profile"
 echo "   or run it before any AI operations"
 
 
+
