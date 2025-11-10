@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "mode": "HINT",
-  "ts_utc": "2025-11-10T03:41:23Z",
-  "git_sha": "ba465592",
+  "mode": "STRICT",
+  "ts_utc": "2025-11-10T03:43:45Z",
+  "git_sha": "2a30f0b2",
   "dsns": {
     "rw": {
       "set": true,

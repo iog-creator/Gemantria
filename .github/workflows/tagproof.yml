@@ -1,0 +1,32 @@
+name: tagproof
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - '*-rc*'
+
+jobs:
+  tagproof:
+    runs-on: ubuntu-latest
+    env:
+      PIP_REQUIRE_VENV: 'true'         # hermetic; no pip installs
+      ATLAS_DSN: ${{ vars.ATLAS_DSN }} # repository variable (masked by proof script)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Require ATLAS_DSN for STRICT proof
+        run: |
+          if [ -z "${ATLAS_DSN:-}" ]; then
+            echo "ERROR: vars.ATLAS_DSN is not set. Set it in repo variables (masked in outputs)."
+            exit 1
+          fi
+      - name: Python version (system)
+        run: python3 --version || true
+      - name: Run ops.tagproof (STRICT)
+        run: make -s ops.tagproof
+      - name: Show masked DSN proof JSON
+        run: |
+          test -f docs/evidence/atlas_proof_dsn.json && \
+          sed -n '1,200p' docs/evidence/atlas_proof_dsn.json || true
+

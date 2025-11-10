@@ -283,11 +283,17 @@ guard.prompt.ssot: ## Enforce GPT System Prompt SSOT structure
 
 # --- Tag proof (STRICT DSN tracks) ---
 .PHONY: ops.tagproof
-ops.tagproof: ## Tag proof (STRICT): DSN + Always-Apply + Atlas
-	@echo "Tag proof (STRICT): DSN + Always-Apply + Atlas"
-	@STRICT_ALWAYS_APPLY=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s guard.alwaysapply.dbmirror
-	@STRICT_ATLAS_DSN=1 ATLAS_DSN="$${ATLAS_DSN:-$${GEMATRIA_DSN}}" $(MAKE) -s atlas.proof.dsn
+ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
+	@echo "[tagproof] STRICT triad (DB mirror)"
+	@STRICT_ALWAYS_APPLY=1 $(MAKE) -s guard.alwaysapply.dbmirror
+	@echo "[tagproof] STRICT prompt SSOT"
+	@STRICT_PROMPT_SSOT=1 $(MAKE) -s guard.prompt.ssot
+	@echo "[tagproof] governance smoke"
 	@$(MAKE) -s governance.smoke
+	@echo "[tagproof] STRICT DSN centralization"
+	@$(MAKE) -s guard.dsn.centralized.strict
+	@echo "[tagproof] STRICT Atlas DSN proof"
+	@STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.proof.dsn
 
 # Complete housekeeping (Rule-058: mandatory post-change)
 
