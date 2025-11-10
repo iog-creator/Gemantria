@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -35,7 +36,7 @@ except ImportError:
                 os.environ[key.strip()] = value.strip()
 
 # Use environment variable or default
-DB_DSN = os.getenv("GEMATRIA_DSN") or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
+DB_DSN = get_rw_dsn() or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
 
 
 def run_audit():
