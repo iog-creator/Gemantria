@@ -239,6 +239,23 @@ atlas.watch: ## Watch for changes and regenerate "Now" diagram (local-only, not 
 atlas.proof.dsn: ## DSN proof: generate masked JSON + HTML with backlink (HINT by default; STRICT with STRICT_ATLAS_DSN=1)
 	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/ops/atlas_proof_dsn.py | tee evidence/atlas.proof.dsn.json >/dev/null
 
+## Generate Atlas Mermaid artifacts (HINT if STRICT_ATLAS_DSN!=1 or DSN/libs missing)
+.PHONY: atlas.generate.mermaid
+atlas.generate.mermaid:
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py | tee evidence/atlas.generate.mermaid.json >/dev/null
+
+# Convenience: open a local viewer (no network) for screenshots
+.PHONY: atlas.serve.mermaid
+atlas.serve.mermaid:
+	@python3 -m http.server 8000 >/dev/null 2>&1 &
+	@echo $$! > .server.pid
+	@sleep 1
+	@echo "Serving docs at http://localhost:8000/docs/atlas/index.html"
+
+.PHONY: atlas.serve.mermaid.stop
+atlas.serve.mermaid.stop:
+	@test -f .server.pid && kill $$(cat .server.pid) && rm .server.pid || true
+
 .PHONY: atlas.proof.dsn.old
 atlas.proof.dsn.old: ## DSN-on proof: verify connectivity and generate Atlas (read-only; stays grey/HINT if DB unreachable) [DEPRECATED - use atlas.proof.dsn]
 	@ATLAS_DSN="$${ATLAS_DSN:-$$GEMATRIA_DSN}"; \
