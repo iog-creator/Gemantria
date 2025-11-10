@@ -7,6 +7,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Any
+from scripts.config.env import get_rw_dsn
 
 # Add repo root to path
 REPO = Path(__file__).resolve().parents[2]
@@ -20,7 +21,6 @@ except ImportError:
     HAS_DB = False
 
 from src.infra.env_loader import ensure_env_loaded
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 ensure_env_loaded()
 

@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -24,7 +25,6 @@ from pgvector.psycopg import register_vector  # noqa: E402
 
 from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Load environment
 ensure_env_loaded()
