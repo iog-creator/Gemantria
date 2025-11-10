@@ -11,10 +11,11 @@ import time
 import urllib.parse
 from glob import glob
 from pathlib import Path
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # ---- Config / Env ----------------------------------------------------------------
 STRICT = os.getenv("STRICT_ALWAYS_APPLY", "0") == "1"  # fail on drift
-DSN = os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")  # read-only DSN
+DSN = get_rw_dsn() or get_rw_dsn()  # read-only DSN
 FILES = [
     "AGENTS.md",
     "RULES_INDEX.md",
