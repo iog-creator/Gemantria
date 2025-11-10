@@ -1,3 +1,5 @@
+from scripts.config.env import get_rw_dsn
+
 #!/usr/bin/env python3
 """
 Atlas DSN Proof - Generate evidence JSON for DSN connectivity and table counts.
@@ -47,7 +49,6 @@ def query_table_counts(dsn: str) -> dict[str, int]:
     """Query table counts for telemetry tables."""
     try:
         import psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
         conn = psycopg.connect(dsn)
         cur = conn.cursor()

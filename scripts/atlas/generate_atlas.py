@@ -1,3 +1,5 @@
+from scripts.config.env import get_rw_dsn
+
 #!/usr/bin/env python3
 """
 Atlas generator - creates telemetry-driven Mermaid diagrams and human summaries.
@@ -20,7 +22,6 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
 from scripts.atlas.telemetry_queries import (
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
     q_active_runs,
     q_errors,
     q_latency_p90,
