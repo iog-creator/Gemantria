@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -12,11 +13,12 @@ import os, sys, glob
 
 try:
     import psycopg
+
 except Exception:
     print("WARN: psycopg not available; skipping migrate (CI empty-DB tolerance).", file=sys.stderr)
     sys.exit(0)
 
-DSN = os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn()
 if not DSN:
     print("SKIP: GEMATRIA_DSN not set (empty-DB tolerance).", file=sys.stderr)
     sys.exit(0)
