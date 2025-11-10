@@ -4,6 +4,7 @@ import sys
 import json
 import datetime
 from pathlib import Path
+from scripts.config.env import get_rw_dsn
 
 # Load .env if present
 env_file = Path(".env")
@@ -43,7 +44,7 @@ def _first_existing_table(cur, candidates) -> str | None:
             """
             select 1
             from information_schema.tables
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+
             where table_schema=%s and table_name=%s
             limit 1
         """,
