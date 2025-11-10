@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -19,7 +20,6 @@ from typing import Dict, Any
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from infra.evidence_logger import get_evidence_logger, finalize_all_evidence
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 
 def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
