@@ -2,6 +2,13 @@
 
 # Python interpreter (for CI compatibility)
 PYTHON ?= python3
+export PYTHON
+
+# === Auto-resolve DSNs from centralized loader (available to all targets) ===
+ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
+GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
+export ATLAS_DSN
+export GEMATRIA_DSN
 
 ui.dev.help:
 	@if [ -n "$$CI" ]; then echo "HINT[ui.dev.help]: CI detected; noop."; exit 0; fi
@@ -221,7 +228,7 @@ atlas.proof.dsn: ## DSN-on proof: verify connectivity and generate Atlas (read-o
 		echo "HINT: DB unreachable; staying in grey mode"; \
 		if [ "$$STRICT_ATLAS_DSN" = "1" ]; then exit 2; else exit 0; fi; \
 	}; \
-	ATLAS_DSN="$$ATLAS_DSN" python scripts/atlas/atlas_proof_dsn.py; \
+	ATLAS_DSN="$$ATLAS_DSN" $(PYTHON) scripts/atlas/atlas_proof_dsn.py; \
 	$(MAKE) -s atlas.generate ATLAS_DSN="$$ATLAS_DSN"; \
 	$(MAKE) -s atlas.test
 
@@ -387,15 +394,15 @@ eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank eval
 # --- eval: rerank quality badge (from blend report) ---
 .PHONY: eval.badges.rerank
 eval.badges.rerank:
-	@python scripts/analytics/rerank_blend_report.py
-	@python scripts/badges/make_rerank_quality_badge.py
+	@$(PYTHON) scripts/analytics/rerank_blend_report.py
+	@$(PYTHON) scripts/badges/make_rerank_quality_badge.py
 	@ls -1 share/eval/badges | grep -E 'rerank_quality\.svg' || true
 
 # --- eval: patterns badge (optional)
 .PHONY: eval.badges.patterns
 eval.badges.patterns:
-	@python scripts/analytics/export_patterns_from_json.py
-	@python scripts/badges/make_patterns_badge.py
+	@$(PYTHON) scripts/analytics/export_patterns_from_json.py
+	@$(PYTHON) scripts/badges/make_patterns_badge.py
 	@ls -1 share/eval/badges | grep -E 'patterns_badge\.svg' || true
 
 .PHONY: db.runs_ledger.smoke
@@ -767,19 +774,19 @@ guard.rules.alwaysapply.dbmirror:
 # Always-Apply triad enforcement (HINT by default; STRICT with env)
 .PHONY: guard.alwaysapply.triad
 guard.alwaysapply.triad:
-	@python scripts/guards/guard_alwaysapply_triage.py || true
+	@$(PYTHON) scripts/guards/guard_alwaysapply_triage.py || true
 	@echo "wrote evidence/guard_alwaysapply_triad.json"
 
 # DB-first mirror (HINT by default; STRICT when STRICT_ALWAYS_APPLY=1)
 .PHONY: guard.alwaysapply.dbmirror
 guard.alwaysapply.dbmirror:
-	@python scripts/guards/sync_alwaysapply_from_db.py || true
+	@$(PYTHON) scripts/guards/sync_alwaysapply_from_db.py || true
 	@echo "wrote evidence/guard_alwaysapply_dbmirror.json"
 
 # Apply DB-backed autofix (WRITE=1); still HINT unless STRICT_ALWAYS_APPLY=1
 .PHONY: guard.alwaysapply.autofix
 guard.alwaysapply.autofix:
-	@WRITE=1 python scripts/guards/sync_alwaysapply_from_db.py || true
+	@WRITE=1 $(PYTHON) scripts/guards/sync_alwaysapply_from_db.py || true
 	@echo "wrote evidence/guard_alwaysapply_dbmirror.json (autofix)"
 
 # --- Back-compat aliases (one release) ---
@@ -851,36 +858,36 @@ guard.ui.xrefs.badges:
 
 .PHONY: schema.smoke
 schema.smoke:
-	@python scripts/guards/guard_schema_smoke.py
+	@$(PYTHON) scripts/guards/guard_schema_smoke.py
 
 .PHONY: guard.rerank.thresholds
 guard.rerank.thresholds:
-	@python scripts/guards/guard_rerank_thresholds.py
+	@$(PYTHON) scripts/guards/guard_rerank_thresholds.py
 
 .PHONY: guard.badges.inventory
 guard.badges.inventory:
-	@python scripts/guards/guard_badges_inventory.py
+	@$(PYTHON) scripts/guards/guard_badges_inventory.py
 
 # --- guard: book extraction correctness (HINT-only)
 .PHONY: guard.book.extraction
 guard.book.extraction:
-	@python scripts/smokes/book_extraction_correctness.py
+	@$(PYTHON) scripts/smokes/book_extraction_correctness.py
 
 .PHONY: guard.extraction.accuracy
 guard.extraction.accuracy:
-	@python scripts/guards/guard_extraction_accuracy.py || true
+	@$(PYTHON) scripts/guards/guard_extraction_accuracy.py || true
 
 .PHONY: graph.fixture.from.truth
 graph.fixture.from.truth:
-	@python scripts/analytics/build_fixture_graph.py
+	@$(PYTHON) scripts/analytics/build_fixture_graph.py
 
 .PHONY: graph.real.from.fixtures
 graph.real.from.fixtures:
-	@python scripts/analytics/build_graph_from_repo_fixtures.py
+	@$(PYTHON) scripts/analytics/build_graph_from_repo_fixtures.py
 
 .PHONY: graph.real.production
 graph.real.production:
-	@python scripts/analytics/build_graph_real.py
+	@$(PYTHON) scripts/analytics/build_graph_real.py
 
 # Documentation governance
 .PHONY: guard.docs.consistency docs.fix.headers docs.audit
@@ -911,6 +918,10 @@ guards.all:
 	@python3 scripts/guards/guard_repo_layout.py
 	@echo ">> DB FK type mismatches (advisory in CI; strict locally)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_fk_types.py || true
+	@echo ">> Validating env usage (no direct os.getenv)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_env_usage.py | tee evidence/guard_env_usage.txt || true
+	@echo ">> Validating schema contract (class not kind, no meta)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_schema_contract.py | tee evidence/guard_schema_contract.txt || true
 
 # Agentic Pipeline Targets (placeholders - wire to existing scripts)
 ai.ingest:
@@ -947,22 +958,22 @@ analytics.export:
 	@echo "HINT: analytics: starting (file-first)"
 	@if test -f exports/graph_latest.scored.json || test -f exports/graph_latest.json; then \
 		echo "HINT: analytics: using graph JSON in exports/"; \
-		python scripts/analytics/graph_stats_from_json.py; \
+		$(PYTHON) scripts/analytics/graph_stats_from_json.py; \
 	else \
 		echo "HINT: analytics: no local graph JSON; deferring to DB exporters"; \
-		python scripts/analytics/export_graph.py || true; \
+		$(PYTHON) scripts/analytics/export_graph.py || true; \
 	fi
-	@python scripts/analytics/export_patterns.py || true
+	@$(PYTHON) scripts/analytics/export_patterns.py || true
 	@echo "[analytics.export] OK"
 
 .PHONY: analytics.rerank.blend
 analytics.rerank.blend:
-	@python scripts/analytics/rerank_blend_report.py
+	@$(PYTHON) scripts/analytics/rerank_blend_report.py
 
 # --- analytics: patterns export (file-first)
 .PHONY: analytics.patterns.file
 analytics.patterns.file:
-	@python scripts/analytics/export_patterns_from_json.py
+	@$(PYTHON) scripts/analytics/export_patterns_from_json.py
 	@head -n 20 share/eval/patterns.json || true
 	@echo "[analytics.patterns.file] OK"
 
@@ -1099,7 +1110,7 @@ evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict
 	@if test -d share/eval/badges; then cp -f share/eval/badges/patterns_badge.svg evidence/ 2>/dev/null || true; fi
 	@if test -f share/eval/rerank_blend_report.json; then cp share/eval/rerank_blend_report.json evidence/; fi
 	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
-	@if test -f evidence/guard_rerank_thresholds.json; then :; else python scripts/guards/guard_rerank_thresholds.py || true; fi
+	@if test -f evidence/guard_rerank_thresholds.json; then :; else $(PYTHON) scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol

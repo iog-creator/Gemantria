@@ -47,7 +47,13 @@ class QwenUnavailableError(Exception):
 
 
 # Environment validation
-HOST = os.getenv("LM_STUDIO_HOST", "http://127.0.0.1:1234")
+# Default: construct from LM_EMBED_HOST/LM_EMBED_PORT (from .env.example) or use 9994
+_default_host = "http://127.0.0.1:9994"
+if "LM_STUDIO_HOST" not in os.environ:
+    embed_host = os.environ.get("LM_EMBED_HOST", "localhost")
+    embed_port = os.environ.get("LM_EMBED_PORT", "9994")
+    _default_host = f"http://{embed_host}:{embed_port}"
+HOST = os.getenv("LM_STUDIO_HOST", _default_host)
 if not HOST.startswith("http"):
     raise ValueError(f"LM_STUDIO_HOST must be a valid HTTP URL, got: {HOST}")
 

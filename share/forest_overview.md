@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-09 16:06:22
+Generated: 2025-11-09 18:05:00
 
 ## Active Rules
 
@@ -138,6 +138,7 @@ Generated: 2025-11-09 16:06:22
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
 - ADR-058-gpt-system-prompt-governance: ADR-058: GPT System Prompt Requirements as Operational Governance
+- ADR-065-postgres-ssot: ADR-065 — Postgres-First SSOT for Gemantria
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

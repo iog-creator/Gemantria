@@ -2,16 +2,17 @@
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 from __future__ import annotations
 
-import os
-
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
+
+from scripts.config.env import get_rw_dsn, get_ro_dsn
 
 _POOL: ConnectionPool | None = None
 
 
 def _dsn() -> str:
-    return os.environ.get("ATLAS_DSN_RW") or os.environ.get("GEMATRIA_DSN") or os.environ.get("ATLAS_DSN") or ""
+    dsn = get_rw_dsn() or get_ro_dsn()
+    return dsn or ""
 
 
 def get_pool() -> ConnectionPool:

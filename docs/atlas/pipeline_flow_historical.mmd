@@ -2,13 +2,13 @@
 flowchart LR
   %% Pipeline Flow - Historical View
   subgraph PIPELINE[Pipeline Stages]
-    COLLECTNOUNS["collect_nouns"]:::blue
+    COLLECTNOUNS["collect_nouns<br/>p90: 103000ms"]:::blue
     click COLLECTNOUNS "/evidence/pipeline_flow_historical.html" "View collect_nouns details"
     COLLECTNOUNS --> VALIDATEBATCH
     VALIDATEBATCH["validate_batch"]:::blue
     click VALIDATEBATCH "/evidence/pipeline_flow_historical.html" "View validate_batch details"
     VALIDATEBATCH --> ENRICHMENT
-    ENRICHMENT["enrichment"]:::blue
+    ENRICHMENT["enrichment<br/>p90: 11614ms"]:::blue
     click ENRICHMENT "/evidence/pipeline_flow_historical.html" "View enrichment details"
     ENRICHMENT --> MATHVERIFIER
     MATHVERIFIER["math_verifier"]:::blue
@@ -17,15 +17,23 @@ flowchart LR
     CONFIDENCEVALIDATOR["confidence_validator"]:::blue
     click CONFIDENCEVALIDATOR "/evidence/pipeline_flow_historical.html" "View confidence_validator details"
     CONFIDENCEVALIDATOR --> NETWORKAGGREGATOR
-    NETWORKAGGREGATOR["network_aggregator"]:::blue
+    NETWORKAGGREGATOR["network_aggregator<br/>p90: 2473ms"]:::blue
     click NETWORKAGGREGATOR "/evidence/pipeline_flow_historical.html" "View network_aggregator details"
     NETWORKAGGREGATOR --> SCHEMAVALIDATOR
     SCHEMAVALIDATOR["schema_validator"]:::blue
     click SCHEMAVALIDATOR "/evidence/pipeline_flow_historical.html" "View schema_validator details"
     SCHEMAVALIDATOR --> ANALYSISRUNNER
-    ANALYSISRUNNER["analysis_runner"]:::blue
+    ANALYSISRUNNER["analysis_runner<br/>p90: 55ms"]:::blue
     click ANALYSISRUNNER "/evidence/pipeline_flow_historical.html" "View analysis_runner details"
   end
+  subgraph RECENT[Recent Runs]
+    R0["e95aca84...<br/>0.0s"]:::green
+    R1["18dcd690...<br/>0.0s"]:::green
+    R2["612968ba...<br/>45243.8s"]:::green
+    R3["84ae2bf8...<br/>0.0s"]:::green
+    R4["fa7d2c27...<br/>11.4s"]:::green
+  end
+  RECENT --> PIPELINE
   classDef blue fill:#dbeafe,stroke:#1e40af,color:#1e3a8a,stroke-width:1px;
   classDef green fill:#a7f3d0,stroke:#065f46,color:#083344,stroke-width:1px;
 ```

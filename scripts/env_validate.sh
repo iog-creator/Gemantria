@@ -108,9 +108,9 @@ check_database() {
 
 # Test LM Studio connectivity (optional, can fail)
 test_lm_studio_health() {
-    if command -v python &> /dev/null; then
+    if command -v python3 &> /dev/null; then
         log "Testing LM Studio health check..."
-        if python -c "
+        if python3 -c "
 from src.services.lmstudio_client import assert_qwen_live
 try:
     result = assert_qwen_live(['christian-bible-expert-v2.0-12b'])

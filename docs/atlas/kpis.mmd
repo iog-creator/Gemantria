@@ -2,9 +2,9 @@
 flowchart TD
   %% KPIs - Key Performance Indicators
   subgraph KPIS[Key Metrics]
-    ACTIVE["Active Runs: 0"]:::green
+    ACTIVE["Active Runs: 141"]:::green
     ERRORS["Errors (24h): 0"]:::green
-    SLOWEST["Slowest p90: N/A"]:::grey
+    SLOWEST["Slowest p90: collect_nouns<br/>103000ms"]:::yellow
   end
   click ACTIVE "/evidence/kpis.html" "View active runs"
   click ERRORS "/evidence/kpis.html" "View errors"

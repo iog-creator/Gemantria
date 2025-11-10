@@ -6,6 +6,18 @@
 
 ---
 
+### Governance Posture — Always-Apply Triad
+
+We explicitly adopt the 050/051/052 triad:
+
+1. **Rule-050 (LOUD FAIL)** — strict activation + SSOT checks.
+2. **Rule-051 (CI gating posture)** — merges honor required checks.
+3. **Rule-052 (tool-priority)** — local+gh → codex → gemini/mcp.
+
+This plan assumes these rules are continuously enforced by guards and mirrored to the Atlas proof.
+
+---
+
 ## Mission
 
 Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and viz-ready artifacts, with self-healing guards and governance.
@@ -288,7 +300,7 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 <!-- RULES_TABLE_START -->
 | # | Title |
 |---:|-------|
-| 000 | # 000-ssot-index (AlwaysApply) |
+| 000 | # 000-ssot-index |
 | 001 | # --- |
 | 002 | # --- |
 | 003 | # --- |
@@ -338,9 +350,9 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 047 | # --- |
 | 048 | # --- |
 | 049 | # --- |
-| 050 | # --- |
-| 051 | # --- |
-| 052 | # --- |
+| 050 | OPS Contract v6.2.3 (AlwaysApply) |
+| 051 | Cursor Insight & Handoff (AlwaysApply) |
+| 052 | Tool Priority & Context Guidance (AlwaysApply) |
 | 053 | # --- |
 | 054 | # --- |
 | 055 | # --- |

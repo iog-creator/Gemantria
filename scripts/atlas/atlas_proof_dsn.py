@@ -46,9 +46,9 @@ def redact_dsn(dsn: str | None) -> dict:
 def query_table_counts(dsn: str) -> dict[str, int]:
     """Query table counts for telemetry tables."""
     try:
-        import psycopg2
+        import psycopg
 
-        conn = psycopg2.connect(dsn)
+        conn = psycopg.connect(dsn)
         cur = conn.cursor()
         tables = {}
         # Query common telemetry tables

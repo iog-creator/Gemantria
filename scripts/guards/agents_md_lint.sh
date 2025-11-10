@@ -9,7 +9,7 @@ fi
 
 # Warn (non-fatal) if any code/docs dir lacks AGENTS.md quick-hint
 # (directories discovered by the existing generator)
-missing_output=$(python scripts/create_agents_md.py --dry-run 2>&1)
+missing_output=$(python3 scripts/create_agents_md.py --dry-run 2>&1)
 if echo "$missing_output" | grep -q "WOULD CREATE:"; then
   echo "HINT: missing folder AGENTS.md detected by generator"
 fi

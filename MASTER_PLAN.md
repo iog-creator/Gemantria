@@ -1,13 +1,20 @@
 # Gematria v2.0 Master Plan
 
-#### Governance Triad (Always-Apply)
+## Always-Apply Triad (Governance)
 
-Active rules: **050**, **051**, **052**.  
-- 050: LOUD FAIL when SSOT/governance absent or red  
-- 051: Required checks gate merges (advisory checks non-blocking)  
-- 052: Tool-priority order enforced (local+gh → codex (401) → gemini/mcp)
+- **Rule-050 — LOUD FAIL** (activation/SSOT)
+- **Rule-051 — Required-checks posture**
+- **Rule-052 — Tool-priority (local+gh → codex → gemini/mcp)**
+
+These rules are baseline and must appear in anchor docs to satisfy the triad guard.
 
 <!-- guard.alwaysapply sentinel: 050 051 052 -->
+
+| # | Title |
+|---:|-------|
+| 050 | OPS Contract v6.2.3 (AlwaysApply) |
+| 051 | Cursor Insight & Handoff (AlwaysApply) |
+| 052 | Tool Priority & Context Guidance (AlwaysApply) |
 
 ## Vision
 

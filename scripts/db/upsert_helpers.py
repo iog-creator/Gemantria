@@ -12,18 +12,19 @@ from .pool import get_pool
 
 
 def upsert_node(surface: str, kind: str = "concept", meta: dict | None = None) -> str:
-    meta = meta or {}
+    """Upsert a node. Note: 'kind' maps to 'class' column; 'meta' is stored in evidence if needed."""
     with get_pool().connection() as conn, conn.cursor(row_factory=dict_row) as cur:
         # Ensure a uniqueness surface index exists (idempotent)
         cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS uq_nodes_surface ON gematria.nodes(surface);")
+        # Schema uses 'class' not 'kind'; no 'meta' column, so we ignore it or could store in a future JSONB column
         cur.execute(
             """
-            INSERT INTO gematria.nodes(surface, kind, meta)
-            VALUES (%(s)s, %(k)s, %(m)s)
-            ON CONFLICT (surface) DO UPDATE SET kind=EXCLUDED.kind
+            INSERT INTO gematria.nodes(surface, class)
+            VALUES (%(s)s, %(k)s)
+            ON CONFLICT (surface) DO UPDATE SET class=EXCLUDED.class
             RETURNING node_id;
             """,
-            {"s": surface, "k": kind, "m": json.dumps(meta)},
+            {"s": surface, "k": kind},
         )
         node_id = cur.fetchone()["node_id"]
         conn.commit()

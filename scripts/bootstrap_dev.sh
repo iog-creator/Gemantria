@@ -28,6 +28,6 @@ fi
 
 # Final verification
 echo "🔍 Running doctor diagnostic..."
-python scripts/doctor.py
+python3 scripts/doctor.py
 
 echo "🎉 Bootstrap complete! Run 'make doctor' anytime to verify environment."

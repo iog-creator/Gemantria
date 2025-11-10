@@ -9,6 +9,6 @@ if [ -z "${VIRTUAL_ENV:-}" ] || [[ "$VIRTUAL_ENV" != *"/home/mccoy/Projects/Gema
   exit 42
 fi
 
-python -c 'import sys; assert sys.prefix.endswith(".venv"), "Not in .venv"' || exit 43
+python3 -c 'import sys; assert sys.prefix.endswith(".venv"), "Not in .venv"' || exit 43
 
 echo "OK: .venv active at $VIRTUAL_ENV"

@@ -30,6 +30,16 @@ This repository contains the planning scaffolding, lightweight gematria helpers,
 
 > Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
 
+### Always-Apply Triad (Governance)
+
+The following rules are **Always-Apply** in this repo and must be referenced in the governance docs and enforced by guards:
+
+- **Rule-050** — LOUD FAIL (activation + SSOT gates)
+- **Rule-051** — Required-checks/CI gating posture
+- **Rule-052** — Tool-priority (local+gh → codex → gemini/mcp)
+
+These three rules are treated as the **050/051/052 triad** and are mirrored in DB/file guards.
+
 ## Local development
 1. Create and activate a virtual environment (for example `.venv`).
 2. Install dependencies: `pip install -r requirements.txt`.
