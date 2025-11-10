@@ -28,11 +28,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from infra.env_loader import ensure_env_loaded
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 ensure_env_loaded()
 
 # Database connection
-GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+GEMATRIA_DSN = get_rw_dsn()
 
 
 def run_command(cmd: list, description: str) -> bool:
