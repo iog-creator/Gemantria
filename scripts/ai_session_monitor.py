@@ -35,9 +35,10 @@ from typing import Any, Dict, List
 # Import our AI learning tracker
 sys.path.insert(0, str(Path(__file__).parent))
 from ai_learning_tracker import AILearningTracker
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Database connection
-GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+GEMATRIA_DSN = get_rw_dsn()
 ROOT = Path(__file__).resolve().parent.parent
 
 

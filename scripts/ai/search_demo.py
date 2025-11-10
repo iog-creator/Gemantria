@@ -9,13 +9,14 @@ from openai import OpenAI
 import psycopg
 
 from scripts.ai.lmstudio_resolver import base_url
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 
 def main():
     q = " ".join(sys.argv[1:]) or "wisdom covenant"
     model = os.environ.get("LM_EMBED_MODEL") or "text-embedding-3-small"
     k = int(os.environ.get("TOPK", "5"))
-    dsn = os.environ.get("ATLAS_DSN") or os.environ.get("GEMATRIA_DSN") or os.environ.get("ATLAS_DSN_RW")
+    dsn = get_rw_dsn()
     if not dsn:
         print("NO-GO: set ATLAS_DSN (RO) or ATLAS_DSN_RW for DB access", file=sys.stderr)
         sys.exit(2)

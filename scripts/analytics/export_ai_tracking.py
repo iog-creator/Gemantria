@@ -7,6 +7,8 @@ import json
 import datetime
 from pathlib import Path
 
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+
 # Load .env if present
 env_file = Path(".env")
 if env_file.exists():
@@ -25,7 +27,7 @@ def rfc3339_now() -> str:
 
 
 def _dsn() -> str | None:
-    return os.getenv("AI_TRACKING_DSN") or os.getenv("AI_AUTOMATION_DSN")
+    return os.getenv("AI_TRACKING_DSN") or get_rw_dsn()
 
 
 def _try_import_psycopg():
