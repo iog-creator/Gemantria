@@ -1,3 +1,5 @@
+from scripts.config.env import get_rw_dsn
+
 #!/usr/bin/env python3
 """
 Atlas generator - creates telemetry-driven Mermaid diagrams and human summaries.
@@ -30,7 +32,7 @@ from scripts.atlas.telemetry_queries import (
 ATLAS_DIR = REPO / "docs" / "atlas"
 EVIDENCE_DOCS = REPO / "docs" / "evidence"
 # Use ATLAS_DSN with fallback to GEMATRIA_DSN (for read-only governance/telemetry)
-DSN = os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn() or get_rw_dsn()
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
