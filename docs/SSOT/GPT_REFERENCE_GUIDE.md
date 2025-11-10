@@ -67,6 +67,11 @@ This curated set of 21 files stays within GPT's 22-file upload limit while provi
 
 ## GPT System Prompt Requirements
 
+**Role Clarification:**
+- **GPT = Project Manager (PM)**: Plans, decides, and provides instructions. Does NOT execute commands.
+- **Cursor = Executor**: Reads GPT's instructions and runs the actual commands/tool calls.
+- **Human = Operator**: Receives guidance and reviews Cursor's work.
+
 **Session Initialization (MANDATORY):**
 ```bash
 cd /home/mccoy/Projects/Gemantria.v2
@@ -82,13 +87,18 @@ make ssot.verify
 - ✅ Database accessible (PostgreSQL gematria and bible_db) - **Note**: Scripts handle DB unavailability gracefully (hermetic behavior per Rule 046)
 - ✅ Share folder curated (21 files under 22-file GPT limit)
 
-**Response Protocol:**
-1. **Goal** — One sentence describing objective
-2. **Commands** — Exact shell commands, top to bottom
-3. **Evidence to return** — Which outputs to paste back
-4. **Next gate** — What happens once evidence returned
+**Response Protocol (Two-Part Format):**
+1. **Code Box for Cursor** (instructions Cursor will execute):
+   - **Goal** — One sentence describing objective
+   - **Commands** — Exact shell commands, top to bottom (for Cursor to execute)
+   - **Evidence to return** — Which outputs Cursor should show
+   - **Next gate** — What happens once evidence returned
+2. **Tutor Notes** (outside the box, for the human):
+   - Conversational, helpful explanation
+   - Plain English, friendly tone
+   - Explains what's happening and why
 
-**Tool Priority:**
+**Tool Priority (for Cursor to use):**
 1. local+gh (git, make, gh pr)
 2. codex (if available, else "Codex disabled (401)")
 3. gemini/mcp (for long docs)
