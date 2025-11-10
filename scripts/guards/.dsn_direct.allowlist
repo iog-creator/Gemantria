@@ -11,14 +11,11 @@ scripts/atlas/generate_atlas.py
 scripts/atlas/telemetry_queries.py
 scripts/audit_genesis_db.py
 scripts/backfill_bge_embeddings.py
-scripts/backfill_noun_embeddings.py
 scripts/bootstrap_dev.sh
 scripts/ci/ensure_db_then_migrate.sh
 scripts/ci/soft_checks.py
 scripts/db/migrate.py
 scripts/db/migrate.sh
-scripts/db/pool.py
-scripts/doctor.py
 scripts/document_management_hints.py
 scripts/echo_env.py
 scripts/env/validate_env.sh
