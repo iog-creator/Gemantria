@@ -26,7 +26,6 @@ from pathlib import Path
 from typing import Dict, List
 
 import psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Database connection
 GEMATRIA_DSN = get_rw_dsn()

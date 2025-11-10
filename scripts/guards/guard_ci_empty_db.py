@@ -10,7 +10,7 @@ Guard: CI empty-DB tolerance.
 - If set and reachable -> ensure base tables exist, else exit 2.
 """
 
-import os, sys
+import sys
 
 try:
     import psycopg

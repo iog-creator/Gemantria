@@ -1,5 +1,3 @@
-from scripts.config.env import get_rw_dsn
-
 #!/usr/bin/env python3
 """
 Atlas generator - creates telemetry-driven Mermaid diagrams and human summaries.

@@ -1,4 +1,3 @@
-from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -35,8 +34,10 @@ except ImportError:
                 key, value = line.split("=", 1)
                 os.environ[key.strip()] = value.strip()
 
-# Use environment variable or default
-DB_DSN = get_rw_dsn() or os.getenv("DATABASE_URL") or "postgresql://localhost/gemantria"
+# Use centralized DSN shim
+from gemantria.dsn import dsn_rw
+
+DB_DSN = dsn_rw()
 
 
 def run_audit():

@@ -5,8 +5,9 @@
 import os, json, sys
 import psycopg
 from datetime import datetime, UTC
+from gemantria.dsn import dsn_ro
 
-DSN = os.getenv("BIBLE_DB_DSN")
+DSN = dsn_ro()
 if not DSN:
     print("ERROR: BIBLE_DB_DSN not set", file=sys.stderr)
     sys.exit(2)

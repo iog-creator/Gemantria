@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 
-import os
 import sys
 import json
 import uuid

@@ -20,7 +20,6 @@ Usage:
     python scripts/governance_housekeeping.py  # Run full housekeeping cycle
 """
 
-import os
 import subprocess
 import sys
 from pathlib import Path

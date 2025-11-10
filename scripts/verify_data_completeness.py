@@ -8,7 +8,6 @@ import sys
 
 # REQUIRED across scripts: load .env before any getenv/DB access
 # (prevents DSN/connection issues)
-from src.infra.db_utils import get_connection_dsn
 from src.infra.env_loader import ensure_env_loaded
 
 ensure_env_loaded()  # mandatory per AGENTS governance
@@ -22,7 +21,9 @@ except Exception:
     )
     sys.exit(2)
 
-DB_DSN = get_connection_dsn(fallback="postgresql://localhost/gemantria")
+from gemantria.dsn import dsn_rw
+
+DB_DSN = dsn_rw()
 
 TABLE_QUERIES: list[tuple[str, str]] = [
     ("concepts", "SELECT 1 FROM concepts LIMIT 1"),

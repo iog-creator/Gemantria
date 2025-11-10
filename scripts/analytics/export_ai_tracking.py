@@ -7,6 +7,7 @@ import json
 import datetime
 from pathlib import Path
 from scripts.config.env import get_rw_dsn
+from gemantria.dsn import dsn_rw
 
 # Load .env if present
 env_file = Path(".env")
@@ -26,7 +27,7 @@ def rfc3339_now() -> str:
 
 
 def _dsn() -> str | None:
-    return os.getenv("AI_TRACKING_DSN") or get_rw_dsn()
+    return dsn_rw() or get_rw_dsn()
 
 
 def _try_import_psycopg():

@@ -5,7 +5,6 @@
 import sys
 
 try:
-    from src.infra.db_utils import get_connection_dsn
     from src.infra.env_loader import ensure_env_loaded  # optional; no-op if absent
 
     ensure_env_loaded()
@@ -21,7 +20,9 @@ except Exception:
     )
     sys.exit(2)
 
-DSN = get_connection_dsn(fallback="postgresql://localhost/gemantria")
+from gemantria.dsn import dsn_rw
+
+DSN = dsn_rw()
 
 PROBES = [
     (

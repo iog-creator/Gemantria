@@ -6,6 +6,7 @@ import json
 import os
 import re
 from pathlib import Path
+from gemantria.dsn import dsn_rw
 
 # Load .env file if it exists
 env_path = Path(".env")
@@ -90,7 +91,7 @@ def check_postgres():
     try:
         import psycopg  # noqa: E402
 
-        dsn = os.environ.get("GEMATRIA_DSN", "")
+        dsn = dsn_rw()
         if not dsn:
             REPORT["postgres"] = {"ok": False, "reason": "GEMATRIA_DSN not set"}
             return
