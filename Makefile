@@ -585,6 +585,28 @@ db.migrate:
 	@echo ">> Running P1-DB migrate…"
 	@PYTHONPATH=. python3 scripts/db/migrate.py
 
+# --- DB plan / readiness (HINT posture; no secrets) ---
+.PHONY: db.plan db.readiness db.apply.hint
+db.plan:
+	@echo "ADR: docs/ADRs/ADR-065-postgres-ssot.md"
+	@ls -1 scripts/sql/pg 2>/dev/null | sed 's/^/sql: scripts\/sql\/pg\//' || echo "HINT: scripts/sql/pg/ directory not found (SQL skeletons not yet created)"
+
+db.readiness:
+	@if [ -z "$${ATLAS_DSN:-$${GEMATRIA_DSN:-}}" ]; then \
+	  echo "HINT: No DSN set (ATLAS_DSN/GEMATRIA_DSN). Readiness will skip live checks."; \
+	else \
+	  psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -c "select version()"; \
+	  psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -c "select extname from pg_extension where extname in ('vector','pg_trgm','pg_stat_statements','citext','pgcrypto') order by 1"; \
+	fi
+
+# Apply core SQL (safe to run repeatedly). Requires DSN env.
+db.apply.hint:
+	@if [ -z "$${ATLAS_DSN:-$${GEMATRIA_DSN:-}}" ]; then \
+	  echo "HINT: set ATLAS_DSN (RO for proofs, RW for DDL) to apply."; exit 0; \
+	else \
+	  for f in scripts/sql/pg/*.sql; do echo "-- $$f" && psql "$${ATLAS_DSN:-$${GEMATRIA_DSN}}" -v ON_ERROR_STOP=1 -f $$f; done; \
+	fi
+
 # UI envelope generation
 .PHONY: ui.envelope
 ui.envelope:
