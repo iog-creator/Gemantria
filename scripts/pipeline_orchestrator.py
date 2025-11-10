@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -334,7 +335,7 @@ def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", 
         import os
 
         # Get DSN from environment
-        dsn = os.getenv("GEMATRIA_DSN")
+        dsn = get_rw_dsn()
         if not dsn:
             raise ValueError("GEMATRIA_DSN environment variable not set")
 

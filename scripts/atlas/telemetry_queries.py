@@ -7,6 +7,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Any
+from scripts.config.env import get_rw_dsn
 
 # Add repo root to path
 REPO = Path(__file__).resolve().parents[2]
@@ -23,7 +24,7 @@ from src.infra.env_loader import ensure_env_loaded
 
 ensure_env_loaded()
 
-DSN = os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn()
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_MAX_ROWS = int(os.getenv("ATLAS_MAX_ROWS", "500"))
 
