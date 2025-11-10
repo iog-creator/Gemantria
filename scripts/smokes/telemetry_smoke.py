@@ -8,9 +8,10 @@ import uuid
 import datetime as dt
 
 import psycopg
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 run_id = f"telemetry-smoke-{uuid.uuid4()}"
-dsn = os.environ.get("ATLAS_DSN_RW")
+dsn = get_rw_dsn()
 if not dsn:
     print("NO-GO: ATLAS_DSN_RW required for telemetry.smoke", file=sys.stderr)
     sys.exit(1)

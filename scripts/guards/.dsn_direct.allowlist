@@ -35,5 +35,3 @@ scripts/ops/strict_flip_on_dsn.sh
 scripts/pipeline_orchestrator.py
 scripts/README.md
 scripts/set_env.sh
-scripts/smokes/telemetry_smoke.py
-scripts/update_share.py

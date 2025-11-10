@@ -35,8 +35,9 @@ SHARE = ROOT / "share"
 # Database integration (optional - hermetic behavior per Rule 046)
 try:
     import psycopg
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
-    GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+    GEMATRIA_DSN = get_rw_dsn()
     DB_AVAILABLE = bool(GEMATRIA_DSN)
 except ImportError:
     DB_AVAILABLE = False
