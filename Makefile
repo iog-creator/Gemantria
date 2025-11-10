@@ -4,6 +4,11 @@
 PYTHON ?= python3
 export PYTHON
 
+# ---- Guard: python runner regression ----------------------------------------
+.PHONY: guard.python.runner
+guard.python.runner:
+	@bash scripts/guards/guard_python_runner.sh
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)

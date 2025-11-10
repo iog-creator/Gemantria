@@ -3,6 +3,12 @@
 
 > Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
 
+## Tooling Policy
+
+- Use **python3** (runner is exported as `$(PYTHON)=python3` in Makefiles).  
+- Never invoke bare `python ` in shell scripts or Makefiles — use `$(PYTHON)` or `python3`.  
+- This policy is covered by the **python runner guard** and is part of the Always-Apply posture (050/051/052).
+
 | # | File | Title |
 |---:|------|-------|
 | 000 | 000-ssot-index.mdc | Non-negotiable rules for Gemantria |
