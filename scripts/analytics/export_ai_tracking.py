@@ -6,8 +6,7 @@ import sys
 import json
 import datetime
 from pathlib import Path
-
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 # Load .env if present
 env_file = Path(".env")

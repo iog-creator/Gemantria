@@ -9,7 +9,7 @@ from openai import OpenAI
 import psycopg
 
 from scripts.ai.lmstudio_resolver import base_url
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 
 def main():

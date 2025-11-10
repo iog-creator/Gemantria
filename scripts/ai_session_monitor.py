@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -35,7 +36,6 @@ from typing import Any, Dict, List
 # Import our AI learning tracker
 sys.path.insert(0, str(Path(__file__).parent))
 from ai_learning_tracker import AILearningTracker
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 
 # Database connection
 GEMATRIA_DSN = get_rw_dsn()
