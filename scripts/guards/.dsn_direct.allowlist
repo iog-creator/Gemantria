@@ -5,9 +5,6 @@ scripts/ai_learning_tracker.py
 scripts/ai/search_demo.py
 scripts/ai_session_monitor.py
 scripts/analytics/export_ai_tracking.py
-scripts/analytics/export_from_db.py
-scripts/atlas/atlas_proof_dsn.py
-scripts/atlas/generate_atlas.py
 scripts/atlas/telemetry_queries.py
 scripts/audit_genesis_db.py
 scripts/backfill_bge_embeddings.py
