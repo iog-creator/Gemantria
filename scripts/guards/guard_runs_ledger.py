@@ -3,10 +3,11 @@
 
 #!/usr/bin/env python3
 import os, sys
+from scripts.config.env import get_rw_dsn
 
 try:
     import psycopg
-from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+
 except Exception:
     print("SKIP: psycopg not installed; tolerated.", file=sys.stderr)
     sys.exit(0)
