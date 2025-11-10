@@ -1,22 +1,46 @@
 # ADR-065 — Postgres-First SSOT for Gemantria
 
-**Status:** Proposed → Trial (HINT)  
+**Status:** Trial (HINT) → Enforced (STRICT, DB-as-SSOT)
 
-This ADR declares **Postgres as the Single Source of Truth** (SSOT) for policy/telemetry/graph artifacts. Files remain **mirrors/pointers** so CI can run without secrets (HINT). STRICT enforces DB-first once a read-only DSN is provided.
+## Decision
 
-## Decisions
+Postgres is the **Single Source of Truth (SSOT)** for governance (Always-Apply 050/051/052), telemetry, and graph artifacts. Repo files are **pointers/mirrors**. CI defaults to **HINT** (no secrets); **STRICT** requires a DSN and fails closed on drift.
 
-- **DB-first SSOT**; files mirror via guards/exports.
+## Architecture
 
-- **Extensions:** vector, pg_trgm, pg_stat_statements, citext, pgcrypto (optional: pg_cron, fdw).
+- **Schemas**
+  - `gematria`: domain graph (nodes, edges, ai_embeddings), derived summaries
+  - `telemetry`: metrics_log (time-series), ai_interactions, checkpointer_state
+  - `ops`: job queue, outbox, matviews, admin helpers
 
-- **Schemas:** gematria (domain), telemetry (events), ops (queue/ops).
+- **Extensions**: `vector` (pgvector), `pg_trgm`, `pg_stat_statements`, `citext`, `pgcrypto` (optional: `pg_cron`, FDWs)
 
-- **Patterns:** FTS (tsvector+GIN), pg_trgm fuzzy, pgvector (1024 dims; HNSW/IVFFlat), partitioned time-series + BRIN, SKIP LOCKED queue + NOTIFY, matviews for Atlas, RLS for tenants.
+- **Indexes/Scale**: GIN (FTS/jsonb), BRIN (time-series), HNSW/IVFFlat (vector), partitioning on telemetry
 
-- **Rollout:** HINT by default; STRICT on DSN with autofix of mirrors.
+- **Security**: RO/ RW roles with least privilege; RLS for multi-tenant; proofs always RO
 
-## Phases
+## Rollout Phases
 
-P0 Readiness → P1 Extensions/Schemas → P2 FTS → P3 Vectors → P4 Queue/NOTIFY → P5 Observability → P6 RLS → P7 Replication/FDW.
+P0 Readiness (this ADR + SQL skeletons + Make targets)  
+P1 Extensions & Schemas (idempotent DDL)  
+P2 FTS & Trigrams  
+P3 Vector search (dims=1024; HNSW/IVF)  
+P4 Queue + LISTEN/NOTIFY  
+P5 Observability (pg_stat_statements, auto_explain*)  
+P6 RLS & tenant policy  
+P7 Replication/FDW (if needed)
 
+*auto_explain requires superuser or managed service capability.
+
+## Operations
+
+- **DSNs**: `ATLAS_DSN` (RO proofs), `ATLAS_DSN_RW` (constrained DDL). Never echo secrets.
+
+- **Guards**: DB-first `guard.alwaysapply.dbmirror` (STRICT), pointer sentinels in `AGENTS.md` / `RULES_INDEX.md`.
+
+- **Browser**: Atlas/Pages proofs must be visually verified (serve `docs/`).
+
+## Consequences
+
+- CI stays hermetic; PRs don't need secrets (HINT).  
+- On STRICT, DB → files is enforced; mirrors drift causes failure (autofix path available).
