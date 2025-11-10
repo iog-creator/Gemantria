@@ -250,6 +250,34 @@ atlas.generate.7d:
 atlas.generate.30d:
 	@cd $(CURDIR) && ATLAS_WINDOW=30d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 30d | tee evidence/atlas.generate.30d.json >/dev/null
 
+# Atlas node pages (PR-safe: file-first)
+.PHONY: atlas.nodes
+atlas.nodes:
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_node_pages.py | tee evidence/atlas.nodes.json >/dev/null
+	@echo "✅ Atlas node pages generated"
+
+# Wire Mermaid clicks for nodes in docs/atlas/execution_live.mmd and dependencies.mmd if present.
+# Adds lines of the form: click "<node>" "nodes/<node>.html" "Details"
+.PHONY: atlas.wire.clicks
+atlas.wire.clicks:
+	@set -e; \
+	files="docs/atlas/execution_live.mmd docs/atlas/dependencies.mmd"; \
+	for f in $$files; do \
+	  test -f "$$f" || continue; \
+	  if [ -f evidence/atlas.nodes.json ]; then \
+	    jq -r '.written[]?|split("/")[-1]|sub(".html$";"")' evidence/atlas.nodes.json 2>/dev/null | while read -r nid; do \
+	      grep -qE "click[[:space:]]+\"?$$nid\"?[[:space:]]+\"nodes/$$nid.html\"" "$$f" && continue; \
+	      echo "  click \"$$nid\" \"nodes/$$nid.html\" \"Details\"" >> "$$f"; \
+	    done; \
+	  fi; \
+	done; \
+	echo "✅ Wired clicks (where applicable)"
+
+# Convenience: full regen + nodes + wire
+.PHONY: atlas.generate.all
+atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
+	@echo "✅ atlas.generate.all complete"
+
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
 atlas.serve.mermaid:
