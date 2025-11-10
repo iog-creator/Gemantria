@@ -250,6 +250,52 @@ atlas.generate.7d:
 atlas.generate.30d:
 	@cd $(CURDIR) && ATLAS_WINDOW=30d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 30d | tee evidence/atlas.generate.30d.json >/dev/null
 
+# Atlas node pages (PR-safe: file-first)
+.PHONY: atlas.nodes
+atlas.nodes:
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_node_pages.py | tee evidence/atlas.nodes.json >/dev/null
+	@echo "✅ Atlas node pages generated"
+
+# Wire Mermaid clicks for nodes in docs/atlas/execution_live.mmd and dependencies.mmd if present.
+# Adds lines of the form: click "<node>" "nodes/<node>.html" "Details"
+# Order matters: regenerate .mmd → (re)build nodes → wire clicks last (so regen cannot clobber).
+.PHONY: atlas.wire.clicks
+atlas.wire.clicks:
+	@set -e; \
+	files="docs/atlas/execution_live.mmd docs/atlas/dependencies.mmd"; \
+	for f in $$files; do \
+	  test -f "$$f" || continue; \
+	  if [ -f evidence/atlas.nodes.json ]; then \
+	    jq -r '.written[]?|split("/")[-1]|sub(".html$";"")' evidence/atlas.nodes.json 2>/dev/null | while read -r nid; do \
+	      [ -z "$$nid" ] && continue; \
+	      echo "$$nid" | grep -Eq '://' && continue; \
+	      echo "$$nid" | grep -q '/' && continue; \
+	      grep -qE "^[[:space:]]*click[[:space:]]+\"?$$nid\"?[[:space:]]+\"nodes/$$nid.html\"" "$$f" && continue; \
+	      printf '  click "%s" "nodes/%s.html" "Details"\n' "$$nid" "$$nid" >> "$$f"; \
+	    done; \
+	  elif [ -f docs/atlas/_kpis.json ]; then \
+	    jq -r '.nodes[].id' docs/atlas/_kpis.json 2>/dev/null | while read -r nid; do \
+	      [ -z "$$nid" ] && continue; \
+	      echo "$$nid" | grep -Eq '://' && continue; \
+	      echo "$$nid" | grep -q '/' && continue; \
+	      grep -qE "^[[:space:]]*click[[:space:]]+\"?$$nid\"?[[:space:]]+\"nodes/$$nid.html\"" "$$f" && continue; \
+	      printf '  click "%s" "nodes/%s.html" "Details"\n' "$$nid" "$$nid" >> "$$f"; \
+	    done; \
+	  fi; \
+	done; \
+	echo "✅ Wired clicks (where applicable)"
+
+.PHONY: atlas.clickproof
+atlas.clickproof:
+	@for f in docs/atlas/execution_live.mmd docs/atlas/dependencies.mmd; do \
+	  test -f "$$f" && { echo "----- $$f (click lines)"; grep -E "^[[:space:]]*click[[:space:]]" "$$f" | tail -n 20 || true; }; \
+	done
+
+# Convenience: full regen + nodes + wire
+.PHONY: atlas.generate.all
+atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
+	@echo "✅ atlas.generate.all complete"
+
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
 atlas.serve.mermaid:

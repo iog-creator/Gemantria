@@ -16,3 +16,17 @@ HINT mode (no DB/DSN) produces placeholders so the browser renders consistently.
 
 STRICT mode (with `STRICT_ATLAS_DSN=1` and valid DSN) queries `metrics_log` and `checkpointer_state` via the central DSN shim (`dsn_atlas()`).
 
+## Visual Verification
+
+**Required per Rule 051**: When modifying Atlas HTML, CSS, or visual artifacts, use Cursor's browser tool to verify visual content:
+
+1. Start local HTTP server: `python3 -m http.server 8000`
+2. Navigate to `http://localhost:8000/docs/atlas/index.html?nocache=$(date +%s)`
+3. Use `browser_snapshot` to verify page structure
+4. Use `browser_take_screenshot` to capture visual evidence
+5. Verify Legend section, KPIs JSON, and all Mermaid files
+
+**Runbook**: See `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md` for complete workflow.
+
+**Evidence**: Save screenshots to `evidence/atlas_*.screenshot.png` and include in PR evidence.
+
