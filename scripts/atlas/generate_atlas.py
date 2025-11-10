@@ -30,7 +30,9 @@ from scripts.atlas.telemetry_queries import (
 ATLAS_DIR = REPO / "docs" / "atlas"
 EVIDENCE_DOCS = REPO / "docs" / "evidence"
 # Use ATLAS_DSN with fallback to GEMATRIA_DSN (for read-only governance/telemetry)
-DSN = get_rw_dsn() or get_rw_dsn()
+from gemantria.dsn import dsn_atlas, dsn_rw
+
+DSN = dsn_atlas() or dsn_rw()
 ATLAS_WINDOW = os.getenv("ATLAS_WINDOW", "24h")
 ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
