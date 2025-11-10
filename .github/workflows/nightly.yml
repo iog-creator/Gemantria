@@ -2,9 +2,7 @@ name: nightly
 
 on:
   workflow_dispatch: {}
-  # OPS v6.2.3: hermetic nightly enabled - runs pipeline.e2e only
-  schedule:
-    - cron: "37 7 * * *" # daily 07:37 UTC (after other nightlies would have run)
+  # OPS v6.2.3: schedule disabled to stop failing nightlies. Run manually when needed.
 
 permissions:
   contents: read

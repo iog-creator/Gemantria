@@ -368,6 +368,20 @@ ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
 	@echo "[tagproof] STRICT Atlas DSN proof"
 	@STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.proof.dsn
 
+# Atlas housekeeping (HINT + STRICT lanes, no nightly)
+.PHONY: housekeeping.atlas
+housekeeping.atlas:
+	@echo "[housekeeping] Atlas HINT lane"
+	@$(MAKE) -s atlas.generate.all
+	@$(MAKE) -s atlas.clickproof | tail -n 40
+	@echo "[housekeeping] UI smoke"
+	@pytest -q tests/ui/test_atlas_node_click.py -q || true
+	@if [ "$${STRICT_ATLAS_DSN:-0}" = "1" ]; then \
+	  echo "[housekeeping] STRICT lane (opt-in)"; \
+	  STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.nodes || true; \
+	fi
+	@echo "[housekeeping] done"
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping

@@ -30,3 +30,59 @@ STRICT mode (with `STRICT_ATLAS_DSN=1` and valid DSN) queries `metrics_log` and 
 
 **Evidence**: Save screenshots to `evidence/atlas_*.screenshot.png` and include in PR evidence.
 
+## Per-node Drill-downs
+
+Each node in the Atlas diagrams has a dedicated HTML page under `docs/atlas/nodes/` providing detailed information.
+
+### Features
+
+- **HINT mode** (default): Node pages generated from `_kpis.json` with basic stats (OK/error counts, last seen)
+- **STRICT mode** (opt-in): Database-backed enrichment with:
+  - Last 5 runs with status, timestamps, and duration
+  - p50/p90 latency percentiles
+  - Recent errors (last 3) with messages and timestamps
+  - Accurate OK/error counts and last-seen timestamps
+
+### Usage
+
+```bash
+# Generate node pages (HINT mode, PR-safe)
+make atlas.nodes
+
+# Generate with STRICT enrichment (requires RO DSN)
+STRICT_ATLAS_DSN=1 make atlas.nodes
+
+# Full Atlas generation (diagrams + nodes + click wiring)
+make atlas.generate.all
+```
+
+### Click Wiring
+
+Click handlers are automatically wired to node pages in Mermaid diagrams. The wiring is:
+- **Idempotent**: Running `make atlas.wire.clicks` multiple times won't duplicate handlers
+- **Persistent**: Click handlers survive Mermaid diagram regeneration
+- **Automatic**: Included in `make atlas.generate.all`
+
+### Node Page Structure
+
+Each node page (`docs/atlas/nodes/<node_id>.html`) includes:
+- Summary section with basic stats
+- Recent runs table (STRICT mode only)
+- Latency metrics (p50/p90, STRICT mode only)
+- Recent errors list (STRICT mode only)
+- Links to related Mermaid diagrams and evidence files
+
+### Running the proofs
+
+PRs run the HINT lane in CI. **No nightly workflows.** Run everything via housekeeping:
+
+```bash
+# HINT + UI smoke
+make housekeeping.atlas
+
+# STRICT enrich (opt-in; requires RO DSN exported locally/runner)
+STRICT_ATLAS_DSN=1 make housekeeping.atlas
+```
+
+This keeps CI noise low and avoids inbox clutter.
+

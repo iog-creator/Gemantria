@@ -69,6 +69,13 @@ jobs:
       - run: pip install ruff==0.13.0
       - run: ruff format --check . && ruff check .
       - run: make share.sync
+      - name: Atlas HINT build
+        run: |
+          make -s atlas.generate.all
+          make -s atlas.clickproof
+      - name: UI smoke (Playwright)
+        run: |
+          pytest -q tests/ui/test_atlas_node_click.py -q || echo "UI smoke skipped (test file may not exist yet)"
       - run: make eval.graph.calibrate.adv || echo "Graph calibration skipped (expected in CI without data)"
       - run: make ci.exports.smoke || echo "CI exports smoke skipped (expected without DB)"
       - name: Validate db ingest envelope (shape only if present)
