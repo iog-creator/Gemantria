@@ -6,10 +6,11 @@ import os, sys
 
 try:
     import psycopg
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 except Exception:
     print("SKIP: psycopg not installed; tolerated.", file=sys.stderr)
     sys.exit(0)
-DSN = os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn()
 RUN_ID = os.getenv("RUN_ID", "ledger-smoke")
 if not DSN:
     print("ERROR: GEMATRIA_DSN not configured in environment.", file=sys.stderr)

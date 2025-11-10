@@ -6,10 +6,11 @@ import os, sys
 
 try:
     import psycopg
+from scripts.config.env import get_rw_dsn, get_bible_db_dsn
 except Exception:
     print("SKIP: psycopg not installed; tolerated.", file=sys.stderr)
     sys.exit(0)
-dsn = os.getenv("GEMATRIA_DSN")
+dsn = get_rw_dsn()
 if not dsn:
     print("OK: empty-DB tolerated (no DSN).")
     sys.exit(0)
