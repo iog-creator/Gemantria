@@ -25,6 +25,7 @@ import os
 import shutil
 import sys
 import hashlib
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -149,6 +150,9 @@ def copy_file(src: Path, dst: Path):
     ensure_dir(dst)
     if files_differ(src, dst):
         shutil.copy2(src, dst)
+        # Update mtime to current time so sync timestamp is visible
+        current_time = time.time()
+        os.utime(dst, (current_time, current_time))
         return True  # File was copied
     return False  # File was unchanged
 
@@ -159,6 +163,9 @@ def head_json(src: Path, dst: Path, max_bytes: int) -> bool:
         content = json.dumps({"preview_head": ""})
         if not dst.exists() or dst.read_text() != content:
             dst.write_text(content)
+            # Update mtime to current time so sync timestamp is visible
+            current_time = time.time()
+            os.utime(dst, (current_time, current_time))
             return True
         return False
 
@@ -170,6 +177,9 @@ def head_json(src: Path, dst: Path, max_bytes: int) -> bool:
         json.loads(text)
         if not dst.exists() or dst.read_text() != text:
             dst.write_text(text)
+            # Update mtime to current time so sync timestamp is visible
+            current_time = time.time()
+            os.utime(dst, (current_time, current_time))
             return True
         return False
     except Exception:
@@ -185,6 +195,9 @@ def head_json(src: Path, dst: Path, max_bytes: int) -> bool:
             content = line + "\n"
             if not dst.exists() or dst.read_text() != content:
                 dst.write_text(content)
+                # Update mtime to current time so sync timestamp is visible
+                current_time = time.time()
+                os.utime(dst, (current_time, current_time))
                 return True
             return False
         except Exception:
@@ -194,6 +207,9 @@ def head_json(src: Path, dst: Path, max_bytes: int) -> bool:
     content = json.dumps({"preview_head": text})
     if not dst.exists() or dst.read_text() != content:
         dst.write_text(content)
+        # Update mtime to current time so sync timestamp is visible
+        current_time = time.time()
+        os.utime(dst, (current_time, current_time))
         return True
     return False
 
