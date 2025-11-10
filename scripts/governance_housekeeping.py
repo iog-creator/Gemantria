@@ -1,3 +1,4 @@
+from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -32,7 +33,7 @@ from infra.env_loader import ensure_env_loaded
 ensure_env_loaded()
 
 # Database connection
-GEMATRIA_DSN = os.environ.get("GEMATRIA_DSN")
+GEMATRIA_DSN = get_rw_dsn()
 
 
 def run_command(cmd: list, description: str) -> bool:

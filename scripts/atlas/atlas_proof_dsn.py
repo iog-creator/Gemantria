@@ -1,3 +1,5 @@
+from scripts.config.env import get_rw_dsn
+
 #!/usr/bin/env python3
 """
 Atlas DSN Proof - Generate evidence JSON for DSN connectivity and table counts.
@@ -19,7 +21,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
 EVIDENCE_DIR = REPO / "docs" / "evidence"
-DSN = os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")
+DSN = get_rw_dsn() or get_rw_dsn()
 STRICT = os.getenv("STRICT_ATLAS_DSN", "0") == "1"
 
 
