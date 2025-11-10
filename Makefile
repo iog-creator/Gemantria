@@ -125,7 +125,7 @@ ai.search.demo:
 .PHONY: writers.smoke
 writers.smoke:
 	@if [ -z "$${ATLAS_DSN_RW:-}" ]; then echo "NO-GO: ATLAS_DSN_RW required"; exit 1; fi
-	python3 scripts/smokes/writers_smoke.py | tee evidence/writers.smoke.json >/dev/null
+	PYTHONPATH="$$(pwd):$${PYTHONPATH:-}" python3 scripts/smokes/writers_smoke.py | tee evidence/writers.smoke.json >/dev/null
 
 .PHONY: telemetry.smoke
 telemetry.smoke:
