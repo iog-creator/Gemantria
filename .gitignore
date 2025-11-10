@@ -31,3 +31,4 @@ ui/out/
 # Allow orchestrator summaries to be committed (generated from evidence)
 !docs/evidence/
 !docs/evidence/*.md
+.server.pid

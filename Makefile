@@ -240,9 +240,15 @@ atlas.proof.dsn: ## DSN proof: generate masked JSON + HTML with backlink (HINT b
 	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/ops/atlas_proof_dsn.py | tee evidence/atlas.proof.dsn.json >/dev/null
 
 ## Generate Atlas Mermaid artifacts (HINT if STRICT_ATLAS_DSN!=1 or DSN/libs missing)
-.PHONY: atlas.generate.mermaid
+.PHONY: atlas.generate.mermaid atlas.generate.7d atlas.generate.30d
 atlas.generate.mermaid:
-	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py | tee evidence/atlas.generate.mermaid.json >/dev/null
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window $${ATLAS_WINDOW:-24h} | tee evidence/atlas.generate.mermaid.json >/dev/null
+
+atlas.generate.7d:
+	@cd $(CURDIR) && ATLAS_WINDOW=7d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 7d | tee evidence/atlas.generate.7d.json >/dev/null
+
+atlas.generate.30d:
+	@cd $(CURDIR) && ATLAS_WINDOW=30d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 30d | tee evidence/atlas.generate.30d.json >/dev/null
 
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
