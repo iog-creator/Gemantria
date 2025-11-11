@@ -1682,3 +1682,9 @@ dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
 		echo "⚠ No .env.local or .env file found"; \
 		echo "Create .env.local with BIBLE_DB_DSN and GEMATRIA_DSN"; \
 	fi
+
+.PHONY: guard.mcp.db.ro
+guard.mcp.db.ro:
+	@echo "Running MCP DB RO guard (STRICT_DB_PROBE=$(STRICT_DB_PROBE))"
+	@STRICT_DB_PROBE=$(STRICT_DB_PROBE) ATLAS_DSN=$(ATLAS_DSN) GEMATRIA_RO_DSN=$(GEMATRIA_RO_DSN) GEMATRIA_DSN=$(GEMATRIA_DSN) \
+		$(PYTHON) scripts/ci/guard_mcp_db_ro.py | tee evidence/guard_mcp_db_ro.final.json
