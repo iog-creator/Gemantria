@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gemantria://v1/tools/validate_vl_spans.input.v1.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "assets",
+    "claims",
+    "model"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "model": {
+      "enum": [
+        "qwen-2.5-vl-7b-q4"
+      ]
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "uri",
+          "kind",
+          "checksum"
+        ],
+        "properties": {
+          "uri": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "diagram",
+              "figure",
+              "map"
+            ]
+          },
+          "checksum": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "span_id",
+          "text"
+        ],
+        "properties": {
+          "span_id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "title": "Validate_Vl_Spans Input V1"
+}

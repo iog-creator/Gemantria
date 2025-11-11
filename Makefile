@@ -1688,3 +1688,7 @@ guard.mcp.db.ro:
 	@echo "Running MCP DB RO guard (STRICT_DB_PROBE=$(STRICT_DB_PROBE))"
 	@STRICT_DB_PROBE=$(STRICT_DB_PROBE) ATLAS_DSN=$(ATLAS_DSN) GEMATRIA_RO_DSN=$(GEMATRIA_RO_DSN) GEMATRIA_DSN=$(GEMATRIA_DSN) \
 		$(PYTHON) scripts/ci/guard_mcp_db_ro.py | tee evidence/guard_mcp_db_ro.final.json
+
+.PHONY: guard.schema.naming
+guard.schema.naming:
+	$(PYTHON) scripts/ci/guard_schema_naming.py | tee evidence/guard_schema_naming.final.json

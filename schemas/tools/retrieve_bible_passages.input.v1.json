@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gemantria://v1/tools/retrieve_bible_passages.input.v1.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "mode",
+    "ring",
+    "read_only"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mode": {
+      "enum": [
+        "by_reference",
+        "by_text"
+      ]
+    },
+    "by_reference": {
+      "type": "object",
+      "properties": {
+        "book": {
+          "type": "string"
+        },
+        "chapter": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "verse_start": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "verse_end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "book",
+        "chapter",
+        "verse_start",
+        "verse_end"
+      ],
+      "additionalProperties": false
+    },
+    "by_text": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 3
+        },
+        "window": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "max_passages": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "ring": {
+      "const": 1
+    },
+    "read_only": {
+      "const": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "by_reference"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "by_reference"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "by_text"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "by_text"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "title": "Retrieve_Bible_Passages Input V1"
+}

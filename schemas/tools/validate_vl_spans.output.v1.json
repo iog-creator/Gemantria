@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gemantria://v1/tools/validate_vl_spans.output.v1.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "agreement",
+    "verdicts",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "agreement": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "verdicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "span_id",
+          "ok"
+        ],
+        "properties": {
+          "span_id": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {
+      "$ref": "common/provenance.v1.json"
+    }
+  },
+  "additionalProperties": false,
+  "title": "Validate_Vl_Spans Output V1"
+}

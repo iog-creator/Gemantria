@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gemantria://v1/tools/rerank_passages.output.v1.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ranking",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "ranking": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "score"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {
+      "$ref": "common/provenance.v1.json"
+    }
+  },
+  "additionalProperties": false,
+  "title": "Rerank_Passages Output V1"
+}

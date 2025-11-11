@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://gemantria.ai/schemas/graph-patterns",
+  "$id": "gemantria://v1/graph-patterns.schema.json",
   "title": "Cross-Text Pattern Correlation Schema",
   "description": "JSON schema for cross-text pattern correlation analysis across multiple biblical books",
   "type": "object",
@@ -150,5 +150,6 @@
   "required": [
     "patterns",
     "metadata"
-  ]
+  ],
+  "additionalProperties": false
 }

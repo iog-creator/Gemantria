@@ -1,5 +1,5 @@
 {
-  "$id": "gemantria:ssot:graph:v1",
+  "$id": "gemantria://v1/graph.schema.json",
   "title": "Graph SSOT",
   "type": "object",
   "required": [
@@ -100,5 +100,6 @@
         }
       }
     }
-  }
+  },
+  "additionalProperties": false
 }
