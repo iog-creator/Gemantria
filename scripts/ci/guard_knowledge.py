@@ -27,7 +27,7 @@ result = {
     "sentinels": {
         "triad_rules": (
             Path("RULES_INDEX.md").exists()
-            and file_contains("RULES_INDEX.md", [r"Rule-050", r"Rule-051", r"Rule-052"])
+            and file_contains("RULES_INDEX.md", [r"050", r"051", r"052"])
         ),
         "ssot_prompt": exists_any(
             ["docs/SSOT/GPT_SYSTEM_PROMPT.md", "GPT_SYSTEM_PROMPT.md"]
