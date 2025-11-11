@@ -20,6 +20,7 @@ ATLAS_DIR = ROOT / "docs" / "atlas"
 NODES_DIR = ATLAS_DIR / "nodes"
 KPIS_JSON = ATLAS_DIR / "_kpis.json"
 EVIDENCE_DIR = ATLAS_DIR.parent / "evidence"
+OTEL_JSONL = ROOT / "evidence" / "otel.spans.jsonl"
 
 
 def _load_kpis() -> Dict[str, Any]:
@@ -165,6 +166,39 @@ def _write_node_page(node_id: str, rec: Dict[str, Any]) -> pathlib.Path:
         else "<li><em>No dedicated evidence file</em></li>"
     )
 
+    # Recent traces (last 3) for this node_id, if JSONL exists (HINT-safe)
+    traces_html = "<em>No traces</em>"
+    if OTEL_JSONL.exists():
+        try:
+            # Read last ~200 lines, filter by agent==node_id (llm.call) or tool==node_id (tool.call)
+            lines = OTEL_JSONL.read_text(encoding="utf-8").splitlines()[-200:]
+            items = []
+            for ln in reversed(lines):
+                try:
+                    j = json.loads(ln)
+                except Exception:
+                    continue
+                name = j.get("name")
+                attrs = j.get("attrs") or {}
+                if name == "llm.call" and attrs.get("agent") == node_id:
+                    items.append(j)
+                elif name == "tool.call" and attrs.get("tool") == node_id:
+                    items.append(j)
+                if len(items) >= 3:
+                    break
+            if items:
+
+                def _fmt(it):
+                    dur = it.get("dur_ms")
+                    rid = it.get("run_id")
+                    tid = it.get("trace_id")
+                    sid = it.get("span_id")
+                    return f"<li>{html.escape(it.get('ts', ''))} • {it.get('name')} • {dur}ms • run={html.escape(str(rid))} • trace={html.escape(str(tid or 'n/a'))} • span={html.escape(str(sid or 'n/a'))}</li>"
+
+                traces_html = "<ul>" + "\n".join(_fmt(i) for i in items) + "</ul>"
+        except Exception:
+            pass
+
     body = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -190,12 +224,15 @@ small {{ color: #666; }}
 </ul>
 <h2>Summary</h2>
 <pre>{html.escape(json.dumps(summary, indent=2, ensure_ascii=False))}</pre>
+<h2>Recent traces</h2>
+{traces_html}
 <h2>Related</h2>
 <ul>
   {evidence_link}
   <li><a href="../dependencies.mmd">Dependencies (Mermaid)</a></li>
   <li><a href="../kpis.mmd">KPIs (Mermaid)</a></li>
   <li><a href="../execution_live.mmd">Execution Live (Mermaid)</a></li>
+  <li><a href="../../evidence/otel.spans.jsonl">All spans (JSONL)</a></li>
 </ul>
 <hr>
 <small>Generated at {now}</small>

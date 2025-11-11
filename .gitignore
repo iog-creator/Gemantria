@@ -28,6 +28,9 @@ evidence/
 share/evidence/
 ui/out/
 
+# Prompt logging (opt-in via ENABLE_PROMPT_LOGGING=1)
+prompts/run_*.jsonl
+
 # Allow orchestrator summaries to be committed (generated from evidence)
 !docs/evidence/
 !docs/evidence/*.md

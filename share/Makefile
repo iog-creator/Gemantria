@@ -79,7 +79,7 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@python3 scripts/sync_share.py
+	@PYTHONPATH=. python3 scripts/sync_share.py
 
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
@@ -93,14 +93,14 @@ adr.housekeeping:
 .PHONY: governance.housekeeping
 governance.housekeeping:
 	@echo ">> Running governance housekeeping (database + compliance + docs)"
-	@$(PYTHON) scripts/governance_housekeeping.py
+	@PYTHONPATH=. $(PYTHON) scripts/governance_housekeeping.py
 	@echo "Governance housekeeping complete"
 
 # Governance docs hints (Rule-026 + Rule-065 compliance)
 .PHONY: governance.docs.hints
 governance.docs.hints:
 	@echo ">> Checking for governance docs/rule changes and emitting hints"
-	@$(PYTHON) scripts/governance_docs_hints.py || true
+	@PYTHONPATH=. $(PYTHON) scripts/governance_docs_hints.py || true
 	@echo "Governance docs hints check complete"
 
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
@@ -163,7 +163,7 @@ telemetry.smoke:
 
 handoff.update:
 	@echo ">> Updating project handoff document"
-	@$(PYTHON) scripts/generate_handoff.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
 # Atlas status diagram generation
@@ -250,6 +250,52 @@ atlas.generate.7d:
 atlas.generate.30d:
 	@cd $(CURDIR) && ATLAS_WINDOW=30d PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_mermaid.py --window 30d | tee evidence/atlas.generate.30d.json >/dev/null
 
+# Atlas node pages (PR-safe: file-first)
+.PHONY: atlas.nodes
+atlas.nodes:
+	@cd $(CURDIR) && PYTHONPATH=$(CURDIR) $(PYTHON) scripts/atlas/generate_node_pages.py | tee evidence/atlas.nodes.json >/dev/null
+	@echo "✅ Atlas node pages generated"
+
+# Wire Mermaid clicks for nodes in docs/atlas/execution_live.mmd and dependencies.mmd if present.
+# Adds lines of the form: click "<node>" "nodes/<node>.html" "Details"
+# Order matters: regenerate .mmd → (re)build nodes → wire clicks last (so regen cannot clobber).
+.PHONY: atlas.wire.clicks
+atlas.wire.clicks:
+	@set -e; \
+	files="docs/atlas/execution_live.mmd docs/atlas/dependencies.mmd"; \
+	for f in $$files; do \
+	  test -f "$$f" || continue; \
+	  if [ -f evidence/atlas.nodes.json ]; then \
+	    jq -r '.written[]?|split("/")[-1]|sub(".html$";"")' evidence/atlas.nodes.json 2>/dev/null | while read -r nid; do \
+	      [ -z "$$nid" ] && continue; \
+	      echo "$$nid" | grep -Eq '://' && continue; \
+	      echo "$$nid" | grep -q '/' && continue; \
+	      grep -qE "^[[:space:]]*click[[:space:]]+\"?$$nid\"?[[:space:]]+\"nodes/$$nid.html\"" "$$f" && continue; \
+	      printf '  click "%s" "nodes/%s.html" "Details"\n' "$$nid" "$$nid" >> "$$f"; \
+	    done; \
+	  elif [ -f docs/atlas/_kpis.json ]; then \
+	    jq -r '.nodes[].id' docs/atlas/_kpis.json 2>/dev/null | while read -r nid; do \
+	      [ -z "$$nid" ] && continue; \
+	      echo "$$nid" | grep -Eq '://' && continue; \
+	      echo "$$nid" | grep -q '/' && continue; \
+	      grep -qE "^[[:space:]]*click[[:space:]]+\"?$$nid\"?[[:space:]]+\"nodes/$$nid.html\"" "$$f" && continue; \
+	      printf '  click "%s" "nodes/%s.html" "Details"\n' "$$nid" "$$nid" >> "$$f"; \
+	    done; \
+	  fi; \
+	done; \
+	echo "✅ Wired clicks (where applicable)"
+
+.PHONY: atlas.clickproof
+atlas.clickproof:
+	@for f in docs/atlas/execution_live.mmd docs/atlas/dependencies.mmd; do \
+	  test -f "$$f" && { echo "----- $$f (click lines)"; grep -E "^[[:space:]]*click[[:space:]]" "$$f" | tail -n 20 || true; }; \
+	done
+
+# Convenience: full regen + nodes + wire
+.PHONY: atlas.generate.all
+atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
+	@echo "✅ atlas.generate.all complete"
+
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
 atlas.serve.mermaid:
@@ -322,16 +368,30 @@ ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
 	@echo "[tagproof] STRICT Atlas DSN proof"
 	@STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.proof.dsn
 
+# Atlas housekeeping (HINT + STRICT lanes, no nightly)
+.PHONY: housekeeping.atlas
+housekeeping.atlas:
+	@echo "[housekeeping] Atlas HINT lane"
+	@$(MAKE) -s atlas.generate.all
+	@$(MAKE) -s atlas.clickproof | tail -n 40
+	@echo "[housekeeping] UI smoke"
+	@pytest -q tests/ui/test_atlas_node_click.py -q || true
+	@if [ "$${STRICT_ATLAS_DSN:-0}" = "1" ]; then \
+	  echo "[housekeeping] STRICT lane (opt-in)"; \
+	  STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.nodes || true; \
+	fi
+	@echo "[housekeeping] done"
+
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
-	@$(PYTHON) scripts/validate_agents_md.py
+	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
 	@echo "AGENTS.md validation complete"
-	@$(PYTHON) scripts/rules_audit.py
+	@PYTHONPATH=. $(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
-	@$(PYTHON) scripts/generate_forest.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_forest.py
 	@echo "Forest generation complete"
 	@echo "✅ Complete housekeeping finished (Rule-058)"
 
@@ -765,6 +825,12 @@ db.ingest.morph:
 pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
+
+.PHONY: schema.docs
+schema.docs:
+	@echo ">> Generating schema documentation from JSON Schema files"
+	@python3 scripts/docs/generate_schema_docs.py --schema-dir docs/SSOT --output-dir docs/schemas
+	@echo "✅ Schema documentation generated in docs/schemas/"
 
 .PHONY: guards.schemas
 guards.schemas:
@@ -1306,6 +1372,18 @@ ui.dev:
 .PHONY: ui.smoke.browser
 ui.smoke.browser:
 	@UI_URL=${UI_URL:-http://localhost:5173} bash scripts/ui/smoke_playwright.sh
+
+.PHONY: ui.test
+ui.test:
+	@echo ">> Running UI tests (Playwright)"
+	@pytest tests/ui -v
+
+.PHONY: otel.smoke
+otel.smoke:
+	@echo ">> Running OTel span smoke test"
+	@PYTHONPATH=. ENABLE_OTEL=1 python3 scripts/observability/otel_smoke.py >/dev/null 2>&1 || true
+	@echo "== otel.spans.jsonl (tail) =="
+	@test -f evidence/otel.spans.jsonl && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
 
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all

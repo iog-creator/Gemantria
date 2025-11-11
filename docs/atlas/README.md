@@ -70,7 +70,14 @@ Each node page (`docs/atlas/nodes/<node_id>.html`) includes:
 - Recent runs table (STRICT mode only)
 - Latency metrics (p50/p90, STRICT mode only)
 - Recent errors list (STRICT mode only)
+- **Recent traces** section when `evidence/otel.spans.jsonl` exists (opt-in via `ENABLE_OTEL=1`)
 - Links to related Mermaid diagrams and evidence files
+
+### Node Pages (Drill-downs)
+
+- Each node page now includes a **Recent traces** section when `evidence/otel.spans.jsonl` exists (opt-in via `ENABLE_OTEL=1`).
+- Spans include `run_id`, `dur_ms`, and optional `trace_id` (when OTLP enabled).
+- Full log at `evidence/otel.spans.jsonl`.
 
 ### Running the proofs
 
