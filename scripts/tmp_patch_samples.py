@@ -10,7 +10,7 @@ import shutil
 
 def wrap_ai_nouns_array(path):
     """Wrap array or add missing envelope fields to ai-nouns JSON."""
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         try:
             data = json.load(f)
         except Exception as e:
@@ -64,7 +64,7 @@ def main():
     # 5c) ui/out/graph_correlations.json — ensure minimal correlations envelope
     if os.path.exists("ui/out/graph_correlations.json"):
         try:
-            with open("ui/out/graph_correlations.json", "r", encoding="utf-8") as f:
+            with open("ui/out/graph_correlations.json", encoding="utf-8") as f:
                 data = json.load(f)
         except Exception:
             data = {}
