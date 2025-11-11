@@ -4,4 +4,5 @@ alwaysApply: false
 body: |
   - AI tracking tables **must** live in `gematria` DB, `public` schema (migrations 015/016).
   - `AI_AUTOMATION_DSN` **must equal** `GEMATRIA_DSN` (same host/port/db).
+  - **DSN Access**: All DSN access must go through centralized loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
   - Guards: `guard.ai.tracking` (HINT), `guard.ai.tracking.strict` (STRICT on tags).

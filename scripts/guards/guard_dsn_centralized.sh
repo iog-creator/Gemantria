@@ -2,8 +2,11 @@
 set -euo pipefail
 # Enforces DSN centralization:
 #  - Only Python files are in scope.
-#  - The ONLY file allowed to touch DSN env vars is: src/gemantria/dsn.py
-#  - Everything else must call dsn_ro/dsn_rw/dsn_atlas from that module.
+#  - The ONLY files allowed to touch DSN env vars are:
+#    * scripts/config/env.py (preferred centralized loader)
+#    * src/gemantria/dsn.py (legacy DSN resolver)
+#  - Everything else must call get_rw_dsn/get_ro_dsn/get_bible_db_dsn from scripts.config.env
+#    or dsn_ro/dsn_rw/dsn_atlas from gemantria.dsn
 #  - Flags: direct os.getenv/os.environ with DSN keys, hardcoded postgres:// strings
 
 ROOT="${ROOT:-$(git rev-parse --show-toplevel)}"
@@ -16,12 +19,24 @@ mapfile -t CANDIDATES < <(
     | grep -Ev '(^tests/|/vendor/|/site-packages/)'
 )
 
-SHIM="src/gemantria/dsn.py"
+# Allowed loaders (both centralized loaders)
+ALLOWED_LOADERS=(
+  "scripts/config/env.py"
+  "scripts/config/__init__.py"
+  "src/gemantria/dsn.py"
+)
 
 bad=()
 for f in "${CANDIDATES[@]}"; do
-  # The shim is allowed to access env directly; everyone else must not.
-  if [[ "$f" == "$SHIM" ]]; then
+  # The loaders are allowed to access env directly; everyone else must not.
+  is_allowed=false
+  for loader in "${ALLOWED_LOADERS[@]}"; do
+    if [[ "$f" == "$loader" ]]; then
+      is_allowed=true
+      break
+    fi
+  done
+  if [[ "$is_allowed" == "true" ]]; then
     continue
   fi
   

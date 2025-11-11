@@ -15,6 +15,7 @@ alwaysApply: false
 - **MANDATORY**: Emit LOUD hints for any governance violations (see Rule 061)
 - **AUTOMATIC**: Check for new hint envelopes in `share/evidence/` directory
 - **AUTOMATIC**: Validate all .mdc rules are properly formatted and cross-referenced
+- **DSN Access**: All database operations must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 
 ## Canonical sections required in AGENTS.md
 - Mission & priorities (e.g., Code > bible_db > LLM; determinism; safety).

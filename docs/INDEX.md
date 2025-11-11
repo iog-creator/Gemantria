@@ -76,6 +76,10 @@ make ops.next                # Check NEXT_STEPS.md completion
 
 ```bash
 # Database connections
+# IMPORTANT: All DSN access must go through centralized loaders:
+# - Preferred: scripts.config.env (get_rw_dsn(), get_ro_dsn(), get_bible_db_dsn())
+# - Legacy: src.gemantria.dsn (dsn_rw(), dsn_ro(), dsn_atlas())
+# Never use os.getenv("GEMATRIA_DSN") directly - enforced by guard.dsn.centralized
 GEMATRIA_DSN=postgresql://...    # Primary database
 BIBLE_DB_DSN=postgresql://...    # Read-only reference database
 

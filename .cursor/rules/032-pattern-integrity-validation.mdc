@@ -25,6 +25,7 @@ Enforced via rules_guard.py + system-enforcement CI.
 - Reasonable pattern strength values (not all zeros)
 - Statistical metrics within expected ranges
 - Book associations must exist in database
+- **DSN Access**: All database queries must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 
 ## Enforcement
 

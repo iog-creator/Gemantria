@@ -17,15 +17,22 @@ ROOT = Path(".")
 ALLOWLIST = {
     "scripts/config/env.py",  # central loader may touch env directly
     "scripts/config/__init__.py",
+    "src/gemantria/dsn.py",  # legacy DSN resolver (still in use; also allowed)
+    "scripts/ops/codemod_dsn_to_shim.py",  # refactoring tool (expected to have DSN patterns)
+    "scripts/ops/auto_refactor_dsn.py",  # refactoring tool (expected to have DSN patterns)
 }
 # Canonical DSN var names (authoritative)
 DSN_VARS = {
     "GEMATRIA_DSN",
     "GEMATRIA_RO_DSN",
+    "GEMATRIA_DSN_RO",  # Alternative naming
+    "GEMATRIA_RW_DSN",  # Alternative naming
+    "GEMATRIA_DSN_RW",  # Alternative naming
     "ATLAS_DSN",
     "ATLAS_DSN_RO",
     "ATLAS_DSN_RW",
     "BIBLE_DB_DSN",
+    "BIBLE_RO_DSN",  # Bible DB RO variant
     "RW_DSN",
     "RO_DSN",
     "AI_AUTOMATION_DSN",

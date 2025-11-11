@@ -14,6 +14,7 @@ Enforce embedding dimension and model consistency across CI pipeline.
 - **CI Gate**: Pipeline fails if embedding dimensions don't match expected values.
 - **Schema Validation**: Exported JSON schemas must enforce 1024-dim constraint.
 - **Database Integrity**: pgvector indexes must be created with correct dimensions.
+- **DSN Access**: All database operations must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 - **Health Check Integration**: assert_qwen_live() must verify embedding dimensions match BGE-M3 spec.
 - **Migration Safety**: Any embedding model changes require dimension compatibility verification.
 - **Test Coverage**: CI must verify embeddings work end-to-end with live models.

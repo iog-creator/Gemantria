@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-10 18:11:42
+Generated: 2025-11-10 19:51:51
 
 ## Active Rules
 
@@ -81,10 +81,13 @@ Generated: 2025-11-10 18:11:42
 - coverage-nightly.yml
 - crossrefs-smoke.yml
 - dbmirror.yml
+- dsn-guard-tags.yml
 - enforce-ruff.yml
 - extraction-accuracy-tag.yml
 - graph-nightly.yml
 - guard-tests.yml
+- housekeeping-masterref.yml
+- knowledge-guard-tags.yml
 - lint-nightly.yml
 - nightly.yml
 - policy-gate.yml
@@ -98,6 +101,7 @@ Generated: 2025-11-10 18:11:42
 - soft-checks.yml
 - ssot-nightly.yml
 - system-enforcement.yml
+- tagproof-core-export.yml
 - tagproof.yml
 - typing-nightly.yml
 - verify-stats.yml

@@ -23,6 +23,8 @@ alwaysApply: false
 **Requirements:**
 
 ## Database Schema (016 Migration)
+- **DSN Access**: All database operations must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
+
 Must include all required tables:
 - `ai_interactions` - Track all AI-user interactions
 - `tool_usage_analytics` - Tool performance metrics

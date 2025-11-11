@@ -1,19 +1,15 @@
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
-import os, json, re, datetime, psycopg
-from scripts.config.env import get_rw_dsn
+import json, os, re, datetime, psycopg
+from scripts.config.env import get_rw_dsn, env
 
-# Load environment variables from .env file
+# scripts.config.env auto-loads .env via _ensure_loaded() when env() is called
+# Trigger env loading by calling env() once
 try:
-    with open(".env") as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith("#"):
-                key, value = line.split("=", 1)
-                os.environ[key] = value
-except FileNotFoundError:
-    pass  # .env file not found, use existing env vars
+    env("PATH")  # Non-fatal call to trigger _ensure_loaded()
+except Exception:
+    pass
 
 BAD = re.compile(r"[\u0000-\u0008\u000B\u000C\u000E-\u001F]")
 
@@ -28,9 +24,12 @@ def scrub(x):
     return x
 
 
-dsn = os.environ.get("DSN") or get_rw_dsn()
-book = os.environ.get("BOOK", "Genesis")
-outp = os.environ.get("OUT", "exports/ai_nouns.json")
+# Use centralized loader; fallback to generic DSN env var if needed
+dsn = get_rw_dsn() or env("DSN")
+if not dsn:
+    raise ValueError("DSN not available (set GEMATRIA_DSN or DSN env var)")
+book = env("BOOK", "Genesis")
+outp = env("OUT", "exports/ai_nouns.json")
 
 with psycopg.connect(dsn) as conn, conn.cursor() as cur:
     cur.execute(
