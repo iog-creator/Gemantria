@@ -1,3 +1,5 @@
+# SENTINELS: DSN centralization (STRICT on tags) — guard_dsn_centralized.py; no DB; tags-only.
+
 name: guard.dsn (tags, STRICT)
 
 on:

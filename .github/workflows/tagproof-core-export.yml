@@ -1,3 +1,5 @@
+# SENTINELS: Tagproof exporter (RO DSN) + schema guard — uses existing exporter; tags-only; RO required.
+
 name: tagproof: core graph export (RO)
 
 on:
