@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import json, os, subprocess, sys
-from datetime import datetime, timezone
+import json, os, subprocess
+from datetime import datetime, UTC
+
 
 def run_guard(args):
     try:
         p = subprocess.run(args, text=True, capture_output=True)
-        out = p.stdout.strip() or '{}'
+        out = p.stdout.strip() or "{}"
         try:
             data = json.loads(out)
         except Exception:
@@ -14,25 +15,53 @@ def run_guard(args):
     except Exception as e:
         return {"rc": 99, "out": {"error": str(e)}}
 
-strict = os.getenv("STRICT_GUARDS","0") in ("1","true","TRUE")
+
+strict = os.getenv("STRICT_GUARDS", "0") in ("1", "true", "TRUE")
 base = {
-    "ts_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "ts_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     "strict": strict,
 }
 
-imp = run_guard(["python3","scripts/ci/guard_jsonschema_import.py"])
-ai  = run_guard([
-    "python3","scripts/ci/guard_json_schema.py","--name","ai_nouns",
-    "--schema-name","ai-nouns.schema.json",
-    "--data-glob","share/**/*.json","--data-glob","evidence/**/*.json","--data-glob","ui/out/**/*.json",
-    "--filename-contains","ai_nouns","--filename-contains","nouns"
-])
-gr  = run_guard([
-    "python3","scripts/ci/guard_json_schema.py","--name","graph",
-    "--schema-name","graph.schema.json",
-    "--data-glob","share/**/*.json","--data-glob","evidence/**/*.json","--data-glob","ui/out/**/*.json",
-    "--filename-contains","graph"
-])
+imp = run_guard(["python3", "scripts/ci/guard_jsonschema_import.py"])
+ai = run_guard(
+    [
+        "python3",
+        "scripts/ci/guard_json_schema.py",
+        "--name",
+        "ai_nouns",
+        "--schema-name",
+        "ai-nouns.schema.json",
+        "--data-glob",
+        "share/**/*.json",
+        "--data-glob",
+        "evidence/**/*.json",
+        "--data-glob",
+        "ui/out/**/*.json",
+        "--filename-contains",
+        "ai_nouns",
+        "--filename-contains",
+        "nouns",
+    ]
+)
+gr = run_guard(
+    [
+        "python3",
+        "scripts/ci/guard_json_schema.py",
+        "--name",
+        "graph",
+        "--schema-name",
+        "graph.schema.json",
+        "--data-glob",
+        "share/**/*.json",
+        "--data-glob",
+        "evidence/**/*.json",
+        "--data-glob",
+        "ui/out/**/*.json",
+        "--filename-contains",
+        "graph",
+    ]
+)
+
 
 def summarize(x):
     out = x.get("out", {})
@@ -47,6 +76,7 @@ def summarize(x):
         "notes": out.get("notes", [])[:3],
         "rc": x.get("rc"),
     }
+
 
 report = base | {
     "guards": {
