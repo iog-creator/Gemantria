@@ -26,6 +26,11 @@ guard.secrets.mask:
 guard.ci.no_schedules:
 	@python3 scripts/ci/guard_no_schedules.py
 
+# Added by ops: guard target for prompt-format
+.PHONY: guard.prompt.format
+guard.prompt.format:
+	@python3 scripts/ci/guard_prompt_format.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
