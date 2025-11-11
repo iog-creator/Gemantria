@@ -1,3 +1,6 @@
+## [Unreleased]
+- TBD
+
 2025-11-11 — v0.0.2: Browser Verification template (Rule-051/067) + STRICT webproof + DSN automation
 2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); add pip cache; require xref index on **release tags** (v*); main/PR remain HINT-only
 2025-11-09 — ops: archive rc16 STRICT-tag (prod path) artifact; record in CHANGELOG; reset to fixtures default
