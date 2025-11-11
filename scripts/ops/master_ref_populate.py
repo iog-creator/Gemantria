@@ -24,6 +24,9 @@ REPO = Path(__file__).resolve().parents[2]  # scripts/ops/master_ref_populate.py
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "src"))
 
+# Import centralized env loader at module level
+from scripts.config.env import env, get_ro_dsn, get_rw_dsn
+
 
 def echo(msg: str, err: bool = False):
     (sys.stderr if err else sys.stdout).write(msg + "\n")
@@ -51,28 +54,17 @@ def load_env():
 
 
 def resolve_dsn() -> str | None:
-    ro = None
+    ro = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO")
     try:
-        from scripts.config.env import get_ro_dsn, get_rw_dsn, env
-
-        # Try GEMATRIA_RO_DSN or ATLAS_DSN_RO first (preferred)
-        ro = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO")
-        if not ro:
-            try:
-                ro = get_ro_dsn()
-            except Exception:
-                ro = None
+        ro = ro or get_ro_dsn()
     except Exception:
-        ro = None
-
+        pass
     if os.getenv("GITHUB_REF_TYPE") == "tag" or os.getenv("STRICT_MASTER_REF") == "1":
-        return ro  # must be present; else fail later
+        return ro
+    # dev: prefer RO, fallback to RW
     if ro:
         return ro
-    # fall back to RW for dev convenience
     try:
-        from scripts.config.env import get_rw_dsn
-
         return get_rw_dsn()
     except Exception:
         return None
