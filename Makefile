@@ -31,6 +31,11 @@ guard.ci.no_schedules:
 guard.prompt.format:
 	@python3 scripts/ci/guard_prompt_format.py
 
+# Guard: docs presence (RFC-072)
+.PHONY: guard.docs.presence
+guard.docs.presence:
+	@python3 scripts/ci/guard_docs_presence.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -359,7 +364,7 @@ atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMA
 
 # --- Governance smoke (enforce one sentinel per Always-Apply block) ---
 .PHONY: governance.smoke
-governance.smoke: ## Fail if any Always-Apply block lacks a sentinel or has duplicates
+governance.smoke: guard.prompt.format guard.docs.presence ## Fail if any Always-Apply block lacks a sentinel or has duplicates
 	@python3 scripts/guards/governance_smoke.py
 
 # --- Prompt SSOT guard (enforce canonical prompt structure) ---
