@@ -145,3 +145,5 @@
   then internal fallbacks (e.g., `get_ro_dsn()`), with failure if none present.
 - For **dev/HINT**, prefer RO; RW fallback is allowed for read-only queries.
 - Clarified: 2025-11-11
+
+- **Rule-067 — Atlas Webproof**: Headless browser proof. **Always-Apply** for changes under  and for OPS blocks touching visual/web artifacts. See GPT_SYSTEM_PROMPT.md Browser Verification template.

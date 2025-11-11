@@ -66,19 +66,64 @@ EVIDENCE PLACEHOLDERS
   * echo "=== otel.spans.jsonl (tail 10) ===" && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
   * test -f evidence/atlas_index.png && echo "[[IMAGE]] evidence/atlas_index.png" || true
 
-BROWSER VERIFICATION (Rule-051 + Rule-067)
 
-* When the OPS OUTPUT block involves visual/web content (HTML, UI components, documentation sites, visualizations), the block **must** include browser verification steps:
-  * Start local HTTP server if needed (e.g., `python3 -m http.server 8778`)
-  * Use `browser_navigate` to load the page
-  * Use `browser_snapshot` to capture accessibility tree
-  * Use `browser_take_screenshot` to capture visual evidence
-  * Verify expected elements are present and no errors are visible
-  * Include browser verification evidence in the "Evidence to return" section
-* Reference: `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md` for Atlas-specific workflow
-* Reference: `docs/runbooks/CURSOR_BROWSER_QA.md` for general browser QA workflow
+
 
 ONCE-PER-REPLY RULES
+BROWSER VERIFICATION (Rule-051 + Rule-067) — MANDATORY TEMPLATE
+
+When the OPS OUTPUT block involves **any** visual or web artifact, **Browser Verification is REQUIRED**:
+
+- Web pages / HTML / docs site
+
+- UI components, dashboards, charts, Mermaid diagrams
+
+- GitHub Pages or any web-based outputs
+
+- Visual layout, CSS, rendering, or navigation/links
+
+- Generated content displayed in a browser
+
+**Include the following in the OPS block (edit paths as needed):**
+
+```bash
+# --- Browser Verification (Rule-051 + Rule-067) ---
+
+# Rules: 051 (Cursor Insight), 067 (Atlas Webproof), 062 (Environment)
+# Required when visual/web content is involved.
+
+# Start a local HTTP server (choose a unique port)
+PORT="${BROWSER_PORT:-8778}"
+python3 -m http.server "$PORT" >/tmp/http_server_${PORT}.log 2>&1 & echo $! > /tmp/http_server_${PORT}.pid
+sleep 2
+curl -fsS "http://127.0.0.1:${PORT}/" >/dev/null || { echo "Server failed to start"; exit 1; }
+
+# Navigate and capture screenshots (Cursor uses its browser tool)
+#   browser_navigate: http://127.0.0.1:${PORT}/docs/atlas/index.html?nocache=$(date +%s)
+#   browser_wait_for: time=2
+#   browser_snapshot: path=evidence/webproof/index.png
+#   browser_find_text: "MCP catalog"
+
+# (Optional additional pages)
+#   browser_navigate: http://127.0.0.1:${PORT}/docs/atlas/mcp_catalog_view.html?nocache=$(date +%s)
+#   browser_wait_for: time=2
+#   browser_snapshot: path=evidence/webproof/catalog.png
+#   browser_find_text: "hybrid_search"
+
+# Hardened webproof hook (fails on Mermaid error banners)
+STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
+
+# Evidence to return
+test -f evidence/webproof/index.png   && echo "[[IMAGE]] evidence/webproof/index.png"   || true
+test -f evidence/webproof/catalog.png && echo "[[IMAGE]] evidence/webproof/catalog.png" || true
+```
+
+**Notes**
+
+* Use Rule-062 validation at the start of every OPS block.
+
+* If no visual/web artifacts are touched, briefly state: "Browser Verification not applicable."
+
 
 * Only one Cursor runnable block per reply unless the Orchestrator explicitly requests multiple blocks.
 * Do not ask for confirmation questions inside the runnable block. If a choice is ambiguous, the PM will pick a safe default and proceed (HINT-first).
@@ -111,3 +156,4 @@ EXAMPLE: Minimal valid PM reply (skeleton)
    and then the plain-English tutor notes.
 
 END OF PROMPT
+
