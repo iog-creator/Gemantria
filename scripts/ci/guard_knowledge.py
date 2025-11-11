@@ -25,16 +25,10 @@ def file_contains(path, pats):
 
 result = {
     "sentinels": {
-        "triad_rules": (
-            Path("RULES_INDEX.md").exists()
-            and file_contains("RULES_INDEX.md", [r"050", r"051", r"052"])
-        ),
-        "ssot_prompt": exists_any(
-            ["docs/SSOT/GPT_SYSTEM_PROMPT.md", "GPT_SYSTEM_PROMPT.md"]
-        ),
+        "triad_rules": (Path("RULES_INDEX.md").exists() and file_contains("RULES_INDEX.md", [r"050", r"051", r"052"])),
+        "ssot_prompt": exists_any(["docs/SSOT/GPT_SYSTEM_PROMPT.md", "GPT_SYSTEM_PROMPT.md"]),
         "agents_triad": (
-            Path("AGENTS.md").exists()
-            and file_contains("AGENTS.md", [r"Always-Apply", r"050", r"051", r"052"])
+            Path("AGENTS.md").exists() and file_contains("AGENTS.md", [r"Always-Apply", r"050", r"051", r"052"])
         ),
         "dsn_loader": (
             Path("scripts/config/env.py").exists()
@@ -45,9 +39,7 @@ result = {
         ),
         "tagproof_exporter": Path("scripts/exports/export_graph_core.py").exists(),
         "dsn_guard_workflow": Path(".github/workflows/dsn-guard-tags.yml").exists(),
-        "tagproof_workflow": Path(
-            ".github/workflows/tagproof-core-export.yml"
-        ).exists(),
+        "tagproof_workflow": Path(".github/workflows/tagproof-core-export.yml").exists(),
         "masterref_runner": Path("scripts/ops/master_ref_populate.py").exists(),
         "masterref_make": (
             Path("Makefile").exists()
@@ -79,4 +71,3 @@ ok_repo = all(result["sentinels"].get(k, False) for k in critical_keys)
 # In PR lane we don't have context; treat same as repo for now
 result["ok_repo"] = ok_repo
 print(json.dumps(result, indent=2))
-

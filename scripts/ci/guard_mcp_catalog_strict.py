@@ -14,18 +14,19 @@ guard.mcp.catalog.strict — STRICT mode
 Fail-closed when STRICT_MCP=1, else warn-only.
 
 """
+
 import json, os, sys, re, pathlib
 
 root = pathlib.Path(".")
 
 paths = {
-    "catalog": root/"docs"/"ops"/"mcp_catalog.sql",
-    "endpoints": root/"docs"/"ops"/"mcp_endpoints.sql",
+    "catalog": root / "docs" / "ops" / "mcp_catalog.sql",
+    "endpoints": root / "docs" / "ops" / "mcp_endpoints.sql",
 }
 
-exists = {k: p.exists() for k,p in paths.items()}
+exists = {k: p.exists() for k, p in paths.items()}
 
-text = {k: (p.read_text(encoding="utf-8", errors="ignore") if exists[k] else "") for k,p in paths.items()}
+text = {k: (p.read_text(encoding="utf-8", errors="ignore") if exists[k] else "") for k, p in paths.items()}
 
 need_funcs = [
     r"CREATE\s+OR\s+REPLACE\s+FUNCTION\s+mcp\.hybrid_search\(",
@@ -35,7 +36,7 @@ need_funcs = [
 
 writes_bad = r"\b(INSERT|UPDATE|DELETE|TRUNCATE|ALTER|DROP|CREATE\s+TABLE)\b"
 
-func_ok = all(re.search(pat, text["endpoints"], flags=re.IGNORECASE|re.MULTILINE) for pat in need_funcs)
+func_ok = all(re.search(pat, text["endpoints"], flags=re.IGNORECASE | re.MULTILINE) for pat in need_funcs)
 
 writes_ok = not re.search(writes_bad, text["endpoints"], flags=re.IGNORECASE)
 
@@ -51,7 +52,7 @@ report = {
     ],
 }
 
-strict = os.getenv("STRICT_MCP","0") == "1"
+strict = os.getenv("STRICT_MCP", "0") == "1"
 
 print(json.dumps(report, indent=2))
 
