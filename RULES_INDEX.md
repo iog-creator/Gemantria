@@ -123,3 +123,7 @@
 - 2025-11-11: RFC-072 Part 2 — added `guard.jsonschema.import` and `requirements-guards.txt` to enforce STRICT validator presence at tag-time. (OPS v6.2)
 - 2025-11-11: RFC-072 Part 2 — added operator target `evidence.agents.summary` (guards snapshot: import, ai-nouns, graph).
 - 2025-11-11: Guards routed via STRICT runner (fail-closed on tags): prompt.format, docs.presence, ai_nouns.schema, graph.schema, jsonschema.import. (OPS v6.2)
+
+
+## RFC References (Pending)
+- RFC-073: Tagproof Core Graph Exports via Read-Only DSN — see docs/rfcs/RFC-073-tagproof-core-graph-exports.md
