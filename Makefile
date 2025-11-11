@@ -1533,3 +1533,13 @@ docs.masterref.check:
 housekeeping.masterref:
 	$(MAKE) docs.masterref.populate
 	$(MAKE) docs.masterref.check
+
+# --- Local automation hardening ---
+.PHONY: hooks.install ops.auto-normalize
+
+hooks.install:
+	@git config core.hooksPath .githooks
+	@echo "[hooks] core.hooksPath set to .githooks"
+
+ops.auto-normalize:
+	@bash scripts/ops/auto_normalize.sh || true

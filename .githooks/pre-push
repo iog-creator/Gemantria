@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Versioned pre-push hook for Gemantria: normalize before push.
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+bash "$ROOT/scripts/ops/auto_normalize.sh"
