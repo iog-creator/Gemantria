@@ -48,7 +48,14 @@ VIEW_URL="http://127.0.0.1:8778/docs/atlas/mcp_catalog_view.html"
 
 shot "index.png" "$INDEX_URL"
 index_dom="$(dump "$INDEX_URL")"
-[[ -n "$index_dom" ]] && ok_index=1
+if [[ -n "$index_dom" ]]; then
+  ok_index=1
+  # Rule-067: Fail if Mermaid shows error banner (regression check)
+  if echo "$index_dom" | grep -qi "Syntax error in text"; then
+    echo "[webproof] ERROR: Mermaid syntax error detected in index page" >&2
+    ok_index=0
+  fi
+fi
 
 shot "catalog.png" "$VIEW_URL"
 catalog_dom="$(dump "$VIEW_URL")"
