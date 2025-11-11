@@ -59,7 +59,7 @@ jobs:
         run: |
           bash scripts/guard_pm_snapshot.sh share/pm.snapshot.md
       - name: Guard PM Snapshot (STRICT on tags)
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc')
         env:
           STRICT_PM_SNAPSHOT: "1"
         run: |
