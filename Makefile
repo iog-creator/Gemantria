@@ -100,7 +100,7 @@ governance.housekeeping:
 .PHONY: governance.docs.hints
 governance.docs.hints:
 	@echo ">> Checking for governance docs/rule changes and emitting hints"
-	@$(PYTHON) scripts/governance_docs_hints.py || true
+	@PYTHONPATH=. $(PYTHON) scripts/governance_docs_hints.py || true
 	@echo "Governance docs hints check complete"
 
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
@@ -163,7 +163,7 @@ telemetry.smoke:
 
 handoff.update:
 	@echo ">> Updating project handoff document"
-	@$(PYTHON) scripts/generate_handoff.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
 # Atlas status diagram generation
@@ -387,11 +387,11 @@ housekeeping.atlas:
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
-	@$(PYTHON) scripts/validate_agents_md.py
+	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
 	@echo "AGENTS.md validation complete"
-	@$(PYTHON) scripts/rules_audit.py
+	@PYTHONPATH=. $(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
-	@$(PYTHON) scripts/generate_forest.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_forest.py
 	@echo "Forest generation complete"
 	@echo "✅ Complete housekeeping finished (Rule-058)"
 
