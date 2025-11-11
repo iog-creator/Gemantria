@@ -123,3 +123,11 @@
 - 2025-11-11: RFC-072 Part 2 — added `guard.jsonschema.import` and `requirements-guards.txt` to enforce STRICT validator presence at tag-time. (OPS v6.2)
 - 2025-11-11: RFC-072 Part 2 — added operator target `evidence.agents.summary` (guards snapshot: import, ai-nouns, graph).
 - 2025-11-11: Guards routed via STRICT runner (fail-closed on tags): prompt.format, docs.presence, ai_nouns.schema, graph.schema, jsonschema.import. (OPS v6.2)
+
+
+### DSN RO Equivalence (tag builds)
+- For **tag/STRICT** builds, the primary Read-Only DSN for the gematria database is resolved as:
+  `env('GEMATRIA_RO_DSN') or env('ATLAS_DSN_RO')` (treated as **peers**),
+  then internal fallbacks (e.g., `get_ro_dsn()`), with failure if none present.
+- For **dev/HINT**, prefer RO; RW fallback is allowed for read-only queries.
+- Clarified: 2025-11-11
