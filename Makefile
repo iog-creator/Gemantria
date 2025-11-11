@@ -9,14 +9,16 @@ export PYTHON
 guard.python.runner:
 	@bash scripts/guards/guard_python_runner.sh
 
-# ---- Guard: DSN centralization ----------------------------------------------
+# ---- Guard: DSN centralization (precise) ----------------------------------------------
 .PHONY: guard.dsn.centralized
 guard.dsn.centralized:
-	@bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.json >/dev/null
+	@python3 scripts/ci/guard_dsn_centralized.py | tee evidence/dsn_guard.precise.json; \
+	jq -e '.ok_pr_files == true' evidence/dsn_guard.precise.json >/dev/null || true
 
 .PHONY: guard.dsn.centralized.strict
 guard.dsn.centralized.strict:
-	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
+	@python3 scripts/ci/guard_dsn_centralized.py | tee evidence/dsn_guard.precise.json; \
+	jq -e '.ok_repo == true and .ok_pr_files == true' evidence/dsn_guard.precise.json
 
 .PHONY: guard.secrets.mask
 guard.secrets.mask:
