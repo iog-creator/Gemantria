@@ -1378,6 +1378,13 @@ ui.test:
 	@echo ">> Running UI tests (Playwright)"
 	@pytest tests/ui -v
 
+.PHONY: otel.smoke
+otel.smoke:
+	@echo ">> Running OTel span smoke test"
+	@PYTHONPATH=. ENABLE_OTEL=1 python3 scripts/observability/otel_smoke.py >/dev/null 2>&1 || true
+	@echo "== otel.spans.jsonl (tail) =="
+	@test -f evidence/otel.spans.jsonl && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
+
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
 	@echo "[ops.verify] All operational guards passed"

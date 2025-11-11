@@ -65,6 +65,13 @@ Gemantria is a deterministic, schema-first AI pipeline that transforms sacred te
 - **Audit UI Artifacts**: All interactive outputs must have `analysis`, `source_refs`, and `evidence` fields populated or stubbed.
 
 ## 7. Testing and UI Verification
+
+### Observability (OTel)
+
+- Optional OTel spans for **pipeline.run**, **llm.call**, and **tool.call**
+- Enable with `ENABLE_OTEL=1`; default OFF for CI/hermetic runs
+- If `OTEL_EXPORTER_OTLP_ENDPOINT` is unset, spans are stored at `evidence/otel.spans.jsonl`
+- Recommended backends (housekeeping only): Jaeger/Grafana Tempo
 - **Browser Click Test**: Playwright script simulates node/edge interaction, screenshot captured.
 - **Regression Snapshots**: Visual diff of key views (node hover, edge click, stats overlay).
 - **DOM Consistency Check**: Node count in DOM must match JSON artifact.
