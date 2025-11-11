@@ -3,9 +3,10 @@
 RFC-073 PR-1 — tag-only core graph export (fail-closed).
 
 Behavior:
-- Requires RO DSN via centralized loader (get_ro_dsn() or get_bible_db_dsn()).
+- Requires GEMATRIA_DSN via centralized loader (get_rw_dsn()) to access gematria database.
 - On tag builds (GITHUB_REF_TYPE=tag), exit non-zero if DSN missing or psycopg unavailable.
 - Produces ui/out/graph_core.json conforming to graph.schema.json (core only).
+- Per AGENTS.md: Extraction DB = GEMATRIA_DSN → database gematria (where graph data lives).
 """
 
 import json
@@ -18,7 +19,7 @@ import pathlib
 REPO = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-from scripts.config.env import get_ro_dsn, get_bible_db_dsn
+from scripts.config.env import get_rw_dsn
 
 
 OUT_PATH = pathlib.Path("ui/out/graph_core.json")
@@ -31,10 +32,11 @@ def fail(msg, code=2):
 
 def main():
     is_tag = os.getenv("GITHUB_REF_TYPE") == "tag"
-    # Try RO DSN first (for gematria DB), fallback to Bible DB DSN
-    dsn = get_ro_dsn() or get_bible_db_dsn()
+    # Use RW DSN to access gematria database (where graph data lives)
+    # Per AGENTS.md: Extraction DB = GEMATRIA_DSN → database gematria
+    dsn = get_rw_dsn()
     if is_tag and not dsn:
-        fail("Tag build requires a read-only DSN (set ATLAS_DSN, BIBLE_RO_DSN, RO_DSN, or ATLAS_DSN_RO).", 2)
+        fail("Tag build requires GEMATRIA_DSN (set GEMATRIA_DSN, RW_DSN, AI_AUTOMATION_DSN, ATLAS_DSN_RW, or ATLAS_DSN).", 2)
 
     try:
         import psycopg  # psycopg3
