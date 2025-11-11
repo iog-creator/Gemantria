@@ -25,4 +25,3 @@ ok = all(
 
 print(json.dumps({"ok": ok, "exists": exists}, indent=2))
 sys.exit(0 if ok else 1)
-
