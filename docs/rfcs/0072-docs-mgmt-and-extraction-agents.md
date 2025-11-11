@@ -2,7 +2,7 @@
 
 - **Author:** PM (via Cursor)
 - **Date:** 2025-11-11
-- **Status:** Proposed
+- **Status:** Accepted (Fast-Track, evidence-first)
 - **Scope:** Cross-cutting infra (governance/docs SSOT) + Agent contracts (discovery/enrichment/extraction)
 
 ## Summary
