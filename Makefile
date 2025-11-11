@@ -1578,3 +1578,13 @@ mcp.examples.smoke:
 	fi ; \
 	psql "$$DSN" -v ON_ERROR_STOP=1 -f scripts/mcp/examples.sql | tee evidence/mcp.examples.out.txt >/dev/null ; \
 	echo "[examples] done"
+
+# --- MCP catalog export (offline-safe) ---
+.PHONY: mcp.catalog.export mcp.catalog.validate
+mcp.catalog.export:
+	@echo "[mcp] export catalog to docs/atlas/data/mcp_catalog.json"
+	@python3 scripts/mcp/export_catalog_json.py | tee evidence/mcp.catalog.export.log.txt
+
+mcp.catalog.validate:
+	@python3 scripts/mcp/validate_catalog_json.py
+	@cp docs/atlas/data/mcp_catalog.json evidence/mcp.catalog.json.snapshot || true

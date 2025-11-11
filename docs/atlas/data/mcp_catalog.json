@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "endpoints": [
+    {
+      "name": "hybrid_search",
+      "spec": {
+        "inputs": [
+          "q_text",
+          "k"
+        ],
+        "max_k": 25,
+        "version": 1
+      }
+    },
+    {
+      "name": "graph_neighbors",
+      "spec": {
+        "inputs": [
+          "node_id",
+          "depth",
+          "k"
+        ],
+        "max_k": 25,
+        "version": 1
+      }
+    },
+    {
+      "name": "lookup_ref",
+      "spec": {
+        "inputs": [
+          "book",
+          "chapter",
+          "verse",
+          "k"
+        ],
+        "max_k": 25,
+        "version": 1
+      }
+    }
+  ]
+}
