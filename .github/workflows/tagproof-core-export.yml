@@ -1,4 +1,4 @@
-name: tagproof: core graph export (RO)
+name: tagproof-core-export-RO
 
 on:
   push:
