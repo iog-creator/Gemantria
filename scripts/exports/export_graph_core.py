@@ -170,12 +170,19 @@ def main():
                         print(f"[export_graph_core] Edge table {edge_table} has columns: {cols}", file=sys.stderr)
 
                 # Build payload conforming to graph.schema.json
+                # Extract book from first node if available (for root-level book property)
+                root_book = None
+                if nodes and nodes[0].get("book"):
+                    root_book = nodes[0]["book"]
+
                 payload = {
                     "schema": "gemantria/graph.v1",  # schema requires exact value
                     "generated_at": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
                     "nodes": nodes,  # top-level, not nested in "graph"
                     "edges": edges,  # top-level, not nested in "graph"
                 }
+                if root_book:
+                    payload["book"] = root_book
                 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
                 OUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
                 print(f"[export_graph_core] wrote {OUT_PATH} with {len(nodes)} nodes, {len(edges)} edges")
