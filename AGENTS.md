@@ -1295,3 +1295,5 @@ Merges are permitted only when **all** are true:
 
 > **RO DSN (tag builds)** — Either `GEMATRIA_RO_DSN` **or** `ATLAS_DSN_RO` satisfies the RO requirement.
 > Exporters/runners must check **both** (peers) before falling back to `get_ro_dsn()`; fail-closed on tags.
+
+> **Postgres Knowledge MCP (RFC-078):** Catalog-as-a-service lives in Postgres. Tag builds use RO DSN and must prove `mcp.v_catalog`. See `docs/runbooks/MCP_KNOWLEDGE_DB.md`.
