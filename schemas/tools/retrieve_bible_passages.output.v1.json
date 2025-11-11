@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tools/retrieve_bible_passages.output.v1.json",
+  "type": "object",
+  "required": ["schema_version", "ring", "items", "provenance"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "ring": { "const": 1 },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "book", "chapter", "verse", "text"],
+        "properties": {
+          "id": { "type": "string" },
+          "book": { "type": "string" },
+          "chapter": { "type": "integer" },
+          "verse": { "type": "integer" },
+          "text": { "type": "string" },
+          "offsets": {
+            "type": "object",
+            "properties": { "start": { "type":"integer" }, "end": { "type":"integer" } },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": { "$ref": "common/provenance.v1.json" }
+  },
+  "additionalProperties": false
+}
