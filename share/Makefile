@@ -1533,3 +1533,135 @@ docs.masterref.check:
 housekeeping.masterref:
 	$(MAKE) docs.masterref.populate
 	$(MAKE) docs.masterref.check
+
+# --- Local automation hardening ---
+.PHONY: hooks.install ops.auto-normalize
+
+hooks.install:
+	@git config core.hooksPath .githooks
+	@echo "[hooks] core.hooksPath set to .githooks"
+
+ops.auto-normalize:
+	@bash scripts/ops/auto_normalize.sh || true
+
+# --- MCP dev bench (local only; skips safely if DSN/psql missing) ---
+.PHONY: mcp.dev.bench
+mcp.dev.bench:
+	@echo "[mcp] dev bench starting"
+	@python3 scripts/mcp/get_dsn_for_bench.py > evidence/mcp.bench.dsn.txt || true
+	@DSN="$$(cat evidence/mcp.bench.dsn.txt)" ; \
+	if [ -z "$$DSN" ]; then \
+	  DSN="$${GEMATRIA_RW_DSN:-$${GEMATRIA_RO_DSN:-$${ATLAS_DSN_RO:-}}}"; \
+	fi ; \
+	if ! command -v psql >/dev/null 2>&1 ; then \
+	  echo "[bench] SKIP: psql not installed" | tee evidence/mcp.bench.skip.txt ; exit 0 ; \
+	fi ; \
+	if [ -z "$$DSN" ]; then \
+	  echo "[bench] SKIP: no DSN available" | tee evidence/mcp.bench.skip.txt ; exit 0 ; \
+	fi ; \
+	echo "[bench] DSN detected (redacted)" | tee evidence/mcp.bench.info.txt ; \
+	psql "$$DSN" -v ON_ERROR_STOP=1 -f scripts/mcp/bench_dev.sql | tee evidence/mcp.bench.raw.txt >/dev/null ; \
+	grep -E "(Execution Time|Planning Time)" -n evidence/mcp.bench.raw.txt | sed -n '1,120p' | tee evidence/mcp.bench.times.txt >/dev/null ; \
+	echo "[bench] done"
+
+# --- MCP examples smoke (local only; skips safely if DSN/psql missing) ---
+.PHONY: mcp.examples.smoke
+mcp.examples.smoke:
+	@echo "[mcp] examples smoke"
+	@python3 scripts/mcp/get_dsn_for_examples.py > evidence/mcp.examples.dsn.txt || true
+	@DSN="$$(cat evidence/mcp.examples.dsn.txt)" ; \
+	if ! command -v psql >/dev/null 2>&1 ; then \
+	  echo "[examples] SKIP: psql not installed" | tee evidence/mcp.examples.skip.txt ; exit 0 ; \
+	fi ; \
+	if [ -z "$$DSN" ]; then \
+	  echo "[examples] SKIP: no DSN available" | tee evidence/mcp.examples.skip.txt ; exit 0 ; \
+	fi ; \
+	psql "$$DSN" -v ON_ERROR_STOP=1 -f scripts/mcp/examples.sql | tee evidence/mcp.examples.out.txt >/dev/null ; \
+	echo "[examples] done"
+
+# --- MCP catalog export (offline-safe) ---
+.PHONY: mcp.catalog.export mcp.catalog.validate
+mcp.catalog.export:
+	@echo "[mcp] export catalog to docs/atlas/data/mcp_catalog.json"
+	@python3 scripts/mcp/export_catalog_json.py | tee evidence/mcp.catalog.export.log.txt
+
+mcp.catalog.validate:
+	@python3 scripts/mcp/validate_catalog_json.py
+	@cp docs/atlas/data/mcp_catalog.json evidence/mcp.catalog.json.snapshot || true
+
+# --- Atlas (MCP) viewer validation (offline-safe) ---
+.PHONY: atlas.viewer.validate
+atlas.viewer.validate:
+	@echo "[atlas] viewer validate"
+	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
+
+# --- Atlas (webproof) ---
+.PHONY: atlas.webproof
+atlas.webproof:
+	@echo "[atlas] webproof (headless browser)"
+	@STRICT_WEBPROOF=${STRICT_WEBPROOF:-0} bash scripts/ci/atlas_webproof.sh
+
+# --- Atlas Live (dev-only; offline-safe) ---
+.PHONY: atlas.live.server atlas.live.fetch atlas.live.health
+
+atlas.live.server:
+	@echo "[atlas-live] starting dev export server on :8777"
+	@python3 scripts/mcp/http_export_server.py & \
+	 echo $$! > .atlas_live.pid; sleep 1; \
+	 (curl -s http://127.0.0.1:8777/health || true) | sed 's/.*/[atlas-live] health: &/'
+
+atlas.live.fetch:
+	@echo "[atlas-live] POST /export -> regenerate catalog (if server running)"
+	@curl -s -X POST http://127.0.0.1:8777/export | tee evidence/atlas_live.fetch.json >/dev/null || echo "[atlas-live] server not running"
+
+atlas.live.health:
+	@curl -s http://127.0.0.1:8777/health || echo "[atlas-live] server not running"
+
+# --- MCP SSE (LM Studio bridge) ---
+.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop guard.mcp.sse
+MCP_HOST?=127.0.0.1
+MCP_PORT?=8005
+
+mcp.sse.start:
+	@nohup $${PYTHON3:-python3} $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
+	echo "[mcp] SSE server started on $(MCP_HOST):$(MCP_PORT)"
+
+mcp.sse.health:
+	@curl -fsSI http://$(MCP_HOST):$(MCP_PORT)/sse | grep -iE 'HTTP/|content-type' || (echo "[mcp] SSE health FAIL" && exit 2)
+
+mcp.sse.stop:
+	@pgrep -af 'gemantria-ops/server.py' | grep -E 'MCP_TRANSPORT=sse|--port 8005' | awk '{print $$1}' | xargs -r kill
+
+guard.mcp.sse:
+	@ENABLE_LMSTUDIO_MCP=$${ENABLE_LMSTUDIO_MCP:-0}; \
+	$${PYTHON3:-python3} scripts/ci/guard_mcp_live.py | tee evidence/guard_mcp_live.json
+
+# --- Bring-up verification script ---
+.PHONY: bringup.001
+bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
+	@bash scripts/bringup_001.sh
+
+.PHONY: dsns.echo
+dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
+	@if [ -f .env.local ]; then \
+		set -a; source .env.local 2>/dev/null; set +a; \
+		if [ -n "$${BIBLE_DB_DSN:-}" ] && [ -n "$${GEMATRIA_DSN:-}" ]; then \
+			printf "BIBLE_DB_DSN=%s\n" "$${BIBLE_DB_DSN%//*}//REDACTED@$${BIBLE_DB_DSN#*@}" | sed 's/?.*$$//'; \
+			printf "GEMATRIA_DSN=%s\n" "$${GEMATRIA_DSN%//*}//REDACTED@$${GEMATRIA_DSN#*@}" | sed 's/?.*$$//'; \
+			echo "CHECKPOINTER=$${CHECKPOINTER:-postgres}"; \
+		else \
+			echo "⚠ DSNs not set in .env.local"; \
+		fi; \
+	elif [ -f .env ]; then \
+		set -a; source .env 2>/dev/null; set +a; \
+		if [ -n "$${BIBLE_DB_DSN:-}" ] && [ -n "$${GEMATRIA_DSN:-}" ]; then \
+			printf "BIBLE_DB_DSN=%s\n" "$${BIBLE_DB_DSN%//*}//REDACTED@$${BIBLE_DB_DSN#*@}" | sed 's/?.*$$//'; \
+			printf "GEMATRIA_DSN=%s\n" "$${GEMATRIA_DSN%//*}//REDACTED@$${GEMATRIA_DSN#*@}" | sed 's/?.*$$//'; \
+			echo "CHECKPOINTER=$${CHECKPOINTER:-postgres}"; \
+		else \
+			echo "⚠ DSNs not set in .env"; \
+		fi; \
+	else \
+		echo "⚠ No .env.local or .env file found"; \
+		echo "Create .env.local with BIBLE_DB_DSN and GEMATRIA_DSN"; \
+	fi

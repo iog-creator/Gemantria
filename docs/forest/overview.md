@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-10 19:51:51
+Generated: 2025-11-11 13:39:10
 
 ## Active Rules
 
@@ -69,8 +69,10 @@ Generated: 2025-11-10 19:51:51
 - Rule 062-environment-validation: ---
 - Rule 063-git-safety: ---
 - Rule 064-ai-tracking-contract: id: "064"
-- Rule 065-gpt-docs-sync: ---
+- Rule 065-auto-normalize: Rule 065 — Auto-Normalize on Branch Switch & PR Events
 - Rule 066-lm-studio-appimage-update: ---
+- Rule 067-atlas-webproof: Rule 067 — Atlas Webproof (Browser-Verified UI)
+- Rule 068-gpt-docs-sync: ---
 
 ## CI Workflows
 

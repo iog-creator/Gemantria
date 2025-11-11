@@ -7,6 +7,7 @@ if str(root) not in sys.path:
 
 # Use centralized DSN loaders (handles .env loading and precedence chains)
 from scripts.config.env import get_rw_dsn, get_bible_db_dsn, env
+
 share_dir = root / "share"
 doc_path = share_dir / "pm.snapshot.md"
 manifest_path = root / "docs" / "SSOT" / "SHARE_MANIFEST.json"
