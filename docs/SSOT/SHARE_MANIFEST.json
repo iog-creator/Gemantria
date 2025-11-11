@@ -89,6 +89,10 @@
       "dst": "share/forest_overview.md"
     },
     {
+      "src": "scripts/AGENTS.md",
+      "dst": "share/scripts_AGENTS.md"
+    },
+    {
       "src": "exports/graph_stats.json",
       "dst": "share/graph_stats.head.json",
       "generate": "head_json",

@@ -24,6 +24,7 @@ alwaysApply: false
 - **MANDATORY**: Include `make ssot.verify` in Tests/checks for any database operations
 - **MANDATORY**: Check `share/evidence/` for new hint envelopes after operations
 - **AUTOMATIC**: Validate all referenced .mdc rules exist and are properly formatted
+- **DSN Access**: All database operations must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 
 ## Enforcement
 - Always start responses with SHORT BRIEF

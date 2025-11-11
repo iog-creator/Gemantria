@@ -6,9 +6,18 @@ Database connection utilities for Gemantria.
 
 Provides centralized DB connection setup with fallback handling
 and error management per governance requirements.
+
+All DSN access must go through scripts.config.env (centralized loader).
 """
 
-import os
+import sys
+from pathlib import Path
+
+# Add project root to path for imports
+REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+
+from scripts.config.env import get_rw_dsn
 import psycopg
 
 
@@ -17,18 +26,18 @@ def get_connection_dsn(env_var: str = "GEMATRIA_DSN", fallback: str = "DB_DSN") 
     Get database DSN with fallback and validation.
 
     Args:
-        env_var: Primary environment variable name (default: GEMATRIA_DSN)
-        fallback: Fallback environment variable name (default: DB_DSN)
+        env_var: Primary environment variable name (default: GEMATRIA_DSN) - ignored, uses centralized loader
+        fallback: Fallback environment variable name (default: DB_DSN) - ignored, uses centralized loader
 
     Returns:
         Valid database DSN string
 
     Raises:
-        ValueError: If neither environment variable is set
+        ValueError: If DSN cannot be determined
     """
-    dsn = os.getenv(env_var) or os.getenv(fallback)
+    dsn = get_rw_dsn()
     if not dsn:
-        raise ValueError(f"{env_var} environment variable required")
+        raise ValueError("GEMATRIA_DSN environment variable required (via centralized loader)")
     return dsn
 
 
@@ -37,7 +46,7 @@ def get_db_connection(dsn: str | None = None) -> psycopg.Connection:
     Get database connection with proper setup.
 
     Args:
-        dsn: Optional DSN string (will use environment if not provided)
+        dsn: Optional DSN string (will use centralized loader if not provided)
 
     Returns:
         Configured database connection

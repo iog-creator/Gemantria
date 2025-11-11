@@ -9,17 +9,15 @@ Provides LOUD HINTS for document management operations per Rule-050 OPS Contract
 Automatically triggers when document operations are needed.
 """
 
-import os
 import sys
 from pathlib import Path
 from datetime import datetime
 
-# Load environment variables
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
-from infra.env_loader import ensure_env_loaded
+# Load environment variables via centralized loader
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
 
-ensure_env_loaded()
-
+from scripts.config.env import get_rw_dsn
 import psycopg
 
 
@@ -28,10 +26,19 @@ class DocumentManagementHints:
 
     def __init__(self):
         self.run_id = f"doc_hints_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self._dsn = None
+
+    def _get_dsn(self):
+        """Get DSN via centralized loader (cached)."""
+        if self._dsn is None:
+            self._dsn = get_rw_dsn()
+            if not self._dsn:
+                raise ValueError("GEMATRIA_DSN not available (via centralized loader)")
+        return self._dsn
 
     def emit_hint(self, hint_text: str, rule_reference: str = "058", context: str = "document_management"):
         """Emit a LOUD HINT for document management."""
-        with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+        with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -45,7 +52,7 @@ class DocumentManagementHints:
 
     def check_document_freshness(self) -> bool:
         """Check if documents need updating per Rule-058."""
-        with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+        with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:
                 cur.execute("""
                     SELECT COUNT(*) FROM check_governance_freshness(24)
@@ -76,7 +83,7 @@ class DocumentManagementHints:
             "Migration Guide",
         }
 
-        with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+        with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:
                 cur.execute("""
                     SELECT section_name FROM document_sections 
@@ -96,7 +103,7 @@ class DocumentManagementHints:
 
     def check_ai_learning_coverage(self) -> bool:
         """Check if AI learning system covers document operations."""
-        with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+        with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:
                 # Check for document-related learning events
                 cur.execute("""
@@ -117,7 +124,7 @@ class DocumentManagementHints:
 
     def check_tool_usage_analytics(self) -> bool:
         """Check if document tools have usage analytics."""
-        with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+        with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:
                 cur.execute("""
                     SELECT COUNT(*) FROM tool_usage_analytics 

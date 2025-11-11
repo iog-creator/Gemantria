@@ -8,25 +8,25 @@ manage_document_sections.py — AI-assisted document management utilities
 Query, analyze, and manage document sections for AI-assisted maintenance.
 """
 
-import os
 import sys
 from pathlib import Path
 from typing import Dict, List
 
-# Load environment variables
+# Load environment variables via centralized loader
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
-from infra.env_loader import ensure_env_loaded
+sys.path.insert(0, str(ROOT))
 
-ensure_env_loaded()
-
+from scripts.config.env import get_rw_dsn
 import psycopg
 
 
 def get_document_hierarchy(document_name: str) -> List[Dict]:
     """Get hierarchical view of document sections."""
 
-    with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+    dsn = get_rw_dsn()
+    if not dsn:
+        raise ValueError("GEMATRIA_DSN not available (via centralized loader)")
+    with psycopg.connect(dsn) as conn:
         with conn.cursor() as cur:
             cur.execute(
                 """

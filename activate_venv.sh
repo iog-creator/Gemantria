@@ -30,9 +30,11 @@ validate_environment() {
         return 1
     fi
 
-    # Try to load environment
+    # Try to load environment (using centralized loader)
     if command -v python3 >/dev/null 2>&1; then
-        if python3 -c "import os; os.chdir('.'); from src.infra.env_loader import ensure_env_loaded; ensure_env_loaded(); print('✅ Environment loaded successfully')"; then
+        # Try preferred centralized loader first, fallback to legacy
+        if python3 -c "import os; os.chdir('.'); from scripts.config.env import env; env('PATH'); print('✅ Environment loaded successfully (centralized)')" 2>/dev/null || \
+           python3 -c "import os; os.chdir('.'); from src.infra.env_loader import ensure_env_loaded; ensure_env_loaded(); print('✅ Environment loaded successfully (legacy)')" 2>/dev/null; then
             echo "✅ Environment validation complete"
             return 0
         else

@@ -10,19 +10,16 @@ for AI-assisted document management and maintenance.
 """
 
 import hashlib
-import os
 import re
 import sys
 from pathlib import Path
 from typing import List, Tuple
 
-# Load environment variables
+# Load environment variables via centralized loader
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
-from infra.env_loader import ensure_env_loaded
+sys.path.insert(0, str(ROOT))
 
-ensure_env_loaded()
-
+from scripts.config.env import get_rw_dsn
 import psycopg
 
 
@@ -134,7 +131,10 @@ def populate_document_sections(doc_path: str, doc_name: str) -> None:
 
     print(f"📄 Processing {doc_name} with {len(sections)} sections...")
 
-    with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+    dsn = get_rw_dsn()
+    if not dsn:
+        raise ValueError("GEMATRIA_DSN not available (via centralized loader)")
+    with psycopg.connect(dsn) as conn:
         with conn.cursor() as cur:
             for section_name, level, parent in sections:
                 # Extract section content for hash and word count
@@ -187,7 +187,10 @@ def main():
         ]
 
     # Use a single connection for all operations
-    with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
+    dsn = get_rw_dsn()
+    if not dsn:
+        raise ValueError("GEMATRIA_DSN not available (via centralized loader)")
+    with psycopg.connect(dsn) as conn:
         for doc_path, doc_name in documents:
             try:
                 populate_document_sections_with_conn(doc_path, doc_name, conn)

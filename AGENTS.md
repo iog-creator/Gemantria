@@ -21,6 +21,10 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 - Databases:
   - `BIBLE_DB_DSN` — read-only Bible database (RO adapter denies writes pre-connection)
   - `GEMATRIA_DSN` — read/write application database
+- **DSN Access**: All DSN access must go through centralized loaders:
+  - **Preferred**: `scripts.config.env` (`get_rw_dsn()`, `get_ro_dsn()`, `get_bible_db_dsn()`)
+  - **Legacy**: `src.gemantria.dsn` (`dsn_rw()`, `dsn_ro()`, `dsn_atlas()`)
+  - Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`
 
 ### 3-Role DB Contract (OPS v6.2.3)
 **Extraction DB**: `GEMATRIA_DSN` → database `gematria`  

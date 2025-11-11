@@ -7,17 +7,22 @@ import json
 import os
 import subprocess
 import sys
-from typing import List
+from pathlib import Path
+
+# Add project root to path for imports
+REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+
+from scripts.config.env import get_rw_dsn
 
 TRIAD = {"050", "051", "052"}
-DSN_ENV_VARS: List[str] = ["AI_AUTOMATION_DSN", "GEMATRIA_DSN"]
 
 
 def main() -> int:
-    dsn = next((os.getenv(var) for var in DSN_ENV_VARS if os.getenv(var)), None)
+    dsn = get_rw_dsn()
     result: dict[str, object] = {
         "source": "db",
-        "dsn_env": next((var for var in DSN_ENV_VARS if os.getenv(var)), "missing"),
+        "dsn_env": "centralized_loader" if dsn else "missing",
         "triad": None,
         "ok": True,
         "note": "",

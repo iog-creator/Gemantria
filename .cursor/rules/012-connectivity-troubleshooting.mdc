@@ -11,6 +11,7 @@ alwaysApply: false
 - **Retry Logic**: Implement exponential backoff for transient failures; maximum 3 attempts with clear logging.
 - **Health Check Failures**: Qwen health checks must fail fast with actionable error messages (not generic "connection failed").
 - **Environment Validation**: Critical connection strings (DSN, LM_STUDIO_HOST) validated at startup with helpful error messages.
+- **DSN Centralization**: All DSN access must go through centralized loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 - **Service Discovery**: LM Studio server detection with fallback localhost and clear port/service requirements.
 - **Connection Pooling**: Database connections use connection pooling; no direct psycopg.connect() in application code.
 - **Dependency Checks**: Critical dependencies (pgvector, requests) checked at import time with clear installation instructions.

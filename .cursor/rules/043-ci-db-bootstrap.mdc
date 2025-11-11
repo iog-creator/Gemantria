@@ -8,3 +8,4 @@ globs:
 # 043 — CI DB Bootstrap & Empty-Data Handling (AlwaysApply)
 - Any workflow that queries the DB must create DB + run all migrations first.
 - Empty datasets are allowed; graph stats may report zeros; density=0; jobs must not fail on emptiness.
+- **DSN Access**: All DSN access must go through centralized loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.

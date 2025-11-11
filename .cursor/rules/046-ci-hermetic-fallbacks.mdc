@@ -7,3 +7,4 @@ globs: []
 - No outbound inference in CI; use deterministic mocks (e.g., `MOCK_AI=1`).
 - Nightlies/observability steps emit HINTs and continue (non-blocking).
 - **File Verification**: All file operations MUST verify existence first using explicit checks (`test -f`, `os.path.exists`, `head`) before reading/writing. Missing critical files emit LOUD FAIL per Rule-039 (no auto-creation, fail-closed).
+- **DSN Handling**: When DB unavailable, scripts must handle gracefully (return empty results, emit HINTs, continue). DSN access must use centralized loaders (`scripts.config.env` preferred) - never direct `os.getenv("GEMATRIA_DSN")`.

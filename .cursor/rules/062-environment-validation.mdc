@@ -49,10 +49,14 @@ python -c "from src.services.lmstudio_client import assert_qwen_live; result = a
 ### 3. Database Configuration Validation
 **BEFORE ANY DB OPERATIONS**: Verify database connections:
 
+**IMPORTANT**: All DSN access must go through centralized loaders:
+- **Preferred**: `scripts.config.env` (`get_rw_dsn()`, `get_ro_dsn()`, `get_bible_db_dsn()`)
+- **Legacy**: `src.gemantria.dsn` (`dsn_rw()`, `dsn_ro()`, `dsn_atlas()`)
+- **Never** use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`
+
 ```bash
-# Check if DSNs are set
-echo "GEMATRIA_DSN: $GEMATRIA_DSN"
-echo "BIBLE_DB_DSN: $BIBLE_DB_DSN"
+# Check if DSNs are set (via centralized loader)
+python3 -c "from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn; print(f'RW: {get_rw_dsn() is not None}'); print(f'RO: {get_ro_dsn() is not None}'); print(f'Bible: {get_bible_db_dsn() is not None}')"
 
 # If not set, use defaults from env_example.txt
 export GEMATRIA_DSN="postgresql://mccoy@/gematria?host=/var/run/postgresql"

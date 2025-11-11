@@ -170,13 +170,32 @@ These scripts provide command-line interfaces for common development and operati
 ### Environment Loading (CRITICAL - Always Apply)
 All scripts must load environment variables consistently to prevent database connectivity issues.
 
+**Preferred Approach (New Code):**
 ```python
-# REQUIRED: Add this to ALL scripts that use environment variables
-from src.infra.env_loader import ensure_env_loaded  # noqa: E402
+# Use centralized loader for both .env loading and DSN access
+from scripts.config.env import get_rw_dsn, get_ro_dsn, env
 
-# Load environment variables from .env file (REQUIRED)
+# scripts.config.env auto-loads .env via _ensure_loaded() when env() is called
+# Trigger env loading by calling env() once (non-fatal)
+try:
+    env("PATH")  # Non-fatal call to trigger _ensure_loaded()
+except Exception:
+    pass
+
+# Use centralized DSN functions
+dsn = get_rw_dsn()
+```
+
+**Legacy Approach (Still Valid):**
+```python
+# For scripts that only need .env loading (no DSN access)
+from src.infra.env_loader import ensure_env_loaded
+
+# Load environment variables from .env file
 ensure_env_loaded()
 ```
+
+**IMPORTANT**: All scripts using database connections **MUST** use centralized DSN loaders (`scripts.config.env` preferred). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 
 ### Command-Line Interface
 - Help: `--help` for all scripts
@@ -193,7 +212,7 @@ ensure_env_loaded()
 - Environment: Use environment variables for configuration
 - Defaults: Sensible defaults with override capability
 - Validation: Input validation with helpful error messages
-- Loading: MANDATORY `ensure_env_loaded()` call for all database scripts
+- Loading: MANDATORY centralized DSN loader usage (`scripts.config.env` preferred) for all database scripts
 
 ## Development Guidelines
 

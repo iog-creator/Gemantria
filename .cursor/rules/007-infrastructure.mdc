@@ -7,6 +7,7 @@ alwaysApply: false
 
 - Checkpointer factory validates CHECKPOINTER env var; defaults to memory for unknown values.
 - Postgres checkpointer requires GEMATRIA_DSN; raises clear error when missing.
+- **DSN Access**: All DSN access must go through centralized loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 - Memory checkpointer used for development/CI; Postgres available for production persistence.
 - Infrastructure code must be fully tested with 100% coverage; placeholder implementations allowed but must raise NotImplementedError.
 - Postgres checkpointer MUST implement full BaseCheckpointSaver interface (get_tuple, list, put, put_writes) with JSONB storage.

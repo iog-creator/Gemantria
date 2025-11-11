@@ -44,6 +44,25 @@ The following rules are **Always-Apply** in this repo and must be referenced in 
 
 These three rules are treated as the **050/051/052 triad** and are mirrored in DB/file guards.
 
+### DSN Centralization Policy
+
+All database connection strings (DSNs) must be accessed through centralized loaders:
+
+- **Preferred (new code)**: `scripts.config.env` — returns `None` if not found (graceful)
+  ```python
+  from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn
+  ```
+- **Legacy (existing code)**: `src.gemantria.dsn` — raises `RuntimeError` if not found (strict)
+  ```python
+  from gemantria.dsn import dsn_rw, dsn_ro, dsn_atlas
+  ```
+
+**Never** use `os.getenv("GEMATRIA_DSN")` directly — enforced by `guard.dsn.centralized`.
+
+**RO-DSN Peer Equivalence**: `GEMATRIA_RO_DSN` and `ATLAS_DSN_RO` are equal primaries for tag builds (not fallback). Both are checked first in centralized loaders. Fail-closed on tags if neither peer RO DSN is present.
+
+See `RULES_INDEX.md` §DSN Policy and `AGENTS.md` §Environment for full details.
+
 ## Local development
 1. Create and activate a virtual environment (for example `.venv`).
 2. Install dependencies: `pip install -r requirements.txt`.
@@ -52,6 +71,23 @@ These three rules are treated as the **050/051/052 triad** and are mirrored in D
    - `make type`
    - `make test.unit`
    - `make coverage.report`
+
+## Canonical Smoke Targets (Hermetic Validation)
+
+The following smoke targets provide hermetic validation (work without DB/services):
+
+```bash
+# Book processing smoke (validates book processing pipeline)
+make book.smoke
+
+# CI exports smoke (validates export readiness)
+make ci.exports.smoke
+
+# Graph calibration smoke (validates graph analysis)
+make eval.graph.calibrate.adv
+```
+
+These are the **canonical smoke targets** referenced in OPS Contract (Rule-050) and CI workflows. They run in HINT-only mode on main/PRs and STRICT mode on release tags.
 
 ## Quick Start (5 minutes, hermetic)
 

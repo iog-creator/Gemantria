@@ -15,19 +15,31 @@
 
 ## DSN Policy
 
-- All DSN access must go through the centralized loader in `scripts/config/env.py`.
+- All DSN access must go through a centralized loader. Two loaders exist:
+  - **Preferred (new code)**: `scripts/config/env.py` - returns `None` if not found (graceful)
+  - **Legacy (existing code)**: `src/gemantria/dsn.py` - raises `RuntimeError` if not found (strict)
 - Never call `os.getenv("GEMATRIA_DSN")`, `os.getenv("BIBLE_DB_DSN")`, etc. directly in `src/` or `scripts/`.
 - Use the canonical import pattern:
   ```python
-  from scripts.config.env import get_rw_dsn, get_bible_db_dsn
+  # Preferred (new code)
+  from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn
   
   rw_dsn = get_rw_dsn()
-  ro_dsn = get_bible_db_dsn()
+  ro_dsn = get_ro_dsn()
+  bible_dsn = get_bible_db_dsn()
+  
+  # Legacy (existing code - still valid)
+  from gemantria.dsn import dsn_rw, dsn_ro, dsn_atlas
+  
+  rw_dsn = dsn_rw()
+  ro_dsn = dsn_ro()
+  atlas_dsn = dsn_atlas()
   ```
 - DSN precedence:
   - **RW DSN**: `GEMATRIA_DSN` → `RW_DSN` → `AI_AUTOMATION_DSN` → `ATLAS_DSN_RW` → `ATLAS_DSN`
-  - **RO DSN**: `ATLAS_DSN` → (fallback to RW)
+  - **RO DSN**: `GEMATRIA_RO_DSN` | `ATLAS_DSN_RO` (peers) → `ATLAS_DSN` → (fallback to RW)
   - **Bible DB DSN**: `BIBLE_RO_DSN` → `RO_DSN` → `ATLAS_DSN_RO` → `ATLAS_DSN`
+- **RO-DSN Peer Equivalence**: `GEMATRIA_RO_DSN` and `ATLAS_DSN_RO` are equal primaries for tag builds (not fallback). Both are checked first in `get_ro_dsn()`.
 - This policy is enforced by the **DSN centralization guard** (`guard.dsn.centralized`).
 
 ### Centralization guard (policy)

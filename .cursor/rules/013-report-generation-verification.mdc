@@ -31,6 +31,7 @@ alwaysApply: false
 - **Column Name Consistency**: Query column names must match actual table schemas
 - **Data Type Compatibility**: ROUND functions and type casts must work with actual data types
 - **Foreign Key Integrity**: Related data must be properly linked across tables
+- **DSN Access**: All database queries must use centralized DSN loaders (`scripts.config.env` preferred, `src.gemantria.dsn` legacy). Never use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`.
 
 ### Failure Modes (Must Be Fixed)
 - Missing tables (confidence_validation_log, qwen_health_log, etc.)

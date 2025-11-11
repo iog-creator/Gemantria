@@ -66,7 +66,15 @@ def get_rw_dsn() -> str | None:
 
 
 def get_ro_dsn() -> str | None:
-    """Read DSN preference: ATLAS_DSN → (fallback) RW."""
+    """
+    Read-only DSN precedence: GEMATRIA_RO_DSN | ATLAS_DSN_RO (peers) → ATLAS_DSN → (fallback) RW.
+    RO-DSN peer equivalence: GEMATRIA_RO_DSN and ATLAS_DSN_RO are equal primaries for tag builds.
+    """
+    # Peer equivalence: try both RO DSNs as primaries
+    ro = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO")
+    if ro:
+        return ro
+    # Fallback to generic ATLAS_DSN, then RW
     return env("ATLAS_DSN") or get_rw_dsn()
 
 
