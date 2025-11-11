@@ -1586,14 +1586,5 @@ mcp.catalog.export:
 	@python3 scripts/mcp/export_catalog_json.py | tee evidence/mcp.catalog.export.log.txt
 
 mcp.catalog.validate:
-	@python3 - <<'PY'
-	import json,sys
-	from pathlib import Path
-	p=Path("docs/atlas/data/mcp_catalog.json")
-	d=json.loads(p.read_text())
-	eps=d.get("endpoints",[])
-	print("[validate] endpoints:", len(eps))
-	assert isinstance(eps,list) and len(eps)>=1
-	print("[validate] ok")
-	PY
+	@python3 scripts/mcp/validate_catalog_json.py
 	@cp docs/atlas/data/mcp_catalog.json evidence/mcp.catalog.json.snapshot || true
