@@ -22,6 +22,10 @@ guard.dsn.centralized.strict:
 guard.secrets.mask:
 	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null
 
+.PHONY: guard.ci.no_schedules
+guard.ci.no_schedules:
+	@python3 scripts/ci/guard_no_schedules.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -79,7 +83,7 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@python3 scripts/sync_share.py
+	@PYTHONPATH=. python3 scripts/sync_share.py
 
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
@@ -93,14 +97,14 @@ adr.housekeeping:
 .PHONY: governance.housekeeping
 governance.housekeeping:
 	@echo ">> Running governance housekeeping (database + compliance + docs)"
-	@$(PYTHON) scripts/governance_housekeeping.py
+	@PYTHONPATH=. $(PYTHON) scripts/governance_housekeeping.py
 	@echo "Governance housekeeping complete"
 
 # Governance docs hints (Rule-026 + Rule-065 compliance)
 .PHONY: governance.docs.hints
 governance.docs.hints:
 	@echo ">> Checking for governance docs/rule changes and emitting hints"
-	@$(PYTHON) scripts/governance_docs_hints.py || true
+	@PYTHONPATH=. $(PYTHON) scripts/governance_docs_hints.py || true
 	@echo "Governance docs hints check complete"
 
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
@@ -163,7 +167,7 @@ telemetry.smoke:
 
 handoff.update:
 	@echo ">> Updating project handoff document"
-	@$(PYTHON) scripts/generate_handoff.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
 
 # Atlas status diagram generation
@@ -296,6 +300,11 @@ atlas.clickproof:
 atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
 	@echo "✅ atlas.generate.all complete"
 
+.PHONY: atlas.traces
+atlas.traces:
+	@python3 scripts/atlas/generate_node_pages.py >/dev/null || true
+	@echo "OK: atlas node pages refreshed with traces (if available)"
+
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
 atlas.serve.mermaid:
@@ -387,11 +396,11 @@ housekeeping.atlas:
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
-	@$(PYTHON) scripts/validate_agents_md.py
+	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
 	@echo "AGENTS.md validation complete"
-	@$(PYTHON) scripts/rules_audit.py
+	@PYTHONPATH=. $(PYTHON) scripts/rules_audit.py
 	@echo "Rules audit complete"
-	@$(PYTHON) scripts/generate_forest.py
+	@PYTHONPATH=. $(PYTHON) scripts/generate_forest.py
 	@echo "Forest generation complete"
 	@echo "✅ Complete housekeeping finished (Rule-058)"
 
@@ -826,6 +835,12 @@ pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
 
+.PHONY: schema.docs
+schema.docs:
+	@echo ">> Generating schema documentation from JSON Schema files"
+	@python3 scripts/docs/generate_schema_docs.py --schema-dir docs/SSOT --output-dir docs/schemas
+	@echo "✅ Schema documentation generated in docs/schemas/"
+
 .PHONY: guards.schemas
 guards.schemas:
 	@echo ">> Validating pipeline artifacts against SSOT schemas (ENVELOPE-FIRST HARDENING)"
@@ -1230,6 +1245,13 @@ evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict
 	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else $(PYTHON) scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
+	@echo "==> Including observability artifacts (if present)..."
+	@tar -czf evidence/atlas_node_pages_proof.tgz \
+		docs/atlas/nodes \
+		evidence/atlas.nodes.json \
+		evidence/otel.spans.jsonl \
+		prompts 2>/dev/null || true
+	@echo "OK: evidence bundle at evidence/atlas_node_pages_proof.tgz"
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
@@ -1366,6 +1388,18 @@ ui.dev:
 .PHONY: ui.smoke.browser
 ui.smoke.browser:
 	@UI_URL=${UI_URL:-http://localhost:5173} bash scripts/ui/smoke_playwright.sh
+
+.PHONY: ui.test
+ui.test:
+	@echo ">> Running UI tests (Playwright)"
+	@pytest tests/ui -v
+
+.PHONY: otel.smoke
+otel.smoke:
+	@echo ">> Running OTel span smoke test"
+	@PYTHONPATH=. ENABLE_OTEL=1 python3 scripts/observability/otel_smoke.py >/dev/null 2>&1 || true
+	@echo "== otel.spans.jsonl (tail) =="
+	@test -f evidence/otel.spans.jsonl && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
 
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all

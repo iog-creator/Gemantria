@@ -22,7 +22,7 @@
     },
     {
       "src": "docs/SSOT/GEMATRIA_MASTER_REFERENCE.md",
-      "dst": "share/GEMATRIA_MASTER_REFERENCE.md"
+      "dst": "share/GEMATRIA_MASTER_REFERENCE.v2.md"
     },
     {
       "src": "docs/SSOT/GPT_SYSTEM_PROMPT.md",

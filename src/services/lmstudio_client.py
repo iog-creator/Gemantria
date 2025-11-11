@@ -604,6 +604,12 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
     Raises:
         QwenUnavailableError: If models are not available and mocks not allowed
     """
+    # Import prompt logger (lazy import to avoid circular dependencies)
+    try:
+        from scripts.logging.prompt_logger import log_prompt
+    except ImportError:
+        log_prompt = None
+
     if _is_mock_mode():
         # Return mock responses for testing
         return [
@@ -611,7 +617,18 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
         ]
 
     results = []
-    for messages in messages_batch:
+    for idx, messages in enumerate(messages_batch):
+        # Extract prompt text from messages (combine system + user messages)
+        prompt_parts = []
+        for msg in messages:
+            role = msg.get("role", "")
+            content = msg.get("content", "")
+            if role == "system":
+                prompt_parts.append(f"System: {content}")
+            elif role == "user":
+                prompt_parts.append(f"User: {content}")
+        prompt_text = "\n\n".join(prompt_parts) if prompt_parts else str(messages)
+
         payload = {
             "model": model,
             "messages": messages,
@@ -626,6 +643,14 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"]
                 results.append(SimpleNamespace(text=content))
+
+                # Log prompt and response if logging is enabled
+                if log_prompt:
+                    agent_name = f"chat_completion_{model}"
+                    if len(messages_batch) > 1:
+                        agent_name = f"{agent_name}_batch{idx}"
+                    log_prompt(agent_name, prompt_text, content)
+
                 break
             except Exception as e:
                 if attempt < RETRY_ATTEMPTS - 1:

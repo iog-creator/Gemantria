@@ -1,0 +1,21 @@
+Makefile:728: warning: overriding recipe for target 'phase8.temporal'
+Makefile:633: warning: ignoring old recipe for target 'phase8.temporal'
+Makefile:1427: warning: overriding recipe for target 'rerank.smoke'
+Makefile:1421: warning: ignoring old recipe for target 'rerank.smoke'
+{
+  "ok": true,
+  "exists": {
+    "root": true,
+    "ssot": true
+  },
+  "sections": {
+    "system_box": true,
+    "tutor_notes": true
+  },
+  "hashes": {
+    "root": "175aa55f808a",
+    "ssot": "402f0ee1a854"
+  },
+  "note": ""
+}
+wrote prompt SSOT guard report to stdout (non-fatal in HINT)

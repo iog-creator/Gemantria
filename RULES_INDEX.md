@@ -102,6 +102,7 @@
 | 056 | 056-ui-generation.mdc | UI Generation Standard |
 | 057 | 057-embedding-consistency.mdc | Embedding Consistency CI Checks |
 | 058 | 058-auto-housekeeping.mdc | Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail. Includes share.sync, governance, ADRs, rules audit, forest regen, and evidence archiving. |
+| 059 | (inline) | **Rule-059 — No Nightlies by Default** — Nightly/scheduled workflows (`schedule:`) are **forbidden** unless explicitly authorized as housekeeping. Enforced by `make guard.ci.no_schedules`. CI must rely on `workflow_dispatch`, PR, or tag events. |
 | 059 | 059-context-persistence.mdc | Context Persistence |
 | 060 | 060-response-style.mdc | Response Style Enforcement |
 | 061 | 061-ai-learning-tracking.mdc | AI learning and interaction tracking system |
