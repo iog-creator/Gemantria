@@ -36,6 +36,26 @@ guard.prompt.format:
 guard.docs.presence:
 	@python3 scripts/ci/guard_docs_presence.py
 
+# Guard: ai-nouns schema (RFC-072 Part 2)
+.PHONY: guard.ai_nouns.schema
+guard.ai_nouns.schema:
+	@python3 scripts/ci/guard_json_schema.py --name ai_nouns \
+		--schema-name ai-nouns.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains ai_nouns --filename-contains nouns || true
+
+# Guard: graph schema (RFC-072 Part 2)
+.PHONY: guard.graph.schema
+guard.graph.schema:
+	@python3 scripts/ci/guard_json_schema.py --name graph \
+		--schema-name graph.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains graph || true
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -893,7 +913,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.schema
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
