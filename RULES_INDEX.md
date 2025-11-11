@@ -146,4 +146,8 @@
 - For **dev/HINT**, prefer RO; RW fallback is allowed for read-only queries.
 - Clarified: 2025-11-11
 
-- **Rule-067 — Atlas Webproof**: Headless browser proof. **Always-Apply** for changes under  and for OPS blocks touching visual/web artifacts. See GPT_SYSTEM_PROMPT.md Browser Verification template.
+- **Rule-067 — Atlas Webproof**: Headless browser proof for visual/web artifacts. **Always-Apply** when OPS blocks touch UI/docs/diagrams.
+
+  - See: `docs/SSOT/GPT_SYSTEM_PROMPT.md` → "BROWSER VERIFICATION (Rule-051 + Rule-067) — MANDATORY TEMPLATE"
+
+  - See: `scripts/ci/atlas_webproof.sh` and `scripts/ops/browser_verify.sh` (recommended wrapper; `make browser.verify`)
