@@ -22,6 +22,10 @@ guard.dsn.centralized.strict:
 guard.secrets.mask:
 	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null
 
+.PHONY: guard.ci.no_schedules
+guard.ci.no_schedules:
+	@python3 scripts/ci/guard_no_schedules.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -295,6 +299,11 @@ atlas.clickproof:
 .PHONY: atlas.generate.all
 atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
 	@echo "✅ atlas.generate.all complete"
+
+.PHONY: atlas.traces
+atlas.traces:
+	@python3 scripts/atlas/generate_node_pages.py >/dev/null || true
+	@echo "OK: atlas node pages refreshed with traces (if available)"
 
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
@@ -1236,6 +1245,13 @@ evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict
 	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else $(PYTHON) scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
+	@echo "==> Including observability artifacts (if present)..."
+	@tar -czf evidence/atlas_node_pages_proof.tgz \
+		docs/atlas/nodes \
+		evidence/atlas.nodes.json \
+		evidence/otel.spans.jsonl \
+		prompts 2>/dev/null || true
+	@echo "OK: evidence bundle at evidence/atlas_node_pages_proof.tgz"
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required

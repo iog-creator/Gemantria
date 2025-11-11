@@ -1,5 +1,14 @@
 # Release Process
 
+## v2.0 (2025-11-10)
+- Overhauled master reference (GEMANTRIA_MASTER_REFERENCE.md v2)
+- Added orchestrator layering (LangGraph + Prefect)
+- Added MCP-style agent interface guidance
+- Implemented Playwright UI tests (tests/ui/test_atlas_node_click.py)
+- Schema-to-doc automation via `make schema.docs` (generates Markdown from JSON Schema files)
+- Added `ui.test` Makefile target for Playwright test execution
+- CI integration: UI tests run in PR workflow
+
 ## infra/v6.2.3 — RFC3339 fast-lane (2025-11-08)
 - STRICT guard on release tags; HINT on main/PRs
 - Normalization step added for legacy epoch exports

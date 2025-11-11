@@ -25,6 +25,7 @@ import json
 import os
 import pathlib
 import time
+import uuid
 from typing import Any, Dict
 
 EVIDENCE_DIR = pathlib.Path("evidence")
@@ -33,6 +34,7 @@ JSONL_PATH = EVIDENCE_DIR / "otel.spans.jsonl"
 ENABLE = os.environ.get("ENABLE_OTEL", "0") == "1"
 SERVICE = os.environ.get("OTEL_SERVICE_NAME", "gemantria")
 OTLP = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT") or ""
+RUN_ID = os.environ.get("PIPELINE_RUN_ID") or datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
 
 # Optional OTel SDK; if missing or no endpoint, we still emit JSONL spans.
 _ot = None
@@ -74,6 +76,7 @@ def _now_iso():
 
 
 def _write_jsonl(rec: Dict[str, Any]):
+    rec.setdefault("run_id", RUN_ID)
     with JSONL_PATH.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
@@ -97,21 +100,30 @@ def span(name: str, **attrs):
         Dictionary with trace_id (if available)
     """
     if not ENABLE:
-        # No-op but keep minimal timing evidence
+        # No-op but keep minimal timing evidence (JSONL only)
         t0 = time.perf_counter()
         ts = _now_iso()
         try:
-            yield {"trace_id": None}
+            yield {"trace_id": None, "span_id": None, "run_id": RUN_ID}
         finally:
             dur_ms = round((time.perf_counter() - t0) * 1000, 3)
             _write_jsonl(
-                {"ts": ts, "service": SERVICE, "name": name, "attrs": attrs, "dur_ms": dur_ms, "trace_id": None}
+                {
+                    "ts": ts,
+                    "service": SERVICE,
+                    "name": name,
+                    "attrs": attrs,
+                    "dur_ms": dur_ms,
+                    "trace_id": None,
+                    "span_id": str(uuid.uuid4()),
+                }
             )
         return
 
     t0 = time.perf_counter()
     ts = _now_iso()
     trace_id_hex = None
+    span_id_hex = None
     if _TRACER:
         with _TRACER.start_as_current_span(name) as sp:
             try:
@@ -122,7 +134,8 @@ def span(name: str, **attrs):
                         pass
                 ctx = sp.get_span_context()
                 trace_id_hex = f"{ctx.trace_id:032x}" if ctx and ctx.trace_id is not None else None
-                yield {"trace_id": trace_id_hex}
+                span_id_hex = f"{ctx.span_id:016x}" if ctx and ctx.span_id is not None else None
+                yield {"trace_id": trace_id_hex, "span_id": span_id_hex, "run_id": RUN_ID}
             finally:
                 dur_ms = round((time.perf_counter() - t0) * 1000, 3)
                 _write_jsonl(
@@ -133,16 +146,26 @@ def span(name: str, **attrs):
                         "attrs": attrs,
                         "dur_ms": dur_ms,
                         "trace_id": trace_id_hex,
+                        "span_id": span_id_hex,
                     }
                 )
     else:
         # Fallback: JSONL-only span
         try:
-            yield {"trace_id": None}
+            sid = str(uuid.uuid4())
+            yield {"trace_id": None, "span_id": sid, "run_id": RUN_ID}
         finally:
             dur_ms = round((time.perf_counter() - t0) * 1000, 3)
             _write_jsonl(
-                {"ts": ts, "service": SERVICE, "name": name, "attrs": attrs, "dur_ms": dur_ms, "trace_id": None}
+                {
+                    "ts": ts,
+                    "service": SERVICE,
+                    "name": name,
+                    "attrs": attrs,
+                    "dur_ms": dur_ms,
+                    "trace_id": None,
+                    "span_id": sid,
+                }
             )
 
 
