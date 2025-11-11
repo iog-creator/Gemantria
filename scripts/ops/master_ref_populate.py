@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""
+Master Reference tracker runner (OPS v6.2).
+
+- Loads env via centralized loader.
+- DSN policy:
+    * Tag/STRICT mode: require RO DSN (GEMATRIA_RO_DSN or ATLAS_DSN_RO). Fail closed if absent.
+    * Dev/non-tag: prefer RO; fall back to RW (GEMATRIA_DSN) for read-only queries performed by the tracker.
+- Calls scripts.populate_document_sections --all (import or subprocess).
+- HINT mode (STRICT_MASTER_REF!=1) will skip gracefully if prerequisites are missing.
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+import importlib
+import subprocess
+import traceback
+from pathlib import Path
+
+# Add project root to path for imports
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO))
+sys.path.insert(0, str(REPO / "src"))
+
+
+def echo(msg: str, err: bool = False):
+    (sys.stderr if err else sys.stdout).write(msg + "\n")
+    (sys.stderr if err else sys.stdout).flush()
+
+
+def fail(msg: str, code: int = 2):
+    echo(f"[masterref] {msg}", err=True)
+    sys.exit(code)
+
+
+def load_env():
+    try:
+        from infra.env_loader import ensure_env_loaded
+
+        ensure_env_loaded()
+        return True
+    except Exception as e:
+        echo(f"[masterref] env loader not available: {e}")
+        if os.getenv("GITHUB_REF_TYPE") == "tag" or os.getenv("STRICT_MASTER_REF") == "1":
+            fail("missing ensure_env_loaded() in STRICT/tag mode", 5)
+        return False
+
+
+def resolve_dsn() -> str | None:
+    ro = None
+    try:
+        from scripts.config.env import get_ro_dsn, get_rw_dsn, env
+
+        # Try GEMATRIA_RO_DSN or ATLAS_DSN_RO first (preferred)
+        ro = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO")
+        if not ro:
+            try:
+                ro = get_ro_dsn()
+            except Exception:
+                ro = None
+    except Exception:
+        ro = None
+
+    if os.getenv("GITHUB_REF_TYPE") == "tag" or os.getenv("STRICT_MASTER_REF") == "1":
+        return ro  # must be present; else fail later
+    if ro:
+        return ro
+    # fall back to RW for dev convenience
+    try:
+        from scripts.config.env import get_rw_dsn
+
+        return get_rw_dsn()
+    except Exception:
+        return None
+
+
+def run_populate() -> int:
+    # Try module form first
+    try:
+        mod = importlib.import_module("scripts.populate_document_sections")
+        if hasattr(mod, "main"):
+            # Call main with --all argument
+            # Temporarily replace sys.argv
+            old_argv = sys.argv
+            sys.argv = ["populate_document_sections.py", "--all"]
+            try:
+                result = mod.main()
+                return int(result or 0)
+            finally:
+                sys.argv = old_argv
+    except Exception as e:
+        echo(f"[masterref] module import failed: {e}")
+
+    # Fallback: file runner
+    cmd = [sys.executable, "scripts/populate_document_sections.py", "--all"]
+    try:
+        return subprocess.call(cmd)
+    except FileNotFoundError:
+        echo("[masterref] populate_document_sections.py not found")
+        return 127
+
+
+def main() -> int:
+    strict = os.getenv("STRICT_MASTER_REF") == "1" or os.getenv("GITHUB_REF_TYPE") == "tag"
+    load_env()
+    dsn = resolve_dsn()
+    if not dsn:
+        if strict:
+            fail(
+                "no DSN (need GEMATRIA_RO_DSN/ATLAS_DSN_RO in tag/STRICT, or GEMATRIA_DSN in dev)",
+                2,
+            )
+        echo("[masterref] no DSN; skipping in HINT mode")
+        return 0
+
+    # Set DSN in environment for populate script
+    os.environ["GEMATRIA_DSN"] = dsn
+
+    try:
+        rc = run_populate()
+        if rc != 0 and strict:
+            fail(f"populate script exited {rc}", rc)
+        echo(f"[masterref] populate exited {rc}")
+        return 0 if not strict else rc
+    except Exception as e:
+        echo("[masterref] exception:\n" + "".join(traceback.format_exc()), err=True)
+        if strict:
+            fail("exception during populate", 4)
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

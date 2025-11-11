@@ -1506,3 +1506,22 @@ exports.graph.core.tagproof:
 	GITHUB_REF_TYPE=$${GITHUB_REF_TYPE:-$$(git describe --exact-match --tags >/dev/null 2>&1 && echo tag || echo "")} \
 	python3 scripts/exports/export_graph_core.py
 
+
+# --- Master Reference tracking (OPS v6.2) ---
+.PHONY: docs.masterref.populate docs.masterref.check housekeeping.masterref
+
+docs.masterref.populate:
+	@echo "[make] masterref: populate document_sections (STRICT=$${STRICT_MASTER_REF:-0})"
+	STRICT_MASTER_REF=$${STRICT_MASTER_REF:-0} \
+		GITHUB_REF_TYPE=$${GITHUB_REF_TYPE:-} \
+		python3 scripts/ops/master_ref_populate.py
+
+docs.masterref.check:
+	@echo "[make] masterref: check hints"
+	@python3 -m scripts.document_management_hints || python3 scripts/document_management_hints.py || echo "[make] masterref: hints script not found (skip)"
+
+# Convenience wrapper to run both steps; safe in HINT, fail-closed when STRICT_MASTER_REF=1
+housekeeping.masterref:
+	$(MAKE) docs.masterref.populate
+	$(MAKE) docs.masterref.check
+
