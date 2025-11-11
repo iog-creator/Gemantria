@@ -92,32 +92,40 @@ When the OPS OUTPUT block involves **any** visual or web artifact, **Browser Ver
 
 ```bash
 # --- Browser Verification (Rule-051 + Rule-067) ---
-
 # Rules: 051 (Cursor Insight), 067 (Atlas Webproof), 062 (Environment)
 # Required when visual/web content is involved.
 
+# Option 1: Use the standardized browser verification script (RECOMMENDED)
+# This script starts the server and generates instructions for Cursor browser tools
+bash scripts/ops/browser_verify.sh --strict --port 8778 --pages "index.html,mcp_catalog_view.html"
+
+# Option 2: Manual browser verification (if script unavailable)
 # Start a local HTTP server (choose a unique port)
 PORT="${BROWSER_PORT:-8778}"
 python3 -m http.server "$PORT" >/tmp/http_server_${PORT}.log 2>&1 & echo $! > /tmp/http_server_${PORT}.pid
 sleep 2
 curl -fsS "http://127.0.0.1:${PORT}/" >/dev/null || { echo "Server failed to start"; exit 1; }
 
-# Navigate and capture screenshots (Cursor uses its browser tool)
+# Cursor MUST execute these browser tool calls (not comments):
 #   browser_navigate: http://127.0.0.1:${PORT}/docs/atlas/index.html?nocache=$(date +%s)
-#   browser_wait_for: time=2
-#   browser_snapshot: path=evidence/webproof/index.png
-#   browser_find_text: "MCP catalog"
+#   browser_wait_for: time=3
+#   browser_snapshot
+#   browser_take_screenshot: filename=evidence/webproof/browser_verified_index.png, fullPage=true
 
-# (Optional additional pages)
 #   browser_navigate: http://127.0.0.1:${PORT}/docs/atlas/mcp_catalog_view.html?nocache=$(date +%s)
-#   browser_wait_for: time=2
-#   browser_snapshot: path=evidence/webproof/catalog.png
-#   browser_find_text: "hybrid_search"
+#   browser_wait_for: time=3
+#   browser_snapshot
+#   browser_take_screenshot: filename=evidence/webproof/browser_verified_catalog.png, fullPage=true
+
+# Cleanup server after browser verification
+kill $(cat /tmp/http_server_${PORT}.pid) 2>/dev/null && rm -f /tmp/http_server_${PORT}.pid || true
 
 # Hardened webproof hook (fails on Mermaid error banners)
 STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
 
 # Evidence to return
+test -f evidence/webproof/browser_verified_index.png   && echo "[[IMAGE]] evidence/webproof/browser_verified_index.png"   || true
+test -f evidence/webproof/browser_verified_catalog.png && echo "[[IMAGE]] evidence/webproof/browser_verified_catalog.png" || true
 test -f evidence/webproof/index.png   && echo "[[IMAGE]] evidence/webproof/index.png"   || true
 test -f evidence/webproof/catalog.png && echo "[[IMAGE]] evidence/webproof/catalog.png" || true
 ```

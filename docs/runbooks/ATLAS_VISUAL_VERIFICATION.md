@@ -12,6 +12,16 @@ Use Cursor's **Browser** tool to visually verify Atlas Mermaid diagrams, HTML pa
 
 ## Steps (Cursor)
 
+**Option 1: Use the standardized script (RECOMMENDED):**
+```bash
+cd /home/mccoy/Projects/Gemantria.v2
+make browser.verify
+# OR
+bash scripts/ops/browser_verify.sh --strict --port 8778
+```
+The script will start the server and generate instructions in `evidence/webproof/browser_verify_instructions.txt`. Cursor must then execute the browser tool calls listed in that file.
+
+**Option 2: Manual setup:**
 1) **Start local HTTP server:**
    ```bash
    cd /home/mccoy/Projects/Gemantria.v2

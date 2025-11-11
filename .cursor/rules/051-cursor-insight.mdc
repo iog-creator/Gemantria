@@ -79,13 +79,22 @@ Cursor **must** use the integrated browser tool to visually verify results when:
 - Before marking visual/UI work as complete
 
 **Visual verification workflow**:
-1. Start local HTTP server if needed: `python3 -m http.server 8000`
-2. Navigate with cache-busting: `?nocache=$(date +%s)` to avoid stale content
-3. Use `browser_snapshot` for structure/content verification
-4. Use `browser_take_screenshot` for visual layout verification
-5. Verify all expected content is visible (check DOM length, element presence)
-6. Save screenshots to `evidence/` directory
-7. Clean up server: `kill $(cat .server.pid) && rm .server.pid`
+1. **Use the standardized script (RECOMMENDED):**
+   ```bash
+   make browser.verify
+   # OR
+   bash scripts/ops/browser_verify.sh --strict --port 8778
+   ```
+   The script generates instructions in `evidence/webproof/browser_verify_instructions.txt`. Cursor **must** execute the browser tool calls listed there.
+
+2. **Manual workflow (if script unavailable):**
+   - Start local HTTP server: `python3 -m http.server 8000`
+   - Navigate with cache-busting: `?nocache=$(date +%s)` to avoid stale content
+   - Use `browser_snapshot` for structure/content verification
+   - Use `browser_take_screenshot` for visual layout verification
+   - Verify all expected content is visible (check DOM length, element presence)
+   - Save screenshots to `evidence/` directory
+   - Clean up server: `kill $(cat .server.pid) && rm .server.pid`
 
 **Runbooks**:
 - Atlas visual verification: `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md`

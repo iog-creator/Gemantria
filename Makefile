@@ -1610,6 +1610,14 @@ atlas.webproof:
 	@echo "[atlas] webproof (headless browser)"
 	@STRICT_WEBPROOF=${STRICT_WEBPROOF:-0} bash scripts/ci/atlas_webproof.sh
 
+# --- Browser Verification (Rule-051 + Rule-067) ---
+.PHONY: browser.verify
+browser.verify:
+	@echo "[browser.verify] Starting browser verification (Rule-051 + Rule-067)"
+	@bash scripts/ops/browser_verify.sh --strict --port ${BROWSER_PORT:-8778} --pages "${BROWSER_PAGES:-index.html,mcp_catalog_view.html}"
+	@echo "[browser.verify] ✓ Browser verification complete"
+	@echo "[browser.verify] NOTE: Cursor must execute browser tool calls from evidence/webproof/browser_verify_instructions.txt"
+
 # --- Atlas Live (dev-only; offline-safe) ---
 .PHONY: atlas.live.server atlas.live.fetch atlas.live.health
 
