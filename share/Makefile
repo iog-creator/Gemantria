@@ -22,6 +22,77 @@ guard.dsn.centralized.strict:
 guard.secrets.mask:
 	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null
 
+.PHONY: guard.ci.no_schedules
+guard.ci.no_schedules:
+	@python3 scripts/ci/guard_no_schedules.py
+
+# Added by ops: guard target for prompt-format
+.PHONY: guard.prompt.format
+guard.prompt.format:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_prompt_format.py
+
+# Guard: docs presence (RFC-072)
+.PHONY: guard.docs.presence
+guard.docs.presence:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_docs_presence.py
+
+# Guard: ai-nouns schema (RFC-072 Part 2)
+.PHONY: guard.ai_nouns.schema
+guard.ai_nouns.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name ai_nouns \
+		--schema-name ai-nouns.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains ai_nouns --filename-contains nouns
+
+# Guard: graph core schema (avoids stats/patterns/correlations)
+.PHONY: guard.graph.core.schema
+guard.graph.core.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_core \
+		--schema-name graph.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains graph \
+		--exclude-contains graph-stats --exclude-contains graph_stats --exclude-contains patterns --exclude-contains correlations
+
+# Guard: graph-stats schema
+.PHONY: guard.graph.stats.schema
+guard.graph.stats.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_stats \
+		--schema-name graph-stats.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains graph-stats --filename-contains graph_stats
+
+# Guard: graph-patterns schema
+.PHONY: guard.graph.patterns.schema
+guard.graph.patterns.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_patterns \
+		--schema-name graph-patterns.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains patterns --filename-contains graph-patterns \
+		--exclude-contains report
+
+# Guard: graph-correlations schema
+.PHONY: guard.graph.correlations.schema
+guard.graph.correlations.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_correlations \
+		--schema-name graph-correlations.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains correlations
+
+# Guard: jsonschema import (STRICT at tag-time, HINT on PRs)
+.PHONY: guard.jsonschema.import
+guard.jsonschema.import:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_jsonschema_import.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -296,6 +367,11 @@ atlas.clickproof:
 atlas.generate.all: atlas.generate.mermaid atlas.nodes atlas.wire.clicks
 	@echo "✅ atlas.generate.all complete"
 
+.PHONY: atlas.traces
+atlas.traces:
+	@python3 scripts/atlas/generate_node_pages.py >/dev/null || true
+	@echo "OK: atlas node pages refreshed with traces (if available)"
+
 # Convenience: open a local viewer (no network) for screenshots
 .PHONY: atlas.serve.mermaid
 atlas.serve.mermaid:
@@ -345,7 +421,7 @@ atlas.demo.proof: ## Seed demo data and run Atlas proof (dev-only; requires GEMA
 
 # --- Governance smoke (enforce one sentinel per Always-Apply block) ---
 .PHONY: governance.smoke
-governance.smoke: ## Fail if any Always-Apply block lacks a sentinel or has duplicates
+governance.smoke: guard.prompt.format guard.docs.presence ## Fail if any Always-Apply block lacks a sentinel or has duplicates
 	@python3 scripts/guards/governance_smoke.py
 
 # --- Prompt SSOT guard (enforce canonical prompt structure) ---
@@ -874,7 +950,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.core.schema guard.graph.stats.schema guard.graph.patterns.schema guard.graph.correlations.schema guard.jsonschema.import
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
@@ -968,6 +1044,12 @@ evidence.exports.rfc3339.verdict:
 evidence.rfc3339.verdict.md: evidence.exports.rfc3339.verdict
 	@python3 scripts/tools/render_rfc3339_verdict_md.py >/dev/null 2>&1 || true
 	@test -f evidence/exports_rfc3339.verdict.md || echo '[bundle] exports_rfc3339.verdict.md missing' >> evidence/bundle.log
+
+# Operator evidence: extraction agents summary (RFC-072 Part 2)
+.PHONY: evidence.agents.summary
+evidence.agents.summary:
+	@mkdir -p evidence
+	@python3 scripts/ops/agent_evidence_summary.py > evidence/agents_summary.json
 
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
@@ -1236,6 +1318,13 @@ evidence.bundle: evidence.badges evidence.exports.badge evidence.exports.verdict
 	@if test -f evidence/exports_guard.verdict.json; then echo "[bundle] exports_guard.verdict.json added" >> evidence/bundle.log; else echo "[bundle] exports_guard.verdict.json missing (HINT-mode runs may not produce it yet)" >> evidence/bundle.log; fi
 	@if test -f evidence/guard_rerank_thresholds.json; then :; else $(PYTHON) scripts/guards/guard_rerank_thresholds.py || true; fi
 	@ls -1 evidence | grep -E 'guard_rerank_thresholds|rerank_blend_report|rerank_quality\.svg|patterns_badge\.svg' || true
+	@echo "==> Including observability artifacts (if present)..."
+	@tar -czf evidence/atlas_node_pages_proof.tgz \
+		docs/atlas/nodes \
+		evidence/atlas.nodes.json \
+		evidence/otel.spans.jsonl \
+		prompts 2>/dev/null || true
+	@echo "OK: evidence bundle at evidence/atlas_node_pages_proof.tgz"
 
 # Rule-050 (OPS Contract v6.2.3) - Evidence-First Protocol
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
@@ -1409,3 +1498,11 @@ rerank.smoke:
 .PHONY: rerank.smoke
 rerank.smoke:
 	@python3 scripts/analytics/rerank_smoke.py
+
+# --- RFC-073: tag-only RO export for core graph ---
+.PHONY: exports.graph.core.tagproof
+exports.graph.core.tagproof:
+	@echo "[make] Running tagproof core export (RO DSN required on tags)"
+	GITHUB_REF_TYPE=$${GITHUB_REF_TYPE:-$$(git describe --exact-match --tags >/dev/null 2>&1 && echo tag || echo "")} \
+	python3 scripts/exports/export_graph_core.py
+

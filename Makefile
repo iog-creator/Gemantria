@@ -1498,3 +1498,11 @@ rerank.smoke:
 .PHONY: rerank.smoke
 rerank.smoke:
 	@python3 scripts/analytics/rerank_smoke.py
+
+# --- RFC-073: tag-only RO export for core graph ---
+.PHONY: exports.graph.core.tagproof
+exports.graph.core.tagproof:
+	@echo "[make] Running tagproof core export (RO DSN required on tags)"
+	GITHUB_REF_TYPE=$${GITHUB_REF_TYPE:-$$(git describe --exact-match --tags >/dev/null 2>&1 && echo tag || echo "")} \
+	python3 scripts/exports/export_graph_core.py
+
