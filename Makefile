@@ -46,15 +46,46 @@ guard.ai_nouns.schema:
 		--data-glob "ui/out/**/*.json" \
 		--filename-contains ai_nouns --filename-contains nouns
 
-# Guard: graph schema (RFC-072 Part 2)
-.PHONY: guard.graph.schema
-guard.graph.schema:
-	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph \
+# Guard: graph core schema (avoids stats/patterns/correlations)
+.PHONY: guard.graph.core.schema
+guard.graph.core.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_core \
 		--schema-name graph.schema.json \
 		--data-glob "share/**/*.json" \
 		--data-glob "evidence/**/*.json" \
 		--data-glob "ui/out/**/*.json" \
-		--filename-contains graph
+		--filename-contains graph \
+		--exclude-contains graph-stats --exclude-contains graph_stats --exclude-contains patterns --exclude-contains correlations
+
+# Guard: graph-stats schema
+.PHONY: guard.graph.stats.schema
+guard.graph.stats.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_stats \
+		--schema-name graph-stats.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains graph-stats --filename-contains graph_stats
+
+# Guard: graph-patterns schema
+.PHONY: guard.graph.patterns.schema
+guard.graph.patterns.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_patterns \
+		--schema-name graph-patterns.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains patterns --filename-contains graph-patterns
+
+# Guard: graph-correlations schema
+.PHONY: guard.graph.correlations.schema
+guard.graph.correlations.schema:
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph_correlations \
+		--schema-name graph-correlations.schema.json \
+		--data-glob "share/**/*.json" \
+		--data-glob "evidence/**/*.json" \
+		--data-glob "ui/out/**/*.json" \
+		--filename-contains correlations
 
 # Guard: jsonschema import (STRICT at tag-time, HINT on PRs)
 .PHONY: guard.jsonschema.import
@@ -918,7 +949,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
-guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.schema guard.jsonschema.import
+guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.core.schema guard.graph.stats.schema guard.graph.patterns.schema guard.graph.correlations.schema guard.jsonschema.import
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
 	@$(PYTHON) scripts/guards/guard_stats_rfc3339.py || true
