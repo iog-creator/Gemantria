@@ -1,46 +1,23 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MCP Catalog Viewer (offline-safe)</title>
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Atlas — MCP Catalog Viewer</title>
 <style>
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:24px}
-h1{margin:0 0 12px} .note{color:#666;margin-bottom:16px}
-table{border-collapse:collapse;width:100%;max-width:960px} th,td{border:1px solid #ddd;padding:8px}
-th{background:#f6f8fa;text-align:left}
-.badge{display:inline-block;background:#eef;border:1px solid #ccd;border-radius:8px;padding:2px 8px;margin-left:8px;font-size:.8rem}
-pre{background:#f6f8fa;padding:8px;border-radius:8px;overflow:auto}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:#0b0b0b;color:#e6e6e6;margin:24px}
+  a{color:#8fd}
+  .bar{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .btn{background:#1f3340;color:#e6f7ff;border:1px solid #355a6b;border-radius:8px;padding:8px 12px;cursor:pointer}
+  .btn:hover{background:#234455}
 </style>
-</head><body>
-<h1>MCP Catalog <span class="badge">offline-safe</span></h1>
-<p class="note">This page reads <code>docs/atlas/data/mcp_catalog.json</code>. Use <code>make mcp.catalog.export</code> to regenerate from the DB; a stub ships as a fallback.</p>
-<div id="status">Loading…</div>
-<table id="tbl" style="display:none">
-  <thead><tr><th>Endpoint</th><th>Inputs</th><th>Max k</th><th>Version</th></tr></thead>
-  <tbody></tbody>
-</table>
-<h3>Raw JSON</h3>
-<pre id="raw"></pre>
-<script>
-(function(){
-  function byId(x){return document.getElementById(x)}
-  fetch('data/mcp_catalog.json').then(r=>r.json()).then(function(data){
-    byId('status').textContent = 'Loaded.';
-    byId('raw').textContent = JSON.stringify(data,null,2);
-    var eps = data.endpoints || [];
-    if(!Array.isArray(eps)){ byId('status').textContent='Invalid catalog JSON.'; return; }
-    var tbody = document.querySelector('#tbl tbody'); tbody.innerHTML = '';
-    eps.forEach(function(ep){
-      var tr = document.createElement('tr');
-      var tdN = document.createElement('td'); tdN.textContent = ep.name || ''; tr.appendChild(tdN);
-      var tdI = document.createElement('td'); tdI.textContent = (ep.spec && ep.spec.inputs||[]).join(', '); tr.appendChild(tdI);
-      var tdK = document.createElement('td'); tdK.textContent = (ep.spec && ep.spec.max_k)||''; tr.appendChild(tdK);
-      var tdV = document.createElement('td'); tdV.textContent = (ep.spec && ep.spec.version)||''; tr.appendChild(tdV);
-      tbody.appendChild(tr);
-    });
-    document.getElementById('tbl').style.display = '';
-  }).catch(function(){
-    byId('status').textContent = 'Could not load data/mcp_catalog.json (ensure it exists).';
-  });
-})();
-</script>
-</body></html>
-
+<body>
+  <h1>MCP Catalog</h1>
+  <div class="bar">
+    <button id="reloadBtn" class="btn">Reload catalog</button>
+    <span id="status" aria-live="polite">Idle</span>
+    <a href="index.html">← Back to Atlas</a>
+  </div>
+  <div id="app"></div>
+  <script src="js/mcp_catalog_viewer.js"></script>
+</body>
+</html>

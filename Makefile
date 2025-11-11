@@ -1588,3 +1588,9 @@ mcp.catalog.export:
 mcp.catalog.validate:
 	@python3 scripts/mcp/validate_catalog_json.py
 	@cp docs/atlas/data/mcp_catalog.json evidence/mcp.catalog.json.snapshot || true
+
+# --- Atlas (MCP) viewer validation (offline-safe) ---
+.PHONY: atlas.viewer.validate
+atlas.viewer.validate:
+	@echo "[atlas] viewer validate"
+	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
