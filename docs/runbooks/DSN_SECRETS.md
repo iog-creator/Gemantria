@@ -10,9 +10,13 @@ RC tags (like `v0.0.1-rc.1`) remain **lenient** and may omit DSNs.
 
   `postgresql://postgres@/bible_db?host=/var/run/postgresql`
 
+  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
+
 - `GEMATRIA_DSN` — **read-write** PostgreSQL DSN (Gemantria app DB). Example:
 
   `postgresql://mccoy@/gematria?host=/var/run/postgresql`
+
+  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
 
 > CI uses these secrets only on **release tags** and regenerates `share/pm.snapshot.md`
 

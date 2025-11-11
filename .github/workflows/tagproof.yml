@@ -13,6 +13,11 @@ jobs:
       PIP_REQUIRE_VENV: 'true'         # hermetic; no pip installs
       ATLAS_DSN: ${{ vars.ATLAS_DSN }} # repository variable (masked by proof script)
       STRICT_WEBPROOF: "1"              # Rule-067: fail-closed on Atlas UI regressions
+      # DSN STRICT env for release tags (aligns with pm-snapshot workflow)
+      BIBLE_DB_DSN: ${{ secrets.BIBLE_DB_DSN }}
+      GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+      CHECKPOINTER: postgres
+      ENFORCE_STRICT: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
