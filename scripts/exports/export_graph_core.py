@@ -95,7 +95,7 @@ def main():
                     nodes = [
                         {
                             "id": str(row[0]),
-                            "label": row[1] or str(row[0]),
+                            "surface": row[1] or str(row[0]),  # schema requires "surface"
                             "hebrew_text": row[2],
                             "gematria_value": row[3],
                             "book": row[4],
@@ -132,8 +132,9 @@ def main():
                         )
                         edges = [
                             {
-                                "source": str(row[0]),
-                                "target": str(row[1]),
+                                "src": str(row[0]),  # schema requires "src"
+                                "dst": str(row[1]),  # schema requires "dst"
+                                "type": "semantic",  # schema requires "type"
                                 "weight": float(row[2] or 0.0),
                             }
                             for row in cur.fetchall()
@@ -146,12 +147,10 @@ def main():
 
                 # Build payload conforming to graph.schema.json
                 payload = {
-                    "schema": "SSOT_graph.v1",
-                    "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
-                    "graph": {
-                        "nodes": nodes,
-                        "edges": edges,
-                    },
+                    "schema": "gemantria/graph.v1",  # schema requires exact value
+                    "generated_at": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
+                    "nodes": nodes,  # top-level, not nested in "graph"
+                    "edges": edges,  # top-level, not nested in "graph"
                 }
                 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
                 OUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
