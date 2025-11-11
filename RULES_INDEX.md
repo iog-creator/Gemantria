@@ -117,3 +117,5 @@
 | 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
 
 ---
+
+- 2025-11-11: **RFC-072 Accepted (Fast-Track).** Added guards: `guard.prompt.format`, `guard.docs.presence` to `governance.smoke` (OPS v6.2).
