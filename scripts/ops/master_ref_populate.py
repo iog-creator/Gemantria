@@ -37,14 +37,16 @@ def fail(msg: str, code: int = 2):
 
 def load_env():
     try:
-        from infra.env_loader import ensure_env_loaded
+        # scripts.config.env auto-loads .env via _ensure_loaded() when env() is called
+        from scripts.config.env import env
 
-        ensure_env_loaded()
+        # Trigger env loading by calling env() once
+        env("PATH")  # Non-fatal call to trigger _ensure_loaded()
         return True
     except Exception as e:
         echo(f"[masterref] env loader not available: {e}")
         if os.getenv("GITHUB_REF_TYPE") == "tag" or os.getenv("STRICT_MASTER_REF") == "1":
-            fail("missing ensure_env_loaded() in STRICT/tag mode", 5)
+            fail("missing env loader in STRICT/tag mode", 5)
         return False
 
 
