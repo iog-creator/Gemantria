@@ -204,6 +204,15 @@ def main():
                 OUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
                 print(f"[export_graph_core] wrote {OUT_PATH} with {len(nodes)} nodes, {len(edges)} edges")
     except Exception as e:
+        error_msg = str(e)
+        # Provide clearer error for CI connection issues
+        if os.getenv("CI") and ("socket" in error_msg.lower() or "connection" in error_msg.lower()):
+            fail(
+                f"RO export failed in CI: {error_msg}\n"
+                "CI requires a network DSN (postgresql://user:pass@host:port/db), not a local socket.\n"
+                "Ensure ATLAS_DSN_RO or GEMATRIA_RO_DSN secret contains a network connection string.",
+                4,
+            )
         fail(f"RO export failed: {e}", 4)
 
 
