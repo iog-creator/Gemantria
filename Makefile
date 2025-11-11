@@ -1535,9 +1535,26 @@ housekeeping.masterref:
 	$(MAKE) docs.masterref.check
 
 
-# --- MCP (Knowledge MCP) STRICT guard ---
-.PHONY: guard.mcp.catalog.strict
+# --- MCP (Knowledge MCP) ---
+.PHONY: mcp.catalog.hints mcp.server.smoke guard.mcp.catalog.hint guard.mcp.catalog.strict
+
+mcp.catalog.hints:
+	@echo "[mcp] catalog guard (HINT)"
+	@python3 scripts/ci/guard_mcp_catalog.py | tee evidence/guard_mcp_catalog.hint.json
+
+guard.mcp.catalog.hint:
+	@echo "[mcp] catalog guard (HINT)"
+	@python3 scripts/ci/guard_mcp_catalog.py | tee evidence/guard_mcp_catalog.hint.json
+
 guard.mcp.catalog.strict:
 	@echo "[mcp] STRICT guard"
 	@STRICT_MCP=1 python3 scripts/ci/guard_mcp_catalog_strict.py | tee evidence/guard_mcp_catalog.strict.json
+
+mcp.server.smoke:
+	@echo "[mcp] stub server smoke (optional, if present)"
+	@python3 scripts/mcp/server_stub.py >/dev/null 2>&1 & echo $$! > .mcp_stub.pid || true
+	@sleep 1
+	@curl -s http://127.0.0.1:8765/mcp/catalog | tee evidence/mcp.catalog.sample.json >/dev/null || true
+	@[ -f .mcp_stub.pid ] && kill $$(cat .mcp_stub.pid) >/dev/null 2>&1 || true
+	@rm -f .mcp_stub.pid || true
 
