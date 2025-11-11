@@ -65,6 +65,10 @@ EVIDENCE PLACEHOLDERS
   * echo "=== HEAD ===" && git rev-parse --short HEAD
   * echo "=== otel.spans.jsonl (tail 10) ===" && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
   * test -f evidence/atlas_index.png && echo "[[IMAGE]] evidence/atlas_index.png" || true
+  * Browser verification evidence (when visual/web content is involved):
+    * test -f evidence/webproof/index.png && echo "[[IMAGE]] evidence/webproof/index.png" || true
+    * test -f evidence/webproof/catalog.png && echo "[[IMAGE]] evidence/webproof/catalog.png" || true
+    * echo "=== webproof report ===" && cat evidence/webproof/report.json | jq -r '.ok, .endpoints_count' || echo "(no report)"
 
 
 
@@ -121,8 +125,10 @@ test -f evidence/webproof/catalog.png && echo "[[IMAGE]] evidence/webproof/catal
 **Notes**
 
 * Use Rule-062 validation at the start of every OPS block.
-
 * If no visual/web artifacts are touched, briefly state: "Browser Verification not applicable."
+* For detailed workflows, see runbooks:
+  * `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md` — Atlas UI verification procedures
+  * `docs/runbooks/CURSOR_BROWSER_QA.md` — General browser QA guidelines
 
 
 * Only one Cursor runnable block per reply unless the Orchestrator explicitly requests multiple blocks.
@@ -148,6 +154,44 @@ EXAMPLE: Minimal valid PM reply (skeleton)
    === OPS OUTPUT (for Cursor to execute) ===
 
    Then a single fenced bash block that includes Rule-062 and the OPS OUTPUT SHAPE comments and the commands Cursor must run. End the fenced block.
+
+   Example with browser verification (when visual/web content is involved):
+
+   ```bash
+   === OPS OUTPUT (for Cursor to execute) ===
+   
+   # --- Rule-062 ENV VALIDATION (MANDATORY) ---
+   python_path="$(command -v python3 || true)"
+   expected_path="/home/mccoy/Projects/Gemantria.v2/.venv/bin/python3"
+   if [ "$python_path" != "$expected_path" ]; then
+     echo "🚨 ENVIRONMENT FAILURE (Rule-062) 🚨"
+     exit 1
+   fi
+   
+   # --- OPS OUTPUT SHAPE (required) ---
+   # 1) Goal — Update Atlas UI and verify rendering
+   # 2) Commands — exact commands to run (this block)
+   # 3) Evidence to return — what Cursor must paste back
+   # 4) Next gate — the single follow-up decision
+   
+   # ... other commands ...
+   
+   # --- Browser Verification (Rule-051 + Rule-067) ---
+   PORT="${BROWSER_PORT:-8778}"
+   python3 -m http.server "$PORT" >/tmp/http_server_${PORT}.log 2>&1 & echo $! > /tmp/http_server_${PORT}.pid
+   sleep 2
+   curl -fsS "http://127.0.0.1:${PORT}/" >/dev/null || { echo "Server failed to start"; exit 1; }
+   
+   # Navigate and capture screenshots (Cursor uses its browser tool)
+   #   browser_navigate: http://127.0.0.1:${PORT}/docs/atlas/index.html?nocache=$(date +%s)
+   #   browser_wait_for: time=2
+   #   browser_snapshot: path=evidence/webproof/index.png
+   
+   STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
+   
+   # Evidence to return
+   test -f evidence/webproof/index.png && echo "[[IMAGE]] evidence/webproof/index.png" || true
+   ```
 
 2. Immediately after the fenced block, include:
 

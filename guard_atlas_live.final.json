@@ -1,0 +1,14 @@
+{
+  "ok_repo": true,
+  "exists": {
+    "server": true,
+    "viewer_live_js": true
+  },
+  "make": {
+    "atlas.live.server": true,
+    "atlas.live.fetch": true
+  },
+  "notes": [
+    "HINT: Dev-only. Safe to ignore in CI; viewer remains offline-safe."
+  ]
+}

@@ -1,1 +1,29 @@
-[]
+{
+  "files": [
+    {
+      "path": "share/releases/v0.0.2/webproof/catalog.png",
+      "sha256": "46543e0ef3980eaf08587023b7cf85577e790a8ccdd209ffe946c584c899edd2",
+      "size": 51089
+    },
+    {
+      "path": "share/releases/v0.0.2/webproof/report.json",
+      "sha256": "d9edb65d9f57cbf0db835b4b236c85c88800a3ec76dff7a77eea6af87435ffcf",
+      "size": 272
+    },
+    {
+      "path": "share/releases/v0.0.2/webproof/index.png",
+      "sha256": "e613f34d2539db388975e603a940e5f6958027701f919eb8e52474fd823e488a",
+      "size": 58454
+    },
+    {
+      "path": "share/releases/v0.0.2/webproof/browser_verified_index.png",
+      "sha256": "8ed0ce4c961af1dbafb37cddb5349f1bf3cb97a4aa3eb862e8c94b4314520000",
+      "size": 196886
+    },
+    {
+      "path": "share/releases/v0.0.2/webproof/browser_verified_catalog.png",
+      "sha256": "fdffcfe3a67767f0592ea3c44a04443085e8aa63ff659b16cf890a47ea3c2552",
+      "size": 175413
+    }
+  ]
+}
