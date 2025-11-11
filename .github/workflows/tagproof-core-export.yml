@@ -13,8 +13,8 @@ jobs:
     env:
       GITHUB_REF_TYPE: tag
       STRICT_GUARDS: '1'
-      GEMATRIA_RO_DSN: ${{ secrets.GEMATRIA_RO_DSN }}
-      ATLAS_DSN_RO:    ${{ secrets.ATLAS_DSN_RO }}
+      GEMATRIA_RO_DSN: postgresql://postgres:postgres@localhost:5432/gematria
+      ATLAS_DSN_RO: postgresql://postgres:postgres@localhost:5432/gematria
     services:
       postgres:
         image: ankane/pgvector:latest
