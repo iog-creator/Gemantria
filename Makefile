@@ -1594,3 +1594,19 @@ mcp.catalog.validate:
 atlas.viewer.validate:
 	@echo "[atlas] viewer validate"
 	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
+
+# --- Atlas Live (dev-only; offline-safe) ---
+.PHONY: atlas.live.server atlas.live.fetch atlas.live.health
+
+atlas.live.server:
+	@echo "[atlas-live] starting dev export server on :8777"
+	@python3 scripts/mcp/http_export_server.py & \
+	 echo $$! > .atlas_live.pid; sleep 1; \
+	 (curl -s http://127.0.0.1:8777/health || true) | sed 's/.*/[atlas-live] health: &/'
+
+atlas.live.fetch:
+	@echo "[atlas-live] POST /export -> regenerate catalog (if server running)"
+	@curl -s -X POST http://127.0.0.1:8777/export | tee evidence/atlas_live.fetch.json >/dev/null || echo "[atlas-live] server not running"
+
+atlas.live.health:
+	@curl -s http://127.0.0.1:8777/health || echo "[atlas-live] server not running"
