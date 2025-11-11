@@ -1,0 +1,37 @@
+name: tagproof: core graph export (RO)
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - 'rc*'
+      - 'ops/*'
+
+jobs:
+  export-core:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF_TYPE: tag
+      STRICT_GUARDS: '1'
+      GEMATRIA_RO_DSN: ${{ secrets.GEMATRIA_RO_DSN }}
+      ATLAS_DSN_RO:    ${{ secrets.ATLAS_DSN_RO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
+      - name: Export core graph (tagproof)
+        run: make exports.graph.core.tagproof
+      - name: Schema guard (graph_core.json)
+        run: |
+          test -f ui/out/graph_core.json
+          python3 scripts/ci/guard_json_schema.py --name graph_core --schema-name graph.schema.json --data-glob "ui/out/graph_core.json"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph_core.json
+          path: ui/out/graph_core.json
