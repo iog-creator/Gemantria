@@ -61,7 +61,11 @@ class TestPipelineIntegration:
         # Mock empty database
         mock_db.return_value.execute.return_value.fetchall.return_value = []
 
-        state = {"run_id": "test-123", "book_name": "Genesis", "network_summary": {"total_nodes": 0}}
+        state = {
+            "run_id": "test-123",
+            "book_name": "Genesis",
+            "network_summary": {"total_nodes": 0},
+        }
 
         result = analysis_runner_node(state)
 
@@ -207,7 +211,10 @@ class TestPipelineIntegration:
         assert state["book_name"] == "Genesis"
         assert len(state["nouns"]) == 0
 
-    @pytest.mark.skipif(not (GEMATRIA_DSN_AVAILABLE and BIBLE_DB_DSN_AVAILABLE), reason="Database DSNs not available")
+    @pytest.mark.skipif(
+        not (GEMATRIA_DSN_AVAILABLE and BIBLE_DB_DSN_AVAILABLE),
+        reason="Database DSNs not available",
+    )
     def test_integration_components_coexist(self):
         """Test that all integration components can be imported together."""
         # This tests that our integration didn't break existing imports

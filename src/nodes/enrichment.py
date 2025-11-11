@@ -67,7 +67,13 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
 
     nouns = valid_nouns
     if not nouns:
-        log_json(LOG, 20, "enrichment_start", noun_count=0, message="No valid nouns to enrich after filtering")
+        log_json(
+            LOG,
+            20,
+            "enrichment_start",
+            noun_count=0,
+            message="No valid nouns to enrich after filtering",
+        )
         state["enriched_nouns"] = []
         state["ai_enrichments_generated"] = 0
         return state

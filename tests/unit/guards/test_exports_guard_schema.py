@@ -34,7 +34,12 @@ def test_hint_mode_schema_passes_and_writes_verdict(tmp_path):
     assert v["strict"] is False
     # All tracked files present with json_ok True; schema_ok should be True now that schemas are committed
     files = v["files"]
-    for name in ("graph_latest.scored.json", "ai_nouns.json", "graph_stats.json", "graph_patterns.json"):
+    for name in (
+        "graph_latest.scored.json",
+        "ai_nouns.json",
+        "graph_stats.json",
+        "graph_patterns.json",
+    ):
         assert name in files, f"{name} missing in verdict"
         f = files[name]
         assert f["exists"] is True

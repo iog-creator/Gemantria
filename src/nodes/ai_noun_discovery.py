@@ -58,7 +58,14 @@ class AINounDiscovery:
             log_json(LOG, 30, "no_hebrew_text", book=book)
             return []
 
-        log_json(LOG, 20, "ai_noun_discovery_start", book=book, text_length=len(raw_text), text_preview=raw_text[:100])
+        log_json(
+            LOG,
+            20,
+            "ai_noun_discovery_start",
+            book=book,
+            text_length=len(raw_text),
+            text_preview=raw_text[:100],
+        )
 
         # Use AI to discover and analyze nouns
         discovered_nouns = self._ai_discover_nouns(raw_text, book)

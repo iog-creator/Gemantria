@@ -34,7 +34,14 @@ if strict and not have:
 
 print(
     json.dumps(
-        {"guard": "jsonschema.import", "strict": strict, "ok": ok, "have_jsonschema": have, "notes": notes}, indent=2
+        {
+            "guard": "jsonschema.import",
+            "strict": strict,
+            "ok": ok,
+            "have_jsonschema": have,
+            "notes": notes,
+        },
+        indent=2,
     )
 )
 sys.exit(0 if ok else 1)

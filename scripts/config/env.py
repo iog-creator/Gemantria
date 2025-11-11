@@ -41,7 +41,11 @@ def redact(value: str | None) -> str | None:
 
 
 def env(
-    key: str, default: _T | None = None, *, cast: Callable[[str], _T] | None = None, required: bool = False
+    key: str,
+    default: _T | None = None,
+    *,
+    cast: Callable[[str], _T] | None = None,
+    required: bool = False,
 ) -> _T | None:
     """Fetch an env var with optional casting and 'required' enforcement."""
     _ensure_loaded()

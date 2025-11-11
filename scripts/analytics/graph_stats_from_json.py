@@ -32,7 +32,10 @@ def main() -> int:
         "edges": m,
         "clusters": 0,
         "density": round(density, 6),
-        "centrality": {"avg_degree": round((2 * m / max(1, n)) / max(1, n), 6), "avg_betweenness": 0.0},
+        "centrality": {
+            "avg_degree": round((2 * m / max(1, n)) / max(1, n), 6),
+            "avg_betweenness": 0.0,
+        },
         "metadata": {"source": "file_first", "input": str(src)},
     }
     pathlib.Path("exports").mkdir(parents=True, exist_ok=True)

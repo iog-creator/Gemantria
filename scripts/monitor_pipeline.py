@@ -274,7 +274,13 @@ def extract_errors(log_lines: List[str]) -> List[Dict[str, Any]]:
 def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Extract pipeline stage status from log lines. Returns (stage_status, stage_timings)."""
     stages = {
-        "collect_nouns": {"status": "pending", "count": 0, "last_event": None, "start_time": None, "duration_ms": None},
+        "collect_nouns": {
+            "status": "pending",
+            "count": 0,
+            "last_event": None,
+            "start_time": None,
+            "duration_ms": None,
+        },
         "validate_batch": {
             "status": "pending",
             "count": 0,
@@ -320,7 +326,12 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
         },
     }
 
-    orchestrator_stage = {"status": "pending", "operation": None, "last_event": None, "start_time": None}
+    orchestrator_stage = {
+        "status": "pending",
+        "operation": None,
+        "last_event": None,
+        "start_time": None,
+    }
 
     # First pass: find total noun count and collect_nouns count
     for line in reversed(log_lines):
@@ -863,7 +874,10 @@ def format_status_report(
             lines.append(
                 f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{stage['count']:,}{Colors.RESET}"
             )
-        elif stage.get("status") == "complete" and stage_name in ["collect_nouns", "validate_batch"]:
+        elif stage.get("status") == "complete" and stage_name in [
+            "collect_nouns",
+            "validate_batch",
+        ]:
             # For completed stages, show count from enrichment total if available
             enrichment_total = stages.get("enrichment", {}).get("total", 0)
             if enrichment_total > 0:

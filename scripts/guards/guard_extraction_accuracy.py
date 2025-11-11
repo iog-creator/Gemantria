@@ -7,7 +7,10 @@ import pathlib
 import sys
 import time
 
-GRAPH = [pathlib.Path("exports/graph_latest.scored.json"), pathlib.Path("exports/graph_latest.json")]
+GRAPH = [
+    pathlib.Path("exports/graph_latest.scored.json"),
+    pathlib.Path("exports/graph_latest.json"),
+]
 TRUTH_V1 = pathlib.Path("tests/truth/extraction_accuracy.v1.json")
 TRUTH_V2 = pathlib.Path("tests/truth/extraction_accuracy.v2.json")
 

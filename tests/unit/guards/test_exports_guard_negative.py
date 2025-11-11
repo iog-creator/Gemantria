@@ -15,10 +15,20 @@ def _mini_repo(tmp: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
     for name in ("guard_exports_json.py", "jsonschema_min.py"):
         shutil.copy(REPO / "scripts" / "guards" / name, tmp / "scripts" / "guards" / name)
     # copy schemas
-    for name in ("ai-nouns.schema.json", "graph-stats.schema.json", "graph-patterns.schema.json", "graph.schema.json"):
+    for name in (
+        "ai-nouns.schema.json",
+        "graph-stats.schema.json",
+        "graph-patterns.schema.json",
+        "graph.schema.json",
+    ):
         shutil.copy(REPO / "schemas" / name, tmp / "schemas" / name)
     # copy exports
-    for name in ("graph_latest.scored.json", "ai_nouns.json", "graph_stats.json", "graph_patterns.json"):
+    for name in (
+        "graph_latest.scored.json",
+        "ai_nouns.json",
+        "graph_stats.json",
+        "graph_patterns.json",
+    ):
         shutil.copy(REPO / "exports" / name, tmp / "exports" / name)
     return tmp / "scripts" / "guards" / "guard_exports_json.py", tmp
 

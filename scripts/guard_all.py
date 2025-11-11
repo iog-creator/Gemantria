@@ -44,7 +44,12 @@ def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
         else:
             message = error or output or f"{description} failed"
 
-        return {"success": success, "message": message, "script": script_path, "description": description}
+        return {
+            "success": success,
+            "message": message,
+            "script": script_path,
+            "description": description,
+        }
 
     except subprocess.TimeoutExpired:
         return {

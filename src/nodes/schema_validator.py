@@ -60,7 +60,13 @@ def schema_validator_node(state: dict[str, Any]) -> dict[str, Any]:
 
                         validate(instance=graph_data, schema=schema)
                         schemas_validated.append("graph_latest.json")
-                        log_json(LOG, 20, "schema_validated", file="graph_latest.json", schema=str(schema_file))
+                        log_json(
+                            LOG,
+                            20,
+                            "schema_validated",
+                            file="graph_latest.json",
+                            schema=str(schema_file),
+                        )
                     except ValidationError as e:
                         validation_errors.append(f"graph_latest.json: {e.message}")
                     except Exception as e:
@@ -108,7 +114,13 @@ def schema_validator_node(state: dict[str, Any]) -> dict[str, Any]:
                         f"COMPASS validation failed: envelope.json score {compass_score:.1%} < 80% threshold"
                     )
 
-                log_json(LOG, 20, "compass_validation_integrated", score=compass_score, passed=compass_score >= 0.8)
+                log_json(
+                    LOG,
+                    20,
+                    "compass_validation_integrated",
+                    score=compass_score,
+                    passed=compass_score >= 0.8,
+                )
 
             except Exception as e:
                 log_json(LOG, 30, "compass_integration_failed", error=str(e))
@@ -116,7 +128,13 @@ def schema_validator_node(state: dict[str, Any]) -> dict[str, Any]:
 
         # If there were validation errors, raise an exception
         if validation_errors:
-            log_json(LOG, 40, "schema_validation_failed", errors=validation_errors, compass_results=compass_results)
+            log_json(
+                LOG,
+                40,
+                "schema_validation_failed",
+                errors=validation_errors,
+                compass_results=compass_results,
+            )
             raise SchemaValidationError(validation_errors)
 
         # Log successful validation

@@ -128,7 +128,15 @@ class TestDocumentSections:
                         """
                         SELECT update_document_section(%s, %s, %s, %s, %s, %s, %s)
                     """,
-                        (test_doc, section_name, f"/tmp/{test_doc}", level, parent, test_hash, words),
+                        (
+                            test_doc,
+                            section_name,
+                            f"/tmp/{test_doc}",
+                            level,
+                            parent,
+                            test_hash,
+                            words,
+                        ),
                     )
 
                 # Test hierarchy function

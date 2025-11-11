@@ -140,7 +140,11 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
 
     metadata = {
         "generated_at": _iso_now(),
-        "analysis_parameters": {"default_unit": "position", "default_window": window_size, "min_series_length": 3},
+        "analysis_parameters": {
+            "default_unit": "position",
+            "default_window": window_size,
+            "min_series_length": 3,
+        },
         "total_series": len(temporal_patterns_list),
         "books_analyzed": [book],
     }
@@ -304,7 +308,9 @@ def main():
     parser.add_argument("--window-size", type=int, default=10, help="Rolling window size")
     parser.add_argument("--forecast-steps", type=int, default=5, help="Number of forecast steps")
     parser.add_argument(
-        "--forecast-only", action="store_true", help="Run forecasting only (requires existing patterns)"
+        "--forecast-only",
+        action="store_true",
+        help="Run forecasting only (requires existing patterns)",
     )
 
     args = parser.parse_args()
@@ -316,7 +322,11 @@ def main():
             if not os.path.exists(patterns_file):
                 print(
                     json.dumps(
-                        {"success": False, "error": "temporal_patterns.json not found. Run analysis first."}, indent=2
+                        {
+                            "success": False,
+                            "error": "temporal_patterns.json not found. Run analysis first.",
+                        },
+                        indent=2,
                     )
                 )
                 sys.exit(1)

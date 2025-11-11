@@ -14,7 +14,13 @@ def log(run_id: str, node: str, event: str, payload: dict):
         cur.execute(
             """INSERT INTO telemetry.metrics_log(ts, run_id, node, event, payload)
                VALUES (%(ts)s,%(run)s,%(node)s,%(evt)s,%(pay)s)""",
-            {"ts": dt.datetime.utcnow(), "run": run_id, "node": node, "evt": event, "pay": json.dumps(payload)},
+            {
+                "ts": dt.datetime.utcnow(),
+                "run": run_id,
+                "node": node,
+                "evt": event,
+                "pay": json.dumps(payload),
+            },
         )
         conn.commit()
 

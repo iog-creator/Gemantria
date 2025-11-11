@@ -21,7 +21,7 @@ def shield_svg(label: str, value: str) -> str:
     l_w = max(84, 8 * len(label) + 20)
     v_w = max(64, 8 * len(value) + 18)
     total = l_w + v_w
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{total}" height="20" role="img" aria-label="{label}: {value}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{total}" height="20" role="img" aria-label="{label}: {value}">
   <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-opacity=".1"/><stop offset=".9" stop-opacity=".3"/><stop offset="1" stop-opacity=".5"/></linearGradient>
   <mask id="m"><rect width="{total}" height="20" rx="3" fill="#fff"/></mask>
   <g mask="url(#m)">
@@ -35,7 +35,7 @@ def shield_svg(label: str, value: str) -> str:
     <text x="{l_w + v_w / 2:.1f}" y="15" fill="#010101" fill-opacity=".3">{value}</text>
     <text x="{l_w + v_w / 2:.1f}" y="14">{value}</text>
   </g>
-</svg>'''
+</svg>"""
 
 
 def main() -> int:

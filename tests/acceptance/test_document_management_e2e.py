@@ -106,7 +106,12 @@ More content.
         """Test document management utility commands work end-to-end."""
         # Test analyze command
         result = subprocess.run(
-            [sys.executable, "scripts/manage_document_sections.py", "analyze", "GEMATRIA_MASTER_REFERENCE.md"],
+            [
+                sys.executable,
+                "scripts/manage_document_sections.py",
+                "analyze",
+                "GEMATRIA_MASTER_REFERENCE.md",
+            ],
             capture_output=True,
             text=True,
             cwd=Path(__file__).resolve().parent.parent.parent,
@@ -174,7 +179,10 @@ More content.
         """Test that document management integrates with housekeeping automation."""
         # Run housekeeping to ensure document operations are included
         result = subprocess.run(
-            ["make", "housekeeping"], capture_output=True, text=True, cwd=Path(__file__).resolve().parent.parent.parent
+            ["make", "housekeeping"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).resolve().parent.parent.parent,
         )
 
         # Housekeeping should complete successfully
