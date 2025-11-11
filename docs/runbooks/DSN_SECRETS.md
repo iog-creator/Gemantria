@@ -4,7 +4,15 @@
 
 RC tags (like `v0.0.1-rc.1`) remain **lenient** and may omit DSNs.
 
-## Required GitHub Secrets (Repository → Settings → Secrets and variables → Actions → *New repository secret*)
+## Required GitHub Variables (Repository → Settings → Secrets and variables → Actions → Variables → *New repository variable*)
+
+- `ATLAS_DSN` — **read-only** PostgreSQL DSN for Atlas UI proof. Example:
+
+  `postgresql://postgres@/gematria?host=/var/run/postgresql`
+
+  **Used in:** `tagproof.yml` (release tags) — **REQUIRED** for STRICT proof step
+
+## Required GitHub Secrets (Repository → Settings → Secrets and variables → Actions → Secrets → *New repository secret*)
 
 - `BIBLE_DB_DSN` — **read-only** PostgreSQL DSN (Bible DB). Example:
 
@@ -30,10 +38,15 @@ RC tags (like `v0.0.1-rc.1`) remain **lenient** and may omit DSNs.
 
 - On release tags, DSNs are **not** `(unset)` in the snapshot
 
-## Test procedure (after adding secrets)
+## Test procedure (after adding variables and secrets)
 
-1. Push a release tag: `git tag v0.0.1 && git push origin v0.0.1`
+1. Set all required variables and secrets in GitHub UI:
+   - **Variable:** `ATLAS_DSN` (Settings → Secrets and variables → Actions → Variables)
+   - **Secret:** `BIBLE_DB_DSN` (Settings → Secrets and variables → Actions → Secrets)
+   - **Secret:** `GEMATRIA_DSN` (Settings → Secrets and variables → Actions → Secrets)
 
-2. Confirm Actions job **pm-snapshot** is green.
+2. Push a release tag: `git tag v0.0.2 && git push origin v0.0.2`
 
-3. Open artifact `pm.snapshot` and verify DSN redaction lines are present.
+3. Confirm Actions jobs **tagproof** and **pm-snapshot** are green.
+
+4. Open artifacts and verify DSN redaction lines are present (DSNs masked in outputs).
