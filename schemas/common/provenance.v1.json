@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common/provenance.v1.json",
+  "title": "Provenance v1.0.0",
+  "type": "object",
+  "required": ["model", "seed", "ts_iso"],
+  "properties": {
+    "model": { "type": "string", "minLength": 1 },
+    "dims":  { "type": "integer", "minimum": 0 },
+    "seed":  { "type": "integer", "minimum": 0 },
+    "ts_iso":{ "type": "string" }
+  },
+  "additionalProperties": false
+}
