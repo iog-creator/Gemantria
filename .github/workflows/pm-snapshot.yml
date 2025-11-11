@@ -51,6 +51,16 @@ jobs:
         run: |
           source .venv/bin/activate
           make pm.snapshot
+      - name: Regenerate PM Snapshot with DSNs (release tags)
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc')
+        env:
+          BIBLE_DB_DSN: ${{ secrets.BIBLE_DB_DSN }}
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+          CHECKPOINTER: postgres
+          ENFORCE_STRICT: "1"
+        run: |
+          source .venv/bin/activate
+          make pm.snapshot
       - name: Verify share manifest (25 files)
         run: |
           source .venv/bin/activate
