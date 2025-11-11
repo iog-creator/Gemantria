@@ -162,6 +162,15 @@ codex.parallel:
 share.sync:
 	@PYTHONPATH=. python3 scripts/sync_share.py
 
+.PHONY: pm.snapshot share.manifest.verify
+
+pm.snapshot:
+	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
+	@python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
+
+share.manifest.verify:
+	@python3 -c "import json, sys, pathlib; target_count = 25; p = pathlib.Path('docs/SSOT/SHARE_MANIFEST.json'); data = json.loads(p.read_text()) if p.exists() else {'items': []}; n = len(data.get('items', [])); print(f'MANIFEST_COUNT={n} (expected {target_count})'); sys.exit(0 if n==target_count else 1)"
+
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
 .PHONY: adr.housekeeping
@@ -1616,3 +1625,52 @@ atlas.live.fetch:
 
 atlas.live.health:
 	@curl -s http://127.0.0.1:8777/health || echo "[atlas-live] server not running"
+
+# --- MCP SSE (LM Studio bridge) ---
+.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop guard.mcp.sse
+MCP_HOST?=127.0.0.1
+MCP_PORT?=8005
+
+mcp.sse.start:
+	@nohup $${PYTHON3:-python3} $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
+	echo "[mcp] SSE server started on $(MCP_HOST):$(MCP_PORT)"
+
+mcp.sse.health:
+	@curl -fsSI http://$(MCP_HOST):$(MCP_PORT)/sse | grep -iE 'HTTP/|content-type' || (echo "[mcp] SSE health FAIL" && exit 2)
+
+mcp.sse.stop:
+	@pgrep -af 'gemantria-ops/server.py' | grep -E 'MCP_TRANSPORT=sse|--port 8005' | awk '{print $$1}' | xargs -r kill
+
+guard.mcp.sse:
+	@ENABLE_LMSTUDIO_MCP=$${ENABLE_LMSTUDIO_MCP:-0}; \
+	$${PYTHON3:-python3} scripts/ci/guard_mcp_live.py | tee evidence/guard_mcp_live.json
+
+# --- Bring-up verification script ---
+.PHONY: bringup.001
+bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
+	@bash scripts/bringup_001.sh
+
+.PHONY: dsns.echo
+dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
+	@if [ -f .env.local ]; then \
+		set -a; source .env.local 2>/dev/null; set +a; \
+		if [ -n "$${BIBLE_DB_DSN:-}" ] && [ -n "$${GEMATRIA_DSN:-}" ]; then \
+			printf "BIBLE_DB_DSN=%s\n" "$${BIBLE_DB_DSN%//*}//REDACTED@$${BIBLE_DB_DSN#*@}" | sed 's/?.*$$//'; \
+			printf "GEMATRIA_DSN=%s\n" "$${GEMATRIA_DSN%//*}//REDACTED@$${GEMATRIA_DSN#*@}" | sed 's/?.*$$//'; \
+			echo "CHECKPOINTER=$${CHECKPOINTER:-postgres}"; \
+		else \
+			echo "⚠ DSNs not set in .env.local"; \
+		fi; \
+	elif [ -f .env ]; then \
+		set -a; source .env 2>/dev/null; set +a; \
+		if [ -n "$${BIBLE_DB_DSN:-}" ] && [ -n "$${GEMATRIA_DSN:-}" ]; then \
+			printf "BIBLE_DB_DSN=%s\n" "$${BIBLE_DB_DSN%//*}//REDACTED@$${BIBLE_DB_DSN#*@}" | sed 's/?.*$$//'; \
+			printf "GEMATRIA_DSN=%s\n" "$${GEMATRIA_DSN%//*}//REDACTED@$${GEMATRIA_DSN#*@}" | sed 's/?.*$$//'; \
+			echo "CHECKPOINTER=$${CHECKPOINTER:-postgres}"; \
+		else \
+			echo "⚠ DSNs not set in .env"; \
+		fi; \
+	else \
+		echo "⚠ No .env.local or .env file found"; \
+		echo "Create .env.local with BIBLE_DB_DSN and GEMATRIA_DSN"; \
+	fi
