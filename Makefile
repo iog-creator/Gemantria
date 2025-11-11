@@ -826,6 +826,12 @@ pipeline.from_db: db.ingest.morph
 	@echo ">> Normalizing + enriching db nouns via pipeline (file-input)…"
 	@PYTHONPATH=$(shell pwd) python3 scripts/pipeline_orchestrator.py pipeline --nouns-json exports/ai_nouns.db_morph.json --book Genesis
 
+.PHONY: schema.docs
+schema.docs:
+	@echo ">> Generating schema documentation from JSON Schema files"
+	@python3 scripts/docs/generate_schema_docs.py --schema-dir docs/SSOT --output-dir docs/schemas
+	@echo "✅ Schema documentation generated in docs/schemas/"
+
 .PHONY: guards.schemas
 guards.schemas:
 	@echo ">> Validating pipeline artifacts against SSOT schemas (ENVELOPE-FIRST HARDENING)"
@@ -1366,6 +1372,11 @@ ui.dev:
 .PHONY: ui.smoke.browser
 ui.smoke.browser:
 	@UI_URL=${UI_URL:-http://localhost:5173} bash scripts/ui/smoke_playwright.sh
+
+.PHONY: ui.test
+ui.test:
+	@echo ">> Running UI tests (Playwright)"
+	@pytest tests/ui -v
 
 # OPS verification suite (Rule 050/051/052 compliance)
 ops.verify: agents.md.lint rules_inventory_check guards.all
