@@ -3,6 +3,10 @@
 
 > Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
 
+## Rule-060: Single runnable block + tutor notes enforcement
+
+*Every PM reply that directs Cursor must follow the single runnable block + === TUTOR NOTES === structure as defined in docs/SSOT/GPT_SYSTEM_PROMPT.md. Rule-062 environment validation is mandatory inside that block.*
+
 ## Tooling Policy
 
 - Use **python3** (runner is exported as `$(PYTHON)=python3` in Makefiles).  
