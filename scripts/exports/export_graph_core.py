@@ -14,6 +14,10 @@ import sys
 import datetime
 import pathlib
 
+# Add project root to path for imports
+REPO = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+
 from scripts.config.env import get_ro_dsn, get_bible_db_dsn
 
 
