@@ -22,6 +22,13 @@ sys.path.insert(0, str(REPO))
 
 from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn, env
 
+# Ensure env is loaded (scripts.config.env auto-loads via _ensure_loaded() when env() is called)
+try:
+    # Trigger env loading by calling env() once
+    env("PATH")  # Non-fatal call to trigger _ensure_loaded()
+except Exception:
+    pass
+
 
 OUT_PATH = pathlib.Path("ui/out/graph_core.json")
 
@@ -170,12 +177,19 @@ def main():
                         print(f"[export_graph_core] Edge table {edge_table} has columns: {cols}", file=sys.stderr)
 
                 # Build payload conforming to graph.schema.json
+                # Extract book from first node if available (for root-level book property)
+                root_book = None
+                if nodes and nodes[0].get("book"):
+                    root_book = nodes[0]["book"]
+
                 payload = {
                     "schema": "gemantria/graph.v1",  # schema requires exact value
                     "generated_at": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
                     "nodes": nodes,  # top-level, not nested in "graph"
                     "edges": edges,  # top-level, not nested in "graph"
                 }
+                if root_book:
+                    payload["book"] = root_book
                 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
                 OUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
                 print(f"[export_graph_core] wrote {OUT_PATH} with {len(nodes)} nodes, {len(edges)} edges")
