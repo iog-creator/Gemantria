@@ -1595,6 +1595,12 @@ atlas.viewer.validate:
 	@echo "[atlas] viewer validate"
 	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
 
+# --- Atlas (webproof) ---
+.PHONY: atlas.webproof
+atlas.webproof:
+	@echo "[atlas] webproof (headless browser)"
+	@STRICT_WEBPROOF=${STRICT_WEBPROOF:-0} bash scripts/ci/atlas_webproof.sh
+
 # --- Atlas Live (dev-only; offline-safe) ---
 .PHONY: atlas.live.server atlas.live.fetch atlas.live.health
 

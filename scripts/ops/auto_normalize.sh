@@ -72,7 +72,14 @@ if [ "${STRICT_PREPUSH:-0}" = "1" ] && [ "$ok_strict" != "true" ]; then
   exit 3
 fi
 
-# 4) Summarize
+# 4) Atlas UI auto-proof (Rule-067)
+if git diff --name-only --cached | grep -E '^(docs/atlas/|scripts/mcp/)' >/dev/null 2>&1; then
+  echo "[auto] atlas viewer.validate + webproof (Rule-067)"
+  make -s atlas.viewer.validate || true
+  make -s atlas.webproof || true
+fi
+
+# 5) Summarize
 changed_after="$(git status --porcelain=v1 | wc -l | tr -d ' ')"
 if [ "$changed_after" != "$changed_before" ]; then
   echo "[auto] ℹ️ files changed during normalization; please add/commit and push again."
