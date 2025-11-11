@@ -1,8 +1,7 @@
 name: rules-inventory-nightly
 
 on:
-  schedule:
-    - cron: "17 7 * * *"  # 7:17 AM UTC daily
+  workflow_dispatch:  # Manual trigger only (Rule-059: no scheduled workflows)
 
 jobs:
   check:
