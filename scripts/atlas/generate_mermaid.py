@@ -35,7 +35,16 @@ def _write_kpis_json(payload: Dict[str, Any]) -> None:
 
 def _hint_write(window: str):
     """Hermetic/HINT mode: emit lightweight placeholders so the browser UI renders."""
-    _write_kpis_json({"mode": "HINT", "window": window, "ok": True, "success": 42, "error": 3, "generated": now_iso()})
+    _write_kpis_json(
+        {
+            "mode": "HINT",
+            "window": window,
+            "ok": True,
+            "success": 42,
+            "error": 3,
+            "generated": now_iso(),
+        }
+    )
     (DOCS / "execution_live.mmd").write_text(
         "%% generated (HINT) " + now_iso() + "\n"
         "flowchart TD\n"
@@ -69,7 +78,11 @@ def _hint_write(window: str):
 def _strict_write(conn, window: str):
     """STRICT mode: query DB and generate real Mermaid from telemetry."""
     # pick window expression
-    win_expr = {"24h": "interval '24 hours'", "7d": "interval '7 days'", "30d": "interval '30 days'"}[window]
+    win_expr = {
+        "24h": "interval '24 hours'",
+        "7d": "interval '7 days'",
+        "30d": "interval '30 days'",
+    }[window]
     with conn.cursor() as cur:
         # 1) execution_live: nodes seen in window by start->end flows
         cur.execute(
@@ -207,7 +220,14 @@ def _strict_write(conn, window: str):
         succ = int(stats.get("ok", 0))
         err = int(stats.get("error", 0))
         _write_kpis_json(
-            {"mode": "STRICT", "window": window, "ok": True, "success": succ, "error": err, "generated": now_iso()}
+            {
+                "mode": "STRICT",
+                "window": window,
+                "ok": True,
+                "success": succ,
+                "error": err,
+                "generated": now_iso(),
+            }
         )
         pie = [
             "%% generated (STRICT) " + now_iso(),
@@ -249,7 +269,14 @@ def main():
         # Never print DSN; safe error
         _hint_write(args.window)
         print(
-            json.dumps({"mode": "HINT", "ok": True, "window": args.window, "note": "fallback: " + e.__class__.__name__})
+            json.dumps(
+                {
+                    "mode": "HINT",
+                    "ok": True,
+                    "window": args.window,
+                    "note": "fallback: " + e.__class__.__name__,
+                }
+            )
         )
         return 0
 

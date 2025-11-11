@@ -51,7 +51,12 @@ def main() -> int:
     metrics = compute_metrics(data)
 
     envelope = {
-        "meta": {"version": "0.1.0", "source": "p9-validate-local", "snapshot_path": snap, "seed": seed},
+        "meta": {
+            "version": "0.1.0",
+            "source": "p9-validate-local",
+            "snapshot_path": snap,
+            "seed": seed,
+        },
         "metrics": metrics,
     }
 

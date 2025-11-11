@@ -140,7 +140,12 @@ def test_bible_db_dsn_precedence_falls_back_to_ro_dsn():
 
 def test_bible_db_dsn_precedence_falls_back_to_atlas_dsn_ro():
     """ATLAS_DSN_RO is used when earlier options are not set."""
-    with temp_env(BIBLE_RO_DSN=None, RO_DSN=None, ATLAS_DSN_RO="postgresql://u:p@h:5432/atlasro", ATLAS_DSN=None):
+    with temp_env(
+        BIBLE_RO_DSN=None,
+        RO_DSN=None,
+        ATLAS_DSN_RO="postgresql://u:p@h:5432/atlasro",
+        ATLAS_DSN=None,
+    ):
         assert env.get_bible_db_dsn() == "postgresql://u:p@h:5432/atlasro"
 
 

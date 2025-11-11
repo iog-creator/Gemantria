@@ -59,7 +59,11 @@ class AISessionMonitor:
         self.tracker.log_interaction(
             session_id=session_id,
             interaction_type="session_start",
-            context={"session_type": "development", "start_time": datetime.now().isoformat(), "context": context or {}},
+            context={
+                "session_type": "development",
+                "start_time": datetime.now().isoformat(),
+                "context": context or {},
+            },
         )
 
         print(f"🎯 Started AI session monitoring: {session_id}")
@@ -67,11 +71,18 @@ class AISessionMonitor:
         # Log initial context awareness
         if context:
             self.tracker.log_context_awareness(
-                session_id=session_id, context_type="session_start", context_data=context, relevance_score=1.0
+                session_id=session_id,
+                context_type="session_start",
+                context_data=context,
+                relevance_score=1.0,
             )
 
     def log_tool_usage(
-        self, tool_name: str, success: bool, execution_time_ms: int | None = None, error_details: str | None = None
+        self,
+        tool_name: str,
+        success: bool,
+        execution_time_ms: int | None = None,
+        error_details: str | None = None,
     ):
         """Log tool usage during the session."""
         if not self.current_session:
@@ -196,7 +207,10 @@ class AISessionMonitor:
 
         # Log context awareness
         self.tracker.log_context_awareness(
-            session_id=self.current_session, context_type="context_snapshot", context_data=context, relevance_score=0.8
+            session_id=self.current_session,
+            context_type="context_snapshot",
+            context_data=context,
+            relevance_score=0.8,
         )
 
         return context
@@ -208,13 +222,19 @@ class AISessionMonitor:
             return
 
         self.tracker.log_learning_event(
-            learning_type=learning_type, trigger_event=trigger, learning_outcome=outcome, confidence_score=confidence
+            learning_type=learning_type,
+            trigger_event=trigger,
+            learning_outcome=outcome,
+            confidence_score=confidence,
         )
 
         print(f"🧠 Logged learning event: {learning_type}")
 
     def end_session(
-        self, feedback_rating: int | None = None, feedback_text: str | None = None, tags: List[str] | None = None
+        self,
+        feedback_rating: int | None = None,
+        feedback_text: str | None = None,
+        tags: List[str] | None = None,
     ):
         """End the monitoring session."""
         if not self.current_session:
@@ -270,7 +290,10 @@ class AISessionMonitor:
 
                 interactions = {}
                 for row in cur.fetchall():
-                    interactions[row[0]] = {"count": row[1], "avg_time": float(row[2]) if row[2] else 0}
+                    interactions[row[0]] = {
+                        "count": row[1],
+                        "avg_time": float(row[2]) if row[2] else 0,
+                    }
 
                 cur.execute(
                     """

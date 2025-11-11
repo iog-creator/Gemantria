@@ -27,7 +27,10 @@ def main():
     ap = argparse.ArgumentParser(description="Extract nouns from bible_db (read-only)")
     ap.add_argument("--book", required=True, help="Book name (e.g., Genesis)")
     ap.add_argument(
-        "--min-confidence", type=float, default=0.0, help="Minimum confidence (for filtering after enrichment)"
+        "--min-confidence",
+        type=float,
+        default=0.0,
+        help="Minimum confidence (for filtering after enrichment)",
     )
     ap.add_argument("--output", required=True, help="Output JSON file path")
     args = ap.parse_args()

@@ -372,7 +372,11 @@ def main() -> int:
 
     # Generate diagrams
     diagrams = {
-        "execution_live": ("Execution Live", "Currently executing pipeline runs", _generate_execution_live),
+        "execution_live": (
+            "Execution Live",
+            "Currently executing pipeline runs",
+            _generate_execution_live,
+        ),
         "pipeline_flow_historical": (
             "Pipeline Flow Historical",
             "Historical pipeline execution flow",
@@ -380,9 +384,17 @@ def main() -> int:
         ),
         "kpis": ("KPIs", "Key performance indicators", _generate_kpis),
         "dependencies": ("Dependencies", "Module and package dependencies", _generate_dependencies),
-        "call_graph": ("Call Graph", "Function and method call relationships", _generate_call_graph),
+        "call_graph": (
+            "Call Graph",
+            "Function and method call relationships",
+            _generate_call_graph,
+        ),
         "class_diagram": ("Class Diagram", "UML class relationships", _generate_class_diagram),
-        "knowledge_graph": ("Knowledge Graph", "Semantic concept relationships", _generate_knowledge_graph),
+        "knowledge_graph": (
+            "Knowledge Graph",
+            "Semantic concept relationships",
+            _generate_knowledge_graph,
+        ),
     }
 
     # Filter to specific diagram if requested

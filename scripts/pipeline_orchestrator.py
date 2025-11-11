@@ -195,7 +195,14 @@ def run_full_pipeline(
         mode: Processing mode (START, RESUME, etc.)
         nouns: Optional list of nouns to use instead of AI discovery
     """
-    log_json(LOG, 20, "pipeline_orchestrator_start", book=book, mode=mode, nouns_provided=nouns is not None)
+    log_json(
+        LOG,
+        20,
+        "pipeline_orchestrator_start",
+        book=book,
+        mode=mode,
+        nouns_provided=nouns is not None,
+    )
 
     try:
         # ENVELOPE-FIRST HARDENING: Validate any existing envelopes before proceeding
@@ -344,7 +351,12 @@ def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", 
 
         # Run backfill
         backfill_noun_embeddings(
-            dsn=dsn, lmstudio_base=lmstudio_url, model_name=model, dim=dim, batch_size=512, sleep_sec=1.0
+            dsn=dsn,
+            lmstudio_base=lmstudio_url,
+            model_name=model,
+            dim=dim,
+            batch_size=512,
+            sleep_sec=1.0,
         )
 
         log_json(LOG, 20, "embeddings_backfill_complete", model=model, dim=dim)
@@ -382,7 +394,9 @@ def main():
     # Analysis command
     analysis_parser = subparsers.add_parser("analysis", help="Analysis operations")
     analysis_parser.add_argument(
-        "operation", choices=["graph", "export", "temporal", "all"], help="Analysis operation to perform"
+        "operation",
+        choices=["graph", "export", "temporal", "all"],
+        help="Analysis operation to perform",
     )
 
     # Embeddings command
@@ -492,7 +506,10 @@ def main():
                                 graph_data = json.load(f)
                         else:
                             graph_data = {}
-                        from scripts.temporal_analytics import analyze_temporal_patterns, generate_forecast
+                        from scripts.temporal_analytics import (
+                            analyze_temporal_patterns,
+                            generate_forecast,
+                        )
 
                         tp = analyze_temporal_patterns(graph_data)
                         fc = generate_forecast(tp)

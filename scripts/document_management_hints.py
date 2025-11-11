@@ -44,7 +44,13 @@ class DocumentManagementHints:
                     """
                     SELECT log_hint_emission(%s, %s, %s, %s, %s)
                 """,
-                    (self.run_id, hint_text, rule_reference, "scripts/document_management_hints.py", context),
+                    (
+                        self.run_id,
+                        hint_text,
+                        rule_reference,
+                        "scripts/document_management_hints.py",
+                        context,
+                    ),
                 )
                 conn.commit()
 
@@ -62,7 +68,8 @@ class DocumentManagementHints:
 
                 if stale_docs > 0:
                     self.emit_hint(
-                        f"🚨 {stale_docs} documents are stale (>24h old). Run document management update.", "058"
+                        f"🚨 {stale_docs} documents are stale (>24h old). Run document management update.",
+                        "058",
                     )
                     return False
 

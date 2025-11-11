@@ -11,7 +11,10 @@ def check_analytics() -> int:
     graph_path = Path("exports/graph_latest.json")
 
     if not graph_path.exists():
-        print("[ops_report --check-analytics] FAIL: exports/graph_latest.json missing", file=sys.stderr)
+        print(
+            "[ops_report --check-analytics] FAIL: exports/graph_latest.json missing",
+            file=sys.stderr,
+        )
         return 1
 
     try:

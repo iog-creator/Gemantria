@@ -202,7 +202,10 @@ def main():
     if args.extract_from_bible:
         print(f"DEBUG: Using bible DSN: {bible_dsn}", file=sys.stderr)
         print(f"DEBUG: Using gematria DSN: {gematria_dsn}", file=sys.stderr)
-        with get_db_connection(bible_dsn) as bible_conn, get_db_connection(gematria_dsn) as gematria_conn:
+        with (
+            get_db_connection(bible_dsn) as bible_conn,
+            get_db_connection(gematria_dsn) as gematria_conn,
+        ):
             extract_and_populate_nouns(bible_conn, gematria_conn, args)
 
     # Always export from gematria DB

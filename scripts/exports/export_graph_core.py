@@ -184,7 +184,10 @@ def main():
                         # If column names don't match, try generic approach
                         cur.execute(f"SELECT * FROM {edge_table} LIMIT 10")
                         cols = [desc[0] for desc in cur.description]
-                        print(f"[export_graph_core] Edge table {edge_table} has columns: {cols}", file=sys.stderr)
+                        print(
+                            f"[export_graph_core] Edge table {edge_table} has columns: {cols}",
+                            file=sys.stderr,
+                        )
 
                 # Build payload conforming to graph.schema.json
                 # Extract book from first node if available (for root-level book property)

@@ -149,7 +149,10 @@ def main() -> int:
     if envelope["count"] > 0:
         for hint in envelope["items"]:
             print(f"HINT: {hint}", file=sys.stderr)
-        print(f"HINT: governance.docs: Wrote {envelope['count']} hint(s) → {HINTS_FILE}", file=sys.stderr)
+        print(
+            f"HINT: governance.docs: Wrote {envelope['count']} hint(s) → {HINTS_FILE}",
+            file=sys.stderr,
+        )
     else:
         print("HINT: governance.docs: No rule/doc changes detected", file=sys.stderr)
 

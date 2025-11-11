@@ -107,7 +107,10 @@ def track_share_item(
                 conn.commit()
     except Exception as e:
         # Hermetic: don't fail if DB tracking fails
-        print(f"HINT: share.tracking: Database tracking failed (hermetic behavior): {e}", file=sys.stderr)
+        print(
+            f"HINT: share.tracking: Database tracking failed (hermetic behavior): {e}",
+            file=sys.stderr,
+        )
 
 
 def track_manifest_metadata(
@@ -130,7 +133,10 @@ def track_manifest_metadata(
                 conn.commit()
     except Exception as e:
         # Hermetic: don't fail if DB tracking fails
-        print(f"HINT: share.tracking: Database metadata tracking failed (hermetic behavior): {e}", file=sys.stderr)
+        print(
+            f"HINT: share.tracking: Database metadata tracking failed (hermetic behavior): {e}",
+            file=sys.stderr,
+        )
 
 
 def files_differ(src: Path, dst: Path) -> bool:

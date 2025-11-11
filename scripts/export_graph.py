@@ -234,7 +234,10 @@ def main():
                     )
                     + "\n"
                 )
-            print(">> analytics.export: fast-lane file detected (exports/graph_latest.json), skipping DB.", flush=True)
+            print(
+                ">> analytics.export: fast-lane file detected (exports/graph_latest.json), skipping DB.",
+                flush=True,
+            )
             log_json(
                 LOG,
                 20,

@@ -72,7 +72,11 @@ def build_graph_from_enriched_nouns():
         "generated_at": enriched_data.get("generated_at", ""),
         "nodes": nodes,
         "edges": edges,
-        "metadata": {"node_count": len(nodes), "edge_count": len(edges), "source": "ai_enriched_nouns"},
+        "metadata": {
+            "node_count": len(nodes),
+            "edge_count": len(edges),
+            "source": "ai_enriched_nouns",
+        },
     }
 
     # Ensure output directory exists

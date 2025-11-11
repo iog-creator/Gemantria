@@ -44,12 +44,18 @@ def main(limit: int = 25) -> int:
 
     # If we don't have enough real data, create synthetic test cases
     if len(nodes) < limit:
-        print(f"Found {len(nodes)} real nodes, creating synthetic cases to reach {limit}", file=sys.stderr)
+        print(
+            f"Found {len(nodes)} real nodes, creating synthetic cases to reach {limit}",
+            file=sys.stderr,
+        )
         synthetic_cases = _create_synthetic_cases(limit - len(nodes))
         nodes.extend(synthetic_cases)
 
     if not nodes:
-        print("HINT: derive_truth_cases: no valid noun sources found with gematria data", file=sys.stderr)
+        print(
+            "HINT: derive_truth_cases: no valid noun sources found with gematria data",
+            file=sys.stderr,
+        )
         return 0
 
     nodes.sort(key=_canon_key)
@@ -71,7 +77,12 @@ def main(limit: int = 25) -> int:
         # Only include if we have the minimal required fields
         if gematria is not None:
             out["cases"].append(
-                {"surface": node.get("surface"), "letters": node.get("letters", None), "gematria": gematria, "ref": ref}
+                {
+                    "surface": node.get("surface"),
+                    "letters": node.get("letters", None),
+                    "gematria": gematria,
+                    "ref": ref,
+                }
             )
 
     if not out["cases"]:
@@ -88,8 +99,18 @@ def _create_synthetic_cases(count: int) -> list[dict]:
     """Create deterministic synthetic test cases for truth suite expansion."""
     # Genesis nouns with their gematria values - expanded beyond the original 10
     synthetic_data = [  # noqa: RUF001
-        {"surface": "בֹּקֶר", "letters": ["ב", "ֹ", "ּ", "ק", "ֶ", "ר"], "gematria": 222, "ref": "Gen.1.5"},
-        {"surface": "אֱלֹהִים", "letters": ["א", "ֱ", "לֹ", "ה", "ִ", "י", "ם"], "gematria": 86, "ref": "Gen.1.1"},
+        {
+            "surface": "בֹּקֶר",
+            "letters": ["ב", "ֹ", "ּ", "ק", "ֶ", "ר"],
+            "gematria": 222,
+            "ref": "Gen.1.5",
+        },
+        {
+            "surface": "אֱלֹהִים",
+            "letters": ["א", "ֱ", "לֹ", "ה", "ִ", "י", "ם"],
+            "gematria": 86,
+            "ref": "Gen.1.1",
+        },
         {"surface": "אֶרֶץ", "letters": ["א", "ֶ", "ר", "ֶ", "ץ"], "gematria": 296, "ref": "Gen.1.1"},
         {"surface": "שָׁמַיִם", "letters": ["שָׁ", "מַ", "יִ", "ם"], "gematria": 390, "ref": "Gen.1.1"},
         {"surface": "ר֫וּחַ", "letters": ["ר֫", "וּ", "חַ"], "gematria": 214, "ref": "Gen.1.2"},
@@ -112,7 +133,12 @@ def _create_synthetic_cases(count: int) -> list[dict]:
         {"surface": "נָהָר", "letters": ["נָ", "הָ", "ר"], "gematria": 255, "ref": "Gen.2.10"},
         {"surface": "אִשָּׁה", "letters": ["אִ", "שָּׁ", "ה"], "gematria": 311, "ref": "Gen.2.18"},
         {"surface": "עֵזֶר", "letters": ["עֵ", "זֶ", "ר"], "gematria": 177, "ref": "Gen.2.18"},
-        {"surface": "כְּנֶגְדּוֹ", "letters": ["כְּ", "נֶ", "גְ", "דּ", "וֹ"], "gematria": 166, "ref": "Gen.2.18"},
+        {
+            "surface": "כְּנֶגְדּוֹ",
+            "letters": ["כְּ", "נֶ", "גְ", "דּ", "וֹ"],
+            "gematria": 166,
+            "ref": "Gen.2.18",
+        },
         {"surface": "חַוָּה", "letters": ["חַ", "וָּ", "ה"], "gematria": 19, "ref": "Gen.3.20"},
         {"surface": "נְחָשׁ", "letters": ["נְ", "חָ", "שׁ"], "gematria": 358, "ref": "Gen.3.1"},
         {"surface": "עֵץ", "letters": ["עֵ", "ץ"], "gematria": 160, "ref": "Gen.3.1"},

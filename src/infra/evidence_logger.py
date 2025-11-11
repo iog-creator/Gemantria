@@ -69,7 +69,11 @@ class EvidenceLogger:
             duration_ms: Duration in milliseconds
             metadata: Additional performance metadata
         """
-        data = {"operation": operation, "duration_ms": duration_ms, "timestamp": datetime.now(UTC).isoformat()}
+        data = {
+            "operation": operation,
+            "duration_ms": duration_ms,
+            "timestamp": datetime.now(UTC).isoformat(),
+        }
         if metadata:
             data.update(metadata)
 

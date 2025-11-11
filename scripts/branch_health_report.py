@@ -35,7 +35,12 @@ def get_branches() -> list[dict]:
 
     # Get local branches
     stdout, _, _ = run_cmd(
-        ["git", "branch", "-a", "--format=%(refname:short)|%(committerdate:iso)|%(committerdate:relative)|%(subject)"]  # noqa: E501
+        [
+            "git",
+            "branch",
+            "-a",
+            "--format=%(refname:short)|%(committerdate:iso)|%(committerdate:relative)|%(subject)",
+        ]  # noqa: E501
     )
 
     for line in stdout.split("\n"):

@@ -53,7 +53,15 @@ for root in roots:
 
 ok = set(scanned) - set(fails)
 print(
-    json.dumps({"scanned": len(scanned), "ok": len(ok), "fails": len(fails), "fail_list": sorted(set(fails))}, indent=2)
+    json.dumps(
+        {
+            "scanned": len(scanned),
+            "ok": len(ok),
+            "fails": len(fails),
+            "fail_list": sorted(set(fails)),
+        },
+        indent=2,
+    )
 )
 
 sys.exit(1 if fails else 0)

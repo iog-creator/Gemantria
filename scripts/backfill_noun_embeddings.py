@@ -37,7 +37,13 @@ sys.path.insert(0, str(src_path))
 
 
 def backfill_noun_embeddings(
-    dsn: str, lmstudio_base: str, model_name: str, dim: int, batch_size: int, sleep_sec: float, where_clause: str = ""
+    dsn: str,
+    lmstudio_base: str,
+    model_name: str,
+    dim: int,
+    batch_size: int,
+    sleep_sec: float,
+    where_clause: str = "",
 ):
     """Backfill embeddings for nouns that don't have them yet."""
 

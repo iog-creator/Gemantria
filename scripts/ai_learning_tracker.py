@@ -70,7 +70,12 @@ class AILearningTracker:
                             """
                             SELECT update_tool_usage(%s, %s, %s, %s)
                         """,
-                            (tool, success, execution_time_ms, error_details.split(":")[0] if error_details else None),
+                            (
+                                tool,
+                                success,
+                                execution_time_ms,
+                                error_details.split(":")[0] if error_details else None,
+                            ),
                         )
 
                 # Log the interaction
@@ -152,7 +157,11 @@ class AILearningTracker:
                 print(f"✅ Logged {rating}/5 {feedback_type} feedback for session {session_id}")
 
     def log_context_awareness(
-        self, session_id: str, context_type: str, context_data: Dict, relevance_score: float | None = None
+        self,
+        session_id: str,
+        context_type: str,
+        context_data: Dict,
+        relevance_score: float | None = None,
     ):
         """Log context awareness event."""
         with self.get_connection() as conn:
@@ -288,7 +297,10 @@ class AILearningTracker:
                             "title": "Most Successful Code Generation Type",
                             "description": f"{best_gen_type[0]} has {best_gen_type[2]:.1%} acceptance rate from {best_gen_type[1]} generations",
                             "confidence": 0.9,
-                            "data": {"generation_type": best_gen_type[0], "acceptance_rate": best_gen_type[2]},
+                            "data": {
+                                "generation_type": best_gen_type[0],
+                                "acceptance_rate": best_gen_type[2],
+                            },
                         }
                     )
 
@@ -486,7 +498,9 @@ def main():
     log_parser = subparsers.add_parser("log_interaction", help="Log an AI interaction")
     log_parser.add_argument("--session-id", required=True)
     log_parser.add_argument(
-        "--type", required=True, choices=["user_query", "tool_call", "code_generation", "validation"]
+        "--type",
+        required=True,
+        choices=["user_query", "tool_call", "code_generation", "validation"],
     )
     log_parser.add_argument("--query")
     log_parser.add_argument("--response")

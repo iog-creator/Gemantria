@@ -174,9 +174,23 @@ def build_mermaid(tag: str, statuses: dict[str, str], base_url: str = "") -> str
         parts.append(f'  click TAG "{rel_changelog}" "Open CHANGELOG"\n')
 
     parts.append('  subgraph GUARDS["Guards & Verdicts"]\n')
-    parts.append(node("EJSON", "Exports JSON", EVIDENCE_DOCS / "exports_json.md", statuses["exports_json"], base_url))
     parts.append(
-        node("ERFC", "RFC3339 timestamps", EVIDENCE_DOCS / "exports_rfc3339.md", statuses["rfc3339"], base_url)
+        node(
+            "EJSON",
+            "Exports JSON",
+            EVIDENCE_DOCS / "exports_json.md",
+            statuses["exports_json"],
+            base_url,
+        )
+    )
+    parts.append(
+        node(
+            "ERFC",
+            "RFC3339 timestamps",
+            EVIDENCE_DOCS / "exports_rfc3339.md",
+            statuses["rfc3339"],
+            base_url,
+        )
     )
     parts.append(
         node(
@@ -187,15 +201,35 @@ def build_mermaid(tag: str, statuses: dict[str, str], base_url: str = "") -> str
             base_url,
         )
     )
-    parts.append(node("XREF", "Xrefs metrics", EVIDENCE_DOCS / "xrefs_metrics.md", statuses["xrefs_metrics"], base_url))
+    parts.append(
+        node(
+            "XREF",
+            "Xrefs metrics",
+            EVIDENCE_DOCS / "xrefs_metrics.md",
+            statuses["xrefs_metrics"],
+            base_url,
+        )
+    )
     parts.append("  end\n\n")
 
     parts.append('  subgraph BADGES["Badges (visual pass/fail)"]\n')
     parts.append(
-        node("BMAN", "Badges manifest", EVIDENCE_DOCS / "badges_manifest.md", statuses["badges_manifest"], base_url)
+        node(
+            "BMAN",
+            "Badges manifest",
+            EVIDENCE_DOCS / "badges_manifest.md",
+            statuses["badges_manifest"],
+            base_url,
+        )
     )
     parts.append(
-        node("BEXP", "exports_json.svg", EVIDENCE_DOCS / "exports_json_badge.md", statuses["badge_exports"], base_url)
+        node(
+            "BEXP",
+            "exports_json.svg",
+            EVIDENCE_DOCS / "exports_json_badge.md",
+            statuses["badge_exports"],
+            base_url,
+        )
     )
     parts.append("  end\n\n")
 

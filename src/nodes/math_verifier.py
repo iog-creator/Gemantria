@@ -38,7 +38,12 @@ def math_verifier_node(state: dict) -> dict:
     """
     math_model = os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")
     if not math_model:
-        log_json(LOG, 30, "math_model_not_configured", message="MATH_MODEL not set, skipping verification")
+        log_json(
+            LOG,
+            30,
+            "math_model_not_configured",
+            message="MATH_MODEL not set, skipping verification",
+        )
         return state
 
     enriched_nouns = state.get("enriched_nouns", [])
@@ -151,7 +156,11 @@ def math_verifier_node(state: dict) -> dict:
                         model_ok = local_sum == claimed
                         model_confidence = 0.5
                         log_json(
-                            LOG, 30, "math_model_parse_failed", noun=noun.get("name"), response=response_text[:100]
+                            LOG,
+                            30,
+                            "math_model_parse_failed",
+                            noun=noun.get("name"),
+                            response=response_text[:100],
                         )
 
             except Exception as e:
@@ -182,7 +191,14 @@ def math_verifier_node(state: dict) -> dict:
             verification_count += 1
 
             if final_ok:
-                log_json(LOG, 20, "gematria_verified", noun=noun.get("name"), local_sum=local_sum, claimed=claimed)
+                log_json(
+                    LOG,
+                    20,
+                    "gematria_verified",
+                    noun=noun.get("name"),
+                    local_sum=local_sum,
+                    claimed=claimed,
+                )
             else:
                 log_json(
                     LOG,

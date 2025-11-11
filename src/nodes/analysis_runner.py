@@ -465,7 +465,14 @@ def _export_stats():
                 ensure_ascii=False,
             )
 
-        log_json(LOG, 20, "stats_exported", nodes=concept_count, edges=relation_count, clusters=cluster_count)
+        log_json(
+            LOG,
+            20,
+            "stats_exported",
+            nodes=concept_count,
+            edges=relation_count,
+            clusters=cluster_count,
+        )
 
     except Exception as e:
         log_json(LOG, 30, "stats_export_failed", error=str(e))

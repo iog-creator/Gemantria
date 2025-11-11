@@ -41,7 +41,13 @@ def get_document_hierarchy(document_name: str) -> List[Dict]:
             sections = []
             for row in cur.fetchall():
                 sections.append(
-                    {"name": row[0], "level": row[1], "parent": row[2], "word_count": row[3], "last_updated": row[4]}
+                    {
+                        "name": row[0],
+                        "level": row[1],
+                        "parent": row[2],
+                        "word_count": row[3],
+                        "last_updated": row[4],
+                    }
                 )
 
     return sections
@@ -66,7 +72,12 @@ def get_section_stats(document_name: str) -> Dict:
 
     sections = get_document_hierarchy(document_name)
 
-    stats = {"total_sections": len(sections), "sections_by_level": {}, "total_words": 0, "empty_sections": 0}
+    stats = {
+        "total_sections": len(sections),
+        "sections_by_level": {},
+        "total_words": 0,
+        "empty_sections": 0,
+    }
 
     for section in sections:
         level = section["level"]

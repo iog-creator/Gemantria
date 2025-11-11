@@ -305,7 +305,13 @@ def main():
     needs_adr = any(
         any(
             t.startswith(prefix)
-            for prefix in [".github/workflows/", "scripts/", "docs/SSOT/", "migrations/", "src/infra/"]
+            for prefix in [
+                ".github/workflows/",
+                "scripts/",
+                "docs/SSOT/",
+                "migrations/",
+                "src/infra/",
+            ]
         )
         for t in touched
     )

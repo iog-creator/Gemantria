@@ -52,7 +52,12 @@ def main() -> int:
     for name in FILES:
         p = EXPORTS / name
 
-        status = {"exists": p.exists(), "has_generated_at": False, "rfc3339_ok": False, "error": None}
+        status = {
+            "exists": p.exists(),
+            "has_generated_at": False,
+            "rfc3339_ok": False,
+            "error": None,
+        }
 
         if not p.exists():
             msg = f"missing: exports/{name}"

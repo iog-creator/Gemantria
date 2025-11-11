@@ -1,0 +1,23 @@
+# Rule 065 — Auto-Normalize on Branch Switch & PR Events
+
+## Rationale
+
+To avoid manual reminders, Cursor must run local normalization automatically whenever:
+
+- creating a PR, switching branches, or pushing commits.
+
+## Required Actions (Cursor)
+
+- Run: `make hooks.install` once per repo clone.
+
+- Run: `bash scripts/ops/auto_normalize.sh` before `gh pr create`, after checkout/switch, and before `git push`.
+
+- If normalization reports changes, stage and commit with message:
+
+  `style(ruff): auto-format (Rule-065)` and retry.
+
+- If STRICT guard fails and the event is a tag build, stop and ask PM to fix or disable with justification (Rule-050).
+
+## Evidence
+
+Cursor must paste the tail of `evidence/guard_mcp_catalog.*.prepush.json` when present.

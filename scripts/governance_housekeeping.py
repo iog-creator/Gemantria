@@ -56,7 +56,8 @@ def run_command(cmd: list, description: str) -> bool:
 def update_governance_artifacts():
     """Update governance artifacts in database."""
     return run_command(
-        [sys.executable, "scripts/governance_tracker.py", "update"], "Updating governance artifacts database"
+        [sys.executable, "scripts/governance_tracker.py", "update"],
+        "Updating governance artifacts database",
     )
 
 
@@ -71,7 +72,8 @@ def validate_governance_compliance():
 def check_stale_artifacts():
     """Check for stale governance artifacts."""
     return run_command(
-        [sys.executable, "scripts/governance_tracker.py", "stale"], "Checking for stale governance artifacts"
+        [sys.executable, "scripts/governance_tracker.py", "stale"],
+        "Checking for stale governance artifacts",
     )
 
 
@@ -80,7 +82,10 @@ def run_document_hints():
     # Document hints are informational and should not fail housekeeping
     try:
         result = subprocess.run(
-            [sys.executable, "scripts/document_management_hints.py"], capture_output=True, text=True, cwd=ROOT
+            [sys.executable, "scripts/document_management_hints.py"],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
         )
         print("🔧 Running document management hint checks...")
         if result.stdout:
@@ -158,7 +163,10 @@ def main():
 
     # Generate final report
     print("📊 Generating governance health report...")
-    run_command([sys.executable, "scripts/governance_tracker.py", "report"], "Generating final governance report")
+    run_command(
+        [sys.executable, "scripts/governance_tracker.py", "report"],
+        "Generating final governance report",
+    )
 
     # Log final status
     log_compliance_status(all_success, "full_housekeeping_cycle")
