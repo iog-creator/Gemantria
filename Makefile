@@ -1013,6 +1013,12 @@ evidence.rfc3339.verdict.md: evidence.exports.rfc3339.verdict
 	@python3 scripts/tools/render_rfc3339_verdict_md.py >/dev/null 2>&1 || true
 	@test -f evidence/exports_rfc3339.verdict.md || echo '[bundle] exports_rfc3339.verdict.md missing' >> evidence/bundle.log
 
+# Operator evidence: extraction agents summary (RFC-072 Part 2)
+.PHONY: evidence.agents.summary
+evidence.agents.summary:
+	@mkdir -p evidence
+	@python3 scripts/ops/agent_evidence_summary.py > evidence/agents_summary.json
+
 .PHONY: guard.ui.xrefs.badges
 guard.ui.xrefs.badges:
 	@if [ "$${CI_XREF_BADGES_SKIP:-0}" = "1" ]; then \
