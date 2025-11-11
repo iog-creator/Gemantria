@@ -15,6 +15,18 @@ jobs:
       STRICT_GUARDS: '1'
       GEMATRIA_RO_DSN: ${{ secrets.GEMATRIA_RO_DSN }}
       ATLAS_DSN_RO:    ${{ secrets.ATLAS_DSN_RO }}
+    services:
+      postgres:
+        image: ankane/pgvector:latest
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gematria
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
