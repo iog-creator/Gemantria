@@ -18,6 +18,16 @@ guard.dsn.centralized:
 guard.dsn.centralized.strict:
 	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
 
+# --- Knowledge Sentinels (Drift Kill-Switch) ---
+.PHONY: guard.knowledge.hints guard.knowledge.strict
+guard.knowledge.hints:
+	@python3 scripts/ci/guard_knowledge.py | tee evidence/guard_knowledge.json; \
+	jq -e '.ok_repo == true' evidence/guard_knowledge.json >/dev/null || true
+
+guard.knowledge.strict:
+	@python3 scripts/ci/guard_knowledge.py | tee evidence/guard_knowledge.json; \
+	jq -e '.ok_repo == true' evidence/guard_knowledge.json
+
 .PHONY: guard.secrets.mask
 guard.secrets.mask:
 	@bash scripts/guards/guard_secrets_mask.sh | tee evidence/guard.secrets.mask.json >/dev/null

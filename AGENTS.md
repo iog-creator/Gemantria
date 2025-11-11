@@ -1243,3 +1243,7 @@ Merges are permitted only when **all** are true:
 | 063 | `063-git-safety.mdc` | Git Safety (No Destructive Operations) | **Default-Apply** |
 | 064 | `064-ai-tracking-contract.mdc` | ai tracking contract | **Default-Apply** |
 <!-- RULES_INVENTORY:END -->
+
+
+> **RO DSN (tag builds)** — Either `GEMATRIA_RO_DSN` **or** `ATLAS_DSN_RO` satisfies the RO requirement.
+> Exporters/runners must check **both** (peers) before falling back to `get_ro_dsn()`; fail-closed on tags.
