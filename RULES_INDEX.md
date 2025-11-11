@@ -127,7 +127,8 @@
 | 064 | 064-ai-tracking-contract.mdc | AI tracking contract |
 | 065 | 065-auto-normalize.mdc | Auto-Normalize on Branch Switch & PR Events |
 | 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
-| 067 | 067-atlas-webproof.mdc | Atlas Webproof (Browser-Verified UI) — Run `make atlas.viewer.validate` and `make atlas.webproof`; attach JSON + screenshots; `STRICT_WEBPROOF=1` for tags. |
+| 067 | 067-atlas-webproof.mdc | Atlas Webproof (Browser-Verified UI) — Run `make atlas.viewer.validate` and `make atlas.webproof`; attach JSON + screenshots; `STRICT_WEBPROOF=1` for tags. **Always-Apply for docs/atlas/* edits.** |
+| 068 | 068-gpt-docs-sync.mdc | GPT Documentation Sync (AlwaysApply) |
 
 ---
 

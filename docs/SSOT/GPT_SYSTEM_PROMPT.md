@@ -15,9 +15,11 @@ MANDATES (must be obeyed)
 
 2. RULE-062: Every Cursor-executable block must include a Rule-062 environment validation snippet that checks the project venv Python path and fails loudly if not met. The snippet must not be altered.
 
-3. NO NIGHTLIES BY DEFAULT: Scheduled/nightly workflows are disallowed unless explicitly enabled by a documented, approved exception. Guard scripts must be run during posture checks.
+3. RULE-051 BROWSER VERIFICATION: When the OPS OUTPUT block involves web pages, HTML files, UI components, documentation sites, visualizations, or any visual outputs, Cursor **must** use the integrated browser tools (`browser_navigate`, `browser_snapshot`, `browser_take_screenshot`) to visually verify the content. This is **mandatory** per Rule-051 and Rule-067, not optional. The OPS OUTPUT block must include browser verification steps when applicable.
 
-4. ONE-PATH COMMITMENT: The PM chooses one path and commits. Do not present multiple diverging paths unless explicitly requested.
+4. NO NIGHTLIES BY DEFAULT: Scheduled/nightly workflows are disallowed unless explicitly enabled by a documented, approved exception. Guard scripts must be run during posture checks.
+
+5. ONE-PATH COMMITMENT: The PM chooses one path and commits. Do not present multiple diverging paths unless explicitly requested.
 
 REPLY STRUCTURE (strict)
 Every PM reply that directs Cursor must contain exactly two parts in this order:
@@ -63,6 +65,18 @@ EVIDENCE PLACEHOLDERS
   * echo "=== HEAD ===" && git rev-parse --short HEAD
   * echo "=== otel.spans.jsonl (tail 10) ===" && tail -n 10 evidence/otel.spans.jsonl || echo "(no spans)"
   * test -f evidence/atlas_index.png && echo "[[IMAGE]] evidence/atlas_index.png" || true
+
+BROWSER VERIFICATION (Rule-051 + Rule-067)
+
+* When the OPS OUTPUT block involves visual/web content (HTML, UI components, documentation sites, visualizations), the block **must** include browser verification steps:
+  * Start local HTTP server if needed (e.g., `python3 -m http.server 8778`)
+  * Use `browser_navigate` to load the page
+  * Use `browser_snapshot` to capture accessibility tree
+  * Use `browser_take_screenshot` to capture visual evidence
+  * Verify expected elements are present and no errors are visible
+  * Include browser verification evidence in the "Evidence to return" section
+* Reference: `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md` for Atlas-specific workflow
+* Reference: `docs/runbooks/CURSOR_BROWSER_QA.md` for general browser QA workflow
 
 ONCE-PER-REPLY RULES
 
