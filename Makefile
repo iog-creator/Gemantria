@@ -1543,3 +1543,38 @@ hooks.install:
 
 ops.auto-normalize:
 	@bash scripts/ops/auto_normalize.sh || true
+
+# --- MCP dev bench (local only; skips safely if DSN/psql missing) ---
+.PHONY: mcp.dev.bench
+mcp.dev.bench:
+	@echo "[mcp] dev bench starting"
+	@python3 scripts/mcp/get_dsn_for_bench.py > evidence/mcp.bench.dsn.txt || true
+	@DSN="$$(cat evidence/mcp.bench.dsn.txt)" ; \
+	if [ -z "$$DSN" ]; then \
+	  DSN="$${GEMATRIA_RW_DSN:-$${GEMATRIA_RO_DSN:-$${ATLAS_DSN_RO:-}}}"; \
+	fi ; \
+	if ! command -v psql >/dev/null 2>&1 ; then \
+	  echo "[bench] SKIP: psql not installed" | tee evidence/mcp.bench.skip.txt ; exit 0 ; \
+	fi ; \
+	if [ -z "$$DSN" ]; then \
+	  echo "[bench] SKIP: no DSN available" | tee evidence/mcp.bench.skip.txt ; exit 0 ; \
+	fi ; \
+	echo "[bench] DSN detected (redacted)" | tee evidence/mcp.bench.info.txt ; \
+	psql "$$DSN" -v ON_ERROR_STOP=1 -f scripts/mcp/bench_dev.sql | tee evidence/mcp.bench.raw.txt >/dev/null ; \
+	grep -E "(Execution Time|Planning Time)" -n evidence/mcp.bench.raw.txt | sed -n '1,120p' | tee evidence/mcp.bench.times.txt >/dev/null ; \
+	echo "[bench] done"
+
+# --- MCP examples smoke (local only; skips safely if DSN/psql missing) ---
+.PHONY: mcp.examples.smoke
+mcp.examples.smoke:
+	@echo "[mcp] examples smoke"
+	@python3 scripts/mcp/get_dsn_for_examples.py > evidence/mcp.examples.dsn.txt || true
+	@DSN="$$(cat evidence/mcp.examples.dsn.txt)" ; \
+	if ! command -v psql >/dev/null 2>&1 ; then \
+	  echo "[examples] SKIP: psql not installed" | tee evidence/mcp.examples.skip.txt ; exit 0 ; \
+	fi ; \
+	if [ -z "$$DSN" ]; then \
+	  echo "[examples] SKIP: no DSN available" | tee evidence/mcp.examples.skip.txt ; exit 0 ; \
+	fi ; \
+	psql "$$DSN" -v ON_ERROR_STOP=1 -f scripts/mcp/examples.sql | tee evidence/mcp.examples.out.txt >/dev/null ; \
+	echo "[examples] done"
