@@ -22,6 +22,13 @@ sys.path.insert(0, str(REPO))
 
 from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn, env
 
+# Ensure env is loaded (scripts.config.env auto-loads via _ensure_loaded() when env() is called)
+try:
+    # Trigger env loading by calling env() once
+    env("PATH")  # Non-fatal call to trigger _ensure_loaded()
+except Exception:
+    pass
+
 
 OUT_PATH = pathlib.Path("ui/out/graph_core.json")
 
