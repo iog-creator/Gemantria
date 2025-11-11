@@ -1533,3 +1533,11 @@ docs.masterref.check:
 housekeeping.masterref:
 	$(MAKE) docs.masterref.populate
 	$(MAKE) docs.masterref.check
+
+
+# --- MCP (Knowledge MCP) STRICT guard ---
+.PHONY: guard.mcp.catalog.strict
+guard.mcp.catalog.strict:
+	@echo "[mcp] STRICT guard"
+	@STRICT_MCP=1 python3 scripts/ci/guard_mcp_catalog_strict.py | tee evidence/guard_mcp_catalog.strict.json
+
