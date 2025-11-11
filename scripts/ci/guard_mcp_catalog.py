@@ -5,6 +5,7 @@ guard.mcp.catalog — HINT mode
 Checks that MCP catalog, endpoints SQL, and Atlas flow diagram exist.
 Non-fatal (HINT-only); used for housekeeping and validation.
 """
+
 import json
 import pathlib
 import sys
