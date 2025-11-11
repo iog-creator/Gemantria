@@ -4,7 +4,6 @@ import argparse
 import glob
 import json
 import os
-import re
 import subprocess
 import sys
 
@@ -36,7 +35,7 @@ def find_first(name):
 
 def load_json_candidates(path):
     # Accept normal JSON or JSON Lines (best-effort)
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         txt = f.read().strip()
     # Try JSON first
     try:
@@ -115,7 +114,7 @@ def main():
         notes.append("no matching data files")
 
     if have_jsonschema and schema_path and candidates:
-        with open(schema_path, "r", encoding="utf-8") as f:
+        with open(schema_path, encoding="utf-8") as f:
             schema = json.load(f)
         v = jsonschema.Draft202012Validator(schema)
         for path in candidates:
@@ -156,4 +155,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
