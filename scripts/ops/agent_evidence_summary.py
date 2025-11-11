@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import json, os, subprocess, datetime, sys
+import json, os, subprocess, sys
+from datetime import datetime, timezone
 
 def run_guard(args):
     try:
@@ -15,7 +16,7 @@ def run_guard(args):
 
 strict = os.getenv("STRICT_GUARDS","0") in ("1","true","TRUE")
 base = {
-    "ts_utc": datetime.datetime.utcnow().isoformat() + "Z",
+    "ts_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     "strict": strict,
 }
 
