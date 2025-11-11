@@ -1,0 +1,12 @@
+```mermaid
+flowchart LR
+  A[AI] -->|calls a small set of tools| B(MCP Server • optional)
+  B -->|RO DSN on tags| C[(Postgres)]
+  B -->|catalog| D[mcp.catalog]
+  C --> E{{mcp.hybrid_search}}
+  C --> F{{mcp.graph_neighbors}}
+  C --> G{{mcp.lookup_ref}}
+  E -->|json (<=25)| H[Atlas / UI]
+  F -->|json (<=25)| H
+  G -->|json (<=25)| H
+```
