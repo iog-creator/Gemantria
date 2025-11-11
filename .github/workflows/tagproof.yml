@@ -12,6 +12,7 @@ jobs:
     env:
       PIP_REQUIRE_VENV: 'true'         # hermetic; no pip installs
       ATLAS_DSN: ${{ vars.ATLAS_DSN }} # repository variable (masked by proof script)
+      STRICT_WEBPROOF: "1"              # Rule-067: fail-closed on Atlas UI regressions
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,6 +26,9 @@ jobs:
         run: python3 --version || true
       - name: Run ops.tagproof (STRICT)
         run: make -s ops.tagproof
+      - name: Atlas webproof (STRICT, Rule-067)
+        run: |
+          STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
       - name: Show masked DSN proof JSON
         run: |
           test -f docs/evidence/atlas_proof_dsn.json && \
