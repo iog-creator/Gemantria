@@ -79,7 +79,7 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@python3 scripts/sync_share.py
+	@PYTHONPATH=. python3 scripts/sync_share.py
 
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
@@ -93,7 +93,7 @@ adr.housekeeping:
 .PHONY: governance.housekeeping
 governance.housekeeping:
 	@echo ">> Running governance housekeeping (database + compliance + docs)"
-	@$(PYTHON) scripts/governance_housekeeping.py
+	@PYTHONPATH=. $(PYTHON) scripts/governance_housekeeping.py
 	@echo "Governance housekeeping complete"
 
 # Governance docs hints (Rule-026 + Rule-065 compliance)
