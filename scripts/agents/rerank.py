@@ -1,4 +1,5 @@
 """Example instrumented agent: rerank."""
+
 from __future__ import annotations
 
 from scripts.observability.otel_helpers import span_llm

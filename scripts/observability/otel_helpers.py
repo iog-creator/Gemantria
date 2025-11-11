@@ -1,4 +1,5 @@
 """HINT-mode span helpers for lightweight instrumentation."""
+
 from __future__ import annotations
 
 import os
@@ -37,6 +38,7 @@ def span_llm(agent: str = "unknown", model: str = "unknown", prompt_len: int = 0
                 _write_jsonl(span)
             else:
                 import json
+
                 with open(path, "a") as fh:
                     fh.write(json.dumps(span) + "\n")
         except Exception:
@@ -68,6 +70,7 @@ def span_tool(name: str = "tool.call", **attrs):
                 _write_jsonl(span)
             else:
                 import json
+
                 with open(path, "a") as fh:
                     fh.write(json.dumps(span) + "\n")
         except Exception:

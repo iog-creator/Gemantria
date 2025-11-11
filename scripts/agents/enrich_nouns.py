@@ -1,4 +1,5 @@
 """Example instrumented agent: enrich_nouns."""
+
 from __future__ import annotations
 
 from scripts.observability.otel_helpers import span_llm
@@ -13,6 +14,7 @@ def enrich_nouns(prompt: str, client, model: str = "qwen2.5"):
 
 
 if __name__ == "__main__":
+
     class DummyClient:
         def chat_completion(self, model, messages):
             return {"ok": True, "model": model, "reply": messages[0]["content"][:80]}

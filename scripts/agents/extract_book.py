@@ -1,4 +1,5 @@
 """Example instrumented agent: extract_book."""
+
 from __future__ import annotations
 
 from scripts.observability.otel_helpers import span_tool
@@ -13,6 +14,7 @@ def extract_book(sql: str, db_executor):
 
 
 if __name__ == "__main__":
+
     def dummy_exec(q):
         return [{"row": 1}]
 
