@@ -1,9 +1,12 @@
-import os, re, json, subprocess, datetime, pathlib
+import os, re, json, subprocess, datetime, pathlib, sys
+
+# Add project root to path for imports (works when run from Makefile with PYTHONPATH=. or directly)
+root = pathlib.Path(__file__).resolve().parents[1]
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
 
 # Use centralized DSN loaders (handles .env loading and precedence chains)
 from scripts.config.env import get_rw_dsn, get_bible_db_dsn, env
-
-root = pathlib.Path(__file__).resolve().parents[1]
 share_dir = root / "share"
 doc_path = share_dir / "pm.snapshot.md"
 manifest_path = root / "docs" / "SSOT" / "SHARE_MANIFEST.json"
@@ -44,7 +47,14 @@ ENFORCE_STRICT = env("ENFORCE_STRICT", "")
 ro_probe = "(skipped: BIBLE_DB_DSN unset)"
 if BIBLE_DB_DSN:
     rc, out, err = run(
-        ["psql", BIBLE_DB_DSN, "-v", "ON_ERROR_STOP=1", "-Atc", "select current_database(), current_user;"]
+        [
+            "psql",
+            BIBLE_DB_DSN,
+            "-v",
+            "ON_ERROR_STOP=1",
+            "-Atc",
+            "select current_database(), current_user;",
+        ]
     )
     ro_probe = out if rc == 0 else f"(RO probe failed) {err}"
 

@@ -166,7 +166,7 @@ share.sync:
 
 pm.snapshot:
 	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
-	@python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
+	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
 
 share.manifest.verify:
 	@python3 -c "import json, sys, pathlib; target_count = 25; p = pathlib.Path('docs/SSOT/SHARE_MANIFEST.json'); data = json.loads(p.read_text()) if p.exists() else {'items': []}; n = len(data.get('items', [])); print(f'MANIFEST_COUNT={n} (expected {target_count})'); sys.exit(0 if n==target_count else 1)"
