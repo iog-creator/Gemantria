@@ -3,8 +3,9 @@
 RFC-073 PR-1 — tag-only core graph export (fail-closed).
 
 Behavior:
-- Requires GEMATRIA_DSN via centralized loader (get_rw_dsn()) to access gematria database.
-- On tag builds (GITHUB_REF_TYPE=tag), exit non-zero if DSN missing or psycopg unavailable.
+- Requires **read-only** DSN on tag builds (GEMATRIA_RO_DSN or ATLAS_DSN_RO preferred).
+- Dev/non-tag prefers RO and may fall back to RW (GEMATRIA_DSN) for read-only queries.
+- On tag builds (GITHUB_REF_TYPE=tag), exit non-zero if RO DSN missing or psycopg unavailable.
 - Produces ui/out/graph_core.json conforming to graph.schema.json (core only).
 - Per AGENTS.md: Extraction DB = GEMATRIA_DSN → database gematria (where graph data lives).
 """
@@ -19,7 +20,7 @@ import pathlib
 REPO = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-from scripts.config.env import get_rw_dsn
+from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn, env
 
 
 OUT_PATH = pathlib.Path("ui/out/graph_core.json")
@@ -32,11 +33,28 @@ def fail(msg, code=2):
 
 def main():
     is_tag = os.getenv("GITHUB_REF_TYPE") == "tag"
-    # Use RW DSN to access gematria database (where graph data lives)
-    # Per AGENTS.md: Extraction DB = GEMATRIA_DSN → database gematria
-    dsn = get_rw_dsn()
-    if is_tag and not dsn:
-        fail("Tag build requires GEMATRIA_DSN (set GEMATRIA_DSN, RW_DSN, AI_AUTOMATION_DSN, ATLAS_DSN_RW, or ATLAS_DSN).", 2)
+    # RFC-073: RO-on-tag policy (prefer GEMATRIA_RO_DSN/ATLAS_DSN_RO; dev may fall back to RW)
+    dsn = None
+    if is_tag:
+        # Tag builds: require read-only DSN
+        # Try GEMATRIA_RO_DSN or ATLAS_DSN_RO first (preferred for gematria DB)
+        dsn = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO")
+        if not dsn:
+            # Fallback to other RO sources
+            dsn = get_ro_dsn() or get_bible_db_dsn()
+        if not dsn:
+            fail(
+                "Tag build requires read-only DSN (set GEMATRIA_RO_DSN or ATLAS_DSN_RO).",
+                2,
+            )
+    else:
+        # Dev/non-tag: prefer RO, fall back to RW for read-only queries
+        dsn = env("GEMATRIA_RO_DSN") or env("ATLAS_DSN_RO") or get_ro_dsn() or get_bible_db_dsn()
+        if not dsn:
+            dsn = get_rw_dsn()  # Fallback to RW for dev
+        if not dsn:
+            print("[export_graph_core] No DSN available; skipping (non-tag).")
+            return
 
     try:
         import psycopg  # psycopg3
