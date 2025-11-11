@@ -9,5 +9,11 @@
   "counts": {
     "edges": 0,
     "top": 0
-  }
+  },
+  "metadata": {
+    "schema": "SSOT_graph-patterns.v1",
+    "generated_at": "2025-11-11T01:51:52.093828Z",
+    "total_patterns": 0
+  },
+  "patterns": []
 }

@@ -81,6 +81,11 @@ def main():
     p.add_argument("--filename-contains", action="append", default=[])
     p.add_argument("--exclude-glob", action="append", default=[])
     p.add_argument("--exclude-contains", action="append", default=[])
+    p.add_argument(
+        "--allow-empty",
+        action="store_true",
+        help="Allow PASS when no data files match (non-tag simulation only).",
+    )
     args = p.parse_args()
 
     strict_env = os.getenv("STRICT_GUARDS", "0") in ("1", "true", "TRUE")
@@ -148,12 +153,21 @@ def main():
         ok = False if strict else True
         notes.append("schema not found: " + args.schema_name)
 
+    # Handle empty-match policy:
+    # - Tag builds always require data (FAIL if empty)
+    # - Non-tag STRICT simulations may pass if --allow-empty is set
     if not candidates:
-        # No data found: pass in HINT, fail in STRICT
-        ok = ok and (not strict)
-        if strict and ok:  # if previously false, keep false
+        if is_tag_build():
             ok = False
-        notes.append("no matching data files")
+            notes.append("tag build requires data; no matching files")
+        elif args.allow_empty:
+            ok = True and ok
+            notes.append("allow-empty: no matching data files (non-tag)")
+        else:
+            ok = ok and (not strict)
+            if strict and ok:  # if previously false, keep false
+                ok = False
+            notes.append("no matching data files after excludes")
 
     if have_jsonschema and schema_path and candidates:
         with open(schema_path, encoding="utf-8") as f:
@@ -179,7 +193,7 @@ def main():
                     )
             files_checked += 1
     else:
-        if strict:
+        if strict and schema_path and not candidates and not args.allow_empty and not is_tag_build():
             ok = False
 
     out = {
