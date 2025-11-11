@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 
 import argparse
+import fnmatch
 import glob
 import json
 import os
 import subprocess
 import sys
+
+
+DEFAULT_EXCLUDES = [
+    "sample",
+    "samples",
+    "fixture",
+    "fixtures",
+    "guard",
+    "golden",
+    "demo",
+    "test",
+    "tests",
+]
+EXCLUDE_SUFFIXES = (".schema.json",)
+EXCLUDE_PATH_HINTS = ("docs/SSOT/",)
 
 
 def is_tag_build():
@@ -63,6 +79,8 @@ def main():
     p.add_argument("--schema-name", required=True)  # filename to search for
     p.add_argument("--data-glob", action="append", default=[])
     p.add_argument("--filename-contains", action="append", default=[])
+    p.add_argument("--exclude-glob", action="append", default=[])
+    p.add_argument("--exclude-contains", action="append", default=[])
     args = p.parse_args()
 
     strict_env = os.getenv("STRICT_GUARDS", "0") in ("1", "true", "TRUE")
@@ -88,6 +106,7 @@ def main():
     candidates = []
     for g in args.data_glob or []:
         candidates.extend(glob.glob(g, recursive=True))
+
     # Optional filename filters
     if args.filename_contains:
 
@@ -97,9 +116,32 @@ def main():
 
         candidates = list(filter(keep, candidates))
 
-    # Deduplicate and only existing files
-    candidates = sorted({c for c in candidates if os.path.isfile(c)})
+    # Exclusions: default substrings + user-provided + schema files + docs/SSOT
+    exclude_contains = set(x.lower() for x in DEFAULT_EXCLUDES + list(args.exclude_contains or []))
+    exclude_globs = list(args.exclude_glob or [])
+
+    def excluded(path: str) -> bool:
+        low = path.lower()
+        if any(hint in path for hint in EXCLUDE_PATH_HINTS):
+            return True
+        if any(low.endswith(suf) for suf in EXCLUDE_SUFFIXES):
+            return True
+        if any(sub in low for sub in exclude_contains):
+            return True
+        for pat in exclude_globs:
+            if fnmatch.fnmatch(path, pat):
+                return True
+        return False
+
+    # Deduplicate and only existing files, excluding schema files and docs/SSOT
+    candidates = sorted({c for c in candidates if os.path.isfile(c) and not excluded(c)})
     exists["data_files"] = candidates
+    exists["excludes"] = {
+        "contains": sorted(list(exclude_contains)),
+        "globs": exclude_globs,
+        "suffixes": EXCLUDE_SUFFIXES,
+        "path_hints": EXCLUDE_PATH_HINTS,
+    }
 
     ok = True
     if not schema_path:
