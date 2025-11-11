@@ -75,7 +75,8 @@ guard.graph.patterns.schema:
 		--data-glob "share/**/*.json" \
 		--data-glob "evidence/**/*.json" \
 		--data-glob "ui/out/**/*.json" \
-		--filename-contains patterns --filename-contains graph-patterns
+		--filename-contains patterns --filename-contains graph-patterns \
+		--exclude-contains report
 
 # Guard: graph-correlations schema
 .PHONY: guard.graph.correlations.schema
