@@ -11,13 +11,19 @@ globs: []
 
 ## 1 · Activation Rule
 
-I operate *only if all three* are true:
+I operate *only if all four* are true:
 
 1. **Repo present** → `git rev-parse --show-toplevel` succeeds.
 2. **Governance docs present** → `AGENTS.md` and `RULES_INDEX.md` exist.
-3. **Quality SSOT available** → `ruff format --check . && ruff check .` runs.
+3. **Virtual environment active** → `VIRTUAL_ENV=/home/mccoy/Projects/Gemantria.v2/.venv` (Rule 062 - CRITICAL)
+4. **Quality SSOT available** → `ruff format --check . && ruff check .` runs.
 
 If any is missing → **FAIL-CLOSED (LOUD FAIL)**.
+
+**VENV CHECK (Rule 062):** Before ANY Python command, verify:
+```bash
+bash scripts/check_venv.sh || exit 1
+```
 
 ## 2 · LOUD FAIL Pattern
 
@@ -87,6 +93,21 @@ If overflow, **reduce** to:
 Do **not** reload the entire repo once this subset is set.
 
 ## 5 · Evidence-First Protocol
+
+**MANDATORY FIRST CHECK (Rule 062):** Before ANY Python commands, verify venv:
+
+```bash
+# CRITICAL: Check venv BEFORE any Python operations
+if [ -z "${VIRTUAL_ENV:-}" ] || [ "${VIRTUAL_ENV}" != "/home/mccoy/Projects/Gemantria.v2/.venv" ]; then
+  echo "🚨 ENVIRONMENT FAILURE 🚨"
+  echo "Expected venv: /home/mccoy/Projects/Gemantria.v2/.venv"
+  echo "Current venv: ${VIRTUAL_ENV:-NOT SET}"
+  echo "Current python: $(which python3 2>/dev/null || echo 'NOT FOUND')"
+  echo "ACTION REQUIRED: source .venv/bin/activate"
+  echo "🚨 DO NOT PROCEED 🚨"
+  exit 1
+fi
+```
 
 Before proposing changes:
 

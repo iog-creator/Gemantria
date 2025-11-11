@@ -365,6 +365,8 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 062 | # --- |
 | 063 | # --- |
 | 064 | # id: "064" |
-| 065 | # --- |
+| 065 | # Rule 065 — Auto-Normalize on Branch Switch & PR Events |
 | 066 | # --- |
+| 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
+| 068 | # --- |
 <!-- RULES_TABLE_END -->

@@ -106,6 +106,7 @@ After pushing the tag, CI will run in **STRICT mode** (not HINT-only):
   - All smoke targets must pass
   - All guards must pass (no HINT-only mode)
   - Evidence artifacts must be present and valid
+  - Atlas screenshots: REQUIRED (Rule-067 webproof)
 - **RO-DSN requirement**: Tag builds require `GEMATRIA_RO_DSN` or `ATLAS_DSN_RO` (peer equivalence, fail-closed if neither present)
 
 ### 4. Post-Release Verification

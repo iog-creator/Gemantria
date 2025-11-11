@@ -11,16 +11,34 @@ Prevent catastrophic failures by ensuring correct environment before any operati
 ## Critical Environment Checks (MANDATORY)
 
 ### 1. Virtual Environment Validation
-**BEFORE ANY COMMAND**: Always verify correct venv activation:
+**CRITICAL: BEFORE ANY PYTHON COMMAND OR SESSION START**: Always verify correct venv activation.
 
+**MANDATORY CHECK (use at start of every session):**
 ```bash
-# Must show: /home/mccoy/Projects/Gemantria.v2/.venv/bin/python
-which python && python --version
+# Use the helper script
+bash scripts/check_venv.sh
+
+# Or inline check:
+if [ -z "${VIRTUAL_ENV:-}" ] || [ "${VIRTUAL_ENV}" != "/home/mccoy/Projects/Gemantria.v2/.venv" ]; then
+  echo "🚨 ENVIRONMENT FAILURE 🚨" >&2
+  echo "Expected venv: /home/mccoy/Projects/Gemantria.v2/.venv" >&2
+  echo "Current venv: ${VIRTUAL_ENV:-NOT SET}" >&2
+  echo "Current python: $(which python3 2>/dev/null || echo 'NOT FOUND')" >&2
+  echo "ACTION REQUIRED: source .venv/bin/activate" >&2
+  echo "🚨 DO NOT PROCEED 🚨" >&2
+  exit 1
+fi
+```
+
+**Verification commands:**
+```bash
+# Must show: /home/mccoy/Projects/Gemantria.v2/.venv/bin/python3
+which python3
 
 # Must show: /home/mccoy/Projects/Gemantria.v2/.venv
 echo $VIRTUAL_ENV
 
-# If not correct: source activate_venv.sh
+# If not correct: source .venv/bin/activate
 ```
 
 **LOUD FAILURE if not in correct venv:**
@@ -28,10 +46,15 @@ echo $VIRTUAL_ENV
 🚨 ENVIRONMENT FAILURE 🚨
 Expected venv: /home/mccoy/Projects/Gemantria.v2/.venv
 Current venv: $VIRTUAL_ENV
-Current python: $(which python)
-ACTION REQUIRED: source activate_venv.sh
+Current python: $(which python3)
+ACTION REQUIRED: source .venv/bin/activate
 🚨 DO NOT PROCEED 🚨
 ```
+
+**Enforcement:**
+- Rule 050 (OPS Contract) requires venv check as FIRST step in Evidence-First Protocol
+- All Python scripts should include venv check at start (see `scripts/bringup_001.sh` for example)
+- Helper script: `scripts/check_venv.sh` - use at session start or before Python commands
 
 ### 2. LM Studio Configuration Validation
 **BEFORE ANY AI OPERATIONS**: Verify LM Studio connectivity:

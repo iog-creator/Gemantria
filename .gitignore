@@ -36,3 +36,4 @@ prompts/run_*.jsonl
 !docs/evidence/*.md
 .server.pid
 json,sys
+.env.local

@@ -67,5 +67,7 @@
 | 062 | 062-environment-validation.mdc | # --- |
 | 063 | 063-git-safety.mdc | # --- |
 | 064 | 064-ai-tracking-contract.mdc | # id: "064" |
-| 065 | 065-gpt-docs-sync.mdc | # --- |
+| 065 | 065-auto-normalize.mdc | # Rule 065 — Auto-Normalize on Branch Switch & PR Events |
 | 066 | 066-lm-studio-appimage-update.mdc | # --- |
+| 067 | 067-atlas-webproof.mdc | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
+| 068 | 068-gpt-docs-sync.mdc | # --- |

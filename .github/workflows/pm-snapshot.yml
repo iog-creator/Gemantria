@@ -1,0 +1,83 @@
+name: pm-snapshot
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - "AGENTS.md"
+      - "RULES_INDEX.md"
+      - "docs/SSOT/**"
+      - "scripts/pm_snapshot.py"
+      - "Makefile"
+      - "docs/SSOT/SHARE_MANIFEST.json"
+    tags:
+      - "v*"
+  pull_request:
+    branches: [ "**" ]
+    paths:
+      - "AGENTS.md"
+      - "RULES_INDEX.md"
+      - "docs/SSOT/**"
+      - "scripts/pm_snapshot.py"
+      - "Makefile"
+      - "docs/SSOT/SHARE_MANIFEST.json"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      # NOTE: For security, pin actions to SHAs in a follow-up commit per policy.
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Create venv
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -V
+          # Optional deps; tolerate absence for hermetic behavior
+          if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
+          pip install ruff || true
+      - name: SSOT ruff checks
+        run: |
+          source .venv/bin/activate
+          ruff --version || true
+          ruff format --check . && ruff check .
+      - name: Generate PM Snapshot
+        run: |
+          source .venv/bin/activate
+          make pm.snapshot
+      - name: Regenerate PM Snapshot with DSNs (release tags)
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc')
+        env:
+          BIBLE_DB_DSN: ${{ secrets.BIBLE_DB_DSN }}
+          GEMATRIA_DSN: ${{ secrets.GEMATRIA_DSN }}
+          CHECKPOINTER: postgres
+          ENFORCE_STRICT: "1"
+        run: |
+          source .venv/bin/activate
+          make pm.snapshot
+      - name: Verify share manifest (25 files)
+        run: |
+          source .venv/bin/activate
+          make share.manifest.verify
+      - name: Guard PM Snapshot (non-strict)
+        run: |
+          bash scripts/guard_pm_snapshot.sh share/pm.snapshot.md
+      - name: Guard PM Snapshot (STRICT on tags)
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc')
+        env:
+          STRICT_PM_SNAPSHOT: "1"
+        run: |
+          bash scripts/guard_pm_snapshot.sh share/pm.snapshot.md
+      - name: Upload snapshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pm.snapshot
+          path: share/pm.snapshot.md
+

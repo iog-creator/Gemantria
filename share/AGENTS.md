@@ -41,6 +41,11 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - **LM Studio Setup**: Run `lms server start --port 9994 --gpu=1.0` for live inference
   - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
+  - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
+    - Start: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`
+    - Health: `make mcp.sse.health`
+    - Guard: `ENABLE_LMSTUDIO_MCP=1 make guard.mcp.sse` (optional, HINT mode by default)
+    - Server URL for LM Studio: `http://127.0.0.1:8005/sse`
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
@@ -458,8 +463,10 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 062 | # --- |
 | 063 | # --- |
 | 064 | # id: "064" |
-| 065 | # --- |
+| 065 | # Rule 065 — Auto-Normalize on Branch Switch & PR Events |
 | 066 | # --- |
+| 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
+| 068 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---
@@ -631,7 +638,23 @@ graph.score:               # Reranker → graph_latest.scored.json
 analytics.export:          # Stats/Patterns/Temporal/Forecast + report.md
 guards.all:                # Schema + invariants + Hebrew + orphans + ADR
 release.prepare:           # Pack artifacts + release notes
+bringup.001:               # STRICT bring-up verification (env gate → LM Studio → pipeline → guards → evidence)
+dsns.echo:                 # Print redacted DSNs for operator sanity (never prints secrets)
 ```
+
+**Bring-up 001 (`make bringup.001`):**
+- **Purpose:** STRICT verification of complete pipeline from environment setup through evidence capture
+- **DSN Precedence:** `.env.local` > `.env` > centralized loader (`scripts.config.env`) > defaults
+- **Requirements:** `BIBLE_DB_DSN` (RO) and `GEMATRIA_DSN` (RW) must be available
+- **Posture:** Enforces `CHECKPOINTER=postgres` and `ENFORCE_STRICT=1` for durable checkpoints
+- **Steps:** (1) Environment hard-gate, (2) Always-Apply triad verification, (3) LM Studio readiness, (4) Minimal pipeline run, (5) Guards (fail-closed), (6) Evidence capture
+- **Output:** `evidence/bringup_001/run.log` with full execution trace and timing
+
+**DSN Helper (`make dsns.echo`):**
+- **Purpose:** Operator sanity check - prints redacted DSNs without exposing secrets
+- **Behavior:** Checks `.env.local` first, then `.env`, then centralized loader; prints redacted connection strings
+- **Security:** Never prints actual credentials - uses `REDACTED@` pattern for user/password portions
+- **Output:** Shows effective `CHECKPOINTER` and `ENFORCE_STRICT` values
 
 ### Handoff Contracts
 
