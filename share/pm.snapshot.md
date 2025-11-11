@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-11T14:17:18-08:00_
+_Generated: 2025-11-11T14:19:58-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
