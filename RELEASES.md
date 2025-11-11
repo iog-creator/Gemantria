@@ -1,5 +1,31 @@
 # Release Process
 
+## v0.0.2 (2025-11-11)
+
+### Browser Verification Template + STRICT Webproof + DSN Automation
+
+**Highlights:**
+- Mandatory Browser Verification template in `GPT_SYSTEM_PROMPT.md` (Rule-051/067)
+- STRICT webproof enforcement on release tags (Rule-067)
+- Automated DSN secrets/variables sync to GitHub
+- Atlas UI enhancements with MCP catalog integration
+
+**Key Changes:**
+- **docs**: Browser Verification template (RFC-077) — mandatory OPS OUTPUT section for visual/web artifacts
+- **ci**: Aligned tagproof workflow with STRICT webproof + DSN posture requirements
+- **ops**: Created `scripts/ops/sync_github_dsns.sh` for automatic GitHub secrets/variables sync
+- **ops**: Rule-067 webproof hardening — fails on Mermaid syntax errors
+- **mcp**: Atlas UI enhancements — live fetch, catalog view, read-only endpoints
+
+**CI Verification:**
+- Tag `v0.0.2` tagproof workflow: ✅ **SUCCESS** (run 19280575725)
+- All STRICT checks passed: webproof, DSN posture, guards
+- All required secrets/variables verified: `ATLAS_DSN`, `BIBLE_DB_DSN`, `GEMATRIA_DSN`
+
+**Related PRs:**
+- PR #406: Browser Verification template (Rule-051/067); RFC-077
+- PR #405: CI alignment with STRICT webproof + DSN posture
+
 ## v2.0 (2025-11-10)
 - Overhauled master reference (GEMANTRIA_MASTER_REFERENCE.md v2)
 - Added orchestrator layering (LangGraph + Prefect)
