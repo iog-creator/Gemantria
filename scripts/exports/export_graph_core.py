@@ -74,7 +74,17 @@ def main():
             return
 
     # Attempt RO connection and extract nodes/edges (read-only queries only).
+    # In CI, DSN must be a network connection (host:port), not a local socket.
     try:
+        # Validate DSN format for CI environments
+        if os.getenv("CI") and dsn and "://" in dsn:
+            # Check if DSN lacks a host (defaults to local socket)
+            if dsn.startswith("postgresql:///") or dsn.startswith("postgres:///"):
+                fail(
+                    "CI environment requires network DSN with host:port (e.g., postgresql://user:pass@host:port/db). "
+                    "Local socket DSNs are not supported in CI.",
+                    4,
+                )
         with psycopg.connect(dsn, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Test connection
