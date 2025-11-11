@@ -29,37 +29,37 @@ guard.ci.no_schedules:
 # Added by ops: guard target for prompt-format
 .PHONY: guard.prompt.format
 guard.prompt.format:
-	@python3 scripts/ci/guard_prompt_format.py
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_prompt_format.py
 
 # Guard: docs presence (RFC-072)
 .PHONY: guard.docs.presence
 guard.docs.presence:
-	@python3 scripts/ci/guard_docs_presence.py
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_docs_presence.py
 
 # Guard: ai-nouns schema (RFC-072 Part 2)
 .PHONY: guard.ai_nouns.schema
 guard.ai_nouns.schema:
-	@python3 scripts/ci/guard_json_schema.py --name ai_nouns \
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name ai_nouns \
 		--schema-name ai-nouns.schema.json \
 		--data-glob "share/**/*.json" \
 		--data-glob "evidence/**/*.json" \
 		--data-glob "ui/out/**/*.json" \
-		--filename-contains ai_nouns --filename-contains nouns || true
+		--filename-contains ai_nouns --filename-contains nouns
 
 # Guard: graph schema (RFC-072 Part 2)
 .PHONY: guard.graph.schema
 guard.graph.schema:
-	@python3 scripts/ci/guard_json_schema.py --name graph \
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_json_schema.py --name graph \
 		--schema-name graph.schema.json \
 		--data-glob "share/**/*.json" \
 		--data-glob "evidence/**/*.json" \
 		--data-glob "ui/out/**/*.json" \
-		--filename-contains graph || true
+		--filename-contains graph
 
 # Guard: jsonschema import (STRICT at tag-time, HINT on PRs)
 .PHONY: guard.jsonschema.import
 guard.jsonschema.import:
-	@python3 scripts/ci/guard_jsonschema_import.py || true
+	@scripts/ci/run_strict.sh python3 scripts/ci/guard_jsonschema_import.py
 
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
