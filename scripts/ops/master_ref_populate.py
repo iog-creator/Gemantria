@@ -20,7 +20,7 @@ import traceback
 from pathlib import Path
 
 # Add project root to path for imports
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[2]  # scripts/ops/master_ref_populate.py -> repo root
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "src"))
 
