@@ -21,6 +21,13 @@ ATLAS_DSN=
 # Falls back to GEMATRIA_DSN if unset
 ATLAS_DSN_RW=
 
+# Read-only DSN (peer equivalence for tag builds)
+# GEMATRIA_RO_DSN and ATLAS_DSN_RO are equal primaries (not fallback)
+# Both are checked first in centralized DSN loaders (scripts/config/env.py, src/gemantria/dsn.py)
+# Required for tag builds; fail-closed if neither peer RO DSN is present
+GEMATRIA_RO_DSN=
+ATLAS_DSN_RO=
+
 # HINT/STRICT switches (default HINT in CI; opt-in STRICT locally/tags)
 STRICT_ATLAS_DSN=0
 STRICT_ALWAYS_APPLY=0
