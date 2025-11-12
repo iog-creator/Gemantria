@@ -1722,3 +1722,6 @@ guard.atlas:
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
 	@echo 'atlas.generate OK'
+
+tvs.atlas.next37:
+	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/tvs_atlas_e35e37.txt || true
