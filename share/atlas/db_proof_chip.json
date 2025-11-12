@@ -2,5 +2,7 @@
   "strict": true,
   "checkpointer": "postgres",
   "dsn": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
-  "generated_at": "2025-11-12T09:08:41Z"
+  "dsn_host_hash": "ce90774e1ecb",
+  "latency_ms": 16,
+  "generated_at": "2025-11-12T09:18:11Z"
 }
