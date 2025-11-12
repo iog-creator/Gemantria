@@ -1692,3 +1692,7 @@ guard.mcp.db.ro:
 .PHONY: guard.schema.naming
 guard.schema.naming:
 	$(PYTHON) scripts/ci/guard_schema_naming.py | tee evidence/guard_schema_naming.final.json
+
+.PHONY: guard.extractors
+guard.extractors:
+	$(PYTHON) scripts/ci/guard_extraction_agents.py | tee evidence/guard_extraction_agents.final.json

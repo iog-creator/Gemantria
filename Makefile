@@ -1696,3 +1696,6 @@ guard.schema.naming:
 .PHONY: guard.extractors
 guard.extractors:
 	$(PYTHON) scripts/ci/guard_extraction_agents.py | tee evidence/guard_extraction_agents.final.json
+
+tvs.exports.next:
+	@pytest -q agentpm/tests/exports/test_graph_export_e20_e22.py > evidence/tvs_exports_e20e22.txt || true
