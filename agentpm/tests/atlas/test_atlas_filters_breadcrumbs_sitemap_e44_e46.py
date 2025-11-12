@@ -1,16 +1,13 @@
 import json, pytest, pathlib
 
 
-xfail_reason = "Staging E44-E46 (quick filters, breadcrumb aria-current, sitemap.json schema) - expected to fail until implemented."
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=True)
-
-
+@pytest.mark.xfail(reason="staged (expected fail)", strict=True)
 def test_e44_index_has_quick_filters():
     html = pathlib.Path("share/atlas/index.html").read_text(encoding="utf-8")
     assert ('id="quick-filters"' in html) or ("data-quick-filters" in html)
 
 
+@pytest.mark.xfail(reason="staged (expected fail)", strict=True)
 def test_e45_node_breadcrumb_has_aria_current():
     html = pathlib.Path("share/atlas/nodes/0.html").read_text(encoding="utf-8")
     assert 'aria-current="page"' in html
