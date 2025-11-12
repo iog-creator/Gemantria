@@ -1729,3 +1729,6 @@ tvs.atlas.next37:
 	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/tvs_atlas_e35e37.txt || true
 tvs.atlas.next40:
 	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/tvs_e38e40.txt || true
+tvs.atlas.next46:
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py || true
+	@echo "TVS E44+ staged: xfail"
