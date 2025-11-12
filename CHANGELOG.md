@@ -1,4 +1,20 @@
 ## [Unreleased]
+
+## [v0.0.3] - 2025-11-12
+
+### Highlights
+
+- **STRICT tag lane:** Added read-only MCP guard step (`make guard.mcp.db.ro STRICT_DB_PROBE=1`) proving `mcp.v_catalog` on tags.
+
+- **Hermetic PRs:** No DB/network probes in PR CI; STRICT proofs run only in tagproof.
+
+- **Governance:** Tool Bus remains **OFF** by default; Guarded Tool Calls P0 execution landed with TVs 01–05 green.
+
+### Proofs (tagproof)
+
+- RO guard executed successfully (see `share/releases/v0.0.3/tagproof/*`).
+
+- Webproof artifacts mirrored when locally available.
 - TBD
 
 2025-11-11 — v0.0.2: Browser Verification template (Rule-051/067) + STRICT webproof + DSN automation

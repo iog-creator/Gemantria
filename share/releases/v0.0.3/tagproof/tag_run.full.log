@@ -1,0 +1,323 @@
+tagproof	Set up job	﻿2025-11-12T00:30:07.4517069Z Current runner version: '2.329.0'
+tagproof	Set up job	2025-11-12T00:30:07.4555433Z ##[group]Runner Image Provisioner
+tagproof	Set up job	2025-11-12T00:30:07.4556944Z Hosted Compute Agent
+tagproof	Set up job	2025-11-12T00:30:07.4557823Z Version: 20251016.436
+tagproof	Set up job	2025-11-12T00:30:07.4558805Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+tagproof	Set up job	2025-11-12T00:30:07.4560082Z Build Date: 2025***10***15T20:44:12Z
+tagproof	Set up job	2025-11-12T00:30:07.4561134Z ##[endgroup]
+tagproof	Set up job	2025-11-12T00:30:07.4561957Z ##[group]Operating System
+tagproof	Set up job	2025-11-12T00:30:07.4562822Z Ubuntu
+tagproof	Set up job	2025-11-12T00:30:07.4563671Z 24.04.3
+tagproof	Set up job	2025-11-12T00:30:07.4564414Z LTS
+tagproof	Set up job	2025-11-12T00:30:07.4565089Z ##[endgroup]
+tagproof	Set up job	2025-11-12T00:30:07.4566274Z ##[group]Runner Image
+tagproof	Set up job	2025-11-12T00:30:07.4567188Z Image: ubuntu***24.04
+tagproof	Set up job	2025-11-12T00:30:07.4568005Z Version: 20251102.99.1
+tagproof	Set up job	2025-11-12T00:30:07.4569767Z Included Software: https://github.com/actions/runner***images/blob/ubuntu24/20251102.99/images/ubuntu/Ubuntu2404***Readme.md
+tagproof	Set up job	2025-11-12T00:30:07.4572302Z Image Release: https://github.com/actions/runner***images/releases/tag/ubuntu24%2F20251102.99
+tagproof	Set up job	2025-11-12T00:30:07.4574195Z ##[endgroup]
+tagproof	Set up job	2025-11-12T00:30:07.4576139Z ##[group]GITHUB_TOKEN Permissions
+tagproof	Set up job	2025-11-12T00:30:07.4578796Z Contents: read
+tagproof	Set up job	2025-11-12T00:30:07.4579594Z Metadata: read
+tagproof	Set up job	2025-11-12T00:30:07.4580476Z Packages: read
+tagproof	Set up job	2025-11-12T00:30:07.4581213Z ##[endgroup]
+tagproof	Set up job	2025-11-12T00:30:07.4584242Z Secret source: Actions
+tagproof	Set up job	2025-11-12T00:30:07.4585433Z Prepare workflow directory
+tagproof	Set up job	2025-11-12T00:30:07.5135003Z Prepare all required actions
+tagproof	Set up job	2025-11-12T00:30:07.5193155Z Getting action download info
+tagproof	Set up job	2025-11-12T00:30:07.7234222Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+tagproof	Set up job	2025-11-12T00:30:07.9426355Z Complete job name: tagproof
+tagproof	Checkout	﻿2025-11-12T00:30:08.0176855Z ##[group]Run actions/checkout@v4
+tagproof	Checkout	2025-11-12T00:30:08.0177756Z with:
+tagproof	Checkout	2025-11-12T00:30:08.0178269Z   repository: iog***creator/Gemantria
+tagproof	Checkout	2025-11-12T00:30:08.0178916Z   token: ***
+tagproof	Checkout	2025-11-12T00:30:08.0179331Z   ssh***strict: true
+tagproof	Checkout	2025-11-12T00:30:08.0179766Z   ssh***user: git
+tagproof	Checkout	2025-11-12T00:30:08.0180211Z   persist***credentials: true
+tagproof	Checkout	2025-11-12T00:30:08.0180701Z   clean: true
+tagproof	Checkout	2025-11-12T00:30:08.0181141Z   sparse***checkout***cone***mode: true
+tagproof	Checkout	2025-11-12T00:30:08.0181669Z   fetch***depth: 1
+tagproof	Checkout	2025-11-12T00:30:08.0182097Z   fetch***tags: false
+tagproof	Checkout	2025-11-12T00:30:08.0182546Z   show***progress: true
+tagproof	Checkout	2025-11-12T00:30:08.0182975Z   lfs: false
+tagproof	Checkout	2025-11-12T00:30:08.0183348Z   submodules: false
+tagproof	Checkout	2025-11-12T00:30:08.0183775Z   set***safe***directory: true
+tagproof	Checkout	2025-11-12T00:30:08.0184443Z env:
+tagproof	Checkout	2025-11-12T00:30:08.0184863Z   PIP_REQUIRE_VENV: true
+tagproof	Checkout	2025-11-12T00:30:08.0185360Z   ATLAS_DSN: ***
+tagproof	Checkout	2025-11-12T00:30:08.0185770Z   STRICT_WEBPROOF: 1
+tagproof	Checkout	2025-11-12T00:30:08.0186356Z   BIBLE_DB_DSN: ***
+tagproof	Checkout	2025-11-12T00:30:08.0186827Z   GEMATRIA_DSN: ***
+tagproof	Checkout	2025-11-12T00:30:08.0187294Z   CHECKPOINTER: postgres
+tagproof	Checkout	2025-11-12T00:30:08.0187745Z   ENFORCE_STRICT: 1
+tagproof	Checkout	2025-11-12T00:30:08.0188168Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:08.1325346Z Syncing repository: iog***creator/Gemantria
+tagproof	Checkout	2025-11-12T00:30:08.1328442Z ##[group]Getting Git version info
+tagproof	Checkout	2025-11-12T00:30:08.1329656Z Working directory is '/home/runner/work/Gemantria/Gemantria'
+tagproof	Checkout	2025-11-12T00:30:08.1331376Z [command]/usr/bin/git version
+tagproof	Checkout	2025-11-12T00:30:08.1427215Z git version 2.51.2
+tagproof	Checkout	2025-11-12T00:30:08.1456397Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:08.1471428Z Temporarily overriding HOME='/home/runner/work/_temp/6ebe0d02***898c***458a***a15b***4daf2704630d' before making global git config changes
+tagproof	Checkout	2025-11-12T00:30:08.1472849Z Adding repository directory to the temporary git global config as a safe directory
+tagproof	Checkout	2025-11-12T00:30:08.1484677Z [command]/usr/bin/git config ***global ***add safe.directory /home/runner/work/Gemantria/Gemantria
+tagproof	Checkout	2025-11-12T00:30:08.1525433Z Deleting the contents of '/home/runner/work/Gemantria/Gemantria'
+tagproof	Checkout	2025-11-12T00:30:08.1530016Z ##[group]Initializing the repository
+tagproof	Checkout	2025-11-12T00:30:08.1535221Z [command]/usr/bin/git init /home/runner/work/Gemantria/Gemantria
+tagproof	Checkout	2025-11-12T00:30:08.1657857Z hint: Using 'master' as the name for the initial branch. This default branch name
+tagproof	Checkout	2025-11-12T00:30:08.1659176Z hint: is subject to change. To configure the initial branch name to use in all
+tagproof	Checkout	2025-11-12T00:30:08.1660609Z hint: of your new repositories, which will suppress this warning, call:
+tagproof	Checkout	2025-11-12T00:30:08.1661742Z hint:
+tagproof	Checkout	2025-11-12T00:30:08.1662471Z hint: 	git config ***global init.defaultBranch <name>
+tagproof	Checkout	2025-11-12T00:30:08.1663330Z hint:
+tagproof	Checkout	2025-11-12T00:30:08.1664288Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+tagproof	Checkout	2025-11-12T00:30:08.1666174Z hint: 'development'. The just***created branch can be renamed via this command:
+tagproof	Checkout	2025-11-12T00:30:08.1667497Z hint:
+tagproof	Checkout	2025-11-12T00:30:08.1668240Z hint: 	git branch ***m <name>
+tagproof	Checkout	2025-11-12T00:30:08.1669049Z hint:
+tagproof	Checkout	2025-11-12T00:30:08.1670063Z hint: Disable this message with "git config set advice.defaultBranchName false"
+tagproof	Checkout	2025-11-12T00:30:08.1671847Z Initialized empty Git repository in /home/runner/work/Gemantria/Gemantria/.git/
+tagproof	Checkout	2025-11-12T00:30:08.1677178Z [command]/usr/bin/git remote add origin https://github.com/iog***creator/Gemantria
+tagproof	Checkout	2025-11-12T00:30:08.1714504Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:08.1715719Z ##[group]Disabling automatic garbage collection
+tagproof	Checkout	2025-11-12T00:30:08.1719881Z [command]/usr/bin/git config ***local gc.auto 0
+tagproof	Checkout	2025-11-12T00:30:08.1757257Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:08.1758077Z ##[group]Setting up auth
+tagproof	Checkout	2025-11-12T00:30:08.1758878Z [command]/usr/bin/git config ***local ***name***only ***get***regexp core\.sshCommand
+tagproof	Checkout	2025-11-12T00:30:08.1787169Z [command]/usr/bin/git submodule foreach ***recursive sh ***c "git config ***local ***name***only ***get***regexp 'core\.sshCommand' && git config ***local ***unset***all 'core.sshCommand' || :"
+tagproof	Checkout	2025-11-12T00:30:08.2166681Z [command]/usr/bin/git config ***local ***name***only ***get***regexp http\.https\:\/\/github\.com\/\.extraheader
+tagproof	Checkout	2025-11-12T00:30:08.2199341Z [command]/usr/bin/git submodule foreach ***recursive sh ***c "git config ***local ***name***only ***get***regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config ***local ***unset***all 'http.https://github.com/.extraheader' || :"
+tagproof	Checkout	2025-11-12T00:30:08.2424894Z [command]/usr/bin/git config ***local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+tagproof	Checkout	2025-11-12T00:30:08.2463531Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:08.2464966Z ##[group]Fetching the repository
+tagproof	Checkout	2025-11-12T00:30:08.2474126Z [command]/usr/bin/git ***c protocol.version=2 fetch ***no***tags ***prune ***no***recurse***submodules ***depth=1 origin +a2269e7032232e3a4692db56be43f37741b4fef3:refs/tags/v0.0.3
+tagproof	Checkout	2025-11-12T00:30:10.2369184Z From https://github.com/iog***creator/Gemantria
+tagproof	Checkout	2025-11-12T00:30:10.2371654Z  * [new ref]         a2269e7032232e3a4692db56be43f37741b4fef3 ***> v0.0.3
+tagproof	Checkout	2025-11-12T00:30:10.2395410Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:10.2397038Z ##[group]Determining the checkout info
+tagproof	Checkout	2025-11-12T00:30:10.2398518Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:10.2402534Z [command]/usr/bin/git sparse***checkout disable
+tagproof	Checkout	2025-11-12T00:30:10.2442788Z [command]/usr/bin/git config ***local ***unset***all extensions.worktreeConfig
+tagproof	Checkout	2025-11-12T00:30:10.2470360Z ##[group]Checking out the ref
+tagproof	Checkout	2025-11-12T00:30:10.2473280Z [command]/usr/bin/git checkout ***progress ***force refs/tags/v0.0.3
+tagproof	Checkout	2025-11-12T00:30:11.2649672Z Updating files:  84% (12723/15109)
+tagproof	Checkout	2025-11-12T00:30:11.2731027Z Updating files:  85% (12843/15109)
+tagproof	Checkout	2025-11-12T00:30:11.2803887Z Updating files:  86% (12994/15109)
+tagproof	Checkout	2025-11-12T00:30:11.2887471Z Updating files:  87% (13145/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3002642Z Updating files:  88% (13296/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3128614Z Updating files:  89% (13448/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3307712Z Updating files:  90% (13599/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3445040Z Updating files:  91% (13750/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3507693Z Updating files:  92% (13901/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3598295Z Updating files:  93% (14052/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3666649Z Updating files:  94% (14203/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3747230Z Updating files:  95% (14354/15109)
+tagproof	Checkout	2025-11-12T00:30:11.3935859Z Updating files:  96% (14505/15109)
+tagproof	Checkout	2025-11-12T00:30:11.4338027Z Updating files:  97% (14656/15109)
+tagproof	Checkout	2025-11-12T00:30:11.4799713Z Updating files:  98% (14807/15109)
+tagproof	Checkout	2025-11-12T00:30:11.5005110Z Updating files:  99% (14958/15109)
+tagproof	Checkout	2025-11-12T00:30:11.5005884Z Updating files: 100% (15109/15109)
+tagproof	Checkout	2025-11-12T00:30:11.5006622Z Updating files: 100% (15109/15109), done.
+tagproof	Checkout	2025-11-12T00:30:11.5149126Z Note: switching to 'refs/tags/v0.0.3'.
+tagproof	Checkout	2025-11-12T00:30:11.5151326Z 
+tagproof	Checkout	2025-11-12T00:30:11.5151886Z You are in 'detached HEAD' state. You can look around, make experimental
+tagproof	Checkout	2025-11-12T00:30:11.5152955Z changes and commit them, and you can discard any commits you make in this
+tagproof	Checkout	2025-11-12T00:30:11.5154001Z state without impacting any branches by switching back to a branch.
+tagproof	Checkout	2025-11-12T00:30:11.5154622Z 
+tagproof	Checkout	2025-11-12T00:30:11.5155062Z If you want to create a new branch to retain commits you create, you may
+tagproof	Checkout	2025-11-12T00:30:11.5156408Z do so (now or later) by using ***c with the switch command. Example:
+tagproof	Checkout	2025-11-12T00:30:11.5157036Z 
+tagproof	Checkout	2025-11-12T00:30:11.5157302Z   git switch ***c <new***branch***name>
+tagproof	Checkout	2025-11-12T00:30:11.5157674Z 
+tagproof	Checkout	2025-11-12T00:30:11.5157893Z Or undo this operation with:
+tagproof	Checkout	2025-11-12T00:30:11.5158307Z 
+tagproof	Checkout	2025-11-12T00:30:11.5158506Z   git switch ***
+tagproof	Checkout	2025-11-12T00:30:11.5158797Z 
+tagproof	Checkout	2025-11-12T00:30:11.5159199Z Turn off this advice by setting config variable advice.detachedHead to false
+tagproof	Checkout	2025-11-12T00:30:11.5159867Z 
+tagproof	Checkout	2025-11-12T00:30:11.5160867Z HEAD is now at a2269e7 Guarded Tool Calls — PR***2: STRICT/tag RO adapter proof (no PR CI probes) (#416)
+tagproof	Checkout	2025-11-12T00:30:11.5195347Z ##[endgroup]
+tagproof	Checkout	2025-11-12T00:30:11.5239768Z [command]/usr/bin/git log ***1 ***format=%H
+tagproof	Checkout	2025-11-12T00:30:11.5264792Z a2269e7032232e3a4692db56be43f37741b4fef3
+tagproof	Require ATLAS_DSN for STRICT proof	﻿2025-11-12T00:30:11.5446313Z ##[group]Run if [ ***z "${ATLAS_DSN:***}" ]; then
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5446783Z [36;1mif [ ***z "${ATLAS_DSN:***}" ]; then[0m
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5447222Z [36;1m  echo "ERROR: vars.ATLAS_DSN is not set. Set it in repo variables (masked in outputs)."[0m
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5447608Z [36;1m  exit 1[0m
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5447789Z [36;1mfi[0m
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5484265Z shell: /usr/bin/bash ***e {0}
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5484552Z env:
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5484734Z   PIP_REQUIRE_VENV: true
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5484961Z   ATLAS_DSN: ***
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5485155Z   STRICT_WEBPROOF: 1
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5485365Z   BIBLE_DB_DSN: ***
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5485546Z   GEMATRIA_DSN: ***
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5485733Z   CHECKPOINTER: postgres
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5486148Z   ENFORCE_STRICT: 1
+tagproof	Require ATLAS_DSN for STRICT proof	2025-11-12T00:30:11.5486373Z ##[endgroup]
+tagproof	Python version (system)	﻿2025-11-12T00:30:11.5586457Z ##[group]Run python3 ***version || true
+tagproof	Python version (system)	2025-11-12T00:30:11.5586832Z [36;1mpython3 ***version || true[0m
+tagproof	Python version (system)	2025-11-12T00:30:11.5617139Z shell: /usr/bin/bash ***e {0}
+tagproof	Python version (system)	2025-11-12T00:30:11.5617379Z env:
+tagproof	Python version (system)	2025-11-12T00:30:11.5617551Z   PIP_REQUIRE_VENV: true
+tagproof	Python version (system)	2025-11-12T00:30:11.5617766Z   ATLAS_DSN: ***
+tagproof	Python version (system)	2025-11-12T00:30:11.5617962Z   STRICT_WEBPROOF: 1
+tagproof	Python version (system)	2025-11-12T00:30:11.5618210Z   BIBLE_DB_DSN: ***
+tagproof	Python version (system)	2025-11-12T00:30:11.5618424Z   GEMATRIA_DSN: ***
+tagproof	Python version (system)	2025-11-12T00:30:11.5618613Z   CHECKPOINTER: postgres
+tagproof	Python version (system)	2025-11-12T00:30:11.5618815Z   ENFORCE_STRICT: 1
+tagproof	Python version (system)	2025-11-12T00:30:11.5618993Z ##[endgroup]
+tagproof	Python version (system)	2025-11-12T00:30:11.5678822Z Python 3.12.3
+tagproof	Run ops.tagproof (STRICT)	﻿2025-11-12T00:30:11.5706667Z ##[group]Run make ***s ops.tagproof
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5707042Z [36;1mmake ***s ops.tagproof[0m
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5737535Z shell: /usr/bin/bash ***e {0}
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5737774Z env:
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5737951Z   PIP_REQUIRE_VENV: true
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5738177Z   ATLAS_DSN: ***
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5738368Z   STRICT_WEBPROOF: 1
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5738563Z   BIBLE_DB_DSN: ***
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5738750Z   GEMATRIA_DSN: ***
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5738937Z   CHECKPOINTER: postgres
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5739136Z   ENFORCE_STRICT: 1
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5739312Z ##[endgroup]
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5818538Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5819091Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5821705Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5822204Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5831674Z [tagproof] STRICT triad (DB mirror)
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5851098Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5852043Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5855083Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.5855919Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.6867257Z Traceback (most recent call last):
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.6868239Z   File "/home/runner/work/Gemantria/Gemantria/scripts/guards/sync_alwaysapply_from_db.py", line 14, in <module>
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.6869139Z     from scripts.config.env import get_rw_dsn
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.6869590Z ModuleNotFoundError: No module named 'scripts'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7042514Z wrote evidence/guard_alwaysapply_dbmirror.json
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7052599Z [tagproof] STRICT prompt SSOT
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7072437Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7073077Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7075746Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7076428Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7339315Z {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7339684Z   "ok": false,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7340000Z   "exists": {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7340262Z     "root": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7340477Z     "ssot": true
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7340674Z   },
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7340856Z   "sections": {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7341085Z     "system_box": false,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7341328Z     "tutor_notes": false
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7341574Z   },
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7341749Z   "hashes": {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7341955Z     "root": "175aa55f808a",
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7342196Z     "ssot": "edbb58552055"
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7342425Z   },
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7342598Z   "note": ""
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7342829Z }
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7389794Z wrote prompt SSOT guard report to stdout (non***fatal in HINT)
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7398946Z [tagproof] governance smoke
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7413359Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7413900Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7416905Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7417368Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7667589Z OK: prompt format guard passed
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7923659Z {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7924043Z   "ok": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7924271Z   "exists": {
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7924511Z     "docs/atlas/index.html": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7924804Z     "docs/SSOT": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7925051Z     "AGENTS.md": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7925298Z     "RULES_INDEX.md": true,
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7925575Z     "docs/SSOT/SHARE_MANIFEST.json": true
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7926166Z   }
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.7926810Z }
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8184964Z ok: governance.sentinel.one***per***block
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8231911Z [tagproof] STRICT DSN centralization
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8246320Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8247130Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8249583Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:11.8250349Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:12.9459986Z [tagproof] STRICT Atlas DSN proof
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:12.9478090Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:12.9478873Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:12.9482187Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	Run ops.tagproof (STRICT)	2025-11-12T00:30:12.9483142Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	Atlas webproof (STRICT, Rule***067)	﻿2025-11-12T00:30:12.9919253Z ##[group]Run STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9919709Z [36;1mSTRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh[0m
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9953321Z shell: /usr/bin/bash ***e {0}
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9953552Z env:
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9953722Z   PIP_REQUIRE_VENV: true
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9953947Z   ATLAS_DSN: ***
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9954163Z   STRICT_WEBPROOF: 1
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9954381Z   BIBLE_DB_DSN: ***
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9954573Z   GEMATRIA_DSN: ***
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9954753Z   CHECKPOINTER: postgres
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9954954Z   ENFORCE_STRICT: 1
+tagproof	Atlas webproof (STRICT, Rule***067)	2025-11-12T00:30:12.9955140Z ##[endgroup]
+tagproof	MCP Knowledge DB (STRICT)	﻿2025-11-12T00:30:24.6828404Z ##[group]Run make guard.mcp.db.ro STRICT_DB_PROBE=1
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6828816Z [36;1mmake guard.mcp.db.ro STRICT_DB_PROBE=1[0m
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6861899Z shell: /usr/bin/bash ***e {0}
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6862152Z env:
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6862328Z   PIP_REQUIRE_VENV: true
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6862561Z   ATLAS_DSN: ***
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6862755Z   STRICT_WEBPROOF: 1
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6862950Z   BIBLE_DB_DSN: ***
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6863153Z   GEMATRIA_DSN: ***
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6863342Z   CHECKPOINTER: postgres
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6863560Z   ENFORCE_STRICT: 1
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6863738Z ##[endgroup]
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6926937Z Makefile:814: warning: overriding recipe for target 'phase8.temporal'
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6927462Z Makefile:719: warning: ignoring old recipe for target 'phase8.temporal'
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6930254Z Makefile:1519: warning: overriding recipe for target 'rerank.smoke'
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6930728Z Makefile:1513: warning: ignoring old recipe for target 'rerank.smoke'
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.6940278Z Running MCP DB RO guard (STRICT_DB_PROBE=1)
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8476740Z {
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8477030Z   "ok": false,
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8477299Z   "probe_requested": true,
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8477570Z   "used_psql": true,
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8477830Z   "dsn_present": true,
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8478049Z   "notes": [
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8478856Z     "probe error: Command '['psql', '***', '***At', '***c', \"select count(*) from information_schema.views where table_schema='mcp' and table_name='v_catalog';\"]' returned non***zero exit status 2."
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8479594Z   ]
+tagproof	MCP Knowledge DB (STRICT)	2025-11-12T00:30:24.8479774Z }
+tagproof	Show masked DSN proof JSON	﻿2025-11-12T00:30:24.8562852Z ##[group]Run test ***f docs/evidence/atlas_proof_dsn.json && \
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8563310Z [36;1mtest ***f docs/evidence/atlas_proof_dsn.json && \[0m
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8563697Z [36;1msed ***n '1,200p' docs/evidence/atlas_proof_dsn.json || true[0m
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8596687Z shell: /usr/bin/bash ***e {0}
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8596928Z env:
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8597105Z   PIP_REQUIRE_VENV: true
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8597326Z   ATLAS_DSN: ***
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8597510Z   STRICT_WEBPROOF: 1
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8597711Z   BIBLE_DB_DSN: ***
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8597897Z   GEMATRIA_DSN: ***
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8598077Z   CHECKPOINTER: postgres
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8598301Z   ENFORCE_STRICT: 1
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8598489Z ##[endgroup]
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8658903Z {
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8659200Z   "ok": true,
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8659497Z   "mode": "STRICT",
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8659858Z   "ts_utc": "2025***11***12T00:30:12Z",
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8660242Z   "git_sha": "a2269e7",
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8660571Z   "dsns": {
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8660891Z     "rw": {
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8661158Z       "set": true,
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8661687Z       "masked": "://****@/***"
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8662027Z     },
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8662285Z     "ro": {
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8662557Z       "set": true,
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8662889Z       "masked": "://****@/***"
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8663219Z     }
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8663482Z   }
+tagproof	Show masked DSN proof JSON	2025-11-12T00:30:24.8663637Z }
+tagproof	Post Checkout	﻿2025-11-12T00:30:24.8731770Z Post job cleanup.
+tagproof	Post Checkout	2025-11-12T00:30:24.9656781Z [command]/usr/bin/git version
+tagproof	Post Checkout	2025-11-12T00:30:24.9692297Z git version 2.51.2
+tagproof	Post Checkout	2025-11-12T00:30:24.9735356Z Temporarily overriding HOME='/home/runner/work/_temp/7348abb9***cabc***46e7***ae32***f7453a7b7d13' before making global git config changes
+tagproof	Post Checkout	2025-11-12T00:30:24.9737143Z Adding repository directory to the temporary git global config as a safe directory
+tagproof	Post Checkout	2025-11-12T00:30:24.9742082Z [command]/usr/bin/git config ***global ***add safe.directory /home/runner/work/Gemantria/Gemantria
+tagproof	Post Checkout	2025-11-12T00:30:24.9777631Z [command]/usr/bin/git config ***local ***name***only ***get***regexp core\.sshCommand
+tagproof	Post Checkout	2025-11-12T00:30:24.9810285Z [command]/usr/bin/git submodule foreach ***recursive sh ***c "git config ***local ***name***only ***get***regexp 'core\.sshCommand' && git config ***local ***unset***all 'core.sshCommand' || :"
+tagproof	Post Checkout	2025-11-12T00:30:25.0069199Z [command]/usr/bin/git config ***local ***name***only ***get***regexp http\.https\:\/\/github\.com\/\.extraheader
+tagproof	Post Checkout	2025-11-12T00:30:25.0093808Z http.https://github.com/.extraheader
+tagproof	Post Checkout	2025-11-12T00:30:25.0107717Z [command]/usr/bin/git config ***local ***unset***all http.https://github.com/.extraheader
+tagproof	Post Checkout	2025-11-12T00:30:25.0141503Z [command]/usr/bin/git submodule foreach ***recursive sh ***c "git config ***local ***name***only ***get***regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config ***local ***unset***all 'http.https://github.com/.extraheader' || :"
+tagproof	Complete job	﻿2025-11-12T00:30:25.0488535Z Cleaning up orphan processes
