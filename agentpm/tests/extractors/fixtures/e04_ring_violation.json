@@ -1,0 +1,1 @@
+{"input":{"text":"read requires RO"},"expected":{"error":"ring-violation"}}
