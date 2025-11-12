@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "method": "psql",
+  "rowcount": null,
+  "value": null,
+  "latency_ms": 16,
+  "generated_at": "2025-11-12T09:18:11Z"
+}

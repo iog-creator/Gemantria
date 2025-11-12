@@ -1797,3 +1797,17 @@ atlas.db_proof.inject:
 
 mcp.strict.trace:
 	./scripts/mcp_strict_trace_ptr.sh && tail -n +1 share/mcp/strict_trace.ptr.txt | tee evidence/mcp_strict_trace.ptr.txt
+
+## MCP M4 targets
+.PHONY: mcp.pg_checkpointer.handshake mcp.db.select1.guard mcp.db.error.guard mcp.strict.live.full
+
+mcp.pg_checkpointer.handshake:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_pg_checkpointer_handshake.py | tee evidence/mcp_pg_checkpointer_handshake.out.json
+
+mcp.db.select1.guard:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_select1_guard.py | tee evidence/mcp_db_select1_guard.out.json
+
+mcp.db.error.guard:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_error_guard.py | tee evidence/mcp_db_error_guard.out.json
+
+mcp.strict.live.full: mcp.pg_checkpointer.handshake mcp.db.select1.guard atlas.db_proof.inject mcp.db.error.guard
