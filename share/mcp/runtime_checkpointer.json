@@ -2,5 +2,5 @@
   "strict": true,
   "active": "postgres",
   "checkpointer_env": "postgres",
-  "generated_at": "2025-11-12T09:27:49Z"
+  "generated_at": "2025-11-12T09:36:18Z"
 }
