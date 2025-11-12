@@ -35,6 +35,7 @@ NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
   </dl>
 </section>
 <p><a class="jumper" href="../jumpers/idx/{i}.html">See cross-batch jumpers</a></p>
+<p><a id="download-json" href="{json_href}" download>Download JSON</a></p>
 <script id="audit-json" type="application/json">{audit_json}</script>
 <p>Generated at: {ts}</p>
 </html>"""
@@ -141,6 +142,9 @@ def generate(
         # node page
         a = audits.get(i, {"batch_id": "", "provenance_hash": "", "provenance": {}})
         audit_json = html.escape(json.dumps(a, sort_keys=True))
+        # E32: Write per-node JSON file
+        (root / "nodes" / f"{i}.json").write_text(json.dumps(a, sort_keys=True), encoding="utf-8")
+        json_href = f"{i}.json"
         p = root / "nodes" / f"{i}.html"
         p.write_text(
             NODE_HTML.format(
@@ -149,10 +153,26 @@ def generate(
                 batch_id=html.escape(str(a["batch_id"])),
                 prov_hash=html.escape(str(a["provenance_hash"])),
                 audit_json=audit_json,
+                json_href=json_href,
             ),
             encoding="utf-8",
         )
         paths["nodes"].append(str(p))
+
+    # E34: sitemap/counts
+    sm = {
+        "nodes_count": len(nodes),
+        "jumpers_count": len(nodes),
+        "files": {
+            "index": str(root / "index.html"),
+            "graph": str(root / "graph.html"),
+            "jumpers_index": str(root / "jumpers" / "index.html"),
+            "nodes_dir": str(root / "nodes"),
+            "jumpers_dir": str(root / "jumpers" / "idx"),
+        },
+    }
+    (root / "sitemap.json").write_text(json.dumps(sm, indent=2, sort_keys=True), encoding="utf-8")
+    paths["sitemap"] = str(root / "sitemap.json")
 
     return {"ok": True, "paths": paths}
 
