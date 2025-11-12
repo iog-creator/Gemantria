@@ -1,8 +1,4 @@
-import json, pathlib, pytest
-
-xfail_reason = "Staged TVs (E47-E49); features not implemented yet"
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+import json, pathlib
 
 ROOT = pathlib.Path("share/atlas")
 

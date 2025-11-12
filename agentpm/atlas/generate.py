@@ -20,13 +20,26 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
   <a href="graph.html">Graph view</a>
   <a href="jumpers/index.html">Jumpers</a>
   {node_links}
-  <div id="quick-filters" data-quick-filters="1" role="group" aria-label="Quick filters">
+  <div id="quick-filters" data-quick-filters="1" role="group" aria-label="Quick filters" data-behavior="toggle-filters">
     <button type="button" data-filter="all">All</button>
     <button type="button" data-filter="top10">Top 10</button>
     <button type="button" data-filter="recent">Recent</button>
   </div>
 </nav>
 </main>
+<script>
+(function(){{
+  try{{
+    var gf=document.getElementById('quick-filters');
+    if(!gf) return;
+    gf.addEventListener('click', function(e){{
+      if(e.target && e.target.matches('button[data-filter]')){{
+        document.documentElement.toggleAttribute('data-filters-toggled','');
+      }}
+    }}, {{passive:true}});
+  }}catch(_){{}}
+}})();
+</script>
 </html>"""
 
 GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
@@ -41,7 +54,7 @@ GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Node {i} | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <main role="main">
-<nav aria-label="Breadcrumb"><a href="../index.html">Atlas</a> / <span aria-current="page">Node {i}</span></nav>
+<nav aria-label="Breadcrumb"><a href="../index.html">Atlas</a> / <span aria-current="page" class="current">Node {i}</span></nav>
 <a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Node {i}</h1>
 <section id="audit">
@@ -213,6 +226,7 @@ def generate(
             "jumpers_dir": str(root / "jumpers" / "idx"),
         },
     }
+    sm["anchors"] = ["index#search", "index#quick-filters", "graph#top", "nodes/0#audit"]
     (root / "sitemap.json").write_text(json.dumps(sm, indent=2, sort_keys=True), encoding="utf-8")
     paths["sitemap"] = str(root / "sitemap.json")
     # E39: sitemap.html (human-friendly)

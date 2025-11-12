@@ -5,7 +5,7 @@
 <form role="search" aria-label="Atlas search">
   <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search">
 </form>
-<p>Generated at: 2025-11-12T05:30:52Z</p>
+<p>Generated at: 2025-11-12T05:34:29Z</p>
 <div id="counts">Nodes: 3 • Jumpers: 3</div>
 <nav>
   <a href="sitemap.html">Sitemap</a>
@@ -15,11 +15,24 @@
   <a href="nodes/0.html">Node 0</a>
   <a href="nodes/1.html">Node 1</a>
   <a href="nodes/2.html">Node 2</a>
-  <div id="quick-filters" data-quick-filters="1" role="group" aria-label="Quick filters">
+  <div id="quick-filters" data-quick-filters="1" role="group" aria-label="Quick filters" data-behavior="toggle-filters">
     <button type="button" data-filter="all">All</button>
     <button type="button" data-filter="top10">Top 10</button>
     <button type="button" data-filter="recent">Recent</button>
   </div>
 </nav>
 </main>
+<script>
+(function(){
+  try{
+    var gf=document.getElementById('quick-filters');
+    if(!gf) return;
+    gf.addEventListener('click', function(e){
+      if(e.target && e.target.matches('button[data-filter]')){
+        document.documentElement.toggleAttribute('data-filters-toggled','');
+      }
+    }, {passive:true});
+  }catch(_){}
+})();
+</script>
 </html>

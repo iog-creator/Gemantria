@@ -1,4 +1,10 @@
 {
+  "anchors": [
+    "index#search",
+    "index#quick-filters",
+    "graph#top",
+    "nodes/0#audit"
+  ],
   "files": {
     "graph": "share/atlas/graph.html",
     "index": "share/atlas/index.html",
