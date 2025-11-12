@@ -1,4 +1,4 @@
-import json, pytest, pathlib
+import json, pathlib
 
 
 def test_e44_index_has_quick_filters():
