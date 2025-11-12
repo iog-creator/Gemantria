@@ -1,0 +1,14 @@
+{
+  "schema": {
+    "id": "atlas.graph.rollup.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:50:06Z",
+  "mode": "HINT",
+  "metrics": {
+    "nodes": 0,
+    "edges": 0,
+    "batches": 0
+  },
+  "ok": true
+}
