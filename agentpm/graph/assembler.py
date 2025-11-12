@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List
+from collections import defaultdict
 from datetime import UTC, datetime
 import hashlib
+import json
 import uuid
 
 from agentpm.extractors.provenance import stamp_batch, _coerce_seed_int
@@ -36,17 +38,64 @@ def ensure_nodes_have_provenance(nodes: Iterable[Dict[str, Any]]) -> None:
             raise ValueError(f"node[{i}] missing provenance")
 
 
+def provenance_hash(prov: Dict[str, Any]) -> str:
+    """Stable SHA-256 over sorted JSON of provenance."""
+    blob = json.dumps(prov, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(blob).hexdigest()
+
+
 def assemble_graph(items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt: datetime) -> Dict[str, Any]:
     """
-    Propagates provenance into downstream graph nodes; preserves input order 1:1.
-    - Uses provenance.stamp_batch(..., base_dt=base_dt) for monotonic RFC3339 ts_iso.
-    - Attaches node.meta.provenance = {model, seed, ts_iso}.
-    - Returns {'batch_id', 'nodes'} and enforces the guard.
+    Build graph with provenance propagation and audit trail.
+    - Uses stamp_batch(..., base_dt=...) to stamp ts_iso (monotonic) + attach model/seed.
+    - Propagates provenance into node.meta.provenance.
+    - Adds node.meta.audit = {batch_id, provenance_hash}.
+    - Computes graph.meta.provenance_rollup (models, seeds, ts_min, ts_max).
+    - Returns {batch_id, meta, nodes}, preserving input order 1:1.
     """
     stamped = stamp_batch(list(items), model, seed, base_dt=base_dt)
+    bid = batch_id_v7(base_dt, seed)
     nodes: List[Dict[str, Any]] = []
+    models: set[str] = set()
+    seeds: set[int] = set()
+    ts_vals: List[str] = []
+
     for it in stamped:
         prov = {k: it[k] for k in ("model", "seed", "ts_iso")}
-        nodes.append({"data": it, "meta": {"provenance": prov}})
+        models.add(prov["model"])
+        seeds.add(int(prov["seed"]))
+        ts_vals.append(prov["ts_iso"])
+        node = {
+            "data": it,
+            "meta": {
+                "provenance": prov,
+                "audit": {"batch_id": bid, "provenance_hash": provenance_hash(prov)},
+            },
+        }
+        nodes.append(node)
+
     ensure_nodes_have_provenance(nodes)
-    return {"batch_id": batch_id_v7(base_dt, seed), "nodes": nodes}
+    rollup = {
+        "models": sorted(models),
+        "seeds": sorted(seeds),
+        "ts_min": min(ts_vals) if ts_vals else None,
+        "ts_max": max(ts_vals) if ts_vals else None,
+    }
+    return {"batch_id": bid, "meta": {"provenance_rollup": rollup}, "nodes": nodes}
+
+
+def correlate_nodes_across_batches(graphs: Iterable[Dict[str, Any]], key_field: str) -> Dict[Any, List[str]]:
+    """
+    Cross-batch correlation (E19): for each graph, map node.data[key_field] -> batch_id list.
+    Order of batch_ids follows input graphs order; duplicates avoided.
+    """
+    mapping: defaultdict[Any, List[str]] = defaultdict(list)
+    for g in graphs:
+        bid = g.get("batch_id")
+        for n in g.get("nodes", []):
+            k = n.get("data", {}).get(key_field)
+            if k is None:
+                continue
+            if not mapping[k] or mapping[k][-1] != bid:
+                mapping[k].append(bid)
+    return dict(mapping)
