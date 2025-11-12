@@ -1723,6 +1723,8 @@ guard.atlas:
 	@pytest -q agentpm/tests/atlas/test_atlas_search_title_aria_e41_e43.py > evidence/guard_atlas_accessibility2.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_search_microdata_guard_e50_e52.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@python3 scripts/atlas/guard_sitemap_integrity.py > evidence/guard_atlas_sitemap.txt || (echo 'FAIL_guard.atlas.sitemap'; exit 1)
 
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
