@@ -1738,3 +1738,6 @@ tvs.atlas.next49:
 	@mkdir -p evidence
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/tvs_e47plus.tail.txt || true
 	@echo 'TVS E47+ staged'
+tvs.mcp.next05:
+	@pytest -q agentpm/tests/mcp/test_mcp_catalog_e01_e05.py || true
+	@echo 'TVS MCP E01–E05 staged'

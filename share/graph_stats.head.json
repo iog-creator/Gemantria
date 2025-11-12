@@ -1,16 +1,11 @@
 {
-  "schema": "graph-stats.v1",
-  "generated_at": "2025-11-09T00:45:55Z",
-  "nodes": 9,
-  "edges": 0,
-  "clusters": 0,
-  "density": 0.0,
-  "centrality": {
-    "avg_degree": 0.0,
-    "avg_betweenness": 0.0
+  "schema": {
+    "id": "graph-stats.v1",
+    "version": 1
   },
-  "metadata": {
-    "source": "file_first",
-    "input": "exports/graph_latest.scored.json"
+  "generated_at": "2025-11-12T03:45:31Z",
+  "totals": {
+    "nodes": 3,
+    "edges": 0
   }
 }
