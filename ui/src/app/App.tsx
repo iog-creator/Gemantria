@@ -8,6 +8,8 @@ import MetaPanel from '../components/MetaPanel';
 import MetricsDashboard from '../components/MetricsDashboard';
 import TemporalPage from '../views/TemporalPage';  // New import for temporal view
 import XrefDemoPage from '../views/XrefDemoPage';  // New import for xref explorer
+import MCPROProofTile from '../components/MCPROProofTile';  // PLAN-081: MCP RO Proof tile
+import BrowserVerifiedBadge from '../components/BrowserVerifiedBadge';  // PLAN-081: Browser-Verified badge
 import { Envelope } from '../types/envelope';
 
 function App() {
@@ -22,8 +24,17 @@ function App() {
   return (
     <div className="App" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
       <header style={{ marginBottom: '30px' }}>
-        <h1>Gemantria Dashboard (P10-UI-02)</h1>
-        <p>Local-only visualization: File loader + enhanced counts panel + minimal graph render</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div>
+            <h1>Gemantria Dashboard (P10-UI-02)</h1>
+            <p>Local-only visualization: File loader + enhanced counts panel + minimal graph render</p>
+          </div>
+          <div style={{ marginTop: '8px' }}>
+            <BrowserVerifiedBadge releaseVersion="v0.0.3" />
+          </div>
+        </div>
+        {/* PLAN-081: Orchestrator dashboard polish — MCP RO Proof tile */}
+        <MCPROProofTile />
       </header>
 
       <FileLoader onFileLoad={handleFileLoad} loading={false} />
