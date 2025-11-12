@@ -37,4 +37,4 @@ with open(p / "rodsn.guard.json", "w") as f:
     json.dump(out, f, indent=2)
 
 print(json.dumps(out))
-sys.exit(0 if out["ok"] else 0)  # guard is advisory in hermetic mode
+sys.exit(0)  # guard is advisory in hermetic mode

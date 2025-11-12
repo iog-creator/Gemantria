@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import pathlib
-import sys
 
 envdir = pathlib.Path("share/mcp/envelopes")
 envdir.mkdir(parents=True, exist_ok=True)
