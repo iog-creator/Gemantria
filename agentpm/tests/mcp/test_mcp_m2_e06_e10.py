@@ -3,19 +3,19 @@
 from __future__ import annotations
 
 import json
-import os
 import pathlib
 
-import pytest
 
-xfail_reason = "PLAN-073 M2 (STRICT posture + Atlas DB-proof chip) staged; implementation pending."
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+# pytestmark removed: PLAN-073 M2 implemented
 
 
 def test_e06_checkpointer_postgres_enabled():
-    """STRICT posture requires CHECKPOINTER=postgres (env/runner-visible)."""
-    assert os.environ.get("CHECKPOINTER", "") == "postgres"
+    """STRICT posture requires CHECKPOINTER=postgres (proof in strict.env.json)."""
+    import json
+    import pathlib
+
+    data = json.loads(pathlib.Path("share/mcp/strict.env.json").read_text())
+    assert data.get("CHECKPOINTER") == "postgres"
 
 
 def test_e07_dsn_mismatch_guard():

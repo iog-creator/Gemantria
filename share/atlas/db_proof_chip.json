@@ -1,0 +1,6 @@
+{
+  "strict": true,
+  "checkpointer": "postgres",
+  "dsn": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
+  "generated_at": "2025-11-12T09:00:50Z"
+}
