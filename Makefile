@@ -1968,3 +1968,8 @@ guard.m13.stale:
 	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
 
 .PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
+
+# PLAN-074 (M14) scaffolding
+.PHONY: m14.proofs
+m14.proofs:
+	@echo "M14 proofs placeholder — to be replaced with real receipts/guards"
