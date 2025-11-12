@@ -1297,3 +1297,5 @@ Merges are permitted only when **all** are true:
 > Exporters/runners must check **both** (peers) before falling back to `get_ro_dsn()`; fail-closed on tags.
 
 > **Postgres Knowledge MCP (RFC-078):** Catalog-as-a-service lives in Postgres. Tag builds use RO DSN and must prove `mcp.v_catalog`. See `docs/runbooks/MCP_KNOWLEDGE_DB.md`.
+
+> **Postgres Knowledge MCP (STRICT tags: RO proof):** tagproof runs `make guard.mcp.db.ro STRICT_DB_PROBE=1` to verify `mcp.v_catalog` via RO DSN; PR CI remains hermetic (no probes).
