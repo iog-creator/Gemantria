@@ -10,6 +10,7 @@ across key governance files. Ensures required patterns are present and bad patte
 
 Related: Rule-027 (Docs Sync Gate), Rule-055 (Auto-Docs Sync Pass)
 """
+
 from pathlib import Path
 import re
 import sys
