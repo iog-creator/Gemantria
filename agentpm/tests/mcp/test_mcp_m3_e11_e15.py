@@ -28,11 +28,7 @@ def test_e13_atlas_chip_in_html():
     p = pathlib.Path("share/atlas/index.html")
     assert p.exists(), "atlas index not generated"
     text = p.read_text(errors="ignore")
-    assert (
-        'data-db-strict="true"' in text
-        or "data-db-strict='true'" in text
-        or "db-proof-chip" in text
-    )
+    assert 'data-db-strict="true"' in text or "data-db-strict='true'" in text or "db-proof-chip" in text
 
 
 def test_e14_dsn_redacted_in_chip():
