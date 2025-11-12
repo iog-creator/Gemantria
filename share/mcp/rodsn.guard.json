@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "errors": [],
+  "strict": false,
+  "dsn_redacted": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
+  "generated_at": "2025-11-12T08:53:42Z"
+}

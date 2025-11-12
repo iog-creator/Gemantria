@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Knowledge MCP Catalog (v1)",
+  "type": "object",
+  "required": ["schema", "book", "generated_at", "tables"],
+  "properties": {
+    "schema": { "const": "SSOT_mcp_catalog.v1" },
+    "book": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "tables": {
+      "type": "object",
+      "properties": {
+        "mcp_tools": { "type": "string" },
+        "mcp_assets": { "type": "string" },
+        "mcp_proofs": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+
