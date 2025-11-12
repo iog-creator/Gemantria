@@ -1,4 +1,4 @@
-import os, json, pytest
+import os, json
 
 
 def _read_json(path):
