@@ -1,4 +1,4 @@
-import os, json, pytest
+import os, json
 
 
 def _maybe(paths):

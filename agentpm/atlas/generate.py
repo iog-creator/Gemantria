@@ -5,7 +5,7 @@ from datetime import datetime, UTC
 import json
 
 INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Index</title><style>body{font-family:system-ui;margin:2rem}a{display:block;margin:.25rem 0}</style>
+<title>Atlas — Index</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
 <h1>Atlas — Index</h1>
 <p>Generated at: {ts}</p>
 <nav>
@@ -16,13 +16,13 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 </html>"""
 
 GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Graph</title><style>body{font-family:system-ui;margin:2rem}</style>
+<title>Atlas — Graph</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <h1>Atlas — Graph</h1>
 <p>Placeholder graph view. Generated at: {ts}</p>
 </html>"""
 
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Node {i}</title><style>body{font-family:system-ui;margin:2rem}</style>
+<title>Atlas — Node {i}</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <h1>Atlas — Node {i}</h1>
 <p>Placeholder node page. Generated at: {ts}</p>
 </html>"""
