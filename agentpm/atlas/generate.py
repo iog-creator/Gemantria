@@ -20,6 +20,11 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
   <a href="graph.html">Graph view</a>
   <a href="jumpers/index.html">Jumpers</a>
   {node_links}
+  <div id="quick-filters" data-quick-filters="1" role="group" aria-label="Quick filters">
+    <button type="button" data-filter="all">All</button>
+    <button type="button" data-filter="top10">Top 10</button>
+    <button type="button" data-filter="recent">Recent</button>
+  </div>
 </nav>
 </main>
 </html>"""
@@ -36,6 +41,7 @@ GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Node {i} | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <main role="main">
+<nav aria-label="Breadcrumb"><a href="../index.html">Atlas</a> / <span aria-current="page">Node {i}</span></nav>
 <a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Node {i}</h1>
 <section id="audit">
