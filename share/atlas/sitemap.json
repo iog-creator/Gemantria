@@ -1,17 +1,17 @@
 {
-  "anchors": [
-    "index#search",
-    "index#quick-filters",
-    "graph#top",
-    "nodes/0#audit"
-  ],
-  "files": {
-    "graph": "share/atlas/graph.html",
-    "index": "share/atlas/index.html",
-    "jumpers_dir": "share/atlas/jumpers/idx",
-    "jumpers_index": "share/atlas/jumpers/index.html",
-    "nodes_dir": "share/atlas/nodes"
+  "schema": {
+    "id": "atlas.sitemap.v1",
+    "version": 1
   },
-  "jumpers_count": 3,
-  "nodes_count": 3
+  "generated_at": "2025-11-12T18:03:10.924629Z",
+  "entries": [
+    {
+      "href": "index.html",
+      "kind": "index"
+    },
+    {
+      "href": "nodes/node_001/provenance.json",
+      "kind": "node-proof"
+    }
+  ]
 }
