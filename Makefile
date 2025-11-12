@@ -969,6 +969,7 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
+	@$(MAKE) guard.atlas
 guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.core.schema guard.graph.stats.schema guard.graph.patterns.schema guard.graph.correlations.schema guard.jsonschema.import
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
@@ -1706,3 +1707,8 @@ guard.exports:
 	@pytest -q agentpm/tests/exports/test_graph_export_e20_e22.py > evidence/guard_exports.txt || (echo FAIL_guard.exports; exit 1)
 	@echo GUARD_EXPORTS_OK
 
+
+guard.atlas:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/atlas/test_atlas_smoke_e23_e25.py > evidence/guard_atlas.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@echo 'GUARD_ATLAS_OK'
