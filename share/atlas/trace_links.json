@@ -1,0 +1,15 @@
+{
+  "links": [
+    {
+      "path": "share/atlas/index.html",
+      "trace_id": "1fe0564b7287",
+      "rel": "index"
+    },
+    {
+      "path": "share/atlas/nodes/0.html",
+      "trace_id": "1fe0564b7287",
+      "rel": "node"
+    }
+  ],
+  "count": 2
+}

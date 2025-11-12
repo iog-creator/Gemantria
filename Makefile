@@ -1828,3 +1828,24 @@ guard.mcp.env_mismatch:
 	STRICT=1 CHECKPOINTER=postgres ./scripts/guards/guard_mcp_env_mismatch.py | tee evidence/guard_mcp_env_mismatch.out.json
 
 mcp.runtime.proofs: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch
+
+
+## MCP M6 targets
+.PHONY: mcp.agent.bindings atlas.node.trace.inject atlas.trace.links mcp.envelope.trace.map guard.mcp.trace_link mcp.runtime.links
+
+mcp.agent.bindings:
+	./scripts/mcp_agent_runtime_bindings.py | tee evidence/mcp_agent_runtime_bindings.out.json
+
+atlas.node.trace.inject:
+	./scripts/atlas_node_trace_inject.py | tee evidence/atlas_node_trace_inject.out.json
+
+atlas.trace.links:
+	./scripts/atlas_trace_links.py | tee evidence/atlas_trace_links.out.json
+
+mcp.envelope.trace.map:
+	./scripts/mcp_envelope_trace_map.py | tee evidence/mcp_envelope_trace_map.out.json
+
+guard.mcp.trace_link:
+	./scripts/guards/guard_mcp_trace_link.py | tee evidence/guard_mcp_trace_link.out.json
+
+mcp.runtime.links: mcp.agent.bindings atlas.node.trace.inject atlas.trace.links mcp.envelope.trace.map guard.mcp.trace_link
