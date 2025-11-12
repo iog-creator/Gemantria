@@ -972,6 +972,7 @@ guards.envelope_first:
 	@$(MAKE) guard.atlas
 	@$(MAKE) guard.atlas
 	@$(MAKE) guard.atlas
+	@ guard.atlas
 guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.core.schema guard.graph.stats.schema guard.graph.patterns.schema guard.graph.correlations.schema guard.jsonschema.import
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
@@ -1715,6 +1716,7 @@ guard.atlas:
 	@pytest -q agentpm/tests/atlas/test_atlas_smoke_e23_e25.py > evidence/guard_atlas.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@echo 'GUARD_ATLAS_OK'
 	@pytest -q agentpm/tests/atlas/test_atlas_links_e26_e28.py > evidence/guard_atlas_links.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py > evidence/guard_atlas_auditjump.txt || (echo 'FAIL_guard.atlas'; exit 1)
 
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
