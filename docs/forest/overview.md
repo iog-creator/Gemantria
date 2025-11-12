@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-11 13:39:10
+Generated: 2025-11-11 16:18:39
 
 ## Active Rules
 
@@ -92,6 +92,7 @@ Generated: 2025-11-11 13:39:10
 - knowledge-guard-tags.yml
 - lint-nightly.yml
 - nightly.yml
+- pm-snapshot.yml
 - policy-gate.yml
 - pr-comment.yml
 - quality-badges.yml

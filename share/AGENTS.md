@@ -49,6 +49,27 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
+### Make Targets & DSN Precedence
+
+**Core operational targets:**
+- `make bringup.001` — STRICT bring-up verification (env gate → LM Studio → pipeline → guards → evidence)
+- `make dsns.echo` — Print redacted DSNs for operator sanity (never prints secrets)
+- `make pm.snapshot` — Generate PM-facing status snapshot with DSN posture proofs and 25-file manifest tracking
+- `make share.manifest.verify` — Verify share directory contains exactly 25 files
+
+**MCP & Atlas targets:**
+- `make mcp.dev.bench` — Run MCP endpoint benchmarks
+- `make mcp.catalog.export` — Export MCP catalog JSON
+- `make mcp.catalog.validate` — Validate MCP catalog structure
+- `make atlas.viewer.validate` — Validate Atlas viewer HTML/JS/JSON presence
+- `make atlas.webproof` — Browser-verified UI proof (Rule-067); `STRICT_WEBPROOF=1` for tags
+
+**DSN precedence (via centralized loaders):**
+- **RW DSN**: `GEMATRIA_DSN` → `RW_DSN` → `AI_AUTOMATION_DSN` → `ATLAS_DSN_RW` → `ATLAS_DSN`
+- **RO DSN**: `GEMATRIA_RO_DSN` | `ATLAS_DSN_RO` (peers) → `ATLAS_DSN` → (fallback to RW)
+- **Bible DB DSN**: `BIBLE_RO_DSN` → `RO_DSN` → `ATLAS_DSN_RO` → `ATLAS_DSN` (also checks `BIBLE_DB_DSN` directly)
+- All DSN access must use centralized loaders (`scripts.config.env` or `src.gemantria.dsn`); never `os.getenv()` directly
+
 ## Workflow (small green PRs)
 - Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
 - Coverage ≥98%.
@@ -1274,3 +1295,5 @@ Merges are permitted only when **all** are true:
 
 > **RO DSN (tag builds)** — Either `GEMATRIA_RO_DSN` **or** `ATLAS_DSN_RO` satisfies the RO requirement.
 > Exporters/runners must check **both** (peers) before falling back to `get_ro_dsn()`; fail-closed on tags.
+
+> **Postgres Knowledge MCP (RFC-078):** Catalog-as-a-service lives in Postgres. Tag builds use RO DSN and must prove `mcp.v_catalog`. See `docs/runbooks/MCP_KNOWLEDGE_DB.md`.

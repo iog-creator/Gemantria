@@ -29,3 +29,13 @@ make guard.mcp.db.ro STRICT_DB_PROBE=1
 ## DSN Redaction
 
 All DSNs must be redacted in artifacts per governance (Rule-050/051). Never print raw DSNs.
+
+## Tag lane (STRICT) — Read-only proof
+
+On release tags, CI must prove the Postgres Knowledge MCP is reachable in **read-only** mode and that `mcp.v_catalog` exists:
+
+```bash
+make guard.mcp.db.ro STRICT_DB_PROBE=1
+```
+
+This runs in tagproof only (no DB probes in PR CI), and must **not** perform any writes.
