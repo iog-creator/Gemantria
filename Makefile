@@ -1911,3 +1911,20 @@ guard.m10.drift:
 	@python3 scripts/guards/guard_m10_filter_apply_drift.py > evidence/guard_m10_filter_apply_drift.stdout.json
 
 .PHONY: m10.proofs guard.m10.trace guard.m10.drift
+
+# --- PLAN-073 M11 targets ---
+m11.proofs:
+	@$(MAKE) -s m10.proofs
+	@python3 scripts/atlas/gen_breadcrumbs.py
+	@python3 scripts/atlas/ensure_sitemap_has_index.py
+	@python3 scripts/guards/guard_m11_trace_links_across_nodes.py > evidence/m11_trace_across_nodes.stdout.json
+	@python3 scripts/atlas/check_rollup_totals.py > evidence/m11_rollup_totals.stdout.json
+	@python3 scripts/guards/guard_m11_filter_apply_multi_schema.py > evidence/guard_m11_apply_multi_schema.stdout.json
+
+guard.m11.trace:
+	@python3 scripts/guards/guard_m11_trace_links_across_nodes.py > evidence/m11_trace_across_nodes.stdout.json
+
+guard.m11.apply_multi:
+	@python3 scripts/guards/guard_m11_filter_apply_multi_schema.py > evidence/guard_m11_apply_multi_schema.stdout.json
+
+.PHONY: m11.proofs guard.m11.trace guard.m11.apply_multi
