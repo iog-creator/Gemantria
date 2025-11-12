@@ -1,7 +1,4 @@
-import os, pytest, re
-
-xfail_reason = "Staged TVs for E38-E40 (accessibility + sitemap.html + counts banner)"
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+import os, re
 
 
 def _read(path):

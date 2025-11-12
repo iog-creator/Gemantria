@@ -9,7 +9,10 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Index</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
 <h1>Atlas — Index</h1>
 <p>Generated at: {ts}</p>
+<div id="counts">Nodes: {nodes_count} • Jumpers: {jumpers_count}</div>
 <nav>
+  <a href="sitemap.html">Sitemap</a>
+  <a href="sitemap.json">Sitemap (JSON)</a>
   <a href="graph.html">Graph view</a>
   <a href="jumpers/index.html">Jumpers</a>
   {node_links}
@@ -18,14 +21,14 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 
 GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Graph</title><style>body{{font-family:system-ui;margin:2rem}}</style>
-<a href="index.html">← Back to Atlas</a>
+<a href="index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Graph</h1>
 <p>Placeholder graph view. Generated at: {ts}</p>
 </html>"""
 
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Node {i}</title><style>body{{font-family:system-ui;margin:2rem}}</style>
-<a href="../index.html">← Back to Atlas</a>
+<a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Node {i}</h1>
 <section id="audit">
   <h2>Audit</h2>
@@ -44,7 +47,7 @@ NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 
 JUMPERS_INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Jumpers</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
-<a href="../index.html">← Back to Atlas</a>
+<a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Jumpers Index</h1>
 <p>Landing page for cross-batch navigation.</p>
 <div data-backfill-proof="true">Backfill proof: jumper pages contain back-links to nodes</div>
@@ -53,7 +56,7 @@ JUMPERS_INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 
 JUMPER_NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Jumpers for Node {i}</title><style>body{{font-family:system-ui;margin:2rem}}</style>
-<a href="../../index.html">← Back to Atlas</a>
+<a href="../../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Jumpers — Node {i}</h1>
 <p>Placeholder jumper list for node {i} (hermetic).</p>
 <ul>
@@ -123,14 +126,20 @@ def generate(
 
     # Index
     node_links = "\n  ".join(f'<a href="nodes/{i}.html">Node {i}</a>' for i in nodes[:50])
-    (root / "index.html").write_text(INDEX_HTML.format(ts=ts, node_links=node_links), encoding="utf-8")
+    (root / "index.html").write_text(
+        INDEX_HTML.format(ts=ts, node_links=node_links, nodes_count=len(nodes), jumpers_count=len(nodes)),
+        encoding="utf-8",
+    )
 
     # Graph
     (root / "graph.html").write_text(GRAPH_HTML.format(ts=ts), encoding="utf-8")
 
     # Jumpers index
     items = "\n".join(f'<a href="idx/{i}.html">Jumpers for Node {i}</a>' for i in nodes[:50])
-    (root / "jumpers" / "index.html").write_text(JUMPERS_INDEX_HTML.format(items=items), encoding="utf-8")
+    (root / "jumpers" / "index.html").write_text(
+        JUMPERS_INDEX_HTML.format(items=items, nodes_count=len(nodes), jumpers_count=len(nodes)),
+        encoding="utf-8",
+    )
 
     # Jumper pages + Node pages with embedded audit JSON
     paths = {
@@ -187,6 +196,16 @@ def generate(
     }
     (root / "sitemap.json").write_text(json.dumps(sm, indent=2, sort_keys=True), encoding="utf-8")
     paths["sitemap"] = str(root / "sitemap.json")
+    # E39: sitemap.html (human-friendly)
+    sm_html = (
+        '<!doctype html><html lang="en"><meta charset="utf-8"><title>Atlas — Sitemap</title>'
+        "<style>body{font-family:system-ui;margin:2rem}li{margin:.25rem 0}</style>"
+        "<h1>Atlas — Sitemap</h1>"
+        f"<p>Nodes: {len(nodes)} • Jumpers: {len(nodes)}</p>"
+        "<ul>" + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500]) + "</ul></html>"
+    )
+    (root / "sitemap.html").write_text(sm_html, encoding="utf-8")
+    paths["sitemap_html"] = str(root / "sitemap.html")
     # integrity block
     idx = (root / "index.html").read_bytes() if (root / "index.html").exists() else b""
     sm["integrity"] = {
