@@ -274,7 +274,7 @@ atlas.preview.mmd:
 # Atlas telemetry-driven dashboard (browser-first, PR-safe)
 
 .PHONY: atlas.generate atlas.live atlas.historical atlas.dependencies atlas.calls atlas.classes atlas.knowledge atlas.kpis atlas.dashboard atlas.all atlas.test atlas.serve atlas.watch
-atlas.generate: ## Generate all Atlas diagrams and summaries
+atlas.generate.legacy: ## Generate all Atlas diagrams and summaries
 	@python3 scripts/atlas/generate_atlas.py
 
 atlas.live: ## Generate execution_live.mmd diagram
@@ -969,6 +969,10 @@ guards.envelope_first:
 	$(PYTHON) scripts/eval/jsonschema_validate.py --schema docs/SSOT/pattern-forecast.schema.json --instance share/exports/pattern_forecast.json || true
 	@echo "ENVELOPE-FIRST validation complete"
 
+	@$(MAKE) guard.atlas
+	@$(MAKE) guard.atlas
+	@$(MAKE) guard.atlas
+	@ guard.atlas
 guards.all: guard.stats.rfc3339 guard.graph.generated_at guard.rules.alwaysapply guard.rules.alwaysapply.dbmirror guard.alwaysapply.triad guard.alwaysapply.dbmirror guard.ai.tracking guard.ui.xrefs.badges schema.smoke guard.badges.inventory guard.book.extraction guard.extraction.accuracy guard.exports.json guard.exports.rfc3339 governance.smoke guard.prompt.ssot guard.python.runner guard.ai_nouns.schema guard.graph.core.schema guard.graph.stats.schema guard.graph.patterns.schema guard.graph.correlations.schema guard.jsonschema.import
 guard.stats.rfc3339:
 	@echo ">> Validating graph_stats.json generated_at (RFC3339)…"
@@ -1692,3 +1696,43 @@ guard.mcp.db.ro:
 .PHONY: guard.schema.naming
 guard.schema.naming:
 	$(PYTHON) scripts/ci/guard_schema_naming.py | tee evidence/guard_schema_naming.final.json
+
+.PHONY: guard.extractors
+guard.extractors:
+	$(PYTHON) scripts/ci/guard_extraction_agents.py | tee evidence/guard_extraction_agents.final.json
+
+exports.generate:
+	@python3 -m agentpm.exports.generate > evidence/exports.generate.out.json
+	@echo exports.generate OK
+
+guard.exports:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/exports/test_graph_export_e20_e22.py > evidence/guard_exports.txt || (echo FAIL_guard.exports; exit 1)
+	@echo GUARD_EXPORTS_OK
+
+
+guard.atlas:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/atlas/test_atlas_smoke_e23_e25.py > evidence/guard_atlas.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@echo 'GUARD_ATLAS_OK'
+	@pytest -q agentpm/tests/atlas/test_atlas_links_e26_e28.py > evidence/guard_atlas_links.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py > evidence/guard_atlas_auditjump.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_download_backlinks_e32_e34.py > evidence/guard_atlas_download.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/guard_atlas_rawproof.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/guard_atlas_accessibility.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_search_title_aria_e41_e43.py > evidence/guard_atlas_accessibility2.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+
+atlas.generate:
+	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
+	@echo 'atlas.generate OK'
+
+tvs.atlas.next37:
+	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/tvs_atlas_e35e37.txt || true
+tvs.atlas.next40:
+	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/tvs_e38e40.txt || true
+tvs.atlas.next49:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/tvs_e47plus.tail.txt || true
+	@echo 'TVS E47+ staged'
