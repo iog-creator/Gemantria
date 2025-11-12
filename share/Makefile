@@ -162,6 +162,15 @@ codex.parallel:
 share.sync:
 	@PYTHONPATH=. python3 scripts/sync_share.py
 
+.PHONY: pm.snapshot share.manifest.verify
+
+pm.snapshot:
+	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
+	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
+
+share.manifest.verify:
+	@python3 -c "import json, sys, pathlib; target_count = 25; p = pathlib.Path('docs/SSOT/SHARE_MANIFEST.json'); data = json.loads(p.read_text()) if p.exists() else {'items': []}; n = len(data.get('items', [])); print(f'MANIFEST_COUNT={n} (expected {target_count})'); sys.exit(0 if n==target_count else 1)"
+
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
 .PHONY: adr.housekeeping
@@ -1601,6 +1610,14 @@ atlas.webproof:
 	@echo "[atlas] webproof (headless browser)"
 	@STRICT_WEBPROOF=${STRICT_WEBPROOF:-0} bash scripts/ci/atlas_webproof.sh
 
+# --- Browser Verification (Rule-051 + Rule-067) ---
+.PHONY: browser.verify
+browser.verify:
+	@echo "[browser.verify] Starting browser verification (Rule-051 + Rule-067)"
+	@bash scripts/ops/browser_verify.sh --strict --port ${BROWSER_PORT:-8778} --pages "${BROWSER_PAGES:-index.html,mcp_catalog_view.html}"
+	@echo "[browser.verify] ✓ Browser verification complete"
+	@echo "[browser.verify] NOTE: Cursor must execute browser tool calls from evidence/webproof/browser_verify_instructions.txt"
+
 # --- Atlas Live (dev-only; offline-safe) ---
 .PHONY: atlas.live.server atlas.live.fetch atlas.live.health
 
@@ -1665,3 +1682,13 @@ dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
 		echo "⚠ No .env.local or .env file found"; \
 		echo "Create .env.local with BIBLE_DB_DSN and GEMATRIA_DSN"; \
 	fi
+
+.PHONY: guard.mcp.db.ro
+guard.mcp.db.ro:
+	@echo "Running MCP DB RO guard (STRICT_DB_PROBE=$(STRICT_DB_PROBE))"
+	@STRICT_DB_PROBE=$(STRICT_DB_PROBE) ATLAS_DSN=$(ATLAS_DSN) GEMATRIA_RO_DSN=$(GEMATRIA_RO_DSN) GEMATRIA_DSN=$(GEMATRIA_DSN) \
+		$(PYTHON) scripts/ci/guard_mcp_db_ro.py | tee evidence/guard_mcp_db_ro.final.json
+
+.PHONY: guard.schema.naming
+guard.schema.naming:
+	$(PYTHON) scripts/ci/guard_schema_naming.py | tee evidence/guard_schema_naming.final.json

@@ -1,3 +1,7 @@
+## [Unreleased]
+- TBD
+
+2025-11-11 — v0.0.2: Browser Verification template (Rule-051/067) + STRICT webproof + DSN automation
 2025-11-09 — ci: enforce xref badge presence on tags (STRICT_XREF_BADGES=1); add pip cache; require xref index on **release tags** (v*); main/PR remain HINT-only
 2025-11-09 — ops: archive rc16 STRICT-tag (prod path) artifact; record in CHANGELOG; reset to fixtures default
 2025-11-09 — ops: expand extraction truth-suite to 25 cases (fixtures path); add derive tool; guard prefers v2≥25
@@ -13,6 +17,36 @@
 2025-11-08 — OPS: Land light xref extractor (HINT guard; schema preserved) [8b23eaf4]
 2025-11-08 — OPS: Lock 3-role DB contract; AI-tracking guard (HINT on PRs, STRICT gated by vars.STRICT_DB_MIRROR_CI) [6ddce6ee]
 # Changelog
+
+## v0.0.2 (2025-11-11)
+
+### docs: Browser Verification template (Rule-051/067) + RFC-077
+- Mandatory Browser Verification section in `GPT_SYSTEM_PROMPT.md` for all OPS OUTPUT blocks involving visual/web artifacts
+- Template includes local server setup, browser navigation, screenshots, and `STRICT_WEBPROOF=1` hook
+- Updated `RULES_INDEX.md` to mark Rule-067 as Always-Apply for `docs/atlas/*` edits
+- Added browser verification evidence examples to EVIDENCE PLACEHOLDERS section
+- Updated EXAMPLE section to show browser verification integrated into OPS OUTPUT block
+
+### ci: STRICT webproof + DSN posture alignment (Rule-067)
+- Aligned `tagproof.yml` workflow with STRICT webproof enforcement
+- Added `STRICT_WEBPROOF=1` environment variable for release tags
+- DSN secrets (`BIBLE_DB_DSN`, `GEMATRIA_DSN`) and variable (`ATLAS_DSN`) required for release tags
+- PM Snapshot regeneration with DSNs on release tags (excludes RC tags)
+
+### ops: DSN secrets automation
+- Created `scripts/ops/sync_github_dsns.sh` to automatically sync local DSN values to GitHub repository variables and secrets
+- Updated `docs/runbooks/DSN_SECRETS.md` to document `ATLAS_DSN` variable requirement
+- All required DSN secrets/variables now set and verified for tagproof CI
+
+### ops: Rule-067 webproof hardening
+- Webproof now fails on Mermaid syntax errors (STRICT mode)
+- Fixed `mcp_flow.mmd` diagram syntax errors
+- Added Atlas webproof Make target and pre-push integration
+
+### mcp: Atlas UI enhancements
+- Atlas live fetch (dev server + viewer hook); offline-safe
+- MCP catalog view with offline-safe guards
+- Real read-only endpoints with safe fallbacks
 
 ## Unreleased
 
