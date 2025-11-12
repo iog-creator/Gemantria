@@ -7,9 +7,7 @@ import pathlib
 
 import pytest
 
-xfail_reason = "PLAN-073 M3 (STRICT live-path + Atlas UI chip) staged; implementation pending."
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+# pytestmark removed: PLAN-073 M3 now implemented
 
 
 def test_e11_checkpointer_live_handshake():
