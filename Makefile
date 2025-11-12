@@ -1764,3 +1764,21 @@ mcp.query.smoke:
 mcp.proof.snapshot:
 	@bash scripts/mcp_proof_snapshot.sh || true
 	@echo 'mcp.proof.snapshot OK'
+
+## MCP M2 targets
+.PHONY: echo.gematria_dsn guard.mcp.dsn_mismatch atlas.db_proof.chip mcp.strict.proofs
+
+echo.gematria_dsn:
+	@echo $(GEMATRIA_DSN)
+
+guard.mcp.dsn_mismatch:
+	./scripts/guards/guard_mcp_dsn_mismatch.py | tee evidence/guard_mcp_dsn_mismatch.out.json
+
+atlas.db_proof.chip:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_db_proof_chip.py | tee evidence/atlas.db_proof_chip.out.json
+
+mcp.strict.proofs:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/guards/guard_mcp_rodsn.py | tee evidence/guard_mcp_rodsn.strict.out.json
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_db_proof_chip.py | tee -a evidence/atlas.db_proof_chip.out.json
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_strict_roundtrip.py | tee evidence/mcp_strict_roundtrip.out.json
+	@echo '{"STRICT":"1","CHECKPOINTER":"postgres"}' > share/mcp/strict.env.json

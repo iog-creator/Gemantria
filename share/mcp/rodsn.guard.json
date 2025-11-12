@@ -1,9 +1,7 @@
 {
-  "ok": false,
-  "errors": [
-    "GEMATRIA_DSN not set"
-  ],
-  "strict": false,
-  "dsn_redacted": null,
-  "generated_at": "2025-11-12T08:54:04Z"
+  "ok": true,
+  "errors": [],
+  "strict": true,
+  "dsn_redacted": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
+  "generated_at": "2025-11-12T09:00:49Z"
 }
