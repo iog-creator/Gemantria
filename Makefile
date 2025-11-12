@@ -1719,6 +1719,7 @@ guard.atlas:
 	@pytest -q agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py > evidence/guard_atlas_auditjump.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_download_backlinks_e32_e34.py > evidence/guard_atlas_download.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/guard_atlas_rawproof.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/guard_atlas_accessibility.txt || (echo 'FAIL_guard.atlas'; exit 1)
 
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
