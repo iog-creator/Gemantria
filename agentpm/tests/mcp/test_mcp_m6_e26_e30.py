@@ -48,4 +48,3 @@ def test_e29_envelope_trace_map():
 def test_e30_trace_link_guard():
     p = pathlib.Path("share/mcp/trace_link.guard.json")
     assert p.exists(), "trace_link.guard.json missing"
-
