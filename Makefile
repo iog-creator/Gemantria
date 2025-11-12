@@ -1696,3 +1696,6 @@ guard.schema.naming:
 .PHONY: guard.extractors
 guard.extractors:
 	$(PYTHON) scripts/ci/guard_extraction_agents.py | tee evidence/guard_extraction_agents.final.json
+
+tvs.atlas.next:
+	@pytest -q agentpm/tests/atlas/test_atlas_smoke_e23_e25.py > evidence/tvs_atlas_e23e25.txt || true
