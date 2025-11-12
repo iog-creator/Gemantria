@@ -1,4 +1,5 @@
 """PLAN-073 M4: STRICT Postgres checkpointer live path tests (E16-E20)."""
+
 from __future__ import annotations
 
 import json
@@ -6,7 +7,9 @@ import pathlib
 
 import pytest
 
-xfail_reason = "PLAN-073 M4 (STRICT Postgres checkpointer + real SELECT 1 + stronger Atlas chip) staged; implementation pending."
+xfail_reason = (
+    "PLAN-073 M4 (STRICT Postgres checkpointer + real SELECT 1 + stronger Atlas chip) staged; implementation pending."
+)
 
 pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
 
@@ -52,4 +55,3 @@ def test_e20_error_path_guard():
     """Error-path guard receipt exists."""
     p = pathlib.Path("share/mcp/db_error.guard.json")
     assert p.exists(), "db_error.guard.json missing"
-
