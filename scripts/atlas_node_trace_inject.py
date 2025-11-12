@@ -12,9 +12,20 @@ if not target.exists():
 
 txt = target.read_text(errors="ignore")
 if "data-trace-id=" not in txt:
-    txt = txt.replace(
-        "<div class='node' id='n0'",
-        f"<div class='node' id='n0' data-trace-id=\"{trace}\" trace-link=\"true\"",
-    )
+    # Try multiple injection points
+    if "<div class='node' id='n0'" in txt:
+        txt = txt.replace(
+            "<div class='node' id='n0'",
+            f'<div class=\'node\' id=\'n0\' data-trace-id="{trace}" trace-link="true"',
+        )
+    elif "<html" in txt and "data-trace-id=" not in txt:
+        txt = txt.replace("<html", f'<html data-trace-id="{trace}" trace-link="true"', 1)
+    elif "<body" in txt:
+        txt = txt.replace("<body", f'<body data-trace-id="{trace}" trace-link="true"', 1)
+    elif "<main" in txt:
+        txt = txt.replace("<main", f'<main data-trace-id="{trace}" trace-link="true"', 1)
+    else:
+        # Fallback: inject as comment at start
+        txt = f'<!-- trace-link data-trace-id="{trace}" -->\n' + txt
 target.write_text(txt)
 print(json.dumps({"node_html": str(target), "trace_id": trace, "marker": True}))
