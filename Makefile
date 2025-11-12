@@ -1875,6 +1875,7 @@ m8.proofs:
 	@python3 scripts/mcp/gen_filter_chips.py
 	@python3 scripts/atlas/write_node_rollups.py
 	@python3 scripts/mcp/probe_db.py > evidence/m8_db_probe.stdout.json
+	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
 
 guard.m8.stale:
 	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
