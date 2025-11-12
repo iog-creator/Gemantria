@@ -34,6 +34,8 @@ jobs:
       - name: Atlas webproof (STRICT, Rule-067)
         run: |
           STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
+      - name: MCP Knowledge DB (STRICT)
+        run: make guard.mcp.db.ro STRICT_DB_PROBE=1
       - name: Show masked DSN proof JSON
         run: |
           test -f docs/evidence/atlas_proof_dsn.json && \
