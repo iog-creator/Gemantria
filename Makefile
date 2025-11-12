@@ -1881,3 +1881,16 @@ guard.m8.stale:
 	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
 
 .PHONY: m8.proofs guard.m8.stale
+
+# --- PLAN-073 M9 targets ---
+m9.proofs:
+	@$(MAKE) -s m8.proofs
+	@python3 scripts/atlas/gen_filter_apply.py
+	@python3 scripts/atlas/augment_node_rollups.py
+	@python3 scripts/mcp/probe_db_latency.py > evidence/m9_latency.stdout.json
+	@python3 scripts/guards/guard_m9_rollup_stale.py > evidence/guard_m9_rollup_stale.stdout.json
+
+guard.m9.rollup.stale:
+	@python3 scripts/guards/guard_m9_rollup_stale.py > evidence/guard_m9_rollup_stale.stdout.json
+
+.PHONY: m9.proofs guard.m9.rollup.stale
