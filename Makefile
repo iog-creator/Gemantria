@@ -1721,6 +1721,7 @@ guard.atlas:
 	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/guard_atlas_rawproof.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/guard_atlas_accessibility.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_search_title_aria_e41_e43.py > evidence/guard_atlas_accessibility2.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
 
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
