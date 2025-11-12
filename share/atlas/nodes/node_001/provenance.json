@@ -1,0 +1,28 @@
+{
+  "schema": {
+    "id": "atlas.node_provenance.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:20:30.941944Z",
+  "node_id": "node_001",
+  "counts": {
+    "traces": 1,
+    "chips": 2
+  },
+  "filter_chip_ids": [
+    "chip:db-backed",
+    "chip:has-trace"
+  ],
+  "trace_links": [
+    {
+      "title": "session-trace",
+      "href": "../../mcp/trace_links.json"
+    }
+  ],
+  "backlinks": [
+    {
+      "rel": "index",
+      "href": "../../index.html"
+    }
+  ]
+}

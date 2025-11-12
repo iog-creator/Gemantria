@@ -17,7 +17,11 @@ artifacts = [
 
 links = [{"path": a, "exists": pathlib.Path(a).exists()} for a in artifacts]
 
-out = {"schema": {"id": "share.manifest_linkage.v1", "version": 1}, "generated_at": rfc3339(), "links": links}
+out = {
+    "schema": {"id": "share.manifest_linkage.v1", "version": 1},
+    "generated_at": rfc3339(),
+    "links": links,
+}
 
 p = pathlib.Path("share/manifest_linkage.json")
 p.write_text(json.dumps(out, indent=2))

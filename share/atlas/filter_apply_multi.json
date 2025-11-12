@@ -1,0 +1,35 @@
+{
+  "schema": {
+    "id": "atlas.filter_apply_multi.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:20:31.000877Z",
+  "items": [
+    {
+      "chip_id": "chip:db-backed",
+      "queries": [
+        {
+          "kind": "sql",
+          "text": "SELECT id,label FROM mcp_catalog LIMIT 5"
+        },
+        {
+          "kind": "sql",
+          "text": "SELECT COUNT(*) AS n FROM mcp_catalog"
+        }
+      ]
+    },
+    {
+      "chip_id": "chip:has-trace",
+      "queries": [
+        {
+          "kind": "sql",
+          "text": "SELECT id,label FROM mcp_catalog LIMIT 5"
+        },
+        {
+          "kind": "sql",
+          "text": "SELECT COUNT(*) AS n FROM mcp_catalog"
+        }
+      ]
+    }
+  ]
+}

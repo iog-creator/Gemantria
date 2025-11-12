@@ -1,0 +1,29 @@
+{
+  "schema": {
+    "id": "share.manifest_linkage.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:20:31Z",
+  "links": [
+    {
+      "path": "share/atlas/sitemap.json",
+      "exists": true
+    },
+    {
+      "path": "share/atlas/index_summary.json",
+      "exists": true
+    },
+    {
+      "path": "share/atlas/filter_chips.json",
+      "exists": true
+    },
+    {
+      "path": "share/atlas/filter_apply.json",
+      "exists": true
+    },
+    {
+      "path": "share/atlas/filter_apply_multi.json",
+      "exists": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema": {
+    "id": "atlas.breadcrumbs.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:20:31Z",
+  "breadcrumbs": [
+    {
+      "path": [
+        "index"
+      ],
+      "href": "index.html"
+    },
+    {
+      "path": [
+        "index",
+        "node_001"
+      ],
+      "href": "nodes/node_001/index.html"
+    },
+    {
+      "path": [
+        "index",
+        "node_002"
+      ],
+      "href": "nodes/node_002/index.html"
+    }
+  ]
+}

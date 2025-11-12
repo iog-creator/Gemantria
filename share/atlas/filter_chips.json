@@ -1,0 +1,26 @@
+{
+  "schema": {
+    "id": "atlas.filter_chips.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:20:30.878552Z",
+  "host_hash": "6e7e493d",
+  "probe": {
+    "mode": "HINT",
+    "dsn_present": true
+  },
+  "items": [
+    {
+      "id": "chip:db-backed",
+      "label": "DB-backed",
+      "type": "source",
+      "node_href": "nodes/node_001/index.html"
+    },
+    {
+      "id": "chip:has-trace",
+      "label": "Has Trace",
+      "type": "state",
+      "node_href": "nodes/node_001/index.html"
+    }
+  ]
+}

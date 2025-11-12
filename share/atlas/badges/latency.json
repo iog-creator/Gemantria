@@ -1,0 +1,10 @@
+{
+  "schema": {
+    "id": "atlas.badge.latency.v1",
+    "version": 1
+  },
+  "measured_ms": 1,
+  "threshold_ms": 50,
+  "ok": true,
+  "mode": "HINT"
+}
