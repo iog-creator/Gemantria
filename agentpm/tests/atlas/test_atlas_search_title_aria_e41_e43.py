@@ -1,4 +1,4 @@
-import pytest, pathlib
+import pathlib
 
 
 def _read(path):
@@ -18,4 +18,3 @@ def test_e42_pages_have_title_suffix():
 def test_e43_pages_have_aria_landmarks():
     idx = _read("share/atlas/index.html")
     assert ('role="main"' in idx) or ("<main" in idx)
-

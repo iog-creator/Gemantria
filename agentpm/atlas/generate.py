@@ -213,7 +213,7 @@ def generate(
     sm_html = (
         '<!doctype html><html lang="en"><meta charset="utf-8"><title>Atlas — Sitemap | Gemantria Atlas</title>'
         "<style>body{font-family:system-ui;margin:2rem}li{margin:.25rem 0}</style>"
-        "<main role=\"main\">"
+        '<main role="main">'
         "<h1>Atlas — Sitemap</h1>"
         f"<p>Nodes: {len(nodes)} • Jumpers: {len(nodes)}</p>"
         "<ul>" + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500]) + "</ul></main></html>"
