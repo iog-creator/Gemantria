@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import json
 
 INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
@@ -27,10 +27,12 @@ NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <p>Placeholder node page. Generated at: {ts}</p>
 </html>"""
 
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00","Z")
 
-def generate(out_dir: str = "share/atlas", nodes=(0,1)) -> dict[str, str]:
+def _now_iso() -> str:
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def generate(out_dir: str = "share/atlas", nodes=(0, 1)) -> dict[str, str]:
     ts = _now_iso()
     root = Path(out_dir)
     (root / "nodes").mkdir(parents=True, exist_ok=True)
@@ -46,6 +48,7 @@ def generate(out_dir: str = "share/atlas", nodes=(0,1)) -> dict[str, str]:
         p.write_text(NODE_HTML.format(i=i, ts=ts), encoding="utf-8")
         paths["nodes"].append(str(p))
     return paths
+
 
 if __name__ == "__main__":
     paths = generate()
