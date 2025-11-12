@@ -1731,3 +1731,7 @@ tvs.atlas.next37:
 	@pytest -q agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py > evidence/tvs_atlas_e35e37.txt || true
 tvs.atlas.next40:
 	@pytest -q agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py > evidence/tvs_e38e40.txt || true
+tvs.atlas.next49:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/tvs_e47plus.tail.txt || true
+	@echo 'TVS E47+ staged'
