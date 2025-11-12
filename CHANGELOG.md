@@ -1,6 +1,14 @@
 ## [Unreleased]
 
-- PLAN-073 M8: DB-backed filter chips + node provenance rollups + stale-evidence guard; E36–E40 PASS.
+## [v0.0.6] - 2025-11-12
+
+### Highlights
+
+- PLAN-073 M8: DB-backed filter chips, per-node provenance rollups, cross-page chip propagation, DB probe receipt, stale-evidence guard.
+
+### Proofs
+
+- STRICT tagproof (RO-DSN MCP guard + Webproof) expected on CI for v0.0.6.
 
 ## [v0.0.3] - 2025-11-12
 
