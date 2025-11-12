@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- PLAN-073 M8: DB-backed filter chips + node provenance rollups + stale-evidence guard; E36–E40 PASS.
+
 ## [v0.0.3] - 2025-11-12
 
 ### Highlights
