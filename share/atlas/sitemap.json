@@ -1,0 +1,11 @@
+{
+  "files": {
+    "graph": "share/atlas/graph.html",
+    "index": "share/atlas/index.html",
+    "jumpers_dir": "share/atlas/jumpers/idx",
+    "jumpers_index": "share/atlas/jumpers/index.html",
+    "nodes_dir": "share/atlas/nodes"
+  },
+  "jumpers_count": 3,
+  "nodes_count": 3
+}
