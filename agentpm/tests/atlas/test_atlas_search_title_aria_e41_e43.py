@@ -1,7 +1,7 @@
 import pytest, pathlib
 
 
-xfail_reason = "Staged TVs for E41–E43 (search box, title suffixes, ARIA landmarks)"
+xfail_reason = "Staged TVs for E41-E43 (search box, title suffixes, ARIA landmarks)"
 
 pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
 
