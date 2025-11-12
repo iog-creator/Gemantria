@@ -30,7 +30,14 @@ else:
     text = "<!doctype html><html><head><meta charset='utf-8'></head><body><div id='app'></div></body></html>"
 
 if "data-db-strict=" not in text and "db-proof-chip" not in text:
-    text = text.replace("<div id='app'", "<div id='app' data-db-strict='true'><!-- db-proof-chip -->")
+    # Try to inject into <html> tag or <body> tag
+    if "<html" in text:
+        text = text.replace("<html", "<html data-db-strict='true'", 1)
+    elif "<body" in text:
+        text = text.replace("<body", "<body data-db-strict='true'", 1)
+    else:
+        # Fallback: add as comment at the start
+        text = "<!-- db-proof-chip -->\n" + text
 
 idx.write_text(text)
 
