@@ -2,14 +2,15 @@
   "links": [
     {
       "path": "share/atlas/index.html",
-      "trace_id": "1fe0564b7287",
+      "trace_id": "a0bfc3033acb",
       "rel": "index"
     },
     {
       "path": "share/atlas/nodes/0.html",
-      "trace_id": "1fe0564b7287",
+      "trace_id": "a0bfc3033acb",
       "rel": "node"
     }
   ],
-  "count": 2
+  "count": 2,
+  "complete": true
 }

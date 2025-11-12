@@ -1848,3 +1848,24 @@ guard.mcp.trace_link:
 	./scripts/guards/guard_mcp_trace_link.py | tee evidence/guard_mcp_trace_link.out.json
 
 mcp.runtime.links: mcp.agent.bindings atlas.node.trace.inject atlas.trace.links mcp.envelope.trace.map guard.mcp.trace_link
+
+
+## MCP M7 targets
+.PHONY: mcp.agent.bindings.chip guard.atlas.node.deeplink atlas.trace.links.complete mcp.envelope.trace.dbmap guard.trace_link.receipt mcp.runtime.provenance
+
+mcp.agent.bindings.chip:
+	./scripts/mcp_agent_bindings_chip.py | tee evidence/mcp_agent_bindings_chip.out.json
+
+guard.atlas.node.deeplink:
+	./scripts/guards/guard_atlas_node_deeplink.py | tee evidence/guard_atlas_node_deeplink.out.json
+
+atlas.trace.links.complete:
+	./scripts/atlas_trace_links_complete.py | tee evidence/atlas_trace_links_complete.out.json
+
+mcp.envelope.trace.dbmap:
+	STRICT=${STRICT:-0} CHECKPOINTER=${CHECKPOINTER:-memory} ./scripts/mcp_envelope_trace_db_map.py | tee evidence/mcp_envelope_trace_db_map.out.json
+
+guard.trace_link.receipt:
+	./scripts/guards/guard_trace_link_receipt.py | tee evidence/guard_trace_link_receipt.out.json
+
+mcp.runtime.provenance: mcp.agent.bindings.chip guard.atlas.node.deeplink atlas.trace.links.complete mcp.envelope.trace.dbmap guard.trace_link.receipt

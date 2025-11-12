@@ -1,6 +1,6 @@
 import pytest
 
-pytestmark = pytest.mark.xfail(reason="PLAN-073 M7 staged; implementation pending.", strict=False)
+# xfail removed: PLAN-073 M7 implemented
 
 
 def test_e31_agent_runtime_bindings_chip():
