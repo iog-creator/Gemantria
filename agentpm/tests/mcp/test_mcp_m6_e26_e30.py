@@ -5,11 +5,10 @@ from __future__ import annotations
 import json
 import pathlib
 
-import pytest
-
-xfail_reason = "PLAN-073 M6 (agent runtime bindings + Atlas deep-links) staged; implementation pending."
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+# pytestmark removed: PLAN-073 M6 implemented
+# import pytest
+# xfail_reason = "PLAN-073 M6 (agent runtime bindings + Atlas deep-links) staged; implementation pending."
+# pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
 
 
 # E26: Agent runtime bindings receipt (what is wired where at runtime)

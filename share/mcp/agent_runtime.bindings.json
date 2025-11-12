@@ -1,0 +1,6 @@
+{
+  "strict": false,
+  "checkpointer": "memory",
+  "catalog": "mcp_catalog.v1",
+  "generated_at": "2025-11-12T09:32:26Z"
+}
