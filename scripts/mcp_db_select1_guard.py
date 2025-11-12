@@ -11,7 +11,13 @@ value = None
 try:
     if shutil.which("psql") and dsn:
         # Run SELECT 1 with a short timeout; we don't fail CI if psql not present
-        cp = subprocess.run(["psql", dsn, "-tAc", "SELECT 1;"], text=True, capture_output=True, check=False, timeout=5)
+        cp = subprocess.run(
+            ["psql", dsn, "-tAc", "SELECT 1;"],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=5,
+        )
         txt = (cp.stdout or "").strip()
         method = "psql"
         if txt:
