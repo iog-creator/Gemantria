@@ -1706,3 +1706,6 @@ guard.exports:
 	@pytest -q agentpm/tests/exports/test_graph_export_e20_e22.py > evidence/guard_exports.txt || (echo FAIL_guard.exports; exit 1)
 	@echo GUARD_EXPORTS_OK
 
+
+tvs.atlas.links.next:
+	@pytest -q agentpm/tests/atlas/test_atlas_links_e26_e28.py > evidence/tvs_atlas_links_e26e28.txt || true
