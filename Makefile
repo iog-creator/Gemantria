@@ -1782,3 +1782,18 @@ mcp.strict.proofs:
 	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_db_proof_chip.py | tee -a evidence/atlas.db_proof_chip.out.json
 	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_strict_roundtrip.py | tee evidence/mcp_strict_roundtrip.out.json
 	@echo '{"STRICT":"1","CHECKPOINTER":"postgres"}' > share/mcp/strict.env.json
+
+## MCP M3 targets
+.PHONY: mcp.strict.live.handshake mcp.db.smoke atlas.db_proof.inject mcp.strict.trace
+
+mcp.strict.live.handshake:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_strict_live_handshake.py | tee evidence/mcp_strict_live_handshake.out.json
+
+mcp.db.smoke:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_smoke.py | tee evidence/mcp_db_smoke.out.json
+
+atlas.db_proof.inject:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_chip_inject.py | tee evidence/atlas_chip_inject.out.json
+
+mcp.strict.trace:
+	./scripts/mcp_strict_trace_ptr.sh && tail -n +1 share/mcp/strict_trace.ptr.txt | tee evidence/mcp_strict_trace.ptr.txt

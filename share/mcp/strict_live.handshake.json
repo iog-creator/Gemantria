@@ -1,0 +1,7 @@
+{
+  "strict": true,
+  "checkpointer": "postgres",
+  "method": "stub-handshake",
+  "ok": true,
+  "generated_at": "2025-11-12T09:05:57Z"
+}
