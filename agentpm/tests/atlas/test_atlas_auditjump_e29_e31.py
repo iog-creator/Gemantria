@@ -1,4 +1,4 @@
-import os, pytest, re
+import os, re
 
 
 def _maybe(paths):
@@ -12,7 +12,7 @@ def test_e29_node_page_embeds_audit_json_script_tag():
     node0 = _maybe(["share/atlas/nodes/0.html"])
     assert node0, "node page missing (staged)"
     html = open(node0, encoding="utf-8").read()
-    assert re.search(r'<script[^>]+type="application/json"[^>]+id="audit-json"', html), "no audit JSON embed (staged)"
+    assert re.search(r'<script[^>]+id="audit-json"[^>]+type="application/json"', html) or re.search(r'<script[^>]+type="application/json"[^>]+id="audit-json"', html), "no audit JSON embed (staged)"
 
 
 def test_e30_node_page_has_cross_batch_jump_links():
