@@ -1,4 +1,3 @@
-import pytest
 
 # xfail removed: PLAN-073 M7 implemented
 
