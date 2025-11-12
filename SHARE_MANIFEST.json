@@ -4841,6 +4841,16 @@
       "size": 269
     },
     {
+      "path": "share/releases/v0.0.3/webproof/browser_verified_index.png",
+      "sha256": "d8258c9ec4f2d37d97091453524f094f4b760de0f5c8820c69d3e469fb52ed80",
+      "size": 197472
+    },
+    {
+      "path": "share/releases/v0.0.3/webproof/browser_verified_mcp_catalog_view.png",
+      "sha256": "fdffcfe3a67767f0592ea3c44a04443085e8aa63ff659b16cf890a47ea3c2552",
+      "size": 175413
+    },
+    {
       "path": "share/releases/v0.0.3/webproof/catalog.png",
       "sha256": "46543e0ef3980eaf08587023b7cf85577e790a8ccdd209ffe946c584c899edd2",
       "size": 51089
