@@ -1696,3 +1696,13 @@ guard.schema.naming:
 .PHONY: guard.extractors
 guard.extractors:
 	$(PYTHON) scripts/ci/guard_extraction_agents.py | tee evidence/guard_extraction_agents.final.json
+
+exports.generate:
+	@python3 -m agentpm.exports.generate > evidence/exports.generate.out.json
+	@echo exports.generate OK
+
+guard.exports:
+	@mkdir -p evidence
+	@pytest -q agentpm/tests/exports/test_graph_export_e20_e22.py > evidence/guard_exports.txt || (echo FAIL_guard.exports; exit 1)
+	@echo GUARD_EXPORTS_OK
+
