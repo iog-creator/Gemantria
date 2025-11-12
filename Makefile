@@ -1945,3 +1945,26 @@ guard.m12.roundtrip:
 	@python3 scripts/guards/guard_m12_filter_apply_roundtrip.py > evidence/guard_m12_filter_apply_roundtrip.stdout.json
 
 .PHONY: m12.proofs guard.m12.coverage guard.m12.roundtrip
+
+# --- PLAN-073 M13 targets (wrap-up) ---
+m13.proofs:
+	@$(MAKE) -s m12.proofs
+	@python3 scripts/atlas/gen_index_badge_rollup.py
+	@python3 scripts/guards/guard_m13_chip_id_uniqueness.py > evidence/guard_m13_chip_id_uniqueness.stdout.json
+	@python3 scripts/guards/guard_m13_sitemap_min.py > evidence/guard_m13_sitemap_min.stdout.json
+	@python3 scripts/guards/guard_m13_manifest_consistency.py > evidence/guard_m13_manifest_consistency.stdout.json
+	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
+
+guard.m13.chips:
+	@python3 scripts/guards/guard_m13_chip_id_uniqueness.py > evidence/guard_m13_chip_id_uniqueness.stdout.json
+
+guard.m13.sitemap:
+	@python3 scripts/guards/guard_m13_sitemap_min.py > evidence/guard_m13_sitemap_min.stdout.json
+
+guard.m13.manifest:
+	@python3 scripts/guards/guard_m13_manifest_consistency.py > evidence/guard_m13_manifest_consistency.stdout.json
+
+guard.m13.stale:
+	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
+
+.PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
