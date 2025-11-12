@@ -36,12 +36,23 @@ def ensure_provenance(model: str, seed: int | str, analysis: str | None) -> Dict
     return out
 
 
-def stamp_batch(items: Iterable[Dict[str, Any]], model: str, seed: int | str) -> List[Dict[str, Any]]:
+def stamp_batch(items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt=None) -> List[Dict[str, Any]]:
     """
-    Stamps a batch with monotonic RFC3339 timestamps (1s increments) and required provenance.
+    Deterministic batch stamping:
+    - Accepts injected UTC base datetime (base_dt). If None, uses now() truncated to seconds.
+    - Adds +1s per record to ensure monotonic ts_iso.
+    - Preserves input ordering 1:1.
+    - Seed affects only the 'seed' field; timestamps depend only on base_dt & index.
     """
     s = _coerce_seed_int(seed)
-    base = datetime.now(UTC).replace(microsecond=0)
+    if base_dt is None:
+        base = datetime.now(UTC).replace(microsecond=0)
+    else:
+        # normalize to UTC, second precision
+        if base_dt.tzinfo is None:
+            base = base_dt.replace(tzinfo=UTC, microsecond=0)
+        else:
+            base = base_dt.astimezone(UTC).replace(microsecond=0)
     stamped: List[Dict[str, Any]] = []
     for i, it in enumerate(items):
         ts = (base + timedelta(seconds=i)).strftime(RFC3339_FORMAT)
