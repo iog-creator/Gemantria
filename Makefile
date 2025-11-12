@@ -1928,3 +1928,20 @@ guard.m11.apply_multi:
 	@python3 scripts/guards/guard_m11_filter_apply_multi_schema.py > evidence/guard_m11_apply_multi_schema.stdout.json
 
 .PHONY: m11.proofs guard.m11.trace guard.m11.apply_multi
+
+# --- PLAN-073 M12 targets ---
+m12.proofs:
+	@$(MAKE) -s m11.proofs
+	@python3 scripts/atlas/gen_index_summary.py
+	@python3 scripts/guards/guard_m12_chip_coverage.py > evidence/guard_m12_chip_coverage.stdout.json
+	@python3 scripts/atlas/gen_trace_badge.py
+	@python3 scripts/guards/guard_m12_filter_apply_roundtrip.py > evidence/guard_m12_filter_apply_roundtrip.stdout.json
+	@python3 scripts/atlas/gen_manifest_linkage.py
+
+guard.m12.coverage:
+	@python3 scripts/guards/guard_m12_chip_coverage.py > evidence/guard_m12_chip_coverage.stdout.json
+
+guard.m12.roundtrip:
+	@python3 scripts/guards/guard_m12_filter_apply_roundtrip.py > evidence/guard_m12_filter_apply_roundtrip.stdout.json
+
+.PHONY: m12.proofs guard.m12.coverage guard.m12.roundtrip
