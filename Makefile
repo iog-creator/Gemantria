@@ -1869,3 +1869,15 @@ guard.trace_link.receipt:
 	./scripts/guards/guard_trace_link_receipt.py | tee evidence/guard_trace_link_receipt.out.json
 
 mcp.runtime.provenance: mcp.agent.bindings.chip guard.atlas.node.deeplink atlas.trace.links.complete mcp.envelope.trace.dbmap guard.trace_link.receipt
+
+# --- PLAN-073 M8 targets ---
+m8.proofs:
+	@python3 scripts/mcp/gen_filter_chips.py
+	@python3 scripts/atlas/write_node_rollups.py
+	@python3 scripts/mcp/probe_db.py > evidence/m8_db_probe.stdout.json
+	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
+
+guard.m8.stale:
+	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
+
+.PHONY: m8.proofs guard.m8.stale
