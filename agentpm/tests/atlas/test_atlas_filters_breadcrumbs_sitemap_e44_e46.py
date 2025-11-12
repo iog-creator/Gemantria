@@ -1,7 +1,7 @@
 import json, pytest, pathlib
 
 
-xfail_reason = "Staging E44–E46 (quick filters, breadcrumb aria-current, sitemap.json schema) — expected to fail until implemented."
+xfail_reason = "Staging E44-E46 (quick filters, breadcrumb aria-current, sitemap.json schema) - expected to fail until implemented."
 
 pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=True)
 
