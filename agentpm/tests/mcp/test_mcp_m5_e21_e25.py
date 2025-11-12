@@ -5,11 +5,9 @@ from __future__ import annotations
 import json
 import pathlib
 
-import pytest
-
-xfail_reason = "PLAN-073 M5 (runtime checkpointer integration + Atlas trace links) staged; implementation pending."
-
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
+# pytestmark removed: PLAN-073 M5 implemented
+# xfail_reason = "PLAN-073 M5 (runtime checkpointer integration + Atlas trace links) staged; implementation pending."
+# pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
 
 
 def test_e21_runtime_checkpointer_postgres_active():
