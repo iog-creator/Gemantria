@@ -1639,13 +1639,17 @@ atlas.live.health:
 	@curl -s http://127.0.0.1:8777/health || echo "[atlas-live] server not running"
 
 # --- MCP SSE (LM Studio bridge) ---
-.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop guard.mcp.sse
+.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop mcp.sse.ensure guard.mcp.sse
 MCP_HOST?=127.0.0.1
 MCP_PORT?=8005
+AUTO_START_MCP_SSE?=0
 
 mcp.sse.start:
-	@nohup $${PYTHON3:-python3} $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
+	@nohup bash $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
 	echo "[mcp] SSE server started on $(MCP_HOST):$(MCP_PORT)"
+
+mcp.sse.ensure: ## Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)
+	@AUTO_START_MCP_SSE=$(AUTO_START_MCP_SSE) bash scripts/mcp_sse_ensure.sh
 
 mcp.sse.health:
 	@curl -fsSI http://$(MCP_HOST):$(MCP_PORT)/sse | grep -iE 'HTTP/|content-type' || (echo "[mcp] SSE health FAIL" && exit 2)
@@ -1741,3 +1745,22 @@ tvs.atlas.next49:
 tvs.mcp.next05:
 	@pytest -q agentpm/tests/mcp/test_mcp_catalog_e01_e05.py || true
 	@echo 'TVS MCP E01–E05 staged'
+
+## MCP targets
+.PHONY: guard.mcp.rodsn mcp.ingest.smoke mcp.query.smoke mcp.proof.snapshot
+
+guard.mcp.rodsn:
+	@./scripts/guards/guard_mcp_rodsn.py > evidence/guard_mcp_rodsn.txt || true
+	@echo 'guard.mcp.rodsn OK'
+
+mcp.ingest.smoke:
+	@python3 -c "from agentpm.mcp.ingest import ingest; import json, pathlib; p = pathlib.Path('share/mcp/test_smoke.json'); p.write_text(json.dumps({'id': 'smoke', 'test': True})); print(ingest(str(p))); p.unlink()" || true
+	@echo 'mcp.ingest.smoke OK'
+
+mcp.query.smoke:
+	@python3 scripts/mcp_query_roundtrip.py > evidence/mcp_query_smoke.txt || true
+	@echo 'mcp.query.smoke OK'
+
+mcp.proof.snapshot:
+	@bash scripts/mcp_proof_snapshot.sh || true
+	@echo 'mcp.proof.snapshot OK'

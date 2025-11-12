@@ -63,7 +63,9 @@ report = {
     "enabled": enable,
     "notes": [
         "HINT: LM Studio MCP bridge (optional). Set ENABLE_LMSTUDIO_MCP=1 to require.",
-        "Start server: make mcp.sse.start",
+        "Auto-start: Set AUTO_START_MCP_SSE=1 to automatically start server when needed.",
+        "Manual start: make mcp.sse.start",
+        "Ensure running: make mcp.sse.ensure (auto-starts if AUTO_START_MCP_SSE=1)",
         "Health check: make mcp.sse.health",
     ],
 }

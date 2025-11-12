@@ -110,6 +110,15 @@ echo ""
 #    Tools are documented; use them in the listed order.
 
 echo ">> Step 2: Headless LM Studio readiness checks"
+
+# 2a) Ensure MCP SSE server is running (if auto-start enabled)
+if [ "${AUTO_START_MCP_SSE:-0}" = "1" ]; then
+    echo ">> Step 2a: Ensuring MCP SSE server is running (AUTO_START_MCP_SSE=1)"
+    bash scripts/mcp_sse_ensure.sh --force || {
+        echo "⚠ MCP SSE server auto-start failed (non-fatal, continuing)"
+    }
+fi
+
 echo "Running: python3 tools/lm_bootstrap_strict.py"
 python3 tools/lm_bootstrap_strict.py || {
     echo "✗ LM Studio bootstrap failed"
