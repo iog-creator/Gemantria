@@ -12,7 +12,8 @@ txt = target.read_text(errors="ignore")
 if "data-trace-id=" not in txt:
     if "<div class='node' id='n0'" in txt:
         txt = txt.replace(
-            "<div class='node' id='n0'", f"<div class='node' id='n0' data-trace-id=\"{trace}\" trace-link=\"true\""
+            "<div class='node' id='n0'",
+            f"<div class='node' id='n0' data-trace-id=\"{trace}\" trace-link=\"true\"",
         )
     elif "<html" in txt and "data-trace-id=" not in txt:
         txt = txt.replace("<html", f'<html data-trace-id="{trace}" trace-link="true"', 1)
