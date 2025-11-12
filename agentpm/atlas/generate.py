@@ -6,8 +6,12 @@ import json
 import html
 
 INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Index</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
+<title>Atlas — Index | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
+<main role="main">
 <h1>Atlas — Index</h1>
+<form role="search" aria-label="Atlas search">
+  <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search">
+</form>
 <p>Generated at: {ts}</p>
 <div id="counts">Nodes: {nodes_count} • Jumpers: {jumpers_count}</div>
 <nav>
@@ -17,17 +21,21 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
   <a href="jumpers/index.html">Jumpers</a>
   {node_links}
 </nav>
+</main>
 </html>"""
 
 GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Graph</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<title>Atlas — Graph | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<main role="main">
 <a href="index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Graph</h1>
 <p>Placeholder graph view. Generated at: {ts}</p>
+</main>
 </html>"""
 
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Node {i}</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<title>Atlas — Node {i} | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<main role="main">
 <a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Node {i}</h1>
 <section id="audit">
@@ -43,19 +51,23 @@ NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <p><a id="view-json-raw" href="{raw_href}">View raw JSON</a></p>
 
 <p>Generated at: {ts}</p>
+</main>
 </html>"""
 
 JUMPERS_INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Jumpers</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
+<title>Atlas — Jumpers | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}a{{display:block;margin:.25rem 0}}</style>
+<main role="main">
 <a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Jumpers Index</h1>
 <p>Landing page for cross-batch navigation.</p>
 <div data-backfill-proof="true">Backfill proof: jumper pages contain back-links to nodes</div>
 {items}
+</main>
 </html>"""
 
 JUMPER_NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
-<title>Atlas — Jumpers for Node {i}</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<title>Atlas — Jumpers for Node {i} | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
+<main role="main">
 <a href="../../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Jumpers — Node {i}</h1>
 <p>Placeholder jumper list for node {i} (hermetic).</p>
@@ -63,6 +75,7 @@ JUMPER_NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
   <li><a href="../../nodes/{i}.html">Return to Node {i}</a></li>
 </ul>
 <div id="jumpers-proof" data-has_backlink="true">proof</div>
+</main>
 </html>"""
 
 
@@ -198,11 +211,12 @@ def generate(
     paths["sitemap"] = str(root / "sitemap.json")
     # E39: sitemap.html (human-friendly)
     sm_html = (
-        '<!doctype html><html lang="en"><meta charset="utf-8"><title>Atlas — Sitemap</title>'
+        '<!doctype html><html lang="en"><meta charset="utf-8"><title>Atlas — Sitemap | Gemantria Atlas</title>'
         "<style>body{font-family:system-ui;margin:2rem}li{margin:.25rem 0}</style>"
+        "<main role=\"main\">"
         "<h1>Atlas — Sitemap</h1>"
         f"<p>Nodes: {len(nodes)} • Jumpers: {len(nodes)}</p>"
-        "<ul>" + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500]) + "</ul></html>"
+        "<ul>" + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500]) + "</ul></main></html>"
     )
     (root / "sitemap.html").write_text(sm_html, encoding="utf-8")
     paths["sitemap_html"] = str(root / "sitemap.html")
