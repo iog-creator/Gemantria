@@ -1,6 +1,5 @@
 import json
 import pathlib
-import time
 
 
 def load_json(p):
