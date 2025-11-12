@@ -10,7 +10,7 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <main role="main">
 <h1>Atlas — Index</h1>
 <form role="search" aria-label="Atlas search">
-  <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search">
+  <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search" role="searchbox">
 </form>
 <p>Generated at: {ts}</p>
 <div id="counts">Nodes: {nodes_count} • Jumpers: {jumpers_count}</div>
@@ -28,15 +28,35 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 </nav>
 </main>
 <script>
+/* E50: search+filters wiring */
 (function(){{
   try{{
-    var gf=document.getElementById('quick-filters');
-    if(!gf) return;
-    gf.addEventListener('click', function(e){{
-      if(e.target && e.target.matches('button[data-filter]')){{
-        document.documentElement.toggleAttribute('data-filters-toggled','');
-      }}
-    }}, {{passive:true}});
+    var q = document.getElementById('search');
+    var list = Array.prototype.slice.call(document.querySelectorAll('a[href^="nodes/"][href$=".html"]'));
+    var gf = document.getElementById('quick-filters');
+    function apply(){{
+      var term = (q && q.value || '').toLowerCase();
+      list.forEach(function(a){{
+        var on = !term || a.textContent.toLowerCase().indexOf(term) !== -1;
+        a.style.display = on ? '' : 'none';
+      }});
+    }}
+    if(q){{ q.addEventListener('input', apply); }}
+    if(gf && gf.dataset && gf.dataset.behavior === 'toggle-filters'){{
+      var btns = gf.querySelectorAll('button[data-filter]');
+      btns.forEach(function(b){{
+        b.addEventListener('click', function(){{
+          var f = b.getAttribute('data-filter');
+          if(f === 'all'){{ if(q){{ q.value=''; }} }}
+          if(f === 'top10'){{
+            list.forEach(function(a,i){{ a.style.display = (i<10)?'':'none'; }});
+            return;
+          }}
+          apply();
+        }});
+      }});
+    }}
+    apply();
   }}catch(_){{}}
 }})();
 </script>
@@ -45,7 +65,7 @@ INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Graph | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <main role="main">
-<a href="index.html" aria-label="Back to Atlas">← Back to Atlas</a>
+<a id="top" href="index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Graph</h1>
 <p>Placeholder graph view. Generated at: {ts}</p>
 </main>
@@ -54,7 +74,7 @@ GRAPH_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Atlas — Node {i} | Gemantria Atlas</title><style>body{{font-family:system-ui;margin:2rem}}</style>
 <main role="main">
-<nav aria-label="Breadcrumb"><a href="../index.html">Atlas</a> / <span aria-current="page" class="current">Node {i}</span></nav>
+<nav aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList"><ol style="list-style:none;padding-left:0;margin:0"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="../index.html" itemprop="item"><span itemprop="name">Atlas</span></a><meta itemprop="position" content="1"></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span aria-current="page" class="current" itemprop="name">Node {i}</span><meta itemprop="position" content="2"></li></ol></nav>
 <a href="../index.html" aria-label="Back to Atlas">← Back to Atlas</a>
 <h1>Atlas — Node {i}</h1>
 <section id="audit">
