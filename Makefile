@@ -1719,3 +1719,5 @@ guard.atlas:
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
 	@echo 'atlas.generate OK'
+tvs.atlas.auditjump.next:
+	@pytest -q agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py > evidence/tvs_atlas_auditjump_e29e31.txt || true
