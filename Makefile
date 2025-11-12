@@ -1894,3 +1894,20 @@ guard.m9.rollup.stale:
 	@python3 scripts/guards/guard_m9_rollup_stale.py > evidence/guard_m9_rollup_stale.stdout.json
 
 .PHONY: m9.proofs guard.m9.rollup.stale
+
+# --- PLAN-073 M10 targets ---
+m10.proofs:
+	@$(MAKE) -s m9.proofs
+	@python3 scripts/atlas/gen_sitemap.py
+	@python3 scripts/atlas/gen_filter_apply_multi.py
+	@python3 scripts/guards/guard_m10_trace_backlink.py > evidence/m10_trace_backlink.stdout.json
+	@python3 scripts/atlas/gen_node_coverage.py
+	@python3 scripts/guards/guard_m10_filter_apply_drift.py > evidence/guard_m10_filter_apply_drift.stdout.json
+
+guard.m10.trace:
+	@python3 scripts/guards/guard_m10_trace_backlink.py > evidence/m10_trace_backlink.stdout.json
+
+guard.m10.drift:
+	@python3 scripts/guards/guard_m10_filter_apply_drift.py > evidence/guard_m10_filter_apply_drift.stdout.json
+
+.PHONY: m10.proofs guard.m10.trace guard.m10.drift
