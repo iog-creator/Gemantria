@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import json
 import html
 
@@ -59,7 +59,7 @@ JUMPER_NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def _load_json(path: Path) -> dict:
@@ -104,7 +104,11 @@ def generate(
     if not nodes:
         nodes = [0, 1, 2]
         audits = {
-            i: {"batch_id": str(export.get("batch_id", "")), "provenance_hash": "", "provenance": {}}
+            i: {
+                "batch_id": str(export.get("batch_id", "")),
+                "provenance_hash": "",
+                "provenance": {},
+            }
             for i in nodes
         }
 
@@ -132,9 +136,7 @@ def generate(
     }
     for i in nodes:
         # jumper node page
-        (root / "jumpers" / "idx" / f"{i}.html").write_text(
-            JUMPER_NODE_HTML.format(i=i), encoding="utf-8"
-        )
+        (root / "jumpers" / "idx" / f"{i}.html").write_text(JUMPER_NODE_HTML.format(i=i), encoding="utf-8")
 
         # node page
         a = audits.get(i, {"batch_id": "", "provenance_hash": "", "provenance": {}})
