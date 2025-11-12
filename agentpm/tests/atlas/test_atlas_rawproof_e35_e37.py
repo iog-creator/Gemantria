@@ -1,9 +1,5 @@
 import os
 import json
-import pytest
-
-xfail_reason = "Staged TVs for E35-E37 pending implementation"
-pytestmark = pytest.mark.xfail(reason=xfail_reason, strict=False)
 
 
 def _maybe(paths):

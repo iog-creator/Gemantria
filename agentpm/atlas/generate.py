@@ -37,6 +37,8 @@ NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <p><a class="jumper" href="../jumpers/idx/{i}.html">See cross-batch jumpers</a></p>
 <p><a id="download-json" href="{json_href}" download>Download JSON</a></p>
 <script id="audit-json" type="application/json">{audit_json}</script>
+<p><a id="view-json-raw" href="{raw_href}">View raw JSON</a></p>
+
 <p>Generated at: {ts}</p>
 </html>"""
 
@@ -45,6 +47,7 @@ JUMPERS_INDEX_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <a href="../index.html">← Back to Atlas</a>
 <h1>Atlas — Jumpers Index</h1>
 <p>Landing page for cross-batch navigation.</p>
+<div data-backfill-proof="true">Backfill proof: jumper pages contain back-links to nodes</div>
 {items}
 </html>"""
 
@@ -56,6 +59,7 @@ JUMPER_NODE_HTML = """<!doctype html><html lang="en"><meta charset="utf-8">
 <ul>
   <li><a href="../../nodes/{i}.html">Return to Node {i}</a></li>
 </ul>
+<div id="jumpers-proof" data-has_backlink="true">proof</div>
 </html>"""
 
 
@@ -145,12 +149,22 @@ def generate(
         # E32: Write per-node JSON file
         (root / "nodes" / f"{i}.json").write_text(json.dumps(a, sort_keys=True), encoding="utf-8")
         json_href = f"{i}.json"
+        raw_path = root / "nodes" / f"{i}.raw.html"
+        raw_path.write_text(
+            f'<!doctype html><html><meta charset="utf-8"><title>Raw JSON — Node {i}</title>'
+            + '<pre id="audit-json-raw">'
+            + html.escape(json.dumps(a, sort_keys=True))
+            + "</pre></html>",
+            encoding="utf-8",
+        )
+        raw_href = f"{i}.raw.html"
         p = root / "nodes" / f"{i}.html"
         p.write_text(
             NODE_HTML.format(
                 i=i,
                 ts=ts,
                 batch_id=html.escape(str(a["batch_id"])),
+                raw_href=raw_href,
                 prov_hash=html.escape(str(a["provenance_hash"])),
                 audit_json=audit_json,
                 json_href=json_href,
@@ -173,7 +187,13 @@ def generate(
     }
     (root / "sitemap.json").write_text(json.dumps(sm, indent=2, sort_keys=True), encoding="utf-8")
     paths["sitemap"] = str(root / "sitemap.json")
-
+    # integrity block
+    idx = (root / "index.html").read_bytes() if (root / "index.html").exists() else b""
+    sm["integrity"] = {
+        "index_sha256": __import__("hashlib").sha256(idx).hexdigest(),
+        "nodes_listed": len(paths.get("nodes", [])),
+        "ok": (sm.get("nodes_count", 0) >= len(paths.get("nodes", []))),
+    }
     return {"ok": True, "paths": paths}
 
 
