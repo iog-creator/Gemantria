@@ -1811,3 +1811,20 @@ mcp.db.error.guard:
 	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_error_guard.py | tee evidence/mcp_db_error_guard.out.json
 
 mcp.strict.live.full: mcp.pg_checkpointer.handshake mcp.db.select1.guard atlas.db_proof.inject mcp.db.error.guard
+
+## MCP M5 targets
+.PHONY: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch mcp.runtime.proofs
+
+mcp.runtime.checkpointer:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_runtime_checkpointer.py | tee evidence/mcp_runtime_checkpointer.out.json
+
+mcp.session.trace:
+	./scripts/mcp_session_trace.py | tee evidence/mcp_session_trace.out.json
+
+atlas.trace.inject:
+	./scripts/atlas_trace_inject.py | tee evidence/atlas_trace_inject.out.json
+
+guard.mcp.env_mismatch:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/guards/guard_mcp_env_mismatch.py | tee evidence/guard_mcp_env_mismatch.out.json
+
+mcp.runtime.proofs: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch

@@ -1,0 +1,7 @@
+{
+  "strict": true,
+  "checkpointer_env": "postgres",
+  "expected_active": "postgres",
+  "mismatch": false,
+  "generated_at": "2025-11-12T09:25:06Z"
+}
