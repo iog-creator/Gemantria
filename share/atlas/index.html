@@ -3,9 +3,9 @@
 <main role="main">
 <h1>Atlas — Index</h1>
 <form role="search" aria-label="Atlas search">
-  <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search">
+  <input id="search" name="q" type="search" placeholder="Search…" aria-label="Search" role="searchbox">
 </form>
-<p>Generated at: 2025-11-12T05:34:29Z</p>
+<p>Generated at: 2025-11-12T16:16:33Z</p>
 <div id="counts">Nodes: 3 • Jumpers: 3</div>
 <nav>
   <a href="sitemap.html">Sitemap</a>
@@ -23,15 +23,35 @@
 </nav>
 </main>
 <script>
+/* E50: search+filters wiring */
 (function(){
   try{
-    var gf=document.getElementById('quick-filters');
-    if(!gf) return;
-    gf.addEventListener('click', function(e){
-      if(e.target && e.target.matches('button[data-filter]')){
-        document.documentElement.toggleAttribute('data-filters-toggled','');
-      }
-    }, {passive:true});
+    var q = document.getElementById('search');
+    var list = Array.prototype.slice.call(document.querySelectorAll('a[href^="nodes/"][href$=".html"]'));
+    var gf = document.getElementById('quick-filters');
+    function apply(){
+      var term = (q && q.value || '').toLowerCase();
+      list.forEach(function(a){
+        var on = !term || a.textContent.toLowerCase().indexOf(term) !== -1;
+        a.style.display = on ? '' : 'none';
+      });
+    }
+    if(q){ q.addEventListener('input', apply); }
+    if(gf && gf.dataset && gf.dataset.behavior === 'toggle-filters'){
+      var btns = gf.querySelectorAll('button[data-filter]');
+      btns.forEach(function(b){
+        b.addEventListener('click', function(){
+          var f = b.getAttribute('data-filter');
+          if(f === 'all'){ if(q){ q.value=''; } }
+          if(f === 'top10'){
+            list.forEach(function(a,i){ a.style.display = (i<10)?'':'none'; });
+            return;
+          }
+          apply();
+        });
+      });
+    }
+    apply();
   }catch(_){}
 })();
 </script>

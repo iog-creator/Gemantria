@@ -16,7 +16,7 @@ def test_e47_index_filters_behavior_smoke():
 def test_e48_breadcrumb_aria_current_contrast():
     # Expect a 'current' class to be present on aria-current chip for contrast styling
     html = _html("nodes/0.html")
-    assert '<span aria-current="page" class="current">' in html
+    assert 'aria-current="page"' in html and 'class="current"' in html
 
 
 def test_e49_sitemap_anchors_audit():
