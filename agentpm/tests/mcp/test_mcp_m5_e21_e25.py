@@ -52,4 +52,3 @@ def test_e25_env_mismatch_warn_guard():
     """Environment mismatch warning guard exists."""
     p = pathlib.Path("share/mcp/env_mismatch.warn.json")
     assert p.exists(), "env_mismatch.warn.json missing"
-
