@@ -92,7 +92,12 @@ def tool_catalog(project_id):
                 ON CONFLICT (project_id, name) DO UPDATE SET ring = EXCLUDED.ring
                 RETURNING id
                 """,
-                (project_id, "test_tool", 2, psycopg.types.json.dumps(io_schema)),  # ring=2 > rule ring=1
+                (
+                    project_id,
+                    "test_tool",
+                    2,
+                    psycopg.types.json.dumps(io_schema),
+                ),  # ring=2 > rule ring=1
             )
             tool_id = cur.fetchone()[0]
             conn.commit()

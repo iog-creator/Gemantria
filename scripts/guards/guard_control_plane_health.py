@@ -75,10 +75,35 @@ try:
 
         # Check table shapes (key columns)
         shape_checks = {
-            "tool_catalog": ["id", "project_id", "name", "ring", "io_schema", "enabled", "created_at"],
-            "capability_rule": ["id", "project_id", "name", "ring", "allowlist", "denylist", "budgets", "created_at"],
+            "tool_catalog": [
+                "id",
+                "project_id",
+                "name",
+                "ring",
+                "io_schema",
+                "enabled",
+                "created_at",
+            ],
+            "capability_rule": [
+                "id",
+                "project_id",
+                "name",
+                "ring",
+                "allowlist",
+                "denylist",
+                "budgets",
+                "created_at",
+            ],
             "doc_fragment": ["id", "project_id", "src", "anchor", "sha256", "created_at"],
-            "capability_session": ["id", "project_id", "rule_id", "por_json", "tiny_menu", "ttl_s", "created_at"],
+            "capability_session": [
+                "id",
+                "project_id",
+                "rule_id",
+                "por_json",
+                "tiny_menu",
+                "ttl_s",
+                "created_at",
+            ],
             "agent_run": [
                 "id",
                 "project_id",
