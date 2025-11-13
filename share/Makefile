@@ -1639,13 +1639,17 @@ atlas.live.health:
 	@curl -s http://127.0.0.1:8777/health || echo "[atlas-live] server not running"
 
 # --- MCP SSE (LM Studio bridge) ---
-.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop guard.mcp.sse
+.PHONY: mcp.sse.start mcp.sse.health mcp.sse.stop mcp.sse.ensure guard.mcp.sse
 MCP_HOST?=127.0.0.1
 MCP_PORT?=8005
+AUTO_START_MCP_SSE?=0
 
 mcp.sse.start:
-	@nohup $${PYTHON3:-python3} $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
+	@nohup bash $$HOME/mcp/gemantria-ops/run_server_sse.sh >/tmp/mcp_sse.log 2>&1 & \
 	echo "[mcp] SSE server started on $(MCP_HOST):$(MCP_PORT)"
+
+mcp.sse.ensure: ## Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)
+	@AUTO_START_MCP_SSE=$(AUTO_START_MCP_SSE) bash scripts/mcp_sse_ensure.sh
 
 mcp.sse.health:
 	@curl -fsSI http://$(MCP_HOST):$(MCP_PORT)/sse | grep -iE 'HTTP/|content-type' || (echo "[mcp] SSE health FAIL" && exit 2)
@@ -1723,6 +1727,8 @@ guard.atlas:
 	@pytest -q agentpm/tests/atlas/test_atlas_search_title_aria_e41_e43.py > evidence/guard_atlas_accessibility2.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@pytest -q agentpm/tests/atlas/test_atlas_search_microdata_guard_e50_e52.py > evidence/guard_atlas_filters.txt || (echo 'FAIL_guard.atlas'; exit 1)
+	@python3 scripts/atlas/guard_sitemap_integrity.py > evidence/guard_atlas_sitemap.txt || (echo 'FAIL_guard.atlas.sitemap'; exit 1)
 
 atlas.generate:
 	@python3 -m agentpm.atlas.generate > evidence/atlas.generate.out.json
@@ -1736,3 +1742,229 @@ tvs.atlas.next49:
 	@mkdir -p evidence
 	@pytest -q agentpm/tests/atlas/test_atlas_filters_contrast_sitemap_e47_e49.py > evidence/tvs_e47plus.tail.txt || true
 	@echo 'TVS E47+ staged'
+tvs.mcp.next05:
+	@pytest -q agentpm/tests/mcp/test_mcp_catalog_e01_e05.py || true
+	@echo 'TVS MCP E01–E05 staged'
+
+## MCP targets
+.PHONY: guard.mcp.rodsn mcp.ingest.smoke mcp.query.smoke mcp.proof.snapshot
+
+guard.mcp.rodsn:
+	@./scripts/guards/guard_mcp_rodsn.py > evidence/guard_mcp_rodsn.txt || true
+	@echo 'guard.mcp.rodsn OK'
+
+mcp.ingest.smoke:
+	@python3 -c "from agentpm.mcp.ingest import ingest; import json, pathlib; p = pathlib.Path('share/mcp/test_smoke.json'); p.write_text(json.dumps({'id': 'smoke', 'test': True})); print(ingest(str(p))); p.unlink()" || true
+	@echo 'mcp.ingest.smoke OK'
+
+mcp.query.smoke:
+	@python3 scripts/mcp_query_roundtrip.py > evidence/mcp_query_smoke.txt || true
+	@echo 'mcp.query.smoke OK'
+
+mcp.proof.snapshot:
+	@bash scripts/mcp_proof_snapshot.sh || true
+	@echo 'mcp.proof.snapshot OK'
+
+## MCP M2 targets
+.PHONY: echo.gematria_dsn guard.mcp.dsn_mismatch atlas.db_proof.chip mcp.strict.proofs
+
+echo.gematria_dsn:
+	@echo $(GEMATRIA_DSN)
+
+guard.mcp.dsn_mismatch:
+	./scripts/guards/guard_mcp_dsn_mismatch.py | tee evidence/guard_mcp_dsn_mismatch.out.json
+
+atlas.db_proof.chip:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_db_proof_chip.py | tee evidence/atlas.db_proof_chip.out.json
+
+mcp.strict.proofs:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/guards/guard_mcp_rodsn.py | tee evidence/guard_mcp_rodsn.strict.out.json
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_db_proof_chip.py | tee -a evidence/atlas.db_proof_chip.out.json
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_strict_roundtrip.py | tee evidence/mcp_strict_roundtrip.out.json
+	@echo '{"STRICT":"1","CHECKPOINTER":"postgres"}' > share/mcp/strict.env.json
+
+## MCP M3 targets
+.PHONY: mcp.strict.live.handshake mcp.db.smoke atlas.db_proof.inject mcp.strict.trace
+
+mcp.strict.live.handshake:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_strict_live_handshake.py | tee evidence/mcp_strict_live_handshake.out.json
+
+mcp.db.smoke:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_smoke.py | tee evidence/mcp_db_smoke.out.json
+
+atlas.db_proof.inject:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/atlas_chip_inject.py | tee evidence/atlas_chip_inject.out.json
+
+mcp.strict.trace:
+	./scripts/mcp_strict_trace_ptr.sh && tail -n +1 share/mcp/strict_trace.ptr.txt | tee evidence/mcp_strict_trace.ptr.txt
+
+## MCP M4 targets
+.PHONY: mcp.pg_checkpointer.handshake mcp.db.select1.guard mcp.db.error.guard mcp.strict.live.full
+
+mcp.pg_checkpointer.handshake:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_pg_checkpointer_handshake.py | tee evidence/mcp_pg_checkpointer_handshake.out.json
+
+mcp.db.select1.guard:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_select1_guard.py | tee evidence/mcp_db_select1_guard.out.json
+
+mcp.db.error.guard:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_error_guard.py | tee evidence/mcp_db_error_guard.out.json
+
+mcp.strict.live.full: mcp.pg_checkpointer.handshake mcp.db.select1.guard atlas.db_proof.inject mcp.db.error.guard
+
+## MCP M5 targets
+.PHONY: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch mcp.runtime.proofs
+
+mcp.runtime.checkpointer:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_runtime_checkpointer.py | tee evidence/mcp_runtime_checkpointer.out.json
+
+mcp.session.trace:
+	./scripts/mcp_session_trace.py | tee evidence/mcp_session_trace.out.json
+
+atlas.trace.inject:
+	./scripts/atlas_trace_inject.py | tee evidence/atlas_trace_inject.out.json
+
+guard.mcp.env_mismatch:
+	STRICT=1 CHECKPOINTER=postgres ./scripts/guards/guard_mcp_env_mismatch.py | tee evidence/guard_mcp_env_mismatch.out.json
+
+mcp.runtime.proofs: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch
+
+## MCP M6 targets
+.PHONY: mcp.agent.bindings atlas.node.trace.inject atlas.trace.links mcp.envelope.trace.map guard.mcp.trace_link mcp.runtime.links
+
+mcp.agent.bindings:
+	./scripts/mcp_agent_runtime_bindings.py | tee evidence/mcp_agent_runtime_bindings.out.json
+
+atlas.node.trace.inject:
+	./scripts/atlas_node_trace_inject.py | tee evidence/atlas_node_trace_inject.out.json
+
+atlas.trace.links:
+	./scripts/atlas_trace_links.py | tee evidence/atlas_trace_links.out.json
+
+mcp.envelope.trace.map:
+	./scripts/mcp_envelope_trace_map.py | tee evidence/mcp_envelope_trace_map.out.json
+
+guard.mcp.trace_link:
+	./scripts/guards/guard_mcp_trace_link.py | tee evidence/guard_mcp_trace_link.out.json
+
+mcp.runtime.links: mcp.agent.bindings atlas.node.trace.inject atlas.trace.links mcp.envelope.trace.map guard.mcp.trace_link
+
+
+## MCP M7 targets
+.PHONY: mcp.agent.bindings.chip guard.atlas.node.deeplink atlas.trace.links.complete mcp.envelope.trace.dbmap guard.trace_link.receipt mcp.runtime.provenance
+
+mcp.agent.bindings.chip:
+	./scripts/mcp_agent_bindings_chip.py | tee evidence/mcp_agent_bindings_chip.out.json
+
+guard.atlas.node.deeplink:
+	./scripts/guards/guard_atlas_node_deeplink.py | tee evidence/guard_atlas_node_deeplink.out.json
+
+atlas.trace.links.complete:
+	./scripts/atlas_trace_links_complete.py | tee evidence/atlas_trace_links_complete.out.json
+
+mcp.envelope.trace.dbmap:
+	STRICT=${STRICT:-0} CHECKPOINTER=${CHECKPOINTER:-memory} ./scripts/mcp_envelope_trace_db_map.py | tee evidence/mcp_envelope_trace_db_map.out.json
+
+guard.trace_link.receipt:
+	./scripts/guards/guard_trace_link_receipt.py | tee evidence/guard_trace_link_receipt.out.json
+
+mcp.runtime.provenance: mcp.agent.bindings.chip guard.atlas.node.deeplink atlas.trace.links.complete mcp.envelope.trace.dbmap guard.trace_link.receipt
+
+# --- PLAN-073 M8 targets ---
+m8.proofs:
+	@python3 scripts/mcp/gen_filter_chips.py
+	@python3 scripts/atlas/write_node_rollups.py
+	@python3 scripts/mcp/probe_db.py > evidence/m8_db_probe.stdout.json
+	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
+
+guard.m8.stale:
+	@python3 scripts/guards/guard_m8_stale.py > evidence/guard_m8_stale.stdout.json
+
+.PHONY: m8.proofs guard.m8.stale
+
+# --- PLAN-073 M9 targets ---
+m9.proofs:
+	@$(MAKE) -s m8.proofs
+	@python3 scripts/atlas/gen_filter_apply.py
+	@python3 scripts/atlas/augment_node_rollups.py
+	@python3 scripts/mcp/probe_db_latency.py > evidence/m9_latency.stdout.json
+	@python3 scripts/guards/guard_m9_rollup_stale.py > evidence/guard_m9_rollup_stale.stdout.json
+
+guard.m9.rollup.stale:
+	@python3 scripts/guards/guard_m9_rollup_stale.py > evidence/guard_m9_rollup_stale.stdout.json
+
+.PHONY: m9.proofs guard.m9.rollup.stale
+
+# --- PLAN-073 M10 targets ---
+m10.proofs:
+	@$(MAKE) -s m9.proofs
+	@python3 scripts/atlas/gen_sitemap.py
+	@python3 scripts/atlas/gen_filter_apply_multi.py
+	@python3 scripts/guards/guard_m10_trace_backlink.py > evidence/m10_trace_backlink.stdout.json
+	@python3 scripts/atlas/gen_node_coverage.py
+	@python3 scripts/guards/guard_m10_filter_apply_drift.py > evidence/guard_m10_filter_apply_drift.stdout.json
+
+guard.m10.trace:
+	@python3 scripts/guards/guard_m10_trace_backlink.py > evidence/m10_trace_backlink.stdout.json
+
+guard.m10.drift:
+	@python3 scripts/guards/guard_m10_filter_apply_drift.py > evidence/guard_m10_filter_apply_drift.stdout.json
+
+.PHONY: m10.proofs guard.m10.trace guard.m10.drift
+
+# --- PLAN-073 M11 targets ---
+m11.proofs:
+	@$(MAKE) -s m10.proofs
+	@python3 scripts/atlas/gen_breadcrumbs.py
+	@python3 scripts/atlas/ensure_sitemap_has_index.py
+	@python3 scripts/guards/guard_m11_trace_links_across_nodes.py > evidence/m11_trace_across_nodes.stdout.json
+	@python3 scripts/atlas/check_rollup_totals.py > evidence/m11_rollup_totals.stdout.json
+	@python3 scripts/guards/guard_m11_filter_apply_multi_schema.py > evidence/guard_m11_apply_multi_schema.stdout.json
+
+guard.m11.trace:
+	@python3 scripts/guards/guard_m11_trace_links_across_nodes.py > evidence/m11_trace_across_nodes.stdout.json
+
+guard.m11.apply_multi:
+	@python3 scripts/guards/guard_m11_filter_apply_multi_schema.py > evidence/guard_m11_apply_multi_schema.stdout.json
+
+.PHONY: m11.proofs guard.m11.trace guard.m11.apply_multi
+
+# --- PLAN-073 M12 targets ---
+m12.proofs:
+	@$(MAKE) -s m11.proofs
+	@python3 scripts/atlas/gen_index_summary.py
+	@python3 scripts/guards/guard_m12_chip_coverage.py > evidence/guard_m12_chip_coverage.stdout.json
+	@python3 scripts/atlas/gen_trace_badge.py
+	@python3 scripts/guards/guard_m12_filter_apply_roundtrip.py > evidence/guard_m12_filter_apply_roundtrip.stdout.json
+	@python3 scripts/atlas/gen_manifest_linkage.py
+
+guard.m12.coverage:
+	@python3 scripts/guards/guard_m12_chip_coverage.py > evidence/guard_m12_chip_coverage.stdout.json
+
+guard.m12.roundtrip:
+	@python3 scripts/guards/guard_m12_filter_apply_roundtrip.py > evidence/guard_m12_filter_apply_roundtrip.stdout.json
+
+.PHONY: m12.proofs guard.m12.coverage guard.m12.roundtrip
+
+# --- PLAN-073 M13 targets (wrap-up) ---
+m13.proofs:
+	@$(MAKE) -s m12.proofs
+	@python3 scripts/atlas/gen_index_badge_rollup.py
+	@python3 scripts/guards/guard_m13_chip_id_uniqueness.py > evidence/guard_m13_chip_id_uniqueness.stdout.json
+	@python3 scripts/guards/guard_m13_sitemap_min.py > evidence/guard_m13_sitemap_min.stdout.json
+	@python3 scripts/guards/guard_m13_manifest_consistency.py > evidence/guard_m13_manifest_consistency.stdout.json
+	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
+
+guard.m13.chips:
+	@python3 scripts/guards/guard_m13_chip_id_uniqueness.py > evidence/guard_m13_chip_id_uniqueness.stdout.json
+
+guard.m13.sitemap:
+	@python3 scripts/guards/guard_m13_sitemap_min.py > evidence/guard_m13_sitemap_min.stdout.json
+
+guard.m13.manifest:
+	@python3 scripts/guards/guard_m13_manifest_consistency.py > evidence/guard_m13_manifest_consistency.stdout.json
+
+guard.m13.stale:
+	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
+
+.PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale

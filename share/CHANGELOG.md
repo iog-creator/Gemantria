@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- PLAN-073 M8: DB-backed filter chips + node provenance rollups + stale-evidence guard; E36–E40 PASS.
+
 ## [v0.0.3] - 2025-11-12
 
 ### Highlights
@@ -238,3 +240,19 @@
 ### Fixes
 
 - **Confidence validator threshold**: Now runtime (env-respected); default lowered to **0.80** (uniform 0.85 artifact). See `AGENTS.md#environment`.
+
+## [v0.0.7] - 2025-11-12
+
+### Highlights
+- PLAN-073 M12: index summary receipt, chip coverage guard, trace badge, roundtrip guard, manifest linkage (E56–E60 PASS).
+
+### Proofs
+- STRICT tagproof (RO-DSN MCP guard + Webproof) expected on CI for v0.0.7.
+
+## [v0.0.8] - 2025-11-12
+
+### Highlights
+- PLAN-073 complete: wrap-up receipts/guards E61–E65 (badges rollup, chip-id uniqueness, sitemap min, manifest consistency, stale sweep).
+
+### Proofs
+- STRICT tagproof (RO-DSN MCP guard + Webproof) on tag.

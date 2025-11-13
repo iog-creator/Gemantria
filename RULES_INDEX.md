@@ -151,3 +151,5 @@
   - See: `docs/SSOT/GPT_SYSTEM_PROMPT.md` → "BROWSER VERIFICATION (Rule-051 + Rule-067) — MANDATORY TEMPLATE"
 
   - See: `scripts/ci/atlas_webproof.sh` and `scripts/ops/browser_verify.sh` (recommended wrapper; `make browser.verify`)
+
+- OPS v6.3: PM ↔ Cursor OPS contract (see docs/SSOT/GEMANTRIA_OPS_v6.3.txt)

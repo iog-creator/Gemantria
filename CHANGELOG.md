@@ -248,3 +248,11 @@
 
 ### Proofs
 - STRICT tagproof (RO-DSN MCP guard + Webproof) expected on CI for v0.0.7.
+
+## [v0.0.8] - 2025-11-12
+
+### Highlights
+- PLAN-073 complete: wrap-up receipts/guards E61–E65 (badges rollup, chip-id uniqueness, sitemap min, manifest consistency, stale sweep).
+
+### Proofs
+- STRICT tagproof (RO-DSN MCP guard + Webproof) on tag.
