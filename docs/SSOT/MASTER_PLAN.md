@@ -63,8 +63,9 @@ All core development phases are complete. The system is operational with:
 - **E70** ✅ PASS: Webproof bundle has backlinks (receipt+guard) (PR #485)
 
 **PLAN-075: DSN Centralization + Control Plane** (In Progress)
-- **E71** ⏳ TODO: Harden DSN centralization (guard + tests prove centralized loader usage)
-- **E72** ⏳ TODO: Control-plane DDL in schema "control" + schema snapshot artifact
+- **E71** ✅ PASS: Harden DSN centralization (guard + tests prove centralized loader usage) (PR #486)
+- **E72** ✅ PASS: Control-plane DDL in schema "control" + schema snapshot artifact (PR #486)
+- **E73** ⏳ TODO: Control-plane smoke script (insert+select; DB-on) with HINT/DB-off tolerance
 
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
