@@ -854,6 +854,11 @@ control.schema.snapshot:
 	@echo ">> Generating control-plane schema snapshot…"
 	@PYTHONPATH=. python3 scripts/db/control_schema_snapshot.py
 
+.PHONY: control.smoke
+control.smoke:
+	@echo ">> Running control-plane smoke test…"
+	@PYTHONPATH=. python3 scripts/db/control_plane_smoke.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"
