@@ -1504,6 +1504,10 @@ ui.build:
 agents.md.lint:
 	@scripts/guards/agents_md_lint.sh
 
+agents.md.sync:
+	@echo ">> Checking AGENTS.md sync with code changes..."
+	@PYTHONPATH=. python3 scripts/check_agents_md_sync.py --verbose
+
 rules_inventory_check:
 	@scripts/guards/rules_inventory_check.sh
 

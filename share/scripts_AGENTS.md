@@ -631,6 +631,44 @@ python scripts/create_agents_md.py
 - **Tool directories**: Specialized templates for scripts/migrations/tests with appropriate standards
 - **Docs directories**: Documentation maintenance templates with ADR cross-references
 
+### `check_agents_md_sync.py` — AGENTS.md Sync Checker
+
+**Purpose:** Detects when code changes in a directory should trigger AGENTS.md updates. Compares file modification times and git history to identify potentially stale AGENTS.md files.
+**Rule References:** 006 (AGENTS.md Governance), 027 (Docs Sync Gate), 017 (Agent Docs Presence)
+**Capabilities:**
+
+- **Change Detection**: Identifies code changes in directories requiring AGENTS.md files
+- **Sync Verification**: Compares AGENTS.md modification times with code file modification times
+- **Git Integration**: Uses git history for accurate modification time detection
+- **Staged/Unstaged**: Can check staged changes or all changes since HEAD
+
+**Usage:**
+
+```bash
+# Check all changes since HEAD
+python scripts/check_agents_md_sync.py
+
+# Check only staged changes
+python scripts/check_agents_md_sync.py --staged
+
+# Verbose output with detailed information
+python scripts/check_agents_md_sync.py --verbose
+
+# Via Makefile
+make agents.md.sync
+```
+
+**When AGENTS.md Needs Updates:**
+- New functions/classes/components are added
+- API contracts or interfaces change
+- Key behavior or patterns change
+- Dependencies or integration points change
+
+**Integration:**
+- **Pre-commit**: Integrated into `rules_guard.py` as non-fatal hint
+- **Makefile**: `make agents.md.sync` provides convenient access
+- **CI**: Can be run in CI to detect documentation drift
+
 ### verify_pr016_pr017.py — Metrics Contract Verifier
 
 **Purpose:** Ensures exported statistics reflect live DB and UI contracts.

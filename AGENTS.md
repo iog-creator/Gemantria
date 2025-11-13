@@ -78,6 +78,12 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - Coverage ≥98%.
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
+- **MANDATORY**: Update `AGENTS.md` files when code changes (Rule 006, Rule 027):
+  - New functions/classes/components → update directory's `AGENTS.md`
+  - API contracts change → update `AGENTS.md` with new contracts
+  - Behavior changes → update `AGENTS.md` documentation
+  - Run `make agents.md.sync` to check for stale documentation
+  - Run `python scripts/create_agents_md.py --dry-run` to find missing files
 - Always run `make housekeeping` after any docs, scripts, or rules change before requesting review (Rule 058).
 
 ## Code Quality Standards
