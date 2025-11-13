@@ -55,12 +55,12 @@ All core development phases are complete. The system is operational with:
 
 ### Active Development Workstreams
 
-**PLAN-074 M14: Atlas UI Tiles + Guards** (In Progress)
-- **E66** ✅ PASS: Versioned graph rollup metrics (PR #480)
-- **E67** ✅ PASS: Per-node drilldown links (PR #481)
-- **E68** ✅ PASS: Screenshot manifest canonicalized (PR #482)
-- **E69** ⏳ TODO: Reranker signal plumbed into badges
-- **E70** ⏳ TODO: Webproof bundle has backlinks
+**PLAN-074 M14: Atlas UI Tiles + Guards** (✅ **Complete**)
+- **E66** ✅ PASS: Versioned graph rollup metrics (receipt+guard) (PR #480)
+- **E67** ✅ PASS: Per-node drilldown links (receipt+guard) (PR #481)
+- **E68** ✅ PASS: Screenshot manifest canonicalized (receipt+guard) (PR #482)
+- **E69** ✅ PASS: Reranker signal plumbed into badges (receipt+guard) (PR #483)
+- **E70** ✅ PASS: Webproof bundle has backlinks (receipt+guard) (PR #485)
 
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
@@ -254,10 +254,13 @@ These are active on every branch/state and are not pruned or downgraded.
 
 ## Next Steps
 
-### Immediate (PLAN-074 M14 Completion)
-- [ ] E69: Implement reranker signal plumbed into badges (receipt + guard)
-- [ ] E70: Implement webproof bundle with backlinks (receipt + guard)
-- [ ] Complete M14 test suite (all E66–E70 PASS)
+### Immediate (PLAN-074 M14 Complete)
+- [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
+- [x] E67: Per-node drilldown links (receipt + guard) ✅
+- [x] E68: Screenshot manifest canonicalized (receipt + guard) ✅
+- [x] E69: Reranker signal plumbed into badges (receipt + guard) ✅
+- [x] E70: Webproof bundle has backlinks (receipt + guard) ✅
+- [x] Complete M14 test suite (all E66–E70 PASS) ✅
 
 ### Phase-1 Control Plane (Testing & Governance)
 - [ ] Final test hardening in CI (STRICT vs HINT mode)

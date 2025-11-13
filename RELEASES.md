@@ -1,5 +1,32 @@
 # Release Process
 
+## v0.0.9 (2025-11-13) — Development
+
+### PLAN-074 M14 Complete: Atlas UI Tiles + Guards E66–E70
+
+**Highlights:**
+- E66: Versioned graph rollup metrics (receipt+guard)
+- E67: Per-node drilldown links (receipt+guard)
+- E68: Screenshot manifest canonicalized (receipt+guard)
+- E69: Reranker signal plumbed into badges (receipt+guard)
+- E70: Webproof bundle has backlinks to evidence (receipt+guard)
+
+**Key Changes:**
+- **feat(074-m14):** E66–E70 PASS — Atlas UI tiles with guards and webproof backlinks (#480, #481, #482, #483, #485)
+- All PLAN-074 M14 milestones complete and merged to main
+
+**CI Verification:**
+- All PRs merged successfully
+- Guards passing for all E66–E70 artifacts
+- Webproof bundle generated with backlinks
+
+**Related PRs:**
+- PR #480: feat(074): E66 PASS — versioned graph rollup metrics
+- PR #481: feat(074): E67 PASS — per-node drilldown links
+- PR #482: feat(074): E68 PASS — screenshot manifest canonicalized
+- PR #483: feat(074): E69 PASS — reranker signal plumbed into badges
+- PR #485: feat(074): E70 PASS — webproof bundle has backlinks
+
 ## v0.0.8 (2025-11-12)
 
 ### PLAN-073 Complete: Wrap-up Receipts/Guards E61–E65

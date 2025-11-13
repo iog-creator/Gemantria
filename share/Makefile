@@ -838,6 +838,27 @@ db.migrate:
 	@echo ">> Running P1-DB migrate…"
 	@PYTHONPATH=. python3 scripts/db/migrate.py
 
+# === Control Plane ===
+.PHONY: db.control.migrate
+db.control.migrate:
+	@echo ">> Running control plane migration…"
+	@PYTHONPATH=. python3 scripts/db/migrate.py
+
+.PHONY: control.session.smoke
+control.session.smoke:
+	@echo ">> Control plane session smoke test"
+	@PYTHONPATH=. python3 -m pytest agentpm/tests/phase1/test_tv01_missing_por.py -v
+
+.PHONY: guarded.tv
+guarded.tv:
+	@echo ">> Running guarded tool call test vectors"
+	@PYTHONPATH=. python3 -m pytest agentpm/tests/phase1/ -v
+
+.PHONY: atlas.compliance.export
+atlas.compliance.export:
+	@echo ">> Exporting compliance data to Atlas"
+	@PYTHONPATH=. python3 scripts/exports/export_compliance.py
+
 # --- DB plan / readiness (HINT posture; no secrets) ---
 .PHONY: db.plan db.readiness db.apply.hint
 db.plan:
@@ -1968,3 +1989,43 @@ guard.m13.stale:
 	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
 
 .PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
+
+# PLAN-074 (M14) receipts/guards — E66+E67+E68
+.PHONY: m14.proofs atlas.reranker.badges guard.m14.reranker_badges atlas.m14.webproof_backlinks guard.m14.webproof_backlinks
+atlas.reranker.badges:
+	@STRICT_MODE=HINT RERANKER_BADGES_OUT=share/atlas/badges/reranker.json \
+		python3 agentpm/atlas/reranker_badges.py
+
+guard.m14.reranker_badges:
+	@python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true
+
+atlas.m14.webproof_backlinks:
+	@STRICT_MODE=HINT WEBPROOF_OUT=docs/atlas/webproof \
+		python3 agentpm/atlas/webproof.py
+
+guard.m14.webproof_backlinks:
+	@python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true
+
+m14.proofs:
+	@echo "[M14] E66: graph rollup (HINT)"; \
+	STRICT_MODE=HINT GRAPH_ROLLUP_OUT=share/atlas/graph/rollup.json \
+		python3 agentpm/metrics/graph_rollup.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_graph_rollup_versioned.py >/dev/null || true ; \
+	echo "[M14] E67: drilldown links sample (HINT)"; \
+	DRILL_PATH=share/atlas/nodes/drilldown.sample.json \
+		python3 agentpm/atlas/drilldowns.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_node_drilldowns_links.py >/dev/null || true ; \
+	echo "[M14] E68: screenshot manifest (HINT)"; \
+	SCREENSHOT_MANIFEST=share/atlas/screenshots/manifest.json \
+		python3 agentpm/atlas/screenshots.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_screenshot_manifest_canonicalized.py >/dev/null || true ; \
+	echo "[M14] E69: reranker badges (HINT)"; \
+	STRICT_MODE=HINT RERANKER_BADGES_OUT=share/atlas/badges/reranker.json \
+		python3 agentpm/atlas/reranker_badges.py >/dev/null ; \
+	python3 scripts/atlas/gen_index_badge_rollup.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true ; \
+	echo "[M14] E70: webproof bundle with backlinks (HINT)"; \
+	STRICT_MODE=HINT WEBPROOF_OUT=docs/atlas/webproof \
+		python3 agentpm/atlas/webproof.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true ; \
+	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"

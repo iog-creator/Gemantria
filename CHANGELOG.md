@@ -1,6 +1,6 @@
 ## [Unreleased]
 
-- PLAN-074 M14: Atlas UI tiles + guards (E66–E68 PASS; E69–E70 TODO).
+- PLAN-074 M14: Atlas UI tiles + guards (E66–E70 COMPLETE) — graph rollup metrics, node drilldowns, screenshot manifest, reranker badges, and webproof bundle backlinks with guards + receipts.
 
 ## [v0.0.8] - 2025-11-12
 
