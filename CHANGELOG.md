@@ -6,6 +6,7 @@
 - PLAN-075 E74–E75: Control-plane compliance MVs + Knowledge-MCP catalog stub — mv_compliance_7d/30d schema snapshot, control.mcp_tool_catalog view, and evidence JSON artifacts.
 - PLAN-076 E76–E78: Control-plane compliance exports — compliance.head, top_violations_7d, and top_violations_30d JSON exports with DB-off tolerance.
 - PLAN-076 E79–E80: Control-plane compliance guard + webproof integration — guard validates compliance export JSONs, webproof page with backlinks to exports and guard verdict.
+- PLAN-077 E81–E85: Knowledge-MCP surfacing — read-only MCP catalog + capability/agent_run summaries with guards and Atlas webproof.
 
 ## [v0.0.8] - 2025-11-12
 

@@ -206,7 +206,7 @@ def main():
             "CRITICAL: Code changed but no docs updated. Must update AGENTS.md/ADR/SSOT/README.",
         )
         print("[rules_guard] ✓ Critical Check 1 PASSED: Docs updated for code changes")
-        
+
         # Additional check: AGENTS.md sync (Rule 006 - AGENTS.md Governance)
         print("[rules_guard] Additional Check 1a: AGENTS.md sync verification")
         try:

@@ -76,6 +76,18 @@ All core development phases are complete. The system is operational with:
 - **E79** ✅ PASS: Guard for control-plane compliance exports (JSON-level validation, PR #490)
 - **E80** ✅ PASS: Atlas/webproof page for control compliance with backlinks (PR #490)
 
+**PLAN-077: Knowledge-MCP Surfacing (Control Plane)** (Planned)
+
+- **E81** ⏳ TODO: MCP catalog export (`mcp_catalog.json`) from existing control-plane views (DB-off tolerant, centralized DSN loader).
+
+- **E82** ⏳ TODO: Capability rules export (`capability_rules.json`) summarizing `capability_rule` table posture.
+
+- **E83** ⏳ TODO: Agent run summary export (`agent_runs_7d.json`) from `agent_run` / `capability_session` (7d window, DB-off tolerant).
+
+- **E84** ⏳ TODO: Guard for Knowledge-MCP exports (presence + JSON structure) with verdict JSON.
+
+- **E85** ⏳ TODO: Atlas/Knowledge-MCP webproof page with backlinks to exports + guard verdict.
+
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
 - ✅ PR-2: Gatekeeper + PoR (TV-01)
