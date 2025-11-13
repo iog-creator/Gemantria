@@ -62,12 +62,17 @@ All core development phases are complete. The system is operational with:
 - **E69** ✅ PASS: Reranker signal plumbed into badges (receipt+guard) (PR #483)
 - **E70** ✅ PASS: Webproof bundle has backlinks (receipt+guard) (PR #485)
 
-**PLAN-075: DSN Centralization + Control Plane** (In Progress)
+**PLAN-075: DSN Centralization + Control Plane** (Complete)
 - **E71** ✅ PASS: Harden DSN centralization (guard + tests prove centralized loader usage) (PR #486)
 - **E72** ✅ PASS: Control-plane DDL in schema "control" + schema snapshot artifact (PR #486)
 - **E73** ✅ PASS: Control-plane smoke script (insert+select; DB-on) with HINT/DB-off tolerance (PR #487)
-- **E74** ⏳ TODO: Control-plane compliance MVs + mv_schema.json evidence
-- **E75** ⏳ TODO: Knowledge-MCP catalog view + mcp_catalog_stub.json evidence
+- **E74** ✅ PASS: Control-plane compliance MVs + mv_schema.json evidence (PR #488)
+- **E75** ✅ PASS: Knowledge-MCP catalog view + mcp_catalog_stub.json evidence (PR #488)
+
+**PLAN-076: Control-Plane Compliance Exports** (In Progress)
+- **E76** ⏳ TODO: Control-plane compliance.head export JSON
+- **E77** ⏳ TODO: Control-plane top_violations_7d export JSON
+- **E78** ⏳ TODO: Control-plane top_violations_30d export JSON
 
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
