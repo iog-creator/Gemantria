@@ -132,3 +132,4 @@ This auto-start capability follows Rule-012 (Connectivity Troubleshooting) and R
 3. **Production**: Use systemd service for persistent startup (future enhancement)
 4. **Troubleshooting**: Use manual mode to isolate startup issues
 
+
