@@ -904,6 +904,11 @@ control.agent_runs_7d.export:
 	@echo ">> Exporting control-plane agent runs 7d…"
 	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
 
+.PHONY: guard.control.knowledge.mcp.exports
+guard.control.knowledge.mcp.exports:
+	@echo ">> Guarding Knowledge-MCP exports (mcp_catalog, capability_rules, agent_runs_7d)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_knowledge_mcp_exports.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"
