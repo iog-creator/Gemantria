@@ -838,6 +838,27 @@ db.migrate:
 	@echo ">> Running P1-DB migrate…"
 	@PYTHONPATH=. python3 scripts/db/migrate.py
 
+# === Control Plane ===
+.PHONY: db.control.migrate
+db.control.migrate:
+	@echo ">> Running control plane migration…"
+	@PYTHONPATH=. python3 scripts/db/migrate.py
+
+.PHONY: control.session.smoke
+control.session.smoke:
+	@echo ">> Control plane session smoke test"
+	@PYTHONPATH=. python3 -m pytest agentpm/tests/phase1/test_tv01_missing_por.py -v
+
+.PHONY: guarded.tv
+guarded.tv:
+	@echo ">> Running guarded tool call test vectors"
+	@PYTHONPATH=. python3 -m pytest agentpm/tests/phase1/ -v
+
+.PHONY: atlas.compliance.export
+atlas.compliance.export:
+	@echo ">> Exporting compliance data to Atlas"
+	@PYTHONPATH=. python3 scripts/exports/export_compliance.py
+
 # --- DB plan / readiness (HINT posture; no secrets) ---
 .PHONY: db.plan db.readiness db.apply.hint
 db.plan:
@@ -1969,8 +1990,15 @@ guard.m13.stale:
 
 .PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
 
-# PLAN-074 (M14) receipts/guards — upgraded with E67
-.PHONY: m14.proofs
+# PLAN-074 (M14) receipts/guards — E66+E67+E68
+.PHONY: m14.proofs atlas.reranker.badges guard.m14.reranker_badges
+atlas.reranker.badges:
+	@STRICT_MODE=HINT RERANKER_BADGES_OUT=share/atlas/badges/reranker.json \
+		python3 agentpm/atlas/reranker_badges.py
+
+guard.m14.reranker_badges:
+	@python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true
+
 m14.proofs:
 	@echo "[M14] E66: graph rollup (HINT)"; \
 	STRICT_MODE=HINT GRAPH_ROLLUP_OUT=share/atlas/graph/rollup.json \
@@ -1980,4 +2008,13 @@ m14.proofs:
 	DRILL_PATH=share/atlas/nodes/drilldown.sample.json \
 		python3 agentpm/atlas/drilldowns.py >/dev/null ; \
 	python3 scripts/guards/guard_m14_node_drilldowns_links.py >/dev/null || true ; \
-	echo "[M14] receipts complete (see evidence/*.verdict.json)"
+	echo "[M14] E68: screenshot manifest (HINT)"; \
+	SCREENSHOT_MANIFEST=share/atlas/screenshots/manifest.json \
+		python3 agentpm/atlas/screenshots.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_screenshot_manifest_canonicalized.py >/dev/null || true ; \
+	echo "[M14] E69: reranker badges (HINT)"; \
+	STRICT_MODE=HINT RERANKER_BADGES_OUT=share/atlas/badges/reranker.json \
+		python3 agentpm/atlas/reranker_badges.py >/dev/null ; \
+	python3 scripts/atlas/gen_index_badge_rollup.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true ; \
+	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"

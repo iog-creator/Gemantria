@@ -1,6 +1,12 @@
 ## [Unreleased]
 
-- PLAN-073 M8: DB-backed filter chips + node provenance rollups + stale-evidence guard; E36–E40 PASS.
+- PLAN-074 M14: Atlas UI tiles + guards (E66–E68 PASS; E69–E70 TODO).
+
+## [v0.0.8] - 2025-11-12
+
+### Highlights
+
+- **PLAN-073 complete:** Wrap-up receipts/guards E61–E65 (badges rollup, chip-id uniqueness, sitemap min, manifest consistency, stale sweep).
 
 ## [v0.0.3] - 2025-11-12
 

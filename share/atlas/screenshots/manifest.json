@@ -1,31 +1,28 @@
 {
   "schema": {
-    "id": "atlas.nodes.drilldown.v1",
+    "id": "atlas.screenshots.manifest.v1",
     "version": 1
   },
   "generated_at": "2025-11-13T02:57:02Z",
   "mode": "HINT",
   "items": [
     {
-      "id": "node-001",
+      "path": "/atlas/screenshots/node-001.png",
       "page_url": "/atlas/nodes/node-001.html",
-      "backlinks": [
-        "/atlas/index.html"
-      ]
+      "width": 100,
+      "height": 100
     },
     {
-      "id": "node-002",
+      "path": "/atlas/screenshots/node-002.png",
       "page_url": "/atlas/nodes/node-002.html",
-      "backlinks": [
-        "/atlas/index.html"
-      ]
+      "width": 100,
+      "height": 100
     },
     {
-      "id": "node-003",
+      "path": "/atlas/screenshots/node-003.png",
       "page_url": "/atlas/nodes/node-003.html",
-      "backlinks": [
-        "/atlas/index.html"
-      ]
+      "width": 100,
+      "height": 100
     }
   ],
   "ok": true

@@ -1,0 +1,14 @@
+{
+  "schema": {
+    "id": "atlas.badges.rollup.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-13T02:57:03Z",
+  "badges": {
+    "latency_present": true,
+    "trace_present": true,
+    "reranker_present": true,
+    "reranker_count": 3
+  },
+  "ok": true
+}
