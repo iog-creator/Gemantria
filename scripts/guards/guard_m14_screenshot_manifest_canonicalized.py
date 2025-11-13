@@ -36,7 +36,7 @@ def main() -> int:
     if not isinstance(items, list) or not items:
         return v(False, error="no_items")
 
-    allowed = {"path","page_url","width","height"}
+    allowed = {"path", "page_url", "width", "height"}
     path_re = re.compile(r"^/atlas/screenshots/[A-Za-z0-9\-_]+\.png$")
     page_re = re.compile(r"^/atlas/nodes/[A-Za-z0-9\-_]+\.html$")
 
@@ -57,7 +57,7 @@ def main() -> int:
             return v(False, error="duplicate_path", value=p)
         seen.add(p)
 
-    if not all(items[i]["path"] <= items[i+1]["path"] for i in range(len(items)-1)):
+    if not all(items[i]["path"] <= items[i + 1]["path"] for i in range(len(items) - 1)):
         return v(False, error="not_sorted_by_path")
 
     return v(True, count=len(items), schema=schema, sorted_by="path")
@@ -65,4 +65,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

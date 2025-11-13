@@ -1,7 +1,8 @@
 # MASTER PLAN — Gemantria Pipeline Project
 
 **Version**: Phase 8 Ledger & Phase 10: Multi-Temporal Analytics with Rolling Windows, Forecasting, and Interactive Exploration
-**Last Updated**: 2025-11-07
+**Last Updated**: 2025-11-13
+**Current Release**: v0.0.8 (2025-11-12)
 **Governance**: OPS Contract v6.2.3
 
 ---
@@ -51,6 +52,22 @@ All core development phases are complete. The system is operational with:
 - ✅ Schema compliance verified
 - ✅ UI integration functional
 - ✅ Governance rules enforced
+
+### Active Development Workstreams
+
+**PLAN-074 M14: Atlas UI Tiles + Guards** (In Progress)
+- **E66** ✅ PASS: Versioned graph rollup metrics (PR #480)
+- **E67** ✅ PASS: Per-node drilldown links (PR #481)
+- **E68** ✅ PASS: Screenshot manifest canonicalized (PR #482)
+- **E69** ⏳ TODO: Reranker signal plumbed into badges
+- **E70** ⏳ TODO: Webproof bundle has backlinks
+
+**Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
+- ✅ PR-1: Control Plane DDL + Health Guard
+- ✅ PR-2: Gatekeeper + PoR (TV-01)
+- ✅ PR-3: Guard Shim + TVs 02–05
+- ✅ PR-4: Atlas Compliance Export
+- ⏳ Pending: Final test hardening in CI, governance wiring
 
 ---
 
@@ -237,11 +254,15 @@ These are active on every branch/state and are not pruned or downgraded.
 
 ## Next Steps
 
-### Immediate (Phase 8 Completion)
-- [ ] Temporal analytics integration testing
-- [ ] UI temporal strip deployment
-- [ ] COMPASS scorer validation
-- [ ] Phase 8 documentation updates
+### Immediate (PLAN-074 M14 Completion)
+- [ ] E69: Implement reranker signal plumbed into badges (receipt + guard)
+- [ ] E70: Implement webproof bundle with backlinks (receipt + guard)
+- [ ] Complete M14 test suite (all E66–E70 PASS)
+
+### Phase-1 Control Plane (Testing & Governance)
+- [ ] Final test hardening in CI (STRICT vs HINT mode)
+- [ ] Governance wiring (tag lanes run guards/exports)
+- [ ] Atlas UI linkage for compliance exports
 
 ### Medium-term (Q1 2026)
 - [ ] Phase 12: Advanced Pattern Mining

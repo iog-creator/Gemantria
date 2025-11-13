@@ -1,5 +1,27 @@
 # Release Process
 
+## v0.0.8 (2025-11-12)
+
+### PLAN-073 Complete: Wrap-up Receipts/Guards E61–E65
+
+**Highlights:**
+- Badges rollup receipt and guard
+- Chip-id uniqueness guard
+- Sitemap minimum guard
+- Manifest consistency guard
+- Stale evidence sweep guard
+
+**Key Changes:**
+- **feat(073-m13):** Wrap-up receipts/guards — E61–E65 PASS (#478)
+- All PLAN-073 milestones complete
+
+**CI Verification:**
+- Tag `v0.0.8` tagproof workflow: ✅ **SUCCESS**
+- All STRICT checks passed
+
+**Related PRs:**
+- PR #478: feat(073-m13): wrap-up receipts/guards — E61–E65 PASS
+
 ## v0.0.2 (2025-11-11)
 
 ### Browser Verification Template + STRICT Webproof + DSN Automation

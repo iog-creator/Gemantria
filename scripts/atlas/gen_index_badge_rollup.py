@@ -33,7 +33,9 @@ roll = {
     },
 }
 
-roll["ok"] = roll["badges"]["latency_present"] and roll["badges"]["trace_present"] and roll["badges"]["reranker_present"]
+roll["ok"] = (
+    roll["badges"]["latency_present"] and roll["badges"]["trace_present"] and roll["badges"]["reranker_present"]
+)
 
 out = root / "badges/index_rollup.json"
 

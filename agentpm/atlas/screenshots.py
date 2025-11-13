@@ -11,17 +11,20 @@ SCHEMA_ID = "atlas.screenshots.manifest.v1"
 
 SCHEMA_VERSION = 1
 
-ALLOWED_KEYS = ("path","page_url","width","height")
+ALLOWED_KEYS = ("path", "page_url", "width", "height")
 
 
 def _items() -> List[Dict[str, Any]]:
-    ids = ["node-001","node-002","node-003"]
-    items = [{
-        "path": f"/atlas/screenshots/{nid}.png",
-        "page_url": f"/atlas/nodes/{nid}.html",
-        "width": 100,
-        "height": 100,
-    } for nid in ids]
+    ids = ["node-001", "node-002", "node-003"]
+    items = [
+        {
+            "path": f"/atlas/screenshots/{nid}.png",
+            "page_url": f"/atlas/nodes/{nid}.html",
+            "width": 100,
+            "height": 100,
+        }
+        for nid in ids
+    ]
     items.sort(key=lambda x: x["path"])
     return items
 
@@ -53,4 +56,3 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
