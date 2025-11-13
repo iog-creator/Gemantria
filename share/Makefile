@@ -12,11 +12,16 @@ guard.python.runner:
 # ---- Guard: DSN centralization ----------------------------------------------
 .PHONY: guard.dsn.centralized
 guard.dsn.centralized:
-	@bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.json >/dev/null
+	@mkdir -p evidence
+	@bash scripts/guards/guard_dsn_centralized.sh > evidence/guard_dsn_centralized.json
+	@cat evidence/guard_dsn_centralized.json
 
 .PHONY: guard.dsn.centralized.strict
 guard.dsn.centralized.strict:
-	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
+	@mkdir -p evidence
+	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh > evidence/guard_dsn_centralized.json
+	@cat evidence/guard_dsn_centralized.json
+	@jq -e '.ok == true' evidence/guard_dsn_centralized.json
 
 # --- Knowledge Sentinels (Drift Kill-Switch) ---
 .PHONY: guard.knowledge.hints guard.knowledge.strict
@@ -839,10 +844,50 @@ db.migrate:
 	@PYTHONPATH=. python3 scripts/db/migrate.py
 
 # === Control Plane ===
-.PHONY: db.control.migrate
-db.control.migrate:
+.PHONY: control.migrate
+control.migrate:
 	@echo ">> Running control plane migration…"
-	@PYTHONPATH=. python3 scripts/db/migrate.py
+	@PYTHONPATH=. python3 scripts/db/migrate_control.py
+
+.PHONY: control.schema.snapshot
+control.schema.snapshot:
+	@echo ">> Generating control-plane schema snapshot…"
+	@PYTHONPATH=. python3 scripts/db/control_schema_snapshot.py
+
+.PHONY: control.smoke
+control.smoke:
+	@echo ">> Running control-plane smoke test…"
+	@PYTHONPATH=. python3 scripts/db/control_plane_smoke.py
+
+.PHONY: control.mvs.snapshot
+control.mvs.snapshot:
+	@echo ">> Generating control-plane MV schema snapshot…"
+	@PYTHONPATH=. python3 scripts/db/control_mvs_snapshot.py
+
+.PHONY: control.mcp.catalog.stub
+control.mcp.catalog.stub:
+	@echo ">> Generating MCP catalog stub evidence…"
+	@PYTHONPATH=. python3 scripts/db/mcp_catalog_stub.py
+
+.PHONY: control.compliance.head
+control.compliance.head:
+	@echo ">> Exporting control-plane compliance head…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=head
+
+.PHONY: control.top_violations_7d
+control.top_violations_7d:
+	@echo ">> Exporting control-plane top violations (7d)…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=7d
+
+.PHONY: control.top_violations_30d
+control.top_violations_30d:
+	@echo ">> Exporting control-plane top violations (30d)…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=30d
+
+.PHONY: control.compliance.all
+control.compliance.all:
+	@echo ">> Exporting all control-plane compliance data…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py
 
 .PHONY: control.session.smoke
 control.session.smoke:
@@ -2005,6 +2050,16 @@ atlas.m14.webproof_backlinks:
 
 guard.m14.webproof_backlinks:
 	@python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true
+
+.PHONY: guard.control.compliance
+guard.control.compliance:
+	@echo ">> Guarding control-plane compliance exports…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_compliance_exports.py
+
+.PHONY: guard.control.compliance.webproof
+guard.control.compliance.webproof:
+	@echo ">> Guarding control-plane compliance webproof backlinks…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_compliance_webproof_backlinks.py
 
 m14.proofs:
 	@echo "[M14] E66: graph rollup (HINT)"; \

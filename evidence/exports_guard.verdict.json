@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"schema":"guard.exports-json.v1","generated_at":"2025-11-10T03:51:37Z","strict":false,"files":{"graph_latest.scored.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"ai_nouns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"graph_stats.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"graph_patterns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null}},"ok":true}
-=======
-{"schema":"guard.exports-json.v1","generated_at":"2025-11-10T03:49:47Z","strict":false,"files":{"graph_latest.scored.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"ai_nouns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"graph_stats.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"graph_patterns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null}},"ok":true}
->>>>>>> origin/main
+{"schema":"guard.exports-json.v1","generated_at":"2025-11-13T04:31:04Z","strict":true,"files":{"graph_latest.scored.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"ai_nouns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null},"graph_stats.json":{"exists":true,"json_ok":false,"schema_ok":false,"error":"json:JSONDecodeError"},"graph_patterns.json":{"exists":true,"json_ok":true,"schema_ok":true,"error":null}},"ok":false}
