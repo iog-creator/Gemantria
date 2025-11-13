@@ -1968,3 +1968,13 @@ guard.m13.stale:
 	@python3 scripts/guards/guard_m13_stale_sweep.py > evidence/guard_m13_stale_sweep.stdout.json
 
 .PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
+
+# PLAN-074 (M14) receipts/guards
+.PHONY: m14.proofs
+m14.proofs:
+	@echo "[M14] Generating graph rollup receipt (HINT mode)" ; \
+	STRICT_MODE=HINT GRAPH_ROLLUP_OUT=share/atlas/graph/rollup.json \
+		python3 agentpm/metrics/graph_rollup.py >/dev/null ; \
+	echo "[M14] Running guard: graph_rollup_versioned" ; \
+	python3 scripts/guards/guard_m14_graph_rollup_versioned.py >/dev/null || true ; \
+	echo "[M14] Done (see evidence/guard_m14_graph_rollup_versioned.verdict.json)"
