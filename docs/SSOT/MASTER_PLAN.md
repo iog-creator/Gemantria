@@ -65,7 +65,9 @@ All core development phases are complete. The system is operational with:
 **PLAN-075: DSN Centralization + Control Plane** (In Progress)
 - **E71** ✅ PASS: Harden DSN centralization (guard + tests prove centralized loader usage) (PR #486)
 - **E72** ✅ PASS: Control-plane DDL in schema "control" + schema snapshot artifact (PR #486)
-- **E73** ⏳ TODO: Control-plane smoke script (insert+select; DB-on) with HINT/DB-off tolerance
+- **E73** ✅ PASS: Control-plane smoke script (insert+select; DB-on) with HINT/DB-off tolerance (PR #487)
+- **E74** ⏳ TODO: Control-plane compliance MVs + mv_schema.json evidence
+- **E75** ⏳ TODO: Knowledge-MCP catalog view + mcp_catalog_stub.json evidence
 
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
