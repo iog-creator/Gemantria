@@ -859,6 +859,16 @@ control.smoke:
 	@echo ">> Running control-plane smoke test…"
 	@PYTHONPATH=. python3 scripts/db/control_plane_smoke.py
 
+.PHONY: control.mvs.snapshot
+control.mvs.snapshot:
+	@echo ">> Generating control-plane MV schema snapshot…"
+	@PYTHONPATH=. python3 scripts/db/control_mvs_snapshot.py
+
+.PHONY: control.mcp.catalog.stub
+control.mcp.catalog.stub:
+	@echo ">> Generating MCP catalog stub evidence…"
+	@PYTHONPATH=. python3 scripts/db/mcp_catalog_stub.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"

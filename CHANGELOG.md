@@ -3,6 +3,7 @@
 - PLAN-074 M14: Atlas UI tiles + guards (E66–E70 COMPLETE) — graph rollup metrics, node drilldowns, screenshot manifest, reranker badges, and webproof bundle backlinks with guards + receipts.
 - PLAN-075 E71–E72: DSN centralization hardening + control-plane DDL — guard enforces centralized loader usage, control schema migration + schema snapshot artifact.
 - PLAN-075 E73: Control-plane smoke script + evidence JSON — insert+select smoke test for control schema tables with DB-off tolerance.
+- PLAN-075 E74–E75: Control-plane compliance MVs + Knowledge-MCP catalog stub — mv_compliance_7d/30d schema snapshot, control.mcp_tool_catalog view, and evidence JSON artifacts.
 
 ## [v0.0.8] - 2025-11-12
 
