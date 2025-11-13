@@ -894,6 +894,11 @@ control.mcp.catalog.export:
 	@echo ">> Exporting control-plane MCP catalog…"
 	@PYTHONPATH=. python3 scripts/db/control_mcp_catalog_export.py
 
+.PHONY: control.capability.rules.export
+control.capability.rules.export:
+	@echo ">> Exporting control-plane capability rules…"
+	@PYTHONPATH=. python3 scripts/db/control_capability_rules_export.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"
