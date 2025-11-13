@@ -206,6 +206,22 @@ def main():
             "CRITICAL: Code changed but no docs updated. Must update AGENTS.md/ADR/SSOT/README.",
         )
         print("[rules_guard] ✓ Critical Check 1 PASSED: Docs updated for code changes")
+        
+        # Additional check: AGENTS.md sync (Rule 006 - AGENTS.md Governance)
+        print("[rules_guard] Additional Check 1a: AGENTS.md sync verification")
+        try:
+            sync_result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "check_agents_md_sync.py"), "--staged"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if sync_result.returncode != 0:
+                print("[rules_guard] ⚠️  HINT: AGENTS.md files may need updates based on code changes")
+                print("[rules_guard]    Run: python scripts/check_agents_md_sync.py --verbose")
+                # Non-fatal - just a hint
+        except Exception as e:
+            print(f"[rules_guard] WARN: Could not run AGENTS.md sync check: {e}")
 
     # CRITICAL CHECK 2: Rules audit (ensures rule numbering + docs sync)
     print("[rules_guard] Critical Check 2: Rules system integrity")
