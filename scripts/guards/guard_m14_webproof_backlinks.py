@@ -58,7 +58,9 @@ class BacklinkParser(HTMLParser):
 def verdict(ok: bool, **extra: Any) -> int:
     VERDICT_PATH.parent.mkdir(parents=True, exist_ok=True)
     payload: Dict[str, Any] = {"ok": ok, **extra}
-    VERDICT_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    verdict_json = json.dumps(payload, indent=2) + "\n"
+    VERDICT_PATH.write_text(verdict_json, encoding="utf-8")
+    print(verdict_json, end="")
     return 0 if ok else 1
 
 
