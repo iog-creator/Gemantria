@@ -889,6 +889,31 @@ control.compliance.all:
 	@echo ">> Exporting all control-plane compliance data…"
 	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py
 
+.PHONY: control.mcp.catalog.export
+control.mcp.catalog.export:
+	@echo ">> Exporting control-plane MCP catalog…"
+	@PYTHONPATH=. python3 scripts/db/control_mcp_catalog_export.py
+
+.PHONY: control.capability.rules.export
+control.capability.rules.export:
+	@echo ">> Exporting control-plane capability rules…"
+	@PYTHONPATH=. python3 scripts/db/control_capability_rules_export.py
+
+.PHONY: control.agent_runs_7d.export
+control.agent_runs_7d.export:
+	@echo ">> Exporting control-plane agent runs 7d…"
+	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
+
+.PHONY: guard.control.knowledge.mcp.exports
+guard.control.knowledge.mcp.exports:
+	@echo ">> Guarding Knowledge-MCP exports (mcp_catalog, capability_rules, agent_runs_7d)…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_knowledge_mcp_exports.py
+
+.PHONY: guard.control.knowledge.mcp.webproof
+guard.control.knowledge.mcp.webproof:
+	@echo ">> Guarding Knowledge-MCP webproof backlinks…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_knowledge_mcp_webproof_backlinks.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"
