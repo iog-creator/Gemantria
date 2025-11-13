@@ -42,10 +42,13 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
-    - Start: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`
-    - Health: `make mcp.sse.health`
-    - Guard: `ENABLE_LMSTUDIO_MCP=1 make guard.mcp.sse` (optional, HINT mode by default)
-    - Server URL for LM Studio: `http://127.0.0.1:8005/sse`
+    - **Auto-start**: Set `AUTO_START_MCP_SSE=1` to automatically start server when needed (integrated into `make bringup.001`)
+    - **Manual start**: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`
+    - **Ensure running**: `make mcp.sse.ensure` (checks if running, starts if `AUTO_START_MCP_SSE=1`)
+    - **Health check**: `make mcp.sse.health`
+    - **Stop**: `make mcp.sse.stop`
+    - **Guard**: `ENABLE_LMSTUDIO_MCP=1 make guard.mcp.sse` (optional, HINT mode by default)
+    - **Server URL for LM Studio**: `http://127.0.0.1:8005/sse`
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
 
