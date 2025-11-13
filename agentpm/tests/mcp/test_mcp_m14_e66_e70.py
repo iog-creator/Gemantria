@@ -2,8 +2,6 @@ import json
 
 from pathlib import Path
 
-import pytest
-
 
 # PLAN-074 M14 tests
 
@@ -139,6 +137,46 @@ def test_e69_reranker_badges_exported_and_guarded():
         assert guard_data.get("ok") is True, f"Guard verdict not ok: {guard_data}"
 
 
-@pytest.mark.xfail(reason="E70 not implemented yet", strict=False)
 def test_e70_webproof_bundle_has_backlinks():
-    raise AssertionError("placeholder")
+    """Webproof bundle has backlinks to underlying evidence (JSON + guards)."""
+    import json
+    import os
+    import subprocess
+    from pathlib import Path
+
+    # Ensure webproof bundle is generated
+    webproof_dir = Path("docs/atlas/webproof")
+    if not webproof_dir.exists() or not (webproof_dir / "index.html").exists():
+        os.environ.setdefault("STRICT_MODE", "HINT")
+        os.environ.setdefault("WEBPROOF_OUT", str(webproof_dir))
+        subprocess.run(["make", "-s", "m14.proofs"], check=False)
+
+    # Verify webproof index exists
+    index_file = webproof_dir / "index.html"
+    assert index_file.exists(), f"Webproof index missing: {index_file}"
+
+    # Verify all artifact HTML pages exist
+    artifacts = ["e66_graph_rollup", "e67_drilldown", "e68_screenshots", "e69_reranker"]
+    for artifact in artifacts:
+        html_file = webproof_dir / f"{artifact}.html"
+        assert html_file.exists(), f"Webproof HTML missing: {html_file}"
+
+    # Run guard and verify verdict
+    result = subprocess.run(
+        ["python3", "scripts/guards/guard_m14_webproof_backlinks.py"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    guard_output = result.stdout
+    assert guard_output, "Guard produced no output"
+
+    guard_data = json.loads(guard_output)
+    assert guard_data.get("ok") is True, f"Guard verdict not ok: {guard_data}"
+
+    # Verify guard verdict file exists
+    verdict_file = Path("evidence/guard_m14_webproof_backlinks.verdict.json")
+    assert verdict_file.exists(), f"Guard verdict file missing: {verdict_file}"
+
+    verdict_data = json.loads(verdict_file.read_text(encoding="utf-8"))
+    assert verdict_data.get("ok") is True, f"Guard verdict file not ok: {verdict_data}"

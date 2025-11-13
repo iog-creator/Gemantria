@@ -1991,13 +1991,20 @@ guard.m13.stale:
 .PHONY: m13.proofs guard.m13.chips guard.m13.sitemap guard.m13.manifest guard.m13.stale
 
 # PLAN-074 (M14) receipts/guards — E66+E67+E68
-.PHONY: m14.proofs atlas.reranker.badges guard.m14.reranker_badges
+.PHONY: m14.proofs atlas.reranker.badges guard.m14.reranker_badges atlas.m14.webproof_backlinks guard.m14.webproof_backlinks
 atlas.reranker.badges:
 	@STRICT_MODE=HINT RERANKER_BADGES_OUT=share/atlas/badges/reranker.json \
 		python3 agentpm/atlas/reranker_badges.py
 
 guard.m14.reranker_badges:
 	@python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true
+
+atlas.m14.webproof_backlinks:
+	@STRICT_MODE=HINT WEBPROOF_OUT=docs/atlas/webproof \
+		python3 agentpm/atlas/webproof.py
+
+guard.m14.webproof_backlinks:
+	@python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true
 
 m14.proofs:
 	@echo "[M14] E66: graph rollup (HINT)"; \
@@ -2017,4 +2024,8 @@ m14.proofs:
 		python3 agentpm/atlas/reranker_badges.py >/dev/null ; \
 	python3 scripts/atlas/gen_index_badge_rollup.py >/dev/null ; \
 	python3 scripts/guards/guard_m14_reranker_badges.py >/dev/null || true ; \
+	echo "[M14] E70: webproof bundle with backlinks (HINT)"; \
+	STRICT_MODE=HINT WEBPROOF_OUT=docs/atlas/webproof \
+		python3 agentpm/atlas/webproof.py >/dev/null ; \
+	python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true ; \
 	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"

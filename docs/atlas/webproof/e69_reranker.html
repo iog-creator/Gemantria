@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas Webproof • Reranker Badges (E69)</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 900px; margin: 2em auto; padding: 0 1em; }
+h1 { color: #1a1a1a; }
+h2 { color: #333; margin-top: 1.5em; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+pre { background: #f5f5f5; padding: 1em; border-radius: 4px; overflow-x: auto; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; }
+.ok { color: #28a745; }
+.error { color: #dc3545; }
+small { color: #666; }
+</style>
+</head>
+<body>
+<h1>Reranker Badges (E69)</h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/badges/reranker.json" data-testid="backlink-e69_reranker-json">Raw JSON: share/atlas/badges/reranker.json</a></li>
+  <li><a href="../../../evidence/guard_m14_reranker_badges.verdict.json" data-testid="backlink-e69_reranker-guard">Guard Verdict: evidence/guard_m14_reranker_badges.verdict.json</a></li>
+</ul>
+</div>
+
+<h2>JSON Data</h2>
+<pre>{
+  &quot;schema&quot;: {
+    &quot;id&quot;: &quot;atlas.badges.reranker.v1&quot;,
+    &quot;version&quot;: 1
+  },
+  &quot;generated_at&quot;: &quot;2025-11-13T03:46:46Z&quot;,
+  &quot;mode&quot;: &quot;HINT&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;node_id&quot;: &quot;node-001&quot;,
+      &quot;score&quot;: 0.87,
+      &quot;badge&quot;: &quot;high&quot;,
+      &quot;thresholds&quot;: {
+        &quot;high&quot;: 0.75,
+        &quot;med&quot;: 0.4
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node-002&quot;,
+      &quot;score&quot;: 0.55,
+      &quot;badge&quot;: &quot;med&quot;,
+      &quot;thresholds&quot;: {
+        &quot;high&quot;: 0.75,
+        &quot;med&quot;: 0.4
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node-003&quot;,
+      &quot;score&quot;: 0.25,
+      &quot;badge&quot;: &quot;low&quot;,
+      &quot;thresholds&quot;: {
+        &quot;high&quot;: 0.75,
+        &quot;med&quot;: 0.4
+      }
+    }
+  ],
+  &quot;ok&quot;: true
+}</pre>
+
+<h2>Guard Verdict</h2>
+<pre>{
+  &quot;ok&quot;: true,
+  &quot;count&quot;: 3,
+  &quot;sorted_by&quot;: &quot;node_id&quot;,
+  &quot;schema&quot;: {
+    &quot;id&quot;: &quot;atlas.badges.reranker.v1&quot;,
+    &quot;version&quot;: 1
+  },
+  &quot;mode&quot;: &quot;HINT&quot;
+}</pre>
+
+<hr>
+<small>Generated at 2025-11-13T03:46:46Z</small>
+</body>
+</html>
