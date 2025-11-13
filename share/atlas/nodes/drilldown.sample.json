@@ -1,0 +1,32 @@
+{
+  "schema": {
+    "id": "atlas.nodes.drilldown.v1",
+    "version": 1
+  },
+  "generated_at": "2025-11-12T18:54:34Z",
+  "mode": "HINT",
+  "items": [
+    {
+      "id": "node-001",
+      "page_url": "/atlas/nodes/node-001.html",
+      "backlinks": [
+        "/atlas/index.html"
+      ]
+    },
+    {
+      "id": "node-002",
+      "page_url": "/atlas/nodes/node-002.html",
+      "backlinks": [
+        "/atlas/index.html"
+      ]
+    },
+    {
+      "id": "node-003",
+      "page_url": "/atlas/nodes/node-003.html",
+      "backlinks": [
+        "/atlas/index.html"
+      ]
+    }
+  ],
+  "ok": true
+}
