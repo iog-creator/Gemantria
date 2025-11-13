@@ -2051,6 +2051,16 @@ atlas.m14.webproof_backlinks:
 guard.m14.webproof_backlinks:
 	@python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true
 
+.PHONY: guard.control.compliance
+guard.control.compliance:
+	@echo ">> Guarding control-plane compliance exports…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_compliance_exports.py
+
+.PHONY: guard.control.compliance.webproof
+guard.control.compliance.webproof:
+	@echo ">> Guarding control-plane compliance webproof backlinks…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_compliance_webproof_backlinks.py
+
 m14.proofs:
 	@echo "[M14] E66: graph rollup (HINT)"; \
 	STRICT_MODE=HINT GRAPH_ROLLUP_OUT=share/atlas/graph/rollup.json \
