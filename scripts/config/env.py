@@ -84,10 +84,10 @@ def get_ro_dsn() -> str | None:
 
 def get_bible_db_dsn() -> str | None:
     """
-    Bible database DSN (read-only) precedence: BIBLE_RO_DSN → RO_DSN → ATLAS_DSN_RO → ATLAS_DSN.
+    Bible database DSN (read-only) precedence: BIBLE_DB_DSN → BIBLE_RO_DSN → RO_DSN → ATLAS_DSN_RO → ATLAS_DSN.
     Set DISABLE_DOTENV=1 in tests to prevent .env from affecting resolution.
     """
-    for key in ("BIBLE_RO_DSN", "RO_DSN", "ATLAS_DSN_RO", "ATLAS_DSN"):
+    for key in ("BIBLE_DB_DSN", "BIBLE_RO_DSN", "RO_DSN", "ATLAS_DSN_RO", "ATLAS_DSN"):
         value = env(key)
         if value:
             return value

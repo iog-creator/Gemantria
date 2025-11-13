@@ -1,4 +1,4 @@
-import os, re, json, subprocess, datetime, pathlib, sys
+import re, json, subprocess, datetime, pathlib, sys
 
 # Add project root to path for imports (works when run from Makefile with PYTHONPATH=. or directly)
 root = pathlib.Path(__file__).resolve().parents[1]
@@ -37,9 +37,8 @@ def run(cmd: list[str], env=None) -> tuple[int, str, str]:
 now_iso = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 
 # Use centralized loaders (handles .env loading, precedence chains, fallbacks)
-# get_bible_db_dsn() checks BIBLE_RO_DSN/RO_DSN/ATLAS_DSN_RO/ATLAS_DSN, but not BIBLE_DB_DSN
-# So we check both: centralized loader first, then direct BIBLE_DB_DSN env var
-BIBLE_DB_DSN = get_bible_db_dsn() or os.getenv("BIBLE_DB_DSN", "")
+# get_bible_db_dsn() now includes BIBLE_DB_DSN in precedence chain
+BIBLE_DB_DSN = get_bible_db_dsn() or ""
 GEMATRIA_DSN = get_rw_dsn() or ""
 CHECKPOINTER = env("CHECKPOINTER", "")
 ENFORCE_STRICT = env("ENFORCE_STRICT", "")
