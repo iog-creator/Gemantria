@@ -909,6 +909,11 @@ guard.control.knowledge.mcp.exports:
 	@echo ">> Guarding Knowledge-MCP exports (mcp_catalog, capability_rules, agent_runs_7d)…"
 	@PYTHONPATH=. python3 scripts/guards/guard_control_knowledge_mcp_exports.py
 
+.PHONY: guard.control.knowledge.mcp.webproof
+guard.control.knowledge.mcp.webproof:
+	@echo ">> Guarding Knowledge-MCP webproof backlinks…"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_knowledge_mcp_webproof_backlinks.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"

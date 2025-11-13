@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Knowledge-MCP Exports — Control Plane</title>
+  </head>
+  <body>
+    <header>
+      <h1>Knowledge-MCP Exports — Control Plane</h1>
+      <p>
+        This page summarizes the control-plane Knowledge-MCP exports used by
+        agents and governance: MCP catalog, capability rules, and agent runs
+        over the last 7 days.
+      </p>
+      <p>
+        <a href="../index.html" data-testid="link-back-to-atlas">
+          ← Back to Atlas
+        </a>
+      </p>
+    </header>
+
+    <main>
+      <section>
+        <h2>Exports</h2>
+        <ul>
+          <li>
+            <a
+              href="../../../share/atlas/control_plane/mcp_catalog.json"
+              data-testid="link-mcp_catalog-json"
+            >
+              MCP Catalog JSON (control.mcp_tool_catalog)
+            </a>
+          </li>
+          <li>
+            <a
+              href="../../../share/atlas/control_plane/capability_rules.json"
+              data-testid="link-capability_rules-json"
+            >
+              Capability Rules JSON (control.capability_rule)
+            </a>
+          </li>
+          <li>
+            <a
+              href="../../../share/atlas/control_plane/agent_runs_7d.json"
+              data-testid="link-agent_runs_7d-json"
+            >
+              Agent Runs 7d JSON (control.agent_run + control.capability_session)
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Guards</h2>
+        <ul>
+          <li>
+            <a
+              href="../../../evidence/guard_control_knowledge_mcp_exports.json"
+              data-testid="link-guard-control-knowledge-mcp-exports-json"
+            >
+              Knowledge-MCP Exports Guard Verdict
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Generated as part of PLAN-077 (Knowledge-MCP Surfacing).
+        All JSON artifacts are DB-off tolerant and may report <code>ok=false</code>
+        when the database is unavailable.
+      </p>
+    </footer>
+  </body>
+</html>
+
