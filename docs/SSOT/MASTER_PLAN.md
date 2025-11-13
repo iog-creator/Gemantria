@@ -62,6 +62,10 @@ All core development phases are complete. The system is operational with:
 - **E69** ✅ PASS: Reranker signal plumbed into badges (receipt+guard) (PR #483)
 - **E70** ✅ PASS: Webproof bundle has backlinks (receipt+guard) (PR #485)
 
+**PLAN-075: DSN Centralization + Control Plane** (In Progress)
+- **E71** ⏳ TODO: Harden DSN centralization (guard + tests prove centralized loader usage)
+- **E72** ⏳ TODO: Control-plane DDL in schema "control" + schema snapshot artifact
+
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
 - ✅ PR-2: Gatekeeper + PoR (TV-01)

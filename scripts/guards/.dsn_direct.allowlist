@@ -1,0 +1,36 @@
+# DSN Direct Access Allowlist
+# Files listed here are allowed to use os.getenv/os.environ for DSN variables.
+# These are typically:
+# - DSN testing/probing scripts
+# - DSN conversion/utility scripts
+# - Guard scripts that need to check DSN configuration
+
+# DSN testing/probing scripts
+scripts/mcp/probe_db.py
+scripts/mcp/probe_db_latency.py
+scripts/mcp/get_dsn_for_examples.py
+scripts/mcp_db_smoke.py
+scripts/mcp_db_select1_guard.py
+
+# DSN conversion/utility scripts
+scripts/ops/convert_socket_to_network_dsn.py
+
+# Guard scripts that check DSN configuration
+scripts/guards/guard_mcp_dsn_mismatch.py
+scripts/guards/guard_mcp_rodsn.py
+scripts/ci/guard_mcp_db_ro.py
+
+# MCP/Atlas scripts that need DSN for catalog/export
+scripts/mcp/export_catalog_json.py
+scripts/mcp/gen_filter_chips.py
+scripts/atlas_chip_inject.py
+scripts/atlas_db_proof_chip.py
+
+# Scripts that create/update agent docs (may need DSN for examples)
+scripts/create_agents_md.py
+
+# Export script (entrypoint with RO-on-tag policy; uses env() from centralized loader)
+# Note: export_graph_core.py uses env() from scripts.config.env, not os.getenv directly
+# The guard may flag it due to string matching, but it's actually compliant
+scripts/exports/export_graph_core.py
+

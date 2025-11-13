@@ -12,11 +12,16 @@ guard.python.runner:
 # ---- Guard: DSN centralization ----------------------------------------------
 .PHONY: guard.dsn.centralized
 guard.dsn.centralized:
-	@bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.json >/dev/null
+	@mkdir -p evidence
+	@bash scripts/guards/guard_dsn_centralized.sh > evidence/guard_dsn_centralized.json
+	@cat evidence/guard_dsn_centralized.json
 
 .PHONY: guard.dsn.centralized.strict
 guard.dsn.centralized.strict:
-	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh | tee evidence/guard.dsn.centralized.strict.json >/dev/null
+	@mkdir -p evidence
+	@STRICT_DSN_CENTRAL=1 bash scripts/guards/guard_dsn_centralized.sh > evidence/guard_dsn_centralized.json
+	@cat evidence/guard_dsn_centralized.json
+	@jq -e '.ok == true' evidence/guard_dsn_centralized.json
 
 # --- Knowledge Sentinels (Drift Kill-Switch) ---
 .PHONY: guard.knowledge.hints guard.knowledge.strict
@@ -839,10 +844,15 @@ db.migrate:
 	@PYTHONPATH=. python3 scripts/db/migrate.py
 
 # === Control Plane ===
-.PHONY: db.control.migrate
-db.control.migrate:
+.PHONY: control.migrate
+control.migrate:
 	@echo ">> Running control plane migration…"
-	@PYTHONPATH=. python3 scripts/db/migrate.py
+	@PYTHONPATH=. python3 scripts/db/migrate_control.py
+
+.PHONY: control.schema.snapshot
+control.schema.snapshot:
+	@echo ">> Generating control-plane schema snapshot…"
+	@PYTHONPATH=. python3 scripts/db/control_schema_snapshot.py
 
 .PHONY: control.session.smoke
 control.session.smoke:
