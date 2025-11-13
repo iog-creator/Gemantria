@@ -899,6 +899,11 @@ control.capability.rules.export:
 	@echo ">> Exporting control-plane capability rules…"
 	@PYTHONPATH=. python3 scripts/db/control_capability_rules_export.py
 
+.PHONY: control.agent_runs_7d.export
+control.agent_runs_7d.export:
+	@echo ">> Exporting control-plane agent runs 7d…"
+	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"

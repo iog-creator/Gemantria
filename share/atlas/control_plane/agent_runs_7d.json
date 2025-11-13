@@ -1,0 +1,11 @@
+{
+  "connection_ok": false,
+  "error": "database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?",
+  "generated_at": "2025-11-13T05:11:12.723268+00:00",
+  "ok": false,
+  "runs": [],
+  "schema": "control",
+  "sessions": [],
+  "since": "2025-11-06T05:11:12.723265+00:00",
+  "window_days": 7
+}
