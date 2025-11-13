@@ -869,6 +869,26 @@ control.mcp.catalog.stub:
 	@echo ">> Generating MCP catalog stub evidence…"
 	@PYTHONPATH=. python3 scripts/db/mcp_catalog_stub.py
 
+.PHONY: control.compliance.head
+control.compliance.head:
+	@echo ">> Exporting control-plane compliance head…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=head
+
+.PHONY: control.top_violations_7d
+control.top_violations_7d:
+	@echo ">> Exporting control-plane top violations (7d)…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=7d
+
+.PHONY: control.top_violations_30d
+control.top_violations_30d:
+	@echo ">> Exporting control-plane top violations (30d)…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py --only=30d
+
+.PHONY: control.compliance.all
+control.compliance.all:
+	@echo ">> Exporting all control-plane compliance data…"
+	@PYTHONPATH=. python3 scripts/db/control_compliance_exports.py
+
 .PHONY: control.session.smoke
 control.session.smoke:
 	@echo ">> Control plane session smoke test"
