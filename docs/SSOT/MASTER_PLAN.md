@@ -70,9 +70,11 @@ All core development phases are complete. The system is operational with:
 - **E75** ✅ PASS: Knowledge-MCP catalog view + mcp_catalog_stub.json evidence (PR #488)
 
 **PLAN-076: Control-Plane Compliance Exports** (In Progress)
-- **E76** ⏳ TODO: Control-plane compliance.head export JSON
-- **E77** ⏳ TODO: Control-plane top_violations_7d export JSON
-- **E78** ⏳ TODO: Control-plane top_violations_30d export JSON
+- **E76** ✅ PASS: Control-plane compliance.head export JSON (PR #489)
+- **E77** ✅ PASS: Control-plane top_violations_7d export JSON (PR #489)
+- **E78** ✅ PASS: Control-plane top_violations_30d export JSON (PR #489)
+- **E79** ⏳ TODO: Guard for control-plane compliance exports (JSON-level validation)
+- **E80** ⏳ TODO: Atlas/webproof page for control compliance with backlinks
 
 **Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
 - ✅ PR-1: Control Plane DDL + Health Guard
