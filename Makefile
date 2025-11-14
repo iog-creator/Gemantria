@@ -2149,3 +2149,8 @@ guard.screenshot.manifest:
 guard.browser.verification:
 	@echo "[guard.browser.verification] Validating browser verification receipts"
 	@PYTHONPATH=. python3 scripts/guards/guard_browser_verification.py
+
+# --- PLAN-079 E94: Screenshot ↔ Tagproof Integration ---
+guard.tagproof.screenshots:
+	@echo "[guard.tagproof.screenshots] Validating tagproof screenshot integration"
+	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_screenshots.py
