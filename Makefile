@@ -2142,3 +2142,10 @@ guard.atlas.guard.receipts:
 guard.screenshot.manifest:
 	@echo "[guard.screenshot.manifest] Validating screenshot manifest coverage"
 	@PYTHONPATH=. python3 scripts/guards/guard_screenshot_manifest.py
+
+# PLAN-079 E93 — Browser Verification Guard
+# This target runs the browser verification guard over existing webproof receipts.
+# CI/tag lanes can invoke this after running the webproof/browser verification scripts.
+guard.browser.verification:
+	@echo "[guard.browser.verification] Validating browser verification receipts"
+	@PYTHONPATH=. python3 scripts/guards/guard_browser_verification.py
