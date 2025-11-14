@@ -7,7 +7,7 @@ Phase-3B Consolidation: Aggregated control-plane summary combining status, table
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 
 from scripts.control.control_pipeline_status import compute_control_pipeline_status
@@ -35,7 +35,7 @@ def compute_control_summary() -> dict[str, Any]:
     """
     result: dict[str, Any] = {
         "ok": False,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "components": {},
     }
 
