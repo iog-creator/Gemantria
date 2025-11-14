@@ -2115,14 +2115,16 @@ m14.proofs:
 	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"
 
 # PLAN-078 E86 — Compliance Summary Dashboard
-.PHONY: atlas.e86 export.e86 guard.e86
-atlas.e86:
-	@echo "Building E86 dashboard (stub)"
-	@true
+.PHONY: atlas.compliance.summary guard.atlas.compliance.summary
+atlas.compliance.summary: export.compliance.summary
+	@echo "[atlas.compliance.summary] Generating compliance summary dashboard"
+	@python3 scripts/atlas/generate_compliance_summary.py
+	@echo "[atlas.compliance.summary] Dashboard: docs/atlas/dashboard/compliance_summary.html"
 
-export.e86:
-	@echo "Exporting E86 metrics (stub)"
-	@true
+export.compliance.summary:
+	@echo "[export.compliance.summary] Generating compliance_summary.json"
+	@python3 scripts/atlas/generate_compliance_summary.py
 
-guard.e86:
-	@python3 scripts/ci/guard_atlas_e86.py
+guard.atlas.compliance.summary:
+	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
+	@python3 scripts/guards/guard_compliance_summary_backlinks.py
