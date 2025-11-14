@@ -2113,3 +2113,49 @@ m14.proofs:
 		python3 agentpm/atlas/webproof.py >/dev/null ; \
 	python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true ; \
 	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"
+
+# PLAN-078 E86 — Compliance Summary Dashboard
+.PHONY: atlas.compliance.summary guard.atlas.compliance.summary
+atlas.compliance.summary: export.compliance.summary
+	@echo "[atlas.compliance.summary] Generating compliance summary dashboard"
+	@python3 scripts/atlas/generate_compliance_summary.py
+	@echo "[atlas.compliance.summary] Dashboard: docs/atlas/dashboard/compliance_summary.html"
+
+export.compliance.summary:
+	@echo "[export.compliance.summary] Generating compliance_summary.json"
+	@python3 scripts/atlas/generate_compliance_summary.py
+
+guard.atlas.compliance.summary:
+	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
+	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-079 E91 — Guard Receipts Index
+atlas.guard.receipts:
+	@echo "[atlas.guard.receipts] Generating guard receipts index"
+	@PYTHONPATH=. python3 scripts/atlas/generate_guard_receipts_index.py
+
+guard.atlas.guard.receipts:
+	@echo "[guard.atlas.guard.receipts] Validating guard receipts index"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_guard_receipts.py
+
+# PLAN-079 E92 — Screenshot Manifest Guard
+guard.screenshot.manifest:
+	@echo "[guard.screenshot.manifest] Validating screenshot manifest coverage"
+	@PYTHONPATH=. python3 scripts/guards/guard_screenshot_manifest.py
+
+# PLAN-079 E93 — Browser Verification Guard
+# This target runs the browser verification guard over existing webproof receipts.
+# CI/tag lanes can invoke this after running the webproof/browser verification scripts.
+guard.browser.verification:
+	@echo "[guard.browser.verification] Validating browser verification receipts"
+	@PYTHONPATH=. python3 scripts/guards/guard_browser_verification.py
+
+# --- PLAN-079 E94: Screenshot ↔ Tagproof Integration ---
+guard.tagproof.screenshots:
+	@echo "[guard.tagproof.screenshots] Validating tagproof screenshot integration"
+	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_screenshots.py
+
+# --- PLAN-079 E95: Atlas Links Integrity Sweep ---
+guard.atlas.links:
+	@echo "[guard.atlas.links] Validating atlas links integrity"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_links.py

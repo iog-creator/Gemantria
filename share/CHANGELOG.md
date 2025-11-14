@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+- PLAN-072 M2+: TVs E06–E10 implemented, tested, guarded (PR #499) — provenance logic complete with `ensure_provenance`, `guard_provenance`, `stamp_batch` functions, full test coverage, guard integration, and AGENTS.md documentation.
 - PLAN-074 M14: Atlas UI tiles + guards (E66–E70 COMPLETE) — graph rollup metrics, node drilldowns, screenshot manifest, reranker badges, and webproof bundle backlinks with guards + receipts.
 - PLAN-075 E71–E72: DSN centralization hardening + control-plane DDL — guard enforces centralized loader usage, control schema migration + schema snapshot artifact.
 - PLAN-075 E73: Control-plane smoke script + evidence JSON — insert+select smoke test for control schema tables with DB-off tolerance.
