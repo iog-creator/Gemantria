@@ -497,6 +497,10 @@ housekeeping.atlas:
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
+	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"
+	@PYTHONPATH=. $(PYTHON) scripts/auto_update_agents_md.py || echo "⚠️  AGENTS.md auto-update had issues (non-fatal)"
+	@echo ">> Auto-updating CHANGELOG.md based on recent commits (Rule-058)"
+	@PYTHONPATH=. $(PYTHON) scripts/auto_update_changelog.py || echo "⚠️  CHANGELOG.md auto-update had issues (non-fatal)"
 	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
 	@echo "AGENTS.md validation complete"
 	@PYTHONPATH=. $(PYTHON) scripts/rules_audit.py
@@ -2277,6 +2281,14 @@ control.tables.smoke:
 control.schema.smoke:
 	@echo "[control.schema.smoke] Introspecting control-plane schemas via pmagent"
 	@python -m pmagent.cli control schema
+
+control.pipeline_status.smoke:
+	@echo "[control.pipeline_status.smoke] Summarizing pipeline runs via pmagent"
+	@python -m pmagent.cli control pipeline-status
+
+control.summary.smoke:
+	@echo "[control.summary.smoke] Aggregated control-plane summary via pmagent"
+	@python -m pmagent.cli control summary
 
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"

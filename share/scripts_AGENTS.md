@@ -702,6 +702,67 @@ python scripts/create_agents_md.py
 - **Tool directories**: Specialized templates for scripts/migrations/tests with appropriate standards
 - **Docs directories**: Documentation maintenance templates with ADR cross-references
 
+### `auto_update_agents_md.py` — Automatic AGENTS.md Updater (Rule-058)
+
+**Purpose:** **AUTOMATICALLY** updates AGENTS.md files based on code changes detected from git. This script runs as part of `make housekeeping` to ensure documentation stays in sync without manual intervention.
+**Rule References:** 006 (AGENTS.md Governance), 027 (Docs Sync Gate), 058 (Auto-Housekeeping)
+**Capabilities:**
+
+- **Automatic Detection**: Identifies code changes in directories requiring AGENTS.md files
+- **Change Analysis**: Detects new functions, classes, and components in changed files
+- **Auto-Update**: Updates AGENTS.md files with timestamp refresh or creates missing files
+- **Git Integration**: Uses git diff to detect changed files
+- **Non-Fatal**: Runs as part of housekeeping with graceful error handling
+
+**Usage:**
+
+```bash
+# Auto-update based on git changes (runs automatically in make housekeeping)
+python scripts/auto_update_agents_md.py
+
+# Dry-run to see what would be updated
+python scripts/auto_update_agents_md.py --dry-run
+```
+
+**Integration:**
+- **Housekeeping**: Automatically runs as part of `make housekeeping` (Rule-058)
+- **Makefile**: Integrated into housekeeping target
+- **Non-Fatal**: Errors are logged but don't fail housekeeping (allows graceful degradation)
+
+**Note:** This script is designed to reduce manual documentation maintenance. If you find yourself manually editing AGENTS.md files, that indicates the auto-update script needs enhancement, not that manual updates are required.
+
+### `auto_update_changelog.py` — Automatic CHANGELOG.md Updater (Rule-058)
+
+**Purpose:** **AUTOMATICALLY** updates CHANGELOG.md based on recent git commits. Extracts feature/fix/docs entries from conventional commit messages and adds them to the [Unreleased] section.
+**Rule References:** 027 (Docs Sync Gate), 058 (Auto-Housekeeping)
+**Capabilities:**
+
+- **Commit Analysis**: Extracts conventional commit format (feat/fix/docs)
+- **Feature Detection**: Detects Phase-3B Feature #X patterns and PR numbers
+- **Auto-Update**: Adds entries to CHANGELOG.md [Unreleased] section
+- **Duplicate Prevention**: Checks for existing entries before adding
+- **Non-Fatal**: Runs as part of housekeeping with graceful error handling
+
+**Usage:**
+
+```bash
+# Auto-update based on recent commits (runs automatically in make housekeeping)
+python scripts/auto_update_changelog.py
+
+# Dry-run to see what would be added
+python scripts/auto_update_changelog.py --dry-run
+
+# Check specific number of commits
+python scripts/auto_update_changelog.py --limit 20
+```
+
+**Integration:**
+- **Housekeeping**: Automatically runs as part of `make housekeeping` (Rule-058)
+- **Makefile**: Integrated into housekeeping target
+- **Non-Fatal**: Errors are logged but don't fail housekeeping (allows graceful degradation)
+
+**Note:** This script is designed to reduce manual CHANGELOG maintenance. If you find yourself manually editing CHANGELOG.md, that indicates the auto-update script needs enhancement, not that manual updates are required.
+
 ### `check_agents_md_sync.py` — AGENTS.md Sync Checker
 
 **Purpose:** Detects when code changes in a directory should trigger AGENTS.md updates. Compares file modification times and git history to identify potentially stale AGENTS.md files.

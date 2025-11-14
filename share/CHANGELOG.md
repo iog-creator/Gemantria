@@ -17,6 +17,16 @@
 - PLAN-079 E91–E95: Guard Receipts, Screenshot Determinism, and Browser Validation — *Planned* — Guard receipts index & browser, screenshot manifest guard, browser verification guard, screenshot ↔ tagproof integration, Atlas links integrity sweep.
 - PLAN-080 E96–E100: Phase-1+2 Verification Sweep & Tagproof — *Planned* — TV-01…TV-05 re-run & coverage receipt, gatekeeper/guard shim coverage audit, full extraction & Atlas + exports regeneration, browser verification & screenshot check (integrated), strict tag lane / tagproof "Phase-2 Ready" bundle.
 
+- pmagent control summary (#530)
+- pmagent control pipeline status (#529)
+- pmagent control schema introspection (#528)
+- pmagent control-plane status (#526)
+- merge pmagent graph import + overview
+- merge pmagent health CLI
+- merge system health aggregate
+- merge LM health guard + smoke
+- merge DB-backed graph overview
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
