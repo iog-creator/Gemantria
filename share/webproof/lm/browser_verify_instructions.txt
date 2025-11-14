@@ -1,0 +1,14 @@
+# Browser Verification Instructions (Rule-051 + Rule-067)
+# Server running on port 8779
+# Execute these browser tool calls:
+
+# For each page in: lm_status.html
+
+# Page: lm_status.html
+#   browser_navigate: http://127.0.0.1:8779/docs/atlas/lm_status.html?nocache=$(date +%s)
+#   browser_wait_for: time=3
+#   browser_snapshot
+#   browser_take_screenshot: filename=share/webproof/lm/browser_verified_lm_status.png, fullPage=true
+
+# After browser verification, run:
+#   STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh

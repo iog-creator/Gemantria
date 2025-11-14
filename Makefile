@@ -918,13 +918,38 @@ control.agent_runs_7d.export:
 	@echo ">> Exporting control-plane agent runs 7d…"
 	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
 
-.PHONY: atlas.lm.usage atlas.lm.health
+.PHONY: atlas.lm.usage atlas.lm.health atlas.lm.dashboards atlas.lm.status.html atlas.lm.dashboards.webproof atlas.lm.status.webproof
 atlas.lm.usage:
 	@echo ">> Exporting LM Studio usage metrics (7d)…"
 	@PYTHONPATH=. python3 scripts/db/control_lm_metrics_export.py
 
 atlas.lm.health: atlas.lm.usage
 	@echo ">> LM usage and health metrics exported to share/atlas/control_plane/"
+
+atlas.lm.dashboards:
+	@echo ">> Validating LM dashboard configs…"
+	@test -f docs/atlas/config/lm_usage_dashboard.json || (echo "ERROR: lm_usage_dashboard.json missing" && exit 1)
+	@test -f docs/atlas/config/lm_health_dashboard.json || (echo "ERROR: lm_health_dashboard.json missing" && exit 1)
+	@jq -e '.schema == "atlas_dashboard"' docs/atlas/config/lm_usage_dashboard.json >/dev/null || (echo "ERROR: Invalid schema in lm_usage_dashboard.json" && exit 1)
+	@jq -e '.schema == "atlas_dashboard"' docs/atlas/config/lm_health_dashboard.json >/dev/null || (echo "ERROR: Invalid schema in lm_health_dashboard.json" && exit 1)
+	@echo ">> LM dashboard configs validated"
+
+atlas.lm.status.html:
+	@echo ">> Validating LM status page…"
+	@test -f docs/atlas/html/lm_status.html || (echo "ERROR: lm_status.html missing" && exit 1)
+	@grep -q "Language Model Status" docs/atlas/html/lm_status.html || (echo "ERROR: Missing 'Language Model Status' marker" && exit 1)
+	@grep -q "LM Studio" docs/atlas/html/lm_status.html || (echo "ERROR: Missing 'LM Studio' marker" && exit 1)
+	@echo ">> LM status page validated"
+
+atlas.lm.dashboards.webproof:
+	@echo ">> Running browser verification for LM dashboards (Rule-067)…"
+	@BROWSER_PAGES="lm_status.html" BROWSER_OUT_DIR="share/webproof/lm" bash scripts/ops/browser_verify.sh --strict --port 8778 || true
+	@echo ">> LM dashboards webproof complete (see share/webproof/lm/)"
+
+atlas.lm.status.webproof:
+	@echo ">> Running browser verification for LM status page (Rule-067)…"
+	@BROWSER_PAGES="lm_status.html" BROWSER_OUT_DIR="share/webproof/lm" bash scripts/ops/browser_verify.sh --strict --port 8779 || true
+	@echo ">> LM status page webproof complete (see share/webproof/lm/)"
 
 .PHONY: guard.control.knowledge.mcp.exports
 guard.control.knowledge.mcp.exports:
