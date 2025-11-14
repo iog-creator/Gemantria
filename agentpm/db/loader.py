@@ -15,6 +15,23 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 
 from scripts.config.env import get_bible_db_dsn, get_rw_dsn
 
+# Check for Postgres driver availability
+try:
+    import psycopg  # noqa: F401
+
+    HAS_POSTGRES_DRIVER = True
+except ImportError:
+    try:
+        import psycopg2  # noqa: F401
+
+        HAS_POSTGRES_DRIVER = True
+    except ImportError:
+        HAS_POSTGRES_DRIVER = False
+
+
+class DbDriverMissingError(RuntimeError):
+    """Postgres database driver (psycopg/psycopg2) is not installed."""
+
 
 class DbUnavailableError(RuntimeError):
     """Database is unavailable (connection error, DSN not set, etc.)."""
@@ -37,15 +54,22 @@ def get_control_engine() -> Engine:
         SQLAlchemy Engine instance.
 
     Raises:
-        DbUnavailableError: If DSN is not set.
+        DbDriverMissingError: If Postgres driver is not installed.
+        DbUnavailableError: If DSN is not set or connection fails.
     """
     global _control_engine
+
+    if not HAS_POSTGRES_DRIVER:
+        raise DbDriverMissingError("Postgres database driver (psycopg/psycopg2) not installed")
 
     if _control_engine is None:
         dsn = get_rw_dsn()
         if not dsn:
             raise DbUnavailableError("GEMATRIA_DSN not set; cannot create control engine")
-        _control_engine = create_engine(dsn, pool_pre_ping=True, echo=False)
+        try:
+            _control_engine = create_engine(dsn, pool_pre_ping=True, echo=False)
+        except (ImportError, ModuleNotFoundError) as e:
+            raise DbDriverMissingError("Postgres database driver not available") from e
 
     return _control_engine
 
@@ -58,15 +82,22 @@ def get_bible_engine() -> Engine:
         SQLAlchemy Engine instance.
 
     Raises:
-        DbUnavailableError: If DSN is not set.
+        DbDriverMissingError: If Postgres driver is not installed.
+        DbUnavailableError: If DSN is not set or connection fails.
     """
     global _bible_engine
+
+    if not HAS_POSTGRES_DRIVER:
+        raise DbDriverMissingError("Postgres database driver (psycopg/psycopg2) not installed")
 
     if _bible_engine is None:
         dsn = get_bible_db_dsn()
         if not dsn:
             raise DbUnavailableError("BIBLE_DB_DSN not set; cannot create bible engine")
-        _bible_engine = create_engine(dsn, pool_pre_ping=True, echo=False)
+        try:
+            _bible_engine = create_engine(dsn, pool_pre_ping=True, echo=False)
+        except (ImportError, ModuleNotFoundError) as e:
+            raise DbDriverMissingError("Postgres database driver not available") from e
 
     return _bible_engine
 

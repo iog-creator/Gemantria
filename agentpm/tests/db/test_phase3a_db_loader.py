@@ -207,3 +207,22 @@ class TestCliBehavior:
         assert data["ok"] is False
         assert data["mode"] == "table_missing"
         assert "error" in data
+
+    @patch("scripts.db_head.fetch_graph_head")
+    def test_cli_driver_missing(self, mock_fetch, capsys):
+        """Test CLI returns ok:false with mode:db_off when driver is missing."""
+        import scripts.db_head
+        from agentpm.db.loader import DbDriverMissingError
+
+        mock_fetch.side_effect = DbDriverMissingError("Postgres database driver not installed")
+
+        # Mock sys.argv
+        with patch.object(sys, "argv", ["db_head.py", "graph", "--limit", "1"]):
+            result = scripts.db_head.main()
+
+        assert result == 1
+        captured = capsys.readouterr()
+        data = json.loads(captured.out)
+        assert data["ok"] is False
+        assert data["mode"] == "db_off"
+        assert data["error"] == "database driver not installed"

@@ -16,7 +16,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import insert
 from sqlalchemy.exc import OperationalError, ProgrammingError
 
-from agentpm.db.loader import DbUnavailableError, get_control_engine
+from agentpm.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
 from agentpm.db.models_graph_stats import Base, GraphStatsSnapshot
 
 # Add project root to path
@@ -106,8 +106,13 @@ def import_graph_stats(source_path: Path, snapshot_id: UUID | None = None) -> di
     # Get database engine
     try:
         engine = get_control_engine()
+    except DbDriverMissingError as e:
+        result["errors"].append("db_driver_missing: database driver not installed")
+        result["mode"] = "db_off"
+        return result
     except DbUnavailableError as e:
         result["errors"].append(f"db_unavailable: {e}")
+        result["mode"] = "db_off"
         return result
 
     # Ensure table exists (create if needed)
