@@ -2282,6 +2282,10 @@ control.schema.smoke:
 	@echo "[control.schema.smoke] Introspecting control-plane schemas via pmagent"
 	@python -m pmagent.cli control schema
 
+control.pipeline_status.smoke:
+	@echo "[control.pipeline_status.smoke] Summarizing pipeline runs via pmagent"
+	@python -m pmagent.cli control pipeline-status
+
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
 	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py
