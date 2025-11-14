@@ -114,6 +114,35 @@ def openai_cfg() -> dict:
     }
 
 
+def get_lm_studio_settings() -> dict[str, str | None | bool]:
+    """
+    Centralized LM Studio config loader.
+    Only place where we touch os.environ for LM_STUDIO_*.
+
+    Returns:
+        Dictionary with:
+        - enabled: bool (True if LM_STUDIO_ENABLED is set and base_url/model are present)
+        - base_url: str | None (from LM_STUDIO_BASE_URL, default: http://localhost:1234/v1)
+        - model: str | None (from LM_STUDIO_MODEL)
+        - api_key: str | None (from LM_STUDIO_API_KEY, optional)
+    """
+    _ensure_loaded()
+    base_url = env("LM_STUDIO_BASE_URL", "http://localhost:1234/v1")
+    model = env("LM_STUDIO_MODEL")
+    api_key = env("LM_STUDIO_API_KEY")
+    enabled_flag = env("LM_STUDIO_ENABLED", "").lower()
+
+    # Enabled if flag is set AND base_url and model are present
+    enabled = bool(enabled_flag in ("1", "true", "yes") and base_url and model)
+
+    return {
+        "enabled": enabled,
+        "base_url": base_url,
+        "model": model,
+        "api_key": api_key,
+    }
+
+
 def snapshot(path: str) -> None:
     """Write a redacted snapshot of key env vars for evidence (no secrets)."""
     _ensure_loaded()
