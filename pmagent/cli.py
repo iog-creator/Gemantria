@@ -31,6 +31,10 @@ from scripts.control.control_tables import (  # noqa: E402
     compute_control_tables,
     print_human_summary as print_tables_summary,
 )
+from scripts.control.control_schema import (  # noqa: E402
+    compute_control_schema,
+    print_human_summary as print_schema_summary,
+)
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -217,6 +221,24 @@ def control_tables(
         print(json.dumps(tables, indent=2))
         # Print human-readable summary to stderr
         summary = print_tables_summary(tables)
+        print(summary, file=sys.stderr)
+    sys.exit(0)
+
+
+@control_app.command("schema", help="Introspect control-plane table schemas (DDL)")
+def control_schema(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Introspect control-plane table schemas (DDL)."""
+    schema = compute_control_schema()
+
+    if json_only:
+        print(json.dumps(schema, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(schema, indent=2))
+        # Print human-readable summary to stderr
+        summary = print_schema_summary(schema)
         print(summary, file=sys.stderr)
     sys.exit(0)
 

@@ -702,6 +702,67 @@ python scripts/create_agents_md.py
 - **Tool directories**: Specialized templates for scripts/migrations/tests with appropriate standards
 - **Docs directories**: Documentation maintenance templates with ADR cross-references
 
+### `auto_update_agents_md.py` — Automatic AGENTS.md Updater (Rule-058)
+
+**Purpose:** **AUTOMATICALLY** updates AGENTS.md files based on code changes detected from git. This script runs as part of `make housekeeping` to ensure documentation stays in sync without manual intervention.
+**Rule References:** 006 (AGENTS.md Governance), 027 (Docs Sync Gate), 058 (Auto-Housekeeping)
+**Capabilities:**
+
+- **Automatic Detection**: Identifies code changes in directories requiring AGENTS.md files
+- **Change Analysis**: Detects new functions, classes, and components in changed files
+- **Auto-Update**: Updates AGENTS.md files with timestamp refresh or creates missing files
+- **Git Integration**: Uses git diff to detect changed files
+- **Non-Fatal**: Runs as part of housekeeping with graceful error handling
+
+**Usage:**
+
+```bash
+# Auto-update based on git changes (runs automatically in make housekeeping)
+python scripts/auto_update_agents_md.py
+
+# Dry-run to see what would be updated
+python scripts/auto_update_agents_md.py --dry-run
+```
+
+**Integration:**
+- **Housekeeping**: Automatically runs as part of `make housekeeping` (Rule-058)
+- **Makefile**: Integrated into housekeeping target
+- **Non-Fatal**: Errors are logged but don't fail housekeeping (allows graceful degradation)
+
+**Note:** This script is designed to reduce manual documentation maintenance. If you find yourself manually editing AGENTS.md files, that indicates the auto-update script needs enhancement, not that manual updates are required.
+
+### `auto_update_changelog.py` — Automatic CHANGELOG.md Updater (Rule-058)
+
+**Purpose:** **AUTOMATICALLY** updates CHANGELOG.md based on recent git commits. Extracts feature/fix/docs entries from conventional commit messages and adds them to the [Unreleased] section.
+**Rule References:** 027 (Docs Sync Gate), 058 (Auto-Housekeeping)
+**Capabilities:**
+
+- **Commit Analysis**: Extracts conventional commit format (feat/fix/docs)
+- **Feature Detection**: Detects Phase-3B Feature #X patterns and PR numbers
+- **Auto-Update**: Adds entries to CHANGELOG.md [Unreleased] section
+- **Duplicate Prevention**: Checks for existing entries before adding
+- **Non-Fatal**: Runs as part of housekeeping with graceful error handling
+
+**Usage:**
+
+```bash
+# Auto-update based on recent commits (runs automatically in make housekeeping)
+python scripts/auto_update_changelog.py
+
+# Dry-run to see what would be added
+python scripts/auto_update_changelog.py --dry-run
+
+# Check specific number of commits
+python scripts/auto_update_changelog.py --limit 20
+```
+
+**Integration:**
+- **Housekeeping**: Automatically runs as part of `make housekeeping` (Rule-058)
+- **Makefile**: Integrated into housekeeping target
+- **Non-Fatal**: Errors are logged but don't fail housekeeping (allows graceful degradation)
+
+**Note:** This script is designed to reduce manual CHANGELOG maintenance. If you find yourself manually editing CHANGELOG.md, that indicates the auto-update script needs enhancement, not that manual updates are required.
+
 ### `check_agents_md_sync.py` — AGENTS.md Sync Checker
 
 **Purpose:** Detects when code changes in a directory should trigger AGENTS.md updates. Compares file modification times and git history to identify potentially stale AGENTS.md files.
@@ -823,6 +884,164 @@ make graph.overview         # JSON to stdout, human summary to stderr
 - **Runbook**: `docs/runbooks/GRAPH_OVERVIEW.md`
 - **Tests**: `agentpm/tests/db/test_phase3b_graph_overview.py`
 - **DB Integration**: Uses `graph_stats_snapshots` table via `agentpm.db.models_graph_stats`
+
+### `control/control_status.py` — Control Plane Status Check (Phase-3B Feature #6)
+
+**Purpose:** Check control-plane database posture and table row counts for key control-plane tables
+
+**Modes:**
+- `ready`: Database connected and all tables accessible
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but some tables missing
+
+**Monitored Tables:**
+- `public.ai_interactions` - AI interaction tracking (Rule-061)
+- `public.governance_artifacts` - Governance artifacts tracking (Rule-026, Rule-058)
+- `control.agent_run` - Agent run audit log (Migration 040)
+- `control.tool_catalog` - Tool catalog (Migration 040)
+- `gematria.graph_stats_snapshots` - Graph statistics snapshots (Phase-3A)
+
+**Usage:**
+```bash
+make control.status.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control status
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "ready",
+  "reason": null,
+  "tables": {
+    "public.ai_interactions": {
+      "present": true,
+      "row_count": 42,
+      "latest_created_at": "2024-01-15T10:30:00+00:00"
+    },
+    ...
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_STATUS: mode=ready tables=ai_interactions(42),governance_artifacts(15),agent_run(8)
+```
+
+**Related:**
+- **Phase-3B Feature #6**: Control-plane status check
+- **Runbook**: `docs/runbooks/CONTROL_STATUS.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py`
+- **CLI**: `pmagent control status` command
+
+### `control/control_tables.py` — Control Plane Tables Listing (Phase-3B Feature #7)
+
+**Purpose:** List all schema-qualified tables across Postgres schemas with row counts
+
+**Modes:**
+- `db_on`: Database connected and queries successful
+- `db_off`: Database unavailable (driver missing or connection failed)
+
+**Usage:**
+```bash
+make control.tables.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control tables
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "error": null,
+  "tables": {
+    "public.ai_interactions": 42,
+    "public.governance_artifacts": 15,
+    "control.agent_run": 8,
+    "control.tool_catalog": 5,
+    "gematria.graph_stats_snapshots": 3
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_TABLES: mode=db_on tables=8 schemas=control(3),gematria(3),public(2)
+```
+
+**Related:**
+- **Phase-3B Feature #7**: Control-plane tables listing
+- **Runbook**: `docs/runbooks/CONTROL_TABLES.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
+- **CLI**: `pmagent control tables` command
+
+### `control/control_schema.py` — Control Plane Schema Introspection (Phase-3B Feature #8)
+
+**Purpose:** Introspect control-plane table schemas (DDL) including columns, primary keys, and indexes
+
+**Modes:**
+- `db_on`: Database connected and schema queries successful
+- `db_off`: Database unavailable (driver missing or connection failed)
+
+**Monitored Tables:**
+- `control.agent_run` - Agent run audit log
+- `control.tool_catalog` - Tool catalog
+- `control.capability_rule` - Capability rules
+- `control.doc_fragment` - Document fragments
+- `control.capability_session` - Capability sessions
+- `public.ai_interactions` - AI interaction tracking
+- `public.governance_artifacts` - Governance artifacts tracking
+
+**Usage:**
+```bash
+make control.schema.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control schema
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "reason": null,
+  "tables": {
+    "control.agent_run": {
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "is_nullable": false,
+          "default": "gen_random_uuid()"
+        },
+        ...
+      ],
+      "primary_key": ["id"],
+      "indexes": [
+        {
+          "name": "idx_agent_run_project",
+          "columns": ["project_id"],
+          "unique": false
+        },
+        ...
+      ]
+    },
+    ...
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_SCHEMA: mode=db_on tables=2 columns=19
+```
+
+**Related:**
+- **Phase-3B Feature #8**: Control-plane schema introspection
+- **Runbook**: `docs/runbooks/CONTROL_SCHEMA.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_schema_cli.py`
+- **CLI**: `pmagent control schema` command
+- **Migrations**: 015 (governance_artifacts), 016 (ai_interactions), 040 (control schema)
 
 ### `system/system_health.py` — System Health Aggregate (Phase-3B)
 
