@@ -69,6 +69,77 @@ STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
 - **Migrations**: 015 (governance_artifacts), 016 (ai_interactions)
 - **CI**: HINT on PRs, STRICT on tags (gated by `vars.STRICT_DB_MIRROR_CI`)
 
+### `guards/guard_db_health.py` — DB Health Guard (Phase-3A)
+
+**Purpose:** Check database health posture (driver availability, connection status, table readiness)
+
+**Modes:**
+- `ready`: All systems operational (driver available, connection works, tables accessible)
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but tables missing
+
+**Usage:**
+```bash
+make guard.db.health        # Detailed JSON output
+make db.health.smoke        # Human-readable summary
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "ready",
+  "checks": {
+    "driver_available": true,
+    "connection_ok": true,
+    "graph_stats_ready": true
+  },
+  "details": {
+    "errors": []
+  }
+}
+```
+
+**Related:**
+- **Phase-3A**: DB activation and health checks
+- **Runbook**: `docs/runbooks/DB_HEALTH.md`
+- **Tests**: `agentpm/tests/db/test_phase3a_db_health_guard.py`
+
+### `guards/guard_lm_health.py` — LM Health Guard (Phase-3B)
+
+**Purpose:** Check LM Studio endpoint availability and response validity
+
+**Modes:**
+- `lm_ready`: LM Studio operational (endpoint reachable and responding correctly)
+- `lm_off`: LM Studio unavailable (endpoint not reachable or responding incorrectly)
+
+**Configuration:**
+- **Endpoint**: `LM_STUDIO_HOST` (default: `http://127.0.0.1:1234`) or `LM_EMBED_HOST`/`LM_EMBED_PORT`
+- **Timeout**: `LM_HEALTH_TIMEOUT` (default: 1.0 seconds)
+
+**Usage:**
+```bash
+make guard.lm.health        # Detailed JSON output
+make lm.health.smoke        # Human-readable summary
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "lm_ready",
+  "details": {
+    "endpoint": "http://127.0.0.1:1234",
+    "errors": []
+  }
+}
+```
+
+**Related:**
+- **Phase-3B**: LM health guard and smoke command
+- **Runbook**: `docs/runbooks/LM_HEALTH.md`
+- **Tests**: `agentpm/tests/lm/test_phase3b_lm_health_guard.py`
+
 ### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
 
 **Purpose:** Emit standardized `HINT:` lines for clear CI log visibility and Cursor runtime tracking.
@@ -716,6 +787,101 @@ make eval.cache.clear
 - **First run**: ~100+ seconds (hard check execution time)
 - **Cached runs**: ~0.02 seconds (JSON file read)
 - **Cache invalidation**: Automatic on manifest changes
+
+### `graph/graph_overview.py` — Graph Overview Command (Phase-3B)
+
+**Purpose:** Query graph statistics from database and provide summary of graph metrics
+
+**Modes:**
+- `db_on`: Database connected and graph stats available
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but graph_stats table missing
+
+**Usage:**
+```bash
+make graph.overview         # JSON to stdout, human summary to stderr
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "stats": {
+    "nodes": 100,
+    "edges": 200,
+    "avg_degree": 4.0,
+    "snapshot_count": 1,
+    "last_import_at": "2024-01-15T10:30:00+00:00"
+  },
+  "reason": null
+}
+```
+
+**Related:**
+- **Phase-3B**: DB-backed graph overview command
+- **Runbook**: `docs/runbooks/GRAPH_OVERVIEW.md`
+- **Tests**: `agentpm/tests/db/test_phase3b_graph_overview.py`
+- **DB Integration**: Uses `graph_stats_snapshots` table via `agentpm.db.models_graph_stats`
+
+### `system/system_health.py` — System Health Aggregate (Phase-3B)
+
+**Purpose:** Aggregate DB health, LM health, and graph overview into a single JSON + human-readable summary
+
+**Components:**
+- **DB Health**: Database driver, connection, and table readiness
+- **LM Health**: LM Studio endpoint availability and response validity
+- **Graph Overview**: Graph statistics from database
+
+**Usage:**
+```bash
+make system.health.smoke    # Aggregated health check with summary
+```
+
+**Output:**
+```json
+{
+  "ok": false,
+  "components": {
+    "db": { "ok": false, "mode": "db_off", ... },
+    "lm": { "ok": false, "mode": "lm_off", ... },
+    "graph": { "ok": false, "mode": "db_off", ... }
+  }
+}
+```
+
+**Human Summary:**
+```
+SYSTEM_HEALTH:
+  DB_HEALTH:   mode=db_off (driver missing)
+  LM_HEALTH:   mode=lm_off (endpoint not reachable)
+  GRAPH_OVERVIEW: mode=db_off (Postgres database driver not available)
+```
+
+**Related:**
+- **Phase-3B**: System health aggregate (DB + LM + Graph)
+- **Runbook**: `docs/runbooks/SYSTEM_HEALTH.md`
+- **Tests**: `agentpm/tests/system/test_phase3b_system_health.py`
+- **Integration**: Calls `guard_db_health`, `guard_lm_health`, and `graph_overview` via subprocess
+
+### `lm/print_lm_health_summary.py` — LM Health Summary Printer (Phase-3B)
+
+**Purpose:** Print human-readable summary line from LM health JSON output
+
+**Usage:**
+```bash
+python -m scripts.guards.guard_lm_health | python3 scripts/lm/print_lm_health_summary.py
+```
+
+**Output:**
+```
+LM_HEALTH: mode=lm_ready (ok)
+LM_HEALTH: mode=lm_off (endpoint not reachable)
+```
+
+**Related:**
+- **Phase-3B**: LM health guard and smoke command
+- **Pattern**: Mirrors `scripts/db/print_db_health_summary.py` for consistency
 
 ### rules_guard.py — Critical System Enforcement
 

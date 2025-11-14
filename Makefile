@@ -2281,3 +2281,11 @@ lm.health.smoke:
 test.phase3b.lm.health:
 	@echo "[test.phase3b.lm.health] Testing LM health guard"
 	@pytest -q agentpm/tests/lm/test_phase3b_lm_health_guard.py
+
+system.health.smoke:
+	@echo "[system.health.smoke] Aggregating DB + LM + Graph health"
+	@python -m scripts.system.system_health
+
+test.phase3b.system.health:
+	@echo "[test.phase3b.system.health] Testing system health aggregate"
+	@pytest -q agentpm/tests/system/test_phase3b_system_health.py
