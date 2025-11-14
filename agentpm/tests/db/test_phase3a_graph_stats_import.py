@@ -172,3 +172,25 @@ class TestGraphStatsImport:
         result = import_graph_stats(test_file)
         assert result["ok"] is True
         assert result["inserted"] == 4
+
+    @patch("scripts.db_import_graph_stats.get_control_engine")
+    def test_import_driver_missing(self, mock_get_engine, tmp_path):
+        """Test import fails gracefully when Postgres driver is missing."""
+        from scripts.db_import_graph_stats import import_graph_stats
+        from agentpm.db.loader import DbDriverMissingError
+
+        # Create test JSON file
+        test_data = {"nodes": 100}
+        test_file = tmp_path / "graph_stats.json"
+        test_file.write_text(json.dumps(test_data))
+
+        # Mock engine to raise DbDriverMissingError
+        mock_get_engine.side_effect = DbDriverMissingError("Postgres database driver not installed")
+
+        result = import_graph_stats(test_file)
+
+        assert result["ok"] is False
+        assert result["inserted"] == 0
+        assert len(result["errors"]) > 0
+        assert any("db_driver_missing" in err for err in result["errors"])
+        assert result.get("mode") == "db_off"

@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from agentpm.db.loader import (
+    DbDriverMissingError,
     DbUnavailableError,
     TableMissingError,
     fetch_graph_head,
@@ -57,6 +58,16 @@ def main() -> int:
 
         print(json.dumps(result, indent=2, default=str))
         return 0
+
+    except DbDriverMissingError as e:
+        result = {
+            "ok": False,
+            "kind": kind,
+            "mode": "db_off",
+            "error": "database driver not installed",
+        }
+        print(json.dumps(result, indent=2))
+        return 1
 
     except DbUnavailableError as e:
         result = {
