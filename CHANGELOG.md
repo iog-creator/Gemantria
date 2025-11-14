@@ -7,6 +7,9 @@
 - PLAN-076 E76–E78: Control-plane compliance exports — compliance.head, top_violations_7d, and top_violations_30d JSON exports with DB-off tolerance.
 - PLAN-076 E79–E80: Control-plane compliance guard + webproof integration — guard validates compliance export JSONs, webproof page with backlinks to exports and guard verdict.
 - PLAN-077 E81–E85: Knowledge-MCP surfacing — COMPLETE — read-only MCP catalog + capability/agent_run summaries with guards and Atlas webproof.
+- PLAN-078 E86–E90: Compliance Dashboards & Violation Browser — *Planned* — Compliance summary dashboard, violation time-series & heatmaps, violation drilldowns, unified violation browser, compliance metrics in graph stats.
+- PLAN-079 E91–E95: Guard Receipts, Screenshot Determinism, and Browser Validation — *Planned* — Guard receipts index & browser, screenshot manifest guard, browser verification guard, screenshot ↔ tagproof integration, Atlas links integrity sweep.
+- PLAN-080 E96–E100: Phase-1+2 Verification Sweep & Tagproof — *Planned* — TV-01…TV-05 re-run & coverage receipt, gatekeeper/guard shim coverage audit, full extraction & Atlas + exports regeneration, browser verification & screenshot check (integrated), strict tag lane / tagproof "Phase-2 Ready" bundle.
 
 ## [v0.0.8] - 2025-11-12
 

@@ -1,0 +1,23 @@
+## plan-077-e82-control-capability-rules-export-20251112-210303
+ M Makefile
+?? evidence_branch.txt
+?? evidence_branch_before.txt
+?? evidence_control_compliance_exports_head.py.txt
+?? evidence_git_diff.txt
+?? evidence_git_status_after.txt
+?? evidence_git_status_before.txt
+?? evidence_make_e81.txt
+?? evidence_make_e82.txt
+?? evidence_pr492_checks.json
+?? evidence_pr492_view.json
+?? evidence_pr493_checks.json
+?? evidence_pr493_view.json
+?? evidence_pr_e81.json
+?? evidence_pytest_e81.txt
+?? evidence_pytest_e82.txt
+?? evidence_repo_root.txt
+?? evidence_ruff_format.txt
+?? evidence_ruff_lint.txt
+?? scripts/db/control_capability_rules_export.py
+?? share/atlas/control_plane/capability_rules.json
+?? tests/db/test_control_capability_rules_export.py

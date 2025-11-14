@@ -1,6 +1,6 @@
 # GPT Reference Guide - Gemantria Project Files
 
-This guide explains the 21 curated files available for GPT analysis of the Gemantria project.
+This guide explains the curated files available for GPT analysis of the Gemantria project. **Note**: For GPT PM context rebuild, see `docs/handoff/GPT_PM_CONTEXT_REBUILD.md` which consolidates project overview, history, and operational context.
 
 ## Core Project Documentation
 
@@ -63,7 +63,7 @@ This guide explains the 21 curated files available for GPT analysis of the Geman
 
 ## File Limits
 
-This curated set of 21 files stays within GPT's 22-file upload limit while providing comprehensive project understanding.
+This curated set of files stays within GPT's 22-file upload limit while providing comprehensive project understanding. The GPT PM Context Rebuild document (`docs/handoff/GPT_PM_CONTEXT_REBUILD.md`) consolidates several files (README, README_FULL, GEMATRIA_MASTER_REFERENCE) to reduce redundancy.
 
 ## GPT System Prompt Requirements
 
@@ -85,7 +85,7 @@ make ssot.verify
 - ✅ Governance docs present (AGENTS.md, RULES_INDEX.md, GEMATRIA_MASTER_REFERENCE.md)
 - ✅ Quality SSOT verified (ruff checks pass)
 - ✅ Database accessible (PostgreSQL gematria and bible_db) - **Note**: Scripts handle DB unavailability gracefully (hermetic behavior per Rule 046)
-- ✅ Share folder curated (21 files under 22-file GPT limit)
+- ✅ Share folder curated (files under 22-file GPT limit, see SHARE_MANIFEST.json for current count)
 
 **Response Protocol (Two-Part Format):**
 1. **Code Box for Cursor** (instructions Cursor will execute):
