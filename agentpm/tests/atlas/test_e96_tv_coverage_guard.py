@@ -26,8 +26,7 @@ def _run_guard() -> subprocess.CompletedProcess:
 
 
 def test_tv_coverage_receipt_created_and_has_basic_shape():
-    cov_result = _run_coverage()
-    # Don't assert on exit code here; guard will handle failure semantics
+    _run_coverage()  # Don't assert on exit code here; guard will handle failure semantics
     assert EVIDENCE_PATH.exists(), "tv_coverage_receipt.json should be created"
     data = json.loads(EVIDENCE_PATH.read_text())
     assert "ok" in data
