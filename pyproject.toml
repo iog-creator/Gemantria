@@ -1,5 +1,15 @@
 version = "0.0.3.dev0"
 
+[project]
+name = "gemantria"
+version = "0.0.3.dev0"
+description = "Gemantria gematria analysis pipeline"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+pmagent = "pmagent.cli:main"
+
 [tool.pytest.ini_options]
 addopts = "-q"
 pythonpath = ["."]

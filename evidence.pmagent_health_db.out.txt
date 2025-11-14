@@ -1,0 +1,15 @@
+DB_HEALTH: mode=db_off (Postgres database driver not available)
+{
+  "ok": false,
+  "mode": "db_off",
+  "checks": {
+    "driver_available": false,
+    "connection_ok": false,
+    "graph_stats_ready": false
+  },
+  "details": {
+    "errors": [
+      "driver_missing: Postgres database driver not available"
+    ]
+  }
+}
