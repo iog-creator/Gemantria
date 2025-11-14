@@ -39,6 +39,10 @@ from scripts.control.control_pipeline_status import (  # noqa: E402
     compute_control_pipeline_status,
     print_human_summary as print_pipeline_summary,
 )
+from scripts.control.control_summary import (  # noqa: E402
+    compute_control_summary,
+    print_human_summary as print_summary_summary,
+)
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -263,6 +267,24 @@ def control_pipeline_status(
         # Print human-readable summary to stderr
         summary = print_pipeline_summary(status)
         print(summary, file=sys.stderr)
+    sys.exit(0)
+
+
+@control_app.command("summary", help="Aggregated control-plane summary (status/tables/schema/pipeline-status)")
+def control_summary(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Aggregated control-plane summary combining all control components."""
+    summary = compute_control_summary()
+
+    if json_only:
+        print(json.dumps(summary, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(summary, indent=2))
+        # Print human-readable summary to stderr
+        summary_line = print_summary_summary(summary)
+        print(summary_line, file=sys.stderr)
     sys.exit(0)
 
 
