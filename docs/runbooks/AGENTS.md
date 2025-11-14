@@ -10,6 +10,9 @@ The `docs/runbooks/` directory contains operational runbooks that provide step-b
 
 - **ATLAS_VISUAL_VERIFICATION.md** - Browser-based visual verification procedures for Atlas UI components
 - **CODEX_CLI.md** - Codex CLI integration guide (installation, usage, examples)
+- **CONTROL_SCHEMA.md** - Control-plane schema introspection procedures (Phase-3B Feature #8)
+- **CONTROL_STATUS.md** - Control-plane status check procedures (Phase-3B Feature #6)
+- **CONTROL_TABLES.md** - Control-plane tables listing procedures (Phase-3B Feature #7)
 - **CURSOR_BROWSER_QA.md** - Browser QA procedures for Cursor agent interactions
 - **DSN_SECRETS.md** - Database connection string management and security practices
 - **HANDOFF_WORKFLOW.md** - Agent handoff procedures and evidence requirements
@@ -18,11 +21,12 @@ The `docs/runbooks/` directory contains operational runbooks that provide step-b
 
 ### Runbook Categories
 
-1. **Visual Verification**: Browser-based UI testing and verification procedures
-2. **Tool Integration**: External tool setup and usage guides
-3. **Security**: Secrets management and secure configuration practices
-4. **Workflow**: Agent handoff and operational workflow procedures
-5. **Infrastructure**: Service setup and configuration guides
+1. **Control Plane**: Control-plane database introspection and status checks (Phase-3B)
+2. **Visual Verification**: Browser-based UI testing and verification procedures
+3. **Tool Integration**: External tool setup and usage guides
+4. **Security**: Secrets management and secure configuration practices
+5. **Workflow**: Agent handoff and operational workflow procedures
+6. **Infrastructure**: Service setup and configuration guides
 
 ## Documentation Standards
 
@@ -82,6 +86,13 @@ All runbooks should include:
 - **ATLAS_VISUAL_VERIFICATION.md**: Browser-based UI verification procedures
 - **CURSOR_BROWSER_QA.md**: Cursor agent browser interaction QA
 - **Rule 067**: Atlas Webproof (browser-verified UI) requirements
+
+### Control Plane Operations
+
+- **CONTROL_STATUS.md**: Control-plane status check and table row counts
+- **CONTROL_TABLES.md**: Control-plane tables listing with row counts
+- **CONTROL_SCHEMA.md**: Control-plane schema introspection (DDL)
+- **Phase-3B**: Control-plane CLI commands via `pmagent control` subcommands
 
 ### Tool Integration
 

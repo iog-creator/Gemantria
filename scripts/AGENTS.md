@@ -824,6 +824,164 @@ make graph.overview         # JSON to stdout, human summary to stderr
 - **Tests**: `agentpm/tests/db/test_phase3b_graph_overview.py`
 - **DB Integration**: Uses `graph_stats_snapshots` table via `agentpm.db.models_graph_stats`
 
+### `control/control_status.py` — Control Plane Status Check (Phase-3B Feature #6)
+
+**Purpose:** Check control-plane database posture and table row counts for key control-plane tables
+
+**Modes:**
+- `ready`: Database connected and all tables accessible
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but some tables missing
+
+**Monitored Tables:**
+- `public.ai_interactions` - AI interaction tracking (Rule-061)
+- `public.governance_artifacts` - Governance artifacts tracking (Rule-026, Rule-058)
+- `control.agent_run` - Agent run audit log (Migration 040)
+- `control.tool_catalog` - Tool catalog (Migration 040)
+- `gematria.graph_stats_snapshots` - Graph statistics snapshots (Phase-3A)
+
+**Usage:**
+```bash
+make control.status.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control status
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "ready",
+  "reason": null,
+  "tables": {
+    "public.ai_interactions": {
+      "present": true,
+      "row_count": 42,
+      "latest_created_at": "2024-01-15T10:30:00+00:00"
+    },
+    ...
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_STATUS: mode=ready tables=ai_interactions(42),governance_artifacts(15),agent_run(8)
+```
+
+**Related:**
+- **Phase-3B Feature #6**: Control-plane status check
+- **Runbook**: `docs/runbooks/CONTROL_STATUS.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py`
+- **CLI**: `pmagent control status` command
+
+### `control/control_tables.py` — Control Plane Tables Listing (Phase-3B Feature #7)
+
+**Purpose:** List all schema-qualified tables across Postgres schemas with row counts
+
+**Modes:**
+- `db_on`: Database connected and queries successful
+- `db_off`: Database unavailable (driver missing or connection failed)
+
+**Usage:**
+```bash
+make control.tables.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control tables
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "error": null,
+  "tables": {
+    "public.ai_interactions": 42,
+    "public.governance_artifacts": 15,
+    "control.agent_run": 8,
+    "control.tool_catalog": 5,
+    "gematria.graph_stats_snapshots": 3
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_TABLES: mode=db_on tables=8 schemas=control(3),gematria(3),public(2)
+```
+
+**Related:**
+- **Phase-3B Feature #7**: Control-plane tables listing
+- **Runbook**: `docs/runbooks/CONTROL_TABLES.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
+- **CLI**: `pmagent control tables` command
+
+### `control/control_schema.py` — Control Plane Schema Introspection (Phase-3B Feature #8)
+
+**Purpose:** Introspect control-plane table schemas (DDL) including columns, primary keys, and indexes
+
+**Modes:**
+- `db_on`: Database connected and schema queries successful
+- `db_off`: Database unavailable (driver missing or connection failed)
+
+**Monitored Tables:**
+- `control.agent_run` - Agent run audit log
+- `control.tool_catalog` - Tool catalog
+- `control.capability_rule` - Capability rules
+- `control.doc_fragment` - Document fragments
+- `control.capability_session` - Capability sessions
+- `public.ai_interactions` - AI interaction tracking
+- `public.governance_artifacts` - Governance artifacts tracking
+
+**Usage:**
+```bash
+make control.schema.smoke    # JSON to stdout, human summary to stderr
+python -m pmagent.cli control schema
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "reason": null,
+  "tables": {
+    "control.agent_run": {
+      "columns": [
+        {
+          "name": "id",
+          "data_type": "uuid",
+          "is_nullable": false,
+          "default": "gen_random_uuid()"
+        },
+        ...
+      ],
+      "primary_key": ["id"],
+      "indexes": [
+        {
+          "name": "idx_agent_run_project",
+          "columns": ["project_id"],
+          "unique": false
+        },
+        ...
+      ]
+    },
+    ...
+  }
+}
+```
+
+**Human Summary:**
+```
+CONTROL_SCHEMA: mode=db_on tables=2 columns=19
+```
+
+**Related:**
+- **Phase-3B Feature #8**: Control-plane schema introspection
+- **Runbook**: `docs/runbooks/CONTROL_SCHEMA.md`
+- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_schema_cli.py`
+- **CLI**: `pmagent control schema` command
+- **Migrations**: 015 (governance_artifacts), 016 (ai_interactions), 040 (control schema)
+
 ### `system/system_health.py` — System Health Aggregate (Phase-3B)
 
 **Purpose:** Aggregate DB health, LM health, and graph overview into a single JSON + human-readable summary
