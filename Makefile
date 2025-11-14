@@ -2159,3 +2159,12 @@ guard.tagproof.screenshots:
 guard.atlas.links:
 	@echo "[guard.atlas.links] Validating atlas links integrity"
 	@PYTHONPATH=. python3 scripts/guards/guard_atlas_links.py
+
+# --- PLAN-080 E96: TV-01..TV-05 Coverage ---
+test.tv.coverage:
+	@echo "[test.tv.coverage] Running TV-01..TV-05 and generating coverage receipt"
+	@PYTHONPATH=. python3 scripts/ci/tv_coverage.py
+
+guard.tv.coverage:
+	@echo "[guard.tv.coverage] Validating TV coverage receipt"
+	@PYTHONPATH=. python3 scripts/guards/guard_tv_coverage.py
