@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
 import requests
 
 ROOT = Path(__file__).resolve().parents[4]
