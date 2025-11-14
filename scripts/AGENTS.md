@@ -788,6 +788,101 @@ make eval.cache.clear
 - **Cached runs**: ~0.02 seconds (JSON file read)
 - **Cache invalidation**: Automatic on manifest changes
 
+### `graph/graph_overview.py` — Graph Overview Command (Phase-3B)
+
+**Purpose:** Query graph statistics from database and provide summary of graph metrics
+
+**Modes:**
+- `db_on`: Database connected and graph stats available
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but graph_stats table missing
+
+**Usage:**
+```bash
+make graph.overview         # JSON to stdout, human summary to stderr
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "db_on",
+  "stats": {
+    "nodes": 100,
+    "edges": 200,
+    "avg_degree": 4.0,
+    "snapshot_count": 1,
+    "last_import_at": "2024-01-15T10:30:00+00:00"
+  },
+  "reason": null
+}
+```
+
+**Related:**
+- **Phase-3B**: DB-backed graph overview command
+- **Runbook**: `docs/runbooks/GRAPH_OVERVIEW.md`
+- **Tests**: `agentpm/tests/db/test_phase3b_graph_overview.py`
+- **DB Integration**: Uses `graph_stats_snapshots` table via `agentpm.db.models_graph_stats`
+
+### `system/system_health.py` — System Health Aggregate (Phase-3B)
+
+**Purpose:** Aggregate DB health, LM health, and graph overview into a single JSON + human-readable summary
+
+**Components:**
+- **DB Health**: Database driver, connection, and table readiness
+- **LM Health**: LM Studio endpoint availability and response validity
+- **Graph Overview**: Graph statistics from database
+
+**Usage:**
+```bash
+make system.health.smoke    # Aggregated health check with summary
+```
+
+**Output:**
+```json
+{
+  "ok": false,
+  "components": {
+    "db": { "ok": false, "mode": "db_off", ... },
+    "lm": { "ok": false, "mode": "lm_off", ... },
+    "graph": { "ok": false, "mode": "db_off", ... }
+  }
+}
+```
+
+**Human Summary:**
+```
+SYSTEM_HEALTH:
+  DB_HEALTH:   mode=db_off (driver missing)
+  LM_HEALTH:   mode=lm_off (endpoint not reachable)
+  GRAPH_OVERVIEW: mode=db_off (Postgres database driver not available)
+```
+
+**Related:**
+- **Phase-3B**: System health aggregate (DB + LM + Graph)
+- **Runbook**: `docs/runbooks/SYSTEM_HEALTH.md`
+- **Tests**: `agentpm/tests/system/test_phase3b_system_health.py`
+- **Integration**: Calls `guard_db_health`, `guard_lm_health`, and `graph_overview` via subprocess
+
+### `lm/print_lm_health_summary.py` — LM Health Summary Printer (Phase-3B)
+
+**Purpose:** Print human-readable summary line from LM health JSON output
+
+**Usage:**
+```bash
+python -m scripts.guards.guard_lm_health | python3 scripts/lm/print_lm_health_summary.py
+```
+
+**Output:**
+```
+LM_HEALTH: mode=lm_ready (ok)
+LM_HEALTH: mode=lm_off (endpoint not reachable)
+```
+
+**Related:**
+- **Phase-3B**: LM health guard and smoke command
+- **Pattern**: Mirrors `scripts/db/print_db_health_summary.py` for consistency
+
 ### rules_guard.py — Critical System Enforcement
 
 **Purpose:** System-level validation ensuring rules aren't just documentation. Fail-closed verification for code changes.
