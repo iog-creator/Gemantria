@@ -2269,3 +2269,15 @@ graph.overview:
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
 	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py
+
+guard.lm.health:
+	@echo "[guard.lm.health] LM health guard (JSON output)"
+	@python -m scripts.guards.guard_lm_health || true
+
+lm.health.smoke:
+	@echo "[lm.health.smoke] LM health smoke test for operators"
+	@python -m scripts.guards.guard_lm_health 2>/dev/null | python3 scripts/lm/print_lm_health_summary.py || echo "LM_HEALTH: mode=error (guard failed)"
+
+test.phase3b.lm.health:
+	@echo "[test.phase3b.lm.health] Testing LM health guard"
+	@pytest -q agentpm/tests/lm/test_phase3b_lm_health_guard.py
