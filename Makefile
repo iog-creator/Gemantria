@@ -2128,3 +2128,12 @@ export.compliance.summary:
 guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-079 E91 — Guard Receipts Index
+atlas.guard.receipts:
+	@echo "[atlas.guard.receipts] Generating guard receipts index"
+	@PYTHONPATH=. python3 scripts/atlas/generate_guard_receipts_index.py
+
+guard.atlas.guard.receipts:
+	@echo "[guard.atlas.guard.receipts] Validating guard receipts index"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_guard_receipts.py
