@@ -81,6 +81,10 @@
       "dst": "share/graph_stats.head.json",
       "generate": "head_json",
       "max_bytes": 4096
+    },
+    {
+      "src": "share/pm.snapshot.md",
+      "dst": "share/pm.snapshot.md"
     }
   ],
   "evidence": [

@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-11T16:22:29-08:00_
+_Generated: 2025-11-14T10:12:03-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -15,6 +15,32 @@ _Generated: 2025-11-11T16:22:29-08:00_
 	Is the server running locally and accepting connections on that socket?`
 - Gematria RW temp-write probe: `(RW probe failed) psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
 	Is the server running locally and accepting connections on that socket?`
+
+### DB Health Guard
+
+- Status: `✗ db_off`
+- Mode: `db_off`
+- Driver available: `✗`
+- Connection OK: `✗`
+- Graph stats ready: `✗`
+- Errors: `1 error(s)`
+
+```json
+{
+  "ok": false,
+  "mode": "db_off",
+  "checks": {
+    "driver_available": false,
+    "connection_ok": false,
+    "graph_stats_ready": false
+  },
+  "details": {
+    "errors": [
+      "driver_missing: Postgres database driver not available"
+    ]
+  }
+}
+```
 
 ## Now / Next / Later (PM-facing)
 

@@ -70,6 +70,19 @@ gfile = root / "evidence" / "bringup_001" / "guards.out"
 if gfile.exists():
     guards_out = gfile.read_text(errors="ignore")[:2000]
 
+# Run DB health guard and embed JSON
+db_health_json = {}
+try:
+    from scripts.guards.guard_db_health import check_db_health
+
+    db_health_json = check_db_health()
+except Exception as e:
+    db_health_json = {
+        "ok": False,
+        "mode": "error",
+        "error": f"guard_db_health failed: {e}",
+    }
+
 # Compose PM Snapshot (Markdown)
 lines = []
 lines.append("# PM Snapshot — GemantriaV.2\n")
@@ -82,6 +95,20 @@ lines.append(f"- ENFORCE_STRICT: `{ENFORCE_STRICT or '(unset)'}`  — expected `
 lines.append("### DB Proofs\n")
 lines.append(f"- Bible RO probe: `{ro_probe}`")
 lines.append(f"- Gematria RW temp-write probe: `{rw_probe}`\n")
+lines.append("### DB Health Guard\n")
+lines.append(f"- Status: `{'✓ Ready' if db_health_json.get('ok') else '✗ ' + db_health_json.get('mode', 'unknown')}`")
+lines.append(f"- Mode: `{db_health_json.get('mode', 'unknown')}`")
+if db_health_json.get("checks"):
+    checks = db_health_json["checks"]
+    lines.append(f"- Driver available: `{'✓' if checks.get('driver_available') else '✗'}`")
+    lines.append(f"- Connection OK: `{'✓' if checks.get('connection_ok') else '✗'}`")
+    lines.append(f"- Graph stats ready: `{'✓' if checks.get('graph_stats_ready') else '✗'}`")
+if db_health_json.get("details", {}).get("errors"):
+    lines.append(f"- Errors: `{len(db_health_json['details']['errors'])} error(s)`")
+lines.append("")
+lines.append("```json")
+lines.append(json.dumps(db_health_json, indent=2))
+lines.append("```\n")
 lines.append("## Now / Next / Later (PM-facing)\n")
 lines.append(
     "**Now**\n- Keep GemantriaV.2 as the active project.\n- Use `STRICT` posture when DSNs present; otherwise HINT mode is allowed for hermetic tests.\n- Regenerate this PM Snapshot on each bring-up or DSN change (`make pm.snapshot`).\n"
@@ -121,8 +148,14 @@ manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
 # Write document
 doc_path.write_text("\n".join(lines) + "\n")
 
+# Write DB health JSON to evidence directory
+db_health_evid = evid_dir / "db_health.json"
+db_health_evid.write_text(json.dumps(db_health_json, indent=2) + "\n")
+
 # Emit machine-friendly evidence
 print("EVID: DOC_PATH", doc_path.as_posix())
 print("EVID: MANIFEST_COUNT", len(items))
 print("EVID: BIBLE_DSN_REDACT", redact(BIBLE_DB_DSN))
 print("EVID: GEMATRIA_DSN_REDACT", redact(GEMATRIA_DSN))
+print("EVID: DB_HEALTH_OK", db_health_json.get("ok", False))
+print("EVID: DB_HEALTH_MODE", db_health_json.get("mode", "unknown"))
