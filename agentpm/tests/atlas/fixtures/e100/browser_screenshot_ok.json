@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "checks": {
+    "receipts_guard_ok": true,
+    "screenshot_manifest_guard_ok": true,
+    "browser_verification_guard_ok": true,
+    "tagproof_screenshots_guard_ok": true,
+    "atlas_links_guard_ok": true
+  },
+  "counts": {
+    "guards_total": 5,
+    "guards_ok": 5,
+    "guards_failed": 0,
+    "broken_links": 0,
+    "missing_screenshots": 0
+  },
+  "details": {}
+}
+
