@@ -17,7 +17,6 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
 
-
 class TestGraphOverview:
     """Test graph overview DB feature."""
 
@@ -271,8 +270,4 @@ class TestGraphOverview:
         assert overview["reason"] == "no snapshots found"
         assert overview["stats"]["nodes"] is None
         assert overview["stats"]["edges"] is None
-
-        summary = print_human_summary(overview)
-        # When no snapshots, stats are None, so summary shows nodes=0 edges=0
-        # But the reason should indicate no snapshots
         assert overview["reason"] == "no snapshots found"
