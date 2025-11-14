@@ -1,0 +1,10 @@
+## impl/phase3a.db-health-smoke
+ M Makefile
+ M share/pm.snapshot.md
+?? agentpm/tests/db/test_phase3a_db_health_smoke.py
+?? docs/runbooks/DB_HEALTH.md
+?? evidence.db_health_smoke.txt
+?? evidence.git_status.txt
+?? evidence.pr519.view.json
+?? evidence.pr_new.json
+?? scripts/db/print_db_health_summary.py
