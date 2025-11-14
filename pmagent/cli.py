@@ -23,12 +23,15 @@ from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
 from scripts.graph.graph_overview import compute_graph_overview  # noqa: E402
 from scripts.system.system_health import compute_system_health, print_human_summary  # noqa: E402
 from scripts.db_import_graph_stats import import_graph_stats  # noqa: E402
+from scripts.control.control_status import compute_control_status, print_human_summary as print_control_summary  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
 app.add_typer(health_app, name="health")
 graph_app = typer.Typer(help="Graph operations")
 app.add_typer(graph_app, name="graph")
+control_app = typer.Typer(help="Control-plane operations")
+app.add_typer(control_app, name="control")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -173,6 +176,24 @@ def graph_import(
         error_msg = errors[0] if errors else "unknown error"
         print(f"GRAPH_IMPORT: failed ({error_msg[:50]})", file=sys.stderr)
         sys.exit(1)
+
+
+@control_app.command("status", help="Check control-plane database status and table row counts")
+def control_status(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Check control-plane database status and table row counts."""
+    status = compute_control_status()
+
+    if json_only:
+        print(json.dumps(status, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(status, indent=2))
+        # Print human-readable summary to stderr
+        summary = print_control_summary(status)
+        print(summary, file=sys.stderr)
+    sys.exit(0)
 
 
 def main() -> None:

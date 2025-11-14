@@ -1,0 +1,12 @@
+## impl/phase3b.pmagent-control-status.20251114-133119
+ M Makefile
+ M evidence.branch_name.txt
+ M pmagent/cli.py
+?? agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py
+?? docs/runbooks/CONTROL_STATUS.md
+?? evidence.git_status.phase3b_pmagent_control_status.txt
+?? evidence.main_head.after_phase3b_f5.txt
+?? evidence.pmagent_control_status.out.txt
+?? evidence.pr525.view.json
+?? evidence.pr_phase3b_pmagent_graph.json
+?? scripts/control/

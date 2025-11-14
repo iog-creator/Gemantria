@@ -1,0 +1,33 @@
+CONTROL_STATUS: mode=db_off (driver_missing: Postgres database driver not avail)
+{
+  "ok": false,
+  "mode": "db_off",
+  "reason": "driver_missing: Postgres database driver not available",
+  "tables": {
+    "public.ai_interactions": {
+      "present": false,
+      "row_count": null,
+      "latest_created_at": null
+    },
+    "public.governance_artifacts": {
+      "present": false,
+      "row_count": null,
+      "latest_created_at": null
+    },
+    "control.agent_run": {
+      "present": false,
+      "row_count": null,
+      "latest_created_at": null
+    },
+    "control.tool_catalog": {
+      "present": false,
+      "row_count": null,
+      "latest_created_at": null
+    },
+    "gematria.graph_stats_snapshots": {
+      "present": false,
+      "row_count": null,
+      "latest_created_at": null
+    }
+  }
+}
