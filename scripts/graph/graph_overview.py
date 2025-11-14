@@ -10,11 +10,10 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 # Add project root to path
 ROOT = Path(__file__).resolve().parents[2]
@@ -189,7 +188,7 @@ def main() -> int:
     summary = print_human_summary(overview)
     print(summary, file=sys.stderr)
 
-    return 0 if overview.get("ok") else 0  # Always exit 0 (hermetic, DB-off-safe)
+    return 0  # Always exit 0 (hermetic, DB-off-safe)
 
 
 if __name__ == "__main__":

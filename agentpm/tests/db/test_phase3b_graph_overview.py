@@ -7,17 +7,15 @@ and computes stats from graph_stats table.
 
 from __future__ import annotations
 
-import json
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 from unittest.mock import MagicMock, patch
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from agentpm.db.models_graph_stats import GraphStatsSnapshot
 
 
 class TestGraphOverview:
@@ -32,7 +30,11 @@ class TestGraphOverview:
         mock_check_db_health.return_value = {
             "ok": False,
             "mode": "db_off",
-            "checks": {"driver_available": False, "connection_ok": False, "graph_stats_ready": False},
+            "checks": {
+                "driver_available": False,
+                "connection_ok": False,
+                "graph_stats_ready": False,
+            },
             "details": {"errors": ["driver_missing: Postgres database driver not installed"]},
         }
 
@@ -93,61 +95,31 @@ class TestGraphOverview:
         # Mock SQLAlchemy session
         mock_engine = MagicMock()
         mock_session = MagicMock()
-        mock_sessionmaker = MagicMock(return_value=mock_session)
         mock_session.__enter__ = MagicMock(return_value=mock_session)
         mock_session.__exit__ = MagicMock(return_value=None)
 
-        # Mock latest snapshot query
         snapshot_id = uuid4()
-        mock_session.execute.return_value.scalar_one_or_none.side_effect = [
-            snapshot_id,  # Latest snapshot ID
-            100,  # nodes
-            200,  # edges
-            None,  # avg_degree (not found, will calculate)
-            1,  # snapshot_count
-            datetime.now(timezone.utc),  # last_import_at
-        ]
+        last_import_time = datetime.now(UTC)
 
-        # Mock count query for snapshot_count
-        mock_count_result = MagicMock()
-        mock_count_result.scalar_one.return_value = 1
-        mock_session.execute.return_value = mock_count_result
-        mock_session.execute.return_value.scalar_one_or_none.side_effect = [
-            snapshot_id,
-            100,
-            200,
-            None,
-        ]
-        mock_session.execute.return_value.scalar_one.return_value = 1
-        mock_session.execute.return_value.scalar_one_or_none.side_effect = [
-            snapshot_id,
-            100,
-            200,
-            None,
-            datetime.now(timezone.utc),
-        ]
+        # Use a call counter to return values in order
+        call_count = [0]
 
-        # Fix the mock to handle multiple execute calls properly
         def execute_side_effect(query, *args, **kwargs):
             result = MagicMock()
-            # Latest snapshot query
-            if "snapshot_id" in str(query) and "order_by" in str(query):
+            call_count[0] += 1
+            # Query order: 1) latest snapshot, 2) nodes, 3) edges, 4) avg_degree, 5) snapshot_count, 6) last_import
+            if call_count[0] == 1:
                 result.scalar_one_or_none.return_value = snapshot_id
-            # Nodes query
-            elif "nodes" in str(query):
+            elif call_count[0] == 2:
                 result.scalar_one_or_none.return_value = 100
-            # Edges query
-            elif "edges" in str(query):
+            elif call_count[0] == 3:
                 result.scalar_one_or_none.return_value = 200
-            # Avg degree query
-            elif "centrality.avg_degree" in str(query):
+            elif call_count[0] == 4:
                 result.scalar_one_or_none.return_value = None
-            # Snapshot count query
-            elif "count" in str(query) and "distinct" in str(query):
+            elif call_count[0] == 5:
                 result.scalar_one.return_value = 1
-            # Last import query
-            elif "max" in str(query) and "created_at" in str(query):
-                result.scalar_one_or_none.return_value = datetime.now(timezone.utc)
+            elif call_count[0] == 6:
+                result.scalar_one_or_none.return_value = last_import_time
             else:
                 result.scalar_one_or_none.return_value = None
                 result.scalar_one.return_value = 0
@@ -156,7 +128,11 @@ class TestGraphOverview:
         mock_session.execute.side_effect = execute_side_effect
         mock_get_engine.return_value = mock_engine
 
-        with patch("scripts.graph.graph_overview.sessionmaker", return_value=mock_sessionmaker):
+        # Mock sessionmaker to return a callable that returns the mock session
+        def sessionmaker_factory(bind):
+            return lambda: mock_session
+
+        with patch("scripts.graph.graph_overview.sessionmaker", side_effect=sessionmaker_factory):
             overview = compute_graph_overview()
 
         assert overview["ok"] is True
@@ -194,26 +170,31 @@ class TestGraphOverview:
         # Mock SQLAlchemy session
         mock_engine = MagicMock()
         mock_session = MagicMock()
-        mock_sessionmaker = MagicMock(return_value=mock_session)
         mock_session.__enter__ = MagicMock(return_value=mock_session)
         mock_session.__exit__ = MagicMock(return_value=None)
 
         snapshot_id = uuid4()
+        last_import_time = datetime.now(UTC)
+
+        # Use a call counter to return values in order
+        call_count = [0]
 
         def execute_side_effect(query, *args, **kwargs):
             result = MagicMock()
-            if "snapshot_id" in str(query) and "order_by" in str(query):
+            call_count[0] += 1
+            # Query order: 1) latest snapshot, 2) nodes, 3) edges, 4) avg_degree, 5) snapshot_count, 6) last_import
+            if call_count[0] == 1:
                 result.scalar_one_or_none.return_value = snapshot_id
-            elif "nodes" in str(query):
+            elif call_count[0] == 2:
                 result.scalar_one_or_none.return_value = 0
-            elif "edges" in str(query):
+            elif call_count[0] == 3:
                 result.scalar_one_or_none.return_value = 0
-            elif "centrality.avg_degree" in str(query):
+            elif call_count[0] == 4:
                 result.scalar_one_or_none.return_value = None
-            elif "count" in str(query) and "distinct" in str(query):
+            elif call_count[0] == 5:
                 result.scalar_one.return_value = 1
-            elif "max" in str(query) and "created_at" in str(query):
-                result.scalar_one_or_none.return_value = datetime.now(timezone.utc)
+            elif call_count[0] == 6:
+                result.scalar_one_or_none.return_value = last_import_time
             else:
                 result.scalar_one_or_none.return_value = None
                 result.scalar_one.return_value = 0
@@ -222,7 +203,11 @@ class TestGraphOverview:
         mock_session.execute.side_effect = execute_side_effect
         mock_get_engine.return_value = mock_engine
 
-        with patch("scripts.graph.graph_overview.sessionmaker", return_value=mock_sessionmaker):
+        # Mock sessionmaker to return a callable that returns the mock session
+        def sessionmaker_factory(bind):
+            return lambda: mock_session
+
+        with patch("scripts.graph.graph_overview.sessionmaker", side_effect=sessionmaker_factory):
             overview = compute_graph_overview()
 
         assert overview["ok"] is True
@@ -258,17 +243,27 @@ class TestGraphOverview:
         # Mock SQLAlchemy session
         mock_engine = MagicMock()
         mock_session = MagicMock()
-        mock_sessionmaker = MagicMock(return_value=mock_session)
         mock_session.__enter__ = MagicMock(return_value=mock_session)
         mock_session.__exit__ = MagicMock(return_value=None)
 
         # Mock latest snapshot query to return None (no snapshots)
-        mock_result = MagicMock()
-        mock_result.scalar_one_or_none.return_value = None
-        mock_session.execute.return_value = mock_result
+        def execute_side_effect(query, *args, **kwargs):
+            result = MagicMock()
+            if "snapshot_id" in str(query) and "order_by" in str(query):
+                result.scalar_one_or_none.return_value = None  # No snapshots
+            else:
+                result.scalar_one_or_none.return_value = None
+                result.scalar_one.return_value = 0
+            return result
+
+        mock_session.execute.side_effect = execute_side_effect
         mock_get_engine.return_value = mock_engine
 
-        with patch("scripts.graph.graph_overview.sessionmaker", return_value=mock_sessionmaker):
+        # Mock sessionmaker to return a callable that returns the mock session
+        def sessionmaker_factory(bind):
+            return lambda: mock_session
+
+        with patch("scripts.graph.graph_overview.sessionmaker", side_effect=sessionmaker_factory):
             overview = compute_graph_overview()
 
         assert overview["ok"] is True
@@ -278,4 +273,6 @@ class TestGraphOverview:
         assert overview["stats"]["edges"] is None
 
         summary = print_human_summary(overview)
-        assert "mode=db_on" in summary or "no snapshots" in summary.lower()
+        # When no snapshots, stats are None, so summary shows nodes=0 edges=0
+        # But the reason should indicate no snapshots
+        assert overview["reason"] == "no snapshots found"
