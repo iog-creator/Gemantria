@@ -87,6 +87,7 @@ class TestDbOffBehavior:
     @patch("agentpm.db.loader.get_control_engine")
     def test_fetch_graph_head_operational_error(self, mock_get_engine):
         """Test fetch_graph_head raises DbUnavailableError on OperationalError."""
+
         # Create a mock OperationalError class
         class MockOperationalError(Exception):
             pass
@@ -118,6 +119,7 @@ class TestDbOffBehavior:
     @patch("agentpm.db.loader.get_control_engine")
     def test_fetch_graph_head_table_missing(self, mock_get_engine):
         """Test fetch_graph_head raises TableMissingError when tables don't exist."""
+
         # Create a mock ProgrammingError class
         class MockProgrammingError(Exception):
             pass
