@@ -2177,3 +2177,16 @@ gatekeeper.coverage:
 guard.gatekeeper.coverage:
 	@echo "[guard.gatekeeper.coverage] Validating gatekeeper coverage manifest"
 	@PYTHONPATH=. python3 scripts/guards/guard_gatekeeper_coverage.py
+
+# --- PLAN-080 E98: Full Extraction & Atlas + Exports Regeneration ---
+regenerate.all:
+	@echo "[regenerate.all] Regenerating all extraction and export artifacts"
+	@PYTHONPATH=. python3 scripts/ci/regenerate_all.py
+
+guard.regenerate.all:
+	@echo "[guard.regenerate.all] Validating regeneration receipt and artifacts"
+	@PYTHONPATH=. python3 scripts/guards/guard_regenerate_all.py > evidence/guard_regenerate_all.json || true
+
+test.e98.regenerate.all:
+	@echo "[test.e98.regenerate.all] Running E98 regeneration guard tests"
+	@pytest -q agentpm/tests/atlas/test_e98_regenerate_all_guard.py
