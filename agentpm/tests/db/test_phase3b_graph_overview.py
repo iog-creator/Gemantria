@@ -225,7 +225,7 @@ class TestGraphOverview:
     @patch("scripts.graph.graph_overview.get_control_engine")
     def test_ready_no_snapshots(self, mock_get_engine, mock_check_db_health):
         """Test overview handles case with no snapshots in database."""
-        from scripts.graph.graph_overview import compute_graph_overview, print_human_summary
+        from scripts.graph.graph_overview import compute_graph_overview
 
         # Mock DB health check to return ready
         mock_check_db_health.return_value = {
