@@ -1,7 +1,13 @@
 {
   "episode": "E87",
-  "series": [],
-  "generated_at": null,
-  "source": "control-plane",
-  "notes": "Stub metrics; to be populated from control-plane compliance exports."
+  "schema": "compliance_timeseries_v1",
+  "generated_at": "2025-11-14T04:16:59.734339+00:00",
+  "series_by_code": [],
+  "series_by_tool": [],
+  "heatmap": [],
+  "source_exports": {
+    "compliance.head.json": true,
+    "top_violations_7d.json": true,
+    "top_violations_30d.json": true
+  }
 }

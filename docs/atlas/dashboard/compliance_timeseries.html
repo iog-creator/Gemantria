@@ -1,11 +1,264 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Compliance Violation Time-Series — E87</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compliance Violation Time-Series — E87</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1400px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.chart-container { position: relative; height: 400px; margin: 2em 0; border: 1px solid #ddd; border-radius: 8px; padding: 1em; background: white; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; }
+.error { color: #dc3545; }
+.selector { margin: 1em 0; }
+.selector select { padding: 0.5em; font-size: 1em; border: 1px solid #ccc; border-radius: 4px; }
+</style>
 </head>
 <body>
-  <h1>Violation Time-Series (E87)</h1>
-  <p>Stub dashboard: will show time-series of violations per code and per tool.</p>
-  <p data-testid="backlink-json">JSON: share/atlas/control_plane/compliance_timeseries.json</p>
+<h1>Violation Time-Series <span class="badge">E87</span></h1>
+<p><a href="../index.html">← Back to Atlas</a> | <a href="compliance_heatmap.html">Heatmap View →</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading time-series data...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/compliance_timeseries.json" data-testid="backlink-compliance-timeseries-json">Raw JSON: share/atlas/control_plane/compliance_timeseries.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/compliance.head.json" data-testid="backlink-compliance-head-json">Raw JSON: share/atlas/control_plane/compliance.head.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-top-violations-7d-json">Raw JSON: share/atlas/control_plane/top_violations_7d.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-top-violations-30d-json">Raw JSON: share/atlas/control_plane/top_violations_30d.json</a></li>
+  <li><a href="../../../evidence/guard_atlas_compliance_timeseries.json" data-testid="backlink-guard-atlas-compliance-timeseries-json">Guard Verdict: evidence/guard_atlas_compliance_timeseries.json</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const contentDiv = document.getElementById('dashboard-content');
+  
+  // Load compliance_timeseries.json
+  fetch('../../../share/atlas/control_plane/compliance_timeseries.json')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load compliance_timeseries.json')))
+    .then(data => {
+      const seriesByCode = data.series_by_code || [];
+      const seriesByTool = data.series_by_tool || [];
+      
+      let html = '';
+      
+      // Violations by Code Chart
+      if (seriesByCode.length > 0) {
+        html += '<div class="tile">';
+        html += '<h2>Violations by Code (Time-Series)</h2>';
+        html += '<div class="selector">';
+        html += '<label>Select Code: <select id="code-selector">';
+        html += '<option value="all">All Codes</option>';
+        for (const item of seriesByCode) {
+          html += '<option value="' + item.code + '">' + item.code + '</option>';
+        }
+        html += '</select></label>';
+        html += '</div>';
+        html += '<div class="chart-container"><canvas id="chart-by-code"></canvas></div>';
+        html += '</div>';
+      }
+      
+      // Violations by Tool Chart
+      if (seriesByTool.length > 0) {
+        html += '<div class="tile">';
+        html += '<h2>Violations by Tool (Time-Series)</h2>';
+        html += '<div class="selector">';
+        html += '<label>Select Tool: <select id="tool-selector">';
+        html += '<option value="all">All Tools</option>';
+        for (const item of seriesByTool) {
+          html += '<option value="' + item.tool + '">' + item.tool + '</option>';
+        }
+        html += '</select></label>';
+        html += '</div>';
+        html += '<div class="chart-container"><canvas id="chart-by-tool"></canvas></div>';
+        html += '</div>';
+      }
+      
+      if (html === '') {
+        html = '<div class="tile"><p class="error">No time-series data available. Ensure compliance exports are generated.</p></div>';
+      }
+      
+      contentDiv.innerHTML = html;
+      
+      // Render charts
+      if (seriesByCode.length > 0) {
+        renderCodeChart(seriesByCode);
+      }
+      if (seriesByTool.length > 0) {
+        renderToolChart(seriesByTool);
+      }
+    })
+    .catch(err => {
+      contentDiv.innerHTML = '<div class="tile"><p class="error">Error loading time-series data: ' + err.message + '</p></div>';
+    });
+  
+  function renderCodeChart(seriesByCode) {
+    const selector = document.getElementById('code-selector');
+    const canvas = document.getElementById('chart-by-code');
+    const ctx = canvas.getContext('2d');
+    
+    let chart = null;
+    
+    function updateChart() {
+      const selectedCode = selector.value;
+      const datasets = [];
+      
+      if (selectedCode === 'all') {
+        // Show all codes (limit to top 10 for readability)
+        const topCodes = seriesByCode.slice(0, 10);
+        for (const item of topCodes) {
+          const timestamps = item.series.map(p => p.timestamp);
+          const values = item.series.map(p => p.value);
+          datasets.push({
+            label: item.code,
+            data: values,
+            borderColor: getColorForIndex(datasets.length),
+            backgroundColor: getColorForIndex(datasets.length) + '20',
+            tension: 0.1
+          });
+        }
+      } else {
+        const item = seriesByCode.find(i => i.code === selectedCode);
+        if (item) {
+          const timestamps = item.series.map(p => p.timestamp);
+          const values = item.series.map(p => p.value);
+          datasets.push({
+            label: item.code,
+            data: values,
+            borderColor: '#0066cc',
+            backgroundColor: '#0066cc20',
+            tension: 0.1
+          });
+        }
+      }
+      
+      const timestamps = seriesByCode[0]?.series.map(p => p.timestamp) || [];
+      
+      if (chart) {
+        chart.destroy();
+      }
+      
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: timestamps.map(ts => new Date(ts).toLocaleDateString()),
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Violations' }
+            },
+            x: {
+              title: { display: true, text: 'Date' }
+            }
+          }
+        }
+      });
+    }
+    
+    selector.addEventListener('change', updateChart);
+    updateChart();
+  }
+  
+  function renderToolChart(seriesByTool) {
+    const selector = document.getElementById('tool-selector');
+    const canvas = document.getElementById('chart-by-tool');
+    const ctx = canvas.getContext('2d');
+    
+    let chart = null;
+    
+    function updateChart() {
+      const selectedTool = selector.value;
+      const datasets = [];
+      
+      if (selectedTool === 'all') {
+        // Show all tools
+        for (const item of seriesByTool) {
+          const timestamps = item.series.map(p => p.timestamp);
+          const values = item.series.map(p => p.value);
+          datasets.push({
+            label: item.tool,
+            data: values,
+            borderColor: getColorForIndex(datasets.length),
+            backgroundColor: getColorForIndex(datasets.length) + '20',
+            tension: 0.1
+          });
+        }
+      } else {
+        const item = seriesByTool.find(i => i.tool === selectedTool);
+        if (item) {
+          const timestamps = item.series.map(p => p.timestamp);
+          const values = item.series.map(p => p.value);
+          datasets.push({
+            label: item.tool,
+            data: values,
+            borderColor: '#0066cc',
+            backgroundColor: '#0066cc20',
+            tension: 0.1
+          });
+        }
+      }
+      
+      const timestamps = seriesByTool[0]?.series.map(p => p.timestamp) || [];
+      
+      if (chart) {
+        chart.destroy();
+      }
+      
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: timestamps.map(ts => new Date(ts).toLocaleDateString()),
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Violations' }
+            },
+            x: {
+              title: { display: true, text: 'Date' }
+            }
+          }
+        }
+      });
+    }
+    
+    selector.addEventListener('change', updateChart);
+    updateChart();
+  }
+  
+  function getColorForIndex(index) {
+    const colors = ['#0066cc', '#dc3545', '#28a745', '#ffc107', '#17a2b8', '#6f42c1', '#e83e8c', '#fd7e14', '#20c997', '#6c757d'];
+    return colors[index % colors.length];
+  }
+})();
+</script>
+
+<hr>
+<small>Generated at <span id="generated-at"></span></small>
+<script>
+  document.getElementById('generated-at').textContent = new Date().toISOString();
+</script>
 </body>
 </html>

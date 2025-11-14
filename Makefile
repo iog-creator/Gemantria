@@ -2129,22 +2129,23 @@ guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
 
-# PLAN-078 E87 — Violation Time-Series + Heatmaps (stubs)
-atlas.compliance.timeseries:
-	@echo "Building E87 time-series dashboard (stub)"
-	@true
-
-atlas.compliance.heatmap:
-	@echo "Building E87 heatmap dashboard (stub)"
-	@true
-
+# PLAN-078 E87 — Violation Time-Series + Heatmaps
 export.compliance.timeseries:
-	@echo "Exporting E87 timeseries metrics (stub)"
-	@true
+	@echo "[export.compliance.timeseries] Generating compliance timeseries metrics"
+	@PYTHONPATH=. python3 scripts/atlas/generate_compliance_timeseries.py
+
+atlas.compliance.timeseries: export.compliance.timeseries
+	@echo "[atlas.compliance.timeseries] E87 time-series dashboard ready"
+	@test -f docs/atlas/dashboard/compliance_timeseries.html || (echo "ERROR: compliance_timeseries.html missing" && exit 1)
+
+atlas.compliance.heatmap: export.compliance.timeseries
+	@echo "[atlas.compliance.heatmap] E87 heatmap dashboard ready"
+	@test -f docs/atlas/dashboard/compliance_heatmap.html || (echo "ERROR: compliance_heatmap.html missing" && exit 1)
 
 guard.atlas.compliance.timeseries:
-	python3 scripts/guards/guard_compliance_timeseries_backlinks.py
+	@echo "[guard.atlas.compliance.timeseries] Validating timeseries dashboard"
+	@PYTHONPATH=. python3 scripts/guards/guard_compliance_timeseries_backlinks.py
 
-# For now, reuse the same guard for heatmap until full implementation
 guard.atlas.compliance.heatmap:
-	python3 scripts/guards/guard_compliance_timeseries_backlinks.py
+	@echo "[guard.atlas.compliance.heatmap] Validating heatmap dashboard"
+	@PYTHONPATH=. python3 scripts/guards/guard_compliance_timeseries_backlinks.py

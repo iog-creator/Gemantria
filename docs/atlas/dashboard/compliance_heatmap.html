@@ -1,11 +1,186 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Compliance Violation Heatmap — E87</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compliance Violation Heatmap — E87</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1400px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.chart-container { position: relative; height: 500px; margin: 2em 0; border: 1px solid #ddd; border-radius: 8px; padding: 1em; background: white; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; }
+.error { color: #dc3545; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+th, td { padding: 0.5em; text-align: left; border: 1px solid #ddd; }
+th { background: #f0f0f0; font-weight: bold; }
+.heatmap-cell { text-align: center; }
+</style>
 </head>
 <body>
-  <h1>Violation Heatmap (E87)</h1>
-  <p>Stub dashboard: will show heatmap of tool × violation type.</p>
-  <p data-testid="backlink-json">JSON: share/atlas/control_plane/compliance_timeseries.json</p>
+<h1>Violation Heatmap <span class="badge">E87</span></h1>
+<p><a href="../index.html">← Back to Atlas</a> | <a href="compliance_timeseries.html">Time-Series View →</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading heatmap data...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/compliance_timeseries.json" data-testid="backlink-compliance-timeseries-json">Raw JSON: share/atlas/control_plane/compliance_timeseries.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/compliance.head.json" data-testid="backlink-compliance-head-json">Raw JSON: share/atlas/control_plane/compliance.head.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-top-violations-7d-json">Raw JSON: share/atlas/control_plane/top_violations_7d.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-top-violations-30d-json">Raw JSON: share/atlas/control_plane/top_violations_30d.json</a></li>
+  <li><a href="../../../evidence/guard_atlas_compliance_timeseries.json" data-testid="backlink-guard-atlas-compliance-timeseries-json">Guard Verdict: evidence/guard_atlas_compliance_timeseries.json</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const contentDiv = document.getElementById('dashboard-content');
+  
+  // Load compliance_timeseries.json
+  fetch('../../../share/atlas/control_plane/compliance_timeseries.json')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load compliance_timeseries.json')))
+    .then(data => {
+      const heatmap = data.heatmap || [];
+      
+      let html = '';
+      
+      // Heatmap Chart
+      if (heatmap.length > 0) {
+        html += '<div class="tile">';
+        html += '<h2>Tool × Violation Type Heatmap</h2>';
+        html += '<div class="chart-container"><canvas id="heatmap-chart"></canvas></div>';
+        html += '</div>';
+        
+        // Heatmap Table
+        html += '<div class="tile">';
+        html += '<h2>Heatmap Data Table</h2>';
+        html += '<table><thead><tr><th>Tool</th><th>Violation Code</th><th>Count</th></tr></thead><tbody>';
+        for (const item of heatmap) {
+          html += '<tr><td>' + item.tool + '</td><td>' + item.code + '</td><td class="heatmap-cell">' + item.count + '</td></tr>';
+        }
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+      
+      if (html === '') {
+        html = '<div class="tile"><p class="error">No heatmap data available. Ensure compliance exports are generated.</p></div>';
+      }
+      
+      contentDiv.innerHTML = html;
+      
+      // Render heatmap chart
+      if (heatmap.length > 0) {
+        renderHeatmapChart(heatmap);
+      }
+    })
+    .catch(err => {
+      contentDiv.innerHTML = '<div class="tile"><p class="error">Error loading heatmap data: ' + err.message + '</p></div>';
+    });
+  
+  function renderHeatmapChart(heatmap) {
+    const canvas = document.getElementById('heatmap-chart');
+    const ctx = canvas.getContext('2d');
+    
+    // Group by tool
+    const tools = [...new Set(heatmap.map(h => h.tool))].sort();
+    const codes = [...new Set(heatmap.map(h => h.code))].sort();
+    
+    // Build data matrix
+    const dataMatrix = [];
+    const labels = [];
+    
+    for (const tool of tools) {
+      const row = [];
+      for (const code of codes) {
+        const item = heatmap.find(h => h.tool === tool && h.code === code);
+        row.push(item ? item.count : 0);
+      }
+      dataMatrix.push(row);
+      labels.push(tool);
+    }
+    
+    // Find max value for color scaling
+    const maxValue = Math.max(...heatmap.map(h => h.count), 1);
+    
+    // Create datasets for each code
+    const datasets = codes.map((code, codeIndex) => {
+      const data = dataMatrix.map((row, toolIndex) => ({
+        x: toolIndex,
+        y: row[codeIndex],
+        v: row[codeIndex]
+      }));
+      
+      return {
+        label: code,
+        data: data,
+        backgroundColor: function(context) {
+          const value = context.parsed.v;
+          const intensity = value / maxValue;
+          const r = Math.floor(255 * intensity);
+          const g = Math.floor(255 * (1 - intensity));
+          const b = 0;
+          return `rgba(${r}, ${g}, ${b}, 0.6)`;
+        },
+        borderColor: '#333',
+        borderWidth: 1
+      };
+    });
+    
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+            title: { display: true, text: 'Tool' }
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            title: { display: true, text: 'Violations' }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'right'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + context.parsed.v;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+})();
+</script>
+
+<hr>
+<small>Generated at <span id="generated-at"></span></small>
+<script>
+  document.getElementById('generated-at').textContent = new Date().toISOString();
+</script>
 </body>
 </html>
