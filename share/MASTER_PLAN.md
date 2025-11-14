@@ -57,6 +57,7 @@ All core development phases are complete. The system is operational with:
 
 **PLAN-072: Extraction Agents Correctness & Resume Docs Management** (📋 **Planned**)
 - **M1** ⏳ PENDING: DMS guard fixes — ensure documentation management guards are hermetic and pass in CI.
+- **M2+** ✅ PASS: Extraction agents provenance (TVs E06–E10) — implemented provenance logic (`ensure_provenance`, `guard_provenance`, `stamp_batch`) with full test coverage, guard integration, and AGENTS.md documentation. All 5 TVs (E06–E10) implemented, tested, guarded (PR #499). Artifacts: `agentpm/extractors/provenance.py`, `agentpm/tests/extractors/test_extraction_provenance_e06_e10.py`, `agentpm/extractors/AGENTS.md`, `scripts/ci/guard_extraction_agents.py`. Targets: `guard.extractors`.
 - **M2** ⏳ PENDING: Extraction agents correctness — define TVs for extraction correctness (TV-E01..E05) with golden fixtures, add hermetic guard `guard_extraction_agents.py` (no DB/network), wire pytest collection under `agentpm/tests/extractors/` (unit-only). Artifacts: `agentpm/tests/extractors/test_extraction_correctness.py`, `agentpm/tests/extractors/fixtures/*.json`, `scripts/ci/guard_extraction_agents.py`. Targets: `guard.extractors`.
 - **M3** ⏳ PENDING: Visualization hooks — wire extraction outputs to visualization components, ensure data flows correctly from extraction → visualization, add visual verification (browser tools) for rendered outputs.
 

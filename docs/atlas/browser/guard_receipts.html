@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Guard Receipts Index — E91</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 1.5rem; max-width: 1400px; }
+    h1 { margin-bottom: 0.25rem; }
+    .subtitle { color: #555; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+    th, td { border-bottom: 1px solid #ddd; padding: 0.4rem 0.6rem; text-align: left; }
+    th { background: #fafafa; font-weight: 600; }
+    tr:hover { background: #f5f5ff; }
+    .filters { display: flex; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .filters input, .filters select {
+      padding: 0.25rem 0.4rem;
+      font-size: 0.9rem;
+    }
+    .status-ok { color: #0a7b33; font-weight: 600; }
+    .status-fail { color: #b00020; font-weight: 600; }
+    .badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+    .backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+    .backlinks ul { list-style: none; padding: 0; }
+    .backlinks li { margin: 0.5em 0; }
+    .backlinks a { color: #0066cc; text-decoration: none; }
+    .backlinks a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Guard Receipts Index <span class="badge">E91</span></h1>
+  <div class="subtitle">
+    PLAN-079 E91 · Generated at <code>2025-11-14T04:57:19.863756+00:00</code> · Files from <code>evidence/guard_*.json</code>
+  </div>
+
+  <div class="filters">
+    <input id="search" type="text" placeholder="Search guard name or filename…" />
+    <select id="statusFilter">
+      <option value="">All statuses</option>
+      <option value="ok">OK only</option>
+      <option value="fail">Failures only</option>
+    </select>
+  </div>
+
+  <table id="receiptsTable">
+    <thead>
+      <tr>
+        <th>Guard</th>
+        <th>Receipt File</th>
+        <th>Status</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-status='ok'><td class='guard-name'>guard_ai_nouns_xrefs.after_merge.json</td><td class='filename'>evidence/guard_ai_nouns_xrefs.after_merge.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_nouns_xrefs.json</td><td class='filename'>evidence/guard_ai_nouns_xrefs.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking.hint.json</td><td class='filename'>evidence/guard_ai_tracking.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking.json</td><td class='filename'>evidence/guard_ai_tracking.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking.strict.json</td><td class='filename'>evidence/guard_ai_tracking.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_FINAL.json</td><td class='filename'>evidence/guard_ai_tracking_FINAL.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_hint.json</td><td class='filename'>evidence/guard_ai_tracking_hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_strict.json</td><td class='filename'>evidence/guard_ai_tracking_strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_strict_FINAL.json</td><td class='filename'>evidence/guard_ai_tracking_strict_FINAL.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_strict_with_env.json</td><td class='filename'>evidence/guard_ai_tracking_strict_with_env.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ai_tracking_with_env.json</td><td class='filename'>evidence/guard_ai_tracking_with_env.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_alwaysapply_dbmirror.hint.json</td><td class='filename'>evidence/guard_alwaysapply_dbmirror.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_alwaysapply_dbmirror.json</td><td class='filename'>evidence/guard_alwaysapply_dbmirror.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_compliance_drilldowns.json</td><td class='filename'>evidence/guard_atlas_compliance_drilldowns.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_compliance_summary.json</td><td class='filename'>evidence/guard_atlas_compliance_summary.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_compliance_timeseries.json</td><td class='filename'>evidence/guard_atlas_compliance_timeseries.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.final.json</td><td class='filename'>evidence/guard_atlas_live.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.pr7.json</td><td class='filename'>evidence/guard_atlas_live.pr7.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.pr7.local.json</td><td class='filename'>evidence/guard_atlas_live.pr7.local.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.push.json</td><td class='filename'>evidence/guard_atlas_live.push.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.template.json</td><td class='filename'>evidence/guard_atlas_live.template.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_live.train.json</td><td class='filename'>evidence/guard_atlas_live.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_node_deeplink.out.json</td><td class='filename'>evidence/guard_atlas_node_deeplink.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.after.json</td><td class='filename'>evidence/guard_atlas_viewer.after.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.final.json</td><td class='filename'>evidence/guard_atlas_viewer.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.json</td><td class='filename'>evidence/guard_atlas_viewer.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.pr6.json</td><td class='filename'>evidence/guard_atlas_viewer.pr6.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.pr7.json</td><td class='filename'>evidence/guard_atlas_viewer.pr7.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.pr7.local.json</td><td class='filename'>evidence/guard_atlas_viewer.pr7.local.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.push.json</td><td class='filename'>evidence/guard_atlas_viewer.push.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.template.json</td><td class='filename'>evidence/guard_atlas_viewer.template.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.train.json</td><td class='filename'>evidence/guard_atlas_viewer.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_viewer.webproof.json</td><td class='filename'>evidence/guard_atlas_viewer.webproof.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_atlas_violation_browser.json</td><td class='filename'>evidence/guard_atlas_violation_browser.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_badges_inventory.json</td><td class='filename'>evidence/guard_badges_inventory.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_control_compliance_exports.json</td><td class='filename'>evidence/guard_control_compliance_exports.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_control_compliance_webproof_backlinks.json</td><td class='filename'>evidence/guard_control_compliance_webproof_backlinks.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_control_graph_compliance.json</td><td class='filename'>evidence/guard_control_graph_compliance.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_control_knowledge_mcp_exports.json</td><td class='filename'>evidence/guard_control_knowledge_mcp_exports.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_control_knowledge_mcp_webproof_backlinks.json</td><td class='filename'>evidence/guard_control_knowledge_mcp_webproof_backlinks.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_dbmirror.json</td><td class='filename'>evidence/guard_dbmirror.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_docs_consistency.final.json</td><td class='filename'>evidence/guard_docs_consistency.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_dsn_centralized.json</td><td class='filename'>evidence/guard_dsn_centralized.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_exports_json.verdict.json</td><td class='filename'>evidence/guard_exports_json.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_extraction_accuracy.json</td><td class='filename'>evidence/guard_extraction_accuracy.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_extraction_agents.final.json</td><td class='filename'>evidence/guard_extraction_agents.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_graph_core.json</td><td class='filename'>evidence/guard_graph_core.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_hint_ai_nouns.json</td><td class='filename'>evidence/guard_hint_ai_nouns.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_hint_ai_nouns.postfix.json</td><td class='filename'>evidence/guard_hint_ai_nouns.postfix.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_hint_graph.json</td><td class='filename'>evidence/guard_hint_graph.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_hint_graph_core.postfix.json</td><td class='filename'>evidence/guard_hint_graph_core.postfix.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_hint_graph_correlations.postfix.json</td><td class='filename'>evidence/guard_hint_graph_correlations.postfix.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_hint_graph_patterns.postfix.json</td><td class='filename'>evidence/guard_hint_graph_patterns.postfix.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_hint_graph_stats.postfix.json</td><td class='filename'>evidence/guard_hint_graph_stats.postfix.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_knowledge.hint.json</td><td class='filename'>evidence/guard_knowledge.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_knowledge.hints.json</td><td class='filename'>evidence/guard_knowledge.hints.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_knowledge.json</td><td class='filename'>evidence/guard_knowledge.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m10_filter_apply_drift.stdout.json</td><td class='filename'>evidence/guard_m10_filter_apply_drift.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m10_filter_apply_drift.verdict.json</td><td class='filename'>evidence/guard_m10_filter_apply_drift.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m11_apply_multi_schema.stdout.json</td><td class='filename'>evidence/guard_m11_apply_multi_schema.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m11_apply_multi_schema.verdict.json</td><td class='filename'>evidence/guard_m11_apply_multi_schema.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m12_chip_coverage.stdout.json</td><td class='filename'>evidence/guard_m12_chip_coverage.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m12_chip_coverage.verdict.json</td><td class='filename'>evidence/guard_m12_chip_coverage.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m12_filter_apply_roundtrip.stdout.json</td><td class='filename'>evidence/guard_m12_filter_apply_roundtrip.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m12_filter_apply_roundtrip.verdict.json</td><td class='filename'>evidence/guard_m12_filter_apply_roundtrip.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_chip_id_uniqueness.stdout.json</td><td class='filename'>evidence/guard_m13_chip_id_uniqueness.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_chip_id_uniqueness.verdict.json</td><td class='filename'>evidence/guard_m13_chip_id_uniqueness.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_manifest_consistency.stdout.json</td><td class='filename'>evidence/guard_m13_manifest_consistency.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_manifest_consistency.verdict.json</td><td class='filename'>evidence/guard_m13_manifest_consistency.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_sitemap_min.stdout.json</td><td class='filename'>evidence/guard_m13_sitemap_min.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_sitemap_min.verdict.json</td><td class='filename'>evidence/guard_m13_sitemap_min.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m13_stale_sweep.stdout.json</td><td class='filename'>evidence/guard_m13_stale_sweep.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_m13_stale_sweep.verdict.json</td><td class='filename'>evidence/guard_m13_stale_sweep.verdict.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m14_graph_rollup_versioned.verdict.json</td><td class='filename'>evidence/guard_m14_graph_rollup_versioned.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m14_node_drilldowns_links.verdict.json</td><td class='filename'>evidence/guard_m14_node_drilldowns_links.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m14_reranker_badges.verdict.json</td><td class='filename'>evidence/guard_m14_reranker_badges.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m14_screenshot_manifest_canonicalized.verdict.json</td><td class='filename'>evidence/guard_m14_screenshot_manifest_canonicalized.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m14_webproof_backlinks.verdict.json</td><td class='filename'>evidence/guard_m14_webproof_backlinks.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m8_stale.stdout.json</td><td class='filename'>evidence/guard_m8_stale.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m8_stale.verdict.json</td><td class='filename'>evidence/guard_m8_stale.verdict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_m9_rollup_stale.stdout.json</td><td class='filename'>evidence/guard_m9_rollup_stale.stdout.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_m9_rollup_stale.verdict.json</td><td class='filename'>evidence/guard_m9_rollup_stale.verdict.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.after.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.after.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.after.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.after.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.final.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.final.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.final.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.final.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.hint.prepush.json</td><td class='filename'>evidence/guard_mcp_catalog.hint.prepush.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr6.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.pr6.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr6.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.pr6.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr7.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.pr7.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr7.local.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.pr7.local.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr7.local.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.pr7.local.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.pr7.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.pr7.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.push.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.push.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.push.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.push.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.main.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.main.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.bench.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.bench.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.bench.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.bench.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.train.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr3.train.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr3.train.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr4.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr4.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr4.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr4.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr4.train.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr4.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr4.train.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr4.train.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5.train.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5.train.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5.train.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5push.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5push.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.pr5push.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.pr5push.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.prepush.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.prepush.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.train.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.train.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.strict.train.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.strict.train.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.template.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.template.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.template.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.template.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.train.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.train.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.train.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.train.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.webproof.hint.json</td><td class='filename'>evidence/guard_mcp_catalog.webproof.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_catalog.webproof.strict.json</td><td class='filename'>evidence/guard_mcp_catalog.webproof.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_db_ro.final.json</td><td class='filename'>evidence/guard_mcp_db_ro.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_dsn_mismatch.out.json</td><td class='filename'>evidence/guard_mcp_dsn_mismatch.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_env_mismatch.out.json</td><td class='filename'>evidence/guard_mcp_env_mismatch.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_live.json</td><td class='filename'>evidence/guard_mcp_live.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_rodsn.out.json</td><td class='filename'>evidence/guard_mcp_rodsn.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_rodsn.strict.out.json</td><td class='filename'>evidence/guard_mcp_rodsn.strict.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_mcp_trace_link.out.json</td><td class='filename'>evidence/guard_mcp_trace_link.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_prompt_ssot.hint.json</td><td class='filename'>evidence/guard_prompt_ssot.hint.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_prompt_ssot.strict.json</td><td class='filename'>evidence/guard_prompt_ssot.strict.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_rerank_thresholds.json</td><td class='filename'>evidence/guard_rerank_thresholds.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_rerank_thresholds.strict.local.json</td><td class='filename'>evidence/guard_rerank_thresholds.strict.local.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_schema_naming.final.json</td><td class='filename'>evidence/guard_schema_naming.final.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_schema_smoke.json</td><td class='filename'>evidence/guard_schema_smoke.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_strict_graph_core.json</td><td class='filename'>evidence/guard_strict_graph_core.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_strict_graph_correlations.json</td><td class='filename'>evidence/guard_strict_graph_correlations.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_strict_graph_patterns.json</td><td class='filename'>evidence/guard_strict_graph_patterns.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_strict_graph_stats.json</td><td class='filename'>evidence/guard_strict_graph_stats.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_strict_summary.json</td><td class='filename'>evidence/guard_strict_summary.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_tag_graph_core.json</td><td class='filename'>evidence/guard_tag_graph_core.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_tag_graph_correlations.json</td><td class='filename'>evidence/guard_tag_graph_correlations.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_tag_graph_patterns.json</td><td class='filename'>evidence/guard_tag_graph_patterns.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_tag_graph_stats.json</td><td class='filename'>evidence/guard_tag_graph_stats.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='fail'><td class='guard-name'>guard_tag_probe_graph_core.json</td><td class='filename'>evidence/guard_tag_probe_graph_core.json</td><td class='status-fail'>fail</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_tag_summary.json</td><td class='filename'>evidence/guard_tag_summary.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_trace_link_receipt.out.json</td><td class='filename'>evidence/guard_trace_link_receipt.out.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ui_xrefs_badges.hit.json</td><td class='filename'>evidence/guard_ui_xrefs_badges.hit.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ui_xrefs_badges.json</td><td class='filename'>evidence/guard_ui_xrefs_badges.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ui_xrefs_badges.skip.json</td><td class='filename'>evidence/guard_ui_xrefs_badges.skip.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ui_xrefs_index.after_merge.json</td><td class='filename'>evidence/guard_ui_xrefs_index.after_merge.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+<tr data-status='ok'><td class='guard-name'>guard_ui_xrefs_index.json</td><td class='filename'>evidence/guard_ui_xrefs_index.json</td><td class='status-ok'>ok</td><td class='timestamp'></td></tr>
+    </tbody>
+  </table>
+
+  <div class="backlinks">
+    <h2>Related Dashboards</h2>
+    <ul>
+      <li><a href="../dashboard/compliance_summary.html" data-testid="backlink-compliance-summary">Compliance Summary Dashboard (E86)</a></li>
+      <li><a href="../dashboard/compliance_timeseries.html" data-testid="backlink-compliance-timeseries">Compliance Time-Series Dashboard (E87)</a></li>
+      <li><a href="violations.html" data-testid="backlink-violations-browser">Violations Browser (E89)</a></li>
+      <li><a href="../../../evidence" data-testid="backlink-evidence-dir">Evidence Directory</a></li>
+    </ul>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("search");
+    const statusFilter = document.getElementById("statusFilter");
+    const rows = Array.from(document.querySelectorAll("#receiptsTable tbody tr"));
+
+    function applyFilters() {
+      const q = searchInput.value.toLowerCase();
+      const status = statusFilter.value;
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        const rowStatus = row.getAttribute("data-status") || "";
+        const matchesText = !q || text.includes(q);
+        const matchesStatus = !status || rowStatus === status;
+        row.style.display = (matchesText && matchesStatus) ? "" : "none";
+      });
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+  </script>
+</body>
+</html>
