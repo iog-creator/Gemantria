@@ -2128,3 +2128,13 @@ export.compliance.summary:
 guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-078 E88 — Violation Drilldowns
+atlas.compliance.drilldowns:
+	@echo "[atlas.compliance.drilldowns] Generating violation drilldown pages"
+	@PYTHONPATH=. python3 scripts/atlas/generate_violation_pages.py
+	@echo "[atlas.compliance.drilldowns] Pages: docs/atlas/webproof/violations/*.html"
+
+guard.atlas.compliance.drilldowns:
+	@echo "[guard.atlas.compliance.drilldowns] Validating violation drilldown pages"
+	@PYTHONPATH=. python3 scripts/guards/guard_compliance_drilldowns.py
