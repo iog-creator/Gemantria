@@ -2216,3 +2216,16 @@ guard.tagproof.phase2:
 test.e100.tagproof.phase2:
 	@echo "[test.e100.tagproof.phase2] Running E100 Phase-2 tagproof bundle tests"
 	@pytest -q agentpm/tests/atlas/test_e100_tagproof_phase2.py
+
+# --- Phase-3A: DB Activation — First Slice ---
+db.smoke.control:
+	@echo "[db.smoke.control] Running DB head query for graph (best-effort)"
+	@PYTHONPATH=. python3 -m scripts.db_head graph --limit 5 || true
+
+db.smoke.stats:
+	@echo "[db.smoke.stats] Running DB head query for stats (best-effort)"
+	@PYTHONPATH=. python3 -m scripts.db_head stats --limit 5 || true
+
+test.phase3a.db:
+	@echo "[test.phase3a.db] Running Phase-3A DB loader tests"
+	@pytest -q agentpm/tests/db/test_phase3a_db_loader.py
