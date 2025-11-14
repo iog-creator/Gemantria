@@ -337,6 +337,25 @@ These are active on every branch/state and are not pruned or downgraded.
 
 ## Next Steps
 
+### Phase-3B: pmagent Control-Plane Health Suite (✅ **Complete**)
+- ✅ **Feature #4**: `pmagent health` CLI (system, db, lm, graph)
+- ✅ **Feature #5**: `pmagent graph import + overview`
+- ✅ **Feature #6**: `pmagent control status` (control-plane database posture)
+- ✅ **Feature #7**: `pmagent control tables` (schema-qualified table listing)
+- ✅ **Feature #8**: `pmagent control schema` (DDL introspection)
+- ✅ **Feature #9**: `pmagent control pipeline-status` (recent pipeline runs summary)
+- ✅ **Feature #10**: `pmagent control summary` (aggregated control-plane summary)
+
+**Phase-3B Completion**: All control-plane introspection commands implemented, tested, documented, and integrated into `pmagent` CLI. Hermetic DB-off behavior preserved throughout.
+
+### Phase-3C: LM Studio + Control Plane Integration (📋 **Planned**)
+- **RFC-080**: LM Studio + Control Plane Integration (design phase)
+- **Track 1**: LM Studio adapter + health-aware routing (P0)
+- **Track 2**: Control-plane logging of LM Studio calls (P1)
+- **Track 3**: Atlas / dashboards consuming `pmagent control summary` (P2)
+
+**Phase-3C Goals**: Integrate LM Studio as local model backend with health-aware routing through `pmagent` and control-plane observability. See [RFC-080](../rfcs/RFC-080-lm-studio-control-plane-integration.md) for detailed design.
+
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
 - [x] E67: Per-node drilldown links (receipt + guard) ✅
