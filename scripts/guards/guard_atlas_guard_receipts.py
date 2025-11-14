@@ -42,6 +42,8 @@ def main() -> int:
     html_text = HTML_PATH.read_text(encoding="utf-8")
 
     guard_files = sorted(EVIDENCE_DIR.glob("guard_*.json")) if EVIDENCE_DIR.exists() else []
+    # Exclude the guard's own verdict file from the check (self-referential)
+    guard_files = [f for f in guard_files if f.name != VERDICT_PATH.name]
     counts["guard_files"] = len(guard_files)
 
     missing_refs = []
