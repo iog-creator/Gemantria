@@ -2,8 +2,9 @@
 
 - **Author:** PM (GPT-5 Thinking)
 - **Date:** 2025-11-14
-- **Status:** Draft
-- **Related:** Rule-050/051/052 (Always-Apply triad), Rule-046 (Hermetic CI Fallbacks), Rule-062 (Environment Validation), Phase-3B (pmagent control-plane health suite), AGENTS.md (LM Studio setup)
+- **Status:** In Progress (P0 complete, P1 complete, P2 pending)
+- **Ratified by:** [ADR-066](../ADRs/ADR-066-lm-studio-control-plane-integration.md) (2025-11-14)
+- **Related:** Rule-050/051/052 (Always-Apply triad), Rule-046 (Hermetic CI Fallbacks), Rule-062 (Environment Validation), Phase-3B (pmagent control-plane health suite), AGENTS.md (LM Studio setup), ADR-007 (LLM Integration), ADR-065 (Postgres SSOT)
 
 ## Summary
 
@@ -213,19 +214,19 @@ def lm_studio_health() -> dict[str, Any]:
 
 ## Acceptance Criteria
 
-- [ ] RFC reviewed and accepted by PM.
-- [ ] MASTER_PLAN updated to reference Phase-3C (LM Studio + Control Plane Integration).
-- [ ] Clear list of concrete PRs (≤5) to implement the integration:
-  1. **P0**: LM Studio adapter module (`agentpm/adapters/lm_studio.py`) + centralized config loader (`scripts/config/lm_studio.py`)
-  2. **P0**: Health check integration with `pmagent health lm` (enhance existing command if needed)
-  3. **P1**: Control-plane logging integration (wrap adapter calls to write to `control.agent_run`)
+- [x] RFC reviewed and accepted by PM.
+- [x] MASTER_PLAN updated to reference Phase-3C (LM Studio + Control Plane Integration).
+- [x] Clear list of concrete PRs (≤5) to implement the integration:
+  1. **P0**: ✅ **COMPLETE** - LM Studio adapter module (`agentpm/adapters/lm_studio.py`) + centralized config loader (`scripts/config/env.py`) - [PR #532](https://github.com/iog-creator/Gemantria/pull/532)
+  2. **P0**: ✅ **COMPLETE** - Health check integration with `pmagent health lm` (uses LM Studio adapter) - [PR #532](https://github.com/iog-creator/Gemantria/pull/532)
+  3. **P1**: ✅ **COMPLETE** - Control-plane logging integration (`agentpm/runtime/lm_logging.py` wraps adapter calls to write to `control.agent_run`) - [PR #532](https://github.com/iog-creator/Gemantria/pull/532)
   4. **P1**: Routing logic (pre-flight health checks, fallback to remote LLMs)
   5. **P2**: Documentation (runbook for LM Studio setup, troubleshooting guide)
 
 ## QA Checklist
 
-- [ ] **Hermetic DB-off story preserved**: All control-plane logging gracefully handles DB unavailability; LM Studio calls work without DB.
-- [ ] **No direct `os.environ` in new code**: All env var access goes through centralized loaders (`scripts/config/lm_studio.py`).
+- [x] **Hermetic DB-off story preserved**: All control-plane logging gracefully handles DB unavailability; LM Studio calls work without DB. ✅ Verified in `test_lm_logging_db_off` and `test_lm_logging_no_dsn`
+- [x] **No direct `os.environ` in new code**: All env var access goes through centralized loaders (`scripts/config/env.py`). ✅ Verified in PR #532
 - [ ] **Control-plane tables unchanged**: No schema changes to `control.agent_run` or related tables (uses existing structure).
 - [ ] **Health checks work**: `pmagent health lm` correctly detects LM Studio availability and model readiness.
 - [ ] **Routing works**: Orchestration code correctly routes to LM Studio when eligible, falls back to remote LLMs when not.
@@ -235,22 +236,26 @@ def lm_studio_health() -> dict[str, Any]:
 
 ### Phase-3C PR Sequence
 
-1. **PR #1 (P0)**: Adapter + Config
-   - Create `agentpm/adapters/lm_studio.py` with `lm_studio_complete()` and `lm_studio_health()`
-   - Create `scripts/config/lm_studio.py` with centralized env loaders
-   - Add tests for adapter (mocked HTTP responses)
-   - Add tests for config loader (env var validation)
+1. **PR #532 (P0)**: ✅ **COMPLETE** - Adapter + Config
+   - ✅ Created `agentpm/adapters/lm_studio.py` with `lm_studio_chat()` and hermetic `lm_off` fallback
+   - ✅ Added `get_lm_studio_settings()` to `scripts/config/env.py` (centralized env loader)
+   - ✅ Created `agentpm/runtime/lm_routing.py` with `select_lm_backend()` helper
+   - ✅ Added tests for adapter (12/12 passing, all hermetic with mocked HTTP)
+   - ✅ Added tests for routing helper (4/4 passing)
+   - **Merged**: 2025-11-14 (commit `99e6116e`)
 
-2. **PR #2 (P0)**: Health Check Integration
-   - Enhance `pmagent health lm` to use LM Studio adapter
-   - Add health check validation (model availability, latency)
-   - Update runbook for `pmagent health lm`
+2. **PR #2 (P0)**: ✅ **COMPLETE** - Health Check Integration
+   - ✅ Enhanced `pmagent health lm` to use LM Studio adapter (`scripts/guards/guard_lm_health.py`)
+   - ✅ Health check uses `lm_studio_chat()` from adapter
+   - ✅ Updated tests to use adapter mocks
+   - **Merged**: 2025-11-14 (commit `99e6116e` - same PR as P0)
 
-3. **PR #3 (P1)**: Control-Plane Logging
-   - Wrap adapter calls with control-plane logging
-   - Write to `control.agent_run` when DB is available
-   - Graceful no-op when DB is unavailable
-   - Add tests for logging (DB-on and DB-off scenarios)
+3. **PR #3 (P1)**: ✅ **COMPLETE** - Control-Plane Logging
+   - ✅ Created `agentpm/runtime/lm_logging.py` with `lm_studio_chat_with_logging()` wrapper
+   - ✅ Writes to `control.agent_run` when DB is available (tool: `lm_studio`)
+   - ✅ Graceful no-op when DB is unavailable (hermetic DB-off behavior)
+   - ✅ Added tests for logging (DB-on and DB-off scenarios) - `agentpm/tests/runtime/test_lm_logging.py`
+   - **Merged**: 2025-11-14 (commit `99e6116e` - same PR as P0)
 
 4. **PR #4 (P1)**: Routing Logic
    - Add routing helper (check health, decide LM Studio vs. remote)

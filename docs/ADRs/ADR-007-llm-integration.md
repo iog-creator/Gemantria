@@ -57,3 +57,7 @@ Integrate LM Studio locally for theological enrichment and gematria confidence s
 - `lmstudio_client.py`: Handles LM Studio REST API and mock mode
 - `enrichment_node.py`: Performs inference and inserts results into `ai_enrichment_log`
 - Confidence stored (0 – 1) with models recorded for provenance
+
+## Related Decisions
+
+**Note:** The current LM Studio integration approach has been updated in **ADR-066** (LM Studio + Control Plane Integration), which ratifies RFC-080. ADR-066 supersedes the LM Studio integration aspects of this ADR while preserving the confidence metadata and enrichment concepts. See ADR-066 for the current adapter pattern, health-aware routing, and control-plane logging implementation.

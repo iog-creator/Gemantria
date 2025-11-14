@@ -12,7 +12,7 @@ import psycopg
 
 from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
-from src.services.lmstudio_client import chat_completion
+from src.services.lm_routing_bridge import chat_completion_with_routing
 from src.utils.json_sanitize import parse_llm_json
 from scripts.config.env import get_rw_dsn
 
@@ -182,9 +182,9 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                 content = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\nTask: Provide theological analysis. Return JSON with insight and confidence."
                 messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
-        # Call LM Studio with batched requests
+        # Call LM Studio with batched requests (via routing bridge with control-plane logging)
         try:
-            outs = chat_completion(messages_batch, model=theology_model, temperature=0.0)
+            outs = chat_completion_with_routing(messages_batch, model=theology_model, temperature=0.0, max_tokens=8192)
             batch_lat_ms = int((time.time() - batch_start) * 1000)
 
             # Process responses
@@ -219,7 +219,9 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                                     "node": "enrichment",
                                 }
                             )
-                            raw_text = chat_completion([messages], model=theology_model, temperature=0.0)[0].text
+                            raw_text = chat_completion_with_routing(
+                                [messages], model=theology_model, temperature=0.0, max_tokens=8192
+                            )[0].text
                             retry += 1
 
                     # enforce required keys; extract confidence if needed

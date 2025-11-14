@@ -4,6 +4,8 @@ Guard: LM (Language Model) Health Check
 
 Checks LM Studio endpoint availability and response validity.
 Returns JSON verdict summarizing LM posture (lm_ready, lm_off).
+
+Phase-3C P1: Updated to use LM Studio adapter from agentpm.adapters.lm_studio.
 """
 
 from __future__ import annotations
@@ -13,38 +15,20 @@ import os
 import sys
 from pathlib import Path
 
-import requests
-from requests.exceptions import ConnectionError, Timeout, RequestException
-
 # Add project root to path
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-
-def get_lm_studio_endpoint() -> str:
-    """
-    Get LM Studio endpoint URL from environment.
-
-    Returns:
-        Base URL for LM Studio (e.g., "http://127.0.0.1:1234")
-    """
-    # Check LM_STUDIO_HOST first (primary)
-    host = os.getenv("LM_STUDIO_HOST")
-    if host:
-        if not host.startswith("http"):
-            # Assume http:// if protocol missing
-            host = f"http://{host}"
-        return host
-
-    # Fallback to LM_EMBED_HOST/LM_EMBED_PORT
-    embed_host = os.getenv("LM_EMBED_HOST", "127.0.0.1")
-    embed_port = os.getenv("LM_EMBED_PORT", "1234")
-    return f"http://{embed_host}:{embed_port}"
+# Import LM Studio adapter (E402: imports after sys.path modification)
+from agentpm.adapters.lm_studio import lm_studio_chat  # noqa: E402
+from scripts.config.env import get_lm_studio_settings  # noqa: E402
 
 
 def check_lm_health() -> dict:
     """
-    Check LM Studio health posture.
+    Check LM Studio health posture using the LM Studio adapter.
+
+    Phase-3C P1: Uses agentpm.adapters.lm_studio.lm_studio_chat() for health check.
 
     Returns:
         Dictionary with health status:
@@ -57,8 +41,8 @@ def check_lm_health() -> dict:
             },
         }
     """
-    endpoint = get_lm_studio_endpoint()
-    chat_endpoint = f"{endpoint}/v1/chat/completions"
+    settings = get_lm_studio_settings()
+    endpoint = settings.get("base_url", "http://localhost:1234/v1")
 
     result: dict = {
         "ok": False,
@@ -69,57 +53,30 @@ def check_lm_health() -> dict:
         },
     }
 
-    # Health check: minimal chat completion request
+    # If LM Studio is not enabled or not configured, return lm_off
+    if not settings.get("enabled") or not settings.get("base_url") or not settings.get("model"):
+        result["details"]["errors"].append("lm_studio_disabled_or_unconfigured")
+        return result
+
+    # Health check: minimal chat completion request using adapter
     # Use tiny prompt and low max_tokens for fast response
-    payload = {
-        "model": "test",  # Model name doesn't matter for health check
-        "messages": [{"role": "user", "content": "hi"}],
-        "max_tokens": 1,
-        "temperature": 0.0,
-    }
+    timeout = float(os.getenv("LM_HEALTH_TIMEOUT", "1.0"))
+    health_result = lm_studio_chat(
+        messages=[{"role": "user", "content": "hi"}],
+        max_tokens=1,
+        temperature=0.0,
+        timeout=timeout,
+    )
 
-    try:
-        # Short timeout (0.5-1.0 seconds) to avoid hanging when LM Studio is off
-        timeout = float(os.getenv("LM_HEALTH_TIMEOUT", "1.0"))
-        response = requests.post(
-            chat_endpoint,
-            json=payload,
-            timeout=timeout,
-            headers={"Content-Type": "application/json"},
-        )
-
-        # Check if response is valid
-        if response.status_code == 200:
-            try:
-                data = response.json()
-                # Verify response has expected structure (has choices or error)
-                if "choices" in data or "error" in data:
-                    result["ok"] = True
-                    result["mode"] = "lm_ready"
-                    return result
-                else:
-                    result["details"]["errors"].append(
-                        "invalid_response: Response missing expected fields (choices/error)"
-                    )
-                    return result
-            except json.JSONDecodeError:
-                result["details"]["errors"].append("invalid_response: Response is not valid JSON")
-                return result
-        else:
-            result["details"]["errors"].append(f"http_error: HTTP {response.status_code}: {response.text[:100]}")
-            return result
-
-    except ConnectionError as e:
-        result["details"]["errors"].append(f"connection_refused: {e}")
+    # Map adapter response to health check format
+    if health_result.get("ok") and health_result.get("mode") == "lm_on":
+        result["ok"] = True
+        result["mode"] = "lm_ready"
         return result
-    except Timeout:
-        result["details"]["errors"].append(f"timeout: Request timed out after {timeout}s")
-        return result
-    except RequestException as e:
-        result["details"]["errors"].append(f"request_error: {e}")
-        return result
-    except Exception as e:
-        result["details"]["errors"].append(f"unexpected_error: {e}")
+    else:
+        # Extract error reason from adapter response
+        reason = health_result.get("reason", "unknown_error")
+        result["details"]["errors"].append(reason)
         return result
 
 
