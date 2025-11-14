@@ -37,7 +37,9 @@ def _print_health_output(health_json: dict, summary_func=None) -> None:
 
 
 @health_app.command("system", help="Aggregate system health (DB + LM + Graph)")
-def health_system(json_only: bool = typer.Option(False, "--json-only", help="Print only JSON")) -> None:
+def health_system(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
     """Check system health (aggregates DB, LM, and Graph health)."""
     health = compute_system_health()
     if json_only:
@@ -94,7 +96,9 @@ def health_lm(json_only: bool = typer.Option(False, "--json-only", help="Print o
 
 
 @health_app.command("graph", help="Check graph overview")
-def health_graph(json_only: bool = typer.Option(False, "--json-only", help="Print only JSON")) -> None:
+def health_graph(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
     """Check graph overview statistics."""
     overview = compute_graph_overview()
 

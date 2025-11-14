@@ -31,7 +31,10 @@ def test_health_system_all_off(mock_system_health, runner):
             "lm": {
                 "ok": False,
                 "mode": "lm_off",
-                "details": {"endpoint": "http://127.0.0.1:1234", "errors": ["connection_refused: Connection refused"]},
+                "details": {
+                    "endpoint": "http://127.0.0.1:1234",
+                    "errors": ["connection_refused: Connection refused"],
+                },
             },
             "graph": {
                 "ok": False,
@@ -59,7 +62,11 @@ def test_health_system_all_ready(mock_system_health, runner):
             "db": {
                 "ok": True,
                 "mode": "ready",
-                "checks": {"driver_available": True, "connection_ok": True, "graph_stats_ready": True},
+                "checks": {
+                    "driver_available": True,
+                    "connection_ok": True,
+                    "graph_stats_ready": True,
+                },
                 "details": {"errors": []},
             },
             "lm": {
