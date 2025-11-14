@@ -13,6 +13,12 @@ alwaysApply: false
 
 **CRITICAL CURSOR ENFORCEMENT**: After ANY file edit in this repository, Cursor MUST automatically run `make housekeeping` before committing. This is non-negotiable. Do not proceed without running housekeeping.
 
+**AUTOMATIC DOCUMENTATION UPDATES**: The housekeeping pipeline now **automatically** updates:
+- **AGENTS.md files** — Detected from code changes (new functions, classes, components)
+- **CHANGELOG.md** — Extracted from commit messages (feat/fix/docs entries)
+
+**You should NOT need to manually update these files** — they are updated automatically by `scripts/auto_update_agents_md.py` and `scripts/auto_update_changelog.py` as part of `make housekeeping`. If you find yourself manually editing AGENTS.md or CHANGELOG.md, that indicates the auto-update scripts need enhancement, not that manual updates are required.
+
 # Rule 058 — Auto-Housekeeping Post-Change (AlwaysApply)
 
 Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail.
@@ -28,19 +34,24 @@ make housekeeping
 
 The `make housekeeping` target executes:
 1. **Share synchronization** (`make share.sync`) — mirrors docs/scripts/rules to `share/`
-2. **AGENTS.md validation** (`python3 scripts/validate_agents_md.py`) — ensures all subdirectory AGENTS.md files exist and are valid
-3. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
-4. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
-5. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
-6. **Forest generation** (`python3 scripts/generate_forest.py`) — regenerates forest overview
+2. **AGENTS.md auto-update** (`python3 scripts/auto_update_agents_md.py`) — **AUTOMATICALLY** updates AGENTS.md files based on code changes (Rule-058)
+3. **CHANGELOG.md auto-update** (`python3 scripts/auto_update_changelog.py`) — **AUTOMATICALLY** updates CHANGELOG.md based on recent commits (Rule-058)
+4. **AGENTS.md validation** (`python3 scripts/validate_agents_md.py`) — ensures all subdirectory AGENTS.md files exist and are valid
+5. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
+6. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
+7. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
+8. **Forest generation** (`python3 scripts/generate_forest.py`) — regenerates forest overview
 
 **Individual commands** (if needed separately):
 ```bash
-make share.sync                    # Documentation synchronization
-python3 scripts/governance_housekeeping.py  # Governance compliance
-python3 scripts/generate_handoff.py         # Handoff document
-python3 scripts/rules_audit.py              # Rule compliance audit
-python3 scripts/generate_forest.py          # Forest overview regeneration
+make share.sync                              # Documentation synchronization
+python3 scripts/auto_update_agents_md.py     # Auto-update AGENTS.md files (Rule-058)
+python3 scripts/auto_update_changelog.py     # Auto-update CHANGELOG.md (Rule-058)
+python3 scripts/validate_agents_md.py        # Validate AGENTS.md presence/structure
+python3 scripts/governance_housekeeping.py   # Governance compliance
+python3 scripts/generate_handoff.py          # Handoff document
+python3 scripts/rules_audit.py               # Rule compliance audit
+python3 scripts/generate_forest.py           # Forest overview regeneration
 ```
 
 **FAIL-CLOSED DESIGN**: If housekeeping skipped, operations fail with critical error logs:
@@ -73,11 +84,20 @@ Evidence: Modified files detected without housekeeping completion
 - **Comprehensive guards**: Run `STRICT_RFC3339=0 make guards.all` for full validation suite
 - **Guard evidence**: Guard runs automatically generate evidence files for audit
 
-### Documentation Updates
-- **ADR creation**: New ADRs must be added to `docs/adr/` and cross-referenced
-- **RELEASES.md**: Update with version entries for significant changes
-- **CHANGELOG.md**: Add entries for user-facing changes
-- **SHARE_MANIFEST.json**: Link evidence bundles and new artifacts
+### Documentation Updates (AUTOMATIC)
+- **AGENTS.md files**: **AUTOMATICALLY** updated by `scripts/auto_update_agents_md.py` when code changes are detected
+  - Detects new functions, classes, components in changed files
+  - Updates relevant AGENTS.md files with timestamp refresh
+  - Creates missing AGENTS.md files with basic template
+  - **No manual intervention required** — runs as part of `make housekeeping`
+- **CHANGELOG.md**: **AUTOMATICALLY** updated by `scripts/auto_update_changelog.py` based on recent commits
+  - Extracts feature/fix/docs entries from conventional commit messages
+  - Detects Phase-3B Feature #X patterns and PR numbers
+  - Adds entries to [Unreleased] section
+  - **No manual intervention required** — runs as part of `make housekeeping`
+- **ADR creation**: New ADRs must be added to `docs/adr/` and cross-referenced (manual)
+- **RELEASES.md**: Update with version entries for significant changes (manual)
+- **SHARE_MANIFEST.json**: Link evidence bundles and new artifacts (manual)
 
 ### Working Tree Reconciliation
 - **Generator drift**: Run `make guard.tests` and `make share.sync` to fix export/share drift
