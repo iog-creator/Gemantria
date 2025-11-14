@@ -30,10 +30,8 @@ Heuristics:
 """
 
 import json
-import os
 import pathlib
 import re
-import sys
 from typing import Any, Iterable
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
