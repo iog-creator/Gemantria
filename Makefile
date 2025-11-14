@@ -2113,3 +2113,18 @@ m14.proofs:
 		python3 agentpm/atlas/webproof.py >/dev/null ; \
 	python3 scripts/guards/guard_m14_webproof_backlinks.py >/dev/null || true ; \
 	echo "[M14] Done (see evidence/guard_m14_*.verdict.json)"
+
+# PLAN-078 E86 — Compliance Summary Dashboard
+.PHONY: atlas.compliance.summary guard.atlas.compliance.summary
+atlas.compliance.summary: export.compliance.summary
+	@echo "[atlas.compliance.summary] Generating compliance summary dashboard"
+	@python3 scripts/atlas/generate_compliance_summary.py
+	@echo "[atlas.compliance.summary] Dashboard: docs/atlas/dashboard/compliance_summary.html"
+
+export.compliance.summary:
+	@echo "[export.compliance.summary] Generating compliance_summary.json"
+	@python3 scripts/atlas/generate_compliance_summary.py
+
+guard.atlas.compliance.summary:
+	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
+	@python3 scripts/guards/guard_compliance_summary_backlinks.py
