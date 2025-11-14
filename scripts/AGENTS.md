@@ -69,6 +69,77 @@ STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
 - **Migrations**: 015 (governance_artifacts), 016 (ai_interactions)
 - **CI**: HINT on PRs, STRICT on tags (gated by `vars.STRICT_DB_MIRROR_CI`)
 
+### `guards/guard_db_health.py` — DB Health Guard (Phase-3A)
+
+**Purpose:** Check database health posture (driver availability, connection status, table readiness)
+
+**Modes:**
+- `ready`: All systems operational (driver available, connection works, tables accessible)
+- `db_off`: Database unavailable (driver missing or connection failed)
+- `partial`: Database connected but tables missing
+
+**Usage:**
+```bash
+make guard.db.health        # Detailed JSON output
+make db.health.smoke        # Human-readable summary
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "ready",
+  "checks": {
+    "driver_available": true,
+    "connection_ok": true,
+    "graph_stats_ready": true
+  },
+  "details": {
+    "errors": []
+  }
+}
+```
+
+**Related:**
+- **Phase-3A**: DB activation and health checks
+- **Runbook**: `docs/runbooks/DB_HEALTH.md`
+- **Tests**: `agentpm/tests/db/test_phase3a_db_health_guard.py`
+
+### `guards/guard_lm_health.py` — LM Health Guard (Phase-3B)
+
+**Purpose:** Check LM Studio endpoint availability and response validity
+
+**Modes:**
+- `lm_ready`: LM Studio operational (endpoint reachable and responding correctly)
+- `lm_off`: LM Studio unavailable (endpoint not reachable or responding incorrectly)
+
+**Configuration:**
+- **Endpoint**: `LM_STUDIO_HOST` (default: `http://127.0.0.1:1234`) or `LM_EMBED_HOST`/`LM_EMBED_PORT`
+- **Timeout**: `LM_HEALTH_TIMEOUT` (default: 1.0 seconds)
+
+**Usage:**
+```bash
+make guard.lm.health        # Detailed JSON output
+make lm.health.smoke        # Human-readable summary
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "mode": "lm_ready",
+  "details": {
+    "endpoint": "http://127.0.0.1:1234",
+    "errors": []
+  }
+}
+```
+
+**Related:**
+- **Phase-3B**: LM health guard and smoke command
+- **Runbook**: `docs/runbooks/LM_HEALTH.md`
+- **Tests**: `agentpm/tests/lm/test_phase3b_lm_health_guard.py`
+
 ### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
 
 **Purpose:** Emit standardized `HINT:` lines for clear CI log visibility and Cursor runtime tracking.
