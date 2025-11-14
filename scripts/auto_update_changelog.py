@@ -38,7 +38,13 @@ def get_recent_commits(limit: int = 10) -> list[dict[str, Any]]:
             if "|" in line:
                 parts = line.split("|", 2)
                 if len(parts) >= 2:
-                    commits.append({"hash": parts[0], "subject": parts[1], "body": parts[2] if len(parts) > 2 else ""})
+                    commits.append(
+                        {
+                            "hash": parts[0],
+                            "subject": parts[1],
+                            "body": parts[2] if len(parts) > 2 else "",
+                        }
+                    )
         return commits
     except subprocess.CalledProcessError:
         return []
