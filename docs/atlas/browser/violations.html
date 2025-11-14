@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unified Violation Browser — E89</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1400px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.controls { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; display: flex; flex-wrap: wrap; gap: 1em; align-items: center; }
+.controls label { font-weight: bold; }
+.controls select, .controls input { padding: 0.5em; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9em; }
+.controls input[type="search"] { flex: 1; min-width: 200px; }
+.stats { display: flex; gap: 1em; margin: 1em 0; flex-wrap: wrap; }
+.stat { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 1em; flex: 1; min-width: 150px; }
+.stat-value { font-size: 1.5em; font-weight: bold; color: #0066cc; }
+.stat-label { font-size: 0.9em; color: #666; margin-top: 0.25em; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; background: white; }
+th, td { padding: 0.75em; text-align: left; border-bottom: 1px solid #ddd; }
+th { background: #f0f0f0; font-weight: bold; cursor: pointer; user-select: none; position: sticky; top: 0; }
+th:hover { background: #e0e0e0; }
+th.sort-asc::after { content: " ▲"; font-size: 0.8em; }
+th.sort-desc::after { content: " ▼"; font-size: 0.8em; }
+tbody tr:hover { background: #f9f9f9; }
+tbody tr.empty-state { background: #fff; }
+tbody tr.empty-state td { text-align: center; padding: 2em; color: #666; font-style: italic; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.loading { color: #666; font-style: italic; text-align: center; padding: 2em; }
+.error { color: #dc3545; background: #ffe6e6; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.count { font-weight: bold; }
+.count-high { color: #dc3545; }
+.count-medium { color: #ff9800; }
+.count-low { color: #28a745; }
+</style>
+</head>
+<body>
+<h1>Unified Violation Browser <span class="badge">E89</span></h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading violations data...</div>
+</div>
+
+<div class="backlinks">
+<h2>Related Dashboards</h2>
+<ul>
+  <li><a href="../dashboard/compliance_summary.html" data-testid="backlink-compliance-summary">Compliance Summary Dashboard (E86)</a></li>
+  <li><a href="../dashboard/compliance_timeseries.html" data-testid="backlink-compliance-timeseries">Compliance Time-Series Dashboard (E87)</a></li>
+  <li><a href="../dashboard/compliance_heatmap.html" data-testid="backlink-compliance-heatmap">Compliance Heatmap Dashboard (E87)</a></li>
+  <li><a href="../../../share/atlas/control_plane/violations_browser.json" data-testid="backlink-violations-browser-json">Raw JSON: violations_browser.json</a></li>
+  <li><a href="../../../evidence/guard_atlas_violation_browser.json" data-testid="backlink-guard-violation-browser-json">Guard Verdict: guard_atlas_violation_browser.json</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const DATA_URL = '../../../share/atlas/control_plane/violations_browser.json';
+  const contentDiv = document.getElementById('dashboard-content');
+  let allViolations = [];
+  let currentSort = { column: null, direction: 'asc' };
+
+  function loadData() {
+    fetch(DATA_URL)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        if (data.error) {
+          contentDiv.innerHTML = `<div class="error">Error loading data: ${data.error}</div>`;
+          return;
+        }
+        allViolations = data.violations || [];
+        renderDashboard(data);
+      })
+      .catch(err => {
+        contentDiv.innerHTML = `<div class="error">Failed to load violations data: ${err.message}</div>`;
+      });
+  }
+
+  function getCountClass(count) {
+    if (count >= 100) return 'count-high';
+    if (count >= 10) return 'count-medium';
+    return 'count-low';
+  }
+
+  function renderDashboard(data) {
+    const stats = data.stats || {};
+    const filters = data.filters || { tools: [], rings: [] };
+
+    let html = `
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">${stats.total_violations || 0}</div>
+          <div class="stat-label">Total Violations</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">${stats.total_count_7d || 0}</div>
+          <div class="stat-label">7d Count</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">${stats.total_count_30d || 0}</div>
+          <div class="stat-label">30d Count</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label for="search">Search:</label>
+        <input type="search" id="search" placeholder="Search violation codes..." oninput="filterTable()">
+        
+        <label for="filter-tool">Tool:</label>
+        <select id="filter-tool" onchange="filterTable()">
+          <option value="">All Tools</option>
+          ${filters.tools.map(t => `<option value="${t}">${t}</option>`).join('')}
+        </select>
+        
+        <label for="filter-ring">Ring:</label>
+        <select id="filter-ring" onchange="filterTable()">
+          <option value="">All Rings</option>
+          ${filters.rings.map(r => `<option value="${r}">${r}</option>`).join('')}
+        </select>
+        
+        <label for="sort-by">Sort By:</label>
+        <select id="sort-by" onchange="changeSort()">
+          <option value="code">Violation Code</option>
+          <option value="7d">7d Count</option>
+          <option value="30d">30d Count</option>
+          <option value="total">Total Count</option>
+          <option value="tool">Tool</option>
+        </select>
+      </div>
+
+      <table id="violations-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('code')">Violation Code</th>
+            <th onclick="sortTable('tool')">Tool</th>
+            <th onclick="sortTable('ring')">Ring</th>
+            <th onclick="sortTable('7d')">7d Count</th>
+            <th onclick="sortTable('30d')">30d Count</th>
+            <th onclick="sortTable('total')">Total</th>
+            <th>Drilldown</th>
+          </tr>
+        </thead>
+        <tbody id="violations-tbody">
+        </tbody>
+      </table>
+    `;
+
+    contentDiv.innerHTML = html;
+    renderTable(allViolations);
+  }
+
+  function renderTable(violations) {
+    const tbody = document.getElementById('violations-tbody');
+    if (!tbody) return;
+
+    if (violations.length === 0) {
+      tbody.innerHTML = '<tr class="empty-state"><td colspan="7">No violations match the current filters.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = violations.map(v => {
+      const total = (v.count_7d || 0) + (v.count_30d || 0);
+      const drilldownLink = v.drilldown_url ? `<a href="${v.drilldown_url}">View Details</a>` : '-';
+      return `
+        <tr>
+          <td><code>${escapeHtml(v.violation_code)}</code></td>
+          <td>${escapeHtml(v.tool || 'unknown')}</td>
+          <td>${escapeHtml(v.ring || 'unknown')}</td>
+          <td class="count ${getCountClass(v.count_7d || 0)}">${v.count_7d || 0}</td>
+          <td class="count ${getCountClass(v.count_30d || 0)}">${v.count_30d || 0}</td>
+          <td class="count ${getCountClass(total)}">${total}</td>
+          <td>${drilldownLink}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  window.filterTable = function() {
+    const search = document.getElementById('search')?.value.toLowerCase() || '';
+    const toolFilter = document.getElementById('filter-tool')?.value || '';
+    const ringFilter = document.getElementById('filter-ring')?.value || '';
+
+    const filtered = allViolations.filter(v => {
+      const matchesSearch = !search || v.violation_code.toLowerCase().includes(search);
+      const matchesTool = !toolFilter || v.tool === toolFilter;
+      const matchesRing = !ringFilter || v.ring === ringFilter;
+      return matchesSearch && matchesTool && matchesRing;
+    });
+
+    renderTable(filtered);
+  };
+
+  window.sortTable = function(column) {
+    if (currentSort.column === column) {
+      currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSort.column = column;
+      currentSort.direction = 'asc';
+    }
+
+    const sorted = [...allViolations].sort((a, b) => {
+      let aVal, bVal;
+      if (column === 'code') {
+        aVal = a.violation_code;
+        bVal = b.violation_code;
+      } else if (column === 'tool') {
+        aVal = a.tool || '';
+        bVal = b.tool || '';
+      } else if (column === 'ring') {
+        aVal = a.ring || '';
+        bVal = b.ring || '';
+      } else if (column === '7d') {
+        aVal = a.count_7d || 0;
+        bVal = b.count_7d || 0;
+      } else if (column === '30d') {
+        aVal = a.count_30d || 0;
+        bVal = b.count_30d || 0;
+      } else if (column === 'total') {
+        aVal = (a.count_7d || 0) + (a.count_30d || 0);
+        bVal = (b.count_7d || 0) + (b.count_30d || 0);
+      } else {
+        return 0;
+      }
+
+      if (typeof aVal === 'string') {
+        return currentSort.direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      } else {
+        return currentSort.direction === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+    });
+
+    // Update sort indicators
+    document.querySelectorAll('th').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+      if (th.textContent.includes(getColumnName(column))) {
+        th.classList.add(`sort-${currentSort.direction}`);
+      }
+    });
+
+    renderTable(sorted);
+  };
+
+  window.changeSort = function() {
+    const sortBy = document.getElementById('sort-by')?.value || 'code';
+    sortTable(sortBy);
+  };
+
+  function getColumnName(column) {
+    const map = {
+      'code': 'Violation Code',
+      'tool': 'Tool',
+      'ring': 'Ring',
+      '7d': '7d Count',
+      '30d': '30d Count',
+      'total': 'Total'
+    };
+    return map[column] || column;
+  }
+
+  loadData();
+})();
+</script>
+</body>
+</html>
+
