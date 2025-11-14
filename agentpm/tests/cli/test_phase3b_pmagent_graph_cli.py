@@ -150,4 +150,3 @@ def test_graph_overview_json_only(mock_overview, runner):
     # Should have JSON
     data = json.loads(result.stdout)
     assert data["ok"] is True
-

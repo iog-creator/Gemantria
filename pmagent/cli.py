@@ -140,10 +140,14 @@ def graph_overview(
     sys.exit(0)
 
 
+# Default input path for graph import
+_DEFAULT_GRAPH_STATS_PATH = Path("exports/graph_stats.json")
+
+
 @graph_app.command("import", help="Import graph_stats.json into database")
 def graph_import(
     input_path: Path = typer.Option(
-        Path("exports/graph_stats.json"),
+        _DEFAULT_GRAPH_STATS_PATH,
         "--input",
         help="Path to graph_stats.json file",
     ),
@@ -158,7 +162,10 @@ def graph_import(
     if result.get("ok"):
         inserted = result.get("inserted", 0)
         snapshot_id = result.get("snapshot_id", "unknown")
-        print(f"GRAPH_IMPORT: snapshots_imported=1 rows_inserted={inserted} snapshot_id={snapshot_id}", file=sys.stderr)
+        print(
+            f"GRAPH_IMPORT: snapshots_imported=1 rows_inserted={inserted} snapshot_id={snapshot_id}",
+            file=sys.stderr,
+        )
         sys.exit(0)
     else:
         errors = result.get("errors", [])
