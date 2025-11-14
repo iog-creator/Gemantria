@@ -23,10 +23,10 @@ from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
 from scripts.graph.graph_overview import compute_graph_overview  # noqa: E402
 from scripts.system.system_health import compute_system_health, print_human_summary  # noqa: E402
 from scripts.db_import_graph_stats import import_graph_stats  # noqa: E402
-from scripts.control.control_status import (
+from scripts.control.control_status import (  # noqa: E402
     compute_control_status,
     print_human_summary as print_control_summary,
-)  # noqa: E402
+)
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
