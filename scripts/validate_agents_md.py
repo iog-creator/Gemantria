@@ -30,6 +30,7 @@ REQUIRED_AGENTS_DIRS = [
     "docs/phase10",
     "webui/dashboard",
     "webui/graph",
+    "agentpm/extractors",  # Provenance management for extraction agents
 ]
 
 
