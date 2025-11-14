@@ -1,0 +1,7 @@
+CONTROL_SCHEMA: mode=db_off (driver_missing: Postgres database driver not avail)
+{
+  "ok": false,
+  "mode": "db_off",
+  "reason": "driver_missing: Postgres database driver not available",
+  "tables": {}
+}

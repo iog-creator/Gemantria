@@ -2274,6 +2274,10 @@ control.tables.smoke:
 	@echo "[control.tables.smoke] Listing control-plane tables via pmagent"
 	@python -m pmagent.cli control tables
 
+control.schema.smoke:
+	@echo "[control.schema.smoke] Introspecting control-plane schemas via pmagent"
+	@python -m pmagent.cli control schema
+
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
 	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py
