@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-REPO = Path(__file__).resolve().parents[4]
+REPO = Path(__file__).resolve().parents[3]
 VIOLATIONS_DIR = REPO / "docs" / "atlas" / "webproof" / "violations"
 GENERATOR_SCRIPT = REPO / "scripts" / "atlas" / "generate_violation_pages.py"
 GUARD_SCRIPT = REPO / "scripts" / "guards" / "guard_compliance_drilldowns.py"
