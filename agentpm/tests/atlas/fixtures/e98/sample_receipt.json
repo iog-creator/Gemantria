@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "timestamp": "2025-11-13T21:53:52.123456Z",
+  "steps": [
+    {
+      "name": "export_graph",
+      "exit_code": 0,
+      "duration_s": 1.23,
+      "success": true
+    },
+    {
+      "name": "export_stats",
+      "exit_code": 0,
+      "duration_s": 2.45,
+      "success": true
+    }
+  ],
+  "artifacts": [
+    "exports/graph_latest.json",
+    "exports/graph_stats.json",
+    "exports/graph_patterns.json",
+    "exports/temporal_patterns.json",
+    "exports/pattern_forecast.json"
+  ],
+  "missing_artifacts": [],
+  "expected_artifacts": [
+    "exports/graph_latest.json",
+    "exports/graph_stats.json",
+    "exports/graph_patterns.json",
+    "exports/temporal_patterns.json",
+    "exports/pattern_forecast.json"
+  ]
+}
+
