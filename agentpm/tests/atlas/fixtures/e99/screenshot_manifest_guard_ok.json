@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "checks": {
+    "manifest_exists": true,
+    "manifest_json_valid": true,
+    "manifest_nonempty": true,
+    "all_atlas_pages_covered": true,
+    "hash_shape_ok": true
+  },
+  "counts": {
+    "manifest_entries": 10,
+    "atlas_pages": 10,
+    "atlas_pages_uncovered": 0,
+    "entries_missing_hash": 0,
+    "entries_bad_hash_shape": 0
+  },
+  "details": {
+    "manifest_path": "evidence/atlas_screenshot_manifest.json",
+    "coverage_missing": []
+  }
+}
+

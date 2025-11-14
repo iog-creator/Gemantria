@@ -2160,6 +2160,12 @@ guard.atlas.links:
 	@echo "[guard.atlas.links] Validating atlas links integrity"
 	@PYTHONPATH=. python3 scripts/guards/guard_atlas_links.py
 
+# --- PLAN-080 E99: Integrated Browser + Screenshot Verification ---
+guard.browser.integrated:
+	@echo "[guard.browser.integrated] Running integrated browser + screenshot verification"
+	@PYTHONPATH=. python3 scripts/guards/guard_browser_screenshot_integrated.py \
+		--write-evidence evidence/browser_screenshot_integrated.json
+
 # --- PLAN-080 E96: TV-01..TV-05 Coverage ---
 test.tv.coverage:
 	@echo "[test.tv.coverage] Running TV-01..TV-05 and generating coverage receipt"
@@ -2190,3 +2196,8 @@ guard.regenerate.all:
 test.e98.regenerate.all:
 	@echo "[test.e98.regenerate.all] Running E98 regeneration guard tests"
 	@pytest -q agentpm/tests/atlas/test_e98_regenerate_all_guard.py
+
+# --- PLAN-080 E99: Integrated Browser + Screenshot Verification Tests ---
+test.e99.browser.integrated:
+	@echo "[test.e99.browser.integrated] Running E99 integrated browser + screenshot verification tests"
+	@pytest -q agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py

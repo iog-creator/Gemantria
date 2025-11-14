@@ -1,0 +1,27 @@
+{
+  "ok": false,
+  "checks": {
+    "html_scanned": true,
+    "no_broken_internal_links": false,
+    "external_links_marked": false
+  },
+  "counts": {
+    "html_files": 10,
+    "internal_links": 50,
+    "broken_internal_links": 3,
+    "external_links": 5,
+    "unmarked_external_links": 2
+  },
+  "details": {
+    "broken_internal_links": [
+      {"source": "docs/atlas/index.html", "href": "missing.html", "resolved": "docs/atlas/missing.html"},
+      {"source": "docs/atlas/dashboard/compliance_summary.html", "href": "broken.html", "resolved": "docs/atlas/dashboard/broken.html"},
+      {"source": "docs/atlas/browser/violations.html", "href": "gone.html", "resolved": "docs/atlas/browser/gone.html"}
+    ],
+    "unmarked_external_links": [
+      {"source": "docs/atlas/index.html", "href": "https://example.com"},
+      {"source": "docs/atlas/dashboard/compliance_summary.html", "href": "https://external.com"}
+    ]
+  }
+}
+
