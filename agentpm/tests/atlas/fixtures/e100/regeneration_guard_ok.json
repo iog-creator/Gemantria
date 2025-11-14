@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "checks": {
+    "receipt_exists": true,
+    "receipt_json_valid": true,
+    "receipt_ok_flag": true,
+    "all_artifacts_present": true,
+    "all_schemas_valid": true,
+    "db_available": true
+  },
+  "counts": {
+    "expected_artifacts": 5,
+    "found_artifacts": 5,
+    "missing_artifacts": 0,
+    "schema_validations": 5,
+    "schema_passed": 5,
+    "schema_failures": 0
+  },
+  "details": {
+    "receipt_path": "/home/mccoy/Projects/Gemantria.v2/evidence/regenerate_all_receipt.json",
+    "missing_artifacts": [],
+    "schema_errors": {}
+  }
+}
+

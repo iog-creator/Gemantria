@@ -2201,3 +2201,18 @@ test.e98.regenerate.all:
 test.e99.browser.integrated:
 	@echo "[test.e99.browser.integrated] Running E99 integrated browser + screenshot verification tests"
 	@pytest -q agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py
+
+# --- PLAN-080 E100: Phase-2 Tagproof Bundle ---
+tagproof.phase2.bundle:
+	@echo "[tagproof.phase2.bundle] Generating Phase-2 tagproof bundle"
+	@PYTHONPATH=. python3 scripts/ci/tagproof_phase2_bundle.py
+
+guard.tagproof.phase2:
+	@echo "[guard.tagproof.phase2] Validating Phase-2 tagproof bundle"
+	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_phase2.py > evidence/guard_tagproof_phase2.json || true
+	@cat evidence/guard_tagproof_phase2.json
+
+# --- PLAN-080 E100: Phase-2 Tagproof Bundle Tests ---
+test.e100.tagproof.phase2:
+	@echo "[test.e100.tagproof.phase2] Running E100 Phase-2 tagproof bundle tests"
+	@pytest -q agentpm/tests/atlas/test_e100_tagproof_phase2.py
