@@ -25,7 +25,7 @@ def ensure_provenance(model: str, seed: int | str, analysis: str | None) -> Dict
     """
     Ensures model/seed/ts_iso are present; preserves analysis even if empty/whitespace.
     Raises ValueError for missing/invalid provenance.
-    
+
     E06: Ensures all provenance fields are present (model, seed, ts_iso).
     E08: Raises ValueError if model is missing/empty.
     E09: Raises ValueError if seed is not an integer (via _coerce_seed_int).
@@ -45,7 +45,7 @@ def guard_provenance(output: Dict[str, Any]) -> None:
     """
     Guard function for provenance validation (E08, E09).
     Raises ValueError if provenance is invalid.
-    
+
     E08: Missing/empty model is a guardable error.
     E09: Non-integer seed is a guardable error.
     """
@@ -54,7 +54,7 @@ def guard_provenance(output: Dict[str, Any]) -> None:
     model = output.get("model")
     if not model or not isinstance(model, str) or not model.strip():
         raise ValueError("provenance guard: 'model' must be non-empty string")
-    
+
     if "seed" not in output:
         raise ValueError("provenance guard: missing 'seed' field")
     try:
