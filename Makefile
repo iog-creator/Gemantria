@@ -918,6 +918,14 @@ control.agent_runs_7d.export:
 	@echo ">> Exporting control-plane agent runs 7d…"
 	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
 
+.PHONY: atlas.lm.usage atlas.lm.health
+atlas.lm.usage:
+	@echo ">> Exporting LM Studio usage metrics (7d)…"
+	@PYTHONPATH=. python3 scripts/db/control_lm_metrics_export.py
+
+atlas.lm.health: atlas.lm.usage
+	@echo ">> LM usage and health metrics exported to share/atlas/control_plane/"
+
 .PHONY: guard.control.knowledge.mcp.exports
 guard.control.knowledge.mcp.exports:
 	@echo ">> Guarding Knowledge-MCP exports (mcp_catalog, capability_rules, agent_runs_7d)…"

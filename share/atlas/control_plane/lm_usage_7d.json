@@ -1,0 +1,17 @@
+{
+  "avg_latency_ms": 0.0,
+  "calls_by_day": [],
+  "connection_ok": false,
+  "error": "database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?",
+  "failed_calls": 0,
+  "generated_at": "2025-11-14T22:43:47.280419+00:00",
+  "ok": false,
+  "schema": "control",
+  "since": "2025-11-07T22:43:47.280416+00:00",
+  "successful_calls": 0,
+  "total_calls": 0,
+  "total_latency_ms": 0,
+  "total_tokens_completion": 0,
+  "total_tokens_prompt": 0,
+  "window_days": 7
+}
