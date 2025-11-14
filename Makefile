@@ -2128,3 +2128,16 @@ export.compliance.summary:
 guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-078 E90 — Graph Compliance Metrics
+control.graph.compliance.export:
+	@echo "[control.graph.compliance.export] Generating graph_compliance.json"
+	@PYTHONPATH=. python3 scripts/db/control_graph_compliance_metrics_export.py
+
+atlas.graph.compliance: control.graph.compliance.export
+	@echo "[atlas.graph.compliance] E90 graph compliance dashboard ready"
+	@test -f docs/atlas/dashboard/graph_compliance.html || (echo "ERROR: graph_compliance.html missing" && exit 1)
+
+guard.control.graph.compliance:
+	@echo "[guard.control.graph.compliance] Validating graph compliance"
+	@PYTHONPATH=. python3 scripts/guards/guard_graph_compliance.py
