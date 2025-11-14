@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Language Model Status — Gemantria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .status-ok { color: #10b981; }
+        .status-fail { color: #ef4444; }
+        .metric-card { transition: transform 0.2s; }
+        .metric-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Language Model Status</h1>
+        <p class="text-gray-600 mb-8">Real-time status and metrics for LM Studio integration</p>
+        <p><a href="../index.html">← Back to Atlas</a></p>
+
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            <p class="mt-4 text-gray-600">Loading metrics...</p>
+        </div>
+
+        <div id="content" class="hidden">
+            <!-- Connection Status -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Connection Status</h2>
+                <div id="connection-status" class="text-3xl font-bold">
+                    <span class="status-ok">●</span> Connected
+                </div>
+                <p id="connection-details" class="text-gray-600 mt-2"></p>
+            </div>
+
+            <!-- Health Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-6 metric-card">
+                    <h3 class="text-sm font-medium text-gray-500 mb-2">Health Score</h3>
+                    <div id="health-score" class="text-4xl font-bold text-gray-900">—</div>
+                    <p class="text-sm text-gray-600 mt-2">Overall system health</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 metric-card">
+                    <h3 class="text-sm font-medium text-gray-500 mb-2">Success Rate</h3>
+                    <div id="success-rate" class="text-4xl font-bold text-green-600">—</div>
+                    <p class="text-sm text-gray-600 mt-2">Last 7 days</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 metric-card">
+                    <h3 class="text-sm font-medium text-gray-500 mb-2">Error Rate</h3>
+                    <div id="error-rate" class="text-4xl font-bold text-red-600">—</div>
+                    <p class="text-sm text-gray-600 mt-2">Last 7 days</p>
+                </div>
+            </div>
+
+            <!-- Usage Metrics -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Usage Metrics (Last 7 Days)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Total Calls</h3>
+                        <div id="total-calls" class="text-3xl font-bold text-gray-900">—</div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Successful</h3>
+                        <div id="successful-calls" class="text-3xl font-bold text-green-600">—</div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Failed</h3>
+                        <div id="failed-calls" class="text-3xl font-bold text-red-600">—</div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-500 mb-2">Average Latency</h3>
+                    <div id="avg-latency" class="text-2xl font-semibold text-gray-900">—</div>
+                </div>
+            </div>
+
+            <!-- DB Offline Message -->
+            <div id="db-offline" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700">
+                            <strong>No LM metrics available</strong> — Database is currently offline (db_off mode).
+                            Metrics will appear once the database connection is restored.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const loadingEl = document.getElementById('loading');
+            const contentEl = document.getElementById('content');
+            const dbOfflineEl = document.getElementById('db-offline');
+
+            async function loadMetrics() {
+                try {
+                    // Load usage and health metrics (relative to docs/atlas/html/)
+                    const [usageRes, healthRes] = await Promise.all([
+                        fetch('../../share/atlas/control_plane/lm_usage_7d.json').catch(() => null),
+                        fetch('../../share/atlas/control_plane/lm_health_7d.json').catch(() => null)
+                    ]);
+
+                    let usage = null;
+                    let health = null;
+
+                    if (usageRes && usageRes.ok) {
+                        usage = await usageRes.json();
+                    }
+                    if (healthRes && healthRes.ok) {
+                        health = await healthRes.json();
+                    }
+
+                    // Check if DB is offline
+                    const dbOffline = (usage && !usage.connection_ok) || (health && !health.connection_ok);
+
+                    if (dbOffline) {
+                        dbOfflineEl.classList.remove('hidden');
+                        // Show placeholder values
+                        document.getElementById('connection-status').innerHTML = 
+                            '<span class="status-fail">●</span> <span class="text-red-600">Disconnected</span>';
+                        document.getElementById('connection-details').textContent = 
+                            'Database connection unavailable. Metrics will appear once connection is restored.';
+                        document.getElementById('health-score').textContent = '—';
+                        document.getElementById('success-rate').textContent = '—';
+                        document.getElementById('error-rate').textContent = '—';
+                        document.getElementById('total-calls').textContent = '0';
+                        document.getElementById('successful-calls').textContent = '0';
+                        document.getElementById('failed-calls').textContent = '0';
+                        document.getElementById('avg-latency').textContent = '—';
+                    } else {
+                        // Render health metrics
+                        if (health) {
+                            const connectionOk = health.connection_ok !== false;
+                            document.getElementById('connection-status').innerHTML = connectionOk
+                                ? '<span class="status-ok">●</span> <span class="text-green-600">Connected</span>'
+                                : '<span class="status-fail">●</span> <span class="text-red-600">Disconnected</span>';
+                            
+                            document.getElementById('health-score').textContent = 
+                                health.health_score !== undefined ? (health.health_score * 100).toFixed(1) + '%' : '—';
+                            document.getElementById('success-rate').textContent = 
+                                health.success_rate !== undefined ? (health.success_rate * 100).toFixed(1) + '%' : '—';
+                            document.getElementById('error-rate').textContent = 
+                                health.error_rate !== undefined ? (health.error_rate * 100).toFixed(1) + '%' : '—';
+                        }
+
+                        // Render usage metrics
+                        if (usage) {
+                            document.getElementById('total-calls').textContent = 
+                                usage.total_calls !== undefined ? usage.total_calls.toLocaleString() : '0';
+                            document.getElementById('successful-calls').textContent = 
+                                usage.successful_calls !== undefined ? usage.successful_calls.toLocaleString() : '0';
+                            document.getElementById('failed-calls').textContent = 
+                                usage.failed_calls !== undefined ? usage.failed_calls.toLocaleString() : '0';
+                            document.getElementById('avg-latency').textContent = 
+                                usage.avg_latency_ms !== undefined 
+                                    ? usage.avg_latency_ms.toFixed(0) + ' ms' 
+                                    : '—';
+                        }
+                    }
+
+                    loadingEl.classList.add('hidden');
+                    contentEl.classList.remove('hidden');
+                } catch (error) {
+                    console.error('Error loading metrics:', error);
+                    loadingEl.innerHTML = '<p class="text-red-600">Error loading metrics. Please refresh the page.</p>';
+                }
+            }
+
+            // Load metrics on page load
+            loadMetrics();
+
+            // Auto-refresh every 30 seconds
+            setInterval(loadMetrics, 30000);
+        })();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+{
+  "schema": "atlas_dashboard",
+  "version": "1.0",
+  "title": "LM Studio Usage (7d)",
+  "description": "Language Model usage metrics over the last 7 days",
+  "data_source": "share/atlas/control_plane/lm_usage_7d.json",
+  "panels": [
+    {
+      "id": "total_calls",
+      "type": "metric",
+      "title": "Total LM Calls",
+      "field": "total_calls",
+      "format": "number"
+    },
+    {
+      "id": "success_vs_failed",
+      "type": "bar",
+      "title": "Success vs Failed Calls",
+      "fields": ["successful_calls", "failed_calls"],
+      "labels": ["Successful", "Failed"]
+    },
+    {
+      "id": "calls_by_day",
+      "type": "line",
+      "title": "Calls by Day",
+      "field": "calls_by_day",
+      "x_field": "date",
+      "y_field": "count"
+    },
+    {
+      "id": "avg_latency",
+      "type": "metric",
+      "title": "Average Latency (ms)",
+      "field": "avg_latency_ms",
+      "format": "number"
+    },
+    {
+      "id": "tokens",
+      "type": "metric",
+      "title": "Total Tokens",
+      "fields": ["total_tokens_prompt", "total_tokens_completion"],
+      "labels": ["Prompt", "Completion"]
+    }
+  ],
+  "db_off_safe": true,
+  "db_off_message": "No LM metrics available (database is currently offline / db_off)."
+}
+
