@@ -1,0 +1,13 @@
+diff --git a/docs/SSOT/MASTER_PLAN.md b/docs/SSOT/MASTER_PLAN.md
+index 25328bab..1b7f10f9 100644
+--- a/docs/SSOT/MASTER_PLAN.md
++++ b/docs/SSOT/MASTER_PLAN.md
+@@ -102,7 +102,7 @@ All core development phases are complete. The system is operational with:
+ 
+ **PLAN-078: Compliance Dashboards & Violation Browser (Phase-2 Milestone)** (📋 **Planned**)
+ 
+-- **E86** ⏳ PENDING: Compliance Summary Dashboard — Build `docs/atlas/dashboard/compliance_summary.html` with tiles: Total violations (24h / 7d / 30d), Violations per tool, Violations per violation code, Violations per ring level, "Top offenders" list (tools / patterns / nodes), Linkouts to raw JSON exports + guard verdicts. JSON metrics export (e.g. `share/atlas/control_plane/compliance_summary.json`). Guard + verdict JSON to ensure metrics exist, dashboard links to JSON and control-plane exports. Artifacts: `docs/atlas/dashboard/compliance_summary.html`, `share/atlas/control_plane/compliance_summary.json`, `scripts/guards/guard_compliance_summary_backlinks.py`, `evidence/guard_compliance_summary_backlinks.json`. Targets: `atlas.compliance.summary`, `guard.atlas.compliance.summary`.
++- **E86** ✅ PASS: Compliance Summary Dashboard — Build `docs/atlas/dashboard/compliance_summary.html` with tiles: Total violations (24h / 7d / 30d), Violations per tool, Violations per violation code, Violations per ring level, "Top offenders" list (tools / patterns / nodes), Linkouts to raw JSON exports + guard verdicts. JSON metrics export (e.g. `share/atlas/control_plane/compliance_summary.json`). Guard + verdict JSON to ensure metrics exist, dashboard links to JSON and control-plane exports. Artifacts: `docs/atlas/dashboard/compliance_summary.html`, `share/atlas/control_plane/compliance_summary.json`, `scripts/guards/guard_compliance_summary_backlinks.py`, `evidence/guard_compliance_summary_backlinks.json`. Targets: `atlas.compliance.summary`, `guard.atlas.compliance.summary`.
+ 
+ - **E87** ⏳ PENDING: Violation Time-Series & Heatmaps — Build `docs/atlas/dashboard/compliance_timeseries.html` and `docs/atlas/dashboard/compliance_heatmap.html`. Visuals: Time-series of violations per code + per tool, Heatmap tool × violation type. JSON export (e.g. `share/atlas/control_plane/compliance_timeseries.json`). Guard verifying required charts + backlinks to JSON. Artifacts: `docs/atlas/dashboard/compliance_timeseries.html`, `docs/atlas/dashboard/compliance_heatmap.html`, `share/atlas/control_plane/compliance_timeseries.json`. Targets: `atlas.compliance.timeseries`, `atlas.compliance.heatmap`, `guard.atlas.compliance.timeseries`, `guard.atlas.compliance.heatmap`.
+ 

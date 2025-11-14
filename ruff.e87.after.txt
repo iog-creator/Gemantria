@@ -1,0 +1,32 @@
+Would reformat: [1magentpm/tests/atlas/test_e87_timeseries_heatmap.py[0m
+1 file would be reformatted, 563 files already formatted
+[1m[91mF401 [0m[[1m[96m*[0m] [1m`json` imported but unused[0m
+ [1m[94m-->[0m agentpm/tests/atlas/test_e87_timeseries_heatmap.py:1:12
+  [1m[94m|[0m
+[1m[94m1 |[0m import os, json, pytest
+  [1m[94m|[0m            [1m[91m^^^^[0m
+[1m[94m2 |[0m
+[1m[94m3 |[0m EXPORT = "share/atlas/control_plane/compliance_timeseries.json"
+  [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `json`[0m
+
+[1m[91mUP022 [0m[1mPrefer `capture_output` over sending `stdout` and `stderr` to `PIPE`[0m
+  [1m[94m-->[0m agentpm/tests/atlas/test_e87_timeseries_heatmap.py:22:12
+   [1m[94m|[0m
+[1m[94m20 |[0m   def test_e87_guard_runs_and_reports():
+[1m[94m21 |[0m       from subprocess import run, PIPE
+[1m[94m22 |[0m       proc = run(
+   [1m[94m|[0m  [1m[91m____________^[0m
+[1m[94m23 |[0m [1m[91m|[0m         ["python3", "scripts/guards/guard_compliance_timeseries_backlinks.py"],
+[1m[94m24 |[0m [1m[91m|[0m         stdout=PIPE,
+[1m[94m25 |[0m [1m[91m|[0m         stderr=PIPE,
+[1m[94m26 |[0m [1m[91m|[0m         text=True,
+[1m[94m27 |[0m [1m[91m|[0m     )
+   [1m[94m|[0m [1m[91m|_____^[0m
+[1m[94m28 |[0m       assert proc.returncode in (0, 1)
+[1m[94m29 |[0m       assert proc.stdout.strip() != ""
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mReplace with `capture_output` keyword argument[0m
+
+Found 2 errors.
+[[36m*[0m] 1 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).

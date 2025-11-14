@@ -1,0 +1,7 @@
+{
+  "episode": "E87",
+  "series": [],
+  "generated_at": null,
+  "source": "control-plane",
+  "notes": "Stub metrics; to be populated from control-plane compliance exports."
+}

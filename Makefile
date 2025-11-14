@@ -2128,3 +2128,23 @@ export.compliance.summary:
 guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-078 E87 — Violation Time-Series + Heatmaps (stubs)
+atlas.compliance.timeseries:
+	@echo "Building E87 time-series dashboard (stub)"
+	@true
+
+atlas.compliance.heatmap:
+	@echo "Building E87 heatmap dashboard (stub)"
+	@true
+
+export.compliance.timeseries:
+	@echo "Exporting E87 timeseries metrics (stub)"
+	@true
+
+guard.atlas.compliance.timeseries:
+	python3 scripts/guards/guard_compliance_timeseries_backlinks.py
+
+# For now, reuse the same guard for heatmap until full implementation
+guard.atlas.compliance.heatmap:
+	python3 scripts/guards/guard_compliance_timeseries_backlinks.py
