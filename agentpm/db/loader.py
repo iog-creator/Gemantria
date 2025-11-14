@@ -10,16 +10,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from sqlalchemy import Engine, create_engine, text
+from sqlalchemy.exc import OperationalError, ProgrammingError
+
 from scripts.config.env import get_bible_db_dsn, get_rw_dsn
-
-try:
-    from sqlalchemy import Engine, create_engine, text
-    from sqlalchemy.exc import OperationalError, ProgrammingError
-
-    HAS_SQLALCHEMY = True
-except ImportError:
-    HAS_SQLALCHEMY = False
-    Engine = Any  # type: ignore[assignment,misc]
 
 
 class DbUnavailableError(RuntimeError):
@@ -43,12 +37,9 @@ def get_control_engine() -> Engine:
         SQLAlchemy Engine instance.
 
     Raises:
-        DbUnavailableError: If DSN is not set or SQLAlchemy is not available.
+        DbUnavailableError: If DSN is not set.
     """
     global _control_engine
-
-    if not HAS_SQLALCHEMY:
-        raise DbUnavailableError("SQLAlchemy not available in this environment")
 
     if _control_engine is None:
         dsn = get_rw_dsn()
@@ -67,12 +58,9 @@ def get_bible_engine() -> Engine:
         SQLAlchemy Engine instance.
 
     Raises:
-        DbUnavailableError: If DSN is not set or SQLAlchemy is not available.
+        DbUnavailableError: If DSN is not set.
     """
     global _bible_engine
-
-    if not HAS_SQLALCHEMY:
-        raise DbUnavailableError("SQLAlchemy not available in this environment")
 
     if _bible_engine is None:
         dsn = get_bible_db_dsn()

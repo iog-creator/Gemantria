@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -18,7 +17,6 @@ class TestLoaderWiring:
 
     @patch("agentpm.db.loader.get_rw_dsn")
     @patch("agentpm.db.loader.create_engine")
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
     def test_get_control_engine_uses_dsn_loader(self, mock_create_engine, mock_get_rw_dsn):
         """Test that get_control_engine() uses get_rw_dsn()."""
         from agentpm.db.loader import get_control_engine
@@ -42,7 +40,6 @@ class TestLoaderWiring:
 
     @patch("agentpm.db.loader.get_bible_db_dsn")
     @patch("agentpm.db.loader.create_engine")
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
     def test_get_bible_engine_uses_dsn_loader(self, mock_create_engine, mock_get_bible_dsn):
         """Test that get_bible_engine() uses get_bible_db_dsn()."""
         from agentpm.db.loader import get_bible_engine
@@ -69,7 +66,6 @@ class TestDbOffBehavior:
     """Test DB-off behavior (connection errors, missing DSNs)."""
 
     @patch("agentpm.db.loader.get_rw_dsn")
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
     def test_fetch_graph_head_db_unavailable_no_dsn(self, mock_get_rw_dsn):
         """Test fetch_graph_head raises DbUnavailableError when DSN is None."""
         from agentpm.db.loader import DbUnavailableError, fetch_graph_head
@@ -153,66 +149,61 @@ class TestDbOffBehavior:
 class TestCliBehavior:
     """Test CLI script behavior."""
 
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
-    @patch("agentpm.db.loader.fetch_graph_head")
-    def test_cli_graph_success(self, mock_fetch):
+    @patch("scripts.db_head.fetch_graph_head")
+    def test_cli_graph_success(self, mock_fetch, capsys):
         """Test CLI returns ok:true with graph rows when successful."""
+        import scripts.db_head
+
         mock_fetch.return_value = [
             {"node_id": "123", "surface": "test", "gematria_value": 42},
         ]
 
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "db_head.py"), "graph", "--limit", "1"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-        )
+        # Mock sys.argv
+        with patch.object(sys, "argv", ["db_head.py", "graph", "--limit", "1"]):
+            result = scripts.db_head.main()
 
-        assert result.returncode == 0
-        data = json.loads(result.stdout)
+        assert result == 0
+        captured = capsys.readouterr()
+        data = json.loads(captured.out)
         assert data["ok"] is True
         assert data["kind"] == "graph"
         assert len(data["rows"]) == 1
         assert data["rows"][0]["surface"] == "test"
 
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
-    @patch("agentpm.db.loader.fetch_graph_head")
-    def test_cli_db_off(self, mock_fetch):
+    @patch("scripts.db_head.fetch_graph_head")
+    def test_cli_db_off(self, mock_fetch, capsys):
         """Test CLI returns ok:false with mode:db_off when DB unavailable."""
+        import scripts.db_head
         from agentpm.db.loader import DbUnavailableError
 
         mock_fetch.side_effect = DbUnavailableError("GEMATRIA_DSN not set")
 
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "db_head.py"), "graph", "--limit", "1"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-        )
+        # Mock sys.argv
+        with patch.object(sys, "argv", ["db_head.py", "graph", "--limit", "1"]):
+            result = scripts.db_head.main()
 
-        assert result.returncode == 1
-        data = json.loads(result.stdout)
+        assert result == 1
+        captured = capsys.readouterr()
+        data = json.loads(captured.out)
         assert data["ok"] is False
         assert data["mode"] == "db_off"
         assert "error" in data
 
-    @patch("agentpm.db.loader.HAS_SQLALCHEMY", True)
-    @patch("agentpm.db.loader.fetch_graph_head")
-    def test_cli_table_missing(self, mock_fetch):
+    @patch("scripts.db_head.fetch_graph_head")
+    def test_cli_table_missing(self, mock_fetch, capsys):
         """Test CLI returns ok:false with mode:table_missing when table doesn't exist."""
+        import scripts.db_head
         from agentpm.db.loader import TableMissingError
 
         mock_fetch.side_effect = TableMissingError("Table does not exist")
 
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "db_head.py"), "graph", "--limit", "1"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-        )
+        # Mock sys.argv
+        with patch.object(sys, "argv", ["db_head.py", "graph", "--limit", "1"]):
+            result = scripts.db_head.main()
 
-        assert result.returncode == 1
-        data = json.loads(result.stdout)
+        assert result == 1
+        captured = capsys.readouterr()
+        data = json.loads(captured.out)
         assert data["ok"] is False
         assert data["mode"] == "table_missing"
         assert "error" in data
