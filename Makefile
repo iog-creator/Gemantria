@@ -2154,3 +2154,8 @@ guard.browser.verification:
 guard.tagproof.screenshots:
 	@echo "[guard.tagproof.screenshots] Validating tagproof screenshot integration"
 	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_screenshots.py
+
+# --- PLAN-079 E95: Atlas Links Integrity Sweep ---
+guard.atlas.links:
+	@echo "[guard.atlas.links] Validating atlas links integrity"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_links.py
