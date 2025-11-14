@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "checks": {
+    "html_scanned": true,
+    "no_broken_internal_links": true,
+    "external_links_marked": true
+  },
+  "counts": {
+    "html_files": 10,
+    "internal_links": 50,
+    "broken_internal_links": 0,
+    "external_links": 5,
+    "unmarked_external_links": 0
+  },
+  "details": {
+    "broken_internal_links": [],
+    "unmarked_external_links": []
+  }
+}
+

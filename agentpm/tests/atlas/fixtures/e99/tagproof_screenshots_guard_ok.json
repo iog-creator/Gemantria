@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "checks": {
+    "tagproof_dir_exists": true,
+    "has_tagproof_screenshots": true,
+    "manifest_nonempty": true,
+    "all_screenshots_listed": true,
+    "no_manifest_orphans": true
+  },
+  "counts": {
+    "tagproof_dirs": 1,
+    "tagproof_screenshots": 5,
+    "tagproof_manifests": 1,
+    "manifest_entries": 5,
+    "unlisted_screenshots": 0,
+    "orphan_manifest_entries": 0
+  },
+  "details": {
+    "tagproof_dirs": ["tagproof"],
+    "manifest_paths": ["tagproof/screenshot_manifest.json"],
+    "unlisted_screenshots": [],
+    "orphan_manifest_entries": []
+  }
+}
+

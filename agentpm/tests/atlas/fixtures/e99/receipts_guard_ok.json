@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "checks": {
+    "html_exists": true,
+    "all_receipts_linked": true,
+    "required_backlinks": true,
+    "e91_badge": true
+  },
+  "counts": {
+    "guard_files": 5,
+    "missing_refs": 0,
+    "missing_backlinks": 0
+  }
+}
+

@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "checks": {
+    "webproof_dir_exists": true,
+    "has_screenshots": true,
+    "report_exists": true,
+    "report_json_valid": true,
+    "report_ok_flag_true_when_present": true,
+    "all_required_pages_have_receipts": true,
+    "screenshot_count_reasonable": true
+  },
+  "counts": {
+    "screenshots": 6,
+    "required_pages": 6,
+    "missing_required_pages": 0
+  },
+  "details": {
+    "report_path": "evidence/webproof/report.json",
+    "webproof_dir": "evidence/webproof",
+    "missing_required_pages": []
+  }
+}
+
