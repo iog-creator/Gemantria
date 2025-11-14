@@ -130,7 +130,13 @@ def test_integrated_guard_handles_missing_scripts():
         assert check in doc["checks"], f"Missing check: {check}"
 
     # If a guard script is missing, it should be reflected in details
-    for guard_name in ["receipts_guard", "screenshot_manifest_guard", "browser_verification_guard", "tagproof_screenshots_guard", "atlas_links_guard"]:
+    for guard_name in [
+        "receipts_guard",
+        "screenshot_manifest_guard",
+        "browser_verification_guard",
+        "tagproof_screenshots_guard",
+        "atlas_links_guard",
+    ]:
         assert guard_name in doc["details"], f"Missing details for {guard_name}"
 
 
