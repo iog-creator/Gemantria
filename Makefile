@@ -2229,3 +2229,11 @@ db.smoke.stats:
 test.phase3a.db:
 	@echo "[test.phase3a.db] Running Phase-3A DB loader tests"
 	@pytest -q agentpm/tests/db/test_phase3a_db_loader.py
+
+db.import.graph_stats:
+	@echo "[db.import.graph_stats] Importing graph stats from exports/graph_stats.json"
+	@python -m scripts.db_import_graph_stats --source exports/graph_stats.json || true
+
+test.phase3a.graph_stats:
+	@echo "[test.phase3a.graph_stats] Testing graph stats importer"
+	@pytest -q agentpm/tests/db/test_phase3a_graph_stats_import.py
