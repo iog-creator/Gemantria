@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 from typer.testing import CliRunner
@@ -173,4 +173,3 @@ def test_health_system_json_only(mock_system_health, runner):
     # Should have JSON
     data = json.loads(result.stdout)
     assert data["ok"] is False
-

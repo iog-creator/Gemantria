@@ -17,11 +17,11 @@ import typer
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-# Import health check functions
-from scripts.guards.guard_db_health import check_db_health
-from scripts.guards.guard_lm_health import check_lm_health
-from scripts.graph.graph_overview import compute_graph_overview
-from scripts.system.system_health import compute_system_health, print_human_summary
+# Import health check functions (E402: imports after sys.path modification)
+from scripts.guards.guard_db_health import check_db_health  # noqa: E402
+from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
+from scripts.graph.graph_overview import compute_graph_overview  # noqa: E402
+from scripts.system.system_health import compute_system_health, print_human_summary  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -51,7 +51,7 @@ def health_system(json_only: bool = typer.Option(False, "--json-only", help="Pri
 def health_db(json_only: bool = typer.Option(False, "--json-only", help="Print only JSON")) -> None:
     """Check database health posture."""
     health = check_db_health()
-    
+
     if json_only:
         print(json.dumps(health, indent=2))
     else:
@@ -74,7 +74,7 @@ def health_db(json_only: bool = typer.Option(False, "--json-only", help="Print o
 def health_lm(json_only: bool = typer.Option(False, "--json-only", help="Print only JSON")) -> None:
     """Check LM Studio health."""
     health = check_lm_health()
-    
+
     if json_only:
         print(json.dumps(health, indent=2))
     else:
@@ -97,7 +97,7 @@ def health_lm(json_only: bool = typer.Option(False, "--json-only", help="Print o
 def health_graph(json_only: bool = typer.Option(False, "--json-only", help="Print only JSON")) -> None:
     """Check graph overview statistics."""
     overview = compute_graph_overview()
-    
+
     if json_only:
         print(json.dumps(overview, indent=2))
     else:
@@ -119,4 +119,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
