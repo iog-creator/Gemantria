@@ -6,13 +6,31 @@ This runbook explains how to check database health posture and interpret the res
 
 ## Quick Start
 
-Run the DB health smoke test:
+### CLI Usage (Primary Interface)
+
+The `pmagent` CLI is the primary interface for health checks:
+
+```bash
+# Check DB health
+pmagent health db
+
+# Or using Python module directly
+python -m pmagent.cli health db
+```
+
+### Make Target (Convenience Wrapper)
+
+The Make target is a thin wrapper around `pmagent`:
 
 ```bash
 make db.health.smoke
 ```
 
-This will output a single summary line like:
+Both methods output:
+- **JSON** to stdout (machine-friendly)
+- **Human-readable summary** to stderr
+
+Example output:
 ```
 DB_HEALTH: mode=ready (all checks passed)
 ```

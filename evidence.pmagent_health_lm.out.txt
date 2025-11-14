@@ -1,0 +1,11 @@
+LM_HEALTH: mode=lm_off ([Errno 111] Connection refused')))
+{
+  "ok": false,
+  "mode": "lm_off",
+  "details": {
+    "endpoint": "http://127.0.0.1:1234",
+    "errors": [
+      "connection_refused: HTTPConnectionPool(host='127.0.0.1', port=1234): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x783dd37c5940>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  }
+}

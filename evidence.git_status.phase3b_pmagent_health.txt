@@ -1,0 +1,17 @@
+## impl/phase3b.pmagent-health.20251114-110239
+ M Makefile
+ M docs/runbooks/DB_HEALTH.md
+ M docs/runbooks/GRAPH_OVERVIEW.md
+ M docs/runbooks/LM_HEALTH.md
+ M docs/runbooks/SYSTEM_HEALTH.md
+ M pyproject.toml
+?? .current_branch.txt
+?? agentpm/tests/cli/
+?? evidence.git_status.phase3b_pmagent_health.txt
+?? evidence.main_head.after_phase3b_f3.txt
+?? evidence.pmagent_health_db.out.txt
+?? evidence.pmagent_health_graph.out.txt
+?? evidence.pmagent_health_lm.out.txt
+?? evidence.pmagent_health_system.out.txt
+?? evidence.pr523.view.json
+?? pmagent/

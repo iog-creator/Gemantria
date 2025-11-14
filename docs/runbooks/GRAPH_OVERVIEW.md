@@ -6,13 +6,27 @@ The `graph.overview` command provides a quick summary of graph statistics from t
 
 ## Quick Start
 
-Run the graph overview command:
+### CLI Usage (Primary Interface)
+
+The `pmagent` CLI is the primary interface for health checks:
+
+```bash
+# Check graph overview
+pmagent health graph
+
+# Or using Python module directly
+python -m pmagent.cli health graph
+```
+
+### Make Target (Convenience Wrapper)
+
+The Make target is a thin wrapper around `pmagent`:
 
 ```bash
 make graph.overview
 ```
 
-This will output:
+Both methods output:
 - **JSON** to stdout (machine-friendly)
 - **Human-readable summary** to stderr
 

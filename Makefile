@@ -2253,8 +2253,8 @@ guard.db.health:
 	@python -m scripts.guards.guard_db_health || true
 
 db.health.smoke:
-	@echo "[db.health.smoke] DB health smoke test for operators"
-	@python -m scripts.guards.guard_db_health 2>/dev/null | python3 scripts/db/print_db_health_summary.py || echo "DB_HEALTH: mode=error (guard failed)"
+	@echo "[db.health.smoke] DB health smoke test for operators (via pmagent)"
+	@python -m pmagent.cli health db || echo "DB_HEALTH: mode=error (pmagent failed)"
 	@echo "[db.health.smoke] Running snapshot health check..."
 	@$(MAKE) -s snapshot.db.health.smoke || true
 
@@ -2263,8 +2263,8 @@ test.phase3a.db.health:
 	@pytest -q agentpm/tests/db/test_phase3a_db_health_guard.py
 
 graph.overview:
-	@echo "[graph.overview] DB-backed graph overview"
-	@python -m scripts.graph.graph_overview
+	@echo "[graph.overview] DB-backed graph overview (via pmagent)"
+	@python -m pmagent.cli health graph
 
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
@@ -2275,16 +2275,16 @@ guard.lm.health:
 	@python -m scripts.guards.guard_lm_health || true
 
 lm.health.smoke:
-	@echo "[lm.health.smoke] LM health smoke test for operators"
-	@python -m scripts.guards.guard_lm_health 2>/dev/null | python3 scripts/lm/print_lm_health_summary.py || echo "LM_HEALTH: mode=error (guard failed)"
+	@echo "[lm.health.smoke] LM health smoke test for operators (via pmagent)"
+	@python -m pmagent.cli health lm || echo "LM_HEALTH: mode=error (pmagent failed)"
 
 test.phase3b.lm.health:
 	@echo "[test.phase3b.lm.health] Testing LM health guard"
 	@pytest -q agentpm/tests/lm/test_phase3b_lm_health_guard.py
 
 system.health.smoke:
-	@echo "[system.health.smoke] Aggregating DB + LM + Graph health"
-	@python -m scripts.system.system_health
+	@echo "[system.health.smoke] Aggregating DB + LM + Graph health (via pmagent)"
+	@python -m pmagent.cli health system
 
 test.phase3b.system.health:
 	@echo "[test.phase3b.system.health] Testing system health aggregate"

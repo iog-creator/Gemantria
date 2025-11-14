@@ -6,13 +6,27 @@ This runbook explains how to check overall system health by aggregating DB healt
 
 ## Quick Start
 
-Run the system health smoke test:
+### CLI Usage (Primary Interface)
+
+The `pmagent` CLI is the primary interface for health checks:
+
+```bash
+# Check system health (aggregates DB + LM + Graph)
+pmagent health system
+
+# Or using Python module directly
+python -m pmagent.cli health system
+```
+
+### Make Target (Convenience Wrapper)
+
+The Make target is a thin wrapper around `pmagent`:
 
 ```bash
 make system.health.smoke
 ```
 
-This will output:
+Both methods output:
 - **JSON** to stdout (machine-friendly)
 - **Human-readable summary** to stderr
 
