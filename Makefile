@@ -2252,6 +2252,12 @@ guard.db.health:
 	@echo "[guard.db.health] Checking DB health posture"
 	@python -m scripts.guards.guard_db_health || true
 
+db.health.smoke:
+	@echo "[db.health.smoke] DB health smoke test for operators"
+	@python -m scripts.guards.guard_db_health 2>/dev/null | python3 scripts/db/print_db_health_summary.py || echo "DB_HEALTH: mode=error (guard failed)"
+	@echo "[db.health.smoke] Running snapshot health check..."
+	@$(MAKE) -s snapshot.db.health.smoke || true
+
 test.phase3a.db.health:
 	@echo "[test.phase3a.db.health] Testing DB health guard"
 	@pytest -q agentpm/tests/db/test_phase3a_db_health_guard.py
