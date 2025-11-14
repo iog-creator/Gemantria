@@ -2168,3 +2168,12 @@ test.tv.coverage:
 guard.tv.coverage:
 	@echo "[guard.tv.coverage] Validating TV coverage receipt"
 	@PYTHONPATH=. python3 scripts/guards/guard_tv_coverage.py
+
+# --- PLAN-080 E97: Gatekeeper / Guard Shim Coverage Audit ---
+gatekeeper.coverage:
+	@echo "[gatekeeper.coverage] Generating gatekeeper coverage manifest"
+	@PYTHONPATH=. python3 scripts/ci/gatekeeper_coverage.py
+
+guard.gatekeeper.coverage:
+	@echo "[guard.gatekeeper.coverage] Validating gatekeeper coverage manifest"
+	@PYTHONPATH=. python3 scripts/guards/guard_gatekeeper_coverage.py
