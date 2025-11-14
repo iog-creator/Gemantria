@@ -2137,3 +2137,8 @@ atlas.guard.receipts:
 guard.atlas.guard.receipts:
 	@echo "[guard.atlas.guard.receipts] Validating guard receipts index"
 	@PYTHONPATH=. python3 scripts/guards/guard_atlas_guard_receipts.py
+
+# PLAN-079 E92 — Screenshot Manifest Guard
+guard.screenshot.manifest:
+	@echo "[guard.screenshot.manifest] Validating screenshot manifest coverage"
+	@PYTHONPATH=. python3 scripts/guards/guard_screenshot_manifest.py
