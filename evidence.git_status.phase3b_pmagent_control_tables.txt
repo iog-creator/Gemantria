@@ -1,0 +1,10 @@
+## impl/phase3b.pmagent-control-tables.20251114-133633
+ M Makefile
+ M evidence.branch_name.txt
+ M pmagent/cli.py
+?? agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py
+?? docs/runbooks/CONTROL_TABLES.md
+?? evidence.git_status.phase3b_pmagent_control_tables.txt
+?? evidence.main_head.after_phase3b_f6.txt
+?? evidence.pmagent_control_tables.out.txt
+?? scripts/control/control_tables.py

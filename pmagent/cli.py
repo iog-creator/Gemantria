@@ -27,6 +27,10 @@ from scripts.control.control_status import (  # noqa: E402
     compute_control_status,
     print_human_summary as print_control_summary,
 )
+from scripts.control.control_tables import (  # noqa: E402
+    compute_control_tables,
+    print_human_summary as print_tables_summary,
+)
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -195,6 +199,24 @@ def control_status(
         print(json.dumps(status, indent=2))
         # Print human-readable summary to stderr
         summary = print_control_summary(status)
+        print(summary, file=sys.stderr)
+    sys.exit(0)
+
+
+@control_app.command("tables", help="List all schema-qualified tables with row counts")
+def control_tables(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """List all schema-qualified tables with row counts."""
+    tables = compute_control_tables()
+
+    if json_only:
+        print(json.dumps(tables, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(tables, indent=2))
+        # Print human-readable summary to stderr
+        summary = print_tables_summary(tables)
         print(summary, file=sys.stderr)
     sys.exit(0)
 

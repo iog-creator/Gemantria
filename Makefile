@@ -2270,6 +2270,10 @@ control.status.smoke:
 	@echo "[control.status.smoke] Checking control-plane status via pmagent"
 	@python -m pmagent.cli control status
 
+control.tables.smoke:
+	@echo "[control.tables.smoke] Listing control-plane tables via pmagent"
+	@python -m pmagent.cli control tables
+
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
 	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py
