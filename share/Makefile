@@ -2159,3 +2159,45 @@ guard.tagproof.screenshots:
 guard.atlas.links:
 	@echo "[guard.atlas.links] Validating atlas links integrity"
 	@PYTHONPATH=. python3 scripts/guards/guard_atlas_links.py
+
+# --- PLAN-080 E99: Integrated Browser + Screenshot Verification ---
+guard.browser.integrated:
+	@echo "[guard.browser.integrated] Running integrated browser + screenshot verification"
+	@PYTHONPATH=. python3 scripts/guards/guard_browser_screenshot_integrated.py \
+		--write-evidence evidence/browser_screenshot_integrated.json
+
+# --- PLAN-080 E96: TV-01..TV-05 Coverage ---
+test.tv.coverage:
+	@echo "[test.tv.coverage] Running TV-01..TV-05 and generating coverage receipt"
+	@PYTHONPATH=. python3 scripts/ci/tv_coverage.py
+
+guard.tv.coverage:
+	@echo "[guard.tv.coverage] Validating TV coverage receipt"
+	@PYTHONPATH=. python3 scripts/guards/guard_tv_coverage.py
+
+# --- PLAN-080 E97: Gatekeeper / Guard Shim Coverage Audit ---
+gatekeeper.coverage:
+	@echo "[gatekeeper.coverage] Generating gatekeeper coverage manifest"
+	@PYTHONPATH=. python3 scripts/ci/gatekeeper_coverage.py
+
+guard.gatekeeper.coverage:
+	@echo "[guard.gatekeeper.coverage] Validating gatekeeper coverage manifest"
+	@PYTHONPATH=. python3 scripts/guards/guard_gatekeeper_coverage.py
+
+# --- PLAN-080 E98: Full Extraction & Atlas + Exports Regeneration ---
+regenerate.all:
+	@echo "[regenerate.all] Regenerating all extraction and export artifacts"
+	@PYTHONPATH=. python3 scripts/ci/regenerate_all.py
+
+guard.regenerate.all:
+	@echo "[guard.regenerate.all] Validating regeneration receipt and artifacts"
+	@PYTHONPATH=. python3 scripts/guards/guard_regenerate_all.py > evidence/guard_regenerate_all.json || true
+
+test.e98.regenerate.all:
+	@echo "[test.e98.regenerate.all] Running E98 regeneration guard tests"
+	@pytest -q agentpm/tests/atlas/test_e98_regenerate_all_guard.py
+
+# --- PLAN-080 E99: Integrated Browser + Screenshot Verification Tests ---
+test.e99.browser.integrated:
+	@echo "[test.e99.browser.integrated] Running E99 integrated browser + screenshot verification tests"
+	@pytest -q agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py

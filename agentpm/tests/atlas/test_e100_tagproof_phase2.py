@@ -58,7 +58,7 @@ def test_bundle_generator_creates_bundle():
         shutil.copy(str(BUNDLE_PATH), str(backup))
 
     try:
-        result = _run_bundle_generator()
+        _run_bundle_generator()
         assert BUNDLE_PATH.exists(), "Bundle file should be created"
         bundle = json.loads(BUNDLE_PATH.read_text())
         assert "version" in bundle
