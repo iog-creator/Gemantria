@@ -2261,3 +2261,11 @@ db.health.smoke:
 test.phase3a.db.health:
 	@echo "[test.phase3a.db.health] Testing DB health guard"
 	@pytest -q agentpm/tests/db/test_phase3a_db_health_guard.py
+
+graph.overview:
+	@echo "[graph.overview] DB-backed graph overview"
+	@python -m scripts.graph.graph_overview
+
+test.phase3b.graph.overview:
+	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
+	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py

@@ -1,0 +1,18 @@
+Makefile:829: warning: overriding recipe for target 'phase8.temporal'
+Makefile:734: warning: ignoring old recipe for target 'phase8.temporal'
+Makefile:1628: warning: overriding recipe for target 'rerank.smoke'
+Makefile:1622: warning: ignoring old recipe for target 'rerank.smoke'
+[graph.overview] DB-backed graph overview
+GRAPH_OVERVIEW: mode=db_off (Postgres database driver not available)
+{
+  "ok": false,
+  "mode": "db_off",
+  "stats": {
+    "nodes": null,
+    "edges": null,
+    "avg_degree": null,
+    "snapshot_count": null,
+    "last_import_at": null
+  },
+  "reason": "Postgres database driver not available"
+}
