@@ -129,8 +129,7 @@ def compute_insights(window_days: int = 7) -> LMInsights7dExport:
     elif failed_calls > 0:
         # If we have failures but no error types, use a generic reason
         top_error_reason = "unknown_error"
-    elif db_off:
-        top_error_reason = "db_off"
+    # Note: db_off case is handled earlier in the function
 
     # For now, we don't have backend breakdown (lm_studio vs remote) in the current data
     # This would require querying the DB for backend field or adding it to usage export

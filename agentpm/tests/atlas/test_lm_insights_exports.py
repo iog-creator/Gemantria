@@ -7,8 +7,6 @@ Verifies that LM insights exports work correctly with db_off + LM-off tolerance.
 
 from __future__ import annotations
 
-import json
-from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -131,8 +129,8 @@ def test_insights_missing_breakdown() -> None:
         assert result.lm_studio_calls is None
         assert result.remote_calls is None
         assert result.lm_studio_usage_ratio is None
-        # top_error_reason should be None when no errors
-        assert result.top_error_reason is None
+        # top_error_reason should be "unknown_error" when there are failures but no error_types
+        assert result.top_error_reason == "unknown_error"
 
 
 def test_insights_no_errors() -> None:
