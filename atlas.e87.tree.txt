@@ -1,0 +1,61 @@
+atlas: docs/atlas:
+atlas: call_graph.mmd
+atlas: class_diagram.mmd
+atlas: compliance
+atlas: dashboard
+atlas: data
+atlas: dependencies.mmd
+atlas: execution_live.mmd
+atlas: index.html
+atlas: js
+atlas: knowledge_graph.mmd
+atlas: _kpis.json
+atlas: kpis.mmd
+atlas: _kpis_panel.html
+atlas: mcp_catalog_view.html
+atlas: mcp_examples.md
+atlas: mcp_flow.mmd
+atlas: nodes
+atlas: pipeline_flow_historical.mmd
+atlas: README.md
+atlas: status.html
+atlas: status.mmd
+atlas: status.txt
+atlas: webproof
+atlas: 
+atlas: docs/atlas/compliance:
+atlas: 
+atlas: docs/atlas/dashboard:
+atlas: compliance_heatmap.html
+atlas: compliance_summary.html
+atlas: compliance_summary.html.bak
+atlas: compliance_timeseries.html
+atlas: 
+atlas: docs/atlas/data:
+atlas: mcp_catalog.json
+atlas: 
+atlas: docs/atlas/js:
+atlas: mcp_catalog_live.js
+atlas: mcp_catalog_viewer.js
+atlas: 
+atlas: docs/atlas/nodes:
+atlas: A.html
+atlas: B.html
+atlas: C.html
+atlas: D.html
+atlas: Enrich.html
+atlas: error.html
+atlas: Index.html
+atlas: Ingest.html
+atlas: Normalize.html
+atlas: Persist.html
+atlas: success.html
+atlas: 
+atlas: docs/atlas/webproof:
+atlas: control_compliance.html
+atlas: e66_graph_rollup.html
+atlas: e67_drilldown.html
+atlas: e68_screenshots.html
+atlas: e69_reranker.html
+atlas: index.html
+atlas: knowledge_mcp.html
