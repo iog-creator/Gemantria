@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Graph Compliance Metrics — E90</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.metric { display: inline-block; margin: 0.5em 1em 0.5em 0; padding: 0.5em 1em; background: white; border-radius: 4px; border: 1px solid #ccc; }
+.metric-value { font-size: 1.5em; font-weight: bold; color: #0066cc; }
+.metric-label { font-size: 0.9em; color: #666; }
+.chart-container { position: relative; height: 300px; margin: 2em 0; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; text-align: center; padding: 2em; }
+.error { color: #dc3545; background: #ffe6e6; padding: 1em; border-radius: 8px; margin: 1em 0; }
+</style>
+</head>
+<body>
+<h1>Graph Compliance Metrics <span class="badge">E90</span></h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading graph compliance metrics...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/graph_compliance.json" data-testid="backlink-graph-compliance-json">Raw JSON: share/atlas/control_plane/graph_compliance.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/compliance_summary.json" data-testid="backlink-compliance-summary-json">Raw JSON: share/atlas/control_plane/compliance_summary.json</a></li>
+  <li><a href="../../../evidence/guard_control_graph_compliance.json" data-testid="backlink-guard-graph-compliance-json">Guard Verdict: evidence/guard_control_graph_compliance.json</a></li>
+  <li><a href="compliance_summary.html" data-testid="backlink-compliance-summary-dashboard">Compliance Summary Dashboard (E86)</a></li>
+  <li><a href="compliance_timeseries.html" data-testid="backlink-compliance-timeseries-dashboard">Compliance Time-Series Dashboard (E87)</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const DATA_URL = '../../../share/atlas/control_plane/graph_compliance.json';
+  const contentDiv = document.getElementById('dashboard-content');
+
+  function loadData() {
+    fetch(DATA_URL)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        if (data.error) {
+          contentDiv.innerHTML = `<div class="error">Error loading data: ${data.error}</div>`;
+          return;
+        }
+        renderDashboard(data);
+      })
+      .catch(err => {
+        contentDiv.innerHTML = `<div class="error">Failed to load graph compliance data: ${err.message}</div>`;
+      });
+  }
+
+  function renderDashboard(data) {
+    const summary = data.summary || {};
+    const sourceExports = data.source_exports || {};
+
+    let html = `
+      <div class="tile">
+        <h2>Summary Metrics</h2>
+        <div class="metric">
+          <span class="metric-value">${summary.nodes || 0}</span><br>
+          <span class="metric-label">Nodes</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">${summary.patterns || 0}</span><br>
+          <span class="metric-label">Patterns</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">${summary.tools || 0}</span><br>
+          <span class="metric-label">Tools</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">${summary.batches || 0}</span><br>
+          <span class="metric-label">Batches</span>
+        </div>
+      </div>
+
+      <div class="tile">
+        <h2>Compliance Metrics Chart</h2>
+        <div class="chart-container">
+          <canvas id="complianceChart"></canvas>
+        </div>
+      </div>
+
+      <div class="tile">
+        <h2>Source Exports</h2>
+        <ul>
+          <li>compliance_summary.json: ${sourceExports['compliance_summary.json'] ? '✓' : '✗'}</li>
+          <li>top_violations_7d.json: ${sourceExports['top_violations_7d.json'] ? '✓' : '✗'}</li>
+          <li>top_violations_30d.json: ${sourceExports['top_violations_30d.json'] ? '✓' : '✗'}</li>
+          <li>graph_stats.json: ${sourceExports['graph_stats.json'] ? '✓' : '✗'}</li>
+        </ul>
+      </div>
+    `;
+
+    contentDiv.innerHTML = html;
+
+    // Initialize Chart.js
+    const ctx = document.getElementById('complianceChart');
+    if (ctx && typeof Chart !== 'undefined') {
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Nodes', 'Patterns', 'Tools', 'Batches'],
+          datasets: [{
+            label: 'Counts',
+            data: [
+              summary.nodes || 0,
+              summary.patterns || 0,
+              summary.tools || 0,
+              summary.batches || 0,
+            ],
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+  }
+
+  loadData();
+})();
+</script>
+</body>
+</html>
+
