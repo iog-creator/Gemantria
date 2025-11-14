@@ -146,14 +146,15 @@ _DEFAULT_GRAPH_STATS_PATH = Path("exports/graph_stats.json")
 
 @graph_app.command("import", help="Import graph_stats.json into database")
 def graph_import(
-    input_path: Path = typer.Option(
-        _DEFAULT_GRAPH_STATS_PATH,
+    input_path: str = typer.Option(
+        str(_DEFAULT_GRAPH_STATS_PATH),
         "--input",
         help="Path to graph_stats.json file",
     ),
 ) -> None:
     """Import graph_stats.json into Postgres database."""
-    result = import_graph_stats(input_path)
+    path = Path(input_path) if input_path else _DEFAULT_GRAPH_STATS_PATH
+    result = import_graph_stats(path)
 
     # Print JSON to stdout
     print(json.dumps(result, indent=2, default=str))
