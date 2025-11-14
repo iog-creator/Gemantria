@@ -2201,3 +2201,47 @@ test.e98.regenerate.all:
 test.e99.browser.integrated:
 	@echo "[test.e99.browser.integrated] Running E99 integrated browser + screenshot verification tests"
 	@pytest -q agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py
+
+# --- PLAN-080 E100: Phase-2 Tagproof Bundle ---
+tagproof.phase2.bundle:
+	@echo "[tagproof.phase2.bundle] Generating Phase-2 tagproof bundle"
+	@PYTHONPATH=. python3 scripts/ci/tagproof_phase2_bundle.py
+
+guard.tagproof.phase2:
+	@echo "[guard.tagproof.phase2] Validating Phase-2 tagproof bundle"
+	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_phase2.py > evidence/guard_tagproof_phase2.json || true
+	@cat evidence/guard_tagproof_phase2.json
+
+# --- PLAN-080 E100: Phase-2 Tagproof Bundle Tests ---
+test.e100.tagproof.phase2:
+	@echo "[test.e100.tagproof.phase2] Running E100 Phase-2 tagproof bundle tests"
+	@pytest -q agentpm/tests/atlas/test_e100_tagproof_phase2.py
+
+# --- Phase-3A: DB Activation — First Slice ---
+db.smoke.control:
+	@echo "[db.smoke.control] Running DB head query for graph (best-effort)"
+	@PYTHONPATH=. python3 -m scripts.db_head graph --limit 5 || true
+
+db.smoke.stats:
+	@echo "[db.smoke.stats] Running DB head query for stats (best-effort)"
+	@PYTHONPATH=. python3 -m scripts.db_head stats --limit 5 || true
+
+test.phase3a.db:
+	@echo "[test.phase3a.db] Running Phase-3A DB loader tests"
+	@pytest -q agentpm/tests/db/test_phase3a_db_loader.py
+
+db.import.graph_stats:
+	@echo "[db.import.graph_stats] Importing graph stats from exports/graph_stats.json"
+	@python -m scripts.db_import_graph_stats --source exports/graph_stats.json || true
+
+test.phase3a.graph_stats:
+	@echo "[test.phase3a.graph_stats] Testing graph stats importer"
+	@pytest -q agentpm/tests/db/test_phase3a_graph_stats_import.py
+
+guard.db.health:
+	@echo "[guard.db.health] Checking DB health posture"
+	@python -m scripts.guards.guard_db_health || true
+
+test.phase3a.db.health:
+	@echo "[test.phase3a.db.health] Testing DB health guard"
+	@pytest -q agentpm/tests/db/test_phase3a_db_health_guard.py

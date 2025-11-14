@@ -2237,3 +2237,11 @@ db.import.graph_stats:
 test.phase3a.graph_stats:
 	@echo "[test.phase3a.graph_stats] Testing graph stats importer"
 	@pytest -q agentpm/tests/db/test_phase3a_graph_stats_import.py
+
+guard.db.health:
+	@echo "[guard.db.health] Checking DB health posture"
+	@python -m scripts.guards.guard_db_health || true
+
+test.phase3a.db.health:
+	@echo "[test.phase3a.db.health] Testing DB health guard"
+	@pytest -q agentpm/tests/db/test_phase3a_db_health_guard.py
