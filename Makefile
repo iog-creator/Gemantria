@@ -2128,3 +2128,16 @@ export.compliance.summary:
 guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
+
+# PLAN-078 E89 — Unified Violation Browser
+export.violation.browser:
+	@echo "[export.violation.browser] Generating violations_browser.json"
+	@PYTHONPATH=. python3 scripts/atlas/generate_violations_browser.py
+
+atlas.violation.browser: export.violation.browser
+	@echo "[atlas.violation.browser] E89 unified violation browser ready"
+	@test -f docs/atlas/browser/violations.html || (echo "ERROR: violations.html missing" && exit 1)
+
+guard.atlas.violation.browser:
+	@echo "[guard.atlas.violation.browser] Validating violation browser"
+	@PYTHONPATH=. python3 scripts/guards/guard_violation_browser.py
