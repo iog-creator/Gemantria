@@ -30,5 +30,10 @@ def test_guard_tagproof_screenshots_includes_debug_lists():
     data = json.loads(result.stdout)
     details = data.get("details") or {}
     # These keys should always be present to help debug STRICT failures
-    for key in ("tagproof_dirs", "manifest_paths", "unlisted_screenshots", "orphan_manifest_entries"):
+    for key in (
+        "tagproof_dirs",
+        "manifest_paths",
+        "unlisted_screenshots",
+        "orphan_manifest_entries",
+    ):
         assert key in details
