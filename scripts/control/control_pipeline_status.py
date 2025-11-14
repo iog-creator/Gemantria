@@ -7,7 +7,7 @@ Phase-3B Feature #9: Summarize recent pipeline runs from control.agent_run table
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import text
