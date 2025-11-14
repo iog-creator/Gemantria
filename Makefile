@@ -2266,6 +2266,10 @@ graph.overview:
 	@echo "[graph.overview] DB-backed graph overview (via pmagent)"
 	@python -m pmagent.cli graph overview
 
+control.status.smoke:
+	@echo "[control.status.smoke] Checking control-plane status via pmagent"
+	@python -m pmagent.cli control status
+
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
 	@pytest -q agentpm/tests/db/test_phase3b_graph_overview.py
