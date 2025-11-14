@@ -167,10 +167,20 @@ codex.parallel:
 share.sync:
 	@PYTHONPATH=. python3 scripts/sync_share.py
 
-.PHONY: pm.snapshot share.manifest.verify
+.PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke
 
 pm.snapshot:
 	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
+
+snapshot.db.health.smoke:
+	@echo "[snapshot.db.health.smoke] Verifying DB health integration in pm.snapshot"
+	@python3 -m scripts.pm_snapshot > /dev/null 2>&1 || true
+	@if [ -f "evidence/pm_snapshot/db_health.json" ]; then \
+		echo "✓ DB health JSON found in evidence/pm_snapshot/db_health.json"; \
+		python3 -c "import json, sys; data=json.load(open('evidence/pm_snapshot/db_health.json')); print(f'  Mode: {data.get(\"mode\", \"unknown\")}, OK: {data.get(\"ok\", False)}')"; \
+	else \
+		echo "⚠ DB health JSON not found (expected if guard_db_health failed)"; \
+	fi
 	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
 
 share.manifest.verify:

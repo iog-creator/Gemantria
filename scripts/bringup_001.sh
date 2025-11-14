@@ -182,10 +182,21 @@ make guards.all || {
 }
 echo ""
 
+# 4a) DB Health Guard (Phase-3A Step-5 integration)
+echo ">> Step 4a: DB Health Guard"
+EVIDENCE_DIR="evidence/bringup_001"
+mkdir -p "$EVIDENCE_DIR"
+DB_HEALTH_OUTPUT=$(python3 -m scripts.guards.guard_db_health 2>&1 || echo '{"ok":false,"mode":"error"}')
+echo "DB Health Guard output:"
+echo "$DB_HEALTH_OUTPUT" | head -n 20
+echo ""
+# Save DB health JSON to evidence directory
+echo "$DB_HEALTH_OUTPUT" > "$EVIDENCE_DIR/db_health.json" || true
+echo ""
+
 # 5) Evidence bundle for this bring-up
 
 echo ">> Step 5: Capture evidence bundle"
-EVIDENCE_DIR="evidence/bringup_001"
 mkdir -p "$EVIDENCE_DIR"
 
 # Copy exports
