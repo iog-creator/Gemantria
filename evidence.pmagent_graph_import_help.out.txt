@@ -1,0 +1,11 @@
+                                                                                
+ Usage: python -m pmagent.cli graph import [OPTIONS]                            
+                                                                                
+ Import graph_stats.json into database                                          
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --input        PATH  Path to graph_stats.json file                           │
+│                      [default: exports/graph_stats.json]                     │
+│ --help               Show this message and exit.                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+

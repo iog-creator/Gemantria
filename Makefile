@@ -2241,8 +2241,8 @@ test.phase3a.db:
 	@pytest -q agentpm/tests/db/test_phase3a_db_loader.py
 
 db.import.graph_stats:
-	@echo "[db.import.graph_stats] Importing graph stats from exports/graph_stats.json"
-	@python -m scripts.db_import_graph_stats --source exports/graph_stats.json || true
+	@echo "[db.import.graph_stats] Importing graph stats via pmagent"
+	@python -m pmagent.cli graph import --input exports/graph_stats.json || true
 
 test.phase3a.graph_stats:
 	@echo "[test.phase3a.graph_stats] Testing graph stats importer"
@@ -2264,7 +2264,7 @@ test.phase3a.db.health:
 
 graph.overview:
 	@echo "[graph.overview] DB-backed graph overview (via pmagent)"
-	@python -m pmagent.cli health graph
+	@python -m pmagent.cli graph overview
 
 test.phase3b.graph.overview:
 	@echo "[test.phase3b.graph.overview] Testing graph overview DB feature"
