@@ -22,10 +22,13 @@ from scripts.guards.guard_db_health import check_db_health  # noqa: E402
 from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
 from scripts.graph.graph_overview import compute_graph_overview  # noqa: E402
 from scripts.system.system_health import compute_system_health, print_human_summary  # noqa: E402
+from scripts.db_import_graph_stats import import_graph_stats  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
 app.add_typer(health_app, name="health")
+graph_app = typer.Typer(help="Graph operations")
+app.add_typer(graph_app, name="graph")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -114,6 +117,54 @@ def health_graph(
             reason = "ok" if overview.get("ok") else mode
         print(f"GRAPH_OVERVIEW: mode={mode} ({reason[:50]})", file=sys.stderr)
     sys.exit(0)
+
+
+@graph_app.command("overview", help="Display graph overview statistics")
+def graph_overview(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Display graph overview statistics from database."""
+    overview = compute_graph_overview()
+
+    if json_only:
+        print(json.dumps(overview, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(overview, indent=2))
+        # Print human-readable summary to stderr
+        mode = overview.get("mode", "unknown")
+        reason = overview.get("reason", "ok")
+        if not reason or reason == "ok":
+            reason = "ok" if overview.get("ok") else mode
+        print(f"GRAPH_OVERVIEW: mode={mode} ({reason[:50]})", file=sys.stderr)
+    sys.exit(0)
+
+
+@graph_app.command("import", help="Import graph_stats.json into database")
+def graph_import(
+    input_path: Path = typer.Option(
+        Path("exports/graph_stats.json"),
+        "--input",
+        help="Path to graph_stats.json file",
+    ),
+) -> None:
+    """Import graph_stats.json into Postgres database."""
+    result = import_graph_stats(input_path)
+
+    # Print JSON to stdout
+    print(json.dumps(result, indent=2, default=str))
+
+    # Print human-readable summary to stderr
+    if result.get("ok"):
+        inserted = result.get("inserted", 0)
+        snapshot_id = result.get("snapshot_id", "unknown")
+        print(f"GRAPH_IMPORT: snapshots_imported=1 rows_inserted={inserted} snapshot_id={snapshot_id}", file=sys.stderr)
+        sys.exit(0)
+    else:
+        errors = result.get("errors", [])
+        error_msg = errors[0] if errors else "unknown error"
+        print(f"GRAPH_IMPORT: failed ({error_msg[:50]})", file=sys.stderr)
+        sys.exit(1)
 
 
 def main() -> None:

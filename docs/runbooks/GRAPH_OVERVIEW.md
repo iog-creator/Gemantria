@@ -8,15 +8,17 @@ The `graph.overview` command provides a quick summary of graph statistics from t
 
 ### CLI Usage (Primary Interface)
 
-The `pmagent` CLI is the primary interface for health checks:
+The `pmagent` CLI is the primary interface for graph operations:
 
 ```bash
 # Check graph overview
-pmagent health graph
+pmagent graph overview
 
 # Or using Python module directly
-python -m pmagent.cli health graph
+python -m pmagent.cli graph overview
 ```
+
+**Note**: The `pmagent health graph` command is also available for backward compatibility, but `pmagent graph overview` is the preferred interface.
 
 ### Make Target (Convenience Wrapper)
 
@@ -197,7 +199,7 @@ make db.import.graph_stats
 ## Related Documentation
 
 - **DB Health**: See `docs/runbooks/DB_HEALTH.md` for database health checks
-- **Graph Stats Import**: See `AGENTS.md` for `db.import.graph_stats` usage
+- **Graph Stats Import**: See `docs/runbooks/GRAPH_IMPORT.md` for importing graph statistics
 - **Database Architecture**: See `docs/ADRs/ADR-001-database-architecture.md` for DB design
 
 ## Make Targets

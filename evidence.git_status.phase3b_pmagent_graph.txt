@@ -1,0 +1,12 @@
+## impl/phase3b.pmagent-graph.20251114-132529
+ M Makefile
+ M docs/runbooks/GRAPH_OVERVIEW.md
+ M pmagent/cli.py
+?? agentpm/tests/cli/test_phase3b_pmagent_graph_cli.py
+?? docs/runbooks/GRAPH_IMPORT.md
+?? evidence.git_status.phase3b_pmagent_graph.txt
+?? evidence.main_head.after_phase3b_f4.txt
+?? evidence.pmagent_graph_import_help.out.txt
+?? evidence.pmagent_graph_overview.out.txt
+?? evidence.pr524.view.json
+?? evidence.pr_phase3b_pmagent_health.json
