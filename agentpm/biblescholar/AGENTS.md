@@ -10,7 +10,8 @@ directly; it should provide pure, testable adapters that callers can use.
 
 ## Status
 
-- Phase-6J: BibleScholar Gematria adapter (read-only) — IN PROGRESS
+- Phase-6J: BibleScholar Gematria adapter (read-only) — COMPLETE
+- Phase-6K: BibleScholar Gematria flow (read-only) — IN PROGRESS
 
 ## Related SSOT Docs
 
@@ -99,6 +100,39 @@ All adapter functions must have comprehensive tests covering:
 - Invalid system names
 
 Tests live in `agentpm/biblescholar/tests/test_gematria_adapter.py`.
+
+### Gematria Flow (Phase-6K)
+
+- **Module**: `agentpm/biblescholar/gematria_flow.py`
+- **Purpose**: Read-only pipeline hook for BibleScholar to compute Gematria for
+  verses (text + OSIS ref) across one or more numerics systems.
+- **Dependencies**:
+  - `agentpm.biblescholar.gematria_adapter`
+  - `agentpm.modules.gematria.core`
+- **Non-goals**:
+  - No control-plane writes.
+  - No database access.
+  - No LM calls.
+
+**API**:
+- `supported_gematria_systems() -> list[str]` - Returns list of supported systems
+- `compute_verse_gematria(text: str, osis_ref: str, systems: Iterable[str] | None = None) -> VerseGematriaSummary`
+  - Computes Gematria for a verse across specified systems (or all systems if None)
+  - Returns `VerseGematriaSummary` with mapping of system -> `GematriaPhraseResult`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.gematria_flow import compute_verse_gematria
+
+# Single system
+summary = compute_verse_gematria("אדם", "Gen.2.7", ["mispar_hechrachi"])
+assert summary.systems["mispar_hechrachi"].value == 45
+
+# All systems (default)
+summary = compute_verse_gematria("הבל", "Gen.4.2")
+assert "mispar_hechrachi" in summary.systems
+assert "mispar_gadol" in summary.systems
+```
 
 ## Future Extensions
 
