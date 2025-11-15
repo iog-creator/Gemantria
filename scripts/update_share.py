@@ -233,8 +233,14 @@ def main():
     items = spec.get("items", [])
     evidence_paths = spec.get("evidence", [])
 
-    # Note: No hard limit on manifest count (data-driven per Rule-044)
-    # The manifest count is determined by the actual items in SHARE_MANIFEST.json
+    # Enforce 40-item limit on manifest count (per PM requirement)
+    MAX_MANIFEST_ITEMS = 40
+    if len(items) > MAX_MANIFEST_ITEMS:
+        print(
+            f"[update_share] ERROR: Manifest has {len(items)} items (max {MAX_MANIFEST_ITEMS}); trim manifest.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     # Track manifest metadata in database
     track_manifest_metadata(

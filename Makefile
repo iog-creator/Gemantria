@@ -185,7 +185,7 @@ snapshot.db.health.smoke:
 	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt
 
 share.manifest.verify:
-	@python3 -c "import json, sys, pathlib; p = pathlib.Path('docs/SSOT/SHARE_MANIFEST.json'); root = pathlib.Path('.'); data = json.loads(p.read_text()) if p.exists() else {'items': []}; items = data.get('items', []); n = len(items); missing = []; [missing.append(it.get('dst', '')) for it in items if it.get('dst') and not (root / it.get('dst')).exists()]; print(f'MANIFEST_COUNT={n}'); (print(f'ERROR: Missing files in share/: {missing}', file=sys.stderr) or sys.exit(1)) if missing else None; print('OK: All manifest items present in share/')"
+	@python3 -c "import json, sys, pathlib; p = pathlib.Path('docs/SSOT/SHARE_MANIFEST.json'); root = pathlib.Path('.'); data = json.loads(p.read_text()) if p.exists() else {'items': []}; items = data.get('items', []); n = len(items); MAX_ITEMS = 40; missing = []; [missing.append(it.get('dst', '')) for it in items if it.get('dst') and not (root / it.get('dst')).exists()]; print(f'MANIFEST_COUNT={n}'); (print(f'ERROR: Manifest exceeds limit ({n} > {MAX_ITEMS})', file=sys.stderr) or sys.exit(1)) if n > MAX_ITEMS else None; (print(f'ERROR: Missing files in share/: {missing}', file=sys.stderr) or sys.exit(1)) if missing else None; print('OK: All manifest items present in share/')"
 
 # ADR housekeeping (Rule-058 compliance - temporarily disabled pending ADR format standardization)
 
