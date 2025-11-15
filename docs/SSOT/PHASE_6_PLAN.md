@@ -85,6 +85,81 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 
 ---
 
+### 6J — BibleScholar Gematria Adapter (Read-Only)
+
+**Objective**: Provide read-only access to Gematria numerics for BibleScholar.
+
+**Status**: ✅ **COMPLETE** (2025-11-15)
+
+**Deliverables**:
+- `agentpm/biblescholar/gematria_adapter.py` — Read-only adapter for Gematria numerics
+- Mispar Hechrachi and Mispar Gadol support
+- DB-off mode handling (graceful degradation)
+
+---
+
+### 6M — Bible DB Read-Only Adapter + Passage Flow
+
+**Objective**: Provide read-only access to bible_db for verse/passage retrieval.
+
+**Status**: ✅ **COMPLETE** (2025-11-15)
+
+**Deliverables**:
+- `agentpm/biblescholar/bible_db_adapter.py` — Read-only adapter for `bible_db`
+- `agentpm/biblescholar/bible_passage_flow.py` — Passage/verse retrieval flow
+- Verse lookup by book/chapter/verse (reference string parsing)
+- Multi-translation support (KJV default, extensible)
+- DB-off mode handling (graceful degradation)
+
+---
+
+### 6O — Vector Similarity Adapter + Verse-Similarity Flow
+
+**Objective**: Provide read-only vector similarity for finding similar verses.
+
+**Status**: ✅ **COMPLETE** (2025-11-15, PR #557)
+
+**Deliverables**:
+- `agentpm/biblescholar/vector_adapter.py` — Vector similarity adapter (pgvector)
+- `agentpm/biblescholar/vector_flow.py` — Verse-similarity flow wrapper
+- Read-only vector similarity using pgvector cosine distance
+- DB-off mode handling (graceful degradation)
+
+---
+
+### 6P — BibleScholar Reference Answer Slice
+
+**Objective**: Single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice.
+
+**Status**: ✅ **COMPLETE** (2025-11-15, PR #560)
+
+**Deliverables**:
+- `agentpm/biblescholar/reference_slice.py` — `answer_reference_question()` orchestrates complete E2E flow
+- Resolves verse context from bible_db (read-only)
+- Retrieves Gematria patterns for Hebrew text
+- Optionally finds similar verses using vector similarity
+- Calls LM Studio via `guarded_lm_call()` with budget enforcement and provenance
+- Returns structured `ReferenceAnswerResult` with answer, trace, context_used, and lm_meta
+
+**Tests**:
+- `agentpm/biblescholar/tests/test_reference_slice.py` (5/5 passing)
+  - Happy path: All adapters + LM succeed
+  - db_off scenario: DB unavailable, graceful degradation
+  - budget_exceeded: LM budget exhausted, handled gracefully
+  - Question-only: No verse reference provided
+  - Verse without Hebrew: No Gematria patterns
+
+**Constraints Met**:
+- ✅ No new DSNs (uses existing adapters)
+- ✅ DB-off hermetic mode (graceful degradation)
+- ✅ Budget enforcement (via guarded_lm_call)
+- ✅ Provenance required (LM metadata in result)
+- ✅ Read-only adapters only
+
+**Dependencies**: 6J, 6M, 6O, 6A, 6B, 6C (all COMPLETE)
+
+---
+
 ### 6D — Downstream App Read-Only Wiring
 
 **StoryMaker**:
