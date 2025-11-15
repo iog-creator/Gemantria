@@ -3,6 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
+import { KnowledgePanel } from "../components/KnowledgePanel";
 import { useGraphData } from "../hooks/useGraphData";
 import { GraphNode } from "../types/graph";
 
@@ -159,9 +160,10 @@ export default function GraphDashboard() {
             </div>
           </div>
 
-          {/* Node Details - Takes up 1/4 of the space */}
-          <div className="lg:col-span-1">
+          {/* Sidebar - Takes up 1/4 of the space */}
+          <div className="lg:col-span-1 space-y-6">
             <NodeDetails node={selectedNode} />
+            <KnowledgePanel />
           </div>
         </main>
 
