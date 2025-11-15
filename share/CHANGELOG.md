@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+- **Phase-3C/3D — LM Studio integration & observability** (PRs #532, #533, #534, #535)
+  - Added LM Studio adapter + routing helper (`src/services/lm_routing_bridge.py`) and `pmagent health lm` command
+  - Wired enrichment pipeline through `chat_completion_with_routing()` with control-plane logging
+  - Added LM Studio setup runbook (`docs/runbooks/LM_STUDIO_SETUP.md`) and AGENTS documentation
+  - Implemented LM metrics exports (`lm_usage_7d.json`, `lm_health_7d.json`) — db_off + LM-off safe
+  - Added Atlas LM dashboards (usage + health configs) and HTML LM status page with Browser Verification (Rule-067)
+  - Key PRs: #532 (LM Studio adapter + routing, P0), #533 (LM routing in enrichment + setup docs, P1b/P2), #534 (LM metrics exports, D1), #535 (LM dashboards + status page, D2/D3)
 - PLAN-072 M2+: TVs E06–E10 implemented, tested, guarded (PR #499) — provenance logic complete with `ensure_provenance`, `guard_provenance`, `stamp_batch` functions, full test coverage, guard integration, and AGENTS.md documentation.
 - PLAN-074 M14: Atlas UI tiles + guards (E66–E70 COMPLETE) — graph rollup metrics, node drilldowns, screenshot manifest, reranker badges, and webproof bundle backlinks with guards + receipts.
 - PLAN-075 E71–E72: DSN centralization hardening + control-plane DDL — guard enforces centralized loader usage, control schema migration + schema snapshot artifact.

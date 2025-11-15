@@ -348,13 +348,51 @@ These are active on every branch/state and are not pruned or downgraded.
 
 **Phase-3B Completion**: All control-plane introspection commands implemented, tested, documented, and integrated into `pmagent` CLI. Hermetic DB-off behavior preserved throughout.
 
-### Phase-3C: LM Studio + Control Plane Integration (📋 **Planned**)
-- **RFC-080**: LM Studio + Control Plane Integration (design phase)
-- **Track 1**: LM Studio adapter + health-aware routing (P0)
-- **Track 2**: Control-plane logging of LM Studio calls (P1)
-- **Track 3**: Atlas / dashboards consuming `pmagent control summary` (P2)
+### Phase-3C: LM Studio + Control Plane Integration (✅ **Complete**)
+- **RFC-080**: LM Studio + Control Plane Integration (ratified by ADR-066)
+- **P0**: LM Studio adapter + routing helper (PR #532)
+- **P1**: `pmagent health lm` + control-plane logging wrapper (`lm_studio_chat_with_logging`) (PR #533)
+- **P1b/P2**: Enrichment pipeline routing + LM Studio setup runbook/docs (PR #533)
 
-**Phase-3C Goals**: Integrate LM Studio as local model backend with health-aware routing through `pmagent` and control-plane observability. See [RFC-080](../rfcs/RFC-080-lm-studio-control-plane-integration.md) for detailed design.
+**Phase-3C Status**: ✅ **PLUMBING COMPLETE** — LM Studio integration is fully wired. DB/LM may still be off by default (hermetic behavior preserved). See [RFC-080](../rfcs/RFC-080-lm-studio-control-plane-integration.md) and [ADR-066](../ADRs/ADR-066-lm-studio-control-plane-integration.md) for details.
+
+### Phase-3D: LM Observability & Status UI (✅ **Complete**)
+- **D1**: LM metrics exports (PR #534)
+  - `share/atlas/control_plane/lm_usage_7d.json` — Usage metrics (total calls, success/failure, latency, tokens)
+  - `share/atlas/control_plane/lm_health_7d.json` — Health metrics (health score, success/error rates, error types)
+  - db_off + LM-off safe (graceful no-op when DB unavailable)
+- **D2**: Atlas LM dashboards (PR #535)
+  - Usage dashboard config: `docs/atlas/config/lm_usage_dashboard.json`
+  - Health dashboard config: `docs/atlas/config/lm_health_dashboard.json`
+  - Both dashboards driven by D1 JSON exports
+- **D3**: HTML LM status page (PR #535)
+  - `docs/atlas/html/lm_status.html` — Non-technical user-friendly status page
+  - Browser Verification (Rule-067): Screenshot in `share/webproof/lm/browser_verified_lm_status.png`
+  - Explicit db_off handling: Page shows "no data / offline" messaging when DB unavailable
+  - Auto-refresh every 30 seconds
+
+**Phase-3D Status**: ✅ **COMPLETE** — All LM observability artifacts are in place and browser-verified. Status page is readable and helpful in db_off mode.
+
+### Phase-4: LM Insights & UI Polish (📋 **Planned**)
+- **4A**: LM Insights exports
+  - Higher-level JSON export (e.g. `lm_insights_7d.json`) summarizing:
+    - `lm_studio_usage_ratio` — Percentage of calls using LM Studio vs fallback
+    - `fallback_rate` — Rate of fallback to legacy `chat_completion()`
+    - `top_error_reason` — Most common error types/causes
+    - Additional aggregated insights from `lm_usage_7d.json` and `lm_health_7d.json`
+  - Still db_off-safe (emit "no data" but don't crash)
+- **4B**: LM status page UX polish
+  - One-sentence summary at the top ("LM Studio is offline / healthy / degraded")
+  - Simple explanations of "health score", "db_off", "error_rate" for non-technical users
+  - Friendlier layout and typography improvements
+- **4C**: Surfacing LM status in consumer flows
+  - Define a tiny JSON + HTML "LM indicator" widget that could be embedded in StoryMaker / BibleScholar / other apps
+  - For now, just plan/spec; implementation can be Phase-4 PRs
+- **4D**: Governance/docs alignment
+  - Update ADR-066 or add a follow-up ADR noting Phase-4 enhancements
+  - Ensure AGENTS.md, LM_STUDIO_SETUP.md, and SHARE_MANIFEST include any new exports/HTML
+
+**Phase-4 Goals**: Enhance LM observability with higher-level insights and improve UX for non-technical users. All enhancements maintain db_off + LM-off safety.
 
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
