@@ -89,6 +89,54 @@
     {
       "src": "share/pm.snapshot.md",
       "dst": "share/pm.snapshot.md"
+    },
+    {
+      "src": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+      "dst": "share/AGENTPM_GEMATRIA_MODULE_PLAN.md"
+    },
+    {
+      "src": "docs/SSOT/BIBLESCHOLAR_INTAKE.md",
+      "dst": "share/BIBLESCHOLAR_INTAKE.md"
+    },
+    {
+      "src": "docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md",
+      "dst": "share/GEMATRIA_NUMERICS_INTAKE.md"
+    },
+    {
+      "src": "docs/SSOT/LM_WIDGETS.md",
+      "dst": "share/LM_WIDGETS.md"
+    },
+    {
+      "src": "docs/SSOT/PHASE_6_PLAN.md",
+      "dst": "share/PHASE_6_PLAN.md"
+    },
+    {
+      "src": "docs/SSOT/PROJECTS_INVENTORY.md",
+      "dst": "share/PROJECTS_INVENTORY.md"
+    },
+    {
+      "src": "README.md",
+      "dst": "share/README.md"
+    },
+    {
+      "src": "README_FULL.md",
+      "dst": "share/README_FULL.md"
+    },
+    {
+      "src": "docs/SSOT/REFERENCES.md",
+      "dst": "share/REFERENCES.md"
+    },
+    {
+      "src": "docs/SSOT/STORYMAKER_INTAKE.md",
+      "dst": "share/STORYMAKER_INTAKE.md"
+    },
+    {
+      "src": "forest_overview.md",
+      "dst": "share/forest_overview.md"
+    },
+    {
+      "src": "docs/SSOT/webui-contract.md",
+      "dst": "share/webui-contract.md"
     }
   ],
   "evidence": [
