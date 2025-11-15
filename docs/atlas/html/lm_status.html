@@ -24,6 +24,11 @@
         </div>
 
         <div id="content" class="hidden">
+            <!-- One-Sentence Status Summary -->
+            <div id="status-summary" class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-md p-6 mb-6 border-l-4 border-blue-500">
+                <p id="status-summary-text" class="text-xl font-semibold text-gray-900">Loading status...</p>
+            </div>
+
             <!-- Connection Status -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <h2 class="text-2xl font-semibold mb-4">Connection Status</h2>
@@ -36,19 +41,28 @@
             <!-- Health Overview -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white rounded-lg shadow-md p-6 metric-card">
-                    <h3 class="text-sm font-medium text-gray-500 mb-2">Health Score</h3>
-                    <div id="health-score" class="text-4xl font-bold text-gray-900">—</div>
-                    <p class="text-sm text-gray-600 mt-2">Overall system health</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-6 metric-card">
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Success Rate</h3>
                     <div id="success-rate" class="text-4xl font-bold text-green-600">—</div>
-                    <p class="text-sm text-gray-600 mt-2">Last 7 days</p>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Percentage of LM calls that completed successfully in the last 7 days.
+                        Higher is better — 95%+ indicates healthy operation.
+                    </p>
                 </div>
                 <div class="bg-white rounded-lg shadow-md p-6 metric-card">
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Error Rate</h3>
                     <div id="error-rate" class="text-4xl font-bold text-red-600">—</div>
-                    <p class="text-sm text-gray-600 mt-2">Last 7 days</p>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Percentage of LM calls that failed in the last 7 days.
+                        Lower is better — under 5% is normal; above 10% may indicate issues.
+                    </p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 metric-card">
+                    <h3 class="text-sm font-medium text-gray-500 mb-2">LM Studio Usage</h3>
+                    <div id="lm-studio-ratio" class="text-4xl font-bold text-blue-600">—</div>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Percentage of calls using local LM Studio (vs. remote services).
+                        Shows "N/A" if backend breakdown is unavailable.
+                    </p>
                 </div>
             </div>
 
@@ -85,8 +99,9 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm text-yellow-700">
-                            <strong>No LM metrics available</strong> — Database is currently offline (db_off mode).
-                            Metrics will appear once the database connection is restored.
+                            <strong>Database Offline (db_off mode)</strong> — The database connection is currently unavailable,
+                            so we cannot display real-time LM metrics. This is normal when running in offline mode or when
+                            the database service is temporarily down. Metrics will appear automatically once the connection is restored.
                         </p>
                     </div>
                 </div>
@@ -99,27 +114,74 @@
             const loadingEl = document.getElementById('loading');
             const contentEl = document.getElementById('content');
             const dbOfflineEl = document.getElementById('db-offline');
+            const statusSummaryEl = document.getElementById('status-summary');
+            const statusSummaryTextEl = document.getElementById('status-summary-text');
+
+            function getStatusSummary(insights) {
+                if (!insights || insights.db_off || !insights.connection_ok) {
+                    return {
+                        text: 'LM Studio is offline — Database connection unavailable. Metrics will appear once connection is restored.',
+                        color: 'text-red-700',
+                        bg: 'from-red-50 to-orange-50',
+                        border: 'border-red-500'
+                    };
+                }
+
+                const successRate = insights.success_rate || 0;
+                const errorRate = insights.error_rate || 0;
+                const totalCalls = insights.total_calls || 0;
+
+                if (totalCalls === 0) {
+                    return {
+                        text: 'LM Studio is ready — No calls recorded in the last 7 days. System is waiting for activity.',
+                        color: 'text-blue-700',
+                        bg: 'from-blue-50 to-indigo-50',
+                        border: 'border-blue-500'
+                    };
+                }
+
+                if (successRate >= 0.95 && errorRate < 0.05) {
+                    return {
+                        text: 'LM Studio is healthy — Operating normally with high success rate and low error rate.',
+                        color: 'text-green-700',
+                        bg: 'from-green-50 to-emerald-50',
+                        border: 'border-green-500'
+                    };
+                } else if (successRate >= 0.80 && errorRate < 0.15) {
+                    return {
+                        text: 'LM Studio is operational — Running with acceptable performance. Monitor for any degradation.',
+                        color: 'text-yellow-700',
+                        bg: 'from-yellow-50 to-amber-50',
+                        border: 'border-yellow-500'
+                    };
+                } else {
+                    return {
+                        text: 'LM Studio is degraded — High error rate or low success rate detected. Review error logs and system health.',
+                        color: 'text-red-700',
+                        bg: 'from-red-50 to-orange-50',
+                        border: 'border-red-500'
+                    };
+                }
+            }
 
             async function loadMetrics() {
                 try {
-                    // Load usage and health metrics (relative to docs/atlas/html/)
-                    const [usageRes, healthRes] = await Promise.all([
-                        fetch('../../share/atlas/control_plane/lm_usage_7d.json').catch(() => null),
-                        fetch('../../share/atlas/control_plane/lm_health_7d.json').catch(() => null)
-                    ]);
+                    // Load insights metrics (relative to docs/atlas/html/)
+                    const insightsRes = await fetch('../../share/atlas/control_plane/lm_insights_7d.json').catch(() => null);
+                    let insights = null;
 
-                    let usage = null;
-                    let health = null;
-
-                    if (usageRes && usageRes.ok) {
-                        usage = await usageRes.json();
-                    }
-                    if (healthRes && healthRes.ok) {
-                        health = await healthRes.json();
+                    if (insightsRes && insightsRes.ok) {
+                        insights = await insightsRes.json();
                     }
 
                     // Check if DB is offline
-                    const dbOffline = (usage && !usage.connection_ok) || (health && !health.connection_ok);
+                    const dbOffline = !insights || insights.db_off || !insights.connection_ok;
+
+                    // Update status summary
+                    const statusSummary = getStatusSummary(insights);
+                    statusSummaryEl.className = `bg-gradient-to-r ${statusSummary.bg} rounded-lg shadow-md p-6 mb-6 border-l-4 ${statusSummary.border}`;
+                    statusSummaryTextEl.className = `text-xl font-semibold ${statusSummary.color}`;
+                    statusSummaryTextEl.textContent = statusSummary.text;
 
                     if (dbOffline) {
                         dbOfflineEl.classList.remove('hidden');
@@ -128,42 +190,51 @@
                             '<span class="status-fail">●</span> <span class="text-red-600">Disconnected</span>';
                         document.getElementById('connection-details').textContent = 
                             'Database connection unavailable. Metrics will appear once connection is restored.';
-                        document.getElementById('health-score').textContent = '—';
                         document.getElementById('success-rate').textContent = '—';
                         document.getElementById('error-rate').textContent = '—';
+                        document.getElementById('lm-studio-ratio').textContent = '—';
                         document.getElementById('total-calls').textContent = '0';
                         document.getElementById('successful-calls').textContent = '0';
                         document.getElementById('failed-calls').textContent = '0';
                         document.getElementById('avg-latency').textContent = '—';
                     } else {
-                        // Render health metrics
-                        if (health) {
-                            const connectionOk = health.connection_ok !== false;
-                            document.getElementById('connection-status').innerHTML = connectionOk
-                                ? '<span class="status-ok">●</span> <span class="text-green-600">Connected</span>'
-                                : '<span class="status-fail">●</span> <span class="text-red-600">Disconnected</span>';
-                            
-                            document.getElementById('health-score').textContent = 
-                                health.health_score !== undefined ? (health.health_score * 100).toFixed(1) + '%' : '—';
-                            document.getElementById('success-rate').textContent = 
-                                health.success_rate !== undefined ? (health.success_rate * 100).toFixed(1) + '%' : '—';
-                            document.getElementById('error-rate').textContent = 
-                                health.error_rate !== undefined ? (health.error_rate * 100).toFixed(1) + '%' : '—';
-                        }
+                        dbOfflineEl.classList.add('hidden');
+                        // Render connection status
+                        const connectionOk = insights.connection_ok !== false;
+                        document.getElementById('connection-status').innerHTML = connectionOk
+                            ? '<span class="status-ok">●</span> <span class="text-green-600">Connected</span>'
+                            : '<span class="status-fail">●</span> <span class="text-red-600">Disconnected</span>';
+                        
+                        document.getElementById('connection-details').textContent = 
+                            connectionOk 
+                                ? `Metrics updated at ${new Date(insights.generated_at).toLocaleString()}`
+                                : 'Connection issues detected';
+
+                        // Render insights metrics
+                        document.getElementById('success-rate').textContent = 
+                            insights.success_rate !== undefined && insights.success_rate !== null
+                                ? (insights.success_rate * 100).toFixed(1) + '%' 
+                                : '—';
+                        document.getElementById('error-rate').textContent = 
+                            insights.error_rate !== undefined && insights.error_rate !== null
+                                ? (insights.error_rate * 100).toFixed(1) + '%' 
+                                : '—';
+                        document.getElementById('lm-studio-ratio').textContent = 
+                            insights.lm_studio_usage_ratio !== undefined && insights.lm_studio_usage_ratio !== null
+                                ? (insights.lm_studio_usage_ratio * 100).toFixed(1) + '%'
+                                : 'N/A';
 
                         // Render usage metrics
-                        if (usage) {
-                            document.getElementById('total-calls').textContent = 
-                                usage.total_calls !== undefined ? usage.total_calls.toLocaleString() : '0';
-                            document.getElementById('successful-calls').textContent = 
-                                usage.successful_calls !== undefined ? usage.successful_calls.toLocaleString() : '0';
-                            document.getElementById('failed-calls').textContent = 
-                                usage.failed_calls !== undefined ? usage.failed_calls.toLocaleString() : '0';
-                            document.getElementById('avg-latency').textContent = 
-                                usage.avg_latency_ms !== undefined 
-                                    ? usage.avg_latency_ms.toFixed(0) + ' ms' 
-                                    : '—';
-                        }
+                        document.getElementById('total-calls').textContent = 
+                            insights.total_calls !== undefined ? insights.total_calls.toLocaleString() : '0';
+                        document.getElementById('successful-calls').textContent = 
+                            insights.successful_calls !== undefined ? insights.successful_calls.toLocaleString() : '0';
+                        document.getElementById('failed-calls').textContent = 
+                            insights.failed_calls !== undefined ? insights.failed_calls.toLocaleString() : '0';
+                        
+                        // Note: avg_latency_ms is not in insights, so we'll leave it as "—" for now
+                        // If needed, we could load usage_7d.json separately for latency
+                        document.getElementById('avg-latency').textContent = '—';
                     }
 
                     loadingEl.classList.add('hidden');
