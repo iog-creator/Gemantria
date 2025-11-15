@@ -43,6 +43,7 @@ from scripts.control.control_summary import (  # noqa: E402
     compute_control_summary,
     print_human_summary as print_summary_summary,
 )
+from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -51,6 +52,8 @@ graph_app = typer.Typer(help="Graph operations")
 app.add_typer(graph_app, name="graph")
 control_app = typer.Typer(help="Control-plane operations")
 app.add_typer(control_app, name="control")
+ask_app = typer.Typer(help="Ask questions using SSOT documentation")
+app.add_typer(ask_app, name="ask")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -285,6 +288,32 @@ def control_summary(
         # Print human-readable summary to stderr
         summary_line = print_summary_summary(summary)
         print(summary_line, file=sys.stderr)
+    sys.exit(0)
+
+
+@ask_app.command("docs", help="Answer a question using SSOT documentation")
+def ask_docs(
+    question: str = typer.Argument(..., help="Question to ask"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Answer a question using SSOT documentation via LM Studio."""
+    result = answer_doc_question(question)
+
+    if json_only:
+        print(json.dumps(result, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(result, indent=2))
+        # Print human-readable summary to stderr
+        if result.get("ok"):
+            answer = result.get("answer", "")
+            mode = result.get("mode", "unknown")
+            sources_count = len(result.get("sources", []))
+            print(f"ANSWER ({mode}): {answer[:200]}...", file=sys.stderr)
+            print(f"SOURCES: {sources_count} section(s)", file=sys.stderr)
+        else:
+            mode = result.get("mode", "unknown")
+            print(f"ERROR: Failed to generate answer (mode: {mode})", file=sys.stderr)
     sys.exit(0)
 
 

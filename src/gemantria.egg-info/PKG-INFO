@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: gemantria
+Version: 0.0.3.dev0
+Summary: Gemantria gematria analysis pipeline
+Requires-Python: >=3.11
+License-File: LICENSE
+Dynamic: license-file
