@@ -1,11 +1,6 @@
 ## [Unreleased]
 
-- **Phase-5 — StoryMaker & BibleScholar LM Integration** (PR #541 - planning scaffold)
-  - Added Phase-5 planning document (`docs/SSOT/PHASE_5_PLAN.md`) with full integration plan
-  - Added LM Indicator Widget contract specification (`docs/SSOT/LM_WIDGETS.md`)
-  - Created stub adapter module (`agentpm/lm_widgets/adapter.py`) for downstream app integration
-  - Updated MASTER_PLAN, AGENTS.md, CHANGELOG.md with Phase-5 tracking
-  - Next: Implement full adapter logic + tests (PR #2), then StoryMaker/BibleScholar integrations (PRs #3, #4)
+- **Phase-5 — StoryMaker & BibleScholar LM Integration**: LM indicator widget contract finalized; Gemantria adapter implemented; StoryMaker React tile and BibleScholar header badge added as hermetic consumers of `lm_indicator.json`.
 
 - **Phase-4 — LM Insights & UI Polish** (PRs #536, #537, #538, #539, #540)
   - Implemented LM insights exports (`lm_insights_7d.json`) aggregating usage and health metrics (Phase-4A)
@@ -48,6 +43,9 @@
 - merge system health aggregate
 - merge LM health guard + smoke
 - merge DB-backed graph overview
+
+- mark Phase-3D complete and add Phase-4 LM insights & UI polish (#536)
+- LM metrics exports for Atlas (D1)
 
 ## [v0.0.8] - 2025-11-12
 

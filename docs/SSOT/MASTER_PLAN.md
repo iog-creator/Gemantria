@@ -400,30 +400,15 @@ These are active on every branch/state and are not pruned or downgraded.
 
 **Phase-4 Status**: ✅ **COMPLETE** — All LM observability exports are in place, status page is UX-polished, and indicator export provides a canonical signal for downstream apps. All enhancements maintain db_off + LM-off safety.
 
-### Phase-5: StoryMaker & BibleScholar LM Integration (🔄 **PLANNING**)
+### Phase-5: StoryMaker & BibleScholar LM Integration (✅ **COMPLETE**)
 
-- **5A**: Planning scaffold + widget SSOT ✅
-  - Added `PHASE_5_PLAN.md` with full integration plan
-  - Added `LM_WIDGETS.md` with widget contract specification
-  - Created stub adapter module (`agentpm/lm_widgets/adapter.py`)
-  - Updated MASTER_PLAN, AGENTS.md, CHANGELOG.md
+- **5A**: LM indicator widget contract finalized in `LM_WIDGETS.md` ✅
+- **5B**: Hermetic LM indicator adapter implemented in Gemantria (`load_lm_indicator_widget_props`) ✅
+- **5C**: StoryMaker integration — LM status tile using the widget props (PR #1 in storymaker-bundle-v1.6) ✅
+- **5D**: BibleScholar integration — header status badge using the widget props (PR #2 in BibleScholarProjectClean) ✅
 
-- **5B**: Adapter implementation (PR #2 - pending)
-  - Implement `load_lm_indicator_widget_props()` with full hermetic + fail-closed logic
-  - Add comprehensive tests (healthy, degraded, offline, missing-file, invalid-JSON)
-  - Ensure db_off-safe and LM-off-safe behavior
-
-- **5C**: StoryMaker integration (PR #3 - external repo)
-  - Integrate LM indicator widget using adapter props
-  - Add tile component with tooltip rendering
-  - Implement color/icon mapping (app-specific)
-
-- **5D**: BibleScholar integration (PR #4 - external repo)
-  - Integrate LM indicator widget using adapter props
-  - Add header badge with tooltip
-  - Implement offline-safe fallback screen note
-
-**Phase-5 Status**: 🔄 **PLANNING** — Initial scaffolding complete. Adapter implementation and app integrations pending.
+**Phase-5 Status**: ✅ **COMPLETE** — Both StoryMaker and BibleScholar now consume the canonical `lm_indicator.json` signal via
+the shared LM widget contract. All adapters are hermetic and fail-closed (offline-safe) and do not introduce new heuristics.
 
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅

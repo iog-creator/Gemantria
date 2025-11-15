@@ -1,6 +1,6 @@
 # Phase-5 — StoryMaker & BibleScholar LM Integration
 
-Status: PLANNING (initial scaffolding)  
+Status: COMPLETE  
 Scope: Safe, hermetic LM status consumption + app-level components  
 Upstream Dependencies: Phase-4 complete on `main` (indicator export + UX status page + governance)
 
@@ -105,4 +105,12 @@ PR #3:
 PR #4:
 
 - BibleScholar integration (external repo)
+
+## Phase-5 Completion Summary
+
+- **Gemantria PR (adapter):** Phase-5 PR #2 — LM Indicator Widget adapter + tests (Gemantria.v2)
+- **StoryMaker PR:** #1 — LM indicator adapter + LMStatusTile React component
+- **BibleScholar PR:** #2 — LM indicator adapter + header status badge (Flask/Jinja)
+- **Contract:** Both downstream apps consume the `LMIndicatorWidgetProps` contract defined in `docs/SSOT/LM_WIDGETS.md`.
+- **Safety:** All adapters are hermetic (file-only, no DB/LM calls) and fail-closed (offline-safe defaults).
 
