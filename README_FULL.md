@@ -85,7 +85,16 @@ The first end-to-end pipeline ingests SSOT documentation into Postgres and enabl
 pip install -e .
 ```
 
-**Run the pipeline:**
+**Automated Bring-Up (Recommended):**
+```bash
+# Automated bring-up: starts Postgres + LM Studio, runs ingestion + golden question
+make reality.check.1
+
+# Or run directly:
+python -m agentpm.scripts.reality_check_1
+```
+
+**Manual Steps:**
 ```bash
 # 1. Ingest SSOT docs into control.doc_sources and control.doc_sections
 python -m agentpm.scripts.ingest_docs
@@ -95,12 +104,22 @@ pmagent ask docs "What does Phase-6P deliver?"
 ```
 
 **What it does:**
-- Ingests curated SSOT files (MASTER_PLAN.md, AGENTS.md, graph.schema.json) into `control.doc_sources` and `control.doc_sections`
-- Retrieves relevant doc sections based on query text match
-- Uses LM Studio (guarded) to answer questions with provenance and budget enforcement
-- Tolerates db_off mode (graceful degradation when DB/LM unavailable)
+- **Automated bring-up**: Starts/verifies Postgres (using `DB_START_CMD` if set) and LM Studio server (using `lms` CLI)
+- **Ingestion**: Ingests curated SSOT files (MASTER_PLAN.md, AGENTS.md, graph.schema.json) into `control.doc_sources` and `control.doc_sections`
+- **Retrieval**: Retrieves relevant doc sections based on text match
+- **Q&A**: Answers questions using LM Studio with guarded calls and budget enforcement
+- **Output**: Returns structured answers with provenance and LM metadata (JSON format)
+
+**Configuration:**
+- Set `LM_STUDIO_ENABLED=1` in `.env.local` or `.env`
+- Configure `LM_STUDIO_BASE_URL` and `LM_STUDIO_MODEL` (see `env_example.txt`)
+- **Optional bring-up hooks** (for automated bring-up):
+  - `DB_START_CMD`: Shell command to start Postgres (e.g., `brew services start postgresql` or `sudo systemctl start postgresql`)
+  - `LM_STUDIO_MODEL_ID`: Model identifier for `lms load` (e.g., `lmstudio-community/Meta-Llama-3-8B-Instruct`)
+  - `LM_STUDIO_SERVER_PORT`: Port for LM Studio server (default: `1234`)
 
 **Module locations:**
+- Bring-up script: `agentpm/scripts/reality_check_1.py`
 - Ingestion: `agentpm/scripts/ingest_docs.py`
 - Retrieval: `agentpm/knowledge/retrieval.py`
 - Q&A: `agentpm/knowledge/qa_docs.py`
