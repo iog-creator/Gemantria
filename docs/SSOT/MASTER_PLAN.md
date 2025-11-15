@@ -400,6 +400,31 @@ These are active on every branch/state and are not pruned or downgraded.
 
 **Phase-4 Status**: ✅ **COMPLETE** — All LM observability exports are in place, status page is UX-polished, and indicator export provides a canonical signal for downstream apps. All enhancements maintain db_off + LM-off safety.
 
+### Phase-5: StoryMaker & BibleScholar LM Integration (🔄 **PLANNING**)
+
+- **5A**: Planning scaffold + widget SSOT ✅
+  - Added `PHASE_5_PLAN.md` with full integration plan
+  - Added `LM_WIDGETS.md` with widget contract specification
+  - Created stub adapter module (`agentpm/lm_widgets/adapter.py`)
+  - Updated MASTER_PLAN, AGENTS.md, CHANGELOG.md
+
+- **5B**: Adapter implementation (PR #2 - pending)
+  - Implement `load_lm_indicator_widget_props()` with full hermetic + fail-closed logic
+  - Add comprehensive tests (healthy, degraded, offline, missing-file, invalid-JSON)
+  - Ensure db_off-safe and LM-off-safe behavior
+
+- **5C**: StoryMaker integration (PR #3 - external repo)
+  - Integrate LM indicator widget using adapter props
+  - Add tile component with tooltip rendering
+  - Implement color/icon mapping (app-specific)
+
+- **5D**: BibleScholar integration (PR #4 - external repo)
+  - Integrate LM indicator widget using adapter props
+  - Add header badge with tooltip
+  - Implement offline-safe fallback screen note
+
+**Phase-5 Status**: 🔄 **PLANNING** — Initial scaffolding complete. Adapter implementation and app integrations pending.
+
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
 - [x] E67: Per-node drilldown links (receipt + guard) ✅
