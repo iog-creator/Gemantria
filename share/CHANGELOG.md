@@ -49,6 +49,13 @@
 - mark Phase-3D complete and add Phase-4 LM insights & UI polish (#536)
 - LM metrics exports for Atlas (D1)
 
+- enhance migration plan with schema-based analysis (primary input)
+- add Knowledge Slice v0 schema and exports (6C) (#546)
+- add LM usage budgets and 7d budget export (#545)
+- enable LM Studio live usage behind flag (#544)
+- add Phase-6 plan (LM Studio live usage + DB-backed knowledge) (#543)
+- LM observability governance & indicator docs (4D) (#540)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

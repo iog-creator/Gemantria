@@ -130,7 +130,9 @@ def fetch_passage(
     return [verse] if verse is not None else []
 
 
-def get_db_status(adapter: BibleDbAdapter | None = None) -> Literal["available", "unavailable", "db_off"]:
+def get_db_status(
+    adapter: BibleDbAdapter | None = None,
+) -> Literal["available", "unavailable", "db_off"]:
     """Get current database status.
 
     Args:

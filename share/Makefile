@@ -171,6 +171,7 @@ share.sync:
 
 pm.snapshot:
 	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
+	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt || echo "⚠️  pm.snapshot had issues (non-fatal)"
 
 snapshot.db.health.smoke:
 	@echo "[snapshot.db.health.smoke] Verifying DB health integration in pm.snapshot"
@@ -496,7 +497,9 @@ housekeeping.atlas:
 
 .PHONY: housekeeping
 housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
-	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff)"
+	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff + pm.snapshot)"
+	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
+	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
 	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/auto_update_agents_md.py || echo "⚠️  AGENTS.md auto-update had issues (non-fatal)"
 	@echo ">> Auto-updating CHANGELOG.md based on recent commits (Rule-058)"
@@ -507,6 +510,8 @@ housekeeping: share.sync adr.housekeeping governance.housekeeping governance.doc
 	@echo "Rules audit complete"
 	@PYTHONPATH=. $(PYTHON) scripts/generate_forest.py
 	@echo "Forest generation complete"
+	@echo ">> Generating PM snapshot (Rule-058)"
+	@$(MAKE) -s pm.snapshot || echo "⚠️  pm.snapshot had issues (non-fatal)"
 	@echo "✅ Complete housekeeping finished (Rule-058)"
 
 # --- UI acceptance (headless) ---
