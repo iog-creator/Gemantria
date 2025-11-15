@@ -41,9 +41,7 @@ def test_compute_phrase_gematria_basic_hevel_hechrachi() -> None:
 
 def test_compute_phrase_gematria_with_osis_ref() -> None:
     """Test that OSIS reference is preserved in result."""
-    result = compute_phrase_gematria(
-        "הבל", system=core.DEFAULT_SYSTEM_NAME, osis_ref="Gen.4.2"
-    )
+    result = compute_phrase_gematria("הבל", system=core.DEFAULT_SYSTEM_NAME, osis_ref="Gen.4.2")
     assert result.value == 37  # canonical example from Gematria tests
     assert result.osis_ref == "Gen.4.2"
     assert result.text == "הבל"
@@ -192,4 +190,3 @@ def test_gematria_phrase_result_optional_osis_ref() -> None:
         value=45,
     )
     assert result.osis_ref is None
-
