@@ -87,18 +87,29 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 
 ### 6D — Downstream App Read-Only Wiring
 
-**StoryMaker**:
+**Step 1: Gemantria-side adapter (✅ COMPLETE)**:
+- Knowledge adapter module ✅ (`agentpm/knowledge/adapter.py`)
+  - Reads `kb_docs.head.json` (hermetic, file-only)
+  - Returns typed widget props for downstream apps
+  - Fail-closed (offline-safe defaults)
+- KB widget contract ✅ (`docs/SSOT/KB_WIDGETS.md`)
+  - Documents JSON→props contract
+  - Adapter rules (hermetic, read-only, file-based)
+- Tests ✅ (`agentpm/tests/knowledge/test_kb_adapter.py`)
+  - Happy path, missing file, malformed JSON, empty docs
+
+**Step 2: StoryMaker integration** (📘 PLANNING):
 - `useKnowledgeSlice()` hook
 - Replace selected hardcoded metadata with DB-backed knowledge
 - Tests: React with mocked KB responses
 
-**BibleScholar**:
+**Step 3: BibleScholar integration** (📘 PLANNING):
 - KB client for lookup of canonical metadata
 - Replace selected lookup logic with DB data
 
 **Shared**:
 - Apps MUST NOT query Postgres directly
-- All reads go through a Gemantria-owned API or CLI wrapper
+- All reads go through Gemantria-owned adapter (`load_kb_docs_widget_props()`)
 
 ---
 
