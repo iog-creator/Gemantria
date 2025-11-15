@@ -233,10 +233,8 @@ def main():
     items = spec.get("items", [])
     evidence_paths = spec.get("evidence", [])
 
-    # Optional safety: enforce low file count
-    if len(items) > 25:
-        print("[update_share] ERROR: more than 25 items; trim manifest.", file=sys.stderr)
-        sys.exit(2)
+    # Note: No hard limit on manifest count (data-driven per Rule-044)
+    # The manifest count is determined by the actual items in SHARE_MANIFEST.json
 
     # Track manifest metadata in database
     track_manifest_metadata(
