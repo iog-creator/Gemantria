@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-14 14:00:55
+Generated: 2025-11-14 19:19:29
 
 ## Active Rules
 
@@ -148,6 +148,7 @@ Generated: 2025-11-14 14:00:55
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
 - ADR-058-gpt-system-prompt-governance: ADR-058: GPT System Prompt Requirements as Operational Governance
 - ADR-065-postgres-ssot: ADR-065 — Postgres-First SSOT for Gemantria
+- ADR-066-lm-studio-control-plane-integration: ADR-066 — LM Studio + Control Plane Integration
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

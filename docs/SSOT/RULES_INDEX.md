@@ -71,9 +71,3 @@
 | 066 | 066-lm-studio-appimage-update.mdc | # --- |
 | 067 | 067-atlas-webproof.mdc | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | 068-gpt-docs-sync.mdc | # --- |
-
-## RFCs
-
-| RFC | Title | Status | Related Rules |
-|-----|-------|--------|---------------|
-| RFC-080 | LM Studio + Control Plane Integration (Phase-3C) | Draft | Rule-046, Rule-050/051/052, Rule-062 |
