@@ -763,6 +763,35 @@ python scripts/auto_update_changelog.py --limit 20
 
 **Note:** This script is designed to reduce manual CHANGELOG maintenance. If you find yourself manually editing CHANGELOG.md, that indicates the auto-update script needs enhancement, not that manual updates are required.
 
+### `validate_agents_md.py` — AGENTS.md Validation (Rule-017 + Rule-058)
+
+**Purpose:** Validates that all required AGENTS.md files are present and have valid structure. Uses dynamic directory discovery to check all directories that require AGENTS.md files per Rule 017.
+**Rule References:** 006 (AGENTS.md Governance), 017 (Agent Docs Presence), 027 (Docs Sync Gate), 058 (Auto-Housekeeping)
+**Capabilities:**
+
+- **Dynamic Discovery**: Automatically discovers directories requiring AGENTS.md files (matches `create_agents_md.py` approach)
+- **Presence Validation**: Checks that all required AGENTS.md files exist
+- **Structure Validation**: Verifies AGENTS.md files have required sections (`# AGENTS.md` header, `## Directory Purpose`)
+- **Exclusion Handling**: Properly excludes generated/static directories (public, dist, build, .egg-info, cache dirs)
+- **Comprehensive Coverage**: Validates AGENTS.md files in `src/`, `agentpm/`, `docs/`, `webui/`, and tool directories
+
+**Usage:**
+
+```bash
+# Validate all required AGENTS.md files
+python scripts/validate_agents_md.py
+
+# Via Makefile (runs as part of housekeeping)
+make housekeeping
+```
+
+**Integration:**
+- **Housekeeping**: Runs as part of `make housekeeping` (Rule-058)
+- **Validation**: Ensures Rule 017 compliance (all required AGENTS.md files present)
+- **Dynamic**: Automatically adapts to new directories without hardcoded lists
+
+**Note:** This script was updated to use dynamic directory discovery instead of a hardcoded list. It now correctly validates all directories that require AGENTS.md files, including all `agentpm/` subdirectories and `docs/` subdirectories.
+
 ### `check_agents_md_sync.py` — AGENTS.md Sync Checker
 
 **Purpose:** Detects when code changes in a directory should trigger AGENTS.md updates. Compares file modification times and git history to identify potentially stale AGENTS.md files.
