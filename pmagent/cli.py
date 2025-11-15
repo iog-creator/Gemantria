@@ -54,6 +54,8 @@ control_app = typer.Typer(help="Control-plane operations")
 app.add_typer(control_app, name="control")
 ask_app = typer.Typer(help="Ask questions using SSOT documentation")
 app.add_typer(ask_app, name="ask")
+reality_app = typer.Typer(help="Reality checks for automated bring-up")
+app.add_typer(reality_app, name="reality-check")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -315,6 +317,22 @@ def ask_docs(
             mode = result.get("mode", "unknown")
             print(f"ERROR: Failed to generate answer (mode: {mode})", file=sys.stderr)
     sys.exit(0)
+
+
+@reality_app.command("1", help="Run Reality Check #1 automated bring-up")
+def reality_check_one() -> None:
+    """Run Reality Check #1 automated bring-up (Postgres + LM Studio + ingestion + Q&A)."""
+    import subprocess
+
+    proc = subprocess.run(
+        [sys.executable, "-m", "agentpm.scripts.reality_check_1"],
+        capture_output=True,
+        text=True,
+    )
+    print(proc.stdout, end="")
+    if proc.stderr:
+        print(proc.stderr, file=sys.stderr, end="")
+    raise typer.Exit(code=proc.returncode)
 
 
 def main() -> None:
