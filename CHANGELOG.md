@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+- **Phase-5 — StoryMaker & BibleScholar LM Integration** (PR #541 - planning scaffold)
+  - Added Phase-5 planning document (`docs/SSOT/PHASE_5_PLAN.md`) with full integration plan
+  - Added LM Indicator Widget contract specification (`docs/SSOT/LM_WIDGETS.md`)
+  - Created stub adapter module (`agentpm/lm_widgets/adapter.py`) for downstream app integration
+  - Updated MASTER_PLAN, AGENTS.md, CHANGELOG.md with Phase-5 tracking
+  - Next: Implement full adapter logic + tests (PR #2), then StoryMaker/BibleScholar integrations (PRs #3, #4)
+
 - **Phase-4 — LM Insights & UI Polish** (PRs #536, #537, #538, #539, #540)
   - Implemented LM insights exports (`lm_insights_7d.json`) aggregating usage and health metrics (Phase-4A)
   - Enhanced LM status page UX with one-sentence status summary and friendly explanations (Phase-4B)
