@@ -145,6 +145,10 @@
     {
       "src": "docs/runbooks/DB_HEALTH.md",
       "dst": "share/DB_HEALTH.md"
+    },
+    {
+      "src": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
+      "dst": "share/USAGE_PATTERNS_REFERENCE.md"
     }
   ],
   "evidence": [

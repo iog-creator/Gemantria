@@ -56,6 +56,8 @@ ask_app = typer.Typer(help="Ask questions using SSOT documentation")
 app.add_typer(ask_app, name="ask")
 reality_app = typer.Typer(help="Reality checks for automated bring-up")
 app.add_typer(reality_app, name="reality-check")
+bringup_app = typer.Typer(help="System bring-up commands")
+app.add_typer(bringup_app, name="bringup")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -332,6 +334,34 @@ def reality_check_one() -> None:
     print(proc.stdout, end="")
     if proc.stderr:
         print(proc.stderr, file=sys.stderr, end="")
+    raise typer.Exit(code=proc.returncode)
+
+
+@reality_app.command("live", help="Run Reality Check #1 LIVE (DB + LM + pipeline)")
+def reality_check_live() -> None:
+    """Run the full live Reality Check #1 and exit non-zero on failure."""
+    import subprocess
+    import sys
+
+    proc = subprocess.run(
+        [sys.executable, "-m", "agentpm.scripts.reality_check_1_live"],
+        text=True,
+    )
+    # The script itself prints JSON and returns appropriate exit code.
+    raise typer.Exit(code=proc.returncode)
+
+
+@bringup_app.command("full", help="Fully start DB, LM Studio server+GUI, and load models")
+def bringup_full() -> None:
+    """Run the full system bring-up (DB + LM Studio + models)."""
+    import subprocess
+    import sys
+
+    proc = subprocess.run(
+        [sys.executable, "-m", "agentpm.scripts.system_bringup"],
+        text=True,
+    )
+    # The script itself prints JSON and returns appropriate exit code.
     raise typer.Exit(code=proc.returncode)
 
 

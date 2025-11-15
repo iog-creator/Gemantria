@@ -42,7 +42,7 @@ STRICT_GOVERNANCE=0
 LM_STUDIO_ENABLED=false
 
 # LM Studio Server Host
-LM_STUDIO_HOST=http://192.168.1.119:1234
+LM_STUDIO_HOST=  # e.g. http://127.0.0.1:9994 (set in your .env)
 
 # === Local AI (LM Studio / OpenAI-compatible) ===
 # OpenAI-compatible API base URL (defaults to LM Studio on port 9994 per AGENTS.md)
@@ -51,6 +51,9 @@ OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 OPENAI_API_KEY=sk-local-placeholder
 # Embedding model name (must match a model loaded in LM Studio)
 LM_EMBED_MODEL=text-embedding-bge-m3
+# Optional: override LM Studio embed host/port if not defaulting to 9994.
+# LM_EMBED_HOST=localhost
+# LM_EMBED_PORT=9994
 
 # Model Configuration
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b

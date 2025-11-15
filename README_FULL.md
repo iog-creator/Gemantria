@@ -121,6 +121,10 @@ pmagent ask docs "What does Phase-6P deliver?"
 **Module locations:**
 - Bring-up script: `agentpm/scripts/reality_check_1.py`
 - Ingestion: `agentpm/scripts/ingest_docs.py`
+
+**Quick Reference:**
+- See `docs/runbooks/USAGE_PATTERNS_REFERENCE.md` for correct usage patterns for LM Studio and databases
+- See `docs/runbooks/LM_STUDIO_SETUP.md` for detailed LM Studio setup instructions
 - Retrieval: `agentpm/knowledge/retrieval.py`
 - Q&A: `agentpm/knowledge/qa_docs.py`
 - CLI: `pmagent ask docs` command

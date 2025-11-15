@@ -1781,6 +1781,21 @@ atlas.viewer.validate:
 	@echo "[atlas] viewer validate"
 	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
 
+
+# Phase-6: Reality Check #1 LIVE (DB + LM Studio + pipeline)
+reality.check.1.live:
+	pmagent reality-check live
+
+
+# Unified bring-up (DB + LM Studio + models)
+system.start:
+	pmagent bringup full
+
+system.stop:
+	# Add teardown logic later (stop DB, kill LM Studio if needed)
+	@pkill -f LM || true
+	@echo "System stop requested (DB and LM Studio teardown not yet implemented)"
+
 # --- Atlas (webproof) ---
 .PHONY: atlas.webproof
 atlas.webproof:
