@@ -9,6 +9,7 @@ src/core/ids.py
 src/core/ssot.py
 src/gemantria/__init__.py
 src/gemantria/dsn.py
+src/gemantria.egg-info/AGENTS.md
 src/gemantria.egg-info/PKG-INFO
 src/gemantria.egg-info/SOURCES.txt
 src/gemantria.egg-info/dependency_links.txt

@@ -137,6 +137,14 @@
     {
       "src": "docs/SSOT/webui-contract.md",
       "dst": "share/webui-contract.md"
+    },
+    {
+      "src": "docs/runbooks/LM_STUDIO_SETUP.md",
+      "dst": "share/LM_STUDIO_SETUP.md"
+    },
+    {
+      "src": "docs/runbooks/DB_HEALTH.md",
+      "dst": "share/DB_HEALTH.md"
     }
   ],
   "evidence": [

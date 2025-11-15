@@ -1,5 +1,9 @@
 version = "0.0.3.dev0"
 
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "gemantria"
 version = "0.0.3.dev0"
@@ -9,6 +13,9 @@ dependencies = []
 
 [project.scripts]
 pmagent = "pmagent.cli:main"
+
+[tool.setuptools]
+packages = ["agentpm", "pmagent"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
