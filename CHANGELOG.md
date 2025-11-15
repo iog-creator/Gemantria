@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 - **Phase-6 — LM Studio Live Usage + DB-Backed Knowledge**: Planning started for enabling LM Studio live usage under guardrails and establishing Postgres as canonical knowledge spine.
+- **Phase-6P — BibleScholar Reference Answer Slice**: Design doc added for single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice. Planning-only PR; implementation to follow.
 
 - **Phase-5 — StoryMaker & BibleScholar LM Integration**: LM indicator widget contract finalized; Gemantria adapter implemented; StoryMaker React tile and BibleScholar header badge added as hermetic consumers of `lm_indicator.json`.
 
