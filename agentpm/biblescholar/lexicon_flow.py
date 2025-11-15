@@ -84,7 +84,9 @@ def fetch_word_study(reference: str) -> WordStudyResult:
     return WordStudyResult(reference=reference, entries=entries, db_status=adapter.db_status)
 
 
-def get_db_status(adapter: LexiconAdapter | None = None) -> Literal["available", "unavailable", "db_off"]:
+def get_db_status(
+    adapter: LexiconAdapter | None = None,
+) -> Literal["available", "unavailable", "db_off"]:
     """Get current database status.
 
     Args:
