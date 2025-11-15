@@ -336,6 +336,8 @@ These are active on every branch/state and are not pruned or downgraded.
 ---
 
 ## Next Steps
+- Project unification and single UI shell (see RFC-081).
+
 
 ### Phase-3B: pmagent Control-Plane Health Suite (✅ **Complete**)
 - ✅ **Feature #4**: `pmagent health` CLI (system, db, lm, graph)
