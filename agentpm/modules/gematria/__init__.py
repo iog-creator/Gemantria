@@ -11,4 +11,4 @@ See:
 - docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md
 """
 
-__all__ = ["core", "hebrew", "verification", "nouns", "osis"]
+__all__ = ["core", "hebrew", "nouns", "osis", "verification"]
