@@ -1,44 +1,52 @@
 {
   "items": [
     {
+      "src": ".github/pull_request_template.md",
+      "dst": "share/pull_request_template.md"
+    },
+    {
+      "src": ".pre-commit-config.yaml",
+      "dst": "share/pre-commit-config.yaml"
+    },
+    {
       "src": "AGENTS.md",
       "dst": "share/AGENTS.md"
     },
     {
-      "src": "docs/SSOT/RULES_INDEX.md",
-      "dst": "share/RULES_INDEX.md"
-    },
-    {
-      "src": "docs/SSOT/MASTER_PLAN.md",
-      "dst": "share/MASTER_PLAN.md"
-    },
-    {
-      "src": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
-      "dst": "share/GPT_SYSTEM_PROMPT.md"
-    },
-    {
-      "src": "pyproject.toml",
-      "dst": "share/pyproject.toml"
-    },
-    {
-      "src": "pytest.ini",
-      "dst": "share/pytest.ini"
+      "src": "CHANGELOG.md",
+      "dst": "share/CHANGELOG.md"
     },
     {
       "src": "Makefile",
       "dst": "share/Makefile"
     },
     {
-      "src": "env_example.txt",
-      "dst": "share/env_example.txt"
+      "src": "RELEASES.md",
+      "dst": "share/RELEASES.md"
     },
     {
-      "src": "docs/SSOT/graph-stats.schema.json",
-      "dst": "share/graph-stats.schema.json"
+      "src": "docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md",
+      "dst": "share/BIBLESCHOLAR_MIGRATION_PLAN.md"
     },
     {
-      "src": "docs/SSOT/graph-patterns.schema.json",
-      "dst": "share/graph-patterns.schema.json"
+      "src": "docs/SSOT/GPT_REFERENCE_GUIDE.md",
+      "dst": "share/GPT_REFERENCE_GUIDE.md"
+    },
+    {
+      "src": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
+      "dst": "share/GPT_SYSTEM_PROMPT.md"
+    },
+    {
+      "src": "docs/SSOT/MASTER_PLAN.md",
+      "dst": "share/MASTER_PLAN.md"
+    },
+    {
+      "src": "docs/SSOT/RULES_INDEX.md",
+      "dst": "share/RULES_INDEX.md"
+    },
+    {
+      "src": "docs/SSOT/SHARE_MANIFEST.json",
+      "dst": "share/SHARE_MANIFEST.json"
     },
     {
       "src": "docs/SSOT/SSOT_ai-nouns.v1.schema.json",
@@ -49,38 +57,34 @@
       "dst": "share/graph.schema.json"
     },
     {
-      "src": ".github/pull_request_template.md",
-      "dst": "share/pull_request_template.md"
+      "src": "docs/SSOT/graph-patterns.schema.json",
+      "dst": "share/graph-patterns.schema.json"
     },
     {
-      "src": ".pre-commit-config.yaml",
-      "dst": "share/pre-commit-config.yaml"
+      "src": "docs/SSOT/graph-stats.schema.json",
+      "dst": "share/graph-stats.schema.json"
     },
     {
-      "src": "CHANGELOG.md",
-      "dst": "share/CHANGELOG.md"
-    },
-    {
-      "src": "RELEASES.md",
-      "dst": "share/RELEASES.md"
-    },
-    {
-      "src": "docs/SSOT/SHARE_MANIFEST.json",
-      "dst": "share/SHARE_MANIFEST.json"
-    },
-    {
-      "src": "docs/SSOT/GPT_REFERENCE_GUIDE.md",
-      "dst": "share/GPT_REFERENCE_GUIDE.md"
-    },
-    {
-      "src": "scripts/AGENTS.md",
-      "dst": "share/scripts_AGENTS.md"
+      "src": "env_example.txt",
+      "dst": "share/env_example.txt"
     },
     {
       "src": "exports/graph_stats.json",
       "dst": "share/graph_stats.head.json",
       "generate": "head_json",
       "max_bytes": 4096
+    },
+    {
+      "src": "pyproject.toml",
+      "dst": "share/pyproject.toml"
+    },
+    {
+      "src": "pytest.ini",
+      "dst": "share/pytest.ini"
+    },
+    {
+      "src": "scripts/AGENTS.md",
+      "dst": "share/scripts_AGENTS.md"
     },
     {
       "src": "share/pm.snapshot.md",
