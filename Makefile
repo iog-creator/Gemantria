@@ -918,7 +918,7 @@ control.agent_runs_7d.export:
 	@echo ">> Exporting control-plane agent runs 7d…"
 	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
 
-.PHONY: atlas.lm.usage atlas.lm.health atlas.lm.insights atlas.lm.indicator atlas.lm.dashboards atlas.lm.status.html atlas.lm.dashboards.webproof atlas.lm.status.webproof
+.PHONY: atlas.lm.usage atlas.lm.health atlas.lm.insights atlas.lm.indicator atlas.lm.budget atlas.lm.dashboards atlas.lm.status.html atlas.lm.dashboards.webproof atlas.lm.status.webproof
 atlas.lm.usage:
 	@echo ">> Exporting LM Studio usage metrics (7d)…"
 	@PYTHONPATH=. python3 scripts/db/control_lm_metrics_export.py
@@ -935,6 +935,11 @@ atlas.lm.indicator: atlas.lm.insights
 	@echo ">> Exporting LM Studio indicator for downstream apps…"
 	@PYTHONPATH=. python3 scripts/db/control_lm_indicator_export.py
 	@echo ">> LM indicator exported to share/atlas/control_plane/lm_indicator.json"
+
+atlas.lm.budget: atlas.lm.insights
+	@echo ">> Exporting LM Studio budget status (7d)…"
+	@PYTHONPATH=. python3 scripts/db/control_lm_budget_export.py
+	@echo ">> LM budget status exported to share/atlas/control_plane/lm_budget_7d.json"
 
 atlas.lm.dashboards:
 	@echo ">> Validating LM dashboard configs…"
