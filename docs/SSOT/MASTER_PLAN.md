@@ -410,6 +410,16 @@ These are active on every branch/state and are not pruned or downgraded.
 **Phase-5 Status**: ✅ **COMPLETE** — Both StoryMaker and BibleScholar now consume the canonical `lm_indicator.json` signal via
 the shared LM widget contract. All adapters are hermetic and fail-closed (offline-safe) and do not introduce new heuristics.
 
+### Phase-6: LM Studio Live Usage + DB-Backed Knowledge (📘 PLANNING)
+
+- **6A**: LM Studio live usage enablement (guarded calls + logs)
+- **6B**: LM usage budgets + rate tracking
+- **6C**: Knowledge Slice v0 (DB-backed)
+- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar)
+- **6E**: Governance & SSOT updates
+
+**Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.
+
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
 - [x] E67: Per-node drilldown links (receipt + guard) ✅

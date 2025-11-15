@@ -50,6 +50,7 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - `lm_insights_7d.json` — Aggregated insights (usage ratio, top errors)
     - `lm_indicator.json` — **Canonical LM status signal for downstream apps** (offline/healthy/degraded)
   - **Phase-5 LM Integration**: ✅ **COMPLETE** — StoryMaker (LM status tile, PR #1) and BibleScholar (header badge, PR #2) now consume `lm_indicator.json` via the shared widget contract. Hermetic adapter implemented in `agentpm/lm_widgets/adapter.py` with full test coverage.
+  - **Phase-6**: LM Studio live usage + DB-backed knowledge planning underway.
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
     - **Auto-start**: Set `AUTO_START_MCP_SSE=1` to automatically start server when needed (integrated into `make bringup.001`)
     - **Manual start**: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`
