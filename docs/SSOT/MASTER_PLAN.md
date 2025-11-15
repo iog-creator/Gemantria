@@ -453,6 +453,28 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 
 **Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.
 
+### Phase-7: Runtime Bring-Up Completion (Planning)
+
+- **7A**: Control-Plane Bring-Up (Migration 040) 📋 PLANNING
+  - Safely apply migration 040 (dev only)
+  - Create the `control` schema and verify required tables/views
+  - Re-run the pipeline step previously blocked on "missing control schema"
+- **7B**: LM Studio & Model Configuration Normalization 📋 PLANNING
+  - Standardize env vars (`THEOLOGY_MODEL`, `MATH_MODEL`, `EMBEDDING_MODEL`, `RERANKER_MODEL`)
+  - Align LM Studio adapter defaults with env configuration
+  - Update env_example.txt + GPT reference docs
+- **7C**: Snapshot Integrity & Drift Review 📋 PLANNING
+  - Compare 21-file GPT snapshot contracts vs current repo
+  - Classify drift (RED/YELLOW/GREEN)
+  - Minimal remediation PRs to realign repo with SSOT or update SSOT accordingly
+- **7D**: Runtime & Bring-Up UX Polish (Optional) 📋 PLANNING
+  - Improve pmagent bringup / mcp UX for non-expert users
+  - Enhanced help text, clearer Reality Check messages, wizard-style flows
+
+**Goal**: Complete Phase 6 setup and establish operational baseline for production use.
+
+**Status**: 📋 **PLANNING**
+
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
 - [x] E67: Per-node drilldown links (receipt + guard) ✅

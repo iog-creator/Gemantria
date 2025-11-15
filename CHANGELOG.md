@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+- **Phase-7 — Runtime Bring-Up Completion**: Planning initiated. Added planning section to MASTER_PLAN.md describing:
+  - 7A control-plane bring-up (migration 040)
+  - 7B LM Studio model configuration normalization
+  - 7C snapshot integrity and drift review
+  - 7D optional UX polish for bring-up tooling
 - **Phase-6 — LM Studio Live Usage + DB-Backed Knowledge**: Planning started for enabling LM Studio live usage under guardrails and establishing Postgres as canonical knowledge spine.
 - **Phase-6P — BibleScholar Reference Answer Slice**: Design doc added for single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice. Planning-only PR; implementation to follow.
 
@@ -56,6 +61,14 @@
 - enable LM Studio live usage behind flag (#544)
 - add Phase-6 plan (LM Studio live usage + DB-backed knowledge) (#543)
 - LM observability governance & indicator docs (4D) (#540)
+
+- unified bring-up system (DB + LM Studio server+GUI + model loader)
+- add reality-check CLI command integration
+- automated Reality Check #1 bring-up script (#564)
+- SSOT docs → DB → LM Studio Q&A pipeline (Reality Check #1) (#562)
+- BibleScholar Reference Slice design doc + MASTER_PLAN update (#559)
+- bible_db verse vector similarity (adapter + flow) (#557)
+- bible_db read-only adapter + passage flow (#555)
 
 ## [v0.0.8] - 2025-11-12
 
