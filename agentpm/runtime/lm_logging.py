@@ -14,6 +14,7 @@ import time
 from typing import Any, Callable
 
 from agentpm.adapters.lm_studio import lm_studio_chat
+from agentpm.runtime.lm_budget import check_lm_budget
 from scripts.config.env import get_lm_studio_enabled, get_rw_dsn
 
 
@@ -158,12 +159,13 @@ def guarded_lm_call(
     timeout: float = 30.0,
     fallback_fn: Callable[[list[dict[str, str]], dict[str, Any]], dict[str, Any]] | None = None,
     fallback_kwargs: dict[str, Any] | None = None,
+    app_name: str | None = None,
 ) -> dict[str, Any]:
     """
-    Phase-6: Guarded LM Studio call wrapper with call_site tracking.
+    Phase-6: Guarded LM Studio call wrapper with call_site tracking and budget enforcement.
 
-    This function respects the LM_STUDIO_ENABLED flag. When enabled, it uses
-    lm_studio_chat_with_logging() with control-plane observability. When disabled
+    This function respects the LM_STUDIO_ENABLED flag and budget limits. When enabled, it uses
+    lm_studio_chat_with_logging() with control-plane observability. When disabled, budget exceeded,
     or LM Studio is unavailable, it falls back to the provided fallback function.
 
     Args:
@@ -175,15 +177,22 @@ def guarded_lm_call(
         fallback_fn: Optional fallback function to call when LM Studio is disabled/unavailable.
             Should accept (messages, kwargs) and return a dict with "ok" and "response" keys.
         fallback_kwargs: Optional kwargs to pass to fallback function.
+        app_name: Application identifier for budget tracking (default: derived from call_site).
 
     Returns:
         Dictionary with:
         - ok: bool (True if call succeeded)
-        - mode: "lm_on" | "lm_off" | "fallback"
-        - reason: str | None (error reason if mode is lm_off)
+        - mode: "lm_on" | "lm_off" | "fallback" | "budget_exceeded"
+        - reason: str | None (error reason if mode is lm_off or budget_exceeded)
         - response: dict | None (LM Studio or fallback response if ok)
         - call_site: str (the call_site identifier)
     """
+    # Derive app_name from call_site if not provided
+    if app_name is None:
+        # Extract app name from call_site (e.g., "gemantria.runtime.generate_text" -> "gemantria.runtime")
+        parts = call_site.split(".")
+        app_name = ".".join(parts[:2]) if len(parts) >= 2 else parts[0] if parts else "unknown"
+
     # Check if LM Studio is enabled
     lm_enabled = get_lm_studio_enabled()
 
@@ -208,13 +217,84 @@ def guarded_lm_call(
             "call_site": call_site,
         }
 
-    # LM Studio enabled - try to use it
+    # Phase-6 6B: Check budget before making LM Studio call
+    estimated_tokens = max_tokens  # Use max_tokens as estimate
+    budget_ok = check_lm_budget(app_name, tokens=estimated_tokens)
+
+    if not budget_ok:
+        # Budget exceeded - skip LM Studio and use fallback
+        if fallback_fn:
+            fallback_kwargs = fallback_kwargs or {}
+            result = fallback_fn(messages, fallback_kwargs)
+            # Log budget exceeded to control-plane
+            _write_agent_run(
+                tool="lm_studio",
+                args_json={
+                    "call_site": call_site,
+                    "app_name": app_name,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                },
+                result_json={
+                    "ok": False,
+                    "mode": "budget_exceeded",
+                    "reason": "budget_exceeded",
+                },
+                violations_json=[
+                    {
+                        "type": "budget_exceeded",
+                        "reason": f"Budget exceeded for {app_name}",
+                    }
+                ],
+            )
+            return {
+                "ok": result.get("ok", False),
+                "mode": "budget_exceeded",
+                "reason": "budget_exceeded",
+                "response": result.get("response"),
+                "call_site": call_site,
+            }
+        # No fallback - return budget exceeded response
+        _write_agent_run(
+            tool="lm_studio",
+            args_json={
+                "call_site": call_site,
+                "app_name": app_name,
+                "messages": messages,
+                "max_tokens": max_tokens,
+            },
+            result_json={
+                "ok": False,
+                "mode": "budget_exceeded",
+                "reason": "budget_exceeded",
+            },
+            violations_json=[
+                {
+                    "type": "budget_exceeded",
+                    "reason": f"Budget exceeded for {app_name}",
+                }
+            ],
+        )
+        return {
+            "ok": False,
+            "mode": "budget_exceeded",
+            "reason": "budget_exceeded",
+            "response": None,
+            "call_site": call_site,
+        }
+
+    # LM Studio enabled and within budget - try to use it
     result = lm_studio_chat_with_logging(
         messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
         timeout=timeout,
     )
+
+    # Add app_name and call_site to result for observability
+    if isinstance(result.get("response"), dict):
+        result["response"]["app_name"] = app_name
+    result["call_site"] = call_site
 
     # If LM Studio call failed and fallback is available, use it
     if not result.get("ok") and fallback_fn:
@@ -228,6 +308,4 @@ def guarded_lm_call(
             "call_site": call_site,
         }
 
-    # Add call_site to result for observability
-    result["call_site"] = call_site
     return result

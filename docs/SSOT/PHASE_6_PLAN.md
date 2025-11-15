@@ -41,11 +41,11 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 **Objective**: Prevent runaway usage; enforce app-level LM budgets.
 
 **Deliverables**:
-- New table: `control.lm_usage_budget`
-- Budget checks before LM calls
-- Automatic fallback when exceeded
-- Export: `lm_budget_7d.json`
-- Atlas dashboard for budgets
+- New table: `control.lm_usage_budget` ✅ (migration 042)
+- Budget checks before LM calls ✅ (`check_lm_budget()` in `agentpm/runtime/lm_budget.py`)
+- Automatic fallback when exceeded ✅ (wired into `guarded_lm_call()`, returns "budget_exceeded" mode)
+- Export: `lm_budget_7d.json` ✅ (`scripts/db/control_lm_budget_export.py`, `make atlas.lm.budget`)
+- Atlas dashboard for budgets (future work)
 
 **Tests**:
 - Budget exhaustion scenarios
