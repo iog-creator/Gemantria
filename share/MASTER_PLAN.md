@@ -400,6 +400,16 @@ These are active on every branch/state and are not pruned or downgraded.
 
 **Phase-4 Status**: ✅ **COMPLETE** — All LM observability exports are in place, status page is UX-polished, and indicator export provides a canonical signal for downstream apps. All enhancements maintain db_off + LM-off safety.
 
+### Phase-5: StoryMaker & BibleScholar LM Integration (✅ **COMPLETE**)
+
+- **5A**: LM indicator widget contract finalized in `LM_WIDGETS.md` ✅
+- **5B**: Hermetic LM indicator adapter implemented in Gemantria (`load_lm_indicator_widget_props`) ✅
+- **5C**: StoryMaker integration — LM status tile using the widget props (PR #1 in storymaker-bundle-v1.6) ✅
+- **5D**: BibleScholar integration — header status badge using the widget props (PR #2 in BibleScholarProjectClean) ✅
+
+**Phase-5 Status**: ✅ **COMPLETE** — Both StoryMaker and BibleScholar now consume the canonical `lm_indicator.json` signal via
+the shared LM widget contract. All adapters are hermetic and fail-closed (offline-safe) and do not introduce new heuristics.
+
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅
 - [x] E67: Per-node drilldown links (receipt + guard) ✅

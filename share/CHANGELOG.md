@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- **Phase-5 — StoryMaker & BibleScholar LM Integration**: LM indicator widget contract finalized; Gemantria adapter implemented; StoryMaker React tile and BibleScholar header badge added as hermetic consumers of `lm_indicator.json`.
+
 - **Phase-4 — LM Insights & UI Polish** (PRs #536, #537, #538, #539, #540)
   - Implemented LM insights exports (`lm_insights_7d.json`) aggregating usage and health metrics (Phase-4A)
   - Enhanced LM status page UX with one-sentence status summary and friendly explanations (Phase-4B)
@@ -41,6 +43,9 @@
 - merge system health aggregate
 - merge LM health guard + smoke
 - merge DB-backed graph overview
+
+- mark Phase-3D complete and add Phase-4 LM insights & UI polish (#536)
+- LM metrics exports for Atlas (D1)
 
 ## [v0.0.8] - 2025-11-12
 
