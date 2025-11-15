@@ -345,6 +345,14 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
   - Multi-translation support (KJV default, extensible)
   - DB-off mode handling (graceful degradation)
   - Tests: `test_bible_db_adapter.py`, `test_bible_passage_flow.py`
+- **6N**: Lexicon read-only adapter + word-study flow (COMPLETE)
+  - `agentpm/biblescholar/lexicon_adapter.py` — Read-only adapter for lexicon tables
+  - `agentpm/biblescholar/lexicon_flow.py` — Word-study retrieval flow
+  - Hebrew/Greek lexicon lookup by Strong's number
+  - Word-level data retrieval for verse references
+  - Tables: `bible.hebrew_entries`, `bible.greek_entries`, `bible.hebrew_ot_words`, `bible.greek_nt_words`
+  - DB-off mode handling (graceful degradation)
+  - Tests: `test_lexicon_adapter.py`, `test_lexicon_flow.py`
 
 ### Phase 7: Core Bible DB Integration
 
@@ -361,12 +369,12 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - 🔄 Enhanced reference parsing (OSIS format) — Phase-7A
 - 🔄 Connection pooling and security — Future enhancement
 
-**7C: Lexicon Adapter**
-- Create `agentpm/biblescholar/lexicon_adapter.py`
-- Hebrew lexicon lookup (Strong's numbers)
-- Greek lexicon lookup (Strong's numbers)
-- Word-level data retrieval
-- Morphology code explanations
+**7C: Lexicon Adapter** (Partially complete via Phase-6N)
+- ✅ `agentpm/biblescholar/lexicon_adapter.py` — COMPLETE (Phase-6N)
+- ✅ `agentpm/biblescholar/lexicon_flow.py` — COMPLETE (Phase-6N)
+- ✅ Hebrew/Greek lexicon lookup (Strong's numbers) — COMPLETE
+- ✅ Word-level data retrieval — COMPLETE
+- 🔄 Morphology code explanations — Future enhancement
 
 **7D: Keyword Search Flow**
 - Create `agentpm/biblescholar/search_flow.py`

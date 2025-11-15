@@ -13,6 +13,7 @@ directly; it should provide pure, testable adapters that callers can use.
 - Phase-6J: BibleScholar Gematria adapter (read-only) — COMPLETE
 - Phase-6K: BibleScholar Gematria flow (read-only) — COMPLETE
 - Phase-6M: Bible DB read-only adapter + passage flow — COMPLETE
+- Phase-6N: Lexicon read-only adapter + word-study flow — COMPLETE
 
 ## Related SSOT Docs
 
@@ -204,6 +205,87 @@ verses = fetch_passage("Genesis 1:31-2:3", "KJV")
 - Tests in `agentpm/biblescholar/tests/test_bible_db_adapter.py`
 - Tests in `agentpm/biblescholar/tests/test_bible_passage_flow.py`
 - Tests verify: SQL query shapes, DB-off handling, no write operations, reference parsing
+
+### Lexicon Adapter (Phase-6N)
+
+- **Module**: `agentpm/biblescholar/lexicon_adapter.py`
+- **Purpose**: Read-only adapter for accessing bible_db lexicon tables (Hebrew/Greek entries). Provides Strong's number lookup and word-level data retrieval.
+- **Dependencies**:
+  - `agentpm.db.loader.get_bible_engine()` (centralized DSN loader)
+  - SQLAlchemy for database queries
+- **Non-goals**:
+  - No database writes (SELECT-only operations)
+  - No control-plane writes
+  - No LM calls
+  - No UI work
+
+**API**:
+- `LexiconAdapter` class:
+  - `get_hebrew_entry(strongs_id: str) -> LexiconEntry | None` - Get Hebrew lexicon entry by Strong's number
+  - `get_greek_entry(strongs_id: str) -> LexiconEntry | None` - Get Greek lexicon entry by Strong's number
+  - `get_entries_for_reference(book_name: str, chapter_num: int, verse_num: int) -> list[LexiconEntry]` - Get all lexicon entries for words in a verse
+  - `db_status: Literal["available", "unavailable", "db_off"]` property
+
+**Data Model**:
+- `LexiconEntry` dataclass with fields: `entry_id`, `strongs_id`, `lemma`, `transliteration`, `definition`, `usage`, `gloss`
+
+**Tables Used**:
+- `bible.hebrew_entries` - Hebrew lexicon entries (indexed on `strongs_id`)
+- `bible.greek_entries` - Greek lexicon entries (indexed on `strongs_id`)
+- `bible.hebrew_ot_words` - Hebrew word-level data (links to verses via `verse_id`)
+- `bible.greek_nt_words` - Greek word-level data (links to verses via `verse_id`)
+
+**Error Handling**:
+- DB unavailable: Returns `None` for entry lookups, empty list for reference queries
+- DB off (DSN not set): Returns `None`/empty list, sets `db_status` to `"db_off"`
+- Connection errors: Returns `None`/empty list, sets `db_status` to `"unavailable"`
+
+**Bible DB Only Rule**: All biblical/lexical answers must come from `bible_db`, not from LLM memory or other sources. This adapter enforces that by providing the only read path to lexicon data.
+
+### Lexicon Flow (Phase-6N)
+
+- **Module**: `agentpm/biblescholar/lexicon_flow.py`
+- **Purpose**: Simple, composable flow for retrieving lexicon entries and word-study data using the lexicon adapter. Provides convenience functions for Strong's number lookup and verse word studies.
+- **Dependencies**:
+  - `agentpm.biblescholar.lexicon_adapter`
+  - `agentpm.biblescholar.bible_passage_flow` (for reference parsing)
+- **Non-goals**:
+  - No LM calls
+  - No Gematria (handled by separate flows)
+  - No UI work
+
+**API**:
+- `fetch_lexicon_entry(strongs_id: str) -> LexiconEntry | None` - Fetch lexicon entry by Strong's number (auto-detects Hebrew/Greek)
+- `fetch_word_study(reference: str) -> WordStudyResult` - Fetch all lexicon entries for words in a verse reference
+- `get_db_status(adapter: LexiconAdapter | None = None) -> Literal["available", "unavailable", "db_off"]`
+
+**Data Model**:
+- `WordStudyResult` dataclass with fields: `reference`, `entries` (list of `LexiconEntry`), `db_status`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.lexicon_flow import fetch_lexicon_entry, fetch_word_study
+
+# Single lexicon entry
+entry = fetch_lexicon_entry("H1")  # Hebrew
+if entry:
+    print(f"{entry.strongs_id}: {entry.lemma} - {entry.gloss}")
+
+entry = fetch_lexicon_entry("G1")  # Greek
+if entry:
+    print(f"{entry.strongs_id}: {entry.lemma} - {entry.definition}")
+
+# Word study for a verse
+result = fetch_word_study("Genesis 1:1")
+print(f"Found {len(result.entries)} lexicon entries for {result.reference}")
+for entry in result.entries:
+    print(f"  {entry.strongs_id}: {entry.lemma} - {entry.gloss}")
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_lexicon_adapter.py`
+- Tests in `agentpm/biblescholar/tests/test_lexicon_flow.py`
+- Tests verify: SQL query shapes, DB-off handling, no write operations, Strong's number lookup, word-study retrieval
 
 ## Future Extensions
 
