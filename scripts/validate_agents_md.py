@@ -4,59 +4,98 @@
 import sys
 from pathlib import Path
 
-# Directories that MUST have AGENTS.md files
-REQUIRED_AGENTS_DIRS = [
-    ".",  # Root
-    "src",
-    "src/core",
-    "src/graph",
-    "src/nodes",
-    "src/infra",
-    "src/services",
-    "src/rerank",
-    "src/ssot",
-    "src/persist",
-    "src/obs",
-    "src/utils",
-    "scripts",
-    "tests",
-    "tools",
-    "migrations",
-    "docs",
-    "docs/SSOT",
-    "docs/ADRs",
-    "docs/forest",
-    "docs/phase9",
-    "docs/phase10",
-    "webui/dashboard",
-    "webui/graph",
-    "agentpm/extractors",  # Provenance management for extraction agents
-]
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def get_required_directories() -> list[str]:
+    """Get directories that require AGENTS.md files (dynamic discovery, matches create_agents_md.py)."""
+    # Directories to exclude from AGENTS.md requirement
+    EXCLUDED_DIRS = {
+        "__pycache__",  # Python bytecode cache
+        ".git",  # Git metadata
+        "node_modules",  # Node.js dependencies
+        ".venv",  # Python virtual environment
+        "venv",  # Python virtual environment (alternate)
+        ".pytest_cache",  # Pytest cache
+        ".mypy_cache",  # Mypy cache
+        ".ruff_cache",  # Ruff cache
+        "__pypackages__",  # PDM packages
+        "public",  # Static/generated web assets
+        "dist",  # Build output
+        "build",  # Build output
+        ".egg-info",  # Python package metadata
+    }
+
+    required = [".", "scripts", "migrations", "tests", "tools"]  # Root + tool directories
+
+    # Add all src subdirectories (excluding cache/generated dirs)
+    src_dir = ROOT / "src"
+    if src_dir.exists():
+        required.append("src")
+        for subdir in src_dir.iterdir():
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+                and not subdir.name.endswith(".egg-info")
+            ):
+                required.append(f"src/{subdir.name}")
+
+    # Add all agentpm subdirectories (excluding cache/generated dirs)
+    agentpm_dir = ROOT / "agentpm"
+    if agentpm_dir.exists():
+        for subdir in agentpm_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required.append(f"agentpm/{subdir.name}")
+
+    # Add all docs subdirectories (excluding cache/generated dirs)
+    docs_dir = ROOT / "docs"
+    if docs_dir.exists():
+        required.append("docs")
+        for subdir in docs_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required.append(f"docs/{subdir.name}")
+
+    # Add webui subdirectories (excluding generated/static dirs)
+    webui_dir = ROOT / "webui"
+    if webui_dir.exists():
+        for subdir in webui_dir.iterdir():
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+                and subdir.name not in {"public", "dist", "build"}
+            ):
+                required.append(f"webui/{subdir.name}")
+
+    return sorted(set(required))  # Remove duplicates and sort
 
 
 def check_agents_files():
     """Check that all required AGENTS.md files exist"""
+    required_dirs = get_required_directories()
     missing = []
-    for dir_path in REQUIRED_AGENTS_DIRS:
-        agents_path = Path(dir_path) / "AGENTS.md"
+    for dir_path in required_dirs:
+        agents_path = ROOT / dir_path / "AGENTS.md"
         if not agents_path.exists():
-            missing.append(str(agents_path))
+            missing.append(dir_path)
 
     if missing:
         print(f"[validate_agents_md] FAIL: Missing {len(missing)} AGENTS.md files:")
         for path in missing:
-            print(f"  - {path}")
+            print(f"  - {path}/AGENTS.md")
         return False
 
-    print(f"[validate_agents_md] PASS: All {len(REQUIRED_AGENTS_DIRS)} required AGENTS.md files present")
+    print(f"[validate_agents_md] PASS: All {len(required_dirs)} required AGENTS.md files present")
     return True
 
 
 def check_agents_content():
     """Check that AGENTS.md files have basic required structure"""
+    required_dirs = get_required_directories()
     issues = []
-    for dir_path in REQUIRED_AGENTS_DIRS:
-        agents_path = Path(dir_path) / "AGENTS.md"
+    for dir_path in required_dirs:
+        agents_path = ROOT / dir_path / "AGENTS.md"
         if not agents_path.exists():
             continue
 
