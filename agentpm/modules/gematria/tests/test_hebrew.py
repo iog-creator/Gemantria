@@ -25,6 +25,33 @@ def test_normalize_hebrew_removes_punctuation() -> None:
     assert hebrew.normalize_hebrew("א-ב-ג") == "אבג"
 
 
+def test_normalize_hebrew_removes_maqaf_and_sof_pasuq() -> None:
+    """Test that normalization removes Hebrew maqaf and sof pasuq."""
+    # Maqaf (U+05BE) is removed
+    assert hebrew.normalize_hebrew("א־ב") == "אב"
+    # Sof pasuq (U+05C3) is removed
+    assert hebrew.normalize_hebrew("א׃ב") == "אב"  # noqa: RUF001
+
+
+def test_normalize_hebrew_empty_string() -> None:
+    """Test that empty string returns empty string."""
+    assert hebrew.normalize_hebrew("") == ""
+
+
+def test_normalize_hebrew_no_hebrew_letters() -> None:
+    """Test that text with no Hebrew letters returns empty string."""
+    assert hebrew.normalize_hebrew("Hello 123") == ""
+    assert hebrew.normalize_hebrew(".,!?") == ""
+    assert hebrew.normalize_hebrew("   ") == ""
+
+
+def test_normalize_hebrew_mixed_scripts() -> None:
+    """Test that normalization extracts only Hebrew letters from mixed scripts."""
+    assert hebrew.normalize_hebrew("א hello ב") == "אב"
+    assert hebrew.normalize_hebrew("א123ב456ג") == "אבג"
+    assert hebrew.normalize_hebrew("א, ב, ג!") == "אבג"
+
+
 def test_letters_from_text_extracts_normalized_letters() -> None:
     """Test that letters_from_text extracts individual letters after normalization."""
     # With niqqud
@@ -38,6 +65,29 @@ def test_letters_from_text_extracts_normalized_letters() -> None:
     # With punctuation
     letters = hebrew.letters_from_text("א, ד, ם")
     assert letters == ["א", "ד", "ם"]
+
+
+def test_letters_from_text_empty_string() -> None:
+    """Test that empty string returns empty list."""
+    assert hebrew.letters_from_text("") == []
+
+
+def test_letters_from_text_only_punctuation() -> None:
+    """Test that text with only punctuation returns empty list."""
+    assert hebrew.letters_from_text(".,!?") == []
+    assert hebrew.letters_from_text("   ") == []
+
+
+def test_letters_from_text_mixed_scripts() -> None:
+    """Test that letters_from_text extracts only Hebrew letters from mixed scripts."""
+    letters = hebrew.letters_from_text("א hello ב")
+    assert letters == ["א", "ב"]
+
+    letters = hebrew.letters_from_text("א123ב456ג")
+    assert letters == ["א", "ב", "ג"]
+
+    letters = hebrew.letters_from_text("א, ב, ג!")
+    assert letters == ["א", "ב", "ג"]
 
 
 def test_letters_to_value_integration() -> None:
@@ -56,12 +106,42 @@ def test_letters_to_value_integration() -> None:
     assert value == 37
 
 
-def test_letters_from_text_empty_string() -> None:
-    """Test that empty string returns empty list."""
-    assert hebrew.letters_from_text("") == []
+def test_letters_to_value_empty_list() -> None:
+    """Test that empty list returns 0."""
+    assert hebrew.letters_to_value([]) == 0
 
 
-def test_letters_from_text_only_punctuation() -> None:
-    """Test that text with only punctuation returns empty list."""
-    assert hebrew.letters_from_text(".,!?") == []
-    assert hebrew.letters_from_text("   ") == []
+def test_letters_to_value_unknown_characters() -> None:
+    """Test that unknown characters in letters list are ignored."""
+    # Unknown characters are ignored
+    assert hebrew.letters_to_value(["א", "X", "ב"]) == 3
+
+
+def test_letters_to_value_full_pipeline_mixed_text() -> None:
+    """Test full pipeline: mixed text → normalize → extract → calculate."""
+    # Mixed Hebrew and English text
+    text = "א hello ב world ג"
+    letters = hebrew.letters_from_text(text)
+    value = hebrew.letters_to_value(letters)
+    # א=1, ב=2, ג=3 = 6
+    assert value == 6
+
+
+def test_letters_to_value_full_pipeline_with_niqqud() -> None:
+    """Test full pipeline with niqqud: text with diacritics → normalize → extract → calculate."""
+    # Text with niqqud
+    text = "הֶבֶל"
+    letters = hebrew.letters_from_text(text)
+    value = hebrew.letters_to_value(letters)
+    # ה=5, ב=2, ל=30 = 37
+    assert value == 37
+
+
+def test_letters_to_value_full_pipeline_with_punctuation() -> None:
+    """Test full pipeline with punctuation: text with punctuation → normalize → extract → calculate."""
+    # Text with punctuation
+    text = "א, ד, ם"
+    letters = hebrew.letters_from_text(text)
+    value = hebrew.letters_to_value(letters)
+    # א=1, ד=4, ם=40 = 45
+    assert value == 45
