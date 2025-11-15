@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+- **Phase-4 — LM Insights & UI Polish** (PRs #536, #537, #538, #539, #540)
+  - Implemented LM insights exports (`lm_insights_7d.json`) aggregating usage and health metrics (Phase-4A)
+  - Enhanced LM status page UX with one-sentence status summary and friendly explanations (Phase-4B)
+  - Added LM indicator export (`lm_indicator.json`) as canonical LM status signal for downstream apps (Phase-4C)
+    - Status classification: offline (db_off/no_calls), degraded (error_rate>=0.2), healthy (error_rate<0.2)
+    - Compact JSON format for StoryMaker, BibleScholar, and other consumer applications
+  - Updated governance/docs to mark `lm_indicator.json` as canonical downstream signal (Phase-4D)
+  - Key PRs: #536 (Phase-4 planning docs), #537 (LM insights exports, 4A), #538 (LM status UX polish, 4B), #539 (LM indicator export, 4C), #540 (governance/docs alignment, 4D)
 - **Phase-3C/3D — LM Studio integration & observability** (PRs #532, #533, #534, #535)
   - Added LM Studio adapter + routing helper (`src/services/lm_routing_bridge.py`) and `pmagent health lm` command
   - Wired enrichment pipeline through `chat_completion_with_routing()` with control-plane logging

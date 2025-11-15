@@ -4,12 +4,12 @@
   "error": "database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?",
   "error_rate": 1.0,
   "error_types": {},
-  "generated_at": "2025-11-15T02:31:15.357887+00:00",
+  "generated_at": "2025-11-15T02:33:53.493424+00:00",
   "health_score": 0.0,
   "ok": false,
   "recent_errors": [],
   "schema": "control",
-  "since": "2025-11-08T02:31:15.357885+00:00",
+  "since": "2025-11-08T02:33:53.493423+00:00",
   "success_rate": 0.0,
   "window_days": 7
 }
