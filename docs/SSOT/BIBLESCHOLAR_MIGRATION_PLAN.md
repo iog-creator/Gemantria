@@ -338,6 +338,13 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - **6J**: BibleScholar Gematria adapter (read-only)
 - **6K**: BibleScholar Gematria verse flow (read-only)
 - **6L**: This design document
+- **6M**: Bible DB read-only adapter + passage flow (COMPLETE)
+  - `agentpm/biblescholar/bible_db_adapter.py` — Read-only adapter for `bible_db`
+  - `agentpm/biblescholar/bible_passage_flow.py` — Passage/verse retrieval flow
+  - Verse lookup by book/chapter/verse (reference string parsing)
+  - Multi-translation support (KJV default, extensible)
+  - DB-off mode handling (graceful degradation)
+  - Tests: `test_bible_db_adapter.py`, `test_bible_passage_flow.py`
 
 ### Phase 7: Core Bible DB Integration
 
@@ -346,13 +353,13 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - Create `agentpm/biblescholar/reference_parser.py`
 - Pure function, no DB dependency
 - OSIS format support
+- Enhance `bible_passage_flow.parse_reference()` with OSIS support
 
-**7B: Bible DB Read-Only Adapter**
-- Create `agentpm/biblescholar/bible_db_adapter.py`
-- Read-only access to `bible_db` database
-- Verse lookup by OSIS reference
-- Multi-translation support (KJV, ASV, YLT, TAHOT)
-- Connection pooling and security
+**7B: Bible DB Read-Only Adapter** (Partially complete via Phase-6M)
+- ✅ `agentpm/biblescholar/bible_db_adapter.py` — COMPLETE (Phase-6M)
+- ✅ `agentpm/biblescholar/bible_passage_flow.py` — COMPLETE (Phase-6M)
+- 🔄 Enhanced reference parsing (OSIS format) — Phase-7A
+- 🔄 Connection pooling and security — Future enhancement
 
 **7C: Lexicon Adapter**
 - Create `agentpm/biblescholar/lexicon_adapter.py`

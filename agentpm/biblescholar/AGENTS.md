@@ -11,7 +11,8 @@ directly; it should provide pure, testable adapters that callers can use.
 ## Status
 
 - Phase-6J: BibleScholar Gematria adapter (read-only) — COMPLETE
-- Phase-6K: BibleScholar Gematria flow (read-only) — IN PROGRESS
+- Phase-6K: BibleScholar Gematria flow (read-only) — COMPLETE
+- Phase-6M: Bible DB read-only adapter + passage flow — COMPLETE
 
 ## Related SSOT Docs
 
@@ -134,10 +135,81 @@ assert "mispar_hechrachi" in summary.systems
 assert "mispar_gadol" in summary.systems
 ```
 
+### Bible DB Adapter (Phase-6M)
+
+- **Module**: `agentpm/biblescholar/bible_db_adapter.py`
+- **Purpose**: Read-only adapter for accessing bible_db database. Provides verse and passage retrieval from `bible.verses` table.
+- **Dependencies**:
+  - `agentpm.db.loader.get_bible_engine()` (centralized DSN loader)
+  - SQLAlchemy for database queries
+- **Non-goals**:
+  - No database writes (SELECT-only operations)
+  - No control-plane writes
+  - No LM calls
+  - No UI work
+
+**API**:
+- `BibleDbAdapter` class:
+  - `get_verse(book_name: str, chapter_num: int, verse_num: int, translation_source: str = "KJV") -> VerseRecord | None`
+  - `get_passage(book_name: str, start_chapter: int, start_verse: int, end_chapter: int, end_verse: int, translation_source: str = "KJV") -> list[VerseRecord]`
+  - `db_status: Literal["available", "unavailable", "db_off"]` property
+
+**Data Model**:
+- `VerseRecord` dataclass with fields: `verse_id`, `book_name`, `chapter_num`, `verse_num`, `text`, `translation_source`
+
+**Error Handling**:
+- DB unavailable: Returns `None` for `get_verse()`, empty list for `get_passage()`
+- DB off (DSN not set): Returns `None`/empty list, sets `db_status` to `"db_off"`
+- Connection errors: Returns `None`/empty list, sets `db_status` to `"unavailable"`
+
+**Bible DB Only Rule**: All biblical content answers must come from `bible_db`, not from LLM memory or other sources. This adapter enforces that by providing the only read path to biblical text.
+
+### Bible Passage Flow (Phase-6M)
+
+- **Module**: `agentpm/biblescholar/bible_passage_flow.py`
+- **Purpose**: Simple, composable flow for retrieving verses and passages using the bible_db adapter. Provides reference string parsing and convenience functions.
+- **Dependencies**:
+  - `agentpm.biblescholar.bible_db_adapter`
+- **Non-goals**:
+  - No LM calls
+  - No Gematria (handled by separate flows)
+  - No UI work
+
+**API**:
+- `parse_reference(reference: str) -> tuple[str, int, int] | None` - Parse "Book Chapter:Verse" format
+- `fetch_verse(reference: str, translation_source: str = "KJV", adapter: BibleDbAdapter | None = None) -> VerseRecord | None`
+- `fetch_passage(reference: str, translation_source: str = "KJV", adapter: BibleDbAdapter | None = None) -> list[VerseRecord]`
+  - Supports formats: "Genesis 1:1" (single), "Genesis 1:1-3" (range), "Genesis 1:1-2:3" (cross-chapter)
+- `get_db_status(adapter: BibleDbAdapter | None = None) -> Literal["available", "unavailable", "db_off"]`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.bible_passage_flow import fetch_verse, fetch_passage
+
+# Single verse
+verse = fetch_verse("Genesis 1:1", "KJV")
+if verse:
+    print(f"{verse.book_name} {verse.chapter_num}:{verse.verse_num} - {verse.text}")
+
+# Passage range
+verses = fetch_passage("Genesis 1:1-3", "KJV")
+for v in verses:
+    print(f"{v.verse_num}: {v.text}")
+
+# Cross-chapter passage
+verses = fetch_passage("Genesis 1:31-2:3", "KJV")
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_bible_db_adapter.py`
+- Tests in `agentpm/biblescholar/tests/test_bible_passage_flow.py`
+- Tests verify: SQL query shapes, DB-off handling, no write operations, reference parsing
+
 ## Future Extensions
 
 - Batch processing for multiple phrases
 - Comparison utilities (difference between systems)
 - Integration with BibleScholar verse lookup
 - Caching layer (if needed, still read-only)
+- More sophisticated reference parsing (OSIS format, book abbreviations)
 
