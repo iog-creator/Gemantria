@@ -417,8 +417,16 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - control.lm_usage_budget table with per-app budgets (migration 042)
   - Budget enforcement in guarded_lm_call() with "budget_exceeded" mode
   - lm_budget_7d.json export for visibility
-- **6C**: Knowledge Slice v0 (DB-backed) 📘 PLANNING
-- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 PLANNING
+- **6C**: Knowledge Slice v0 (DB-backed) ✅ **COMPLETE**
+  - knowledge schema with kb_document and kb_embedding tables (migration 043)
+  - Markdown ingestion script (control_kb_ingest.py) with db_off safety
+  - KB export script (control_kb_export.py) → kb_docs.head.json
+  - Make targets: atlas.kb.ingest, atlas.kb.export
+  - Hermetic tests for ingestion and export
+- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 IN PROGRESS
+  - Step 1: Gemantria-side adapter ✅ (agentpm/knowledge/adapter.py, KB_WIDGETS.md)
+  - Step 2: StoryMaker integration 📘 PLANNING
+  - Step 3: BibleScholar integration 📘 PLANNING
 - **6E**: Governance & SSOT updates 📘 PLANNING
 
 **Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.

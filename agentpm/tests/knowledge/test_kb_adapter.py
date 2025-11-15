@@ -3,12 +3,8 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
-from unittest.mock import patch
 
 from agentpm.knowledge.adapter import (
-    KB_DOCS_PATH,
-    KBWidgetProps,
     load_kb_docs_widget_props,
     OFFLINE_SAFE_DEFAULT,
 )

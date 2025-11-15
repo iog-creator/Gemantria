@@ -7,7 +7,7 @@ from agentpm.knowledge.adapter import (
 )
 
 __all__ = [
-    "KBWidgetProps",
     "KBDocWidgetProps",
+    "KBWidgetProps",
     "load_kb_docs_widget_props",
 ]
