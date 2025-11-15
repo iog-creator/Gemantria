@@ -125,12 +125,34 @@ def get_lm_studio_settings() -> dict[str, str | None | bool]:
     Returns:
         Dictionary with:
         - enabled: bool (True if LM_STUDIO_ENABLED is true AND base_url/model are present)
-        - base_url: str | None (from LM_STUDIO_BASE_URL, default: http://localhost:1234/v1)
+        - base_url: str | None (from LM_STUDIO_BASE_URL or LM_STUDIO_HOST, default: http://localhost:1234/v1)
         - model: str | None (from LM_STUDIO_MODEL)
         - api_key: str | None (from LM_STUDIO_API_KEY, optional)
     """
     _ensure_loaded()
-    base_url = env("LM_STUDIO_BASE_URL", "http://localhost:1234/v1")
+
+    # Check LM_STUDIO_BASE_URL first, then fall back to LM_STUDIO_HOST
+    base_url = env("LM_STUDIO_BASE_URL")
+    if not base_url:
+        # Try LM_STUDIO_HOST (legacy format)
+        lm_host = env("LM_STUDIO_HOST")
+        if lm_host:
+            # Ensure it has /v1 suffix
+            if not lm_host.endswith("/v1"):
+                # Remove trailing slash if present, then add /v1
+                base_url = f"{lm_host.rstrip('/')}/v1"
+            else:
+                base_url = lm_host
+        else:
+            # Fall back to LM_EMBED_HOST/LM_EMBED_PORT (older legacy format)
+            embed_host = env("LM_EMBED_HOST", "localhost")
+            embed_port = env("LM_EMBED_PORT", "1234")
+            base_url = f"http://{embed_host}:{embed_port}/v1"
+
+    # Default if nothing is set
+    if not base_url:
+        base_url = "http://localhost:1234/v1"
+
     model = env("LM_STUDIO_MODEL")
     api_key = env("LM_STUDIO_API_KEY")
     enabled_flag = env("LM_STUDIO_ENABLED", "false").lower()
@@ -158,6 +180,114 @@ def get_lm_studio_enabled() -> bool:
     _ensure_loaded()
     enabled_flag = env("LM_STUDIO_ENABLED", "false").lower()
     return enabled_flag in ("1", "true", "yes")
+
+
+def get_lm_model_config() -> dict[str, str | None]:
+    """
+    Phase-7B: Centralized LM model configuration loader.
+
+    Normalizes canonical env vars with legacy fallbacks for backward compatibility.
+    All model configuration should use this function instead of direct os.getenv() calls.
+
+    Returns:
+        Dictionary with:
+        - provider: str - Inference provider (default: "lmstudio")
+        - base_url: str - Base URL for OpenAI-compatible API (default: "http://127.0.0.1:9994/v1")
+        - embedding_model: str | None - Embedding model ID (canonical: EMBEDDING_MODEL, legacy: LM_EMBED_MODEL)
+        - theology_model: str | None - Theology/general reasoning model ID
+        - math_model: str | None - Math verification model ID
+        - reranker_model: str | None - Reranker model ID (canonical: RERANKER_MODEL, legacy: QWEN_RERANKER_MODEL)
+
+    Legacy Support:
+        - LM_EMBED_MODEL → EMBEDDING_MODEL (deprecated, will be removed in Phase-8)
+        - QWEN_RERANKER_MODEL → RERANKER_MODEL (deprecated, will be removed in Phase-8)
+    """
+    _ensure_loaded()
+    import warnings
+
+    # Canonical vars
+    embedding = env("EMBEDDING_MODEL")
+    theology = env("THEOLOGY_MODEL")
+    math_model = env("MATH_MODEL")
+    reranker = env("RERANKER_MODEL")
+
+    # Legacy fallbacks (with deprecation warnings)
+    if not embedding:
+        legacy_embed = env("LM_EMBED_MODEL")
+        if legacy_embed:
+            warnings.warn(
+                "LM_EMBED_MODEL is deprecated, use EMBEDDING_MODEL instead. Support will be removed in Phase-8.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            embedding = legacy_embed
+
+    if not reranker:
+        legacy_rerank = env("QWEN_RERANKER_MODEL")
+        if legacy_rerank:
+            warnings.warn(
+                "QWEN_RERANKER_MODEL is deprecated, use RERANKER_MODEL instead. Support will be removed in Phase-8.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            reranker = legacy_rerank
+
+    # Get base URL from existing openai_cfg() function
+    cfg = openai_cfg()
+    base_url = cfg.get("base_url", "http://127.0.0.1:9994/v1")
+
+    return {
+        "provider": env("INFERENCE_PROVIDER", "lmstudio"),
+        "base_url": base_url,
+        "embedding_model": embedding,
+        "theology_model": theology,
+        "math_model": math_model,
+        "reranker_model": reranker,
+    }
+
+
+def get_embedding_model() -> str:
+    """
+    Phase-7B: Get embedding model ID with legacy fallback.
+
+    Returns:
+        Embedding model ID (default: "text-embedding-bge-m3")
+    """
+    cfg = get_lm_model_config()
+    return cfg.get("embedding_model") or "text-embedding-bge-m3"
+
+
+def get_theology_model() -> str:
+    """
+    Phase-7B: Get theology model ID.
+
+    Returns:
+        Theology model ID (default: "christian-bible-expert-v2.0-12b")
+    """
+    cfg = get_lm_model_config()
+    return cfg.get("theology_model") or "christian-bible-expert-v2.0-12b"
+
+
+def get_math_model() -> str:
+    """
+    Phase-7B: Get math verification model ID.
+
+    Returns:
+        Math model ID (default: "self-certainty-qwen3-1.7b-base-math")
+    """
+    cfg = get_lm_model_config()
+    return cfg.get("math_model") or "self-certainty-qwen3-1.7b-base-math"
+
+
+def get_reranker_model() -> str:
+    """
+    Phase-7B: Get reranker model ID with legacy fallback.
+
+    Returns:
+        Reranker model ID (default: "qwen-reranker")
+    """
+    cfg = get_lm_model_config()
+    return cfg.get("reranker_model") or "qwen-reranker"
 
 
 def snapshot(path: str) -> None:

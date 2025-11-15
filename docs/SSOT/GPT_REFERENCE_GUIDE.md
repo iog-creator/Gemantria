@@ -115,6 +115,24 @@ make ssot.verify
 
 **Example**: `governance_tracker.py` checks DB availability, emits HINTs, and returns success when DB unavailable, allowing `make housekeeping` to pass.
 
+## LM Studio & Local Model Configuration
+
+This system uses LM Studio as the default inference provider (`INFERENCE_PROVIDER=lmstudio`). The following environment variables control how local models are selected:
+
+- **`INFERENCE_PROVIDER`** – Inference provider selector (default: `lmstudio`)
+- **`OPENAI_BASE_URL`** – Base URL for LM Studio's OpenAI-compatible API (default: `http://127.0.0.1:9994/v1`)
+- **`EMBEDDING_MODEL`** – Vector embedding model (default: `text-embedding-bge-m3`, 1024-dimensional)
+- **`THEOLOGY_MODEL`** – Main reasoning/theology model (default: `christian-bible-expert-v2.0-12b`)
+- **`MATH_MODEL`** – Optional math-heavy model for numeric verification (default: `self-certainty-qwen3-1.7b-base-math`)
+- **`RERANKER_MODEL`** – Optional reranker model for post-processing (default: `qwen.qwen3-reranker-0.6b`)
+- **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`)
+
+All LM configuration is centralized in `scripts/config/env.py` via the `get_lm_model_config()` function and helper functions (`get_embedding_model()`, `get_theology_model()`, etc.).
+
+**Legacy Support (Deprecated):**
+- `LM_EMBED_MODEL` → Use `EMBEDDING_MODEL` instead (will be removed in Phase-8)
+- `QWEN_RERANKER_MODEL` → Use `RERANKER_MODEL` instead (will be removed in Phase-8)
+
 ## Governance Reference
 
 **ADR-058**: GPT System Prompt Requirements as Operational Governance - Establishes GPT system prompt requirements as part of the operational governance framework.

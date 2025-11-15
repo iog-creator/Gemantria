@@ -41,25 +41,46 @@ STRICT_GOVERNANCE=0
 # When true, selected features may call LM Studio under guardrails.
 LM_STUDIO_ENABLED=false
 
-# LM Studio Server Host
+# Inference provider used by the runtime (lmstudio | openai | other)
+# Default: lmstudio
+INFERENCE_PROVIDER=lmstudio
+
+# LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)
 LM_STUDIO_HOST=  # e.g. http://127.0.0.1:9994 (set in your .env)
 
 # === Local AI (LM Studio / OpenAI-compatible) ===
 # OpenAI-compatible API base URL (defaults to LM Studio on port 9994 per AGENTS.md)
+# This is the PRIMARY base URL for LM Studio API calls
 OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 # API key (any non-empty string works for local servers; SDK requires it)
 OPENAI_API_KEY=sk-local-placeholder
-# Embedding model name (must match a model loaded in LM Studio)
-LM_EMBED_MODEL=text-embedding-bge-m3
+
+# === Canonical LM Model IDs (Phase-7B) ===
+# These model IDs must match models loaded in LM Studio
+# All model configuration is centralized in scripts/config/env.py
+
+# Embedding model (1024-dimensional, verified)
+# Used for semantic embeddings in network aggregation
+# Legacy: LM_EMBED_MODEL (deprecated, use EMBEDDING_MODEL instead)
+EMBEDDING_MODEL=text-embedding-bge-m3
+LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
+
+# Main reasoning / theology model
+# Used for noun discovery, enrichment, and general theological analysis
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+
+# Optional: math-heavy model for numeric/reasoning tasks
+# Used for gematria calculation verification
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Optional: reranker model for post-processing
+# Used for semantic reranking in network aggregation
+# Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
+RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
 # Optional: override LM Studio embed host/port if not defaulting to 9994.
 # LM_EMBED_HOST=localhost
 # LM_EMBED_PORT=9994
-
-# Model Configuration
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-EMBEDDING_MODEL=text-embedding-bge-m3
-RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # Embedding Configuration
 USE_QWEN_EMBEDDINGS=true
@@ -73,6 +94,11 @@ LM_STUDIO_TIMEOUT=30
 LM_STUDIO_RETRY_ATTEMPTS=3
 LM_STUDIO_RETRY_DELAY=2.0
 LM_STUDIO_MOCK=false
+
+# MCP SSE Server Auto-Start (for LM Studio bridge)
+# Set to 1 to automatically start MCP SSE server on port 8005 when needed
+# Auto-starts when running: pmagent bringup full, make bringup.001, pmagent mcp sse, make mcp.sse.ensure
+AUTO_START_MCP_SSE=0
 
 # ============================================================================
 # PIPELINE CONFIGURATION

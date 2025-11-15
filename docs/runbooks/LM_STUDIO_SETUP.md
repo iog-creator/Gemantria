@@ -31,22 +31,23 @@ This runbook provides step-by-step instructions for setting up LM Studio as a lo
 Create or update `.env.local` (or `.env`) with LM Studio settings:
 
 ```bash
-# LM Studio Configuration (Phase-3C)
+# LM Studio Configuration (Phase-7B: Canonical Model Configuration)
 LM_STUDIO_ENABLED=1
-LM_STUDIO_BASE_URL=http://127.0.0.1:1234/v1
-LM_STUDIO_MODEL=christian-bible-expert-v2.0-12b
+INFERENCE_PROVIDER=lmstudio
+OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 
-# Alternative: Use legacy host/port format
-# LM_STUDIO_HOST=http://127.0.0.1:1234
-# LM_EMBED_HOST=127.0.0.1
-# LM_EMBED_PORT=1234
-
-# Model Configuration
+# Canonical Model Configuration
+# All model IDs must match models loaded in LM Studio
+EMBEDDING_MODEL=text-embedding-bge-m3
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-EMBEDDING_MODEL=text-embedding-bge-m3
 RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# MCP SSE Server Auto-Start
+AUTO_START_MCP_SSE=1
 ```
+
+**Note**: The runtime loads all model IDs from `scripts/config/env.py` via centralized loaders. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
 
 **Note**: The centralized config loader (`scripts/config/env.py`) handles environment variable precedence. See Configuration section below for details.
 
