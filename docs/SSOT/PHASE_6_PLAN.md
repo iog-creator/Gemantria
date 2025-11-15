@@ -59,18 +59,29 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 **Objective**: Add the first DB-backed knowledge structure.
 
 **Deliverables**:
-- New schema: `knowledge`
+- New schema: `knowledge` ✅ (migration 043)
 - Tables:
-  - `kb_document` (uuidv7, title, section, body_md, tags[])
-  - `kb_embedding` (doc_id → vector pgvector[1024])
-- ETL ingestion script (markdown → DB)
+  - `kb_document` (uuid, title, section, slug, body_md, tags[]) ✅
+  - `kb_embedding` (doc_id → vector pgvector[1024]) ✅
+- ETL ingestion script (markdown → DB) ✅ (`scripts/db/control_kb_ingest.py`)
+  - Parses markdown files from `docs/knowledge_seed/` (or custom directory)
+  - Extracts title (H1 or filename), section (parent directory), slug
+  - UPSERTs into `knowledge.kb_document` (idempotent)
+  - db_off-safe (fails gracefully with clear message)
+- Export script ✅ (`scripts/db/control_kb_export.py`)
+  - Exports subset of KB docs (LIMIT 50) to `share/atlas/control_plane/kb_docs.head.json`
+  - Includes: id, title, section, slug, tags, preview (first 200 chars), created_at
+  - db_off-safe (emits empty list when DB unavailable)
 - Make targets:
-  - `make kb.ingest`
-  - `make kb.export`
+  - `make atlas.kb.ingest` ✅
+  - `make atlas.kb.export` ✅
 
 **Tests**:
-- ETL hermetic tests
-- db_off-safe mode using cached artifacts
+- ETL hermetic tests ✅ (`agentpm/tests/knowledge/test_kb_ingest_and_export.py`)
+  - db_off handling (fail-soft, exit 0)
+  - Export JSON structure validation
+  - Slug generation and title extraction utilities
+- db_off-safe mode using cached artifacts ✅
 
 ---
 
