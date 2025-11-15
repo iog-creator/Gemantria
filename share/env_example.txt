@@ -37,6 +37,10 @@ STRICT_GOVERNANCE=0
 # LM STUDIO CONFIGURATION
 # ============================================================================
 
+# Phase-6: LM Studio live usage toggle
+# When true, selected features may call LM Studio under guardrails.
+LM_STUDIO_ENABLED=false
+
 # LM Studio Server Host
 LM_STUDIO_HOST=http://192.168.1.119:1234
 

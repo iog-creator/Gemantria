@@ -15,15 +15,18 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 **Objective**: Move from "wired but off" to **real LM Studio usage** for selected features under strict guardrails.
 
 **Deliverables**:
-- Config flag: `LM_STUDIO_ENABLED=true|false`
-- Routing logic: LM Studio handles specific features when enabled; otherwise fallback
-- Guarded call wrapper:
-  - call_site
-  - token usage
-  - latency
-  - success/failure
+- Config flag: `LM_STUDIO_ENABLED=true|false` ✅
+- Routing logic: LM Studio handles specific features when enabled; otherwise fallback ✅
+- Guarded call wrapper (`guarded_lm_call()`): ✅
+  - call_site tracking
+  - token usage (via control-plane logging)
+  - latency (via control-plane logging)
+  - success/failure (via control-plane logging)
   - logged into control-plane
-- First LM-enabled feature (StoryMaker or BibleScholar)
+- First LM-enabled feature: `agentpm/runtime/lm_helpers.generate_text()` ✅
+  - Simple text generation helper that demonstrates LM Studio enablement
+  - Can be used by downstream apps (StoryMaker, BibleScholar) or internal features
+  - Respects `LM_STUDIO_ENABLED` flag with graceful fallback
 
 **Tests**:
 - LM Studio enabled + unreachable (fallback)
