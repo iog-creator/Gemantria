@@ -119,9 +119,12 @@ def get_lm_studio_settings() -> dict[str, str | None | bool]:
     Centralized LM Studio config loader.
     Only place where we touch os.environ for LM_STUDIO_*.
 
+    Phase-6: LM_STUDIO_ENABLED is now a master switch. When false, LM Studio
+    is disabled regardless of base_url/model configuration.
+
     Returns:
         Dictionary with:
-        - enabled: bool (True if LM_STUDIO_ENABLED is set and base_url/model are present)
+        - enabled: bool (True if LM_STUDIO_ENABLED is true AND base_url/model are present)
         - base_url: str | None (from LM_STUDIO_BASE_URL, default: http://localhost:1234/v1)
         - model: str | None (from LM_STUDIO_MODEL)
         - api_key: str | None (from LM_STUDIO_API_KEY, optional)
@@ -130,10 +133,12 @@ def get_lm_studio_settings() -> dict[str, str | None | bool]:
     base_url = env("LM_STUDIO_BASE_URL", "http://localhost:1234/v1")
     model = env("LM_STUDIO_MODEL")
     api_key = env("LM_STUDIO_API_KEY")
-    enabled_flag = env("LM_STUDIO_ENABLED", "").lower()
+    enabled_flag = env("LM_STUDIO_ENABLED", "false").lower()
 
-    # Enabled if flag is set AND base_url and model are present
-    enabled = bool(enabled_flag in ("1", "true", "yes") and base_url and model)
+    # Phase-6: LM_STUDIO_ENABLED is a master switch
+    # Must be explicitly enabled AND have base_url and model configured
+    flag_enabled = enabled_flag in ("1", "true", "yes")
+    enabled = bool(flag_enabled and base_url and model)
 
     return {
         "enabled": enabled,
@@ -141,6 +146,18 @@ def get_lm_studio_settings() -> dict[str, str | None | bool]:
         "model": model,
         "api_key": api_key,
     }
+
+
+def get_lm_studio_enabled() -> bool:
+    """
+    Phase-6: Check if LM Studio is enabled via LM_STUDIO_ENABLED flag.
+
+    Returns:
+        True if LM_STUDIO_ENABLED is set to true/1/yes, False otherwise.
+    """
+    _ensure_loaded()
+    enabled_flag = env("LM_STUDIO_ENABLED", "false").lower()
+    return enabled_flag in ("1", "true", "yes")
 
 
 def snapshot(path: str) -> None:
