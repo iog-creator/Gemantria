@@ -166,3 +166,20 @@ PIP_REQUIRE_VENV=true
 # - LM Studio models are local (no cloud credentials needed)
 
 CODE_EXEC_TS=0
+
+# ============================================================================
+# RUNTIME BRING-UP HOOKS (Phase-6 Reality Checks)
+# ============================================================================
+
+# Optional shell command the tools can use to start Postgres automatically.
+# Example (macOS/Homebrew):  DB_START_CMD="brew services start postgresql"
+# Example (systemd):         DB_START_CMD="sudo systemctl start postgresql"
+DB_START_CMD=""
+
+# LM Studio CLI model identifier to auto-load via `lms load`.
+# Example: LM_STUDIO_MODEL_ID="lmstudio-community/Meta-Llama-3-8B-Instruct"
+LM_STUDIO_MODEL_ID=""
+
+# Port for the LM Studio HTTP server (used by lms server start).
+# Defaults to 1234 if left blank.
+LM_STUDIO_SERVER_PORT=""

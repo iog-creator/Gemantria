@@ -1839,6 +1839,11 @@ guard.mcp.sse:
 bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
 	@bash scripts/bringup_001.sh
 
+# --- Reality Check #1: Automated bring-up for SSOT Docs → Postgres → LM Studio Q&A ---
+.PHONY: reality.check.1
+reality.check.1: ## Run Reality Check #1: automated bring-up (Postgres + LM Studio + ingest + golden question)
+	@python3 -m agentpm.scripts.reality_check_1
+
 .PHONY: dsns.echo
 dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
 	@if [ -f .env.local ]; then \
