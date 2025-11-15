@@ -373,26 +373,32 @@ These are active on every branch/state and are not pruned or downgraded.
 
 **Phase-3D Status**: ✅ **COMPLETE** — All LM observability artifacts are in place and browser-verified. Status page is readable and helpful in db_off mode.
 
-### Phase-4: LM Insights & UI Polish (📋 **Planned**)
-- **4A**: LM Insights exports
-  - Higher-level JSON export (e.g. `lm_insights_7d.json`) summarizing:
+### Phase-4: LM Insights & UI Polish (✅ **COMPLETE**)
+- **4A**: LM Insights exports ✅
+  - Higher-level JSON export (`lm_insights_7d.json`) summarizing:
     - `lm_studio_usage_ratio` — Percentage of calls using LM Studio vs fallback
     - `fallback_rate` — Rate of fallback to legacy `chat_completion()`
     - `top_error_reason` — Most common error types/causes
     - Additional aggregated insights from `lm_usage_7d.json` and `lm_health_7d.json`
-  - Still db_off-safe (emit "no data" but don't crash)
-- **4B**: LM status page UX polish
+  - db_off-safe (emit "no data" but don't crash)
+- **4B**: LM status page UX polish ✅
   - One-sentence summary at the top ("LM Studio is offline / healthy / degraded")
   - Simple explanations of "health score", "db_off", "error_rate" for non-technical users
   - Friendlier layout and typography improvements
-- **4C**: Surfacing LM status in consumer flows
-  - Define a tiny JSON + HTML "LM indicator" widget that could be embedded in StoryMaker / BibleScholar / other apps
-  - For now, just plan/spec; implementation can be Phase-4 PRs
-- **4D**: Governance/docs alignment
-  - Update ADR-066 or add a follow-up ADR noting Phase-4 enhancements
-  - Ensure AGENTS.md, LM_STUDIO_SETUP.md, and SHARE_MANIFEST include any new exports/HTML
+  - Consumes `lm_insights_7d.json` for unified status display
+- **4C**: LM indicator export for downstream apps ✅
+  - Compact JSON export (`lm_indicator.json`) with status classification:
+    - `status`: "offline" | "healthy" | "degraded"
+    - `reason`: "db_off" | "no_calls" | "high_error_rate" | "ok"
+    - Core metrics: `success_rate`, `error_rate`, `total_calls`, `db_off`
+  - **Canonical LM status signal for downstream apps** (StoryMaker, BibleScholar, etc.)
+  - Derived from `lm_insights_7d.json` (hermetic, no DB/LM calls)
+- **4D**: Governance/docs alignment ✅
+  - Updated ADR-066 with Phase-4 exports list
+  - Updated AGENTS.md, LM_STUDIO_SETUP.md, CHANGELOG.md, and SHARE_MANIFEST
+  - Documented `lm_indicator.json` as canonical downstream signal
 
-**Phase-4 Goals**: Enhance LM observability with higher-level insights and improve UX for non-technical users. All enhancements maintain db_off + LM-off safety.
+**Phase-4 Status**: ✅ **COMPLETE** — All LM observability exports are in place, status page is UX-polished, and indicator export provides a canonical signal for downstream apps. All enhancements maintain db_off + LM-off safety.
 
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅

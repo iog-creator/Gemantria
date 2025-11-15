@@ -44,6 +44,11 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`, `THEOLOGY_MODEL=christian-bible-expert-v2.0-12b`
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
   - **Phase-3C Integration**: Enrichment pipeline uses `lm_studio_chat_with_logging()` with control-plane observability (see RFC-080, ADR-066)
+  - **LM Observability Exports**: Phase-4 exports provide LM status signals:
+    - `lm_usage_7d.json` — Raw usage metrics (calls, latency)
+    - `lm_health_7d.json` — Health metrics (success/error rates)
+    - `lm_insights_7d.json` — Aggregated insights (usage ratio, top errors)
+    - `lm_indicator.json` — **Canonical LM status signal for downstream apps** (offline/healthy/degraded)
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
     - **Auto-start**: Set `AUTO_START_MCP_SSE=1` to automatically start server when needed (integrated into `make bringup.001`)
     - **Manual start**: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`

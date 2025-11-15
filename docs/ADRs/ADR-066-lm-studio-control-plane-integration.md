@@ -91,11 +91,29 @@ Follow-up Phase-3C PRs for:
 - Routing integration into real pipelines (P1b/P2 — pending)
 - Documentation (LM Studio setup runbook — P2 — pending)
 
+## Phase-4: LM Observability Exports
+
+Phase-4 extends the control-plane integration with observability exports for downstream applications:
+
+1. **`lm_usage_7d.json`** — Raw usage metrics (total calls, successful/failed, latency) for the last 7 days
+2. **`lm_health_7d.json`** — Health metrics (success rate, error rate, health score) for the last 7 days
+3. **`lm_insights_7d.json`** — Aggregated insights (LM Studio usage ratio, top error reasons, fallback rates)
+4. **`lm_indicator.json`** — **Canonical LM status signal for downstream apps** (offline/healthy/degraded)
+
+All exports are db_off + LM-off safe (graceful fallback when DB or LM Studio unavailable).
+
+**For downstream applications** (StoryMaker, BibleScholar, etc.), **use `lm_indicator.json` as the primary LM status signal** instead of parsing raw metrics. The indicator provides a simple, stable interface:
+- `status`: "offline" | "healthy" | "degraded"
+- `reason`: "db_off" | "no_calls" | "high_error_rate" | "ok"
+- Core metrics: `success_rate`, `error_rate`, `total_calls`, `db_off`
+
+See `docs/SSOT/MASTER_PLAN.md` Phase-4 section for implementation details.
+
 ## References
 
 - **RFC-080** — LM Studio + Control Plane Integration (design specification)
 - **ADR-007** — LLM Integration and Confidence Metadata (earlier design)
 - **ADR-010** — Qwen Integration
 - **ADR-065** — Postgres SSOT / control plane
-- **PLAN / MASTER_PLAN** entries for Phase-3C
+- **PLAN / MASTER_PLAN** entries for Phase-3C and Phase-4
 
