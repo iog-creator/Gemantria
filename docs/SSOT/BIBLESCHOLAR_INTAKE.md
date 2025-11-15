@@ -29,7 +29,7 @@ Initial candidates (from PROJECTS_INVENTORY):
   - [ ] `cross_language_api.py` - Cross-language (Hebrew/Greek) search
   - [ ] `lexicon_api.py` - Lexicon/word lookup endpoints
   - [ ] `search_api.py` - General search API
-  - [ ] `vector_search_api.py` - Semantic/vector search endpoints
+  - [x] `vector_search_api.py` - Semantic/vector search endpoints (Phase-6O: `vector_adapter.py` + `vector_flow.py`)
 
 - [ ] **Utilities** (`src/utils/`):
   - [ ] `bible_reference_parser.py` - Parse Bible references (book:chapter:verse)

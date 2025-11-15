@@ -14,6 +14,7 @@ directly; it should provide pure, testable adapters that callers can use.
 - Phase-6K: BibleScholar Gematria flow (read-only) — COMPLETE
 - Phase-6M: Bible DB read-only adapter + passage flow — COMPLETE
 - Phase-6N: Lexicon read-only adapter + word-study flow — COMPLETE
+- Phase-6O: Vector similarity adapter + verse-similarity flow — COMPLETE
 
 ## Related SSOT Docs
 
@@ -286,6 +287,84 @@ for entry in result.entries:
 - Tests in `agentpm/biblescholar/tests/test_lexicon_adapter.py`
 - Tests in `agentpm/biblescholar/tests/test_lexicon_flow.py`
 - Tests verify: SQL query shapes, DB-off handling, no write operations, Strong's number lookup, word-study retrieval
+
+### Vector Similarity Adapter (Phase-6O)
+
+- **Module**: `agentpm/biblescholar/vector_adapter.py`
+- **Purpose**: Read-only adapter for verse vector similarity queries using pgvector. Provides semantic similarity search for finding similar verses based on embedding vectors stored in `bible.verses.embedding`.
+- **Dependencies**:
+  - `agentpm.db.loader.get_bible_engine()` (centralized DSN loader)
+  - SQLAlchemy for database queries
+  - pgvector extension (cosine distance operator `<->`)
+- **Non-goals**:
+  - No database writes (SELECT-only operations)
+  - No control-plane writes
+  - No LM calls
+  - No UI work
+
+**API**:
+- `BibleVectorAdapter` class:
+  - `find_similar_by_verse(verse_id: int, limit: int = 10, translation_source: str | None = None) -> list[VerseSimilarityResult]` - Find similar verses by verse_id
+  - `find_similar_by_ref(book_name: str, chapter_num: int, verse_num: int, translation_source: str = "KJV", limit: int = 10) -> list[VerseSimilarityResult]` - Find similar verses by Bible reference
+  - `db_status: Literal["available", "unavailable", "db_off"]` property
+
+**Data Model**:
+- `VerseSimilarityResult` dataclass with fields: `verse_id`, `book_name`, `chapter_num`, `verse_num`, `text`, `translation_source`, `similarity_score` (0.0 to 1.0, higher is more similar)
+
+**Tables Used**:
+- `bible.verses` - Verse storage with `embedding vector(768)` column (HNSW index for similarity search)
+
+**Vector Similarity**:
+- Uses pgvector's cosine distance operator `<->` for similarity calculations
+- Similarity score: `1 - (embedding <-> source_embedding)` (converts distance to similarity, 0.0 to 1.0)
+- Results ordered by similarity (highest first)
+- Requires `embedding IS NOT NULL` for both source and target verses
+
+**Error Handling**:
+- DB unavailable: Returns empty list
+- DB off (DSN not set): Returns empty list, sets `db_status` to `"db_off"`
+- Connection errors: Returns empty list, sets `db_status` to `"unavailable"`
+- Verse not found or no embedding: Returns empty list
+
+**Bible DB Only Rule**: All verse similarity queries must come from `bible_db` embeddings, not from LLM memory or other sources. This adapter enforces that by providing the only read path to vector similarity data.
+
+### Vector Similarity Flow (Phase-6O)
+
+- **Module**: `agentpm/biblescholar/vector_flow.py`
+- **Purpose**: Simple, composable flow for finding similar verses using vector similarity. Provides convenience functions for reference-based similarity search.
+- **Dependencies**:
+  - `agentpm.biblescholar.vector_adapter`
+  - `agentpm.biblescholar.bible_passage_flow` (for reference parsing)
+- **Non-goals**:
+  - No LM calls
+  - No Gematria (handled by separate flows)
+  - No UI work
+
+**API**:
+- `similar_verses_for_reference(reference: str, translation_source: str = "KJV", limit: int = 10) -> list[VerseSimilarityResult]` - Find similar verses for a Bible reference
+- `similar_verses_for_verse_id(verse_id: int, limit: int = 10) -> list[VerseSimilarityResult]` - Find similar verses by verse_id
+- `get_db_status(adapter: BibleVectorAdapter | None = None) -> Literal["available", "unavailable", "db_off"]`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.vector_flow import similar_verses_for_reference, similar_verses_for_verse_id
+
+# Find similar verses by reference
+similar = similar_verses_for_reference("Genesis 1:1", "KJV", limit=5)
+for verse in similar:
+    print(f"{verse.book_name} {verse.chapter_num}:{verse.verse_num} (score: {verse.similarity_score:.3f})")
+    print(f"  {verse.text}")
+
+# Find similar verses by verse_id
+similar = similar_verses_for_verse_id(verse_id=1, limit=10)
+for verse in similar:
+    print(f"{verse.book_name} {verse.chapter_num}:{verse.verse_num} - {verse.similarity_score:.3f}")
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_vector_adapter.py`
+- Tests in `agentpm/biblescholar/tests/test_vector_flow.py`
+- Tests verify: SQL query shapes, DB-off handling, no write operations, vector similarity calculations, reference parsing
 
 ## Future Extensions
 
