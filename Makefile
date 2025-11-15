@@ -918,13 +918,18 @@ control.agent_runs_7d.export:
 	@echo ">> Exporting control-plane agent runs 7d…"
 	@PYTHONPATH=. python3 scripts/db/control_agent_runs_7d_export.py
 
-.PHONY: atlas.lm.usage atlas.lm.health atlas.lm.dashboards atlas.lm.status.html atlas.lm.dashboards.webproof atlas.lm.status.webproof
+.PHONY: atlas.lm.usage atlas.lm.health atlas.lm.insights atlas.lm.dashboards atlas.lm.status.html atlas.lm.dashboards.webproof atlas.lm.status.webproof
 atlas.lm.usage:
 	@echo ">> Exporting LM Studio usage metrics (7d)…"
 	@PYTHONPATH=. python3 scripts/db/control_lm_metrics_export.py
 
 atlas.lm.health: atlas.lm.usage
 	@echo ">> LM usage and health metrics exported to share/atlas/control_plane/"
+
+atlas.lm.insights: atlas.lm.health
+	@echo ">> Exporting LM Studio insights (7d)…"
+	@PYTHONPATH=. python3 scripts/db/control_lm_insights_export.py
+	@echo ">> LM insights exported to share/atlas/control_plane/lm_insights_7d.json"
 
 atlas.lm.dashboards:
 	@echo ">> Validating LM dashboard configs…"
