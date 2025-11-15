@@ -423,7 +423,10 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - KB export script (control_kb_export.py) → kb_docs.head.json
   - Make targets: atlas.kb.ingest, atlas.kb.export
   - Hermetic tests for ingestion and export
-- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 PLANNING
+- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 IN PROGRESS
+  - Step 1: Gemantria-side adapter ✅ (agentpm/knowledge/adapter.py, KB_WIDGETS.md)
+  - Step 2: StoryMaker integration 📘 PLANNING
+  - Step 3: BibleScholar integration 📘 PLANNING
 - **6E**: Governance & SSOT updates 📘 PLANNING
 
 **Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.
