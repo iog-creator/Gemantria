@@ -76,6 +76,36 @@ ls -1 share/eval
 * Optional Postgres 15+ (CI bootstraps automatically)
 * Recommended: `pre-commit install`
 
+### 4.3 Reality Check #1: SSOT Docs → Postgres → LM Studio Q&A
+
+The first end-to-end pipeline ingests SSOT documentation into Postgres and enables Q&A via LM Studio.
+
+**Prerequisites:**
+```bash
+pip install -e .
+```
+
+**Run the pipeline:**
+```bash
+# 1. Ingest SSOT docs into control.doc_sources and control.doc_sections
+python -m agentpm.scripts.ingest_docs
+
+# 2. Ask questions using SSOT documentation
+pmagent ask docs "What does Phase-6P deliver?"
+```
+
+**What it does:**
+- Ingests curated SSOT files (MASTER_PLAN.md, AGENTS.md, graph.schema.json) into `control.doc_sources` and `control.doc_sections`
+- Retrieves relevant doc sections based on query text match
+- Uses LM Studio (guarded) to answer questions with provenance and budget enforcement
+- Tolerates db_off mode (graceful degradation when DB/LM unavailable)
+
+**Module locations:**
+- Ingestion: `agentpm/scripts/ingest_docs.py`
+- Retrieval: `agentpm/knowledge/retrieval.py`
+- Q&A: `agentpm/knowledge/qa_docs.py`
+- CLI: `pmagent ask docs` command
+
 ---
 
 ## 5. Make Targets (Full Catalog)
