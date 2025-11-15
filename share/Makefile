@@ -941,6 +941,17 @@ atlas.lm.budget: atlas.lm.insights
 	@PYTHONPATH=. python3 scripts/db/control_lm_budget_export.py
 	@echo ">> LM budget status exported to share/atlas/control_plane/lm_budget_7d.json"
 
+.PHONY: atlas.kb.ingest atlas.kb.export
+atlas.kb.ingest:
+	@echo ">> Ingesting knowledge base documents from docs/knowledge_seed/…"
+	@PYTHONPATH=. python3 scripts/db/control_kb_ingest.py
+	@echo ">> Knowledge base ingestion complete"
+
+atlas.kb.export:
+	@echo ">> Exporting knowledge base documents (head)…"
+	@PYTHONPATH=. python3 scripts/db/control_kb_export.py
+	@echo ">> Knowledge base export complete: share/atlas/control_plane/kb_docs.head.json"
+
 atlas.lm.dashboards:
 	@echo ">> Validating LM dashboard configs…"
 	@test -f docs/atlas/config/lm_usage_dashboard.json || (echo "ERROR: lm_usage_dashboard.json missing" && exit 1)

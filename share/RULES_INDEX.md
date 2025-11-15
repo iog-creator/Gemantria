@@ -71,3 +71,7 @@
 | 066 | 066-lm-studio-appimage-update.mdc | # --- |
 | 067 | 067-atlas-webproof.mdc | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | 068-gpt-docs-sync.mdc | # --- |
+
+## RFC Index
+
+- RFC-081 — Unified UI & BibleScholar as Module
