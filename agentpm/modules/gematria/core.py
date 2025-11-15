@@ -17,7 +17,7 @@ from typing import Iterable
 DEFAULT_SYSTEM_NAME = "mispar_hechrachi"
 
 # Mispar Hechrachi: Hebrew letter-to-value mapping
-# Finals mapped to regular values (ך=20, ם=40, ן=50, ף=80, ץ=90)
+# Finals mapped to regular values (ך=20, ם=40, ן=50, ף=80, ץ=90)  # noqa: RUF003
 # Reference: src/core/hebrew_utils.py, scripts/gematria_verify.py
 _MISPAR_HECHRACHI_MAP: dict[str, int] = {
     "א": 1,
@@ -36,7 +36,7 @@ _MISPAR_HECHRACHI_MAP: dict[str, int] = {
     "מ": 40,
     "ם": 40,  # final mem
     "נ": 50,
-    "ן": 50,  # final nun
+    "ן": 50,  # final nun  # noqa: RUF001
     "ס": 60,  # noqa: RUF001
     "ע": 70,
     "פ": 80,
