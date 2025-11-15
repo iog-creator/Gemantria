@@ -4781,6 +4781,26 @@
       "size": 642
     },
     {
+      "path": "share/projects/biblescholar/ARCHITECTURE.md",
+      "sha256": "20b681d8e256dd094884fc7e1dc00e88c254317cb5353558552d825e2b3447b6",
+      "size": 2627
+    },
+    {
+      "path": "share/projects/biblescholar/README.md",
+      "sha256": "8d775ad4381cecc51018929313a2e3407616c1626b5f33889b3ea72857d55440",
+      "size": 8514
+    },
+    {
+      "path": "share/projects/storymaker/AGENTS.md",
+      "sha256": "76d77cd7f407b0fddc709d1b3d00415ba32ab7443a88fef35b3385478a18051a",
+      "size": 2627
+    },
+    {
+      "path": "share/projects/storymaker/README.md",
+      "sha256": "800970cf483f037760078730e2d410a7cda6f3c1b3eb2d1941c675ce10cdf5d8",
+      "size": 4546
+    },
+    {
       "path": "share/pull_request_template.md",
       "sha256": "92dcd26cbefbfb59c33b9727e25d1ac73674ee2eac73656c39dc3664cf03085d",
       "size": 1799
@@ -4866,29 +4886,29 @@
       "size": 272
     },
     {
+      "path": "share/schemas/SCHEMA_REGISTRY.md",
+      "sha256": "9058c56df66a5e419e303c9743a0808dc25cdad6e9665b91f7375e4e2f56fac2",
+      "size": 5073
+    },
+    {
+      "path": "share/schemas/biblescholar/README.md",
+      "sha256": "e7e1c980b05461bdfcd24a26bec37e70d7baf48337972784bc572dfb93dd9170",
+      "size": 7267
+    },
+    {
+      "path": "share/schemas/biblescholar/bible_db_verses_structure.sql",
+      "sha256": "c07d63d20599f6fc04abddb3a79bb67b65bf5621372563d5f9ee4557e1ddf1c1",
+      "size": 2886
+    },
+    {
+      "path": "share/schemas/biblescholar/bible_db_versification_structure.sql",
+      "sha256": "c3275efa71f4b25adac72db91e0d3f35d09ea268141f3e3271d0b09fc6169ca7",
+      "size": 2521
+    },
+    {
       "path": "share/scripts_AGENTS.md",
       "sha256": "16e28b50a07dd8272c1dce842361905f7a14dd23b80484b11bc83f6805878076",
       "size": 32600
-    },
-    {
-      "path": "share/projects/biblescholar/README.md",
-      "sha256": "8d775ad4381cecc51018929313a2e3407616c1626b5f33889b3ea72857d55440",
-      "size": 8514
-    },
-    {
-      "path": "share/projects/biblescholar/ARCHITECTURE.md",
-      "sha256": "20b681d8e256dd094884fc7e1dc00e88c254317cb5353558552d825e2b3447b6",
-      "size": 2627
-    },
-    {
-      "path": "share/projects/storymaker/README.md",
-      "sha256": "800970cf483f037760078730e2d410a7cda6f3c1b3eb2d1941c675ce10cdf5d8",
-      "size": 4546
-    },
-    {
-      "path": "share/projects/storymaker/AGENTS.md",
-      "sha256": "76d77cd7f407b0fddc709d1b3d00415ba32ab7443a88fef35b3385478a18051a",
-      "size": 2627
     }
   ]
 }

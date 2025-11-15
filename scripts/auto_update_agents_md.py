@@ -49,6 +49,11 @@ def get_directory_for_file(file_path: Path) -> Path | None:
         src_idx = parts.index("src")
         if len(parts) > src_idx + 1:
             return ROOT / "/".join(parts[: src_idx + 2])
+    elif "agentpm" in parts:
+        # agentpm/*/ requires AGENTS.md (modules, biblescholar, etc.)
+        agentpm_idx = parts.index("agentpm")
+        if len(parts) > agentpm_idx + 1:
+            return ROOT / "/".join(parts[: agentpm_idx + 2])
     elif file_path.parent.name in ("scripts", "migrations", "tests", "docs"):
         # These directories require AGENTS.md
         return file_path.parent

@@ -44,6 +44,7 @@ def get_required_directories() -> dict[str, list[str]]:
 
     required = {
         "source": [],  # src/*/
+        "agentpm": [],  # agentpm/*/ (modules, biblescholar, etc.)
         "tools": ["scripts", "migrations", "tests"],  # Tool directories
         "docs": [],  # docs/*/
     }
@@ -54,6 +55,13 @@ def get_required_directories() -> dict[str, list[str]]:
         for subdir in src_dir.iterdir():
             if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required["source"].append(f"src/{subdir.name}")
+
+    # Add all agentpm subdirectories (excluding cache/generated dirs)
+    agentpm_dir = ROOT / "agentpm"
+    if agentpm_dir.exists():
+        for subdir in agentpm_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required["agentpm"].append(f"agentpm/{subdir.name}")
 
     # Add all docs subdirectories (excluding cache/generated dirs)
     docs_dir = ROOT / "docs"
@@ -79,13 +87,19 @@ def get_missing_agents_files() -> dict[str, list[str]]:
     required = get_required_directories()
     existing = get_existing_agents_files()
 
-    missing: dict[str, list[str]] = {"source": [], "tools": [], "docs": []}
+    missing: dict[str, list[str]] = {"source": [], "agentpm": [], "tools": [], "docs": []}
 
     # Check source directories
     for src_subdir in required["source"]:
         agents_path = f"{src_subdir}/AGENTS.md"
         if agents_path not in existing:
             missing["source"].append(src_subdir)
+
+    # Check agentpm directories
+    for agentpm_subdir in required["agentpm"]:
+        agents_path = f"{agentpm_subdir}/AGENTS.md"
+        if agents_path not in existing:
+            missing["agentpm"].append(agentpm_subdir)
 
     # Check tool directories
     for tool_dir in required["tools"]:
@@ -671,6 +685,8 @@ def create_agents_md_file(dir_path: str, dry_run: bool = False) -> bool:
     # Determine directory type and create appropriate content
     if dir_path.startswith("src/"):
         content = create_source_agents_md(dir_path)
+    elif dir_path.startswith("agentpm/"):
+        content = create_source_agents_md(dir_path)  # Use same template as source
     elif dir_path in ["scripts", "migrations", "tests"]:
         content = create_tools_agents_md(dir_path)
     elif dir_path.startswith("docs/"):
