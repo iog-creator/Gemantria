@@ -58,27 +58,35 @@ OPENAI_API_KEY=sk-local-placeholder
 # === Canonical LM Model IDs (Phase-7B) ===
 # These model IDs must match models loaded in LM Studio
 # All model configuration is centralized in scripts/config/env.py
+# 
+# NOTE: Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls`
+# to list available models and validate your configuration.
 
-# General embedding model used for RAG (Granite or BGE)
-EMBEDDING_MODEL=granite-embedding-english-r2
+# General embedding model used for RAG
+# Example: text-embedding-bge-m3, text-embedding-qwen3-embedding-0.6b
+EMBEDDING_MODEL=text-embedding-bge-m3
 LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
 
 # Theology / Bible expert model
 # Used for noun discovery, enrichment, and general theological analysis
-THEOLOGY_MODEL=lmstudio/christian-theology-model
+# Example: christian-bible-expert-v2.0-12b, qwen/qwen3-14b
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 
-# Local agent / workflow model (Granite 4.0 Tiny)
+# Local agent / workflow model
 # Used for local agent workflows and reasoning
-LOCAL_AGENT_MODEL=lmstudio/granite-4.0-h-tiny-q4
+# Example: qwen/qwen3-8b, qwen2.5-14b-instruct
+LOCAL_AGENT_MODEL=qwen/qwen3-8b
 
 # Optional: math-heavy model for numeric/reasoning tasks
 # Used for gematria calculation verification
-MATH_MODEL=lmstudio/math-model
+# Example: self-certainty-qwen3-1.7b-base-math
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 
 # Optional: reranker model for post-processing
 # Used for semantic reranking in network aggregation
+# Example: qwen.qwen3-reranker-0.6b, qwen3-reranker-8b
 # Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
-RERANKER_MODEL=lmstudio/granite-reranker-english-r2
+RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # Optional: override LM Studio embed host/port if not defaulting to 9994.
 # LM_EMBED_HOST=localhost
