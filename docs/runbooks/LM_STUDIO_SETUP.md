@@ -38,11 +38,12 @@ OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 
 # Canonical Model Configuration
 # All model IDs must match models loaded in LM Studio
-EMBEDDING_MODEL=granite-embedding-english-r2
-THEOLOGY_MODEL=lmstudio/christian-theology-model
-LOCAL_AGENT_MODEL=lmstudio/granite-4.0-h-tiny-q4
-MATH_MODEL=lmstudio/math-model
-RERANKER_MODEL=lmstudio/granite-reranker-english-r2
+# Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls` to list available models.
+EMBEDDING_MODEL=text-embedding-bge-m3
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+LOCAL_AGENT_MODEL=qwen/qwen3-8b
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # MCP SSE Server Auto-Start
 AUTO_START_MCP_SSE=1
