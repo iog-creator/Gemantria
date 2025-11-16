@@ -121,9 +121,9 @@ This system uses LM Studio as the default inference provider (`INFERENCE_PROVIDE
 
 - **`INFERENCE_PROVIDER`** – Inference provider selector (default: `lmstudio`)
 - **`OPENAI_BASE_URL`** – Base URL for LM Studio's OpenAI-compatible API (default: `http://127.0.0.1:9994/v1`)
-- **`EMBEDDING_MODEL`** – General embedding model (e.g., `text-embedding-bge-m3`)  
-- **`THEOLOGY_MODEL`** – Christian/theology reasoning model (e.g., `christian-bible-expert-v2.0-12b`)  
-- **`LOCAL_AGENT_MODEL`** – Local agent/workflow model (e.g., `qwen/qwen3-8b`)
+- **`EMBEDDING_MODEL`** – General embedding model (e.g., `granite-embedding-english-r2`)
+- **`THEOLOGY_MODEL`** – Christian/theology reasoning model
+- **`LOCAL_AGENT_MODEL`** – Local agent/workflow model (e.g., `granite-4.0-h-tiny-q4`)
 - **`MATH_MODEL`** – Optional math-heavy model for numeric verification
 - **`RERANKER_MODEL`** – Optional reranker model for post-processing
 - **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`)
