@@ -44,7 +44,7 @@ The DB health check reports one of three modes:
 **Meaning**: Database driver is installed, connection works, and required tables are accessible.
 
 **What it checks**:
-- ✅ Postgres driver (psycopg/psycopg2) is available
+- ✅ Postgres driver (psycopg3) is available
 - ✅ Control database (GEMATRIA_DSN) is reachable
 - ✅ `gematria.graph_stats_snapshots` table exists and is queryable
 
@@ -55,7 +55,7 @@ The DB health check reports one of three modes:
 **Meaning**: Database driver is missing or connection cannot be established.
 
 **Common reasons**:
-- **Driver not installed**: Postgres driver (psycopg/psycopg2) is not in the Python environment
+- **Driver not installed**: Postgres driver (psycopg3) is not in the Python environment
 - **Connection failed**: Database server is not running or DSN is incorrect
 - **DSN not set**: `GEMATRIA_DSN` environment variable is not configured
 
@@ -63,8 +63,6 @@ The DB health check reports one of three modes:
 1. **If driver missing**: Install the Postgres driver:
    ```bash
    pip install psycopg[binary,pool]~=3.2
-   # OR
-   pip install psycopg2-binary>=2.9
    ```
 2. **If connection failed**: 
    - Verify database server is running: `pg_isready` or `systemctl status postgresql`
@@ -151,7 +149,7 @@ The bring-up script (`make bringup.001`) runs DB health check as part of Step 4a
 **Solution**:
 ```bash
 # Check if driver is installed
-python3 -c "import psycopg; print('psycopg OK')" || python3 -c "import psycopg2; print('psycopg2 OK')"
+python3 -c "import psycopg; print('psycopg3 OK')"
 
 # Install driver
 pip install psycopg[binary,pool]~=3.2

@@ -425,10 +425,55 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - KB export script (control_kb_export.py) → kb_docs.head.json
   - Make targets: atlas.kb.ingest, atlas.kb.export
   - Hermetic tests for ingestion and export
+- **6J**: BibleScholar Gematria adapter (read-only) ✅ **COMPLETE** (2025-11-15)
+  - `agentpm/biblescholar/gematria_adapter.py` — Read-only adapter for Gematria numerics
+  - Mispar Hechrachi and Mispar Gadol support
+  - DB-off mode handling (graceful degradation)
+- **6M**: Bible DB read-only adapter + passage flow ✅ **COMPLETE** (2025-11-15)
+  - `agentpm/biblescholar/bible_db_adapter.py` — Read-only adapter for `bible_db`
+  - `agentpm/biblescholar/bible_passage_flow.py` — Passage/verse retrieval flow
+  - Verse lookup by book/chapter/verse (reference string parsing)
+  - Multi-translation support (KJV default, extensible)
+  - DB-off mode handling (graceful degradation)
+- **6O**: Vector similarity adapter + verse-similarity flow ✅ **COMPLETE** (2025-11-15, PR #557)
+  - `agentpm/biblescholar/vector_adapter.py` — Vector similarity adapter (pgvector)
+  - `agentpm/biblescholar/vector_flow.py` — Verse-similarity flow wrapper
+  - Read-only vector similarity using pgvector cosine distance
+  - DB-off mode handling (graceful degradation)
+- **6P**: BibleScholar Reference Answer Slice 📋 **PLANNING** (design doc only)
+  - Single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice
+  - Inputs: Natural-language question + optional verse reference
+  - Flow: Resolve verse context → Retrieve Gematria patterns → Perform LM Studio guarded call → Synthesize output with justification + trace
+  - Outputs: `{ answer: str, trace: [...], context_used: {...} }`
+  - Constraints: No new DSNs, must pass db_off hermetic mode, budget enforcement + provenance required
+  - Dependencies: 6J, 6M, 6O, 6A, 6B, 6C (all COMPLETE)
+  - See `docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md` for design details
 - **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 PLANNING
 - **6E**: Governance & SSOT updates 📘 PLANNING
 
 **Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.
+
+### Phase-7: Runtime Bring-Up Completion (Planning)
+
+- **7A**: Control-Plane Bring-Up (Migration 040) 📋 PLANNING
+  - Safely apply migration 040 (dev only)
+  - Create the `control` schema and verify required tables/views
+  - Re-run the pipeline step previously blocked on "missing control schema"
+- **7B**: LM Studio & Model Configuration Normalization 📋 PLANNING
+  - Standardize env vars (`THEOLOGY_MODEL`, `MATH_MODEL`, `EMBEDDING_MODEL`, `RERANKER_MODEL`)
+  - Align LM Studio adapter defaults with env configuration
+  - Update env_example.txt + GPT reference docs
+- **7C**: Snapshot Integrity & Drift Review 📋 PLANNING
+  - Compare 21-file GPT snapshot contracts vs current repo
+  - Classify drift (RED/YELLOW/GREEN)
+  - Minimal remediation PRs to realign repo with SSOT or update SSOT accordingly
+- **7D**: Runtime & Bring-Up UX Polish (Optional) 📋 PLANNING
+  - Improve pmagent bringup / mcp UX for non-expert users
+  - Enhanced help text, clearer Reality Check messages, wizard-style flows
+
+**Goal**: Complete Phase 6 setup and establish operational baseline for production use.
+
+**Status**: 📋 **PLANNING**
 
 ### Immediate (PLAN-074 M14 Complete)
 - [x] E66: Versioned graph rollup metrics (receipt + guard) ✅

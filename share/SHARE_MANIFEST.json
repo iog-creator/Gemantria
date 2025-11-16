@@ -87,10 +87,6 @@
       "dst": "share/scripts_AGENTS.md"
     },
     {
-      "src": "share/pm.snapshot.md",
-      "dst": "share/pm.snapshot.md"
-    },
-    {
       "src": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
       "dst": "share/AGENTPM_GEMATRIA_MODULE_PLAN.md"
     },
@@ -137,6 +133,22 @@
     {
       "src": "docs/SSOT/webui-contract.md",
       "dst": "share/webui-contract.md"
+    },
+    {
+      "src": "docs/runbooks/LM_STUDIO_SETUP.md",
+      "dst": "share/LM_STUDIO_SETUP.md"
+    },
+    {
+      "src": "docs/runbooks/DB_HEALTH.md",
+      "dst": "share/DB_HEALTH.md"
+    },
+    {
+      "src": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
+      "dst": "share/USAGE_PATTERNS_REFERENCE.md"
+    },
+    {
+      "src": "share/pm.snapshot.md",
+      "dst": "share/pm.snapshot.md"
     }
   ],
   "evidence": [

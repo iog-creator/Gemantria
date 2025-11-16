@@ -37,11 +37,168 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - `ALLOW_PARTIAL=0|1` (if 1, manifest must capture reason)
   - `PARTIAL_REASON=<string>` (required when ALLOW_PARTIAL=1)
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
-- LLM: LM Studio only when enabled; confidence is metadata only.
-  - **LM Studio Setup**: See `docs/runbooks/LM_STUDIO_SETUP.md` for complete setup guide
-  - **Quick Start**: Set `LM_STUDIO_ENABLED=1`, `LM_STUDIO_BASE_URL=http://127.0.0.1:1234/v1`, `LM_STUDIO_MODEL=<model-name>`
-  - **Health Check**: `pmagent health lm` verifies LM Studio availability
-  - **Default Models**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=qwen-reranker`, `THEOLOGY_MODEL=christian-bible-expert-v2.0-12b`
+- LLM: Local inference providers (LM Studio or Ollama) when enabled; confidence is metadata only.
+  - **Inference Providers** (Phase-7E): Supports both LM Studio and Ollama via `INFERENCE_PROVIDER`:
+    - `lmstudio`: OpenAI-compatible API (`OPENAI_BASE_URL`)
+    - `ollama`: Native HTTP API (`OLLAMA_BASE_URL`) - **Recommended for Granite 4.0 models**
+  - **Setup**: See `docs/runbooks/LM_STUDIO_SETUP.md` for LM Studio setup or `docs/runbooks/OLLAMA_ALTERNATIVE.md` for Ollama
+  - **Quick Start (LM Studio)**: Set `INFERENCE_PROVIDER=lmstudio`, `LM_STUDIO_ENABLED=1`, `OPENAI_BASE_URL=http://127.0.0.1:9994/v1`
+  - **Quick Start (Ollama)**: Set `INFERENCE_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, then `ollama pull ibm/granite4.0-preview:tiny`
+  - **Health Check**: `pmagent health lm` verifies inference provider availability
+  - **Default Models (Phase-7F)**: 
+    - `LOCAL_AGENT_MODEL=granite4:tiny-h` (Ollama)
+    - `EMBEDDING_MODEL=bge-m3:latest` (Ollama: `qllama/bge-m3`)
+    - `RERANKER_MODEL=bge-reranker-v2-m3:latest` (Ollama: `bona/bge-reranker-v2-m3`)
+    - `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B` (via theology adapter)
+
+### LM Status Command
+
+- Command: `pmagent lm.status`
+- Purpose: Show current LM configuration and local service health:
+  - Per-slot provider and model (local_agent, embedding, reranker, theology)
+  - Ollama health (local only)
+  - LM Studio/theology_lmstudio health (local only)
+- Notes:
+  - No LangChain/LangGraph; this is a thin status/introspection layer.
+  - All checks use localhost URLs (127.0.0.1); no internet calls.
+
+### System Status UI & TVs
+
+- JSON endpoint:
+  - Path: `/api/status/system` (DB + LM health snapshot; reuses DB + LM health helpers)
+- HTML status page:
+  - Path: `/status`
+  - Shows:
+    - DB health mode (`ready`, `db_off`, or `partial`)
+    - LM slots (local_agent, embedding, reranker, theology) with provider, model, and service status
+- TVs:
+  - `TV-LM-HEALTH-01`: LM stack local health snapshot (Ollama + LM Studio per-slot status)
+  - `TV-DB-HEALTH-01`: DB health mode snapshot (ready/db_off/partial) based on db health guard
+- Notes:
+  - All checks are local-only (Postgres + LM providers on 127.0.0.1).
+  - No LangChain/LangGraph in this path; thin status layer over existing adapters and guards.
+
+### Status Explanation Skill
+
+- Command: `pmagent status.explain`
+- Purpose:
+  - Read the combined DB + LM system status snapshot.
+  - Produce a plain-language explanation of current health:
+    - Database mode (ready/db_off/partial) and what it means.
+    - LM slots (local_agent, embedding, reranker, theology) and their service states.
+- Behavior:
+  - Uses rule-based summaries by default.
+  - May call the local LM provider stack (Granite/Ollama/LM Studio) to refine wording if available.
+  - Never fails if LM is down; always returns a best-effort explanation.
+- Options:
+  - `--json-only`: Return JSON instead of formatted text.
+  - `--no-lm`: Skip LM enhancement, use rule-based explanation only.
+- Notes:
+  - No external internet calls; only local DB and LM services (127.0.0.1).
+  - Exit code 0 always (explanations are best-effort snapshots).
+
+### Status Explanation in UI
+
+- API endpoint:
+  - Path: `/api/status/explain`
+  - Returns:
+    - `level`: "OK" | "WARN" | "ERROR"
+    - `headline`: short summary
+    - `details`: human-readable explanation
+- HTML integration:
+  - The `/status` page shows:
+    - An "Explanation" card that surfaces the headline and details.
+    - Explanation is refreshed alongside the raw DB/LM status snapshot.
+- Notes:
+  - Uses the same explain_system_status() helper as `pmagent status explain`.
+  - Works even if LM is offline (falls back to rule-based summary).
+
+### LM Insights Graph
+
+- API endpoint:
+  - Path: `/api/lm/indicator`
+  - Purpose: Expose LM indicator snapshots (from existing exports) in a stable JSON shape for UI.
+  - Returns:
+    - `snapshot`: Current LM indicator data (status, rates, metrics) or `null` if unavailable
+    - `note`: Message if data is missing
+- HTML page:
+  - Path: `/lm-insights`
+  - Shows a simple chart of recent LM indicator snapshots:
+    - Status indicator (color-coded: green/yellow/red)
+    - Success/error rates bar chart
+    - Metrics summary (total calls, success rate, error rate)
+- Data source:
+  - Read-only view over the LM indicator export JSON created in Phase-4C/4D.
+  - Location: `share/atlas/control_plane/lm_indicator.json`
+- Notes:
+  - No DB queries; no new LM calls.
+  - Uses Tailwind + Chart.js via CDN; no React/LangChain/LangGraph.
+
+### System Dashboard
+
+- HTML page:
+  - Path: `/dashboard`
+  - Purpose: Provide a friendly overview of:
+    - System health (DB + LM) using /api/status/system and /api/status/explain.
+    - LM indicator snapshot using /api/lm/indicator.
+- Cards:
+  - "System Health" card:
+    - Shows overall level (OK/WARN/ERROR), headline, DB mode, LM slot summary.
+    - Links to `/status` for detailed view.
+  - "LM Insights" card:
+    - Shows LM indicator status (healthy/degraded/offline) and key metrics.
+    - Links to `/lm-insights` for detailed graph.
+- Notes:
+  - All data is read-only from existing JSON APIs/exports.
+  - No additional DB queries or LM calls beyond current endpoints.
+  - Auto-refreshes every 30 seconds.
+  - Uses Tailwind CSS for styling (consistent with /status and /lm-insights).
+
+### DB Health Graph
+
+- API endpoint:
+  - Path: `/api/db/health_timeline`
+  - Purpose: Expose DB health snapshots from existing exports in a stable JSON shape for UI.
+- HTML page:
+  - Path: `/db-insights`
+  - Shows a chart of DB health mode over time (ready/partial/db_off) and a summary of the latest state.
+- Data source:
+  - Read-only view over DB health export JSON (smokes/health indicators).
+- Notes:
+  - No DB queries or LM calls; purely export-driven.
+  - Uses Tailwind + Chart.js via CDN; no React/LangChain/LangGraph.
+
+### BibleScholar Passage UI
+
+- API endpoint:
+  - Path: `/api/bible/passage`
+  - Purpose: Fetch a Bible passage from `bible_db` and generate an optional theology commentary using the theology LM slot.
+  - Query parameters:
+    - `reference`: Bible reference string (e.g., "John 3:16-18")
+    - `use_lm`: Boolean (default: True) - Use AI commentary
+  - Returns:
+    - `reference`: The input reference
+    - `verses`: Array of verse objects with book, chapter, verse, text
+    - `commentary`: Object with `source` ("lm_theology" | "fallback") and `text`
+    - `errors`: Array of error messages (empty if no errors)
+- HTML page:
+  - Path: `/bible`
+  - Features:
+    - Reference input field (e.g., "John 3:16-18")
+    - Optional "Use AI commentary" toggle (default ON)
+    - Renders passage text with verse numbers
+    - Displays commentary in a separate section
+    - Shows error messages if reference is invalid or DB unavailable
+- Data sources:
+  - `bible_db` read-only adapter (no writes)
+  - LM theology slot (Christian-Bible-Expert model via existing LM adapter)
+- Notes:
+  - All calls are local-only (DB + LM)
+  - Falls back gracefully if LM is offline; passage text is still shown
+  - Uses Tailwind CSS for styling (consistent with other UI pages)
+
+
+  - **Phase-7F Model Readiness**: All four slots configured, adapters implemented, tests created. See `docs/PHASE_7F_IMPLEMENTATION_SUMMARY.md` for details.
   - **Live Gate**: Pipeline fails-closed if `USE_QWEN_EMBEDDINGS=true` but models unavailable
   - **Phase-3C Integration**: Enrichment pipeline uses `lm_studio_chat_with_logging()` with control-plane observability (see RFC-080, ADR-066)
   - **LM Observability Exports**: Phase-4 exports provide LM status signals:
@@ -51,11 +208,23 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - `lm_indicator.json` — **Canonical LM status signal for downstream apps** (offline/healthy/degraded)
   - **Phase-5 LM Integration**: ✅ **COMPLETE** — StoryMaker (LM status tile, PR #1) and BibleScholar (header badge, PR #2) now consume `lm_indicator.json` via the shared widget contract. Hermetic adapter implemented in `agentpm/lm_widgets/adapter.py` with full test coverage.
   - **Phase-6**: LM Studio live usage + DB-backed knowledge planning underway.
+  - **Phase-7E**: ✅ **COMPLETE** — Ollama provider integration with Granite 4.0 support. Provider routing via `agentpm/adapters/lm_studio.py` (`chat()` and `embed()` functions).
+  - **Phase-7F**: ✅ **COMPLETE** — Flexible local LM architecture with per-slot provider routing:
+    - **Per-slot provider configuration**: Each model slot (local_agent, embedding, reranker, theology) can independently use `ollama` or `lmstudio` via `LOCAL_AGENT_PROVIDER`, `EMBEDDING_PROVIDER`, `RERANKER_PROVIDER`, `THEOLOGY_PROVIDER` env vars
+    - **Provider enable/disable flags**: `OLLAMA_ENABLED` and `LM_STUDIO_ENABLED` control provider availability
+    - **Default configuration**: Ollama for chat/embed/rerank (Granite models), LM Studio for theology (Christian-Bible-Expert-v2.0-12B)
+    - **Models**: `granite4:tiny-h` (chat/rerank), `granite-embedding:278m` (embeddings), `Christian-Bible-Expert-v2.0-12B` (theology)
+    - **Test suite**: `tests/integration/test_phase7f_model_readiness.py` (availability-aware, skips when services unavailable)
+    - **Architecture**: No LangChain/LangGraph in core LM pipeline; all calls go to local services (Ollama, LM Studio) on 127.0.0.1
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
-    - **Auto-start**: Set `AUTO_START_MCP_SSE=1` to automatically start server when needed (integrated into `make bringup.001`)
+    - **Auto-start**: Set `AUTO_START_MCP_SSE=1` in `.env` to automatically start server when needed
+    - **Integration points**:
+      - `pmagent bringup full` - Automatically ensures MCP SSE server is running (if `AUTO_START_MCP_SSE=1`)
+      - `make bringup.001` - Automatically ensures server is running before LM Studio checks
+      - `pmagent mcp sse` - Manual ensure command (auto-starts if `AUTO_START_MCP_SSE=1`)
+      - `make mcp.sse.ensure` - Makefile ensure command (auto-starts if `AUTO_START_MCP_SSE=1`)
     - **Manual start**: `make mcp.sse.start` or `~/mcp/gemantria-ops/run_server_sse.sh`
-    - **Ensure running**: `make mcp.sse.ensure` (checks if running, starts if `AUTO_START_MCP_SSE=1`)
-    - **Health check**: `make mcp.sse.health`
+    - **Health check**: `make mcp.sse.health` or `pmagent mcp sse`
     - **Stop**: `make mcp.sse.stop`
     - **Guard**: `ENABLE_LMSTUDIO_MCP=1 make guard.mcp.sse` (optional, HINT mode by default)
     - **Server URL for LM Studio**: `http://127.0.0.1:8005/sse`
@@ -65,7 +234,7 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 ### Make Targets & DSN Precedence
 
 **Core operational targets:**
-- `make bringup.001` — STRICT bring-up verification (env gate → LM Studio → pipeline → guards → evidence)
+- `make bringup.001` — STRICT bring-up verification (env gate → inference provider → pipeline → guards → evidence)
 - `make dsns.echo` — Print redacted DSNs for operator sanity (never prints secrets)
 - `make pm.snapshot` — Generate PM-facing status snapshot with DSN posture proofs and 25-file manifest tracking
 - `make share.manifest.verify` — Verify share directory contains exactly 25 files
@@ -687,7 +856,7 @@ dsns.echo:                 # Print redacted DSNs for operator sanity (never prin
 - **DSN Precedence:** `.env.local` > `.env` > centralized loader (`scripts.config.env`) > defaults
 - **Requirements:** `BIBLE_DB_DSN` (RO) and `GEMATRIA_DSN` (RW) must be available
 - **Posture:** Enforces `CHECKPOINTER=postgres` and `ENFORCE_STRICT=1` for durable checkpoints
-- **Steps:** (1) Environment hard-gate, (2) Always-Apply triad verification, (3) LM Studio readiness, (4) Minimal pipeline run, (5) Guards (fail-closed), (6) Evidence capture
+- **Steps:** (1) Environment hard-gate, (2) Always-Apply triad verification, (3) Inference provider readiness (LM Studio or Ollama), (4) Minimal pipeline run, (5) Guards (fail-closed), (6) Evidence capture
 - **Output:** `evidence/bringup_001/run.log` with full execution trace and timing
 
 **DSN Helper (`make dsns.echo`):**
@@ -743,9 +912,12 @@ dsns.echo:                 # Print redacted DSNs for operator sanity (never prin
 | **Math / Verification**     | **self-certainty-qwen3-1.7b-base-math**                  | numerical & gematria verification           | —                                         | —                 |
 | **ADR / Scribe**            | **Qwen2.5-14B-Instruct-GGUF**                            | structured ADR drafting                     | —                                         | —                 |
 
-### 🧩 **Concrete Model Bindings (LM Studio Local)**
+### 🧩 **Concrete Model Bindings (LM Studio / Ollama)**
+
+**Phase-7E**: Supports both LM Studio and Ollama providers.
 
 ```yaml
+# LM Studio Profile (Legacy)
 models:
   provider: lmstudio
   theology: christian-bible-expert-v2.0-12b
@@ -753,6 +925,15 @@ models:
   math: self-certainty-qwen3-1.7b-base-math
   embedding: text-embedding-bge-m3
   reranker: qwen.qwen3-reranker-0.6b
+
+# Ollama Profile (Phase-7F - All Four Slots Ready)
+models:
+  provider: ollama
+  theology: Christian-Bible-Expert-v2.0-12B  # via theology adapter
+  local_agent: granite4:tiny-h
+  math: self-certainty-qwen3-1.7b-base-math
+  embedding: bge-m3:latest  # Ollama: qllama/bge-m3
+  reranker: bge-reranker-v2-m3:latest  # Ollama: bona/bge-reranker-v2-m3
 
 routing:
   ingestion: none
@@ -836,10 +1017,23 @@ agent_settings:
 
 ### 🧾 **Minimal .env Keys**
 
+**Phase-7E**: Choose provider (lmstudio or ollama) and configure accordingly.
+
 ```dotenv
-INFERENCE_PROVIDER=lmstudio
+# Provider Selection (Phase-7E)
+INFERENCE_PROVIDER=lmstudio  # or "ollama" for Granite 4.0
+
+# LM Studio Configuration
+OPENAI_BASE_URL=http://127.0.0.1:9994/v1
+LM_STUDIO_ENABLED=1
+
+# Ollama Configuration (when INFERENCE_PROVIDER=ollama)
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# Model Configuration (provider-agnostic)
 ENFORCE_QWEN_LIVE=1
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+LOCAL_AGENT_MODEL=qwen/qwen3-8b  # or granite4:tiny-h for Ollama
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 EMBEDDING_MODEL=text-embedding-bge-m3
 RERANKER_MODEL=qwen.qwen3-reranker-0.6b

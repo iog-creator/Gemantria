@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-15T12:21:55-08:00_
+_Generated: 2025-11-16T09:56:47-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -20,7 +20,7 @@ _Generated: 2025-11-15T12:21:55-08:00_
 
 - Status: `✗ db_off`
 - Mode: `db_off`
-- Driver available: `✗`
+- Driver available: `✓`
 - Connection OK: `✗`
 - Graph stats ready: `✗`
 - Errors: `1 error(s)`
@@ -30,13 +30,13 @@ _Generated: 2025-11-15T12:21:55-08:00_
   "ok": false,
   "mode": "db_off",
   "checks": {
-    "driver_available": false,
+    "driver_available": true,
     "connection_ok": false,
     "graph_stats_ready": false
   },
   "details": {
     "errors": [
-      "driver_missing: Postgres database driver not available"
+      "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
     ]
   }
 }
