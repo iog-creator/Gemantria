@@ -347,11 +347,11 @@ def main():
         # Always update timestamp (copy_file does this), so track it
         timestamp_updated_count += 1
         timestamp_updated_files.append(str(dst.relative_to(ROOT)))
-        
+
         if content_changed:
             copied_count += 1
             changed_files.append(str(dst.relative_to(ROOT)))
-        
+
         dst_checksum = get_file_checksum(dst)
         track_share_item(
             item_id,
@@ -365,9 +365,13 @@ def main():
         )
 
     if copied_count == 0:
-        print(f"[update_share] OK — share/ refreshed ({timestamp_updated_count}/{total_count} files synced, timestamps updated)")
+        print(
+            f"[update_share] OK — share/ refreshed ({timestamp_updated_count}/{total_count} files synced, timestamps updated)"
+        )
     else:
-        print(f"[update_share] OK — share/ refreshed ({copied_count}/{total_count} files with content changes, {timestamp_updated_count}/{total_count} timestamps updated)")
+        print(
+            f"[update_share] OK — share/ refreshed ({copied_count}/{total_count} files with content changes, {timestamp_updated_count}/{total_count} timestamps updated)"
+        )
         print("[update_share] CHANGED FILES:")
         for f in changed_files:
             print(f"  - {f}")
