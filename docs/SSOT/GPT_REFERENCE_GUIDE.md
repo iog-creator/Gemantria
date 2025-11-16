@@ -121,17 +121,37 @@ This system uses LM Studio as the default inference provider (`INFERENCE_PROVIDE
 
 - **`INFERENCE_PROVIDER`** – Inference provider selector (default: `lmstudio`)
 - **`OPENAI_BASE_URL`** – Base URL for LM Studio's OpenAI-compatible API (default: `http://127.0.0.1:9994/v1`)
-- **`EMBEDDING_MODEL`** – Vector embedding model (default: `text-embedding-bge-m3`, 1024-dimensional)
-- **`THEOLOGY_MODEL`** – Main reasoning/theology model (default: `christian-bible-expert-v2.0-12b`)
-- **`MATH_MODEL`** – Optional math-heavy model for numeric verification (default: `self-certainty-qwen3-1.7b-base-math`)
-- **`RERANKER_MODEL`** – Optional reranker model for post-processing (default: `qwen.qwen3-reranker-0.6b`)
+- **`EMBEDDING_MODEL`** – General embedding model (e.g., `granite-embedding-english-r2`)
+- **`THEOLOGY_MODEL`** – Christian/theology reasoning model
+- **`LOCAL_AGENT_MODEL`** – Local agent/workflow model (e.g., `granite-4.0-h-tiny-q4`)
+- **`MATH_MODEL`** – Optional math-heavy model for numeric verification
+- **`RERANKER_MODEL`** – Optional reranker model for post-processing
 - **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`)
 
-All LM configuration is centralized in `scripts/config/env.py` via the `get_lm_model_config()` function and helper functions (`get_embedding_model()`, `get_theology_model()`, etc.).
+All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model_config()`.
 
 **Legacy Support (Deprecated):**
 - `LM_EMBED_MODEL` → Use `EMBEDDING_MODEL` instead (will be removed in Phase-8)
 - `QWEN_RERANKER_MODEL` → Use `RERANKER_MODEL` instead (will be removed in Phase-8)
+
+### LM Studio Model Discovery
+
+Use the discovery helper to list available LM Studio models and validate configuration:
+
+```bash
+python -m scripts.lm_models_ls
+```
+
+This command calls the LM Studio `/v1/models` endpoint (via `OPENAI_BASE_URL`) and verifies that `EMBEDDING_MODEL`, `THEOLOGY_MODEL`, `LOCAL_AGENT_MODEL`, and `RERANKER_MODEL` exist.
+
+### OPS Command Ledger (v0)
+
+Successful OPS command bundles can be recorded in the OPS Command Ledger:
+
+- File: `share/ops_command_ledger.jsonl`
+- Helper: `scripts/ops_ledger.append_entry()`
+
+Future phases may mine this ledger for reusable command sequences.
 
 ## Governance Reference
 

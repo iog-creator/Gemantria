@@ -1,0 +1,1 @@
+{"id": "phase7b.lm-config-discovery-ledger.v0", "phase": "Phase-7B", "plan_ref": "PLAN-077", "category": "lm_config", "description": "LM config normalization + LM Studio discovery + OPS ledger v0", "commands": ["ruff format --check .", "ruff check .", "python -m scripts.lm_models_ls"], "status": "success", "created_at": "2025-11-16T00:45:26.691299Z"}

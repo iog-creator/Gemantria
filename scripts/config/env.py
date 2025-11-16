@@ -195,6 +195,7 @@ def get_lm_model_config() -> dict[str, str | None]:
         - base_url: str - Base URL for OpenAI-compatible API (default: "http://127.0.0.1:9994/v1")
         - embedding_model: str | None - Embedding model ID (canonical: EMBEDDING_MODEL, legacy: LM_EMBED_MODEL)
         - theology_model: str | None - Theology/general reasoning model ID
+        - local_agent_model: str | None - Local agent/workflow model ID
         - math_model: str | None - Math verification model ID
         - reranker_model: str | None - Reranker model ID (canonical: RERANKER_MODEL, legacy: QWEN_RERANKER_MODEL)
 
@@ -205,9 +206,15 @@ def get_lm_model_config() -> dict[str, str | None]:
     _ensure_loaded()
     import warnings
 
+    provider = env("INFERENCE_PROVIDER", "lmstudio")
+    # Get base URL from existing openai_cfg() function
+    cfg = openai_cfg()
+    base_url = cfg.get("base_url", "http://127.0.0.1:9994/v1")
+
     # Canonical vars
     embedding = env("EMBEDDING_MODEL")
     theology = env("THEOLOGY_MODEL")
+    local_agent = env("LOCAL_AGENT_MODEL")
     math_model = env("MATH_MODEL")
     reranker = env("RERANKER_MODEL")
 
@@ -232,15 +239,12 @@ def get_lm_model_config() -> dict[str, str | None]:
             )
             reranker = legacy_rerank
 
-    # Get base URL from existing openai_cfg() function
-    cfg = openai_cfg()
-    base_url = cfg.get("base_url", "http://127.0.0.1:9994/v1")
-
     return {
-        "provider": env("INFERENCE_PROVIDER", "lmstudio"),
+        "provider": provider,
         "base_url": base_url,
         "embedding_model": embedding,
         "theology_model": theology,
+        "local_agent_model": local_agent,
         "math_model": math_model,
         "reranker_model": reranker,
     }

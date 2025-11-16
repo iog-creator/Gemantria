@@ -59,24 +59,26 @@ OPENAI_API_KEY=sk-local-placeholder
 # These model IDs must match models loaded in LM Studio
 # All model configuration is centralized in scripts/config/env.py
 
-# Embedding model (1024-dimensional, verified)
-# Used for semantic embeddings in network aggregation
-# Legacy: LM_EMBED_MODEL (deprecated, use EMBEDDING_MODEL instead)
-EMBEDDING_MODEL=text-embedding-bge-m3
+# General embedding model used for RAG (Granite or BGE)
+EMBEDDING_MODEL=granite-embedding-english-r2
 LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
 
-# Main reasoning / theology model
+# Theology / Bible expert model
 # Used for noun discovery, enrichment, and general theological analysis
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+THEOLOGY_MODEL=lmstudio/christian-theology-model
+
+# Local agent / workflow model (Granite 4.0 Tiny)
+# Used for local agent workflows and reasoning
+LOCAL_AGENT_MODEL=lmstudio/granite-4.0-h-tiny-q4
 
 # Optional: math-heavy model for numeric/reasoning tasks
 # Used for gematria calculation verification
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+MATH_MODEL=lmstudio/math-model
 
 # Optional: reranker model for post-processing
 # Used for semantic reranking in network aggregation
 # Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
-RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+RERANKER_MODEL=lmstudio/granite-reranker-english-r2
 
 # Optional: override LM Studio embed host/port if not defaulting to 9994.
 # LM_EMBED_HOST=localhost

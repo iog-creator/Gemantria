@@ -38,16 +38,23 @@ OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 
 # Canonical Model Configuration
 # All model IDs must match models loaded in LM Studio
-EMBEDDING_MODEL=text-embedding-bge-m3
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+EMBEDDING_MODEL=granite-embedding-english-r2
+THEOLOGY_MODEL=lmstudio/christian-theology-model
+LOCAL_AGENT_MODEL=lmstudio/granite-4.0-h-tiny-q4
+MATH_MODEL=lmstudio/math-model
+RERANKER_MODEL=lmstudio/granite-reranker-english-r2
 
 # MCP SSE Server Auto-Start
 AUTO_START_MCP_SSE=1
 ```
 
-**Note**: The runtime loads all model IDs from `scripts/config/env.py` via centralized loaders. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
+**Note**: The runtime loads all model IDs from `scripts/config/env.py` via `get_lm_model_config()`. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
+
+To inspect models currently exposed by LM Studio and validate configuration, run:
+
+```bash
+python -m scripts.lm_models_ls
+```
 
 **Note**: The centralized config loader (`scripts/config/env.py`) handles environment variable precedence. See Configuration section below for details.
 
