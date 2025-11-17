@@ -42,7 +42,15 @@ STRICT_GOVERNANCE=0
 LM_STUDIO_ENABLED=false
 
 # Inference provider used by the runtime (lmstudio | openai | other)
-# Default: lmstudio
+# === Local Inference Configuration (LM Studio / Ollama) ===
+#
+# INFERENCE_PROVIDER controls which local runtime we talk to:
+#   - lmstudio: OpenAI-compatible HTTP API (OPENAI_BASE_URL)
+#   - ollama:   Ollama HTTP API (OLLAMA_BASE_URL)
+#
+# You can switch providers by changing INFERENCE_PROVIDER and the base URL.
+
+# Default: LM Studio
 INFERENCE_PROVIDER=lmstudio
 
 # LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)
@@ -55,38 +63,85 @@ OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 # API key (any non-empty string works for local servers; SDK requires it)
 OPENAI_API_KEY=sk-local-placeholder
 
-# === Canonical LM Model IDs (Phase-7B) ===
-# These model IDs must match models loaded in LM Studio
+# Ollama base URL (used when INFERENCE_PROVIDER=ollama)
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# === Canonical LM Model IDs (slots) ===
+# These slots are provider-agnostic. The runtime picks the right host
+# (LM Studio vs Ollama) based on INFERENCE_PROVIDER.
+#
 # All model configuration is centralized in scripts/config/env.py
 # 
 # NOTE: Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls`
 # to list available models and validate your configuration.
+#
+# Phase-7E: Two profiles are available below. Choose ONE profile block to copy into your .env:
+#   - LEGACY: Current working setup (BGE + Qwen models)
+#   - GRANITE: Recommended Granite-based setup via Ollama (Phase-7E)
+
+# ============================================================================
+# PROFILE: LEGACY (Current Working Setup)
+# ============================================================================
+# Copy this block if you want to use your existing BGE + Qwen models
 
 # General embedding model used for RAG
-# Example: text-embedding-bge-m3, text-embedding-qwen3-embedding-0.6b
 EMBEDDING_MODEL=text-embedding-bge-m3
 LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
 
 # Theology / Bible expert model
 # Used for noun discovery, enrichment, and general theological analysis
-# Example: christian-bible-expert-v2.0-12b, qwen/qwen3-14b
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 
 # Local agent / workflow model
 # Used for local agent workflows and reasoning
-# Example: qwen/qwen3-8b, qwen2.5-14b-instruct
 LOCAL_AGENT_MODEL=qwen/qwen3-8b
 
 # Optional: math-heavy model for numeric/reasoning tasks
 # Used for gematria calculation verification
-# Example: self-certainty-qwen3-1.7b-base-math
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 
 # Optional: reranker model for post-processing
 # Used for semantic reranking in network aggregation
-# Example: qwen.qwen3-reranker-0.6b, qwen3-reranker-8b
 # Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
 RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# ============================================================================
+# PROFILE: PHASE-7F (Ollama + BGE Models - Recommended)
+# ============================================================================
+# Copy this block for Phase-7F: All four slots ready via Ollama
+#
+#   INFERENCE_PROVIDER=ollama
+#   OLLAMA_BASE_URL=http://127.0.0.1:11434
+#   LOCAL_AGENT_MODEL=granite4:tiny-h
+#   EMBEDDING_MODEL=bge-m3:latest
+#   RERANKER_MODEL=bge-reranker-v2-m3:latest
+#   THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B
+#   THEOLOGY_PROVIDER=theology
+#
+# Installation:
+#   1. Install Ollama: curl -fsSL https://ollama.com/install.sh | sh
+#   2. Pull Granite models: ollama pull ibm/granite4.0-preview:tiny
+#   3. Set INFERENCE_PROVIDER=ollama in your .env
+#   4. See docs/runbooks/OLLAMA_ALTERNATIVE.md for details
+#
+# NOTE: The adapter automatically maps canonical model names to provider-specific names
+#       (e.g., granite-4.0-h-tiny → ibm/granite4.0-preview:tiny for Ollama)
+
+# General embedding model (Granite)
+# EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# LM_EMBED_MODEL=ibm-granite/granite-embedding-english-r2  # Legacy support (deprecated)
+
+# Theology / Bible expert model (unchanged - Christian model remains)
+# THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+
+# Local agent / workflow model (Granite 4.0 H Tiny)
+# LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny
+
+# Optional: math-heavy model (unchanged)
+# MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Optional: reranker model (Granite)
+# RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
 
 # Optional: override LM Studio embed host/port if not defaulting to 9994.
 # LM_EMBED_HOST=localhost

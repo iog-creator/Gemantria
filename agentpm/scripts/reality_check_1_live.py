@@ -20,6 +20,14 @@ This script enforces a *real* runtime check:
 
    LM_EMBED_MODEL) with a tiny request.
 
+   **IMPORTANT**: Model endpoint selection:
+
+   - Embedding models (EMBEDDING_MODEL, LM_EMBED_MODEL) MUST use `/v1/embeddings` endpoint
+
+   - Chat/completion models (THEOLOGY_MODEL, MATH_MODEL, RERANKER_MODEL) MUST use `/v1/chat/completions` endpoint
+
+   This distinction is enforced by the `_embedding()` and `_chat_completion()` helper functions.
+
 5. Runs the docs→DB→LM Q&A pipeline end-to-end.
 
 6. Exits non-zero if ANY of the above fail.
@@ -31,6 +39,10 @@ This is intended to be called via either:
   - `pmagent reality-check live`
 
   - `make reality.check.1.live`
+
+
+
+Related: ADR-026 (Reranker Bi-Encoder Proxy) documents the endpoint usage pattern.
 
 """
 
@@ -186,8 +198,42 @@ def _chat_completion(base_url: str, model: str, prompt: str) -> Dict[str, Any]:
         return {"ok": False, "reason": f"unexpected_error: {e}"}
 
 
+def _embedding(base_url: str, model: str, input_text: str) -> Dict[str, Any]:
+    """Test embedding model using /embeddings endpoint."""
+    url = f"{base_url.rstrip('/')}/embeddings"
+
+    payload = {
+        "model": model,
+        "input": input_text,
+    }
+
+    try:
+        resp = requests.post(url, json=payload, timeout=20)
+
+        resp.raise_for_status()
+
+        data = resp.json()
+
+        return {"ok": True, "response": data}
+
+    except (ConnectionError, Timeout) as e:
+        return {"ok": False, "reason": f"embedding_error: {e}"}
+
+    except HTTPError as e:
+        return {"ok": False, "reason": f"http_error: {e}"}
+
+    except ValueError as e:
+        return {"ok": False, "reason": f"invalid_json: {e}"}
+
+    except RequestException as e:
+        return {"ok": False, "reason": f"request_error: {e}"}
+
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "reason": f"unexpected_error: {e}"}
+
+
 def check_models(base_url: str) -> Dict[str, Any]:
-    """Ping each configured model with a tiny chat completion."""
+    """Ping each configured model with appropriate endpoint (chat for LLMs, embeddings for embedding models)."""
 
     models_to_check = []
 
@@ -213,7 +259,11 @@ def check_models(base_url: str) -> Dict[str, Any]:
     results: Dict[str, Any] = {"ok": True, "models": []}
 
     for env_name, model in models_to_check:
-        ping = _chat_completion(base_url, model, f"Health check for {env_name}")
+        # Use embeddings endpoint for embedding models, chat for others
+        if "embedding" in env_name.lower() or "embed" in model.lower():
+            ping = _embedding(base_url, model, "Health check")
+        else:
+            ping = _chat_completion(base_url, model, f"Health check for {env_name}")
 
         entry = {"env": env_name, "model": model, **ping}
 

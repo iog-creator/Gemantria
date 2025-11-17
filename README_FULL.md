@@ -104,19 +104,21 @@ pmagent ask docs "What does Phase-6P deliver?"
 ```
 
 **What it does:**
-- **Automated bring-up**: Starts/verifies Postgres (using `DB_START_CMD` if set) and LM Studio server (using `lms` CLI)
+- **Automated bring-up**: Starts/verifies Postgres (using `DB_START_CMD` if set) and inference provider (LM Studio via `lms` CLI or Ollama)
 - **Ingestion**: Ingests curated SSOT files (MASTER_PLAN.md, AGENTS.md, graph.schema.json) into `control.doc_sources` and `control.doc_sections`
 - **Retrieval**: Retrieves relevant doc sections based on text match
-- **Q&A**: Answers questions using LM Studio with guarded calls and budget enforcement
+- **Q&A**: Answers questions using inference provider (LM Studio or Ollama) with guarded calls and budget enforcement
 - **Output**: Returns structured answers with provenance and LM metadata (JSON format)
 
 **Configuration:**
-- Set `LM_STUDIO_ENABLED=1` in `.env.local` or `.env`
-- Configure `LM_STUDIO_BASE_URL` and `LM_STUDIO_MODEL` (see `env_example.txt`)
+- **Phase-7E**: Choose inference provider via `INFERENCE_PROVIDER`:
+  - `lmstudio`: Set `LM_STUDIO_ENABLED=1`, `OPENAI_BASE_URL=http://127.0.0.1:9994/v1`
+  - `ollama`: Set `OLLAMA_BASE_URL=http://127.0.0.1:11434`, then `ollama pull ibm/granite4.0-preview:tiny`
+- Configure model IDs in `.env.local` or `.env` (see `env_example.txt`)
 - **Optional bring-up hooks** (for automated bring-up):
   - `DB_START_CMD`: Shell command to start Postgres (e.g., `brew services start postgresql` or `sudo systemctl start postgresql`)
-  - `LM_STUDIO_MODEL_ID`: Model identifier for `lms load` (e.g., `lmstudio-community/Meta-Llama-3-8B-Instruct`)
-  - `LM_STUDIO_SERVER_PORT`: Port for LM Studio server (default: `1234`)
+  - `LM_STUDIO_MODEL_ID`: Model identifier for `lms load` (e.g., `lmstudio-community/Meta-Llama-3-8B-Instruct`) - LM Studio only
+  - `LM_STUDIO_SERVER_PORT`: Port for LM Studio server (default: `1234`) - LM Studio only
 
 **Module locations:**
 - Bring-up script: `agentpm/scripts/reality_check_1.py`

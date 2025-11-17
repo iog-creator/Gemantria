@@ -44,6 +44,9 @@ from scripts.control.control_summary import (  # noqa: E402
     print_human_summary as print_summary_summary,
 )
 from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
+from agentpm.lm.lm_status import compute_lm_status, print_lm_status_table  # noqa: E402
+from agentpm.status.explain import explain_system_status  # noqa: E402
+from agentpm.docs.search import search_docs  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -58,6 +61,14 @@ reality_app = typer.Typer(help="Reality checks for automated bring-up")
 app.add_typer(reality_app, name="reality-check")
 bringup_app = typer.Typer(help="System bring-up commands")
 app.add_typer(bringup_app, name="bringup")
+mcp_app = typer.Typer(help="MCP server commands")
+app.add_typer(mcp_app, name="mcp")
+lm_app = typer.Typer(help="LM (Language Model) operations")
+app.add_typer(lm_app, name="lm")
+status_app = typer.Typer(help="System status helpers")
+app.add_typer(status_app, name="status")
+docs_app = typer.Typer(help="Documentation search operations")
+app.add_typer(docs_app, name="docs")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -124,6 +135,53 @@ def health_lm(json_only: bool = typer.Option(False, "--json-only", help="Print o
         else:
             reason = "endpoint not reachable"
         print(f"LM_HEALTH: mode={mode} ({reason})", file=sys.stderr)
+    sys.exit(0)
+
+
+@lm_app.command("status", help="Show LM configuration and local service health")
+def lm_status(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Show LM status for all slots (local_agent, embedding, reranker, theology)."""
+    status = compute_lm_status()
+
+    if json_only:
+        print(json.dumps(status, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(status, indent=2))
+        # Print human-readable table to stderr
+        table = print_lm_status_table(status)
+        print(table, file=sys.stderr)
+    sys.exit(0)
+
+
+@status_app.command("explain", help="Explain current DB + LM health in plain language")
+def status_explain(
+    json_only: bool = typer.Option(False, "--json-only", help="Return JSON instead of text"),
+    no_lm: bool = typer.Option(False, "--no-lm", help="Skip LM enhancement, use rule-based only"),
+) -> None:
+    """Explain current system status in plain language."""
+    explanation = explain_system_status(use_lm=not no_lm)
+
+    if json_only:
+        print(json.dumps(explanation, indent=2))
+    else:
+        # Pretty text output
+        level = explanation.get("level", "UNKNOWN")
+        headline = explanation.get("headline", "Unknown status")
+        details = explanation.get("details", "")
+
+        # Print to stdout
+        level_tag = f"[{level}]"
+        print(f"{level_tag} {headline}")
+        print(details)
+
+        # If ERROR level, also print to stderr
+        if level == "ERROR":
+            print(f"{level_tag} {headline}", file=sys.stderr)
+            print(details, file=sys.stderr)
+
     sys.exit(0)
 
 
@@ -353,7 +411,7 @@ def reality_check_live() -> None:
 
 @bringup_app.command("full", help="Fully start DB, LM Studio server+GUI, and load models")
 def bringup_full() -> None:
-    """Run the full system bring-up (DB + LM Studio + models)."""
+    """Run the full system bring-up (DB + LM Studio + models + MCP SSE if enabled)."""
     import subprocess
     import sys
 
@@ -363,6 +421,61 @@ def bringup_full() -> None:
     )
     # The script itself prints JSON and returns appropriate exit code.
     raise typer.Exit(code=proc.returncode)
+
+
+@mcp_app.command("sse", help="Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)")
+def mcp_sse_ensure() -> None:
+    """Ensure MCP SSE server is running on port 8005 (for LM Studio bridge)."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    script_path = Path("scripts/mcp_sse_ensure.sh")
+    if not script_path.exists():
+        print(f"ERROR: MCP SSE ensure script not found at {script_path}", file=sys.stderr)
+        raise typer.Exit(code=1)
+
+    proc = subprocess.run(
+        ["bash", str(script_path)],
+        text=True,
+    )
+    raise typer.Exit(code=proc.returncode)
+
+
+@docs_app.command("search", help="Search governance/docs content via semantic similarity")
+def docs_search(
+    query: str = typer.Argument(..., help="Search query text"),
+    k: int = typer.Option(10, "--k", help="Number of results to return"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    tier0_only: bool = typer.Option(
+        True, "--tier0-only/--all", help="Search only Tier-0 docs (AGENTS_ROOT + AGENTS::*)"
+    ),
+) -> None:
+    """Search governance/docs content via semantic similarity over control-plane embeddings."""
+    result = search_docs(query=query, k=k, tier0_only=tier0_only)
+
+    if json_only:
+        print(json.dumps(result, indent=2))
+    else:
+        # Print JSON to stdout
+        print(json.dumps(result, indent=2))
+        # Print human-readable summary to stderr
+        if result.get("ok"):
+            results = result.get("results", [])
+            print(
+                f"DOCS_SEARCH: found {len(results)} result(s) for '{query[:50]}...'",
+                file=sys.stderr,
+            )
+            for i, r in enumerate(results[:5], 1):  # Show top 5 in summary
+                logical_name = r.get("logical_name", "unknown")
+                score = r.get("score", 0.0)
+                snippet = r.get("content", "")[:100]
+                print(f"  {i}. [{logical_name}] (score: {score:.3f}) {snippet}...", file=sys.stderr)
+        else:
+            error = result.get("error", "unknown error")
+            print(f"DOCS_SEARCH: failed ({error[:50]})", file=sys.stderr)
+
+    sys.exit(0 if result.get("ok") else 1)
 
 
 def main() -> None:

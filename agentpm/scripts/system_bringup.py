@@ -79,7 +79,12 @@ def start_db():
     if cmd:
         proc = run(cmd)
 
-        return {"mode": mode, "stdout": proc.stdout, "stderr": proc.stderr, "ok": proc.returncode == 0}
+        return {
+            "mode": mode,
+            "stdout": proc.stdout,
+            "stderr": proc.stderr,
+            "ok": proc.returncode == 0,
+        }
 
     return {"mode": "unknown", "ok": False, "reason": "no_db_start_command_detected"}
 
@@ -141,12 +146,52 @@ def start_gui_if_available():
     return {"ok": False, "reason": "gui_not_found"}
 
 
+def ensure_mcp_sse_server():
+    """Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)."""
+    auto_start = os.getenv("AUTO_START_MCP_SSE", "0") == "1"
+
+    if not auto_start:
+        return {"ok": False, "reason": "auto_start_disabled", "mode": "skipped"}
+
+    # Check if server is already running
+    script_path = Path("scripts/mcp_sse_ensure.sh")
+    if not script_path.exists():
+        return {"ok": False, "reason": "ensure_script_not_found"}
+
+    # Run the ensure script (it will check and start if needed)
+    proc = run(["bash", str(script_path)])
+
+    if proc.returncode == 0:
+        # Check if server is actually running now
+        import socket
+
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
+            result = sock.connect_ex(("127.0.0.1", 8005))
+            sock.close()
+            if result == 0:
+                return {"ok": True, "mode": "running", "stdout": proc.stdout}
+        except Exception:
+            pass
+
+    return {
+        "ok": False,
+        "reason": "server_not_running",
+        "stdout": proc.stdout,
+        "stderr": proc.stderr,
+    }
+
+
 def main():
     manifest = {}
 
     manifest["db_start"] = start_db()
 
     manifest["gui"] = start_gui_if_available()
+
+    # Ensure MCP SSE server is running (if auto-start enabled)
+    manifest["mcp_sse"] = ensure_mcp_sse_server()
 
     base_url = lmstudio_resolver.base_url()
 

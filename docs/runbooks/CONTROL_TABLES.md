@@ -137,7 +137,7 @@ This outputs only JSON to stdout, with no summary to stderr.
 
 If `mode=db_off`:
 
-1. **Check database driver**: Ensure `psycopg` or `psycopg2` is installed
+1. **Check database driver**: Ensure `psycopg3` is installed
    ```bash
    pip install psycopg[binary]
    ```

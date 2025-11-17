@@ -31,6 +31,12 @@ def _ensure_loaded() -> None:
             path = find_dotenv(usecwd=True)
             if path:
                 load_dotenv(path, override=False)
+            # Also load .env.local if present (overrides .env values)
+            from pathlib import Path
+
+            env_local = Path.cwd() / ".env.local"
+            if env_local.exists():
+                load_dotenv(env_local, override=True)
         _LOADED = True
 
 
@@ -184,20 +190,38 @@ def get_lm_studio_enabled() -> bool:
 
 def get_lm_model_config() -> dict[str, str | None]:
     """
-    Phase-7B: Centralized LM model configuration loader.
+    Phase-7B/7E: Centralized LM model configuration loader.
+
+    This is the SSOT for local/remote LM configuration. It is intentionally
+    provider-agnostic and supports both LM Studio and Ollama:
+
+      provider:
+        - "lmstudio": use OPENAI_BASE_URL and the LM Studio adapter
+        - "ollama":   use OLLAMA_BASE_URL and the Ollama adapter
+        - other:      reserved for future providers
 
     Normalizes canonical env vars with legacy fallbacks for backward compatibility.
     All model configuration should use this function instead of direct os.getenv() calls.
 
     Returns:
         Dictionary with:
-        - provider: str - Inference provider (default: "lmstudio")
+        - provider: str - Default inference provider (default: "lmstudio")
+        - ollama_enabled: bool - Whether Ollama is enabled (default: True)
+        - lm_studio_enabled: bool - Whether LM Studio is enabled (from LM_STUDIO_ENABLED)
         - base_url: str - Base URL for OpenAI-compatible API (default: "http://127.0.0.1:9994/v1")
-        - embedding_model: str | None - Embedding model ID (canonical: EMBEDDING_MODEL, legacy: LM_EMBED_MODEL)
-        - theology_model: str | None - Theology/general reasoning model ID
+        - ollama_base_url: str - Base URL for Ollama API (default: "http://127.0.0.1:11434")
+        - local_agent_provider: str | None - Provider for local agent slot (defaults to provider)
         - local_agent_model: str | None - Local agent/workflow model ID
-        - math_model: str | None - Math verification model ID
+        - embedding_provider: str | None - Provider for embedding slot (defaults to provider)
+        - embedding_model: str | None - Embedding model ID (canonical: EMBEDDING_MODEL, legacy: LM_EMBED_MODEL)
+        - reranker_provider: str | None - Provider for reranker slot (defaults to provider)
         - reranker_model: str | None - Reranker model ID (canonical: RERANKER_MODEL, legacy: QWEN_RERANKER_MODEL)
+        - reranker_strategy: str | None - Reranker strategy (default: "embedding_only", options: "embedding_only", "granite_llm")
+        - theology_provider: str | None - Provider for theology slot (default: "lmstudio")
+        - theology_model: str | None - Theology/general reasoning model ID
+        - theology_lmstudio_base_url: str | None - LM Studio base URL for theology (default: "http://127.0.0.1:1234")
+        - theology_lmstudio_api_key: str | None - LM Studio API key for theology (optional)
+        - math_model: str | None - Math verification model ID
 
     Legacy Support:
         - LM_EMBED_MODEL → EMBEDDING_MODEL (deprecated, will be removed in Phase-8)
@@ -206,17 +230,46 @@ def get_lm_model_config() -> dict[str, str | None]:
     _ensure_loaded()
     import warnings
 
-    provider = env("INFERENCE_PROVIDER", "lmstudio")
+    provider = (env("INFERENCE_PROVIDER", "lmstudio") or "lmstudio").strip()
+
+    # Provider enable/disable flags
+    ollama_enabled = env("OLLAMA_ENABLED", "true").lower() in ("1", "true", "yes")
+    lm_studio_enabled = get_lm_studio_enabled()
+
     # Get base URL from existing openai_cfg() function
     cfg = openai_cfg()
     base_url = cfg.get("base_url", "http://127.0.0.1:9994/v1")
+    ollama_base_url = env("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+
+    # Per-slot provider configuration (defaults to main provider)
+    local_agent_provider = env("LOCAL_AGENT_PROVIDER") or provider
+    embedding_provider = env("EMBEDDING_PROVIDER") or provider
+    reranker_provider = env("RERANKER_PROVIDER") or provider
+    theology_provider = env("THEOLOGY_PROVIDER") or "lmstudio"
 
     # Canonical vars
     embedding = env("EMBEDDING_MODEL")
     theology = env("THEOLOGY_MODEL")
+    theology_lmstudio_base_url = env("THEOLOGY_LMSTUDIO_BASE_URL", "http://127.0.0.1:1234")
+    theology_lmstudio_api_key = env("THEOLOGY_LMSTUDIO_API_KEY")
     local_agent = env("LOCAL_AGENT_MODEL")
     math_model = env("MATH_MODEL")
     reranker = env("RERANKER_MODEL")
+    reranker_strategy = env("RERANKER_STRATEGY", "embedding_only")
+
+    # Phase-7F: Normalize model names for Ollama when provider is ollama
+    if provider == "ollama":
+        # Normalize embedding model name
+        if embedding and "bge-m3" in embedding.lower() and ":" not in embedding:
+            embedding = "bge-m3:latest"
+        elif embedding and "text-embedding-bge-m3" in embedding.lower():
+            embedding = "bge-m3:latest"
+
+        # Normalize reranker model name
+        if reranker and "bge-reranker" in reranker.lower() and ":" not in reranker:
+            reranker = "bge-reranker-v2-m3:latest"
+        elif reranker and "bge-reranker-v2-m3" in reranker.lower() and ":" not in reranker:
+            reranker = "bge-reranker-v2-m3:latest"
 
     # Legacy fallbacks (with deprecation warnings)
     if not embedding:
@@ -241,12 +294,22 @@ def get_lm_model_config() -> dict[str, str | None]:
 
     return {
         "provider": provider,
+        "ollama_enabled": ollama_enabled,
+        "lm_studio_enabled": lm_studio_enabled,
         "base_url": base_url,
-        "embedding_model": embedding,
-        "theology_model": theology,
+        "ollama_base_url": ollama_base_url,
+        "local_agent_provider": local_agent_provider,
         "local_agent_model": local_agent,
-        "math_model": math_model,
+        "embedding_provider": embedding_provider,
+        "embedding_model": embedding,
+        "reranker_provider": reranker_provider,
         "reranker_model": reranker,
+        "reranker_strategy": reranker_strategy,
+        "theology_provider": theology_provider,
+        "theology_model": theology,
+        "theology_lmstudio_base_url": theology_lmstudio_base_url,
+        "theology_lmstudio_api_key": theology_lmstudio_api_key,
+        "math_model": math_model,
     }
 
 

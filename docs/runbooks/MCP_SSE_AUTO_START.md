@@ -15,7 +15,9 @@ AUTO_START_MCP_SSE=1
 ```
 
 The server will automatically start when:
+- Running `pmagent bringup full` (if `AUTO_START_MCP_SSE=1`)
 - Running `make bringup.001` (if `AUTO_START_MCP_SSE=1`)
+- Running `pmagent mcp sse` (if `AUTO_START_MCP_SSE=1`)
 - Running `make mcp.sse.ensure` (checks and starts if needed)
 
 ### Manual Start
@@ -41,7 +43,9 @@ When enabled, the `scripts/mcp_sse_ensure.sh` script will:
 3. Verify the server started successfully
 
 **Integration points:**
+- `pmagent bringup full` - Automatically ensures MCP SSE server is running (via `system_bringup.py`)
 - `make bringup.001` - Automatically ensures server is running before LM Studio checks
+- `pmagent mcp sse` - Manual ensure command via pmagent CLI
 - `make mcp.sse.ensure` - Standalone check-and-start command
 - `scripts/mcp_sse_ensure.sh` - Core script that can be called directly
 
@@ -115,6 +119,11 @@ If you see `ECONNREFUSED 127.0.0.1:8005`:
 - `make mcp.sse.ensure` - Check and start if `AUTO_START_MCP_SSE=1`
 - `make mcp.sse.health` - Verify server is responding
 - `make mcp.sse.stop` - Stop the server
+
+### pmagent CLI Commands
+
+- `pmagent bringup full` - Full system bring-up (includes MCP SSE if `AUTO_START_MCP_SSE=1`)
+- `pmagent mcp sse` - Ensure MCP SSE server is running (auto-starts if `AUTO_START_MCP_SSE=1`)
 
 ## Integration with Cursor Rules
 

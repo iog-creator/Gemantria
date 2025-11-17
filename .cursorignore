@@ -1,7 +1,5 @@
 # Build artifacts and mirrors
 
-share/**
-
 _artifacts/**
 
 # Environments / vendors / caches (not indexed but accessible)

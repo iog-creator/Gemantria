@@ -70,6 +70,12 @@
 - bible_db verse vector similarity (adapter + flow) (#557)
 - bible_db read-only adapter + passage flow (#555)
 
+- remove Granite model references from docs
+- update env_example.txt with models that actually exist
+- lm config normalization + model discovery + ops ledger v0
+- LM Studio model configuration normalization
+- add Phase-7 planning section
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

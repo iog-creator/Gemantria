@@ -186,17 +186,17 @@ WHERE created_at >= now() - interval '30 days';
 -- REFRESH FUNCTION
 -- ===============================
 
-CREATE OR REPLACE FUNCTION control.refresh_compliance(window text)
+CREATE OR REPLACE FUNCTION control.refresh_compliance("window" text)
 RETURNS void
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    IF window = '7d' THEN
+    IF "window" = '7d' THEN
         REFRESH MATERIALIZED VIEW control.mv_compliance_7d;
-    ELSIF window = '30d' THEN
+    ELSIF "window" = '30d' THEN
         REFRESH MATERIALIZED VIEW control.mv_compliance_30d;
     ELSE
-        RAISE EXCEPTION 'Invalid window: % (must be 7d or 30d)', window;
+        RAISE EXCEPTION 'Invalid window: % (must be 7d or 30d)', "window";
     END IF;
 END;
 $$;

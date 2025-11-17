@@ -87,10 +87,6 @@
       "dst": "share/scripts_AGENTS.md"
     },
     {
-      "src": "share/pm.snapshot.md",
-      "dst": "share/pm.snapshot.md"
-    },
-    {
       "src": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
       "dst": "share/AGENTPM_GEMATRIA_MODULE_PLAN.md"
     },
@@ -149,6 +145,10 @@
     {
       "src": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
       "dst": "share/USAGE_PATTERNS_REFERENCE.md"
+    },
+    {
+      "src": "share/pm.snapshot.md",
+      "dst": "share/pm.snapshot.md"
     }
   ],
   "evidence": [
