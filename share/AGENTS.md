@@ -39,8 +39,8 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: Local inference providers (LM Studio or Ollama) when enabled; confidence is metadata only.
   - **Inference Providers** (Phase-7E): Supports both LM Studio and Ollama via `INFERENCE_PROVIDER`:
-    - `lmstudio`: OpenAI-compatible API (`OPENAI_BASE_URL`)
-    - `ollama`: Native HTTP API (`OLLAMA_BASE_URL`) - **Recommended for Granite 4.0 models**
+    - `lmstudio`: OpenAI-compatible API (`OPENAI_BASE_URL`) - **Granite models available in LM Studio**
+    - `ollama`: Native HTTP API (`OLLAMA_BASE_URL`) - **Granite models also available via Ollama**
   - **Setup**: See `docs/runbooks/LM_STUDIO_SETUP.md` for LM Studio setup or `docs/runbooks/OLLAMA_ALTERNATIVE.md` for Ollama
   - **Quick Start (LM Studio)**: Set `INFERENCE_PROVIDER=lmstudio`, `LM_STUDIO_ENABLED=1`, `OPENAI_BASE_URL=http://127.0.0.1:9994/v1`
   - **Quick Start (Ollama)**: Set `INFERENCE_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, then `ollama pull ibm/granite4.0-preview:tiny`
@@ -167,6 +167,26 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - Notes:
   - No DB queries or LM calls; purely export-driven.
   - Uses Tailwind + Chart.js via CDN; no React/LangChain/LangGraph.
+
+### PLAN-081 Orchestrator Signals
+
+- **Purpose**: Provide orchestrator dashboard with quick visual proofs of MCP read-only endpoints and browser-verified Atlas views.
+- **New Tiles**:
+  - **MCP RO Proof**: Shows MCP endpoint count and last updated timestamp
+  - **Browser-Verified Badge**: Shows browser verification status (verified/partial/missing)
+  - **Graph Stats Tile** (Phase-8 Block 4): Shows nodes/edges/clusters/density at a glance
+- **Data Sources**:
+  - `/api/mcp/catalog_summary`: MCP endpoints count & freshness
+    - Prefers: `share/atlas/control_plane/mcp_catalog.json`
+    - Fallback: `docs/atlas/data/mcp_catalog.json`
+  - `/api/atlas/browser_verification`: Browser screenshot/verification status
+    - Prefers: `evidence/guard_browser_verification.json`
+    - Fallback: `evidence/browser_screenshot_integrated.json`
+  - `/api/graph/stats_summary`: Graph network metrics
+    - Prefers: `share/exports/graph_stats.json`
+    - Fallback: `exports/graph_stats.json`
+- **Read-Only Posture**: No writes, no LM calls; export-driven JSON summaries and evidence files.
+- **Integration**: Rendered in GraphDashboard top row as high-level orchestrator signals.
 
 ### BibleScholar Passage UI
 
@@ -343,8 +363,16 @@ This process eliminates stale bytecode as a source of errors.
 - **Share sync robustness**: Content-only validation (mtime checks removed) ensures sync works across different filesystem timestamps
 
 ### Evaluation
-* **Phase-8 local eval**: `make eval.smoke` runs a non-CI smoke to validate the eval harness. Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
-* **Phase-8 manifest eval**: `make eval.report` loads `eval/manifest.yml` and emits `share/eval/report.{json,md}`. Keep this **local-only** until stabilized; no CI wiring and no `make go` edits.
+* **Phase-8 local eval**:
+  * `make eval.smoke` — local, non-CI smoke:
+    - runs `ci.exports.smoke` (DB/export hermetic smoke)
+    - runs `eval.graph.calibrate.adv` (advanced graph calibrate harness)
+    - hermetic / empty-DB tolerant; failures are explicit, not silent
+  * `make eval.report` — full Phase-8 eval package:
+    - thin wrapper for `eval.package` (graph calibration + eval badges + share sync)
+    - outputs to `share/eval/` and `share/eval/badges/`
+  * `make eval.phase8` — alias for `eval.package` (same as `eval.report` but name is explicit)
+  * These commands are **local-only** (not bound to CI). Do not wire into CI or `make go` until stabilized. Governance gates (037/038, share no-drift, NEXT_STEPS) remain unchanged.
 * **Ops verifier (local)**: `make ops.verify` prints deterministic checks confirming Phase-8 eval surfaces exist (Makefile targets, manifest version, docs header, share dir). Local-only; not wired into CI.
 * **Pipeline stabilization**: `eval.package` runs to completion with soft integrity gates; `targets.check.dupes` prevents Makefile regressions; `build_release_manifest.py` skips bundles/ for performance.
 

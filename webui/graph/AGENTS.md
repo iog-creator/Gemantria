@@ -76,11 +76,39 @@ The `webui/graph/` directory contains a React-based interactive visualization ap
 **Features**:
 
 - Responsive grid layout
-- Error handling and loading states
+- Error handling and loading states (UX policy: calm, non-technical messages)
 - Metadata display (node/edge counts)
 - Integration with data loading hooks
 - Performance badge integration (MetaPanel)
 - Dual views toggle (user badges + dev metrics dashboard)
+- **Orchestrator Bar**: High-level signals row with MCP RO Proof and Browser-Verified Badge (PLAN-081)
+
+### GraphDashboard Orchestrator Bar
+
+**Components**:
+- `MCPROProofTile.tsx`: Displays MCP catalog endpoint count and last updated timestamp
+- `BrowserVerifiedBadge.tsx`: Shows browser verification status with link to Atlas viewer
+- `GraphStatsTile.tsx`: Shows network metrics (nodes, edges, clusters, density) at a glance
+
+**Behavior**:
+- All components consume new API endpoints (`/api/mcp/catalog_summary`, `/api/atlas/browser_verification`, `/api/graph/stats_summary`)
+- All degrade gracefully (show "unavailable" when `ok=false`)
+- Rendered in the top row of GraphDashboard as high-level orchestrator signals
+- Clickable tiles that set focus state for contextual filtering hints
+- Auto-refresh every 60 seconds
+
+**Data Flow**:
+- `api.ts` helpers fetch from backend API endpoints
+- Backend endpoints use `_load_json_or_hint()` for hermetic file loading
+- Components receive props or fetch directly if props not provided
+
+**View Mode Toggles**:
+- Three view modes: "Overview", "Temporal", "Forecast"
+- Toggle buttons below orchestrator bar
+- Does not change data or pipeline; purely a UI-layer focus control
+- Shows contextual hints when temporal or forecast mode is active
+
+**Note**: No backend writes; they only read JSON summaries and evidence files.
 
 #### `TemporalExplorer.tsx` - Phase 8 Temporal Pattern Visualization (NEW)
 

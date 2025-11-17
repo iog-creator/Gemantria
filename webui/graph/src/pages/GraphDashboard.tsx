@@ -3,8 +3,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 import GraphView from "../components/GraphView";
 import NodeDetails from "../components/NodeDetails";
 import GraphStats from "../components/GraphStats";
+import MCPROProofTile from "../components/MCPROProofTile";
+import BrowserVerifiedBadge from "../components/BrowserVerifiedBadge";
+import GraphStatsTile from "../components/GraphStatsTile";
 import { useGraphData } from "../hooks/useGraphData";
 import { GraphNode } from "../types/graph";
+import { fetchMcpCatalogSummary, fetchBrowserVerificationStatus, fetchGraphStatsSummary, McpCatalogSummary, BrowserVerificationStatus, GraphStatsSummary } from "../api";
 
 const Fallback = ({error}: {error: Error}) => (
   <div className="p-8 text-red-600 border-2 border-red-200 rounded-lg bg-red-50">
@@ -23,6 +27,11 @@ export default function GraphDashboard() {
   const { data, loading, error } = useGraphData();
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
+  const [mcpSummary, setMcpSummary] = useState<McpCatalogSummary | null>(null);
+  const [browserStatus, setBrowserStatus] = useState<BrowserVerificationStatus | null>(null);
+  const [graphStats, setGraphStats] = useState<GraphStatsSummary | null>(null);
+  const [focusedTile, setFocusedTile] = useState<"mcp" | "browser" | "graph" | null>(null);
+  const [viewMode, setViewMode] = useState<"overview" | "temporal" | "forecast">("overview");
 
   useEffect(() => {
     if (!data.nodes?.length) return;
@@ -39,6 +48,54 @@ export default function GraphDashboard() {
       setShowEscalation(true);
     }
   }, [data]);
+
+  // Load orchestrator signals (MCP catalog, browser verification, and graph stats)
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const [mcp, browser, stats] = await Promise.all([
+          fetchMcpCatalogSummary(),
+          fetchBrowserVerificationStatus(),
+          fetchGraphStatsSummary(),
+        ]);
+        if (!cancelled) {
+          setMcpSummary(mcp);
+          setBrowserStatus(browser);
+          setGraphStats(stats);
+        }
+      } catch {
+        if (!cancelled) {
+          setMcpSummary({
+            ok: false,
+            endpoint_count: null,
+            last_updated: null,
+            error: "Failed to load MCP summary",
+          });
+          setBrowserStatus({
+            ok: false,
+            status: "missing",
+            verified_pages: null,
+            error: "Failed to load browser status",
+          });
+          setGraphStats({
+            ok: false,
+            nodes: null,
+            edges: null,
+            clusters: null,
+            density: null,
+            error: "Failed to load graph stats",
+          });
+        }
+      }
+    }
+    load();
+    const id = setInterval(load, 60000); // Refresh every 60 seconds
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
 
   if (showEscalation) {
     const dataSizeMB = JSON.stringify(data).length / (1024 * 1024);
@@ -76,7 +133,7 @@ export default function GraphDashboard() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading graph data...</p>
+          <p className="text-gray-600">Loading data…</p>
         </div>
       </div>
     );
@@ -86,10 +143,8 @@ export default function GraphDashboard() {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-          <h2 className="text-xl font-semibold text-red-600 mb-2">
-            Error Loading Graph
-          </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-600 mb-2">Data unavailable (safe fallback).</p>
+          <p className="text-xs text-muted-foreground mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -120,7 +175,7 @@ export default function GraphDashboard() {
             Gematria Concept Network
           </h1>
             </nav>
-            <div className="flex gap-4 text-sm text-gray-600" aria-label="Dataset summary">
+            <div className="flex gap-4 text-sm text-gray-600 mb-4" aria-label="Dataset summary">
             <span>Nodes: {data.nodes.length}</span>
             <span>Edges: {data.edges.length}</span>
             <span>
@@ -128,12 +183,96 @@ export default function GraphDashboard() {
               {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
             </span>
           </div>
+          {/* PLAN-081: Orchestrator Dashboard Polish — MCP RO Proof tile, Browser-Verified Badge, and Graph Stats */}
+          <div className="mb-4 flex flex-wrap items-center gap-4">
+            <div onClick={() => setFocusedTile("mcp")} className="cursor-pointer transition hover:brightness-105">
+              <MCPROProofTile summary={mcpSummary} className="flex-1 min-w-[280px]" />
+            </div>
+            <div onClick={() => setFocusedTile("browser")} className="cursor-pointer transition hover:brightness-105">
+              <BrowserVerifiedBadge status={browserStatus} />
+            </div>
+            <div onClick={() => setFocusedTile("graph")} className="cursor-pointer transition hover:brightness-105">
+              <GraphStatsTile stats={graphStats} className="flex-1 min-w-[280px]" />
+            </div>
+          </div>
+          {/* Mode indicator */}
+          <p className="mb-2 text-xs text-muted-foreground">
+            Mode:{" "}
+            <span className="font-medium">
+              {viewMode === "overview" && "Overview"}
+              {viewMode === "temporal" && "Temporal"}
+              {viewMode === "forecast" && "Forecast"}
+            </span>
+          </p>
+          {/* View mode toggles */}
+          <div className="mb-4 flex gap-2">
+            <button
+              type="button"
+              className={`px-3 py-1 rounded-full text-sm ${
+                viewMode === "overview"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => setViewMode("overview")}
+            >
+              Overview
+            </button>
+            <button
+              type="button"
+              className={`px-3 py-1 rounded-full text-sm ${
+                viewMode === "temporal"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => setViewMode("temporal")}
+            >
+              Temporal
+            </button>
+            <button
+              type="button"
+              className={`px-3 py-1 rounded-full text-sm ${
+                viewMode === "forecast"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => setViewMode("forecast")}
+            >
+              Forecast
+            </button>
+          </div>
           </header>
 
         {/* Main Content */}
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Graph View - Takes up 3/4 of the space */}
           <div className="lg:col-span-3 space-y-6">
+            {/* Focus hints for orchestrator tiles */}
+            {focusedTile === "mcp" && (
+              <p className="text-sm text-gray-600 mb-2">
+                Focusing on MCP proof. Use graph filters to inspect MCP-related nodes/endpoints.
+              </p>
+            )}
+            {focusedTile === "browser" && (
+              <p className="text-sm text-gray-600 mb-2">
+                Focusing on browser verification. Use Atlas/webproof links to inspect rendered pages.
+              </p>
+            )}
+            {focusedTile === "graph" && (
+              <p className="text-sm text-gray-600 mb-2">
+                Focusing on graph stats. Network metrics displayed in the stats tile above.
+              </p>
+            )}
+            {/* View mode hints */}
+            {viewMode === "temporal" && (
+              <p className="text-sm text-gray-500 mb-2">
+                Temporal view active — focus on time-series patterns and trends.
+              </p>
+            )}
+            {viewMode === "forecast" && (
+              <p className="text-sm text-gray-500 mb-2">
+                Forecast view active — focus on predictive forecasts and uncertainty bands.
+              </p>
+            )}
             {/* Stats Panel */}
             <div className="bg-white rounded-lg shadow-lg p-4">
               <h2 className="text-xl font-semibold mb-4">Network Statistics</h2>
