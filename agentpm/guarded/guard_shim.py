@@ -200,9 +200,9 @@ class GuardShim:
                         self.project_id,
                         self.session_id,
                         tool,
-                        psycopg.types.json.dumps(args_json),
-                        psycopg.types.json.dumps(result_json),
-                        psycopg.types.json.dumps(violations_json),
+                        json.dumps(args_json),
+                        json.dumps(result_json),
+                        json.dumps(violations_json),
                     ),
                 )
                 run_id = cur.fetchone()[0]
