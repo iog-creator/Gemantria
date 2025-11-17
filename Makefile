@@ -608,6 +608,12 @@ test.env.loader:
 test.guard:
 	@pytest -q tests/unit/guards/test_exports_guard_schema.py
 
+.PHONY: test.seed.crossrefs
+test.seed.crossrefs: ## Seed enriched sample with crossrefs for guard testing (hermetic)
+	@echo ">> Seeding enriched sample with crossrefs (hermetic)…"
+	@mkdir -p exports
+	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
+
 # CI smoke targets (for workflow compatibility)
 # Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
