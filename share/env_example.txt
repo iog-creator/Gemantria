@@ -41,22 +41,111 @@ STRICT_GOVERNANCE=0
 # When true, selected features may call LM Studio under guardrails.
 LM_STUDIO_ENABLED=false
 
-# LM Studio Server Host
-LM_STUDIO_HOST=http://192.168.1.119:1234
+# Inference provider used by the runtime (lmstudio | openai | other)
+# === Local Inference Configuration (LM Studio / Ollama) ===
+#
+# INFERENCE_PROVIDER controls which local runtime we talk to:
+#   - lmstudio: OpenAI-compatible HTTP API (OPENAI_BASE_URL)
+#   - ollama:   Ollama HTTP API (OLLAMA_BASE_URL)
+#
+# You can switch providers by changing INFERENCE_PROVIDER and the base URL.
+
+# Default: LM Studio
+INFERENCE_PROVIDER=lmstudio
+
+# LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)
+LM_STUDIO_HOST=  # e.g. http://127.0.0.1:9994 (set in your .env)
 
 # === Local AI (LM Studio / OpenAI-compatible) ===
 # OpenAI-compatible API base URL (defaults to LM Studio on port 9994 per AGENTS.md)
+# This is the PRIMARY base URL for LM Studio API calls
 OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 # API key (any non-empty string works for local servers; SDK requires it)
 OPENAI_API_KEY=sk-local-placeholder
-# Embedding model name (must match a model loaded in LM Studio)
-LM_EMBED_MODEL=text-embedding-bge-m3
 
-# Model Configuration
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+# Ollama base URL (used when INFERENCE_PROVIDER=ollama)
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# === Canonical LM Model IDs (slots) ===
+# These slots are provider-agnostic. The runtime picks the right host
+# (LM Studio vs Ollama) based on INFERENCE_PROVIDER.
+#
+# All model configuration is centralized in scripts/config/env.py
+# 
+# NOTE: Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls`
+# to list available models and validate your configuration.
+#
+# Phase-7E: Two profiles are available below. Choose ONE profile block to copy into your .env:
+#   - LEGACY: Current working setup (BGE + Qwen models)
+#   - GRANITE: Recommended Granite-based setup via Ollama (Phase-7E)
+
+# ============================================================================
+# PROFILE: LEGACY (Current Working Setup)
+# ============================================================================
+# Copy this block if you want to use your existing BGE + Qwen models
+
+# General embedding model used for RAG
 EMBEDDING_MODEL=text-embedding-bge-m3
+LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
+
+# Theology / Bible expert model
+# Used for noun discovery, enrichment, and general theological analysis
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+
+# Local agent / workflow model
+# Used for local agent workflows and reasoning
+LOCAL_AGENT_MODEL=qwen/qwen3-8b
+
+# Optional: math-heavy model for numeric/reasoning tasks
+# Used for gematria calculation verification
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Optional: reranker model for post-processing
+# Used for semantic reranking in network aggregation
+# Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
 RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# ============================================================================
+# PROFILE: PHASE-7F (Ollama + BGE Models - Recommended)
+# ============================================================================
+# Copy this block for Phase-7F: All four slots ready via Ollama
+#
+#   INFERENCE_PROVIDER=ollama
+#   OLLAMA_BASE_URL=http://127.0.0.1:11434
+#   LOCAL_AGENT_MODEL=granite4:tiny-h
+#   EMBEDDING_MODEL=bge-m3:latest
+#   RERANKER_MODEL=bge-reranker-v2-m3:latest
+#   THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B
+#   THEOLOGY_PROVIDER=theology
+#
+# Installation:
+#   1. Install Ollama: curl -fsSL https://ollama.com/install.sh | sh
+#   2. Pull Granite models: ollama pull ibm/granite4.0-preview:tiny
+#   3. Set INFERENCE_PROVIDER=ollama in your .env
+#   4. See docs/runbooks/OLLAMA_ALTERNATIVE.md for details
+#
+# NOTE: The adapter automatically maps canonical model names to provider-specific names
+#       (e.g., granite-4.0-h-tiny → ibm/granite4.0-preview:tiny for Ollama)
+
+# General embedding model (Granite)
+# EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# LM_EMBED_MODEL=ibm-granite/granite-embedding-english-r2  # Legacy support (deprecated)
+
+# Theology / Bible expert model (unchanged - Christian model remains)
+# THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+
+# Local agent / workflow model (Granite 4.0 H Tiny)
+# LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny
+
+# Optional: math-heavy model (unchanged)
+# MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Optional: reranker model (Granite)
+# RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+
+# Optional: override LM Studio embed host/port if not defaulting to 9994.
+# LM_EMBED_HOST=localhost
+# LM_EMBED_PORT=9994
 
 # Embedding Configuration
 USE_QWEN_EMBEDDINGS=true
@@ -70,6 +159,11 @@ LM_STUDIO_TIMEOUT=30
 LM_STUDIO_RETRY_ATTEMPTS=3
 LM_STUDIO_RETRY_DELAY=2.0
 LM_STUDIO_MOCK=false
+
+# MCP SSE Server Auto-Start (for LM Studio bridge)
+# Set to 1 to automatically start MCP SSE server on port 8005 when needed
+# Auto-starts when running: pmagent bringup full, make bringup.001, pmagent mcp sse, make mcp.sse.ensure
+AUTO_START_MCP_SSE=0
 
 # ============================================================================
 # PIPELINE CONFIGURATION
@@ -166,3 +260,20 @@ PIP_REQUIRE_VENV=true
 # - LM Studio models are local (no cloud credentials needed)
 
 CODE_EXEC_TS=0
+
+# ============================================================================
+# RUNTIME BRING-UP HOOKS (Phase-6 Reality Checks)
+# ============================================================================
+
+# Optional shell command the tools can use to start Postgres automatically.
+# Example (macOS/Homebrew):  DB_START_CMD="brew services start postgresql"
+# Example (systemd):         DB_START_CMD="sudo systemctl start postgresql"
+DB_START_CMD=""
+
+# LM Studio CLI model identifier to auto-load via `lms load`.
+# Example: LM_STUDIO_MODEL_ID="lmstudio-community/Meta-Llama-3-8B-Instruct"
+LM_STUDIO_MODEL_ID=""
+
+# Port for the LM Studio HTTP server (used by lms server start).
+# Defaults to 1234 if left blank.
+LM_STUDIO_SERVER_PORT=""

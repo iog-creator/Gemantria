@@ -56,16 +56,15 @@ def redact_dsn(dsn: str | None) -> dict:
 
 
 def _connect(dsn: str):
-    """Connect to database using psycopg 3 (preferred) or psycopg2 (fallback only)."""
+    """Connect to database using psycopg3 (required)."""
     try:
         import psycopg  # type: ignore
+    except ImportError as e:
+        raise ImportError(
+            "psycopg3 is required but not installed. Install with: pip install 'psycopg[binary,pool]~=3.2'"
+        ) from e
 
-        return psycopg.connect(dsn, autocommit=True, connect_timeout=5)
-    except ImportError:
-        # Fallback to psycopg2 only if psycopg 3 is unavailable
-        import psycopg2  # type: ignore
-
-        return psycopg2.connect(dsn, connect_timeout=5)
+    return psycopg.connect(dsn, autocommit=True, connect_timeout=5)
 
 
 def fetch_triad_from_db(dsn: str) -> tuple[list[str], str]:

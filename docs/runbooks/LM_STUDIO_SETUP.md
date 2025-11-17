@@ -28,24 +28,53 @@ This runbook provides step-by-step instructions for setting up LM Studio as a lo
 
 ### 2. Configure Environment Variables
 
-Create or update `.env.local` (or `.env`) with LM Studio settings:
+**Phase-7E**: Two profiles are available in `env_example.txt`:
+- **LEGACY**: Current working setup (BGE + Qwen models) - use `INFERENCE_PROVIDER=lmstudio`
+- **GRANITE**: Recommended Granite-based setup - available in both LM Studio and Ollama (see Granite Installation below)
+
+Create or update `.env.local` (or `.env`) with LM Studio settings. Choose ONE profile:
+
+#### Option A: LEGACY Profile (Current Working Setup)
 
 ```bash
-# LM Studio Configuration (Phase-3C)
+# LM Studio Configuration
 LM_STUDIO_ENABLED=1
-LM_STUDIO_BASE_URL=http://127.0.0.1:1234/v1
-LM_STUDIO_MODEL=christian-bible-expert-v2.0-12b
+INFERENCE_PROVIDER=lmstudio
+OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 
-# Alternative: Use legacy host/port format
-# LM_STUDIO_HOST=http://127.0.0.1:1234
-# LM_EMBED_HOST=127.0.0.1
-# LM_EMBED_PORT=1234
-
-# Model Configuration
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+# Legacy Model Configuration (BGE + Qwen)
 EMBEDDING_MODEL=text-embedding-bge-m3
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+LOCAL_AGENT_MODEL=qwen/qwen3-8b
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# MCP SSE Server Auto-Start
+AUTO_START_MCP_SSE=1
+```
+
+#### Option B: GRANITE Profile (Recommended - Phase-7E)
+
+**Prerequisites**: Install Granite models via LM Studio (see Granite Installation below) or via Ollama.
+
+```bash
+# Ollama Configuration (Phase-7E)
+INFERENCE_PROVIDER=ollama
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# Granite Model Configuration (Phase-7E)
+EMBEDDING_MODEL=text-embedding-bge-m3      # keep BGE for now
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+LOCAL_AGENT_MODEL=granite4:tiny-h          # or ibm/granite4:tiny-h
+RERANKER_MODEL=qwen/qwen3-8b-reranker      # Granite reranker later via microservice
+```
+
+**Note**: The runtime loads all model IDs from `scripts/config/env.py` via `get_lm_model_config()`. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
+
+To inspect models currently exposed by LM Studio and validate configuration, run:
+
+```bash
+python -m scripts.lm_models_ls
 ```
 
 **Note**: The centralized config loader (`scripts/config/env.py`) handles environment variable precedence. See Configuration section below for details.
@@ -99,11 +128,73 @@ lms ps
 # Or use LM Studio GUI: Models → Load Model
 ```
 
-**Required Models**:
+**Required Models (LEGACY Profile)**:
 - `christian-bible-expert-v2.0-12b` (theology enrichment)
 - `self-certainty-qwen3-1.7b-base-math` (math verification)
 - `text-embedding-bge-m3` (embeddings)
 - `qwen.qwen3-reranker-0.6b` (reranking)
+
+**Required Models (GRANITE Profile - Phase-7D)**:
+- `ibm-granite/granite-4.0-h-tiny` (local agent/workflow model)
+- `ibm-granite/granite-embedding-english-r2` (embeddings)
+- `ibm-granite/granite-embedding-reranker-english-r2` (reranker)
+- `christian-bible-expert-v2.0-12b` (theology enrichment - unchanged)
+- `self-certainty-qwen3-1.7b-base-math` (math verification - unchanged)
+
+### Granite Installation (Phase-7D)
+
+**Phase-7D** introduces Granite models as the recommended default for local agent and embeddings. To install Granite models using the LM Studio CLI:
+
+#### Method 1: Interactive CLI Download (Recommended)
+
+1. **Download Granite 4.0 H Tiny (chat model)**:
+   ```bash
+   lms get granite
+   ```
+   When prompted, select `ibm-granite/granite-4.0-h-tiny-GGUF` from the search results.
+
+2. **Download Granite embedding model**:
+   ```bash
+   lms get granite-embedding
+   ```
+   Search for and select `ibm-granite/granite-embedding-english-r2` or similar.
+
+3. **Download Granite reranker model**:
+   ```bash
+   lms get granite-reranker
+   ```
+   Search for and select `ibm-granite/granite-embedding-reranker-english-r2` or similar.
+
+4. **Verify installation**:
+   ```bash
+   # List all installed models
+   lms ls
+   
+   # Verify models are available via API
+   python -m scripts.lm_models_ls
+   ```
+   The output should include:
+   - `ibm-granite/granite-4.0-h-tiny-GGUF` (or similar)
+   - `ibm-granite/granite-embedding-english-r2`
+   - `ibm-granite/granite-embedding-reranker-english-r2`
+
+5. **Update `.env`** to use the GRANITE profile (see Option B above)
+
+#### Method 2: GUI Installation (Alternative)
+
+1. **Open LM Studio GUI** and navigate to the model browser
+2. **Search for Granite models**:
+   - "Granite 4.0 H Tiny" or "ibm-granite/granite-4.0-h-tiny"
+   - "granite-embedding-english-r2"
+   - "granite-embedding-reranker-english-r2"
+3. **Download and install** the models (recommended quantization: Q4_0 or Q4_K_M for 16GB GPU)
+4. **Verify installation** using the same commands as Method 1
+
+**Note**: 
+- Model IDs may vary slightly depending on LM Studio's model catalog
+- Use `python -m scripts.lm_models_ls` to verify exact model IDs after installation
+- See `docs/SSOT/LM_MODEL_CATALOG.json` for the complete model catalog
+- The CLI method (`lms get`) provides interactive search and selection, making it easier to find the correct model variants
 
 ## Configuration
 

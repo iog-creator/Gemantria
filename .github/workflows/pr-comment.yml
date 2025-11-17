@@ -20,7 +20,7 @@ jobs:
           echo "### OPS Evidence (auto-updated)\n\n- ruff ✅\n- eval.graph.calibrate.adv ✅\n- ci.exports.smoke ✅" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       - name: Upsert PR comment
-        uses: peter-evans/create-or-update-comment@71345d5e91eb7f4c57854d9db6c2b1d699707e4b
+        uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.brief.outputs.BODY }}

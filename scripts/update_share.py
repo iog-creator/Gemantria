@@ -155,13 +155,14 @@ def files_differ(src: Path, dst: Path) -> bool:
 
 def copy_file(src: Path, dst: Path):
     ensure_dir(dst)
-    if files_differ(src, dst):
+    content_changed = files_differ(src, dst)
+    if content_changed or not dst.exists():
         shutil.copy2(src, dst)
-        # Update mtime to current time so sync timestamp is visible
-        current_time = time.time()
-        os.utime(dst, (current_time, current_time))
-        return True  # File was copied
-    return False  # File was unchanged
+    # Always update mtime to current time so sync timestamp is visible (even if content unchanged)
+    # This ensures git sees the timestamp change for all synced files
+    current_time = time.time()
+    os.utime(dst, (current_time, current_time))
+    return content_changed  # Return True if content changed, False if only timestamp updated
 
 
 def head_json(src: Path, dst: Path, max_bytes: int) -> bool:
@@ -254,8 +255,10 @@ def main():
     SHARE.mkdir(parents=True, exist_ok=True)
 
     copied_count = 0
+    timestamp_updated_count = 0
     total_count = 0
     changed_files = []
+    timestamp_updated_files = []
 
     for it in items:
         src_rel = it.get("src")
@@ -340,38 +343,35 @@ def main():
             continue
 
         src_checksum = get_file_checksum(src)
-        if copy_file(src, dst):
+        content_changed = copy_file(src, dst)
+        # Always update timestamp (copy_file does this), so track it
+        timestamp_updated_count += 1
+        timestamp_updated_files.append(str(dst.relative_to(ROOT)))
+
+        if content_changed:
             copied_count += 1
             changed_files.append(str(dst.relative_to(ROOT)))
-            dst_checksum = get_file_checksum(dst)
-            track_share_item(
-                item_id,
-                src_rel,
-                dst_rel,
-                None,
-                None,
-                dst_checksum,
-                src_checksum,
-                "synced",
-            )
-        else:
-            # File unchanged, but still track
-            dst_checksum = get_file_checksum(dst)
-            track_share_item(
-                item_id,
-                src_rel,
-                dst_rel,
-                None,
-                None,
-                dst_checksum,
-                src_checksum,
-                "synced",
-            )
+
+        dst_checksum = get_file_checksum(dst)
+        track_share_item(
+            item_id,
+            src_rel,
+            dst_rel,
+            None,
+            None,
+            dst_checksum,
+            src_checksum,
+            "synced",
+        )
 
     if copied_count == 0:
-        print("[update_share] OK — share/ up to date (no changes)")
+        print(
+            f"[update_share] OK — share/ refreshed ({timestamp_updated_count}/{total_count} files synced, timestamps updated)"
+        )
     else:
-        print(f"[update_share] OK — share/ refreshed ({copied_count}/{total_count} files updated)")
+        print(
+            f"[update_share] OK — share/ refreshed ({copied_count}/{total_count} files with content changes, {timestamp_updated_count}/{total_count} timestamps updated)"
+        )
         print("[update_share] CHANGED FILES:")
         for f in changed_files:
             print(f"  - {f}")

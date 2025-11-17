@@ -115,6 +115,107 @@ make ssot.verify
 
 **Example**: `governance_tracker.py` checks DB availability, emits HINTs, and returns success when DB unavailable, allowing `make housekeeping` to pass.
 
+## Local Model Configuration (LM Studio & Ollama)
+
+This system supports multiple local inference providers controlled by `INFERENCE_PROVIDER`:
+
+- `lmstudio` – Use LM Studio's OpenAI-compatible API (`OPENAI_BASE_URL`).
+- `ollama` – Use Ollama's native HTTP API (`OLLAMA_BASE_URL`).
+
+The following environment variables control how local models are selected:
+
+- **`INFERENCE_PROVIDER`** – `lmstudio` (default) or `ollama`.
+- **`OPENAI_BASE_URL`** – Base URL for LM Studio's OpenAI-compatible API.
+- **`OLLAMA_BASE_URL`** – Base URL for Ollama's API (default: `http://127.0.0.1:11434`).
+- **`EMBEDDING_MODEL`** – Vector model (default: `text-embedding-bge-m3`).
+- **`THEOLOGY_MODEL`** – Main reasoning/theology model.
+- **`LOCAL_AGENT_MODEL`** – Local agent model (e.g. Granite 4 Tiny-H - available in both LM Studio and Ollama).
+- **`MATH_MODEL`** – Optional math-heavy model.
+- **`RERANKER_MODEL`** – Optional reranker model (Granite reranker planned later).
+- **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`).
+
+All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model_config()`. The LM Studio adapter and the Ollama adapter both read from the same configuration and pick the correct runtime based on `INFERENCE_PROVIDER`.
+
+**Phase-7E Profiles:**
+- **LEGACY**: Current working setup (BGE + Qwen models) - see `env_example.txt` for configuration
+- **GRANITE**: Recommended Granite-based setup (Phase-7E) - available in both LM Studio and Ollama:
+  - **LM Studio**: Use `INFERENCE_PROVIDER=lmstudio` and install via `lms get granite` (see `docs/runbooks/LM_STUDIO_SETUP.md`)
+  - **Ollama**: Use `INFERENCE_PROVIDER=ollama` and `ollama pull ibm/granite4.0-preview:tiny`
+
+**Legacy Support (Deprecated):**
+- `LM_EMBED_MODEL` → Use `EMBEDDING_MODEL` instead (will be removed in Phase-8)
+- `QWEN_RERANKER_MODEL` → Use `RERANKER_MODEL` instead (will be removed in Phase-8)
+
+### LM Studio Model Discovery
+
+Use the discovery helper to list available LM Studio models and validate configuration:
+
+```bash
+python -m scripts.lm_models_ls
+```
+
+This command calls the LM Studio `/v1/models` endpoint (via `OPENAI_BASE_URL`) and verifies that `EMBEDDING_MODEL`, `THEOLOGY_MODEL`, `LOCAL_AGENT_MODEL`, and `RERANKER_MODEL` exist.
+
+### LM Model Catalog (Phase-7D)
+
+The complete model catalog is maintained in `docs/SSOT/LM_MODEL_CATALOG.json`. This catalog includes:
+- **LEGACY profile**: Current working setup (BGE + Qwen models)
+- **GRANITE profile**: Recommended Granite-based setup (Phase-7D)
+
+Each model entry includes:
+- Model ID (as it appears in LM Studio)
+- Type (chat, embedding, reranker)
+- Size information
+- Installation status
+- Download commands (for Granite models)
+
+To install Granite models, use the interactive CLI:
+```bash
+# Interactive installation (recommended)
+lms get granite
+# Then select: ibm-granite/granite-4.0-h-tiny-GGUF
+
+# Or use the helper script
+./scripts/lm_install_granite.sh
+```
+
+See `docs/runbooks/LM_STUDIO_SETUP.md` for complete installation instructions.
+
+### LM Studio Adapter (Phase-7D)
+
+The LM Studio adapter (`agentpm/adapters/lm_studio.py`) is aligned with the canonical model loader (`get_lm_model_config()`). The adapter supports model slots:
+
+- **`model_slot="theology"`** – Uses `THEOLOGY_MODEL` from config
+- **`model_slot="local_agent"`** – Uses `LOCAL_AGENT_MODEL` from config
+- **`model_slot="math"`** – Uses `MATH_MODEL` from config
+- **`model_slot=None`** – Legacy fallback (uses `LM_STUDIO_MODEL` if set)
+
+Example usage:
+```python
+from agentpm.adapters.lm_studio import lm_studio_chat
+
+# Use theology model
+result = lm_studio_chat(
+    messages=[{"role": "user", "content": "..."}],
+    model_slot="theology"
+)
+
+# Use local agent model
+result = lm_studio_chat(
+    messages=[{"role": "user", "content": "..."}],
+    model_slot="local_agent"
+)
+```
+
+### OPS Command Ledger (v0)
+
+Successful OPS command bundles can be recorded in the OPS Command Ledger:
+
+- File: `share/ops_command_ledger.jsonl`
+- Helper: `scripts/ops_ledger.append_entry()`
+
+Future phases may mine this ledger for reusable command sequences.
+
 ## Governance Reference
 
 **ADR-058**: GPT System Prompt Requirements as Operational Governance - Establishes GPT system prompt requirements as part of the operational governance framework.

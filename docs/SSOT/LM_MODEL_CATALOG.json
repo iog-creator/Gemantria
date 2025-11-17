@@ -1,0 +1,133 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-11-16",
+  "models": {
+    "legacy": {
+      "profile": "LEGACY",
+      "description": "Current working setup (BGE + Qwen models)",
+      "models": {
+        "embedding": {
+          "id": "text-embedding-bge-m3",
+          "type": "embedding",
+          "size": "~634 MB",
+          "status": "installed"
+        },
+        "theology": {
+          "id": "christian-bible-expert-v2.0-12b",
+          "type": "chat",
+          "size": "~7.12 GB",
+          "status": "installed"
+        },
+        "local_agent": {
+          "id": "qwen/qwen3-8b",
+          "type": "chat",
+          "size": "~5.03 GB",
+          "status": "installed"
+        },
+        "math": {
+          "id": "self-certainty-qwen3-1.7b-base-math",
+          "type": "chat",
+          "size": "~1.67 GB",
+          "status": "installed"
+        },
+        "reranker": {
+          "id": "qwen.qwen3-reranker-0.6b",
+          "type": "reranker",
+          "size": "~639 MB",
+          "status": "installed"
+        }
+      }
+    },
+    "granite": {
+      "profile": "GRANITE",
+      "description": "Recommended Granite-based setup (Phase-7D)",
+      "models": {
+        "embedding": {
+          "id": "ibm-granite/granite-embedding-english-r2",
+          "type": "embedding",
+          "size": "~149M parameters",
+          "status": "pending_installation",
+          "download_command": "lms get granite-embedding-english-r2",
+          "notes": "Search for 'granite embedding' in LM Studio catalog"
+        },
+        "theology": {
+          "id": "christian-bible-expert-v2.0-12b",
+          "type": "chat",
+          "size": "~7.12 GB",
+          "status": "installed",
+          "notes": "Unchanged from legacy profile"
+        },
+        "local_agent": {
+          "id": "ibm-granite/granite-4.0-h-tiny-GGUF",
+          "type": "chat",
+          "size": "~7B parameters (~1B active MoE)",
+          "status": "pending_installation",
+          "download_command": "lms get granite",
+          "download_instructions": "Interactive selection: choose 'ibm-granite/granite-4.0-h-tiny-GGUF' from search results",
+          "notes": "Hybrid Mamba-2 + Transformer architecture, 70% lower memory, 2× faster inference"
+        },
+        "math": {
+          "id": "self-certainty-qwen3-1.7b-base-math",
+          "type": "chat",
+          "size": "~1.67 GB",
+          "status": "installed",
+          "notes": "Unchanged from legacy profile"
+        },
+        "reranker": {
+          "id": "ibm-granite/granite-embedding-reranker-english-r2",
+          "type": "reranker",
+          "size": "~149M parameters",
+          "status": "pending_installation",
+          "download_command": "lms get granite-reranker",
+          "notes": "Search for 'granite reranker' in LM Studio catalog"
+        }
+      }
+    }
+  },
+    "installation_notes": {
+      "lm_studio": {
+        "cli_method": "Use 'lms get <keyword>' for interactive model selection",
+        "example": "lms get granite",
+        "verification": "python -m scripts.lm_models_ls",
+        "limitation": "Interactive prompts required, not fully automatable"
+      },
+      "ollama": {
+        "cli_method": "Use 'ollama pull <model>' for non-interactive download",
+        "example": "ollama pull ibm/granite4.0-preview:tiny",
+        "verification": "ollama list",
+        "advantage": "Fully programmatic, no interactive prompts",
+        "granite_support": "Phase-7D: Granite 4.0 models are available!",
+        "granite_models": {
+          "chat": [
+            "ibm/granite4.0-preview:tiny",
+            "ibm/granite4.0-preview:micro",
+            "ibm/granite4.0-preview:small"
+          ],
+          "embedding": [
+            "ibm/granite-embedding:30m",
+            "ibm/granite-embedding:278m"
+          ]
+        },
+        "recommended": "For automation, CI/CD pipelines, and Granite 4.0 support"
+      }
+    },
+  "provider_comparison": {
+    "lm_studio": {
+      "automation": "Limited (interactive prompts)",
+      "langchain_integration": "Custom adapter needed",
+      "model_names": "Complex IDs (ibm-granite/granite-4.0-h-tiny-GGUF)",
+      "api_endpoint": "http://localhost:9994/v1",
+      "best_for": "GUI-based workflows, manual model management"
+    },
+    "ollama": {
+      "automation": "Full (all commands scriptable)",
+      "langchain_integration": "Native ChatOllama support",
+      "model_names": "Simple names (granite-4.0-h-tiny)",
+      "api_endpoint": "http://localhost:11434/v1",
+      "best_for": "Automation, CI/CD, LangGraph integration"
+    }
+  },
+  "catalog_location": "docs/SSOT/LM_MODEL_CATALOG.json",
+  "alternative_docs": "docs/runbooks/OLLAMA_ALTERNATIVE.md"
+}
+

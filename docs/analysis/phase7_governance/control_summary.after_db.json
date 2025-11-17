@@ -1,0 +1,61 @@
+CONTROL_SUMMARY: ok=true
+{
+  "ok": true,
+  "generated_at": "2025-11-16T17:14:31.658884+00:00",
+  "components": {
+    "status": {
+      "ok": false,
+      "mode": "db_off",
+      "reason": "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+      "tables": {
+        "public.ai_interactions": {
+          "present": false,
+          "row_count": null,
+          "latest_created_at": null
+        },
+        "public.governance_artifacts": {
+          "present": false,
+          "row_count": null,
+          "latest_created_at": null
+        },
+        "control.agent_run": {
+          "present": false,
+          "row_count": null,
+          "latest_created_at": null
+        },
+        "control.tool_catalog": {
+          "present": false,
+          "row_count": null,
+          "latest_created_at": null
+        },
+        "gematria.graph_stats_snapshots": {
+          "present": false,
+          "row_count": null,
+          "latest_created_at": null
+        }
+      }
+    },
+    "tables": {
+      "ok": false,
+      "mode": "db_off",
+      "error": "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+      "tables": {}
+    },
+    "schema": {
+      "ok": false,
+      "mode": "db_off",
+      "reason": "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+      "tables": {}
+    },
+    "pipeline_status": {
+      "ok": false,
+      "mode": "db_off",
+      "reason": "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+      "window_hours": 24,
+      "summary": {
+        "total_runs": 0,
+        "pipelines": {}
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ import uuid
 from collections import defaultdict
 from itertools import pairwise
 from typing import Any, Dict, List
-from scripts.config.env import get_rw_dsn
+from scripts.config.env import get_rw_dsn, get_reranker_model
 
 # Dependency check for pgvector
 try:
@@ -606,7 +606,7 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
             LOG,
             20,
             "rerank_batch",
-            model=os.getenv("QWEN_RERANKER_MODEL", "qwen-reranker"),
+            model=get_reranker_model(),
             k=len(candidates),
             kept=sum(1 for score in rerank_scores if score >= RERANK_MIN),
             yes_ratio=yes_count / len(rerank_scores) if rerank_scores else 0,
@@ -636,7 +636,7 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
                 continue  # Skip edges below weak threshold
 
             # Store relationship with rerank evidence
-            rerank_model = os.getenv("QWEN_RERANKER_MODEL", "qwen-reranker")
+            rerank_model = get_reranker_model()
             cur.execute(
                 """INSERT INTO concept_relations
                    (source_id, target_id, similarity, relation_type, cosine,

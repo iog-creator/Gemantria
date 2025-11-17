@@ -467,7 +467,7 @@ guard.prompt.ssot: ## Enforce GPT System Prompt SSOT structure
 
 # --- Tag proof (STRICT DSN tracks) ---
 .PHONY: ops.tagproof
-ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
+ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof + doc vectors
 	@echo "[tagproof] STRICT triad (DB mirror)"
 	@STRICT_ALWAYS_APPLY=1 $(MAKE) -s guard.alwaysapply.dbmirror
 	@echo "[tagproof] STRICT prompt SSOT"
@@ -478,6 +478,10 @@ ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof
 	@$(MAKE) -s guard.dsn.centralized.strict
 	@echo "[tagproof] STRICT Atlas DSN proof"
 	@STRICT_ATLAS_DSN=1 $(MAKE) -s atlas.proof.dsn
+	@echo "[tagproof] STRICT doc fragments (Tier-0)"
+	@STRICT_MODE=STRICT $(MAKE) -s guard.docs.fragments
+	@echo "[tagproof] STRICT doc embeddings (Tier-0)"
+	@STRICT_MODE=STRICT $(MAKE) -s guard.docs.embeddings
 
 # Atlas housekeeping (HINT + STRICT lanes, no nightly)
 .PHONY: housekeeping.atlas
@@ -496,8 +500,8 @@ housekeeping.atlas:
 # Complete housekeeping (Rule-058: mandatory post-change)
 
 .PHONY: housekeeping
-housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints handoff.update
-	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + handoff + pm.snapshot)"
+housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
+	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
 	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"
@@ -1781,6 +1785,21 @@ atlas.viewer.validate:
 	@echo "[atlas] viewer validate"
 	@python3 scripts/ci/guard_atlas_viewer.py | tee evidence/guard_atlas_viewer.json >/dev/null || true
 
+
+# Phase-6: Reality Check #1 LIVE (DB + LM Studio + pipeline)
+reality.check.1.live:
+	pmagent reality-check live
+
+
+# Unified bring-up (DB + LM Studio + models)
+system.start:
+	pmagent bringup full
+
+system.stop:
+	# Add teardown logic later (stop DB, kill LM Studio if needed)
+	@pkill -f LM || true
+	@echo "System stop requested (DB and LM Studio teardown not yet implemented)"
+
 # --- Atlas (webproof) ---
 .PHONY: atlas.webproof
 atlas.webproof:
@@ -2382,3 +2401,84 @@ system.health.smoke:
 test.phase3b.system.health:
 	@echo "[test.phase3b.system.health] Testing system health aggregate"
 	@pytest -q agentpm/tests/system/test_phase3b_system_health.py
+
+# -----------------------------------------------------------------------------
+# Governance DB SSOT — Rules ingestion + guard
+# -----------------------------------------------------------------------------
+
+governance.ingest.rules:
+	@PYTHONPATH=. python scripts/governance/ingest_rules_to_db.py
+
+governance.ingest.rules.dryrun:
+	@PYTHONPATH=. python scripts/governance/ingest_rules_to_db.py --dry-run
+
+guard.rules.db.ssot:
+	@PYTHONPATH=. python scripts/guards/guard_rules_db_ssot.py
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Registry — ingestion
+# -----------------------------------------------------------------------------
+
+governance.ingest.docs:
+	@PYTHONPATH=. python scripts/governance/ingest_docs_to_db.py
+
+governance.ingest.docs.dryrun:
+	@PYTHONPATH=. python scripts/governance/ingest_docs_to_db.py --dry-run
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Registry — guards (HINT posture)
+# -----------------------------------------------------------------------------
+
+guard.docs.db.ssot:
+	@PYTHONPATH=. python scripts/guards/guard_docs_db_ssot.py
+
+ci.guards.docs:
+	@PYTHONPATH=. python scripts/guards/guard_docs_db_ssot.py
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Content — ingestion (Phase-8A)
+# -----------------------------------------------------------------------------
+
+governance.ingest.doc_content:
+	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py
+
+governance.ingest.doc_content.dryrun:
+	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py --dry-run
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Content — guards (HINT posture)
+# -----------------------------------------------------------------------------
+
+guard.docs.fragments:
+	@PYTHONPATH=. python scripts/guards/guard_doc_fragments.py
+
+ci.guards.doc_content:
+	@PYTHONPATH=. python scripts/guards/guard_doc_fragments.py
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Embeddings — ingestion (Phase-8C.3)
+# -----------------------------------------------------------------------------
+
+governance.ingest.doc_embeddings:
+	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py
+
+governance.ingest.doc_embeddings.dryrun:
+	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py --dry-run
+
+
+# -----------------------------------------------------------------------------
+# Governance Doc Embeddings — guards (HINT posture)
+# -----------------------------------------------------------------------------
+
+guard.docs.embeddings:
+	@PYTHONPATH=. python scripts/guards/guard_doc_embeddings.py
+
+ci.guards.doc_vectors:
+	@PYTHONPATH=. python scripts/guards/guard_doc_fragments.py
+	@PYTHONPATH=. python scripts/guards/guard_doc_embeddings.py
+

@@ -34,13 +34,18 @@ make housekeeping
 
 The `make housekeeping` target executes:
 1. **Share synchronization** (`make share.sync`) — mirrors docs/scripts/rules to `share/`
-2. **AGENTS.md auto-update** (`python3 scripts/auto_update_agents_md.py`) — **AUTOMATICALLY** updates AGENTS.md files based on code changes (Rule-058)
-3. **CHANGELOG.md auto-update** (`python3 scripts/auto_update_changelog.py`) — **AUTOMATICALLY** updates CHANGELOG.md based on recent commits (Rule-058)
-4. **AGENTS.md validation** (`python3 scripts/validate_agents_md.py`) — ensures all subdirectory AGENTS.md files exist and are valid
-5. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
-6. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
-7. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
-8. **Forest generation** (`python3 scripts/generate_forest.py`) — regenerates forest overview
+2. **ADR housekeeping** (`adr.housekeeping`) — ADR validation and updates
+3. **Governance housekeeping** (`governance.housekeeping`) — runs `scripts/governance_housekeeping.py` for database compliance + docs
+4. **Governance docs hints** (`governance.docs.hints`) — emits hints for rule/docs changes (Rule-026)
+5. **Document management hints** (`docs.hints`) — populates document operation metrics (Rule-061)
+6. **Document master reference** (`docs.masterref.populate`) — populates document_sections table for analytics
+7. **AGENTS.md auto-update** (`python3 scripts/auto_update_agents_md.py`) — **AUTOMATICALLY** updates AGENTS.md files based on code changes (Rule-058)
+8. **CHANGELOG.md auto-update** (`python3 scripts/auto_update_changelog.py`) — **AUTOMATICALLY** updates CHANGELOG.md based on recent commits (Rule-058)
+9. **AGENTS.md validation** (`python3 scripts/validate_agents_md.py`) — ensures all subdirectory AGENTS.md files exist and are valid
+10. **Rules audit** (`python3 scripts/rules_audit.py`) — validates rule compliance
+11. **Forest generation** (`python3 scripts/generate_forest.py`) — regenerates forest overview
+12. **Handoff update** (`handoff.update`) — regenerates `NEXT_STEPS.md` via `scripts/generate_handoff.py`
+13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
 
 **Individual commands** (if needed separately):
 ```bash

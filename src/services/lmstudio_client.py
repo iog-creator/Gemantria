@@ -12,6 +12,14 @@ from typing import NamedTuple
 
 import requests
 
+# Phase-7B: Centralized model config loader
+from scripts.config.env import (
+    get_embedding_model,
+    get_math_model,
+    get_reranker_model,
+    get_theology_model,
+)
+
 # Dependency checks
 try:
     import psycopg  # noqa: F401
@@ -47,13 +55,31 @@ class QwenUnavailableError(Exception):
 
 
 # Environment validation
-# Default: construct from LM_EMBED_HOST/LM_EMBED_PORT (from .env.example) or use 9994
-_default_host = "http://127.0.0.1:9994"
-if "LM_STUDIO_HOST" not in os.environ:
-    embed_host = os.environ.get("LM_EMBED_HOST", "localhost")
-    embed_port = os.environ.get("LM_EMBED_PORT", "9994")
-    _default_host = f"http://{embed_host}:{embed_port}"
-HOST = os.getenv("LM_STUDIO_HOST", _default_host)
+# Use centralized config loader to ensure .env is loaded
+try:
+    from scripts.config.env import openai_cfg, env, _ensure_loaded
+
+    _ensure_loaded()  # Load .env if present
+    # Try new-style config first, fall back to old-style
+    cfg = openai_cfg()
+    _default_host = cfg.get("base_url", "").replace("/v1", "") or "http://127.0.0.1:1234"
+    if "LM_STUDIO_HOST" in os.environ:
+        HOST = os.getenv("LM_STUDIO_HOST")
+    elif "LM_EMBED_HOST" in os.environ or "LM_EMBED_PORT" in os.environ:
+        embed_host = env("LM_EMBED_HOST", "localhost")
+        embed_port = env("LM_EMBED_PORT", "1234")
+        HOST = f"http://{embed_host}:{embed_port}"
+    else:
+        HOST = _default_host
+except ImportError:
+    # Fallback if centralized loader not available
+    _default_host = "http://127.0.0.1:1234"
+    if "LM_STUDIO_HOST" not in os.environ:
+        embed_host = os.environ.get("LM_EMBED_HOST", "localhost")
+        embed_port = os.environ.get("LM_EMBED_PORT", "1234")
+        _default_host = f"http://{embed_host}:{embed_port}"
+    HOST = os.getenv("LM_STUDIO_HOST", _default_host)
+
 if not HOST.startswith("http"):
     raise ValueError(f"LM_STUDIO_HOST must be a valid HTTP URL, got: {HOST}")
 
@@ -244,10 +270,11 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
         )
 
 
-THEOLOGY_MODEL = os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b")
-MATH_MODEL = os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-bge-m3")
-RERANKER_MODEL = os.getenv("RERANKER_MODEL", "qwen-reranker")
+# Phase-7B: Initialize model config from centralized loader
+THEOLOGY_MODEL = get_theology_model()
+MATH_MODEL = get_math_model()
+EMBEDDING_MODEL = get_embedding_model()
+RERANKER_MODEL = get_reranker_model()
 
 
 class LMStudioClient:

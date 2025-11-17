@@ -158,3 +158,15 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 - P0.1-P0.3: Setup & Core (2 hours)
 - P0.4-P0.5: Pipeline & AI (1.5 hours)
 - P0.6-P0.8: Testing & Production (45 min)
+
+- Phase-7F (COMPLETE): Flexible local LM architecture (Ollama + LM Studio per-slot routing)
+- Phase-7G: Added `pmagent lm.status` command to introspect LM providers, models, and local service health.
+- Phase-7G: Basic UI/TV wiring — system status JSON endpoint, HTML status page, and LM/DB health TVs.
+- Phase-8A: Status explanation skill — `pmagent status.explain` uses DB/LM snapshots to produce a human-readable reality check.
+- Phase-8B: Status explanation in UI — `/api/status/explain` + Explanation card on `/status` using the status.explain skill.
+- Phase-8C: LM Insights graph — `/api/lm/indicator` endpoint and `/lm-insights` page visualizing LM indicator snapshots.
+- Phase-8C (Governance/Docs): Doc content + embeddings RAG-ready — Full doc content and embeddings in control-plane for governance/docs RAG. Includes `pmagent docs.search` CLI, STRICT guards for Tier-0 docs (fragments + embeddings), and integration into `ops.tagproof`. See `docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md` for details.
+- Phase-8D (Governance/Docs): Atlas Governance Search Panel — `/api/docs/search` API endpoint and `/governance-search` HTML page for semantic search over Tier-0 governance docs. Integrated into Atlas viewer. See `docs/SSOT/ATLAS_GOVERNANCE_SEARCH_PANEL.md` for specification.
+- Phase-8D: System dashboard — `/dashboard` front door that summarizes status + LM insights for non-technical users.
+- Phase-8E: DB health graph — `/api/db/health_timeline` endpoint and `/db-insights` page visualizing DB health mode over time.
+- Phase-9A: BibleScholar passage UI — `/api/bible/passage` endpoint and `/bible` page for passage + theology commentary.

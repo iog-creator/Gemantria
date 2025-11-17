@@ -205,7 +205,7 @@ When investigating issues:
 
 If `mode=db_off`:
 
-1. **Check database driver**: Ensure `psycopg` or `psycopg2` is installed
+1. **Check database driver**: Ensure `psycopg3` is installed
    ```bash
    pip install psycopg[binary]
    ```

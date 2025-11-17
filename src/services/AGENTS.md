@@ -62,6 +62,7 @@ Describes service-level integrations (database + LM Studio) that provide externa
   - **Temporal**: `GET /api/v1/temporal` - Time series pattern analysis (Phase 8)
   - **Forecasting**: `GET /api/v1/forecast` - Predictive pattern modeling (Phase 8)
   - **Network**: `GET /api/v1/network/{concept_id}` - Concept subgraph exploration
+  - **Docs Search**: `GET /api/docs/search` - Semantic search over governance/docs (Phase-8D)
 - **Filtering & Pagination**: Efficient parameter-based filtering with result limits
 - **Error Handling**: Structured error responses with appropriate HTTP status codes
 

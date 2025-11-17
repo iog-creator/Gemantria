@@ -15,22 +15,17 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 
 from scripts.config.env import get_bible_db_dsn, get_rw_dsn
 
-# Check for Postgres driver availability
+# Check for Postgres driver availability (psycopg3 only)
 try:
     import psycopg  # noqa: F401
 
     HAS_POSTGRES_DRIVER = True
 except ImportError:
-    try:
-        import psycopg2  # noqa: F401
-
-        HAS_POSTGRES_DRIVER = True
-    except ImportError:
-        HAS_POSTGRES_DRIVER = False
+    HAS_POSTGRES_DRIVER = False
 
 
 class DbDriverMissingError(RuntimeError):
-    """Postgres database driver (psycopg/psycopg2) is not installed."""
+    """Postgres database driver (psycopg3) is not installed."""
 
 
 class DbUnavailableError(RuntimeError):
@@ -60,7 +55,7 @@ def get_control_engine() -> Engine:
     global _control_engine
 
     if not HAS_POSTGRES_DRIVER:
-        raise DbDriverMissingError("Postgres database driver (psycopg/psycopg2) not installed")
+        raise DbDriverMissingError("Postgres database driver (psycopg3) not installed")
 
     if _control_engine is None:
         dsn = get_rw_dsn()
@@ -88,7 +83,7 @@ def get_bible_engine() -> Engine:
     global _bible_engine
 
     if not HAS_POSTGRES_DRIVER:
-        raise DbDriverMissingError("Postgres database driver (psycopg/psycopg2) not installed")
+        raise DbDriverMissingError("Postgres database driver (psycopg3) not installed")
 
     if _bible_engine is None:
         dsn = get_bible_db_dsn()

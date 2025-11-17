@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-15 11:20:49
+Generated: 2025-11-16 09:56:47
 
 ## Active Rules
 
@@ -120,7 +120,6 @@ Generated: 2025-11-15 11:20:49
 - ADR-004-postgres-checkpointer: ADR-004: Postgres Checkpointer with BaseCheckpointSaver Interface
 - ADR-005-metrics-logging: ADR-005: Metrics & Structured Logging
 - ADR-006-observability-dashboards: ADR-006: Observability Dashboards & Queries
-- ADR-007-llm-integration: ADR-007: LLM Integration and Confidence Metadata
 - ADR-008-confidence-validation: ADR-008: Confidence-Aware Batch Validation
 - ADR-009-semantic-aggregation: ADR-009: Semantic Aggregation & Network Analysis
 - ADR-010-qwen-integration: ADR-010: Qwen3 Integration for Real Semantic Intelligence
@@ -140,15 +139,12 @@ Generated: 2025-11-15 11:20:49
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
-- ADR-032-bibledb-as-SSOT-roadmap: ADR-032: bible_db as Single Source of Truth (Roadmap)
 - ADR-033-ai-nouns-ssot-contract: ADR-033: AI Nouns SSOT Contract (v1)
 - ADR-034-uuid-key-evolution: ADR-034: UUID Key Evolution and FK Realignment
 - ADR-055-auto-docs-sync-ci: ADR-055: Auto-Docs Sync CI Enforcement
 - ADR-056-auto-housekeeping-ci: ADR-056: Auto-Housekeeping CI Enforcement
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
 - ADR-058-gpt-system-prompt-governance: ADR-058: GPT System Prompt Requirements as Operational Governance
-- ADR-065-postgres-ssot: ADR-065 — Postgres-First SSOT for Gemantria
-- ADR-066-lm-studio-control-plane-integration: ADR-066 — LM Studio + Control Plane Integration
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status
