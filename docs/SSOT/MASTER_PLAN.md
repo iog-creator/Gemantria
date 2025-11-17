@@ -152,6 +152,12 @@ All core development phases are complete. The system is operational with:
 - ✅ PR-4: Atlas Compliance Export
 - ⏳ Pending: Final test hardening in CI, governance wiring
 
+#### Postgres Control Plane & Governance Recording (Current Reality)
+
+- **Control schema (`control`)**: Migration `040_control_plane_schema.sql` creates the dedicated `control` schema with five core tables (`tool_catalog`, `capability_rule`, `doc_fragment`, `capability_session`, `agent_run`) plus `mv_compliance_7d` / `mv_compliance_30d` and the `control.refresh_compliance(window)` function. All writes go through centralized DSN loaders (`get_rw_dsn()`), and every row carries a `project_id` for multi-project support.
+- **Guarded tool calls → agent_run**: The Phase-1 Guard Shim (`agentpm/guarded/guard_shim.py`) and Gatekeeper (`agentpm/guarded/gatekeeper.py`) record each guarded tool call into `control.agent_run`, including PoR status (`por_ok`), JSON Schema status (`schema_ok`), provenance status (`provenance_ok`), violation codes (`MISSING_POR`, `RING_VIOLATION`, etc.), seed/model/tool_version, latency, and retry counts. Materialized views aggregate these rows into 7d/30d compliance ratios and top violation maps, which are exported to `share/atlas/control_plane/*.json`.
+- **Governance + housekeeping tracking**: Migration `015_create_governance_tracking.sql` creates `governance_artifacts`, `hint_emissions`, and `governance_compliance_log` to persist housekeeping and governance checks (Rule-026/Rule-058). Housekeeping scripts call `update_governance_artifact(...)`, `log_hint_emission(...)`, and `check_governance_freshness(...)` so that rule files, AGENTS.md entries, and runtime LOUD HINT emissions are mirrored into Postgres for audit and freshness monitoring.
+
 ---
 
 ## Phase 8: Multi-Temporal Analytics Suite
