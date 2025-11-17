@@ -629,6 +629,19 @@ eval.xrefs.badges:
 eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank eval.badges.patterns share.sync
 	@echo "[eval.package] OK"
 
+# Phase-8 eval wrapper targets (operator-friendly)
+.PHONY: eval.smoke
+eval.smoke: ci.exports.smoke eval.graph.calibrate.adv
+	@echo "[eval.smoke] Phase-8 local eval smoke (exports + advanced graph) — non-CI, hermetic tolerant."
+
+.PHONY: eval.report
+eval.report: eval.package
+	@echo "[eval.report] Phase-8 eval package complete — see share/ and badges/ outputs."
+
+.PHONY: eval.phase8
+eval.phase8: eval.package
+	@echo "[eval.phase8] Alias for Phase-8 eval package (eval.package)."
+
 # --- eval: rerank quality badge (from blend report) ---
 .PHONY: eval.badges.rerank
 eval.badges.rerank:

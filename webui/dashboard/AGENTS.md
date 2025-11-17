@@ -108,6 +108,7 @@ The `webui/dashboard/` directory contains React components for the advanced anal
 - **Data Errors**: Validation against TypeScript interfaces
 - **Timeout Handling**: Appropriate loading states and user feedback
 - **Fallback Data**: Graceful degradation when APIs unavailable
+- **UX Policy**: Error states are intentionally calm and non-technical. The dashboards show simple "Data unavailable (safe fallback)" messages instead of raw stack traces.
 
 ## Performance Considerations
 
@@ -171,6 +172,49 @@ The `webui/dashboard/` directory contains React components for the advanced anal
 - **Embedded**: Integration into larger applications
 - **Micro-frontend**: Independent deployment with shared routing
 - **Docker**: Containerized deployment with nginx
+
+## Orchestrator Dashboard Tiles
+
+### Purpose
+
+The orchestrator dashboard provides a high-level overview of system health, compliance, and knowledge base status for operational monitoring. It displays four key tiles:
+
+1. **System Health**: DB + LM health snapshot with overall status level
+2. **LM Stack**: LM indicator status (healthy/degraded/offline) with reason
+3. **Compliance**: Control-plane compliance metrics and latest agent run
+4. **Knowledge**: KB docs head snapshot with schema and document count
+
+### API Endpoints
+
+| Tile | Endpoint | Data Source | Behavior |
+|------|----------|-------------|----------|
+| System Health | `/api/status/system` | `get_system_status()` helper | Returns DB mode (ready/db_off/partial) and LM slots status |
+| LM Stack | `/api/lm/indicator` | `share/atlas/control_plane/lm_indicator.json` | Read-only wrapper; returns null snapshot if file missing |
+| Compliance | `/api/compliance/head` | `share/atlas/control_plane/compliance.head.json` | Hermetic: returns `ok=false` if file missing, never 500 |
+| Knowledge | `/api/kb/docs_head` | `share/atlas/control_plane/kb_docs.head.json` | Hermetic: returns `ok=false` if file missing, never 500 |
+
+### Read-Only & Hermetic Behavior
+
+- **All endpoints are read-only**: No database writes, no state changes
+- **DB-off tolerant**: All endpoints handle missing files gracefully
+- **Soft failures**: Missing files return `ok=false` with error message, never HTTP 500
+- **LM offline is normal**: Dashboard treats LM offline as a normal operational state
+- **Auto-refresh**: Dashboard refreshes every 30 seconds automatically
+
+### Data Normalization
+
+The `fetchOrchestratorSnapshot()` helper:
+- Fetches all four endpoints in parallel using `Promise.all()`
+- Normalizes missing/`ok=false` responses into `null` values
+- Provides friendly defaults for missing data
+- Stamps `lastUpdated` with current ISO timestamp
+
+### Display Guidelines
+
+- **Orchestrator-facing language**: Show summaries, not raw JSON or stack traces
+- **Status indicators**: Use color-coded badges (OK/WARN/ERROR) for quick scanning
+- **Graceful degradation**: Show "Data unavailable" messages when endpoints fail
+- **Last updated timestamp**: Display when data was last refreshed
 
 ## Related Documentation
 

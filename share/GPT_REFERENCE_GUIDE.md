@@ -129,7 +129,7 @@ The following environment variables control how local models are selected:
 - **`OLLAMA_BASE_URL`** – Base URL for Ollama's API (default: `http://127.0.0.1:11434`).
 - **`EMBEDDING_MODEL`** – Vector model (default: `text-embedding-bge-m3`).
 - **`THEOLOGY_MODEL`** – Main reasoning/theology model.
-- **`LOCAL_AGENT_MODEL`** – Local agent model (e.g. Granite 4 Tiny-H via Ollama).
+- **`LOCAL_AGENT_MODEL`** – Local agent model (e.g. Granite 4 Tiny-H - available in both LM Studio and Ollama).
 - **`MATH_MODEL`** – Optional math-heavy model.
 - **`RERANKER_MODEL`** – Optional reranker model (Granite reranker planned later).
 - **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`).
@@ -138,7 +138,9 @@ All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model
 
 **Phase-7E Profiles:**
 - **LEGACY**: Current working setup (BGE + Qwen models) - see `env_example.txt` for configuration
-- **GRANITE**: Recommended Granite-based setup via Ollama (Phase-7E) - use `INFERENCE_PROVIDER=ollama` and `ollama pull ibm/granite4.0-preview:tiny`
+- **GRANITE**: Recommended Granite-based setup (Phase-7E) - available in both LM Studio and Ollama:
+  - **LM Studio**: Use `INFERENCE_PROVIDER=lmstudio` and install via `lms get granite` (see `docs/runbooks/LM_STUDIO_SETUP.md`)
+  - **Ollama**: Use `INFERENCE_PROVIDER=ollama` and `ollama pull ibm/granite4.0-preview:tiny`
 
 **Legacy Support (Deprecated):**
 - `LM_EMBED_MODEL` → Use `EMBEDDING_MODEL` instead (will be removed in Phase-8)

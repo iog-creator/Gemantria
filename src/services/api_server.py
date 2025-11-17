@@ -97,6 +97,14 @@ if Path(export_dir).exists():
 else:
     LOG.warning(f"Export directory {export_dir} not found - static files not mounted")
 
+# Mount static files from share directory (PLAN-081: orchestrator dashboard)
+share_dir = Path("share")
+if share_dir.exists():
+    app.mount("/share", StaticFiles(directory=str(share_dir)), name="share")
+    LOG.info(f"Mounted static files from {share_dir} at /share")
+else:
+    LOG.warning(f"Share directory {share_dir} not found - static files not mounted")
+
 
 def get_export_path(filename: str) -> Path:
     """Get the full path to an export file."""
@@ -292,6 +300,282 @@ async def get_lm_indicator_endpoint() -> JSONResponse:
             status_code=500,
             detail="Failed to load LM indicator data",
         ) from e
+
+
+def _load_json_or_hint(path: Path) -> tuple[bool, dict | None, str | None]:
+    """Load JSON file with hermetic error handling.
+
+    Returns:
+        Tuple of (ok, data, error_message)
+        - ok: True if file exists and is valid JSON
+        - data: Parsed JSON dict, or None if error
+        - error_message: Error description, or None if ok
+    """
+    try:
+        if not path.exists():
+            return (False, None, f"File not found: {path}")
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            return (True, data, None)
+        except json.JSONDecodeError as e:
+            return (False, None, f"Invalid JSON: {e}")
+        except OSError as e:
+            return (False, None, f"Read error: {e}")
+    except Exception as e:
+        return (False, None, f"Unexpected error: {e}")
+
+
+@app.get("/api/compliance/head")
+async def get_compliance_head_endpoint() -> JSONResponse:
+    """Get compliance head snapshot for orchestrator dashboard.
+
+    Returns:
+        JSON with compliance data:
+        {
+            "ok": bool,
+            "snapshot": {
+                "generated_at": str,
+                "latest_agent_run": str | null,
+                "windows": {...},
+                ...
+            } | null,
+            "error": str | null
+        }
+    """
+    share_dir = Path("share")
+    compliance_file = share_dir / "atlas" / "control_plane" / "compliance.head.json"
+
+    ok, data, error_msg = _load_json_or_hint(compliance_file)
+
+    if ok:
+        return JSONResponse(
+            content={
+                "ok": True,
+                "snapshot": data,
+            }
+        )
+    else:
+        return JSONResponse(
+            content={
+                "ok": False,
+                "snapshot": None,
+                "error": error_msg,
+            }
+        )
+
+
+@app.get("/api/kb/docs_head")
+async def get_kb_docs_head_endpoint() -> JSONResponse:
+    """Get KB docs head snapshot for orchestrator dashboard.
+
+    Returns:
+        JSON with KB docs data:
+        {
+            "ok": bool,
+            "snapshot": {
+                "generated_at": str,
+                "docs": [...],
+                "schema": str,
+                "ok": bool,
+                "db_off": bool,
+                ...
+            } | null,
+            "error": str | null
+        }
+    """
+    share_dir = Path("share")
+    kb_docs_file = share_dir / "atlas" / "control_plane" / "kb_docs.head.json"
+
+    ok, data, error_msg = _load_json_or_hint(kb_docs_file)
+
+    if ok:
+        return JSONResponse(
+            content={
+                "ok": True,
+                "snapshot": data,
+            }
+        )
+    else:
+        return JSONResponse(
+            content={
+                "ok": False,
+                "snapshot": None,
+                "error": error_msg,
+            }
+        )
+
+
+@app.get("/api/mcp/catalog_summary")
+async def get_mcp_catalog_summary() -> JSONResponse:
+    """Get MCP catalog summary for orchestrator dashboard.
+
+    Returns:
+        JSON with MCP catalog summary:
+        {
+            "ok": bool,
+            "endpoint_count": int | null,
+            "last_updated": str | null,
+            "error": str | null
+        }
+    """
+    share_dir = Path("share")
+    docs_dir = Path("docs")
+    candidates = [
+        share_dir / "atlas" / "control_plane" / "mcp_catalog.json",
+        docs_dir / "atlas" / "data" / "mcp_catalog.json",
+    ]
+
+    last_error = None
+    for candidate in candidates:
+        ok, data, error = _load_json_or_hint(candidate)
+        if not ok:
+            last_error = error
+            continue
+
+        # Extract endpoint count from various possible keys
+        endpoints = data.get("endpoints") or data.get("tools") or []
+        if isinstance(endpoints, list):
+            count = len(endpoints)
+        elif isinstance(endpoints, dict):
+            count = len(endpoints)
+        else:
+            count = 0
+
+        last_updated = data.get("generated_at") or data.get("updated_at") or data.get("last_updated")
+
+        return JSONResponse(
+            content={
+                "ok": True,
+                "endpoint_count": count,
+                "last_updated": last_updated,
+                "error": None,
+            }
+        )
+
+    # If we get here, no usable file found
+    return JSONResponse(
+        content={
+            "ok": False,
+            "endpoint_count": None,
+            "last_updated": None,
+            "error": last_error or "MCP catalog summary unavailable",
+        }
+    )
+
+
+@app.get("/api/atlas/browser_verification")
+async def get_browser_verification_status() -> JSONResponse:
+    """Get browser verification status for orchestrator dashboard.
+
+    Returns:
+        JSON with browser verification status:
+        {
+            "ok": bool,
+            "status": "verified" | "partial" | "missing",
+            "verified_pages": int | null,
+            "error": str | null
+        }
+    """
+    evidence_dir = Path("evidence")
+    candidates = [
+        evidence_dir / "guard_browser_verification.json",
+        evidence_dir / "browser_screenshot_integrated.json",
+    ]
+
+    last_error = None
+    for path in candidates:
+        ok, data, error = _load_json_or_hint(path)
+        if not ok:
+            last_error = error
+            continue
+
+        # Derive status from evidence content
+        status = data.get("status") or data.get("verdict")
+        if status not in ("verified", "partial", "missing"):
+            # Default to verified if file exists and no explicit status
+            status = "verified" if ok else "missing"
+
+        verified_pages = data.get("verified_pages") or data.get("page_count") or data.get("pages_verified")
+
+        return JSONResponse(
+            content={
+                "ok": True,
+                "status": status,
+                "verified_pages": verified_pages,
+                "error": None,
+            }
+        )
+
+    # If we get here, no usable file found
+    return JSONResponse(
+        content={
+            "ok": False,
+            "status": "missing",
+            "verified_pages": None,
+            "error": last_error or "No browser verification evidence found",
+        }
+    )
+
+
+@app.get("/api/graph/stats_summary")
+async def get_graph_stats_summary() -> JSONResponse:
+    """Get graph stats summary for orchestrator dashboard.
+
+    Returns:
+        JSON with graph stats summary:
+        {
+            "ok": bool,
+            "nodes": int | null,
+            "edges": int | null,
+            "clusters": int | null,
+            "density": float | null,
+            "error": str | null
+        }
+    """
+    share_dir = Path("share")
+    export_dir = Path(os.getenv("EXPORT_DIR", "exports"))
+    candidates = [
+        share_dir / "exports" / "graph_stats.json",
+        export_dir / "graph_stats.json",
+    ]
+
+    last_error: str | None = None
+    for path in candidates:
+        ok, data, error = _load_json_or_hint(path)
+        if not ok or data is None:
+            last_error = error
+            continue
+
+        # Extract stats from various possible structures
+        # Support both top-level fields and nested totals structure
+        totals = data.get("totals") or {}
+        nodes = data.get("nodes") or totals.get("nodes")
+        edges = data.get("edges") or totals.get("edges")
+        clusters = data.get("clusters") or data.get("total_clusters")
+        density = data.get("density") or data.get("avg_density")
+
+        return JSONResponse(
+            content={
+                "ok": True,
+                "nodes": nodes,
+                "edges": edges,
+                "clusters": clusters,
+                "density": density,
+                "error": None,
+            }
+        )
+
+    # If we get here, no usable file found
+    return JSONResponse(
+        content={
+            "ok": False,
+            "nodes": None,
+            "edges": None,
+            "clusters": None,
+            "density": None,
+            "error": last_error or "Graph stats export not available",
+        }
+    )
 
 
 @app.get("/status", response_class=HTMLResponse)

@@ -30,7 +30,7 @@ This runbook provides step-by-step instructions for setting up LM Studio as a lo
 
 **Phase-7E**: Two profiles are available in `env_example.txt`:
 - **LEGACY**: Current working setup (BGE + Qwen models) - use `INFERENCE_PROVIDER=lmstudio`
-- **GRANITE**: Recommended Granite-based setup via Ollama - use `INFERENCE_PROVIDER=ollama`
+- **GRANITE**: Recommended Granite-based setup - available in both LM Studio and Ollama (see Granite Installation below)
 
 Create or update `.env.local` (or `.env`) with LM Studio settings. Choose ONE profile:
 
@@ -53,9 +53,9 @@ RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 AUTO_START_MCP_SSE=1
 ```
 
-#### Option B: GRANITE Profile (Recommended - Phase-7E via Ollama)
+#### Option B: GRANITE Profile (Recommended - Phase-7E)
 
-**Prerequisites**: Install Ollama and pull Granite models (see Granite Installation below).
+**Prerequisites**: Install Granite models via LM Studio (see Granite Installation below) or via Ollama.
 
 ```bash
 # Ollama Configuration (Phase-7E)
