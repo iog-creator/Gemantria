@@ -54,8 +54,18 @@ class DocTarget:
 
 CANONICAL_DOCS: List[DocTarget] = [
     DocTarget(logical_name="AGENTS_ROOT", role="ssot", repo_path=REPO_ROOT / "AGENTS.md", is_ssot=True),
-    DocTarget(logical_name="MASTER_PLAN", role="ssot", repo_path=REPO_ROOT / "MASTER_PLAN.md", is_ssot=True),
-    DocTarget(logical_name="RULES_INDEX", role="ssot", repo_path=REPO_ROOT / "RULES_INDEX.md", is_ssot=True),
+    DocTarget(
+        logical_name="MASTER_PLAN",
+        role="ssot",
+        repo_path=REPO_ROOT / "MASTER_PLAN.md",
+        is_ssot=True,
+    ),
+    DocTarget(
+        logical_name="RULES_INDEX",
+        role="ssot",
+        repo_path=REPO_ROOT / "RULES_INDEX.md",
+        is_ssot=True,
+    ),
 ]
 
 
@@ -168,7 +178,10 @@ def ingest_docs(dry_run: bool = False) -> int:
         if t.repo_path.is_file():
             existing_targets.append(t)
         else:
-            print(f"[WARN] Missing doc for logical_name={t.logical_name} path={t.repo_path}", file=sys.stderr)
+            print(
+                f"[WARN] Missing doc for logical_name={t.logical_name} path={t.repo_path}",
+                file=sys.stderr,
+            )
 
     if not existing_targets:
         print("ERROR: No documentation files found for ingestion.", file=sys.stderr)

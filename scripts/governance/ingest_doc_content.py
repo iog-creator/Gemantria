@@ -222,7 +222,10 @@ def ingest_doc_content(
             # Resolve file path
             file_path = REPO_ROOT / repo_path
             if not file_path.is_file():
-                print(f"[WARN] File not found: {repo_path} (logical_name={logical_name})", file=sys.stderr)
+                print(
+                    f"[WARN] File not found: {repo_path} (logical_name={logical_name})",
+                    file=sys.stderr,
+                )
                 continue
 
             # Read and chunk
@@ -290,10 +293,15 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="Compute chunks but don't write to DB")
     parser.add_argument("--limit", type=int, help="Limit number of docs processed")
     parser.add_argument(
-        "--only-agents", action="store_true", default=True, help="Only process AGENTS docs (default: True)"
+        "--only-agents",
+        action="store_true",
+        default=True,
+        help="Only process AGENTS docs (default: True)",
     )
     parser.add_argument(
-        "--all-docs", action="store_true", help="Process all enabled SSOT docs (overrides --only-agents)"
+        "--all-docs",
+        action="store_true",
+        help="Process all enabled SSOT docs (overrides --only-agents)",
     )
 
     args = parser.parse_args()

@@ -13,7 +13,12 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-from agentpm.lm.lm_status import check_lmstudio_health, check_ollama_health, compute_lm_status, print_lm_status_table
+from agentpm.lm.lm_status import (
+    check_lmstudio_health,
+    check_ollama_health,
+    compute_lm_status,
+    print_lm_status_table,
+)
 from pmagent.cli import app
 
 
@@ -143,7 +148,12 @@ def test_compute_lm_status_handles_down_services(mock_lmstudio, mock_ollama, mon
 def test_compute_lm_status_default_providers(monkeypatch):
     """Test compute_lm_status uses default providers when not set."""
     # Clear provider env vars
-    for key in ["LOCAL_AGENT_PROVIDER", "EMBEDDING_PROVIDER", "RERANKER_PROVIDER", "THEOLOGY_PROVIDER"]:
+    for key in [
+        "LOCAL_AGENT_PROVIDER",
+        "EMBEDDING_PROVIDER",
+        "RERANKER_PROVIDER",
+        "THEOLOGY_PROVIDER",
+    ]:
         monkeypatch.delenv(key, raising=False)
 
     monkeypatch.setenv("INFERENCE_PROVIDER", "ollama")
@@ -176,8 +186,18 @@ def test_print_lm_status_table():
     status = {
         "ok": True,
         "slots": [
-            {"slot": "local_agent", "provider": "ollama", "model": "granite4:tiny-h", "service_status": "OK"},
-            {"slot": "embedding", "provider": "ollama", "model": "granite-embedding:278m", "service_status": "OK"},
+            {
+                "slot": "local_agent",
+                "provider": "ollama",
+                "model": "granite4:tiny-h",
+                "service_status": "OK",
+            },
+            {
+                "slot": "embedding",
+                "provider": "ollama",
+                "model": "granite-embedding:278m",
+                "service_status": "OK",
+            },
             {
                 "slot": "reranker",
                 "provider": "ollama",
@@ -211,7 +231,12 @@ def test_lm_status_command_json(mock_compute, runner):
     mock_status = {
         "ok": True,
         "slots": [
-            {"slot": "local_agent", "provider": "ollama", "model": "granite4:tiny-h", "service_status": "OK"},
+            {
+                "slot": "local_agent",
+                "provider": "ollama",
+                "model": "granite4:tiny-h",
+                "service_status": "OK",
+            },
         ],
     }
     mock_compute.return_value = mock_status
@@ -230,8 +255,18 @@ def test_lm_status_command_table(mock_compute, runner):
     mock_status = {
         "ok": True,
         "slots": [
-            {"slot": "local_agent", "provider": "ollama", "model": "granite4:tiny-h", "service_status": "OK"},
-            {"slot": "embedding", "provider": "ollama", "model": "granite-embedding:278m", "service_status": "OK"},
+            {
+                "slot": "local_agent",
+                "provider": "ollama",
+                "model": "granite4:tiny-h",
+                "service_status": "OK",
+            },
+            {
+                "slot": "embedding",
+                "provider": "ollama",
+                "model": "granite-embedding:278m",
+                "service_status": "OK",
+            },
         ],
     }
     mock_compute.return_value = mock_status

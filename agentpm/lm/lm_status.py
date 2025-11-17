@@ -74,7 +74,11 @@ def compute_lm_status() -> dict[str, Any]:
 
     # Define slots
     slots = [
-        {"name": "local_agent", "provider_key": "local_agent_provider", "model_key": "local_agent_model"},
+        {
+            "name": "local_agent",
+            "provider_key": "local_agent_provider",
+            "model_key": "local_agent_model",
+        },
         {"name": "embedding", "provider_key": "embedding_provider", "model_key": "embedding_model"},
         {"name": "reranker", "provider_key": "reranker_provider", "model_key": "reranker_model"},
         {"name": "theology", "provider_key": "theology_provider", "model_key": "theology_model"},

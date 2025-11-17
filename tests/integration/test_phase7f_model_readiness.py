@@ -144,9 +144,10 @@ class TestSlot3Reranker:
         assert provider == "ollama", f"Expected provider=ollama, got {provider}"
         assert reranker is not None, "RERANKER_MODEL not configured"
         assert "granite" in reranker.lower(), f"Expected Granite reranker model, got {reranker}"
-        assert strategy in ("embedding_only", "granite_llm"), (
-            f"Expected reranker_strategy in (embedding_only, granite_llm), got {strategy}"
-        )
+        assert strategy in (
+            "embedding_only",
+            "granite_llm",
+        ), f"Expected reranker_strategy in (embedding_only, granite_llm), got {strategy}"
 
     def test_granite_reranker(self, model_config):
         """Test Granite reranker via Ollama adapter."""
@@ -181,9 +182,10 @@ class TestSlot3Reranker:
 
         # Verify reranker strategy is used
         strategy = model_config.get("reranker_strategy", "embedding_only")
-        assert strategy in ("embedding_only", "granite_llm"), (
-            f"Expected reranker_strategy in (embedding_only, granite_llm), got {strategy}"
-        )
+        assert strategy in (
+            "embedding_only",
+            "granite_llm",
+        ), f"Expected reranker_strategy in (embedding_only, granite_llm), got {strategy}"
 
 
 class TestSlot4Theology:
@@ -198,7 +200,10 @@ class TestSlot4Theology:
         assert "christian" in theology.lower() or "bible" in theology.lower(), (
             f"Expected Christian/Bible model, got {theology}"
         )
-        assert provider in ("lmstudio", "ollama"), f"Expected theology_provider in (lmstudio, ollama), got {provider}"
+        assert provider in (
+            "lmstudio",
+            "ollama",
+        ), f"Expected theology_provider in (lmstudio, ollama), got {provider}"
 
     def test_theology_chat(self, model_config):
         """Test theology chat via theology adapter."""
@@ -224,7 +229,16 @@ class TestSlot4Theology:
 
         # Check for theological content (case-insensitive)
         response_lower = response.lower()
-        theological_keywords = ["god", "jesus", "christ", "love", "world", "believe", "eternal", "life"]
+        theological_keywords = [
+            "god",
+            "jesus",
+            "christ",
+            "love",
+            "world",
+            "believe",
+            "eternal",
+            "life",
+        ]
         assert any(keyword in response_lower for keyword in theological_keywords), (
             f"Response should contain theological content, got: {response[:200]}"
         )
