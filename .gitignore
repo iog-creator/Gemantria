@@ -37,3 +37,9 @@ prompts/run_*.jsonl
 .server.pid
 json,sys
 .env.local
+
+# Local eval artifacts (not in SHARE_MANIFEST)
+share/eval/
+
+# Local scratch PR body files
+tmp_pr_body*.md
