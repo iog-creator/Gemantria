@@ -159,6 +159,16 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 - P0.4-P0.5: Pipeline & AI (1.5 hours)
 - P0.6-P0.8: Testing & Production (45 min)
 
+### Phase-7: Runtime Bring-Up Completion (Planning)
+
+- **7A**: LM Studio & Model Configuration Normalization
+- **7B**: LM Studio & Model Configuration Normalization
+  - Profiles:
+    - LEGACY: BGE-M3 embeddings + Qwen reranker, theology + math as current working setup.
+    - GRANITE: Granite 4 Tiny-H local agent, BGE-M3 reserved for Bible/multilingual, Granite embedding English R2 + Granite reranker English R2 for general retrieval lanes (knowledge/analytics).
+  - Update LM_MODEL_CATALOG, LM_STUDIO_SETUP, GPT_REFERENCE_GUIDE, and env_example.txt to keep LEGACY working while documenting GRANITE as the recommended future path.
+- **7C**: Snapshot Integrity & Drift Review
+
 - Phase-7F (COMPLETE): Flexible local LM architecture (Ollama + LM Studio per-slot routing)
 - Phase-7G: Added `pmagent lm.status` command to introspect LM providers, models, and local service health.
 - Phase-7G: Basic UI/TV wiring — system status JSON endpoint, HTML status page, and LM/DB health TVs.
