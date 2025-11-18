@@ -1870,6 +1870,11 @@ bringup.live: ## Unified live bring-up: strict reality-check (DB/LM/control) + b
 	@python3 -m pmagent reality-check check --mode strict --no-dashboards
 	@$(MAKE) bringup.001
 
+# --- AI Documentation Helpers ---
+.PHONY: ai.docs.reality-check
+ai.docs.reality-check: ## Generate AI notes for pmagent reality-check (uses Granite when available)
+	@$(PYTHON) -m agentpm.ai_docs.reality_check_ai_notes
+
 # --- Reality Check #1: Automated bring-up for SSOT Docs → Postgres → LM Studio Q&A ---
 .PHONY: reality.check.1
 reality.check.1: ## Run Reality Check #1: automated bring-up (Postgres + LM Studio + ingest + golden question)

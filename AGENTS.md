@@ -245,6 +245,9 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - `make pm.snapshot` — Generate PM-facing status snapshot with DSN posture proofs and 25-file manifest tracking
 - `make share.manifest.verify` — Verify share directory contains exactly 25 files
 
+**AI-in-the-loop docs helpers:**
+- `pmagent docs reality-check-ai-notes` — Uses Granite (LM Studio) when available to propose orchestrator-facing notes about the reality-check system; safe when LM is off (writes placeholder file)
+
 **MCP & Atlas targets:**
 - `make mcp.dev.bench` — Run MCP endpoint benchmarks
 - `make mcp.catalog.export` — Export MCP catalog JSON
