@@ -141,6 +141,11 @@ RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 # Optional: math-heavy model (unchanged)
 # MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 
+# Optional: local agent (Granite chat model)
+# LOCAL_AGENT_MODEL=granite4:tiny-h
+# Optional: embedding model (Granite, general English retrieval)
+# EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+
 # Optional: reranker model (Granite)
 # RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
 

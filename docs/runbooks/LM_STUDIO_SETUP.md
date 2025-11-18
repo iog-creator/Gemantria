@@ -63,10 +63,10 @@ INFERENCE_PROVIDER=ollama
 OLLAMA_BASE_URL=http://127.0.0.1:11434
 
 # Granite Model Configuration (Phase-7E)
-EMBEDDING_MODEL=text-embedding-bge-m3      # keep BGE for now
+EMBEDDING_MODEL=text-embedding-bge-m3      # BGE-M3 for Bible/multilingual retrieval (bible_db, scripture-first flows)
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 LOCAL_AGENT_MODEL=granite4:tiny-h          # or ibm/granite4:tiny-h
-RERANKER_MODEL=qwen/qwen3-8b-reranker      # Granite reranker later via microservice
+RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2    # Granite R2 reranker for general retrieval (set back to qwen.qwen3-reranker if not installed)
 ```
 
 **Note**: The runtime loads all model IDs from `scripts/config/env.py` via `get_lm_model_config()`. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
@@ -135,11 +135,12 @@ lms ps
 - `qwen.qwen3-reranker-0.6b` (reranking)
 
 **Required Models (GRANITE Profile - Phase-7D)**:
-- `ibm-granite/granite-4.0-h-tiny` (local agent/workflow model)
-- `ibm-granite/granite-embedding-english-r2` (embeddings)
-- `ibm-granite/granite-embedding-reranker-english-r2` (reranker)
-- `christian-bible-expert-v2.0-12b` (theology enrichment - unchanged)
-- `self-certainty-qwen3-1.7b-base-math` (math verification - unchanged)
+- `ibm-granite/granite-4.0-h-tiny` — local agent/workflow model (router, pmagent flows)
+- `text-embedding-bge-m3` — embeddings for Bible/multilingual retrieval (bible_db, scripture-first flows)
+- `ibm-granite/granite-embedding-english-r2` — embeddings for general English knowledge/analytics
+- `ibm-granite/granite-embedding-reranker-english-r2` — reranker for graph/knowledge retrieval lanes
+- `christian-bible-expert-v2.0-12b` — theology enrichment (unchanged)
+- `self-certainty-qwen3-1.7b-base-math` — math verification (unchanged)
 
 ### Granite Installation (Phase-7D)
 

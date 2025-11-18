@@ -133,7 +133,7 @@ The following environment variables control how local models are selected:
 - **`THEOLOGY_MODEL`** – Main reasoning/theology model.
 - **`LOCAL_AGENT_MODEL`** – Local agent model (e.g. Granite 4 Tiny-H - available in both LM Studio and Ollama).
 - **`MATH_MODEL`** – Optional math-heavy model.
-- **`RERANKER_MODEL`** – Optional reranker model (Granite reranker planned later).
+- **`RERANKER_MODEL`** – Optional reranker model (Granite R2 recommended: `ibm-granite/granite-embedding-reranker-english-r2`; use `qwen.qwen3-reranker-0.6b` as a lighter fallback).
 - **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`).
 
 All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model_config()`. The LM Studio adapter and the Ollama adapter both read from the same configuration and pick the correct runtime based on `INFERENCE_PROVIDER`.
@@ -143,6 +143,11 @@ All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model
 - **GRANITE**: Recommended Granite-based setup (Phase-7E) - available in both LM Studio and Ollama:
   - **LM Studio**: Use `INFERENCE_PROVIDER=lmstudio` and install via `lms get granite` (see `docs/runbooks/LM_STUDIO_SETUP.md`)
   - **Ollama**: Use `INFERENCE_PROVIDER=ollama` and `ollama pull ibm/granite4.0-preview:tiny`
+
+**Recommended combinations (Phase-7E+):**
+- **Bible/multilingual retrieval**: `EMBEDDING_MODEL=text-embedding-bge-m3`, `RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2`.
+- **General English knowledge/analytics**: `EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2`, `RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2`.
+- **Local agent (router)**: `LOCAL_AGENT_MODEL` set to `granite4:tiny-h` (Ollama) or `ibm-granite/granite-4.0-h-tiny` (LM Studio), depending on `INFERENCE_PROVIDER`.
 
 **Legacy Support (Deprecated):**
 - `LM_EMBED_MODEL` → Use `EMBEDDING_MODEL` instead (will be removed in Phase-8)
