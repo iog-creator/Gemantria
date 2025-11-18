@@ -47,6 +47,7 @@ from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
 from agentpm.lm.lm_status import compute_lm_status, print_lm_status_table  # noqa: E402
 from agentpm.status.explain import explain_system_status  # noqa: E402
 from agentpm.docs.search import search_docs  # noqa: E402
+from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -466,6 +467,16 @@ def mcp_sse_ensure() -> None:
         text=True,
     )
     raise typer.Exit(code=proc.returncode)
+
+
+@docs_app.command(
+    "reality-check-ai-notes",
+    help="Generate AI notes for pmagent reality-check (uses Granite when available)",
+)
+def docs_reality_check_ai_notes() -> None:
+    """Generate orchestrator-facing AI notes about the reality-check system."""
+    exit_code = reality_check_ai_notes_main()
+    raise typer.Exit(code=exit_code)
 
 
 @docs_app.command("search", help="Search governance/docs content via semantic similarity")
