@@ -35,7 +35,7 @@ from sqlalchemy import text
 
 from agentpm.adapters import lm_studio
 from agentpm.db.loader import get_control_engine
-from scripts.config.env import get_lm_model_config
+from scripts.config.env import get_retrieval_lane_models
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -45,10 +45,10 @@ def get_embedding_model(model_name: str | None = None) -> str:
     """Get embedding model name from config or override."""
     if model_name:
         return model_name
-    cfg = get_lm_model_config()
+    cfg = get_retrieval_lane_models()
     model = cfg.get("embedding_model")
     if not model:
-        raise RuntimeError("No EMBEDDING_MODEL configured. Set EMBEDDING_MODEL in .env")
+        raise RuntimeError("No EMBEDDING_MODEL configured. Set EMBEDDING_MODEL or a Granite override in .env")
     return model
 
 

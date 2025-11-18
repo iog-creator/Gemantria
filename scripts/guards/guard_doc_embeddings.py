@@ -46,14 +46,14 @@ sys.path.insert(0, str(ROOT))
 from sqlalchemy import text
 
 from agentpm.db.loader import get_control_engine
-from scripts.config.env import get_lm_model_config
+from scripts.config.env import get_retrieval_lane_models
 
 
 def get_embedding_model(model_name: str | None = None) -> str:
     """Get embedding model name from config or override."""
     if model_name:
         return model_name
-    cfg = get_lm_model_config()
+    cfg = get_retrieval_lane_models()
     model = cfg.get("embedding_model")
     if not model:
         return "unknown"  # Will cause check to fail gracefully

@@ -80,6 +80,16 @@ OLLAMA_BASE_URL=http://127.0.0.1:11434
 #   - LEGACY: Current working setup (BGE + Qwen models)
 #   - GRANITE: Recommended Granite-based setup via Ollama (Phase-7E)
 
+# Retrieval profile switch (controls embedding + reranker defaults)
+#   LEGACY  → BGE + Qwen (current behavior)
+#   GRANITE → Granite embedding + reranker when overrides are configured
+RETRIEVAL_PROFILE=LEGACY
+
+# Optional Granite overrides (used when RETRIEVAL_PROFILE=GRANITE)
+# GRANITE_EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# GRANITE_RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+# GRANITE_LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny-GGUF
+
 # ============================================================================
 # PROFILE: LEGACY (Current Working Setup)
 # ============================================================================

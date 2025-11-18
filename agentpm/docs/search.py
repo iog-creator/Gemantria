@@ -19,15 +19,15 @@ from sqlalchemy import text
 
 from agentpm.adapters import lm_studio
 from agentpm.db.loader import get_control_engine
-from scripts.config.env import get_lm_model_config
+from scripts.config.env import get_retrieval_lane_models
 
 
-def get_embedding_model() -> str:
-    """Get embedding model name from config."""
-    cfg = get_lm_model_config()
-    model = cfg.get("embedding_model")
+def _get_retrieval_embedding_model() -> str:
+    """Resolve embedding model for retrieval lane (profile-aware)."""
+    lane = get_retrieval_lane_models()
+    model = lane.get("embedding_model")
     if not model:
-        raise RuntimeError("No EMBEDDING_MODEL configured")
+        raise RuntimeError("No EMBEDDING_MODEL configured for retrieval lane")
     return model
 
 
@@ -64,7 +64,7 @@ def search_docs(
 
     # Get model name
     try:
-        model = model_name or get_embedding_model()
+        model = model_name or _get_retrieval_embedding_model()
         result["model_name"] = model
     except Exception as e:
         result["error"] = f"Failed to get embedding model: {e}"

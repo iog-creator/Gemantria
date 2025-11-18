@@ -22,6 +22,21 @@ _REDACT = re.compile(r"://[^@]*@")
 
 _LOADED = False
 
+_PROFILE_DEFAULTS = {
+    "LEGACY": {
+        "embedding_model": "text-embedding-bge-m3",
+        "reranker_model": "qwen.qwen3-reranker-0.6b",
+        "local_agent_model": "qwen/qwen3-8b",
+        "theology_model": "christian-bible-expert-v2.0-12b",
+    },
+    "GRANITE": {
+        "embedding_model": "ibm-granite/granite-embedding-english-r2",
+        "reranker_model": "ibm-granite/granite-embedding-reranker-english-r2",
+        "local_agent_model": "ibm-granite/granite-4.0-h-tiny-GGUF",
+        "theology_model": "christian-bible-expert-v2.0-12b",
+    },
+}
+
 
 def _ensure_loaded() -> None:
     global _LOADED
@@ -222,6 +237,12 @@ def get_lm_model_config() -> dict[str, str | None]:
         - theology_lmstudio_base_url: str | None - LM Studio base URL for theology (default: "http://127.0.0.1:1234")
         - theology_lmstudio_api_key: str | None - LM Studio API key for theology (optional)
         - math_model: str | None - Math verification model ID
+        - retrieval_profile: str - Active retrieval profile ("LEGACY" default)
+        - granite_embedding_model: str | None - Granite embedding model ID reference
+        - granite_reranker_model: str | None - Granite reranker model ID reference
+        - granite_local_agent_model: str | None - Granite local agent model ID reference
+        - legacy_profile_defaults: dict - Reference defaults for LEGACY profile slots
+        - granite_profile_defaults: dict - Reference defaults for GRANITE profile slots
 
     Legacy Support:
         - LM_EMBED_MODEL → EMBEDDING_MODEL (deprecated, will be removed in Phase-8)
@@ -231,6 +252,15 @@ def get_lm_model_config() -> dict[str, str | None]:
     import warnings
 
     provider = (env("INFERENCE_PROVIDER", "lmstudio") or "lmstudio").strip()
+    retrieval_profile = (env("RETRIEVAL_PROFILE", "LEGACY") or "LEGACY").strip().upper()
+    if retrieval_profile not in _PROFILE_DEFAULTS:
+        retrieval_profile = "LEGACY"
+
+    granite_models = {
+        "embedding_model": env("GRANITE_EMBEDDING_MODEL"),
+        "reranker_model": env("GRANITE_RERANKER_MODEL"),
+        "local_agent_model": env("GRANITE_LOCAL_AGENT_MODEL"),
+    }
 
     # Provider enable/disable flags
     ollama_enabled = env("OLLAMA_ENABLED", "true").lower() in ("1", "true", "yes")
@@ -248,13 +278,16 @@ def get_lm_model_config() -> dict[str, str | None]:
     theology_provider = env("THEOLOGY_PROVIDER") or "lmstudio"
 
     # Canonical vars
-    embedding = env("EMBEDDING_MODEL")
-    theology = env("THEOLOGY_MODEL")
+    legacy_defaults = _PROFILE_DEFAULTS["LEGACY"]
+    granite_defaults = _PROFILE_DEFAULTS["GRANITE"]
+
+    embedding = env("EMBEDDING_MODEL") or legacy_defaults["embedding_model"]
+    theology = env("THEOLOGY_MODEL") or legacy_defaults["theology_model"]
     theology_lmstudio_base_url = env("THEOLOGY_LMSTUDIO_BASE_URL", "http://127.0.0.1:1234")
     theology_lmstudio_api_key = env("THEOLOGY_LMSTUDIO_API_KEY")
-    local_agent = env("LOCAL_AGENT_MODEL")
+    local_agent = env("LOCAL_AGENT_MODEL") or legacy_defaults["local_agent_model"]
     math_model = env("MATH_MODEL")
-    reranker = env("RERANKER_MODEL")
+    reranker = env("RERANKER_MODEL") or legacy_defaults["reranker_model"]
     reranker_strategy = env("RERANKER_STRATEGY", "embedding_only")
 
     # Phase-7F: Normalize model names for Ollama when provider is ollama
@@ -310,6 +343,12 @@ def get_lm_model_config() -> dict[str, str | None]:
         "theology_lmstudio_base_url": theology_lmstudio_base_url,
         "theology_lmstudio_api_key": theology_lmstudio_api_key,
         "math_model": math_model,
+        "retrieval_profile": retrieval_profile,
+        "granite_embedding_model": granite_models["embedding_model"],
+        "granite_reranker_model": granite_models["reranker_model"],
+        "granite_local_agent_model": granite_models["local_agent_model"],
+        "legacy_profile_defaults": legacy_defaults.copy(),
+        "granite_profile_defaults": granite_defaults.copy(),
     }
 
 
@@ -355,6 +394,62 @@ def get_reranker_model() -> str:
     """
     cfg = get_lm_model_config()
     return cfg.get("reranker_model") or "qwen-reranker"
+
+
+def get_retrieval_lane_models() -> dict[str, str | bool | None]:
+    """
+    Phase-7C: Determine retrieval lane models (embedding + reranker) with profile awareness.
+
+    Returns:
+        Dict containing:
+        - profile: Active retrieval profile ("LEGACY" or "GRANITE")
+        - embedding_model: Model ID to use for embeddings (profile aware)
+        - reranker_model: Model ID to use for reranker (profile aware)
+        - granite_active: bool flag indicating Granite lane is active
+    """
+    cfg = get_lm_model_config()
+    profile = (cfg.get("retrieval_profile") or "LEGACY").upper()
+    legacy_defaults = cfg.get("legacy_profile_defaults") or {}
+    default_embedding = legacy_defaults.get("embedding_model", "text-embedding-bge-m3")
+    default_reranker = legacy_defaults.get("reranker_model", "qwen.qwen3-reranker-0.6b")
+    embedding = cfg.get("embedding_model") or default_embedding
+    reranker = cfg.get("reranker_model") or default_reranker
+    granite_active = False
+
+    if profile == "GRANITE":
+        granite_embedding = cfg.get("granite_embedding_model")
+        granite_reranker = cfg.get("granite_reranker_model")
+        missing: list[str] = []
+
+        if granite_embedding:
+            embedding = granite_embedding
+        else:
+            missing.append("embedding")
+
+        if granite_reranker:
+            reranker = granite_reranker
+        else:
+            missing.append("reranker")
+
+        if missing:
+            print(
+                f"HINT: retrieval: GRANITE profile requested but missing {', '.join(missing)} model(s); "
+                "falling back to LEGACY retrieval lane (BGE + Qwen)",
+                flush=True,
+            )
+        else:
+            granite_active = True
+            print(
+                f"HINT: retrieval: using GRANITE profile (embed={embedding}, rerank={reranker})",
+                flush=True,
+            )
+
+    return {
+        "profile": profile,
+        "embedding_model": embedding,
+        "reranker_model": reranker,
+        "granite_active": granite_active,
+    }
 
 
 def snapshot(path: str) -> None:

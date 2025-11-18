@@ -56,6 +56,7 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - `EMBEDDING_MODEL=bge-m3:latest` (Ollama: `qllama/bge-m3`)
     - `RERANKER_MODEL=bge-reranker-v2-m3:latest` (Ollama: `bona/bge-reranker-v2-m3`)
     - `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B` (via theology adapter)
+  - **Retrieval Profile (Phase-7C)**: `RETRIEVAL_PROFILE=LEGACY` (default) keeps BGE + Qwen retrieval. Setting `RETRIEVAL_PROFILE=GRANITE` switches retrieval embeddings/rerankers to Granite IDs resolved via `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Misconfigured Granite profiles emit a `HINT` and fall back to LEGACY for hermetic runs.
 
 ### LM Status Command
 

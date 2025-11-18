@@ -134,6 +134,7 @@ The following environment variables control how local models are selected:
 - **`LOCAL_AGENT_MODEL`** – Local agent model (e.g. Granite 4 Tiny-H - available in both LM Studio and Ollama).
 - **`MATH_MODEL`** – Optional math-heavy model.
 - **`RERANKER_MODEL`** – Optional reranker model (Granite reranker planned later).
+- **`RETRIEVAL_PROFILE`** – `LEGACY` (default) keeps BGE + Qwen retrieval. `GRANITE` switches retrieval embeddings/rerankers to Granite IDs using `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Missing Granite overrides trigger a HINT and fall back to LEGACY.
 - **`AUTO_START_MCP_SSE`** – Auto-start MCP SSE server during bring-up (default: `0`).
 
 All LM configuration is centralized in `scripts/config/env.py` via `get_lm_model_config()`. The LM Studio adapter and the Ollama adapter both read from the same configuration and pick the correct runtime based on `INFERENCE_PROVIDER`.

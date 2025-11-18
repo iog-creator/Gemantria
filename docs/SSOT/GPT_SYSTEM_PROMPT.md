@@ -75,6 +75,14 @@ test -f evidence/webproof/index.png && echo "[[IMAGE]] evidence/webproof/index.p
 
 Notes: Use Rule-062 validation at the start of every OPS block. If no visual/web artifacts are touched, state: "Browser Verification not applicable."
 
+LM RETRIEVAL PROFILES (Phase-7C)
+* Default retrieval lane is `RETRIEVAL_PROFILE=LEGACY` (BGE + Qwen). No behavior change when unset.
+* To opt into Granite-based retrieval, set `RETRIEVAL_PROFILE=GRANITE` and configure:
+  * `GRANITE_EMBEDDING_MODEL`
+  * `GRANITE_RERANKER_MODEL`
+  * `GRANITE_LOCAL_AGENT_MODEL`
+* The centralized loader emits a `HINT: retrieval: ...` line whenever profile=GRANITE. Missing Granite envs cause an automatic LEGACY fallback (still with a HINT) so CI remains hermetic. Cursor instructions must mention the profile being activated and capture the HINT in evidence when toggling Granite.
+
 ONCE-PER-REPLY RULES
 * Only one Cursor runnable block per reply unless the Orchestrator explicitly requests multiple blocks.
 * Do not ask for confirmation questions inside the runnable block. If a choice is ambiguous, the PM will pick a safe default and proceed (HINT-first).
