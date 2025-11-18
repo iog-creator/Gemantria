@@ -71,6 +71,22 @@ RERANKER_MODEL=qwen/qwen3-8b-reranker      # Granite reranker later via microser
 
 **Note**: The runtime loads all model IDs from `scripts/config/env.py` via `get_lm_model_config()`. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
 
+#### Retrieval Profile Switch (Phase-7C)
+
+Set `RETRIEVAL_PROFILE` to control which embedding + reranker pair the retrieval lane uses:
+
+```bash
+# LEGACY (default): BGE + Qwen (no behavior change)
+RETRIEVAL_PROFILE=LEGACY
+
+# Optional Granite overrides (only applied when RETRIEVAL_PROFILE=GRANITE)
+# GRANITE_EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# GRANITE_RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+# GRANITE_LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny-GGUF
+```
+
+When `RETRIEVAL_PROFILE=GRANITE`, the retrieval config automatically switches to the Granite models above (or your overrides). If any Granite env is missing, the loader emits a `HINT` and falls back to LEGACY values so CI remains deterministic.
+
 To inspect models currently exposed by LM Studio and validate configuration, run:
 
 ```bash

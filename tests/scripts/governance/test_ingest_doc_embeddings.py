@@ -10,9 +10,9 @@ from scripts.governance import ingest_doc_embeddings as mod
 
 
 def test_get_embedding_model_from_config() -> None:
-    """Test that get_embedding_model retrieves model from config."""
-    with patch("scripts.governance.ingest_doc_embeddings.get_lm_model_config") as mock_config:
-        mock_config.return_value = {"embedding_model": "bge-m3:latest"}
+    """Test that get_embedding_model retrieves model from profile-aware config."""
+    with patch("scripts.governance.ingest_doc_embeddings.get_retrieval_lane_models") as mock_lane:
+        mock_lane.return_value = {"embedding_model": "bge-m3:latest"}
         model = mod.get_embedding_model()
         assert model == "bge-m3:latest"
 
@@ -25,8 +25,8 @@ def test_get_embedding_model_override() -> None:
 
 def test_get_embedding_model_missing() -> None:
     """Test that missing model raises RuntimeError."""
-    with patch("scripts.governance.ingest_doc_embeddings.get_lm_model_config") as mock_config:
-        mock_config.return_value = {}
+    with patch("scripts.governance.ingest_doc_embeddings.get_retrieval_lane_models") as mock_lane:
+        mock_lane.return_value = {}
         with pytest.raises(RuntimeError, match="No EMBEDDING_MODEL configured"):
             mod.get_embedding_model()
 
