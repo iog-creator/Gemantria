@@ -15,6 +15,12 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 2) Determinism: content_hash identity; uuidv7 surrogate; fixed seeds; position_index.
 3) Safety: **bible_db is READ-ONLY**; parameterized SQL only; **fail-closed if <50 nouns** (ALLOW_PARTIAL=1 is explicit).
 
+## pmagent Status
+
+See `docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md` for current vs intended state of pmagent commands and capabilities.
+
+See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation design and validation schema.
+
 ## Environment
 - venv: `python -m venv .venv && source .venv/bin/activate`
 - install: `make deps`
@@ -39,8 +45,8 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - Checkpointer: `CHECKPOINTER=postgres|memory` (default: memory for CI/dev)
 - LLM: Local inference providers (LM Studio or Ollama) when enabled; confidence is metadata only.
   - **Inference Providers** (Phase-7E): Supports both LM Studio and Ollama via `INFERENCE_PROVIDER`:
-    - `lmstudio`: OpenAI-compatible API (`OPENAI_BASE_URL`)
-    - `ollama`: Native HTTP API (`OLLAMA_BASE_URL`) - **Recommended for Granite 4.0 models**
+    - `lmstudio`: OpenAI-compatible API (`OPENAI_BASE_URL`) - **Granite models available in LM Studio**
+    - `ollama`: Native HTTP API (`OLLAMA_BASE_URL`) - **Granite models also available via Ollama**
   - **Setup**: See `docs/runbooks/LM_STUDIO_SETUP.md` for LM Studio setup or `docs/runbooks/OLLAMA_ALTERNATIVE.md` for Ollama
   - **Quick Start (LM Studio)**: Set `INFERENCE_PROVIDER=lmstudio`, `LM_STUDIO_ENABLED=1`, `OPENAI_BASE_URL=http://127.0.0.1:9994/v1`
   - **Quick Start (Ollama)**: Set `INFERENCE_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, then `ollama pull ibm/granite4.0-preview:tiny`
@@ -802,6 +808,20 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
   - Seed+proof: `DEMO_DB=1 make atlas.demo.proof` (requires `GEMATRIA_DSN`, writes demo rows)
   - Cleanup: `DEMO_DB=1 make atlas.demo.reset`
   - Safety: DEMO seed is **dev-only**; CI/release must **not** invoke these targets.
+
+#### 13. Reality Check Agent (System Validation)
+- **Purpose:** Unified environment validation across env/DSN, DB/control plane, LM/models, exports, and eval smokes with HINT/STRICT modes
+- **Reads:** Environment variables, DSN configs, DB health, LM status, control plane exports, eval smoke targets
+- **Writes:** JSON verdict to stdout, human summary to stderr
+- **Requirements:** Hermetic behavior (works without DB/LM), HINT/STRICT mode support, comprehensive but single-command validation
+- **System Prompt:**
+  > You are the Reality Check Agent. Validate the entire system environment and report a structured verdict. Use HINT mode for development (tolerates missing non-critical components) and STRICT mode for production (all components must be OK).
+- **Task Prompt:**
+  > Run comprehensive system validation in {MODE} mode. Check env/DSN, DB/control plane, LM/models, exports, and eval smokes. Return JSON verdict with overall_ok flag and detailed component status.
+- **pmagent Command:** `pmagent reality-check check --mode hint|strict [--json-only] [--no-dashboards]`
+  - **HINT mode (hermetic / PR):** DB/env must be correct; LM/exports/eval may be offline and produce hints without failing the run.
+  - **STRICT mode (live-ready):** DB, control-plane, and LM providers must be reachable; failures are treated as errors and reflected in `overall_ok=false`.
+  - **Unified bringup:** `make bringup.live` composes `pmagent reality-check check --mode strict --no-dashboards` with `make bringup.001` to provide a single live bringup gate for humans.
 
 ### Support Agents (Resilience & Governance)
 

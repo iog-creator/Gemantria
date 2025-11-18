@@ -76,6 +76,9 @@
 - LM Studio model configuration normalization
 - add Phase-7 planning section
 
+- add Postgres Control Plane & Governance Recording section to MASTER_PLAN
+- use json.dumps() instead of psycopg.types.json.dumps() for JSONB inserts
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

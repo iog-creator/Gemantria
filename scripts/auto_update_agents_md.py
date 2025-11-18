@@ -54,6 +54,11 @@ def get_directory_for_file(file_path: Path) -> Path | None:
         agentpm_idx = parts.index("agentpm")
         if len(parts) > agentpm_idx + 1:
             return ROOT / "/".join(parts[: agentpm_idx + 2])
+    elif "webui" in parts:
+        # webui/*/ requires AGENTS.md for UI apps (graph dashboard, forecast UI, etc.)
+        webui_idx = parts.index("webui")
+        if len(parts) > webui_idx + 1:
+            return ROOT / "/".join(parts[: webui_idx + 2])
     elif file_path.parent.name in ("scripts", "migrations", "tests", "docs"):
         # These directories require AGENTS.md
         return file_path.parent

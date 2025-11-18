@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-16 09:56:47
+Generated: 2025-11-17 11:22:06
 
 ## Active Rules
 
@@ -103,6 +103,7 @@ Generated: 2025-11-16 09:56:47
 - scorecards.yml
 - soft-checks.yml
 - ssot-nightly.yml
+- stale-pr.yml
 - system-enforcement.yml
 - tagproof-core-export.yml
 - tagproof.yml

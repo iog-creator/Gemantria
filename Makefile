@@ -1864,6 +1864,12 @@ guard.mcp.sse:
 bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
 	@bash scripts/bringup_001.sh
 
+# --- Strict Bringup Unification (live-ready gate) ---
+.PHONY: bringup.live
+bringup.live: ## Unified live bring-up: strict reality-check (DB/LM/control) + bringup.001 pipeline
+	@python3 -m pmagent reality-check check --mode strict --no-dashboards
+	@$(MAKE) bringup.001
+
 # --- Reality Check #1: Automated bring-up for SSOT Docs → Postgres → LM Studio Q&A ---
 .PHONY: reality.check.1
 reality.check.1: ## Run Reality Check #1: automated bring-up (Postgres + LM Studio + ingest + golden question)

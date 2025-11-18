@@ -1,4 +1,4 @@
-<!-- Handoff updated: 2025-11-16T09:56:46.717832 -->
+<!-- Handoff updated: 2025-11-17T11:22:06.009450 -->
 # PLAN-073 M1 — Implementation Notes (E01–E05)
 
 - E01: Ensure Knowledge MCP schema files/tables exist (read-only lane). Provide minimal seed or describe via guard.

@@ -409,6 +409,32 @@ def reality_check_live() -> None:
     raise typer.Exit(code=proc.returncode)
 
 
+@reality_app.command("check", help="Run comprehensive reality check (env + DB + LM + exports + eval)")
+def reality_check_check(
+    mode: str = typer.Option("hint", "--mode", help="Mode: hint (default) or strict"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    no_dashboards: bool = typer.Option(False, "--no-dashboards", help="Skip exports/eval checks"),
+) -> None:
+    """Run comprehensive reality check."""
+    from agentpm.reality.check import reality_check, print_human_summary
+
+    mode_upper = mode.upper()
+    if mode_upper not in ("HINT", "STRICT"):
+        print(f"ERROR: mode must be 'hint' or 'strict', got '{mode}'", file=sys.stderr)
+        raise typer.Exit(code=1)
+
+    verdict = reality_check(mode=mode_upper, skip_dashboards=no_dashboards)
+
+    if json_only:
+        print(json.dumps(verdict, indent=2))
+    else:
+        # Print JSON to stdout, summary to stderr (matches existing pattern)
+        print(json.dumps(verdict, indent=2))
+        print_human_summary(verdict, file=sys.stderr)
+
+    raise typer.Exit(code=0 if verdict.get("overall_ok") else 1)
+
+
 @bringup_app.command("full", help="Fully start DB, LM Studio server+GUI, and load models")
 def bringup_full() -> None:
     """Run the full system bring-up (DB + LM Studio + models + MCP SSE if enabled)."""
