@@ -76,8 +76,12 @@ def get_directory_for_file(file_path: Path) -> Path | None:
         if path_str.startswith("docs/") and current.name not in excluded:
             return current
 
-        # WebUI directories
+        # WebUI directories — normalize to top-level webui/<app> so AGENTS.md lives
+        # alongside the app (e.g. webui/graph/AGENTS.md), not in nested src/ folders.
         if path_str.startswith("webui/") and current.name not in excluded:
+            parts = path_str.split("/")
+            if len(parts) >= 2:
+                return ROOT / "webui" / parts[1]
             return current
 
         current = current.parent
@@ -90,8 +94,11 @@ def get_agents_md_mtime(agents_path: Path) -> datetime | None:
     if not agents_path.exists():
         return None
 
+    git_mtime: datetime | None = None
+    fs_mtime: datetime | None = None
+
+    # Git commit time (for committed changes)
     try:
-        # Try git log first (more accurate for committed files)
         result = subprocess.run(
             ["git", "log", "-1", "--format=%ct", "--", str(agents_path)],
             capture_output=True,
@@ -100,15 +107,20 @@ def get_agents_md_mtime(agents_path: Path) -> datetime | None:
         )
         if result.returncode == 0 and result.stdout.strip():
             timestamp = int(result.stdout.strip())
-            return datetime.fromtimestamp(timestamp)
+            git_mtime = datetime.fromtimestamp(timestamp)
     except Exception:
-        pass
+        git_mtime = None
 
-    # Fallback to filesystem mtime
+    # Filesystem mtime (for uncommitted local edits)
     try:
-        return datetime.fromtimestamp(agents_path.stat().st_mtime)
+        fs_mtime = datetime.fromtimestamp(agents_path.stat().st_mtime)
     except Exception:
-        return None
+        fs_mtime = None
+
+    if git_mtime and fs_mtime:
+        # Prefer the newer of git or filesystem times so local edits are respected
+        return max(git_mtime, fs_mtime)
+    return git_mtime or fs_mtime
 
 
 def get_code_files_mtime(directory: Path) -> datetime | None:

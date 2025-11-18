@@ -39,7 +39,8 @@ STRICT_GOVERNANCE=0
 
 # Phase-6: LM Studio live usage toggle
 # When true, selected features may call LM Studio under guardrails.
-LM_STUDIO_ENABLED=false
+# Recommended default for local strict bringup (`make bringup.live`).
+LM_STUDIO_ENABLED=true
 
 # Inference provider used by the runtime (lmstudio | openai | other)
 # === Local Inference Configuration (LM Studio / Ollama) ===
@@ -50,7 +51,7 @@ LM_STUDIO_ENABLED=false
 #
 # You can switch providers by changing INFERENCE_PROVIDER and the base URL.
 
-# Default: LM Studio
+# Default: LM Studio (recommended provider for local strict bringup)
 INFERENCE_PROVIDER=lmstudio
 
 # LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)

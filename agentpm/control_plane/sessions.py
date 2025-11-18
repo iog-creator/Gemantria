@@ -4,6 +4,7 @@ from scripts.config.env import get_rw_dsn
 
 """Capability session management with PoR checklist."""
 
+import json
 import pathlib
 from typing import Any, Dict, List
 
@@ -88,7 +89,7 @@ def create_session(
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id
             """,
-            (project_id, rule_id, psycopg.types.json.dumps(por_json), tiny_menu, ttl_s),
+            (project_id, rule_id, json.dumps(por_json), tiny_menu, ttl_s),
         )
         session_id = cur.fetchone()[0]
         conn.commit()

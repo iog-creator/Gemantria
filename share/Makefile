@@ -608,6 +608,12 @@ test.env.loader:
 test.guard:
 	@pytest -q tests/unit/guards/test_exports_guard_schema.py
 
+.PHONY: test.seed.crossrefs
+test.seed.crossrefs: ## Seed enriched sample with crossrefs for guard testing (hermetic)
+	@echo ">> Seeding enriched sample with crossrefs (hermetic)…"
+	@mkdir -p exports
+	PYTHONPATH=$(shell pwd) python3 scripts/dev_seed_enriched_sample.py
+
 # CI smoke targets (for workflow compatibility)
 # Rule-050 (OPS Contract v6.2.3) - Hermetic Test Bundle
 # Rule-051 (Cursor Insight & Handoff) - Baseline Evidence Required
@@ -1857,6 +1863,12 @@ guard.mcp.sse:
 .PHONY: bringup.001
 bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
 	@bash scripts/bringup_001.sh
+
+# --- Strict Bringup Unification (live-ready gate) ---
+.PHONY: bringup.live
+bringup.live: ## Unified live bring-up: strict reality-check (DB/LM/control) + bringup.001 pipeline
+	@python3 -m pmagent reality-check check --mode strict --no-dashboards
+	@$(MAKE) bringup.001
 
 # --- Reality Check #1: Automated bring-up for SSOT Docs → Postgres → LM Studio Q&A ---
 .PHONY: reality.check.1

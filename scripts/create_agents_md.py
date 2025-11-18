@@ -45,6 +45,7 @@ def get_required_directories() -> dict[str, list[str]]:
     required = {
         "source": [],  # src/*/
         "agentpm": [],  # agentpm/*/ (modules, biblescholar, etc.)
+        "webui": [],  # webui/*/ (graph dashboard, forecast UI, etc.)
         "tools": ["scripts", "migrations", "tests"],  # Tool directories
         "docs": [],  # docs/*/
     }
@@ -70,6 +71,13 @@ def get_required_directories() -> dict[str, list[str]]:
             if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required["docs"].append(f"docs/{subdir.name}")
 
+    # Add all webui subdirectories (excluding cache/generated dirs)
+    webui_dir = ROOT / "webui"
+    if webui_dir.exists():
+        for subdir in webui_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required["webui"].append(f"webui/{subdir.name}")
+
     return required
 
 
@@ -87,7 +95,13 @@ def get_missing_agents_files() -> dict[str, list[str]]:
     required = get_required_directories()
     existing = get_existing_agents_files()
 
-    missing: dict[str, list[str]] = {"source": [], "agentpm": [], "tools": [], "docs": []}
+    missing: dict[str, list[str]] = {
+        "source": [],
+        "agentpm": [],
+        "webui": [],
+        "tools": [],
+        "docs": [],
+    }
 
     # Check source directories
     for src_subdir in required["source"]:
@@ -112,6 +126,12 @@ def get_missing_agents_files() -> dict[str, list[str]]:
         agents_path = f"{docs_subdir}/AGENTS.md"
         if agents_path not in existing:
             missing["docs"].append(docs_subdir)
+
+    # Check webui directories
+    for webui_subdir in required["webui"]:
+        agents_path = f"{webui_subdir}/AGENTS.md"
+        if agents_path not in existing:
+            missing["webui"].append(webui_subdir)
 
     return missing
 
@@ -691,6 +711,9 @@ def create_agents_md_file(dir_path: str, dry_run: bool = False) -> bool:
         content = create_tools_agents_md(dir_path)
     elif dir_path.startswith("docs/"):
         content = create_docs_agents_md(dir_path)
+    elif dir_path.startswith("webui/"):
+        # Treat webui/* like source directories so UI surfaces stay documented
+        content = create_source_agents_md(dir_path)
     else:
         print(f"SKIP: {dir_path} not recognized as requiring AGENTS.md")
         return False
