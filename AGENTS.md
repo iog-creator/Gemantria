@@ -52,11 +52,15 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - **Quick Start (Ollama)**: Set `INFERENCE_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, then `ollama pull ibm/granite4.0-preview:tiny`
   - **Health Check**: `pmagent health lm` verifies inference provider availability
   - **Default Models (Phase-7F)**: 
-    - `LOCAL_AGENT_MODEL=granite4:tiny-h` (Ollama)
-    - `EMBEDDING_MODEL=bge-m3:latest` (Ollama: `qllama/bge-m3`)
-    - `RERANKER_MODEL=bge-reranker-v2-m3:latest` (Ollama: `bona/bge-reranker-v2-m3`)
+    - **Default stack**: Granite embedding + Granite reranker + Granite local agent.
+      - `LOCAL_AGENT_MODEL=granite4:tiny-h` (Ollama)
+      - `EMBEDDING_MODEL=granite-embedding:278m` (Granite)
+      - `RERANKER_MODEL=granite4:tiny-h` (Granite)
+    - **Bible lane**: BGE embedding + theology model; BGE is not the general default.
+      - `BIBLE_EMBEDDING_MODEL=bge-m3:latest` (Ollama: `qllama/bge-m3`) - for Bible/multilingual tasks only
+    - **Qwen reranker**: fallback only, not the primary reranker.
     - `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B` (via theology adapter)
-  - **Retrieval Profile (Phase-7C)**: `RETRIEVAL_PROFILE=LEGACY` (default) keeps BGE + Qwen retrieval. Setting `RETRIEVAL_PROFILE=GRANITE` switches retrieval embeddings/rerankers to Granite IDs resolved via `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Misconfigured Granite profiles emit a `HINT` and fall back to LEGACY for hermetic runs.
+  - **Retrieval Profile (Phase-7C)**: `RETRIEVAL_PROFILE=DEFAULT` (default) uses Granite stack. Setting `RETRIEVAL_PROFILE=GRANITE` or `BIBLE` switches retrieval embeddings/rerankers accordingly. Granite IDs are resolved via `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Misconfigured Granite profiles emit a `HINT` and fall back to DEFAULT for hermetic runs.
 
 ### LM Status Command
 
@@ -219,8 +223,9 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - **Phase-7F**: ✅ **COMPLETE** — Flexible local LM architecture with per-slot provider routing:
     - **Per-slot provider configuration**: Each model slot (local_agent, embedding, reranker, theology) can independently use `ollama` or `lmstudio` via `LOCAL_AGENT_PROVIDER`, `EMBEDDING_PROVIDER`, `RERANKER_PROVIDER`, `THEOLOGY_PROVIDER` env vars
     - **Provider enable/disable flags**: `OLLAMA_ENABLED` and `LM_STUDIO_ENABLED` control provider availability
-    - **Default configuration**: Ollama for chat/embed/rerank (Granite models), LM Studio for theology (Christian-Bible-Expert-v2.0-12B)
-    - **Models**: `granite4:tiny-h` (chat/rerank), `granite-embedding:278m` (embeddings), `Christian-Bible-Expert-v2.0-12B` (theology)
+    - **Default configuration**: Granite stack for general retrieval (embedding, reranker, local agent), LM Studio for theology (Christian-Bible-Expert-v2.0-12B)
+    - **Models**: `granite4:tiny-h` (chat/rerank - default), `granite-embedding:278m` (embeddings - default), `Christian-Bible-Expert-v2.0-12B` (theology)
+    - **Bible lane**: BGE models reserved for Bible/multilingual tasks; not the general default
     - **Test suite**: `tests/integration/test_phase7f_model_readiness.py` (availability-aware, skips when services unavailable)
     - **Architecture**: No LangChain/LangGraph in core LM pipeline; all calls go to local services (Ollama, LM Studio) on 127.0.0.1
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration

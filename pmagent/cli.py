@@ -48,6 +48,7 @@ from agentpm.lm.lm_status import compute_lm_status, print_lm_status_table  # noq
 from agentpm.status.explain import explain_system_status  # noqa: E402
 from agentpm.docs.search import search_docs  # noqa: E402
 from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
+from scripts.config.env import get_retrieval_lane_models, get_lm_model_config  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -70,6 +71,8 @@ status_app = typer.Typer(help="System status helpers")
 app.add_typer(status_app, name="status")
 docs_app = typer.Typer(help="Documentation search operations")
 app.add_typer(docs_app, name="docs")
+models_app = typer.Typer(help="Model introspection commands")
+app.add_typer(models_app, name="models")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -513,6 +516,28 @@ def docs_search(
             print(f"DOCS_SEARCH: failed ({error[:50]})", file=sys.stderr)
 
     sys.exit(0 if result.get("ok") else 1)
+
+
+@models_app.command("active", help="Show active retrieval profile and models")
+def models_active() -> None:
+    """Show active retrieval profile and associated models (config-only; no LM calls)."""
+    models = get_retrieval_lane_models()
+    cfg = get_lm_model_config()
+
+    profile = models.get("profile", "UNKNOWN")
+    embed = models.get("embedding_model")
+    rerank = models.get("reranker_model")
+    agent = cfg.get("local_agent_model")
+    bible = cfg.get("bible_embedding_model")
+
+    print(f"ACTIVE RETRIEVAL PROFILE: {profile}")
+    print(f"EMBEDDING_MODEL:          {embed}")
+    print(f"RERANKER_MODEL:           {rerank}")
+    print(f"LOCAL_AGENT_MODEL:        {agent}")
+    if bible is not None:
+        print(f"BIBLE_EMBEDDING_MODEL:    {bible}")
+
+    sys.exit(0)
 
 
 def main() -> None:
