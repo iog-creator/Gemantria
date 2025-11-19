@@ -76,12 +76,14 @@ test -f evidence/webproof/index.png && echo "[[IMAGE]] evidence/webproof/index.p
 Notes: Use Rule-062 validation at the start of every OPS block. If no visual/web artifacts are touched, state: "Browser Verification not applicable."
 
 LM RETRIEVAL PROFILES (Phase-7C)
-* Default retrieval lane is `RETRIEVAL_PROFILE=LEGACY` (BGE + Qwen). No behavior change when unset.
-* To opt into Granite-based retrieval, set `RETRIEVAL_PROFILE=GRANITE` and configure:
+* Default retrieval lane is `RETRIEVAL_PROFILE=DEFAULT` (Granite stack). Granite is the default for general retrieval and local agent.
+* BGE is reserved for Bible/multilingual lanes; not the general default.
+* To use Bible/multilingual lane, set `RETRIEVAL_PROFILE=BIBLE` and configure `BIBLE_EMBEDDING_MODEL`.
+* To use explicit Granite overrides, set `RETRIEVAL_PROFILE=GRANITE` and configure:
   * `GRANITE_EMBEDDING_MODEL`
   * `GRANITE_RERANKER_MODEL`
   * `GRANITE_LOCAL_AGENT_MODEL`
-* The centralized loader emits a `HINT: retrieval: ...` line whenever profile=GRANITE. Missing Granite envs cause an automatic LEGACY fallback (still with a HINT) so CI remains hermetic. Cursor instructions must mention the profile being activated and capture the HINT in evidence when toggling Granite.
+* The centralized loader emits a `HINT: retrieval: ...` line whenever profile=GRANITE. Missing Granite envs cause an automatic DEFAULT fallback (still with a HINT) so CI remains hermetic. Cursor instructions must mention the profile being activated and capture the HINT in evidence when toggling profiles.
 
 ONCE-PER-REPLY RULES
 * Only one Cursor runnable block per reply unless the Orchestrator explicitly requests multiple blocks.
