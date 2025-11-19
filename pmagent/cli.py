@@ -49,6 +49,8 @@ from agentpm.status.explain import explain_system_status  # noqa: E402
 from agentpm.docs.search import search_docs  # noqa: E402
 from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
 from scripts.config.env import get_retrieval_lane_models, get_lm_model_config  # noqa: E402
+from agentpm.scripts.docs_inventory import run_inventory  # noqa: E402
+from agentpm.scripts.docs_duplicates_report import generate_duplicates_report  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -480,6 +482,49 @@ def docs_reality_check_ai_notes() -> None:
     """Generate orchestrator-facing AI notes about the reality-check system."""
     exit_code = reality_check_ai_notes_main()
     raise typer.Exit(code=exit_code)
+
+
+@docs_app.command("inventory", help="Scan repo docs into control.kb_document (DM-001)")
+def docs_inventory() -> None:
+    """Scan repository for markdown-like files and upsert metadata into control.kb_document."""
+    result = run_inventory()
+
+    if result.get("db_off"):
+        print(f"WARNING: {result.get('error', 'Database unavailable')}")
+        print("db_off: true")
+        raise typer.Exit(code=0)
+
+    if not result.get("ok"):
+        print(f"ERROR: {result.get('error', 'Unknown error')}", file=sys.stderr)
+        raise typer.Exit(code=1)
+
+    print(f"Scanned {result['scanned']} file(s)")
+    print(f"Inserted {result['inserted']} new document(s)")
+    print(f"Updated {result['updated']} existing document(s)")
+    print("✓ Inventory completed successfully")
+
+
+@docs_app.command("duplicates-report", help="Generate duplicates report (DM-001)")
+def docs_duplicates_report() -> None:
+    """Generate a report of exact duplicate documents from control.kb_document."""
+    from pathlib import Path
+
+    output_path = Path("docs/analysis/DOC_DUPLICATES_REPORT.md")
+    result = generate_duplicates_report(output_path)
+
+    if result.get("db_off"):
+        print(f"WARNING: {result.get('error', 'Database unavailable')}")
+        print("db_off: true")
+        raise typer.Exit(code=0)
+
+    if not result.get("ok"):
+        print(f"ERROR: {result.get('error', 'Unknown error')}", file=sys.stderr)
+        raise typer.Exit(code=1)
+
+    print(f"Found {len(result['duplicate_groups'])} duplicate group(s)")
+    print(f"Total duplicate files: {result['exact_duplicates']}")
+    print(f"Report written to: {output_path}")
+    print("✓ Duplicates report generated successfully")
 
 
 @docs_app.command("search", help="Search governance/docs content via semantic similarity")
