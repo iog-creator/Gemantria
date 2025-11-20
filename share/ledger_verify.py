@@ -90,17 +90,17 @@ def verify_ledger() -> tuple[int, dict]:
         print("SKIP: GEMATRIA_DSN not set", file=sys.stderr)
         return 0, {"ok": True, "skipped": True, "reason": "DSN not set"}
 
-      # Connect to database
-      try:
+    # Connect to database
+    try:
         with psycopg.connect(dsn) as conn, conn.cursor() as cur:
             results = []
             all_current = True
             stale = []
             missing = []
 
-                for file_path, name, source_of_truth in artifacts:
-                    # Check if file exists
-                    if not file_path.exists():
+            for file_path, name, source_of_truth in artifacts:
+                # Check if file exists
+                if not file_path.exists():
                         status = "missing"
                         current_hash = None
                         ledger_hash = None
@@ -117,11 +117,11 @@ def verify_ledger() -> tuple[int, dict]:
                         )
                         continue
 
-                    # Compute current hash
-                    current_hash = compute_file_hash(file_path)
+                # Compute current hash
+                current_hash = compute_file_hash(file_path)
 
-                    # Look up most recent row in ledger
-                    cur.execute(
+                # Look up most recent row in ledger
+                cur.execute(
                         """
                         SELECT hash, status, generated_at
                         FROM control.system_state_ledger
@@ -132,24 +132,24 @@ def verify_ledger() -> tuple[int, dict]:
                         (name, source_of_truth),
                     )
 
-                    row = cur.fetchone()
+                row = cur.fetchone()
 
-                    if row is None:
-                        # No ledger entry found
-                        status = "missing"
-                        ledger_hash = None
-                        all_current = False
-                        missing.append(name)
+                if row is None:
+                    # No ledger entry found
+                    status = "missing"
+                    ledger_hash = None
+                    all_current = False
+                    missing.append(name)
+                else:
+                    ledger_hash = row[0]
+                    if current_hash == ledger_hash:
+                        status = "current"
                     else:
-                        ledger_hash = row[0]
-                        if current_hash == ledger_hash:
-                            status = "current"
-                        else:
-                            status = "stale"
-                            all_current = False
-                            stale.append(name)
+                        status = "stale"
+                        all_current = False
+                        stale.append(name)
 
-                    results.append(
+                results.append(
                         {
                             "name": name,
                             "source_of_truth": source_of_truth,
@@ -157,30 +157,30 @@ def verify_ledger() -> tuple[int, dict]:
                             "ledger_hash": ledger_hash[:16] + "..." if ledger_hash else None,
                             "current_hash": current_hash[:16] + "..." if current_hash else None,
                         }
-                    )
-
-                # Print summary table
-                print("=" * 80)
-                print("LEDGER VERIFICATION SUMMARY")
-                print("=" * 80)
-                print(f"{'Name':<40} {'Source':<30} {'Status':<10}")
-                print("-" * 80)
-
-                for result in results:
-                    status_icon = "✓" if result["status"] == "current" else "✗"
-                    name = result["name"]
-                    source = result["source_of_truth"]
-                    status = result["status"]
-                    print(f"{name:<40} {source:<30} {status_icon} {status:<10}")
-
-                print("-" * 80)
-                current_count = len([r for r in results if r["status"] == "current"])
-                print(
-                    f"Total: {len(results)}, Current: {current_count}, "
-                    f"Stale: {len(stale)}, Missing: {len(missing)}"
                 )
-                print("=" * 80)
-                print()
+
+            # Print summary table
+            print("=" * 80)
+            print("LEDGER VERIFICATION SUMMARY")
+            print("=" * 80)
+            print(f"{'Name':<40} {'Source':<30} {'Status':<10}")
+            print("-" * 80)
+
+            for result in results:
+                status_icon = "✓" if result["status"] == "current" else "✗"
+                name = result["name"]
+                source = result["source_of_truth"]
+                status = result["status"]
+                print(f"{name:<40} {source:<30} {status_icon} {status:<10}")
+
+            print("-" * 80)
+            current_count = len([r for r in results if r["status"] == "current"])
+            print(
+                f"Total: {len(results)}, Current: {current_count}, "
+                f"Stale: {len(stale)}, Missing: {len(missing)}"
+            )
+            print("=" * 80)
+            print()
 
                 if not all_current:
                     print("❌ LEDGER VERIFICATION FAILED")
