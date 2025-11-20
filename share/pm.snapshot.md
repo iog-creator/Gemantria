@@ -1,43 +1,38 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-20T08:12:44-08:00_
+_Generated: 2025-11-20T11:11:12-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
-- BIBLE_DB_DSN: `postgresql://<REDACTED>/gematria`
+- BIBLE_DB_DSN: `postgresql://<REDACTED>/bible_db`
 - GEMATRIA_DSN: `postgresql://<REDACTED>/gematria`
 - CHECKPOINTER: `(unset)`  — expected `postgres` in STRICT
 - ENFORCE_STRICT: `(unset)`  — expected `1` in STRICT
 
 ### DB Proofs
 
-- Bible RO probe: `(RO probe failed) psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
-	Is the server running locally and accepting connections on that socket?`
-- Gematria RW temp-write probe: `(RW probe failed) psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
-	Is the server running locally and accepting connections on that socket?`
+- Bible RO probe: `bible_db|mccoy`
+- Gematria RW temp-write probe: `ok`
 
 ### DB Health Guard
 
-- Status: `✗ db_off`
-- Mode: `db_off`
+- Status: `✓ Ready`
+- Mode: `ready`
 - Driver available: `✓`
-- Connection OK: `✗`
-- Graph stats ready: `✗`
-- Errors: `1 error(s)`
+- Connection OK: `✓`
+- Graph stats ready: `✓`
 
 ```json
 {
-  "ok": false,
-  "mode": "db_off",
+  "ok": true,
+  "mode": "ready",
   "checks": {
     "driver_available": true,
-    "connection_ok": false,
-    "graph_stats_ready": false
+    "connection_ok": true,
+    "graph_stats_ready": true
   },
   "details": {
-    "errors": [
-      "connection_failed: (psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
-    ]
+    "errors": []
   }
 }
 ```
