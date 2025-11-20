@@ -4,11 +4,11 @@ from scripts.config.env import get_rw_dsn
 
 #!/usr/bin/env python3
 """
-Guard: Control Plane Health Check
-- If GEMATRIA_DSN is unset -> exit 0 (tolerate environments without DB).
-- If set but DB unreachable -> exit 0 in HINT mode, exit 1 in STRICT mode.
+Guard: Control Plane Health Check (Option C - DB is SSOT)
+- If GEMATRIA_DSN is unset -> exit 0 (tolerate environments without DB configured).
+- If set but DB unreachable -> exit 1 (FAIL: DB is SSOT, broken state).
 - If set and reachable -> ensure control schema and tables exist, check shapes, refresh MVs.
-- HINT-tolerant on PRs (STRICT_MODE=HINT), strict on tags (STRICT_MODE=STRICT).
+- For live gates: DB-down is always a failure (Option C).
 """
 
 import os
@@ -192,8 +192,8 @@ try:
         sys.exit(0)
 
 except Exception as e:
-    if strict_mode == "STRICT":
-        print(f"ERROR: DB unreachable or error: {e}", file=sys.stderr)
-        sys.exit(1)
-    print(f"OK: DB unreachable ({e}); tolerated in HINT mode.", file=sys.stderr)
-    sys.exit(0)
+    # Option C: DB is SSOT - DB-down is always a failure for live gates
+    print("❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr)
+    print(f"   Error: {e}", file=sys.stderr)
+    print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr)
+    sys.exit(1)

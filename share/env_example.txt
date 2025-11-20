@@ -76,35 +76,55 @@ OLLAMA_BASE_URL=http://127.0.0.1:11434
 # NOTE: Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls`
 # to list available models and validate your configuration.
 #
-# Phase-7E: Two profiles are available below. Choose ONE profile block to copy into your .env:
-#   - LEGACY: Current working setup (BGE + Qwen models)
-#   - GRANITE: Recommended Granite-based setup via Ollama (Phase-7E)
-
 # ============================================================================
-# PROFILE: LEGACY (Current Working Setup)
+# GENERAL RETRIEVAL (Default - Granite Stack)
 # ============================================================================
-# Copy this block if you want to use your existing BGE + Qwen models
+# Granite is the default stack for general retrieval and local agent.
+# BGE is reserved for Bible/multilingual lanes (see below).
 
-# General embedding model used for RAG
-EMBEDDING_MODEL=text-embedding-bge-m3
-LM_EMBED_MODEL=text-embedding-bge-m3  # Legacy support (deprecated)
+# General embedding model (Granite - default for general retrieval)
+EMBEDDING_MODEL=granite-embedding:278m
+LM_EMBED_MODEL=granite-embedding:278m  # Legacy support (deprecated)
+
+# Local agent / workflow model (Granite - default)
+# Used for local agent workflows and reasoning
+LOCAL_AGENT_MODEL=granite4:tiny-h
+
+# Reranker model (Granite - default for general retrieval)
+# Used for semantic reranking in network aggregation
+RERANKER_MODEL=granite4:tiny-h
 
 # Theology / Bible expert model
 # Used for noun discovery, enrichment, and general theological analysis
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
 
-# Local agent / workflow model
-# Used for local agent workflows and reasoning
-LOCAL_AGENT_MODEL=qwen/qwen3-8b
-
 # Optional: math-heavy model for numeric/reasoning tasks
 # Used for gematria calculation verification
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
 
-# Optional: reranker model for post-processing
-# Used for semantic reranking in network aggregation
-# Legacy: QWEN_RERANKER_MODEL (deprecated, use RERANKER_MODEL instead)
-RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+# ============================================================================
+# BIBLE / MULTILINGUAL LANE (BGE-based)
+# ============================================================================
+# Used by Bible-specific pipelines; not the general default.
+# Uncomment and set these if you need BGE for Bible/multilingual tasks:
+
+# BIBLE_EMBEDDING_MODEL=bge-m3:latest
+# Optional: Qwen reranker fallback (not the primary reranker)
+# LEGACY_RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# ============================================================================
+# RETRIEVAL PROFILE SWITCH (Phase-7C)
+# ============================================================================
+# RETRIEVAL_PROFILE controls retrieval lane:
+#   DEFAULT  - Granite stack (this file's main example above)
+#   BIBLE    - Bible/multilingual lane (BGE-based)
+#   CUSTOM   - for explicit env overrides
+RETRIEVAL_PROFILE=DEFAULT
+
+# Optional Granite overrides (used when RETRIEVAL_PROFILE=GRANITE or CUSTOM)
+# GRANITE_EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# GRANITE_RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+# GRANITE_LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny-GGUF
 
 # ============================================================================
 # PROFILE: PHASE-7F (Ollama + BGE Models - Recommended)

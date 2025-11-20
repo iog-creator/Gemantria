@@ -3,12 +3,11 @@
 
 #!/usr/bin/env python3
 """
-Book smoke: empty-DB tolerant.
+Book smoke: DB connectivity check (Option C - DB is SSOT).
 
 - If GEMATRIA_DSN unset or psycopg not available: SKIP (exit 0).
+- If DSN is set but DB unreachable: FAIL (exit 1) - DB is SSOT, broken state.
 - If available: run a trivial SELECT 1 to prove connectivity.
-
-Never fails CI for missing DB; this is a posture proof, not a migration.
 """
 
 from __future__ import annotations
@@ -39,9 +38,17 @@ def main() -> int:
         print(f"book.smoke: OK (db responded {row[0]})")
         return 0
     except Exception as exc:  # pragma: no cover - runtime informational hint
-        # Do not fail closed on local smoke; print hint and pass.
-        print(f"book.smoke: HINT only ({exc.__class__.__name__}: {exc})")
-        return 0
+        # DB is SSOT - if DSN is set but DB unreachable, this is a broken state.
+        print(
+            "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.",
+            file=sys.stderr,
+        )
+        print(f"   Error: {exc.__class__.__name__}: {exc}", file=sys.stderr)
+        print(
+            "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+            file=sys.stderr,
+        )
+        return 1
 
 
 if __name__ == "__main__":

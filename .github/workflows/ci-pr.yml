@@ -92,3 +92,6 @@ jobs:
             export CI_XREF_BADGES_SKIP=1
           fi
           python3 scripts/guards/guard_xrefs_badges.py
+      - name: AGENTS.md sync check (fail-closed)
+        run: |
+          PYTHONPATH=. python scripts/check_agents_md_sync.py

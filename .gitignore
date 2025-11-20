@@ -2,6 +2,8 @@
 
 # Node modules (all directories)
 node_modules/
+webui/graph/node_modules/
+
 
 # UI (local-only) build artifacts
 ui/node_modules/
@@ -26,7 +28,11 @@ exports/ai_nouns.enriched.json
 **/__pycache__/
 evidence/
 share/evidence/
+archive/
 ui/out/
+scripts/dev/
+agentpm/obs/
+
 
 # Prompt logging (opt-in via ENABLE_PROMPT_LOGGING=1)
 prompts/run_*.jsonl

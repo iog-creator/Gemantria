@@ -122,15 +122,9 @@ Reference: {reference}
 
 Commentary:"""
 
-    try:
-        commentary_text = theology_chat(user_prompt, system=system_prompt)
-        return {"source": "lm_theology", "text": commentary_text}
-    except Exception as e:
-        # LM unavailable or error - return fallback
-        return {
-            "source": "fallback",
-            "text": f"Theology model is currently unavailable ({e!s}). Passage text is shown without commentary.",
-        }
+    # Fail-closed: let RuntimeError propagate if service unavailable
+    commentary_text = theology_chat(user_prompt, system=system_prompt)
+    return {"source": "lm_theology", "text": commentary_text}
 
 
 def get_passage_and_commentary(

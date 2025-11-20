@@ -52,6 +52,20 @@ All core development phases are complete. The system is operational with:
 - ✅ Schema compliance verified
 - ✅ UI integration functional
 - ✅ Governance rules enforced
+- ✅ **Reality Green Truth Gate** (`make reality.green`) - Canonical "all green" signal for live work
+
+### Reality Green Truth Gate
+
+**Purpose**: The `make reality.green` target is the **110% signal** that the system is up to date and consistent for the next agent. It validates:
+- **DB Health (Option C)**: Database is reachable and healthy. DB-down is a hard failure when `GEMATRIA_DSN` is set (DB is SSOT).
+- **Control-Plane Health**: Control-plane schema, tables, and materialized views are present and healthy.
+- **AGENTS.md Sync**: All AGENTS.md files are in sync with code changes (no stale documentation).
+- **Share Sync & Exports**: Share directory is synced and required control-plane exports exist.
+- **WebUI Shell Sanity**: WebUI shell files are present (static check only).
+
+**When to Run**: Before declaring features complete, opening PRs for main, generating share/ snapshots, or declaring system "live".
+
+**Enforcement**: If `reality.green` is red, all docs (including AGENTS + SSOT) are treated as untrustworthy until fixed.
 
 ### Active Development Workstreams
 
@@ -476,6 +490,10 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 - **7D**: Runtime & Bring-Up UX Polish (Optional) 📋 PLANNING
   - Improve pmagent bringup / mcp UX for non-expert users
   - Enhanced help text, clearer Reality Check messages, wizard-style flows
+
+- **7E**: Core LLM Prompting Guide (Design Doc) ✅ COMPLETE (docs only)
+  - `Prompting Guide for Our Core LLM models.md` documents the Granite 4.0 + BGE-M3 + Granite Reranker stack, chat templates, embedding usage, and reranker prompting.
+  - Treated as a **design-level MoE-of-MoEs spec** for future router work; runtime model bindings remain governed by `AGENTS.md` until an explicit Phase-7 implementation milestone is marked complete.
 
 **Goal**: Complete Phase 6 setup and establish operational baseline for production use.
 

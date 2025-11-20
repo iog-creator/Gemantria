@@ -20,6 +20,7 @@ The `docs/` directory contains all project documentation including architectural
 - **README.md**: Project overview, setup, and usage
 - **MASTER_PLAN.md**: High-level project roadmap and goals
 - **qwen_integration.md**: LM Studio and Qwen model integration guide
+- **Prompting Guide for Our Core LLM models.md**: Prompt engineering and routing guide for the Granite 4.0 + BGE-M3 + Granite Reranker stack (design-level MoE-of-MoEs spec)
 
 ## ADR Guidelines
 

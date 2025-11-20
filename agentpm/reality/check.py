@@ -245,6 +245,29 @@ def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str
         if not eval_result.get("ok"):
             hints.append("Eval smoke tests failed")
 
+    # Gather KB hints (advisory-only, never affects overall_ok) - KB-Reg:M4, M6
+    kb_hints: list[dict[str, Any]] = []
+    try:
+        # Import here to avoid circular import (snapshot imports reality_check)
+        from agentpm.status.snapshot import get_kb_status_view, get_kb_hints
+
+        kb_status_view = get_kb_status_view()
+        kb_hints = get_kb_hints(kb_status_view)
+        # Convert structured KB hints to simple hint strings for backward compatibility
+        for kb_hint in kb_hints:
+            hints.append(f"KB: {kb_hint.get('message', 'KB registry issue')}")
+
+        # Add concise doc freshness summary (KB-Reg:M6)
+        freshness_summary = kb_status_view.get("freshness", {})
+        stale_count = freshness_summary.get("stale_count", 0)
+        out_of_sync_count = freshness_summary.get("out_of_sync_count", 0)
+        if stale_count > 0 or out_of_sync_count > 0:
+            freshness_msg = f"Doc freshness: {stale_count} stale, {out_of_sync_count} out-of-sync"
+            hints.append(f"KB: {freshness_msg}")
+    except Exception:
+        # KB hints are advisory-only; ignore errors
+        pass
+
     verdict = {
         "command": "reality.check",
         "mode": mode,
@@ -255,6 +278,7 @@ def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str
         "exports": exports_result,
         "eval_smoke": eval_result,
         "hints": hints,
+        "kb_hints": kb_hints,  # Structured KB hints (KB-Reg:M4)
         "overall_ok": not hard_fail,
     }
 

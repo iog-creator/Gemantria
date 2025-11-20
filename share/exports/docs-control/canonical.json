@@ -1,0 +1,1599 @@
+{
+  "items": [
+    {
+      "path": "archive/evidence_v0.0.9_pre/a_exporter.after.txt",
+      "title": "Add project root to path for imports",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T18:30:54.511805-08:00",
+      "size_bytes": 5152
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/a_exporter.before.txt",
+      "title": "Add project root to path for imports",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T18:30:38.311812-08:00",
+      "size_bytes": 5194
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/atlas.generate.tail.txt",
+      "title": "Atlas.Generate.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:26:56.055860-08:00",
+      "size_bytes": 0
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/atlas.proof.prev.tail.txt",
+      "title": "Atlas.Proof.Prev.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:38:34.105476-08:00",
+      "size_bytes": 400
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.after.txt",
+      "title": "Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:13:20.956893-08:00",
+      "size_bytes": 42
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.e06e10.impl.name.txt",
+      "title": "Branch.E06E10.Impl.Name",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T19:44:18.144211-08:00",
+      "size_bytes": 42
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.pr3.txt",
+      "title": "Branch.Pr3",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T21:58:10.604596-08:00",
+      "size_bytes": 45
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.pr4.before.txt",
+      "title": "Branch.Pr4.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:36:40.595720-08:00",
+      "size_bytes": 45
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.pr5.before.txt",
+      "title": "Branch.Pr5.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:45:04.302927-08:00",
+      "size_bytes": 47
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.pr6.start.txt",
+      "title": "Branch.Pr6.Start",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:51:13.257880-08:00",
+      "size_bytes": 47
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.pr7.local.start.txt",
+      "title": "Branch.Pr7.Local.Start",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T23:00:37.390973-08:00",
+      "size_bytes": 47
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/branch.train.txt",
+      "title": "Branch.Train",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:34.032547-08:00",
+      "size_bytes": 45
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/_branch.txt",
+      "title": " Branch",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T19:21:13.578317-08:00",
+      "size_bytes": 5
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/browser_verification.note.txt",
+      "title": "Browser Verification.Note",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:13:20.970893-08:00",
+      "size_bytes": 37
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/b_runner.after.txt",
+      "title": "Add project root to path for imports",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T18:31:30.129805-08:00",
+      "size_bytes": 3968
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle2.guards_all.tail.txt",
+      "title": "Bundle2.Guards All.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:29:19.306890-08:00",
+      "size_bytes": 1093
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle2.pytest.e06e10.tail.txt",
+      "title": "Bundle2.Pytest.E06E10.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:29:18.465678-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle2.pytest.e11e13.tail.txt",
+      "title": "Bundle2.Pytest.E11E13.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:29:18.770709-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle3.guard.det.tail.txt",
+      "title": "Bundle3.Guard.Det.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:45:01.686488-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle.pytest.e06e10.tail.txt",
+      "title": "Bundle.Pytest.E06E10.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:21:14.633558-08:00",
+      "size_bytes": 88
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/bundle.ruff.tail.txt",
+      "title": "Bundle.Ruff.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:21:14.326555-08:00",
+      "size_bytes": 25
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/cfg.toolbus.txt",
+      "title": "Cfg.Toolbus",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T19:31:07.376650-08:00",
+      "size_bytes": 50
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/dsn.burndown-1.changed.txt",
+      "title": "Dsn.Burndown 1.Changed",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:49:39.161439-08:00",
+      "size_bytes": 97
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e11e13.impl.branch.after.txt",
+      "title": "E11E13.Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:25:53.853133-08:00",
+      "size_bytes": 48
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e11e13.impl.head.after.txt",
+      "title": "E11E13.Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:26:19.032263-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e11e13.impl.head.before.txt",
+      "title": "E11E13.Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:25:26.168989-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.branch.after.txt",
+      "title": "E14E16.Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:40:15.919895-08:00",
+      "size_bytes": 50
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.head.after.txt",
+      "title": "E14E16.Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:40:15.916895-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.head.before.txt",
+      "title": "E14E16.Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:40:21.155894-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.pytest.e14e16.tail.txt",
+      "title": "E14E16.Impl.Pytest.E14E16.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:39:08.926970-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.ruff.tail.txt",
+      "title": "E14E16.Impl.Ruff.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:40:21.160894-08:00",
+      "size_bytes": 19
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e14e16.impl.status.before.txt",
+      "title": "E14E16.Impl.Status.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:40:21.158894-08:00",
+      "size_bytes": 22
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e17e19.impl.branch.after.txt",
+      "title": "E17E19.Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:51:36.156835-08:00",
+      "size_bytes": 62
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e17e19.impl.head.before.txt",
+      "title": "E17E19.Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:50:24.475322-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e17e19.impl.pytest.e17e19.tail.txt",
+      "title": "E17E19.Impl.Pytest.E17E19.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:50:12.021236-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e17e19.pytest.tail.txt",
+      "title": "E17E19.Pytest.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T18:45:22.559577-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.browser_verification.note.txt",
+      "title": "E20Gate.Browser Verification.Note",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:35.125627-08:00",
+      "size_bytes": 56
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.guard.determinism.tail.txt",
+      "title": "E20Gate.Guard.Determinism.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:44.583717-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.guard.graph.tail.txt",
+      "title": "E20Gate.Guard.Graph.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:44.586717-08:00",
+      "size_bytes": 74
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.guard.provenance.tail.txt",
+      "title": "E20Gate.Guard.Provenance.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:44.581717-08:00",
+      "size_bytes": 79
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.guard.rollups.tail.txt",
+      "title": "E20Gate.Guard.Rollups.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:44.588717-08:00",
+      "size_bytes": 76
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20gate.head.after.txt",
+      "title": "E20Gate.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:04:34.412620-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20impl.branch.after.txt",
+      "title": "E20Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:10:25.649030-08:00",
+      "size_bytes": 54
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20impl.guard.exports.tail.txt",
+      "title": "E20Impl.Guard.Exports.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:10:20.623981-08:00",
+      "size_bytes": 372
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e20impl.pytest.e20e22.tail.txt",
+      "title": "E20Impl.Pytest.E20E22.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:10:19.949974-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e23impl.branch.after.txt",
+      "title": "E23Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:17:14.815735-08:00",
+      "size_bytes": 49
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e23impl.head.after.txt",
+      "title": "E23Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:17:14.812735-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e23impl.pytest.e23e25.tail.txt",
+      "title": "E23Impl.Pytest.E23E25.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:16:43.710663-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e23impl.status.after.txt",
+      "title": "E23Impl.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:17:14.831678-08:00",
+      "size_bytes": 110
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26gate.guard.exports.tail.txt",
+      "title": "E26Gate.Guard.Exports.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:23:13.888951-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.branch.after.txt",
+      "title": "E26Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:19.140294-08:00",
+      "size_bytes": 48
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.browser_verify.summary.txt",
+      "title": "E26Impl.Browser Verify.Summary",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:19.158294-08:00",
+      "size_bytes": 25
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.guard.atlas_links.tail.txt",
+      "title": "E26Impl.Guard.Atlas Links.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:11.335322-08:00",
+      "size_bytes": 101
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.head.after.txt",
+      "title": "E26Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:19.138292-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.pytest.e26e28.tail.txt",
+      "title": "E26Impl.Pytest.E26E28.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:10.031327-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e26impl.status.after.txt",
+      "title": "E26Impl.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:32:19.153559-08:00",
+      "size_bytes": 370
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e29gate.browser_verification.note.txt",
+      "title": "E29Gate.Browser Verification.Note",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:37:18.777617-08:00",
+      "size_bytes": 106
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e29impl.branch.after.txt",
+      "title": "E29Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:46:22.751487-08:00",
+      "size_bytes": 46
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e29impl.pytest.e29e31.tail.txt",
+      "title": "E29Impl.Pytest.E29E31.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:47:03.875284-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32gate.guard.atlas_auditjump.tail.txt",
+      "title": "E32Gate.Guard.Atlas Auditjump.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:49:10.442587-08:00",
+      "size_bytes": 105
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32impl.guard.atlas.txt",
+      "title": "E32Impl.Guard.Atlas",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:54:14.722010-08:00",
+      "size_bytes": 295
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32impl.guard.exports.txt",
+      "title": "E32Impl.Guard.Exports",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:54:14.309989-08:00",
+      "size_bytes": 297
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32impl.guard.extractors.txt",
+      "title": "E32Impl.Guard.Extractors",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:54:13.904969-08:00",
+      "size_bytes": 403
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32impl.head.before.txt",
+      "title": "E32Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:52:11.604434-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e32impl.pytest.e06e10.tail.txt",
+      "title": "E32Impl.Pytest.E06E10.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:54:00.108813-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e35impl.branch.after.txt",
+      "title": "E35Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:02:28.947912-08:00",
+      "size_bytes": 45
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e35impl.head.after.txt",
+      "title": "E35Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:02:28.944513-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e35impl.pytest.e32e34.tail.txt",
+      "title": "E35Impl.Pytest.E32E34.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:01:52.292784-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e35.status.after.txt",
+      "title": "E35.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T20:55:41.466487-08:00",
+      "size_bytes": 43
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e38gate.guard.atlas_download.tail.txt",
+      "title": "E38Gate.Guard.Atlas Download.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:04:56.645238-08:00",
+      "size_bytes": 104
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e38gate.pytest.e35e37.tail.txt",
+      "title": "E38Gate.Pytest.E35E37.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:04:54.481292-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e38impl.head.before.txt",
+      "title": "E38Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:11:06.194767-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e38impl.pytest.e38e40.tail.txt",
+      "title": "E38Impl.Pytest.E38E40.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:11:55.572217-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e41gate.branch.after.txt",
+      "title": "E41Gate.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:14:59.075606-08:00",
+      "size_bytes": 55
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e41gate.guard.atlas_accessibility.tail.txt",
+      "title": "E41Gate.Guard.Atlas Accessibility.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:14:46.219700-08:00",
+      "size_bytes": 360
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e41impl.branch.after.txt",
+      "title": "E41Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:20:38.701887-08:00",
+      "size_bytes": 54
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e41impl.pytest.e41e43.tail.txt",
+      "title": "E41Impl.Pytest.E41E43.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:20:31.380911-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44gate.branch.after.txt",
+      "title": "E44Gate.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:22:55.387495-08:00",
+      "size_bytes": 65
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44impl.branch.after.txt",
+      "title": "E44Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:27:35.705195-08:00",
+      "size_bytes": 56
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44impl.head.before.txt",
+      "title": "E44Impl.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:27:03.904310-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44impl.pytest.e44e46.tail.txt",
+      "title": "E44Impl.Pytest.E44E46.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:27:47.629601-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44impl.status.after.txt",
+      "title": "E44Impl.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:27:35.719603-08:00",
+      "size_bytes": 124
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e44impl.status.before.txt",
+      "title": "E44Impl.Status.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:27:03.916311-08:00",
+      "size_bytes": 142
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e47gate.branch.after.txt",
+      "title": "E47Gate.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:31:12.365409-08:00",
+      "size_bytes": 62
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e47gate.guard.atlas_filters.tail.txt",
+      "title": "E47Gate.Guard.Atlas Filters.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:30:45.196653-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e47gate.head.after.txt",
+      "title": "E47Gate.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:31:12.362037-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e47gate.status.after.txt",
+      "title": "E47Gate.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:31:12.383155-08:00",
+      "size_bytes": 136
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e49impl.branch.after.txt",
+      "title": "E49Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:35:38.703882-08:00",
+      "size_bytes": 61
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e49impl.head.after.txt",
+      "title": "E49Impl.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:35:38.701882-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e49impl.pytest.e47e49.tail.txt",
+      "title": "E49Impl.Pytest.E47E49.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:35:11.405249-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.branch.after.txt",
+      "title": "E50Gate.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:12:14.844132-08:00",
+      "size_bytes": 60
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.atlas_smoke.tail.txt",
+      "title": "E50Gate.Guard.Atlas Smoke.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:48.594380-08:00",
+      "size_bytes": 400
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.determinism.tail.txt",
+      "title": "E50Gate.Guard.Determinism.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:44.103433-08:00",
+      "size_bytes": 457
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.exports.tail.txt",
+      "title": "E50Gate.Guard.Exports.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:45.487417-08:00",
+      "size_bytes": 372
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.graph.tail.txt",
+      "title": "E50Gate.Guard.Graph.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:44.418429-08:00",
+      "size_bytes": 457
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.provenance.tail.txt",
+      "title": "E50Gate.Guard.Provenance.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:43.672439-08:00",
+      "size_bytes": 457
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50gate.guard.rollups.tail.txt",
+      "title": "E50Gate.Guard.Rollups.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:11:44.750425-08:00",
+      "size_bytes": 457
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50impl.branch.after.txt",
+      "title": "E50Impl.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:17:25.990461-08:00",
+      "size_bytes": 59
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50impl.guard.atlas_sitemap.tail.txt",
+      "title": "E50Impl.Guard.Atlas Sitemap.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:17:50.783501-08:00",
+      "size_bytes": 27
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/e50impl.status.after.txt",
+      "title": "E50Impl.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:17:26.004947-08:00",
+      "size_bytes": 130
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/gitignore.after.txt",
+      "title": "Gitignore.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:29:12.968056-08:00",
+      "size_bytes": 954
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/guard_atlas_filters.txt",
+      "title": "Guard Atlas Filters",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:41:09.206922-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/guard_atlas.txt",
+      "title": "Guard Atlas",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:41:06.477594-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/guard_mcp_catalog.strict.train.txt",
+      "title": "Guard Mcp Catalog.Strict.Train",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:40.213622-08:00",
+      "size_bytes": 662
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/hand_n.head.txt",
+      "title": "Hand N.Head",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:42:34.078478-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/head.after.txt",
+      "title": "Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:13:20.953893-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/head.before.txt",
+      "title": "Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:12:14.743955-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/head.short.txt",
+      "title": "Head.Short",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:03:45.506849-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/hooks.path.after.txt",
+      "title": "Hooks.Path.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:15:28.649666-08:00",
+      "size_bytes": 10
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m10.branch.before.txt",
+      "title": "M10.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:02:30.371761-08:00",
+      "size_bytes": 47
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m10.head.after.txt",
+      "title": "M10.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:03:35.695449-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m10.head.before.txt",
+      "title": "M10.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:02:30.370006-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m11.branch.before.txt",
+      "title": "M11.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:08:33.568267-08:00",
+      "size_bytes": 50
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m11.head.after.txt",
+      "title": "M11.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:11:23.955334-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m11.head.before.txt",
+      "title": "M11.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:08:33.566267-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m12.branch.before.txt",
+      "title": "M12.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:18:55.335750-08:00",
+      "size_bytes": 53
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m12.head.after.txt",
+      "title": "M12.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:20:12.783895-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m12.head.before.txt",
+      "title": "M12.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:18:55.333750-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m14.e66.pytest.tail.txt",
+      "title": "M14.E66.Pytest.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:50:12.101542-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m7.branch.before.txt",
+      "title": "M7.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:36:09.454051-08:00",
+      "size_bytes": 51
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m7_to_m8.branch.after.txt",
+      "title": "M7 To M8.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:43:18.864168-08:00",
+      "size_bytes": 51
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m7_to_m8.branch.before.txt",
+      "title": "M7 To M8.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:43:05.334868-08:00",
+      "size_bytes": 50
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m7_to_m8.head.after.txt",
+      "title": "M7 To M8.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:43:18.862168-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/m8.head.after.txt",
+      "title": "M8.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:49:59.435778-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/main.atlas.db_proof.inject.tail.txt",
+      "title": "Main.Atlas.Db Proof.Inject.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:11:50.481652-08:00",
+      "size_bytes": 34
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/main.log.txt",
+      "title": "Main.Log",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T21:52:36.182190-08:00",
+      "size_bytes": 498
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/main.pytest.mcp.tail.after457.last120.txt",
+      "title": "Main.Pytest.Mcp.Tail.After457.Last120",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:11:46.213981-08:00",
+      "size_bytes": 1107
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/main.pytest.mcp.tail.after459.last120.txt",
+      "title": "Main.Pytest.Mcp.Tail.After459.Last120",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:21:18.414837-08:00",
+      "size_bytes": 1107
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/main.pytest.mcp.tail.last50.txt",
+      "title": "Main.Pytest.Mcp.Tail.Last50",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:44:44.446841-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/mcp.bench.dsn.txt",
+      "title": "Mcp.Bench.Dsn",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:29:08.681864-08:00",
+      "size_bytes": 1
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/mcp.catalog.validate.log.txt",
+      "title": "Mcp.Catalog.Validate.Log",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:45:11.029042-08:00",
+      "size_bytes": 318
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/merge.pr4.rc.txt",
+      "title": "Merge.Pr4.Rc",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:36:50.400843-08:00",
+      "size_bytes": 2
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/merge.status.after.txt",
+      "title": "Merge.Status.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:21:14.295984-08:00",
+      "size_bytes": 56
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/p0.schemas.ids.txt",
+      "title": "P0.Schemas.Ids",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:03:46.410580-08:00",
+      "size_bytes": 440
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan072_final.guard.atlas_sitemap.tail.txt",
+      "title": "Plan072 Final.Guard.Atlas Sitemap.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:24:03.213919-08:00",
+      "size_bytes": 50
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan072.next.branch.before.txt",
+      "title": "Plan072.Next.Branch.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:40:20.323471-08:00",
+      "size_bytes": 44
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan072.next.head.before.txt",
+      "title": "Plan072.Next.Head.Before",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:40:20.320471-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan072.next.head.final.txt",
+      "title": "Plan072.Next.Head.Final",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:41:19.116048-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073.impl.branch.txt",
+      "title": "Plan073.Impl.Branch",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:44:39.084841-08:00",
+      "size_bytes": 43
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m2.branch.after.txt",
+      "title": "Plan073M2.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:01:02.162896-08:00",
+      "size_bytes": 46
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m2.head.after.txt",
+      "title": "Plan073M2.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:01:02.159479-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m3.branch.after.txt",
+      "title": "Plan073M3.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:06:07.050553-08:00",
+      "size_bytes": 43
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m4.branch.after.txt",
+      "title": "Plan073M4.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:18:27.298934-08:00",
+      "size_bytes": 46
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m4.pytest.tail.txt",
+      "title": "Plan073M4.Pytest.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:18:20.302862-08:00",
+      "size_bytes": 98
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m5.branch.after.txt",
+      "title": "Plan073M5.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:25:43.307074-08:00",
+      "size_bytes": 51
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/plan073m5.head.after.txt",
+      "title": "Plan073M5.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:25:43.304074-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_073m13_impl.merge.out.txt",
+      "title": "Pr 073M13 Impl.Merge.Out",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T10:27:40.354672-08:00",
+      "size_bytes": 111
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr394.checks.after.txt",
+      "title": "Pr394.Checks.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:03:11.170661-08:00",
+      "size_bytes": 1301
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr394.guard.hint.txt",
+      "title": "Pr394.Guard.Hint",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:03:10.351658-08:00",
+      "size_bytes": 346
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr425.required_checks.note.txt",
+      "title": "Pr425.Required Checks.Note",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T17:29:27.505574-08:00",
+      "size_bytes": 64
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_431.required_gate.txt",
+      "title": "Pr 431.Required Gate",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:13:08.468481-08:00",
+      "size_bytes": 148
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_434.required_gate.txt",
+      "title": "Pr 434.Required Gate",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T19:31:39.779441-08:00",
+      "size_bytes": 4
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_441.required_gate.txt",
+      "title": "Pr 441.Required Gate",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T21:04:48.564441-08:00",
+      "size_bytes": 19
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_451.merge_rc.txt",
+      "title": "Pr 451.Merge Rc",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:40:55.047128-08:00",
+      "size_bytes": 11
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr457.branch.after.txt",
+      "title": "Pr457.Branch.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:11:52.939466-08:00",
+      "size_bytes": 47
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr457.head.after.txt",
+      "title": "Pr457.Head.After",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:11:52.937466-08:00",
+      "size_bytes": 9
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_457.merge.attempt.txt",
+      "title": "Pr 457.Merge.Attempt",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:11:31.374400-08:00",
+      "size_bytes": 20
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/pr_457.merge.final.txt",
+      "title": "Pr 457.Merge.Final",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:12:19.395622-08:00",
+      "size_bytes": 329
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/smoke.book.head.txt",
+      "title": "Smoke.Book.Head",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T19:53:18.219890-08:00",
+      "size_bytes": 541
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/smoke.calibrate.head.txt",
+      "title": "Smoke.Calibrate.Head",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T19:53:19.147892-08:00",
+      "size_bytes": 934
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/smoke.exports.head.txt",
+      "title": "Smoke.Exports.Head",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T19:53:18.661891-08:00",
+      "size_bytes": 893
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/tag.local.name.txt",
+      "title": "Tag.Local.Name",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:46:56.438860-08:00",
+      "size_bytes": 34
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/tag.pr4.local.name.txt",
+      "title": "Tag.Pr4.Local.Name",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:38:38.457688-08:00",
+      "size_bytes": 34
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/tag.pr6.name.txt",
+      "title": "Tag.Pr6.Name",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:51:20.360977-08:00",
+      "size_bytes": 34
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/tag_v006.repo_root.txt",
+      "title": "Tag V006.Repo Root",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:53:32.744293-08:00",
+      "size_bytes": 34
+    },
+    {
+      "path": "archive/evidence_v0.0.9_pre/tvs_e50plus.tail.txt",
+      "title": "Tvs E50Plus.Tail",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:12:23.418066-08:00",
+      "size_bytes": 80
+    },
+    {
+      "path": "archive/NEXT_STEPS_v0.0.9_pre.md",
+      "title": "PLAN-073 M1 \u2014 Implementation Notes (E01\u2013E05)",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T17:28:58.960461-08:00",
+      "size_bytes": 542
+    },
+    {
+      "path": "docs/analysis/phase7_governance/COMPREHENSIVE_SYSTEM_REPORT.md",
+      "title": "Gemantria System \u2014 Comprehensive Implementation Report",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316240-08:00",
+      "size_bytes": 42363
+    },
+    {
+      "path": "docs/SSOT/RULES_INDEX.md",
+      "title": "RULES_INDEX",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T11:34:15.164610-08:00",
+      "size_bytes": 3283
+    },
+    {
+      "path": "docs/VERIFICATION_MATRIX.md",
+      "title": "Verification Matrix",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 2843
+    },
+    {
+      "path": "evidence/governance_smoke.tail.txt",
+      "title": "Governance Smoke.Tail",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:14:49.016101-08:00",
+      "size_bytes": 318
+    },
+    {
+      "path": "evidence/guard_no_schedules.tail.txt",
+      "title": "Guard No Schedules.Tail",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:14:49.016101-08:00",
+      "size_bytes": 325
+    },
+    {
+      "path": "evidence/guard.prompt.strict.tail.txt",
+      "title": "Guard.Prompt.Strict.Tail",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:14:49.016101-08:00",
+      "size_bytes": 569
+    },
+    {
+      "path": "evidence/guard_truth_hint.stderr.txt",
+      "title": "Guard Truth Hint.Stderr",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:14:49.016101-08:00",
+      "size_bytes": 87
+    },
+    {
+      "path": "exports/README.md",
+      "title": "Exports Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:32.076522-08:00",
+      "size_bytes": 8162
+    },
+    {
+      "path": "schemas/biblescholar/SCHEMA_INDEX.md",
+      "title": "BibleScholar Project \u2014 Schema Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.501036-08:00",
+      "size_bytes": 5598
+    },
+    {
+      "path": "ui/out/temporal_summary.md",
+      "title": "Temporal Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.530000-08:00",
+      "size_bytes": 37
+    }
+  ],
+  "total": 177,
+  "generated_at": "2025-11-19T18:29:47.736915+00:00"
+}

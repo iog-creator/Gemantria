@@ -129,6 +129,7 @@
 | 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
 | 067 | 067-atlas-webproof.mdc | Atlas Webproof (Browser-Verified UI) — Run `make atlas.viewer.validate` and `make atlas.webproof`; attach JSON + screenshots; `STRICT_WEBPROOF=1` for tags. **Always-Apply for docs/atlas/* edits.** |
 | 068 | 068-gpt-docs-sync.mdc | GPT Documentation Sync (AlwaysApply) |
+| 069 | 069-reality-green.mdc | Reality Green Truth Gate (Option C - DB is SSOT) — `make reality.green` validates DB health, control-plane health, AGENTS.md sync, share sync, and required exports. Only passes when system is up to date and consistent. Required before: declaring features complete, opening PRs for main, generating share/ snapshots. |
 
 ---
 
@@ -153,3 +154,12 @@
   - See: `scripts/ci/atlas_webproof.sh` and `scripts/ops/browser_verify.sh` (recommended wrapper; `make browser.verify`)
 
 - OPS v6.3: PM ↔ Cursor OPS contract (see docs/SSOT/GEMANTRIA_OPS_v6.3.txt)
+
+## PM and Cursor Workflow Contracts
+
+- [PM Contract — Strict SSOT + DMS Mode](docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md)
+- [Cursor Workflow Contract](docs/SSOT/CURSOR_WORKFLOW_CONTRACT.md)
+- [Cursor Workflow Runbook](docs/runbooks/CURSOR_WORKFLOW_RUNBOOK.md)
+- [Doc Control Panel Data Contract](docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md) - JSON export formats for orchestrator dashboard (DM-002)
+- [PM + OPS Behavioral Contract](docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md)
+- [Cursor Workflow Contract (Installed)](docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md)

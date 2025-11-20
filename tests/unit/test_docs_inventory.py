@@ -116,9 +116,6 @@ def test_run_inventory_success(mock_get_dsn, mock_psycopg, tmp_path):
 
     # Mock DB connection with proper context manager setup
     mock_conn = MagicMock()
-    mock_cur_table_check = MagicMock()
-    mock_cur_file_check = MagicMock()
-    mock_cur_insert = MagicMock()
 
     # Setup connection context manager
     mock_conn.__enter__ = MagicMock(return_value=mock_conn)
