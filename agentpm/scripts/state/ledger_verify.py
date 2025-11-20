@@ -44,14 +44,34 @@ def get_artifact_list() -> list[tuple[Path, str, str]]:
         # SSOT docs
         (repo_root / "docs/SSOT/MASTER_PLAN.md", "MASTER_PLAN.md", "docs/SSOT"),
         (repo_root / "docs/runbooks/DB_HEALTH.md", "DB_HEALTH.md", "docs/runbooks"),
-        (repo_root / "docs/runbooks/PM_SNAPSHOT_CURRENT.md", "PM_SNAPSHOT_CURRENT.md", "docs/runbooks"),
+        (
+            repo_root / "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
+            "PM_SNAPSHOT_CURRENT.md",
+            "docs/runbooks",
+        ),
         (repo_root / "RULES_INDEX.md", "RULES_INDEX.md", "root"),
         # Share exports (control-plane)
-        (repo_root / "share/atlas/control_plane/system_health.json", "system_health.json", "share/atlas/control_plane"),
-        (repo_root / "share/atlas/control_plane/lm_indicator.json", "lm_indicator.json", "share/atlas/control_plane"),
+        (
+            repo_root / "share/atlas/control_plane/system_health.json",
+            "system_health.json",
+            "share/atlas/control_plane",
+        ),
+        (
+            repo_root / "share/atlas/control_plane/lm_indicator.json",
+            "lm_indicator.json",
+            "share/atlas/control_plane",
+        ),
         # Share exports (docs-control)
-        (repo_root / "share/exports/docs-control/canonical.json", "canonical.json", "share/exports/docs-control"),
-        (repo_root / "share/exports/docs-control/summary.json", "summary.json", "share/exports/docs-control"),
+        (
+            repo_root / "share/exports/docs-control/canonical.json",
+            "canonical.json",
+            "share/exports/docs-control",
+        ),
+        (
+            repo_root / "share/exports/docs-control/summary.json",
+            "summary.json",
+            "share/exports/docs-control",
+        ),
     ]
 
 

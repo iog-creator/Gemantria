@@ -83,7 +83,7 @@ def reality_check(**kwargs: Any) -> dict[str, Any]:
     Returns:
         Dict with reality check results.
     """
-    result = check_reality()
+    result = check_reality(**kwargs)
     return {
         "ok": result.get("overall_ok", False),
         "result": result,

@@ -75,7 +75,10 @@ def check_control_plane_health() -> CheckResult:
     else:
         error_msg = stderr.strip() or stdout.strip() or "Unknown error"
         return CheckResult(
-            "Control-Plane Health", False, f"Control-plane health check failed: {error_msg}", {"exit_code": exit_code}
+            "Control-Plane Health",
+            False,
+            f"Control-plane health check failed: {error_msg}",
+            {"exit_code": exit_code},
         )
 
 

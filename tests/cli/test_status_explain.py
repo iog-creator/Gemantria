@@ -47,6 +47,14 @@ def test_status_explain_json_only(mock_explain):
         "level": "OK",
         "headline": "All systems nominal",
         "details": "Database is ready and all checks passed. All 4 LM slot(s) are operational.",
+        "documentation": {
+            "available": True,
+            "total": 5,
+            "by_subsystem": {"docs": 3, "agentpm": 1, "root": 1},
+            "by_type": {"ssot": 2, "adr": 1, "agents_md": 2},
+            "hints": [],
+            "key_docs": [],
+        },
     }
 
     result = runner.invoke(app, ["status", "explain", "--json-only"])
@@ -60,6 +68,11 @@ def test_status_explain_json_only(mock_explain):
     assert data["headline"] == "All systems nominal"
     assert "details" in data
     assert isinstance(data["details"], str)
+    # KB-Reg:M5: Verify documentation section is present
+    assert "documentation" in data
+    assert isinstance(data["documentation"], dict)
+    assert "available" in data["documentation"]
+    assert "total" in data["documentation"]
 
 
 @patch("pmagent.cli.explain_system_status")

@@ -218,10 +218,16 @@ def main():
                 check=False,
             )
             if sync_result.returncode != 0:
-                print("[rules_guard] FAIL: AGENTS.md files are stale and must be updated", file=sys.stderr)
+                print(
+                    "[rules_guard] FAIL: AGENTS.md files are stale and must be updated",
+                    file=sys.stderr,
+                )
                 print(sync_result.stdout, file=sys.stderr)
                 print(sync_result.stderr, file=sys.stderr)
-                print("[rules_guard]    Run: python scripts/check_agents_md_sync.py --verbose", file=sys.stderr)
+                print(
+                    "[rules_guard]    Run: python scripts/check_agents_md_sync.py --verbose",
+                    file=sys.stderr,
+                )
                 require(
                     False,
                     "CRITICAL: AGENTS.md files are stale. Update them to reflect code changes per Rule-006, Rule-027, Rule-058.",

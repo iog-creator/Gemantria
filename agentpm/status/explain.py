@@ -9,6 +9,7 @@ Uses rule-based logic with optional LM enhancement for better wording.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any
 
 from agentpm.status.system import get_system_status
@@ -149,19 +150,126 @@ Provide an improved, user-friendly explanation:"""
         # Call LM (guarded - will raise if unavailable)
         enhanced_text = chat(prompt, model_slot="local_agent", system=system_prompt)
 
-        # Use LM text as details, but keep original level and headline
-        return {
+        # Use LM text as details, but keep original level, headline, and documentation section
+        enhanced = {
             "level": rule_based["level"],
             "headline": rule_based["headline"],
             "details": enhanced_text.strip(),
         }
+        # Preserve documentation section if present
+        if "documentation" in rule_based:
+            enhanced["documentation"] = rule_based["documentation"]
+        return enhanced
     except Exception:
         # LM call failed, return rule-based explanation
         return rule_based
 
 
+def _add_kb_documentation_section(explanation: dict[str, Any]) -> dict[str, Any]:
+    """Add KB documentation section to explanation (KB-Reg:M5).
+
+    Args:
+        explanation: Existing explanation dict
+
+    Returns:
+        Explanation dict with added "documentation" field
+    """
+    try:
+        from agentpm.status.snapshot import get_kb_status_view, get_kb_hints
+
+        kb_status_view = get_kb_status_view()
+        kb_hints = get_kb_hints(kb_status_view)
+
+        # Get freshness summary (KB-Reg:M6)
+        freshness_summary = kb_status_view.get("freshness", {})
+
+        doc_section: dict[str, Any] = {
+            "available": kb_status_view.get("available", False),
+            "total": kb_status_view.get("total", 0),
+            "by_subsystem": kb_status_view.get("by_subsystem", {}),
+            "by_type": kb_status_view.get("by_type", {}),
+            "hints": kb_hints,
+            "key_docs": [],
+            "freshness": freshness_summary,  # KB-Reg:M6
+        }
+
+        # Identify key docs (prioritize SSOT, ADRs, and root AGENTS.md)
+        if kb_status_view.get("available", False):
+            try:
+                from agentpm.kb.registry import load_registry
+
+                repo_root = Path(__file__).resolve().parents[2]
+                registry_path = repo_root / "share" / "kb_registry.json"
+                if registry_path.exists():
+                    registry = load_registry(registry_path)
+                    # Find key docs: prioritize SSOT, ADRs, root AGENTS.md
+                    # Try specific IDs first, then fall back to type-based selection
+                    key_doc_ids = [
+                        "ssot-master-plan",
+                        "ssot-pmagent-current-vs-intended",
+                        "agents-md-root",
+                    ]
+                    found_ids = set()
+                    for doc_id in key_doc_ids:
+                        # Find document by ID in registry.documents list
+                        doc = next((d for d in registry.documents if d.id == doc_id), None)
+                        if doc:
+                            doc_path = repo_root / doc.path
+                            if doc_path.exists():
+                                doc_section["key_docs"].append(
+                                    {
+                                        "id": doc.id,
+                                        "title": doc.title,
+                                        "path": doc.path,
+                                        "type": doc.type,
+                                    }
+                                )
+                                found_ids.add(doc.id)
+
+                    # If we don't have 3 yet, add more by type priority (ssot > adr > agents_md)
+                    if len(doc_section["key_docs"]) < 3:
+                        for doc in registry.documents:
+                            if doc.id in found_ids:
+                                continue
+                            if doc.type in ("ssot", "adr", "agents_md"):
+                                doc_path = repo_root / doc.path
+                                if doc_path.exists():
+                                    doc_section["key_docs"].append(
+                                        {
+                                            "id": doc.id,
+                                            "title": doc.title,
+                                            "path": doc.path,
+                                            "type": doc.type,
+                                        }
+                                    )
+                                    found_ids.add(doc.id)
+                                    if len(doc_section["key_docs"]) >= 3:
+                                        break
+
+                    # Limit to 3 docs
+                    doc_section["key_docs"] = doc_section["key_docs"][:3]
+            except Exception:
+                # KB registry unavailable or error loading key docs, skip silently
+                # (documentation section will still have status/hints, just no key_docs)
+                pass
+
+        explanation["documentation"] = doc_section
+    except Exception:
+        # KB registry unavailable, add empty section
+        explanation["documentation"] = {
+            "available": False,
+            "total": 0,
+            "by_subsystem": {},
+            "by_type": {},
+            "hints": [],
+            "key_docs": [],
+        }
+
+    return explanation
+
+
 def explain_system_status(use_lm: bool = True) -> dict[str, Any]:
-    """Explain current system status in plain language.
+    """Explain current system status in plain language (KB-Reg:M5: includes KB documentation context).
 
     Args:
         use_lm: Whether to attempt LM enhancement (default: True)
@@ -172,6 +280,14 @@ def explain_system_status(use_lm: bool = True) -> dict[str, Any]:
             "level": "OK" | "WARN" | "ERROR",
             "headline": str,
             "details": str,
+            "documentation": {
+                "available": bool,
+                "total": int,
+                "by_subsystem": {...},
+                "by_type": {...},
+                "hints": [...],
+                "key_docs": [...]
+            }
         }
     """
     try:
@@ -183,12 +299,23 @@ def explain_system_status(use_lm: bool = True) -> dict[str, Any]:
             "level": "ERROR",
             "headline": "Unable to check system status",
             "details": "Failed to retrieve system status. Please check logs for details.",
+            "documentation": {
+                "available": False,
+                "total": 0,
+                "by_subsystem": {},
+                "by_type": {},
+                "hints": [],
+                "key_docs": [],
+            },
         }
 
     # Generate rule-based explanation
     explanation = summarize_system_status(status)
 
-    # Optionally enhance with LM
+    # Add KB documentation section (KB-Reg:M5)
+    explanation = _add_kb_documentation_section(explanation)
+
+    # Optionally enhance with LM (note: LM enhancement doesn't modify documentation section)
     if use_lm:
         explanation = _enhance_with_lm(explanation, status)
 

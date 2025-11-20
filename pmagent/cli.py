@@ -45,6 +45,7 @@ from scripts.control.control_summary import (  # noqa: E402
 from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
 from agentpm.lm.lm_status import compute_lm_status, print_lm_status_table  # noqa: E402
 from agentpm.status.explain import explain_system_status  # noqa: E402
+from agentpm.status.snapshot import get_kb_status_view  # noqa: E402
 from agentpm.docs.search import search_docs  # noqa: E402
 from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
 from scripts.config.env import get_retrieval_lane_models, get_lm_model_config  # noqa: E402
@@ -65,6 +66,12 @@ from agentpm.tools import (  # noqa: E402
     rerank_passages,
     extract_concepts,
     generate_embeddings as tool_embed,
+)
+from agentpm.kb.registry import (  # noqa: E402
+    load_registry,
+    query_registry,
+    validate_registry,
+    REGISTRY_PATH,
 )
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
@@ -92,6 +99,10 @@ models_app = typer.Typer(help="Model introspection commands")
 app.add_typer(models_app, name="models")
 state_app = typer.Typer(help="System state ledger operations")
 app.add_typer(state_app, name="state")
+kb_app = typer.Typer(help="Knowledge-base document registry operations")
+app.add_typer(kb_app, name="kb")
+registry_app = typer.Typer(help="KB document registry commands")
+kb_app.add_typer(registry_app, name="registry")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -210,6 +221,65 @@ def status_explain(
         if level == "ERROR":
             print(f"{level_tag} {headline}", file=sys.stderr)
             print(details, file=sys.stderr)
+
+    sys.exit(0)
+
+
+@status_app.command("kb", help="KB registry status view for PM/AgentPM planning")
+def status_kb(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """Get KB-focused status view showing document counts by subsystem/type and missing files."""
+    try:
+        path = Path(registry_path) if registry_path else None
+        kb_status = get_kb_status_view(registry_path=path)
+
+        if json_only:
+            print(json.dumps(kb_status, indent=2))
+        else:
+            # Human-readable output
+            print("KB Registry Status:", file=sys.stderr)
+            print(f"  Available: {kb_status.get('available', False)}", file=sys.stderr)
+            print(f"  Total documents: {kb_status.get('total', 0)}", file=sys.stderr)
+
+            by_subsystem = kb_status.get("by_subsystem", {})
+            if by_subsystem:
+                print("  By subsystem:", file=sys.stderr)
+                for subsystem, count in sorted(by_subsystem.items()):
+                    print(f"    {subsystem}: {count}", file=sys.stderr)
+
+            by_type = kb_status.get("by_type", {})
+            if by_type:
+                print("  By type:", file=sys.stderr)
+                for doc_type, count in sorted(by_type.items()):
+                    print(f"    {doc_type}: {count}", file=sys.stderr)
+
+            missing_files = kb_status.get("missing_files", [])
+            if missing_files:
+                print(f"  Missing files ({len(missing_files)}):", file=sys.stderr)
+                for file_path in missing_files[:10]:  # Show first 10
+                    print(f"    {file_path}", file=sys.stderr)
+                if len(missing_files) > 10:
+                    print(f"    ... and {len(missing_files) - 10} more", file=sys.stderr)
+
+            notes = kb_status.get("notes", [])
+            if notes:
+                print("  Notes:", file=sys.stderr)
+                for note in notes:
+                    print(f"    {note}", file=sys.stderr)
+
+            # JSON to stdout for scripting
+            print(json.dumps(kb_status, indent=2))
+
+    except Exception as e:
+        error_msg = {"error": str(e), "available": False, "total": 0}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to get KB status: {e}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
 
     sys.exit(0)
 
@@ -754,7 +824,10 @@ def bible_retrieve(
             print(json.dumps(result, indent=2))
             if result.get("ok"):
                 verses = result.get("verses", [])
-                print(f"BIBLE_RETRIEVE: found {len(verses)} verse(s) for '{reference}'", file=sys.stderr)
+                print(
+                    f"BIBLE_RETRIEVE: found {len(verses)} verse(s) for '{reference}'",
+                    file=sys.stderr,
+                )
             else:
                 errors = result.get("errors", [])
                 error_msg = errors[0] if errors else "unknown error"
@@ -839,7 +912,10 @@ def embed_text_cmd(
             if result.get("ok"):
                 embeddings = result.get("embeddings", [])
                 dimension = result.get("dimension", 0)
-                print(f"EMBED: generated {len(embeddings)} embedding(s) (dim={dimension})", file=sys.stderr)
+                print(
+                    f"EMBED: generated {len(embeddings)} embedding(s) (dim={dimension})",
+                    file=sys.stderr,
+                )
             else:
                 errors = result.get("errors", [])
                 error_msg = errors[0] if errors else "unknown error"
@@ -849,6 +925,220 @@ def embed_text_cmd(
     except Exception as e:
         mark_agent_run_error(run, e)
         raise
+
+
+@registry_app.command("list", help="List all registered KB documents")
+def kb_registry_list(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """List all registered KB documents."""
+    try:
+        path = Path(registry_path) if registry_path else REGISTRY_PATH
+        registry = load_registry(path)
+
+        if json_only:
+            print(json.dumps(registry.to_dict(), indent=2))
+        else:
+            print(f"KB Registry: {len(registry.documents)} document(s)", file=sys.stderr)
+            print(f"Version: {registry.version}", file=sys.stderr)
+            print(f"Generated: {registry.generated_at}", file=sys.stderr)
+            print("", file=sys.stderr)
+            for doc in registry.documents:
+                print(f"  {doc.id:30} {doc.type:15} {doc.path}")
+            print(json.dumps(registry.to_dict(), indent=2))
+        sys.exit(0)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@registry_app.command("show", help="Show details for a single KB document")
+def kb_registry_show(
+    doc_id: str = typer.Argument(..., help="Document ID to show"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """Show details for a single KB document."""
+    try:
+        path = Path(registry_path) if registry_path else REGISTRY_PATH
+        registry = load_registry(path)
+        doc = registry.get_by_id(doc_id)
+
+        if not doc:
+            print(f"ERROR: Document not found: {doc_id}", file=sys.stderr)
+            sys.exit(1)
+
+        if json_only:
+            print(json.dumps(doc.to_dict(), indent=2))
+        else:
+            print(f"Document: {doc.id}", file=sys.stderr)
+            print(f"  Title: {doc.title}", file=sys.stderr)
+            print(f"  Path: {doc.path}", file=sys.stderr)
+            print(f"  Type: {doc.type}", file=sys.stderr)
+            print(f"  Tags: {', '.join(doc.tags) if doc.tags else '(none)'}", file=sys.stderr)
+            print(f"  Owning Subsystem: {doc.owning_subsystem}", file=sys.stderr)
+            print(f"  Registered: {doc.registered_at}", file=sys.stderr)
+            if doc.provenance:
+                print(f"  Provenance: {json.dumps(doc.provenance, indent=4)}", file=sys.stderr)
+            print(json.dumps(doc.to_dict(), indent=2))
+        sys.exit(0)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@registry_app.command("by-subsystem", help="List KB documents by owning subsystem")
+def kb_registry_by_subsystem(
+    owning_subsystem: str = typer.Option(..., "--owning-subsystem", help="Owning subsystem to filter by"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """List KB documents filtered by owning subsystem."""
+    try:
+        path = Path(registry_path) if registry_path else REGISTRY_PATH
+        registry = load_registry(path)
+        results = query_registry(registry, owning_subsystem=owning_subsystem)
+
+        if json_only:
+            print(json.dumps([doc.to_dict() for doc in results], indent=2))
+        else:
+            print(
+                f"KB Registry: {len(results)} document(s) for subsystem '{owning_subsystem}'",
+                file=sys.stderr,
+            )
+            print("", file=sys.stderr)
+            for doc in results:
+                print(f"  {doc.id:30} {doc.type:15} {doc.path}")
+            print(json.dumps([doc.to_dict() for doc in results], indent=2))
+        sys.exit(0)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@registry_app.command("by-tag", help="List KB documents by tag")
+def kb_registry_by_tag(
+    tag: str = typer.Option(..., "--tag", help="Tag to filter by"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """List KB documents filtered by tag."""
+    try:
+        path = Path(registry_path) if registry_path else REGISTRY_PATH
+        registry = load_registry(path)
+        results = query_registry(registry, tags=[tag])
+
+        if json_only:
+            print(json.dumps([doc.to_dict() for doc in results], indent=2))
+        else:
+            print(f"KB Registry: {len(results)} document(s) with tag '{tag}'", file=sys.stderr)
+            print("", file=sys.stderr)
+            for doc in results:
+                print(f"  {doc.id:30} {doc.type:15} {doc.path}")
+            print(json.dumps([doc.to_dict() for doc in results], indent=2))
+        sys.exit(0)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@registry_app.command("summary", help="Get KB registry status summary (same as 'status kb')")
+def kb_registry_summary(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """Get KB registry status summary showing counts by subsystem/type and missing files."""
+    try:
+        path = Path(registry_path) if registry_path else None
+        kb_status = get_kb_status_view(registry_path=path)
+
+        if json_only:
+            print(json.dumps(kb_status, indent=2))
+        else:
+            # Human-readable output
+            print("KB Registry Summary:", file=sys.stderr)
+            print(f"  Available: {kb_status.get('available', False)}", file=sys.stderr)
+            print(f"  Total documents: {kb_status.get('total', 0)}", file=sys.stderr)
+
+            by_subsystem = kb_status.get("by_subsystem", {})
+            if by_subsystem:
+                print("  By subsystem:", file=sys.stderr)
+                for subsystem, count in sorted(by_subsystem.items()):
+                    print(f"    {subsystem}: {count}", file=sys.stderr)
+
+            by_type = kb_status.get("by_type", {})
+            if by_type:
+                print("  By type:", file=sys.stderr)
+                for doc_type, count in sorted(by_type.items()):
+                    print(f"    {doc_type}: {count}", file=sys.stderr)
+
+            missing_files = kb_status.get("missing_files", [])
+            if missing_files:
+                print(f"  Missing files ({len(missing_files)}):", file=sys.stderr)
+                for file_path in missing_files[:10]:  # Show first 10
+                    print(f"    {file_path}", file=sys.stderr)
+                if len(missing_files) > 10:
+                    print(f"    ... and {len(missing_files) - 10} more", file=sys.stderr)
+
+            notes = kb_status.get("notes", [])
+            if notes:
+                print("  Notes:", file=sys.stderr)
+                for note in notes:
+                    print(f"    {note}", file=sys.stderr)
+
+            # JSON to stdout for scripting
+            print(json.dumps(kb_status, indent=2))
+
+    except Exception as e:
+        error_msg = {"error": str(e), "available": False, "total": 0}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to get KB summary: {e}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
+
+    sys.exit(0)
+
+
+@registry_app.command("validate", help="Validate registry entries (check file existence, duplicates)")
+def kb_registry_validate(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
+) -> None:
+    """Validate registry entries (check file existence, duplicates, etc.)."""
+    try:
+        path = Path(registry_path) if registry_path else REGISTRY_PATH
+        registry = load_registry(path)
+        validation = validate_registry(registry)
+
+        if json_only:
+            print(json.dumps(validation, indent=2))
+        else:
+            stats = validation["stats"]
+            print("Validation Results:", file=sys.stderr)
+            print(f"  Valid: {validation['valid']}", file=sys.stderr)
+            print(f"  Total: {stats['total']}", file=sys.stderr)
+            print(f"  Valid Paths: {stats['valid_paths']}", file=sys.stderr)
+            print(f"  Missing Paths: {stats['missing_paths']}", file=sys.stderr)
+            print(f"  Duplicate IDs: {stats['duplicate_ids']}", file=sys.stderr)
+            print(f"  Duplicate Paths: {stats['duplicate_paths']}", file=sys.stderr)
+            if validation["errors"]:
+                print("", file=sys.stderr)
+                print("Errors:", file=sys.stderr)
+                for error in validation["errors"]:
+                    print(f"  - {error}", file=sys.stderr)
+            if validation["warnings"]:
+                print("", file=sys.stderr)
+                print("Warnings:", file=sys.stderr)
+                for warning in validation["warnings"]:
+                    print(f"  - {warning}", file=sys.stderr)
+            print(json.dumps(validation, indent=2))
+        sys.exit(0 if validation["valid"] else 1)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def main() -> None:

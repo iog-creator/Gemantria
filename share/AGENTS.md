@@ -926,6 +926,8 @@ dsns.echo:                 # Print redacted DSNs for operator sanity (never prin
 
 ## Model Routing & Configuration
 
+For detailed prompt templates, routing roles, and MoE-of-MoEs design for the Granite 4.0 + BGE-M3 + Granite Reranker stack, see `Prompting Guide for Our Core LLM models.md`. That guide is a **design-level spec**; this section remains the SSOT for what is currently wired in code.
+
 ### 🔧 **Model Routing Map (Who Handles What)**
 
 | Agent                       | Primary model                                            | Why / Purpose                               | Fallback                                  | Non-LLM deps      |

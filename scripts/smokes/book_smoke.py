@@ -39,9 +39,15 @@ def main() -> int:
         return 0
     except Exception as exc:  # pragma: no cover - runtime informational hint
         # DB is SSOT - if DSN is set but DB unreachable, this is a broken state.
-        print("❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr)
+        print(
+            "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.",
+            file=sys.stderr,
+        )
         print(f"   Error: {exc.__class__.__name__}: {exc}", file=sys.stderr)
-        print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr)
+        print(
+            "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+            file=sys.stderr,
+        )
         return 1
 
 

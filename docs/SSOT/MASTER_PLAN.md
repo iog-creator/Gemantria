@@ -491,6 +491,10 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - Improve pmagent bringup / mcp UX for non-expert users
   - Enhanced help text, clearer Reality Check messages, wizard-style flows
 
+- **7E**: Core LLM Prompting Guide (Design Doc) ✅ COMPLETE (docs only)
+  - `Prompting Guide for Our Core LLM models.md` documents the Granite 4.0 + BGE-M3 + Granite Reranker stack, chat templates, embedding usage, and reranker prompting.
+  - Treated as a **design-level MoE-of-MoEs spec** for future router work; runtime model bindings remain governed by `AGENTS.md` until an explicit Phase-7 implementation milestone is marked complete.
+
 **Goal**: Complete Phase 6 setup and establish operational baseline for production use.
 
 **Status**: 📋 **PLANNING**

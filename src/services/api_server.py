@@ -28,11 +28,13 @@ from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger
 
 # Import system status helpers
+from agentpm.status.eval_exports import (
+    load_db_health_snapshot,
+    load_edge_class_counts,
+    load_lm_indicator,
+)
 from agentpm.status.explain import explain_system_status
 from agentpm.status.system import get_system_status
-
-# Import LM indicator adapter
-from agentpm.lm_widgets.adapter import INDICATOR_PATH
 from datetime import UTC
 
 # Load environment variables
@@ -172,7 +174,7 @@ async def get_system_status_endpoint() -> JSONResponse:
     """Get system status (DB + LM health snapshot).
 
     Returns:
-        JSON with db and lm health status:
+        JSON with db and lm health status, plus optional AI tracking and share manifest:
         {
             "db": {
                 "reachable": bool,
@@ -190,18 +192,58 @@ async def get_system_status_endpoint() -> JSONResponse:
                     ...
                 ],
                 "notes": str
-            }
+            },
+            "ai_tracking": {
+                "ok": bool,
+                "mode": "db_on" | "db_off",
+                "summary": {...}
+            } (optional),
+            "share_manifest": {
+                "ok": bool,
+                "count": int,
+                "items": [...]
+            } (optional)
         }
     """
     try:
-        status = get_system_status()
-        return JSONResponse(content=status)
+        # Use unified snapshot helper for consistency with pm.snapshot
+        from agentpm.status.snapshot import get_system_snapshot
+
+        snapshot = get_system_snapshot(
+            include_reality_check=False,  # Skip for /api/status/system (use /api/status/explain for that)
+            include_ai_tracking=True,
+            include_share_manifest=True,
+            include_eval_insights=True,  # Include eval exports summary
+            use_lm_for_explain=False,  # Fast path for API
+        )
+
+        # Extract and format response (backward compatible with existing frontend)
+        system_status = get_system_status()  # Keep existing format for db/lm
+        response = {
+            "db": system_status.get("db", {}),
+            "lm": system_status.get("lm", {}),
+        }
+
+        # Add optional AI tracking, share manifest, and eval insights if available
+        if "ai_tracking" in snapshot:
+            response["ai_tracking"] = snapshot["ai_tracking"]
+        if "share_manifest" in snapshot:
+            response["share_manifest"] = snapshot["share_manifest"]
+        if "eval_insights" in snapshot:
+            response["eval_insights"] = snapshot["eval_insights"]
+
+        return JSONResponse(content=response)
     except Exception as e:
         LOG.error(f"Error getting system status: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Internal server error while fetching system status: {e!s}",
-        ) from e
+        # Fallback to original implementation if snapshot helper fails
+        try:
+            status = get_system_status()
+            return JSONResponse(content=status)
+        except Exception as fallback_error:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Internal server error while fetching system status: {e!s}",
+            ) from fallback_error
 
 
 @app.get("/api/status/explain")
@@ -244,54 +286,43 @@ async def get_lm_indicator_endpoint() -> JSONResponse:
                 "top_error_reason": str | None,
                 "window_days": int,
                 "generated_at": str
-            }
+            } | null,
+            "note": str (if snapshot is null)
         }
-        Or empty snapshot if file is missing/invalid.
+        Uses shared eval exports helper (hermetic, tolerant of missing files).
     """
-    import json as json_lib
-    from pathlib import Path
-
     try:
-        # Use absolute path from adapter
-        indicator_path = Path(INDICATOR_PATH)
-        if not indicator_path.is_absolute():
-            # Resolve relative to repo root
-            repo_root = Path(__file__).resolve().parents[2]
-            indicator_path = repo_root / indicator_path
+        indicator_data = load_lm_indicator()
 
-        if not indicator_path.exists():
-            # Return empty snapshot with note
+        # Check if data is available
+        if not indicator_data.get("available", False):
             return JSONResponse(
                 content={
                     "snapshot": None,
-                    "note": "LM indicator data not available; run the LM indicator export pipeline to populate this chart.",
+                    "note": indicator_data.get(
+                        "note",
+                        "LM indicator data not available; run the LM indicator export pipeline to populate this chart.",
+                    ),
                 }
             )
 
-        # Read and parse JSON
-        try:
-            indicator_data = json_lib.loads(indicator_path.read_text(encoding="utf-8"))
-        except (json_lib.JSONDecodeError, OSError) as e:
-            LOG.error(f"Error reading LM indicator JSON: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Failed to parse LM indicator data",
-            ) from e
+        # Remove internal fields before returning
+        snapshot = {k: v for k, v in indicator_data.items() if k not in ("available", "note")}
 
         return JSONResponse(
             content={
-                "snapshot": indicator_data,
+                "snapshot": snapshot,
             }
         )
 
-    except HTTPException:
-        raise
     except Exception as e:
         LOG.error(f"Error getting LM indicator: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to load LM indicator data",
-        ) from e
+        return JSONResponse(
+            content={
+                "snapshot": None,
+                "note": f"Failed to load LM indicator data: {e}",
+            }
+        )
 
 
 @app.get("/status", response_class=HTMLResponse)
@@ -348,7 +379,7 @@ async def status_page() -> HTMLResponse:
             </div>
             
             <!-- LM Status Section -->
-            <div class="bg-white rounded-lg shadow p-6">
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
                 <h2 class="text-xl font-semibold mb-4">LM Slots</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -365,6 +396,28 @@ async def status_page() -> HTMLResponse:
                     </table>
                 </div>
                 <p id="lm-notes" class="text-sm text-gray-600 mt-4"></p>
+            </div>
+            
+            <!-- Documentation Health Section (KB-Reg:M5) -->
+            <div id="doc-health-card" class="bg-white rounded-lg shadow p-6 mb-6 hidden">
+                <h2 class="text-xl font-semibold mb-4">Documentation Health</h2>
+                <div id="doc-health-content">
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-600 mb-2">
+                            <span id="doc-total"></span>
+                            <span id="doc-subsystem-breakdown" class="ml-2"></span>
+                        </div>
+                        <div id="doc-hints-badge" class="hidden inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2"></div>
+                    </div>
+                    <div id="doc-key-docs" class="mt-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-2">Key Documents:</h3>
+                        <ul id="doc-key-docs-list" class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                        </ul>
+                    </div>
+                </div>
+                <div id="doc-health-unavailable" class="hidden text-sm text-gray-500 italic">
+                    Documentation registry unavailable
+                </div>
             </div>
             
             <p class="text-xs text-gray-500 mt-6">All LM/DB checks are local (127.0.0.1).</p>
@@ -402,10 +455,72 @@ async def status_page() -> HTMLResponse:
                 } else {
                     explanationCard.className = 'bg-green-50 border border-green-200 rounded-lg shadow p-6 mb-6';
                 }
+                
+                // Load documentation health (KB-Reg:M5)
+                loadDocumentationHealth(explanation);
             } catch (error) {
                 // Hide explanation content, show error message
                 document.getElementById('explanation-content').classList.add('hidden');
                 document.getElementById('explanation-error').classList.remove('hidden');
+            }
+        }
+        
+        function loadDocumentationHealth(explanation) {
+            const docCard = document.getElementById('doc-health-card');
+            const docContent = document.getElementById('doc-health-content');
+            const docUnavailable = document.getElementById('doc-health-unavailable');
+            
+            if (!explanation.documentation || !explanation.documentation.available) {
+                docCard.classList.remove('hidden');
+                docContent.classList.add('hidden');
+                docUnavailable.classList.remove('hidden');
+                return;
+            }
+            
+            const doc = explanation.documentation;
+            docCard.classList.remove('hidden');
+            docContent.classList.remove('hidden');
+            docUnavailable.classList.add('hidden');
+            
+            // Update total and subsystem breakdown
+            const docTotal = document.getElementById('doc-total');
+            docTotal.textContent = `Total: ${doc.total} document(s)`;
+            
+            const docSubsystem = document.getElementById('doc-subsystem-breakdown');
+            const subsystems = Object.entries(doc.by_subsystem || {})
+                .map(([sub, count]) => `${sub}: ${count}`)
+                .join(', ');
+            docSubsystem.textContent = subsystems ? `(${subsystems})` : '';
+            
+            // Show hints badge if there are WARN hints
+            const warnHints = (doc.hints || []).filter(h => h.level === 'WARN');
+            const hintsBadge = document.getElementById('doc-hints-badge');
+            if (warnHints.length > 0) {
+                hintsBadge.classList.remove('hidden');
+                hintsBadge.className = 'inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2 bg-yellow-500 text-white';
+                hintsBadge.textContent = `⚠️ ${warnHints.length} warning(s)`;
+            } else {
+                hintsBadge.classList.add('hidden');
+            }
+            
+            // Update key docs list
+            const keyDocsList = document.getElementById('doc-key-docs-list');
+            keyDocsList.innerHTML = '';
+            if (doc.key_docs && doc.key_docs.length > 0) {
+                doc.key_docs.forEach(docItem => {
+                    const li = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `/${docItem.path}`;
+                    link.className = 'text-blue-600 hover:text-blue-800';
+                    link.textContent = docItem.title;
+                    li.appendChild(link);
+                    keyDocsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No key documents found';
+                li.className = 'text-gray-400 italic';
+                keyDocsList.appendChild(li);
             }
         }
         
@@ -511,7 +626,8 @@ async def lm_insights_page() -> HTMLResponse:
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto">
         <h1 class="text-3xl font-bold mb-2">LM Insights</h1>
-        <p class="text-gray-600 mb-6">Recent local LM health and usage snapshots.</p>
+        <p class="text-gray-600 mb-2 text-sm">Recent LM activity analytics (advisory only; not used for health gates)</p>
+        <p class="text-gray-500 mb-6 text-xs italic">Note: System health status is determined by the unified snapshot API, not by these analytics.</p>
         
         <div id="loading" class="text-gray-600">Loading LM indicator data...</div>
         
@@ -766,7 +882,8 @@ async def dashboard_page() -> HTMLResponse:
                 
                 <!-- LM Insights Card -->
                 <div id="lm-insights-card" class="bg-white rounded-lg shadow p-6 border border-gray-200">
-                    <h2 class="text-xl font-semibold mb-4">LM Insights</h2>
+                    <h2 class="text-xl font-semibold mb-1">LM Insights</h2>
+                    <p class="text-xs text-gray-500 mb-4 italic">Recent LM activity analytics (advisory only)</p>
                     
                     <div id="lm-insights-loading" class="text-sm text-gray-500">Loading...</div>
                     <div id="lm-insights-content" class="hidden">
@@ -957,42 +1074,35 @@ async def get_db_health_timeline_endpoint() -> JSONResponse:
                     "ok": bool
                 },
                 ...
-            ]
+            ],
+            "note": str (if snapshots is empty)
         }
-        Or empty snapshots list if file is missing/invalid.
+        Uses shared eval exports helper (hermetic, tolerant of missing files).
     """
-    import json as json_lib
-    from pathlib import Path
     from datetime import datetime
 
     try:
-        # Path to DB health JSON (same location as pm_snapshot writes it)
-        repo_root = Path(__file__).resolve().parents[2]
-        db_health_path = repo_root / "evidence" / "pm_snapshot" / "db_health.json"
+        db_health_data = load_db_health_snapshot()
 
-        if not db_health_path.exists():
-            # Return empty snapshots with note
+        # Check if data is available
+        if not db_health_data.get("available", False):
             return JSONResponse(
                 content={
                     "snapshots": [],
-                    "note": "DB health data not available; run `make pm.snapshot` to populate this chart.",
+                    "note": db_health_data.get(
+                        "note",
+                        "DB health data not available; run `make pm.snapshot` to populate this chart.",
+                    ),
                 }
             )
 
-        # Read and parse JSON
-        try:
-            db_health_data = json_lib.loads(db_health_path.read_text(encoding="utf-8"))
-        except (json_lib.JSONDecodeError, OSError) as e:
-            LOG.error(f"Error reading DB health JSON: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Failed to parse DB health data",
-            ) from e
+        # Remove internal fields
+        db_health_clean = {k: v for k, v in db_health_data.items() if k not in ("available", "note")}
 
-        # Transform to timeline shape
-        mode = db_health_data.get("mode", "db_off")
-        ok = db_health_data.get("ok", False)
-        errors = db_health_data.get("details", {}).get("errors", [])
+        # Transform to timeline shape (single snapshot for now)
+        mode = db_health_clean.get("mode", "db_off")
+        ok = db_health_clean.get("ok", False)
+        errors = db_health_clean.get("details", {}).get("errors", [])
 
         # Build notes
         if mode == "ready" and ok:
@@ -1005,7 +1115,7 @@ async def get_db_health_timeline_endpoint() -> JSONResponse:
             notes = f"Unknown status: {mode}"
 
         # Create snapshot with generated_at (use current time if not present)
-        generated_at = db_health_data.get("generated_at")
+        generated_at = db_health_clean.get("generated_at")
         if not generated_at:
             generated_at = datetime.now(UTC).isoformat()
 
@@ -1022,14 +1132,63 @@ async def get_db_health_timeline_endpoint() -> JSONResponse:
             }
         )
 
-    except HTTPException:
-        raise
     except Exception as e:
         LOG.error(f"Error getting DB health timeline: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to load DB health timeline data",
-        ) from e
+        return JSONResponse(
+            content={
+                "snapshots": [],
+                "note": f"Failed to load DB health timeline data: {e}",
+            }
+        )
+
+
+@app.get("/api/eval/edges")
+async def get_eval_edges_endpoint() -> JSONResponse:
+    """Get edge class counts for visualization.
+
+    Returns:
+        JSON with edge class counts:
+        {
+            "data": {
+                "thresholds": {"strong": float, "weak": float},
+                "counts": {"strong": int, "weak": int, "other": int}
+            } | null,
+            "note": str (if data is null)
+        }
+        Uses shared eval exports helper (hermetic, tolerant of missing files).
+    """
+    try:
+        edge_data = load_edge_class_counts()
+
+        # Check if data is available
+        if not edge_data.get("available", False):
+            return JSONResponse(
+                content={
+                    "data": None,
+                    "note": edge_data.get(
+                        "note",
+                        "Edge class counts not available; run `make eval.reclassify` to populate this data.",
+                    ),
+                }
+            )
+
+        # Remove internal fields before returning
+        data = {k: v for k, v in edge_data.items() if k not in ("available", "note")}
+
+        return JSONResponse(
+            content={
+                "data": data,
+            }
+        )
+
+    except Exception as e:
+        LOG.error(f"Error getting edge class counts: {e}")
+        return JSONResponse(
+            content={
+                "data": None,
+                "note": f"Failed to load edge class counts: {e}",
+            }
+        )
 
 
 @app.get("/db-insights", response_class=HTMLResponse)
@@ -1047,7 +1206,8 @@ async def db_insights_page() -> HTMLResponse:
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto">
         <h1 class="text-3xl font-bold mb-2">DB Health Timeline</h1>
-        <p class="text-gray-600 mb-6">Recent database health snapshots from smokes/exports.</p>
+        <p class="text-gray-600 mb-2 text-sm">Recent DB health history (advisory only; not used for health gates)</p>
+        <p class="text-gray-500 mb-6 text-xs italic">Note: System health status is determined by the unified snapshot API, not by these analytics.</p>
         
         <div id="loading" class="text-gray-600">Loading DB health data...</div>
         
