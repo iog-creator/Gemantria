@@ -79,6 +79,8 @@
 - add Postgres Control Plane & Governance Recording section to MASTER_PLAN
 - use json.dumps() instead of psycopg.types.json.dumps() for JSONB inserts
 
+- add kb_document registry, docs inventory, and duplicates report (#578)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

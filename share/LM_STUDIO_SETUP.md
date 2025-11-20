@@ -28,13 +28,11 @@ This runbook provides step-by-step instructions for setting up LM Studio as a lo
 
 ### 2. Configure Environment Variables
 
-**Phase-7E**: Two profiles are available in `env_example.txt`:
-- **LEGACY**: Current working setup (BGE + Qwen models) - use `INFERENCE_PROVIDER=lmstudio`
-- **GRANITE**: Recommended Granite-based setup - available in both LM Studio and Ollama (see Granite Installation below)
+**Default Stack**: Granite is the default for general retrieval and local agent. BGE is used for Bible/multilingual lanes.
 
-Create or update `.env.local` (or `.env`) with LM Studio settings. Choose ONE profile:
+Create or update `.env.local` (or `.env`) with LM Studio settings:
 
-#### Option A: LEGACY Profile (Current Working Setup)
+#### Default Configuration (Granite Stack)
 
 ```bash
 # LM Studio Configuration
@@ -42,34 +40,48 @@ LM_STUDIO_ENABLED=1
 INFERENCE_PROVIDER=lmstudio
 OPENAI_BASE_URL=http://127.0.0.1:9994/v1
 
-# Legacy Model Configuration (BGE + Qwen)
-EMBEDDING_MODEL=text-embedding-bge-m3
+# Granite Model Configuration (Default)
+EMBEDDING_MODEL=granite-embedding:278m
+LOCAL_AGENT_MODEL=granite4:tiny-h
+RERANKER_MODEL=granite4:tiny-h
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-LOCAL_AGENT_MODEL=qwen/qwen3-8b
 MATH_MODEL=self-certainty-qwen3-1.7b-base-math
-RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 
 # MCP SSE Server Auto-Start
 AUTO_START_MCP_SSE=1
 ```
 
-#### Option B: GRANITE Profile (Recommended - Phase-7E)
+#### Bible/Multilingual Lane (BGE-based)
 
-**Prerequisites**: Install Granite models via LM Studio (see Granite Installation below) or via Ollama.
+If you need BGE for Bible-specific pipelines, set:
 
 ```bash
-# Ollama Configuration (Phase-7E)
-INFERENCE_PROVIDER=ollama
-OLLAMA_BASE_URL=http://127.0.0.1:11434
-
-# Granite Model Configuration (Phase-7E)
-EMBEDDING_MODEL=text-embedding-bge-m3      # keep BGE for now
-THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
-LOCAL_AGENT_MODEL=granite4:tiny-h          # or ibm/granite4:tiny-h
-RERANKER_MODEL=qwen/qwen3-8b-reranker      # Granite reranker later via microservice
+# Bible/multilingual lane (BGE-based)
+BIBLE_EMBEDDING_MODEL=bge-m3:latest
+# Optional: Qwen reranker fallback (not the primary reranker)
+# LEGACY_RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 ```
 
 **Note**: The runtime loads all model IDs from `scripts/config/env.py` via `get_lm_model_config()`. Legacy vars (`LM_EMBED_MODEL`, `QWEN_RERANKER_MODEL`) are supported but deprecated and will be removed in Phase-8.
+
+#### Retrieval Profile Switch (Phase-7C)
+
+Set `RETRIEVAL_PROFILE` to control which embedding + reranker pair the retrieval lane uses:
+
+```bash
+# DEFAULT (default): Granite stack (this file's main example)
+RETRIEVAL_PROFILE=DEFAULT
+
+# BIBLE: Bible/multilingual lane (BGE-based)
+# RETRIEVAL_PROFILE=BIBLE
+
+# Optional Granite overrides (only applied when RETRIEVAL_PROFILE=GRANITE or CUSTOM)
+# GRANITE_EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# GRANITE_RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+# GRANITE_LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny-GGUF
+```
+
+When `RETRIEVAL_PROFILE=GRANITE`, the retrieval config automatically switches to the Granite models above (or your overrides). If any Granite env is missing, the loader emits a `HINT` and falls back to DEFAULT values so CI remains deterministic.
 
 To inspect models currently exposed by LM Studio and validate configuration, run:
 
@@ -128,22 +140,19 @@ lms ps
 # Or use LM Studio GUI: Models → Load Model
 ```
 
-**Required Models (LEGACY Profile)**:
+**Required Models (Default - Granite Stack)**:
+- `granite-embedding:278m` or `ibm-granite/granite-embedding-english-r2` (embeddings)
+- `granite4:tiny-h` or `ibm-granite/granite-4.0-h-tiny` (local agent/workflow model and reranker)
 - `christian-bible-expert-v2.0-12b` (theology enrichment)
 - `self-certainty-qwen3-1.7b-base-math` (math verification)
-- `text-embedding-bge-m3` (embeddings)
-- `qwen.qwen3-reranker-0.6b` (reranking)
 
-**Required Models (GRANITE Profile - Phase-7D)**:
-- `ibm-granite/granite-4.0-h-tiny` (local agent/workflow model)
-- `ibm-granite/granite-embedding-english-r2` (embeddings)
-- `ibm-granite/granite-embedding-reranker-english-r2` (reranker)
-- `christian-bible-expert-v2.0-12b` (theology enrichment - unchanged)
-- `self-certainty-qwen3-1.7b-base-math` (math verification - unchanged)
+**Bible/Multilingual Lane Models (BGE-based)**:
+- `bge-m3:latest` (Bible/multilingual embeddings)
+- `qwen.qwen3-reranker-0.6b` (optional fallback reranker, not primary)
 
-### Granite Installation (Phase-7D)
+### Granite Installation
 
-**Phase-7D** introduces Granite models as the recommended default for local agent and embeddings. To install Granite models using the LM Studio CLI:
+**Granite is the default stack** for general retrieval and local agent. To install Granite models using the LM Studio CLI:
 
 #### Method 1: Interactive CLI Download (Recommended)
 

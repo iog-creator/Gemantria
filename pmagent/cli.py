@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.guards.guard_db_health import check_db_health  # noqa: E402
 from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
 from scripts.graph.graph_overview import compute_graph_overview  # noqa: E402
-from scripts.system.system_health import compute_system_health, print_human_summary  # noqa: E402
+from scripts.system.system_health import print_human_summary  # noqa: E402
 from scripts.db_import_graph_stats import import_graph_stats  # noqa: E402
 from scripts.control.control_status import (  # noqa: E402
     compute_control_status,
@@ -40,7 +40,6 @@ from scripts.control.control_pipeline_status import (  # noqa: E402
     print_human_summary as print_pipeline_summary,
 )
 from scripts.control.control_summary import (  # noqa: E402
-    compute_control_summary,
     print_human_summary as print_summary_summary,
 )
 from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
@@ -51,6 +50,22 @@ from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_note
 from scripts.config.env import get_retrieval_lane_models, get_lm_model_config  # noqa: E402
 from agentpm.scripts.docs_inventory import run_inventory  # noqa: E402
 from agentpm.scripts.docs_duplicates_report import generate_duplicates_report  # noqa: E402
+from agentpm.scripts.docs_dm002_preview import main as docs_dm002_preview_main  # noqa: E402
+from agentpm.scripts.docs_dm002_sync import main as docs_dm002_sync_main  # noqa: E402
+from agentpm.scripts.docs_dm002_summary import main as docs_dm002_summary_main  # noqa: E402
+from agentpm.scripts.docs_archive_dryrun import main as docs_archive_dryrun_main  # noqa: E402
+from agentpm.scripts.docs_dashboard_refresh import main as docs_dashboard_refresh_main  # noqa: E402
+from agentpm.scripts.state.ledger_sync import sync_ledger  # noqa: E402
+from agentpm.control_plane import create_agent_run, mark_agent_run_success, mark_agent_run_error  # noqa: E402
+from agentpm.tools import (  # noqa: E402
+    health as tool_health,
+    control_summary as tool_control_summary,
+    ledger_verify as tool_ledger_verify,
+    retrieve_bible_passages,
+    rerank_passages,
+    extract_concepts,
+    generate_embeddings as tool_embed,
+)
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -75,6 +90,8 @@ docs_app = typer.Typer(help="Documentation search operations")
 app.add_typer(docs_app, name="docs")
 models_app = typer.Typer(help="Model introspection commands")
 app.add_typer(models_app, name="models")
+state_app = typer.Typer(help="System state ledger operations")
+app.add_typer(state_app, name="state")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -90,12 +107,18 @@ def health_system(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
 ) -> None:
     """Check system health (aggregates DB, LM, and Graph health)."""
-    health = compute_system_health()
-    if json_only:
-        print(json.dumps(health, indent=2))
-    else:
-        _print_health_output(health, print_human_summary)
-    sys.exit(0)
+    run = create_agent_run("system.health", {"json_only": json_only})
+    try:
+        health = tool_health()
+        if json_only:
+            print(json.dumps(health, indent=2))
+        else:
+            _print_health_output(health, print_human_summary)
+        mark_agent_run_success(run, health)
+        sys.exit(0)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
 
 
 @health_app.command("db", help="Check database health")
@@ -346,17 +369,23 @@ def control_summary(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
 ) -> None:
     """Aggregated control-plane summary combining all control components."""
-    summary = compute_control_summary()
-
-    if json_only:
-        print(json.dumps(summary, indent=2))
-    else:
-        # Print JSON to stdout
-        print(json.dumps(summary, indent=2))
-        # Print human-readable summary to stderr
-        summary_line = print_summary_summary(summary)
-        print(summary_line, file=sys.stderr)
-    sys.exit(0)
+    run = create_agent_run("system.control-summary", {"json_only": json_only})
+    try:
+        result = tool_control_summary()
+        summary = result.get("summary", {})
+        if json_only:
+            print(json.dumps(summary, indent=2))
+        else:
+            # Print JSON to stdout
+            print(json.dumps(summary, indent=2))
+            # Print human-readable summary to stderr
+            summary_line = print_summary_summary(summary)
+            print(summary_line, file=sys.stderr)
+        mark_agent_run_success(run, result)
+        sys.exit(0)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
 
 
 @ask_app.command("docs", help="Answer a question using SSOT documentation")
@@ -424,21 +453,28 @@ def reality_check_check(
     """Run comprehensive reality check."""
     from agentpm.reality.check import reality_check, print_human_summary
 
-    mode_upper = mode.upper()
-    if mode_upper not in ("HINT", "STRICT"):
-        print(f"ERROR: mode must be 'hint' or 'strict', got '{mode}'", file=sys.stderr)
-        raise typer.Exit(code=1)
+    run = create_agent_run("system.reality-check", {"mode": mode, "no_dashboards": no_dashboards})
+    try:
+        mode_upper = mode.upper()
+        if mode_upper not in ("HINT", "STRICT"):
+            print(f"ERROR: mode must be 'hint' or 'strict', got '{mode}'", file=sys.stderr)
+            mark_agent_run_error(run, f"Invalid mode: {mode}")
+            raise typer.Exit(code=1)
 
-    verdict = reality_check(mode=mode_upper, skip_dashboards=no_dashboards)
+        verdict = reality_check(mode=mode_upper, skip_dashboards=no_dashboards)
 
-    if json_only:
-        print(json.dumps(verdict, indent=2))
-    else:
-        # Print JSON to stdout, summary to stderr (matches existing pattern)
-        print(json.dumps(verdict, indent=2))
-        print_human_summary(verdict, file=sys.stderr)
+        if json_only:
+            print(json.dumps(verdict, indent=2))
+        else:
+            # Print JSON to stdout, summary to stderr (matches existing pattern)
+            print(json.dumps(verdict, indent=2))
+            print_human_summary(verdict, file=sys.stderr)
 
-    raise typer.Exit(code=0 if verdict.get("overall_ok") else 1)
+        mark_agent_run_success(run, verdict)
+        raise typer.Exit(code=0 if verdict.get("overall_ok") else 1)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
 
 
 @bringup_app.command("full", help="Fully start DB, LM Studio server+GUI, and load models")
@@ -487,21 +523,30 @@ def docs_reality_check_ai_notes() -> None:
 @docs_app.command("inventory", help="Scan repo docs into control.kb_document (DM-001)")
 def docs_inventory() -> None:
     """Scan repository for markdown-like files and upsert metadata into control.kb_document."""
-    result = run_inventory()
+    run = create_agent_run("system.docs-status", {})
+    try:
+        result = run_inventory()
 
-    if result.get("db_off"):
-        print(f"WARNING: {result.get('error', 'Database unavailable')}")
-        print("db_off: true")
-        raise typer.Exit(code=0)
+        if result.get("db_off"):
+            print(f"WARNING: {result.get('error', 'Database unavailable')}")
+            print("db_off: true")
+            mark_agent_run_success(run, result)
+            raise typer.Exit(code=0)
 
-    if not result.get("ok"):
-        print(f"ERROR: {result.get('error', 'Unknown error')}", file=sys.stderr)
-        raise typer.Exit(code=1)
+        if not result.get("ok"):
+            error_msg = result.get("error", "Unknown error")
+            print(f"ERROR: {error_msg}", file=sys.stderr)
+            mark_agent_run_error(run, error_msg)
+            raise typer.Exit(code=1)
 
-    print(f"Scanned {result['scanned']} file(s)")
-    print(f"Inserted {result['inserted']} new document(s)")
-    print(f"Updated {result['updated']} existing document(s)")
-    print("✓ Inventory completed successfully")
+        print(f"Scanned {result['scanned']} file(s)")
+        print(f"Inserted {result['inserted']} new document(s)")
+        print(f"Updated {result['updated']} existing document(s)")
+        print("✓ Inventory completed successfully")
+        mark_agent_run_success(run, result)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
 
 
 @docs_app.command("duplicates-report", help="Generate duplicates report (DM-001)")
@@ -525,6 +570,80 @@ def docs_duplicates_report() -> None:
     print(f"Total duplicate files: {result['exact_duplicates']}")
     print(f"Report written to: {output_path}")
     print("✓ Duplicates report generated successfully")
+
+
+@docs_app.command("dm002-preview", help="Preview canonical vs archive classification (DM-002, preview-only)")
+def docs_dm002_preview() -> None:
+    """Preview canonical vs archive classification from duplicates report (no DB writes, no file moves)."""
+    try:
+        docs_dm002_preview_main()
+        print("✓ DM-002 preview generated successfully")
+    except SystemExit as e:
+        if e.code != 0:
+            print(f"ERROR: {e}", file=sys.stderr)
+            raise typer.Exit(code=1) from e
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        raise typer.Exit(code=1) from e
+
+
+@docs_app.command("dm002-sync", help="Sync canonical/archive classification from preview into DB (DM-002)")
+def docs_dm002_sync() -> None:
+    """DM-002: sync canonical/archive classification from DOC_DM002_CANONICAL_PREVIEW.md into control.kb_document. No file moves or deletions."""
+    try:
+        docs_dm002_sync_main()
+        print("✓ DM-002 sync completed successfully")
+    except SystemExit as e:
+        if e.code != 0:
+            print(f"ERROR: {e}", file=sys.stderr)
+            raise typer.Exit(code=1) from e
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        raise typer.Exit(code=1) from e
+
+
+@docs_app.command("dm002-summary", help="Summarize document classification from DB (DM-002, read-only)")
+def docs_dm002_summary() -> None:
+    """DM-002: summarize doc registry classification (DB-only, read-only)."""
+    try:
+        docs_dm002_summary_main()
+        print("✓ DM-002 summary generated successfully")
+    except SystemExit as e:
+        if e.code != 0:
+            print(f"ERROR: {e}", file=sys.stderr)
+            raise typer.Exit(code=1) from e
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        raise typer.Exit(code=1) from e
+
+
+@docs_app.command("archive-dryrun", help="Plan archive moves (dry-run only, no file changes)")
+def docs_archive_dryrun() -> None:
+    """DM-00X: plan archive moves (dry-run only, no file changes)."""
+    try:
+        docs_archive_dryrun_main()
+        print("✓ Archive dry-run plan generated successfully")
+    except SystemExit as e:
+        if e.code != 0:
+            print(f"ERROR: {e}", file=sys.stderr)
+            raise typer.Exit(code=1) from e
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        raise typer.Exit(code=1) from e
+
+
+@docs_app.command("dashboard-refresh", help="Regenerate JSON exports for the Doc Control Panel")
+def docs_dashboard_refresh() -> None:
+    """Regenerate JSON exports for the Doc Control Panel."""
+    try:
+        docs_dashboard_refresh_main()
+    except SystemExit as e:
+        if e.code != 0:
+            print(f"ERROR: {e}", file=sys.stderr)
+            raise typer.Exit(code=1) from e
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        raise typer.Exit(code=1) from e
 
 
 @docs_app.command("search", help="Search governance/docs content via semantic similarity")
@@ -583,6 +702,153 @@ def models_active() -> None:
         print(f"BIBLE_EMBEDDING_MODEL:    {bible}")
 
     sys.exit(0)
+
+
+@state_app.command("sync", help="Sync system state ledger with current artifact hashes")
+def state_sync() -> None:
+    """Sync system state ledger with current artifact hashes."""
+    sys.exit(sync_ledger())
+
+
+@state_app.command("verify", help="Verify system state ledger against current artifact hashes")
+def state_verify() -> None:
+    """Verify system state ledger against current artifact hashes."""
+    run = create_agent_run("system.ledger-verify", {})
+    try:
+        result = tool_ledger_verify()
+        exit_code = 0 if result.get("ok") else 1
+        mark_agent_run_success(run, result)
+        sys.exit(exit_code)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
+
+
+# New tool commands
+bible_app = typer.Typer(help="Bible operations")
+app.add_typer(bible_app, name="bible")
+
+rerank_app = typer.Typer(help="Rerank operations")
+app.add_typer(rerank_app, name="rerank")
+
+extract_app = typer.Typer(help="Extract operations")
+app.add_typer(extract_app, name="extract")
+
+embed_app = typer.Typer(help="Embed operations")
+app.add_typer(embed_app, name="embed")
+
+
+@bible_app.command("retrieve", help="Retrieve Bible passages by reference")
+def bible_retrieve(
+    reference: str = typer.Argument(..., help="Bible reference (e.g., 'John 3:16-18')"),
+    use_lm: bool = typer.Option(True, "--use-lm/--no-lm", help="Use AI commentary"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Retrieve Bible passages by reference."""
+    run = create_agent_run("bible.retrieve", {"reference": reference, "use_lm": use_lm})
+    try:
+        result = retrieve_bible_passages(reference, use_lm=use_lm)
+        if json_only:
+            print(json.dumps(result, indent=2))
+        else:
+            print(json.dumps(result, indent=2))
+            if result.get("ok"):
+                verses = result.get("verses", [])
+                print(f"BIBLE_RETRIEVE: found {len(verses)} verse(s) for '{reference}'", file=sys.stderr)
+            else:
+                errors = result.get("errors", [])
+                error_msg = errors[0] if errors else "unknown error"
+                print(f"BIBLE_RETRIEVE: failed ({error_msg[:50]})", file=sys.stderr)
+        mark_agent_run_success(run, result)
+        sys.exit(0 if result.get("ok") else 1)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
+
+
+@rerank_app.command("passages", help="Rerank passages using SSOT blend formula")
+def rerank_passages_cmd(
+    query: str = typer.Argument(..., help="Query text"),
+    passages: str = typer.Argument(..., help="Comma-separated list of passages"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Rerank passages using SSOT blend formula."""
+    passage_list = [p.strip() for p in passages.split(",")]
+    run = create_agent_run("rerank.passages", {"query": query, "passages": passage_list})
+    try:
+        result = rerank_passages(query, passage_list)
+        if json_only:
+            print(json.dumps(result, indent=2))
+        else:
+            print(json.dumps(result, indent=2))
+            if result.get("ok"):
+                ranked = result.get("ranked", [])
+                print(f"RERANK: ranked {len(ranked)} passage(s)", file=sys.stderr)
+            else:
+                errors = result.get("errors", [])
+                error_msg = errors[0] if errors else "unknown error"
+                print(f"RERANK: failed ({error_msg[:50]})", file=sys.stderr)
+        mark_agent_run_success(run, result)
+        sys.exit(0 if result.get("ok") else 1)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
+
+
+@extract_app.command("concepts", help="Extract concepts from text")
+def extract_concepts_cmd(
+    text: str = typer.Argument(..., help="Text to extract concepts from"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Extract concepts from text using theology model."""
+    run = create_agent_run("extract.concepts", {"text": text[:100]})  # Truncate for logging
+    try:
+        result = extract_concepts(text)
+        if json_only:
+            print(json.dumps(result, indent=2))
+        else:
+            print(json.dumps(result, indent=2))
+            if result.get("ok"):
+                concepts = result.get("concepts", [])
+                print(f"EXTRACT: extracted {len(concepts)} concept(s)", file=sys.stderr)
+            else:
+                errors = result.get("errors", [])
+                error_msg = errors[0] if errors else "unknown error"
+                print(f"EXTRACT: failed ({error_msg[:50]})", file=sys.stderr)
+        mark_agent_run_success(run, result)
+        sys.exit(0 if result.get("ok") else 1)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
+
+
+@embed_app.command("text", help="Generate embeddings for text")
+def embed_text_cmd(
+    text: str = typer.Argument(..., help="Text to embed (or comma-separated list)"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Generate embeddings for text."""
+    text_list = [t.strip() for t in text.split(",")] if "," in text else [text]
+    run = create_agent_run("embed.text", {"text_count": len(text_list)})
+    try:
+        result = tool_embed(text_list[0] if len(text_list) == 1 else text_list)
+        if json_only:
+            print(json.dumps(result, indent=2))
+        else:
+            print(json.dumps(result, indent=2))
+            if result.get("ok"):
+                embeddings = result.get("embeddings", [])
+                dimension = result.get("dimension", 0)
+                print(f"EMBED: generated {len(embeddings)} embedding(s) (dim={dimension})", file=sys.stderr)
+            else:
+                errors = result.get("errors", [])
+                error_msg = errors[0] if errors else "unknown error"
+                print(f"EMBED: failed ({error_msg[:50]})", file=sys.stderr)
+        mark_agent_run_success(run, result)
+        sys.exit(0 if result.get("ok") else 1)
+    except Exception as e:
+        mark_agent_run_error(run, e)
+        raise
 
 
 def main() -> None:

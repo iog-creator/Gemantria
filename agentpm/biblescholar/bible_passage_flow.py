@@ -16,6 +16,144 @@ from typing import Literal
 from agentpm.biblescholar.bible_db_adapter import BibleDbAdapter, VerseRecord
 
 
+# Book name mapping cache
+_book_name_cache: dict[str, str] | None = None
+
+
+def _get_book_name_mapping() -> dict[str, str]:
+    """Get mapping from full book names to database abbreviations.
+
+    Returns:
+        Dict mapping full names (e.g., "Genesis") to abbreviations (e.g., "Gen").
+    """
+    global _book_name_cache
+    if _book_name_cache is not None:
+        return _book_name_cache
+
+    try:
+        # Try to load from database first
+        from agentpm.db.loader import get_bible_engine
+        from sqlalchemy import text
+
+        engine = get_bible_engine()
+        with engine.connect() as conn:
+            result = conn.execute(
+                text("SELECT abbreviation, book_name FROM bible.book_abbreviations WHERE source = 'standard'")
+            )
+            mapping = {row[0]: row[1] for row in result}
+            _book_name_cache = mapping
+            return mapping
+
+    except Exception:
+        # Fallback mapping for common books if DB unavailable or query fails
+        _book_name_cache = {
+            "Genesis": "Gen",
+            "Exodus": "Exo",
+            "Leviticus": "Lev",
+            "Numbers": "Num",
+            "Deuteronomy": "Deu",
+            "Joshua": "Jos",
+            "Judges": "Jdg",
+            "Ruth": "Rut",
+            "1Samuel": "1Sa",
+            "2Samuel": "2Sa",
+            "1Kings": "1Ki",
+            "2Kings": "2Ki",
+            "1Chronicles": "1Ch",
+            "2Chronicles": "2Ch",
+            "Ezra": "Ezr",
+            "Nehemiah": "Neh",
+            "Esther": "Est",
+            "Job": "Job",
+            "Psalms": "Psa",
+            "Proverbs": "Pro",
+            "Ecclesiastes": "Ecc",
+            "Songofsolomon": "Sng",
+            "Isaiah": "Isa",
+            "Jeremiah": "Jer",
+            "Lamentations": "Lam",
+            "Ezekiel": "Ezk",
+            "Daniel": "Dan",
+            "Hosea": "Hos",
+            "Joel": "Jol",
+            "Amos": "Amo",
+            "Obadiah": "Oba",
+            "Jonah": "Jon",
+            "Micah": "Mic",
+            "Nahum": "Nam",
+            "Habakkuk": "Hab",
+            "Zephaniah": "Zep",
+            "Haggai": "Hag",
+            "Zechariah": "Zec",
+            "Malachi": "Mal",
+            "Matthew": "Mat",
+            "Mark": "Mrk",
+            "Luke": "Luk",
+            "John": "Jhn",
+            "Acts": "Act",
+            "Romans": "Rom",
+            "1Corinthians": "1Co",
+            "2Corinthians": "2Co",
+            "Galatians": "Gal",
+            "Ephesians": "Eph",
+            "Philippians": "Php",
+            "Colossians": "Col",
+            "1Thessalonians": "1Th",
+            "2Thessalonians": "2Th",
+            "1Timothy": "1Ti",
+            "2Timothy": "2Ti",
+            "Titus": "Tit",
+            "Philemon": "Phm",
+            "Hebrews": "Heb",
+            "James": "Jas",
+            "1Peter": "1Pe",
+            "2Peter": "2Pe",
+            "1John": "1Jn",
+            "2John": "2Jn",
+            "3John": "3Jn",
+            "Jude": "Jud",
+            "Revelation": "Rev",
+        }
+        return _book_name_cache
+
+
+def normalize_book_name(book_name: str) -> str:
+    """Normalize book name to database format.
+
+    Args:
+        book_name: Book name (full or abbreviated).
+
+    Returns:
+        Normalized book name for database queries.
+    """
+    # First try to map full names to abbreviations (case-insensitive)
+    mapping = _get_book_name_mapping()
+    book_name_clean = book_name.strip()
+
+    # Try exact match first
+    if book_name_clean in mapping:
+        return mapping[book_name_clean]
+
+    # Try case-insensitive match
+    for full_name, abbr in mapping.items():
+        if full_name.lower() == book_name_clean.lower():
+            return abbr
+
+    # Handle numbered books (1Corinthians -> 1Co, etc.)
+    if book_name_clean.startswith(("1", "2", "3")) and len(book_name_clean) > 1:
+        rest = book_name_clean[1:]
+        # Try exact match for the rest
+        if rest in mapping:
+            return mapping[rest]
+        # Try case-insensitive match for the rest
+        for full_name, abbr in mapping.items():
+            if full_name.lower() == rest.lower():
+                return abbr
+
+    # If it's already an abbreviation, return as-is
+    return book_name_clean
+
+
 def parse_reference(reference: str) -> tuple[str, int, int] | None:
     """Parse a simple Bible reference string.
 
@@ -41,8 +179,8 @@ def parse_reference(reference: str) -> tuple[str, int, int] | None:
     chapter_num = int(match.group(2))
     verse_num = int(match.group(3))
 
-    # Normalize book name (capitalize first letter)
-    book_name = book_name.capitalize()
+    # Normalize book name to database format
+    book_name = normalize_book_name(book_name)
 
     return (book_name, chapter_num, verse_num)
 
@@ -99,7 +237,7 @@ def fetch_passage(
     range_match = re.match(range_pattern, reference.strip())
 
     if range_match:
-        book_name = range_match.group(1).capitalize()
+        book_name = normalize_book_name(range_match.group(1))
         start_chapter = int(range_match.group(2))
         start_verse = int(range_match.group(3))
         end_chapter = int(range_match.group(4))
@@ -112,7 +250,7 @@ def fetch_passage(
     single_range_match = re.match(single_range_pattern, reference.strip())
 
     if single_range_match:
-        book_name = single_range_match.group(1).capitalize()
+        book_name = normalize_book_name(single_range_match.group(1))
         chapter_num = int(single_range_match.group(2))
         start_verse = int(single_range_match.group(3))
         end_verse = int(single_range_match.group(4))

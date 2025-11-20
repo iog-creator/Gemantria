@@ -7,13 +7,14 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      "/exports": {
-        target: "http://localhost:4000", // Serving exports directly
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/exports/, ''),
-      },
+      // Note: /exports is served statically from public/exports/ directory
+      // Files are synced via npm run sync-doc-exports before build
       "/api": {
         target: "http://localhost:8000", // API server for temporal and forecast data
+        changeOrigin: true,
+      },
+      "/temporal": {
+        target: "http://localhost:8000", // API server for temporal routes
         changeOrigin: true,
       },
     },

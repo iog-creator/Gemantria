@@ -2,6 +2,7 @@
 // Interactive forecast dashboard per ADR-025
 
 import React, { useState, useEffect } from 'react';
+import { loadForecastPatterns, loadTemporalPatterns } from '../graph/src/lib/temporalExports';
 
 interface ForecastData {
   forecast: number[];
@@ -30,13 +31,12 @@ const ForecastDashboard: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Load forecast data
-        const forecastResponse = await fetch('/temporal/forecast?model=naive&horizon=10');
-        if (forecastResponse.ok) {
-          const forecastResult = await forecastResponse.json();
-          // Transform API response to component format
-          if (forecastResult.forecasts && forecastResult.forecasts.length > 0) {
-            const first = forecastResult.forecasts[0];
+        // Load forecast data from static export
+        const forecastResult = await loadForecastPatterns<any>();
+        if (forecastResult.ok && forecastResult.data) {
+          const forecastJson = forecastResult.data;
+          if (forecastJson.forecasts && forecastJson.forecasts.length > 0) {
+            const first = forecastJson.forecasts[0];
             setForecastData({
               forecast: first.predictions || [],
               rmse: first.metrics?.rmse || 0,
@@ -49,13 +49,12 @@ const ForecastDashboard: React.FC = () => {
           }
         }
 
-        // Load temporal patterns
-        const temporalResponse = await fetch('/temporal/patterns?book=Genesis');
-        if (temporalResponse.ok) {
-          const temporalResult = await temporalResponse.json();
-          // Transform API response to component format
-          if (temporalResult.temporal_patterns && temporalResult.temporal_patterns.length > 0) {
-            const first = temporalResult.temporal_patterns[0];
+        // Load temporal patterns from static export
+        const temporalResult = await loadTemporalPatterns<any>();
+        if (temporalResult.ok && temporalResult.data) {
+          const temporalJson = temporalResult.data;
+          if (temporalJson.temporal_patterns && temporalJson.temporal_patterns.length > 0) {
+            const first = temporalJson.temporal_patterns[0];
             setTemporalData({
               rolling_mean: first.values || [],
               change_points: first.change_points || [],
@@ -67,6 +66,10 @@ const ForecastDashboard: React.FC = () => {
               },
             });
           }
+        }
+
+        if (!forecastResult.ok && !temporalResult.ok) {
+          setError(forecastResult.error || temporalResult.error || 'Failed to load exports');
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
@@ -83,7 +86,28 @@ const ForecastDashboard: React.FC = () => {
   }
 
   if (error) {
-    return <div className="p-4 text-red-500">Error: {error}</div>;
+    return (
+      <div className="p-6">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+          <h3 className="text-yellow-800 font-semibold mb-2">
+            Forecast Exports Not Available
+          </h3>
+          <p className="text-gray-700 mb-4">
+            <strong>WHEN/THEN:</strong> When forecast exports are available, this panel will show
+            predictive patterns and temporal analytics.
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            To refresh forecast data, run the forecast export pipeline:
+          </p>
+          <code className="block bg-gray-100 p-2 rounded text-sm">
+            make forecast.exports
+          </code>
+          <p className="text-xs text-gray-500 mt-4">
+            Technical details: {error}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -140,7 +164,7 @@ const ForecastDashboard: React.FC = () => {
               <h3 className="font-medium">Forecast Values</h3>
               <div className="text-sm">
                 {forecastData.forecast.slice(0, 5).map((val, i) => (
-                  <p key={i}>Step {i+1}: {val.toFixed(2)}</p>
+                  <p key={i}>Step {i + 1}: {val.toFixed(2)}</p>
                 ))}
                 {forecastData.forecast.length > 5 && (
                   <p>... and {forecastData.forecast.length - 5} more</p>

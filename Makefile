@@ -165,7 +165,15 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@PYTHONPATH=. python3 scripts/sync_share.py
+	@PYTHONPATH=. python3 scripts/sync_share.py || { \
+		exit_code=$$?; \
+		if [ $$exit_code -eq 1 ]; then \
+			echo "[share.sync] Files changed (exit code 1 is expected when files are updated)"; \
+			exit 0; \
+		else \
+			exit $$exit_code; \
+		fi; \
+	}
 
 .PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke
 
@@ -497,10 +505,35 @@ housekeeping.atlas:
 	fi
 	@echo "[housekeeping] done"
 
-# Complete housekeeping (Rule-058: mandatory post-change)
+# Reality Green - Full System Truth Gate (Option C)
+# This is the 110% signal that the system is up to date and consistent for the next agent.
+# Only passes when: DB healthy (Option C), control-plane healthy, AGENTS.md synced,
+# share/ synced, required exports present, WebUI shell sanity.
+.PHONY: reality.green
+reality.green: ## Full system truth gate (DB, AGENTS, share, SSOT)
+	@echo ">> Running reality.green - Full System Truth Gate"
+	@PYTHONPATH=. $(PYTHON) scripts/guards/guard_reality_green.py
 
-.PHONY: housekeeping
-housekeeping: share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
+# System State Ledger - Sync artifact hashes to control.system_state_ledger
+.PHONY: state.sync state.verify
+state.sync: ## Sync system state ledger with current artifact hashes
+	@echo ">> Syncing system state ledger"
+	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_sync
+
+state.verify: ## Verify system state ledger against current artifact hashes
+	@echo ">> Verifying system state ledger"
+	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_verify
+
+# Complete housekeeping (Rule-058: mandatory post-change)
+# CRITICAL: DB must be reachable (SSOT requirement) - fail-closed if offline
+
+.PHONY: housekeeping housekeeping.db.gate
+housekeeping.db.gate:
+	@echo ">> Checking DB connectivity (SSOT requirement)..."
+	@PYTHONPATH=. $(PYTHON) -c "from scripts.guards.guard_db_health import check_db_health; import sys; h = check_db_health(); ok = h.get('ok', False) and h.get('mode') == 'ready'; sys.exit(0 if ok else 1)" || (echo "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - housekeeping cannot proceed."; echo "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured."; exit 1)
+	@echo "✅ DB connectivity verified"
+
+housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
@@ -1305,7 +1338,7 @@ docs.audit: guard.docs.consistency
 # --- Local posture smoke: empty-DB tolerant ---
 .PHONY: book.smoke
 book.smoke:
-	@python3 scripts/smokes/book_smoke.py
+	@PYTHONPATH=src $(PYTHON) scripts/smokes/book_smoke.py
 
 .PHONY: guard.tests
 guard.tests:

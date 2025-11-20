@@ -246,6 +246,7 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 ### Make Targets & DSN Precedence
 
 **Core operational targets:**
+- `make reality.green` — **Full system truth gate (110% signal)** - Validates DB health (Option C), control-plane health, AGENTS.md sync, share sync, and required exports. Only passes when system is up to date and consistent for the next agent. **Required before**: declaring features complete, opening PRs for main, generating share/ snapshots.
 - `make bringup.001` — STRICT bring-up verification (env gate → inference provider → pipeline → guards → evidence)
 - `make dsns.echo` — Print redacted DSNs for operator sanity (never prints secrets)
 - `make pm.snapshot` — Generate PM-facing status snapshot with DSN posture proofs and 25-file manifest tracking

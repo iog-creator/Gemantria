@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { loadTemporalPatterns } from "../../../graph/src/lib/temporalExports";
 
 // Types for temporal pattern data
 interface TemporalPattern {
@@ -38,24 +39,20 @@ const TemporalExplorer: React.FC = () => {
 
   useEffect(() => {
     fetchTemporalData();
-  }, [selectedSeries, unit, window]);
+  }, []);
 
   const fetchTemporalData = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedSeries) params.append("series_id", selectedSeries);
-      if (unit) params.append("unit", unit);
-      if (window) params.append("window", window.toString());
+      const result = await loadTemporalPatterns<TemporalData>();
 
-      const response = await fetch(`/api/v1/temporal?${params}`);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (result.ok && result.data) {
+        setData(result.data);
+        setError(null);
+      } else {
+        setError(result.error || "Failed to load exports");
+        setData(null);
       }
-
-      const result = await response.json();
-      setData(result);
-      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
       setData(null);
@@ -152,11 +149,23 @@ const TemporalExplorer: React.FC = () => {
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h3 className="text-red-800 font-semibold">
-            Error Loading Temporal Data
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+          <h3 className="text-yellow-800 font-semibold mb-2">
+            Temporal Exports Not Available
           </h3>
-          <p className="text-red-600 mt-2">{error}</p>
+          <p className="text-gray-700 mb-4">
+            <strong>WHEN/THEN:</strong> When temporal exports are available, this panel will show
+            cross-time patterns across books and verses.
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            To refresh temporal data, run the temporal export pipeline:
+          </p>
+          <code className="block bg-gray-100 p-2 rounded text-sm">
+            make temporal.exports
+          </code>
+          <p className="text-xs text-gray-500 mt-4">
+            Technical details: {error}
+          </p>
         </div>
       </div>
     );

@@ -830,6 +830,50 @@ make agents.md.sync
 - **Makefile**: `make agents.md.sync` provides convenient access
 - **CI**: Can be run in CI to detect documentation drift
 
+### `guard_reality_green.py` — Reality Green Truth Gate
+
+**Purpose:** Full system truth gate that validates the system is up to date and consistent for the next agent. This is the 110% signal that everything is ready.
+
+**Rule References:** Option C (DB is SSOT), Rule 006 (AGENTS.md Governance), Rule 027 (Docs Sync Gate), Rule 030 (Share Sync), Rule 058 (Auto-Housekeeping)
+
+**Capabilities:**
+- **DB Health Check (Option C)**: Validates DB is reachable and healthy. Fails if `GEMATRIA_DSN` is set but DB is unreachable (DB is SSOT - broken state).
+- **Control-Plane Health**: Validates control-plane schema, tables, and materialized views are present and healthy.
+- **AGENTS.md Sync**: Ensures all AGENTS.md files are in sync with code changes (no stale documentation).
+- **Share Sync & Exports**: Verifies share/ directory is synced and required control-plane exports exist:
+  - `share/atlas/control_plane/system_health.json`
+  - `share/atlas/control_plane/lm_indicator.json`
+  - `share/exports/docs-control/summary.json`
+  - WebUI public exports (mirrors of share exports)
+- **WebUI Shell Sanity**: Optional check that WebUI shell files are present (static check only).
+
+**Usage:**
+```bash
+# Run full reality green check
+python scripts/guards/guard_reality_green.py
+
+# Via Makefile
+make reality.green
+```
+
+**When to Run:**
+- Before declaring a feature "complete"
+- Before opening a PR for main
+- Before generating a new share/ snapshot for other agents
+- Before declaring system "live" or ready for production use
+
+**Output:**
+- Human-readable summary with ✅ PASS / ❌ FAIL for each check
+- JSON summary for automation/parsing
+- Exit code 0 if all checks pass, 1 if any check fails
+
+**Integration:**
+- **Makefile**: `make reality.green` provides convenient access
+- **Pre-merge**: Should be run before merging to main
+- **CI**: Can be integrated into CI pipelines as a required check
+
+**Note:** This gate enforces Option C - DB-down is always a failure when `GEMATRIA_DSN` is set. The system treats DB as SSOT and cannot proceed in a broken state.
+
 ### verify_pr016_pr017.py — Metrics Contract Verifier
 
 **Purpose:** Ensures exported statistics reflect live DB and UI contracts.

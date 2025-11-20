@@ -208,7 +208,8 @@ def main():
         print("[rules_guard] ✓ Critical Check 1 PASSED: Docs updated for code changes")
 
         # Additional check: AGENTS.md sync (Rule 006 - AGENTS.md Governance)
-        print("[rules_guard] Additional Check 1a: AGENTS.md sync verification")
+        # FAIL-CLOSED: Stale AGENTS.md files block merges per Rule-006, Rule-027, Rule-058
+        print("[rules_guard] Additional Check 1a: AGENTS.md sync verification (fail-closed)")
         try:
             sync_result = subprocess.run(
                 [sys.executable, str(ROOT / "scripts" / "check_agents_md_sync.py"), "--staged"],
@@ -217,11 +218,17 @@ def main():
                 check=False,
             )
             if sync_result.returncode != 0:
-                print("[rules_guard] ⚠️  HINT: AGENTS.md files may need updates based on code changes")
-                print("[rules_guard]    Run: python scripts/check_agents_md_sync.py --verbose")
-                # Non-fatal - just a hint
+                print("[rules_guard] FAIL: AGENTS.md files are stale and must be updated", file=sys.stderr)
+                print(sync_result.stdout, file=sys.stderr)
+                print(sync_result.stderr, file=sys.stderr)
+                print("[rules_guard]    Run: python scripts/check_agents_md_sync.py --verbose", file=sys.stderr)
+                require(
+                    False,
+                    "CRITICAL: AGENTS.md files are stale. Update them to reflect code changes per Rule-006, Rule-027, Rule-058.",
+                )
+            print("[rules_guard] ✓ Additional Check 1a PASSED: AGENTS.md files are in sync")
         except Exception as e:
-            print(f"[rules_guard] WARN: Could not run AGENTS.md sync check: {e}")
+            require(False, f"CRITICAL: Could not run AGENTS.md sync check: {e}")
 
     # CRITICAL CHECK 2: Rules audit (ensures rule numbering + docs sync)
     print("[rules_guard] Critical Check 2: Rules system integrity")

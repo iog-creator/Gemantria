@@ -6,7 +6,7 @@ import GraphStats from "../components/GraphStats";
 import { useGraphData } from "../hooks/useGraphData";
 import { GraphNode } from "../types/graph";
 
-const Fallback = ({error}: {error: Error}) => (
+const Fallback = ({ error }: { error: Error }) => (
   <div className="p-8 text-red-600 border-2 border-red-200 rounded-lg bg-red-50">
     <h2 className="text-xl font-bold mb-4">Oops – graph failed to render</h2>
     <pre className="bg-red-100 p-4 rounded text-sm mb-4 overflow-auto">{error.message}</pre>
@@ -19,7 +19,11 @@ const Fallback = ({error}: {error: Error}) => (
   </div>
 );
 
-export default function GraphDashboard() {
+interface GraphDashboardProps {
+  embedded?: boolean;
+}
+
+export default function GraphDashboard({ embedded = false }: GraphDashboardProps) {
   const { data, loading, error } = useGraphData();
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
@@ -112,70 +116,75 @@ export default function GraphDashboard() {
       </a>
 
       <div className="p-6">
-      <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Header with navigation landmark */}
-          <header className="mb-6">
-            <nav aria-label="Main navigation">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Gematria Concept Network
-          </h1>
-            </nav>
-            <div className="flex gap-4 text-sm text-gray-600" aria-label="Dataset summary">
-            <span>Nodes: {data.nodes.length}</span>
-            <span>Edges: {data.edges.length}</span>
-            <span>
-              Clusters:{" "}
-              {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
-            </span>
-          </div>
-          </header>
+          {!embedded && (
+            <header className="mb-6">
+              <nav aria-label="Main navigation">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Gematria Concept Network
+                </h1>
+              </nav>
+              <div className="flex gap-4 text-sm text-gray-600" aria-label="Dataset summary">
+                <span>Nodes: {data.nodes.length}</span>
+                <span>Edges: {data.edges.length}</span>
+                <span>
+                  Clusters:{" "}
+                  {new Set(data.nodes.map((n) => n.cluster).filter(Boolean)).size}
+                </span>
+              </div>
+            </header>
+          )}
 
-        {/* Main Content */}
+          {/* Main Content */}
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Graph View - Takes up 3/4 of the space */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Stats Panel */}
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <h2 className="text-xl font-semibold mb-4">Network Statistics</h2>
-              <GraphStats />
-            </div>
+            {/* Graph View - Takes up 3/4 of the space */}
+            <div className="lg:col-span-3 space-y-6">
+              {/* Stats Panel */}
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <h2 className="text-xl font-semibold mb-4">Network Statistics</h2>
+                <GraphStats />
+              </div>
 
-            {/* Graph Visualization */}
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <h2 className="text-xl font-semibold mb-4">
-                Network Visualization
-              </h2>
-              <div className="h-96 lg:h-[600px]">
-                <ErrorBoundary FallbackComponent={Fallback}>
-                  <GraphView
-                    nodes={data.nodes}
-                    edges={data.edges}
-                    width={800}
-                    height={600}
-                    onNodeSelect={setSelectedNode}
-                  />
-                </ErrorBoundary>
+              {/* Graph Visualization */}
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <h2 className="text-xl font-semibold mb-4">
+                  Network Visualization
+                </h2>
+                <div className="h-96 lg:h-[600px]">
+                  <ErrorBoundary FallbackComponent={Fallback}>
+                    <GraphView
+                      nodes={data.nodes}
+                      edges={data.edges}
+                      width={800}
+                      height={600}
+                      onNodeSelect={setSelectedNode}
+                    />
+                  </ErrorBoundary>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Node Details - Takes up 1/4 of the space */}
-          <div className="lg:col-span-1">
-            <NodeDetails node={selectedNode} />
-          </div>
-        </main>
+            {/* Node Details - Takes up 1/4 of the space */}
+            <div className="lg:col-span-1">
+              <NodeDetails node={selectedNode} />
+            </div>
+          </main>
 
-        {/* Footer */}
-        <footer className="mt-6 text-center text-sm text-gray-500" role="contentinfo">
-          <p>
-            Graph data exported on{" "}
-            {data.metadata?.export_timestamp
-              ? new Date(data.metadata.export_timestamp).toLocaleString()
-              : "Unknown"}
-          </p>
-        </footer>
+          {/* Footer */}
+          {!embedded && (
+            <footer className="mt-6 text-center text-sm text-gray-500" role="contentinfo">
+              <p>
+                Graph data exported on{" "}
+                {data.metadata?.export_timestamp
+                  ? new Date(data.metadata.export_timestamp).toLocaleString()
+                  : "Unknown"}
+              </p>
+            </footer>
+          )}
         </div>
       </div>
     </div>
   );
 }
+

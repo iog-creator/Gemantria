@@ -4,9 +4,9 @@ from scripts.config.env import get_rw_dsn
 
 #!/usr/bin/env python3
 """
-Guard: CI empty-DB tolerance.
-- If GEMATRIA_DSN is unset -> exit 0 (tolerate environments without DB).
-- If set but DB unreachable -> exit 0 (treat as tolerated skip).
+Guard: DB connectivity check (Option C - DB is SSOT).
+- If GEMATRIA_DSN is unset -> exit 0 (tolerate environments without DB configured).
+- If set but DB unreachable -> exit 1 (FAIL: DB is SSOT, broken state).
 - If set and reachable -> ensure base tables exist, else exit 2.
 """
 
@@ -26,8 +26,8 @@ try:
     with psycopg.connect(DSN) as conn, conn.cursor() as cur:
         cur.execute("SELECT 1 FROM information_schema.schemata WHERE schema_name='gematria'")
         if cur.fetchone() is None:
-            print("OK: gematria schema absent; tolerated in CI.")
-            sys.exit(0)
+            print("ERROR: gematria schema absent; DB is SSOT - schema must exist.", file=sys.stderr)
+            sys.exit(2)
         cur.execute("SELECT to_regclass('gematria.nouns')")
         if cur.fetchone()[0] is None:
             print("ERROR: gematria.nouns missing with DSN set; run make db.migrate", file=sys.stderr)
@@ -35,5 +35,7 @@ try:
         print("OK: DB reachable and base tables present.")
         sys.exit(0)
 except Exception as e:
-    print(f"OK: DB unreachable ({e}); tolerated in CI.", file=sys.stderr)
-    sys.exit(0)
+    print("❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr)
+    print(f"   Error: {e}", file=sys.stderr)
+    print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr)
+    sys.exit(1)

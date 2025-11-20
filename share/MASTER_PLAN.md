@@ -52,6 +52,20 @@ All core development phases are complete. The system is operational with:
 - ✅ Schema compliance verified
 - ✅ UI integration functional
 - ✅ Governance rules enforced
+- ✅ **Reality Green Truth Gate** (`make reality.green`) - Canonical "all green" signal for live work
+
+### Reality Green Truth Gate
+
+**Purpose**: The `make reality.green` target is the **110% signal** that the system is up to date and consistent for the next agent. It validates:
+- **DB Health (Option C)**: Database is reachable and healthy. DB-down is a hard failure when `GEMATRIA_DSN` is set (DB is SSOT).
+- **Control-Plane Health**: Control-plane schema, tables, and materialized views are present and healthy.
+- **AGENTS.md Sync**: All AGENTS.md files are in sync with code changes (no stale documentation).
+- **Share Sync & Exports**: Share directory is synced and required control-plane exports exist.
+- **WebUI Shell Sanity**: WebUI shell files are present (static check only).
+
+**When to Run**: Before declaring features complete, opening PRs for main, generating share/ snapshots, or declaring system "live".
+
+**Enforcement**: If `reality.green` is red, all docs (including AGENTS + SSOT) are treated as untrustworthy until fixed.
 
 ### Active Development Workstreams
 

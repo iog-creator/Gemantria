@@ -149,6 +149,14 @@
     {
       "src": "share/pm.snapshot.md",
       "dst": "share/pm.snapshot.md"
+    },
+    {
+      "src": "agentpm/scripts/state/ledger_sync.py",
+      "dst": "share/ledger_sync.py"
+    },
+    {
+      "src": "agentpm/scripts/state/ledger_verify.py",
+      "dst": "share/ledger_verify.py"
     }
   ],
   "evidence": [

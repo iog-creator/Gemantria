@@ -9,6 +9,8 @@ governance_housekeeping.py — Automated governance maintenance per Rule-058.
 Integrates with existing housekeeping workflow to ensure governance artifacts
 stay current and compliant. Called automatically by make housekeeping targets.
 
+CRITICAL: DB must be reachable (SSOT requirement) - fails-closed if offline.
+
 Functions:
 - Update governance database with latest artifacts
 - Validate governance compliance
@@ -33,6 +35,31 @@ ensure_env_loaded()
 
 # Database connection
 GEMATRIA_DSN = get_rw_dsn()
+
+
+def check_db_health_gate() -> bool:
+    """Check DB health and fail-closed if offline (SSOT requirement)."""
+    try:
+        from scripts.guards.guard_db_health import check_db_health
+
+        health = check_db_health()
+        ok = health.get("ok", False)
+        mode = health.get("mode", "unknown")
+
+        if not ok or mode != "ready":
+            print("❌ CRITICAL: Database is unreachable (SSOT requirement)")
+            print(f"   DB health mode: {mode}")
+            if health.get("details", {}).get("errors"):
+                print(f"   Errors: {health['details']['errors'][0]}")
+            print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.")
+            return False
+
+        print("✅ DB connectivity verified (SSOT requirement)")
+        return True
+    except Exception as e:
+        print(f"❌ CRITICAL: Failed to check DB health: {e}")
+        print("   DB is SSOT - housekeeping cannot proceed without DB connectivity.")
+        return False
 
 
 def run_command(cmd: list, description: str) -> bool:
@@ -145,6 +172,13 @@ def main():
     """Run complete governance housekeeping cycle."""
     print("🏠 GOVERNANCE HOUSEKEEPING STARTED (Rule-058)")
     print("=" * 50)
+
+    # CRITICAL: DB health gate (SSOT requirement - fail-closed if offline)
+    if not check_db_health_gate():
+        print("\n❌ GOVERNANCE HOUSEKEEPING FAILED: DB unreachable (SSOT requirement)")
+        sys.exit(1)
+
+    print()
 
     operations = [
         ("Update governance artifacts", update_governance_artifacts),
