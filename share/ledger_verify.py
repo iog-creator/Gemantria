@@ -182,8 +182,8 @@ def verify_ledger() -> tuple[int, dict]:
             print("=" * 80)
             print()
 
-                if not all_current:
-                    print("❌ LEDGER VERIFICATION FAILED")
+            if not all_current:
+                print("❌ LEDGER VERIFICATION FAILED")
                     if stale:
                         print(f"   Stale artifacts ({len(stale)}): {', '.join(stale)}")
                         print("   Run 'make state.sync' to update ledger")
