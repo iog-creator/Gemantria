@@ -53,7 +53,12 @@ Subdirectories (e.g. `agentpm/db/`, `agentpm/control_plane/`, `agentpm/runtime/`
   - **Snapshot integration (KB-Reg:M2)**: Registry summary included in `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()` (advisory-only, non-gating)
   - **Planning helper (KB-Reg:M2)**: `query_registry()` provides read-only filter interface for future AgentPM planning flows
   - **Freshness tracking (KB-Reg:M6)**: Registry tracks document freshness (`last_seen_mtime`, `last_refreshed_at`, `min_refresh_interval_days`); `analyze_freshness()` detects stale/missing/out-of-sync docs; freshness summary included in `pmagent status kb` and `pmagent status.explain`; KB hints include `KB_DOC_STALE` and `KB_DOC_OUT_OF_SYNC` warnings (advisory-only); default refresh intervals: SSOT (30d), ADR (90d), AGENTS.md (14d), runbook (60d), rule (90d), changelog (7d), other (60d)
-- **`agentpm/plan/`**: Planning workflows powered by KB registry (AgentPM-Next:M1).
+- **`agentpm/plan/`**: Planning workflows powered by KB registry (AgentPM-Next:M1 + M2).
+  - **`agentpm/plan/kb.py`**: KB document worklist builder (M1) — `build_kb_doc_worklist()` produces prioritized worklist from KB registry status and hints
+  - **`agentpm/plan/fix.py`**: Doc-fix executor (M2) — `build_fix_actions()` and `apply_actions()` consume worklist and execute doc fixes (create stubs, mark stale, sync metadata)
+  - **CLI**: `pmagent plan kb list` (M1) and `pmagent plan kb fix` (M2)
+  - **Safety**: M2 defaults to dry-run; `--apply` requires explicit opt-in; only approved paths can be written; idempotent operations; manifest logging
+  - **See**: `agentpm/plan/AGENTS.md` for detailed contracts
   - **`agentpm/plan/kb.py`**: KB document worklist builder (`build_kb_doc_worklist()`) that produces prioritized documentation tasks from KB registry status and hints
   - **Purpose**: Provide deterministic, read-only planning surfaces for PM/AgentPM workflows
   - **CLI**: `pmagent plan kb` command returns prioritized worklist of documentation tasks (missing > stale > out_of_sync > low_coverage > info)
