@@ -77,6 +77,7 @@ Implemented commands (names approximate):
 * `pmagent kb registry summary` – Get KB registry status summary (same as `status kb`).
 * `pmagent kb registry validate` – Validate registry entries (check file existence, duplicates).
 * `pmagent status kb` – **Primary KB status view for PM/AgentPM planning (KB-Reg:M3b)** – Shows document counts by subsystem/type and missing files.
+* `pmagent plan kb` – **Registry-powered planning surface (AgentPM-Next:M1)** – Returns prioritized documentation worklist (missing > stale > out_of_sync > low_coverage > info) with suggested actions, grouped by subsystem.
 * `pmagent reality-check 1` – Run Reality Check #1 automated bring-up.
 * `pmagent reality-check live` – Run Reality Check #1 LIVE (DB + LM + pipeline).
 * `pmagent bringup full` – Fully start DB, LM Studio server+GUI, and load models.

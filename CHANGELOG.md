@@ -83,6 +83,8 @@
 
 - normalize book name handling and fix branch consistency
 
+- KB registry M1–M6 (doc health, hints, status surfaces) (#579)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

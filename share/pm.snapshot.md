@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-20T13:51:05-08:00_
+_Generated: 2025-11-20T14:11:05-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -114,8 +114,8 @@ _Note: KB registry is advisory-only and read-only in CI. It does not affect syst
 
 _Note: KB hints are advisory-only and do not affect system health gates._
 
-- ℹ️ **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'agentpm' has low document coverage (1 doc(s))
+- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'agentpm' has low document coverage (1 doc(s))
   - Subsystem: agentpm, Current docs: 1
-- ℹ️ **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'webui' has low document coverage (1 doc(s))
+- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'webui' has low document coverage (1 doc(s))
   - Subsystem: webui, Current docs: 1
 
