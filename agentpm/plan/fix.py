@@ -164,7 +164,8 @@ def build_fix_actions(
         elif severity == "stale":
             action_type = "mark_stale_and_suggest_update"
             description = item.get(
-                "suggested_action", f"Mark stale and suggest update for {item.get('title', item_id)}"
+                "suggested_action",
+                f"Mark stale and suggest update for {item.get('title', item_id)}",
             )
         elif severity == "out_of_sync":
             action_type = "sync_metadata"
@@ -386,7 +387,10 @@ def apply_actions(
                 if action.action_type == "create_stub_doc":
                     if not doc_path.exists():
                         # Get metadata from registry if available
-                        metadata: dict[str, Any] = {"title": action.description, "owning_subsystem": action.subsystem}
+                        metadata: dict[str, Any] = {
+                            "title": action.description,
+                            "owning_subsystem": action.subsystem,
+                        }
                         if registry:
                             doc = registry.get_by_id(action.id)
                             if doc:

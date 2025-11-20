@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import typer
 
@@ -74,6 +75,8 @@ from agentpm.kb.registry import (  # noqa: E402
     REGISTRY_PATH,
 )
 from agentpm.plan.kb import build_kb_doc_worklist  # noqa: E402
+from agentpm.plan.fix import build_fix_actions, apply_actions  # noqa: E402
+from agentpm.kb.registry import REPO_ROOT  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -106,6 +109,9 @@ registry_app = typer.Typer(help="KB document registry commands")
 kb_app.add_typer(registry_app, name="registry")
 plan_app = typer.Typer(help="Planning workflows powered by KB registry")
 app.add_typer(plan_app, name="plan")
+plan_kb_app = typer.Typer(help="KB-powered planning commands")
+plan_app.add_typer(plan_kb_app, name="kb")
+plan_app.add_typer(plan_kb_app, name="kb")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -287,8 +293,8 @@ def status_kb(
     sys.exit(0)
 
 
-@plan_app.command("kb", help="Get KB-powered documentation worklist for planning")
-def plan_kb(
+@plan_kb_app.command("list", help="Get KB-powered documentation worklist for planning")
+def plan_kb_list(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
 ) -> None:
     """Get prioritized documentation worklist from KB registry status and hints.
@@ -349,6 +355,155 @@ def plan_kb(
             print(json.dumps(error_msg, indent=2))
         else:
             print(f"ERROR: Failed to build worklist: {e}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
+
+    sys.exit(0)
+
+
+@plan_kb_app.command("fix", help="Execute doc fixes from KB worklist")
+def plan_kb_fix(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    dry_run: bool = typer.Option(True, "--dry-run/--apply", help="Dry-run mode (default) or apply fixes"),
+    subsystem: str | None = typer.Option(None, "--subsystem", help="Filter to specific subsystem"),
+    min_severity: str | None = typer.Option(None, "--min-severity", help="Filter to severity level or higher"),
+    limit: int = typer.Option(50, "--limit", help="Limit number of actions processed"),
+    allow_stubs_for_low_coverage: bool = typer.Option(
+        False,
+        "--allow-stubs-for-low-coverage",
+        help="Allow creating stubs for low-coverage subsystems",
+    ),
+) -> None:
+    """Execute doc fixes from KB worklist.
+
+    Consumes worklist from `pmagent plan kb list` and produces/executes doc fixes.
+    Default is --dry-run mode (no writes); --apply requires explicit opt-in.
+    """
+    from datetime import datetime, UTC
+
+    try:
+        # Build worklist
+        worklist = build_kb_doc_worklist()
+
+        if not worklist.get("available", False):
+            error_msg = {
+                "error": "KB Registry unavailable",
+                "mode": "dry-run" if dry_run else "apply",
+                "actions": [],
+            }
+            if json_only:
+                print(json.dumps(error_msg, indent=2))
+            else:
+                print(
+                    "ERROR: KB Registry unavailable (registry may not be seeded yet)",
+                    file=sys.stderr,
+                )
+                print(json.dumps(error_msg, indent=2))
+            sys.exit(1)
+
+        # Build filters
+        filters: dict[str, Any] = {}
+        if subsystem:
+            filters["subsystem"] = subsystem
+        if min_severity:
+            filters["min_severity"] = min_severity
+        filters["limit"] = limit
+
+        # Build fix actions
+        actions = build_fix_actions(worklist, filters)
+
+        # Apply actions
+        apply_result = apply_actions(
+            actions,
+            dry_run=dry_run,
+            repo_root=REPO_ROOT,
+            allow_stubs_for_low_coverage=allow_stubs_for_low_coverage,
+        )
+
+        # Build output JSON
+        now = datetime.now(UTC)
+        output: dict[str, Any] = {
+            "mode": "dry-run" if dry_run else "apply",
+            "filters": filters,
+            "source": {
+                "worklist_items": worklist.get("total_items", 0),
+                "generated_at": now.isoformat(),
+            },
+            "actions": [action.to_dict() for action in actions],
+            "summary": {
+                "total_actions": len(actions),
+                "by_severity": {},
+                "by_action_type": {},
+                "actions_applied": apply_result.get("actions_applied", 0),
+                "actions_skipped": apply_result.get("actions_skipped", 0),
+                "files_created": apply_result.get("files_created", []),
+                "files_modified": apply_result.get("files_modified", []),
+                "errors": apply_result.get("errors", []),
+            },
+        }
+
+        # Build summary counts
+        for action in actions:
+            severity = action.severity
+            action_type = action.action_type
+            output["summary"]["by_severity"][severity] = output["summary"]["by_severity"].get(severity, 0) + 1
+            output["summary"]["by_action_type"][action_type] = (
+                output["summary"]["by_action_type"].get(action_type, 0) + 1
+            )
+
+        # Log manifest if apply mode
+        if not dry_run and (apply_result.get("files_created") or apply_result.get("files_modified")):
+            manifest_dir = REPO_ROOT / "evidence" / "plan_kb_fix"
+            manifest_dir.mkdir(parents=True, exist_ok=True)
+            manifest_path = manifest_dir / f"run-{now.strftime('%Y%m%d-%H%M%S')}.json"
+            manifest_path.write_text(json.dumps(output, indent=2) + "\n")
+
+        if json_only:
+            print(json.dumps(output, indent=2))
+        else:
+            # Human-readable output to stderr
+            mode_str = "dry-run" if dry_run else "apply"
+            total = output["summary"]["total_actions"]
+            applied = output["summary"]["actions_applied"]
+            skipped = output["summary"]["actions_skipped"]
+            by_severity = output["summary"]["by_severity"]
+
+            severity_counts = ", ".join([f"{count} {sev}" for sev, count in sorted(by_severity.items())])
+            print(f"Doc-fix run ({mode_str}) — {total} actions: {severity_counts}", file=sys.stderr)
+            print(f"  Applied: {applied}, Skipped: {skipped}", file=sys.stderr)
+
+            # Show top 5 actions
+            top_actions = actions[:5]
+            if top_actions:
+                print("", file=sys.stderr)
+                print("Top actions:", file=sys.stderr)
+                for action in top_actions:
+                    path_str = action.doc_path or "N/A"
+                    print(f"  [{action.severity}] {action.subsystem}: {path_str}", file=sys.stderr)
+                    print(f"    {action.description[:60]}...", file=sys.stderr)
+                if len(actions) > 5:
+                    print(f"    ... and {len(actions) - 5} more actions", file=sys.stderr)
+
+            if apply_result.get("errors"):
+                print("", file=sys.stderr)
+                print("Errors:", file=sys.stderr)
+                for error in apply_result["errors"]:
+                    print(f"  {error}", file=sys.stderr)
+
+            # JSON to stdout
+            print(json.dumps(output, indent=2))
+
+    except Exception as e:
+        error_msg = {
+            "error": str(e),
+            "mode": "dry-run" if dry_run else "apply",
+            "actions": [],
+            "summary": {"total_actions": 0},
+        }
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to execute fix actions: {e}", file=sys.stderr)
             print(json.dumps(error_msg, indent=2))
         sys.exit(1)
 
