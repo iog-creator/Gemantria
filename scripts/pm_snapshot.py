@@ -93,6 +93,7 @@ try:
         include_share_manifest=True,
         include_eval_insights=True,  # Include eval exports summary (M4)
         include_kb_registry=True,  # Include KB registry summary (KB-Reg:M2)
+        include_kb_doc_health=True,  # Include KB doc-health metrics (AgentPM-Next:M3)
         reality_check_mode="HINT",  # HINT mode for snapshot speed
         use_lm_for_explain=False,  # Skip LM for snapshot speed
     )
@@ -106,6 +107,7 @@ try:
     eval_insights_summary = snapshot.get("eval_insights", {})
     kb_registry_summary = snapshot.get("kb_registry", {})
     kb_hints = snapshot.get("kb_hints", [])  # KB-Reg:M4
+    kb_doc_health_summary = snapshot.get("kb_doc_health", {})  # AgentPM-Next:M3
 except Exception as e:
     # Fallback to individual calls if unified helper fails
     # Gather system health (DB + LM + Graph)
@@ -184,6 +186,7 @@ except Exception as e:
         "warnings_count": 0,
     }
     kb_hints = []  # KB-Reg:M4
+    kb_doc_health_summary = {}  # AgentPM-Next:M3
     try:
         from agentpm.status.snapshot import (
             get_kb_registry_summary,
@@ -308,6 +311,7 @@ snapshot_json = {
     "eval_insights": eval_insights_summary,
     "kb_registry": kb_registry_summary,
     "kb_hints": kb_hints,  # KB-Reg:M4
+    "kb_doc_health": kb_doc_health_summary,  # AgentPM-Next:M3
 }
 
 # Write comprehensive JSON snapshot to evidence directory
@@ -432,6 +436,50 @@ if kb_hints:
             lines.append(f"  - Subsystem: {hint['subsystem']}, Current docs: {hint['have']}")
 else:
     lines.append("- ✓ No KB registry issues detected")
+lines.append("")
+
+# Documentation Health (AgentPM-Next:M3)
+lines.append("## Documentation Health (Advisory)\n")
+lines.append("_Note: Documentation health metrics are advisory-only and do not affect system health gates._\n")
+kb_doc_available = kb_doc_health_summary.get("available", False)
+if kb_doc_available:
+    metrics = kb_doc_health_summary.get("metrics", {})
+    fresh_ratio = metrics.get("kb_fresh_ratio", {})
+    missing_count = metrics.get("kb_missing_count", {})
+    stale_by_sub = metrics.get("kb_stale_count_by_subsystem", {})
+    fixes_7d = metrics.get("kb_fixes_applied_last_7d", 0)
+    notes = metrics.get("notes", [])
+
+    overall_fresh = fresh_ratio.get("overall")
+    if overall_fresh is not None:
+        lines.append(f"- Overall freshness: `{overall_fresh:.1f}%`")
+    else:
+        lines.append("- Overall freshness: `unknown`")
+
+    by_sub = fresh_ratio.get("by_subsystem", {})
+    if by_sub:
+        lines.append("  - By subsystem:")
+        for subsystem, ratio in sorted(by_sub.items()):
+            miss_sub = missing_count.get("by_subsystem", {}).get(subsystem, 0)
+            stale_sub = stale_by_sub.get(subsystem, 0)
+            lines.append(f"    - {subsystem}: {ratio:.1f}% fresh (missing={miss_sub}, stale={stale_sub})")
+
+    missing_overall = missing_count.get("overall", 0)
+    if missing_overall > 0:
+        lines.append(f"- Missing documents: `{missing_overall}`")
+    else:
+        lines.append("- Missing documents: `0`")
+
+    lines.append(f"- Fixes applied (last 7 days): `{fixes_7d}`")
+
+    if notes:
+        lines.append("  - Notes:")
+        for note in notes[:5]:  # Limit to first 5 notes
+            lines.append(f"    - {note}")
+else:
+    error_msg = kb_doc_health_summary.get("error", "KB doc-health metrics unavailable")
+    lines.append("- Status: `✗ Unavailable`")
+    lines.append(f"- Note: {error_msg}")
 lines.append("")
 
 

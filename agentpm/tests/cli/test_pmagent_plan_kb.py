@@ -173,7 +173,7 @@ def test_plan_kb_cli_json_only() -> None:
     """Test pmagent plan kb --json-only CLI command."""
     repo_root = Path(__file__).resolve().parents[3]
     result = subprocess.run(
-        [sys.executable, "-m", "pmagent.cli", "plan", "kb", "--json-only"],
+        [sys.executable, "-m", "pmagent.cli", "plan", "kb", "list", "--json-only"],
         cwd=repo_root,
         capture_output=True,
         text=True,
@@ -208,7 +208,7 @@ def test_plan_kb_cli_human_mode() -> None:
     """Test pmagent plan kb CLI command (human-readable mode)."""
     repo_root = Path(__file__).resolve().parents[3]
     result = subprocess.run(
-        [sys.executable, "-m", "pmagent.cli", "plan", "kb"],
+        [sys.executable, "-m", "pmagent.cli", "plan", "kb", "list"],
         cwd=repo_root,
         capture_output=True,
         text=True,

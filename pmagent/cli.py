@@ -76,6 +76,7 @@ from agentpm.kb.registry import (  # noqa: E402
 )
 from agentpm.plan.kb import build_kb_doc_worklist  # noqa: E402
 from agentpm.plan.fix import build_fix_actions, apply_actions  # noqa: E402
+from agentpm.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
 from agentpm.kb.registry import REPO_ROOT  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
@@ -111,7 +112,9 @@ plan_app = typer.Typer(help="Planning workflows powered by KB registry")
 app.add_typer(plan_app, name="plan")
 plan_kb_app = typer.Typer(help="KB-powered planning commands")
 plan_app.add_typer(plan_kb_app, name="kb")
-plan_app.add_typer(plan_kb_app, name="kb")
+
+report_app = typer.Typer(help="Reporting commands")
+app.add_typer(report_app, name="report")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -505,6 +508,65 @@ def plan_kb_fix(
         else:
             print(f"ERROR: Failed to execute fix actions: {e}", file=sys.stderr)
             print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
+
+    sys.exit(0)
+
+
+@report_app.command("kb", help="Report KB doc-health metrics (M1+M2 aggregate)")
+def report_kb(
+    json_only: bool = typer.Option(True, "--json-only/--human", help="Print only JSON (default) or human summary"),
+) -> None:
+    """Report KB documentation health metrics based on registry + M2 manifests.
+
+    This is a read-only, hermetic reporting surface that:
+    - Uses the KB registry + freshness analysis for structural metrics.
+    - Uses AgentPM-Next:M2 manifests for recent fix activity.
+    - Degrades gracefully (available=False + notes) when inputs are missing.
+    """
+    try:
+        report = compute_kb_doc_health_metrics()
+        if json_only:
+            print(json.dumps(report, indent=2))
+        else:
+            # Human-readable summary to stderr, JSON to stdout.
+            metrics = report.get("metrics", {})
+            fresh = metrics.get("kb_fresh_ratio", {})
+            missing = metrics.get("kb_missing_count", {})
+            stale_by_sub = metrics.get("kb_stale_count_by_subsystem", {})
+            fixes_7d = metrics.get("kb_fixes_applied_last_7d", 0)
+            notes = metrics.get("notes", [])
+
+            overall_fresh = fresh.get("overall")
+            if overall_fresh is None:
+                print("KB doc-health: fresh ratio unknown (no registry or empty)", file=sys.stderr)
+            else:
+                print(f"KB doc-health: {overall_fresh:.1f}% fresh overall", file=sys.stderr)
+
+            by_sub = fresh.get("by_subsystem", {})
+            if by_sub:
+                print("  By subsystem:", file=sys.stderr)
+                for subsystem, ratio in sorted(by_sub.items()):
+                    miss_sub = missing.get("by_subsystem", {}).get(subsystem, 0)
+                    stale_sub = stale_by_sub.get(subsystem, 0)
+                    print(
+                        f"    {subsystem}: {ratio:.1f}% fresh (missing={miss_sub}, stale={stale_sub})",
+                        file=sys.stderr,
+                    )
+
+            print(f"KB fixes applied (last 7d): {fixes_7d}", file=sys.stderr)
+
+            if notes:
+                print("", file=sys.stderr)
+                print("Notes:", file=sys.stderr)
+                for note in notes:
+                    print(f"  - {note}", file=sys.stderr)
+
+            print(json.dumps(report, indent=2))
+
+    except Exception as e:
+        error_msg = {"available": False, "error": str(e)}
+        print(json.dumps(error_msg, indent=2))
         sys.exit(1)
 
     sys.exit(0)
