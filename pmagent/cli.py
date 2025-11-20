@@ -73,6 +73,7 @@ from agentpm.kb.registry import (  # noqa: E402
     validate_registry,
     REGISTRY_PATH,
 )
+from agentpm.plan.kb import build_kb_doc_worklist  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -103,6 +104,8 @@ kb_app = typer.Typer(help="Knowledge-base document registry operations")
 app.add_typer(kb_app, name="kb")
 registry_app = typer.Typer(help="KB document registry commands")
 kb_app.add_typer(registry_app, name="registry")
+plan_app = typer.Typer(help="Planning workflows powered by KB registry")
+app.add_typer(plan_app, name="plan")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -278,6 +281,74 @@ def status_kb(
             print(json.dumps(error_msg, indent=2))
         else:
             print(f"ERROR: Failed to get KB status: {e}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
+
+    sys.exit(0)
+
+
+@plan_app.command("kb", help="Get KB-powered documentation worklist for planning")
+def plan_kb(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Get prioritized documentation worklist from KB registry status and hints.
+
+    Returns a worklist of documentation tasks grouped by subsystem and ordered by
+    severity (missing > stale > out_of_sync > low_coverage > info).
+    """
+    try:
+        worklist = build_kb_doc_worklist()
+
+        if json_only:
+            print(json.dumps(worklist, indent=2))
+        else:
+            # Human-readable output
+            available = worklist.get("available", False)
+            total_items = worklist.get("total_items", 0)
+            items = worklist.get("items", [])
+            by_subsystem = worklist.get("by_subsystem", {})
+
+            if not available:
+                print("KB Registry unavailable (registry may not be seeded yet)", file=sys.stderr)
+                print(json.dumps(worklist, indent=2))
+                sys.exit(0)
+
+            if total_items == 0:
+                print("No documentation work items found (all docs are fresh)", file=sys.stderr)
+                print(json.dumps(worklist, indent=2))
+                sys.exit(0)
+
+            # Top section: Most urgent items (missing/stale)
+            urgent_items = [item for item in items if item.get("severity") in ["missing", "stale"]]
+            if urgent_items:
+                print("Most urgent doc work (missing/stale):", file=sys.stderr)
+                for item in urgent_items[:5]:  # Show top 5
+                    severity = item.get("severity", "unknown").upper()
+                    title = item.get("title", "Unknown")
+                    subsystem = item.get("subsystem", "unknown")
+                    reason = item.get("reason", "")
+                    print(f"  [{severity}] {title} ({subsystem})", file=sys.stderr)
+                    print(f"    Reason: {reason}", file=sys.stderr)
+                    print(f"    Action: {item.get('suggested_action', 'N/A')}", file=sys.stderr)
+                if len(urgent_items) > 5:
+                    print(f"    ... and {len(urgent_items) - 5} more urgent items", file=sys.stderr)
+                print("", file=sys.stderr)
+
+            # Compact table grouped by subsystem
+            if by_subsystem:
+                print("By subsystem:", file=sys.stderr)
+                for subsystem, count in sorted(by_subsystem.items()):
+                    print(f"  {subsystem}: {count} item(s)", file=sys.stderr)
+
+            # JSON to stdout for scripting
+            print(json.dumps(worklist, indent=2))
+
+    except Exception as e:
+        error_msg = {"error": str(e), "available": False, "total_items": 0, "items": []}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to build worklist: {e}", file=sys.stderr)
             print(json.dumps(error_msg, indent=2))
         sys.exit(1)
 
