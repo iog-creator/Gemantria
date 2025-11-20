@@ -224,13 +224,15 @@ async def get_system_status_endpoint() -> JSONResponse:
             "lm": system_status.get("lm", {}),
         }
 
-        # Add optional AI tracking, share manifest, and eval insights if available
+        # Add optional AI tracking, share manifest, eval insights, and KB doc health if available
         if "ai_tracking" in snapshot:
             response["ai_tracking"] = snapshot["ai_tracking"]
         if "share_manifest" in snapshot:
             response["share_manifest"] = snapshot["share_manifest"]
         if "eval_insights" in snapshot:
             response["eval_insights"] = snapshot["eval_insights"]
+        if "kb_doc_health" in snapshot:
+            response["kb_doc_health"] = snapshot["kb_doc_health"]
 
         return JSONResponse(content=response)
     except Exception as e:
@@ -409,6 +411,23 @@ async def status_page() -> HTMLResponse:
                         </div>
                         <div id="doc-hints-badge" class="hidden inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2"></div>
                     </div>
+                    
+                    <!-- Metrics Section (AgentPM-Next:M4) -->
+                    <div id="doc-metrics-container" class="hidden mb-4 grid grid-cols-3 gap-4 text-center border-t border-b border-gray-100 py-4 bg-gray-50 rounded-md">
+                        <div>
+                            <div id="doc-freshness-val" class="text-lg font-bold text-gray-800">--%</div>
+                            <div class="text-xs text-gray-500">Freshness</div>
+                        </div>
+                        <div>
+                            <div id="doc-fixes-val" class="text-lg font-bold text-gray-800">--</div>
+                            <div class="text-xs text-gray-500">Fixes (7d)</div>
+                        </div>
+                        <div>
+                            <div id="doc-missing-val" class="text-lg font-bold text-gray-800">--</div>
+                            <div class="text-xs text-gray-500">Missing/Stale</div>
+                        </div>
+                    </div>
+
                     <div id="doc-key-docs" class="mt-4">
                         <h3 class="text-sm font-medium text-gray-700 mb-2">Key Documents:</h3>
                         <ul id="doc-key-docs-list" class="list-disc list-inside text-sm text-gray-600 space-y-1">
@@ -470,7 +489,10 @@ async def status_page() -> HTMLResponse:
             const docContent = document.getElementById('doc-health-content');
             const docUnavailable = document.getElementById('doc-health-unavailable');
             
+            // Note: This loads registry summary from explanation (M5); metrics (M3) loaded via snapshot
             if (!explanation.documentation || !explanation.documentation.available) {
+                // Don't hide if we might have snapshot metrics; wait for snapshot to confirm
+                // But for now, assume registry availability is master switch
                 docCard.classList.remove('hidden');
                 docContent.classList.add('hidden');
                 docUnavailable.classList.remove('hidden');
@@ -524,6 +546,45 @@ async def status_page() -> HTMLResponse:
             }
         }
         
+        function loadDocMetrics(docHealth) {
+            const metricsContainer = document.getElementById('doc-metrics-container');
+            
+            if (!docHealth || !docHealth.available || !docHealth.metrics) {
+                metricsContainer.classList.add('hidden');
+                return;
+            }
+            
+            metricsContainer.classList.remove('hidden');
+            const m = docHealth.metrics;
+            
+            // Freshness
+            const freshRatio = m.kb_fresh_ratio?.overall ?? 0;
+            const freshPct = Math.round(freshRatio * 100);
+            const freshEl = document.getElementById('doc-freshness-val');
+            freshEl.textContent = `${freshPct}%`;
+            // Color code freshness
+            if (freshPct >= 90) freshEl.className = "text-lg font-bold text-green-600";
+            else if (freshPct >= 70) freshEl.className = "text-lg font-bold text-yellow-600";
+            else freshEl.className = "text-lg font-bold text-red-600";
+            
+            // Fixes
+            document.getElementById('doc-fixes-val').textContent = m.kb_fixes_applied_last_7d ?? 0;
+            
+            // Missing/Stale
+            const missing = m.kb_missing_count ?? 0;
+            // Estimate stale from breakdown if available, or just use missing for now
+            // Actually docHealth usually has detailed counts
+            let stale = 0;
+            if (m.kb_stale_count_by_subsystem) {
+                stale = Object.values(m.kb_stale_count_by_subsystem).reduce((a, b) => a + b, 0);
+            }
+            
+            const missingStaleEl = document.getElementById('doc-missing-val');
+            missingStaleEl.textContent = `${missing} / ${stale}`;
+            if (missing + stale > 0) missingStaleEl.className = "text-lg font-bold text-yellow-600";
+            else missingStaleEl.className = "text-lg font-bold text-gray-800";
+        }
+
         async function loadStatus() {
             try {
                 const response = await fetch('/api/status/system');
@@ -985,6 +1046,11 @@ async def dashboard_page() -> HTMLResponse:
                 const okSlots = lm.slots.filter(s => s.service === 'OK').length;
                 const totalSlots = lm.slots.length;
                 lmSummary.textContent = `LM: ${okSlots}/${totalSlots} slots OK`;
+                
+                // Update KB Doc Metrics (AgentPM-Next:M4)
+                if (statusData.kb_doc_health) {
+                    loadDocMetrics(statusData.kb_doc_health);
+                }
                 
             } catch (error) {
                 document.getElementById('system-health-loading').classList.add('hidden');

@@ -16,6 +16,7 @@ from agentpm.kb.registry import analyze_freshness, load_registry, validate_regis
 from agentpm.reality.check import reality_check as check_reality
 from agentpm.status.eval_exports import get_eval_insights_summary
 from agentpm.status.explain import explain_system_status
+from agentpm.status.kb_metrics import compute_kb_doc_health_metrics
 from agentpm.tools.system import health as tool_health
 from scripts.config.env import get_rw_dsn
 from scripts.guards.guard_db_health import check_db_health
@@ -441,6 +442,7 @@ def get_system_snapshot(
     include_share_manifest: bool = True,
     include_eval_insights: bool = True,
     include_kb_registry: bool = True,
+    include_kb_doc_health: bool = True,
     reality_check_mode: str = "HINT",
     use_lm_for_explain: bool = False,
 ) -> dict[str, Any]:
@@ -452,6 +454,7 @@ def get_system_snapshot(
         include_share_manifest: Whether to include share manifest summary
         include_eval_insights: Whether to include eval exports summary (Phase-8/10)
         include_kb_registry: Whether to include KB registry summary (advisory-only)
+        include_kb_doc_health: Whether to include KB doc-health metrics (AgentPM-Next:M3)
         reality_check_mode: Mode for reality-check ("HINT" or "STRICT")
         use_lm_for_explain: Whether to use LM for status explanation
 
@@ -468,6 +471,7 @@ def get_system_snapshot(
             "share_manifest": {...} (if included),
             "eval_insights": {...} (if included) - optional, export-driven analytics
             "kb_registry": {...} (if included) - optional, advisory-only, read-only in CI
+            "kb_doc_health": {...} (if included) - optional, doc-health metrics (AgentPM-Next:M3)
         }
     """
     from datetime import datetime
@@ -558,6 +562,18 @@ def get_system_snapshot(
                 "note": f"KB registry unavailable: {e}",
             }
 
+    # Gather KB doc-health metrics (if requested) - advisory only, non-gating (AgentPM-Next:M3)
+    kb_doc_health_summary = {}
+    if include_kb_doc_health:
+        try:
+            kb_doc_health_summary = compute_kb_doc_health_metrics()
+        except Exception as e:
+            kb_doc_health_summary = {
+                "available": False,
+                "metrics": {},
+                "error": f"KB doc-health metrics unavailable: {e}",
+            }
+
     # Determine overall_ok from components
     # NOTE: eval_insights and kb_registry are advisory only and do NOT affect overall_ok
     overall_ok = (
@@ -602,5 +618,8 @@ def get_system_snapshot(
                     "message": f"Failed to generate KB hints: {e}",
                 }
             ]
+
+    if include_kb_doc_health:
+        snapshot["kb_doc_health"] = kb_doc_health_summary
 
     return snapshot

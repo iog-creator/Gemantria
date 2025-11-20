@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-20T14:11:05-08:00_
+_Generated: 2025-11-20T15:13:27-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -118,4 +118,19 @@ _Note: KB hints are advisory-only and do not affect system health gates._
   - Subsystem: agentpm, Current docs: 1
 - INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'webui' has low document coverage (1 doc(s))
   - Subsystem: webui, Current docs: 1
+
+## Documentation Health (Advisory)
+
+_Note: Documentation health metrics are advisory-only and do not affect system health gates._
+
+- Overall freshness: `100.0%`
+  - By subsystem:
+    - agentpm: 100.0% fresh (missing=0, stale=0)
+    - docs: 100.0% fresh (missing=0, stale=0)
+    - root: 100.0% fresh (missing=0, stale=0)
+    - webui: 100.0% fresh (missing=0, stale=0)
+- Missing documents: `0`
+- Fixes applied (last 7 days): `0`
+  - Notes:
+    - No plan_kb_fix manifests directory; treating fixes_applied_last_7d as 0
 

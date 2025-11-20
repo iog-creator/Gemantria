@@ -26,8 +26,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-import psycopg  # noqa: E402
 from scripts.config.env import get_rw_dsn  # noqa: E402
+import psycopg  # noqa: E402
 
 
 def compute_file_hash(file_path: Path) -> str:
@@ -90,40 +90,41 @@ def sync_ledger() -> int:
 
     # Connect to database
     try:
-        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-            inserted = 0
-            skipped = 0
+        with psycopg.connect(dsn) as conn:
+            with conn.cursor() as cur:
+                inserted = 0
+                skipped = 0
 
-            for file_path, name, source_of_truth in artifacts:
-                if not file_path.exists():
-                    print(f"SKIP: {name} not found at {file_path}", file=sys.stderr)
-                    skipped += 1
-                    continue
+                for file_path, name, source_of_truth in artifacts:
+                    if not file_path.exists():
+                        print(f"SKIP: {name} not found at {file_path}", file=sys.stderr)
+                        skipped += 1
+                        continue
 
-                try:
-                    file_hash = compute_file_hash(file_path)
-                    status = "current"
+                    try:
+                        file_hash = compute_file_hash(file_path)
+                        status = "current"
 
-                    # Insert ledger entry (non-destructive: always insert new row)
-                    cur.execute(
-                        """
+                        # Insert ledger entry (non-destructive: always insert new row)
+                        cur.execute(
+                            """
                             INSERT INTO control.system_state_ledger
                                 (name, source_of_truth, hash, status, generated_at)
                             VALUES (%s, %s, %s, %s, now())
                             """,
-                        (name, source_of_truth, file_hash, status),
-                    )
+                            (name, source_of_truth, file_hash, status),
+                        )
 
-                    print(f"✓ Synced: {name} ({source_of_truth}) -> {file_hash[:16]}...")
-                    inserted += 1
+                        print(f"✓ Synced: {name} ({source_of_truth}) -> {file_hash[:16]}...")
+                        inserted += 1
 
-                except Exception as e:
-                    print(f"ERROR: Failed to sync {name}: {e}", file=sys.stderr)
-                    return 1
+                    except Exception as e:
+                        print(f"ERROR: Failed to sync {name}: {e}", file=sys.stderr)
+                        return 1
 
-            conn.commit()
-            print(f"\n✓ Ledger sync complete: {inserted} inserted, {skipped} skipped")
-            return 0
+                conn.commit()
+                print(f"\n✓ Ledger sync complete: {inserted} inserted, {skipped} skipped")
+                return 0
 
     except Exception as e:
         print(f"ERROR: Database connection failed: {e}", file=sys.stderr)

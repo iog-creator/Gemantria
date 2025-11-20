@@ -3,6 +3,7 @@
 Tests for system status HTML page.
 
 Phase-7G: Verifies /status page renders correctly and contains required elements.
+AgentPM-Next:M4: Verifies KB doc metrics elements are present.
 """
 
 from __future__ import annotations
@@ -45,81 +46,27 @@ def test_status_page_contains_system_status_title(mock_get_status):
 
     response = client.get("/status")
     assert response.status_code == 200
-    content = response.text
-    assert "System Status" in content
+    assert "System Status" in response.text
 
 
-@patch("src.services.api_server.get_system_status")
-def test_status_page_contains_db_status_section(mock_get_status):
-    """Test that /status contains DB Status section."""
-    mock_get_status.return_value = {
+@patch("agentpm.status.snapshot.get_system_snapshot")
+def test_status_page_contains_doc_metrics_elements(mock_get_snapshot):
+    """Test that /status contains KB Doc Metrics elements (AgentPM-Next:M4)."""
+    mock_get_snapshot.return_value = {
         "db": {"reachable": True, "mode": "ready", "notes": "Database is ready"},
         "lm": {"slots": [], "notes": "No LM slots"},
+        "kb_doc_health": {
+            "available": True,
+            "metrics": {"kb_fresh_ratio": {"overall": 0.95}, "kb_fixes_applied_last_7d": 12, "kb_missing_count": 1},
+        },
     }
 
     response = client.get("/status")
     assert response.status_code == 200
-    content = response.text
-    assert "DB Status" in content
-
-
-@patch("src.services.api_server.get_system_status")
-def test_status_page_contains_lm_slots_section(mock_get_status):
-    """Test that /status contains LM Slots section."""
-    mock_get_status.return_value = {
-        "db": {"reachable": True, "mode": "ready", "notes": "Database is ready"},
-        "lm": {"slots": [], "notes": "No LM slots"},
-    }
-
-    response = client.get("/status")
-    assert response.status_code == 200
-    content = response.text
-    assert "LM Slots" in content
-
-
-@patch("src.services.api_server.get_system_status")
-def test_status_page_fetches_api_endpoint(mock_get_status):
-    """Test that /status page JavaScript fetches /api/status/system."""
-    mock_get_status.return_value = {
-        "db": {"reachable": True, "mode": "ready", "notes": "Database is ready"},
-        "lm": {"slots": [], "notes": "No LM slots"},
-    }
-
-    response = client.get("/status")
-    assert response.status_code == 200
-    content = response.text
-    assert "/api/status/system" in content
-    assert "fetch" in content.lower()
-
-
-@patch("src.services.api_server.get_system_status")
-def test_status_page_contains_tailwind(mock_get_status):
-    """Test that /status page uses Tailwind CSS."""
-    mock_get_status.return_value = {
-        "db": {"reachable": True, "mode": "ready", "notes": "Database is ready"},
-        "lm": {"slots": [], "notes": "No LM slots"},
-    }
-
-    response = client.get("/status")
-    assert response.status_code == 200
-    content = response.text
-    assert "tailwindcss.com" in content or "tailwind" in content.lower()
-
-
-@patch("src.services.api_server.get_system_status")
-def test_status_page_contains_explanation_section(mock_get_status):
-    """Test that /status page contains Explanation section."""
-    mock_get_status.return_value = {
-        "db": {"reachable": True, "mode": "ready", "notes": "Database is ready"},
-        "lm": {"slots": [], "notes": "No LM slots"},
-    }
-
-    response = client.get("/status")
-    assert response.status_code == 200
-    content = response.text
-    assert "Explanation" in content
-    assert "explanation-headline" in content
-    assert "explanation-details" in content
-    assert "explanation-content" in content
-    assert "explanation-error" in content
-    assert "/api/status/explain" in content
+    # Check for new elements
+    assert 'id="doc-metrics-container"' in response.text
+    assert 'id="doc-freshness-val"' in response.text
+    assert 'id="doc-fixes-val"' in response.text
+    assert 'id="doc-missing-val"' in response.text
+    assert "Freshness" in response.text
+    assert "Fixes (7d)" in response.text

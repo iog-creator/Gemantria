@@ -257,3 +257,77 @@ class TestPmSnapshotIntegration:
             assert "message" in hint
             assert hint["level"] in ["WARN", "INFO"]
             assert hint["code"].startswith("KB_")
+
+    def test_snapshot_helper_includes_kb_doc_health(self):
+        """Test that the unified snapshot helper includes KB doc-health metrics (AgentPM-Next:M3)."""
+        from agentpm.status.snapshot import get_system_snapshot
+
+        result = get_system_snapshot(
+            include_reality_check=True,
+            include_ai_tracking=True,
+            include_share_manifest=True,
+            include_eval_insights=True,
+            include_kb_registry=True,
+            include_kb_doc_health=True,
+            reality_check_mode="HINT",
+            use_lm_for_explain=False,
+        )
+
+        # Verify KB doc-health structure
+        kb_doc_health = result["kb_doc_health"]
+        assert isinstance(kb_doc_health, dict)
+        assert "available" in kb_doc_health
+        assert "metrics" in kb_doc_health
+
+        # Verify metrics structure
+        metrics = kb_doc_health.get("metrics", {})
+        assert "kb_fresh_ratio" in metrics
+        assert "kb_missing_count" in metrics
+        assert "kb_stale_count_by_subsystem" in metrics
+        assert "kb_fixes_applied_last_7d" in metrics
+        assert "kb_debt_burned_down" in metrics
+        assert "notes" in metrics
+
+    def test_snapshot_helper_kb_doc_health_optional(self):
+        """Test that KB doc-health can be excluded from snapshot."""
+        from agentpm.status.snapshot import get_system_snapshot
+
+        # Call without KB doc-health
+        result = get_system_snapshot(
+            include_reality_check=True,
+            include_ai_tracking=True,
+            include_share_manifest=True,
+            include_eval_insights=True,
+            include_kb_registry=True,
+            include_kb_doc_health=False,
+            reality_check_mode="HINT",
+            use_lm_for_explain=False,
+        )
+
+        # Verify kb_doc_health is not present
+        assert "kb_doc_health" not in result
+
+    def test_snapshot_helper_kb_doc_health_handles_missing_registry(self):
+        """Test that KB doc-health handles missing registry gracefully."""
+        from agentpm.status.snapshot import get_system_snapshot
+
+        # Call with KB doc-health (registry may not exist)
+        result = get_system_snapshot(
+            include_reality_check=True,
+            include_ai_tracking=True,
+            include_share_manifest=True,
+            include_eval_insights=True,
+            include_kb_registry=True,
+            include_kb_doc_health=True,
+            reality_check_mode="HINT",
+            use_lm_for_explain=False,
+        )
+
+        # Verify structure is always present (hermetic behavior)
+        kb_doc_health = result["kb_doc_health"]
+        assert isinstance(kb_doc_health, dict)
+        assert "available" in kb_doc_health
+        assert "metrics" in kb_doc_health
+        # If registry doesn't exist, should return unavailable gracefully
+        if not kb_doc_health.get("available", False):
+            assert "error" in kb_doc_health or "note" in kb_doc_health.get("metrics", {})

@@ -77,7 +77,10 @@ Implemented commands (names approximate):
 * `pmagent kb registry summary` – Get KB registry status summary (same as `status kb`).
 * `pmagent kb registry validate` – Validate registry entries (check file existence, duplicates).
 * `pmagent status kb` – **Primary KB status view for PM/AgentPM planning (KB-Reg:M3b)** – Shows document counts by subsystem/type and missing files.
-* `pmagent plan kb` – **Registry-powered planning surface (AgentPM-Next:M1)** – Returns prioritized documentation worklist (missing > stale > out_of_sync > low_coverage > info) with suggested actions, grouped by subsystem.
+* `pmagent plan kb list` – **Registry-powered planning surface (AgentPM-Next:M1)** – Returns prioritized documentation worklist (missing > stale > out_of_sync > low_coverage > info) with suggested actions, grouped by subsystem.
+* `pmagent plan kb fix` – **Orchestrated doc-fix runs (AgentPM-Next:M2)** – Consumes `pmagent plan kb list` worklist and executes doc fixes (create stubs, mark stale, sync metadata). Default `--dry-run` mode; `--apply` requires explicit opt-in. Filters: `--subsystem`, `--min-severity`, `--limit`. See `docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md` for full spec.
+
+* `pmagent report kb` – **Doc-health orchestration & reporting (AgentPM-Next:M3)** – Aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. Shows fresh ratios, missing/stale counts, fixes applied, and debt burn-down trends. See `docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md` for full spec.
 * `pmagent reality-check 1` – Run Reality Check #1 automated bring-up.
 * `pmagent reality-check live` – Run Reality Check #1 LIVE (DB + LM + pipeline).
 * `pmagent bringup full` – Fully start DB, LM Studio server+GUI, and load models.
@@ -121,8 +124,8 @@ Implemented commands (names approximate):
   - Runtime LM calls: `lm_studio_chat_with_logging()` and `guarded_lm_call()` write to `control.agent_run` via `_write_agent_run()` helper
   - CLI commands: Most pmagent commands (e.g., `reality-check check`, `health system`, `control status`, `bible retrieve`) use `create_agent_run()` and `mark_agent_run_success()` / `mark_agent_run_error()` to track executions in `control.agent_run_cli`
   - DB-off behavior: All tracking functions gracefully no-op when DB is unavailable (return `None`, no exceptions) for hermetic CI/testing
-* **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2)**:
-  - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), and KB registry into a single operator-facing snapshot
+* **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
+  - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
   - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
   - Generates both Markdown (`share/pm.snapshot.md`) and JSON (`evidence/pm_snapshot/snapshot.json`) outputs
   - Calls `pmagent health system` (via `agentpm.tools.system.health()`), `pmagent status explain` (via `agentpm.status.explain.explain_system_status()`), and `pmagent reality-check check --mode hint` (via `agentpm.reality.check.reality_check()`)
@@ -132,6 +135,8 @@ Implemented commands (names approximate):
   - Reads `share/kb_registry.json` for KB registry summary (KB-Reg:M2 + M3a, advisory-only, read-only in CI, seeded with core SSOT/runbook/AGENTS docs)
   - **KB status view (KB-Reg:M3b)**: `pmagent status kb` provides PM-focused KB registry status view with document counts by subsystem/type and missing files list
   - **KB hints (KB-Reg:M4)**: KB registry health surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, and validation issues; all hints are advisory-only and never affect `overall_ok`
+  - **KB doc health (AgentPM-Next:M3)**: `pm.snapshot` includes "Documentation Health" section with aggregated metrics (freshness, missing/stale counts, fixes applied) derived from `pmagent report kb` logic; fully advisory-only.
+  - **WebUI integration (AgentPM-Next:M4)**: `/status` page visualizes KB doc health metrics (freshness score, fixes applied, missing/stale counts) in the "Documentation Health" card. Consumes `kb_doc_health` from `/api/status/system` snapshot.
   - **KB-aware status explanation (KB-Reg:M5)**: `pmagent status.explain` includes `documentation` section with KB registry status, coverage breakdown, key docs (SSOT, ADRs, root AGENTS.md), and hints; `/status` UI shows "Documentation Health" card with counts, subsystem breakdown, hints badge, and key doc links
   - **KB drift & freshness checks (KB-Reg:M6)**: KB registry tracks document freshness (last_seen_mtime, last_refreshed_at, min_refresh_interval_days); `analyze_freshness()` detects stale/missing/out-of-sync docs; freshness summary included in `pmagent status kb` and `pmagent status.explain`; KB hints include `KB_DOC_STALE` and `KB_DOC_OUT_OF_SYNC` warnings; `pmagent reality-check` includes concise doc freshness summary in hints (advisory-only); default refresh intervals: SSOT (30d), ADR (90d), AGENTS.md (14d), runbook (60d), rule (90d), changelog (7d), other (60d)
   - DB-off/LM-off behavior: All components degrade gracefully to clear HINTs and explicit mode indicators; snapshot is still produced with all available information (hermetic behavior for CI/testing)
