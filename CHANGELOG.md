@@ -89,6 +89,8 @@
 - add AgentPM-Next:M2 planning hook to MASTER_PLAN (PR #580)
 - AgentPM-Next:M1 registry-powered planning (pmagent plan kb) (#580)
 
+- ruff linting issues in share/ledger_*.py files
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

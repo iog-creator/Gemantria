@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compliance Heatmap Dashboard — E87</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.tile h3 { margin-top: 0; color: #555; }
+.heatmap { margin: 1em 0; }
+.heatmap table { width: 100%; border-collapse: collapse; background: white; border-radius: 4px; overflow: hidden; }
+.heatmap th, .heatmap td { padding: 0.5em; text-align: center; border: 1px solid #ddd; }
+.heatmap th { background: #f0f0f0; font-weight: bold; }
+.heatmap td { position: relative; }
+.heatmap .cell-value { font-weight: bold; }
+.heatmap .cell-intensity {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 0.3;
+  border-radius: 2px;
+}
+.heatmap .intensity-low { background: #e6f7ff; }
+.heatmap .intensity-med { background: #bae7ff; }
+.heatmap .intensity-high { background: #40a9ff; }
+.heatmap .intensity-very-high { background: #0050b3; }
+.metric { display: inline-block; margin: 0.5em 1em 0.5em 0; padding: 0.5em 1em; background: white; border-radius: 4px; border: 1px solid #ccc; }
+.metric-value { font-size: 1.5em; font-weight: bold; color: #0066cc; }
+.metric-label { font-size: 0.9em; color: #666; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; }
+.error { color: #dc3545; }
+.ok { color: #28a745; }
+</style>
+</head>
+<body>
+<h1>Compliance Heatmap Dashboard <span class="badge">E87</span></h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading heatmap data...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/compliance_timeseries.json" data-testid="backlink-compliance-timeseries-json">Raw JSON: share/atlas/control_plane/compliance_timeseries.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-top-violations-7d-json">Raw JSON: share/atlas/control_plane/top_violations_7d.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-top-violations-30d-json">Raw JSON: share/atlas/control_plane/top_violations_30d.json</a></li>
+  <li><a href="../../../evidence/guard_atlas_compliance_timeseries.json" data-testid="backlink-guard-atlas-compliance-timeseries-json">Guard Verdict: evidence/guard_atlas_compliance_timeseries.json</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const contentDiv = document.getElementById('dashboard-content');
+
+  // Load compliance_timeseries.json
+  fetch('../../../share/atlas/control_plane/compliance_timeseries.json')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load compliance_timeseries.json')))
+    .then(data => {
+      const heatmapData = data.heatmap_tool_by_code || {};
+      const entries = heatmapData.entries || [];
+      const metadata = data.metadata || {};
+
+      let html = '';
+
+      // Metadata Tile
+      html += '<div class="tile">';
+      html += '<h3>Heatmap Overview</h3>';
+      html += '<div class="metric"><span class="metric-value">' + entries.length + '</span><br><span class="metric-label">Tool-Code Pairs</span></div>';
+      html += '<div class="metric"><span class="metric-value">' + (metadata.total_tools || 0) + '</span><br><span class="metric-label">Tools</span></div>';
+      html += '<div class="metric"><span class="metric-value">' + (metadata.total_codes || 0) + '</span><br><span class="metric-label">Violation Codes</span></div>';
+      html += '</div>';
+
+      if (entries.length > 0) {
+        // Build heatmap table
+        const tools = [...new Set(entries.map(e => e.tool))].sort();
+        const codes = [...new Set(entries.map(e => e.code))].sort();
+
+        // Find max count for intensity scaling
+        const maxCount = Math.max(...entries.map(e => e.count));
+
+        html += '<div class="tile">';
+        html += '<h3>Tool × Violation Code Heatmap</h3>';
+        html += '<div class="heatmap">';
+        html += '<table>';
+        html += '<thead><tr><th>Tool ↓<br>Code →</th>';
+
+        for (const code of codes) {
+          html += '<th>' + code + '</th>';
+        }
+        html += '</tr></thead><tbody>';
+
+        for (const tool of tools) {
+          html += '<tr><th>' + tool + '</th>';
+
+          for (const code of codes) {
+            const entry = entries.find(e => e.tool === tool && e.code === code);
+            const count = entry ? entry.count : 0;
+
+            // Calculate intensity class
+            let intensityClass = 'intensity-low';
+            if (maxCount > 0) {
+              const intensity = count / maxCount;
+              if (intensity > 0.75) intensityClass = 'intensity-very-high';
+              else if (intensity > 0.5) intensityClass = 'intensity-high';
+              else if (intensity > 0.25) intensityClass = 'intensity-med';
+            }
+
+            html += '<td>';
+            if (count > 0) {
+              html += '<div class="cell-intensity ' + intensityClass + '"></div>';
+            }
+            html += '<div class="cell-value">' + count + '</div>';
+            html += '</td>';
+          }
+
+          html += '</tr>';
+        }
+
+        html += '</tbody></table>';
+        html += '</div>';
+
+        // Heatmap legend
+        html += '<div style="margin-top: 1em; font-size: 0.9em; color: #666;">';
+        html += '<strong>Intensity Legend:</strong> ';
+        html += '<span style="background: #e6f7ff; padding: 2px 8px; margin: 0 4px; border-radius: 2px;">Low</span>';
+        html += '<span style="background: #bae7ff; padding: 2px 8px; margin: 0 4px; border-radius: 2px;">Medium</span>';
+        html += '<span style="background: #40a9ff; padding: 2px 8px; margin: 0 4px; border-radius: 2px;">High</span>';
+        html += '<span style="background: #0050b3; color: white; padding: 2px 8px; margin: 0 4px; border-radius: 2px;">Very High</span>';
+        html += '</div>';
+
+        html += '</div>';
+
+        // Top Tool-Code Combinations
+        const topEntries = entries
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+
+        if (topEntries.length > 0) {
+          html += '<div class="tile">';
+          html += '<h3>Top Tool-Code Combinations</h3>';
+          html += '<table><thead><tr><th>Tool</th><th>Violation Code</th><th>Count</th></tr></thead><tbody>';
+
+          for (const entry of topEntries) {
+            html += '<tr>';
+            html += '<td>' + entry.tool + '</td>';
+            html += '<td>' + entry.code + '</td>';
+            html += '<td>' + entry.count + '</td>';
+            html += '</tr>';
+          }
+
+          html += '</tbody></table>';
+          html += '</div>';
+        }
+      }
+
+      contentDiv.innerHTML = html;
+    })
+    .catch(error => {
+      contentDiv.innerHTML = '<div class="error">Error loading heatmap data: ' + error.message + '</div>';
+    });
+})();
+</script>
+</body>
+</html>
