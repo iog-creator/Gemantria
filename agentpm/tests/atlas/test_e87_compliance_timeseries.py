@@ -35,7 +35,14 @@ def test_export_compliance_timeseries_structure():
         data = json.load(f)
 
     # Check required top-level fields
-    required_fields = ["episode", "schema", "generated_at", "series_by_code", "series_by_tool", "heatmap_tool_by_code"]
+    required_fields = [
+        "episode",
+        "schema",
+        "generated_at",
+        "series_by_code",
+        "series_by_tool",
+        "heatmap_tool_by_code",
+    ]
     for field in required_fields:
         assert field in data, f"Missing required field: {field}"
 
@@ -175,6 +182,7 @@ def test_generate_compliance_timeseries_script():
 def test_guard_script_import():
     """Test the guard script can be imported."""
     import importlib
+
     try:
         spec = importlib.util.find_spec("scripts.guards.guard_atlas_compliance_timeseries")
         assert spec is not None, "Guard script module should be importable"
