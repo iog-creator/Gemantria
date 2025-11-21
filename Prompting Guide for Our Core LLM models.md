@@ -92,4 +92,25 @@ This stack makes the system "breathe": Granite Tiny decides → expert activates
 
 We now have the exact prompting + models to make MoE-of-MoEs real today.
 
-Ready for Phase-7C router code when you are.
+## Implementation Status (Phase-7C)
+
+**Router Implementation**: ✅ **COMPLETE** (Phase-7C)
+
+The router module (`agentpm/lm/router.py`) implements rule-based task-to-model routing based on this guide:
+
+- **Implemented**: Rule-based slot selection (embedding, reranker, math, theology, local_agent) driven by task `kind` and `domain`
+- **Implemented**: Provider selection via per-slot environment variables (Ollama vs LM Studio)
+- **Implemented**: Temperature defaults aligned with Prompting Guide recommendations (theology enrichment: 0.35, math: 0.0, general: 0.6)
+- **Implemented**: Tool-calling parameter injection (tool_choice, response_format) for Granite 4.0
+- **Implemented**: Integration with math verifier (`src/nodes/math_verifier.py`) behind `ROUTER_ENABLED` flag
+- **Implemented**: CLI command `pmagent lm router-status` for router configuration introspection
+
+**Future Extensions** (not yet implemented):
+- **Option B**: Use Granite Tiny-H as a classifier to route tasks dynamically (calls the local_agent model to classify tasks before routing)
+- **MoE-of-MoEs**: Support hot-swapping models via Ollama client for expert activation (as described in routing strategy above)
+
+**Configuration**:
+- Set `ROUTER_ENABLED=0` to bypass router and use legacy direct model selection
+- Router respects all per-slot provider/model configuration from Phase-7F
+
+**See also**: `docs/SSOT/LM_ROUTER_CONTRACT.md` for the full router API contract and runtime behavior specification.

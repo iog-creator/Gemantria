@@ -57,7 +57,11 @@ def test_status_page_contains_doc_metrics_elements(mock_get_snapshot):
         "lm": {"slots": [], "notes": "No LM slots"},
         "kb_doc_health": {
             "available": True,
-            "metrics": {"kb_fresh_ratio": {"overall": 0.95}, "kb_fixes_applied_last_7d": 12, "kb_missing_count": 1},
+            "metrics": {
+                "kb_fresh_ratio": {"overall": 0.95},
+                "kb_fixes_applied_last_7d": 12,
+                "kb_missing_count": 1,
+            },
         },
     }
 

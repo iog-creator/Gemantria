@@ -6,12 +6,8 @@ ids = []
 
 errors = []
 
-# Only check P0 schemas (common/ and tools/), not legacy root schemas
-for p in root.rglob("*.json"):
-    # Skip legacy schemas in root schemas/ directory
-    rel = p.relative_to(root)
-    if len(rel.parts) == 1:  # Root-level schema files
-        continue
+# Check all JSON Schema files (*.schema.json) under schemas/ (root + subdirs)
+for p in root.rglob("*.schema.json"):
     data = json.load(open(p))
     path = p.as_posix()
     top = data

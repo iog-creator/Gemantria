@@ -830,6 +830,150 @@ make agents.md.sync
 - **Makefile**: `make agents.md.sync` provides convenient access
 - **CI**: Can be run in CI to detect documentation drift
 
+### `guards/guard_mcp_db_ro.py` — MCP Database RO Guard (PLAN-091 E101)
+
+**Purpose:** Validates MCP catalog access via read-only database connection. Ensures `mcp.v_catalog` view is available and contains tool definitions.
+
+**Rule References:** PLAN-091 (Guarded Tool Calls P0 Execution), Rule 039 (Execution Contract), Rule 046 (Hermetic CI Fallbacks)
+
+**Capabilities:**
+- **RO DSN Validation**: Tests read-only database connection using centralized DSN loaders
+- **MCP Catalog Verification**: Validates `mcp.v_catalog` view exists and contains tool definitions
+- **Hermetic Fallbacks**: Gracefully handles missing DSN/view with appropriate error messages
+- **Evidence Generation**: Writes guard evidence to `evidence/guard_mcp_db_ro.final.json`
+
+**Usage:**
+```bash
+# Run MCP DB RO guard
+python scripts/guards/guard_mcp_db_ro.py
+
+# Via Makefile (with STRICT_DB_PROBE control)
+make guard.mcp.db.ro STRICT_DB_PROBE=0  # HINT mode - tolerate missing DSN
+make guard.mcp.db.ro STRICT_DB_PROBE=1  # STRICT mode - require DSN/view
+```
+
+**Output:**
+```json
+{
+  "ok": true,
+  "probe_requested": false,
+  "used_psql": true,
+  "dsn_present": true,
+  "notes": ["probe skipped (STRICT_DB_PROBE=0)"]
+}
+```
+
+**Modes:**
+- **HINT (default)**: Tolerates missing DSN/view - passes when not configured
+- **STRICT**: Requires DSN/view to be present and accessible - fails when missing
+
+**Integration:**
+- **PLAN-091 E101**: Core component of guarded tool calls implementation
+- **Tagproof Phase-2**: Included in `scripts/ci/tagproof_phase2_bundle.py` as required component in STRICT mode
+- **CI Hermetic**: Uses hermetic fallbacks per Rule 046
+
+### `ci/tagproof_phase2_bundle.py` — Tagproof Phase-2 Bundle Generator (PLAN-091 E102)
+
+**Purpose:** Generates comprehensive Phase-2 tagproof bundle combining all critical guard verdicts and evidence for automated validation.
+
+**Rule References:** PLAN-091 E102 (Tagproof/Atlas Wiring), Rule 041 (PR Merge Policy), Rule 051 (Cursor Insight & Handoff)
+
+**Capabilities:**
+- **Multi-Component Aggregation**: Combines TV coverage, gatekeeper coverage, regeneration evidence, browser screenshots, and MCP DB RO guard
+- **MCP Catalog Integration**: Includes MCP catalog summary with availability status and tool counts
+- **Dynamic Component Management**: Adapts required components based on STRICT/HINT mode
+- **Evidence File Generation**: Creates `evidence/tagproof_phase2_bundle.json` with complete validation evidence
+
+**Usage:**
+```bash
+# Generate Phase-2 tagproof bundle
+python scripts/ci/tagproof_phase2_bundle.py
+
+# Via Makefile
+make tagproof.phase2.bundle
+```
+
+**Output Structure:**
+```json
+{
+  "version": 1,
+  "timestamp": "2025-11-21T...",
+  "components": {
+    "tv_coverage": {...},
+    "gatekeeper_coverage": {...},
+    "regeneration_receipt": {...},
+    "browser_screenshot": {...},
+    "mcp_catalog_summary": {
+      "generated_at": "2025-11-21T...",
+      "available": false,
+      "tools_count": 0,
+      "error": "DSN not available"
+    },
+    "mcp_db_ro_guard": {...}
+  },
+  "meta": {
+    "phase": 2,
+    "plan": "PLAN-080"
+  }
+}
+```
+
+**Integration:**
+- **Phase-2 Tagproof**: Core component of automated PR validation
+- **MCP Catalog**: Includes read-only catalog access verification
+- **Guard Integration**: Works with `scripts/guards/guard_tagproof_phase2.py` for validation
+
+### `guards/guard_tagproof_phase2.py` — Tagproof Phase-2 Guard (PLAN-091 E102)
+
+**Purpose:** Validates Phase-2 tagproof bundle completeness and component health. Ensures all required evidence is present and valid.
+
+**Rule References:** PLAN-091 E102 (Tagproof/Atlas Wiring), Rule 041 (PR Merge Policy), Rule 051 (Cursor Insight & Handoff)
+
+**Capabilities:**
+- **Dynamic Component Requirements**: Adapts required components based on STRICT/HINT mode (MCP RO required in STRICT)
+- **Bundle Validation**: Verifies `evidence/tagproof_phase2_bundle.json` exists and contains all required components
+- **Component Health Checks**: Validates each component's health status and error conditions
+- **Evidence-Based Validation**: Uses evidence files rather than re-running expensive operations
+
+**Usage:**
+```bash
+# Run Phase-2 tagproof guard
+python scripts/guards/guard_tagproof_phase2.py
+
+# Via Makefile
+make guard.tagproof.phase2
+```
+
+**Required Components (STRICT mode):**
+- `tv_coverage` - TV coverage evidence
+- `gatekeeper_coverage` - Gatekeeper coverage evidence
+- `regeneration_guard` - Regeneration guard verdict
+- `browser_screenshot` - Browser screenshot evidence
+- `mcp_db_ro_guard` - MCP DB RO guard verdict (STRICT mode only)
+
+**Output:**
+```json
+{
+  "ok": true,
+  "counts": {
+    "components_total": 5,
+    "components_missing": 0,
+    "components_ok": 5,
+    "components_failed": 0
+  },
+  "details": {
+    "mode": "STRICT",
+    "missing_components": [],
+    "component_errors": {}
+  }
+}
+```
+
+**Integration:**
+- **Phase-2 Tagproof**: Validates complete system readiness before merge
+- **MCP Integration**: Includes MCP catalog validation in STRICT mode
+- **CI/CD**: Used for automated PR validation and merge gates
+
 ### `guard_reality_green.py` — Reality Green Truth Gate
 
 **Purpose:** Full system truth gate that validates the system is up to date and consistent for the next agent. This is the 110% signal that everything is ready.

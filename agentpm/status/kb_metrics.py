@@ -142,7 +142,11 @@ def compute_kb_doc_health_metrics(
             kb_missing_count_by_subsystem={},
             kb_stale_count_by_subsystem={},
             kb_fixes_applied_last_7d=0,
-            kb_debt_burned_down={"overall": None, "by_subsystem": {}, "note": "insufficient_history"},
+            kb_debt_burned_down={
+                "overall": None,
+                "by_subsystem": {},
+                "note": "insufficient_history",
+            },
             notes=notes,
         )
         return {"available": False, "metrics": metrics.to_dict()}
@@ -158,7 +162,11 @@ def compute_kb_doc_health_metrics(
             kb_missing_count_by_subsystem={},
             kb_stale_count_by_subsystem={},
             kb_fixes_applied_last_7d=0,
-            kb_debt_burned_down={"overall": None, "by_subsystem": {}, "note": "insufficient_history"},
+            kb_debt_burned_down={
+                "overall": None,
+                "by_subsystem": {},
+                "note": "insufficient_history",
+            },
             notes=notes,
         )
         return {"available": False, "metrics": metrics.to_dict()}
@@ -174,7 +182,11 @@ def compute_kb_doc_health_metrics(
             kb_missing_count_by_subsystem={},
             kb_stale_count_by_subsystem={},
             kb_fixes_applied_last_7d=0,
-            kb_debt_burned_down={"overall": None, "by_subsystem": {}, "note": "insufficient_history"},
+            kb_debt_burned_down={
+                "overall": None,
+                "by_subsystem": {},
+                "note": "insufficient_history",
+            },
             notes=notes,
         )
         return {"available": False, "metrics": metrics.to_dict()}

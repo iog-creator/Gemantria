@@ -99,7 +99,9 @@ def test_bundle_generator_handles_missing_components():
         # Check that missing components are marked with error
         for component_key in bundle["components"]:
             if "error" in bundle["components"][component_key]:
-                assert bundle["components"][component_key]["error"] == "missing"
+                error_msg = bundle["components"][component_key]["error"]
+                # Allow different error messages (PLAN-091 E103)
+                assert error_msg in ["missing", "DSN not available"] or "does not exist" in error_msg
     finally:
         # Restore backups
         for filename, backup in backups.items():
@@ -114,6 +116,7 @@ def test_guard_happy_path():
     gatekeeper_coverage = _load_fixture("gatekeeper_coverage_ok.json")
     regeneration_guard = _load_fixture("regeneration_guard_ok.json")
     browser_screenshot = _load_fixture("browser_screenshot_ok.json")
+    mcp_db_ro_guard = _load_fixture("guard_mcp_db_ro_ok.json")
 
     # Create a happy-path bundle
     bundle = {
@@ -124,6 +127,7 @@ def test_guard_happy_path():
             "gatekeeper_coverage": gatekeeper_coverage,
             "regeneration_guard": regeneration_guard,
             "browser_screenshot": browser_screenshot,
+            "mcp_db_ro_guard": mcp_db_ro_guard,
         },
         "meta": {"phase": 2, "plan": "PLAN-080"},
     }
@@ -170,6 +174,7 @@ def test_guard_missing_component():
             "gatekeeper_coverage": gatekeeper_coverage,
             "regeneration_guard": regeneration_guard,
             "browser_screenshot": {"error": "missing"},
+            "mcp_catalog_summary": {"error": "DSN not available"},
         },
         "meta": {"phase": 2, "plan": "PLAN-080"},
     }
@@ -189,8 +194,10 @@ def test_guard_missing_component():
         assert result.returncode == 1, "Guard should fail with missing component"
         doc = json.loads(result.stdout)
         assert doc["ok"] is False
-        assert doc["counts"]["components_missing"] == 1
+        # In STRICT mode, both browser_screenshot and mcp_db_ro_guard are missing
+        assert doc["counts"]["components_missing"] == 2
         assert "browser_screenshot" in doc["details"]["missing_components"]
+        assert "mcp_db_ro_guard" in doc["details"]["missing_components"]
     finally:
         if backup and backup.exists():
             shutil.copy(str(backup), str(BUNDLE_PATH))
@@ -279,3 +286,52 @@ def test_guard_counts_consistency():
     missing = counts["components_missing"]
 
     assert ok + failed + missing == total, f"Counts should sum to total: {ok} + {failed} + {missing} = {total}"
+
+
+@patch.dict("os.environ", {"STRICT_MODE": "1"}, clear=False)
+def test_guard_strict_mode_mcp_ro_required():
+    """Test that MCP RO guard is required in STRICT mode (PLAN-091 E102)."""
+    # Load fixtures (exclude MCP RO to test it's required)
+    tv_coverage = _load_fixture("tv_coverage_ok.json")
+    gatekeeper_coverage = _load_fixture("gatekeeper_coverage_ok.json")
+    regeneration_guard = _load_fixture("regeneration_guard_ok.json")
+    browser_screenshot = _load_fixture("browser_screenshot_ok.json")
+
+    # Create bundle WITHOUT mcp_db_ro_guard (should fail in STRICT mode)
+    bundle = {
+        "version": 1,
+        "timestamp": "2025-11-14T00:00:00Z",
+        "components": {
+            "tv_coverage": tv_coverage,
+            "gatekeeper_coverage": gatekeeper_coverage,
+            "regeneration_guard": regeneration_guard,
+            "browser_screenshot": browser_screenshot,
+            # Intentionally missing: "mcp_db_ro_guard"
+        },
+        "meta": {"phase": 2, "plan": "PLAN-080"},
+    }
+
+    # Write bundle to temp location
+    backup = None
+    if BUNDLE_PATH.exists():
+        backup = BUNDLE_PATH.with_suffix(".json.backup")
+        shutil.copy(str(BUNDLE_PATH), str(backup))
+
+    try:
+        BUNDLE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with BUNDLE_PATH.open("w") as f:
+            json.dump(bundle, f)
+
+        result = _run_guard()
+        assert result.returncode == 1, "Guard should fail in STRICT mode when MCP RO is missing"
+        doc = json.loads(result.stdout)
+        assert doc["ok"] is False
+        assert doc["counts"]["components_total"] == 5, "STRICT mode should expect 5 components including MCP RO"
+        assert doc["counts"]["components_missing"] == 1
+        assert "mcp_db_ro_guard" in doc["details"]["missing_components"]
+    finally:
+        if backup and backup.exists():
+            shutil.copy(str(backup), str(BUNDLE_PATH))
+            backup.unlink()
+        elif BUNDLE_PATH.exists():
+            BUNDLE_PATH.unlink()

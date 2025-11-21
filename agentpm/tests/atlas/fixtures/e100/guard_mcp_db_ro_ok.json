@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "probe_requested": false,
+  "used_psql": true,
+  "dsn_present": true,
+  "notes": ["probe skipped (STRICT_DB_PROBE=0)"]
+}

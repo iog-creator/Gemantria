@@ -228,6 +228,15 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - **Bible lane**: BGE models reserved for Bible/multilingual tasks; not the general default
     - **Test suite**: `tests/integration/test_phase7f_model_readiness.py` (availability-aware, skips when services unavailable)
     - **Architecture**: No LangChain/LangGraph in core LM pipeline; all calls go to local services (Ollama, LM Studio) on 127.0.0.1
+  - **Phase-7C**: ✅ **COMPLETE** — LM Router (centralized task-to-model routing):
+    - **Router module**: `agentpm/lm/router.py` - Rule-based task classification and model slot selection
+    - **Router contract**: `docs/SSOT/LM_ROUTER_CONTRACT.md` - Full specification of router API and behavior
+    - **Integration**: Math verifier (`src/nodes/math_verifier.py`) uses router when `ROUTER_ENABLED=1` (default enabled)
+    - **CLI command**: `pmagent lm router-status` - Show router configuration and slot mappings (read-only, hermetic)
+    - **Configuration**: `ROUTER_ENABLED` (default: `1`) controls router usage; set to `0` for legacy behavior
+    - **Routing rules**: Embedding → `embedding` slot, rerank → `reranker` slot, math → `math` slot, theology/bible → `theology` slot, tool-calling → `local_agent` slot, default → `local_agent` slot
+    - **Test suite**: `tests/unit/test_lm_router.py` - Unit tests for router decisions and fallback behavior (hermetic, no network calls)
+    - **Design reference**: `Prompting Guide for Our Core LLM models.md` - Design-level spec for model stack and prompting
   - **LM Studio MCP Bridge**: Optional SSE server on port 8005 for LM Studio plugin integration
     - **Auto-start**: Set `AUTO_START_MCP_SSE=1` in `.env` to automatically start server when needed
     - **Integration points**:
