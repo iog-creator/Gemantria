@@ -625,11 +625,10 @@ def get_system_snapshot(
     if include_kb_doc_health:
         snapshot["kb_doc_health"] = kb_doc_health_summary
 
+    # Add MCP catalog summary (advisory-only, read-only)
     if include_mcp_catalog:
-        # Add MCP catalog summary (advisory-only, read-only)
         try:
             from agentpm.adapters.mcp_db import catalog_read_ro
-
             mcp_catalog_result = catalog_read_ro()
             snapshot["mcp_catalog"] = {
                 "available": mcp_catalog_result.get("ok", False),
