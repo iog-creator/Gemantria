@@ -365,6 +365,7 @@ These are active on every branch/state and are not pruned or downgraded.
 
 ## Next Steps
 - Project unification and single UI shell (see RFC-081).
+- **Phase-7 — Apps & Knowledge OS**: UX & cross-project knowledge for BibleScholar, StoryMaker, and PM/OPS (see `docs/SSOT/PHASE_7_PLAN.md`).
 
 
 ### Phase-3B: pmagent Control-Plane Health Suite (✅ **Complete**)
@@ -440,7 +441,7 @@ These are active on every branch/state and are not pruned or downgraded.
 **Phase-5 Status**: ✅ **COMPLETE** — Both StoryMaker and BibleScholar now consume the canonical `lm_indicator.json` signal via
 the shared LM widget contract. All adapters are hermetic and fail-closed (offline-safe) and do not introduce new heuristics.
 
-### Phase-6: LM Studio Live Usage + DB-Backed Knowledge (📘 IN PROGRESS)
+### Phase-6: LM Studio Live Usage + DB-Backed Knowledge (✅ **CORE COMPLETE**)
 
 - **6A**: LM Studio live usage enablement (guarded calls + logs) ✅ **COMPLETE**
 - **6B**: LM usage budgets + rate tracking ✅ **COMPLETE**
@@ -468,14 +469,15 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - `agentpm/biblescholar/vector_flow.py` — Verse-similarity flow wrapper
   - Read-only vector similarity using pgvector cosine distance
   - DB-off mode handling (graceful degradation)
-- **6P**: BibleScholar Reference Answer Slice 📋 **PLANNING** (design doc only)
+- **6P**: BibleScholar Reference Answer Slice ✅ **COMPLETE** (2025-11-15, PR #560)
   - Single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice
+  - `agentpm/biblescholar/reference_slice.py` — `answer_reference_question()` orchestrates complete E2E flow
   - Inputs: Natural-language question + optional verse reference
   - Flow: Resolve verse context → Retrieve Gematria patterns → Perform LM Studio guarded call → Synthesize output with justification + trace
   - Outputs: `{ answer: str, trace: [...], context_used: {...} }`
   - Constraints: No new DSNs, must pass db_off hermetic mode, budget enforcement + provenance required
+  - Tests: `agentpm/biblescholar/tests/test_reference_slice.py` (5/5 passing)
   - Dependencies: 6J, 6M, 6O, 6A, 6B, 6C (all COMPLETE)
-  - See `docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md` for design details
 - **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 PLANNING
 - **6E**: Governance & SSOT updates 📘 PLANNING
 
