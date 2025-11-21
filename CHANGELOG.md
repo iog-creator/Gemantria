@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+- **AgentPM-Next PLAN-092 (M1–M4) — Complete**: KB registry-powered planning workflows implemented and shipped. M1: `pmagent plan kb` for prioritized documentation worklists. M2: `pmagent plan kb fix` for orchestrated doc-fix runs. M3: `pmagent report kb` for doc-health control loop & reporting. M4: `/status` page KB doc-health metrics visualization. CLI, API, and UI integration tested; browser verification setup complete; governance gates passed.
 - **Phase-7 — Runtime Bring-Up Completion**: Planning initiated. Added planning section to MASTER_PLAN.md describing:
   - 7A control-plane bring-up (migration 040)
   - 7B LM Studio model configuration normalization

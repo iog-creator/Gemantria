@@ -443,6 +443,7 @@ def get_system_snapshot(
     include_eval_insights: bool = True,
     include_kb_registry: bool = True,
     include_kb_doc_health: bool = True,
+    include_mcp_catalog: bool = True,
     reality_check_mode: str = "HINT",
     use_lm_for_explain: bool = False,
 ) -> dict[str, Any]:
@@ -455,6 +456,7 @@ def get_system_snapshot(
         include_eval_insights: Whether to include eval exports summary (Phase-8/10)
         include_kb_registry: Whether to include KB registry summary (advisory-only)
         include_kb_doc_health: Whether to include KB doc-health metrics (AgentPM-Next:M3)
+        include_mcp_catalog: Whether to include MCP catalog summary (advisory-only)
         reality_check_mode: Mode for reality-check ("HINT" or "STRICT")
         use_lm_for_explain: Whether to use LM for status explanation
 
@@ -472,6 +474,7 @@ def get_system_snapshot(
             "eval_insights": {...} (if included) - optional, export-driven analytics
             "kb_registry": {...} (if included) - optional, advisory-only, read-only in CI
             "kb_doc_health": {...} (if included) - optional, doc-health metrics (AgentPM-Next:M3)
+            "mcp_catalog": {...} (if included) - optional, advisory-only, MCP tool catalog
         }
     """
     from datetime import datetime
@@ -621,5 +624,22 @@ def get_system_snapshot(
 
     if include_kb_doc_health:
         snapshot["kb_doc_health"] = kb_doc_health_summary
+
+    # Add MCP catalog summary (advisory-only, read-only)
+    if include_mcp_catalog:
+        try:
+            from agentpm.adapters.mcp_db import catalog_read_ro
+            mcp_catalog_result = catalog_read_ro()
+            snapshot["mcp_catalog"] = {
+                "available": mcp_catalog_result.get("ok", False),
+                "tools_count": len(mcp_catalog_result.get("tools", [])),
+                "error": mcp_catalog_result.get("error") if not mcp_catalog_result.get("ok", False) else None,
+            }
+        except Exception as e:
+            snapshot["mcp_catalog"] = {
+                "available": False,
+                "tools_count": 0,
+                "error": f"Failed to read MCP catalog: {e}",
+            }
 
     return snapshot

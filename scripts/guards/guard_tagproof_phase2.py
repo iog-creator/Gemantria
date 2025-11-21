@@ -21,8 +21,10 @@ EVIDENCE_DIR = ROOT / "evidence"
 BUNDLE_PATH = EVIDENCE_DIR / "tagproof_phase2_bundle.json"
 VERDICT_PATH = EVIDENCE_DIR / "guard_tagproof_phase2.json"
 
-# Determine mode (STRICT on tags, HINT on PRs)
-STRICT_MODE = os.getenv("STRICT_MODE", "0") == "1" or os.getenv("CI") == "true"
+
+# Determine mode (STRICT on tags, HINT on PRs) - evaluated at runtime
+def _is_strict_mode() -> bool:
+    return os.getenv("STRICT_MODE", "0") == "1" or os.getenv("CI") == "true"
 
 
 def _load_bundle() -> dict[str, Any] | None:
@@ -64,13 +66,13 @@ def main() -> int:
     """Run the Phase-2 tagproof guard."""
     checks: dict[str, bool] = {}
     counts: dict[str, int] = {
-        "components_total": 4,
+        "components_total": 4,  # Will be updated dynamically later
         "components_missing": 0,
         "components_ok": 0,
         "components_failed": 0,
     }
     details: dict[str, Any] = {
-        "mode": "STRICT" if STRICT_MODE else "HINT",
+        "mode": "STRICT" if _is_strict_mode() else "HINT",
         "missing_components": [],
         "component_errors": {},
     }
@@ -92,7 +94,7 @@ def main() -> int:
     checks["bundle_exists"] = True
     components = bundle.get("components", {})
 
-    # Required components
+    # Required components (base set)
     required_components = {
         "tv_coverage": "tv_coverage",
         "gatekeeper_coverage": "gatekeeper_coverage",
@@ -100,15 +102,34 @@ def main() -> int:
         "browser_screenshot": "browser_screenshot",
     }
 
+    # Add MCP RO guard as required in STRICT mode (PLAN-091 E102)
+    if _is_strict_mode():
+        required_components["mcp_db_ro"] = "mcp_db_ro_guard"
+
+    # Dynamic components_total based on required_components
+    components_total = len(required_components)
+    counts: dict[str, int] = {
+        "components_total": components_total,
+        "components_missing": 0,
+        "components_ok": 0,
+        "components_failed": 0,
+    }
+
     for check_name, component_key in required_components.items():
-        component = components.get(component_key, {})
-        if "error" in component:
+        if component_key not in components:
+            # Component is completely missing from bundle
             checks[f"{check_name}_ok"] = False
             counts["components_missing"] += 1
             details["missing_components"].append(component_key)
-            details["component_errors"][component_key] = component.get("error", "missing")
+            details["component_errors"][component_key] = "missing from bundle"
+        elif "error" in components[component_key]:
+            # Component exists but has an error field (legacy handling)
+            checks[f"{check_name}_ok"] = False
+            counts["components_missing"] += 1
+            details["missing_components"].append(component_key)
+            details["component_errors"][component_key] = components[component_key].get("error", "missing")
         else:
-            ok, error_msg = _get_component_ok(component, component_key)
+            ok, error_msg = _get_component_ok(components[component_key], component_key)
             check_key = f"{check_name}_ok"
             # Don't set check yet - we'll set it after HINT mode adjustments
             initial_ok = ok
@@ -124,7 +145,7 @@ def main() -> int:
             checks[check_key] = initial_ok
 
     # Special handling for gatekeeper_coverage in HINT mode
-    if not STRICT_MODE and not checks.get("gatekeeper_coverage_ok", True):
+    if not _is_strict_mode() and not checks.get("gatekeeper_coverage_ok", True):
         # In HINT mode, allow gatekeeper failures if uncovered codes are flagged
         gatekeeper = components.get("gatekeeper_coverage", {})
         uncovered = gatekeeper.get("coverage", {}).get("BUDGET_EXCEEDED") is False
@@ -141,7 +162,7 @@ def main() -> int:
     # Special handling for browser_screenshot in HINT mode
     # Only override if component exists but failed (not if it's missing)
     if (
-        not STRICT_MODE
+        not _is_strict_mode()
         and not checks.get("browser_screenshot_ok", True)
         and "browser_screenshot" not in details["missing_components"]
     ):

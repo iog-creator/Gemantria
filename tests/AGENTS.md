@@ -61,6 +61,18 @@ Unit Tests (70%) → Integration Tests (20%) → E2E Tests (10%)
 - Data schema validation
 - Breaking change detection
 
+#### `agentpm/` - AgentPM Integration Tests
+
+**Purpose**: Test AgentPM components including LM routing, guarded calls, and MCP adapters
+**Scope**: AgentPM-specific functionality with hermetic fallbacks
+**Dependencies**: Optional database/external services (skip when unavailable)
+**Key Focus**:
+
+- LM router slot selection and model routing
+- Guarded tool call validation and PoR enforcement
+- MCP catalog access and error handling
+- Tagproof bundle generation and validation
+
 ## Test Organization Principles
 
 ### Directory Structure

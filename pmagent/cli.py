@@ -8,6 +8,7 @@ Phase-3B Feature #4: CLI interface for health checks.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -205,6 +206,71 @@ def lm_status(
         # Print human-readable table to stderr
         table = print_lm_status_table(status)
         print(table, file=sys.stderr)
+    sys.exit(0)
+
+
+@lm_app.command("router-status", help="Show LM router configuration (Phase-7C)")
+def lm_router_status(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Show LM router configuration and slot mappings (read-only, hermetic)."""
+    try:
+        from agentpm.lm.router import GraniteRouter, RouterTask
+        from scripts.config.env import get_lm_model_config
+
+        router = GraniteRouter(config=get_lm_model_config(), dry_run=True)
+
+        # Build router status
+        router_enabled = os.getenv("ROUTER_ENABLED", "1") in ("1", "true", "yes")
+        status = {
+            "router_enabled": router_enabled,
+            "slots": {},
+        }
+
+        # Test routing for each slot type
+        test_tasks = [
+            ("embedding", RouterTask(kind="embed", domain=None)),
+            ("reranker", RouterTask(kind="rerank", domain=None)),
+            ("math", RouterTask(kind="math_verification", domain="math")),
+            ("theology", RouterTask(kind="theology_enrichment", domain="theology")),
+            ("local_agent", RouterTask(kind="chat", domain="general", needs_tools=False)),
+            ("local_agent_tools", RouterTask(kind="chat", domain="general", needs_tools=True)),
+        ]
+
+        for slot_name, task in test_tasks:
+            try:
+                decision = router.route_task(task)
+                status["slots"][slot_name] = {
+                    "slot": decision.slot,
+                    "provider": decision.provider,
+                    "model": decision.model_name,
+                    "temperature": decision.temperature,
+                }
+            except Exception as e:
+                status["slots"][slot_name] = {
+                    "error": str(e),
+                }
+
+        if json_only:
+            print(json.dumps(status, indent=2))
+        else:
+            # Print JSON to stdout
+            print(json.dumps(status, indent=2))
+            # Print human-readable summary to stderr
+            print(f"Router enabled: {router_enabled}", file=sys.stderr)
+            print(
+                f"Slots configured: {len([s for s in status['slots'].values() if 'error' not in s])}",
+                file=sys.stderr,
+            )
+
+    except ImportError as e:
+        error_msg = {"error": f"Router not available: {e}"}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(json.dumps(error_msg, indent=2), file=sys.stderr)
+        sys.exit(1)
+
     sys.exit(0)
 
 

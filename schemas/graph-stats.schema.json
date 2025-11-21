@@ -47,6 +47,6 @@
       "additionalProperties": true
     }
   },
-  "additionalProperties": true,
+  "additionalProperties": false,
   "$id": "gemantria://v1/graph-stats.schema.json"
 }

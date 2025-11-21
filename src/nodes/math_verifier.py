@@ -20,6 +20,17 @@ from src.utils.json_sanitize import parse_llm_json
 
 LOG = get_logger("gemantria.math_verifier")
 
+# Phase-7C: Router integration (optional, behind ROUTER_ENABLED flag)
+try:
+    from agentpm.lm.router import RouterTask, route_task
+    from agentpm.adapters.lm_studio import chat as lm_studio_chat
+    from agentpm.adapters.ollama import chat as ollama_chat
+    from agentpm.adapters.theology import chat as theology_chat
+
+    ROUTER_AVAILABLE = True
+except ImportError:
+    ROUTER_AVAILABLE = False
+
 
 def math_verifier_node(state: dict) -> dict:
     """
@@ -132,8 +143,52 @@ def math_verifier_node(state: dict) -> dict:
                     {"role": "user", "content": prompt},
                 ]
 
-                results = chat_completion([messages], model=math_model, temperature=0.0)
-                response_text = results[0].text.strip().lower()
+                # Phase-7C: Use router if enabled, otherwise use legacy path
+                use_router = ROUTER_AVAILABLE and os.getenv("ROUTER_ENABLED", "1") in (
+                    "1",
+                    "true",
+                    "yes",
+                )
+                if use_router:
+                    # Route task through router
+                    router_task = RouterTask(
+                        kind="math_verification",
+                        domain="math",
+                        needs_tools=False,
+                        temperature=0.0,
+                    )
+                    decision = route_task(router_task, dry_run=False)
+
+                    # Call appropriate adapter based on router decision
+                    if decision.provider == "ollama":
+                        response_text = (
+                            ollama_chat(prompt, model=decision.model_name, system=messages[0]["content"])
+                            .strip()
+                            .lower()
+                        )
+                    elif decision.provider == "lmstudio":
+                        # Use theology adapter if slot is theology, otherwise lm_studio_chat
+                        if decision.slot == "theology":
+                            response_text = theology_chat(prompt, system=messages[0]["content"]).strip().lower()
+                        else:
+                            response_text = (
+                                lm_studio_chat(
+                                    prompt,
+                                    model_slot=decision.slot,
+                                    system=messages[0]["content"],
+                                    temperature=decision.temperature,
+                                )
+                                .strip()
+                                .lower()
+                            )
+                    else:
+                        # Fallback to legacy
+                        results = chat_completion([messages], model=math_model, temperature=0.0)
+                        response_text = results[0].text.strip().lower()
+                else:
+                    # Legacy path: direct call
+                    results = chat_completion([messages], model=math_model, temperature=0.0)
+                    response_text = results[0].text.strip().lower()
 
                 # Parse response (look for true/false)
                 model_ok = False
