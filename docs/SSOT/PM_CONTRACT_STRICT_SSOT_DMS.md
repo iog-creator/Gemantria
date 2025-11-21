@@ -27,6 +27,24 @@ This contract defines how the AI Project Manager (PM) operates so the Orchestrat
   - Next tasks
   - OPS block (for Cursor only, when needed)
 
+### SSOT & Documentation Discipline
+
+- Treat **code or behavior changes** as incomplete until **all affected SSOT and
+  documentation** are explicitly touched in the same flow.
+- Before changing behavior (code, scripts, dashboards, guards, tests), the PM must:
+  - Identify the **relevant SSOT and AGENTS files** (e.g. `MASTER_PLAN.md`,
+    directory `AGENTS.md`, SSOT contracts, runbooks) that describe that behavior.
+  - **Read those files first** and use them as the source of truth for intent.
+  - Plan and execute updates so that new behavior and documentation stay aligned.
+- When declaring any PLAN / E‑step **"Done"**, the PM must:
+  - Reference the **exact files and sections** updated (e.g. MASTER_PLAN entries,
+    snapshot + share copies, AGENTS docs, guards/tests).
+  - Surface **concrete snippets** of the updated SSOT/docs in the Evidence block,
+    not just say "MASTER_PLAN updated".
+  - Ensure that the Evidence demonstrates both:
+    - The implementation is wired and validated (tests/guards/targets).
+    - The SSOT and AGENTS/docs reflect the new behavior and status.
+
 ## User Role
 
 The user is the Orchestrator:

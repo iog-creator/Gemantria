@@ -629,6 +629,7 @@ def get_system_snapshot(
     if include_mcp_catalog:
         try:
             from agentpm.adapters.mcp_db import catalog_read_ro
+
             mcp_catalog_result = catalog_read_ro()
             snapshot["mcp_catalog"] = {
                 "available": mcp_catalog_result.get("ok", False),

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compliance Time-Series Dashboard — E87</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.tile h3 { margin-top: 0; color: #555; }
+.metric { display: inline-block; margin: 0.5em 1em 0.5em 0; padding: 0.5em 1em; background: white; border-radius: 4px; border: 1px solid #ccc; }
+.metric-value { font-size: 1.5em; font-weight: bold; color: #0066cc; }
+.metric-label { font-size: 0.9em; color: #666; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+th, td { padding: 0.5em; text-align: left; border-bottom: 1px solid #ddd; }
+th { background: #f0f0f0; font-weight: bold; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; }
+.error { color: #dc3545; }
+.ok { color: #28a745; }
+.timeseries-chart { margin: 1em 0; padding: 1em; background: white; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Compliance Time-Series Dashboard <span class="badge">E87</span></h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading time-series metrics...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/compliance_timeseries.json" data-testid="backlink-compliance-timeseries-json">Raw JSON: share/atlas/control_plane/compliance_timeseries.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-top-violations-7d-json">Raw JSON: share/atlas/control_plane/top_violations_7d.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-top-violations-30d-json">Raw JSON: share/atlas/control_plane/top_violations_30d.json</a></li>
+  <li><a href="../../../share/atlas/control_plane/agent_runs_7d.json" data-testid="backlink-agent-runs-7d-json">Raw JSON: share/atlas/control_plane/agent_runs_7d.json</a></li>
+  <li><a href="../../../evidence/guard_atlas_compliance_timeseries.json" data-testid="backlink-guard-atlas-compliance-timeseries-json">Guard Verdict: evidence/guard_atlas_compliance_timeseries.json</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const contentDiv = document.getElementById('dashboard-content');
+
+  // Load compliance_timeseries.json
+  fetch('../../../share/atlas/control_plane/compliance_timeseries.json')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load compliance_timeseries.json')))
+    .then(data => {
+      const seriesByCode = data.series_by_code || [];
+      const seriesByTool = data.series_by_tool || [];
+      const metadata = data.metadata || {};
+
+      let html = '';
+
+      // Metadata Tile
+      html += '<div class="tile">';
+      html += '<h3>Dataset Overview</h3>';
+      html += '<div class="metric"><span class="metric-value">' + (metadata.total_codes || 0) + '</span><br><span class="metric-label">Violation Codes</span></div>';
+      html += '<div class="metric"><span class="metric-value">' + (metadata.total_tools || 0) + '</span><br><span class="metric-label">Tools</span></div>';
+      html += '<div class="metric"><span class="metric-value">' + (metadata.heatmap_entries || 0) + '</span><br><span class="metric-label">Heatmap Entries</span></div>';
+      html += '</div>';
+
+      // Time-Series by Violation Code
+      if (seriesByCode.length > 0) {
+        html += '<div class="tile">';
+        html += '<h3>Violation Trends by Code</h3>';
+        html += '<table><thead><tr><th>Violation Code</th><th>7d Count</th><th>30d Count</th><th>Trend</th></tr></thead><tbody>';
+
+        for (const series of seriesByCode) {
+          const points = series.data_points || [];
+          const count7d = points.find(p => p.period === '7d')?.count || 0;
+          const count30d = points.find(p => p.period === '30d')?.count || 0;
+          const trend = count30d > count7d ? '↗️' : count30d < count7d ? '↘️' : '→';
+
+          html += '<tr>';
+          html += '<td>' + series.code + '</td>';
+          html += '<td>' + count7d + '</td>';
+          html += '<td>' + count30d + '</td>';
+          html += '<td>' + trend + '</td>';
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+
+      // Time-Series by Tool
+      if (seriesByTool.length > 0) {
+        html += '<div class="tile">';
+        html += '<h3>Violation Trends by Tool</h3>';
+        html += '<table><thead><tr><th>Tool</th><th>7d Count</th><th>30d Count</th><th>Trend</th></tr></thead><tbody>';
+
+        for (const series of seriesByTool) {
+          const points = series.data_points || [];
+          const count7d = points.find(p => p.period === '7d')?.count || 0;
+          const count30d = points.find(p => p.period === '30d')?.count || 0;
+          const trend = count30d > count7d ? '↗️' : count30d < count7d ? '↘️' : '→';
+
+          html += '<tr>';
+          html += '<td>' + series.tool + '</td>';
+          html += '<td>' + count7d + '</td>';
+          html += '<td>' + count30d + '</td>';
+          html += '<td>' + trend + '</td>';
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+
+      // Simple Time-Series Chart Visualization
+      if (seriesByTool.length > 0) {
+        html += '<div class="tile">';
+        html += '<h3>Time-Series Visualization</h3>';
+        html += '<div class="timeseries-chart">';
+        html += '<p><em>Chart visualization would be implemented with a JavaScript charting library like Chart.js</em></p>';
+        html += '<p>Top 5 tools by 7d violations:</p>';
+        html += '<ul>';
+
+        const sortedTools = seriesByTool
+          .map(t => ({tool: t.tool, count7d: t.data_points.find(p => p.period === '7d')?.count || 0}))
+          .sort((a, b) => b.count7d - a.count7d)
+          .slice(0, 5);
+
+        for (const tool of sortedTools) {
+          html += '<li>' + tool.tool + ': ' + tool.count7d + ' violations</li>';
+        }
+        html += '</ul>';
+        html += '</div>';
+        html += '</div>';
+      }
+
+      contentDiv.innerHTML = html;
+    })
+    .catch(error => {
+      contentDiv.innerHTML = '<div class="error">Error loading time-series data: ' + error.message + '</div>';
+    });
+})();
+</script>
+</body>
+</html>

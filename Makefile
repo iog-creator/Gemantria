@@ -2281,6 +2281,25 @@ guard.atlas.compliance.summary:
 	@echo "[guard.atlas.compliance.summary] Validating compliance summary dashboard"
 	@python3 scripts/guards/guard_compliance_summary_backlinks.py
 
+# PLAN-078 E87 — Violation Time-Series & Heatmaps
+.PHONY: atlas.compliance.timeseries atlas.compliance.heatmap guard.atlas.compliance.timeseries
+atlas.compliance.timeseries: export.compliance.timeseries
+	@echo "[atlas.compliance.timeseries] Generating compliance timeseries dashboard"
+	@python3 scripts/atlas/generate_compliance_timeseries.py
+	@echo "[atlas.compliance.timeseries] Dashboard: docs/atlas/dashboard/compliance_timeseries.html"
+
+atlas.compliance.heatmap: atlas.compliance.timeseries
+	@echo "[atlas.compliance.heatmap] Heatmap uses same data as timeseries"
+	@echo "[atlas.compliance.heatmap] Dashboard: docs/atlas/dashboard/compliance_heatmap.html"
+
+export.compliance.timeseries:
+	@echo "[export.compliance.timeseries] Generating compliance_timeseries.json"
+	@python3 scripts/atlas/generate_compliance_timeseries.py
+
+guard.atlas.compliance.timeseries:
+	@echo "[guard.atlas.compliance.timeseries] Validating compliance timeseries dashboards"
+	@python3 scripts/guards/guard_atlas_compliance_timeseries.py
+
 # PLAN-079 E91 — Guard Receipts Index
 atlas.guard.receipts:
 	@echo "[atlas.guard.receipts] Generating guard receipts index"
