@@ -68,7 +68,11 @@ def chat(
         messages.append({"role": "user", "content": prompt})
 
         # Call LM Studio chat/completions endpoint
-        url = f"{base_url.rstrip('/')}/v1/chat/completions"
+        clean_base = base_url.rstrip("/")
+        if clean_base.endswith("/v1"):
+            clean_base = clean_base[:-3]
+        url = f"{clean_base}/v1/chat/completions"
+
         headers = {"Content-Type": "application/json"}
         if api_key and api_key != "changeme":
             headers["Authorization"] = f"Bearer {api_key}"
@@ -81,7 +85,8 @@ def chat(
         }
 
         try:
-            response = requests.post(url, json=payload, headers=headers, timeout=30.0)
+            # Increased timeout to 300s to allow for model loading
+            response = requests.post(url, json=payload, headers=headers, timeout=300.0)
             response.raise_for_status()
             data = response.json()
 

@@ -81,6 +81,8 @@ Implemented commands (names approximate):
 * `pmagent plan kb fix` – **Orchestrated doc-fix runs (AgentPM-Next:M2)** – Consumes `pmagent plan kb list` worklist and executes doc fixes (create stubs, mark stale, sync metadata). Default `--dry-run` mode; `--apply` requires explicit opt-in. Filters: `--subsystem`, `--min-severity`, `--limit`. See `docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md` for full spec.
 
 * `pmagent report kb` – **Doc-health orchestration & reporting (AgentPM-Next:M3)** – Aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. Shows fresh ratios, missing/stale counts, fixes applied, and debt burn-down trends. See `docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md` for full spec.
+* `pmagent tools.plan` – **Planning lane entry point (Gemini/Codex)** – Runs governed planning/coding/maths prompts through the planning slot. Reads STDIN / prompt files, routes through the configured `PLANNING_PROVIDER`, and logs an `agent_run` row. Theology work is explicitly disallowed.
+* `pmagent tools.gemini` / `pmagent tools.codex` – Provider-specific wrappers that force the Gemini CLI or Codex CLI adapter regardless of the default planning provider. Useful for debugging adapters and for multi-agent workflows that need different tools in parallel.
 * `pmagent reality-check 1` – Run Reality Check #1 automated bring-up.
 * `pmagent reality-check live` – Run Reality Check #1 LIVE (DB + LM + pipeline).
 * `pmagent bringup full` – Fully start DB, LM Studio server+GUI, and load models.
@@ -170,6 +172,13 @@ Implemented commands (names approximate):
   * `pmagent docs search` for Tier-0 docs and governance.
 * ✅ **Dashboards**:
   * Phase-8 orchestrator dashboards (Forecast + Graph) wired to control-plane exports.
+* ✅ **Planning lane (Gemini/Codex helpers)**:
+  * pmagent exposes a planning slot that dispatches prompts to Gemini CLI or OpenAI Codex when `PLANNING_PROVIDER` is set and the corresponding CLI is available.
+  * Each planning call accepts an optional `--system` prompt; recommended templates live in the Prompting Guide and enforce output JSON contracts (`objective/constraints/ordered_plan/verification_steps` for Gemini, `analysis/proposed_diffs/tests` for Codex).
+  * Planning commands record AI tracking rows, enforce Rule-050 (hermetic CLI wrappers and LM-off fallbacks), and never call theology/gematria tasks (router tags prompts as `kind="planning"` or `kind="math"` only).
+  * Operators can spawn multiple planning agents in parallel (Architect vs Implementer vs Math Verifier) using `pmagent tools.plan|gemini|codex --system ... --prompt-file ...`, then persist each response to `evidence/planning/` before execution to preserve PoR.
+  * CI/dev defaults keep these CLIs disabled unless explicitly enabled; when disabled the commands emit a governed error and return immediately (no untracked subprocesses).
+  * Installation/authentication playbooks live in `docs/runbooks/GEMINI_CLI.md` and `docs/runbooks/CODEX_CLI.md`; both runbooks stress local-only usage and hermetic CI defaults.
 * 🟡 **Atlas/guards**:
   * Atlas + guard tooling is live via Make + scripts, but not wrapped neatly as `pmagent atlas.*` or `pmagent guards.*`.
 * 🔴 **Ops ledger + pipelines as pmagent verbs**:

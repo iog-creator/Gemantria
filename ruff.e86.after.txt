@@ -1,4 +1,0 @@
-Would reformat: [1magentpm/tests/atlas/test_e86_compliance_summary.py[0m
-Would reformat: [1mscripts/atlas/generate_compliance_summary.py[0m
-Would reformat: [1mscripts/guards/guard_compliance_summary_backlinks.py[0m
-3 files would be reformatted, 559 files already formatted

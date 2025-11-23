@@ -1,0 +1,67 @@
+{
+    "$id": "gemantria://v1/mcp_ingest_envelope.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Knowledge MCP Ingest Envelope (v1)",
+    "type": "object",
+    "required": ["schema", "generated_at", "tools", "endpoints"],
+    "properties": {
+        "schema": {"const": "mcp_ingest_envelope.v1"},
+        "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC3339 timestamp when envelope was generated"
+        },
+        "tools": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "description"],
+                "properties": {
+                    "name": {"type": "string", "minLength": 1, "description": "Tool name (primary key)"},
+                    "description": {"type": "string", "minLength": 1, "description": "Tool description"},
+                    "tags": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "default": [],
+                        "description": "Array of tag strings"
+                    },
+                    "cost_est": {"type": "number", "minimum": 0, "description": "Estimated cost (optional)"},
+                    "visibility": {
+                        "type": "string",
+                        "enum": ["public", "internal", "experimental"],
+                        "default": "public",
+                        "description": "Tool visibility level"
+                    }
+                }
+            }
+        },
+        "endpoints": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "path", "method"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Endpoint name (primary key, should match tool name)"
+                    },
+                    "path": {"type": "string", "minLength": 1, "description": "HTTP path"},
+                    "method": {
+                        "type": "string",
+                        "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+                        "default": "GET",
+                        "description": "HTTP method"
+                    },
+                    "auth": {
+                        "type": "string",
+                        "enum": ["none", "bearer", "basic", "internal"],
+                        "default": "none",
+                        "description": "Authentication type"
+                    },
+                    "notes": {"type": "string", "default": "", "description": "Optional notes about the endpoint"}
+                }
+            }
+        }
+    }
+}

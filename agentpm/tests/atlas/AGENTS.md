@@ -17,28 +17,48 @@ The `agentpm/tests/atlas/` directory contains Atlas integration tests that valid
 - Component health validation and missing component detection
 
 **Key Tests**:
-- `test_e100_tagproof_phase2.py` - Complete tagproof bundle validation suite
+- `test_e100_tagproof_phase2.py` - Complete tagproof bundle validation suite (PLAN-080 E100)
+  - Tests bundle generation script execution and output structure
+  - Validates guard script validation logic
+  - Tests hermetic mode with fixture-based evidence
+  - Validates component aggregation and health checks
+  - Tests STRICT vs HINT mode behavior
 
 ### E-Series Test Pattern
 
 **Purpose**: Execute specific implementation phases (E100, E101, E102, etc.) with comprehensive validation.
 
 **Test Structure**:
-- **E100**: Phase-2 tagproof bundle generation and validation
+- **E87**: Compliance time-series and heatmap generation validation (PLAN-092)
+  - Tests compliance_timeseries.json export existence and structure
+  - Validates dashboard HTML generation and functionality
+  - Tests heatmap data structure and visualization
+  - Validates evidence file generation
+- **E100**: Phase-2 tagproof bundle generation and validation (PLAN-080)
+  - Tests bundle generation script execution and output structure
+  - Validates guard script validation logic
+  - Tests hermetic mode with fixture-based evidence
 - **E101**: Guarded tool calls implementation (P0 schemas, PoR enforcement, MCP adapter)
 - **E102**: Tagproof/Atlas wiring and MCP RO proof guard integration
 
 ## Test Fixtures
 
-### Evidence Fixtures (`fixtures/e100/`)
+### Evidence Fixtures
 
-Contains pre-generated evidence files for hermetic testing:
-
+**E100 Fixtures** (`fixtures/e100/`):
 - `tv_coverage_ok.json` - TV coverage evidence
 - `gatekeeper_coverage_ok.json` - Gatekeeper coverage evidence
 - `regeneration_guard_ok.json` - Regeneration guard verdict
+- `regeneration_guard_failed.json` - Failed regeneration guard verdict
 - `browser_screenshot_ok.json` - Browser screenshot evidence
 - `guard_mcp_db_ro_ok.json` - MCP DB RO guard verdict
+
+**E95 Fixtures** (`fixtures/e95/`):
+- HTML test files for Atlas links guard validation
+- `test_absolute.html`, `test_broken.html`, `test_whitelisted.html`
+
+**E98/E99 Fixtures** (`fixtures/e98/`, `fixtures/e99/`):
+- Sample receipts and guard evidence for browser verification and Atlas links validation
 
 ## API Contracts
 

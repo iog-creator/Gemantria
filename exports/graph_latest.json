@@ -1,4 +1,6 @@
 {
+  "schema": "gemantria/graph.v1",
+  "book": "global",
   "nodes": [],
   "edges": [],
   "metadata": {

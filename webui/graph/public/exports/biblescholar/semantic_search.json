@@ -1,0 +1,100 @@
+{
+  "query": "hope in difficult times",
+  "translation": "KJV",
+  "limit": 10,
+  "model": "text-embedding-bge-m3",
+  "results_count": 10,
+  "results": [
+    {
+      "verse_id": 70611,
+      "book_name": "Rom",
+      "chapter_num": 12,
+      "verse_num": 12,
+      "text": "Rejoicing in hope; patient in tribulation; continuing instant in prayer;",
+      "translation_source": "KJV",
+      "similarity_score": 0.24129271487667492
+    },
+    {
+      "verse_id": 70405,
+      "book_name": "Rom",
+      "chapter_num": 5,
+      "verse_num": 4,
+      "text": "And patience, experience; and experience, hope:",
+      "translation_source": "KJV",
+      "similarity_score": 0.2003846631367875
+    },
+    {
+      "verse_id": 71674,
+      "book_name": "Eph",
+      "chapter_num": 5,
+      "verse_num": 16,
+      "text": "Redeeming the time, because the days are evil.",
+      "translation_source": "KJV",
+      "similarity_score": 0.1679073231049607
+    },
+    {
+      "verse_id": 58339,
+      "book_name": "Psa",
+      "chapter_num": 119,
+      "verse_num": 81,
+      "text": "CAPH. My soul fainteth for thy salvation: {but} I hope in thy word.",
+      "translation_source": "KJV",
+      "similarity_score": 0.1634159271320007
+    },
+    {
+      "verse_id": 61734,
+      "book_name": "Jer",
+      "chapter_num": 17,
+      "verse_num": 17,
+      "text": "Be not a terror unto me: thou {art} my hope in the day of evil.",
+      "translation_source": "KJV",
+      "similarity_score": 0.1610222601768858
+    },
+    {
+      "verse_id": 62740,
+      "book_name": "Lam",
+      "chapter_num": 3,
+      "verse_num": 26,
+      "text": "{It is} good that {a man} should both hope and quietly wait for the salvation of the LORD.",
+      "translation_source": "KJV",
+      "similarity_score": 0.14246836606646618
+    },
+    {
+      "verse_id": 71521,
+      "book_name": "Gal",
+      "chapter_num": 5,
+      "verse_num": 5,
+      "text": "For we through the Spirit wait for the hope of righteousness by faith.",
+      "translation_source": "KJV",
+      "similarity_score": 0.13342956640145143
+    },
+    {
+      "verse_id": 58505,
+      "book_name": "Psa",
+      "chapter_num": 130,
+      "verse_num": 5,
+      "text": "I wait for the LORD, my soul doth wait, and in his word do I hope.",
+      "translation_source": "KJV",
+      "similarity_score": 0.12852383783740173
+    },
+    {
+      "verse_id": 58372,
+      "book_name": "Psa",
+      "chapter_num": 119,
+      "verse_num": 114,
+      "text": "Thou {art} my hiding place and my shield: I hope in thy word.",
+      "translation_source": "KJV",
+      "similarity_score": 0.12824667682411406
+    },
+    {
+      "verse_id": 55327,
+      "book_name": "Job",
+      "chapter_num": 5,
+      "verse_num": 16,
+      "text": "So the poor hath hope, and iniquity stoppeth her mouth.",
+      "translation_source": "KJV",
+      "similarity_score": 0.12760290648897765
+    }
+  ],
+  "generated_at": "2025-11-22T21:05:26.109681+00:00"
+}

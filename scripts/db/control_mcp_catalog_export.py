@@ -23,6 +23,7 @@ STUB_SCRIPT = REPO_ROOT / "scripts" / "db" / "mcp_catalog_stub.py"
 STUB_JSON = REPO_ROOT / "evidence" / "mcp_catalog_stub.json"
 OUT_DIR = REPO_ROOT / "share" / "atlas" / "control_plane"
 OUT_PATH = OUT_DIR / "mcp_catalog.json"
+VIEW_NAME = "control.mcp_tool_catalog"
 
 
 def now_iso() -> str:
@@ -54,6 +55,7 @@ def build_db_off(error_msg: str) -> dict:
         "ok": False,
         "connection_ok": False,
         "tools": [],
+        "view_name": VIEW_NAME,
         "error": error_msg,
     }
 
@@ -79,6 +81,7 @@ def normalize_payload(data: dict) -> dict:
     data.setdefault("connection_ok", False)
     data.setdefault("tools", [])
     data.setdefault("error", None)
+    data.setdefault("view_name", VIEW_NAME)
     return data
 
 
@@ -103,7 +106,11 @@ def main() -> int:
         json.dumps(payload, indent=2, sort_keys=False),
         encoding="utf-8",
     )
-    print(f"[control_mcp_catalog_export] Wrote {OUT_PATH.relative_to(REPO_ROOT)}")
+    status = "OK" if payload.get("ok") else "WARN"
+    detail = payload.get("error") or f"{len(payload.get('tools', []))} tools exported"
+    print(
+        f"[control_mcp_catalog_export] {status}: view={payload.get('view_name')} | {detail} | wrote {OUT_PATH.relative_to(REPO_ROOT)}"
+    )
     return 0
 
 

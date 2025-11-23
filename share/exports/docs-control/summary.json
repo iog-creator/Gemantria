@@ -1,14 +1,14 @@
 {
   "totals": {
-    "canonical": 177,
-    "archive_candidates": 690,
-    "unreviewed": 1311,
-    "total": 2178
+    "canonical": 618,
+    "archive_candidates": 0,
+    "unreviewed": 0,
+    "total": 2232
   },
   "path_buckets": {
-    "ssot": 35,
+    "ssot": 50,
     "archive": 1695,
-    "other": 448
+    "other": 487
   },
-  "generated_at": "2025-11-19T18:29:47.735827+00:00"
+  "generated_at": "2025-11-23T02:48:05.052611+00:00"
 }

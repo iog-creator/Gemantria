@@ -1,0 +1,281 @@
+{
+  "dry_run": false,
+  "total_candidates": 39,
+  "successfully_moved": 39,
+  "failed": 0,
+  "moves": [
+    {
+      "path": "evidence.pr520.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr520.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "temporal_patterns.head.json",
+      "target": "archive/docs/root-cleanup/temporal_patterns.head.json",
+      "moved": true,
+      "error": null,
+      "reason": "snapshot file"
+    },
+    {
+      "path": "evidence_pr492_view.json",
+      "target": "archive/docs/root-cleanup/evidence_pr492_view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr524.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr524.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "guard_mcp_catalog.final.hint.json",
+      "target": "archive/docs/root-cleanup/guard_mcp_catalog.final.hint.json",
+      "moved": true,
+      "error": null,
+      "reason": "guard output"
+    },
+    {
+      "path": "backup-safety-rules-20251107_114253.bundle",
+      "target": "archive/docs/root-cleanup/backup-safety-rules-20251107_114253.bundle",
+      "moved": true,
+      "error": null,
+      "reason": "backup bundle"
+    },
+    {
+      "path": "evidence.pr_phase3b_lm_health.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_lm_health.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr519.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr519.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr518.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr518.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": ".last_doctor.json",
+      "target": "archive/docs/root-cleanup/.last_doctor.json",
+      "moved": true,
+      "error": null,
+      "reason": "temporary state file"
+    },
+    {
+      "path": "graph_stats.head.json",
+      "target": "archive/docs/root-cleanup/graph_stats.head.json",
+      "moved": true,
+      "error": null,
+      "reason": "snapshot file"
+    },
+    {
+      "path": "evidence.pr_phase3b_pmagent_control_status.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_pmagent_control_status.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence_pr_e82.json",
+      "target": "archive/docs/root-cleanup/evidence_pr_e82.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "pr_499.before.json",
+      "target": "archive/docs/root-cleanup/pr_499.before.json",
+      "moved": true,
+      "error": null,
+      "reason": "PR evidence"
+    },
+    {
+      "path": "evidence.pr523.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr523.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr525.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr525.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr_phase3b_pmagent_health.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_pmagent_health.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "backup-safety-rules-20251107_114258.tar.gz",
+      "target": "archive/docs/root-cleanup/backup-safety-rules-20251107_114258.tar.gz",
+      "moved": true,
+      "error": null,
+      "reason": "backup bundle"
+    },
+    {
+      "path": "export.e86.compliance_summary.tail.json",
+      "target": "archive/docs/root-cleanup/export.e86.compliance_summary.tail.json",
+      "moved": true,
+      "error": null,
+      "reason": "temporary export"
+    },
+    {
+      "path": "evidence.pr_phase3b_graph_overview.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_graph_overview.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "pattern_forecast.head.json",
+      "target": "archive/docs/root-cleanup/pattern_forecast.head.json",
+      "moved": true,
+      "error": null,
+      "reason": "snapshot file"
+    },
+    {
+      "path": "backup-safety-rules-20251107_114302.tar.gz",
+      "target": "archive/docs/root-cleanup/backup-safety-rules-20251107_114302.tar.gz",
+      "moved": true,
+      "error": null,
+      "reason": "backup bundle"
+    },
+    {
+      "path": "evidence.pr522.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr522.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.guard.dbhealth.json",
+      "target": "archive/docs/root-cleanup/evidence.guard.dbhealth.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr_phase3a_step6.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3a_step6.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence_pr493_view.json",
+      "target": "archive/docs/root-cleanup/evidence_pr493_view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr_phase3b_system_health.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_system_health.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "guard_atlas_viewer.final.json",
+      "target": "archive/docs/root-cleanup/guard_atlas_viewer.final.json",
+      "moved": true,
+      "error": null,
+      "reason": "guard output"
+    },
+    {
+      "path": "evidence_pr_e81.json",
+      "target": "archive/docs/root-cleanup/evidence_pr_e81.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr521.view.json",
+      "target": "archive/docs/root-cleanup/evidence.pr521.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence_pr493_checks.json",
+      "target": "archive/docs/root-cleanup/evidence_pr493_checks.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr_phase3b_pmagent_control_schema.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_pmagent_control_schema.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence_pr492_checks.json",
+      "target": "archive/docs/root-cleanup/evidence_pr492_checks.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "evidence.pr_phase3b_pmagent_graph.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_pmagent_graph.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "guard_mcp_catalog.final.strict.json",
+      "target": "archive/docs/root-cleanup/guard_mcp_catalog.final.strict.json",
+      "moved": true,
+      "error": null,
+      "reason": "guard output"
+    },
+    {
+      "path": "pr_500.e86.view.json",
+      "target": "archive/docs/root-cleanup/pr_500.e86.view.json",
+      "moved": true,
+      "error": null,
+      "reason": "PR evidence"
+    },
+    {
+      "path": "evidence.pr_phase3b_pmagent_control_tables.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_phase3b_pmagent_control_tables.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    },
+    {
+      "path": "guard_atlas_live.final.json",
+      "target": "archive/docs/root-cleanup/guard_atlas_live.final.json",
+      "moved": true,
+      "error": null,
+      "reason": "guard output"
+    },
+    {
+      "path": "evidence.pr_new.json",
+      "target": "archive/docs/root-cleanup/evidence.pr_new.json",
+      "moved": true,
+      "error": null,
+      "reason": "evidence file"
+    }
+  ]
+}

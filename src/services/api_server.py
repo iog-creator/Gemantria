@@ -261,7 +261,7 @@ async def get_status_explanation_endpoint() -> JSONResponse:
         }
     """
     try:
-        explanation = explain_system_status(use_lm=True)
+        explanation = explain_system_status(use_lm=False)  # Disabled to avoid triggering model loads
         return JSONResponse(content=explanation)
     except Exception as e:
         LOG.error(f"Error getting status explanation: {e}")
@@ -650,6 +650,11 @@ async def status_page() -> HTMLResponse:
                 
                 lmNotes.textContent = lm.notes;
                 
+                // Load KB Doc Metrics if available (AgentPM-Next:M4)
+                if (data.kb_doc_health) {
+                    loadDocMetrics(data.kb_doc_health);
+                }
+                
             } catch (error) {
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('error').classList.remove('hidden');
@@ -915,7 +920,7 @@ async def dashboard_page() -> HTMLResponse:
         <div id="loading" class="text-gray-600">Loading dashboard data...</div>
         
         <div id="dashboard-content" class="hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- System Health Card -->
                 <div id="system-health-card" class="bg-white rounded-lg shadow p-6 border border-gray-200">
                     <h2 class="text-xl font-semibold mb-4">System Health</h2>
@@ -965,6 +970,51 @@ async def dashboard_page() -> HTMLResponse:
                         Data unavailable
                     </div>
                 </div>
+                
+                <!-- Rerank / Edge Strength Metrics Card -->
+                <div id="rerank-metrics-card" class="bg-white rounded-lg shadow p-6 border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-1">Rerank / Edge Strength Metrics</h2>
+                    <p class="text-xs text-gray-500 mb-4 italic">Granite rerank metrics (advisory; core health still via /status + /lm-insights)</p>
+                    
+                    <div id="rerank-metrics-loading" class="text-sm text-gray-500">Loading...</div>
+                    <div id="rerank-metrics-content" class="hidden">
+                        <div class="space-y-2 text-sm">
+                            <div id="rerank-nodes" class="text-gray-700"></div>
+                            <div id="rerank-edges" class="text-gray-700"></div>
+                        </div>
+                        
+                        <!-- Edge Strength Bar Chart -->
+                        <div id="rerank-chart-container" class="mt-4 mb-4">
+                            <div class="text-xs font-semibold text-gray-600 mb-2">Edge Strength Distribution</div>
+                            <div id="rerank-chart" class="space-y-2">
+                                <!-- Chart bars will be rendered here by JavaScript -->
+                            </div>
+                            <div id="rerank-chart-empty" class="text-xs text-gray-400 italic hidden">
+                                No edge data available yet
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div id="rerank-strong" class="text-gray-700"></div>
+                            <div id="rerank-weak" class="text-gray-700"></div>
+                            <div id="rerank-avg-strength" class="text-gray-700"></div>
+                        </div>
+                        
+                        <!-- Explanatory Text -->
+                        <div class="mt-4 pt-3 border-t border-gray-200">
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                <strong>Edge Strength</strong> is computed as <code class="text-xs bg-gray-100 px-1 rounded">0.5 * cosine + 0.5 * rerank_score</code>.
+                                Edges are classified as <strong>strong</strong> (≥0.90), <strong>weak</strong> (≥0.75), or <strong>other</strong> (&lt;0.75).
+                                Strong edges indicate high semantic similarity and rerank confidence.
+                            </p>
+                        </div>
+                        
+                        <div id="rerank-note" class="mt-2 text-xs text-gray-500 italic"></div>
+                    </div>
+                    <div id="rerank-metrics-error" class="hidden text-sm text-red-600">
+                        Data unavailable
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -982,6 +1032,9 @@ async def dashboard_page() -> HTMLResponse:
             
             // Load LM Insights
             await loadLMInsights();
+            
+            // Load Rerank Metrics
+            await loadRerankMetrics();
         }
         
         async function loadSystemHealth() {
@@ -993,7 +1046,12 @@ async def dashboard_page() -> HTMLResponse:
                 }
                 const statusData = await statusResponse.json();
                 
-                // Fetch explanation
+                // Hide loading, show content
+                document.getElementById('system-health-loading').classList.add('hidden');
+                document.getElementById('system-health-error').classList.add('hidden');
+                document.getElementById('system-health-content').classList.remove('hidden');
+                
+                // Fetch explanation (optional, don't fail if it errors)
                 let explanationData = null;
                 try {
                     const explainResponse = await fetch('/api/status/explain');
@@ -1002,15 +1060,24 @@ async def dashboard_page() -> HTMLResponse:
                     }
                 } catch (e) {
                     // Explanation is optional, continue without it
+                    console.warn('Failed to load explanation:', e);
                 }
                 
-                // Hide loading, show content
-                document.getElementById('system-health-loading').classList.add('hidden');
-                document.getElementById('system-health-error').classList.add('hidden');
-                document.getElementById('system-health-content').classList.remove('hidden');
+                // Update status badge (use explanation level if available, otherwise infer from status)
+                let level = explanationData?.level;
+                if (!level) {
+                    // Infer level from DB and LM status
+                    const db = statusData.db || {};
+                    const lm = statusData.lm || {};
+                    const dbOk = db.mode === 'ready' && db.reachable;
+                    const lmOk = (lm.slots || []).some((s: any) => s.service === 'OK');
+                    if (!dbOk || !lmOk) {
+                        level = db.mode === 'db_off' || !lmOk ? 'ERROR' : 'WARN';
+                    } else {
+                        level = 'OK';
+                    }
+                }
                 
-                // Update status badge
-                const level = explanationData?.level || 'OK';
                 const statusBadge = document.getElementById('system-status-badge');
                 if (level === 'ERROR') {
                     statusBadge.className = 'inline-block px-3 py-1 rounded-full text-white font-semibold text-sm mb-2 bg-red-500';
@@ -1028,7 +1095,7 @@ async def dashboard_page() -> HTMLResponse:
                 headline.textContent = explanationData?.headline || 'System status summary';
                 
                 // Update DB summary
-                const db = statusData.db;
+                const db = statusData.db || {};
                 const dbSummary = document.getElementById('db-summary');
                 let dbText = 'DB: ';
                 if (db.mode === 'ready' && db.reachable) {
@@ -1041,11 +1108,16 @@ async def dashboard_page() -> HTMLResponse:
                 dbSummary.textContent = dbText;
                 
                 // Update LM summary
-                const lm = statusData.lm;
+                const lm = statusData.lm || {};
                 const lmSummary = document.getElementById('lm-summary');
-                const okSlots = lm.slots.filter(s => s.service === 'OK').length;
-                const totalSlots = lm.slots.length;
-                lmSummary.textContent = `LM: ${okSlots}/${totalSlots} slots OK`;
+                const slots = lm.slots || [];
+                const okSlots = slots.filter((s: any) => s.service === 'OK').length;
+                const totalSlots = slots.length;
+                if (totalSlots === 0) {
+                    lmSummary.textContent = 'LM: No slots configured';
+                } else {
+                    lmSummary.textContent = `LM: ${okSlots}/${totalSlots} slots OK`;
+                }
                 
                 // Update KB Doc Metrics (AgentPM-Next:M4)
                 if (statusData.kb_doc_health) {
@@ -1053,9 +1125,11 @@ async def dashboard_page() -> HTMLResponse:
                 }
                 
             } catch (error) {
+                console.error('Failed to load system health:', error);
                 document.getElementById('system-health-loading').classList.add('hidden');
                 document.getElementById('system-health-content').classList.add('hidden');
                 document.getElementById('system-health-error').classList.remove('hidden');
+                document.getElementById('system-health-error').textContent = `Error: ${error.message || 'Failed to load system health'}`;
             }
         }
         
@@ -1067,16 +1141,19 @@ async def dashboard_page() -> HTMLResponse:
                 }
                 const data = await response.json();
                 
-                // Hide loading, show content
+                // Hide loading
                 document.getElementById('lm-insights-loading').classList.add('hidden');
-                document.getElementById('lm-insights-error').classList.add('hidden');
                 
                 if (!data.snapshot) {
-                    // Show error if no snapshot
+                    // Show informative message if no snapshot (this is expected if exports haven't run)
                     document.getElementById('lm-insights-error').classList.remove('hidden');
+                    document.getElementById('lm-insights-error').textContent = data.note || 'LM indicator data not available. Run exports to populate.';
+                    document.getElementById('lm-insights-content').classList.add('hidden');
                     return;
                 }
                 
+                // Show content
+                document.getElementById('lm-insights-error').classList.add('hidden');
                 document.getElementById('lm-insights-content').classList.remove('hidden');
                 
                 const snapshot = data.snapshot;
@@ -1105,19 +1182,107 @@ async def dashboard_page() -> HTMLResponse:
                 metrics.textContent = `Total Calls: ${totalCalls} | Success Rate: ${successRate}%`;
                 
             } catch (error) {
+                console.error('Failed to load LM insights:', error);
                 document.getElementById('lm-insights-loading').classList.add('hidden');
                 document.getElementById('lm-insights-content').classList.add('hidden');
                 document.getElementById('lm-insights-error').classList.remove('hidden');
+                document.getElementById('lm-insights-error').textContent = `Error: ${error.message || 'Failed to load LM insights'}`;
             }
         }
         
         // Load dashboard on page load
         loadDashboard();
         
+        async function loadRerankMetrics() {
+            try {
+                const response = await fetch('/api/rerank/summary');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                // Hide loading, show content
+                document.getElementById('rerank-metrics-loading').classList.add('hidden');
+                document.getElementById('rerank-metrics-error').classList.add('hidden');
+                document.getElementById('rerank-metrics-content').classList.remove('hidden');
+                
+                // Update metrics
+                document.getElementById('rerank-nodes').textContent = `Nodes: ${data.nodes || 0}`;
+                document.getElementById('rerank-edges').textContent = `Edges: ${data.edges || 0}`;
+                document.getElementById('rerank-strong').textContent = `Strong edges: ${data.strong_edges || 0}`;
+                document.getElementById('rerank-weak').textContent = `Weak edges: ${data.weak_edges || 0}`;
+                
+                const avgStrength = data.avg_edge_strength;
+                if (avgStrength !== null && avgStrength !== undefined) {
+                    document.getElementById('rerank-avg-strength').textContent = `Avg edge strength: ${avgStrength.toFixed(4)}`;
+                } else {
+                    document.getElementById('rerank-avg-strength').textContent = 'Avg edge strength: N/A';
+                }
+                
+                // Render bar chart for edge strength distribution
+                const chartContainer = document.getElementById('rerank-chart');
+                const chartEmpty = document.getElementById('rerank-chart-empty');
+                const totalEdges = data.edges || 0;
+                const strongEdges = data.strong_edges || 0;
+                const weakEdges = data.weak_edges || 0;
+                const otherEdges = Math.max(0, totalEdges - strongEdges - weakEdges);
+                
+                if (totalEdges === 0) {
+                    chartContainer.classList.add('hidden');
+                    chartEmpty.classList.remove('hidden');
+                } else {
+                    chartContainer.classList.remove('hidden');
+                    chartEmpty.classList.add('hidden');
+                    
+                    // Clear previous chart
+                    chartContainer.innerHTML = '';
+                    
+                    // Calculate max value for scaling
+                    const maxValue = Math.max(strongEdges, weakEdges, otherEdges, 1);
+                    
+                    // Render bars
+                    const categories = [
+                        { label: 'Strong (≥0.90)', count: strongEdges, color: 'bg-green-500' },
+                        { label: 'Weak (≥0.75)', count: weakEdges, color: 'bg-yellow-500' },
+                        { label: 'Other (<0.75)', count: otherEdges, color: 'bg-gray-300' }
+                    ];
+                    
+                    categories.forEach(cat => {
+                        const percentage = maxValue > 0 ? (cat.count / maxValue) * 100 : 0;
+                        const barHtml = `
+                            <div class="flex items-center space-x-2">
+                                <div class="text-xs text-gray-600 w-24 flex-shrink-0">${cat.label}</div>
+                                <div class="flex-1 bg-gray-200 rounded h-6 relative overflow-hidden">
+                                    <div class="${cat.color} h-full rounded transition-all duration-300" style="width: ${percentage}%"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-700">
+                                        ${cat.count}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        chartContainer.insertAdjacentHTML('beforeend', barHtml);
+                    });
+                }
+                
+                // Show note if present
+                if (data.note) {
+                    document.getElementById('rerank-note').textContent = data.note;
+                } else {
+                    document.getElementById('rerank-note').textContent = '';
+                }
+                
+            } catch (error) {
+                document.getElementById('rerank-metrics-loading').classList.add('hidden');
+                document.getElementById('rerank-metrics-content').classList.add('hidden');
+                document.getElementById('rerank-metrics-error').classList.remove('hidden');
+            }
+        }
+        
         // Auto-refresh every 30 seconds
         setInterval(() => {
             loadSystemHealth();
             loadLMInsights();
+            loadRerankMetrics();
         }, 30000);
     </script>
 </body>
@@ -1253,6 +1418,83 @@ async def get_eval_edges_endpoint() -> JSONResponse:
             content={
                 "data": None,
                 "note": f"Failed to load edge class counts: {e}",
+            }
+        )
+
+
+@app.get("/api/rerank/summary")
+async def get_rerank_summary_endpoint() -> JSONResponse:
+    """Get rerank/edge strength metrics summary.
+
+    Returns:
+        JSON with rerank metrics:
+        {
+            "nodes": int,
+            "edges": int,
+            "strong_edges": int,
+            "weak_edges": int,
+            "avg_edge_strength": float | null,
+            "note": str (if data is missing)
+        }
+        Gracefully handles missing files in hermetic/empty-DB runs.
+    """
+    try:
+        # Load graph stats
+        graph_stats_path = get_export_path("graph_stats.json")
+        graph_stats = load_json_file(graph_stats_path)
+        nodes = graph_stats.get("nodes", 0)
+        edges = graph_stats.get("edges", 0)
+
+        # Load edge class counts
+        edge_data = load_edge_class_counts()
+        strong_edges = 0
+        weak_edges = 0
+        if edge_data.get("available", False):
+            counts = edge_data.get("counts", {})
+            strong_edges = counts.get("strong", 0)
+            weak_edges = counts.get("weak", 0)
+
+        # Try to get avg_edge_strength from graph_latest.json metadata
+        avg_edge_strength = None
+        graph_latest_path = get_export_path("graph_latest.json")
+        graph_latest = load_json_file(graph_latest_path)
+        if graph_latest:
+            metadata = graph_latest.get("metadata", {})
+            if "avg_edge_strength" in metadata:
+                avg_edge_strength = metadata.get("avg_edge_strength")
+            # Also check network_aggregation_summary if present
+            elif "network_aggregation_summary" in metadata:
+                summary = metadata.get("network_aggregation_summary", {})
+                if "avg_edge_strength" in summary:
+                    avg_edge_strength = summary.get("avg_edge_strength")
+
+        # Build response
+        response = {
+            "nodes": nodes,
+            "edges": edges,
+            "strong_edges": strong_edges,
+            "weak_edges": weak_edges,
+            "avg_edge_strength": avg_edge_strength,
+        }
+
+        # Add note if data is incomplete
+        if not graph_stats or nodes == 0:
+            response["note"] = "Graph stats not available; run pipeline to populate data."
+        elif not edge_data.get("available", False):
+            response["note"] = "Edge class counts not available; run `make eval.reclassify` to populate."
+
+        return JSONResponse(content=response)
+
+    except Exception as e:
+        LOG.error(f"Error getting rerank summary: {e}")
+        return JSONResponse(
+            content={
+                "nodes": 0,
+                "edges": 0,
+                "strong_edges": 0,
+                "weak_edges": 0,
+                "avg_edge_strength": None,
+                "note": f"Failed to load rerank summary: {e}",
             }
         )
 
@@ -1474,7 +1716,7 @@ async def db_insights_page() -> HTMLResponse:
 @app.get("/api/bible/passage")
 async def get_bible_passage(
     reference: str = Query(..., description="Bible reference (e.g., 'John 3:16-18')"),
-    use_lm: bool = Query(True, description="Use AI commentary (default: True)"),
+    use_lm: bool = Query(False, description="Use AI commentary (default: False to avoid model loads)"),
 ) -> JSONResponse:
     """Get Bible passage and optional commentary.
 
@@ -1518,6 +1760,611 @@ async def get_bible_passage(
                 "errors": [f"Unexpected error: {e!s}"],
             },
         )
+
+
+@app.get("/api/bible/semantic-search")
+async def semantic_search_endpoint(
+    query: str = Query(..., description="Search query (e.g., 'hope in difficult times')"),
+    limit: int = Query(10, ge=1, le=50, description="Maximum number of results (1-50)"),
+    translation: str = Query("KJV", description="Bible translation (default: KJV)"),
+) -> JSONResponse:
+    """Semantic search over Bible verses using vector embeddings.
+
+    Args:
+        query: User's search query (concepts, questions, themes).
+        limit: Maximum number of results to return (1-50).
+        translation: Bible translation to search (default: KJV).
+
+    Returns:
+        JSON with:
+        {
+            "query": str,
+            "translation": str,
+            "limit": int,
+            "model": str,
+            "results_count": int,
+            "results": [
+                {
+                    "verse_id": int,
+                    "book_name": str,
+                    "chapter_num": int,
+                    "verse_num": int,
+                    "text": str,
+                    "translation_source": str,
+                    "similarity_score": float (0.0-1.0)
+                },
+                ...
+            ],
+            "generated_at": str (RFC3339)
+        }
+    """
+    from agentpm.biblescholar.semantic_search_flow import semantic_search
+    from datetime import datetime, UTC
+
+    try:
+        result = semantic_search(query=query, limit=limit, translation=translation)
+
+        # Convert to API response format
+        response = {
+            "query": result.query,
+            "translation": translation,
+            "limit": limit,
+            "model": result.model,
+            "results_count": result.total_results,
+            "results": [
+                {
+                    "verse_id": r.verse_id,
+                    "book_name": r.book_name,
+                    "chapter_num": r.chapter_num,
+                    "verse_num": r.verse_num,
+                    "text": r.text,
+                    "translation_source": r.translation_source,
+                    "similarity_score": r.similarity_score,
+                }
+                for r in result.results
+            ],
+            "generated_at": datetime.now(UTC).isoformat(),
+        }
+
+        return JSONResponse(content=response)
+    except Exception as e:
+        LOG.error(f"Error in semantic search: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Semantic search failed: {e!s}",
+        ) from e
+
+
+class KeywordSearchRequest(BaseModel):
+    query: str
+    limit: int = 20
+    translation: str = "KJV"
+
+
+class CrossLanguageRequest(BaseModel):
+    strongs_id: str
+    reference: str | None = None
+    limit: int = 10
+
+
+@app.post("/api/bible/search")
+async def keyword_search_endpoint(request: KeywordSearchRequest) -> JSONResponse:  # noqa: B008
+    """Keyword search across Bible verses.
+
+    Args:
+        query: Search keyword (case-insensitive, minimum 2 characters).
+        limit: Maximum number of results to return (1-100).
+        translation: Bible translation to search (default: KJV).
+
+    Returns:
+        JSON with:
+        {
+            "query": str,
+            "translation": str,
+            "limit": int,
+            "results_count": int,
+            "results": [
+                {
+                    "verse_id": int,
+                    "book_name": str,
+                    "chapter_num": int,
+                    "verse_num": int,
+                    "text": str,
+                    "translation_source": str
+                },
+                ...
+            ],
+            "generated_at": str (RFC3339),
+            "mode": "available" | "db_off"
+        }
+    """
+    from agentpm.biblescholar.search_flow import search_verses, get_db_status
+    from datetime import datetime, UTC
+
+    db_status = get_db_status()
+    if db_status == "db_off":
+        return JSONResponse(
+            content={
+                "query": request.query,
+                "translation": request.translation,
+                "limit": request.limit,
+                "results_count": 0,
+                "results": [],
+                "generated_at": datetime.now(UTC).isoformat(),
+                "mode": "db_off",
+            }
+        )
+
+    try:
+        results = search_verses(query=request.query, translation=request.translation, limit=request.limit)
+
+        response = {
+            "query": request.query,
+            "translation": request.translation,
+            "limit": request.limit,
+            "results_count": len(results),
+            "results": [
+                {
+                    "verse_id": r.verse_id,
+                    "book_name": r.book_name,
+                    "chapter_num": r.chapter_num,
+                    "verse_num": r.verse_num,
+                    "text": r.text,
+                    "translation_source": r.translation_source,
+                }
+                for r in results
+            ],
+            "generated_at": datetime.now(UTC).isoformat(),
+            "mode": db_status,
+        }
+
+        return JSONResponse(content=response)
+    except Exception as e:
+        LOG.error(f"Error in keyword search: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Keyword search failed: {e!s}",
+        ) from e
+
+
+@app.get("/api/bible/lexicon/{strongs_id}")
+async def lexicon_lookup_endpoint(strongs_id: str) -> JSONResponse:
+    """Lookup lexicon entry by Strong's number.
+
+    Args:
+        strongs_id: Strong's number (e.g., "H7965" for Hebrew, "G1" for Greek).
+
+    Returns:
+        JSON with:
+        {
+            "strongs_id": str,
+            "lemma": str,
+            "gloss": str | None,
+            "language": "hebrew" | "greek",
+            "occurrence_count": int | None,
+            "mode": "available" | "db_off"
+        }
+    """
+    from agentpm.biblescholar.lexicon_flow import fetch_lexicon_entry
+    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+
+    try:
+        entry = fetch_lexicon_entry(strongs_id)
+
+        if not entry:
+            # Check status to determine if DB is off or entry just not found
+            adapter = LexiconAdapter()
+            db_status = adapter.db_status
+            if db_status == "db_off":
+                return JSONResponse(
+                    content={
+                        "strongs_id": strongs_id,
+                        "lemma": "",
+                        "gloss": None,
+                        "language": "unknown",
+                        "occurrence_count": None,
+                        "mode": "db_off",
+                    }
+                )
+            raise HTTPException(
+                status_code=404,
+                detail=f"Lexicon entry not found for Strong's number: {strongs_id}",
+            )
+
+        # Entry found = DB is available
+        # Determine language from Strong's prefix
+        is_hebrew = strongs_id.upper().startswith("H")
+        language = "hebrew" if is_hebrew else "greek"
+
+        response = {
+            "strongs_id": entry.strongs_id,
+            "lemma": entry.lemma,
+            "gloss": entry.gloss,
+            "language": language,
+            "occurrence_count": None,  # Could be added if needed
+            "mode": "available",
+        }
+
+        return JSONResponse(content=response)
+    except HTTPException:
+        raise
+    except Exception as e:
+        LOG.error(f"Error in lexicon lookup: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Lexicon lookup failed: {e!s}",
+        ) from e
+
+
+@app.post("/api/bible/cross-language")
+async def cross_language_endpoint(request: CrossLanguageRequest) -> JSONResponse:  # noqa: B008
+    """Find Hebrew↔Greek semantic connections for a Strong's number.
+
+    Args:
+        strongs_id: Source Strong's number (e.g., "H7965" for Hebrew, "G1" for Greek).
+        reference: Optional Bible reference to use as starting point.
+        limit: Maximum number of connections to return (1-50).
+
+    Returns:
+        JSON with:
+        {
+            "strongs_id": str,
+            "reference": str | None,
+            "limit": int,
+            "connections_count": int,
+            "connections": [
+                {
+                    "source_strongs": str,
+                    "target_strongs": str,
+                    "target_lemma": str,
+                    "similarity_score": float (0.0-1.0),
+                    "common_verses": list[str]
+                },
+                ...
+            ],
+            "generated_at": str (RFC3339),
+            "mode": "available" | "db_off"
+        }
+    """
+    from agentpm.biblescholar.cross_language_flow import find_cross_language_connections
+    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+    from datetime import datetime, UTC
+
+    try:
+        connections = find_cross_language_connections(
+            strongs_id=request.strongs_id, reference=request.reference, limit=request.limit
+        )
+        adapter = LexiconAdapter()
+        db_status = adapter.db_status
+
+        response = {
+            "strongs_id": request.strongs_id,
+            "reference": request.reference,
+            "limit": request.limit,
+            "connections_count": len(connections),
+            "connections": [
+                {
+                    "source_strongs": c.source_strongs,
+                    "target_strongs": c.target_strongs,
+                    "target_lemma": c.target_lemma,
+                    "similarity_score": c.similarity_score,
+                    "common_verses": c.common_verses,
+                }
+                for c in connections
+            ],
+            "generated_at": datetime.now(UTC).isoformat(),
+            "mode": db_status,
+        }
+
+        return JSONResponse(content=response)
+    except Exception as e:
+        LOG.error(f"Error in cross-language search: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Cross-language search failed: {e!s}",
+        ) from e
+
+
+@app.get("/api/bible/insights/{reference}")
+async def insights_endpoint(
+    reference: str,
+    translations: str | None = Query(None, description="Comma-separated list of translations (e.g., 'ESV,ASV')"),
+    include_lexicon: bool = Query(True, description="Include lexicon entries"),
+    include_similar: bool = Query(True, description="Include similar verses"),
+    similarity_limit: int = Query(5, ge=1, le=20, description="Number of similar verses (1-20)"),
+) -> JSONResponse:
+    """Get contextual insights for a Bible verse.
+
+    Args:
+        reference: Bible reference (e.g., "John 3:16").
+        translations: Optional comma-separated list of additional translations.
+        include_lexicon: Whether to include lexicon entries.
+        include_similar: Whether to include similar verses.
+        similarity_limit: Number of similar verses to fetch (1-20).
+
+    Returns:
+        JSON with:
+        {
+            "reference": str,
+            "primary_text": str,
+            "secondary_texts": dict[str, str],
+            "lexicon_entries": [
+                {
+                    "strongs_id": str,
+                    "lemma": str,
+                    "gloss": str | None,
+                    ...
+                },
+                ...
+            ],
+            "similar_verses": [
+                {
+                    "verse_id": int,
+                    "book_name": str,
+                    "chapter_num": int,
+                    "verse_num": int,
+                    "text": str,
+                    "similarity_score": float
+                },
+                ...
+            ],
+            "generated_at": str (RFC3339),
+            "mode": "available" | "db_off"
+        }
+    """
+    from agentpm.biblescholar.insights_flow import get_verse_context
+    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+    from datetime import datetime, UTC
+
+    try:
+        # Parse translations
+        translation_list = None
+        if translations:
+            translation_list = [t.strip() for t in translations.split(",") if t.strip()]
+
+        context = get_verse_context(
+            reference=reference,
+            translations=translation_list,
+            include_lexicon=include_lexicon,
+            include_similar=include_similar,
+            similarity_limit=similarity_limit,
+        )
+
+        if not context:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Verse not found for reference: {reference}",
+            )
+
+        adapter = LexiconAdapter()
+        db_status = adapter.db_status
+
+        response = {
+            "reference": context.reference,
+            "primary_text": context.primary_text,
+            "secondary_texts": context.secondary_texts,
+            "lexicon_entries": [
+                {
+                    "strongs_id": e.strongs_id,
+                    "lemma": e.lemma,
+                    "gloss": e.gloss,
+                }
+                for e in context.lexicon_entries
+            ],
+            "similar_verses": [
+                {
+                    "verse_id": v.verse_id,
+                    "book_name": v.book_name,
+                    "chapter_num": v.chapter_num,
+                    "verse_num": v.verse_num,
+                    "text": v.text,
+                    "similarity_score": v.similarity_score,
+                }
+                for v in context.similar_verses
+            ],
+            "generated_at": datetime.now(UTC).isoformat(),
+            "mode": db_status,
+        }
+
+        return JSONResponse(content=response)
+    except HTTPException:
+        raise
+    except Exception as e:
+        LOG.error(f"Error in insights lookup: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Insights lookup failed: {e!s}",
+        ) from e
+
+
+@app.get("/api/mcp/tools/search")
+async def mcp_tools_search_endpoint(
+    q: str | None = Query(None, description="Search query (semantic + keyword)"),
+    subsystem: str | None = Query(None, description="Filter by subsystem (e.g., 'biblescholar')"),
+    visibility: str | None = Query(None, description="Filter by visibility ('internal' or 'external')"),
+    limit: int = Query(20, ge=1, le=100, description="Maximum number of results (1-100)"),
+) -> JSONResponse:
+    """Hybrid semantic + keyword search for MCP tools.
+
+    Combines vector similarity (embedding) with keyword matching and metadata filters.
+
+    Args:
+        q: Search query (optional). If provided, performs semantic similarity search.
+        subsystem: Filter by subsystem (e.g., 'biblescholar').
+        visibility: Filter by visibility ('internal' or 'external').
+        limit: Maximum number of results to return (1-100).
+
+    Returns:
+        JSON with:
+        {
+            "query": str | None,
+            "filters": {
+                "subsystem": str | None,
+                "visibility": str | None
+            },
+            "limit": int,
+            "results_count": int,
+            "results": [
+                {
+                    "name": str,
+                    "description": str,
+                    "tags": list[str],
+                    "subsystem": str | None,
+                    "visibility": str,
+                    "popularity_score": int,
+                    "similarity_score": float | None
+                },
+                ...
+            ],
+            "generated_at": str (RFC3339),
+            "mode": "available" | "db_off"
+        }
+    """
+    from scripts.config.env import get_rw_dsn
+    from datetime import datetime, UTC
+    import psycopg
+
+    try:
+        dsn = get_rw_dsn()
+        if not dsn:
+            return JSONResponse(
+                content={
+                    "query": q,
+                    "filters": {"subsystem": subsystem, "visibility": visibility},
+                    "limit": limit,
+                    "results_count": 0,
+                    "results": [],
+                    "generated_at": datetime.now(UTC).isoformat(),
+                    "mode": "db_off",
+                }
+            )
+
+        with psycopg.connect(dsn) as conn:
+            # Build query with filters
+            conditions = []
+            params: dict[str, Any] = {}
+
+            # Subsystem filter
+            if subsystem:
+                conditions.append("subsystem = %(subsystem)s")
+                params["subsystem"] = subsystem
+
+            # Visibility filter
+            if visibility:
+                conditions.append("visibility = %(visibility)s")
+                params["visibility"] = visibility
+
+            # Semantic search (if query provided and embedding column exists)
+            query_embedding = None
+            if q:
+                try:
+                    from agentpm.adapters.lm_studio import embed
+
+                    embeddings = embed([q], model_slot="embedding")
+                    if embeddings and embeddings[0]:
+                        query_embedding = embeddings[0]
+                        # Check if embedding column exists
+                        with conn.cursor() as cur:
+                            cur.execute(
+                                """
+                                SELECT EXISTS(
+                                    SELECT 1 FROM information_schema.columns
+                                    WHERE table_schema = 'mcp' AND table_name = 'tools'
+                                    AND column_name = 'embedding'
+                                )
+                                """
+                            )
+                            has_embedding = cur.fetchone()[0]
+                            if has_embedding and query_embedding:
+                                # Use vector similarity with stricter threshold (0.5 instead of 0.3)
+                                # This reduces noise and improves search quality
+                                conditions.append(
+                                    "embedding IS NOT NULL AND 1 - (embedding <=> %(query_embedding)s::vector) > 0.5"
+                                )
+                                params["query_embedding"] = str(query_embedding)
+                            else:
+                                # Fallback to keyword search
+                                conditions.append('(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)')
+                                params["keyword"] = f"%{q}%"
+                    else:
+                        # Fallback to keyword search
+                        conditions.append('(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)')
+                        params["keyword"] = f"%{q}%"
+                except Exception as e:
+                    LOG.warning(f"Embedding generation failed, using keyword search: {e}")
+                    conditions.append('(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)')
+                    params["keyword"] = f"%{q}%"
+            elif q:
+                # Keyword search only
+                conditions.append('(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)')
+                params["keyword"] = f"%{q}%"
+
+            # Build SQL
+            where_clause = " AND ".join(conditions) if conditions else "1=1"
+
+            # Order by similarity if embedding search, else by popularity
+            if query_embedding and "query_embedding" in params:
+                order_by = "ORDER BY 1 - (embedding <=> %(query_embedding)s::vector) DESC, popularity_score DESC"
+            else:
+                order_by = "ORDER BY popularity_score DESC, name ASC"
+
+            sql = f"""
+                SELECT
+                    name,
+                    "desc",
+                    tags,
+                    COALESCE(subsystem, '') as subsystem,
+                    COALESCE(visibility, 'internal') as visibility,
+                    COALESCE(popularity_score, 0) as popularity_score,
+                    CASE
+                        WHEN %(query_embedding)s::vector IS NOT NULL AND embedding IS NOT NULL
+                        THEN 1 - (embedding <=> %(query_embedding)s::vector)
+                        ELSE NULL
+                    END as similarity_score
+                FROM mcp.tools
+                WHERE {where_clause}
+                {order_by}
+                LIMIT %(limit)s
+            """
+            params["limit"] = limit
+            if "query_embedding" not in params:
+                params["query_embedding"] = None
+
+            with conn.cursor() as cur:
+                cur.execute(sql, params)
+                rows = cur.fetchall()
+
+            results = [
+                {
+                    "name": row[0],
+                    "description": row[1] or "",
+                    "tags": row[2] or [],
+                    "subsystem": row[3] or None,
+                    "visibility": row[4] or "internal",
+                    "popularity_score": row[5] or 0,
+                    "similarity_score": float(row[6]) if row[6] is not None else None,
+                }
+                for row in rows
+            ]
+
+            response = {
+                "query": q,
+                "filters": {"subsystem": subsystem, "visibility": visibility},
+                "limit": limit,
+                "results_count": len(results),
+                "results": results,
+                "generated_at": datetime.now(UTC).isoformat(),
+                "mode": "available",
+            }
+
+            return JSONResponse(content=response)
+
+    except Exception as e:
+        LOG.error(f"Error in MCP tools search: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"MCP tools search failed: {e!s}",
+        ) from e
 
 
 @app.get("/bible", response_class=HTMLResponse)

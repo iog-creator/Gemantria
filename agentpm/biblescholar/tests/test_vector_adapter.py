@@ -186,7 +186,12 @@ class TestBibleVectorAdapter:
         assert results == []
         assert adapter.db_status == "unavailable"
 
-    def test_db_status_property(self):
+    @patch("agentpm.biblescholar.vector_adapter.get_bible_engine")
+    def test_db_status_property(self, mock_get_engine):
         """Test db_status property updates status."""
+        from agentpm.db.loader import DbUnavailableError
+
+        mock_get_engine.side_effect = DbUnavailableError("DB not configured")
+
         adapter = BibleVectorAdapter()
         assert adapter.db_status == "db_off"

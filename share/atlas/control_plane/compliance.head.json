@@ -1,8 +1,22 @@
 {
   "schema": "control",
-  "generated_at": "2025-11-13T04:31:01.803108+00:00",
-  "ok": false,
-  "connection_ok": false,
-  "summary": null,
-  "error": "connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?"
+  "generated_at": "2025-11-21T04:00:57.712909+00:00",
+  "ok": true,
+  "connection_ok": true,
+  "summary": {
+    "window_7d": {
+      "runs": 0,
+      "por_ok_ratio": 0.0,
+      "schema_ok_ratio": 0.0,
+      "provenance_ok_ratio": 0.0,
+      "updated_at": "2025-11-16T19:07:36.542379-08:00"
+    },
+    "window_30d": {
+      "runs": 0,
+      "por_ok_ratio": 0.0,
+      "schema_ok_ratio": 0.0,
+      "provenance_ok_ratio": 0.0,
+      "updated_at": "2025-11-16T19:07:36.551207-08:00"
+    }
+  }
 }

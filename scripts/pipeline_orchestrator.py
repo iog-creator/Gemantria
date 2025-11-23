@@ -411,6 +411,12 @@ def main():
     full_parser.add_argument("--book", default="Genesis", help="Book to process")
     full_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
     full_parser.add_argument("--skip-analysis", action="store_true", help="Skip analysis step")
+    full_parser.add_argument(
+        "--nouns-json",
+        dest="nouns_json",
+        default=None,
+        help="Optional path to ai-nouns envelope; skips discovery if supplied.",
+    )
 
     args = parser.parse_args()
 

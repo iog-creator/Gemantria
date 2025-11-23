@@ -63,6 +63,7 @@ Describes service-level integrations (database + LM Studio) that provide externa
   - **Forecasting**: `GET /api/v1/forecast` - Predictive pattern modeling (Phase 8)
   - **Network**: `GET /api/v1/network/{concept_id}` - Concept subgraph exploration
   - **Docs Search**: `GET /api/docs/search` - Semantic search over governance/docs (Phase-8D)
+  - **Rerank Metrics**: `GET /api/rerank/summary` - Rerank/edge strength metrics summary (nodes, edges, strong/weak edge counts, avg_edge_strength)
 - **Filtering & Pagination**: Efficient parameter-based filtering with result limits
 - **Error Handling**: Structured error responses with appropriate HTTP status codes
 

@@ -34,7 +34,7 @@ def test_lm_insights_page_contains_title():
     assert response.status_code == 200
     content = response.text
     assert "LM Insights" in content
-    assert "Recent local LM health" in content
+    assert "Recent LM activity analytics (advisory only; not used for health gates)" in content
 
 
 def test_lm_insights_page_contains_chart_canvas():

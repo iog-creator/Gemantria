@@ -50,9 +50,11 @@ Emits JSON verdict:
 
 import json
 import pathlib
+import sys
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+EVIDENCE_DIR = ROOT / "evidence"
 TAGPROOF_ROOT = ROOT / "tagproof"
 RELEASES_ROOT = ROOT / "share" / "releases"
 
@@ -176,6 +178,20 @@ def main() -> int:
         "counts": counts,
         "details": details,
     }
+
+    # Optional evidence writing for PLAN-079 E94
+    evidence_path: pathlib.Path | None = None
+    if "--write-evidence" in sys.argv:
+        idx = sys.argv.index("--write-evidence")
+        if idx + 1 < len(sys.argv):
+            evidence_path = pathlib.Path(sys.argv[idx + 1])
+        else:
+            evidence_path = EVIDENCE_DIR / "guard_tagproof_screenshots.json"
+
+    if evidence_path is not None:
+        evidence_path.parent.mkdir(parents=True, exist_ok=True)
+        evidence_path.write_text(json.dumps(verdict, indent=2))
+
     print(json.dumps(verdict, indent=2))
     return 0 if ok else 1
 

@@ -356,12 +356,12 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 
 ### Phase 7: Core Bible DB Integration
 
-**7A: Bible Reference Parsing** (Next candidate)
-- Extract `bible_reference_parser.py` logic
-- Create `agentpm/biblescholar/reference_parser.py`
-- Pure function, no DB dependency
-- OSIS format support
-- Enhance `bible_passage_flow.parse_reference()` with OSIS support
+**7A: Bible Reference Parsing** (✅ COMPLETE)
+- ✅ Extract `bible_reference_parser.py` logic
+- ✅ Create `agentpm/biblescholar/reference_parser.py`
+- ✅ Pure function, no DB dependency
+- ✅ OSIS format support
+- ✅ Enhance `bible_passage_flow.parse_reference()` with OSIS support (Pending integration)
 
 **7B: Bible DB Read-Only Adapter** (Partially complete via Phase-6M)
 - ✅ `agentpm/biblescholar/bible_db_adapter.py` — COMPLETE (Phase-6M)
@@ -376,12 +376,12 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - ✅ Word-level data retrieval — COMPLETE
 - 🔄 Morphology code explanations — Future enhancement
 
-**7D: Keyword Search Flow**
-- Create `agentpm/biblescholar/search_flow.py`
-- Keyword search across verses
-- Multi-translation search
-- Result ranking and filtering
-- Uses `bible_db_adapter` (read-only)
+**7D: Keyword Search Flow** (✅ COMPLETE)
+- ✅ Create `agentpm/biblescholar/search_flow.py`
+- ✅ Keyword search across verses (ILIKE)
+- ✅ Multi-translation search
+- ✅ Result ranking (ordered by book/chapter/verse) and filtering (limit)
+- ✅ Uses `bible_db_adapter` (read-only)
 
 **7E: Vector Search Integration** (Complete via Phase-6O)
 - ✅ `agentpm/biblescholar/vector_adapter.py` — COMPLETE (Phase-6O)
@@ -393,21 +393,27 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 
 ### Phase 8: Advanced Features
 
-**8A: Contextual Insights Flow**
-- Create `agentpm/biblescholar/insights_flow.py`
-- DB-grounded contextual analysis
-- LM formatting (via control-plane)
-- Cross-references and related passages
-- **Rule**: All content from DB; LM only formats
+**8A: Contextual Insights Flow** (✅ COMPLETE)
+- ✅ Create `agentpm/biblescholar/insights_flow.py`
+- ✅ DB-grounded contextual analysis (VerseContext aggregation)
+- ✅ LM formatting (via `format_context_for_llm`)
+- ✅ Cross-references and related passages (via vector search)
+- ✅ **Rule**: All content from DB; LM only formats
 
-**8B: Cross-Language Flow**
-- Create `agentpm/biblescholar/cross_language_flow.py`
-- Hebrew/Greek word analysis within verse context
-- Cross-language search capabilities
-- Uses lexicon adapter + vector search
+**8B: Cross-Language Flow** (✅ COMPLETE)
+- ✅ Create `agentpm/biblescholar/cross_language_flow.py`
+- ✅ Hebrew/Greek word analysis within verse context
+- ✅ Cross-language search capabilities (via vector similarity)
+- ✅ Uses lexicon adapter + vector search
 
 ### Phase 9: UI Integration (Separate Episode)
 
+**9A: UI Stubbing** (✅ COMPLETE)
+- ✅ Add BibleScholar to Orchestrator Shell (Left Rail)
+- ✅ Create `BibleScholarPanel` stub (hermetic)
+- ✅ Create basic export script (`scripts/ui/export_biblescholar_summary.py`)
+
+**9B: Full Integration (Planned)**
 - Harvest Flask/Jinja UI patterns into React
 - Create unified UI pages for BibleScholar features
 - Integrate with existing `webui/graph` foundation

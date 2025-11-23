@@ -6,9 +6,10 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 
 
-def _run_guard() -> subprocess.CompletedProcess:
+def _run_guard(*extra_args: str) -> subprocess.CompletedProcess:
+    cmd = [sys.executable, "scripts/guards/guard_tagproof_screenshots.py", *extra_args]
     return subprocess.run(
-        [sys.executable, "scripts/guards/guard_tagproof_screenshots.py"],
+        cmd,
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -37,3 +38,18 @@ def test_guard_tagproof_screenshots_includes_debug_lists():
         "orphan_manifest_entries",
     ):
         assert key in details
+
+
+def test_guard_tagproof_screenshots_writes_evidence(tmp_path: pathlib.Path):
+    """Guard should be able to write an evidence JSON file when requested."""
+    evidence_path = tmp_path / "guard_tagproof_screenshots.json"
+    result = _run_guard("--write-evidence", str(evidence_path))
+    assert result.stdout.strip(), f"guard emitted no stdout: {result}"
+    assert evidence_path.exists(), "evidence file was not created"
+
+    data = json.loads(evidence_path.read_text())
+    # Evidence file should mirror core verdict structure
+    assert "ok" in data
+    assert "checks" in data
+    assert "counts" in data
+    assert "details" in data

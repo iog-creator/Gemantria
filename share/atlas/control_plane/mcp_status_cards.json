@@ -1,0 +1,83 @@
+{
+  "schema": "mcp_status_cards_v1",
+  "generated_at": "2025-11-21T15:51:35.726009+00:00",
+  "ok": true,
+  "cards": {
+    "e21_por": {
+      "name": "e21_por",
+      "status": "ok",
+      "ok": true,
+      "label": "E21_POR: OK",
+      "color": "green",
+      "icon": "status-healthy",
+      "details": {
+        "method": "regeneration_receipt",
+        "generated_at": "2025-11-21T07:01:21.903134+00:00",
+        "steps_count": 2,
+        "all_steps_ok": true
+      }
+    },
+    "e22_schema": {
+      "name": "e22_schema",
+      "status": "ok",
+      "ok": true,
+      "label": "E22_SCHEMA: OK",
+      "color": "green",
+      "icon": "status-healthy",
+      "details": {
+        "method": "schema_snapshot",
+        "generated_at": "2025-11-21T07:01:22.034038+00:00",
+        "tables_count": 14,
+        "schema": "control"
+      }
+    },
+    "e23_gatekeeper": {
+      "name": "e23_gatekeeper",
+      "status": "ok",
+      "ok": true,
+      "label": "E23_GATEKEEPER: OK",
+      "color": "green",
+      "icon": "status-healthy",
+      "details": {
+        "method": "gatekeeper_coverage",
+        "generated_at": "2025-11-21T07:01:22.179106+00:00",
+        "violation_codes_count": 7,
+        "all_covered": true
+      }
+    },
+    "e24_tagproof": {
+      "name": "e24_tagproof",
+      "status": "ok",
+      "ok": true,
+      "label": "E24_TAGPROOF: OK",
+      "color": "green",
+      "icon": "status-healthy",
+      "details": {
+        "method": "tagproof_bundle",
+        "generated_at": "2025-11-21T07:01:42.554092+00:00",
+        "components_count": 9,
+        "required_present": true,
+        "mode": "HINT"
+      }
+    },
+    "e25_bundle": {
+      "name": "e25_bundle",
+      "status": "ok",
+      "ok": true,
+      "label": "E25_BUNDLE: OK",
+      "color": "green",
+      "icon": "status-healthy",
+      "details": {
+        "method": "bundle_aggregate",
+        "generated_at": "2025-11-21T07:01:42.569777+00:00",
+        "proofs_count": 4,
+        "all_ok": true
+      }
+    }
+  },
+  "summary": {
+    "total_cards": 5,
+    "ok_count": 5,
+    "failed_count": 0
+  }
+}

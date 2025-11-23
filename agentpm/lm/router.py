@@ -154,6 +154,10 @@ class GraniteRouter:
         if task.kind == "theology_enrichment" or task.domain in ("theology", "bible"):
             return "theology"
 
+        # Planning lane (Gemini/Codex helpers)
+        if task.kind == "planning" or task.domain == "planning":
+            return "planning"
+
         # Tool-calling tasks
         if task.needs_tools:
             return "local_agent"
@@ -171,6 +175,10 @@ class GraniteRouter:
         - RERANKER_PROVIDER → reranker slot
         - Falls back to INFERENCE_PROVIDER if slot-specific provider not set
         """
+        if slot == "planning":
+            provider = self.config.get("planning_provider") or self.config.get("provider", "lmstudio")
+            provider = str(provider or "").strip()
+            return provider or "lmstudio"
         provider_key = f"{slot}_provider"
         provider = self.config.get(provider_key) or self.config.get("provider", "lmstudio")
         return str(provider).strip()
@@ -185,6 +193,9 @@ class GraniteRouter:
         - EMBEDDING_MODEL → embedding slot
         - RERANKER_MODEL → reranker slot
         """
+        if slot == "planning":
+            model = self.config.get("planning_model") or self.config.get("local_agent_model")
+            return str(model).strip() if model else None
         model_key = f"{slot}_model"
         model = self.config.get(model_key)
         return str(model).strip() if model else None
@@ -202,6 +213,12 @@ class GraniteRouter:
         elif provider == "lmstudio":
             if not self.config.get("lm_studio_enabled", True):
                 raise RuntimeError("LM Studio is disabled (LM_STUDIO_ENABLED=false)")
+        elif provider == "gemini":
+            if not self.config.get("gemini_enabled", True):
+                raise RuntimeError("Gemini CLI is disabled (GEMINI_ENABLED=false)")
+        elif provider == "codex":
+            if not self.config.get("codex_enabled", False):
+                raise RuntimeError("Codex CLI is disabled (CODEX_ENABLED=false)")
         # Other providers: assume available (future extension)
 
     def _get_default_temperature(self, slot: str, task: RouterTask) -> float:
@@ -220,6 +237,8 @@ class GraniteRouter:
             return 0.6
         if slot == "math":
             return 0.0  # Deterministic verification
+        if slot == "planning":
+            return 0.2
         if slot in ("embedding", "reranker"):
             return 0.0  # Not applicable, but return placeholder
         # Default: general/agent tasks
@@ -242,6 +261,10 @@ class GraniteRouter:
         # Max tokens from task
         if task.max_tokens is not None:
             params["max_tokens"] = task.max_tokens
+
+        if slot == "planning":
+            params["planning_provider"] = self.config.get("planning_provider")
+            params["planning_model"] = self.config.get("planning_model")
 
         return params
 

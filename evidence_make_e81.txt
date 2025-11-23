@@ -1,9 +1,0 @@
-Makefile:819: warning: overriding recipe for target 'phase8.temporal'
-Makefile:724: warning: ignoring old recipe for target 'phase8.temporal'
-Makefile:1598: warning: overriding recipe for target 'rerank.smoke'
-Makefile:1592: warning: ignoring old recipe for target 'rerank.smoke'
->> Exporting control-plane MCP catalog…
-ERROR: Database error: connection is bad: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
-	Is the server running locally and accepting connections on that socket?
-[mcp_catalog_stub] DB-off: Database connection failed
-[control_mcp_catalog_export] Wrote share/atlas/control_plane/mcp_catalog.json

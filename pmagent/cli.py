@@ -69,6 +69,9 @@ from agentpm.tools import (  # noqa: E402
     extract_concepts,
     generate_embeddings as tool_embed,
 )
+from agentpm.adapters import planning as planning_adapter  # noqa: E402
+from agentpm.adapters import gemini_cli as gemini_cli_adapter  # noqa: E402
+from agentpm.adapters import codex_cli as codex_cli_adapter  # noqa: E402
 from agentpm.kb.registry import (  # noqa: E402
     load_registry,
     query_registry,
@@ -77,6 +80,12 @@ from agentpm.kb.registry import (  # noqa: E402
 )
 from agentpm.plan.kb import build_kb_doc_worklist  # noqa: E402
 from agentpm.plan.fix import build_fix_actions, apply_actions  # noqa: E402
+from agentpm.plan.next import (  # noqa: E402
+    build_capability_session,
+    build_next_plan,
+    list_capability_sessions,
+    run_reality_loop,
+)
 from agentpm.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
 from agentpm.kb.registry import REPO_ROOT  # noqa: E402
 
@@ -91,6 +100,8 @@ ask_app = typer.Typer(help="Ask questions using SSOT documentation")
 app.add_typer(ask_app, name="ask")
 reality_app = typer.Typer(help="Reality checks for automated bring-up")
 app.add_typer(reality_app, name="reality-check")
+reality_validate_app = typer.Typer(help="Reality validation commands")
+app.add_typer(reality_validate_app, name="reality")
 bringup_app = typer.Typer(help="System bring-up commands")
 app.add_typer(bringup_app, name="bringup")
 mcp_app = typer.Typer(help="MCP server commands")
@@ -117,6 +128,12 @@ plan_app.add_typer(plan_kb_app, name="kb")
 report_app = typer.Typer(help="Reporting commands")
 app.add_typer(report_app, name="report")
 
+tools_app = typer.Typer(help="External planning/tool helpers (Gemini, Codex)")
+app.add_typer(tools_app, name="tools")
+
+autopilot_app = typer.Typer(help="Autopilot backend operations")
+app.add_typer(autopilot_app, name="autopilot")
+
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
     """Print health JSON to stdout and optional summary to stderr."""
@@ -124,6 +141,29 @@ def _print_health_output(health_json: dict, summary_func=None) -> None:
     if summary_func:
         summary = summary_func(health_json)
         print(summary, file=sys.stderr)
+
+
+def _load_prompt_text(prompt: str, prompt_file: Path | None) -> str:
+    """Load prompt text from argument, stdin, or file."""
+    if prompt_file:
+        return prompt_file.read_text().strip()
+    prompt = prompt.strip()
+    if prompt == "-":
+        return sys.stdin.read().strip()
+    return prompt
+
+
+def _print_planning_result(result: planning_adapter.PlanningCliResult, *, json_only: bool) -> None:
+    """Print planning result summary and optional response."""
+    summary = planning_adapter.summarize_result(result)
+    print(json.dumps(summary, indent=2))
+    if json_only:
+        return
+    if result.response:
+        print("\n=== Response ===")
+        print(result.response)
+    elif summary.get("reason"):
+        print(f"\n(no response - reason: {summary['reason']})")
 
 
 @health_app.command("system", help="Aggregate system health (DB + LM + Graph)")
@@ -430,6 +470,348 @@ def plan_kb_list(
     sys.exit(0)
 
 
+@plan_app.command("next", help="Suggest next work items from MASTER_PLAN + NEXT_STEPS")
+def plan_next(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    limit: int = typer.Option(3, "--limit", help="Limit number of suggested tasks"),
+    with_status: bool = typer.Option(False, "--with-status", help="Include system posture (reality-check + status)"),
+) -> None:
+    """Suggest next work items based on MASTER_PLAN.md and NEXT_STEPS.md.
+
+    Hermetic: file-only, no DB/LM calls, no writes.
+    With --with-status: includes system posture (reality-check + status explain).
+    """
+    try:
+        result = build_next_plan(limit=limit, with_status=with_status)
+
+        # Always print JSON to stdout
+        print(json.dumps(result, indent=2))
+
+        if json_only:
+            sys.exit(0)
+
+        if not result.get("available", False):
+            print(
+                "PLAN data unavailable (MASTER_PLAN.md or NEXT_STEPS.md missing)",
+                file=sys.stderr,
+            )
+            sys.exit(0)
+
+        candidates = result.get("candidates", [])
+        if not candidates:
+            print("No next-step candidates found in NEXT_STEPS.md", file=sys.stderr)
+            sys.exit(0)
+
+        print("Top next work candidates:", file=sys.stderr)
+        for cand in candidates:
+            cid = cand.get("id", "?")
+            title = cand.get("title", "Unknown")
+            source = cand.get("source", "NEXT_STEPS")
+            print(f"  - [{cid}] {title} ({source})", file=sys.stderr)
+
+        current_focus = result.get("current_focus")
+        if current_focus:
+            print(f"\nCurrent Focus: {current_focus}", file=sys.stderr)
+
+        next_milestone = result.get("next_milestone")
+        if next_milestone:
+            print(f"Next Milestone: {next_milestone}", file=sys.stderr)
+
+        # Print posture summary if available
+        posture = result.get("posture")
+        if posture:
+            mode = posture.get("mode", "unknown")
+            if mode == "live":
+                reality = posture.get("reality", {})
+                status = posture.get("status", {})
+                overall_ok = reality.get("overall_ok", False)
+                level = status.get("level", "UNKNOWN")
+                headline = status.get("headline", "No status available")
+                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(f"  {headline}", file=sys.stderr)
+            else:
+                print(f"\nSystem Posture: {mode} (commands unavailable)", file=sys.stderr)
+                if posture.get("error"):
+                    print(f"  Note: {posture['error']}", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {"error": str(e), "available": False, "candidates": []}
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to build next-plan suggestions: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@plan_app.command("open", help="Open a NEXT_STEPS item as a capability_session envelope")
+def plan_open(
+    candidate_id: str = typer.Argument(..., help="Candidate id from `pmagent plan next` (e.g. NEXT_STEPS:1)"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+    with_status: bool = typer.Option(True, "--with-status", help="Include posture (reality+status) when available"),
+) -> None:
+    """Open a NEXT_STEPS item as a capability_session envelope.
+
+    Hermetic: file-only, optional posture via reality-check + status explain.
+    """
+    try:
+        session = build_capability_session(candidate_id, with_status=with_status)
+
+        # Always print JSON to stdout
+        print(json.dumps(session, indent=2))
+
+        if json_only:
+            sys.exit(0)
+
+        if not session.get("available", False):
+            reason = session.get("reason", "unknown")
+            print(f"Capability session unavailable: {reason}", file=sys.stderr)
+            sys.exit(0)
+
+        # Print human summary to stderr
+        session_id = session.get("id", "?")
+        title = session.get("title", "Unknown")
+        source = session.get("source", "NEXT_STEPS")
+        print(f"Capability Session: [{session_id}] {title} ({source})", file=sys.stderr)
+
+        plan = session.get("plan", {})
+        current_focus = plan.get("current_focus")
+        if current_focus:
+            print(f"Current Focus: {current_focus}", file=sys.stderr)
+
+        next_milestone = plan.get("next_milestone")
+        if next_milestone:
+            print(f"Next Milestone: {next_milestone}", file=sys.stderr)
+
+        # Print posture summary if available
+        posture = session.get("posture")
+        if posture:
+            mode = posture.get("mode", "unknown")
+            if mode == "live":
+                reality = posture.get("reality", {})
+                status = posture.get("status", {})
+                overall_ok = reality.get("overall_ok", False)
+                level = status.get("level", "UNKNOWN")
+                headline = status.get("headline", "No status available")
+                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(f"  {headline}", file=sys.stderr)
+                print(f"  Mode: {mode}", file=sys.stderr)
+            else:
+                print(f"\nSystem Posture: {mode} (commands unavailable)", file=sys.stderr)
+                if posture.get("error"):
+                    print(f"  Note: {posture['error']}", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "type": "capability_session",
+            "version": "1.0",
+            "id": candidate_id,
+            "available": False,
+            "error": str(e),
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to build capability session: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@plan_app.command("reality-loop", help="Run a single plan+posture loop and persist a capability_session envelope")
+def plan_reality_loop(
+    limit: int = typer.Option(3, "--limit", help="Max candidates to consider from NEXT_STEPS"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+    dry_run_command: str | None = typer.Option(
+        None,
+        "--dry-run-command",
+        help="Optional shell/Make/pmagent command to associate with this capability_session (NOT executed)",
+    ),
+    track_session: bool = typer.Option(
+        False,
+        "--track-session",
+        help="Validate and (when enabled) persist the capability_session into control.agent_run_cli",
+    ),
+) -> None:
+    """Run a single planning + posture loop and persist a capability_session envelope.
+
+    Hermetic: file-only, no DB writes by default; writes capability_session to evidence/pmagent/.
+    With --track-session: validates and optionally persists to control.agent_run_cli (gated by DB availability).
+    """
+    try:
+        result = run_reality_loop(limit=limit, dry_run_command=dry_run_command)
+
+        # If envelope was created and tracking is enabled, validate and optionally persist
+        tracking_result = None
+        if result.get("available", False) and result.get("envelope_path"):
+            envelope = result.get("envelope", {})
+            if envelope:
+                from agentpm.reality.capability_envelope_validator import validate_and_optionally_persist  # noqa: E402, PLC0415
+
+                tracking_result = validate_and_optionally_persist(envelope, tracking_enabled=track_session)
+
+        # Always print JSON summary to stdout
+        summary = {
+            "available": result.get("available", False),
+            "candidate": result.get("candidate"),
+            "envelope_path": result.get("envelope_path"),
+            "dry_run_command": result.get("dry_run_command"),
+            "error": result.get("error"),
+        }
+        if tracking_result is not None:
+            summary["tracking"] = tracking_result
+        print(json.dumps(summary, indent=2))
+
+        if json_only:
+            sys.exit(0)
+
+        if not result.get("available", False):
+            error = result.get("error", "unknown")
+            print(f"No capability session created: {error}", file=sys.stderr)
+            print("(This is advisory only; no candidates available in NEXT_STEPS.md)", file=sys.stderr)
+            sys.exit(0)
+
+        # Print human summary to stderr
+        candidate = result.get("candidate", {})
+        candidate_id = candidate.get("id", "?")
+        title = candidate.get("title", "Unknown")
+        source = candidate.get("source", "NEXT_STEPS")
+        envelope_path = result.get("envelope_path", "?")
+
+        print(f"Capability Session: [{candidate_id}] {title} ({source})", file=sys.stderr)
+        print(f"Envelope written to: {envelope_path}", file=sys.stderr)
+
+        # Show posture summary from envelope
+        envelope = result.get("envelope", {})
+        posture = envelope.get("posture")
+        if posture:
+            mode = posture.get("mode", "unknown")
+            if mode == "live":
+                reality = posture.get("reality", {})
+                status = posture.get("status", {})
+                overall_ok = reality.get("overall_ok", False)
+                level = status.get("level", "UNKNOWN")
+                headline = status.get("headline", "No status available")
+                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(f"  {headline}", file=sys.stderr)
+                print(f"  Mode: {mode}", file=sys.stderr)
+            else:
+                print(f"\nSystem Posture: {mode} (commands unavailable)", file=sys.stderr)
+                if posture.get("error"):
+                    print(f"  Note: {posture['error']}", file=sys.stderr)
+
+        # Show dry-run command if provided
+        if result.get("dry_run_command"):
+            print(f"\nSession dry-run command (not executed): {result['dry_run_command']}", file=sys.stderr)
+
+        # Show tracking status
+        if tracking_result is not None:
+            tracking = tracking_result.get("tracking")
+            if tracking:
+                mode = tracking.get("mode", "unknown")
+                written = tracking.get("written", False)
+                agent_run_id = tracking.get("agent_run_cli_id")
+                if mode == "db_on" and written and agent_run_id:
+                    print(f"\nTracking: persisted to control.agent_run_cli (id: {agent_run_id})", file=sys.stderr)
+                elif mode == "db_off":
+                    print(f"\nTracking: DB unavailable (mode: {mode})", file=sys.stderr)
+                elif mode == "error":
+                    error_msg = tracking.get("error", "unknown error")
+                    print(f"\nTracking: error ({error_msg})", file=sys.stderr)
+            elif not track_session:
+                # Tracking disabled (validation ran but no tracking block)
+                print("\nTracking: disabled (use --track-session to persist to DB)", file=sys.stderr)
+        elif result.get("available", False) and not track_session:
+            # Envelope created but tracking not attempted (shouldn't happen, but handle gracefully)
+            print("\nTracking: disabled (use --track-session to persist to DB)", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "available": False,
+            "candidate": None,
+            "envelope_path": None,
+            "error": str(e),
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to run reality loop: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@plan_app.command("history", help="List recent capability_session envelopes (read-only)")
+def plan_history(
+    limit: int = typer.Option(10, "--limit", help="Maximum number of sessions to list"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+) -> None:
+    """List recent capability_session envelopes from evidence/pmagent/.
+
+    Hermetic: read-only, file-only, no DB/LM calls.
+    """
+    try:
+        sessions = list_capability_sessions(limit=limit)
+
+        # Always print JSON summary to stdout
+        summary = {
+            "count": len(sessions),
+            "sessions": sessions,
+        }
+        print(json.dumps(summary, indent=2))
+
+        if json_only:
+            sys.exit(0)
+
+        if not sessions:
+            print("No capability sessions found in evidence/pmagent/", file=sys.stderr)
+            sys.exit(0)
+
+        # Print human summary to stderr
+        print(f"\nRecent Capability Sessions (newest first, limit={limit}):", file=sys.stderr)
+        for i, session in enumerate(sessions, 1):
+            session_id = session.get("id", "?")
+            title = session.get("title", "Unknown")
+            source = session.get("source", "NEXT_STEPS")
+            timestamp = session.get("timestamp", "?")
+            dry_run = session.get("dry_run_command")
+            posture_mode = session.get("posture_mode")
+            reality_ok = session.get("reality_overall_ok")
+            status_level = session.get("status_level")
+
+            print(f"\n{i}. [{session_id}] {title} ({source})", file=sys.stderr)
+            print(f"   Timestamp: {timestamp}", file=sys.stderr)
+            if dry_run:
+                print(f"   Dry-run command: {dry_run}", file=sys.stderr)
+            if posture_mode:
+                posture_str = f"Posture: {posture_mode}"
+                if posture_mode == "live" and reality_ok is not None:
+                    posture_str += f" (reality: {'OK' if reality_ok else 'ISSUES'})"
+                if status_level:
+                    posture_str += f", status: {status_level}"
+                print(f"   {posture_str}", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "count": 0,
+            "sessions": [],
+            "error": str(e),
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to list capability sessions: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@autopilot_app.command("serve", help="Start the Autopilot backend server")
+def autopilot_serve(
+    host: str = typer.Option("127.0.0.1", "--host", help="Host to bind to"),
+    port: int = typer.Option(8006, "--port", help="Port to bind to"),
+    reload: bool = typer.Option(False, "--reload", help="Enable auto-reload"),
+) -> None:
+    """Start the Autopilot backend server (FastAPI)."""
+    import uvicorn
+
+    print(f"Starting Autopilot backend on http://{host}:{port}...", file=sys.stderr)
+    uvicorn.run("agentpm.server.autopilot_api:app", host=host, port=port, reload=reload)
+
+
 @plan_kb_app.command("fix", help="Execute doc fixes from KB worklist")
 def plan_kb_fix(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
@@ -630,12 +1012,112 @@ def report_kb(
 
             print(json.dumps(report, indent=2))
 
-    except Exception as e:
-        error_msg = {"available": False, "error": str(e)}
-        print(json.dumps(error_msg, indent=2))
+    except Exception as exc:
+        error_msg = {"available": False, "error": str(exc)}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to compute KB doc-health metrics: {exc}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
         sys.exit(1)
 
     sys.exit(0)
+
+
+@tools_app.command("plan", help="Run prompt via configured planning provider (Gemini/Codex/local fallback)")
+def tools_plan(
+    prompt: str = typer.Argument(..., help="Prompt text; use '-' to read from stdin"),
+    prompt_file: Path | None = typer.Option(  # noqa: B008
+        None,
+        "--prompt-file",
+        "-f",
+        exists=True,
+        dir_okay=False,
+        readable=True,
+        help="Read prompt from file instead of CLI argument",
+    ),  # noqa: B008
+    system: str = typer.Option("", "--system", help="Optional system prompt"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+) -> None:
+    run = create_agent_run("tools.plan", {"json_only": json_only})
+    try:
+        prompt_text = _load_prompt_text(prompt, prompt_file)
+        result = planning_adapter.run_planning_prompt(prompt_text, system=system or None)
+        _print_planning_result(result, json_only=json_only)
+        mark_agent_run_success(run, planning_adapter.summarize_result(result))
+    except Exception as exc:
+        mark_agent_run_error(run, exc)
+        raise
+
+
+@tools_app.command("gemini", help="Force Gemini CLI planning helper")
+def tools_gemini(
+    prompt: str = typer.Argument(..., help="Prompt text; use '-' to read from stdin"),
+    prompt_file: Path | None = typer.Option(  # noqa: B008
+        None,
+        "--prompt-file",
+        "-f",
+        exists=True,
+        dir_okay=False,
+        readable=True,
+        help="Read prompt from file instead of CLI argument",
+    ),  # noqa: B008
+    system: str = typer.Option("", "--system", help="Optional system prompt"),
+    model: str | None = typer.Option(None, "--model", help="Override planning model ID"),
+    cli_path: str | None = typer.Option(None, "--cli-path", help="Path to gemini CLI binary"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+) -> None:
+    cfg = get_lm_model_config()
+    run = create_agent_run("tools.gemini", {"json_only": json_only})
+    try:
+        prompt_text = _load_prompt_text(prompt, prompt_file)
+        result = gemini_cli_adapter.run(
+            prompt_text,
+            system=system or None,
+            model=model or cfg.get("planning_model") or cfg.get("local_agent_model"),
+            cli_path=cli_path or cfg.get("gemini_cli_path") or "gemini",
+            enabled=bool(cfg.get("gemini_enabled", True)),
+        )
+        _print_planning_result(result, json_only=json_only)
+        mark_agent_run_success(run, planning_adapter.summarize_result(result))
+    except Exception as exc:
+        mark_agent_run_error(run, exc)
+        raise
+
+
+@tools_app.command("codex", help="Force Codex CLI planning helper")
+def tools_codex(
+    prompt: str = typer.Argument(..., help="Prompt text; use '-' to read from stdin"),
+    prompt_file: Path | None = typer.Option(  # noqa: B008
+        None,
+        "--prompt-file",
+        "-f",
+        exists=True,
+        dir_okay=False,
+        readable=True,
+        help="Read prompt from file instead of CLI argument",
+    ),  # noqa: B008
+    system: str = typer.Option("", "--system", help="Optional system prompt"),
+    model: str | None = typer.Option(None, "--model", help="Override planning model ID"),
+    cli_path: str | None = typer.Option(None, "--cli-path", help="Path to codex CLI binary"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+) -> None:
+    cfg = get_lm_model_config()
+    run = create_agent_run("tools.codex", {"json_only": json_only})
+    try:
+        prompt_text = _load_prompt_text(prompt, prompt_file)
+        result = codex_cli_adapter.run(
+            prompt_text,
+            system=system or None,
+            model=model or cfg.get("planning_model") or cfg.get("local_agent_model"),
+            cli_path=cli_path or cfg.get("codex_cli_path") or "codex",
+            enabled=bool(cfg.get("codex_enabled", False)),
+        )
+        _print_planning_result(result, json_only=json_only)
+        mark_agent_run_success(run, planning_adapter.summarize_result(result))
+    except Exception as exc:
+        mark_agent_run_error(run, exc)
+        raise
 
 
 @health_app.command("graph", help="Check graph overview")
@@ -899,6 +1381,195 @@ def reality_check_check(
     except Exception as e:
         mark_agent_run_error(run, e)
         raise
+
+
+@reality_validate_app.command(
+    "validate-capability-envelope",
+    help="Validate a capability_session envelope file against AI tracking mapping contract",
+)
+def reality_validate_capability_envelope(
+    file: Path = typer.Argument(..., help="Path to capability_session JSON file"),  # noqa: B008
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Validate a capability_session envelope file.
+
+    Hermetic: read-only, no DB writes. Checks envelope against future AI tracking mapping.
+    """
+    from agentpm.reality.capability_envelope_validator import validate_capability_envelope_file
+
+    try:
+        result = validate_capability_envelope_file(file)
+
+        # Always print JSON to stdout
+        print(json.dumps(result, indent=2))
+
+        if json_only:
+            sys.exit(0 if result.get("ok", False) else 1)
+
+        # Print human summary to stderr
+        if result.get("ok", False):
+            print("✓ Envelope validation passed", file=sys.stderr)
+            if result.get("warnings"):
+                print(f"  Warnings: {len(result['warnings'])}", file=sys.stderr)
+                for warning in result["warnings"]:
+                    print(f"    - {warning}", file=sys.stderr)
+        else:
+            print("✗ Envelope validation failed", file=sys.stderr)
+            if result.get("file_error"):
+                print(f"  File error: {result['file_error']}", file=sys.stderr)
+            if result.get("errors"):
+                print(f"  Errors ({len(result['errors'])}):", file=sys.stderr)
+                for error in result["errors"]:
+                    print(f"    - {error}", file=sys.stderr)
+
+        sys.exit(0 if result.get("ok", False) else 1)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "ok": False,
+            "file_path": str(file),
+            "file_error": str(e),
+            "errors": [str(e)],
+            "warnings": [],
+            "derived_tracking": {},
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to validate envelope: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@reality_validate_app.command(
+    "sessions",
+    help="Summarize capability_session envelopes and tracking posture",
+)
+def reality_sessions(
+    limit: int = typer.Option(10, "--limit", help="Max sessions to show"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
+) -> None:
+    """Summarize capability_session envelopes and tracking posture.
+
+    Hermetic: read-only, file-only reads, optional DB reads (gracefully handles DB-off).
+    """
+    from agentpm.reality.sessions_summary import summarize_tracked_sessions
+
+    try:
+        summary = summarize_tracked_sessions(limit=limit)
+
+        # Always print JSON to stdout
+        print(json.dumps(summary, indent=2, sort_keys=True))
+
+        if json_only:
+            sys.exit(0)
+
+        # Print human summary to stderr
+        envelopes = summary.get("envelopes", {})
+        tracking = summary.get("tracking", {})
+
+        envelope_count = envelopes.get("count", 0)
+        latest = envelopes.get("latest", [])
+
+        print(f"\nSessions: {envelope_count} envelope(s)", file=sys.stderr)
+        if latest:
+            print("  Latest sessions:", file=sys.stderr)
+            for i, session in enumerate(latest[:5], 1):  # Show first 5
+                session_id = session.get("id", "unknown")
+                title = session.get("title", "")[:50]
+                mode = session.get("posture_mode", "unknown")
+                dry_run = session.get("dry_run_command")
+                dry_run_str = f" (cmd: {dry_run[:30]}...)" if dry_run else ""
+                print(f"    {i}. [{session_id}] {title} (mode: {mode}){dry_run_str}", file=sys.stderr)
+
+        db_mode = tracking.get("db_mode", "unknown")
+        enabled_hint = tracking.get("enabled_hint", False)
+        agent_run_cli = tracking.get("agent_run_cli")
+
+        print("\nTracking:", file=sys.stderr)
+        print(f"  DB mode: {db_mode}", file=sys.stderr)
+        print(f"  Enabled hint: {enabled_hint}", file=sys.stderr)
+        if agent_run_cli:
+            count = agent_run_cli.get("count")
+            if count is not None:
+                print(f"  agent_run_cli count: {count}", file=sys.stderr)
+            modes = agent_run_cli.get("latest_modes")
+            if modes:
+                print(f"  Latest modes: {modes}", file=sys.stderr)
+        else:
+            print("  agent_run_cli: (not available)", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "error": str(e),
+            "envelopes": {"count": 0, "latest": []},
+            "tracking": {"enabled_hint": False, "db_mode": "unknown", "agent_run_cli": None},
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to summarize sessions: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@reality_validate_app.command(
+    "validate-capability-history",
+    help="Scan and validate all capability_session envelopes in evidence/pmagent/",
+)
+def reality_validate_capability_history(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Scan and validate all capability_session envelopes.
+
+    Hermetic: read-only, no DB writes. Aggregates validation results across all envelopes.
+    """
+    from agentpm.reality.capability_envelope_validator import scan_capability_envelopes
+
+    try:
+        report = scan_capability_envelopes()
+
+        # Always print JSON to stdout
+        print(json.dumps(report, indent=2))
+
+        if json_only:
+            sys.exit(0 if report.get("error_count", 0) == 0 else 1)
+
+        # Print human summary to stderr
+        total = report.get("total_files", 0)
+        ok_count = report.get("ok_count", 0)
+        error_count = report.get("error_count", 0)
+        warning_count = report.get("warning_count", 0)
+
+        print("\nCapability Session History Validation:", file=sys.stderr)
+        print(f"  Total files: {total}", file=sys.stderr)
+        print(f"  ✓ OK: {ok_count}", file=sys.stderr)
+        print(f"  ✗ Errors: {error_count}", file=sys.stderr)
+        print(f"  ⚠ Warnings: {warning_count}", file=sys.stderr)
+
+        if report.get("files_with_errors"):
+            print(f"\n  Files with errors ({len(report['files_with_errors'])}):", file=sys.stderr)
+            for file_info in report["files_with_errors"][:5]:  # Show first 5
+                print(f"    - {file_info['file_path']}", file=sys.stderr)
+                for error in file_info.get("errors", [])[:3]:  # Show first 3 errors
+                    print(f"      • {error}", file=sys.stderr)
+
+        if report.get("files_with_warnings"):
+            print(f"\n  Files with warnings ({len(report['files_with_warnings'])}):", file=sys.stderr)
+            for file_info in report["files_with_warnings"][:5]:  # Show first 5
+                print(f"    - {file_info['file_path']}", file=sys.stderr)
+
+        sys.exit(0 if error_count == 0 else 1)
+    except Exception as e:  # pragma: no cover (defensive)
+        error_msg = {
+            "total_files": 0,
+            "ok_count": 0,
+            "error_count": 0,
+            "warning_count": 0,
+            "files_with_errors": [],
+            "files_with_warnings": [],
+            "error": str(e),
+        }
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to scan envelopes: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 @bringup_app.command("full", help="Fully start DB, LM Studio server+GUI, and load models")

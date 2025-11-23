@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Search Tab - Visual Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Mock data for testing
+        const mockData = {
+            query: "hope in difficult times",
+            translation: "KJV",
+            limit: 10,
+            model: "text-embedding-bge-m3",
+            results_count: 3,
+            results: [
+                {
+                    verse_id: 1,
+                    book_name: "Romans",
+                    chapter_num: 5,
+                    verse_num: 3,
+                    text: "And not only so, but we glory in tribulations also: knowing that tribulation worketh patience;",
+                    translation_source: "KJV",
+                    similarity_score: 0.92
+                },
+                {
+                    verse_id: 2,
+                    book_name: "James",
+                    chapter_num: 1,
+                    verse_num: 2,
+                    text: "My brethren, count it all joy when ye fall into divers temptations;",
+                    translation_source: "KJV",
+                    similarity_score: 0.88
+                },
+                {
+                    verse_id: 3,
+                    book_name: "2 Corinthians",
+                    chapter_num: 4,
+                    verse_num: 17,
+                    text: "For our light affliction, which is but for a moment, worketh for us a far more exceeding and eternal weight of glory;",
+                    translation_source: "KJV",
+                    similarity_score: 0.85
+                }
+            ],
+            generated_at: "2025-11-22T20:38:14.715793+00:00"
+        };
+
+        function SemanticSearchTab() {
+            const [data, setData] = useState(mockData);
+            const [loading, setLoading] = useState(false);
+
+            if (loading) {
+                return (
+                    <div className="flex items-center justify-center p-8">
+                        <div className="text-gray-400">Loading semantic search results...</div>
+                    </div>
+                );
+            }
+
+            if (!data) {
+                return (
+                    <div className="p-6 space-y-4">
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <h3 className="font-semibold text-yellow-900 mb-2">WHEN/THEN</h3>
+                            <div className="text-sm text-yellow-800 space-y-2">
+                                <p>
+                                    <strong>No semantic search export found.</strong> Run{' '}
+                                    <code className="bg-yellow-100 px-1 py-0.5 rounded text-xs">
+                                        make export.biblescholar.semantic QUERY="hope in difficult times"
+                                    </code>{' '}
+                                    to generate semantic search results.
+                                </p>
+                                <p className="mt-2">
+                                    Semantic search finds verses by <strong>meaning</strong>, not just keywords.
+                                    Ask questions or search by concepts to discover thematically related verses.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (data.error) {
+                return (
+                    <div className="p-6">
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p className="text-sm text-red-800">
+                                <strong>Error:</strong> {data.error}
+                            </p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="p-6 space-y-4">
+                    {/* Search Query Info */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h3 className="font-semibold text-blue-900">Query</h3>
+                                <p className="text-blue-800 mt-1 text-lg">"{data.query}"</p>
+                            </div>
+                            <div className="text-right text-sm text-blue-700">
+                                <div>{data.results_count} results</div>
+                                <div className="text-xs opacity-75">Translation: {data.translation}</div>
+                                <div className="text-xs opacity-75">Model: {data.model}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Results List */}
+                    <div className="space-y-3">
+                        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                            Semantically Similar Verses
+                        </h3>
+                        {data.results.map((result, idx) => (
+                            <div
+                                key={result.verse_id}
+                                className="bg-white border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                            >
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                                            #{idx + 1}
+                                        </span>
+                                        <span className="font-semibold text-gray-900">
+                                            {result.book_name} {result.chapter_num}:{result.verse_num}
+                                        </span>
+                                        <span className="text-xs text-gray-500">({result.translation_source})</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div
+                                            className="h-2 rounded-full bg-blue-500"
+                                            style={{ width: `${result.similarity_score * 100}px` }}
+                                            title={`Similarity: ${(result.similarity_score * 100).toFixed(1)}%`}
+                                        />
+                                        <span className="text-sm font-semibold text-blue-600">
+                                            {(result.similarity_score * 100).toFixed(1)}%
+                                        </span>
+                                    </div>
+                                </div>
+                                <p className="text-gray-700 leading-relaxed">{result.text}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="text-xs text-gray-500 text-center pt-4 border-t">
+                        Generated at {new Date(data.generated_at).toLocaleString()}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<SemanticSearchTab />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+

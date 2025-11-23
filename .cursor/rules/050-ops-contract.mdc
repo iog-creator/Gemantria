@@ -53,6 +53,7 @@ Cursor **must** declare the tool and files used.
 2. **Codex** — edits/patches/re-writes
    *If unavailable → print `Codex disabled (401)` and fallback*
 3. **Gemini / MCP** — long-context reasoning or large docs
+   - pmagent’s **planning lane** treats Codex and Gemini CLI as optional planning/coding/maths providers. They are configured via `PLANNING_PROVIDER` / `PLANNING_MODEL` and CLI paths. When disabled, pmagent falls back to the Granite local_agent slot; theology slots remain LM Studio/Ollama-only.
 
 ### Files Referenced
 
@@ -172,7 +173,14 @@ make eval.graph.calibrate.adv
 make ci.exports.smoke
 ```
 
-If DB/services down → "correct hermetic behavior."
+Hermetic smokes are required for CI and for **initial safety checks**, but they are **not sufficient** to declare any DB/LM‑touching feature "done."
+
+- For features that exercise DB or LM (pipelines, BibleScholar, Knowledge MCP, control‑plane exports, etc.), Cursor must:
+  - Run the hermetic bundle above, **and then**
+  - Run at least one **live DB+LM execution of the relevant flow** whenever the operator has indicated DB/LM should be up.
+- Persistent `db_off` / `lm_off` / similar HINTs in that live context are a **failure to investigate**, not "correct hermetic behavior."
+
+In CI and explicitly hermetic runs (where DB/LM are intentionally off), DB/services down → "correct hermetic behavior."
 
 ## 9 · Non-Required Automated Reviews
 

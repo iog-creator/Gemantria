@@ -6,7 +6,23 @@ The `agentpm/guarded/` directory contains guarded components for the Gematria an
 
 ## Key Components
 
-<!-- Add key components and their purposes here -->
+### `autopilot_adapter.py`
+
+**Purpose:** Guarded Tool Adapter for Autopilot Phase C. Maps Autopilot intents to safe pmagent commands using a strict whitelist approach.
+
+**Key Function:**
+- `map_intent_to_command(intent: str) -> str | None`: Maps an intent to a safe pmagent command, or returns None for unknown intents.
+
+**Whitelist Mappings:**
+- `"status"` → `"pmagent status explain"`
+- `"health"` → `"pmagent health system"`
+- `"plan"` → `"pmagent plan next"`
+
+**Safety:**
+- Only whitelisted intents are allowed
+- Unknown intents return None (rejected)
+- Case-insensitive matching
+- Whitespace is stripped
 
 ## API Contracts
 

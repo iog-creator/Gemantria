@@ -52,23 +52,38 @@ BGE-M3 is **not prompted like chat models** — it's sentence-transformers style
 
 In Ollama: Use `nomic-embed-text` or `bge-m3` tag; LM Studio loads as text-embedding model.
 
-#### 3. Granite Reranker R2 (Cross-Encoder Mode)
-Cross-encoder (no bi-encoder prefix needed). From IBM/HF card (Sep 2025 release):
+#### 3. Granite Reranker (LLM-Based Ranking via Granite 4.0)
+Our reranker uses **Granite 4.0 LLM** (not cross-encoder) with structured prompts for document ranking. This approach provides flexible ranking with automatic fallback to embedding-only scoring on errors.
 
-- **Prompt format**: Query + document pair, separated by SEP token or simple concat.
-  Standard:
-  ```text
-  [QUERY] {query} [DOCUMENT] {document_text}
-  ```
-- Or HF pipeline:
-  ```python
-  from sentence_transformers import CrossEncoder
-  model = CrossEncoder('ibm-granite/granite-embedding-reranker-english-r2')
-  scores = model.predict([("query", "doc1"), ("query", "doc2")])
-  ```
-- Best practices (arXiv 2508.21085 & IBM docs): Max 8192 tokens per pair; batch up to 128 pairs; scores 0-1 (sigmoid). For Bible: No special prompt — raw text works best due to training on diverse corpora.
+**Configuration**:
+- **Strategy**: Set `RERANKER_STRATEGY=granite_llm` to use Granite LLM ranking (default: `embedding_only`)
+- **Model**: Uses `RERANKER_MODEL` (defaults to `LOCAL_AGENT_MODEL` if not set)
+- **Document truncation**: Each candidate document is truncated to `MAX_DOC_CHARS=1024` to stay within ~8K token envelope
+- **Generation limit**: `GRANITE_RERANK_NUM_PREDICT=4096` (default) sets `num_predict` for sufficient generation tokens
 
-In practice: Always rerank top-50 from BGE-M3 → Granite R2 for final edge weights.
+**Prompt format** (structured JSON-only):
+- **System prompt**: Explicitly demands ONLY `[{"index": 1, "score": 0.95}, ...]` JSON array
+- **User prompt**: Query + numbered candidate documents (truncated to 1024 chars each)
+- **Response contract**: Model must return JSON list with `index` (1-based) and `score` (0.0 to 1.0) fields only
+- **Example**:
+  ```json
+  [{"index": 1, "score": 0.95}, {"index": 2, "score": 0.75}, {"index": 3, "score": 0.60}]
+  ```
+
+**Fallback semantics** (error-tolerance):
+- **JSON parse errors**: If Granite returns malformed/truncated JSON, logs HINT and falls back to `embedding_only` scoring (no pipeline crash)
+- **HTTP errors**: If Ollama/LM Studio returns 404 or other HTTP errors, logs HINT and falls back to `embedding_only` scoring
+- **Edge strength computation**: Even when fallback occurs, `edge_strength = α*cosine + (1-α)*rerank_score` is still computed using available cosine scores (rerank defaults to 0.5 if unavailable)
+- **Pipeline resilience**: Rerank failures are **non-fatal**; pipeline continues with embedding-only scores
+
+**Best practices**:
+- Keep document strings under 1024 chars (truncation happens automatically)
+- Monitor HINT logs for fallback frequency (indicates model/service issues)
+- For production: Ensure Ollama/LM Studio is healthy to minimize fallbacks
+- Fallback behavior is intentional: embedding-only scoring is deterministic and always available
+
+**Legacy cross-encoder mode** (not currently used):
+The original Granite Reranker R2 cross-encoder approach (sentence-transformers) is documented above for reference, but our current implementation uses Granite 4.0 LLM ranking with the structured prompt approach described here.
 
 ### Recommended Supplementary Models (<=14B, Open Weights, Ollama-Compatible 2025)
 
@@ -92,6 +107,65 @@ This stack makes the system "breathe": Granite Tiny decides → expert activates
 
 We now have the exact prompting + models to make MoE-of-MoEs real today.
 
+### Planning & Coding Helpers (Gemini CLI + OpenAI Codex)
+
+Our **planning lane** is intentionally separate from theology/gematria inference. It is exposed via `pmagent tools.plan` and can be pinned to a specific provider with `pmagent tools.gemini` or `pmagent tools.codex`. These CLIs excel at long-context planning, backend refactors, hermetic tool orchestration, and math-heavy analysis. They are **never** used for theology or Bible scoring; those slots remain on Granite/BGE.
+
+#### When to route work to the planning lane
+
+- Multi-step backend refactors (router changes, guard wiring, CI glue)
+- Detailing operations or math proofs before deterministic implementation
+- Planning tasks that need decomposition into sub-agents with their own prompts
+- Any request where pmagent must call out to an external coding/planning helper but still stay within OPS governance
+
+Always tag planning prompts with `kind="planning"` or `kind="math"` so the router cannot leak them into theology slots.
+
+#### Gemini CLI (default planning provider)
+
+- Interface: `gemini` CLI (`gemini --version >= 0.17.x`) invoked by `pmagent tools.plan` or `pmagent tools.gemini`
+- Strengths: massive context windows, structured planning trees, high recall on repo-wide searches, and native support for tool lists
+- System template:
+
+```
+You are a backend planning specialist for the Gemantria.v2 pipeline.
+- Stay inside OPS governance (Rules 050/051/052).
+- Output JSON: {objective, constraints, ordered_plan, verification_steps}.
+- Never attempt theology or gematria interpretation.
+```
+
+- Prompt tips:
+  - Embed acceptance criteria: “Plan must include docs/rules updates + pmagent wiring.”
+  - Bound response size (≤15 steps) to keep outputs actionable.
+  - For math tasks append: “Show derivations before simplifying numeric results.”
+
+#### OpenAI Codex CLI (code-first planning provider)
+
+- Interface: `codex` CLI (same CLI wrapped by `scripts/agents/codex-task.sh`) invoked via `pmagent tools.codex`
+- Strengths: surgical diff suggestions, deterministic code synth, guard/test enumeration
+- System template:
+
+```
+You are an implementation-focused coding assistant.
+Inputs include repo paths and governance guardrails.
+Produce concrete diffs + safety checks; never invent theology content.
+Return JSON: {analysis, proposed_diffs[], tests}.
+```
+
+- Prompt tips:
+  - Provide precise excerpts for every file you want modified.
+  - Ask for Ruff-compliant diffs and mention any mandatory make targets.
+  - Require a `tests` block listing hermetic commands (`ruff`, `make book.smoke`, etc.).
+
+#### Multi-agent orchestration pattern
+
+- Spawn multiple agents with different `--system` roles (Architect, Implementer, Math Verifier) while sharing the same prompt payload via `--prompt-file`.
+- Example chain:
+  1. `pmagent tools.plan --system "Architect"` to outline phases.
+  2. `pmagent tools.gemini` for math-heavy subtasks or dependency analysis.
+  3. `pmagent tools.codex` to translate approved steps into diffs/tests.
+- Always persist outputs to `evidence/planning/*.json` before acting so PoR stays intact.
+- Planning commands log `agent_run` rows and degrade cleanly (clear errors) when the CLIs are disabled, keeping CI hermetic.
+
 ## Implementation Status (Phase-7C)
 
 **Router Implementation**: ✅ **COMPLETE** (Phase-7C)
@@ -112,5 +186,10 @@ The router module (`agentpm/lm/router.py`) implements rule-based task-to-model r
 **Configuration**:
 - Set `ROUTER_ENABLED=0` to bypass router and use legacy direct model selection
 - Router respects all per-slot provider/model configuration from Phase-7F
+- Canonical env slots (Phase-7B normalization):
+  - `LOCAL_AGENT_MODEL`, `EMBEDDING_MODEL`, `RERANKER_MODEL`, `THEOLOGY_MODEL`, `MATH_MODEL`
+  - Per-slot provider overrides: `LOCAL_AGENT_PROVIDER`, `EMBEDDING_PROVIDER`, `RERANKER_PROVIDER`, `THEOLOGY_PROVIDER`
+  - Provider toggles: `INFERENCE_PROVIDER` (default `lmstudio`), `OLLAMA_ENABLED`, `LM_STUDIO_ENABLED`
+  - Theology slot extras: `THEOLOGY_LMSTUDIO_BASE_URL`, `THEOLOGY_LMSTUDIO_API_KEY`
 
 **See also**: `docs/SSOT/LM_ROUTER_CONTRACT.md` for the full router API contract and runtime behavior specification.

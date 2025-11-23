@@ -91,6 +91,8 @@
 
 - ruff linting issues in share/ledger_*.py files
 
+- PLAN-092 M1-M4 complete + E87/E91 artifacts (#583)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

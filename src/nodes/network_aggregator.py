@@ -41,6 +41,22 @@ from src.infra.structured_logger import get_logger, log_json  # noqa: E402
 from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
 from src.ssot.noun_adapter import adapt_ai_noun  # noqa: E402
 
+# Phase-7F: Provider-aware embedding and rerank adapters
+try:
+    from agentpm.adapters.lm_studio import embed as provider_aware_embed, rerank as provider_aware_rerank  # noqa: E402
+    from scripts.config.env import get_lm_model_config  # noqa: E402
+
+    HAS_PROVIDER_AWARE = True
+except ImportError:
+    HAS_PROVIDER_AWARE = False
+    import warnings  # noqa: E402
+
+    warnings.warn(
+        "Provider-aware adapters not available. Falling back to LM Studio client only.",
+        UserWarning,
+        stacklevel=2,
+    )
+
 LOG = get_logger("gemantria.network_aggregator")
 
 VECTOR_DIM = int(os.getenv("VECTOR_DIM", "1024"))
@@ -364,7 +380,26 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
     log_json(LOG, 20, "network_aggregation_start", noun_count=len(nouns))
 
     try:
-        client = get_lmstudio_client()
+        # Phase-7F: Use provider-aware adapters if available, fallback to LM Studio client
+        if HAS_PROVIDER_AWARE:
+            cfg = get_lm_model_config()
+            embedding_provider = cfg.get("embedding_provider") or cfg.get("provider", "lmstudio")
+            reranker_provider = cfg.get("reranker_provider") or cfg.get("provider", "lmstudio")
+            log_json(
+                LOG,
+                20,
+                "network_aggregation_provider_config",
+                embedding_provider=embedding_provider,
+                reranker_provider=reranker_provider,
+            )
+            # Legacy client only needed for rerank if not using provider-aware rerank
+            client = get_lmstudio_client() if reranker_provider == "lmstudio" else None
+        else:
+            # Fallback: use LM Studio client
+            client = get_lmstudio_client()
+            embedding_provider = "lmstudio"
+            reranker_provider = "lmstudio"
+
         network_summary = {
             "total_nodes": 0,
             "strong_edges": 0,
@@ -385,7 +420,9 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
 
             # Process nouns: generate embeddings and store in concept_network
             # Use connection context for transaction management (auto-commits on exit)
-            concept_data = _generate_and_store_embeddings(client, cur, nouns, network_summary)
+            concept_data = _generate_and_store_embeddings(
+                client, cur, nouns, network_summary, use_provider_aware=HAS_PROVIDER_AWARE
+            )
 
             if not concept_data:
                 log_json(LOG, 30, "no_valid_embeddings_generated")
@@ -400,7 +437,9 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
 
             # Build rerank-driven relationships using KNN + reranker (legacy)
             if len(concept_data) >= 2:
-                _build_rerank_relationships(client, cur, concept_data, network_summary)
+                _build_rerank_relationships(
+                    client, cur, concept_data, network_summary, use_provider_aware=HAS_PROVIDER_AWARE
+                )
 
             # Transaction commits automatically on successful exit
 
@@ -414,7 +453,20 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
         raise NetworkAggregationError(f"Network aggregation failed: {e!s}") from e
 
 
-def _generate_and_store_embeddings(client, cur, nouns: list[dict], summary: dict) -> list[tuple]:
+def _noun_display_name(noun: dict[str, Any]) -> str:
+    """Best-effort human-readable name for logging/diagnostics."""
+    return (
+        noun.get("name")
+        or noun.get("analysis", {}).get("lemma")
+        or noun.get("hebrew")
+        or noun.get("surface")
+        or str(noun.get("noun_id", ""))
+    )
+
+
+def _generate_and_store_embeddings(
+    client, cur, nouns: list[dict], summary: dict, use_provider_aware: bool = False
+) -> list[tuple]:
     """
     Generate embeddings for nouns and store them in concept_network table.
     Returns list of (noun_id, network_id, embedding, doc_string) tuples.
@@ -425,7 +477,12 @@ def _generate_and_store_embeddings(client, cur, nouns: list[dict], summary: dict
     for noun in nouns:
         doc_string = _build_document_string(noun)
         if not doc_string:
-            log_json(LOG, 30, "skipping_noun_incomplete_data", noun_name=noun.get("name"))
+            log_json(
+                LOG,
+                30,
+                "skipping_noun_incomplete_data",
+                noun_name=_noun_display_name(noun),
+            )
             continue
 
         embedding_texts.append(doc_string)
@@ -443,7 +500,11 @@ def _generate_and_store_embeddings(client, cur, nouns: list[dict], summary: dict
         batch_nouns = valid_nouns[i : i + batch_size]
 
         try:
-            batch_embeddings = client.get_embeddings(batch_texts)
+            # Phase-7F: Use provider-aware embedding if available
+            if use_provider_aware:
+                batch_embeddings = provider_aware_embed(batch_texts, model_slot="embedding")
+            else:
+                batch_embeddings = client.get_embeddings(batch_texts)
             summary["embeddings_generated"] += len(batch_embeddings)
 
             # Runtime dimension guard and normalization
@@ -487,7 +548,7 @@ def _generate_and_store_embeddings(client, cur, nouns: list[dict], summary: dict
                     20,
                     "embedding_stored",
                     noun_id=str(noun_id),
-                    noun_name=noun.get("name"),
+                    noun_name=_noun_display_name(noun),
                     network_id=str(concept_network_id),
                 )
 
@@ -557,7 +618,9 @@ def _build_document_string(noun: dict[str, Any]) -> str:
     return "\n".join(doc_parts)
 
 
-def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary: dict):
+def _build_rerank_relationships(
+    client, cur, concept_data: list[tuple], summary: dict, use_provider_aware: bool = False
+):
     """Build relationships using KNN recall + reranker precision."""
     total_edge_strength = 0.0
     total_yes_scores = 0
@@ -589,9 +652,16 @@ def _build_rerank_relationships(client, cur, concept_data: list[tuple], summary:
         if not candidates:
             continue
 
-        # Rerank candidates using Qwen reranker
+        # Rerank candidates using provider-aware reranker or legacy client
         start_time = time.time()
-        rerank_scores = client.rerank(source_doc, candidates)
+        if use_provider_aware:
+            # Provider-aware rerank returns list[tuple[str, float]], extract scores in order
+            rerank_results = provider_aware_rerank(source_doc, candidates, model_slot="reranker")
+            # Create a map from doc to score, then extract in original candidate order
+            score_map = {doc: score for doc, score in rerank_results}
+            rerank_scores = [score_map.get(doc, 0.5) for doc in candidates]
+        else:
+            rerank_scores = client.rerank(source_doc, candidates)
         rerank_latency_ms = (time.time() - start_time) * 1000
 
         summary["rerank_calls"] += len(rerank_scores)

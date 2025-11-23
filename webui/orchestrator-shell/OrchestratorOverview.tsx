@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useHeaderData } from "./useHeaderData";
+import MCPROProofTile from "./MCPROProofTile";
+import BrowserVerifiedBadge from "./BrowserVerifiedBadge";
+import AutopilotStatusTile from "./AutopilotStatusTile";
 
 interface Intent {
     id: number;
@@ -32,6 +35,12 @@ export default function OrchestratorOverview() {
 
     return (
         <div className="orchestrator-overview p-8">
+            <section className="header-badges mb-6">
+                <div className="flex items-center gap-4">
+                    <BrowserVerifiedBadge />
+                </div>
+            </section>
+
             <section className="signals mb-8">
                 <h2 className="text-xl font-bold mb-4">Recent Signals</h2>
                 {signals.length === 0 ? (
@@ -66,6 +75,14 @@ export default function OrchestratorOverview() {
                         )}
                     </>
                 )}
+            </section>
+
+            <section className="mcp-proof mb-8">
+                <MCPROProofTile />
+            </section>
+
+            <section className="autopilot-status mb-8">
+                <AutopilotStatusTile />
             </section>
 
             <section className="autopilot bg-white p-6 rounded-lg shadow-sm border border-gray-200">

@@ -1,6 +1,375 @@
 {
   "items": [
     {
+      "path": "ADR-007-llm-integration.md",
+      "title": "ADR-007: LLM Integration and Confidence Metadata",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311815-08:00",
+      "size_bytes": 2883
+    },
+    {
+      "path": "ADR-032-bibledb-as-SSOT-roadmap.md",
+      "title": "ADR-032: bible_db as Single Source of Truth (Roadmap)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311877-08:00",
+      "size_bytes": 3000
+    },
+    {
+      "path": "ADR-065-postgres-ssot.md",
+      "title": "ADR-065 \u2014 Postgres-First SSOT for Gemantria",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311916-08:00",
+      "size_bytes": 1791
+    },
+    {
+      "path": "ADR-066-lm-studio-control-plane-integration.md",
+      "title": "ADR-066 \u2014 LM Studio + Control Plane Integration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311969-08:00",
+      "size_bytes": 5134
+    },
+    {
+      "path": "agentpm/adapters/AGENTS.md",
+      "title": "AGENTS.md - agentpm/adapters Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:03:01.325271-08:00",
+      "size_bytes": 3102
+    },
+    {
+      "path": "agentpm/AGENTS.md",
+      "title": "AGENTS.md - agentpm Package",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:45:38.714238-08:00",
+      "size_bytes": 15419
+    },
+    {
+      "path": "agentpm/ai_docs/AGENTS.md",
+      "title": "AGENTS.md - agentpm/ai_docs Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.069053-08:00",
+      "size_bytes": 621
+    },
+    {
+      "path": "agentpm/atlas/AGENTS.md",
+      "title": "AGENTS.md - agentpm/atlas Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 615
+    },
+    {
+      "path": "agentpm/biblescholar/AGENTS.md",
+      "title": "AGENTS.md \u2014 agentpm/biblescholar",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T12:28:17.231162-08:00",
+      "size_bytes": 21540
+    },
+    {
+      "path": "agentpm/bus/AGENTS.md",
+      "title": "AGENTS.md - agentpm/bus Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 609
+    },
+    {
+      "path": "agentpm/control_plane/AGENTS.md",
+      "title": "AGENTS.md - agentpm/control_plane Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 639
+    },
+    {
+      "path": "agentpm/control_widgets/AGENTS.md",
+      "title": "AGENTS.md - agentpm/control_widgets Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T10:39:52.506300-08:00",
+      "size_bytes": 645
+    },
+    {
+      "path": "agentpm/db/AGENTS.md",
+      "title": "AGENTS.md - agentpm/db Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T09:31:31.372169-08:00",
+      "size_bytes": 606
+    },
+    {
+      "path": "agentpm/docs/AGENTS.md",
+      "title": "AGENTS.md - agentpm/docs Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T18:38:53.339931-08:00",
+      "size_bytes": 612
+    },
+    {
+      "path": "agentpm/exports/AGENTS.md",
+      "title": "AGENTS.md - agentpm/exports Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 621
+    },
+    {
+      "path": "agentpm/extractors/AGENTS.md",
+      "title": "AGENTS.md - Extractors Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T20:12:49.967741-08:00",
+      "size_bytes": 5341
+    },
+    {
+      "path": "agentpm/gatekeeper/AGENTS.md",
+      "title": "AGENTS.md - agentpm/gatekeeper Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 630
+    },
+    {
+      "path": "agentpm/graph/AGENTS.md",
+      "title": "AGENTS.md - agentpm/graph Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 615
+    },
+    {
+      "path": "agentpm/guard/AGENTS.md",
+      "title": "AGENTS.md - agentpm/guard Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T17:44:22.751222-08:00",
+      "size_bytes": 615
+    },
+    {
+      "path": "agentpm/guarded/AGENTS.md",
+      "title": "AGENTS.md - agentpm/guarded Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T10:46:26.671613-08:00",
+      "size_bytes": 1184
+    },
+    {
+      "path": "agentpm/kb/AGENTS.md",
+      "title": "KB Document Registry (KB-Reg:M1)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.069053-08:00",
+      "size_bytes": 7667
+    },
+    {
+      "path": "agentpm/knowledge/AGENTS.md",
+      "title": "AGENTS.md - agentpm/knowledge Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 627
+    },
+    {
+      "path": "agentpm/lm/AGENTS.md",
+      "title": "AGENTS.md - agentpm/lm Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:52:23.433388-08:00",
+      "size_bytes": 3281
+    },
+    {
+      "path": "agentpm/lm_widgets/AGENTS.md",
+      "title": "AGENTS.md - agentpm/lm_widgets Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 630
+    },
+    {
+      "path": "agentpm/mcp/AGENTS.md",
+      "title": "AGENTS.md - agentpm/mcp Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 609
+    },
+    {
+      "path": "agentpm/metrics/AGENTS.md",
+      "title": "AGENTS.md - agentpm/metrics Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 621
+    },
+    {
+      "path": "agentpm/modules/AGENTS.md",
+      "title": "AGENTS.md - agentpm/modules Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 621
+    },
+    {
+      "path": "agentpm/modules/gematria/AGENTS.md",
+      "title": "AGENTS.md \u2014 agentpm/modules/gematria",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T10:57:49.906161-08:00",
+      "size_bytes": 1292
+    },
+    {
+      "path": "agentpm/obs/AGENTS.md",
+      "title": "AGENTS.md - agentpm/obs Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T08:12:44.294129-08:00",
+      "size_bytes": 609
+    },
+    {
+      "path": "agentpm/plan/AGENTS.md",
+      "title": "AGENTS.md",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:52:58.532478-08:00",
+      "size_bytes": 14755
+    },
+    {
+      "path": "agentpm/reality/AGENTS.md",
+      "title": "AGENTS.md - agentpm/reality Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T10:02:33.812726-08:00",
+      "size_bytes": 12574
+    },
+    {
+      "path": "agentpm/rpc/AGENTS.md",
+      "title": "AGENTS.md - agentpm/rpc Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 609
+    },
+    {
+      "path": "agentpm/runtime/AGENTS.md",
+      "title": "AGENTS.md - agentpm/runtime Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.069053-08:00",
+      "size_bytes": 7666
+    },
+    {
+      "path": "agentpm/scripts/AGENTS.md",
+      "title": "AGENTS.md - agentpm/scripts Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314194-08:00",
+      "size_bytes": 2453
+    },
+    {
+      "path": "agentpm/status/AGENTS.md",
+      "title": "AGENTS.md - agentpm/status Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.636149-08:00",
+      "size_bytes": 2451
+    },
+    {
+      "path": "agentpm/tests/AGENTS.md",
+      "title": "AGENTS.md - agentpm/tests Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T10:39:52.556264-08:00",
+      "size_bytes": 615
+    },
+    {
+      "path": "agentpm/tests/atlas/AGENTS.md",
+      "title": "AGENTS.md - agentpm/tests/atlas Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:00:24.730841-08:00",
+      "size_bytes": 5670
+    },
+    {
+      "path": "agentpm/tests/docs/AGENTS.md",
+      "title": "AGENTS.md - Tests/Docs Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:43:50.342491-08:00",
+      "size_bytes": 2755
+    },
+    {
+      "path": "agentpm/tests/mcp/AGENTS.md",
+      "title": "AGENTS.md - agentpm/tests/mcp Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:28:52.390445-08:00",
+      "size_bytes": 2783
+    },
+    {
+      "path": "agentpm/tools/AGENTS.md",
+      "title": "AGENTS.md - agentpm/tools Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.070016-08:00",
+      "size_bytes": 5385
+    },
+    {
+      "path": "AGENTS.md",
+      "title": "AGENTS.md \u2014 Gemantria Agent Framework",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T13:38:07.079714-08:00",
+      "size_bytes": 86205
+    },
+    {
       "path": "archive/evidence_v0.0.9_pre/a_exporter.after.txt",
       "title": "Add project root to path for imports",
       "doc_type": "legacy",
@@ -937,6 +1306,15 @@
       "size_bytes": 662
     },
     {
+      "path": "archive/evidence_v0.0.9_pre/guard_prompt_ssot.strict.txt",
+      "title": "Guard Prompt Ssot.Strict",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:13:12.165522-08:00",
+      "size_bytes": 569
+    },
+    {
       "path": "archive/evidence_v0.0.9_pre/hand_n.head.txt",
       "title": "Hand N.Head",
       "doc_type": "legacy",
@@ -1486,6 +1864,15 @@
       "size_bytes": 34
     },
     {
+      "path": "archive/evidence_v0.0.9_pre/triad.master_plan.ssot.snip.txt",
+      "title": "Triad.Master Plan.Ssot.Snip",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T18:48:01.129387-08:00",
+      "size_bytes": 414
+    },
+    {
       "path": "archive/evidence_v0.0.9_pre/tvs_e50plus.tail.txt",
       "title": "Tvs E50Plus.Tail",
       "doc_type": "legacy",
@@ -1504,6 +1891,1266 @@
       "size_bytes": 542
     },
     {
+      "path": "CHANGELOG.md",
+      "title": "Changelog",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:34:57.023525-08:00",
+      "size_bytes": 21712
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "title": "Contributing",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.312662-08:00",
+      "size_bytes": 332
+    },
+    {
+      "path": ".cursor/plans/ai-in-the-loop-lm-studio-integration-32131067.plan.md",
+      "title": "AI-in-the-loop LM Studio Integration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T18:29:17.517350-08:00",
+      "size_bytes": 6335
+    },
+    {
+      "path": ".cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md",
+      "title": "Telemetry-Driven Atlas (Browser-First, PR-Safe)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T15:08:43.070200-08:00",
+      "size_bytes": 11613
+    },
+    {
+      "path": ".cursor/plans/codebase-cleanup-plan-60872abe.plan.md",
+      "title": "Plan: Codebase Cleanup and Pipeline Consolidation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 3913
+    },
+    {
+      "path": ".cursor/plans/codex-cli-optional-integration-cfdd787b.plan.md",
+      "title": "Codex CLI Optional Integration (Local-Only, CI-Gated)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T12:44:17.140323-07:00",
+      "size_bytes": 5252
+    },
+    {
+      "path": ".cursor/plans/langgraph-studio-integration-visualization-enhancement-281fa0b3.plan.md",
+      "title": "LangGraph Studio Integration & Visualization Enhancement Plan",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T20:54:07.615208-08:00",
+      "size_bytes": 8772
+    },
+    {
+      "path": ".cursor/plans/phase-1-control-plane-implementation-ebfb34c0.plan.md",
+      "title": "Phase-1 Plan: Control Plane + Gatekeeper + Guard Shim",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T18:49:08.018436-08:00",
+      "size_bytes": 9455
+    },
+    {
+      "path": ".cursor/plans/plan-e3abd805.plan.md",
+      "title": "PM Contract Update + Phase 6\u20137 Closeout",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:54:06.908378-08:00",
+      "size_bytes": 2977
+    },
+    {
+      "path": ".cursor/plans/pmagent-reality-check-implementation-a3cef828.plan.md",
+      "title": "pmagent reality-check check Implementation Plan",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T11:01:28.316808-08:00",
+      "size_bytes": 7642
+    },
+    {
+      "path": ".cursor/plans/ui-enhancement-18696d49.plan.md",
+      "title": "UI Enhancement & Data Pipeline Improvement Plan",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 6250
+    },
+    {
+      "path": ".cursor/rules/000-ssot-index.mdc",
+      "title": "000-ssot-index (AlwaysApply)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 249
+    },
+    {
+      "path": ".cursor/rules/001-db-safety.mdc",
+      "title": "Related ADR: ADR-001 (Two-DB Safety)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 956
+    },
+    {
+      "path": ".cursor/rules/002-gematria-validation.mdc",
+      "title": "002 Gematria Validation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 405
+    },
+    {
+      "path": ".cursor/rules/003-graph-and-batch.mdc",
+      "title": "003 Graph And Batch",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:32.075522-08:00",
+      "size_bytes": 940
+    },
+    {
+      "path": ".cursor/rules/004-pr-workflow.mdc",
+      "title": "References",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.010857-08:00",
+      "size_bytes": 367
+    },
+    {
+      "path": ".cursor/rules/005-github-operations.mdc",
+      "title": "References",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 374
+    },
+    {
+      "path": ".cursor/rules/006-agents-md-governance.mdc",
+      "title": "AGENTS.md Governance \u2014 How agents must use and maintain AGENTS.md",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:48:37.837863-08:00",
+      "size_bytes": 3506
+    },
+    {
+      "path": ".cursor/rules/007-infrastructure.mdc",
+      "title": "007 Infrastructure",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 1016
+    },
+    {
+      "path": ".cursor/rules/008-cursor-rule-authoring.mdc",
+      "title": "Cursor Rule Authoring Guide",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:17:14.765750-08:00",
+      "size_bytes": 2828
+    },
+    {
+      "path": ".cursor/rules/009-documentation-sync.mdc",
+      "title": "009 Documentation Sync",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 473
+    },
+    {
+      "path": ".cursor/rules/010-task-brief.mdc",
+      "title": "SHORT BRIEF Format (Always Required)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 1850
+    },
+    {
+      "path": ".cursor/rules/011-production-safety.mdc",
+      "title": "Rule 011 \u2014 DEPRECATED",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T11:42:23.654908-08:00",
+      "size_bytes": 1475
+    },
+    {
+      "path": ".cursor/rules/012-connectivity-troubleshooting.mdc",
+      "title": "012 Connectivity Troubleshooting",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 1656
+    },
+    {
+      "path": ".cursor/rules/013-report-generation-verification.mdc",
+      "title": "013 Report Generation Verification",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 2503
+    },
+    {
+      "path": ".cursor/rules/014-governance-index.mdc",
+      "title": "Rule 014 \u2014 Governance Index (Reserved)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 297
+    },
+    {
+      "path": ".cursor/rules/015-semantic-export-compliance.mdc",
+      "title": "Related ADRs: ADR-015 (JSON-LD & RDF Graph Exports + Visualization Interface)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1030
+    },
+    {
+      "path": ".cursor/rules/016-visualization-contract-sync.mdc",
+      "title": "Rule 016 \u2014 DEPRECATED",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1164
+    },
+    {
+      "path": ".cursor/rules/017-agent-docs-presence.mdc",
+      "title": "Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1017
+    },
+    {
+      "path": ".cursor/rules/018-ssot-linkage.mdc",
+      "title": "Related ADRs: ADR-013 (Comprehensive documentation synchronization enhancement)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1035
+    },
+    {
+      "path": ".cursor/rules/019-metrics-contract-sync.mdc",
+      "title": "Metrics Contract Synchronization Rule",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1586
+    },
+    {
+      "path": ".cursor/rules/020-ontology-forward-compat.mdc",
+      "title": "Ontology Forward Compatibility Rule",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1775
+    },
+    {
+      "path": ".cursor/rules/021-stats-proof.mdc",
+      "title": "Rule 021 \u2014 Stats Proof (PR-016/017)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1215
+    },
+    {
+      "path": ".cursor/rules/022-visualization-contract-sync.mdc",
+      "title": "Rule 022 \u2014 Visualization Contract Sync",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 862
+    },
+    {
+      "path": ".cursor/rules/023-visualization-api-spec.mdc",
+      "title": "Rule 023 \u2014 Visualization API Spec",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 239
+    },
+    {
+      "path": ".cursor/rules/024-dashboard-ui-spec.mdc",
+      "title": "Rule 024 \u2014 Dashboard UI Spec",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 323
+    },
+    {
+      "path": ".cursor/rules/025-phase-gate.mdc",
+      "title": "Rule 025 \u2014 Multi-Temporal Analytics Enforcement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 1714
+    },
+    {
+      "path": ".cursor/rules/026-system-enforcement-bridge.mdc",
+      "title": "Rule 026 \u2014 System Enforcement Bridge",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 394
+    },
+    {
+      "path": ".cursor/rules/027-docs-sync-gate.mdc",
+      "title": "Rule 027 \u2014 Docs Sync Gate",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.010857-08:00",
+      "size_bytes": 295
+    },
+    {
+      "path": ".cursor/rules/028-phase-freshness.mdc",
+      "title": "Rule 028 \u2014 Phase Freshness",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 262
+    },
+    {
+      "path": ".cursor/rules/029-adr-coverage.mdc",
+      "title": "Rule 029 \u2014 ADR Coverage",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T11:12:17.442941-08:00",
+      "size_bytes": 266
+    },
+    {
+      "path": ".cursor/rules/030-share-sync.mdc",
+      "title": "Share Directory Synchronization (Always Required)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T12:31:53.095232-08:00",
+      "size_bytes": 1804
+    },
+    {
+      "path": ".cursor/rules/031-correlation-visualization-validation.mdc",
+      "title": "Rule 031 \u2014 Correlation Visualization Validation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 3255
+    },
+    {
+      "path": ".cursor/rules/032-pattern-integrity-validation.mdc",
+      "title": "Rule 032 \u2014 Pattern Integrity Validation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 2137
+    },
+    {
+      "path": ".cursor/rules/033-visualization-api-validation.mdc",
+      "title": "Rule 033 \u2014 Visualization API Validation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 2071
+    },
+    {
+      "path": ".cursor/rules/034-temporal-suite.mdc",
+      "title": "Rule 034 \u2014 Temporal Analytics Suite (Phase 8)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1457
+    },
+    {
+      "path": ".cursor/rules/035-forecasting-spec.mdc",
+      "title": "Rule 035 \u2014 Forecasting Spec (DEPRECATED)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 269
+    },
+    {
+      "path": ".cursor/rules/036-temporal-visualization-spec.mdc",
+      "title": "Rule 036 \u2014 Temporal Visualization Spec (DEPRECATED)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 291
+    },
+    {
+      "path": ".cursor/rules/037-data-persistence-completeness.mdc",
+      "title": "Rule 037 \u2014 Data Persistence Completeness",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 789
+    },
+    {
+      "path": ".cursor/rules/038-exports-smoke-gate.mdc",
+      "title": "Rule 038 \u2014 Exports Smoke Gate",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 682
+    },
+    {
+      "path": ".cursor/rules/039-execution-contract.mdc",
+      "title": "039 Execution Contract",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 677
+    },
+    {
+      "path": ".cursor/rules/040-ci-triage-playbook.mdc",
+      "title": "040 Ci Triage Playbook",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 718
+    },
+    {
+      "path": ".cursor/rules/041-pr-merge-policy.mdc",
+      "title": "041 Pr Merge Policy",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 409
+    },
+    {
+      "path": ".cursor/rules/042-formatter-single-source-of-truth.mdc",
+      "title": "042 \u2014 Formatter Single Source of Truth (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 352
+    },
+    {
+      "path": ".cursor/rules/043-ci-db-bootstrap.mdc",
+      "title": "043 \u2014 CI DB Bootstrap & Empty-Data Handling (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 592
+    },
+    {
+      "path": ".cursor/rules/044-share-manifest-contract.mdc",
+      "title": "044 \u2014 Share Manifest Contract (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 298
+    },
+    {
+      "path": ".cursor/rules/045-rerank-blend-SSOT.mdc",
+      "title": "045 \u2014 Rerank Blend is SSOT (AlwaysApply)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 269
+    },
+    {
+      "path": ".cursor/rules/046-ci-hermetic-fallbacks.mdc",
+      "title": "046 \u2014 Hermetic CI Fallbacks (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 742
+    },
+    {
+      "path": ".cursor/rules/047-reserved.mdc",
+      "title": "047 Reserved",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:32.075522-08:00",
+      "size_bytes": 181
+    },
+    {
+      "path": ".cursor/rules/048-reserved.mdc",
+      "title": "048 Reserved",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:32.076522-08:00",
+      "size_bytes": 181
+    },
+    {
+      "path": ".cursor/rules/049-gpt5-contract-v5.2.mdc",
+      "title": "049 Gpt5 Contract V5.2",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 761
+    },
+    {
+      "path": ".cursor/rules/050-ops-contract.mdc",
+      "title": "\ud83e\udded Gemantria \u2014 OPS Contract v6.2.3",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T10:01:53.370207-08:00",
+      "size_bytes": 9089
+    },
+    {
+      "path": ".cursor/rules/051-cursor-insight.mdc",
+      "title": "051 \u2014 Cursor Insight & Handoff (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T12:42:24.042711-08:00",
+      "size_bytes": 6390
+    },
+    {
+      "path": ".cursor/rules/052-tool-priority.mdc",
+      "title": "052 \u2014 Tool Priority & Context Guidance (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:35:19.801212-08:00",
+      "size_bytes": 851
+    },
+    {
+      "path": ".cursor/rules/053-idempotence.mdc",
+      "title": "053 \u2014 Idempotent Baseline (OPS v6.2.1)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 670
+    },
+    {
+      "path": ".cursor/rules/053-pm-dms-integration.mdc",
+      "title": "Rule-053: PM DMS-First Context Discovery",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T13:37:45.959540-08:00",
+      "size_bytes": 5095
+    },
+    {
+      "path": ".cursor/rules/054-reuse-first.mdc",
+      "title": "Rule-054 \u2014 Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 739
+    },
+    {
+      "path": ".cursor/rules/055-auto-docs-sync.mdc",
+      "title": "055 \u2014 Auto-Docs Sync Pass (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 277
+    },
+    {
+      "path": ".cursor/rules/056-ui-generation.mdc",
+      "title": "056 Ui Generation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 853
+    },
+    {
+      "path": ".cursor/rules/057-embedding-consistency.mdc",
+      "title": "Rule 057 \u2014 EMBEDDING CONSISTENCY CI CHECKS (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 1505
+    },
+    {
+      "path": ".cursor/rules/058-auto-housekeeping.mdc",
+      "title": "Rule 058 \u2014 Auto-Housekeeping Post-Change (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311403-08:00",
+      "size_bytes": 6751
+    },
+    {
+      "path": ".cursor/rules/059-context-persistence.mdc",
+      "title": "059 \u2014 Context Persistence (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.918301-08:00",
+      "size_bytes": 218
+    },
+    {
+      "path": ".cursor/rules/060-response-style.mdc",
+      "title": "Rule-060: Response Style",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T08:40:51.994626-08:00",
+      "size_bytes": 382
+    },
+    {
+      "path": ".cursor/rules/061-ai-learning-tracking.mdc",
+      "title": "Rule 061 \u2014 AI Learning Tracking (AlwaysApply: false, but recommended)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 2469
+    },
+    {
+      "path": ".cursor/rules/062-environment-validation.mdc",
+      "title": "Environment Validation (Always Required)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T14:40:52.639370-08:00",
+      "size_bytes": 4882
+    },
+    {
+      "path": ".cursor/rules/063-git-safety.mdc",
+      "title": "Git Safety (No Destructive Operations)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T12:31:53.095232-08:00",
+      "size_bytes": 5022
+    },
+    {
+      "path": ".cursor/rules/064-ai-tracking-contract.mdc",
+      "title": "064 Ai Tracking Contract",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.611414-08:00",
+      "size_bytes": 559
+    },
+    {
+      "path": ".cursor/rules/065-auto-normalize.mdc",
+      "title": "Rule 065 \u2014 Auto-Normalize on Branch Switch & PR Events",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:23:25.143359-08:00",
+      "size_bytes": 755
+    },
+    {
+      "path": ".cursor/rules/066-lm-studio-appimage-update.mdc",
+      "title": "066 \u2014 LM Studio AppImage Update & Dock Integration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T07:46:09.480424-08:00",
+      "size_bytes": 4789
+    },
+    {
+      "path": ".cursor/rules/067-atlas-webproof.mdc",
+      "title": "Rule 067 \u2014 Atlas Webproof (Browser-Verified UI)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T23:02:43.622551-08:00",
+      "size_bytes": 777
+    },
+    {
+      "path": ".cursor/rules/068-gpt-docs-sync.mdc",
+      "title": "068 \u2014 GPT Documentation Sync (AlwaysApply)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:49:26.143267-08:00",
+      "size_bytes": 5761
+    },
+    {
+      "path": ".cursor/rules/README.md",
+      "title": "Cursor IDE Configuration Rules",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T11:24:02.770358-08:00",
+      "size_bytes": 12137
+    },
+    {
+      "path": ".cursor/runbooks/NEXT_STEPS_025.md",
+      "title": "NEXT_STEPS \u2014 Phase-9 Advanced Calibration + Quality Trend (Active v1)",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.103451-07:00",
+      "size_bytes": 1550
+    },
+    {
+      "path": ".cursor/runbooks/NEXT_STEPS_026.md",
+      "title": "NEXT_STEPS \u2014 Edge audit & anomaly badges (026) (Active v1)",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.104121-07:00",
+      "size_bytes": 1676
+    },
+    {
+      "path": ".cursor/templates/NEXT_STEPS.template.md",
+      "title": "NEXT_STEPS \u2014 <short goal> (Active v1)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.104121-07:00",
+      "size_bytes": 569
+    },
+    {
+      "path": "DATA_FLOW_DIAGRAM.md",
+      "title": "Gemantria Data Flow Architecture",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.104357-07:00",
+      "size_bytes": 6356
+    },
+    {
+      "path": "docs/adr/029-remove-legacy-scripts.md",
+      "title": "ADR-029: Remove legacy offline scripts in favor of LangGraph orchestrator",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.982678-08:00",
+      "size_bytes": 559
+    },
+    {
+      "path": "docs/adr/030-db-seeded-noun-source.md",
+      "title": "ADR-030: DB-seeded noun source for STRICT extraction",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T22:12:53.356435-08:00",
+      "size_bytes": 781
+    },
+    {
+      "path": "docs/adr/ADR-063-code-exec-ts.md",
+      "title": "ADR-063: TS Code-Execution Sandbox (PoC)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T10:10:45.660504-08:00",
+      "size_bytes": 513
+    },
+    {
+      "path": "docs/adr/ADR-064-rfc3339-fast-lane.md",
+      "title": "ADR-064: RFC3339 Fast-Lane Contract for Graph Exports",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T10:46:36.703609-08:00",
+      "size_bytes": 674
+    },
+    {
+      "path": "docs/adr/AGENTS.md",
+      "title": "AGENTS.md - ADR Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654211-08:00",
+      "size_bytes": 4623
+    },
+    {
+      "path": "docs/ADRs/010-chapter-mode-extraction.md",
+      "title": "ADR-010: Chapter-Mode Execution for OT Extraction",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 1275
+    },
+    {
+      "path": "docs/ADRs/ADR-000-langgraph.md",
+      "title": "ADR-000: Orchestration via LangGraph (StateGraph)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 2702
+    },
+    {
+      "path": "docs/ADRs/ADR-001-two-db.md",
+      "title": "ADR-001: Two-DB Safety (bible_db RO; gematria RW)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 2392
+    },
+    {
+      "path": "docs/ADRs/ADR-002-gematria-rules.md",
+      "title": "ADR-002: Gematria and Normalization Rules",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 2621
+    },
+    {
+      "path": "docs/ADRs/ADR-003-batch-semantics.md",
+      "title": "ADR-003: Batch Semantics & Validation Gates",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 2035
+    },
+    {
+      "path": "docs/ADRs/ADR-004-postgres-checkpointer.md",
+      "title": "ADR-004: Postgres Checkpointer with BaseCheckpointSaver Interface",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 4714
+    },
+    {
+      "path": "docs/ADRs/ADR-005-metrics-logging.md",
+      "title": "ADR-005: Metrics & Structured Logging",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 2058
+    },
+    {
+      "path": "docs/ADRs/ADR-006-observability-dashboards.md",
+      "title": "ADR-006: Observability Dashboards & Queries",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 1233
+    },
+    {
+      "path": "docs/ADRs/ADR-008-confidence-validation.md",
+      "title": "ADR-008: Confidence-Aware Batch Validation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 4688
+    },
+    {
+      "path": "docs/ADRs/ADR-009-semantic-aggregation.md",
+      "title": "ADR-009: Semantic Aggregation & Network Analysis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 5977
+    },
+    {
+      "path": "docs/ADRs/ADR-010-qwen-integration.md",
+      "title": "ADR-010: Qwen3 Integration for Real Semantic Intelligence",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T11:42:23.654908-08:00",
+      "size_bytes": 8663
+    },
+    {
+      "path": "docs/ADRs/ADR-011-concept-network-verification.md",
+      "title": "ADR-011: Concept Network Health Verification Views",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 3019
+    },
+    {
+      "path": "docs/ADRs/ADR-012-concept-network-dimension-fix.md",
+      "title": "ADR-012: Concept Network Vector Dimension Correction",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 3262
+    },
+    {
+      "path": "docs/ADRs/ADR-013-documentation-sync-enhancement.md",
+      "title": "ADR-013: Comprehensive Documentation Synchronization Enhancement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:46:26.884966-08:00",
+      "size_bytes": 9592
+    },
+    {
+      "path": "docs/ADRs/ADR-014-relations-and-pattern-discovery.md",
+      "title": "ADR-014: Relations & Pattern Discovery",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 2206
+    },
+    {
+      "path": "docs/ADRs/ADR-015-jsonld-and-visualization.md",
+      "title": "ADR-015: JSON-LD & RDF Graph Exports + Visualization Interface",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 6474
+    },
+    {
+      "path": "docs/ADRs/ADR-016-insight-metrics-and-ontology.md",
+      "title": "ADR-016: Insight Metrics & Ontology Enrichment",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 2322
+    },
+    {
+      "path": "docs/ADRs/ADR-017-agent-documentation-presence.md",
+      "title": "ADR-017: Agent Documentation Presence Enforcement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 4692
+    },
+    {
+      "path": "docs/ADRs/ADR-018-pattern-correlation.md",
+      "title": "ADR-018: Pattern Correlation Engine",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:46:26.884966-08:00",
+      "size_bytes": 5589
+    },
+    {
+      "path": "docs/ADRs/ADR-019-forest-governance.md",
+      "title": "ADR-019: Forest Governance & Phase Gate System",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 4916
+    },
+    {
+      "path": "docs/ADRs/ADR-020-ontology-forward-compatibility.md",
+      "title": "ADR-020: Ontology Forward Compatibility",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 5026
+    },
+    {
+      "path": "docs/ADRs/ADR-021-metrics-contract-synchronization.md",
+      "title": "ADR-021: Metrics Contract Synchronization",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 4956
+    },
+    {
+      "path": "docs/ADRs/ADR-022-cross-text-pattern-analysis.md",
+      "title": "ADR-022: Cross-Text Pattern Analysis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 5212
+    },
+    {
+      "path": "docs/ADRs/ADR-022-system-enforcement-bridge.md",
+      "title": "ADR-022: System Enforcement Bridge",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 9065
+    },
+    {
+      "path": "docs/ADRs/ADR-023-visualization-api-and-dashboard.md",
+      "title": "ADR-023: Visualization API and Dashboard",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 6011
+    },
+    {
+      "path": "docs/ADRs/ADR-025-multi-temporal-analytics.md",
+      "title": "ADR-025: Multi-Temporal Analytics & Predictive Patterns",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 8152
+    },
+    {
+      "path": "docs/ADRs/ADR-026-reranker-bi-encoder-proxy.md",
+      "title": "ADR-026: Reranker Bi-Encoder Proxy Implementation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 5243
+    },
+    {
+      "path": "docs/ADRs/ADR-033-ai-nouns-ssot-contract.md",
+      "title": "ADR-033: AI Nouns SSOT Contract (v1)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 2444
+    },
+    {
+      "path": "docs/ADRs/ADR-034-uuid-key-evolution.md",
+      "title": "ADR-034: UUID Key Evolution and FK Realignment",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 416
+    },
+    {
+      "path": "docs/ADRs/ADR-055-auto-docs-sync-ci.md",
+      "title": "ADR-055: Auto-Docs Sync CI Enforcement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T11:42:24.511298-08:00",
+      "size_bytes": 750
+    },
+    {
+      "path": "docs/ADRs/ADR-056-auto-housekeeping-ci.md",
+      "title": "ADR-056: Auto-Housekeeping CI Enforcement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T11:54:41.724255-08:00",
+      "size_bytes": 8472
+    },
+    {
+      "path": "docs/ADRs/ADR-057-context-persistence-ci.md",
+      "title": "ADR-057: Context Persistence CI Enforcement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 2279
+    },
+    {
+      "path": "docs/ADRs/ADR-058-gpt-system-prompt-governance.md",
+      "title": "ADR-058: GPT System Prompt Requirements as Operational Governance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 3198
+    },
+    {
+      "path": "docs/ADRs/AGENTS.md",
+      "title": "AGENTS.md - Architectural Decision Records Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.010857-08:00",
+      "size_bytes": 7482
+    },
+    {
+      "path": "docs/AGENTS.md",
+      "title": "AGENTS.md - Documentation Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:13:52.844946-08:00",
+      "size_bytes": 5352
+    },
+    {
+      "path": "docs/AI_LEARNING_SYSTEM_AGENTS.md",
+      "title": "AI_LEARNING_SYSTEM_AGENTS.md - AI Learning & Analytics Agents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 8707
+    },
+    {
+      "path": "docs/AI_LEARNING_SYSTEM.md",
+      "title": "\ud83e\udd16 AI Learning & Analytics System",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.981210-08:00",
+      "size_bytes": 10446
+    },
+    {
+      "path": "docs/analysis/AGENTS.md",
+      "title": "AGENTS.md - docs/analysis Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 538
+    },
+    {
+      "path": "docs/ANALYSIS/AGENTS.md",
+      "title": "AGENTS.md - docs/ANALYSIS Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 538
+    },
+    {
+      "path": "docs/analysis/BRANCH_FRAGMENTATION_ISSUE.md",
+      "title": "Branch Fragmentation Issue \u2014 Critical Repository Health Problem",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.315528-08:00",
+      "size_bytes": 10319
+    },
+    {
+      "path": "docs/analysis/BRANCH_FRAGMENTATION_SUMMARY.md",
+      "title": "Branch Fragmentation Issue \u2014 Quick Reference for GPT Agents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.315528-08:00",
+      "size_bytes": 3123
+    },
+    {
+      "path": "docs/analysis/bringup_research.md",
+      "title": "Bring-up System Research Dossier",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.315528-08:00",
+      "size_bytes": 29724
+    },
+    {
+      "path": "docs/analysis/DOC_ARCHIVE_DRYRUN.md",
+      "title": "Archive Dry-Run Plan",
+      "doc_type": "legacy",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 120129
+    },
+    {
+      "path": "docs/analysis/DOC_DM002_CANONICAL_PREVIEW.md",
+      "title": "DM-002 Canonical vs Archive Preview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 61491
+    },
+    {
+      "path": "docs/analysis/DOC_DM002_SUMMARY.md",
+      "title": "DM-002 Document Classification Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 732
+    },
+    {
+      "path": "docs/analysis/DOC_DUPLICATES_REPORT.md",
+      "title": "Document Duplicates Report (DM-001)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.072016-08:00",
+      "size_bytes": 202141
+    },
+    {
+      "path": "docs/analysis/ORPHANS_CANDIDATE_REPORT.md",
+      "title": "Orphan Candidates Report",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.072016-08:00",
+      "size_bytes": 5396
+    },
+    {
+      "path": "docs/analysis/PHASE_1_2_STATUS.md",
+      "title": "Phase-1 & Phase-2 Control Plane Status Analysis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T19:57:45.043553-08:00",
+      "size_bytes": 5899
+    },
+    {
+      "path": "docs/analysis/phase7_governance/AGENTS.snapshot.md",
+      "title": "AGENTS.md \u2014 Gemantria Agent Framework",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316095-08:00",
+      "size_bytes": 70705
+    },
+    {
       "path": "docs/analysis/phase7_governance/COMPREHENSIVE_SYSTEM_REPORT.md",
       "title": "Gemantria System \u2014 Comprehensive Implementation Report",
       "doc_type": "reference",
@@ -1511,6 +3158,1743 @@
       "is_canonical": true,
       "last_modified": "2025-11-16T17:55:27.316240-08:00",
       "size_bytes": 42363
+    },
+    {
+      "path": "docs/analysis/phase7_governance/forest_overview.snapshot.md",
+      "title": "Forest Overview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 6262
+    },
+    {
+      "path": "docs/analysis/phase7_governance/HOUSEKEEPING_AUDIT_SUMMARY.md",
+      "title": "Phase-7 Governance Housekeeping & Audit Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 13575
+    },
+    {
+      "path": "docs/analysis/phase7_governance/MASTER_PLAN.snapshot.md",
+      "title": "MASTER PLAN \u2014 Gemantria Pipeline Project",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.637346-08:00",
+      "size_bytes": 36510
+    },
+    {
+      "path": "docs/analysis/phase7_governance/PHASE_1_7_DRIFT_MAP.md",
+      "title": "Phase 1-7 Drift Map",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 14999
+    },
+    {
+      "path": "docs/analysis/phase7_governance/PHASE_1_7_GOVERNANCE_DRIFT_MAP.md",
+      "title": "Phase 1\u20137 Unified Governance Drift Map",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 6449
+    },
+    {
+      "path": "docs/analysis/phase7_governance/PHASE_7_GOVERNANCE_DRIFT_MAP.md",
+      "title": "Phase-7 Governance Drift Map",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 14289
+    },
+    {
+      "path": "docs/analysis/phase7_governance/pm.snapshot.after_db.md",
+      "title": "PM Snapshot \u2014 GemantriaV.2",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 1623
+    },
+    {
+      "path": "docs/ANALYSIS/rule-enforcement-gaps.md",
+      "title": "Rule Enforcement Gaps Analysis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:17:01.274844-08:00",
+      "size_bytes": 10083
+    },
+    {
+      "path": "docs/atlas/AGENTS.md",
+      "title": "AGENTS.md - docs/atlas Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:44:19.361963-08:00",
+      "size_bytes": 3110
+    },
+    {
+      "path": "docs/atlas/mcp_examples.md",
+      "title": "MCP Examples (psql)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:37:04.489486-08:00",
+      "size_bytes": 668
+    },
+    {
+      "path": "docs/atlas/README.md",
+      "title": "Atlas Mermaid bundle",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:50:44.799947-08:00",
+      "size_bytes": 3559
+    },
+    {
+      "path": "docs/audits/AGENTS.md",
+      "title": "AGENTS.md - Audits Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654297-08:00",
+      "size_bytes": 4577
+    },
+    {
+      "path": "docs/audits/AGENTS_MD_AUDIT_20251112.md",
+      "title": "AGENTS.md Documentation Audit \u2014 2025-11-12",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654387-08:00",
+      "size_bytes": 13901
+    },
+    {
+      "path": "docs/audits/AUDIT_DB_ORIGINALS.md",
+      "title": "Audit Db Originals",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T09:29:10.201345-08:00",
+      "size_bytes": 503
+    },
+    {
+      "path": "docs/audits/governance-audit-20251108.md",
+      "title": "Governance Audit Report \u2014 2025-11-08",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T17:46:26.884966-08:00",
+      "size_bytes": 10454
+    },
+    {
+      "path": "docs/consumers/AGENTS.md",
+      "title": "AGENTS.md - Consumers Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654473-08:00",
+      "size_bytes": 3680
+    },
+    {
+      "path": "docs/consumers/NOUN_INDEX.md",
+      "title": "Noun Consumer Bridge",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 834
+    },
+    {
+      "path": "docs/consumers/TEMPORAL_STRIP.md",
+      "title": "Temporal Strip Export (CSV/PNG)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 965
+    },
+    {
+      "path": "docs/dashboard.md",
+      "title": "Monitoring Dashboard",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 171
+    },
+    {
+      "path": "docs/DECISION_LOG.md",
+      "title": "\ud83e\uddfe Gemantria Decision Log (Chronological)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 761
+    },
+    {
+      "path": "docs/evidence/AGENTS.md",
+      "title": "AGENTS.md - docs/evidence Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 538
+    },
+    {
+      "path": "docs/evidence/badges_manifest.md",
+      "title": "Badges manifest \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246312-08:00",
+      "size_bytes": 865
+    },
+    {
+      "path": "docs/evidence/call_graph.md",
+      "title": "Call Graph",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.728525-08:00",
+      "size_bytes": 330
+    },
+    {
+      "path": "docs/evidence/class_diagram.md",
+      "title": "Class Diagram",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.728846-08:00",
+      "size_bytes": 318
+    },
+    {
+      "path": "docs/evidence/dependencies.md",
+      "title": "Dependencies",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.728192-08:00",
+      "size_bytes": 325
+    },
+    {
+      "path": "docs/evidence/execution_live.md",
+      "title": "Execution Live",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.675798-08:00",
+      "size_bytes": 386
+    },
+    {
+      "path": "docs/evidence/exports_json_badge.md",
+      "title": "exports_json.svg \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246431-08:00",
+      "size_bytes": 381
+    },
+    {
+      "path": "docs/evidence/exports_json.md",
+      "title": "Exports JSON \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246360-08:00",
+      "size_bytes": 1005
+    },
+    {
+      "path": "docs/evidence/exports_rfc3339.md",
+      "title": "RFC3339 timestamps \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246474-08:00",
+      "size_bytes": 1072
+    },
+    {
+      "path": "docs/evidence/extraction_accuracy.md",
+      "title": "Extraction accuracy \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246517-08:00",
+      "size_bytes": 703
+    },
+    {
+      "path": "docs/evidence/knowledge_graph.md",
+      "title": "Knowledge Graph",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.729147-08:00",
+      "size_bytes": 327
+    },
+    {
+      "path": "docs/evidence/kpis.md",
+      "title": "KPIs",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.727773-08:00",
+      "size_bytes": 793
+    },
+    {
+      "path": "docs/evidence/pipeline_flow_historical.md",
+      "title": "Pipeline Flow Historical",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T19:40:48.707125-08:00",
+      "size_bytes": 340
+    },
+    {
+      "path": "docs/evidence/xrefs_metrics.md",
+      "title": "Xrefs metrics \u2705",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T14:03:22.246558-08:00",
+      "size_bytes": 564
+    },
+    {
+      "path": "docs/expansion.md",
+      "title": "Expansion Metrics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 428
+    },
+    {
+      "path": "docs/FIGMA_MCP_SETUP.md",
+      "title": "Figma MCP Integration Setup Guide",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105947-07:00",
+      "size_bytes": 8491
+    },
+    {
+      "path": "docs/forest/AGENTS.md",
+      "title": "AGENTS.md \u2014 docs/forest/ Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.010857-08:00",
+      "size_bytes": 3157
+    },
+    {
+      "path": "docs/forest/overview.md",
+      "title": "Forest Overview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:01:55.595836-08:00",
+      "size_bytes": 6277
+    },
+    {
+      "path": "docs/forest/README.md",
+      "title": "docs/forest/ \u2014 Project Forest Overview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.107553-07:00",
+      "size_bytes": 1496
+    },
+    {
+      "path": "docs/handoff/2025-11-12-PLAN-074-M14-complete.md",
+      "title": "PLAN-074 M14 Completion Snapshot",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:52:11.568882-08:00",
+      "size_bytes": 671
+    },
+    {
+      "path": "docs/handoff/2025-11-13-PLAN-074-M14-E69-OPS-v6.3.md",
+      "title": "Chat Handoff \u2014 PLAN-074 M14 E69 + OPS v6.3 Governance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:49:16.233240-08:00",
+      "size_bytes": 9127
+    },
+    {
+      "path": "docs/handoff/AGENTS.md",
+      "title": "AGENTS.md - docs/handoff Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 535
+    },
+    {
+      "path": "docs/handoff/GPT_PM_CONTEXT_REBUILD.md",
+      "title": "GPT PM Context Rebuild \u2014 Complete Project Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T19:57:45.043553-08:00",
+      "size_bytes": 14892
+    },
+    {
+      "path": "docs/handoff/PHASE6P_COMPLETE_HANDOFF.md",
+      "title": "Handoff Summary \u2014 Phase-6P Complete, PR #560 Merged",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 5547
+    },
+    {
+      "path": "docs/handoff/PLAN-073-M4-handoff.md",
+      "title": "PLAN-073 M4 Handoff Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T09:20:48.234802-08:00",
+      "size_bytes": 10223
+    },
+    {
+      "path": "docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md",
+      "title": "PLAN-092 AgentPM-Next (M1-M4) Handoff Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.637346-08:00",
+      "size_bytes": 5522
+    },
+    {
+      "path": "docs/hints_registry.md",
+      "title": "\ud83d\udd25\ud83d\udd25\ud83d\udd25 LOUD HINTS REGISTRY \ud83d\udd25\ud83d\udd25\ud83d\udd25",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.982678-08:00",
+      "size_bytes": 8125
+    },
+    {
+      "path": "docs/INDEX.md",
+      "title": "Gemantria Repository Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.612589-08:00",
+      "size_bytes": 5791
+    },
+    {
+      "path": "docs/INGEST_BIBLE_DB.md",
+      "title": "Bible DB Read-Only Ingestion",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:43.702580-08:00",
+      "size_bytes": 647
+    },
+    {
+      "path": "docs/ingestion/AGENTS.md",
+      "title": "AGENTS.md - Ingestion Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654641-08:00",
+      "size_bytes": 3890
+    },
+    {
+      "path": "docs/ingestion/REAL_DATA_INGESTION.md",
+      "title": "Real-Data Ingestion Plan (Phase-9, reuse-first)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.612673-08:00",
+      "size_bytes": 1067
+    },
+    {
+      "path": "docs/MASTER_PLAN.md",
+      "title": "MASTER_PLAN \u2014 Phase 0 Bootstrap (Gemantria)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:42.568915-07:00",
+      "size_bytes": 863
+    },
+    {
+      "path": "docs/ops/AGENTS.md",
+      "title": "AGENTS.md - docs/ops Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 523
+    },
+    {
+      "path": "docs/OPS/AGENTS.md",
+      "title": "AGENTS.md - docs/OPS Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 523
+    },
+    {
+      "path": "docs/OPS_BOOK_SMOKE.md",
+      "title": "Book Pipeline \u2014 Local Smoke",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T12:36:01.460956-07:00",
+      "size_bytes": 178
+    },
+    {
+      "path": "docs/OPS_CALIBRATION.md",
+      "title": "Rerank Calibration \u2014 Local Smoke",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T12:36:01.460956-07:00",
+      "size_bytes": 527
+    },
+    {
+      "path": "docs/ops/DSN_NETWORK_SETUP.md",
+      "title": "Network DSN Setup for CI",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T19:24:26.300558-08:00",
+      "size_bytes": 2540
+    },
+    {
+      "path": "docs/ops/master_reference_tracking.md",
+      "title": "Master Reference Tracking (OPS v6.2)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T18:47:01.719454-08:00",
+      "size_bytes": 483
+    },
+    {
+      "path": "docs/ops/mcp_README.md",
+      "title": "Knowledge MCP \u2014 Operator Notes (PR-3)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T22:29:11.173430-08:00",
+      "size_bytes": 696
+    },
+    {
+      "path": "docs/OPS/NEXT_STEPS.md",
+      "title": "Gemantria \u2013 NEXT STEPS (Ops Backlog, v1)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T11:22:18.446275-08:00",
+      "size_bytes": 1695
+    },
+    {
+      "path": "docs/OPS_VERIFY.md",
+      "title": "Ops Verifier (Local-Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105985-07:00",
+      "size_bytes": 590
+    },
+    {
+      "path": "docs/optimization.md",
+      "title": "Optimization Metrics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 165
+    },
+    {
+      "path": "docs/phase10/AGENTS.md",
+      "title": "AGENTS.md - Phase 10 Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654721-08:00",
+      "size_bytes": 4180
+    },
+    {
+      "path": "docs/phase10/DASHBOARD_PLAN.md",
+      "title": "Phase-10 \u2014 Dashboard Plan (Docs-only; Hermetic)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T15:00:37.004439-08:00",
+      "size_bytes": 984
+    },
+    {
+      "path": "docs/PHASE10_RETROSPECTIVE.md",
+      "title": "Phase 10 Retrospective (P10-UI-03)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 1441
+    },
+    {
+      "path": "docs/phase10/STRUCTURE.md",
+      "title": "Phase-10 UI Structure (Plan)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T15:09:32.861665-08:00",
+      "size_bytes": 806
+    },
+    {
+      "path": "docs/phase10/UI_SPEC.md",
+      "title": "Gemantria UI Integration Spec (Hermetic, Contract-First)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T15:15:24.629945-08:00",
+      "size_bytes": 4059
+    },
+    {
+      "path": "docs/PHASE11_PLAN.md",
+      "title": "Phase 11: UI Enhancement & Data Pipeline Improvement",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 1859
+    },
+    {
+      "path": "docs/PHASE_7F_IMPLEMENTATION_SUMMARY.md",
+      "title": "Phase-7F Implementation Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314636-08:00",
+      "size_bytes": 6642
+    },
+    {
+      "path": "docs/PHASE_7F_MODEL_READINESS_CHECKLIST.md",
+      "title": "Phase-7F: Model Readiness Checklist",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314717-08:00",
+      "size_bytes": 8636
+    },
+    {
+      "path": "docs/PHASE_7F_SUMMARY.md",
+      "title": "Phase-7F: Model Readiness Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314717-08:00",
+      "size_bytes": 4559
+    },
+    {
+      "path": "docs/PHASE8_EVAL.md",
+      "title": "Phase-8 Eval (Local Manifest \u2192 Report)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T12:36:01.460956-07:00",
+      "size_bytes": 9436
+    },
+    {
+      "path": "docs/PHASE8_PLAN.md",
+      "title": "Gemantria \u2014 Phase-8 Plan (Scope & Milestones)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.105985-07:00",
+      "size_bytes": 1051
+    },
+    {
+      "path": "docs/phase9/AGENTS.md",
+      "title": "AGENTS.md - Phase 9 Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654804-08:00",
+      "size_bytes": 5070
+    },
+    {
+      "path": "docs/phase9/ENVELOPE_FIELDS.md",
+      "title": "Ingestion Envelope \u2014 Fields (Plan Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:52:37.834001-08:00",
+      "size_bytes": 1027
+    },
+    {
+      "path": "docs/phase9/FIRST_SNAPSHOT_PLAN.md",
+      "title": "Phase-9 \u2014 First Real Snapshot Plan (Local-Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:54:41.708927-08:00",
+      "size_bytes": 857
+    },
+    {
+      "path": "docs/phase9/INGEST_ENVELOPE.md",
+      "title": "Ingest Envelope (Local-Only Stub)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:58:41.823606-08:00",
+      "size_bytes": 704
+    },
+    {
+      "path": "docs/phase9/INGESTION_PLAN.md",
+      "title": "Phase-9 \u2014 Real-Data Ingestion (Plan Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:13:11.331693-08:00",
+      "size_bytes": 583
+    },
+    {
+      "path": "docs/phase9/MAPPINGS.md",
+      "title": "Phase-9 \u2014 Table Mappings & Field Caps (Plan Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:36:45.987864-08:00",
+      "size_bytes": 699
+    },
+    {
+      "path": "docs/phase9/SNAPSHOTS.md",
+      "title": "Phase-9 \u2014 Snapshot Preparation & Rotation (Local-Only)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:26:29.282201-08:00",
+      "size_bytes": 1251
+    },
+    {
+      "path": "docs/phase9/VALIDATION_README.md",
+      "title": "Phase-9 Local Validation (Hermetic)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T14:22:58.419470-08:00",
+      "size_bytes": 623
+    },
+    {
+      "path": "docs/plan-074/AGENTS.md",
+      "title": "AGENTS.md - docs/plan-074 Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 538
+    },
+    {
+      "path": "docs/plan-074/README.md",
+      "title": "PLAN-074 \u2014 M14 Kickoff (E66\u2013E70)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:27:55.518918-08:00",
+      "size_bytes": 392
+    },
+    {
+      "path": "docs/plans/AGENTPM_NEXT_M4.md",
+      "title": "Implement AgentPM-Next:M4 (Atlas UI Integration)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.637346-08:00",
+      "size_bytes": 1230
+    },
+    {
+      "path": "docs/plans/AGENTS.md",
+      "title": "AGENTS.md - docs/plans Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 529
+    },
+    {
+      "path": "docs/plans/PLAN-072-m2-extraction-correctness.md",
+      "title": "PLAN-072 \u2014 Milestone 2: Extraction Agents Correctness (hermetic)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:58:33.248495-08:00",
+      "size_bytes": 757
+    },
+    {
+      "path": "docs/plans/PLAN-072-resume.md",
+      "title": "PLAN-072 \u2014 Resume Docs Management System & Extraction Agents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:49:42.549392-08:00",
+      "size_bytes": 3292
+    },
+    {
+      "path": "docs/plans/PLAN-079-normalization.md",
+      "title": "PLAN-079 \u2014 Normalize naming & metrics (pre-implementation)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T15:58:18.882208-08:00",
+      "size_bytes": 2353
+    },
+    {
+      "path": "docs/plans/PLAN-080-guarded-calls-execution.md",
+      "title": "PLAN-080 \u2014 Guarded Tool Calls P0 Execution (jsonschema + PoR + adapters + TVs)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:06:02.366867-08:00",
+      "size_bytes": 1937
+    },
+    {
+      "path": "docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md",
+      "title": "PLAN-080: Phase-1+2 Verification Sweep & Tagproof",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.637346-08:00",
+      "size_bytes": 7876
+    },
+    {
+      "path": "docs/plans/PLAN-081-orchestrator-dashboard-polish.md",
+      "title": "PLAN-081 \u2014 Orchestrator Dashboard Polish (Atlas Tile + Browser-Verified Badge)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:13:52.844946-08:00",
+      "size_bytes": 2609
+    },
+    {
+      "path": "docs/plans/PR2-RO-ADAPTER-PLAN.md",
+      "title": "PR-2 Plan: STRICT/Tag-Lane RO Adapter Wiring",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:29:55.575492-08:00",
+      "size_bytes": 1651
+    },
+    {
+      "path": "docs/projects/AGENTS.md",
+      "title": "AGENTS.md - docs/projects Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 538
+    },
+    {
+      "path": "docs/projects/biblescholar/ARCHITECTURE.md",
+      "title": "BibleScholar Architecture",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500610-08:00",
+      "size_bytes": 2627
+    },
+    {
+      "path": "docs/projects/biblescholar/README.md",
+      "title": "BibleScholar Project Documentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500670-08:00",
+      "size_bytes": 8514
+    },
+    {
+      "path": "docs/projects/README.md",
+      "title": "Sibling Projects Documentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500610-08:00",
+      "size_bytes": 1483
+    },
+    {
+      "path": "docs/projects/storymaker/AGENTS.md",
+      "title": "StoryMaker \u2014 AGENTS.md (Index)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500670-08:00",
+      "size_bytes": 2627
+    },
+    {
+      "path": "docs/projects/storymaker/README.md",
+      "title": "StoryMaker Project Documentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500755-08:00",
+      "size_bytes": 4546
+    },
+    {
+      "path": "docs/qwen_integration.md",
+      "title": "Qwen3 Integration Guide",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T07:46:09.480424-08:00",
+      "size_bytes": 10660
+    },
+    {
+      "path": "docs/README.md",
+      "title": "Project Documentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.982388-08:00",
+      "size_bytes": 16508
+    },
+    {
+      "path": "docs/rfcs/000-instrumentation-rollout.md",
+      "title": "RFC 000 \u2014 Instrumentation rollout: lightweight span helpers & initial instruments",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T17:02:23.461707-08:00",
+      "size_bytes": 3109
+    },
+    {
+      "path": "docs/rfcs/AGENTS.md",
+      "title": "AGENTS.md - RFCs Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T18:30:26.673288-08:00",
+      "size_bytes": 5185
+    },
+    {
+      "path": "docs/rfcs/RFC-074-knowledge-sentinels.md",
+      "title": "RFC-074: Knowledge Sentinels (Drift Kill-Switch)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T18:57:41.983633-08:00",
+      "size_bytes": 2335
+    },
+    {
+      "path": "docs/rfcs/RFC-077-browser-verification-template.md",
+      "title": "RFC-077: Mandatory Browser Verification Template (Rule-051 + Rule-067)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T14:40:52.639406-08:00",
+      "size_bytes": 1617
+    },
+    {
+      "path": "docs/rfcs/RFC-078-postgres-knowledge-mcp.md",
+      "title": "RFC-078: Postgres Knowledge MCP (Catalog-as-a-Service, DSN-first)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T15:04:29.690584-08:00",
+      "size_bytes": 2731
+    },
+    {
+      "path": "docs/rfcs/RFC-079-guarded-calls-naming.md",
+      "title": "RFC-079: Guarded Tool Calls \u2014 Naming & Idempotent Migrations (P0)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T15:58:18.882208-08:00",
+      "size_bytes": 1531
+    },
+    {
+      "path": "docs/rfcs/RFC-080-lm-studio-control-plane-integration.md",
+      "title": "RFC-080: LM Studio + Control Plane Integration (Phase-3C)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T14:42:31.662203-08:00",
+      "size_bytes": 13157
+    },
+    {
+      "path": "docs/rfcs/RFC-081-unified-ui-and-biblescholar-module.md",
+      "title": "RFC-081 \u2014 Unified UI & BibleScholar as Module",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T10:57:49.907337-08:00",
+      "size_bytes": 5843
+    },
+    {
+      "path": "docs/runbooks/AGENTS.md",
+      "title": "AGENTS.md - Runbooks Directory",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T13:51:11.753217-08:00",
+      "size_bytes": 6364
+    },
+    {
+      "path": "docs/runbooks/ATLAS_VISUAL_VERIFICATION.md",
+      "title": "Atlas Visual Verification \u2014 Browser Workflow",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T15:02:07.651456-08:00",
+      "size_bytes": 4198
+    },
+    {
+      "path": "docs/runbooks/CODEX_CLI.md",
+      "title": "Codex CLI Integration Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:56:22.062525-08:00",
+      "size_bytes": 3826
+    },
+    {
+      "path": "docs/runbooks/CONTROL_PIPELINE_STATUS.md",
+      "title": "Control Pipeline Status Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 7748
+    },
+    {
+      "path": "docs/runbooks/CONTROL_SCHEMA.md",
+      "title": "Control Schema Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 10058
+    },
+    {
+      "path": "docs/runbooks/CONTROL_STATUS.md",
+      "title": "Control Status Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 7685
+    },
+    {
+      "path": "docs/runbooks/CONTROL_SUMMARY.md",
+      "title": "Control Summary Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T14:00:46.566638-08:00",
+      "size_bytes": 8841
+    },
+    {
+      "path": "docs/runbooks/CONTROL_TABLES.md",
+      "title": "Control Tables Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 5607
+    },
+    {
+      "path": "docs/runbooks/CURSOR_BROWSER_QA.md",
+      "title": "Cursor Browser QA \u2014 XRef Visualization",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T15:44:56.948884-08:00",
+      "size_bytes": 1237
+    },
+    {
+      "path": "docs/runbooks/CURSOR_WORKFLOW_RUNBOOK.md",
+      "title": "Cursor Workflow Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:05:08.993338-08:00",
+      "size_bytes": 759
+    },
+    {
+      "path": "docs/runbooks/DB_HEALTH.md",
+      "title": "DB Health Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 5248
+    },
+    {
+      "path": "docs/runbooks/DSN_SECRETS.md",
+      "title": "DSN Secrets for Release Tags (STRICT)",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T14:46:59.884586-08:00",
+      "size_bytes": 2108
+    },
+    {
+      "path": "docs/runbooks/GEMINI_CLI.md",
+      "title": "Gemini CLI Integration Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T10:11:53.853297-08:00",
+      "size_bytes": 5595
+    },
+    {
+      "path": "docs/runbooks/GOVERNANCE_DB_SSOT.md",
+      "title": "Governance DB SSOT Runbook \u2014 Cursor Rules",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 2673
+    },
+    {
+      "path": "docs/runbooks/GRAPH_IMPORT.md",
+      "title": "Graph Import Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T13:31:17.923829-08:00",
+      "size_bytes": 6146
+    },
+    {
+      "path": "docs/runbooks/GRAPH_OVERVIEW.md",
+      "title": "Graph Overview Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T13:31:17.923829-08:00",
+      "size_bytes": 5414
+    },
+    {
+      "path": "docs/runbooks/HANDOFF_WORKFLOW.md",
+      "title": "Handoff Workflow \u2014 Rule 051",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T07:46:09.480424-08:00",
+      "size_bytes": 3716
+    },
+    {
+      "path": "docs/runbooks/LM_HEALTH.md",
+      "title": "LM Health Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T13:25:28.846682-08:00",
+      "size_bytes": 6434
+    },
+    {
+      "path": "docs/runbooks/LM_STUDIO_SETUP.md",
+      "title": "LM Studio Setup Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:15:01.389360-08:00",
+      "size_bytes": 15666
+    },
+    {
+      "path": "docs/runbooks/MCP_KNOWLEDGE_DB.md",
+      "title": "MCP Knowledge DB \u2014 Bring-up & Proof (RFC-078)",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-11T16:29:55.575492-08:00",
+      "size_bytes": 1180
+    },
+    {
+      "path": "docs/runbooks/MCP_SSE_AUTO_START.md",
+      "title": "MCP SSE Server Auto-Start Guide",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 4182
+    },
+    {
+      "path": "docs/runbooks/OLLAMA_ALTERNATIVE.md",
+      "title": "Ollama Alternative to LM Studio",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 6876
+    },
+    {
+      "path": "docs/runbooks/OLLAMA_AUTO_DISCOVERY.md",
+      "title": "Ollama Auto-Discovery & Model Installation",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 5289
+    },
+    {
+      "path": "docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md",
+      "title": "Phase-6D: Downstream App Read-Only Wiring",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T21:55:53.637735-08:00",
+      "size_bytes": 5854
+    },
+    {
+      "path": "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
+      "title": "PM Snapshot \u2014 Current State (auto-maintained)",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.072016-08:00",
+      "size_bytes": 1682
+    },
+    {
+      "path": "docs/runbooks/SETUP_LM_STUDIO_AND_DB.md",
+      "title": "Setup Guide: LM Studio & Database",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 5994
+    },
+    {
+      "path": "docs/runbooks/SYSTEM_HEALTH.md",
+      "title": "System Health Runbook",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T13:25:28.846682-08:00",
+      "size_bytes": 8514
+    },
+    {
+      "path": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
+      "title": "LM Studio & Database Usage Patterns Reference",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.316386-08:00",
+      "size_bytes": 14581
+    },
+    {
+      "path": "docs/schema/AGENTS.md",
+      "title": "AGENTS.md - Schema Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.654974-08:00",
+      "size_bytes": 6721
+    },
+    {
+      "path": "docs/schemas/AGENTS.md",
+      "title": "AGENTS.md - docs/schemas Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500755-08:00",
+      "size_bytes": 535
+    },
+    {
+      "path": "docs/schema/SCHEMA.md",
+      "title": "Gemantria DB Schema (Phase-1, v6.2.3)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T16:34:40.945896-07:00",
+      "size_bytes": 2144
+    },
+    {
+      "path": "docs/schemas/graph-correlations.schema.md",
+      "title": "Graph Correlations Export Schema",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.070867-08:00",
+      "size_bytes": 1715
+    },
+    {
+      "path": "docs/schemas/graph-patterns.schema.md",
+      "title": "Cross-Text Pattern Correlation Schema",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.070960-08:00",
+      "size_bytes": 2124
+    },
+    {
+      "path": "docs/schemas/graph-stats.schema.md",
+      "title": "GraphStats",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.070796-08:00",
+      "size_bytes": 494
+    },
+    {
+      "path": "docs/schemas/pattern-forecast.schema.md",
+      "title": "Pattern Forecast Analytics Schema",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.070655-08:00",
+      "size_bytes": 2232
+    },
+    {
+      "path": "docs/schemas/SSOT_ai-nouns.v1.schema.md",
+      "title": "AI Nouns SSOT",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.078513-08:00",
+      "size_bytes": 472
+    },
+    {
+      "path": "docs/schemas/SSOT_graph.v1.schema.md",
+      "title": "Graph SSOT",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.078431-08:00",
+      "size_bytes": 578
+    },
+    {
+      "path": "docs/schemas/temporal-patterns.schema.md",
+      "title": "Temporal Pattern Analytics Schema",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:04:51.071033-08:00",
+      "size_bytes": 1891
+    },
+    {
+      "path": "docs/sql/AGENTS.md",
+      "title": "AGENTS.md - docs/sql Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500755-08:00",
+      "size_bytes": 523
+    },
+    {
+      "path": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+      "title": "AgentPM Gematria Module \u2014 Extraction Plan",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T10:57:49.906913-08:00",
+      "size_bytes": 8619
+    },
+    {
+      "path": "docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md",
+      "title": "AgentPM-Next:M2 Design Spec \u2014 Doc-Fix Flows",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.636369-08:00",
+      "size_bytes": 9441
+    },
+    {
+      "path": "docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md",
+      "title": "AgentPM-Next:M3 Design Spec \u2014 Doc-Health Control Loop & Reporting",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T19:16:36.636369-08:00",
+      "size_bytes": 11528
+    },
+    {
+      "path": "docs/SSOT/AGENTS.md",
+      "title": "AGENTS.md - SSOT Directory",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:13:52.844946-08:00",
+      "size_bytes": 3710
+    },
+    {
+      "path": "docs/SSOT/ATLAS_GOVERNANCE_SEARCH_PANEL.md",
+      "title": "Atlas Governance Search Panel & Orchestrator Console (Phase-8D)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314877-08:00",
+      "size_bytes": 9239
+    },
+    {
+      "path": "docs/SSOT/AUTOPILOT_ORCHESTRATOR_PLAN.md",
+      "title": "Autopilot \u2192 pmagent Orchestrator Plan (v0)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T10:58:33.331970-08:00",
+      "size_bytes": 4843
+    },
+    {
+      "path": "docs/SSOT/BIBLESCHOLAR_INTAKE.md",
+      "title": "BibleScholar Intake \u2014 Unification Planning",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T12:17:37.092796-08:00",
+      "size_bytes": 2774
+    },
+    {
+      "path": "docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md",
+      "title": "BibleScholar \u2192 AgentPM Migration Plan (Phase-6L)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T11:39:12.218265-08:00",
+      "size_bytes": 31471
+    },
+    {
+      "path": "docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md",
+      "title": "BibleScholar Reference Answer Slice (Phase-6P)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T12:51:47.028341-08:00",
+      "size_bytes": 4948
+    },
+    {
+      "path": "docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md",
+      "title": "Capability Session \u2192 AI Tracking Mapping (Design)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:49:32.313398-08:00",
+      "size_bytes": 7899
+    },
+    {
+      "path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",
+      "title": "Cursor Workflow Contract (SSOT)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.070016-08:00",
+      "size_bytes": 1095
+    },
+    {
+      "path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT.md",
+      "title": "Cursor Workflow Contract (v2025-11-20)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.070016-08:00",
+      "size_bytes": 2080
+    },
+    {
+      "path": "docs/SSOT/data_flow.md",
+      "title": "SSOT: Complete Data Flow Architecture",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 17793
+    },
+    {
+      "path": "docs/SSOT/data_flow_visual.md",
+      "title": "Visual Data Flow Summary",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 3255
+    },
+    {
+      "path": "docs/SSOT/DM_002_PLAN.md",
+      "title": "DM-002 \u2014 Canonical vs Archive Classification Plan",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 2473
+    },
+    {
+      "path": "docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md",
+      "title": "Doc Content + pgvector Ingestion Plan \u2014 Governance/Docs RAG",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314967-08:00",
+      "size_bytes": 10155
+    },
+    {
+      "path": "docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md",
+      "title": "SSOT: Doc Control Panel Data Contract",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 19595
+    },
+    {
+      "path": "docs/SSOT/DOC_REGISTRY_PLAN.md",
+      "title": "Postgres Doc Registry Plan \u2014 Eliminating Share Drift",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.314967-08:00",
+      "size_bytes": 9915
+    },
+    {
+      "path": "docs/SSOT/EPOCH_LEDGER.md",
+      "title": "EPOCH_LEDGER \u2014 Major System Transitions",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 1597
+    },
+    {
+      "path": "docs/SSOT/GEMANTRIA_OPS_v6.3.txt",
+      "title": "--- OPS OUTPUT SHAPE (required) ---",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:41:29.991548-08:00",
+      "size_bytes": 5525
+    },
+    {
+      "path": "docs/SSOT/GEMATRIA_INTAKE_SCAN.md",
+      "title": "Gematria Intake Scan",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 2459
+    },
+    {
+      "path": "docs/SSOT/GEMATRIA_MASTER_REFERENCE.md",
+      "title": "Gemantria Master Reference \u2013 Version 2.0 (2025-11-10)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:13:32.677234-08:00",
+      "size_bytes": 7054
+    },
+    {
+      "path": "docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md",
+      "title": "Gematria Numerics Intake \u2014 Internal Scan",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T10:57:49.907149-08:00",
+      "size_bytes": 50910
+    },
+    {
+      "path": "docs/SSOT/GPT_REFERENCE_GUIDE.md",
+      "title": "GPT Reference Guide - Gemantria Project Files",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:15:01.389209-08:00",
+      "size_bytes": 11039
+    },
+    {
+      "path": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
+      "title": "--- OPS OUTPUT SHAPE (required) ---",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:15:01.389272-08:00",
+      "size_bytes": 8511
+    },
+    {
+      "path": "docs/SSOT/graph-metrics-api.md",
+      "title": "Graph Metrics API (Canonical)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 3893
+    },
+    {
+      "path": "docs/SSOT/graph-stats-api.md",
+      "title": "SSOT: Graph Statistics API",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 7370
+    },
+    {
+      "path": "docs/SSOT/jsonld-schema.md",
+      "title": "SSOT: JSON-LD Schema for Concept Network Exports",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 6280
+    },
+    {
+      "path": "docs/SSOT/LM_ROUTER_CONTRACT.md",
+      "title": "LM Router Contract (Phase-7C)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:13:42.890464-08:00",
+      "size_bytes": 9188
+    },
+    {
+      "path": "docs/SSOT/LM_WIDGETS.md",
+      "title": "LM Indicator Widget Contract (SSOT)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T19:32:06.700030-08:00",
+      "size_bytes": 737
+    },
+    {
+      "path": "docs/SSOT/MASTER_PLAN.md",
+      "title": "MASTER PLAN \u2014 Gemantria Pipeline Project",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:13:52.844946-08:00",
+      "size_bytes": 52581
+    },
+    {
+      "path": "docs/SSOT/Orchestrator Dashboard - Vision.md",
+      "title": "Orchestrator Dashboard - Vision",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:08:40.473426-08:00",
+      "size_bytes": 2303
+    },
+    {
+      "path": "docs/SSOT/ORCHESTRATOR_SHELL_CONTRACT.md",
+      "title": "Orchestrator UI Shell \u2014 SSOT Contract (v1)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T11:13:52.844946-08:00",
+      "size_bytes": 8579
+    },
+    {
+      "path": "docs/SSOT/PHASE_5_PLAN.md",
+      "title": "Phase-5 \u2014 StoryMaker & BibleScholar LM Integration",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-14T19:32:06.700243-08:00",
+      "size_bytes": 2920
+    },
+    {
+      "path": "docs/SSOT/PHASE_6_PLAN.md",
+      "title": "Phase-6 \u2014 LM Studio Live Usage + DB-Backed Knowledge",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:05:15.427093-08:00",
+      "size_bytes": 4384
+    },
+    {
+      "path": "docs/SSOT/PLAN_072_M1_DMS_GUARDS.md",
+      "title": "PLAN-072 M1: DMS Guard Fixes (Hermetic + CI-Ready)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:41:39.188655-08:00",
+      "size_bytes": 11675
+    },
+    {
+      "path": "docs/SSOT/PLAN_073_M1_KNOWLEDGE_MCP.md",
+      "title": "PLAN-073 M1: Knowledge MCP Foundation (E01\u2013E05)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:03:53.785094-08:00",
+      "size_bytes": 13143
+    },
+    {
+      "path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+      "title": "pmagent \u2014 Current vs Intended State (Control Plane Orchestrator)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:56:27.549318-08:00",
+      "size_bytes": 17191
+    },
+    {
+      "path": "docs/SSOT/PMAGENT_REALITY_CHECK_AI_NOTES.md",
+      "title": "pmagent reality-check \u2014 AI-Generated Notes",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T17:47:03.758661-08:00",
+      "size_bytes": 511
+    },
+    {
+      "path": "docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md",
+      "title": "pmagent reality.check \u2014 Design Document",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T17:28:58.960530-08:00",
+      "size_bytes": 12859
+    },
+    {
+      "path": "docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+      "title": "PM + OPS Behavioral Contract (SSOT)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "size_bytes": 1699
+    },
+    {
+      "path": "docs/SSOT/PM_CONTRACT.md",
+      "title": "PM Contract \u2014 Project Manager Operating Agreement",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T13:37:06.797293-08:00",
+      "size_bytes": 22450
+    },
+    {
+      "path": "docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md",
+      "title": "Project Manager Contract \u2014 Strict SSOT + DMS Mode (v2025-11-20)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T07:59:57.481293-08:00",
+      "size_bytes": 4286
+    },
+    {
+      "path": "docs/SSOT/PROJECTS_INVENTORY.md",
+      "title": "Projects Inventory (Phase-6 6E)",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "size_bytes": 3371
+    },
+    {
+      "path": "docs/SSOT/rdf-ontology.md",
+      "title": "SSOT: RDF Ontology for Concept Network",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 7778
+    },
+    {
+      "path": "docs/SSOT/REFERENCES.md",
+      "title": "SSOT References Primer",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 385
     },
     {
       "path": "docs/SSOT/RULES_INDEX.md",
@@ -1522,6 +4906,60 @@
       "size_bytes": 3283
     },
     {
+      "path": "docs/SSOT/STORYMAKER_INTAKE.md",
+      "title": "StoryMaker Intake \u2014 Unification Planning",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T10:57:49.907337-08:00",
+      "size_bytes": 716
+    },
+    {
+      "path": "docs/SSOT/visualization-config.md",
+      "title": "SSOT: Visualization Configuration",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 10521
+    },
+    {
+      "path": "docs/SSOT/webui-contract.md",
+      "title": "SSOT: WebUI Data Contract",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.106988-07:00",
+      "size_bytes": 7905
+    },
+    {
+      "path": "docs/tickets/AGENTS.md",
+      "title": "AGENTS.md - Tickets Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655098-08:00",
+      "size_bytes": 3152
+    },
+    {
+      "path": "docs/tickets/ENRICH-JSON-REPAIR.md",
+      "title": "ENRICH-JSON-REPAIR",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T22:55:25.318402-08:00",
+      "size_bytes": 355
+    },
+    {
+      "path": "docs/vendor/AGENTS.md",
+      "title": "AGENTS.md - docs/vendor Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500755-08:00",
+      "size_bytes": 532
+    },
+    {
       "path": "docs/VERIFICATION_MATRIX.md",
       "title": "Verification Matrix",
       "doc_type": "reference",
@@ -1529,6 +4967,15 @@
       "is_canonical": true,
       "last_modified": "2025-10-30T19:45:32.106988-07:00",
       "size_bytes": 2843
+    },
+    {
+      "path": "eval/scaling.md",
+      "title": "Scaling Metrics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.528231-08:00",
+      "size_bytes": 157
     },
     {
       "path": "evidence/governance_smoke.tail.txt",
@@ -1576,6 +5023,222 @@
       "size_bytes": 8162
     },
     {
+      "path": "forest_overview.md",
+      "title": "Forest Overview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:42:16.049338-08:00",
+      "size_bytes": 6498
+    },
+    {
+      "path": "GEMANTRIA_MASTER_REFERENCE_v2.md",
+      "title": "Gemantria Master Reference \u2013 Version 2.0 (2025-11-10)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T16:50:44.798360-08:00",
+      "size_bytes": 6729
+    },
+    {
+      "path": "gemini.md",
+      "title": "Gemini Agent Framework Map",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T20:30:35.683740-08:00",
+      "size_bytes": 3333
+    },
+    {
+      "path": ".github/BRANCH_PROTECTION.md",
+      "title": "Branch Protection Configuration for `main`",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.104121-07:00",
+      "size_bytes": 975
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "title": "Pull Request Template",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T15:44:56.948574-08:00",
+      "size_bytes": 1799
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "title": "Pull Request Template",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.311576-08:00",
+      "size_bytes": 188
+    },
+    {
+      "path": ".github/TEMPLATES/NEXT_STEPS.template.md",
+      "title": "NEXT_STEPS (author: GPT-5)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T12:03:19.464300-07:00",
+      "size_bytes": 423
+    },
+    {
+      "path": "GPT_SYSTEM_PROMPT.md",
+      "title": "GPT System Prompt \u2014 SSOT Pointer",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-09T16:14:36.349151-08:00",
+      "size_bytes": 716
+    },
+    {
+      "path": "grafana/README.md",
+      "title": "Grafana Dashboards",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.107864-07:00",
+      "size_bytes": 3035
+    },
+    {
+      "path": "MASTER_PLAN.md",
+      "title": "Gematria v2.0 Master Plan",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T18:20:22.987892-08:00",
+      "size_bytes": 7364
+    },
+    {
+      "path": "MCP_BIBLESCHOLAR_REGISTRATION.md",
+      "title": "MCP Teaching Pipeline - BibleScholar Registration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T13:31:31.656997-08:00",
+      "size_bytes": 1415
+    },
+    {
+      "path": "migrations/AGENTS.md",
+      "title": "AGENTS.md - Database Migrations Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.010857-08:00",
+      "size_bytes": 6390
+    },
+    {
+      "path": "migrations/README.md",
+      "title": "Database Migrations",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T12:31:53.096188-08:00",
+      "size_bytes": 2322
+    },
+    {
+      "path": "NEXT_STEPS.md",
+      "title": "PLAN-078 E90: Compliance Metrics in Graph Stats \u2014 Execution Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T12:02:40.277570-08:00",
+      "size_bytes": 20994
+    },
+    {
+      "path": "PROGRESS_SUMMARY.md",
+      "title": "Progress Summary - Gemantria v2 (PR-004 Ready)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-18T19:14:49.015458-08:00",
+      "size_bytes": 3902
+    },
+    {
+      "path": "Prompting Guide for Our Core LLM models.md",
+      "title": "Prompting Guide For Our Core Llm Models",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T17:17:24.104073-08:00",
+      "size_bytes": 13781
+    },
+    {
+      "path": "README_FULL.md",
+      "title": "Gemantria \u2014 Full Documentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-16T17:55:27.313448-08:00",
+      "size_bytes": 8349
+    },
+    {
+      "path": "README.md",
+      "title": "Gemantria",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-10T20:18:30.612391-08:00",
+      "size_bytes": 9363
+    },
+    {
+      "path": "RELEASE_CHECKLIST.md",
+      "title": "Release Checklist \u2014 v0.1.0-rc1",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-01T17:05:25.587054-07:00",
+      "size_bytes": 362
+    },
+    {
+      "path": "RELEASES.md",
+      "title": "Release Process",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T19:52:22.742603-08:00",
+      "size_bytes": 9432
+    },
+    {
+      "path": "reports/README.md",
+      "title": "Pipeline Reports & Generated Outputs",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.108680-07:00",
+      "size_bytes": 9472
+    },
+    {
+      "path": "RULES_INDEX.md",
+      "title": "RULES_INDEX",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T21:05:23.930581-08:00",
+      "size_bytes": 13277
+    },
+    {
+      "path": "SCHEMA_INDEX.md",
+      "title": "BibleScholar Project \u2014 Schema Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "size_bytes": 5598
+    },
+    {
+      "path": "schemas/biblescholar/README.md",
+      "title": "Database Schema and Setup",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.500755-08:00",
+      "size_bytes": 7267
+    },
+    {
       "path": "schemas/biblescholar/SCHEMA_INDEX.md",
       "title": "BibleScholar Project \u2014 Schema Index",
       "doc_type": "reference",
@@ -1585,6 +5248,231 @@
       "size_bytes": 5598
     },
     {
+      "path": "schemas/README.md",
+      "title": "Schema Definitions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.109438-07:00",
+      "size_bytes": 778
+    },
+    {
+      "path": "scripts/AGENTS.md",
+      "title": "AGENTS.md - Scripts Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T09:43:50.342491-08:00",
+      "size_bytes": 67843
+    },
+    {
+      "path": "scripts/README.md",
+      "title": "Utility Scripts & Export Tools",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-05T21:35:32.077522-08:00",
+      "size_bytes": 8527
+    },
+    {
+      "path": "src/AGENTS.md",
+      "title": "AGENTS.md - src/ Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655659-08:00",
+      "size_bytes": 4247
+    },
+    {
+      "path": "src/core/AGENTS.md",
+      "title": "AGENTS.md - Core Utilities Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.011857-08:00",
+      "size_bytes": 2562
+    },
+    {
+      "path": "src/core/README.md",
+      "title": "Core Processing Logic",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.111985-07:00",
+      "size_bytes": 5621
+    },
+    {
+      "path": "src/gemantria/AGENTS.md",
+      "title": "AGENTS.md - src/gemantria Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-15T13:09:03.501256-08:00",
+      "size_bytes": 619
+    },
+    {
+      "path": "src/graph/AGENTS.md",
+      "title": "AGENTS.md - Graph Orchestration Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-06T10:51:30.726621-08:00",
+      "size_bytes": 6295
+    },
+    {
+      "path": "src/graph/README.md",
+      "title": "Graph Processing & Pipeline Orchestration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.111985-07:00",
+      "size_bytes": 7968
+    },
+    {
+      "path": "src/infra/AGENTS.md",
+      "title": "AGENTS.md - Infrastructure Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T13:38:29.210567-08:00",
+      "size_bytes": 6621
+    },
+    {
+      "path": "src/nodes/AGENTS.md",
+      "title": "AGENTS.md - Pipeline Nodes Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T17:38:14.184107-08:00",
+      "size_bytes": 5948
+    },
+    {
+      "path": "src/obs/AGENTS.md",
+      "title": "AGENTS.md - Observability Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-04T20:08:45.012857-08:00",
+      "size_bytes": 3649
+    },
+    {
+      "path": "src/persist/AGENTS.md",
+      "title": "AGENTS.md - Persistence Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655659-08:00",
+      "size_bytes": 5236
+    },
+    {
+      "path": "src/README.md",
+      "title": "Core Pipeline Source Code",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.111834-07:00",
+      "size_bytes": 5396
+    },
+    {
+      "path": "src/rerank/AGENTS.md",
+      "title": "AGENTS.md - Rerank Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655659-08:00",
+      "size_bytes": 7415
+    },
+    {
+      "path": "src/services/AGENTS.md",
+      "title": "AGENTS.md \u2014 Service Layer Agents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:03:01.325271-08:00",
+      "size_bytes": 4553
+    },
+    {
+      "path": "src/services/README.md",
+      "title": "External Service Integrations",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.113487-07:00",
+      "size_bytes": 8706
+    },
+    {
+      "path": "src/ssot/AGENTS.md",
+      "title": "AGENTS.md - SSOT Directory",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655659-08:00",
+      "size_bytes": 7200
+    },
+    {
+      "path": "src/utils/AGENTS.md",
+      "title": "AGENTS.md - Utils Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-12T20:47:01.655659-08:00",
+      "size_bytes": 5961
+    },
+    {
+      "path": "tests/AGENTS.md",
+      "title": "AGENTS.md - Testing Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T18:07:02.403109-08:00",
+      "size_bytes": 7175
+    },
+    {
+      "path": "tests/README.md",
+      "title": "Test Suites & Quality Assurance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.113487-07:00",
+      "size_bytes": 9723
+    },
+    {
+      "path": "tests/specs/extractors/072-m2-plus.e06-e10.md",
+      "title": "PLAN-072 M2+ \u2014 Extraction Agents TVs (E06\u2013E10)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-13T19:57:45.044952-08:00",
+      "size_bytes": 519
+    },
+    {
+      "path": "tools/AGENTS.md",
+      "title": "AGENTS.md \u2014 Tools (Headless Orchestration & Smoke Tests)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-08T15:55:45.401465-08:00",
+      "size_bytes": 2220
+    },
+    {
+      "path": "tools/README.md",
+      "title": "Tools \u2014 Headless Orchestration & Smoke Tests",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.114527-07:00",
+      "size_bytes": 869
+    },
+    {
+      "path": "ui/docs/consumers/NOUN_INDEX.md",
+      "title": "Noun Consumer Bridge",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.530000-08:00",
+      "size_bytes": 525
+    },
+    {
       "path": "ui/out/temporal_summary.md",
       "title": "Temporal Summary",
       "doc_type": "reference",
@@ -1592,8 +5480,89 @@
       "is_canonical": true,
       "last_modified": "2025-11-03T20:23:13.530000-08:00",
       "size_bytes": 37
+    },
+    {
+      "path": "ui/README.md",
+      "title": "Gemantria UI (Phase-10 Dashboard)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-07T19:38:35.995468-08:00",
+      "size_bytes": 1883
+    },
+    {
+      "path": "ui/README_UI.md",
+      "title": "UI Workspace (Phase-10)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-02T15:09:32.861665-08:00",
+      "size_bytes": 919
+    },
+    {
+      "path": "webui/dashboard/AGENTS.md",
+      "title": "AGENTS.md \u2014 webui/dashboard",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.075458-08:00",
+      "size_bytes": 1591
+    },
+    {
+      "path": "webui/graph/AGENTS.md",
+      "title": "AGENTS.md \u2014 webui/graph",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.076016-08:00",
+      "size_bytes": 3413
+    },
+    {
+      "path": "webui/graph/public/exports/docs-control/README.md",
+      "title": "Docs Control Panel Exports",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-20T13:59:53.077988-08:00",
+      "size_bytes": 803
+    },
+    {
+      "path": "webui/graph/README.md",
+      "title": "Graph Visualization WebUI",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-10-30T19:45:32.114797-07:00",
+      "size_bytes": 2838
+    },
+    {
+      "path": "webui/orchestrator-shell/AGENTS.md",
+      "title": "AGENTS.md - webui/orchestrator-shell Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-21T08:29:24.993526-08:00",
+      "size_bytes": 1335
+    },
+    {
+      "path": "webui/public/AGENTS.md",
+      "title": "AGENTS.md - webui/public Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-17T18:38:53.339931-08:00",
+      "size_bytes": 614
+    },
+    {
+      "path": "webui/README.md",
+      "title": "WebUI Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-03T20:23:13.530221-08:00",
+      "size_bytes": 7495
     }
   ],
-  "total": 177,
-  "generated_at": "2025-11-19T18:29:47.736915+00:00"
+  "total": 618,
+  "generated_at": "2025-11-23T02:48:05.054797+00:00"
 }

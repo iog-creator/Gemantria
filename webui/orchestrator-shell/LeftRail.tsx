@@ -12,6 +12,7 @@ export default function LeftRail({ activeTool, onSelectTool }: LeftRailProps) {
         { id: "forecast", label: "Forecast Dashboard", icon: "📈" },
         { id: "models", label: "Models", icon: "🧠" },
         { id: "db", label: "DB", icon: "🗄️" },
+        { id: "biblescholar", label: "BibleScholar", icon: "📖" },
         { id: "inputs", label: "Inputs", icon: "📎" },
         { id: "insights", label: "Insights", icon: "💡" },
         { id: "compliance", label: "Compliance", icon: "✅" },

@@ -167,7 +167,13 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                         LOG,
                         40,
                         "unknown_in_prompt",
-                        noun_name=n.get("name"),
+                        noun_name=(
+                            n.get("name")
+                            or n.get("analysis", {}).get("lemma")
+                            or n.get("hebrew")
+                            or n.get("surface")
+                            or str(n.get("noun_id", ""))
+                        ),
                         noun_hebrew=n.get("hebrew"),
                         noun_verse=n.get("primary_verse"),
                         prompt_preview=content[:200],
