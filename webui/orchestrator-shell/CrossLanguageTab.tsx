@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import StatusBanner from './StatusBanner';
 import SearchBar from './SearchBar';
@@ -55,7 +55,7 @@ async function fetchJsonSafe<T>(path: string): Promise<T | null> {
 }
 
 export default function CrossLanguageTab() {
-  const [liveMode, setLiveMode] = useState(false);
+  const [liveMode, setLiveMode] = useState(true);
   const [staticData, setStaticData] = useState<CrossLanguageData | null>(null);
   const [liveResults, setLiveResults] = useState<CrossLanguageData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -84,7 +84,7 @@ export default function CrossLanguageTab() {
   // Live API call - memoized to prevent SearchBar debounce loop
   const handleLiveSearch = useCallback(async (strongs: string) => {
     if (!strongs.trim()) return;
-    
+
     // Prevent duplicate searches for the same query or if already searching
     if (searchingRef.current || lastQueryRef.current === strongs.trim().toUpperCase()) {
       return;
@@ -96,10 +96,9 @@ export default function CrossLanguageTab() {
     setError(null);
 
     try {
-      const response = await fetch('/api/bible/cross-language', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ strongs_id: strongs, limit: 10 }),
+      const params = new URLSearchParams({ limit: '10' });
+      const response = await fetch(`/api/bible/cross-language/${encodeURIComponent(strongs)}?${params}`, {
+        method: 'GET',
       });
 
       if (!response.ok) {
@@ -108,15 +107,25 @@ export default function CrossLanguageTab() {
 
       const data = await response.json();
 
-      if (data.mode === 'db_off') {
+      // Check if data is an array (list of matches)
+      if (Array.isArray(data)) {
+        setLiveResults({
+          strongs_id: strongs,
+          connections: data, // The API returns the list of connections directly
+          connections_count: data.length,
+          total_connections: data.length,
+          mode: 'available',
+        });
+      } else if (data.mode === 'db_off') {
         setError('Database offline. Switching to static mode.');
         setLiveMode(false);
       } else {
+        // Fallback if structure is unexpected
         setLiveResults({
-          strongs_id: data.strongs_id || strongs,
-          connections: data.connections || [],
-          connections_count: data.connections_count || 0,
-          total_connections: data.connections_count || 0,
+          strongs_id: strongs,
+          connections: [],
+          connections_count: 0,
+          total_connections: 0,
           mode: 'available',
         });
       }
@@ -142,8 +151,8 @@ export default function CrossLanguageTab() {
               <button
                 onClick={() => setShowCapabilities(!showCapabilities)}
                 className={`text-sm font-medium px-3 py-1.5 rounded transition-colors ${showCapabilities
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'text-gray-600 hover:bg-gray-100'
                   }`}
               >
                 {showCapabilities ? 'Hide Tools' : 'Show Related Tools'}

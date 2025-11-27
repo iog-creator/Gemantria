@@ -40,7 +40,7 @@ async function fetchJsonSafe<T>(path: string): Promise<T | null> {
 }
 
 export default function SearchTab() {
-    const [liveMode, setLiveMode] = useState(false);
+    const [liveMode, setLiveMode] = useState(true);
     const [staticData, setStaticData] = useState<SearchData | null>(null);
     const [liveResults, setLiveResults] = useState<SearchData | null>(null);
     const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ export default function SearchTab() {
     // Live API call - memoized to prevent SearchBar debounce loop
     const handleLiveSearch = useCallback(async (query: string) => {
         if (!query.trim()) return;
-        
+
         // Prevent duplicate searches for the same query or if already searching
         if (searchingRef.current || lastQueryRef.current === query.trim()) {
             return;
@@ -81,10 +81,14 @@ export default function SearchTab() {
         setError(null);
 
         try {
-            const response = await fetch('/api/bible/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, limit: 20, translation: 'KJV' }),
+            const params = new URLSearchParams({
+                q: query.trim(),
+                limit: '20',
+                translation: 'KJV'
+            });
+
+            const response = await fetch(`/api/bible/search?${params}`, {
+                method: 'GET',
             });
 
             if (!response.ok) {
@@ -93,21 +97,26 @@ export default function SearchTab() {
 
             const data = await response.json();
 
-            if (data.mode === 'db_off') {
-                setError('Database offline. Switching to static mode.');
-                setLiveMode(false);
-            } else {
-                setLiveResults({
-                    query: data.query || query,
-                    translation: data.translation || 'KJV',
-                    limit: data.limit || 20,
-                    results_count: data.results_count || 0,
-                    results: data.results || [],
-                    mode: 'available',
-                });
-            }
+            // API returns { results: [...], count: N }
+            // Map to our SearchData structure
+            setLiveResults({
+                query: query,
+                translation: 'KJV',
+                limit: 20,
+                results_count: data.count || 0,
+                results: (data.results || []).map((r: any) => ({
+                    verse_id: 0, // Not provided by API
+                    book_name: r.book,
+                    chapter_num: r.chapter,
+                    verse_num: r.verse,
+                    text: r.text,
+                    translation_source: r.translation
+                })),
+                mode: 'available',
+            });
         } catch (err) {
-            setError('Live search failed. Switching to static mode.');
+            const errorMsg = err instanceof Error ? err.message : 'Live search failed';
+            setError(`Live search failed: ${errorMsg}. Switching to static mode.`);
             setLiveMode(false);
         } finally {
             setLoading(false);
@@ -137,8 +146,8 @@ export default function SearchTab() {
                             <button
                                 onClick={() => setShowCapabilities(!showCapabilities)}
                                 className={`text-sm font-medium px-3 py-1.5 rounded transition-colors ${showCapabilities
-                                        ? 'bg-blue-100 text-blue-700'
-                                        : 'text-gray-600 hover:bg-gray-100'
+                                    ? 'bg-blue-100 text-blue-700'
+                                    : 'text-gray-600 hover:bg-gray-100'
                                     }`}
                             >
                                 {showCapabilities ? 'Hide Tools' : 'Show Related Tools'}
@@ -177,16 +186,14 @@ export default function SearchTab() {
                         <StatusBanner mode={liveMode ? 'live' : 'hermetic'} />
                     )}
 
-                    {/* Live Search Input */}
-                    {liveMode && (
-                        <div className="mb-4">
-                            <SearchBar
-                                onSearch={handleLiveSearch}
-                                disabled={loading}
-                                placeholder="Enter keyword search (e.g., 'Jesus')"
-                            />
-                        </div>
-                    )}
+                    {/* Search Input - Always show, but only functional in Live Mode */}
+                    <div className="mb-4">
+                        <SearchBar
+                            onSearch={liveMode ? handleLiveSearch : () => {}}
+                            disabled={loading || !liveMode}
+                            placeholder={liveMode ? "Enter keyword search (e.g., 'Jesus')" : "Enable Live Search to search"}
+                        />
+                    </div>
                 </div>
 
                 {/* Loading */}

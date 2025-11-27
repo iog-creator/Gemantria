@@ -91,8 +91,10 @@ Please provide a concise answer based on the context above."""
 
     # Determine mode
     mode = result.get("mode", "unknown")
-    if not sections:
-        mode = "db_off"  # No sections found (DB unavailable or no matches)
+    # Only set db_off if we actually know DB is unavailable
+    # Empty sections could mean no matches, not necessarily DB off
+    # The retrieve_doc_sections function returns empty list for both cases
+    # So we rely on the LM call result mode instead
 
     return {
         "answer": answer,

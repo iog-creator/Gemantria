@@ -19,7 +19,7 @@ from src.infra.env_loader import ensure_env_loaded
 
 ensure_env_loaded()
 
-from src.nodes.collect_nouns_db import collect_nouns_for_book
+from agentpm.modules.gematria.utils.collect_nouns_db import collect_nouns_for_book
 from src.core.books import normalize_book
 
 

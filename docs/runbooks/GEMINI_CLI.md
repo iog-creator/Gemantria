@@ -1,5 +1,7 @@
 # Gemini CLI Integration Runbook
 
+> **⚠️ DEPRECATED**: Gemini CLI has been deprecated in favor of local inference providers (LM Studio/Ollama) for performance and architectural alignment. The Planning Lane now defaults to the Granite `local_agent` slot. This runbook is retained for reference only. New integrations should use local providers.
+
 Gemini CLI provides a governed planning/coding lane with very large context windows. It is optional, disabled in CI, and only used for backend planning/maths tasks (never theology).
 
 ## Install & Authenticate
@@ -42,7 +44,7 @@ Set the planning lane via `.env.local`:
 ```dotenv
 PLANNING_PROVIDER=gemini
 PLANNING_MODEL=gemini-2.5-pro
-GEMINI_ENABLED=true          # default true locally, false in CI
+GEMINI_ENABLED=true          # DEPRECATED: Now defaults to false. Set explicitly to enable.
 GEMINI_CLI_PATH=gemini       # override if installed elsewhere
 ```
 
@@ -66,7 +68,7 @@ Usage patterns:
 | --- | --- |
 | `gemini command not found` | Ensure CLI is on `PATH` or set `GEMINI_CLI_PATH` to full path. |
 | `model.startsWith is not a function` | `model.name` in `settings.json` is nested incorrectly; ensure it's `"model": { "name": "gemini-2.5-pro" }`. |
-| `gemini_disabled` error from pmagent | Set `GEMINI_ENABLED=true` locally; default false in CI to keep hermetic runs. |
+| `gemini_disabled` error from pmagent | **DEPRECATED**: Gemini CLI is now disabled by default. Set `GEMINI_ENABLED=true` explicitly to enable (not recommended). |
 | CLI hangs | Use `pmagent tools.gemini --json-only` for non-interactive runs or pass `--cli-path "$(npm bin -g)/gemini"`. |
 
 ## Governance Reminders

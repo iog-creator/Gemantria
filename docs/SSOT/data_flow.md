@@ -17,7 +17,7 @@ graph TB
     %% Input Sources
     subgraph "Input Sources"
         BIBLE[Bible Database<br/>Read-Only<br/>KJV Text]
-        LMSTUDIO[LM Studio<br/>Qwen Models<br/>Live API]
+        LMSTUDIO[LM Studio<br/>BGE-M3 + Qwen Reranker<br/>Live API]
     end
 
     %% Pipeline Stages
@@ -272,7 +272,7 @@ graph LR
 graph LR
     subgraph "Input"
         NOUNS[enriched_nouns<br/>Filtered list]
-        EMBEDDING_MODEL[Qwen Embedding<br/>text-embedding-qwen3-embedding-0.6b]
+        EMBEDDING_MODEL[BGE-M3 Embedding<br/>text-embedding-bge-m3]
         RERANKER_MODEL[Qwen Reranker<br/>qwen.qwen3-reranker-0.6b]
     end
 

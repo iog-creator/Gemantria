@@ -42,23 +42,30 @@ def get_directory_for_file(file_path: Path) -> Path | None:
     if file_path.name == "AGENTS.md":
         return None
 
+    # Normalize path relative to ROOT first
+    try:
+        rel_path = file_path.relative_to(ROOT)
+    except ValueError:
+        # Path is not under ROOT, skip it
+        return None
+
     # Check if file is in a directory that requires AGENTS.md
-    parts = file_path.parts
+    parts = rel_path.parts
     if "src" in parts:
         # src/*/ requires AGENTS.md
         src_idx = parts.index("src")
         if len(parts) > src_idx + 1:
-            return ROOT / "/".join(parts[: src_idx + 2])
+            return ROOT / Path(*parts[: src_idx + 2])
     elif "agentpm" in parts:
         # agentpm/*/ requires AGENTS.md (modules, biblescholar, etc.)
         agentpm_idx = parts.index("agentpm")
         if len(parts) > agentpm_idx + 1:
-            return ROOT / "/".join(parts[: agentpm_idx + 2])
+            return ROOT / Path(*parts[: agentpm_idx + 2])
     elif "webui" in parts:
         # webui/*/ requires AGENTS.md for UI apps (graph dashboard, forecast UI, etc.)
         webui_idx = parts.index("webui")
         if len(parts) > webui_idx + 1:
-            return ROOT / "/".join(parts[: webui_idx + 2])
+            return ROOT / Path(*parts[: webui_idx + 2])
     elif file_path.parent.name in ("scripts", "migrations", "tests", "docs"):
         # These directories require AGENTS.md
         return file_path.parent
@@ -95,22 +102,29 @@ def detect_code_changes(file_path: Path) -> dict[str, Any]:
 def update_agents_md(directory: Path, changes: dict[str, Any], dry_run: bool = False) -> bool:
     """Update AGENTS.md file in directory with detected changes."""
     agents_path = directory / "AGENTS.md"
+    # Normalize path for display
+    try:
+        display_path = agents_path.relative_to(ROOT)
+    except ValueError:
+        # Fallback to absolute path if not under ROOT (shouldn't happen, but be safe)
+        display_path = agents_path
+
     if not agents_path.exists():
         if dry_run:
-            print(f"  [DRY-RUN] Would create {agents_path.relative_to(ROOT)}")
+            print(f"  [DRY-RUN] Would create {display_path}")
         else:
             # Create basic AGENTS.md if missing
             agents_path.write_text(
                 f"# AGENTS.md — {directory.name}\n\n## Directory Purpose\n\nTODO: Document purpose\n"
             )
-            print(f"  ✓ Created {agents_path.relative_to(ROOT)}")
+            print(f"  ✓ Created {display_path}")
         return True
 
     # For now, just touch the file to update timestamp
     # In the future, we could parse and update content intelligently
     if not dry_run:
         agents_path.touch()
-        print(f"  ✓ Updated {agents_path.relative_to(ROOT)} (timestamp refreshed)")
+        print(f"  ✓ Updated {display_path} (timestamp refreshed)")
 
     return True
 

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import os
 
-from src.core.hebrew_utils import MAP, calculate_gematria
+from agentpm.modules.gematria.utils.hebrew_utils import MAP, calculate_gematria
 from src.infra.metrics_core import get_metrics_client
 from src.infra.structured_logger import get_logger, log_json
 from src.services.lmstudio_client import chat_completion

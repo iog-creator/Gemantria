@@ -14,7 +14,7 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from src.utils.osis import extract_verse_references
+from agentpm.modules.gematria.utils.osis import extract_verse_references
 
 from datetime import datetime, UTC
 

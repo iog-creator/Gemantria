@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any
 
 # Standard paths for eval exports
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 LM_INDICATOR_PATH = REPO_ROOT / "share" / "atlas" / "control_plane" / "lm_indicator.json"
 EDGE_CLASS_COUNTS_PATH = REPO_ROOT / "share" / "eval" / "edges" / "edge_class_counts.json"
 DB_HEALTH_PATH = REPO_ROOT / "evidence" / "pm_snapshot" / "db_health.json"

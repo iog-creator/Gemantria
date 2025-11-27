@@ -41,6 +41,10 @@
       "dst": "share/MASTER_PLAN.md"
     },
     {
+      "src": "docs/SSOT/PM_CONTRACT.md",
+      "dst": "share/PM_CONTRACT.md"
+    },
+    {
       "src": "docs/SSOT/RULES_INDEX.md",
       "dst": "share/RULES_INDEX.md"
     },

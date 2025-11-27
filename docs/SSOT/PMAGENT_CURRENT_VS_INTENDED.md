@@ -69,7 +69,9 @@ Implemented commands (names approximate):
 * `pmagent graph overview` – Display graph overview statistics.
 * `pmagent graph import` – Import graph_stats.json into database.
 * `pmagent ask docs <question>` – Answer questions using SSOT documentation.
-* `pmagent docs search <query>` – Search governance/docs content via semantic similarity.
+* `pmagent docs search <query>` – Search governance/docs content via semantic similarity. **REQUIRES DB** - Fails (exit 1) when DB unavailable.
+* `pmagent docs dashboard-refresh` – Generate documentation control panel exports. **REQUIRES DB** - Fails (exit 1) when DB unavailable.
+* `pmagent docs inventory` – Scan repository and upsert document metadata into `control.kb_document`. **REQUIRES DB** - Fails (exit 1) when DB unavailable.
 * `pmagent kb registry list` – List all registered KB documents.
 * `pmagent kb registry show <doc_id>` – Show details for a single KB document.
 * `pmagent kb registry by-subsystem --owning-subsystem <subsystem>` – Filter documents by owning subsystem.
@@ -126,6 +128,9 @@ Implemented commands (names approximate):
   - Runtime LM calls: `lm_studio_chat_with_logging()` and `guarded_lm_call()` write to `control.agent_run` via `_write_agent_run()` helper
   - CLI commands: Most pmagent commands (e.g., `reality-check check`, `health system`, `control status`, `bible retrieve`) use `create_agent_run()` and `mark_agent_run_success()` / `mark_agent_run_error()` to track executions in `control.agent_run_cli`
   - DB-off behavior: All tracking functions gracefully no-op when DB is unavailable (return `None`, no exceptions) for hermetic CI/testing
+* **Command behavior distinction (Rule-046)**:
+  - **Observability/Status commands** (e.g., `pmagent health *`, `pmagent control *`, `pmagent status *`, `pmagent graph overview`): Handle DB-off / LM-off gracefully (exit code 0, structured `mode="db_off"` output). Designed for monitoring and status checks in CI/hermetic environments.
+  - **Operational commands** (e.g., `pmagent docs dashboard-refresh`, `pmagent docs search`, `pmagent docs inventory`, `pmagent docs dm002-sync`): **REQUIRE** the database and must **FAIL** (exit code 1) when DB/LM unavailable. These commands perform data writes, ingestion, or operations that cannot proceed without the database.
 * **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
   - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
   - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)

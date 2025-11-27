@@ -296,14 +296,24 @@ def get_lm_model_config() -> dict[str, str | None]:
     reranker = env("RERANKER_MODEL") or legacy_defaults["reranker_model"]
     reranker_strategy = env("RERANKER_STRATEGY", "embedding_only")
 
-    # Planning lane (Gemini/Codex CLI helpers)
-    planning_provider_raw = env("PLANNING_PROVIDER", "").strip().lower()
-    planning_provider = planning_provider_raw or None
-    planning_model = env("PLANNING_MODEL") or local_agent
-    gemini_enabled = env("GEMINI_ENABLED", "true").lower() in ("1", "true", "yes")
+    # Planning lane (Codex CLI helper; Gemini CLI deprecated for local inference)
+    planning_provider_raw = env("PLANNING_PROVIDER", "granite").strip().lower()
+    planning_provider = planning_provider_raw if planning_provider_raw else "granite"
+    planning_model = env("PLANNING_MODEL") or "granite-4.0-small"
+    gemini_enabled = env("GEMINI_ENABLED", "false").lower() in (
+        "1",
+        "true",
+        "yes",
+    )  # Deprecated: disabled by default for local inference
     codex_enabled = env("CODEX_ENABLED", "false").lower() in ("1", "true", "yes")
     gemini_cli_path = env("GEMINI_CLI_PATH") or "gemini"
     codex_cli_path = env("CODEX_CLI_PATH") or "codex"
+
+    # Vision lane (Qwen3-VL-4B for multimodal tasks)
+    vision_provider = env("VISION_PROVIDER", "lmstudio").strip().lower()
+    vision_model = env("VISION_MODEL", "qwen3-vl-4b")
+    lmstudio_base_url = env("LMSTUDIO_BASE_URL", "http://localhost:1234/v1")
+    ollama_base_url = env("OLLAMA_BASE_URL", "http://localhost:11434")
 
     # Phase-7F: Normalize model names for Ollama when provider is ollama
     if provider == "ollama":
@@ -370,6 +380,10 @@ def get_lm_model_config() -> dict[str, str | None]:
         "codex_enabled": codex_enabled,
         "gemini_cli_path": gemini_cli_path,
         "codex_cli_path": codex_cli_path,
+        "vision_provider": vision_provider,
+        "vision_model": vision_model,
+        "lmstudio_base_url": lmstudio_base_url,
+        "ollama_base_url": ollama_base_url,
     }
 
 

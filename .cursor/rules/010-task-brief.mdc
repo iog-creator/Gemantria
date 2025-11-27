@@ -7,9 +7,11 @@ alwaysApply: false
 
 ## Required Structure
 **Goal**: One sentence describing the objective
+**Pre-work gotchas** (Rule 070): Potential issues, edge cases, dependencies, or integration concerns discovered before starting
 **Inputs consulted**: List of files/docs/SSOT referenced
 **Changes to make**: Bulleted list of modifications
 **Tests/checks**: Commands or criteria to verify
+**Post-work gotchas** (Rule 070): Issues introduced, verification needed, documentation gaps, or known limitations discovered after completion
 **Share sync**: Whether to run make share.sync
 
 ## Examples
@@ -37,5 +39,6 @@ alwaysApply: false
 - **Rule 006**: AGENTS.md governance (read before any multi-step task)
 - **Rule 058**: Auto-housekeeping (mandatory after modifications)
 - **Rule 061**: AI learning tracking (emit hints for violations)
+- **Rule 070**: Gotchas check (mandatory pre-work and post-work analysis)
 - **docs/SSOT/GPT_SYSTEM_PROMPT.md**: AI operational governance
 - **share/evidence/**: Hint envelope directory for validation

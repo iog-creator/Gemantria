@@ -15,6 +15,7 @@ from typing import Literal
 
 from agentpm.biblescholar.bible_passage_flow import parse_reference
 from agentpm.biblescholar.lexicon_adapter import LexiconAdapter, LexiconEntry
+from agentpm.tools.bible import lookup_lexicon_entry
 
 
 @dataclass
@@ -43,19 +44,21 @@ def fetch_lexicon_entry(strongs_id: str) -> LexiconEntry | None:
     Returns:
         LexiconEntry if found, None if not found or DB unavailable.
     """
-    adapter = LexiconAdapter()
+    result = lookup_lexicon_entry(strongs_id)
 
-    # Determine language from Strong's prefix
-    if strongs_id.upper().startswith("H"):
-        return adapter.get_hebrew_entry(strongs_id)
-    elif strongs_id.upper().startswith("G"):
-        return adapter.get_greek_entry(strongs_id)
-    else:
-        # Try Hebrew first, then Greek
-        entry = adapter.get_hebrew_entry(strongs_id)
-        if entry:
-            return entry
-        return adapter.get_greek_entry(strongs_id)
+    if not result.get("ok", False) or not result.get("found", False):
+        return None
+
+    e = result["entry"]
+    return LexiconEntry(
+        entry_id=e["entry_id"],
+        strongs_id=e["strongs_id"],
+        lemma=e["lemma"],
+        transliteration=e["transliteration"],
+        definition=e["definition"],
+        usage=e["usage"],
+        gloss=e["gloss"],
+    )
 
 
 def fetch_word_study(reference: str) -> WordStudyResult:

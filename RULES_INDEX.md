@@ -129,7 +129,8 @@
 | 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
 | 067 | 067-atlas-webproof.mdc | Atlas Webproof (Browser-Verified UI) — Run `make atlas.viewer.validate` and `make atlas.webproof`; attach JSON + screenshots; `STRICT_WEBPROOF=1` for tags. **Always-Apply for docs/atlas/* edits.** |
 | 068 | 068-gpt-docs-sync.mdc | GPT Documentation Sync (AlwaysApply) |
-| 069 | 069-reality-green.mdc | Reality Green Truth Gate (Option C - DB is SSOT) — `make reality.green` validates DB health, control-plane health, AGENTS.md sync, share sync, and required exports. Only passes when system is up to date and consistent. Required before: declaring features complete, opening PRs for main, generating share/ snapshots. |
+| 069 | 069-always-use-dms-first.mdc | Rule 069 — Always Use DMS First (Planning Queries) |
+| 070 | 070-gotchas-check.mdc | 070 — Gotchas Check (AlwaysApply) — Mandatory pre-work and post-work gotchas analysis for all workflows |
 
 ---
 

@@ -42,8 +42,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T18:03:01.325271-08:00",
-      "size_bytes": 3102
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
+      "size_bytes": 4073
     },
     {
       "path": "agentpm/AGENTS.md",
@@ -51,8 +51,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T18:45:38.714238-08:00",
-      "size_bytes": 15419
+      "last_modified": "2025-11-23T07:49:59.490401-08:00",
+      "size_bytes": 16242
     },
     {
       "path": "agentpm/ai_docs/AGENTS.md",
@@ -78,8 +78,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T12:28:17.231162-08:00",
-      "size_bytes": 21540
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
+      "size_bytes": 23702
     },
     {
       "path": "agentpm/bus/AGENTS.md",
@@ -123,8 +123,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-17T18:38:53.339931-08:00",
-      "size_bytes": 612
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
+      "size_bytes": 3436
     },
     {
       "path": "agentpm/exports/AGENTS.md",
@@ -154,6 +154,15 @@
       "size_bytes": 630
     },
     {
+      "path": "agentpm/governance/AGENTS.md",
+      "title": "AGENTS.md - agentpm/governance Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T08:26:34.942315-08:00",
+      "size_bytes": 630
+    },
+    {
       "path": "agentpm/graph/AGENTS.md",
       "title": "AGENTS.md - agentpm/graph Directory",
       "doc_type": "reference",
@@ -177,17 +186,17 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T10:46:26.671613-08:00",
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
       "size_bytes": 1184
     },
     {
       "path": "agentpm/kb/AGENTS.md",
-      "title": "KB Document Registry (KB-Reg:M1)",
+      "title": "AGENTS.md \u2014 agentpm/kb",
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.069053-08:00",
-      "size_bytes": 7667
+      "last_modified": "2025-11-24T09:36:22.328897-08:00",
+      "size_bytes": 7669
     },
     {
       "path": "agentpm/knowledge/AGENTS.md",
@@ -195,7 +204,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-15T13:09:03.498623-08:00",
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
       "size_bytes": 627
     },
     {
@@ -240,7 +249,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-15T13:09:03.499623-08:00",
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
       "size_bytes": 621
     },
     {
@@ -251,6 +260,24 @@
       "is_canonical": true,
       "last_modified": "2025-11-15T10:57:49.906161-08:00",
       "size_bytes": 1292
+    },
+    {
+      "path": "agentpm/modules/gematria/tests/AGENTS.md",
+      "title": "AGENTS.md - agentpm/modules/gematria/tests Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T21:40:31.322144-08:00",
+      "size_bytes": 1863
+    },
+    {
+      "path": "agentpm/modules/gematria/utils/AGENTS.md",
+      "title": "AGENTS.md - agentpm/modules/gematria/utils Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T21:40:31.322144-08:00",
+      "size_bytes": 2053
     },
     {
       "path": "agentpm/obs/AGENTS.md",
@@ -303,8 +330,17 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-16T17:55:27.314194-08:00",
-      "size_bytes": 2453
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
+      "size_bytes": 4021
+    },
+    {
+      "path": "agentpm/server/AGENTS.md",
+      "title": "AGENTS.md - agentpm/server Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-25T08:00:34.691596-08:00",
+      "size_bytes": 618
     },
     {
       "path": "agentpm/status/AGENTS.md",
@@ -312,7 +348,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T19:16:36.636149-08:00",
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
       "size_bytes": 2451
     },
     {
@@ -366,8 +402,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T13:38:07.079714-08:00",
-      "size_bytes": 86205
+      "last_modified": "2025-11-24T09:36:03.579492-08:00",
+      "size_bytes": 92404
     },
     {
       "path": "archive/evidence_v0.0.9_pre/a_exporter.after.txt",
@@ -1896,8 +1932,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T19:34:57.023525-08:00",
-      "size_bytes": 21712
+      "last_modified": "2025-11-24T08:26:35.014609-08:00",
+      "size_bytes": 21857
     },
     {
       "path": "CONTRIBUTING.md",
@@ -2238,8 +2274,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-04T20:08:45.010857-08:00",
-      "size_bytes": 295
+      "last_modified": "2025-11-23T09:35:52.597887-08:00",
+      "size_bytes": 1111
     },
     {
       "path": ".cursor/rules/028-phase-freshness.mdc",
@@ -2409,8 +2445,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-10T20:18:30.611414-08:00",
-      "size_bytes": 742
+      "last_modified": "2025-11-24T08:31:25.597160-08:00",
+      "size_bytes": 1691
     },
     {
       "path": ".cursor/rules/047-reserved.mdc",
@@ -2454,8 +2490,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T12:42:24.042711-08:00",
-      "size_bytes": 6390
+      "last_modified": "2025-11-23T09:33:00.160160-08:00",
+      "size_bytes": 7228
     },
     {
       "path": ".cursor/rules/052-tool-priority.mdc",
@@ -2481,8 +2517,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T13:37:45.959540-08:00",
-      "size_bytes": 5095
+      "last_modified": "2025-11-22T13:40:31.167420-08:00",
+      "size_bytes": 5487
     },
     {
       "path": ".cursor/rules/054-reuse-first.mdc",
@@ -2499,8 +2535,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-07T19:38:35.918301-08:00",
-      "size_bytes": 277
+      "last_modified": "2025-11-23T09:35:52.597887-08:00",
+      "size_bytes": 854
     },
     {
       "path": ".cursor/rules/056-ui-generation.mdc",
@@ -2508,8 +2544,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-07T19:38:35.918301-08:00",
-      "size_bytes": 853
+      "last_modified": "2025-11-23T09:35:52.597887-08:00",
+      "size_bytes": 2028
     },
     {
       "path": ".cursor/rules/057-embedding-consistency.mdc",
@@ -2562,8 +2598,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-11T14:40:52.639370-08:00",
-      "size_bytes": 4882
+      "last_modified": "2025-11-24T08:31:25.597160-08:00",
+      "size_bytes": 8438
     },
     {
       "path": ".cursor/rules/063-git-safety.mdc",
@@ -2618,6 +2654,24 @@
       "is_canonical": true,
       "last_modified": "2025-11-20T13:49:26.143267-08:00",
       "size_bytes": 5761
+    },
+    {
+      "path": ".cursor/rules/069-always-use-dms-first.mdc",
+      "title": "Rule 069 \u2014 Always Use DMS First (Planning Queries)",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T18:32:50.460965-08:00",
+      "size_bytes": 2937
+    },
+    {
+      "path": ".cursor/rules/AGENTS.md",
+      "title": "Cursor Rules \u2014 Consolidated AGENTS.md",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T09:35:56.328417-08:00",
+      "size_bytes": 111363
     },
     {
       "path": ".cursor/rules/README.md",
@@ -3093,7 +3147,7 @@
       "doc_type": "legacy",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "last_modified": "2025-11-22T18:37:57.582348-08:00",
       "size_bytes": 120129
     },
     {
@@ -3102,7 +3156,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.071016-08:00",
+      "last_modified": "2025-11-23T07:41:37.204822-08:00",
       "size_bytes": 61491
     },
     {
@@ -3111,8 +3165,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.071016-08:00",
-      "size_bytes": 732
+      "last_modified": "2025-11-25T08:17:23.298887-08:00",
+      "size_bytes": 724
     },
     {
       "path": "docs/analysis/DOC_DUPLICATES_REPORT.md",
@@ -3122,6 +3176,15 @@
       "is_canonical": true,
       "last_modified": "2025-11-20T13:59:53.072016-08:00",
       "size_bytes": 202141
+    },
+    {
+      "path": "docs/analysis/GRANITE_PMAGENT_TEST_REPORT.md",
+      "title": "Granite 4.0 + pmagent Integration Test Report",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:45:43.645461-08:00",
+      "size_bytes": 6289
     },
     {
       "path": "docs/analysis/ORPHANS_CANDIDATE_REPORT.md",
@@ -3223,6 +3286,24 @@
       "size_bytes": 1623
     },
     {
+      "path": "docs/analysis/PMAGENT_EVALUATION_PLAN.md",
+      "title": "PMAgent Evaluation & Improvement Plan",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:43:22.839893-08:00",
+      "size_bytes": 7367
+    },
+    {
+      "path": "docs/analysis/PMAGENT_FIXES_SUMMARY.md",
+      "title": "PMAgent Fixes Summary",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:43:22.840503-08:00",
+      "size_bytes": 3726
+    },
+    {
       "path": "docs/ANALYSIS/rule-enforcement-gaps.md",
       "title": "Rule Enforcement Gaps Analysis",
       "doc_type": "reference",
@@ -3230,6 +3311,15 @@
       "is_canonical": true,
       "last_modified": "2025-11-09T14:17:01.274844-08:00",
       "size_bytes": 10083
+    },
+    {
+      "path": "docs/analysis/UI_DASHBOARD_ROOT_CAUSES.md",
+      "title": "Root Cause Analysis: UI Dashboard Management Difficulties",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:12:20.474921-08:00",
+      "size_bytes": 8291
     },
     {
       "path": "docs/atlas/AGENTS.md",
@@ -3498,8 +3588,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T18:01:55.595836-08:00",
-      "size_bytes": 6277
+      "last_modified": "2025-11-25T08:00:34.773885-08:00",
+      "size_bytes": 6363
     },
     {
       "path": "docs/forest/README.md",
@@ -3925,6 +4015,15 @@
       "size_bytes": 529
     },
     {
+      "path": "docs/plans/NANOBANNA_PRO_PLAN.md",
+      "title": "Nanobanna Pro: The AI Site Builder",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T17:22:29.360266-08:00",
+      "size_bytes": 2645
+    },
+    {
       "path": "docs/plans/PLAN-072-m2-extraction-correctness.md",
       "title": "PLAN-072 \u2014 Milestone 2: Extraction Agents Correctness (hermetic)",
       "doc_type": "reference",
@@ -4137,8 +4236,17 @@
       "doc_type": "runbook",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-14T13:51:11.753217-08:00",
-      "size_bytes": 6364
+      "last_modified": "2025-11-23T08:54:00.954847-08:00",
+      "size_bytes": 6551
+    },
+    {
+      "path": "docs/runbooks/API_SERVER_HARDENING.md",
+      "title": "API Server Hardening Guide",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:58:44.420462-08:00",
+      "size_bytes": 5800
     },
     {
       "path": "docs/runbooks/ATLAS_VISUAL_VERIFICATION.md",
@@ -4148,6 +4256,15 @@
       "is_canonical": true,
       "last_modified": "2025-11-11T15:02:07.651456-08:00",
       "size_bytes": 4198
+    },
+    {
+      "path": "docs/runbooks/BIBLESCHOLAR_API_VERIFICATION.md",
+      "title": "BibleScholar API Verification",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T08:54:00.954847-08:00",
+      "size_bytes": 3662
     },
     {
       "path": "docs/runbooks/CODEX_CLI.md",
@@ -4191,8 +4308,8 @@
       "doc_type": "runbook",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-14T14:00:46.566638-08:00",
-      "size_bytes": 8841
+      "last_modified": "2025-11-23T07:40:18.574173-08:00",
+      "size_bytes": 9248
     },
     {
       "path": "docs/runbooks/CONTROL_TABLES.md",
@@ -4249,6 +4366,15 @@
       "size_bytes": 5595
     },
     {
+      "path": "docs/runbooks/GENAI_TOOLBOX_MCP.md",
+      "title": "GenAI Toolbox MCP Server Installation",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:30:13.954601-08:00",
+      "size_bytes": 5597
+    },
+    {
       "path": "docs/runbooks/GOVERNANCE_DB_SSOT.md",
       "title": "Governance DB SSOT Runbook \u2014 Cursor Rules",
       "doc_type": "ssot",
@@ -4256,6 +4382,15 @@
       "is_canonical": true,
       "last_modified": "2025-11-16T17:55:27.316386-08:00",
       "size_bytes": 2673
+    },
+    {
+      "path": "docs/runbooks/GPU_RESOURCE_MANAGEMENT.md",
+      "title": "GPU Resource Management for Ollama + LM Studio",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T16:48:38.836224-08:00",
+      "size_bytes": 4595
     },
     {
       "path": "docs/runbooks/GRAPH_IMPORT.md",
@@ -4292,6 +4427,15 @@
       "is_canonical": true,
       "last_modified": "2025-11-14T13:25:28.846682-08:00",
       "size_bytes": 6434
+    },
+    {
+      "path": "docs/runbooks/LM_STUDIO_MEMORY_MANAGEMENT.md",
+      "title": "LM Studio Memory Management",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T16:58:21.883050-08:00",
+      "size_bytes": 3269
     },
     {
       "path": "docs/runbooks/LM_STUDIO_SETUP.md",
@@ -4339,6 +4483,24 @@
       "size_bytes": 5289
     },
     {
+      "path": "docs/runbooks/OLLAMA_MONITOR.md",
+      "title": "Ollama Monitor",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:51:47.220340-08:00",
+      "size_bytes": 3902
+    },
+    {
+      "path": "docs/runbooks/OLLAMA_MONITOR_TROUBLESHOOTING.md",
+      "title": "Ollama Monitor Troubleshooting",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:56:32.051350-08:00",
+      "size_bytes": 2366
+    },
+    {
       "path": "docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md",
       "title": "Phase-6D: Downstream App Read-Only Wiring",
       "doc_type": "runbook",
@@ -4366,6 +4528,15 @@
       "size_bytes": 5994
     },
     {
+      "path": "docs/runbooks/STATUS_POLLING_OPTIMIZATION.md",
+      "title": "Status Polling Optimization",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T16:51:39.245397-08:00",
+      "size_bytes": 4075
+    },
+    {
       "path": "docs/runbooks/SYSTEM_HEALTH.md",
       "title": "System Health Runbook",
       "doc_type": "runbook",
@@ -4375,13 +4546,31 @@
       "size_bytes": 8514
     },
     {
+      "path": "docs/runbooks/UI_VISUAL_VERIFICATION_CHECKLIST.md",
+      "title": "UI Visual Verification Checklist",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T09:33:00.160160-08:00",
+      "size_bytes": 3416
+    },
+    {
       "path": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
       "title": "LM Studio & Database Usage Patterns Reference",
       "doc_type": "runbook",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-16T17:55:27.316386-08:00",
-      "size_bytes": 14581
+      "last_modified": "2025-11-23T07:40:18.559660-08:00",
+      "size_bytes": 15497
+    },
+    {
+      "path": "docs/runbooks/VECTOR_DMS_WALKTHROUGH.md",
+      "title": "Vector DMS Walkthrough",
+      "doc_type": "runbook",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-23T08:54:00.954847-08:00",
+      "size_bytes": 5094
     },
     {
       "path": "docs/schema/AGENTS.md",
@@ -4758,8 +4947,8 @@
       "doc_type": "ssot",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T11:13:52.844946-08:00",
-      "size_bytes": 52581
+      "last_modified": "2025-11-24T09:36:03.579850-08:00",
+      "size_bytes": 52646
     },
     {
       "path": "docs/SSOT/Orchestrator Dashboard - Vision.md",
@@ -4798,6 +4987,15 @@
       "size_bytes": 4384
     },
     {
+      "path": "docs/SSOT/PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "title": "Phase 9.1: PM\u2194DMS Integration \u2014 Implementation Summary",
+      "doc_type": "ssot",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-22T13:42:29.493895-08:00",
+      "size_bytes": 6297
+    },
+    {
       "path": "docs/SSOT/PLAN_072_M1_DMS_GUARDS.md",
       "title": "PLAN-072 M1: DMS Guard Fixes (Hermetic + CI-Ready)",
       "doc_type": "ssot",
@@ -4821,8 +5019,8 @@
       "doc_type": "ssot",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T20:56:27.549318-08:00",
-      "size_bytes": 17191
+      "last_modified": "2025-11-23T07:49:59.490454-08:00",
+      "size_bytes": 18208
     },
     {
       "path": "docs/SSOT/PMAGENT_REALITY_CHECK_AI_NOTES.md",
@@ -4857,8 +5055,8 @@
       "doc_type": "ssot",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T13:37:06.797293-08:00",
-      "size_bytes": 22450
+      "last_modified": "2025-11-23T09:00:30.021904-08:00",
+      "size_bytes": 23343
     },
     {
       "path": "docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md",
@@ -4902,8 +5100,8 @@
       "doc_type": "ssot",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-15T11:34:15.164610-08:00",
-      "size_bytes": 3283
+      "last_modified": "2025-11-24T09:36:03.578719-08:00",
+      "size_bytes": 3379
     },
     {
       "path": "docs/SSOT/STORYMAKER_INTAKE.md",
@@ -5050,6 +5248,2931 @@
       "size_bytes": 3333
     },
     {
+      "path": "genai-toolbox/CHANGELOG.md",
+      "title": "Changelog",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.142838-08:00",
+      "size_bytes": 87790
+    },
+    {
+      "path": "genai-toolbox/CODE_OF_CONDUCT.md",
+      "title": "Code of Conduct",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.142872-08:00",
+      "size_bytes": 4471
+    },
+    {
+      "path": "genai-toolbox/CONTRIBUTING.md",
+      "title": "How to contribute",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.142936-08:00",
+      "size_bytes": 11876
+    },
+    {
+      "path": "genai-toolbox/DEVELOPER.md",
+      "title": "DEVELOPER.md",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.143013-08:00",
+      "size_bytes": 15882
+    },
+    {
+      "path": "genai-toolbox/docs/ALLOYDBADMIN_README.md",
+      "title": "AlloyDB for PostgreSQL Admin MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 4465
+    },
+    {
+      "path": "genai-toolbox/docs/ALLOYDBPG_README.md",
+      "title": "AlloyDB for PostgreSQL MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 5484
+    },
+    {
+      "path": "genai-toolbox/docs/BIGQUERY_README.md",
+      "title": "BigQuery MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 4790
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLMSSQLADMIN_README.md",
+      "title": "Cloud SQL for SQL Server Admin MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 3994
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLMSSQL_README.md",
+      "title": "Cloud SQL for SQL Server MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 4429
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLMYSQLADMIN_README.md",
+      "title": "Cloud SQL for MySQL Admin MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 3947
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLMYSQL_README.md",
+      "title": "Cloud SQL for MySQL MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 5183
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLPGADMIN_README.md",
+      "title": "Cloud SQL for PostgreSQL Admin MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 4011
+    },
+    {
+      "path": "genai-toolbox/docs/CLOUDSQLPG_README.md",
+      "title": "Cloud SQL for PostgreSQL MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 6338
+    },
+    {
+      "path": "genai-toolbox/docs/DATAPLEX_README.md",
+      "title": "Dataplex MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 3708
+    },
+    {
+      "path": "genai-toolbox/docs/en/about/faq.md",
+      "title": "Faq",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145072-08:00",
+      "size_bytes": 3887
+    },
+    {
+      "path": "genai-toolbox/docs/en/about/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145056-08:00",
+      "size_bytes": 109
+    },
+    {
+      "path": "genai-toolbox/docs/en/concepts/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145072-08:00",
+      "size_bytes": 94
+    },
+    {
+      "path": "genai-toolbox/docs/en/concepts/telemetry/index.md",
+      "title": "Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145165-08:00",
+      "size_bytes": 11483
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/configure.md",
+      "title": "This will load all tools",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145485-08:00",
+      "size_bytes": 2996
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145165-08:00",
+      "size_bytes": 104
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/introduction/_index.md",
+      "title": "see releases page for other versions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.145485-08:00",
+      "size_bytes": 18877
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/local_quickstart_go.md",
+      "title": "Local Quickstart Go",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.146560-08:00",
+      "size_bytes": 2462
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/local_quickstart_js.md",
+      "title": "Local Quickstart Js",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.146658-08:00",
+      "size_bytes": 2748
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/local_quickstart.md",
+      "title": "TODO(developer): replace with correct package if needed",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.146441-08:00",
+      "size_bytes": 4863
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/mcp_quickstart/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.146732-08:00",
+      "size_bytes": 7866
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/quickstart/shared/cloud_setup.md",
+      "title": "Cloud Setup",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149151-08:00",
+      "size_bytes": 710
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/quickstart/shared/configure_toolbox.md",
+      "title": "Configure Toolbox",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149205-08:00",
+      "size_bytes": 4135
+    },
+    {
+      "path": "genai-toolbox/docs/en/getting-started/quickstart/shared/database_setup.md",
+      "title": "Database Setup",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149236-08:00",
+      "size_bytes": 4276
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/alloydb_pg_admin_mcp.md",
+      "title": "Alloydb Pg Admin Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149334-08:00",
+      "size_bytes": 384
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/alloydb_pg_mcp.md",
+      "title": "Alloydb Pg Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149334-08:00",
+      "size_bytes": 370
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/bigquery_mcp.md",
+      "title": "Bigquery Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149334-08:00",
+      "size_bytes": 380
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_mssql_admin_mcp.md",
+      "title": "Cloud Sql Mssql Admin Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 8916
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_mssql_mcp.md",
+      "title": "Cloud Sql Mssql Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 422
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_mysql_admin_mcp.md",
+      "title": "Cloud Sql Mysql Admin Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 8891
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_mysql_mcp.md",
+      "title": "Cloud Sql Mysql Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 404
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_pg_admin_mcp.md",
+      "title": "Cloud Sql Pg Admin Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 8967
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/cloud_sql_pg_mcp.md",
+      "title": "Cloud Sql Pg Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 416
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/firestore_mcp.md",
+      "title": "Firestore Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 393
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149318-08:00",
+      "size_bytes": 203
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/looker_mcp.md",
+      "title": "Looker Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 11658
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/mssql_mcp.md",
+      "title": "Mssql Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 9289
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/mysql_mcp.md",
+      "title": "Mysql Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 9214
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/neo4j_mcp.md",
+      "title": "Neo4J Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 9146
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/postgres_mcp.md",
+      "title": "Postgres Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 9764
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/spanner_mcp.md",
+      "title": "Spanner Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 376
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect-ide/sqlite_mcp.md",
+      "title": "Sqlite Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 8339
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect_via_geminicli.md",
+      "title": "Connect Via Geminicli",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 2477
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/connect_via_mcp.md",
+      "title": "Connect Via Mcp",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 5952
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/deploy_docker.md",
+      "title": "Replace with the cloud run service URL generated above",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 2899
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/deploy_gke.md",
+      "title": "Deploy Gke",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 6879
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/deploy_toolbox.md",
+      "title": "Replace with the Cloud Run service URL generated in the previous step",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 8106
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/export_telemetry.md",
+      "title": "Export Telemetry",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149369-08:00",
+      "size_bytes": 3045
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.149236-08:00",
+      "size_bytes": 129
+    },
+    {
+      "path": "genai-toolbox/docs/en/how-to/toolbox-ui/index.md",
+      "title": "Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.289517-08:00",
+      "size_bytes": 4446
+    },
+    {
+      "path": "genai-toolbox/docs/en/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 293
+    },
+    {
+      "path": "genai-toolbox/docs/en/reference/cli.md",
+      "title": "Basic server with custom port configuration",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311095-08:00",
+      "size_bytes": 6286
+    },
+    {
+      "path": "genai-toolbox/docs/en/reference/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311084-08:00",
+      "size_bytes": 113
+    },
+    {
+      "path": "genai-toolbox/docs/en/reference/prebuilt-tools.md",
+      "title": "Prebuilt Tools",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311125-08:00",
+      "size_bytes": 30074
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/authServices/google.md",
+      "title": "Google",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311265-08:00",
+      "size_bytes": 1968
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/authServices/_index.md",
+      "title": "for a single token",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311265-08:00",
+      "size_bytes": 9082
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311211-08:00",
+      "size_bytes": 123
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/prompts/custom/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311354-08:00",
+      "size_bytes": 2427
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/prompts/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311305-08:00",
+      "size_bytes": 3826
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/alloydb-admin.md",
+      "title": "Alloydb Admin",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311391-08:00",
+      "size_bytes": 1960
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/alloydb-pg.md",
+      "title": "Alloydb Pg",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 7957
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/bigquery.md",
+      "title": "BigQuery Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 11645
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/bigtable.md",
+      "title": "Bigtable Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3403
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cassandra.md",
+      "title": "Cassandra",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3820
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/clickhouse.md",
+      "title": "Clickhouse",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3312
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-healthcare.md",
+      "title": "Cloud Healthcare",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 9617
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-monitoring.md",
+      "title": "Cloud Monitoring",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 1739
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-sql-admin.md",
+      "title": "Cloud Sql Admin",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 1955
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-sql-mssql.md",
+      "title": "Cloud Sql Mssql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 5118
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-sql-mysql.md",
+      "title": "Cloud Sql Mysql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 5567
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/cloud-sql-pg.md",
+      "title": "Cloud Sql Pg",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 7628
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/couchbase.md",
+      "title": "Couchbase",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 7753
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/dataplex.md",
+      "title": "Dataplex Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 18802
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/dgraph.md",
+      "title": "Dgraph",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2712
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/elasticsearch.md",
+      "title": "Elasticsearch Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2688
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/firebird.md",
+      "title": "Firebird",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2343
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/firestore.md",
+      "title": "Firestore Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3473
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/http.md",
+      "title": "Http",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2611
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311370-08:00",
+      "size_bytes": 984
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/looker.md",
+      "title": "Looker",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 4939
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/mindsdb.md",
+      "title": "Mindsdb",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 6896
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/mongodb.md",
+      "title": "Mongodb",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 1093
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/mssql.md",
+      "title": "Mssql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 4252
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/mysql.md",
+      "title": "Mysql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3411
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/neo4j.md",
+      "title": "Neo4J",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 1988
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/oceanbase.md",
+      "title": "Oceanbase",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3313
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/oracle.md",
+      "title": "Oracle",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 4863
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/postgres.md",
+      "title": "Postgres",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 4279
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/redis.md",
+      "title": "Redis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3923
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/serverless-spark.md",
+      "title": "Serverless Spark",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2492
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/singlestore.md",
+      "title": "Singlestore",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2966
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/spanner.md",
+      "title": "Spanner Source",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3604
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/sqlite.md",
+      "title": "Sqlite",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2446
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/tidb.md",
+      "title": "Tidb",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3256
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/trino.md",
+      "title": "Trino",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 2866
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/valkey.md",
+      "title": "Valkey",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3154
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/sources/yugabytedb.md",
+      "title": "Yugabytedb",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.311415-08:00",
+      "size_bytes": 3598
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydbainl/alloydb-ai-nl.md",
+      "title": "Alloydb Ai Nl",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312709-08:00",
+      "size_bytes": 5879
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydbainl/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312701-08:00",
+      "size_bytes": 89
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-create-cluster.md",
+      "title": "Alloydb Create Cluster",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 3036
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-create-instance.md",
+      "title": "Alloydb Create Instance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 3112
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-create-user.md",
+      "title": "Alloydb Create User",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 3068
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-get-cluster.md",
+      "title": "Alloydb Get Cluster",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 1542
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-get-instance.md",
+      "title": "Alloydb Get Instance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 1645
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-get-user.md",
+      "title": "Alloydb Get User",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 1603
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-list-clusters.md",
+      "title": "Alloydb List Clusters",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 1877
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-list-instances.md",
+      "title": "Alloydb List Instances",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 2135
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-list-users.md",
+      "title": "Alloydb List Users",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 1554
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/alloydb-wait-for-operation.md",
+      "title": "Alloydb Wait For Operation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312521-08:00",
+      "size_bytes": 2997
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/alloydb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312508-08:00",
+      "size_bytes": 112
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-analyze-contribution.md",
+      "title": "Bigquery Analyze Contribution",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 4240
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-conversational-analytics.md",
+      "title": "Bigquery Conversational Analytics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2951
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-execute-sql.md",
+      "title": "Bigquery Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2919
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-forecast.md",
+      "title": "Bigquery Forecast",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 3493
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-get-dataset-info.md",
+      "title": "Bigquery Get Dataset Info",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2340
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-get-table-info.md",
+      "title": "Bigquery Get Table Info",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2390
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-list-dataset-ids.md",
+      "title": "Bigquery List Dataset Ids",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2089
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-list-table-ids.md",
+      "title": "Bigquery List Table Ids",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2310
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-search-catalog.md",
+      "title": "Bigquery Search Catalog",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 2998
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/bigquery-sql.md",
+      "title": "Bigquery Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312765-08:00",
+      "size_bytes": 4949
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigquery/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312755-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigtable/bigtable-sql.md",
+      "title": "Bigtable Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313043-08:00",
+      "size_bytes": 5418
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/bigtable/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313032-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cassandra/cassandra-cql.md",
+      "title": "Cassandra Cql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313075-08:00",
+      "size_bytes": 4651
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cassandra/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313065-08:00",
+      "size_bytes": 105
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/clickhouse/clickhouse-execute-sql.md",
+      "title": "Clickhouse Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313118-08:00",
+      "size_bytes": 1740
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/clickhouse/clickhouse-list-databases.md",
+      "title": "Clickhouse List Databases",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313136-08:00",
+      "size_bytes": 1809
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/clickhouse/clickhouse-list-tables.md",
+      "title": "Clickhouse List Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313136-08:00",
+      "size_bytes": 2256
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/clickhouse/clickhouse-sql.md",
+      "title": "Clickhouse Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313136-08:00",
+      "size_bytes": 2823
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/clickhouse/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313105-08:00",
+      "size_bytes": 126
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-fhir-fetch-page.md",
+      "title": "Cloud Healthcare Fhir Fetch Page",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313225-08:00",
+      "size_bytes": 2104
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-fhir-patient-everything.md",
+      "title": "Cloud Healthcare Fhir Patient Everything",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313271-08:00",
+      "size_bytes": 3407
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-fhir-patient-search.md",
+      "title": "Cloud Healthcare Fhir Patient Search",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313271-08:00",
+      "size_bytes": 4196
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-dataset.md",
+      "title": "Cloud Healthcare Get Dataset",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313271-08:00",
+      "size_bytes": 1416
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-dicom-store.md",
+      "title": "Cloud Healthcare Get Dicom Store",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313271-08:00",
+      "size_bytes": 1555
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-dicom-store-metrics.md",
+      "title": "Cloud Healthcare Get Dicom Store Metrics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313271-08:00",
+      "size_bytes": 1598
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-fhir-resource.md",
+      "title": "Cloud Healthcare Get Fhir Resource",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 1950
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-fhir-store.md",
+      "title": "Cloud Healthcare Get Fhir Store",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 1540
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-get-fhir-store-metrics.md",
+      "title": "Cloud Healthcare Get Fhir Store Metrics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 1578
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-list-dicom-stores.md",
+      "title": "Cloud Healthcare List Dicom Stores",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 1322
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-list-fhir-stores.md",
+      "title": "Cloud Healthcare List Fhir Stores",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 1311
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-retrieve-rendered-dicom-instance.md",
+      "title": "Cloud Healthcare Retrieve Rendered Dicom Instance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 2579
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-search-dicom-instances.md",
+      "title": "Cloud Healthcare Search Dicom Instances",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 7310
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-search-dicom-series.md",
+      "title": "Cloud Healthcare Search Dicom Series",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 6873
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/cloud-healthcare-search-dicom-studies.md",
+      "title": "Cloud Healthcare Search Dicom Studies",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313376-08:00",
+      "size_bytes": 6053
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudhealthcare/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313214-08:00",
+      "size_bytes": 153
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudmonitoring/cloud-monitoring-query-prometheus.md",
+      "title": "Cloud Monitoring Query Prometheus",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313517-08:00",
+      "size_bytes": 3379
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudmonitoring/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313507-08:00",
+      "size_bytes": 118
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlcreatedatabase.md",
+      "title": "Cloudsqlcreatedatabase",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 1582
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlcreateusers.md",
+      "title": "Cloudsqlcreateusers",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 1345
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlgetinstances.md",
+      "title": "Cloudsqlgetinstances",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 970
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqllistdatabases.md",
+      "title": "Cloudsqllistdatabases",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 1609
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqllistinstances.md",
+      "title": "Cloudsqllistinstances",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 1590
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlmssqlcreateinstance.md",
+      "title": "Cloudsqlmssqlcreateinstance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 2931
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlmysqlcreateinstance.md",
+      "title": "Cloudsqlmysqlcreateinstance",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 2911
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlpgcreateinstances.md",
+      "title": "Cloudsqlpgcreateinstances",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 2912
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlpgupgradeprecheck.md",
+      "title": "Cloudsqlpgupgradeprecheck",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 2043
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/cloudsqlwaitforoperation.md",
+      "title": "Cloudsqlwaitforoperation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313560-08:00",
+      "size_bytes": 2305
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/cloudsql/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313548-08:00",
+      "size_bytes": 98
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/couchbase/couchbase-sql.md",
+      "title": "Couchbase Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313732-08:00",
+      "size_bytes": 4855
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/couchbase/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313723-08:00",
+      "size_bytes": 105
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataform/dataform-compile-local.md",
+      "title": "Dataform Compile Local",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313789-08:00",
+      "size_bytes": 1783
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataform/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313779-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataplex/dataplex-lookup-entry.md",
+      "title": "Dataplex Lookup Entry",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313831-08:00",
+      "size_bytes": 3066
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataplex/dataplex-search-aspect-types.md",
+      "title": "Dataplex Search Aspect Types",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313831-08:00",
+      "size_bytes": 2680
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataplex/dataplex-search-entries.md",
+      "title": "Dataplex Search Entries",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313831-08:00",
+      "size_bytes": 2621
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dataplex/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313820-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dgraph/dgraph-dql.md",
+      "title": "Dgraph Dql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313896-08:00",
+      "size_bytes": 4451
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/dgraph/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313886-08:00",
+      "size_bytes": 99
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/elasticsearch/elasticsearch-esql.md",
+      "title": "elasticsearch-esql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313944-08:00",
+      "size_bytes": 2159
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/elasticsearch/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313934-08:00",
+      "size_bytes": 114
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firebird/firebird-execute-sql.md",
+      "title": "Firebird Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313981-08:00",
+      "size_bytes": 1324
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firebird/firebird-sql.md",
+      "title": "Firebird Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313981-08:00",
+      "size_bytes": 5688
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firebird/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.313971-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-add-documents.md",
+      "title": "Firestore Add Documents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 8720
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-delete-documents.md",
+      "title": "Firestore Delete Documents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 1410
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-get-documents.md",
+      "title": "Firestore Get Documents",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 1400
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-get-rules.md",
+      "title": "Firestore Get Rules",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 1365
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-list-collections.md",
+      "title": "Firestore List Collections",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 1617
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-query-collection.md",
+      "title": "Firestore Query Collection",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314030-08:00",
+      "size_bytes": 5314
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-query.md",
+      "title": "Using curl",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314189-08:00",
+      "size_bytes": 13273
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-update-document.md",
+      "title": "Firestore Update Document",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314189-08:00",
+      "size_bytes": 11687
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/firestore-validate-rules.md",
+      "title": "Firestore Validate Rules",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314189-08:00",
+      "size_bytes": 3258
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/firestore/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314020-08:00",
+      "size_bytes": 106
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/http/http.md",
+      "title": "Http",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314297-08:00",
+      "size_bytes": 9719
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/http/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314288-08:00",
+      "size_bytes": 95
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.312459-08:00",
+      "size_bytes": 14379
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314327-08:00",
+      "size_bytes": 99
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-add-dashboard-element.md",
+      "title": "Looker Add Dashboard Element",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1888
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-conversational-analytics.md",
+      "title": "Looker Conversational Analytics",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1596
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-create-project-file.md",
+      "title": "Looker Create Project File",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1450
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-delete-project-file.md",
+      "title": "Looker Delete Project File",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1369
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-dev-mode.md",
+      "title": "Looker Dev Mode",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1248
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-generate-embed-url.md",
+      "title": "Looker Generate Embed Url",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314337-08:00",
+      "size_bytes": 1766
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-connection-databases.md",
+      "title": "Looker Get Connection Databases",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1292
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-connection-schemas.md",
+      "title": "Looker Get Connection Schemas",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1294
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-connections.md",
+      "title": "Looker Get Connections",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1321
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-connection-table-columns.md",
+      "title": "Looker Get Connection Table Columns",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1539
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-connection-tables.md",
+      "title": "Looker Get Connection Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1324
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-dashboards.md",
+      "title": "Looker Get Dashboards",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 2003
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-dimensions.md",
+      "title": "Looker Get Dimensions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 2093
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-explores.md",
+      "title": "Looker Get Explores",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1493
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-filters.md",
+      "title": "Looker Get Filters",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1751
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-looks.md",
+      "title": "Looker Get Looks",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1935
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-measures.md",
+      "title": "Looker Get Measures",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 2069
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-models.md",
+      "title": "Looker Get Models",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1132
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-parameters.md",
+      "title": "Looker Get Parameters",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314451-08:00",
+      "size_bytes": 1781
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-project-file.md",
+      "title": "Looker Get Project File",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1246
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-project-files.md",
+      "title": "Looker Get Project Files",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1257
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-get-projects.md",
+      "title": "Looker Get Projects",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1185
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-health-analyze.md",
+      "title": "Looker Health Analyze",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 3258
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-health-pulse.md",
+      "title": "Looker Health Pulse",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 3270
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-health-vacuum.md",
+      "title": "Looker Health Vacuum",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 2926
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-make-dashboard.md",
+      "title": "Looker Make Dashboard",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1629
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-make-look.md",
+      "title": "Looker Make Look",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1831
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-query.md",
+      "title": "Looker Query",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 2983
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-query-sql.md",
+      "title": "Looker Query Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 2894
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-query-url.md",
+      "title": "Looker Query Url",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 20679
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-run-dashboard.md",
+      "title": "Looker Run Dashboard",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1274
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-run-look.md",
+      "title": "Looker Run Look",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1203
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/looker/looker-update-project-file.md",
+      "title": "Looker Update Project File",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314624-08:00",
+      "size_bytes": 1462
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mindsdb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314911-08:00",
+      "size_bytes": 3978
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mindsdb/mindsdb-execute-sql.md",
+      "title": "Mindsdb Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314932-08:00",
+      "size_bytes": 3660
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mindsdb/mindsdb-sql.md",
+      "title": "Mindsdb Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314932-08:00",
+      "size_bytes": 6638
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314970-08:00",
+      "size_bytes": 104
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-aggregate.md",
+      "title": "Mongodb Aggregate",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 3707
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-delete-many.md",
+      "title": "Mongodb Delete Many",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 2746
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-delete-one.md",
+      "title": "Mongodb Delete One",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 2912
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-find.md",
+      "title": "Mongodb Find",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 4039
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-find-one.md",
+      "title": "Mongodb Find One",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 3840
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-insert-many.md",
+      "title": "Mongodb Insert Many",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 2545
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-insert-one.md",
+      "title": "Mongodb Insert One",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 2337
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-update-many.md",
+      "title": "Mongodb Update Many",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 5057
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mongodb/mongodb-update-one.md",
+      "title": "Mongodb Update One",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.314980-08:00",
+      "size_bytes": 5469
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mssql/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315162-08:00",
+      "size_bytes": 140
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mssql/mssql-execute-sql.md",
+      "title": "Mssql Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315171-08:00",
+      "size_bytes": 1504
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mssql/mssql-list-tables.md",
+      "title": "Mssql List Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315171-08:00",
+      "size_bytes": 1837
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mssql/mssql-sql.md",
+      "title": "Mssql Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315171-08:00",
+      "size_bytes": 5042
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315253-08:00",
+      "size_bytes": 126
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-execute-sql.md",
+      "title": "Mysql Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 1724
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-list-active-queries.md",
+      "title": "Mysql List Active Queries",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 2773
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-list-table-fragmentation.md",
+      "title": "Mysql List Table Fragmentation",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 2718
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-list-tables.md",
+      "title": "Mysql List Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 2495
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-list-tables-missing-unique-indexes.md",
+      "title": "Mysql List Tables Missing Unique Indexes",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 1997
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/mysql/mysql-sql.md",
+      "title": "Mysql Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315264-08:00",
+      "size_bytes": 4865
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/neo4j/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315384-08:00",
+      "size_bytes": 97
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/neo4j/neo4j-cypher.md",
+      "title": "Neo4J Cypher",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315394-08:00",
+      "size_bytes": 3359
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/neo4j/neo4j-execute-cypher.md",
+      "title": "Neo4J Execute Cypher",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315394-08:00",
+      "size_bytes": 2681
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/neo4j/neo4j-schema.md",
+      "title": "Neo4J Schema",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315394-08:00",
+      "size_bytes": 2133
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oceanbase/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315457-08:00",
+      "size_bytes": 106
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oceanbase/oceanbase-execute-sql.md",
+      "title": "Oceanbase Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315467-08:00",
+      "size_bytes": 1311
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oceanbase/oceanbase-sql.md",
+      "title": "Oceanbase Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315467-08:00",
+      "size_bytes": 5088
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oracle/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315511-08:00",
+      "size_bytes": 100
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oracle/oracle-execute-sql.md",
+      "title": "Oracle Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315520-08:00",
+      "size_bytes": 784
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/oracle/oracle-sql.md",
+      "title": "Oracle Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315520-08:00",
+      "size_bytes": 1728
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315559-08:00",
+      "size_bytes": 148
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-database-overview.md",
+      "title": "Postgres Database Overview",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315570-08:00",
+      "size_bytes": 2095
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-execute-sql.md",
+      "title": "Postgres Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315570-08:00",
+      "size_bytes": 1801
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-active-queries.md",
+      "title": "Postgres List Active Queries",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315570-08:00",
+      "size_bytes": 2804
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-available-extensions.md",
+      "title": "Postgres List Available Extensions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2106
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-indexes.md",
+      "title": "Postgres List Indexes",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 3087
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-installed-extensions.md",
+      "title": "Postgres List Installed Extensions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 1519
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-locks.md",
+      "title": "Postgres List Locks",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2722
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-schemas.md",
+      "title": "Postgres List Schemas",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2093
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-sequences.md",
+      "title": "Postgres List Sequences",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2464
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-tables.md",
+      "title": "Postgres List Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 1875
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-triggers.md",
+      "title": "Postgres List Triggers",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2677
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-list-views.md",
+      "title": "Postgres List Views",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 1591
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-long-running-transactions.md",
+      "title": "Postgres Long Running Transactions",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 4242
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-replication-stats.md",
+      "title": "Postgres Replication Stats",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 2834
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/postgres/postgres-sql.md",
+      "title": "Postgres Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315615-08:00",
+      "size_bytes": 5062
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/redis/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315832-08:00",
+      "size_bytes": 97
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/redis/redis.md",
+      "title": "Redis",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315841-08:00",
+      "size_bytes": 1675
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/serverless-spark/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315872-08:00",
+      "size_bytes": 360
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/serverless-spark/serverless-spark-cancel-batch.md",
+      "title": "Serverless Spark Cancel Batch",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315883-08:00",
+      "size_bytes": 1907
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/serverless-spark/serverless-spark-get-batch.md",
+      "title": "serverless-spark-get-batch",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315883-08:00",
+      "size_bytes": 2804
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/serverless-spark/serverless-spark-list-batches.md",
+      "title": "Serverless Spark List Batches",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315883-08:00",
+      "size_bytes": 2560
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/singlestore/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315946-08:00",
+      "size_bytes": 109
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/singlestore/singlestore-execute-sql.md",
+      "title": "Singlestore Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315956-08:00",
+      "size_bytes": 1320
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/singlestore/singlestore-sql.md",
+      "title": "Singlestore Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315956-08:00",
+      "size_bytes": 4659
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/spanner/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.315994-08:00",
+      "size_bytes": 101
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/spanner/spanner-execute-sql.md",
+      "title": "Spanner Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316005-08:00",
+      "size_bytes": 1615
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/spanner/spanner-list-tables.md",
+      "title": "Spanner List Tables",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316005-08:00",
+      "size_bytes": 6484
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/spanner/spanner-sql.md",
+      "title": "Spanner Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316005-08:00",
+      "size_bytes": 7201
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/sqlite/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316098-08:00",
+      "size_bytes": 99
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/sqlite/sqlite-execute-sql.md",
+      "title": "Sqlite Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316111-08:00",
+      "size_bytes": 1357
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/sqlite/sqlite-sql.md",
+      "title": "Sqlite Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316133-08:00",
+      "size_bytes": 3854
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/tidb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316163-08:00",
+      "size_bytes": 137
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/tidb/tidb-execute-sql.md",
+      "title": "Tidb Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316173-08:00",
+      "size_bytes": 1252
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/tidb/tidb-sql.md",
+      "title": "Tidb Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316173-08:00",
+      "size_bytes": 4732
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/trino/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316200-08:00",
+      "size_bytes": 136
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/trino/trino-execute-sql.md",
+      "title": "Trino Execute Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316211-08:00",
+      "size_bytes": 1670
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/trino/trino-sql.md",
+      "title": "Trino Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316237-08:00",
+      "size_bytes": 4888
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/utility/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316265-08:00",
+      "size_bytes": 97
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/utility/wait.md",
+      "title": "Wait",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316275-08:00",
+      "size_bytes": 1271
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/valkey/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316300-08:00",
+      "size_bytes": 99
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/valkey/valkey.md",
+      "title": "Valkey",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316309-08:00",
+      "size_bytes": 1690
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/yuagbytedb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316334-08:00",
+      "size_bytes": 103
+    },
+    {
+      "path": "genai-toolbox/docs/en/resources/tools/yuagbytedb/yugabytedb-sql.md",
+      "title": "Yugabytedb Sql",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316344-08:00",
+      "size_bytes": 4751
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/alloydb/ai-nl/index.md",
+      "title": "Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316491-08:00",
+      "size_bytes": 212
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/alloydb/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316380-08:00",
+      "size_bytes": 110
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/alloydb/mcp_quickstart.md",
+      "title": "Mcp Quickstart",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316491-08:00",
+      "size_bytes": 11041
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/bigquery/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316574-08:00",
+      "size_bytes": 112
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/bigquery/local_quickstart.md",
+      "title": "TODO(developer): replace with correct package if needed",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316703-08:00",
+      "size_bytes": 26309
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/bigquery/mcp_quickstart/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316727-08:00",
+      "size_bytes": 8771
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316366-08:00",
+      "size_bytes": 101
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/looker/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316949-08:00",
+      "size_bytes": 108
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/looker/looker_gemini.md",
+      "title": "Looker Gemini",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.316959-08:00",
+      "size_bytes": 3293
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/looker/looker_gemini_oauth/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317010-08:00",
+      "size_bytes": 4748
+    },
+    {
+      "path": "genai-toolbox/docs/en/samples/looker/looker_mcp_inspector/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317627-08:00",
+      "size_bytes": 2772
+    },
+    {
+      "path": "genai-toolbox/docs/en/sdks/go-sdk.md",
+      "title": "Go Sdk",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317838-08:00",
+      "size_bytes": 397
+    },
+    {
+      "path": "genai-toolbox/docs/en/sdks/_index.md",
+      "title": " Index",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317828-08:00",
+      "size_bytes": 110
+    },
+    {
+      "path": "genai-toolbox/docs/en/sdks/js-sdk.md",
+      "title": "Js Sdk",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317838-08:00",
+      "size_bytes": 401
+    },
+    {
+      "path": "genai-toolbox/docs/en/sdks/python-sdk.md",
+      "title": "Python Sdk",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.317838-08:00",
+      "size_bytes": 412
+    },
+    {
+      "path": "genai-toolbox/docs/LOOKER_README.md",
+      "title": "Looker MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 5162
+    },
+    {
+      "path": "genai-toolbox/docs/SPANNER_README.md",
+      "title": "Cloud Spanner MCP Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 4123
+    },
+    {
+      "path": "genai-toolbox/docs/TOOLBOX_README.md",
+      "title": "MCP Toolbox for Databases Server",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.144746-08:00",
+      "size_bytes": 2324
+    },
+    {
+      "path": "genai-toolbox/.github/PULL_REQUEST_TEMPLATE.md",
+      "title": "Pull Request Template",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.141291-08:00",
+      "size_bytes": 905
+    },
+    {
+      "path": "genai-toolbox/.hugo/archetypes/default.md",
+      "title": "Default",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.141809-08:00",
+      "size_bytes": 104
+    },
+    {
+      "path": "genai-toolbox/MCP-TOOLBOX-EXTENSION.md",
+      "title": "Mcp Toolbox Extension",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.143116-08:00",
+      "size_bytes": 7414
+    },
+    {
+      "path": "genai-toolbox/README.md",
+      "title": "MCP Toolbox for Databases",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T19:24:07.143237-08:00",
+      "size_bytes": 28368
+    },
+    {
       "path": ".github/BRANCH_PROTECTION.md",
       "title": "Branch Protection Configuration for `main`",
       "doc_type": "reference",
@@ -5145,8 +8268,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-22T12:02:40.277570-08:00",
-      "size_bytes": 20994
+      "last_modified": "2025-11-25T08:00:34.465522-08:00",
+      "size_bytes": 21987
     },
     {
       "path": "PROGRESS_SUMMARY.md",
@@ -5262,7 +8385,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T09:43:50.342491-08:00",
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
       "size_bytes": 67843
     },
     {
@@ -5289,7 +8412,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-04T20:08:45.011857-08:00",
+      "last_modified": "2025-11-24T21:38:30.182471-08:00",
       "size_bytes": 2562
     },
     {
@@ -5316,8 +8439,17 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-06T10:51:30.726621-08:00",
+      "last_modified": "2025-11-25T08:00:34.689596-08:00",
       "size_bytes": 6295
+    },
+    {
+      "path": "src/graph/nodes/AGENTS.md",
+      "title": "AGENTS.md - src/graph/nodes Directory",
+      "doc_type": "reference",
+      "status": "canonical",
+      "is_canonical": true,
+      "last_modified": "2025-11-24T21:40:31.322144-08:00",
+      "size_bytes": 1013
     },
     {
       "path": "src/graph/README.md",
@@ -5343,7 +8475,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T17:38:14.184107-08:00",
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
       "size_bytes": 5948
     },
     {
@@ -5388,8 +8520,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T18:03:01.325271-08:00",
-      "size_bytes": 4553
+      "last_modified": "2025-11-25T08:00:34.690596-08:00",
+      "size_bytes": 5353
     },
     {
       "path": "src/services/README.md",
@@ -5424,7 +8556,7 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T18:07:02.403109-08:00",
+      "last_modified": "2025-11-25T08:00:34.691596-08:00",
       "size_bytes": 7175
     },
     {
@@ -5505,8 +8637,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.075458-08:00",
-      "size_bytes": 1591
+      "last_modified": "2025-11-24T09:36:22.328897-08:00",
+      "size_bytes": 1601
     },
     {
       "path": "webui/graph/AGENTS.md",
@@ -5514,8 +8646,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-20T13:59:53.076016-08:00",
-      "size_bytes": 3413
+      "last_modified": "2025-11-24T21:38:30.182471-08:00",
+      "size_bytes": 3423
     },
     {
       "path": "webui/graph/public/exports/docs-control/README.md",
@@ -5541,8 +8673,8 @@
       "doc_type": "reference",
       "status": "canonical",
       "is_canonical": true,
-      "last_modified": "2025-11-21T08:29:24.993526-08:00",
-      "size_bytes": 1335
+      "last_modified": "2025-11-24T12:01:36.752681-08:00",
+      "size_bytes": 2629
     },
     {
       "path": "webui/public/AGENTS.md",
@@ -5563,6 +8695,6 @@
       "size_bytes": 7495
     }
   ],
-  "total": 618,
-  "generated_at": "2025-11-23T02:48:05.054797+00:00"
+  "total": 966,
+  "generated_at": "2025-11-25T18:50:07.761713+00:00"
 }

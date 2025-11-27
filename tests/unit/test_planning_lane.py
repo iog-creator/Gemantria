@@ -84,14 +84,14 @@ def test_codex_cli_success(mock_available, mock_run):
 @patch("agentpm.adapters.planning.get_lm_model_config")
 @patch("agentpm.adapters.planning.gemini_cli.run")
 def test_planning_prompt_uses_gemini_when_configured(mock_run, mock_cfg):
-    """Planning adapter should call Gemini CLI when configured."""
+    """Planning adapter should call Gemini CLI when explicitly enabled (deprecated)."""
     success = PlanningCliResult(ok=True, mode="lm_on", provider="gemini", response="Steps")
     mock_run.return_value = success
     mock_cfg.return_value = {
         "planning_provider": "gemini",
         "planning_model": "gemini-2.5-pro",
         "gemini_cli_path": "gemini",
-        "gemini_enabled": True,
+        "gemini_enabled": True,  # Explicitly enabled (deprecated, defaults to False)
     }
 
     result = planning.run_planning_prompt("Design guard", system="Architect role")
@@ -144,11 +144,11 @@ def test_planning_prompt_uses_codex_provider(mock_run, mock_cfg):
 
 
 def test_router_routes_planning_slot_with_configured_provider():
-    """Router should return planning slot decision with configured provider/model."""
+    """Router should return planning slot decision with configured provider/model (Gemini deprecated)."""
     config = {
         "planning_provider": "gemini",
         "planning_model": "gemini-2.5-pro-plan",
-        "gemini_enabled": True,
+        "gemini_enabled": True,  # Explicitly enabled (deprecated, defaults to False)
         "local_agent_model": "granite4:tiny-h",
     }
     router = GraniteRouter(config=config, dry_run=True)

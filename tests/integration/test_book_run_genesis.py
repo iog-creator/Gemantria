@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from src.nodes.collect_nouns_db import collect_nouns_for_book
+from agentpm.modules.gematria.utils.collect_nouns_db import collect_nouns_for_book
 
 pytestmark = pytest.mark.requires_bible_db
 

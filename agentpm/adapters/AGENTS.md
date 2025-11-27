@@ -37,6 +37,25 @@ Provides adapter for Ollama API (chat, embeddings, reranking) with error-toleran
 
 **Error Handling**: All rerank errors are non-fatal; pipeline continues with embedding-only scores when Granite rerank fails.
 
+### Theology Adapter (`theology.py`)
+
+Provides adapter for Christian-Bible-Expert-v2.0-12B model via LM Studio or Ollama.
+
+**Purpose**: Dedicated adapter for theology model, separate from LM Studio critical path. Supports local-only providers (no internet).
+
+**Key Functions**:
+- `chat(prompt: str, *, system: str | None = None, model: str | None = None) -> str` - Chat with theology model
+
+**Configuration**:
+- **Port Default**: Uses config's `base_url` default (typically port 9994), not hardcoded values
+- **Provider Selection**: `THEOLOGY_PROVIDER=lmstudio|ollama` (default: `lmstudio`)
+- **Base URL**: `THEOLOGY_LMSTUDIO_BASE_URL` (defaults to `base_url` from config, typically `http://127.0.0.1:9994/v1`)
+- **Model**: `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B`
+
+**Error Handling**: Raises `RuntimeError` if model not configured or provider unavailable (fail-closed, no fallbacks).
+
+**Security**: Enforces localhost-only connections (127.0.0.1 or localhost).
+
 ## API Contracts
 
 ### `catalog_read_ro() -> dict[str, Any]`

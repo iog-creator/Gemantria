@@ -11,6 +11,7 @@ Provides type-safe model resolution with fallbacks and validation.
 """
 
 import os
+from enum import Enum
 from typing import Dict, List
 from dataclasses import dataclass
 
@@ -19,6 +20,22 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from infra.env_loader import ensure_env_loaded
+from scripts.config.env import get_lm_model_config
+
+
+class Modality(str, Enum):
+    """Model modality types."""
+
+    TEXT = "text"
+    VISION_TEXT = "vision_text"
+
+
+class ModelRole(str, Enum):
+    """Model role types."""
+
+    GENERAL = "general"
+    REASONING = "reasoning"
+    VISION = "vision"
 
 
 @dataclass
@@ -27,6 +44,69 @@ class ModelConfig:
 
     name: str
     fallback: str | None = None
+
+
+@dataclass
+class ModelRegistryConfig:
+    """Extended model configuration for registry with modality and role."""
+
+    name: str  # provider-specific model id
+    provider: str  # "granite" | "ollama" | "lmstudio"
+    modality: Modality
+    role: ModelRole
+    slot: str  # "local_agent" | "planning" | "vision"
+    max_context: int = 131072
+
+
+def get_model_registry() -> Dict[str, ModelRegistryConfig]:
+    """Get the centralized model registry.
+
+    Returns:
+        Dictionary mapping slot names to ModelRegistryConfig
+    """
+    settings = get_lm_model_config()
+
+    # Determine local_agent model based on planning provider
+    if settings.get("planning_provider") == "granite":
+        local_agent_name = settings.get("local_agent_model", "granite-4.0-small")
+    else:
+        local_agent_name = settings.get("local_agent_model", "granite-4.0-small")
+
+    return {
+        "local_agent": ModelRegistryConfig(
+            name=local_agent_name,
+            provider="granite",
+            modality=Modality.TEXT,
+            role=ModelRole.GENERAL,
+            slot="local_agent",
+        ),
+        "planning": ModelRegistryConfig(
+            name=settings.get("planning_model", "granite-4.0-small"),
+            provider=settings.get("planning_provider", "granite"),
+            modality=Modality.TEXT,
+            role=ModelRole.REASONING,
+            slot="planning",
+        ),
+        "vision": ModelRegistryConfig(
+            name=settings.get("vision_model", "qwen3-vl-4b"),
+            provider=settings.get("vision_provider", "lmstudio"),
+            modality=Modality.VISION_TEXT,
+            role=ModelRole.VISION,
+            slot="vision",
+        ),
+    }
+
+
+# Global registry instance
+_MODEL_REGISTRY: Dict[str, ModelRegistryConfig] | None = None
+
+
+def MODEL_REGISTRY() -> Dict[str, ModelRegistryConfig]:
+    """Get the global model registry (cached)."""
+    global _MODEL_REGISTRY
+    if _MODEL_REGISTRY is None:
+        _MODEL_REGISTRY = get_model_registry()
+    return _MODEL_REGISTRY
 
 
 class ModelRouter:

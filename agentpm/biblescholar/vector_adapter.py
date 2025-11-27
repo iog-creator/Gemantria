@@ -10,8 +10,10 @@ Previously used 768-dim embeddings from bible.verses.embedding (deprecated).
 
 See:
 - docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md
-- agentpm/biblescholar/AGENTS.md
-"""
+- agentpm/biblescholar/AGENTS.md.
+
+Canonical embedding dimension: 1024 (BGE-M3 compatible).
+The deprecated bible.verses.embedding column (vector(768)) should not be used."""
 
 from dataclasses import dataclass
 from typing import Literal
@@ -326,6 +328,12 @@ class BibleVectorAdapter:
             List of VerseSimilarityResult objects, ordered by similarity (highest first).
             Empty list if DB unavailable.
         """
+        # Validate embedding dimension (BGE-M3 requires 1024-dim)
+        if len(query_embedding) != 1024:
+            raise ValueError(
+                f"Query embedding must be 1024-dimensional (BGE-M3 compatible), got {len(query_embedding)}-dimensional"
+            )
+
         if not self._ensure_engine():
             return []
 

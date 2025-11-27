@@ -136,6 +136,47 @@ class BibleDbAdapter:
             self._db_status = "unavailable"
             return None
 
+    def get_verse_by_id(self, verse_id: int) -> VerseRecord | None:
+        """Get a single verse by ID.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            VerseRecord if found, None if not found or DB unavailable.
+        """
+        if not self._ensure_engine():
+            return None
+
+        try:
+            query = text(
+                """
+                SELECT verse_id, book_name, chapter_num, verse_num, text, translation_source
+                FROM bible.verses
+                WHERE verse_id = :verse_id
+                LIMIT 1
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                row = result.fetchone()
+
+                if row is None:
+                    return None
+
+                return VerseRecord(
+                    verse_id=row[0],
+                    book_name=row[1],
+                    chapter_num=row[2],
+                    verse_num=row[3],
+                    text=row[4],
+                    translation_source=row[5],
+                )
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return None
+
     def get_passage(
         self,
         book_name: str,
@@ -341,3 +382,100 @@ class BibleDbAdapter:
         """
         self._ensure_engine()  # Update status
         return self._db_status
+
+    def get_proper_names_for_verse(self, verse_id: int) -> list[dict]:
+        """Get proper names associated with a verse.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            List of dictionaries containing proper name details.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT pn.unified_name, pn.description, pn.type
+                FROM bible.proper_names pn
+                JOIN bible.verse_word_links vwl ON pn.proper_name_id = vwl.word_id
+                WHERE vwl.verse_id = :verse_id
+                  AND vwl.word_type = 'proper_name'
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                return [{"name": row[0], "description": row[1], "type": row[2]} for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def get_word_links_for_verse(self, verse_id: int) -> list[dict]:
+        """Get word links for a verse.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            List of dictionaries containing word link details.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT word_id, word_type
+                FROM bible.verse_word_links
+                WHERE verse_id = :verse_id
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                return [{"word_id": row[0], "word_type": row[1]} for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def get_cross_references(self, book_name: str, chapter_num: int, verse_num: int) -> list[str]:
+        """Get cross-references for a verse.
+
+        Args:
+            book_name: Book name.
+            chapter_num: Chapter number.
+            verse_num: Verse number.
+
+        Returns:
+            List of cross-reference strings.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT target_book, target_chapter, target_verse
+                FROM bible.versification_mappings
+                WHERE source_book = :book_name
+                  AND source_chapter = :chapter_num
+                  AND source_verse = :verse_num
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(
+                    query,
+                    {
+                        "book_name": book_name,
+                        "chapter_num": chapter_num,
+                        "verse_num": verse_num,
+                    },
+                )
+                return [f"{row[0]} {row[1]}:{row[2]}" for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []

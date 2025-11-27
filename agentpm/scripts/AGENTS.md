@@ -6,10 +6,16 @@
 
 ## Key Components
 
-| Script | Purpose |
-| --- | --- |
-| `ingest_docs.py` | Parses SSOT documentation (AGENTS, MASTER_PLAN, schemas) into `control.doc_sources` / `control.doc_sections` for retrieval-augmented answers. |
-| `reality_check_1.py` | Automates Phase-6 Reality Check #1 by verifying Postgres + LM Studio, running docs ingest, and executing the golden question `What does Phase-6P deliver?`. |
+| Script | Purpose | DB Requirement |
+| --- | --- | --- |
+| `ingest_docs.py` | Parses SSOT documentation (AGENTS, MASTER_PLAN, schemas) into `control.doc_sources` / `control.doc_sections` for retrieval-augmented answers. | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
+| `reality_check_1.py` | Automates Phase-6 Reality Check #1 by verifying Postgres + LM Studio, running docs ingest, and executing the golden question `What does Phase-6P deliver?`. | Observability - Handles db_off gracefully |
+| `docs_dashboard_refresh.py` | Generates documentation control panel exports (summary, canonical, archive candidates, unreviewed batch, orphans). | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
+| `docs_inventory.py` | Scans repository for markdown-like files and upserts metadata into `control.kb_document` for document management. | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
+| `docs_classify_direct.py` | Direct document classification script - updates `control.kb_document` with canonical/archive_candidate status. | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
+| `docs_dm002_sync.py` | Writes canonical/archive_candidate decisions from preview file into `control.kb_document`. | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
+| `docs_dm002_preview.py` | Reads duplicate report and proposes canonical/archive classifications (does not touch DB). | **No DB required** - Works without DB |
+| `docs_archive_apply.py` | Moves archive_candidate documents to `archive/docs/` and updates DB status. | **REQUIRES DB** - Fails (exit 1) when DB unavailable |
 
 ## API Contracts
 
@@ -28,6 +34,9 @@
 
 - Always run `bash scripts/check_venv.sh` before invoking scripts locally (Rule-062).  
 - Prefer centralized DSN loaders from `scripts.config.env`; never call `os.getenv` for DSNs directly.  
+- **DB-off handling (Rule-046)**:
+  - **Operational scripts** (data writes, ingestion, exports): Must **FAIL** (exit code 1) when DB unavailable. Print: `"ERROR: This command requires the database to be available."`
+  - **Observability scripts** (status checks, health queries): Handle db_off gracefully (exit code 0, structured `mode="db_off"` output).
 - Scripts should emit machine-readable JSON summaries to stdout and human hints to stderr for evidence capture.  
 - Add new script entrypoints to `pmagent/cli.py` plus relevant Makefile targets/README instructions.  
 - Update this `AGENTS.md` whenever new automation scripts or CLI bridges are added to this directory.

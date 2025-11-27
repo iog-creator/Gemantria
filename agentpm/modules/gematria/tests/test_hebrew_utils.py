@@ -1,4 +1,4 @@
-from src.core.hebrew_utils import calc_string, calculate_gematria
+from agentpm.modules.gematria.utils.hebrew_utils import calc_string, calculate_gematria
 from src.core.ids import normalize_hebrew
 
 

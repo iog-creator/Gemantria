@@ -173,6 +173,9 @@ def build_fix_actions(
         elif severity == "low_coverage":
             action_type = "propose_new_docs"
             description = item.get("suggested_action", f"Propose new docs for {subsystem} subsystem")
+            # Propose a default location for subsystem documentation
+            if not doc_path:
+                doc_path = f"docs/subsystems/{subsystem}.md"
         else:
             action_type = "no_op"
             description = item.get("suggested_action", f"Advisory note for {item.get('title', item_id)}")
@@ -429,6 +432,23 @@ def apply_actions(
                         except Exception as e:
                             result["errors"].append(f"Failed to save registry: {e}")
                             action.notes.append(f"Registry save failed: {e}")
+
+                elif action.action_type == "propose_new_docs":
+                    # Same logic as create_stub_doc but specific for new proposals
+                    if not doc_path.exists():
+                        metadata = {
+                            "title": f"{action.subsystem.title()} Subsystem Documentation",
+                            "owning_subsystem": action.subsystem,
+                            "type": "guide",
+                            "tags": ["subsystem", "overview"],
+                        }
+                        create_stub_doc(doc_path, metadata)
+                        result["files_created"].append(str(action.doc_path))
+                        action.applied = True
+                        result["actions_applied"] += 1
+                    else:
+                        result["actions_skipped"] += 1
+                        action.notes.append("File already exists")
 
         except Exception as e:
             result["errors"].append(f"Error processing {action.id}: {e}")

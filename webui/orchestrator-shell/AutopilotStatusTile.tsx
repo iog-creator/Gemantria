@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 interface AutopilotSummaryData {
     schema: string;
@@ -24,7 +24,7 @@ export default function AutopilotStatusTile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("/exports/control-plane/autopilot_summary.json");
+                const res = await fetch("/share/atlas/control_plane/autopilot_summary.json");
                 if (res.ok) {
                     const json = await res.json();
                     setData(json);
@@ -48,7 +48,7 @@ export default function AutopilotStatusTile() {
         return (
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold mb-2">Autopilot Status</h3>
-                <p className="text-gray-600 text-sm">Loading...</p>
+                <p className="text-gray-800 text-sm">Loading...</p>
             </div>
         );
     }
@@ -57,7 +57,7 @@ export default function AutopilotStatusTile() {
         return (
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold mb-2">Autopilot Status</h3>
-                <p className="text-gray-600 text-sm">{error || "Data unavailable"}</p>
+                <p className="text-gray-800 text-sm">{error || "Data unavailable"}</p>
             </div>
         );
     }
@@ -79,12 +79,15 @@ export default function AutopilotStatusTile() {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold mb-3">Autopilot Status</h3>
             <div className="space-y-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-400/30 shadow-[0_0_15px_rgba(59,130,246,0.3)] flex items-center justify-center backdrop-blur-sm">
+                        <div className="w-6 h-6 rounded-full bg-blue-400/80 shadow-[0_0_10px_rgba(59,130,246,0.6)]"></div>
+                    </div>
                     <span className={`px-3 py-1 rounded text-sm font-medium ${statusColor}`}>
                         {statusText}
                     </span>
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-800">
                     <p>
                         <strong>Total Runs:</strong> {totalRuns} (last {data.window_days} days)
                     </p>
@@ -101,7 +104,7 @@ export default function AutopilotStatusTile() {
                 {Object.keys(data.stats).length > 0 && (
                     <div className="mt-3 pt-3 border-t border-gray-200">
                         <p className="text-xs font-semibold text-gray-700 mb-2">By Tool:</p>
-                        <ul className="space-y-1 text-xs text-gray-600">
+                        <ul className="space-y-1 text-xs text-gray-800">
                             {Object.entries(data.stats).map(([tool, stats]) => (
                                 <li key={tool} className="flex items-center justify-between">
                                     <span className="font-medium">{tool}:</span>

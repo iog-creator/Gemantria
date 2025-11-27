@@ -67,7 +67,7 @@ export default function LexiconTab() {
     // Live API call - memoized to prevent SearchBar debounce loop
     const handleLiveLookup = useCallback(async (strongs: string) => {
         if (!strongs.trim()) return;
-        
+
         // Prevent duplicate searches for the same query or if already searching
         const normalized = strongs.trim().toUpperCase();
         if (searchingRef.current || lastQueryRef.current === normalized) {
@@ -109,9 +109,9 @@ export default function LexiconTab() {
                         entry_id: 0,
                         strongs_id: data.strongs_id,
                         lemma: data.lemma,
-                        transliteration: null,
-                        definition: null,
-                        usage: null,
+                        transliteration: data.transliteration || null,
+                        definition: data.definition || null,
+                        usage: data.usage || null,
                         gloss: data.gloss || null,
                     } : null,
                     mode: 'available',
@@ -140,8 +140,8 @@ export default function LexiconTab() {
                             <button
                                 onClick={() => setShowCapabilities(!showCapabilities)}
                                 className={`text-sm font-medium px-3 py-1.5 rounded transition-colors ${showCapabilities
-                                        ? 'bg-blue-100 text-blue-700'
-                                        : 'text-gray-600 hover:bg-gray-100'
+                                    ? 'bg-blue-100 text-blue-700'
+                                    : 'text-gray-600 hover:bg-gray-100'
                                     }`}
                             >
                                 {showCapabilities ? 'Hide Tools' : 'Show Related Tools'}

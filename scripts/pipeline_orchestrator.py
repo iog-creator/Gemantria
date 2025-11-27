@@ -331,7 +331,7 @@ def run_analysis(operation: str) -> Dict[str, Any]:
         return {"success": False, "operation": operation, "error": str(e)}
 
 
-def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", dim: int = 1024) -> Dict[str, Any]:
+def run_embeddings_backfill(model: str = "text-embedding-bge-m3", dim: int = 1024) -> Dict[str, Any]:
     """
     Run embeddings backfill for existing nouns.
     """
@@ -401,9 +401,7 @@ def main():
 
     # Embeddings command
     embeddings_parser = subparsers.add_parser("embeddings", help="Embeddings backfill")
-    embeddings_parser.add_argument(
-        "--model", default="text-embedding-qwen3-embedding-0.6b", help="Embedding model name"
-    )
+    embeddings_parser.add_argument("--model", default="text-embedding-bge-m3", help="Embedding model name")
     embeddings_parser.add_argument("--dim", type=int, default=1024, help="Embedding dimension")
 
     # Full workflow command

@@ -39,20 +39,21 @@ def write_json(filename: str, data: Any) -> None:
 
 
 def get_db_connection() -> Any:
-    """Get a database connection or exit if unavailable."""
+    """Get a database connection. This command REQUIRES the database to be available."""
     if psycopg is None:
-        print("ERROR: psycopg not available", file=sys.stderr)
+        print("ERROR: psycopg not available. This command requires the database.", file=sys.stderr)
         sys.exit(1)
 
     dsn = get_rw_dsn()
     if not dsn:
-        print("ERROR: GEMATRIA_DSN not set", file=sys.stderr)
+        print("ERROR: GEMATRIA_DSN not set. This command requires the database.", file=sys.stderr)
         sys.exit(1)
 
     try:
         return psycopg.connect(dsn, autocommit=True)
     except Exception as exc:
         print(f"ERROR: Failed to connect to database: {exc}", file=sys.stderr)
+        print("ERROR: This command requires the database to be available and running.", file=sys.stderr)
         sys.exit(1)
 
 
@@ -247,7 +248,7 @@ def generate_archive_dryrun() -> None:
 
 
 def main() -> None:
-    """Main entry point."""
+    """Main entry point. This command REQUIRES the database to be available."""
     ensure_exports_dir()
 
     conn = get_db_connection()

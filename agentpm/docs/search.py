@@ -36,6 +36,7 @@ def search_docs(
     k: int = 10,
     model_name: str | None = None,
     tier0_only: bool = True,
+    doc_type: str | None = None,
 ) -> Dict[str, object]:
     """
     Search governance/docs content via semantic similarity.
@@ -45,6 +46,7 @@ def search_docs(
         k: Number of results to return (default: 10)
         model_name: Embedding model name (defaults to config)
         tier0_only: If True, only search Tier-0 docs (AGENTS_ROOT + AGENTS::*)
+        doc_type: Optional document type filter (ssot, runbook, reference, legacy, unknown)
 
     Returns:
         Dict with:
@@ -91,11 +93,11 @@ def search_docs(
     # Convert to JSON string for pgvector
     embedding_json = json.dumps(query_embedding)
 
-    # Connect to DB and run similarity search
+    # Connect to DB and run similarity search - this command REQUIRES the database
     try:
         engine = get_control_engine()
     except Exception as e:
-        result["error"] = f"Failed to connect to control DB: {e}"
+        result["error"] = f"Database unavailable. This command requires the database: {e}"
         return result
 
     try:
@@ -105,6 +107,17 @@ def search_docs(
             if tier0_only:
                 tier0_filter = """
                     AND (dr.logical_name = 'AGENTS_ROOT' OR dr.logical_name LIKE 'AGENTS::%')
+                """
+
+            # Build query with optional doc_type filter
+            doc_type_filter = ""
+            doc_type_join = ""
+            if doc_type:
+                doc_type_join = """
+                    INNER JOIN control.kb_document kb ON kb.path = dr.repo_path
+                """
+                doc_type_filter = """
+                    AND kb.doc_type = :doc_type
                 """
 
             query_sql = text(
@@ -117,23 +130,26 @@ def search_docs(
                 FROM control.doc_embedding e
                 INNER JOIN control.doc_fragment df ON df.id = e.fragment_id
                 INNER JOIN control.doc_registry dr ON dr.doc_id = df.doc_id
+                {doc_type_join}
                 WHERE e.model_name = :model_name
                   AND dr.is_ssot = TRUE
                   AND dr.enabled = TRUE
                   {tier0_filter}
+                  {doc_type_filter}
                 ORDER BY e.embedding <-> CAST(:query_embedding AS vector)
                 LIMIT :k
                 """
             )
 
-            rows = conn.execute(
-                query_sql,
-                {
-                    "query_embedding": embedding_json,
-                    "model_name": model,
-                    "k": k,
-                },
-            ).fetchall()
+            params = {
+                "query_embedding": embedding_json,
+                "model_name": model,
+                "k": k,
+            }
+            if doc_type:
+                params["doc_type"] = doc_type
+
+            rows = conn.execute(query_sql, params).fetchall()
 
             # Format results
             results = []
@@ -157,7 +173,7 @@ def search_docs(
             result["results"] = results
 
     except Exception as e:
-        result["error"] = f"Database query failed: {e}"
+        result["error"] = f"Database query failed. This command requires the database: {e}"
         return result
 
     return result

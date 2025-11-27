@@ -10,7 +10,7 @@ import subprocess
 import uuid
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from agentpm.guarded.autopilot_adapter import map_intent_to_command
@@ -19,7 +19,7 @@ from agentpm.guarded.autopilot_adapter import map_intent_to_command
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("autopilot")
 
-app = FastAPI(title="Autopilot Backend API", version="0.2.0")
+router = APIRouter(prefix="/api/autopilot", tags=["autopilot"])
 
 
 class IntentRequest(BaseModel):
@@ -34,7 +34,7 @@ class IntentResponse(BaseModel):
     status: str
 
 
-@app.post("/autopilot/intent", response_model=IntentResponse)
+@router.post("/intent", response_model=IntentResponse)
 async def handle_intent(request: IntentRequest):
     """
     Handle an autopilot intent.
@@ -101,6 +101,6 @@ async def handle_intent(request: IntentRequest):
         raise HTTPException(status_code=500, detail=f"Command execution failed: {e!s}") from e
 
 
-@app.get("/health")
+@router.get("/health")
 async def health_check():
     return {"status": "ok", "phase": "C"}

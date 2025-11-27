@@ -137,7 +137,9 @@ See each subdirectory's `AGENTS.md` for more detailed contracts and test entry p
 - pmagent CLI subcommands (e.g. `pmagent health *`, `pmagent status *` including `pmagent status kb` for KB registry status view, `pmagent reality-check check`) are thin wrappers over `agentpm.*` modules.
 - All top-level behaviors must:
   - Use centralized env/DSN loaders.
-  - Treat DB-off / LM-off as **first-class modes** (never crash; emit structured `mode` + `ok` flags instead).
+  - **Command Type Distinction (Rule-046)**:
+    - **Observability/Status commands** (e.g., `pmagent health *`, `pmagent control *`, `pmagent status *`, `pmagent graph overview`): Handle DB-off / LM-off gracefully (emit structured `mode` + `ok` flags, exit code 0). These commands are designed for monitoring and status checks in CI/hermetic environments.
+    - **Operational commands** (e.g., `pmagent docs dashboard-refresh`, `pmagent docs search`, `pmagent docs inventory`, `pmagent docs dm002-sync`): **REQUIRE** the database and must **FAIL** (exit code 1) when DB/LM unavailable. These commands perform data writes, ingestion, or operations that cannot proceed without the database.
   - Persist AI tracking records (when DB is available) via the runtime/logging layer.
 
 ## Testing Strategy
@@ -157,7 +159,9 @@ See each subdirectory's `AGENTS.md` for more detailed contracts and test entry p
 
 - **DSN & Postgres**
   - Never hard-code DSNs; always use `scripts.config.env` or `agentpm.db.loader`.
-  - Respect DB-off modes; raise `DbUnavailableError` or return structured `mode="db_off"` instead of crashing.
+  - **DB-off handling (Rule-046)**:
+    - **Observability commands**: Return structured `mode="db_off"` with `ok=false` (exit code 0) - graceful degradation for CI/hermetic environments.
+    - **Operational commands**: Must **FAIL** (exit code 1) when DB unavailable. Print clear error message: "ERROR: This command requires the database to be available."
 - **LM & providers**
   - Use the centralized LM model config (`scripts.config.env.get_lm_model_config()`).
   - Theology slot is served by LM Studio (`THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B`) when enabled; other slots may use Ollama Granite per env.

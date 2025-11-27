@@ -8,7 +8,58 @@ alwaysApply: false
 ## Purpose
 Prevent catastrophic failures by ensuring correct environment before any operations.
 
+## Context Scope
+**THIS RULE APPLIES TO LIVE DEVELOPMENT AND OPERATIONS CONTEXTS**, not CI/hermetic environments. For CI/hermetic contexts where services are intentionally offline, see Rule 046 (Hermetic CI Fallbacks) which allows graceful degradation.
+
 ## Critical Environment Checks (MANDATORY)
+
+### 0. Service Status Check (FIRST STEP - BEFORE TROUBLESHOOTING)
+**CRITICAL: BEFORE ANY TROUBLESHOOTING OR DEBUGGING**: Always check if required services are running.
+
+**MANDATORY CHECK (use before troubleshooting any UI/API issues):**
+```bash
+# Use the service status script
+bash scripts/check_services.sh
+
+# Or use Makefile target
+make services.check
+```
+
+**What it checks:**
+1. Virtual environment (.venv) activation status
+2. API server (port 8000) - required for `/api/*` endpoints
+3. Vite dev server (port 5173) - required for UI dashboard
+4. Database connection (optional, may be expected to be off in CI)
+
+**If services are not running:**
+- **DO NOT** troubleshoot UI/API issues until services are started
+- **DO NOT** assume code is broken - check service status first
+- **AUTOMATICALLY START** missing services before debugging (Cursor must do this, not wait for orchestrator)
+
+**MANDATORY: Auto-Start Services When Down**
+When services are detected as down, Cursor MUST automatically start them:
+1. **Database (Postgres)**: Run `pmagent bringup full` which automatically detects and starts DB (systemd/brew/docker)
+2. **LM Studio**: `pmagent bringup full` also starts LM Studio server
+3. **API Server**: Start manually if needed: `python3 -m uvicorn src.services.api_server:app --host 0.0.0.0 --port 8000 --reload &`
+4. **Vite Server**: Start manually if needed: `cd ui && npm run dev &`
+
+**For tasks requiring live DB+LM (LIVE DEVELOPMENT/OPERATIONS ONLY):**
+- If `make reality.green` fails due to `db_off` or `lm_off`, Cursor MUST run `pmagent bringup full` first
+- Then re-run the task/check
+- Do NOT report "DB offline" as expected behavior when task requires live services
+- **Note**: In CI/hermetic contexts, Rule 046 allows graceful degradation. This auto-start mandate applies only when operating in live development/operations mode.
+
+**Common Issues:**
+- `.venv` not activated → `source .venv/bin/activate`
+- Database not running → `pmagent bringup full` (auto-detects and starts)
+- LM Studio not running → `pmagent bringup full` (starts server)
+- API server not running → `python3 -m uvicorn src.services.api_server:app --host 0.0.0.0 --port 8000 --reload &`
+- Vite server not running → `cd ui && npm run dev &`
+
+**Enforcement:**
+- Rule 050 (OPS Contract) requires service status check as FIRST step before troubleshooting
+- All troubleshooting sessions must start with `bash scripts/check_services.sh`
+- Helper script: `scripts/check_services.sh` - use before any debugging
 
 ### 1. Virtual Environment Validation
 **CRITICAL: BEFORE ANY PYTHON COMMAND OR SESSION START**: Always verify correct venv activation.
@@ -70,16 +121,27 @@ python -c "from src.services.lmstudio_client import assert_qwen_live; result = a
 ```
 
 ### 3. Database Configuration Validation
-**BEFORE ANY DB OPERATIONS**: Verify database connections:
+**BEFORE ANY DB OPERATIONS**: Verify database connections and AUTO-START if needed.
 
 **IMPORTANT**: All DSN access must go through centralized loaders:
 - **Preferred**: `scripts.config.env` (`get_rw_dsn()`, `get_ro_dsn()`, `get_bible_db_dsn()`)
 - **Legacy**: `src.gemantria.dsn` (`dsn_rw()`, `dsn_ro()`, `dsn_atlas()`)
 - **Never** use `os.getenv("GEMATRIA_DSN")` directly - enforced by `guard.dsn.centralized`
 
+**AUTO-START DATABASE WHEN DOWN (LIVE DEVELOPMENT/OPERATIONS ONLY):**
+If database is detected as offline and task requires live DB **in a live development/operations context** (not CI/hermetic):
+1. Run `pmagent bringup full` - automatically detects DB environment (systemd/brew/docker) and starts it
+2. Wait 2-3 seconds for Postgres to fully start
+3. Re-check connection: `pg_isready` or `pmagent health db`
+4. Proceed with task
+- **CI/Hermetic Context**: In CI/hermetic environments where services are intentionally offline, Rule 046 applies and graceful degradation is acceptable. This auto-start requirement does NOT apply in CI/hermetic contexts.
+
 ```bash
 # Check if DSNs are set (via centralized loader)
 python3 -c "from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn; print(f'RW: {get_rw_dsn() is not None}'); print(f'RO: {get_ro_dsn() is not None}'); print(f'Bible: {get_bible_db_dsn() is not None}')"
+
+# If database is down and task requires it, AUTO-START:
+pmagent bringup full  # Starts DB + LM Studio automatically
 
 # If not set, use defaults from env_example.txt
 export GEMATRIA_DSN="postgresql://mccoy@/gematria?host=/var/run/postgresql"

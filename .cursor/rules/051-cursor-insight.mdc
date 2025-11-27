@@ -69,6 +69,19 @@ No extra narrative, no speculation.
 
 **CRITICAL: Browser verification is NOT optional for UI/visual work. Cursor MUST perform browser verification proactively, without waiting for user reminders.**
 
+**Visual Verification Checklist:**
+1. **Screenshot verification**: Use `browser_take_screenshot` to capture full-page screenshots
+2. **Element size verification**: Use `browser_evaluate` to check element dimensions (especially SVGs - must be correct pixel size, not viewport-scaled)
+3. **Console error check**: Use `browser_console_messages` to verify no errors
+4. **DOM structure check**: Use `browser_snapshot` to verify accessibility structure
+5. **Interactive testing**: Test actual user interactions (typing, clicking, submitting)
+
+**Common Visual Bugs to Verify:**
+- SVG icons scaling incorrectly (check for 1679px+ widths - indicates missing size constraints)
+- Loading spinners rendering as "giant Q" shapes (check border styles)
+- Search inputs disabled when they should be enabled
+- Live mode toggles defaulting to wrong state
+
 Cursor **must** use the integrated browser tool to visually verify results when:
 - Generating or modifying web pages, HTML files, or documentation that renders in a browser
 - Creating UI components, dashboards, charts, or visualizations

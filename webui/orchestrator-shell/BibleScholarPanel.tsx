@@ -32,11 +32,19 @@ async function fetchJsonSafe<T>(path: string): Promise<T | null> {
     try {
         const response = await fetch(path);
         if (!response.ok) {
+            // Don't log 404s for optional files
+            if (response.status === 404) {
+                return null;
+            }
             return null;
         }
         return await response.json();
     } catch (error) {
-        console.error(`Failed to fetch ${path}:`, error);
+        // Only log non-404 errors (like network errors)
+        const err = error as Error;
+        if (!err.message.includes('Unexpected token') && !err.message.includes('404')) {
+            console.error(`Failed to fetch ${path}:`, error);
+        }
         return null;
     }
 }
@@ -56,8 +64,13 @@ export default function BibleScholarPanel() {
                 if (data) {
                     setSummary(data);
                 }
+                // Silently ignore missing summary.json - it's optional
             } catch (err) {
-                console.error('Failed to load BibleScholar summary:', err);
+                // Only log if it's not a 404/missing file error
+                const error = err as Error;
+                if (!error.message.includes('404') && !error.message.includes('Unexpected token')) {
+                    console.error('Failed to load BibleScholar summary:', err);
+                }
             } finally {
                 setLoading(false);
             }

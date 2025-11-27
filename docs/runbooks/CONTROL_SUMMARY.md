@@ -77,7 +77,7 @@ When the database is unavailable (driver missing, connection failed, etc.), all 
 CONTROL_SUMMARY: ok=true
 ```
 
-**Note:** DB-off output is expected in CI and acceptable per Rule-046 (Hermetic CI Fallbacks). When all components are in db_off mode (hermetic behavior), the overall `ok` status is `true` because this is expected behavior, not an error.
+**Note:** DB-off output is expected in CI for **observability commands** (status checks, health queries) per Rule-046 (Hermetic CI Fallbacks). When all components are in db_off mode (hermetic behavior), the overall `ok` status is `true` because this is expected behavior for observability commands. **Operational commands** (ingestion, dashboard-refresh, data writes) that require the database will fail with exit code 1 when DB is unavailable.
 
 ### DB-On Example (Snippet)
 
@@ -174,13 +174,14 @@ Each component in `components` follows the same structure as its individual CLI 
 
 The overall `ok` status is determined conservatively:
 
-1. **All components db_off**: `ok=true` (hermetic behavior is acceptable)
+1. **All components db_off**: `ok=true` (hermetic behavior is acceptable for observability commands)
 2. **Some components db_on, all ok**: `ok=true`
 3. **Some components db_on, any failed**: `ok=false`
 4. **Any component with mode="error"**: `ok=false` (exception occurred)
 
 This ensures that:
-- Hermetic CI environments (all db_off) are treated as acceptable
+- Hermetic CI environments (all db_off) are treated as acceptable for **observability/status commands only**
+- **Operational commands** (ingestion, dashboard-refresh, data writes) that require the database will fail when DB is unavailable
 - Real database connections must all succeed for overall `ok=true`
 - Exceptions are always treated as failures
 

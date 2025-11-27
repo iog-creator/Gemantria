@@ -89,7 +89,7 @@ _BOOK_NAME_MAPPING: dict[str, str] = {
     "Matt": "Mat",
     "Mark": "Mar",
     "Luke": "Luk",
-    "John": "Joh",
+    "John": "Jhn",
     "Acts": "Act",
     "Romans": "Rom",
     "1Corinthians": "1Co",

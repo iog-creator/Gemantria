@@ -39,7 +39,7 @@ except ImportError:
 
 from src.infra.structured_logger import get_logger, log_json  # noqa: E402
 from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
-from src.ssot.noun_adapter import adapt_ai_noun  # noqa: E402
+from agentpm.modules.gematria.utils.noun_adapter import adapt_ai_noun  # noqa: E402
 
 # Phase-7F: Provider-aware embedding and rerank adapters
 try:

@@ -15,6 +15,7 @@ directly; it should provide pure, testable adapters that callers can use.
 - Phase-6M: Bible DB read-only adapter + passage flow — COMPLETE
 - Phase-6N: Lexicon read-only adapter + word-study flow — COMPLETE
 - Phase-6O: Vector similarity adapter + verse-similarity flow — COMPLETE
+- Phase-13B: Multi-language support — translation_source filtering — COMPLETE
 
 ## Related SSOT Docs
 
@@ -206,6 +207,7 @@ verses = fetch_passage("Genesis 1:31-2:3", "KJV")
 - Tests in `agentpm/biblescholar/tests/test_bible_db_adapter.py`
 - Tests in `agentpm/biblescholar/tests/test_bible_passage_flow.py`
 - Tests verify: SQL query shapes, DB-off handling, no write operations, reference parsing
+- **Phase 13B**: Multi-translation tests added to verify translation_source filtering (KJV, ESV, ASV, YLT, TAHOT)
 
 ### Lexicon Adapter (Phase-6N)
 
@@ -428,7 +430,8 @@ assert ref.book == "1Co"
   - No semantic search (use vector flow for that)
 
 **API**:
-- `search_verses(query: str, translation: str = "KJV", limit: int = 20) -> list[VerseRecord]`
+- `search_verses(query: str, translation: str, limit: int = 20) -> list[VerseRecord]`
+  - **translation**: Required translation identifier (e.g., "KJV", "ESV", "ASV", "YLT")
   - Validates query length (min 2 chars)
   - Delegates to `BibleDbAdapter.search_verses`
 
@@ -436,7 +439,7 @@ assert ref.book == "1Co"
 ```python
 from agentpm.biblescholar.search_flow import search_verses
 
-# Basic search
+# Basic search (translation is required)
 results = search_verses("beginning", "KJV", limit=5)
 for verse in results:
     print(f"{verse.book_name} {verse.chapter_num}:{verse.verse_num} - {verse.text}")
@@ -488,6 +491,49 @@ print(prompt_context)
 
 - Tests in `agentpm/biblescholar/tests/test_insights_flow.py`
 - Covers: Aggregation logic, formatting output, missing data handling
+
+### Passage Commentary Service (Phase-9A)
+
+- **Module**: `agentpm/biblescholar/passage.py`
+- **Purpose**: Provides passage lookup with theology-aware commentary using enriched context (lexicon + similar verses) and the Christian Bible Expert model.
+- **Dependencies**:
+  - `agentpm.biblescholar.bible_passage_flow` (passage retrieval)
+  - `agentpm.biblescholar.insights_flow` (enriched context gathering)
+  - `agentpm.adapters.theology` (Christian Bible Expert model)
+- **Fail-closed**: No fallbacks allowed. Raises `ValueError` if `use_lm=False` or no verses found. Raises `RuntimeError` if theology model unavailable.
+
+**API**:
+- `fetch_passage_dict(reference: str, translation_source: str = "KJV") -> dict[str, Any]` - Fetch passage from bible_db
+- `generate_commentary(passage: dict[str, Any], *, use_lm: bool = True) -> dict[str, Any]` - Generate commentary with enriched context
+- `get_passage_and_commentary(reference: str, *, use_lm: bool = True, translation_source: str = "KJV") -> dict[str, Any]` - Combined passage + commentary
+
+**Enriched Context Flow**:
+1. Find passage in bible_db ✓
+2. Semantic check: Find similar verses via vector search ✓
+3. Pull information: Gather lexicon entries (word study) ✓
+4. Format enriched context for LLM ✓
+5. Pass to Christian Bible Expert model for synthesis ✓
+
+**Error Handling**:
+- `use_lm=False`: Raises `ValueError` (fallbacks not allowed)
+- No verses found: Raises `ValueError` (fail-closed)
+- Theology model unavailable: Raises `RuntimeError` (fail-closed via `theology_chat()`)
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.passage import get_passage_and_commentary
+
+# Get passage with AI commentary (enriched context)
+result = get_passage_and_commentary("Genesis 5:5", use_lm=True)
+print(f"Reference: {result['reference']}")
+print(f"Verses: {len(result['verses'])}")
+print(f"Commentary source: {result['commentary']['source']}")  # Always "lm_theology"
+print(f"Commentary: {result['commentary']['text']}")
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_passage.py`
+- Covers: Passage retrieval, enriched context gathering, theology model integration, fail-closed behavior
 
 ### Cross-Language Flow (Phase-8B)
 

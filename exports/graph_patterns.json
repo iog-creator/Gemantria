@@ -1,14 +1,289 @@
 {
-  "patterns": [],
-  "metadata": {
-    "total_patterns": 0,
-    "analyzed_books": [],
-    "pattern_methods": [],
-    "generated_at": "2025-11-08T21:13:10.405798+00:00",
-    "run_id": "placeholder-run",
-    "analysis_parameters": {
-      "min_shared_concepts": 2,
-      "min_pattern_strength": 0.1
+  "patterns": [
+    {
+      "id": "1b7506d5-5dea-463d-b921-f806a04a372e",
+      "name": "community_2",
+      "type": "louvain_community",
+      "definition": {
+        "seed": 42,
+        "node_ids": [
+          "node8",
+          "node7"
+        ],
+        "algorithm": "louvain",
+        "node_count": 2
+      },
+      "metadata": {
+        "avg_degree_centrality": 0.14285714285714285,
+        "avg_betweenness_centrality": 0.0
+      },
+      "occurrence_count": 1,
+      "avg_score": 2.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "node8",
+            "node7"
+          ],
+          "score": 2
+        }
+      ],
+      "created_at": "2025-11-25T19:45:04.913929-08:00"
+    },
+    {
+      "id": "d252cf68-8249-49a7-8eb2-97832d5b1c1d",
+      "name": "community_1",
+      "type": "louvain_community",
+      "definition": {
+        "seed": 42,
+        "node_ids": [
+          "node4",
+          "node6",
+          "node5"
+        ],
+        "algorithm": "louvain",
+        "node_count": 3
+      },
+      "metadata": {
+        "avg_degree_centrality": 0.2857142857142857,
+        "avg_betweenness_centrality": 0.0
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "node4",
+            "node6",
+            "node5"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:45:04.913929-08:00"
+    },
+    {
+      "id": "7c8e1d38-da55-410b-a808-49e1c95d141b",
+      "name": "community_0",
+      "type": "louvain_community",
+      "definition": {
+        "seed": 42,
+        "node_ids": [
+          "node2",
+          "node3",
+          "node1"
+        ],
+        "algorithm": "louvain",
+        "node_count": 3
+      },
+      "metadata": {
+        "avg_degree_centrality": 0.2857142857142857,
+        "avg_betweenness_centrality": 0.0
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "node2",
+            "node3",
+            "node1"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:45:04.913929-08:00"
+    },
+    {
+      "id": "e0a3507c-2867-41f3-9dde-c9e9f37e8a9c",
+      "name": "clique_2",
+      "type": "maximal_clique",
+      "definition": {
+        "node_ids": [
+          "I",
+          "G",
+          "H"
+        ],
+        "algorithm": "find_cliques",
+        "node_count": 3
+      },
+      "metadata": {
+        "is_complete": true
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "I",
+            "G",
+            "H"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
+    },
+    {
+      "id": "5518b0a6-ffb7-4a01-be75-f6398ddede6e",
+      "name": "clique_1",
+      "type": "maximal_clique",
+      "definition": {
+        "node_ids": [
+          "B",
+          "A",
+          "C"
+        ],
+        "algorithm": "find_cliques",
+        "node_count": 3
+      },
+      "metadata": {
+        "is_complete": true
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "B",
+            "A",
+            "C"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
+    },
+    {
+      "id": "8ea21efa-6df7-408e-9e10-4c9b7c66a4c4",
+      "name": "clique_0",
+      "type": "maximal_clique",
+      "definition": {
+        "node_ids": [
+          "F",
+          "E",
+          "D"
+        ],
+        "algorithm": "find_cliques",
+        "node_count": 3
+      },
+      "metadata": {
+        "is_complete": true
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "F",
+            "E",
+            "D"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
+    },
+    {
+      "id": "45378d21-8185-4f1f-939a-0fbbd565d08b",
+      "name": "triangle_1",
+      "type": "triangle_motif",
+      "definition": {
+        "node_ids": [
+          "D",
+          "E",
+          "F"
+        ],
+        "algorithm": "cycle_detection",
+        "node_count": 3
+      },
+      "metadata": {
+        "motif_type": "triangle"
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "D",
+            "E",
+            "F"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
+    },
+    {
+      "id": "602d81b6-2e9e-4ff5-b45e-fda52532a7fe",
+      "name": "triangle_0",
+      "type": "triangle_motif",
+      "definition": {
+        "node_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "algorithm": "cycle_detection",
+        "node_count": 3
+      },
+      "metadata": {
+        "motif_type": "triangle"
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "A",
+            "B",
+            "C"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
+    },
+    {
+      "id": "420cecae-ec4c-45d3-933e-dfecbafacaae",
+      "name": "triangle_2",
+      "type": "triangle_motif",
+      "definition": {
+        "node_ids": [
+          "G",
+          "H",
+          "I"
+        ],
+        "algorithm": "cycle_detection",
+        "node_count": 3
+      },
+      "metadata": {
+        "motif_type": "triangle"
+      },
+      "occurrence_count": 1,
+      "avg_score": 3.0,
+      "occurrences": [
+        {
+          "nodes": [
+            "G",
+            "H",
+            "I"
+          ],
+          "score": 3
+        }
+      ],
+      "created_at": "2025-11-25T19:55:42.161129-08:00"
     }
+  ],
+  "metadata": {
+    "total_count": 9,
+    "pattern_types": {
+      "louvain_community": 3,
+      "maximal_clique": 3,
+      "triangle_motif": 3
+    },
+    "generated_at": "2025-11-26T04:00:43.983384+00:00",
+    "source": "public.patterns (Phase 12)",
+    "version": "1.0"
   }
 }

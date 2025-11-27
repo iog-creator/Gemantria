@@ -148,17 +148,15 @@ def main() -> None:
     """Ingest SSOT docs into control.doc_sources and control.doc_sections."""
     import sys
 
-    # Check for DB connection
+    # Check for DB connection - this command REQUIRES the database
     if psycopg is None:
-        print("WARNING: psycopg not available; skipping DB ingestion")
-        print("db_off: true")
-        sys.exit(0)
+        print("ERROR: psycopg not available. This command requires the database.", file=sys.stderr)
+        sys.exit(1)
 
     dsn = get_rw_dsn()
     if not dsn:
-        print("WARNING: GEMATRIA_DSN not set; skipping DB ingestion")
-        print("db_off: true")
-        sys.exit(0)
+        print("ERROR: GEMATRIA_DSN not set. This command requires the database.", file=sys.stderr)
+        sys.exit(1)
 
     try:
         with psycopg.connect(dsn, autocommit=True) as conn:
@@ -214,9 +212,9 @@ def main() -> None:
             print(f"\n✓ Ingested {success_count}/{len(files_to_ingest)} file(s) successfully")
 
     except Exception as exc:
-        print(f"ERROR: Database error: {exc!s}")
-        print("db_off: true")
-        sys.exit(0)  # Fail-soft: exit 0 on DB errors
+        print(f"ERROR: Database error: {exc!s}", file=sys.stderr)
+        print("ERROR: This command requires the database to be available.", file=sys.stderr)
+        sys.exit(1)  # This command REQUIRES the database - must fail
 
 
 if __name__ == "__main__":

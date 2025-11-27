@@ -121,6 +121,7 @@ def scan_governance_artifacts() -> List[Dict]:
         "scripts/manage_document_sections.py",
         "scripts/populate_document_sections.py",
         "scripts/document_management_hints.py",
+        "docs/SSOT/auto_schema_output.md",
     ]
 
     for agent_file in agent_files:

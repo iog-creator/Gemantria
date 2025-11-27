@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface StatusBannerProps {
   mode: 'hermetic' | 'live' | 'error';
   message?: string;

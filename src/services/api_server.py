@@ -15,6 +15,7 @@ Usage:
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +37,13 @@ from agentpm.status.eval_exports import (
 from agentpm.status.explain import explain_system_status
 from agentpm.status.system import get_system_status
 from datetime import UTC
+
+# Router imports
+from src.services.routers.biblescholar import router as bible_router, biblescholar_router
+from src.services.routers.ollama_proxy import router as ollama_router
+from src.services.routers.dashboard import router as dashboard_router
+from src.services.routers.vision import router as vision_router
+from agentpm.server.autopilot_api import router as autopilot_router
 
 # Load environment variables
 ensure_env_loaded()
@@ -82,6 +90,22 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Include BibleScholar routers
+app.include_router(bible_router)  # /api/bible routes
+app.include_router(biblescholar_router)  # /api/biblescholar routes
+
+# Include Ollama proxy router
+app.include_router(ollama_router)
+
+# Include Dashboard router
+app.include_router(dashboard_router)
+
+# Include Vision router
+app.include_router(vision_router)
+
+# Include Autopilot router
+app.include_router(autopilot_router)
+
 # CORS middleware for web UI access
 app.add_middleware(
     CORSMiddleware,
@@ -98,6 +122,14 @@ if Path(export_dir).exists():
     LOG.info(f"Mounted static files from {export_dir} at /exports")
 else:
     LOG.warning(f"Export directory {export_dir} not found - static files not mounted")
+
+# Mount static files from share directory
+share_dir = Path("share")
+if share_dir.exists():
+    app.mount("/share", StaticFiles(directory=str(share_dir)), name="share")
+    LOG.info(f"Mounted static files from {share_dir} at /share")
+else:
+    LOG.warning(f"Share directory {share_dir} not found - static files not mounted")
 
 
 def get_export_path(filename: str) -> Path:
@@ -271,6 +303,115 @@ async def get_status_explanation_endpoint() -> JSONResponse:
         ) from e
 
 
+@app.get("/api/lm/insights")
+async def get_lm_insights_endpoint() -> JSONResponse:
+    """Get detailed LM insights from Phase 4 exports (7-day window).
+
+    Returns aggregated metrics from lm_usage_7d.json, lm_health_7d.json, and lm_insights_7d.json:
+    {
+        "usage": {
+            "total_calls": int,
+            "successful_calls": int,
+            "failed_calls": int,
+            "total_tokens_prompt": int,
+            "total_tokens_completion": int,
+            "avg_latency_ms": float,
+            "calls_by_day": [...]
+        },
+        "health": {
+            "success_rate": float,
+            "error_rate": float,
+            "error_types": {...},
+            "recent_errors": [...]
+        },
+        "insights": {
+            "ok": bool,
+            "total_calls": int,
+            "success_rate": float,
+            "error_rate": float,
+            "top_error_reason": str | null,
+            "lm_studio_usage_ratio": float | null
+        },
+        "generated_at": str,
+        "window_days": int
+    }
+    """
+    try:
+        from pathlib import Path
+        import json
+
+        REPO_ROOT = Path(__file__).resolve().parents[2]
+        OUT_DIR = REPO_ROOT / "share" / "atlas" / "control_plane"
+
+        # Load export files
+        usage_path = OUT_DIR / "lm_usage_7d.json"
+        health_path = OUT_DIR / "lm_health_7d.json"
+        insights_path = OUT_DIR / "lm_insights_7d.json"
+
+        usage_data = None
+        health_data = None
+        insights_data = None
+
+        # Load usage data
+        if usage_path.exists():
+            try:
+                usage_data = json.loads(usage_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as e:
+                LOG.warning(f"Failed to load lm_usage_7d.json: {e}")
+
+        # Load health data
+        if health_path.exists():
+            try:
+                health_data = json.loads(health_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as e:
+                LOG.warning(f"Failed to load lm_health_7d.json: {e}")
+
+        # Load insights data
+        if insights_path.exists():
+            try:
+                insights_data = json.loads(insights_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as e:
+                LOG.warning(f"Failed to load lm_insights_7d.json: {e}")
+
+        # If no data available, return empty structure
+        if not usage_data and not health_data and not insights_data:
+            return JSONResponse(
+                content={
+                    "usage": None,
+                    "health": None,
+                    "insights": None,
+                    "generated_at": None,
+                    "window_days": 7,
+                    "error": "No LM metrics data available (exports may not have been generated)",
+                }
+            )
+
+        # Extract relevant fields
+        response = {
+            "usage": usage_data if usage_data else None,
+            "health": health_data if health_data else None,
+            "insights": insights_data if insights_data else None,
+            "generated_at": insights_data.get("generated_at")
+            if insights_data
+            else usage_data.get("generated_at")
+            if usage_data
+            else None,
+            "window_days": insights_data.get("window_days", 7)
+            if insights_data
+            else usage_data.get("window_days", 7)
+            if usage_data
+            else 7,
+        }
+
+        return JSONResponse(content=response)
+    except Exception as e:
+        LOG.error(f"Error getting LM insights: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to load LM insights: {e!s}",
+        ) from e
+
+
 @app.get("/api/lm/indicator")
 async def get_lm_indicator_endpoint() -> JSONResponse:
     """Get LM indicator snapshot for visualization.
@@ -324,6 +465,184 @@ async def get_lm_indicator_endpoint() -> JSONResponse:
                 "snapshot": None,
                 "note": f"Failed to load LM indicator data: {e}",
             }
+        )
+
+
+@app.get("/api/inference/models")
+async def get_inference_models_endpoint() -> JSONResponse:
+    """Get unified inference model activity from Ollama and LM Studio.
+
+    Returns:
+        JSON with inference model data:
+        {
+            "ollama": {
+                "available": bool,
+                "base_url": str,
+                "available_models": [{"id": str, "name": str}],
+                "active_requests": [...],
+                "recent_requests": [...]
+            },
+            "lmstudio": {
+                "available": bool,
+                "base_urls": [str],
+                "available_models": [{"id": str, "base_url": str}],
+                "recent_activity": [...]
+            },
+            "last_updated": str
+        }
+    """
+    from datetime import UTC, datetime
+    from src.services.inference_monitor import (
+        get_lmstudio_loaded_models,
+        get_lmstudio_recent_activity,
+        get_ollama_loaded_models,
+    )
+    from src.services.ollama_monitor.store import get_monitor_snapshot
+    from scripts.config.env import get_lm_model_config
+
+    try:
+        cfg = get_lm_model_config()
+        ollama_base_url = cfg.get("ollama_base_url", "http://127.0.0.1:11434")
+        ollama_enabled = cfg.get("ollama_enabled", True)
+
+        # Get Ollama data
+        ollama_data = {
+            "available": False,
+            "base_url": ollama_base_url,
+            "available_models": [],
+            "active_requests": [],
+            "recent_requests": [],
+        }
+
+        if ollama_enabled:
+            try:
+                # Get monitor snapshot
+                monitor_snapshot = get_monitor_snapshot()
+                ollama_data["active_requests"] = monitor_snapshot.get("activeRequests", [])
+
+                # Filter recent requests to last 2 days
+                from datetime import UTC, datetime, timedelta
+
+                two_days_ago = datetime.now(UTC) - timedelta(days=2)
+                all_recent = monitor_snapshot.get("recentRequests", [])
+                recent_filtered = []
+                for req in all_recent:
+                    try:
+                        req_time = datetime.fromisoformat(req.get("timestamp", "").replace("Z", "+00:00"))
+                        if req_time >= two_days_ago:
+                            # Add simplified inference summary
+                            from src.services.inference_monitor import simplify_inference_output
+
+                            req["inference_summary"] = simplify_inference_output(
+                                req.get("promptPreview", ""), req.get("endpoint")
+                            )
+                            recent_filtered.append(req)
+                    except (ValueError, TypeError):
+                        # If timestamp parsing fails, include it anyway (recent by default)
+                        from src.services.inference_monitor import simplify_inference_output
+
+                        req["inference_summary"] = simplify_inference_output(
+                            req.get("promptPreview", ""), req.get("endpoint")
+                        )
+                        recent_filtered.append(req)
+
+                ollama_data["recent_requests"] = recent_filtered
+
+                # Get available models (list from /api/tags)
+                available_models = get_ollama_loaded_models(ollama_base_url)
+
+                # Extract recently used models from recent requests
+                recently_used_models = set()
+                for req in recent_filtered:
+                    if req.get("model"):
+                        recently_used_models.add(req["model"])
+
+                # Filter available models to only show recently used ones
+                if recently_used_models:
+                    ollama_data["recently_used_models"] = [
+                        m
+                        for m in available_models
+                        if m.get("name") in recently_used_models or m.get("id") in recently_used_models
+                    ]
+                else:
+                    ollama_data["recently_used_models"] = []
+
+                ollama_data["available_models"] = available_models
+                ollama_data["available"] = True
+            except Exception as e:
+                LOG.debug(f"Ollama monitor unavailable: {e}")
+
+        # Get LM Studio data
+        lmstudio_data = {
+            "available": False,
+            "base_urls": [],
+            "available_models": [],
+            "recent_activity": [],
+        }
+
+        lm_studio_enabled = cfg.get("lm_studio_enabled", False)
+        if lm_studio_enabled:
+            # Collect all LM Studio base URLs
+            base_urls = []
+            default_base_url = cfg.get("base_url", "http://127.0.0.1:9994/v1")
+            if default_base_url:
+                # Remove /v1 suffix for consistency
+                clean_url = default_base_url.rstrip("/")
+                if clean_url.endswith("/v1"):
+                    clean_url = clean_url[:-3]
+                base_urls.append(clean_url)
+
+            theology_base_url = cfg.get("theology_lmstudio_base_url")
+            if theology_base_url:
+                clean_url = theology_base_url.rstrip("/")
+                if clean_url.endswith("/v1"):
+                    clean_url = clean_url[:-3]
+                if clean_url not in base_urls:
+                    base_urls.append(clean_url)
+
+            lmstudio_data["base_urls"] = base_urls
+
+            # Get available models (list from /v1/models)
+            if base_urls:
+                available_models = get_lmstudio_loaded_models(base_urls)
+                lmstudio_data["available_models"] = available_models
+                if available_models:
+                    lmstudio_data["available"] = True
+
+            # Get recent activity from DB (last 2 days)
+            recent_activity = get_lmstudio_recent_activity(days=2, limit=1000)
+            lmstudio_data["recent_activity"] = recent_activity
+
+            # Extract recently used models (models that appear in recent activity)
+            recently_used_models = set()
+            for act in recent_activity:
+                if act.get("model") and act["model"] != "unknown":
+                    recently_used_models.add(act["model"])
+
+            # Filter available models to only show recently used ones
+            if recently_used_models:
+                lmstudio_data["recently_used_models"] = [
+                    m for m in available_models if m.get("id") in recently_used_models
+                ]
+            else:
+                lmstudio_data["recently_used_models"] = []
+
+        return JSONResponse(
+            content={
+                "ollama": ollama_data,
+                "lmstudio": lmstudio_data,
+                "last_updated": datetime.now(UTC).isoformat(),
+            }
+        )
+
+    except Exception as e:
+        LOG.error(f"Error getting inference models: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "Failed to get inference models data",
+                "details": str(e),
+            },
         )
 
 
@@ -679,208 +998,449 @@ async def status_page() -> HTMLResponse:
 
 @app.get("/lm-insights", response_class=HTMLResponse)
 async def lm_insights_page() -> HTMLResponse:
-    """HTML page showing LM indicator insights with chart."""
+    """HTML page showing Inference Models Insight with real-time activity from Ollama and LM Studio.
+
+    Features:
+    - Summary cards showing key metrics at a glance
+    - Inference section with simplified summaries for orchestrator readability
+    - Only shows recently used models (last 2 days)
+    - Better visual hierarchy for understanding at a glance
+    """
     html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LM Insights - Gemantria</title>
+    <title>Inference Models Insight - Gemantria</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body { background-color: rgb(17, 24, 39); }
+    </style>
 </head>
-<body class="bg-gray-50 p-8">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold mb-2">LM Insights</h1>
-        <p class="text-gray-600 mb-2 text-sm">Recent LM activity analytics (advisory only; not used for health gates)</p>
-        <p class="text-gray-500 mb-6 text-xs italic">Note: System health status is determined by the unified snapshot API, not by these analytics.</p>
+<body class="bg-gray-900 p-8 text-white">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2 text-white">Inference Models Insight</h1>
+        <p class="text-gray-400 mb-6 text-sm">Real-time monitoring of Ollama and LM Studio inference models (last 2 days). Understanding at a glance.</p>
         
-        <div id="loading" class="text-gray-600">Loading LM indicator data...</div>
+        <div id="loading" class="text-gray-300">Loading inference models data...</div>
         
-        <div id="no-data" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg shadow p-6 mb-6">
-            <p class="text-yellow-800">
-                No LM indicator snapshots available yet; run the LM indicator export pipeline to populate this chart.
-            </p>
-        </div>
+        <div id="error" class="hidden text-red-400 mt-4"></div>
         
-        <div id="insights-content" class="hidden">
-            <!-- Status Indicator -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-xl font-semibold mb-4">Current Status</h2>
-                <div id="status-indicator" class="flex items-center mb-4">
-                    <span id="status-badge" class="px-4 py-2 rounded-full text-white font-semibold"></span>
-                    <span id="status-text" class="ml-3 text-lg"></span>
+        <div id="content" class="hidden">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg shadow p-4 border border-gray-700">
+                    <div class="text-sm text-gray-400 mb-1">Total Requests</div>
+                    <div id="summary-total" class="text-2xl font-bold text-white">—</div>
                 </div>
-                <div id="status-details" class="text-sm text-gray-600"></div>
+                <div class="bg-gray-800 rounded-lg shadow p-4 border border-gray-700">
+                    <div class="text-sm text-gray-400 mb-1">Errors</div>
+                    <div id="summary-errors" class="text-2xl font-bold text-red-400">—</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow p-4 border border-gray-700">
+                    <div class="text-sm text-gray-400 mb-1">Avg Duration</div>
+                    <div id="summary-avg-duration" class="text-2xl font-bold text-white">—</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow p-4 border border-gray-700">
+                    <div class="text-sm text-gray-400 mb-1">Active Now</div>
+                    <div id="summary-active" class="text-2xl font-bold text-blue-400">—</div>
+                </div>
             </div>
             
-            <!-- Metrics Chart -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-xl font-semibold mb-4">Success & Error Rates</h2>
-                <canvas id="lmIndicatorChart" class="max-h-96"></canvas>
+            <!-- Provider Tabs -->
+            <div class="mb-6 border-b border-gray-700">
+                <nav class="flex space-x-8">
+                    <button id="tab-ollama" class="tab-button py-4 px-1 border-b-2 font-medium text-sm text-blue-400 border-blue-400" onclick="switchTab('ollama')">
+                        Ollama
+                    </button>
+                    <button id="tab-lmstudio" class="tab-button py-4 px-1 border-b-2 font-medium text-sm text-gray-400 border-transparent hover:text-gray-300 hover:border-gray-600" onclick="switchTab('lmstudio')">
+                        LM Studio
+                    </button>
+                </nav>
             </div>
             
-            <!-- Metrics Summary -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-xl font-semibold mb-4">Metrics Summary</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="p-4 bg-blue-50 rounded">
-                        <div class="text-sm text-gray-600">Total Calls</div>
-                        <div id="total-calls" class="text-2xl font-bold text-blue-700"></div>
+            <!-- Ollama Tab Content -->
+            <div id="tab-content-ollama" class="tab-content">
+                <!-- Status and Recently Used Models -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                        <h2 class="text-lg font-semibold mb-3 text-white">Status</h2>
+                        <div id="ollama-status" class="text-sm text-gray-300"></div>
                     </div>
-                    <div class="p-4 bg-green-50 rounded">
-                        <div class="text-sm text-gray-600">Success Rate</div>
-                        <div id="success-rate" class="text-2xl font-bold text-green-700"></div>
-                    </div>
-                    <div class="p-4 bg-red-50 rounded">
-                        <div class="text-sm text-gray-600">Error Rate</div>
-                        <div id="error-rate" class="text-2xl font-bold text-red-700"></div>
+                    <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                        <h2 class="text-lg font-semibold mb-3 text-white">Recently Used Models</h2>
+                        <div id="ollama-models" class="text-sm text-gray-300">No models used in last 2 days</div>
                     </div>
                 </div>
-                <div class="mt-4 text-sm text-gray-500">
-                    <div>Window: <span id="window-days"></span> days</div>
-                    <div>Generated: <span id="generated-at"></span></div>
+                
+                <!-- Inference Section -->
+                <div class="mb-6 bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                    <h2 class="text-lg font-semibold mb-4 text-white">Inference</h2>
+                    <p class="text-xs text-gray-400 mb-4">Simplified summaries for orchestrator readability</p>
+                    <div id="ollama-inference" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Model</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Summary</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ollama-inference-body" class="bg-gray-800 divide-y divide-gray-700">
+                            </tbody>
+                        </table>
+                        <div id="ollama-inference-empty" class="text-sm text-gray-400 py-4 text-center">No inference activity</div>
+                    </div>
+                </div>
+                
+                <div class="mb-6 bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Active Requests</h2>
+                    <div id="ollama-active" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Model</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Endpoint</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Start Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Prompt Preview</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ollama-active-body" class="bg-gray-800 divide-y divide-gray-700">
+                            </tbody>
+                        </table>
+                        <div id="ollama-active-empty" class="text-sm text-gray-400 py-4 text-center">No active requests</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity (Detailed) -->
+                <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                    <h2 class="text-lg font-semibold mb-4 text-white">Recent Activity (Last 2 Days)</h2>
+                    <div id="ollama-recent" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Model</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Endpoint</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Duration</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Tokens</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ollama-recent-body" class="bg-gray-800 divide-y divide-gray-700">
+                            </tbody>
+                        </table>
+                        <div id="ollama-recent-empty" class="text-sm text-gray-400 py-4 text-center">No recent requests</div>
+                    </div>
                 </div>
             </div>
+            
+            <!-- LM Studio Tab Content -->
+            <div id="tab-content-lmstudio" class="tab-content hidden">
+                <!-- Status and Recently Used Models -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                        <h2 class="text-lg font-semibold mb-3 text-white">Status</h2>
+                        <div id="lmstudio-status" class="text-sm text-gray-300"></div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                        <h2 class="text-lg font-semibold mb-3 text-white">Recently Used Models</h2>
+                        <div id="lmstudio-models" class="text-sm text-gray-300">No models used in last 2 days</div>
+                    </div>
+                </div>
+                
+                <!-- Inference Section -->
+                <div class="mb-6 bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                    <h2 class="text-lg font-semibold mb-4 text-white">Inference</h2>
+                    <p class="text-xs text-gray-400 mb-4">Simplified summaries for orchestrator readability</p>
+                    <div id="lmstudio-inference" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Model</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Summary</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lmstudio-inference-body" class="bg-gray-800 divide-y divide-gray-700">
+                            </tbody>
+                        </table>
+                        <div id="lmstudio-inference-empty" class="text-sm text-gray-400 py-4 text-center">No inference activity</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity (Detailed) -->
+                <div class="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+                    <h2 class="text-lg font-semibold mb-4 text-white">Recent Activity (Last 2 Days)</h2>
+                    <div id="lmstudio-activity" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Model</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Input Tokens</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Output Tokens</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Duration</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">File/Process</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lmstudio-activity-body" class="bg-gray-800 divide-y divide-gray-700">
+                            </tbody>
+                        </table>
+                        <div id="lmstudio-activity-empty" class="text-sm text-gray-400 py-4 text-center">No recent activity</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-sm text-gray-400 text-center">
+                Last updated: <span id="last-updated"></span>
+            </div>
         </div>
-        
-        <div id="error" class="hidden text-red-600 mt-4"></div>
     </div>
     
     <script>
-        let chart = null;
+        let currentTab = 'ollama';
         
-        async function loadLMIndicator() {
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('text-blue-400', 'border-blue-400');
+                btn.classList.add('text-gray-400', 'border-transparent');
+            });
+            
+            if (tab === 'ollama') {
+                document.getElementById('tab-ollama').classList.remove('text-gray-400', 'border-transparent');
+                document.getElementById('tab-ollama').classList.add('text-blue-400', 'border-blue-400');
+                document.getElementById('tab-content-ollama').classList.remove('hidden');
+                document.getElementById('tab-content-lmstudio').classList.add('hidden');
+            } else {
+                document.getElementById('tab-lmstudio').classList.remove('text-gray-400', 'border-transparent');
+                document.getElementById('tab-lmstudio').classList.add('text-blue-400', 'border-blue-400');
+                document.getElementById('tab-content-lmstudio').classList.remove('hidden');
+                document.getElementById('tab-content-ollama').classList.add('hidden');
+            }
+        }
+        
+        function formatTimestamp(ts) {
+            if (!ts) return '—';
             try {
-                const response = await fetch('/api/lm/indicator');
+                const date = new Date(ts);
+                return date.toLocaleString();
+            } catch {
+                return ts;
+            }
+        }
+        
+        function formatDuration(ms) {
+            if (ms == null) return '—';
+            if (ms < 1000) return `${Math.round(ms)}ms`;
+            return `${(ms / 1000).toFixed(2)}s`;
+        }
+        
+        function getStatusColor(status) {
+            if (status === 'success' || status === 'completed') return 'text-green-400';
+            if (status === 'error' || status === 'failed') return 'text-red-400';
+            if (status === 'pending' || status === 'active') return 'text-yellow-400';
+            return 'text-gray-300';
+        }
+        
+        async function loadInferenceModels() {
+            try {
+                const response = await fetch('/api/inference/models');
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 const data = await response.json();
                 
-                // Hide loading
+                // Hide loading, show content
                 document.getElementById('loading').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
                 
-                if (!data.snapshot) {
-                    // Show no-data message
-                    document.getElementById('no-data').classList.remove('hidden');
-                    return;
+                // Update last updated
+                document.getElementById('last-updated').textContent = formatTimestamp(data.last_updated);
+                
+                // Calculate summary statistics
+                const ollama = data.ollama;
+                const lmstudio = data.lmstudio;
+                const allRecent = [
+                    ...(ollama.recent_requests || []),
+                    ...(lmstudio.recent_activity || [])
+                ];
+                const allActive = [
+                    ...(ollama.active_requests || [])
+                ];
+                
+                const totalRequests = allRecent.length;
+                const errors = allRecent.filter(r => r.status === 'error').length;
+                const durations = allRecent.filter(r => r.durationMs != null).map(r => r.durationMs);
+                const avgDuration = durations.length > 0 
+                    ? (durations.reduce((a, b) => a + b, 0) / durations.length).toFixed(0) + 'ms'
+                    : '—';
+                const active = allActive.length;
+                
+                // Update summary cards
+                document.getElementById('summary-total').textContent = totalRequests;
+                document.getElementById('summary-errors').textContent = errors;
+                document.getElementById('summary-avg-duration').textContent = avgDuration;
+                document.getElementById('summary-active').textContent = active;
+                
+        function getStatusColor(status) {
+            if (status === 'success' || status === 'completed') return 'text-green-400';
+            if (status === 'error' || status === 'failed') return 'text-red-400';
+            if (status === 'pending' || status === 'active') return 'text-yellow-400';
+            return 'text-gray-300';
+        }
+        
+                // Ollama data
+                const ollamaStatus = document.getElementById('ollama-status');
+                if (ollama.available) {
+                    ollamaStatus.innerHTML = `<span class="text-green-400 font-semibold">✓ Available</span><br><span class="text-xs text-gray-400">${ollama.base_url}</span>`;
+                } else {
+                    ollamaStatus.innerHTML = `<span class="text-red-400 font-semibold">✗ Unavailable</span><br><span class="text-xs text-gray-400">${ollama.base_url}</span>`;
                 }
                 
-                // Show content
-                document.getElementById('insights-content').classList.remove('hidden');
-                
-                const snapshot = data.snapshot;
-                
-                // Update status indicator
-                const statusBadge = document.getElementById('status-badge');
-                const statusText = document.getElementById('status-text');
-                const statusDetails = document.getElementById('status-details');
-                
-                let statusColor = 'bg-gray-500';
-                let statusLabel = 'Unknown';
-                
-                if (snapshot.status === 'healthy') {
-                    statusColor = 'bg-green-500';
-                    statusLabel = 'Healthy';
-                } else if (snapshot.status === 'degraded') {
-                    statusColor = 'bg-yellow-500';
-                    statusLabel = 'Degraded';
-                } else if (snapshot.status === 'offline') {
-                    statusColor = 'bg-red-500';
-                    statusLabel = 'Offline';
+                // Ollama models (only recently used)
+                const ollamaModelsEl = document.getElementById('ollama-models');
+                if (ollama.recently_used_models && ollama.recently_used_models.length > 0) {
+                    ollamaModelsEl.innerHTML = ollama.recently_used_models.map(m => 
+                        `<div class="mb-1"><span class="font-medium text-sm text-white">${m.name || m.id}</span></div>`
+                    ).join('');
+                } else {
+                    ollamaModelsEl.textContent = 'No models used in last 2 days';
                 }
                 
-                statusBadge.className = `${statusColor} px-4 py-2 rounded-full text-white font-semibold`;
-                statusBadge.textContent = statusLabel;
-                statusText.textContent = `Status: ${snapshot.status} (${snapshot.reason})`;
-                
-                let detailsText = `Success rate: ${(snapshot.success_rate * 100).toFixed(1)}%, `;
-                detailsText += `Error rate: ${(snapshot.error_rate * 100).toFixed(1)}%`;
-                if (snapshot.top_error_reason) {
-                    detailsText += `, Top error: ${snapshot.top_error_reason}`;
-                }
-                if (snapshot.db_off) {
-                    detailsText += ' (Database offline)';
-                }
-                statusDetails.textContent = detailsText;
-                
-                // Update metrics
-                document.getElementById('total-calls').textContent = snapshot.total_calls.toLocaleString();
-                document.getElementById('success-rate').textContent = `${(snapshot.success_rate * 100).toFixed(1)}%`;
-                document.getElementById('error-rate').textContent = `${(snapshot.error_rate * 100).toFixed(1)}%`;
-                document.getElementById('window-days').textContent = snapshot.window_days;
-                document.getElementById('generated-at').textContent = new Date(snapshot.generated_at).toLocaleString();
-                
-                // Create/update chart
-                const ctx = document.getElementById('lmIndicatorChart').getContext('2d');
-                
-                if (chart) {
-                    chart.destroy();
+                // Ollama inference section
+                const ollamaInferenceBody = document.getElementById('ollama-inference-body');
+                const ollamaInferenceEmpty = document.getElementById('ollama-inference-empty');
+                if (ollama.recent_requests && ollama.recent_requests.length > 0) {
+                    ollamaInferenceEmpty.classList.add('hidden');
+                    ollamaInferenceBody.innerHTML = ollama.recent_requests.slice(0, 10).map(req => `
+                        <tr>
+                            <td class="px-4 py-2 text-sm text-white">${req.model || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-300 font-medium">${req.inference_summary || '—'}</td>
+                            <td class="px-4 py-2 text-sm ${getStatusColor(req.status)}">${req.status || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatTimestamp(req.timestamp)}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    ollamaInferenceBody.innerHTML = '';
+                    ollamaInferenceEmpty.classList.remove('hidden');
                 }
                 
-                chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Success Rate', 'Error Rate'],
-                        datasets: [{
-                            label: 'Rate',
-                            data: [
-                                snapshot.success_rate * 100,
-                                snapshot.error_rate * 100
-                            ],
-                            backgroundColor: [
-                                'rgba(34, 197, 94, 0.8)',
-                                'rgba(239, 68, 68, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(34, 197, 94, 1)',
-                                'rgba(239, 68, 68, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value + '%';
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return context.parsed.y.toFixed(2) + '%';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
+                // Ollama active requests
+                const ollamaActiveBody = document.getElementById('ollama-active-body');
+                const ollamaActiveEmpty = document.getElementById('ollama-active-empty');
+                if (ollama.active_requests && ollama.active_requests.length > 0) {
+                    ollamaActiveEmpty.classList.add('hidden');
+                    ollamaActiveBody.innerHTML = ollama.active_requests.map(req => `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">${req.model || '—'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${req.endpoint || '—'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm ${getStatusColor(req.status)}">${req.status || 'pending'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${formatTimestamp(req.timestamp)}</td>
+                            <td class="px-6 py-4 text-sm text-gray-300 max-w-xs truncate">${req.promptPreview || '—'}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    ollamaActiveBody.innerHTML = '';
+                    ollamaActiveEmpty.classList.remove('hidden');
+                }
+                
+                // Ollama recent requests (detailed)
+                const ollamaRecentBody = document.getElementById('ollama-recent-body');
+                const ollamaRecentEmpty = document.getElementById('ollama-recent-empty');
+                if (ollama.recent_requests && ollama.recent_requests.length > 0) {
+                    ollamaRecentEmpty.classList.add('hidden');
+                    ollamaRecentBody.innerHTML = ollama.recent_requests.map(req => `
+                        <tr>
+                            <td class="px-4 py-2 text-sm text-white">${req.model || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${req.endpoint || '—'}</td>
+                            <td class="px-4 py-2 text-sm ${getStatusColor(req.status)}">${req.status || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatDuration(req.durationMs)}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${req.outputTokens != null ? req.outputTokens : '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatTimestamp(req.timestamp)}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    ollamaRecentBody.innerHTML = '';
+                    ollamaRecentEmpty.classList.remove('hidden');
+                }
+                
+                // LM Studio data
+                const lmstudioStatus = document.getElementById('lmstudio-status');
+                if (lmstudio.available) {
+                    lmstudioStatus.innerHTML = `<span class="text-green-400 font-semibold">✓ Available</span><br><span class="text-xs text-gray-400">${lmstudio.base_urls.join(', ')}</span>`;
+                } else {
+                    lmstudioStatus.innerHTML = `<span class="text-red-400 font-semibold">✗ Unavailable</span>${lmstudio.base_urls.length > 0 ? `<br><span class="text-xs text-gray-400">${lmstudio.base_urls.join(', ')}</span>` : ''}`;
+                }
+                
+                // LM Studio models (only recently used)
+                const lmstudioModelsEl = document.getElementById('lmstudio-models');
+                if (lmstudio.recently_used_models && lmstudio.recently_used_models.length > 0) {
+                    lmstudioModelsEl.innerHTML = lmstudio.recently_used_models.map(m => 
+                        `<div class="mb-1"><span class="font-medium text-sm text-white">${m.id}</span> <span class="text-gray-400 text-xs">(${m.base_url})</span></div>`
+                    ).join('');
+                } else {
+                    lmstudioModelsEl.textContent = 'No models used in last 2 days';
+                }
+                
+                // LM Studio inference section
+                const lmstudioInferenceBody = document.getElementById('lmstudio-inference-body');
+                const lmstudioInferenceEmpty = document.getElementById('lmstudio-inference-empty');
+                if (lmstudio.recent_activity && lmstudio.recent_activity.length > 0) {
+                    lmstudioInferenceEmpty.classList.add('hidden');
+                    lmstudioInferenceBody.innerHTML = lmstudio.recent_activity.slice(0, 10).map(act => `
+                        <tr>
+                            <td class="px-4 py-2 text-sm text-white">${act.model || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-300 font-medium">${act.inference_summary || '—'}</td>
+                            <td class="px-4 py-2 text-sm ${getStatusColor(act.status)}">${act.status || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatTimestamp(act.timestamp)}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    lmstudioInferenceBody.innerHTML = '';
+                    lmstudioInferenceEmpty.classList.remove('hidden');
+                }
+                
+                // LM Studio activity (detailed)
+                const lmstudioActivityBody = document.getElementById('lmstudio-activity-body');
+                const lmstudioActivityEmpty = document.getElementById('lmstudio-activity-empty');
+                if (lmstudio.recent_activity && lmstudio.recent_activity.length > 0) {
+                    lmstudioActivityEmpty.classList.add('hidden');
+                    lmstudioActivityBody.innerHTML = lmstudio.recent_activity.map(act => `
+                        <tr>
+                            <td class="px-4 py-2 text-sm text-white">${act.model || '—'}</td>
+                            <td class="px-4 py-2 text-sm ${getStatusColor(act.status)}">${act.status || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${act.input_tokens != null ? act.input_tokens : '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${act.output_tokens != null ? act.output_tokens : '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatDuration(act.duration_ms)}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${act.file_context || '—'}</td>
+                            <td class="px-4 py-2 text-sm text-gray-400">${formatTimestamp(act.timestamp)}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    lmstudioActivityBody.innerHTML = '';
+                    lmstudioActivityEmpty.classList.remove('hidden');
+                }
                 
             } catch (error) {
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('error').classList.remove('hidden');
-                document.getElementById('error').textContent = `Error loading LM indicator: ${error.message}`;
+                document.getElementById('error').textContent = `Error loading inference models: ${error.message}`;
             }
         }
         
         // Load on page load
-        loadLMIndicator();
+        loadInferenceModels();
         
-        // Auto-refresh every 30 seconds
-        setInterval(loadLMIndicator, 30000);
+        // Auto-refresh every 3 seconds
+        setInterval(loadInferenceModels, 3000);
     </script>
 </body>
 </html>"""
@@ -946,10 +1506,10 @@ async def dashboard_page() -> HTMLResponse:
                     </div>
                 </div>
                 
-                <!-- LM Insights Card -->
+                <!-- Inference Models Insight Card -->
                 <div id="lm-insights-card" class="bg-white rounded-lg shadow p-6 border border-gray-200">
-                    <h2 class="text-xl font-semibold mb-1">LM Insights</h2>
-                    <p class="text-xs text-gray-500 mb-4 italic">Recent LM activity analytics (advisory only)</p>
+                    <h2 class="text-xl font-semibold mb-1">Inference Models Insight</h2>
+                    <p class="text-xs text-gray-500 mb-4 italic">Real-time monitoring of Ollama and LM Studio inference models</p>
                     
                     <div id="lm-insights-loading" class="text-sm text-gray-500">Loading...</div>
                     <div id="lm-insights-content" class="hidden">
@@ -1070,7 +1630,7 @@ async def dashboard_page() -> HTMLResponse:
                     const db = statusData.db || {};
                     const lm = statusData.lm || {};
                     const dbOk = db.mode === 'ready' && db.reachable;
-                    const lmOk = (lm.slots || []).some((s: any) => s.service === 'OK');
+                    const lmOk = (lm.slots || []).some((s) => s.service === 'OK');
                     if (!dbOk || !lmOk) {
                         level = db.mode === 'db_off' || !lmOk ? 'ERROR' : 'WARN';
                     } else {
@@ -1111,7 +1671,7 @@ async def dashboard_page() -> HTMLResponse:
                 const lm = statusData.lm || {};
                 const lmSummary = document.getElementById('lm-summary');
                 const slots = lm.slots || [];
-                const okSlots = slots.filter((s: any) => s.service === 'OK').length;
+                const okSlots = slots.filter((s) => s.service === 'OK').length;
                 const totalSlots = slots.length;
                 if (totalSlots === 0) {
                     lmSummary.textContent = 'LM: No slots configured';
@@ -1119,10 +1679,8 @@ async def dashboard_page() -> HTMLResponse:
                     lmSummary.textContent = `LM: ${okSlots}/${totalSlots} slots OK`;
                 }
                 
-                // Update KB Doc Metrics (AgentPM-Next:M4)
-                if (statusData.kb_doc_health) {
-                    loadDocMetrics(statusData.kb_doc_health);
-                }
+                // Note: KB Doc Metrics display is available on /status page
+                // Dashboard shows simplified summary only
                 
             } catch (error) {
                 console.error('Failed to load system health:', error);
@@ -2583,49 +3141,111 @@ async def get_correlations(
 @app.get("/api/v1/patterns")
 async def get_patterns(
     limit: int | None = Query(50, description="Maximum number of patterns to return"),
-    min_strength: float | None = Query(0.0, description="Minimum pattern strength threshold"),
-    metric: str | None = Query(None, description="Filter by pattern metric"),
+    min_score: float | None = Query(0.0, description="Minimum pattern score threshold"),
+    pattern_type: str | None = Query(None, description="Filter by pattern type (e.g., 'louvain_community')"),
 ) -> JSONResponse:
-    """Get cross-text pattern analysis data."""
-    filepath = get_export_path("graph_patterns.json")
-    data = load_json_file(filepath)
+    """Get pattern mining data from Phase 12 database tables.
 
-    if not data or "patterns" not in data:
+    Returns discovered patterns and their occurrences from public.patterns
+    and public.pattern_occurrences tables.
+    """
+    try:
+        import psycopg2
+        import psycopg2.extras
+        from scripts.config.env import get_rw_dsn
+    except ImportError:
         raise HTTPException(
-            status_code=404,
-            detail="Pattern data not available. Run export pipeline first.",
+            status_code=500,
+            detail="Database driver not available",
         )
 
-    patterns = data["patterns"]
+    dsn = get_rw_dsn()
+    if not dsn:
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection not configured",
+        )
 
-    # Apply filters
-    if min_strength > 0.0:
-        patterns = [p for p in patterns if p.get("pattern_strength", 0) >= min_strength]
+    try:
+        conn = psycopg2.connect(dsn)
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-    if metric:
-        patterns = [p for p in patterns if p.get("metric", "") == metric]
+        # Build query with filters
+        query = """
+            SELECT 
+                p.id,
+                p.name,
+                p.type,
+                p.definition,
+                p.metadata,
+                p.created_at,
+                COUNT(po.id) as occurrence_count,
+                COALESCE(AVG(po.score), 0) as avg_score
+            FROM public.patterns p
+            LEFT JOIN public.pattern_occurrences po ON p.id = po.pattern_id
+            WHERE 1=1
+        """
+        params = []
 
-    # Sort by strength (descending)
-    patterns = sorted(patterns, key=lambda x: x.get("pattern_strength", 0), reverse=True)
+        if pattern_type:
+            query += " AND p.type = %s"
+            params.append(pattern_type)
 
-    if limit and limit > 0:
-        patterns = patterns[:limit]
+        query += " GROUP BY p.id, p.name, p.type, p.definition, p.metadata, p.created_at"
 
-    # Return filtered data with metadata
-    return JSONResponse(
-        content={
-            "patterns": patterns,
-            "metadata": {
-                **data.get("metadata", {}),
-                "filtered_count": len(patterns),
-                "applied_filters": {
-                    "limit": limit,
-                    "min_strength": min_strength,
-                    "metric": metric,
+        if min_score and min_score > 0.0:
+            query += " HAVING COALESCE(AVG(po.score), 0) >= %s"
+            params.append(min_score)
+
+        query += " ORDER BY avg_score DESC, p.created_at DESC"
+
+        if limit and limit > 0:
+            query += " LIMIT %s"
+            params.append(limit)
+
+        cur.execute(query, params)
+        patterns = cur.fetchall()
+
+        # Convert to list of dicts and format
+        patterns_list = []
+        for pattern in patterns:
+            patterns_list.append(
+                {
+                    "id": str(pattern["id"]),
+                    "name": pattern["name"],
+                    "type": pattern["type"],
+                    "definition": pattern["definition"],
+                    "metadata": pattern["metadata"],
+                    "occurrence_count": pattern["occurrence_count"],
+                    "avg_score": float(pattern["avg_score"]),
+                    "created_at": pattern["created_at"].isoformat() if pattern["created_at"] else None,
+                }
+            )
+
+        cur.close()
+        conn.close()
+
+        return JSONResponse(
+            content={
+                "patterns": patterns_list,
+                "metadata": {
+                    "total_count": len(patterns_list),
+                    "applied_filters": {
+                        "limit": limit,
+                        "min_score": min_score,
+                        "pattern_type": pattern_type,
+                    },
+                    "source": "public.patterns (Phase 12)",
                 },
-            },
-        }
-    )
+            }
+        )
+
+    except Exception as e:
+        LOG.error(f"Error querying patterns: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve patterns: {e!s}",
+        )
 
 
 @app.get("/api/v1/network/{concept_id}")
@@ -2693,15 +3313,75 @@ async def get_concept_network(
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
     """Global exception handler for consistent error responses."""
-    LOG.error(f"API Error: {exc}")
+
+    # Log full traceback for debugging
+    LOG.error(
+        f"Unhandled exception in {request.method} {request.url.path}",
+        exc_info=True,
+        extra={
+            "path": str(request.url.path),
+            "method": request.method,
+            "error": str(exc),
+        },
+    )
+
+    # Don't expose internal details in production
+    detail = str(exc) if os.getenv("DEBUG", "0") == "1" else "Internal server error"
+
     return JSONResponse(
         status_code=500,
         content={
             "error": "Internal server error",
-            "detail": str(exc),
-            "path": str(request.url),
+            "detail": detail,
+            "path": str(request.url.path),
         },
     )
+
+
+@app.get("/api/health")
+async def api_health_check():
+    """Health check endpoint for monitoring and load balancers."""
+    try:
+        # Basic health checks
+        checks = {
+            "status": "healthy",
+            "timestamp": time.time(),
+            "version": "1.0.0",
+        }
+
+        # Check if export directory is accessible
+        export_dir = os.getenv("EXPORT_DIR", "exports")
+        if Path(export_dir).exists():
+            checks["exports"] = "available"
+        else:
+            checks["exports"] = "unavailable"
+            checks["status"] = "degraded"
+
+        # Optional: Check database connectivity (non-blocking)
+        try:
+            from scripts.config.env import get_rw_dsn
+
+            dsn = get_rw_dsn()
+            if dsn:
+                checks["database"] = "configured"
+            else:
+                checks["database"] = "not_configured"
+        except Exception:
+            checks["database"] = "unknown"
+
+        status_code = 200 if checks["status"] == "healthy" else 503
+        return JSONResponse(content=checks, status_code=status_code)
+
+    except Exception as e:
+        LOG.error(f"Health check failed: {e}", exc_info=True)
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy",
+                "error": str(e),
+                "timestamp": time.time(),
+            },
+        )
 
 
 @app.get("/api/v1/temporal")
@@ -2960,6 +3640,9 @@ async def search_docs_endpoint(
     q: str = Query(..., description="Search query"),
     k: int = Query(10, ge=1, le=50, description="Number of results"),
     tier0_only: bool = Query(True, description="Restrict to Tier-0 docs"),
+    doc_type: str | None = Query(
+        None, description="Filter by document type (ssot, runbook, reference, legacy, unknown)"
+    ),
 ) -> JSONResponse:
     """
     Search governance/docs content via semantic similarity.
@@ -2968,7 +3651,7 @@ async def search_docs_endpoint(
     """
     from agentpm.docs.search import search_docs
 
-    result = search_docs(query=q, k=k, tier0_only=tier0_only)
+    result = search_docs(query=q, k=k, tier0_only=tier0_only, doc_type=doc_type)
 
     if not result.get("ok", False):
         return JSONResponse(
@@ -3071,7 +3754,7 @@ async def governance_search_page() -> HTMLResponse:
             placeholder="How does the system enforce correctness across Tier-0 docs?"
             class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-blue-500"
           />
-          <div class="flex items-center gap-3 text-xs text-slate-300">
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300">
             <label class="flex items-center gap-1">
               <span>k</span>
               <input
@@ -3083,6 +3766,21 @@ async def governance_search_page() -> HTMLResponse:
                 value="10"
                 class="w-16 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs outline-none focus:border-blue-500"
               />
+            </label>
+            <label class="flex items-center gap-1">
+              <span class="text-slate-400">Type:</span>
+              <select
+                id="doc_type"
+                name="doc_type"
+                class="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs outline-none focus:border-blue-500"
+              >
+                <option value="">All types</option>
+                <option value="ssot">SSOT</option>
+                <option value="runbook">Runbook</option>
+                <option value="reference">Reference</option>
+                <option value="legacy">Legacy</option>
+                <option value="unknown">Unknown</option>
+              </select>
             </label>
             <label class="inline-flex items-center gap-2">
               <input
@@ -3191,13 +3889,17 @@ async def governance_search_page() -> HTMLResponse:
       const q = document.getElementById("q").value.trim();
       const k = document.getElementById("k").value || "10";
       const tier0Only = document.getElementById("tier0_only").checked ? "true" : "false";
+      const docType = document.getElementById("doc_type").value;
       if (!q) {
         statusEl.textContent = "Please enter a query.";
         return;
       }
       statusEl.textContent = "Searching...";
       try {
-        const url = `/api/docs/search?q=${encodeURIComponent(q)}&k=${encodeURIComponent(k)}&tier0_only=${tier0Only}`;
+        let url = `/api/docs/search?q=${encodeURIComponent(q)}&k=${encodeURIComponent(k)}&tier0_only=${tier0Only}`;
+        if (docType) {
+          url += `&doc_type=${encodeURIComponent(docType)}`;
+        }
         const res = await fetch(url);
         const data = await res.json();
         statusEl.textContent = data.ok
@@ -3213,6 +3915,75 @@ async def governance_search_page() -> HTMLResponse:
 </body>
 </html>"""
     return HTMLResponse(content=html)
+
+
+# --- Doc Control Panel API endpoints (DM-002) ---
+
+
+@app.get("/api/docs/control/canonical")
+async def get_canonical_docs() -> JSONResponse:
+    """
+    Get canonical documents list from DM-002 export.
+
+    Returns:
+        JSON with canonical documents from share/exports/docs-control/canonical.json
+    """
+    canonical_path = Path("share/exports/docs-control/canonical.json")
+    data = load_json_file(canonical_path)
+
+    if not data:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "ok": False,
+                "error": "Canonical documents export not found. Run 'pmagent docs dashboard-refresh' to generate.",
+                "items": [],
+                "total": 0,
+            },
+        )
+
+    return JSONResponse(
+        content={
+            "ok": True,
+            "items": data.get("items", []),
+            "total": data.get("total", 0),
+            "generated_at": data.get("generated_at"),
+        }
+    )
+
+
+@app.get("/api/docs/control/archive-candidates")
+async def get_archive_candidates() -> JSONResponse:
+    """
+    Get archive candidates grouped by directory from DM-002 export.
+
+    Returns:
+        JSON with archive candidates from share/exports/docs-control/archive-candidates.json
+    """
+    candidates_path = Path("share/exports/docs-control/archive-candidates.json")
+    data = load_json_file(candidates_path)
+
+    if not data:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "ok": False,
+                "error": "Archive candidates export not found. Run 'pmagent docs dashboard-refresh' to generate.",
+                "groups": [],
+                "total_groups": 0,
+                "total_items": 0,
+            },
+        )
+
+    return JSONResponse(
+        content={
+            "ok": True,
+            "groups": data.get("groups", []),
+            "total_groups": data.get("total_groups", 0),
+            "total_items": data.get("total_items", 0),
+            "generated_at": data.get("generated_at"),
+        }
+    )
 
 
 if __name__ == "__main__":

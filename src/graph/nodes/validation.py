@@ -6,7 +6,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from src.core.hebrew_utils import calculate_gematria
+from agentpm.modules.gematria.utils.hebrew_utils import calculate_gematria
 from src.core.ids import normalize_hebrew
 from src.infra.db import get_bible_ro
 

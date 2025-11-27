@@ -19,6 +19,7 @@ def generate_text(
     max_tokens: int = 256,
     temperature: float = 0.7,
     system_prompt: str | None = None,
+    model_slot: str | None = None,
 ) -> dict[str, Any]:
     """
     Phase-6: Simple text generation using guarded LM Studio calls.
@@ -58,6 +59,7 @@ def generate_text(
         temperature=temperature,
         max_tokens=max_tokens,
         fallback_fn=fallback_fn,
+        model_slot=model_slot,
     )
 
     # Extract text from response

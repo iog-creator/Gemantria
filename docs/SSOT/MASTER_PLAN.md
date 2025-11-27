@@ -604,11 +604,11 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 
 The Gemantria project represents a comprehensive approach to biblical text analysis, combining rigorous mathematical methods with AI-powered insights and interactive visualization. Through careful phase planning, strict governance, and mathematical validation, we deliver reliable, reproducible results for biblical research and exploration.
 
-**Current Focus**: Phase 8 temporal analytics completion and Phase 11 unified envelope stabilization.
+**Current Focus**: Phase 12 advanced pattern mining capabilities.
 
-**Next Milestone**: Phase 12 advanced pattern mining capabilities.
+**Next Milestone**: Phase 13 multi-language support.
 
-> **Note:** “Next Milestone” indicates **future direction only**. Do **not** begin Phase 12 work until Phases 8–11 have passed both hermetic and live DB+LM runtime gates, and this document **and** `NEXT_STEPS.md` explicitly mark Phase 12 as **Active**.
+> **Note**: Phase 12 is now **Active**.
 
 <!-- RULES_TABLE_START -->
 | # | Title |
@@ -682,4 +682,5 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 066 | # --- |
 | 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | # --- |
+| 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
 <!-- RULES_TABLE_END -->

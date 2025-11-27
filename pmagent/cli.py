@@ -86,8 +86,10 @@ from agentpm.plan.next import (  # noqa: E402
     list_capability_sessions,
     run_reality_loop,
 )
+from agentpm.handoff.service import generate_handoff  # noqa: E402
 from agentpm.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
 from agentpm.kb.registry import REPO_ROOT  # noqa: E402
+from agentpm.governance.conflict_audit import audit_governance_conflicts  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -119,6 +121,8 @@ app.add_typer(state_app, name="state")
 kb_app = typer.Typer(help="Knowledge-base document registry operations")
 app.add_typer(kb_app, name="kb")
 registry_app = typer.Typer(help="KB document registry commands")
+handoff_app = typer.Typer(help="Handoff generation commands")
+app.add_typer(handoff_app, name="handoff")
 kb_app.add_typer(registry_app, name="registry")
 plan_app = typer.Typer(help="Planning workflows powered by KB registry")
 app.add_typer(plan_app, name="plan")
@@ -127,6 +131,9 @@ plan_app.add_typer(plan_kb_app, name="kb")
 
 report_app = typer.Typer(help="Reporting commands")
 app.add_typer(report_app, name="report")
+
+governance_app = typer.Typer(help="Governance conflict audit commands")
+app.add_typer(governance_app, name="governance")
 
 tools_app = typer.Typer(help="External planning/tool helpers (Gemini, Codex)")
 app.add_typer(tools_app, name="tools")
@@ -1024,6 +1031,77 @@ def report_kb(
     sys.exit(0)
 
 
+@governance_app.command("audit", help="Audit governance conflicts in rules and SSOT documents")
+def governance_audit(
+    conflicts: bool = typer.Option(False, "--conflicts", help="Audit logical conflicts between rules"),
+    output: Path | None = typer.Option(  # noqa: B008
+        None,
+        "--output",
+        "-o",
+        help="Output path for JSON manifest (default: evidence/governance_conflict_manifest.json)",
+    ),
+    json_only: bool = typer.Option(True, "--json-only/--human", help="Print only JSON (default) or human summary"),
+) -> None:
+    """Audit governance conflicts in rules and SSOT documents.
+
+    This command systematically detects logical contradictions between rules,
+    leveraging M1/M2 doc fragments and M3 metrics to identify conflicts.
+    """
+    if not conflicts:
+        print("ERROR: --conflicts flag required", file=sys.stderr)
+        print("Usage: pmagent governance audit --conflicts [--output PATH] [--json-only]", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        output_path = output or (REPO_ROOT / "evidence" / "governance_conflict_manifest.json")
+        result = audit_governance_conflicts(output_path=output_path)
+
+        if json_only:
+            print(json.dumps(result.to_dict(), indent=2))
+        else:
+            # Human-readable summary to stderr, JSON to stdout
+            print("Governance Conflict Audit", file=sys.stderr)
+            print(f"  Rules scanned: {result.total_rules_scanned}", file=sys.stderr)
+            print(f"  Conflicts found: {result.conflicts_found}", file=sys.stderr)
+            print("", file=sys.stderr)
+
+            if result.findings:
+                for finding in result.findings:
+                    print(f"  [{finding.severity.upper()}] {finding.conflict_id}", file=sys.stderr)
+                    for rule_1, rule_2 in finding.rule_pairs:
+                        print(f"    Conflict: Rule {rule_1} vs Rule {rule_2}", file=sys.stderr)
+                    print(f"    Description: {finding.description}", file=sys.stderr)
+                    if finding.recommendation:
+                        print(f"    Recommendation: {finding.recommendation}", file=sys.stderr)
+                    print("", file=sys.stderr)
+            else:
+                print("  No conflicts detected.", file=sys.stderr)
+
+            if result.notes:
+                print("", file=sys.stderr)
+                print("Notes:", file=sys.stderr)
+                for note in result.notes:
+                    print(f"  - {note}", file=sys.stderr)
+
+            print(json.dumps(result.to_dict(), indent=2))
+
+        # Exit with error code if critical conflicts found
+        critical_count = sum(1 for f in result.findings if f.severity == "critical")
+        if critical_count > 0:
+            sys.exit(1)
+
+    except Exception as exc:
+        error_msg = {"error": str(exc), "available": False}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to audit governance conflicts: {exc}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
+        sys.exit(1)
+
+    sys.exit(0)
+
+
 @tools_app.command("plan", help="Run prompt via configured planning provider (Gemini/Codex/local fallback)")
 def tools_plan(
     prompt: str = typer.Argument(..., help="Prompt text; use '-' to read from stdin"),
@@ -1076,7 +1154,7 @@ def tools_gemini(
             system=system or None,
             model=model or cfg.get("planning_model") or cfg.get("local_agent_model"),
             cli_path=cli_path or cfg.get("gemini_cli_path") or "gemini",
-            enabled=bool(cfg.get("gemini_enabled", True)),
+            enabled=bool(cfg.get("gemini_enabled", False)),  # Deprecated: disabled by default
         )
         _print_planning_result(result, json_only=json_only)
         mark_agent_run_success(run, planning_adapter.summarize_result(result))
@@ -1774,6 +1852,7 @@ def docs_search(
             error = result.get("error", "unknown error")
             print(f"DOCS_SEARCH: failed ({error[:50]})", file=sys.stderr)
 
+    # This command REQUIRES the database - must fail if unavailable
     sys.exit(0 if result.get("ok") else 1)
 
 
@@ -1954,6 +2033,7 @@ def embed_text_cmd(
 
 @registry_app.command("list", help="List all registered KB documents")
 def kb_registry_list(
+    limit: int = typer.Option(None, "--limit", help="Limit number of results"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
     registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
 ) -> None:
@@ -1962,16 +2042,29 @@ def kb_registry_list(
         path = Path(registry_path) if registry_path else REGISTRY_PATH
         registry = load_registry(path)
 
+        documents = registry.documents
+        if limit is not None and limit > 0:
+            documents = documents[:limit]
+
         if json_only:
-            print(json.dumps(registry.to_dict(), indent=2))
+            output = registry.to_dict()
+            if limit is not None:
+                output["documents"] = [doc.to_dict() for doc in documents]
+            print(json.dumps(output, indent=2))
         else:
             print(f"KB Registry: {len(registry.documents)} document(s)", file=sys.stderr)
+            if limit is not None:
+                print(f"Showing: {len(documents)} of {len(registry.documents)}", file=sys.stderr)
             print(f"Version: {registry.version}", file=sys.stderr)
             print(f"Generated: {registry.generated_at}", file=sys.stderr)
             print("", file=sys.stderr)
-            for doc in registry.documents:
+            for doc in documents:
                 print(f"  {doc.id:30} {doc.type:15} {doc.path}")
-            print(json.dumps(registry.to_dict(), indent=2))
+            # Output full registry as JSON for scripting
+            output = registry.to_dict()
+            if limit is not None:
+                output["documents"] = [doc.to_dict() for doc in documents]
+            print(json.dumps(output, indent=2))
         sys.exit(0)
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
@@ -1980,18 +2073,27 @@ def kb_registry_list(
 
 @registry_app.command("show", help="Show details for a single KB document")
 def kb_registry_show(
-    doc_id: str = typer.Argument(..., help="Document ID to show"),
+    doc_id: str = typer.Argument(..., help="Document ID or path to show"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
     registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
 ) -> None:
-    """Show details for a single KB document."""
+    """Show details for a single KB document (by ID or path)."""
     try:
         path = Path(registry_path) if registry_path else REGISTRY_PATH
         registry = load_registry(path)
+
+        # Try by ID first, then by path
         doc = registry.get_by_id(doc_id)
+        if not doc:
+            # Try to find by path (exact match or partial)
+            for candidate in registry.documents:
+                if candidate.path == doc_id or candidate.path.endswith(doc_id):
+                    doc = candidate
+                    break
 
         if not doc:
             print(f"ERROR: Document not found: {doc_id}", file=sys.stderr)
+            print("   Tip: Use 'pmagent kb registry list' to see available documents", file=sys.stderr)
             sys.exit(1)
 
         if json_only:
@@ -2164,6 +2266,110 @@ def kb_registry_validate(
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+@ask_app.command("query", help="Semantic search over documentation")
+def ask_query(
+    query: str = typer.Argument(..., help="Search query"),
+    limit: int = typer.Option(5, "--limit", help="Number of results"),
+    threshold: float = typer.Option(0.10, "--threshold", help="Similarity threshold (default: 0.10)"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
+) -> None:
+    """Search documentation using vector similarity."""
+    from agentpm.knowledge.vector_store import VectorStore
+
+    try:
+        store = VectorStore()
+        results = store.search(query, limit=limit, threshold=threshold)
+
+        data = [
+            {
+                "path": r.path,
+                "title": r.title,
+                "similarity": r.similarity,
+            }
+            for r in results
+        ]
+
+        if json_only:
+            print(json.dumps(data, indent=2))
+        else:
+            print(f"Search results for: '{query}'")
+            if not results:
+                print("No relevant documents found.")
+                print(f"   Threshold used: {threshold:.2f}")
+                print("   Suggestions:")
+                print("     - Lower threshold: --threshold 0.05")
+                print("     - Refine query with more specific terms")
+                print("     - Check if embeddings exist: pmagent status kb")
+            for i, r in enumerate(results, 1):
+                print(f"{i}. {r.title or r.path} ({r.similarity:.2f})")
+                print(f"   Path: {r.path}")
+
+    except Exception as e:
+        if json_only:
+            print(json.dumps({"error": str(e)}))
+        else:
+            print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@handoff_app.command("generate", help="Generate handoff document from Postgres/DMS data")
+def handoff_generate(
+    handoff_type: str = typer.Option(
+        "session", "--handoff-type", "-t", help="Type of handoff (session, task, role, system-state)"
+    ),
+    scope_id: str | None = typer.Option(None, "--scope-id", "-s", help="Optional scope ID for task-type handoffs"),
+    role: str | None = typer.Option(None, "--role", "-r", help="Optional role for role-type handoffs"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON (for external LM consumption)"),
+) -> None:
+    """Generate handoff document from Postgres/DMS data.
+
+    This command consolidates data from control.agent_run, control.doc_registry,
+    and evidence files to generate a canonical handoff_context JSON envelope.
+
+    The --json-only flag is required for external LM consumption (System GPT / Gemini).
+    """
+    try:
+        # Generate handoff context
+        context = generate_handoff(
+            handoff_type=handoff_type,
+            scope_id=scope_id,
+            role=role,
+            out_format="json",
+        )
+
+        if json_only:
+            # Output JSON (canonical envelope for external LM consumption)
+            output = json.dumps(context, indent=2)
+            print(output)
+        else:
+            # Output Markdown (human-readable format)
+            from agentpm.handoff.templates import render_markdown
+
+            output = render_markdown(context)
+            print(output)
+            if context.get("agent_runs"):
+                summary = context["agent_runs"].get("summary", {})
+                print(f"Agent runs (last 24h): {summary.get('last_24h', 0)}", file=sys.stderr)
+            if context.get("next_steps"):
+                print(f"Next steps: {len(context['next_steps'])}", file=sys.stderr)
+
+    except ValueError as e:
+        # Invalid handoff_type
+        if json_only:
+            print(json.dumps({"error": str(e)}))
+        else:
+            print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        if json_only:
+            print(json.dumps({"error": str(e)}))
+        else:
+            print(f"Error generating handoff: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)
 
 
 def main() -> None:

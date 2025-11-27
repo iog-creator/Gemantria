@@ -544,6 +544,12 @@ housekeeping.db.gate:
 	@echo "✅ DB connectivity verified"
 
 housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
+
+# ---- Work Completion Gate (AWCG) -------------------------------------------
+.PHONY: work.complete
+work.complete:
+	@echo "Running Automatic Work Completion Gate (AWCG)..."
+	@python3 scripts/ops/work_completion_gate.py --work-type "manual" --description "Manual work completion gate" || true
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
@@ -1454,7 +1460,7 @@ ai.ingest:
 
 ai.nouns:
 	@echo ">> AI Noun Discovery Agent: Shards→SSOT ai-nouns"
-	@PYTHONPATH=$(shell pwd) BOOK=$${BOOK:-Genesis} python3 scripts/ai_noun_discovery.py $${RESUME_FROM:+--resume-from $${RESUME_FROM}}
+	@PYTHONPATH=$(shell pwd) BOOK=$${BOOK:-Genesis} python3 agentpm/modules/gematria/scripts/ai_noun_discovery.py $${RESUME_FROM:+--resume-from $${RESUME_FROM}}
 
 ai.enrich:
 	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
@@ -1462,7 +1468,7 @@ ai.enrich:
 
 ai.verify.math:
 	@echo ">> Math Verifier Agent (gematria sanity via MATH_MODEL=$${MATH_MODEL:-self-certainty-qwen3-1.7b-base-math})"
-	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/math_verifier.py
+	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 agentpm/modules/gematria/scripts/math_verifier.py
 
 sandbox.smoke:
 	@echo ">> TS Sandbox Smoke (PoC, gate-aware, hermetic hello-world)"
@@ -1474,8 +1480,11 @@ graph.build:
 
 graph.score:
 	@echo ">> Rerank Agent: graph_latest→graph_latest.scored"
-	@# TODO: wire to reranking script
-	@echo "GRAPH_SCORE_OK"
+	@PYTHONPATH=$(shell pwd) python3 scripts/score_graph.py
+
+graph.stats:
+	@echo ">> Graph Stats: graph_latest.scored→graph_stats (Rule 022)"
+	@PYTHONPATH=$(shell pwd) python3 scripts/analytics/graph_stats_from_json.py
 
 analytics.export:
 	@echo "HINT: analytics: starting (file-first)"
@@ -1545,7 +1554,7 @@ doctor.db:
 	@PYTHONPATH=$(shell pwd) python3 scripts/doctor_db.py
 
 ai.nouns.resume:
-	python3 scripts/ai_noun_discovery.py --resume-from $(RESUME_FROM)
+	python3 agentpm/modules/gematria/scripts/ai_noun_discovery.py --resume-from $(RESUME_FROM)
 
 ai.nouns.only:
 	$(MAKE) ai.nouns BOOK=$(BOOK) RESUME_FROM= ONLY=$(ONLY)
@@ -1973,6 +1982,31 @@ mcp.sse.stop:
 guard.mcp.sse:
 	@ENABLE_LMSTUDIO_MCP=$${ENABLE_LMSTUDIO_MCP:-0}; \
 	$${PYTHON3:-python3} scripts/ci/guard_mcp_live.py | tee evidence/guard_mcp_live.json
+
+# --- Service Status Check (MANDATORY BEFORE TROUBLESHOOTING) ---
+.PHONY: services.check
+services.check: ## Check status of all required services (.venv, API server, Vite dev server)
+	@bash scripts/check_services.sh
+
+# --- API Server Management (Hardened) ---
+.PHONY: api.start api.stop api.restart api.status api.watch api.health
+api.start: ## Start API server with process manager
+	@bash scripts/api_server_manager.sh start
+
+api.stop: ## Stop API server
+	@bash scripts/api_server_manager.sh stop
+
+api.restart: ## Restart API server
+	@bash scripts/api_server_manager.sh restart
+
+api.status: ## Check API server status
+	@bash scripts/api_server_manager.sh status
+
+api.watch: ## Start API server with auto-restart watcher
+	@bash scripts/api_server_manager.sh watch
+
+api.health: ## Check API server health endpoint
+	@curl -s http://localhost:8000/api/health | python3 -m json.tool || echo "API server not responding"
 
 # --- Bring-up verification script ---
 .PHONY: bringup.001

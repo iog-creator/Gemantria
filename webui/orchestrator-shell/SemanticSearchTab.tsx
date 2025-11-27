@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import StatusBanner from './StatusBanner';
 import SearchBar from './SearchBar';
@@ -42,7 +42,7 @@ async function fetchJsonSafe<T>(path: string): Promise<T | null> {
 }
 
 export default function SemanticSearchTab() {
-  const [liveMode, setLiveMode] = useState(false);
+  const [liveMode, setLiveMode] = useState(true);
   const [staticData, setStaticData] = useState<SemanticSearchData | null>(null);
   const [liveResults, setLiveResults] = useState<SemanticSearchData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -83,12 +83,11 @@ export default function SemanticSearchTab() {
 
     try {
       const params = new URLSearchParams({
-        query: query.trim(),
-        limit: '20',
-        translation: 'KJV'
+        q: query.trim(),
+        limit: '20'
       });
 
-      const response = await fetch(`/api/bible/semantic-search?${params}`, {
+      const response = await fetch(`/api/bible/semantic?${params}`, {
         method: 'GET',
       });
 
@@ -98,13 +97,27 @@ export default function SemanticSearchTab() {
 
       const data = await response.json();
 
-      if (data.mode === 'db_off') {
-        setError('Database offline. Switching to static mode.');
-        setLiveMode(false);
-      } else {
-        setLiveResults(data);
-      }
+      // API returns { query: str, results: [...], total: N }
+      // Map to our SemanticSearchData structure
+      setLiveResults({
+        query: data.query || query,
+        translation: 'KJV',
+        limit: 20,
+        results_count: data.total || 0,
+        results: (data.results || []).map((r: any) => ({
+          verse_id: 0, // Not provided by API
+          book_name: r.book,
+          chapter_num: r.chapter,
+          verse_num: r.verse,
+          text: r.text,
+          translation_source: 'KJV',
+          similarity_score: r.similarity
+        })),
+        mode: 'available',
+      });
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Live search failed';
+      setError(`Live search failed: ${errorMsg}. Switching to static mode.`);
       setLiveMode(false);
     } finally {
       setLoading(false);
@@ -175,16 +188,14 @@ export default function SemanticSearchTab() {
             <StatusBanner mode={liveMode ? 'live' : 'hermetic'} />
           )}
 
-          {/* Live Search Input */}
-          {liveMode && (
-            <div className="mb-4">
-              <SearchBar
-                onSearch={handleLiveSearch}
-                disabled={loading}
-                placeholder="Enter semantic query (e.g., 'hope in difficult times')"
-              />
-            </div>
-          )}
+          {/* Search Input - Always show, but only functional in Live Mode */}
+          <div className="mb-4">
+            <SearchBar
+              onSearch={liveMode ? handleLiveSearch : () => {}}
+              disabled={loading || !liveMode}
+              placeholder={liveMode ? "Enter semantic query (e.g., 'hope in difficult times')" : "Enable Live Search to search"}
+            />
+          </div>
         </div>
 
         {/* Loading */}

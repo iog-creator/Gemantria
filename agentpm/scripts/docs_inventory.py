@@ -5,7 +5,7 @@ Document Inventory Script (DM-001)
 Scans the repository for markdown-like files and upserts metadata into control.kb_document
 for document management and duplicate detection.
 
-Tolerates db_off (no DB required; fails gracefully with clear message).
+This command REQUIRES the database to be available.
 """
 
 from __future__ import annotations
@@ -250,7 +250,6 @@ def run_inventory(repo_root: Path | None = None) -> dict[str, Any]:
 
     except Exception as exc:  # noqa: BLE001
         result["error"] = f"database error: {exc!s}"
-        result["db_off"] = True
 
     return result
 
@@ -261,10 +260,11 @@ def main() -> None:
 
     result = run_inventory()
 
-    if result.get("db_off"):
-        print(f"WARNING: {result.get('error', 'Database unavailable')}")
-        print("db_off: true")
-        sys.exit(0)
+    # This command REQUIRES the database - must fail if unavailable
+    if result.get("error") and "database" in result.get("error", "").lower():
+        print(f"ERROR: {result.get('error', 'Database unavailable')}", file=sys.stderr)
+        print("ERROR: This command requires the database to be available.", file=sys.stderr)
+        sys.exit(1)
 
     if not result.get("ok"):
         print(f"ERROR: {result.get('error', 'Unknown error')}")

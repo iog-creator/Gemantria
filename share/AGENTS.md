@@ -21,7 +21,82 @@ See `docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md` for current vs intended state of 
 
 See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation design and validation schema.
 
+## PM DMS Integration (Rule-053) ⭐ NEW
+
+**Phase 9.1**: PM must query **Postgres DMS (control plane)** BEFORE file searching.
+
+**DMS-First Workflow**:
+1. **Documentation**: `pmagent kb registry by-subsystem --owning-subsystem=<project>`
+2. **Tool Catalog**: `SELECT * FROM control.mcp_tool_catalog WHERE tags @> '{<project>}'`
+3. **Project Status**: `pmagent status kb` and `pmagent plan kb list`
+4. **File Search** (LAST RESORT): Only if content not in DMS
+
+**Feature Registration**:
+- After building new tool/module: Create MCP envelope → `make mcp.ingest` → Update KB registry
+- PM learns capabilities automatically through DMS registration
+- **Goal**: PM and project develop together
+
+**Documentation Updates MUST Go Through DMS:**
+- After updating ANY documentation (AGENTS.md, cursor rules, runbooks, ADRs), you MUST:
+  1. Run `docs_inventory.py` to register new/updated docs
+  2. Run `reindex_knowledge.py` to update embeddings for semantic search
+  3. Verify with `pmagent kb registry list | grep <doc-name>`
+- **Direct file edits without DMS updates are incomplete.** The PM agent queries the DMS, not the file system.
+
+See `.cursor/rules/053-pm-dms-integration.mdc` and `docs/SSOT/PM_CONTRACT.md` Section 2.6 for full workflow.
+
 ## Environment
+
+### Service Status Check (MANDATORY BEFORE TROUBLESHOOTING)
+**CRITICAL**: Before troubleshooting any UI/API issues, ALWAYS check if required services are running.
+
+```bash
+# Check service status (venv, API server, Vite dev server)
+make services.check
+# OR
+bash scripts/check_services.sh
+```
+
+**AUTO-START SERVICES WHEN DOWN (Rule-062):**
+When services are detected as down, **Cursor MUST automatically start them** (do not wait for orchestrator):
+1. **Database (Postgres)**: Run `pmagent bringup full` - automatically detects environment (systemd/brew/docker) and starts DB
+2. **LM Studio**: `pmagent bringup full` also starts LM Studio server
+3. **API Server**: Start manually if needed: `python3 -m uvicorn src.services.api_server:app --host 0.0.0.0 --port 8000 --reload &`
+4. **Vite Server**: Start manually if needed: `cd ui && npm run dev &`
+
+**For tasks requiring live DB+LM:**
+- If `make reality.green` fails due to `db_off` or `lm_off`, Cursor MUST run `pmagent bringup full` first
+- Wait 2-3 seconds for services to start, then re-run the check
+- Do NOT report "DB offline" as expected behavior when task requires live services
+
+**Common Issues:**
+- `.venv` not activated → Most common cause of failures
+- Database not running → **AUTO-START**: `pmagent bringup full` (Cursor must do this automatically)
+- LM Studio not running → **AUTO-START**: `pmagent bringup full` (Cursor must do this automatically)
+- API server (port 8000) not running → UI can't fetch `/api/*` endpoints
+- Vite dev server (port 5173) not running → Dashboard won't load
+
+**Quick Start:**
+```bash
+# 1. Activate venv (ALWAYS FIRST)
+source .venv/bin/activate
+
+# 2. Auto-start DB + LM Studio (if down)
+pmagent bringup full  # Cursor must run this when services are down
+
+# 3. Start API server (if needed)
+python3 -m uvicorn src.services.api_server:app --host 0.0.0.0 --port 8000 --reload &
+
+# 4. Start Vite dev server (if needed)
+cd ui && npm run dev &
+```
+
+**Enforcement (Rule-062):**
+- Service status check is MANDATORY before any troubleshooting
+- **AUTO-START services when down** - Cursor must do this, not wait for orchestrator
+- DO NOT debug code until services are verified running
+- `.venv` activation is the #1 most common failure point
+
 - venv: `python -m venv .venv && source .venv/bin/activate`
 - install: `make deps`
 - Databases:
@@ -61,13 +136,13 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - **Qwen reranker**: fallback only, not the primary reranker.
     - `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B` (via theology adapter)
   - **Retrieval Profile (Phase-7C)**: `RETRIEVAL_PROFILE=DEFAULT` (default) uses Granite stack. Setting `RETRIEVAL_PROFILE=GRANITE` or `BIBLE` switches retrieval embeddings/rerankers accordingly. Granite IDs are resolved via `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Misconfigured Granite profiles emit a `HINT` and fall back to DEFAULT for hermetic runs.
-  - **Planning Lane (Gemini CLI + Codex)**: pmagent exposes a **planning slot** for backend planning, coding refactors, and math-heavy reasoning. This lane is intentionally **non-theology** and never substitutes for gematria/theology slots.
-    - Configure via `PLANNING_PROVIDER` (`gemini`, `codex`, `lmstudio`, `ollama`) and `PLANNING_MODEL`. Optional toggles: `GEMINI_ENABLED`, `CODEX_ENABLED`, `GEMINI_CLI_PATH`, `CODEX_CLI_PATH`.
-    - pmagent calls CLI adapters (`agentpm/adapters/gemini_cli.py`, `agentpm/adapters/codex_cli.py`) with structured prompts, logs runs through `agentpm.runtime.lm_logging`, and records outcomes in `control.agent_run`.
-    - If the selected CLI is unavailable, pmagent fails closed with `mode="lm_off"` and optionally falls back to the Granite local_agent slot—never to theology.
-    - Multi-agent planning is permitted: pmagent may spin up multiple planning calls (Gemini/Codex instances) for decomposition tasks, each tracked with its own agent_run row. Context windows are large, but prompts must still cite SSOT docs; no theology, scripture exegesis, or gematria scoring is delegated to these tools.
+  - **Planning Lane (Codex CLI; Gemini CLI deprecated)**: pmagent exposes a **planning slot** for backend planning, coding refactors, and math-heavy reasoning. This lane is intentionally **non-theology** and never substitutes for gematria/theology slots. **Gemini CLI is deprecated** in favor of local inference providers (LM Studio/Ollama) for performance and architectural alignment.
+    - Configure via `PLANNING_PROVIDER` (`codex`, `lmstudio`, `ollama`) and `PLANNING_MODEL`. Optional toggles: `CODEX_ENABLED`, `CODEX_CLI_PATH`. **Gemini CLI (`GEMINI_ENABLED`, `GEMINI_CLI_PATH`) is deprecated and defaults to disabled.**
+    - pmagent calls CLI adapters (`agentpm/adapters/codex_cli.py`; `agentpm/adapters/gemini_cli.py` is deprecated) with structured prompts, logs runs through `agentpm.runtime.lm_logging`, and records outcomes in `control.agent_run`.
+    - If the selected CLI is unavailable or `PLANNING_PROVIDER` is unset, pmagent falls back to the Granite local_agent slot—never to theology.
+    - Multi-agent planning is permitted: pmagent may spin up multiple planning calls (Codex instances) for decomposition tasks, each tracked with its own agent_run row. Context windows are large, but prompts must still cite SSOT docs; no theology, scripture exegesis, or gematria scoring is delegated to these tools.
     - Planning lane usage is opt-in per operator; CI remains hermetic (planning CLIs disabled unless explicitly allowed).
-    - **Runbooks**: See `docs/runbooks/GEMINI_CLI.md` and `docs/runbooks/CODEX_CLI.md` for setup and usage details.
+    - **Runbooks**: See `docs/runbooks/CODEX_CLI.md` for setup and usage details. `docs/runbooks/GEMINI_CLI.md` is deprecated and retained for reference only.
 
 ### LM Status Command
 
@@ -131,26 +206,29 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - Uses the same explain_system_status() helper as `pmagent status explain`.
   - Works even if LM is offline (falls back to rule-based summary).
 
-### LM Insights Graph
+### Inference Models Insight
 
 - API endpoint:
-  - Path: `/api/lm/indicator`
-  - Purpose: Expose LM indicator snapshots (from existing exports) in a stable JSON shape for UI.
+  - Path: `/api/inference/models`
+  - Purpose: Expose real-time inference model activity from both Ollama and LM Studio providers.
   - Returns:
-    - `snapshot`: Current LM indicator data (status, rates, metrics) or `null` if unavailable
-    - `note`: Message if data is missing
-- HTML page:
-  - Path: `/lm-insights`
-  - Shows a simple chart of recent LM indicator snapshots:
-    - Status indicator (color-coded: green/yellow/red)
-    - Success/error rates bar chart
-    - Metrics summary (total calls, success rate, error rate)
-- Data source:
-  - Read-only view over the LM indicator export JSON created in Phase-4C/4D.
-  - Location: `share/atlas/control_plane/lm_indicator.json`
+    - `ollama`: Ollama provider data (available, base_url, available_models, active_requests, recent_requests)
+    - `lmstudio`: LM Studio provider data (available, base_urls, available_models, recent_activity)
+    - `last_updated`: Timestamp of last update
+  - HTML page:
+    - Path: `/lm-insights`
+    - Shows real-time inference model monitoring with provider tabs:
+      - **Ollama Tab**: Available models (list from `/api/tags`), active requests (in-flight), recent requests (completed) with model, endpoint, status, tokens, duration, prompt preview
+      - **LM Studio Tab**: Available models (list from `/v1/models`), recent activity from `control.agent_run` with model, tokens, duration, file/process context, output preview
+  - Auto-refreshes every 3 seconds
+- Data sources:
+  - Ollama: In-memory monitor store (`src/services/ollama_monitor/store.py`) and `/api/tags` endpoint
+  - LM Studio: `control.agent_run` table (recent `lm_studio` tool calls) and `/v1/models` endpoint
 - Notes:
-  - No DB queries; no new LM calls.
-  - Uses Tailwind + Chart.js via CDN; no React/LangChain/LangGraph.
+  - Real-time monitoring of both providers
+  - File/process context extracted from `call_site` and `app_name` in agent_run args_json
+  - Output preview extracted from response content or response_length
+  - Uses Tailwind CSS; no React/LangChain/LangGraph.
 
 ### System Dashboard
 
@@ -163,9 +241,9 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - "System Health" card:
     - Shows overall level (OK/WARN/ERROR), headline, DB mode, LM slot summary.
     - Links to `/status` for detailed view.
-  - "LM Insights" card:
+  - "Inference Models Insight" card:
     - Shows LM indicator status (healthy/degraded/offline) and key metrics.
-    - Links to `/lm-insights` for detailed graph.
+    - Links to `/lm-insights` for detailed real-time model monitoring.
 - Notes:
   - All data is read-only from existing JSON APIs/exports.
   - No additional DB queries or LM calls beyond current endpoints.
@@ -270,6 +348,9 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 
 **AI-in-the-loop docs helpers:**
 - `pmagent docs reality-check-ai-notes` — Uses Granite (LM Studio) when available to propose orchestrator-facing notes about the reality-check system; safe when LM is off (writes placeholder file)
+- **Command Behavior (Rule-046)**: pmagent commands follow a clear distinction:
+  - **Observability/Status commands** (e.g., `pmagent health *`, `pmagent control *`, `pmagent status *`): Handle DB-off / LM-off gracefully (exit code 0, structured `mode="db_off"` output) for CI/hermetic environments.
+  - **Operational commands** (e.g., `pmagent docs dashboard-refresh`, `pmagent docs search`, `pmagent docs inventory`): **REQUIRE** the database and must **FAIL** (exit code 1) when DB unavailable. These commands perform data writes, ingestion, or operations that cannot proceed without the database.
 
 **MCP & Atlas targets:**
 - `make mcp.dev.bench` — Run MCP endpoint benchmarks
@@ -295,6 +376,13 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
   - Behavior changes → update `AGENTS.md` documentation
   - Run `make agents.md.sync` to check for stale documentation
   - Run `python scripts/create_agents_md.py --dry-run` to find missing files
+- **MANDATORY DMS Update (Rule 027, Rule 055)**: After ANY documentation change, you MUST update the DMS:
+  ```bash
+  source .venv/bin/activate
+  PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/docs_inventory.py
+  PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/reindex_knowledge.py
+  ```
+  **Why:** The DMS is the authoritative source for documentation discovery and semantic search. Direct file edits without DMS updates are incomplete. The PM agent and other tools query the DMS, not the file system directly.
 - Always run `make housekeeping` after any docs, scripts, or rules change before requesting review (Rule 058).
 
 ## Code Quality Standards
@@ -331,6 +419,40 @@ This process eliminates stale bytecode as a source of errors.
 - Viz: Recharts, D3 wrapper, React Flow (graphs)
 - Styling: Tailwind (or CSS Modules)
 - Layout: `src/components/*`, `src/hooks/*`, `src/services/*`, `src/views/*`
+
+### Critical UI Patterns (Locked Down)
+
+#### SVG Icon Sizing (CRITICAL)
+**Problem:** SVG icons can scale to viewport width (e.g., 1679px) when Tailwind classes alone are used.
+**Solution:** ALL SVG icons MUST include explicit inline size constraints:
+```tsx
+<svg className="h-5 w-5 text-gray-400" style={{ width: '20px', height: '20px', flexShrink: 0 }}>
+  {/* path content */}
+</svg>
+```
+**Why:** Tailwind classes (`h-5 w-5`) are not sufficient; SVGs need explicit pixel constraints to prevent viewport scaling.
+
+#### Live Search Default Behavior
+**Pattern:** All search/query features MUST default to `liveMode = true`:
+```tsx
+const [liveMode, setLiveMode] = useState(true); // NOT false
+```
+**Rationale:** Users expect live data by default. Static mode is a fallback only, not the default.
+
+#### API Endpoint Contracts
+**Requirement:** Frontend API calls MUST match backend router signatures exactly:
+- Check router files (e.g., `src/services/routers/biblescholar.py`) for exact parameter names
+- Use GET with query params when backend expects GET (e.g., `?q=...&limit=20`)
+- Use POST with body only when backend expects POST
+- Map response structures to match backend DTOs exactly
+
+#### Browser Verification (MANDATORY)
+**Rule:** Browser verification is REQUIRED for all UI work. Use browser tools to:
+1. Take screenshots (`browser_take_screenshot`) to verify visual state
+2. Use snapshots (`browser_snapshot`) to verify DOM structure
+3. Check console messages (`browser_console_messages`) for errors
+4. Verify element sizes and positions with `browser_evaluate`
+**Do NOT claim fixes are complete without visual verification.**
 
 ### QA gates (always)
 - Frontend: `npm run lint && npm run test` (if present)
@@ -542,7 +664,8 @@ External planning agents (Gemini CLI, Codex, Granite local agents, or any other 
   2. `docs/SSOT/MASTER_PLAN.md` (Active Development Workstreams + PLAN checklists),
   3. `NEXT_STEPS.md` (latest Next Gate / Next Steps),
   4. `.cursor/rules/` governance files (at minimum 050, 051, 052, 062),
-  5. Directory‑level `AGENTS.md` files and relevant SSOT/runbooks (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`, `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`).
+  5. Directory‑level `AGENTS.md` files and relevant SSOT/runbooks (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`, `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`),
+  6. `docs/plans/PHASE_12_PATTERN_MINING.md` (Phase 12 Architecture & Plan).
 
 - **Output shape for PM decisions:**
   - All external PM agents must speak in the same 4‑block OPS format:
@@ -794,6 +917,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 066 | # --- |
 | 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | # --- |
+| 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
 <!-- RULES_INVENTORY_END -->
 
 ---
@@ -1039,6 +1163,19 @@ dsns.echo:                 # Print redacted DSNs for operator sanity (never prin
 
 For detailed prompt templates, routing roles, and MoE-of-MoEs design for the Granite 4.0 + BGE-M3 + Granite Reranker stack, see `Prompting Guide for Our Core LLM models.md`. That guide is a **design-level spec**; this section remains the SSOT for what is currently wired in code.
 
+### 📊 **Model Roles Table**
+
+| Slot       | Model                  | Provider  | Role       | Modality     |
+|-----------|------------------------|-----------|------------|--------------|
+| local_agent | Granite 4.0 Small    | granite   | general    | text         |
+| planning  | Nemotron Nano 12B v2   | ollama/*  | reasoning  | text         |
+| vision    | Qwen3-VL-4B            | lmstudio  | vision     | vision_text  |
+
+**Model-Specific Configuration:**
+- **Nemotron reasoning mode**: `/think` in system prompt, `temperature=0.6`, `top_p=0.95`
+- **Nemotron fast mode**: `/no_think` in system prompt, `temperature=0.0`, `top_p=1.0`
+- **Qwen3-VL-4B**: Requires OpenAI-style `image_url` messages with `data:image/...;base64,...` format
+
 ### 🔧 **Model Routing Map (Who Handles What)**
 
 | Agent                       | Primary model                                            | Why / Purpose                               | Fallback                                  | Non-LLM deps      |
@@ -1054,6 +1191,8 @@ For detailed prompt templates, routing roles, and MoE-of-MoEs design for the Gra
 | **Incident Triage**         | **Qwen2.5-14B-Instruct-GGUF**                            | broader context understanding for fixes     | `christian-bible-expert-v2.0-12b`         | —                 |
 | **Math / Verification**     | **self-certainty-qwen3-1.7b-base-math**                  | numerical & gematria verification           | —                                         | —                 |
 | **ADR / Scribe**            | **Qwen2.5-14B-Instruct-GGUF**                            | structured ADR drafting                     | —                                         | —                 |
+| **Planning / Reasoning**    | **Nemotron Nano 12B v2** (via planning lane)            | complex multi-step reasoning, planning      | Granite 4.0 (default)                    | —                 |
+| **Vision / Multimodal**    | **Qwen3-VL-4B** (via vision lane)                        | screenshot analysis, visual QA, document layout | Granite 4.0 (fallback)                | images            |
 
 ### 🧩 **Concrete Model Bindings (LM Studio / Ollama)**
 
@@ -1074,9 +1213,15 @@ models:
   provider: ollama
   theology: Christian-Bible-Expert-v2.0-12B  # via theology adapter
   local_agent: granite4:tiny-h
+  planning: nvidia/nemotron-nano-12b-v2  # Planning lane (Nemotron)
   math: self-certainty-qwen3-1.7b-base-math
   embedding: bge-m3:latest  # Ollama: qllama/bge-m3
   reranker: bge-reranker-v2-m3:latest  # Ollama: bona/bge-reranker-v2-m3
+
+# LM Studio Profile (with Vision Lane)
+models:
+  provider: lmstudio
+  vision: qwen3-vl-4b  # Vision lane (Qwen3-VL-4B)
 
 routing:
   ingestion: none
@@ -1090,6 +1235,8 @@ routing:
   triage: general
   math: math
   adr: general
+  planning: planning  # Routes to Nemotron when configured
+  vision: vision  # Routes to Qwen3-VL-4B when configured
 ```
 
 ### ⚙️ **Agent Settings**
@@ -1183,6 +1330,16 @@ RERANKER_MODEL=qwen.qwen3-reranker-0.6b
 ANSWERER_MODEL_PRIMARY=christian-bible-expert-v2.0-12b
 ANSWERER_MODEL_ALT=Qwen2.5-14B-Instruct-GGUF
 EDGE_ALPHA=0.5
+
+# Planning Lane (Nemotron)
+PLANNING_PROVIDER=ollama  # or "lmstudio" or "granite" (default)
+PLANNING_MODEL=nvidia/nemotron-nano-12b-v2  # or "nemotron-nano-12b-v2" for LM Studio
+
+# Vision Lane (Qwen3-VL-4B)
+VISION_PROVIDER=lmstudio  # or "ollama"
+VISION_MODEL=qwen3-vl-4b
+LMSTUDIO_BASE_URL=http://localhost:1234/v1
+OLLAMA_BASE_URL=http://localhost:11434
 ```
 
 ### 🔍 **Command-to-Function Mapping**

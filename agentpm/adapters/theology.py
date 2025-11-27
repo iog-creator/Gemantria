@@ -54,7 +54,8 @@ def chat(
             raise RuntimeError("LM Studio is disabled (LM_STUDIO_ENABLED=false)")
 
         # Local LM Studio on 127.0.0.1 (no internet)
-        base_url = cfg.get("theology_lmstudio_base_url", "http://127.0.0.1:1234")
+        # Default to base_url from config (which defaults to 9994), not hardcoded 1234
+        base_url = cfg.get("theology_lmstudio_base_url") or cfg.get("base_url", "http://127.0.0.1:9994/v1")
         api_key = cfg.get("theology_lmstudio_api_key", "changeme")
 
         # Ensure base_url is localhost/127.0.0.1 (security check)

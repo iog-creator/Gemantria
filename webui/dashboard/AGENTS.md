@@ -1,6 +1,6 @@
 # AGENTS.md — webui/dashboard
 
-## Purpose
+## Directory Purpose
 
 This directory contains the main dashboard UI for the Orchestrator Shell, including:
 - Doc Control Panel

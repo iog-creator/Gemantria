@@ -18,10 +18,10 @@ def map_intent_to_command(intent: str) -> str | None:
     """Map an Autopilot intent to a safe pmagent command.
 
     Uses a strict whitelist approach: only known, safe intents are mapped.
-    Unknown intents return None to indicate they are not allowed.
+    Supports both exact matches and keyword-based matching for natural language.
 
     Args:
-        intent: The intent text (e.g., "status", "health", "plan")
+        intent: The intent text (e.g., "status", "check system health", "show plan")
 
     Returns:
         The corresponding pmagent command string, or None if intent is not in whitelist.
@@ -29,11 +29,26 @@ def map_intent_to_command(intent: str) -> str | None:
     Examples:
         >>> map_intent_to_command("status")
         'pmagent status explain'
+        >>> map_intent_to_command("check system health")
+        'pmagent health system'
         >>> map_intent_to_command("unknown")
         None
     """
     # Normalize intent: lowercase and strip whitespace
     normalized = intent.lower().strip()
 
-    # Return mapped command if in whitelist, None otherwise
-    return INTENT_TO_COMMAND_MAP.get(normalized)
+    # Try exact match first
+    if normalized in INTENT_TO_COMMAND_MAP:
+        return INTENT_TO_COMMAND_MAP[normalized]
+
+    # Keyword-based matching for natural language
+    # Check if intent contains keywords that map to commands
+    if "status" in normalized or "system status" in normalized:
+        return INTENT_TO_COMMAND_MAP.get("status")
+    if "health" in normalized or "system health" in normalized or "check health" in normalized:
+        return INTENT_TO_COMMAND_MAP.get("health")
+    if "plan" in normalized or "next plan" in normalized or "show plan" in normalized:
+        return INTENT_TO_COMMAND_MAP.get("plan")
+
+    # Unknown intent - not in whitelist
+    return None

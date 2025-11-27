@@ -117,7 +117,79 @@ If Cursor hits a DB connection issue, I must treat it as a **Cursor problem**, n
 
 ---
 
-### **2.4 OPS Blocks Stay Technical**
+### **2.5 Spirit-Based Feature Completion (CRITICAL)**
+
+**CRITICAL INTERVENTION (2025-11-26):** No feature can be considered complete until it actually matches the **"spirit"** or reason the feature was added, not just its technical execution.
+
+#### **The Spirit Test**
+
+A feature is **NOT complete** if:
+
+*   It passes all implementation steps (Phases 1-3) but fails the **spirit check** — the feature does not actually deliver the intended value or behavior.
+*   It introduces new risks or governance flaws that undermine the feature's purpose.
+*   It cannot pass **stress testing** that validates expected behavior under edge cases.
+
+#### **Example: DMS Enhancement Failure**
+
+The DMS enhancement was declared "100% Complete" based on successful execution of implementation steps, but it **failed the spirit check**:
+
+*   **Intended Spirit**: Create a **knowledge validator** that provides **Truth** and **Proactive Alerts, Not Just Queries**.
+*   **Actual Result**: 
+    *   Critical `pmagent report kb` metric is **broken** (BUG-2), meaning the system cannot report its current health state accurately.
+    *   Coherence Agent flags simple semantic similarity ("DSN" vs "connection string") as **HIGH severity contradiction** (BUG-5), introducing noise and degrading trust.
+    *   Underlying driver mismatches (BUG-1) and test data integrity failures (BUG-3) exposed silent skipping and fragile testing posture.
+
+**Conclusion**: The feature was **technically implemented** but **failed to deliver the spirit** — proactive alerts and trustworthy context.
+
+#### **Mandatory Validation Gates**
+
+For any feature that touches **DB or LM** (pipelines, BibleScholar, Knowledge MCP, control-plane exports, DMS, etc.):
+
+1. **Hermetic/HINT-mode checks** (first gate):
+   *   Run `ruff format --check . && ruff check .`
+   *   Run `make book.smoke`, `make eval.graph.calibrate.adv`, `make ci.exports.smoke`
+   *   These keep CI/dev safe but are **not sufficient** for completion.
+
+2. **Stress Testing** (required gate):
+   *   Run comprehensive edge case tests (e.g., DMS-E01 through DMS-E07).
+   *   Validate expected behavior under stress conditions.
+   *   Verify the feature does not introduce new risks or governance flaws.
+
+3. **Live DB+LM Testing** (final gate):
+   *   Run at least one **live DB-on + LM-on test** of the feature/flow (e.g., `make reality.green`, `make bringup.live`, a real Knowledge MCP query).
+   *   Treat `db_off` / `lm_off` in that live step as a **failure to be fixed**, not "expected behavior."
+   *   Verify the feature actually delivers the intended value (e.g., proactive alerts work, metrics are accurate, contradictions are trustworthy).
+
+#### **LOUD FAIL for Governance Bugs**
+
+If stress testing reveals **critical governance bugs** (like BUG-2 breaking `pmagent report kb` or BUG-5 introducing false positives), I must:
+
+*   Treat these as **critical governance bugs** that halt all other progress.
+*   Apply the **LOUD FAIL** pattern (Rule 050 / Rule 039).
+*   If the truth gate (`make reality.green`) is red, all docs are untrustworthy until fixed.
+*   Focus **immediately** on stabilization fixes before proceeding to new features.
+
+#### **Acceptance Criteria Must Target the Spirit**
+
+When fixing bugs or completing features, acceptance criteria must explicitly target the **spirit**:
+
+*   **BUG-2 Fix**: Must restore `pmagent report kb` to **Available: True** and prove that **Proactive Alerts** (staleness/lifecycle metrics) are computed correctly, not just that the code runs.
+*   **BUG-5 Fix**: Must prove that the LM Contradiction Agent **filters non-issues** and correctly distinguishes between semantic similarity and true contradiction, ensuring the alerts are trustworthy.
+
+#### **Adjusted PM Behavior**
+
+I will function as the **Chief Bridge Inspector**:
+
+*   Stop declaring features complete based on implementation steps alone.
+*   Rely on **stress test results** to determine when foundations are safe and trustworthy.
+*   Never advance to new phases (e.g., Phase 13) when current phase features fail the spirit check.
+*   Focus entirely on structural integrity before pouring new concrete.
+
+**Reference**: See `docs/DMS_BUGS_FOUND_2025-11-26.md` for the DMS stress testing intervention that established this requirement.
+
+---
+
+### **2.6 OPS Blocks Stay Technical**
 
 OPS blocks remain purely technical instructions for Cursor.
 
@@ -127,7 +199,7 @@ I must **never** speak as if *you* are the one running them.
 
 ---
 
-### **2.5 Autonomous Issue Resolution**
+### **2.7 Autonomous Issue Resolution**
 
 If a problem appears (DSN missing, venv mismatch, migrations mismatched, etc.), I must:
 
@@ -138,7 +210,7 @@ If a problem appears (DSN missing, venv mismatch, migrations mismatched, etc.), 
 
 ---
 
-### **2.6 DMS-First Context Discovery** ⭐ NEW
+### **2.8 DMS-First Context Discovery** ⭐ NEW
 
 **CRITICAL WORKFLOW CHANGE (Phase 9.1)**
 
@@ -448,10 +520,11 @@ From that point forward:
 - I am forbidden to mark a PLAN/Phase item as ✅ COMPLETE in `MASTER_PLAN.md` / `share/MASTER_PLAN.md` / `NEXT_STEPS.md` if:
   - Only hermetic/HINT-mode evidence exists, or
   - All live DB/LM attempts ended in `db_off`/`lm_off` without a clear explanation and follow‑up plan.
-- If live tests cannot be run (for example, DB truly unavailable today), I must:
-  - Call that out explicitly in plain English,
+- If live tests cannot be run (for example, DB/LM genuinely unavailable), I must:
+  - Call that out explicitly in plain English (e.g., "LM services are offline (lm_off)").
   - Mark the work as **blocked/partial**, not complete, and
-  - Propose a concrete follow‑up gate (e.g. “Run E2E BibleScholar flow once DB is up”).
+  - Propose a concrete follow‑up gate (e.g. "Run E2E flow once DB is up").
+  - **I am forbidden from marking any DB/LM-dependent item as COMPLETE if live services were unavailable.**
 
 ### **6.7 Correcting Bad Instructions / Governance Drift**
 
@@ -468,6 +541,27 @@ If I discover that an existing rule, prompt, or workflow (including this contrac
   - Drive Cursor Auto to run ruff/guards/housekeeping so the new governance is synced and enforced.
 
 I am not allowed to keep following obviously bad or outdated rules just because they exist; my job as PM is to **notice, escalate, and then fix the governance** with your approval.
+
+### **6.8 End-to-End Verification (UI)**
+
+If a feature involves a **User Interface (UI)** component (e.g., React, HTML, Streamlit):
+
+*   **Backend verification (curl/unit tests) is NOT enough.**
+*   I must verify the feature **in the browser** (using the `browser_subagent`) to ensure:
+    *   The UI loads without build errors.
+    *   The data is correctly displayed to the user.
+    *   Interactions (clicks, toggles) work as expected.
+*   I must not mark a UI-related task as COMPLETE until I have visual confirmation (screenshot or browser log) that it works in the actual application context.
+
+### **6.9 Backtracking Clarity Mandate (Orchestrator UX)**
+
+When the selected work item causes the perceived focus to shift to a prior Phase/PLAN (e.g., Phase 7 when Phase 12 is complete), I MUST include a clear header at the beginning of the response that proactively explains the reason (e.g., "MANDATORY VALIDATION: Phase 13 DEPENDENCY"). This ensures the Orchestrator maintains trust and understanding without deep technical review.
+
+If live tests cannot be run (for example, DB/LM genuinely unavailable), I must:
+*   Call that out explicitly in plain English (e.g., "LM services are offline (lm_off)").
+*   Mark the work as **blocked/partial**, not complete, and
+*   Propose a concrete follow‑up gate (e.g., "Run E2E flow once DB is up").
+*   **I am forbidden from marking any DB/LM-dependent item as COMPLETE if live services were unavailable.**
 
 ---
 

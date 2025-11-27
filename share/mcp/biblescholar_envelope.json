@@ -1,65 +1,92 @@
 {
   "schema": "mcp_ingest_envelope.v1",
-  "generated_at": "2025-11-22T21:39:01Z",
+  "generated_at": "2025-11-25T03:40:00Z",
   "tools": [
     {
       "name": "bible.semantic_search",
-      "description": "Semantic search across 116k Bible verses using BGE-M3 (1024-dim) embeddings and pgvector cosine similarity",
-      "tags": ["biblescholar", "search", "semantic", "pgvector", "bge-m3"],
-      "cost_est": 0.5,
+      "description": "Semantic search across 116k Bible verses using BGE-M3 embeddings and pgvector similarity",
+      "tags": ["biblescholar", "search", "semantic", "pgvector", "embeddings"],
+      "cost_est": 0.001,
       "visibility": "internal"
     },
     {
       "name": "bible.cross_language",
-      "description": "Find Hebrew (OT) ↔ Greek (NT) semantic connections using vector similarity",
-      "tags": ["biblescholar", "cross-language", "hebrew", "greek", "semantic"],
-      "cost_est": 0.5,
+      "description": "Find cross-language semantic connections between Hebrew and Greek words using vector similarity",
+      "tags": ["biblescholar", "cross-language", "hebrew", "greek", "semantic", "pgvector"],
+      "cost_est": 0.001,
       "visibility": "internal"
     },
     {
       "name": "bible.lexicon_lookup",
-      "description": "Lookup Hebrew/Greek lexicon entries by Strong's number",
-      "tags": ["biblescholar", "lexicon", "strongs", "hebrew", "greek"],
-      "cost_est": 0.1,
+      "description": "Look up Strong's lexicon entries with definitions, transliterations, and usage information",
+      "tags": ["biblescholar", "lexicon", "strongs", "dictionary"],
+      "cost_est": 0.0001,
       "visibility": "internal"
     },
     {
       "name": "bible.verse_insights",
-      "description": "Aggregate verse context (text + lexicon + similar verses) for LLM consumption",
-      "tags": ["biblescholar", "insights", "context", "aggregation"],
-      "cost_est": 0.5,
+      "description": "Get contextual insights for a Bible verse including translations, lexicon entries, similar verses, and AI-synthesized commentary",
+      "tags": ["biblescholar", "insights", "commentary", "context", "lm"],
+      "cost_est": 0.01,
+      "visibility": "internal"
+    },
+    {
+      "name": "query-gematria-nodes",
+      "description": "Query nodes from the gematria concept network graph (GenAI Toolbox)",
+      "tags": ["genai-toolbox", "gematria", "graph", "database"],
+      "cost_est": 0.0001,
+      "visibility": "internal"
+    },
+    {
+      "name": "query-bible-verses",
+      "description": "Query Bible verses from the bible_db database (GenAI Toolbox)",
+      "tags": ["genai-toolbox", "bible", "verses", "database"],
+      "cost_est": 0.0001,
       "visibility": "internal"
     }
   ],
   "endpoints": [
     {
-      "name": "semantic_search_export",
-      "path": "/api/bible/semantic-search",
+      "name": "bible.semantic_search",
+      "path": "/api/bible/semantic",
       "method": "GET",
       "auth": "none",
-      "notes": "Semantic search endpoint. Query param: query, limit, translation. Generates share/exports/biblescholar/semantic_search.json via make export.biblescholar.semantic"
+      "notes": "Query parameter: q (search query), limit (default 20), translation (default KJV)"
     },
     {
-      "name": "cross_language_export",
-      "path": "/api/bible/cross-language",
+      "name": "bible.cross_language",
+      "path": "/api/biblescholar/cross-language",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Query parameter: strongs_id (e.g., 'H7965' or 'G1'), limit (default 10), reference (optional)"
+    },
+    {
+      "name": "bible.lexicon_lookup",
+      "path": "/api/bible/lexicon/{strongs_id}",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Path parameter: strongs_id (e.g., 'H7965' or 'G1')"
+    },
+    {
+      "name": "bible.verse_insights",
+      "path": "/api/biblescholar/insights",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Query parameter: reference (e.g., 'John 3:16'), use_lm (default true)"
+    },
+    {
+      "name": "query-gematria-nodes",
+      "path": "http://127.0.0.1:5000/mcp",
       "method": "POST",
       "auth": "none",
-      "notes": "Cross-language search endpoint. Body: strongs_id, limit. Generates share/exports/biblescholar/cross_language.json via make export.biblescholar.crosslang"
+      "notes": "GenAI Toolbox MCP server endpoint. Tool name: query-gematria-nodes"
     },
     {
-      "name": "lexicon_lookup_export",
-      "path": "/api/bible/lexicon",
-      "method": "GET",
+      "name": "query-bible-verses",
+      "path": "http://127.0.0.1:5000/mcp",
+      "method": "POST",
       "auth": "none",
-      "notes": "Lexicon lookup endpoint. Query param: strongs_id. Generates share/exports/biblescholar/lexicon.json via make export.biblescholar.lexicon"
-    },
-    {
-      "name": "verse_insights_export",
-      "path": "/api/bible/insights",
-      "method": "GET",
-      "auth": "none",
-      "notes": "Verse insights endpoint. Query param: reference. Generates share/exports/biblescholar/insights.json via make export.biblescholar.insights"
+      "notes": "GenAI Toolbox MCP server endpoint. Tool name: query-bible-verses"
     }
   ]
 }
-
