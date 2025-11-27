@@ -53,7 +53,11 @@ class CrossLanguageFlow:
 
         if not verses:
             return WordAnalysis(
-                word_id=word_id, original_text="Unknown", strongs_id=strongs_id, gloss="Not found", connections=[]
+                word_id=word_id,
+                original_text="Unknown",
+                strongs_id=strongs_id,
+                gloss="Not found",
+                connections=[],
             )
 
         # In a full implementation, we'd get the specific word gloss/text from the word table.

@@ -8,7 +8,11 @@ from __future__ import annotations
 
 import pytest
 
-from agentpm.biblescholar.reference_parser import ParsedReference, normalize_book_name, parse_reference
+from agentpm.biblescholar.reference_parser import (
+    ParsedReference,
+    normalize_book_name,
+    parse_reference,
+)
 
 
 class TestNormalizeBookName:

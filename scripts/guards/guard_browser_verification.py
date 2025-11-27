@@ -30,9 +30,18 @@ REPORT_PATH = WEBPROOF_DIR / "report.json"
 REQUIRED_PAGES = {
     "index.html": {"report_key": "ok_index", "screenshot_key": "index"},
     "mcp_catalog_view.html": {"report_key": "ok_catalog", "screenshot_key": "catalog"},
-    "compliance_summary.html": {"report_key": "ok_compliance_summary", "screenshot_key": "compliance_summary"},
-    "compliance_timeseries.html": {"report_key": "ok_compliance_timeseries", "screenshot_key": "compliance_timeseries"},
-    "compliance_heatmap.html": {"report_key": "ok_compliance_heatmap", "screenshot_key": "compliance_heatmap"},
+    "compliance_summary.html": {
+        "report_key": "ok_compliance_summary",
+        "screenshot_key": "compliance_summary",
+    },
+    "compliance_timeseries.html": {
+        "report_key": "ok_compliance_timeseries",
+        "screenshot_key": "compliance_timeseries",
+    },
+    "compliance_heatmap.html": {
+        "report_key": "ok_compliance_heatmap",
+        "screenshot_key": "compliance_heatmap",
+    },
     "violations.html": {"report_key": "ok_violations", "screenshot_key": "violations"},
     "guard_receipts.html": {"report_key": "ok_guard_receipts", "screenshot_key": "guard_receipts"},
 }

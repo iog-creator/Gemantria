@@ -53,7 +53,10 @@ def get_db_connection() -> Any:
         return psycopg.connect(dsn, autocommit=True)
     except Exception as exc:
         print(f"ERROR: Failed to connect to database: {exc}", file=sys.stderr)
-        print("ERROR: This command requires the database to be available and running.", file=sys.stderr)
+        print(
+            "ERROR: This command requires the database to be available and running.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
 

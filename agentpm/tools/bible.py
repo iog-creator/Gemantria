@@ -178,4 +178,10 @@ def lookup_lexicon_entry(strongs_id: str, **kwargs: Any) -> dict[str, Any]:
             result_json={"ok": False, "error": str(e)},
             violations_json=[{"type": "exception", "reason": str(e)}],
         )
-        return {"ok": False, "strongs_id": strongs_id, "entry": None, "found": False, "error": str(e)}
+        return {
+            "ok": False,
+            "strongs_id": strongs_id,
+            "entry": None,
+            "found": False,
+            "error": str(e),
+        }

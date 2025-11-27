@@ -43,7 +43,10 @@ from agentpm.modules.gematria.utils.noun_adapter import adapt_ai_noun  # noqa: E
 
 # Phase-7F: Provider-aware embedding and rerank adapters
 try:
-    from agentpm.adapters.lm_studio import embed as provider_aware_embed, rerank as provider_aware_rerank  # noqa: E402
+    from agentpm.adapters.lm_studio import (
+        embed as provider_aware_embed,
+        rerank as provider_aware_rerank,
+    )  # noqa: E402
     from scripts.config.env import get_lm_model_config  # noqa: E402
 
     HAS_PROVIDER_AWARE = True
@@ -438,7 +441,11 @@ def network_aggregator_node(state: dict[str, Any]) -> dict[str, Any]:
             # Build rerank-driven relationships using KNN + reranker (legacy)
             if len(concept_data) >= 2:
                 _build_rerank_relationships(
-                    client, cur, concept_data, network_summary, use_provider_aware=HAS_PROVIDER_AWARE
+                    client,
+                    cur,
+                    concept_data,
+                    network_summary,
+                    use_provider_aware=HAS_PROVIDER_AWARE,
                 )
 
             # Transaction commits automatically on successful exit

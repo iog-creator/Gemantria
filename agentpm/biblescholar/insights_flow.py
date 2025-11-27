@@ -64,7 +64,10 @@ class InsightsFlow:
         cross_refs = self.db.get_cross_references(verse.book_name, verse.chapter_num, verse.verse_num)
 
         return VerseContext(
-            verse_id=verse_id, proper_names=proper_names, word_links=word_links, cross_references=cross_refs
+            verse_id=verse_id,
+            proper_names=proper_names,
+            word_links=word_links,
+            cross_references=cross_refs,
         )
 
     def generate_insight(self, verse_id: str) -> Dict:

@@ -25,8 +25,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from scripts.config.env import get_rw_dsn, get_lm_model_config  # noqa: E402
 import psycopg  # noqa: E402
+from scripts.config.env import get_lm_model_config, get_rw_dsn  # noqa: E402
 
 
 def generate_intelligent_analysis(summary: dict) -> str | None:
@@ -78,7 +78,9 @@ Do not use generic phrases like "one or more checks failed". Be specific and act
         try:
             # Use explicit model parameter to ensure Granite is used
             if granite_model:
-                analysis = chat(prompt, model=granite_model, model_slot="local_agent", system=system_prompt)
+                analysis = chat(
+                    prompt, model=granite_model, model_slot="local_agent", system=system_prompt
+                )
             else:
                 # Fallback to slot-based routing
                 analysis = chat(prompt, model_slot="local_agent", system=system_prompt)
@@ -235,7 +237,9 @@ def verify_ledger() -> tuple[int, dict]:
 
                 for result in results:
                     status_icon = "✓" if result["status"] == "current" else "✗"
-                    print(f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}")
+                    print(
+                        f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}"
+                    )
 
                 print("-" * 80)
                 print(
@@ -275,9 +279,13 @@ def verify_ledger() -> tuple[int, dict]:
                         # Fallback to rule-based message if LM unavailable
                         print("💡 Next steps:")
                         if stale:
-                            print(f"   Run 'make state.sync' to update ledger for: {', '.join(stale)}")
+                            print(
+                                f"   Run 'make state.sync' to update ledger for: {', '.join(stale)}"
+                            )
                         if missing:
-                            print(f"   Run 'make state.sync' to add missing entries: {', '.join(missing)}")
+                            print(
+                                f"   Run 'make state.sync' to add missing entries: {', '.join(missing)}"
+                            )
                         print()
                 else:
                     print("✅ LEDGER VERIFICATION PASSED")

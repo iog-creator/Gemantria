@@ -155,7 +155,8 @@ def test_maybe_persist_capability_session_handles_exceptions() -> None:
 
     with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
         with patch(
-            "agentpm.reality.capability_envelope_writer.create_agent_run", side_effect=Exception("DB connection failed")
+            "agentpm.reality.capability_envelope_writer.create_agent_run",
+            side_effect=Exception("DB connection failed"),
         ):
             result = maybe_persist_capability_session(envelope, tracking_enabled=True)
 
@@ -186,7 +187,10 @@ def test_validate_and_optionally_persist_includes_tracking_block_when_enabled_an
     mock_agent_run.id = "test-uuid-789"
 
     with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
-        with patch("agentpm.reality.capability_envelope_writer.create_agent_run", return_value=mock_agent_run):
+        with patch(
+            "agentpm.reality.capability_envelope_writer.create_agent_run",
+            return_value=mock_agent_run,
+        ):
             result = validate_and_optionally_persist(envelope, tracking_enabled=True)
 
     assert result["ok"] is True

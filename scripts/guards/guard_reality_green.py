@@ -278,11 +278,11 @@ def main() -> int:
                 if "issues" in check.details:
                     for issue in check.details["issues"]:
                         print(f"   • {issue}")
-                elif "stale" in check.details and check.details["stale"]:
+                elif check.details.get("stale"):
                     print(f"   • Stale artifacts: {', '.join(check.details['stale'])}")
-                elif "missing" in check.details and check.details["missing"]:
+                elif check.details.get("missing"):
                     print(f"   • Missing artifacts: {', '.join(check.details['missing'])}")
-                elif "output" in check.details and check.details["output"]:
+                elif check.details.get("output"):
                     # Show first few lines of output for context
                     output_lines = check.details["output"].split("\n")[:5]
                     for line in output_lines:
