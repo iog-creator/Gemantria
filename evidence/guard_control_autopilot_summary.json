@@ -1,0 +1,25 @@
+{
+  "guard": "guard_control_autopilot_summary",
+  "episode": "Phase-D",
+  "overall_ok": true,
+  "checks": {
+    "file_exists": {
+      "exists": true
+    },
+    "schema": {
+      "schema_ok": true
+    },
+    "structure": {
+      "structure_ok": true,
+      "issues": []
+    },
+    "timestamp": {
+      "timestamp_ok": true,
+      "age_hours": 0.0034079752777777775
+    },
+    "ok_status": {
+      "ok_status": true
+    }
+  },
+  "mode": "HINT"
+}

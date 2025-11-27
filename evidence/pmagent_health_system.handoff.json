@@ -1,0 +1,84 @@
+✓ Model already installed: granite4:tiny-h
+✓ Model already installed: granite-embedding:278m
+⚠ Model not found: Christian-Bible-Expert-v2.0-12B
+Pulling model: Christian-Bible-Expert-v2.0-12B...
+Pull status: 
+✓ Model already installed: granite4:tiny-h
+{
+  "ok": true,
+  "db": {
+    "ok": true,
+    "mode": "ready",
+    "checks": {
+      "driver_available": true,
+      "connection_ok": true,
+      "graph_stats_ready": true
+    },
+    "details": {
+      "errors": []
+    }
+  },
+  "lm": {
+    "ok": false,
+    "mode": "lm_off",
+    "details": {
+      "endpoint": "http://127.0.0.1:11434",
+      "provider": "ollama",
+      "errors": [
+        "models_missing: Christian-Bible-Expert-v2.0-12B"
+      ]
+    }
+  },
+  "graph": {
+    "ok": true,
+    "mode": "db_on",
+    "stats": {
+      "nodes": null,
+      "edges": null,
+      "avg_degree": null,
+      "snapshot_count": null,
+      "last_import_at": null
+    },
+    "reason": "no snapshots found"
+  },
+  "system": {
+    "ok": false,
+    "components": {
+      "db": {
+        "ok": true,
+        "mode": "ready",
+        "checks": {
+          "driver_available": true,
+          "connection_ok": true,
+          "graph_stats_ready": true
+        },
+        "details": {
+          "errors": []
+        }
+      },
+      "lm": {
+        "ok": false,
+        "mode": "lm_off",
+        "details": {
+          "endpoint": "http://127.0.0.1:11434",
+          "provider": "ollama",
+          "errors": [
+            "models_missing: Christian-Bible-Expert-v2.0-12B"
+          ]
+        }
+      },
+      "graph": {
+        "ok": true,
+        "mode": "db_on",
+        "stats": {
+          "nodes": null,
+          "edges": null,
+          "avg_degree": null,
+          "snapshot_count": null,
+          "last_import_at": null
+        },
+        "reason": "no snapshots found"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "guard": "guard_atlas_violation_browser",
+  "episode": "E89",
+  "overall_ok": true,
+  "checks": {
+    "file_exists": {
+      "exists": true
+    },
+    "html_structure": {
+      "structure_ok": true,
+      "issues": []
+    },
+    "backlinks": {
+      "all_backlinks_present": true,
+      "missing_backlinks": [],
+      "found_backlinks": [
+        "backlink-compliance-summary",
+        "backlink-compliance-timeseries",
+        "backlink-guard-receipts",
+        "backlink-json-summary",
+        "backlink-json-7d",
+        "backlink-json-30d",
+        "backlink-json-graph-compliance",
+        "backlink-evidence-dir"
+      ]
+    },
+    "links_resolve": {
+      "links_ok": true,
+      "errors": []
+    }
+  }
+}

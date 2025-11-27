@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "mode": "ready",
+  "checks": {
+    "driver_available": true,
+    "connection_ok": true,
+    "graph_stats_ready": true
+  },
+  "details": {
+    "errors": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-08T21:53:46.474564+00:00",
+  "agent": "guard_all",
+  "event_type": "validation",
+  "level": "INFO",
+  "data": {
+    "validation_type": "Hebrew Export Integrity (SQL)",
+    "passed": true,
+    "details": {
+      "message": "SQL guard passed: no issues found"
+    }
+  }
+}

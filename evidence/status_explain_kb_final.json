@@ -1,0 +1,64 @@
+{
+  "level": "OK",
+  "headline": "All systems nominal",
+  "details": "Database is ready and all checks passed. All 4 LM slot(s) are operational.",
+  "documentation": {
+    "available": true,
+    "total": 9,
+    "by_subsystem": {
+      "docs": 3,
+      "root": 4,
+      "agentpm": 1,
+      "webui": 1
+    },
+    "by_type": {
+      "ssot": 2,
+      "adr": 3,
+      "runbook": 1,
+      "agents_md": 3
+    },
+    "hints": [
+      {
+        "level": "INFO",
+        "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+        "message": "Subsystem 'agentpm' has low document coverage (1 doc(s))",
+        "subsystem": "agentpm",
+        "have": 1
+      },
+      {
+        "level": "INFO",
+        "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+        "message": "Subsystem 'webui' has low document coverage (1 doc(s))",
+        "subsystem": "webui",
+        "have": 1
+      }
+    ],
+    "key_docs": [
+      {
+        "id": "ssot-master-plan",
+        "title": "Master Plan",
+        "path": "docs/SSOT/MASTER_PLAN.md",
+        "type": "ssot"
+      },
+      {
+        "id": "ssot-pmagent-current-vs-intended",
+        "title": "pmagent Current vs Intended State",
+        "path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+        "type": "ssot"
+      },
+      {
+        "id": "agents-md-root",
+        "title": "Root AGENTS.md",
+        "path": "AGENTS.md",
+        "type": "agents_md"
+      }
+    ],
+    "freshness": {
+      "total": 9,
+      "stale_count": 0,
+      "missing_count": 0,
+      "out_of_sync_count": 0,
+      "fresh_count": 9
+    }
+  }
+}

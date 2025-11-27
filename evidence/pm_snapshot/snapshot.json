@@ -1,0 +1,1277 @@
+{
+  "generated_at": "2025-11-27T10:18:25-08:00",
+  "overall_ok": true,
+  "db_mode": "ready",
+  "lm_mode": "lm_ready",
+  "posture": {
+    "bible_db_dsn": "postgresql://<REDACTED>/bible_db",
+    "gematria_dsn": "postgresql://<REDACTED>/gematria",
+    "checkpointer": "(unset)",
+    "enforce_strict": "(unset)",
+    "ro_probe": "bible_db|mccoy",
+    "rw_probe": "ok"
+  },
+  "db_health": {
+    "ok": true,
+    "mode": "ready",
+    "checks": {
+      "driver_available": true,
+      "connection_ok": true,
+      "graph_stats_ready": true
+    },
+    "details": {
+      "errors": []
+    }
+  },
+  "system_health": {
+    "ok": true,
+    "db": {
+      "ok": true,
+      "mode": "ready",
+      "checks": {
+        "driver_available": true,
+        "connection_ok": true,
+        "graph_stats_ready": true
+      },
+      "details": {
+        "errors": []
+      }
+    },
+    "lm": {
+      "ok": true,
+      "mode": "lm_ready",
+      "details": {
+        "endpoint": "http://127.0.0.1:9994/v1",
+        "provider": "lmstudio",
+        "errors": []
+      }
+    },
+    "graph": {
+      "ok": true,
+      "mode": "db_on",
+      "stats": {
+        "nodes": null,
+        "edges": null,
+        "avg_degree": null,
+        "snapshot_count": null,
+        "last_import_at": null
+      },
+      "reason": "no snapshots found"
+    },
+    "system": {
+      "ok": true,
+      "components": {
+        "db": {
+          "ok": true,
+          "mode": "ready",
+          "checks": {
+            "driver_available": true,
+            "connection_ok": true,
+            "graph_stats_ready": true
+          },
+          "details": {
+            "errors": []
+          }
+        },
+        "lm": {
+          "ok": true,
+          "mode": "lm_ready",
+          "details": {
+            "endpoint": "http://127.0.0.1:9994/v1",
+            "provider": "lmstudio",
+            "errors": []
+          }
+        },
+        "graph": {
+          "ok": true,
+          "mode": "db_on",
+          "stats": {
+            "nodes": null,
+            "edges": null,
+            "avg_degree": null,
+            "snapshot_count": null,
+            "last_import_at": null
+          },
+          "reason": "no snapshots found"
+        }
+      }
+    }
+  },
+  "status_explain": {
+    "level": "OK",
+    "headline": "All systems nominal",
+    "details": "Database is ready and all checks passed. All 4 LM slot(s) are operational.",
+    "documentation": {
+      "available": true,
+      "total": 9,
+      "by_subsystem": {
+        "docs": 3,
+        "root": 4,
+        "agentpm": 1,
+        "webui": 1
+      },
+      "by_type": {
+        "ssot": 2,
+        "adr": 3,
+        "runbook": 1,
+        "agents_md": 3
+      },
+      "hints": [
+        {
+          "level": "INFO",
+          "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+          "message": "Subsystem 'agentpm' has low document coverage (1 doc(s))",
+          "subsystem": "agentpm",
+          "have": 1
+        },
+        {
+          "level": "INFO",
+          "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+          "message": "Subsystem 'webui' has low document coverage (1 doc(s))",
+          "subsystem": "webui",
+          "have": 1
+        }
+      ],
+      "key_docs": [
+        {
+          "id": "ssot-master-plan",
+          "title": "Master Plan",
+          "path": "docs/SSOT/MASTER_PLAN.md",
+          "type": "ssot"
+        },
+        {
+          "id": "ssot-pmagent-current-vs-intended",
+          "title": "pmagent Current vs Intended State",
+          "path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+          "type": "ssot"
+        },
+        {
+          "id": "agents-md-root",
+          "title": "Root AGENTS.md",
+          "path": "AGENTS.md",
+          "type": "agents_md"
+        }
+      ],
+      "freshness": {
+        "total": 9,
+        "stale_count": 0,
+        "missing_count": 0,
+        "out_of_sync_count": 0,
+        "fresh_count": 9
+      }
+    }
+  },
+  "reality_check": {
+    "command": "reality.check",
+    "mode": "HINT",
+    "timestamp": "2025-11-27T18:18:26.283629+00:00",
+    "env": {
+      "ok": true,
+      "dsn_ok": true,
+      "details": {
+        "dsns": {
+          "rw": true,
+          "ro": true,
+          "bible": true
+        }
+      }
+    },
+    "db": {
+      "ok": true,
+      "control_schema": "control",
+      "tables_expected": 0,
+      "tables_present": 0,
+      "generated_at": "2025-11-27T18:18:26.283644+00:00",
+      "components": {
+        "status": {
+          "ok": true,
+          "mode": "ready",
+          "reason": null,
+          "tables": {
+            "public.ai_interactions": {
+              "present": true,
+              "row_count": 1,
+              "latest_created_at": "2025-11-07T11:11:49.732991-08:00"
+            },
+            "public.governance_artifacts": {
+              "present": true,
+              "row_count": 129,
+              "latest_created_at": "2025-11-27T08:50:13.941764-08:00"
+            },
+            "control.agent_run": {
+              "present": true,
+              "row_count": 2159,
+              "latest_created_at": "2025-11-27T09:10:02.584405-08:00"
+            },
+            "control.tool_catalog": {
+              "present": true,
+              "row_count": 7,
+              "latest_created_at": "2025-11-26T09:05:34.616631-08:00"
+            },
+            "gematria.graph_stats_snapshots": {
+              "present": true,
+              "row_count": 0,
+              "latest_created_at": null
+            }
+          }
+        },
+        "tables": {
+          "ok": true,
+          "mode": "db_on",
+          "error": null,
+          "tables": {
+            "control.agent_run": 2159,
+            "control.agent_run_cli": 16,
+            "control.capability_rule": 5,
+            "control.capability_session": 5,
+            "control.doc_embedding": 2963,
+            "control.doc_fragment": 2968,
+            "control.doc_registry": 130,
+            "control.doc_sync_state": 0,
+            "control.doc_version": 372,
+            "control.guard_definition": 0,
+            "control.kb_document": 4232,
+            "control.rule_definition": 69,
+            "control.rule_source": 138,
+            "control.system_state_ledger": 312,
+            "control.tool_catalog": 7,
+            "gematria.ai_embeddings": 1,
+            "gematria.checkpoints": 4,
+            "gematria.concept_centrality": 0,
+            "gematria.concept_relations": 0,
+            "gematria.concepts": 0,
+            "gematria.edges": 1,
+            "gematria.enrichment_crossrefs": 0,
+            "gematria.graph_stats_snapshots": 0,
+            "gematria.nodes": 2,
+            "gematria.nouns": 0,
+            "gematria.runs": 2,
+            "gematria.runs_ledger": 115,
+            "gematria.schema_migrations": 2,
+            "mcp.endpoints": 10,
+            "mcp.logs": 0,
+            "mcp.tools": 6,
+            "ops.job_queue": 0,
+            "public.ai_enrichment_log": 13857,
+            "public.ai_interactions": 1,
+            "public.ai_performance_insights": 0,
+            "public.books": 35,
+            "public.checkpointer_state": 64,
+            "public.checkpointer_writes": 2,
+            "public.checkpoints": 22,
+            "public.cluster_metrics": 0,
+            "public.code_generation_events": 0,
+            "public.code_generation_patterns": 0,
+            "public.concept_centrality": 0,
+            "public.concept_clusters": 0,
+            "public.concept_metadata": 0,
+            "public.concept_metrics": 0,
+            "public.concept_network": 1733,
+            "public.concept_relations": 14330,
+            "public.concept_rerank_cache": 0,
+            "public.concepts": 25,
+            "public.confidence_validation_log": 35,
+            "public.connections": 0,
+            "public.context_awareness_events": 0,
+            "public.context_success_patterns": 0,
+            "public.cross_references": 0,
+            "public.doctrinal_links": 0,
+            "public.document_access_log": 1,
+            "public.document_sections": 396,
+            "public.governance_artifacts": 129,
+            "public.governance_compliance_log": 193,
+            "public.hint_emissions": 579,
+            "public.hypotheses": 0,
+            "public.integration_log": 0,
+            "public.isolation_patterns": 0,
+            "public.learning_events": 2,
+            "public.metrics_log": 7969,
+            "public.model_performance_metrics": 0,
+            "public.network_metrics": 0,
+            "public.pattern_occurrences": 9,
+            "public.patterns": 9,
+            "public.prime_factors": 0,
+            "public.qwen_health_log": 15,
+            "public.runs": 25,
+            "public.satisfaction_metrics": 0,
+            "public.share_manifest_items": 40,
+            "public.share_manifest_metadata": 1,
+            "public.tool_usage_analytics": 0,
+            "public.twin_patterns": 0,
+            "public.user_feedback": 0,
+            "public.verse_noun_occurrences": 0,
+            "staging.concept_metadata_norm": 0,
+            "staging.concept_relations_norm": 1855,
+            "staging.concepts_norm": 710,
+            "telemetry.ai_interactions": 0,
+            "telemetry.checkpointer_state": 0,
+            "telemetry.metrics_log": 0
+          }
+        },
+        "schema": {
+          "ok": true,
+          "mode": "db_on",
+          "reason": null,
+          "tables": {
+            "control.agent_run": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": "gen_random_uuid()"
+                },
+                {
+                  "name": "project_id",
+                  "data_type": "bigint",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "session_id",
+                  "data_type": "uuid",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "tool",
+                  "data_type": "text",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "args_json",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "result_json",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "violations_json",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": "'[]'::jsonb"
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": false,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "idx_agent_run_created",
+                  "columns": [
+                    "created_at"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_agent_run_project",
+                  "columns": [
+                    "project_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_agent_run_session",
+                  "columns": [
+                    "session_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_agent_run_tool",
+                  "columns": [
+                    "tool"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_agent_run_violations",
+                  "columns": [
+                    "violations_json"
+                  ],
+                  "unique": false
+                }
+              ]
+            },
+            "control.tool_catalog": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": "gen_random_uuid()"
+                },
+                {
+                  "name": "project_id",
+                  "data_type": "bigint",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "name",
+                  "data_type": "text",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "ring",
+                  "data_type": "integer",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "io_schema",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "enabled",
+                  "data_type": "boolean",
+                  "is_nullable": false,
+                  "default": "true"
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": false,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "idx_tool_catalog_enabled",
+                  "columns": [
+                    "enabled"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_tool_catalog_project",
+                  "columns": [
+                    "project_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_tool_catalog_ring",
+                  "columns": [
+                    "ring"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "tool_catalog_project_id_name_key",
+                  "columns": [
+                    "project_id",
+                    "name"
+                  ],
+                  "unique": true
+                }
+              ]
+            },
+            "control.capability_rule": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": "gen_random_uuid()"
+                },
+                {
+                  "name": "project_id",
+                  "data_type": "bigint",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "name",
+                  "data_type": "text",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "ring",
+                  "data_type": "integer",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "allowlist",
+                  "data_type": "ARRAY",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "denylist",
+                  "data_type": "ARRAY",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "budgets",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": "'{}'::jsonb"
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": false,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "capability_rule_project_id_name_key",
+                  "columns": [
+                    "project_id",
+                    "name"
+                  ],
+                  "unique": true
+                },
+                {
+                  "name": "idx_capability_rule_project",
+                  "columns": [
+                    "project_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_capability_rule_ring",
+                  "columns": [
+                    "ring"
+                  ],
+                  "unique": false
+                }
+              ]
+            },
+            "control.doc_fragment": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": "gen_random_uuid()"
+                },
+                {
+                  "name": "project_id",
+                  "data_type": "bigint",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "src",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "anchor",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "sha256",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": false,
+                  "default": "now()"
+                },
+                {
+                  "name": "doc_id",
+                  "data_type": "uuid",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "version_id",
+                  "data_type": "bigint",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "fragment_index",
+                  "data_type": "integer",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "fragment_type",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "content",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "updated_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": true,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "doc_fragment_project_id_src_anchor_key",
+                  "columns": [
+                    "project_id",
+                    "src",
+                    "anchor"
+                  ],
+                  "unique": true
+                },
+                {
+                  "name": "idx_doc_fragment_content_unique",
+                  "columns": [
+                    "doc_id",
+                    "version_id",
+                    "fragment_index"
+                  ],
+                  "unique": true
+                },
+                {
+                  "name": "idx_doc_fragment_doc_id",
+                  "columns": [
+                    "doc_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_doc_fragment_project",
+                  "columns": [
+                    "project_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_doc_fragment_sha256",
+                  "columns": [
+                    "sha256"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_doc_fragment_src",
+                  "columns": [
+                    "src"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_doc_fragment_type",
+                  "columns": [
+                    "fragment_type"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_doc_fragment_version_id",
+                  "columns": [
+                    "version_id"
+                  ],
+                  "unique": false
+                }
+              ]
+            },
+            "control.capability_session": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": "gen_random_uuid()"
+                },
+                {
+                  "name": "project_id",
+                  "data_type": "bigint",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "rule_id",
+                  "data_type": "uuid",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "por_json",
+                  "data_type": "jsonb",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "tiny_menu",
+                  "data_type": "ARRAY",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "ttl_s",
+                  "data_type": "integer",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": false,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "idx_capability_session_created",
+                  "columns": [
+                    "created_at"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_capability_session_project",
+                  "columns": [
+                    "project_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_capability_session_rule",
+                  "columns": [
+                    "rule_id"
+                  ],
+                  "unique": false
+                }
+              ]
+            },
+            "public.ai_interactions": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "integer",
+                  "is_nullable": false,
+                  "default": "nextval('ai_interactions_id_seq'::regclass)"
+                },
+                {
+                  "name": "session_id",
+                  "data_type": "character varying",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "interaction_type",
+                  "data_type": "character varying",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "user_query",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "ai_response",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "tools_used",
+                  "data_type": "ARRAY",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "context_provided",
+                  "data_type": "jsonb",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "execution_time_ms",
+                  "data_type": "integer",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "success",
+                  "data_type": "boolean",
+                  "is_nullable": true,
+                  "default": "true"
+                },
+                {
+                  "name": "error_details",
+                  "data_type": "text",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": true,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "idx_ai_interactions_created",
+                  "columns": [
+                    "created_at"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_ai_interactions_session",
+                  "columns": [
+                    "session_id"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_ai_interactions_type",
+                  "columns": [
+                    "interaction_type"
+                  ],
+                  "unique": false
+                }
+              ]
+            },
+            "public.governance_artifacts": {
+              "columns": [
+                {
+                  "name": "id",
+                  "data_type": "integer",
+                  "is_nullable": false,
+                  "default": "nextval('governance_artifacts_id_seq'::regclass)"
+                },
+                {
+                  "name": "artifact_type",
+                  "data_type": "character varying",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "artifact_name",
+                  "data_type": "character varying",
+                  "is_nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "file_path",
+                  "data_type": "character varying",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "rule_references",
+                  "data_type": "ARRAY",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "agent_references",
+                  "data_type": "ARRAY",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "last_updated",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": true,
+                  "default": "now()"
+                },
+                {
+                  "name": "checksum",
+                  "data_type": "character varying",
+                  "is_nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "validation_status",
+                  "data_type": "character varying",
+                  "is_nullable": true,
+                  "default": "'pending'::character varying"
+                },
+                {
+                  "name": "created_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": true,
+                  "default": "now()"
+                },
+                {
+                  "name": "updated_at",
+                  "data_type": "timestamp with time zone",
+                  "is_nullable": true,
+                  "default": "now()"
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "indexes": [
+                {
+                  "name": "governance_artifacts_artifact_type_artifact_name_key",
+                  "columns": [
+                    "artifact_type",
+                    "artifact_name"
+                  ],
+                  "unique": true
+                },
+                {
+                  "name": "idx_governance_agent_refs",
+                  "columns": [
+                    "agent_references"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_governance_rule_refs",
+                  "columns": [
+                    "rule_references"
+                  ],
+                  "unique": false
+                },
+                {
+                  "name": "idx_governance_type",
+                  "columns": [
+                    "artifact_type"
+                  ],
+                  "unique": false
+                }
+              ]
+            }
+          }
+        },
+        "pipeline_status": {
+          "ok": true,
+          "mode": "db_on",
+          "reason": null,
+          "window_hours": 24,
+          "summary": {
+            "total_runs": 2152,
+            "pipelines": {
+              "lm_studio": {
+                "total": 2150,
+                "by_status": {
+                  "success": 700,
+                  "failed": 1450,
+                  "running": 0,
+                  "other": 0
+                },
+                "last_run_started_at": "2025-11-27T09:10:02.584405-08:00",
+                "last_run_status": "success"
+              },
+              "lookup_lexicon_entry": {
+                "total": 1,
+                "by_status": {
+                  "success": 1,
+                  "failed": 0,
+                  "running": 0,
+                  "other": 0
+                },
+                "last_run_started_at": "2025-11-26T11:17:13.301181-08:00",
+                "last_run_status": "success"
+              },
+              "search_bible_verses": {
+                "total": 1,
+                "by_status": {
+                  "success": 1,
+                  "failed": 0,
+                  "running": 0,
+                  "other": 0
+                },
+                "last_run_started_at": "2025-11-26T11:17:13.295238-08:00",
+                "last_run_status": "success"
+              }
+            }
+          }
+        }
+      }
+    },
+    "lm": {
+      "ok": true,
+      "provider": "unknown",
+      "slots": [
+        {
+          "slot": "local_agent",
+          "provider": "lmstudio",
+          "model": "ibm/granite-4-h-tiny",
+          "service_status": "OK"
+        },
+        {
+          "slot": "embedding",
+          "provider": "lmstudio",
+          "model": "text-embedding-bge-m3",
+          "service_status": "OK"
+        },
+        {
+          "slot": "reranker",
+          "provider": "lmstudio",
+          "model": "ibm/granite-4-h-tiny (embedding_only)",
+          "service_status": "OK"
+        },
+        {
+          "slot": "theology",
+          "provider": "lmstudio",
+          "model": "christian-bible-expert-v2.0-12b",
+          "service_status": "OK"
+        }
+      ],
+      "mode": "lm_ready",
+      "details": {
+        "endpoint": "http://127.0.0.1:9994/v1",
+        "provider": "lmstudio",
+        "errors": []
+      }
+    },
+    "exports": {
+      "ok": true,
+      "lm_indicator": {
+        "db_off": true,
+        "error_rate": 0.0,
+        "generated_at": "2025-11-24T15:55:28.576012+00:00",
+        "reason": "db_off",
+        "status": "offline",
+        "success_rate": 0.0,
+        "top_error_reason": "db_off",
+        "total_calls": 0,
+        "window_days": 7
+      },
+      "compliance_head": {
+        "schema": "control",
+        "generated_at": "2025-11-21T04:00:57.712909+00:00",
+        "ok": true,
+        "connection_ok": true,
+        "summary": {
+          "window_7d": {
+            "runs": 0,
+            "por_ok_ratio": 0.0,
+            "schema_ok_ratio": 0.0,
+            "provenance_ok_ratio": 0.0,
+            "updated_at": "2025-11-16T19:07:36.542379-08:00"
+          },
+          "window_30d": {
+            "runs": 0,
+            "por_ok_ratio": 0.0,
+            "schema_ok_ratio": 0.0,
+            "provenance_ok_ratio": 0.0,
+            "updated_at": "2025-11-16T19:07:36.551207-08:00"
+          }
+        }
+      },
+      "kb_docs_head": {
+        "connection_ok": false,
+        "db_off": true,
+        "docs": [],
+        "error": "GEMATRIA_DSN not set",
+        "generated_at": "2025-11-15T04:16:54.247886+00:00",
+        "ok": false,
+        "schema": "knowledge"
+      },
+      "mcp_catalog": {
+        "schema": "control",
+        "generated_at": "2025-11-21T04:36:51.015962+00:00",
+        "ok": true,
+        "connection_ok": true,
+        "tools": [
+          {
+            "tool_name": "smoke_test_7bf0a1ea",
+            "input_schema_ref": "{}",
+            "output_schema_ref": "{}",
+            "ring": 0,
+            "read_only": true
+          },
+          {
+            "tool_name": "smoke_test_7c4f7c47",
+            "input_schema_ref": "{}",
+            "output_schema_ref": "{}",
+            "ring": 0,
+            "read_only": true
+          }
+        ],
+        "error": null,
+        "view_name": "control.mcp_tool_catalog"
+      }
+    },
+    "eval_smoke": {
+      "ok": true,
+      "targets": [
+        "ci.exports.smoke",
+        "eval.graph.calibrate.adv"
+      ],
+      "messages": [
+        "ci.exports.smoke: OK",
+        "eval.graph.calibrate.adv: OK"
+      ]
+    },
+    "hints": [
+      "KB: Subsystem 'agentpm' has low document coverage (1 doc(s))",
+      "KB: Subsystem 'webui' has low document coverage (1 doc(s))"
+    ],
+    "kb_hints": [
+      {
+        "level": "INFO",
+        "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+        "message": "Subsystem 'agentpm' has low document coverage (1 doc(s))",
+        "subsystem": "agentpm",
+        "have": 1
+      },
+      {
+        "level": "INFO",
+        "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+        "message": "Subsystem 'webui' has low document coverage (1 doc(s))",
+        "subsystem": "webui",
+        "have": 1
+      }
+    ],
+    "overall_ok": true
+  },
+  "ai_tracking": {
+    "ok": true,
+    "mode": "db_on",
+    "summary": {
+      "agent_run": {
+        "total": 2159,
+        "last_24h": 2152,
+        "last_7d": 2159
+      },
+      "agent_run_cli": {
+        "total": 16,
+        "last_24h": 3,
+        "last_7d": 16,
+        "success_count": 3,
+        "error_count": 0
+      }
+    }
+  },
+  "share_manifest": {
+    "ok": false,
+    "count": 0,
+    "error": "Manifest file not found: /home/mccoy/Projects/docs/SSOT/SHARE_MANIFEST.json"
+  },
+  "eval_insights": {
+    "lm_indicator": {
+      "db_off": true,
+      "error_rate": 0.0,
+      "generated_at": "2025-11-24T15:55:28.576012+00:00",
+      "reason": "db_off",
+      "status": "offline",
+      "success_rate": 0.0,
+      "top_error_reason": "db_off",
+      "total_calls": 0,
+      "window_days": 7,
+      "available": true
+    },
+    "db_health": {
+      "ok": true,
+      "mode": "ready",
+      "checks": {
+        "driver_available": true,
+        "connection_ok": true,
+        "graph_stats_ready": true
+      },
+      "details": {
+        "errors": []
+      },
+      "available": true
+    },
+    "edge_class_counts": {
+      "thresholds": {
+        "strong": 0.9,
+        "weak": 0.75
+      },
+      "counts": {
+        "strong": 0,
+        "weak": 0,
+        "other": 0
+      },
+      "available": true
+    }
+  },
+  "kb_registry": {
+    "available": true,
+    "total": 9,
+    "valid": true,
+    "errors_count": 0,
+    "warnings_count": 0
+  },
+  "kb_hints": [
+    {
+      "level": "INFO",
+      "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+      "message": "Subsystem 'agentpm' has low document coverage (1 doc(s))",
+      "subsystem": "agentpm",
+      "have": 1
+    },
+    {
+      "level": "INFO",
+      "code": "KB_LOW_COVERAGE_SUBSYSTEM",
+      "message": "Subsystem 'webui' has low document coverage (1 doc(s))",
+      "subsystem": "webui",
+      "have": 1
+    }
+  ],
+  "kb_doc_health": {
+    "available": true,
+    "metrics": {
+      "kb_fresh_ratio": {
+        "overall": 100.0,
+        "by_subsystem": {
+          "docs": 100.0,
+          "root": 100.0,
+          "agentpm": 100.0,
+          "webui": 100.0
+        }
+      },
+      "kb_missing_count": {
+        "overall": 0,
+        "by_subsystem": {}
+      },
+      "kb_stale_count_by_subsystem": {},
+      "kb_fixes_applied_last_7d": 2,
+      "kb_debt_burned_down": {
+        "overall": null,
+        "by_subsystem": {},
+        "note": "insufficient_history"
+      },
+      "notes": []
+    }
+  }
+}

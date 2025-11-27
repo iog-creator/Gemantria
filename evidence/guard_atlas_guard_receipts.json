@@ -1,0 +1,28 @@
+{
+  "ok": false,
+  "checks": {
+    "html_exists": true,
+    "all_receipts_linked": false,
+    "required_backlinks": true,
+    "e91_badge": true
+  },
+  "counts": {
+    "guard_files": 19,
+    "missing_refs": 11,
+    "missing_backlinks": 0
+  },
+  "missing_refs": [
+    "guard_atlas_compliance_drilldowns.json",
+    "guard_atlas_links.json",
+    "guard_atlas_violation_browser.json",
+    "guard_biblescholar_reference.json",
+    "guard_control_graph_compliance.json",
+    "guard_control_widgets.json",
+    "guard_gatekeeper_coverage.json",
+    "guard_regenerate_all.json",
+    "guard_snapshot_drift.json",
+    "guard_tagproof_screenshots.json",
+    "guard_tv_coverage.json"
+  ],
+  "missing_backlinks": []
+}

@@ -1,0 +1,147 @@
+{
+  "ok": false,
+  "checks": {
+    "receipts_guard_ok": false,
+    "screenshot_manifest_guard_ok": true,
+    "browser_verification_guard_ok": true,
+    "tagproof_screenshots_guard_ok": true,
+    "atlas_links_guard_ok": true
+  },
+  "counts": {
+    "guards_total": 5,
+    "guards_ok": 4,
+    "guards_failed": 1,
+    "broken_links": 0,
+    "missing_screenshots": 30
+  },
+  "details": {
+    "receipts_guard": {
+      "ok": false,
+      "checks": {
+        "html_exists": true,
+        "all_receipts_linked": false,
+        "required_backlinks": true,
+        "e91_badge": true
+      },
+      "counts": {
+        "guard_files": 19,
+        "missing_refs": 11,
+        "missing_backlinks": 0
+      },
+      "missing_refs": [
+        "guard_atlas_compliance_drilldowns.json",
+        "guard_atlas_links.json",
+        "guard_atlas_violation_browser.json",
+        "guard_biblescholar_reference.json",
+        "guard_control_graph_compliance.json",
+        "guard_control_widgets.json",
+        "guard_gatekeeper_coverage.json",
+        "guard_regenerate_all.json",
+        "guard_snapshot_drift.json",
+        "guard_tagproof_screenshots.json",
+        "guard_tv_coverage.json"
+      ],
+      "missing_backlinks": []
+    },
+    "screenshot_manifest_guard": {
+      "ok": true,
+      "checks": {
+        "manifest_exists": true,
+        "manifest_json_valid": true,
+        "manifest_nonempty": true,
+        "all_atlas_pages_covered": false,
+        "hash_shape_ok": true,
+        "coverage_ok": true
+      },
+      "counts": {
+        "manifest_entries": 3,
+        "atlas_pages": 30,
+        "atlas_pages_uncovered": 30,
+        "entries_missing_hash": 0,
+        "entries_bad_hash_shape": 0
+      },
+      "details": "<truncated 1224 chars>"
+    },
+    "browser_verification_guard": {
+      "ok": true,
+      "checks": {
+        "webproof_dir_exists": true,
+        "has_screenshots": true,
+        "report_exists": true,
+        "report_json_valid": true,
+        "report_ok_flag_true_when_present": true,
+        "core_pages_verified": true,
+        "all_required_pages_have_receipts": true,
+        "screenshot_count_reasonable": true
+      },
+      "counts": {
+        "screenshots": 19,
+        "required_pages": 7,
+        "pages_verified": 7,
+        "missing_required_pages": 0
+      },
+      "details": {
+        "report_path": "/home/mccoy/Projects/Gemantria.v2/evidence/webproof/report.json",
+        "webproof_dir": "/home/mccoy/Projects/Gemantria.v2/evidence/webproof",
+        "pages_verified": [
+          "index.html",
+          "mcp_catalog_view.html",
+          "compliance_summary.html",
+          "compliance_timeseries.html",
+          "compliance_heatmap.html",
+          "violations.html",
+          "guard_receipts.html"
+        ],
+        "missing_required_pages": [],
+        "core_pages_missing": []
+      }
+    },
+    "tagproof_screenshots_guard": {
+      "ok": true,
+      "checks": {
+        "tagproof_dir_exists": true,
+        "has_tagproof_screenshots": true,
+        "manifest_nonempty": true,
+        "all_screenshots_listed": true,
+        "no_manifest_orphans": true
+      },
+      "counts": {
+        "tagproof_dirs": 2,
+        "tagproof_screenshots": 7,
+        "tagproof_manifests": 1,
+        "manifest_entries": 7,
+        "unlisted_screenshots": 0,
+        "orphan_manifest_entries": 0
+      },
+      "details": {
+        "tagproof_dirs": [
+          "/home/mccoy/Projects/Gemantria.v2/tagproof",
+          "/home/mccoy/Projects/Gemantria.v2/share/releases/v0.0.3/tagproof"
+        ],
+        "manifest_paths": [
+          "/home/mccoy/Projects/Gemantria.v2/tagproof/screenshot_manifest.json"
+        ],
+        "unlisted_screenshots": [],
+        "orphan_manifest_entries": []
+      }
+    },
+    "atlas_links_guard": {
+      "ok": true,
+      "checks": {
+        "html_scanned": true,
+        "no_broken_internal_links": true,
+        "external_links_marked": true
+      },
+      "counts": {
+        "html_files": 30,
+        "internal_links": 83,
+        "broken_internal_links": 0,
+        "external_links": 0,
+        "unmarked_external_links": 0,
+        "absolute_paths": 3,
+        "whitelisted_links": 63
+      },
+      "details": "<truncated 7740 chars>"
+    }
+  }
+}

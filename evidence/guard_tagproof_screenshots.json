@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "checks": {
+    "tagproof_dir_exists": true,
+    "has_tagproof_screenshots": true,
+    "manifest_nonempty": true,
+    "all_screenshots_listed": true,
+    "no_manifest_orphans": true
+  },
+  "counts": {
+    "tagproof_dirs": 2,
+    "tagproof_screenshots": 7,
+    "tagproof_manifests": 1,
+    "manifest_entries": 7,
+    "unlisted_screenshots": 0,
+    "orphan_manifest_entries": 0
+  },
+  "details": {
+    "tagproof_dirs": [
+      "/home/mccoy/Projects/Gemantria.v2/tagproof",
+      "/home/mccoy/Projects/Gemantria.v2/share/releases/v0.0.3/tagproof"
+    ],
+    "manifest_paths": [
+      "/home/mccoy/Projects/Gemantria.v2/tagproof/screenshot_manifest.json"
+    ],
+    "unlisted_screenshots": [],
+    "orphan_manifest_entries": []
+  }
+}

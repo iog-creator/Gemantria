@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "timestamp": "2025-11-20T23:43:12.554390Z",
+  "pytest_exit_code": 0,
+  "suite": "TV-01..TV-05",
+  "notes": "All test vectors passed."
+}

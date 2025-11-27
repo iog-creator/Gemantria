@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "checks": {
+    "all_snapshots_exist": true,
+    "all_snapshots_valid": true,
+    "ledger_available": false
+  },
+  "counts": {
+    "total_snapshots": 6,
+    "valid_snapshots": 6,
+    "missing_snapshots": 0,
+    "ledger_entries": 0
+  },
+  "details": {
+    "snapshot_files": {
+      "schema_snapshot": {
+        "path": "share/atlas/control_plane/schema_snapshot.json",
+        "exists": true,
+        "size": 24390,
+        "mtime": "2025-11-20T20:36:50.007731",
+        "structure": {
+          "valid": true,
+          "has_timestamp": true,
+          "has_ok_flag": false,
+          "keys": [
+            "schema",
+            "generated_at",
+            "tables"
+          ]
+        }
+      },
+      "mv_schema": {
+        "path": "share/atlas/control_plane/mv_schema.json",
+        "exists": true,
+        "size": 283,
+        "mtime": "2025-11-20T20:36:50.506133",
+        "structure": {
+          "valid": true,
+          "has_timestamp": true,
+          "has_ok_flag": true,
+          "keys": [
+            "schema",
+            "generated_at",
+            "ok",
+            "connection_ok",
+            "materialized_views"
+          ]
+        }
+      },
+      "mcp_catalog": {
+        "path": "share/atlas/control_plane/mcp_catalog.json",
+        "exists": true,
+        "size": 517,
+        "mtime": "2025-11-20T20:36:51.032218",
+        "structure": {
+          "valid": true,
+          "has_timestamp": true,
+          "has_ok_flag": true,
+          "keys": [
+            "schema",
+            "generated_at",
+            "ok",
+            "connection_ok",
+            "tools",
+            "error",
+            "view_name"
+          ]
+        }
+      },
+      "compliance_summary": {
+        "path": "share/atlas/control_plane/compliance_summary.json",
+        "exists": true,
+        "size": 429,
+        "mtime": "2025-11-20T22:56:29.027095",
+        "structure": {
+          "valid": true,
+          "has_timestamp": true,
+          "has_ok_flag": false,
+          "keys": [
+            "episode",
+            "schema",
+            "generated_at",
+            "metrics",
+            "source_exports"
+          ]
+        }
+      },
+      "compliance_timeseries": {
+        "path": "share/atlas/control_plane/compliance_timeseries.json",
+        "exists": true,
+        "size": 470,
+        "mtime": "2025-11-20T22:56:29.517309",
+        "structure": {
+          "valid": true,
+          "has_timestamp": true,
+          "has_ok_flag": false,
+          "keys": [
+            "episode",
+            "schema",
+            "generated_at",
+            "series_by_code",
+            "series_by_tool",
+            "heatmap_tool_by_code",
+            "source_exports",
+            "metadata"
+          ]
+        }
+      },
+      "pm_snapshot": {
+        "path": "share/pm.snapshot.md",
+        "exists": true,
+        "size": 3863,
+        "mtime": "2025-11-21T07:54:04.426512",
+        "structure": {
+          "valid": true
+        }
+      }
+    },
+    "ledger": {
+      "available": false,
+      "entry_count": 0
+    }
+  },
+  "generated_at": "2025-11-21T16:10:32.900503Z"
+}

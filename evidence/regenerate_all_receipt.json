@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "timestamp": "2025-11-20T23:50:59.982755Z",
+  "steps": [
+    {
+      "name": "export_graph",
+      "exit_code": 0,
+      "duration_s": 0.09,
+      "success": true,
+      "stderr": null
+    },
+    {
+      "name": "export_stats",
+      "exit_code": 0,
+      "duration_s": 0.7,
+      "success": true,
+      "stderr": "Eigenvector centrality error: No module named 'scipy', using zeros\n"
+    }
+  ],
+  "artifacts": [
+    "exports/graph_latest.json",
+    "exports/graph_stats.json",
+    "exports/graph_patterns.json",
+    "exports/temporal_patterns.json",
+    "exports/pattern_forecast.json"
+  ],
+  "missing_artifacts": [],
+  "expected_artifacts": [
+    "exports/graph_latest.json",
+    "exports/graph_stats.json",
+    "exports/graph_patterns.json",
+    "exports/temporal_patterns.json",
+    "exports/pattern_forecast.json"
+  ]
+}

@@ -1,0 +1,27 @@
+# UI Consolidation Walkthrough
+
+## Changes
+- **Refactored [webui/graph/src/App.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/App.tsx)**: Implemented [ShellLayout](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/components/ShellLayout.tsx#6-58) to enforce the Orchestrator UI Shell (Header, Left Rail, Main Canvas).
+- **Created [webui/graph/src/components/ShellLayout.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/components/ShellLayout.tsx)**: A new layout component that wraps the application and handles navigation.
+- **Updated [webui/orchestrator-shell/LeftRail.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/orchestrator-shell/LeftRail.tsx)**: Exported [LeftRailProps](file:///home/mccoy/Projects/Gemantria.v2/webui/orchestrator-shell/LeftRail.tsx#3-7) interface.
+- **Refactored Pages**: Removed `min-h-screen` and internal navigation logic from:
+    - [SystemDashboard.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/SystemDashboard.tsx)
+    - [LMInsightsPage.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/LMInsightsPage.tsx)
+    - [GraphDashboard.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/GraphDashboard.tsx)
+    - [BiblePage.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/BiblePage.tsx)
+    - [VectorSearchPage.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/VectorSearchPage.tsx)
+    - [LexiconPage.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/LexiconPage.tsx)
+    - [KeywordSearchPage.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/graph/src/pages/KeywordSearchPage.tsx)
+    - [DocControlPanel.tsx](file:///home/mccoy/Projects/Gemantria.v2/webui/dashboard/src/components/DocControlPanel.tsx)
+- **Deprecated Rule 016**: Removed obsolete governance rule.
+
+## Verification
+- **Environment**: Validated python path.
+- **Housekeeping**: Ran `make housekeeping` successfully.
+- **Webproof**: Generated a screenshot of the consolidated UI shell.
+
+### Webproof Screenshot
+![Consolidated UI Shell](/home/mccoy/.gemini/antigravity/brain/892fb245-8e2b-493f-8c46-2816288a7bf0/unified_shell_refactor.png)
+
+## Next Steps
+- Proceed to integrate Vector Search UI (Phase 7E) into the stabilized shell.

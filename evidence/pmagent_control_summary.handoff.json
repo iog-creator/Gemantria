@@ -1,0 +1,806 @@
+{
+  "ok": true,
+  "generated_at": "2025-11-20T20:23:07.428943+00:00",
+  "components": {
+    "status": {
+      "ok": true,
+      "mode": "ready",
+      "reason": null,
+      "tables": {
+        "public.ai_interactions": {
+          "present": true,
+          "row_count": 1,
+          "latest_created_at": "2025-11-07T11:11:49.732991-08:00"
+        },
+        "public.governance_artifacts": {
+          "present": true,
+          "row_count": 126,
+          "latest_created_at": "2025-11-20T11:11:09.979421-08:00"
+        },
+        "control.agent_run": {
+          "present": true,
+          "row_count": 0,
+          "latest_created_at": null
+        },
+        "control.tool_catalog": {
+          "present": true,
+          "row_count": 0,
+          "latest_created_at": null
+        },
+        "gematria.graph_stats_snapshots": {
+          "present": true,
+          "row_count": 0,
+          "latest_created_at": null
+        }
+      }
+    },
+    "tables": {
+      "ok": true,
+      "mode": "db_on",
+      "error": null,
+      "tables": {
+        "control.agent_run": 0,
+        "control.capability_rule": 0,
+        "control.capability_session": 0,
+        "control.doc_embedding": 2963,
+        "control.doc_fragment": 2963,
+        "control.doc_registry": 130,
+        "control.doc_sync_state": 0,
+        "control.doc_version": 372,
+        "control.guard_definition": 0,
+        "control.kb_document": 2178,
+        "control.rule_definition": 69,
+        "control.rule_source": 138,
+        "control.system_state_ledger": 24,
+        "control.tool_catalog": 0,
+        "gematria.ai_embeddings": 1,
+        "gematria.checkpoints": 4,
+        "gematria.concept_centrality": 0,
+        "gematria.concept_relations": 0,
+        "gematria.concepts": 0,
+        "gematria.edges": 1,
+        "gematria.enrichment_crossrefs": 0,
+        "gematria.graph_stats_snapshots": 0,
+        "gematria.nodes": 2,
+        "gematria.nouns": 0,
+        "gematria.runs": 2,
+        "gematria.runs_ledger": 110,
+        "gematria.schema_migrations": 2,
+        "ops.job_queue": 0,
+        "public.ai_enrichment_log": 13857,
+        "public.ai_interactions": 1,
+        "public.ai_performance_insights": 0,
+        "public.books": 35,
+        "public.checkpointer_state": 64,
+        "public.checkpointer_writes": 2,
+        "public.checkpoints": 22,
+        "public.cluster_metrics": 0,
+        "public.code_generation_events": 0,
+        "public.code_generation_patterns": 0,
+        "public.concept_centrality": 0,
+        "public.concept_clusters": 0,
+        "public.concept_metadata": 0,
+        "public.concept_metrics": 0,
+        "public.concept_network": 46,
+        "public.concept_relations": 274,
+        "public.concept_rerank_cache": 0,
+        "public.concepts": 25,
+        "public.confidence_validation_log": 35,
+        "public.connections": 0,
+        "public.context_awareness_events": 0,
+        "public.context_success_patterns": 0,
+        "public.cross_references": 0,
+        "public.doctrinal_links": 0,
+        "public.document_access_log": 1,
+        "public.document_sections": 374,
+        "public.governance_artifacts": 126,
+        "public.governance_compliance_log": 73,
+        "public.hint_emissions": 109,
+        "public.hypotheses": 0,
+        "public.integration_log": 0,
+        "public.isolation_patterns": 0,
+        "public.learning_events": 2,
+        "public.metrics_log": 7969,
+        "public.model_performance_metrics": 0,
+        "public.network_metrics": 0,
+        "public.prime_factors": 0,
+        "public.qwen_health_log": 15,
+        "public.runs": 25,
+        "public.satisfaction_metrics": 0,
+        "public.share_manifest_items": 39,
+        "public.share_manifest_metadata": 1,
+        "public.tool_usage_analytics": 0,
+        "public.twin_patterns": 0,
+        "public.user_feedback": 0,
+        "public.verse_noun_occurrences": 0,
+        "staging.concept_metadata_norm": 0,
+        "staging.concept_relations_norm": 1855,
+        "staging.concepts_norm": 710,
+        "telemetry.ai_interactions": 0,
+        "telemetry.checkpointer_state": 0,
+        "telemetry.metrics_log": 0
+      }
+    },
+    "schema": {
+      "ok": true,
+      "mode": "db_on",
+      "reason": null,
+      "tables": {
+        "control.agent_run": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": "gen_random_uuid()"
+            },
+            {
+              "name": "project_id",
+              "data_type": "bigint",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "session_id",
+              "data_type": "uuid",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "tool",
+              "data_type": "text",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "args_json",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "result_json",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "violations_json",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": "'[]'::jsonb"
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": false,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "idx_agent_run_created",
+              "columns": [
+                "created_at"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_agent_run_project",
+              "columns": [
+                "project_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_agent_run_session",
+              "columns": [
+                "session_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_agent_run_tool",
+              "columns": [
+                "tool"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_agent_run_violations",
+              "columns": [
+                "violations_json"
+              ],
+              "unique": false
+            }
+          ]
+        },
+        "control.tool_catalog": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": "gen_random_uuid()"
+            },
+            {
+              "name": "project_id",
+              "data_type": "bigint",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "name",
+              "data_type": "text",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "ring",
+              "data_type": "integer",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "io_schema",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "enabled",
+              "data_type": "boolean",
+              "is_nullable": false,
+              "default": "true"
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": false,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "idx_tool_catalog_enabled",
+              "columns": [
+                "enabled"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_tool_catalog_project",
+              "columns": [
+                "project_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_tool_catalog_ring",
+              "columns": [
+                "ring"
+              ],
+              "unique": false
+            },
+            {
+              "name": "tool_catalog_project_id_name_key",
+              "columns": [
+                "project_id",
+                "name"
+              ],
+              "unique": true
+            }
+          ]
+        },
+        "control.capability_rule": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": "gen_random_uuid()"
+            },
+            {
+              "name": "project_id",
+              "data_type": "bigint",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "name",
+              "data_type": "text",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "ring",
+              "data_type": "integer",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "allowlist",
+              "data_type": "ARRAY",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "denylist",
+              "data_type": "ARRAY",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "budgets",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": "'{}'::jsonb"
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": false,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "capability_rule_project_id_name_key",
+              "columns": [
+                "project_id",
+                "name"
+              ],
+              "unique": true
+            },
+            {
+              "name": "idx_capability_rule_project",
+              "columns": [
+                "project_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_capability_rule_ring",
+              "columns": [
+                "ring"
+              ],
+              "unique": false
+            }
+          ]
+        },
+        "control.doc_fragment": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": "gen_random_uuid()"
+            },
+            {
+              "name": "project_id",
+              "data_type": "bigint",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "src",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "anchor",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "sha256",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": false,
+              "default": "now()"
+            },
+            {
+              "name": "doc_id",
+              "data_type": "uuid",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "version_id",
+              "data_type": "bigint",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "fragment_index",
+              "data_type": "integer",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "fragment_type",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "content",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "updated_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": true,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "doc_fragment_project_id_src_anchor_key",
+              "columns": [
+                "project_id",
+                "src",
+                "anchor"
+              ],
+              "unique": true
+            },
+            {
+              "name": "idx_doc_fragment_content_unique",
+              "columns": [
+                "doc_id",
+                "version_id",
+                "fragment_index"
+              ],
+              "unique": true
+            },
+            {
+              "name": "idx_doc_fragment_doc_id",
+              "columns": [
+                "doc_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_doc_fragment_project",
+              "columns": [
+                "project_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_doc_fragment_sha256",
+              "columns": [
+                "sha256"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_doc_fragment_src",
+              "columns": [
+                "src"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_doc_fragment_type",
+              "columns": [
+                "fragment_type"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_doc_fragment_version_id",
+              "columns": [
+                "version_id"
+              ],
+              "unique": false
+            }
+          ]
+        },
+        "control.capability_session": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": "gen_random_uuid()"
+            },
+            {
+              "name": "project_id",
+              "data_type": "bigint",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "rule_id",
+              "data_type": "uuid",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "por_json",
+              "data_type": "jsonb",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "tiny_menu",
+              "data_type": "ARRAY",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "ttl_s",
+              "data_type": "integer",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": false,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "idx_capability_session_created",
+              "columns": [
+                "created_at"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_capability_session_project",
+              "columns": [
+                "project_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_capability_session_rule",
+              "columns": [
+                "rule_id"
+              ],
+              "unique": false
+            }
+          ]
+        },
+        "public.ai_interactions": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "integer",
+              "is_nullable": false,
+              "default": "nextval('ai_interactions_id_seq'::regclass)"
+            },
+            {
+              "name": "session_id",
+              "data_type": "character varying",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "interaction_type",
+              "data_type": "character varying",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "user_query",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "ai_response",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "tools_used",
+              "data_type": "ARRAY",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "context_provided",
+              "data_type": "jsonb",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "execution_time_ms",
+              "data_type": "integer",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "success",
+              "data_type": "boolean",
+              "is_nullable": true,
+              "default": "true"
+            },
+            {
+              "name": "error_details",
+              "data_type": "text",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": true,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "idx_ai_interactions_created",
+              "columns": [
+                "created_at"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_ai_interactions_session",
+              "columns": [
+                "session_id"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_ai_interactions_type",
+              "columns": [
+                "interaction_type"
+              ],
+              "unique": false
+            }
+          ]
+        },
+        "public.governance_artifacts": {
+          "columns": [
+            {
+              "name": "id",
+              "data_type": "integer",
+              "is_nullable": false,
+              "default": "nextval('governance_artifacts_id_seq'::regclass)"
+            },
+            {
+              "name": "artifact_type",
+              "data_type": "character varying",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "artifact_name",
+              "data_type": "character varying",
+              "is_nullable": false,
+              "default": null
+            },
+            {
+              "name": "file_path",
+              "data_type": "character varying",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "rule_references",
+              "data_type": "ARRAY",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "agent_references",
+              "data_type": "ARRAY",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "last_updated",
+              "data_type": "timestamp with time zone",
+              "is_nullable": true,
+              "default": "now()"
+            },
+            {
+              "name": "checksum",
+              "data_type": "character varying",
+              "is_nullable": true,
+              "default": null
+            },
+            {
+              "name": "validation_status",
+              "data_type": "character varying",
+              "is_nullable": true,
+              "default": "'pending'::character varying"
+            },
+            {
+              "name": "created_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": true,
+              "default": "now()"
+            },
+            {
+              "name": "updated_at",
+              "data_type": "timestamp with time zone",
+              "is_nullable": true,
+              "default": "now()"
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "indexes": [
+            {
+              "name": "governance_artifacts_artifact_type_artifact_name_key",
+              "columns": [
+                "artifact_type",
+                "artifact_name"
+              ],
+              "unique": true
+            },
+            {
+              "name": "idx_governance_agent_refs",
+              "columns": [
+                "agent_references"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_governance_rule_refs",
+              "columns": [
+                "rule_references"
+              ],
+              "unique": false
+            },
+            {
+              "name": "idx_governance_type",
+              "columns": [
+                "artifact_type"
+              ],
+              "unique": false
+            }
+          ]
+        }
+      }
+    },
+    "pipeline_status": {
+      "ok": true,
+      "mode": "db_on",
+      "reason": null,
+      "window_hours": 24,
+      "summary": {
+        "total_runs": 0,
+        "pipelines": {}
+      }
+    }
+  }
+}

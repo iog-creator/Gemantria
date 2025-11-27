@@ -1,0 +1,214 @@
+{
+  "ok": true,
+  "checks": {
+    "html_scanned": true,
+    "no_broken_internal_links": true,
+    "external_links_marked": true
+  },
+  "counts": {
+    "html_files": 28,
+    "internal_links": 67,
+    "broken_internal_links": 0,
+    "external_links": 0,
+    "unmarked_external_links": 0,
+    "absolute_paths": 1,
+    "whitelisted_links": 46
+  },
+  "details": {
+    "broken_internal_links": [],
+    "unmarked_external_links": [],
+    "absolute_paths": [
+      {
+        "source": "docs/atlas/index.html",
+        "href": "/governance-search",
+        "marked_external": true
+      }
+    ],
+    "whitelisted_links": [
+      {
+        "source": "docs/atlas/browser/guard_receipts.html",
+        "href": "../../../evidence"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_heatmap.html",
+        "href": "../../../share/atlas/control_plane/compliance_timeseries.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_heatmap.html",
+        "href": "../../../share/atlas/control_plane/top_violations_7d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_heatmap.html",
+        "href": "../../../share/atlas/control_plane/top_violations_30d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_heatmap.html",
+        "href": "../../../evidence/guard_atlas_compliance_timeseries.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_summary.html",
+        "href": "../../../share/atlas/control_plane/compliance_summary.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_summary.html",
+        "href": "../../../share/atlas/control_plane/compliance.head.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_summary.html",
+        "href": "../../../share/atlas/control_plane/top_violations_7d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_summary.html",
+        "href": "../../../share/atlas/control_plane/top_violations_30d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_summary.html",
+        "href": "../../../evidence/guard_atlas_compliance_summary.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_timeseries.html",
+        "href": "../../../share/atlas/control_plane/compliance_timeseries.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_timeseries.html",
+        "href": "../../../share/atlas/control_plane/top_violations_7d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_timeseries.html",
+        "href": "../../../share/atlas/control_plane/top_violations_30d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_timeseries.html",
+        "href": "../../../share/atlas/control_plane/agent_runs_7d.json"
+      },
+      {
+        "source": "docs/atlas/dashboard/compliance_timeseries.html",
+        "href": "../../../evidence/guard_atlas_compliance_timeseries.json"
+      },
+      {
+        "source": "docs/atlas/nodes/A.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/B.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/C.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/D.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/Enrich.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/Index.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/Ingest.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/Normalize.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/Persist.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/error.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/nodes/success.html",
+        "href": "../../evidence/otel.spans.jsonl"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/compliance.head.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/top_violations_7d.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/top_violations_30d.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../evidence/guard_control_compliance_exports.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/compliance.head.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/top_violations_7d.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../share/atlas/control_plane/top_violations_30d.json"
+      },
+      {
+        "source": "docs/atlas/webproof/control_compliance.html",
+        "href": "../../../evidence/guard_control_compliance_exports.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e66_graph_rollup.html",
+        "href": "../../../share/atlas/graph/rollup.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e66_graph_rollup.html",
+        "href": "../../../evidence/guard_m14_graph_rollup_versioned.verdict.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e67_drilldown.html",
+        "href": "../../../share/atlas/nodes/drilldown.sample.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e67_drilldown.html",
+        "href": "../../../evidence/guard_m14_node_drilldowns_links.verdict.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e68_screenshots.html",
+        "href": "../../../share/atlas/screenshots/manifest.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e68_screenshots.html",
+        "href": "../../../evidence/guard_m14_screenshot_manifest_canonicalized.verdict.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e69_reranker.html",
+        "href": "../../../share/atlas/badges/reranker.json"
+      },
+      {
+        "source": "docs/atlas/webproof/e69_reranker.html",
+        "href": "../../../evidence/guard_m14_reranker_badges.verdict.json"
+      },
+      {
+        "source": "docs/atlas/webproof/knowledge_mcp.html",
+        "href": "../../../share/atlas/control_plane/mcp_catalog.json"
+      },
+      {
+        "source": "docs/atlas/webproof/knowledge_mcp.html",
+        "href": "../../../share/atlas/control_plane/capability_rules.json"
+      },
+      {
+        "source": "docs/atlas/webproof/knowledge_mcp.html",
+        "href": "../../../share/atlas/control_plane/agent_runs_7d.json"
+      },
+      {
+        "source": "docs/atlas/webproof/knowledge_mcp.html",
+        "href": "../../../evidence/guard_control_knowledge_mcp_exports.json"
+      }
+    ]
+  }
+}

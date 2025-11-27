@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "slots": [
+    {
+      "slot": "local_agent",
+      "provider": "ollama",
+      "model": "granite4:tiny-h",
+      "service_status": "OK"
+    },
+    {
+      "slot": "embedding",
+      "provider": "ollama",
+      "model": "granite-embedding:278m",
+      "service_status": "OK"
+    },
+    {
+      "slot": "reranker",
+      "provider": "ollama",
+      "model": "granite4:tiny-h (granite_llm)",
+      "service_status": "OK"
+    },
+    {
+      "slot": "theology",
+      "provider": "lmstudio",
+      "model": "Christian-Bible-Expert-v2.0-12B",
+      "service_status": "OK"
+    }
+  ]
+}

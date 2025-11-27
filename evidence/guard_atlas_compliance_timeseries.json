@@ -1,0 +1,26 @@
+{
+  "episode": "E87",
+  "guard": "guard_atlas_compliance_timeseries",
+  "ok": true,
+  "checks": {
+    "json": {
+      "json_exists": true,
+      "json_structure": true,
+      "episode_correct": true,
+      "schema_correct": true,
+      "arrays_valid": true,
+      "heatmap_valid": true
+    },
+    "html": {
+      "timeseries_html_exists": true,
+      "heatmap_html_exists": true,
+      "timeseries_backlinks": true,
+      "heatmap_backlinks": true
+    }
+  },
+  "summary": {
+    "json_ok": true,
+    "html_ok": true,
+    "overall_ok": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "guard": "guard_control_widgets",
+  "phase": "6D",
+  "mode": "HINT",
+  "overall_ok": true,
+  "checks": {
+    "adapter_import": {
+      "ok": true,
+      "message": "Adapter module imported successfully"
+    },
+    "widget_functions": {
+      "ok": true,
+      "message": "Widget functions work correctly",
+      "graph_compliance_status": "ok",
+      "biblescholar_reference_status": "empty"
+    },
+    "export_files": {
+      "ok": true,
+      "graph_compliance_exists": true,
+      "biblescholar_reference_exists": true
+    }
+  }
+}

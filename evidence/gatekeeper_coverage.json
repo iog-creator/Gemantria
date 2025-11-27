@@ -1,0 +1,20 @@
+{
+  "violation_codes": [
+    "MISSING_POR",
+    "ARG_SCHEMA_INVALID",
+    "RING_VIOLATION",
+    "PROVENANCE_MISMATCH",
+    "FORBIDDEN_TOOL",
+    "BUDGET_EXCEEDED",
+    "RETRY_EXHAUSTED"
+  ],
+  "coverage": {
+    "MISSING_POR": true,
+    "ARG_SCHEMA_INVALID": true,
+    "RING_VIOLATION": true,
+    "PROVENANCE_MISMATCH": true,
+    "FORBIDDEN_TOOL": true,
+    "BUDGET_EXCEEDED": true,
+    "RETRY_EXHAUSTED": true
+  }
+}

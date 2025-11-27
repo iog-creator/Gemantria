@@ -1,0 +1,30 @@
+{
+  "generated_at": "2025-11-24T16:26:26.466316+00:00",
+  "total_rules_scanned": 71,
+  "conflicts_found": 1,
+  "findings": [
+    {
+      "conflict_id": "CONFLICT-046-062",
+      "severity": "critical",
+      "rule_pairs": [
+        {
+          "rule_1": "046",
+          "rule_2": "062"
+        }
+      ],
+      "description": "Rule 046 (Hermetic CI Fallbacks) allows graceful degradation for db_off scenarios in CI, while Rule 062 (Environment Validation) mandates auto-starting services for live operations. This creates ambiguity about when to use hermetic mode vs live mode.",
+      "evidence": [
+        "Rule 046: 4 hermetic patterns found",
+        "Rule 062: 4 live operation patterns found",
+        "Rule 046 allows 'db_off gracefully' for observability commands",
+        "Rule 062 mandates 'pmagent bringup full' when DB is down for live tasks"
+      ],
+      "recommendation": "Clarify the distinction: Rule 046 applies to CI/hermetic contexts only, while Rule 062 applies to live development/operations. Add explicit context markers to both rules to prevent ambiguity."
+    }
+  ],
+  "notes": [
+    "Scanned 71 rule files from /home/mccoy/Projects/Gemantria.v2/.cursor/rules",
+    "Known conflicts detected using pattern matching",
+    "Recommendation: Review findings and update rules to resolve conflicts"
+  ]
+}

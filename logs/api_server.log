@@ -1,0 +1,2046 @@
+{"level": "INFO", "ts": 1763931159794, "logger": "api_server", "msg": "Mounted static files from exports at /exports"}
+INFO:     Started server process [665352]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49230 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49242 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34064 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34074 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34078 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34082 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34092 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34096 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33040 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33052 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51470 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51470 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51470 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51470 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51470 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54320 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54328 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54338 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54348 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34528 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34544 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34560 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34544 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43192 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43200 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43212 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43200 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41134 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41158 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41174 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41182 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39586 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39598 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39608 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39598 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39634 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39646 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39656 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39646 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33076 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33084 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33092 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33096 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33108 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51876 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51888 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51896 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51896 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32836 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32844 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32848 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32848 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38716 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38730 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38738 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38740 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38756 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38766 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38770 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38786 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38798 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38800 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38812 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38824 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59458 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59470 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59482 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59496 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59498 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59526 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59540 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40406 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40420 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40430 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40442 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40450 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40452 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40450 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57600 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57604 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57608 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57608 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36840 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50592 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50604 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50606 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54646 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54658 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54670 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54672 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54676 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54692 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54676 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52654 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52666 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52670 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52666 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48720 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38326 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38332 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38348 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58522 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58528 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58544 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58558 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58572 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58582 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58572 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59488 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59490 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59498 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59498 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37416 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47610 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47620 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47628 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47628 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36106 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36110 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36122 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36122 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52198 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55780 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55784 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55796 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55780 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37978 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37982 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37994 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37998 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37982 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41300 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41304 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41320 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41332 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41320 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46674 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46688 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46698 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46710 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46688 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57724 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57736 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57738 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57746 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57724 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43822 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43834 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43836 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43844 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43836 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52522 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52544 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50240 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50248 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50258 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50264 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50240 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38292 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38300 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38310 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38318 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38300 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39696 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39708 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39710 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39726 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39696 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49666 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49670 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49682 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49696 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49682 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60200 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60216 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60222 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60232 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60216 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45824 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45828 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45840 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45842 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45828 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48024 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48030 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48036 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48038 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48030 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53252 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53258 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53270 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53276 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53258 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43770 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43784 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43790 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43800 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43784 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48560 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48574 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48584 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48596 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48574 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37664 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37672 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37676 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37688 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37676 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58562 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58574 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58584 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58594 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58574 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45492 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45498 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45508 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45524 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45498 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57432 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57442 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57450 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57456 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57442 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49344 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49354 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49356 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49368 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49354 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48668 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48672 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48676 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48682 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48672 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59224 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59226 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59234 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59226 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48800 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48810 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48828 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52784 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52798 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52812 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52828 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52798 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34476 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34486 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34494 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34508 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34494 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60104 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60120 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60128 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60120 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58884 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58900 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58902 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58906 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58900 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38184 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38198 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38206 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38222 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38198 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37150 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37152 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37166 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37176 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37152 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55366 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55372 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55374 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55374 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47522 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47522 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47522 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47522 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47522 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37412 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42868 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42882 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42884 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42882 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53588 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53600 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53604 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53600 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46548 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33712 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33726 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33742 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33726 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54522 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54532 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54108 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37832 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37844 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37856 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37856 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52516 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54794 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43622 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43628 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43630 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43630 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33794 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33804 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33818 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33818 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49552 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49568 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49574 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49590 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49596 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49610 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49616 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49622 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49634 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49640 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49644 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49652 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38012 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38024 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34024 - "POST /api/inference/test HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34026 - "POST /api/docs/refresh HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34028 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34044 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34050 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34050 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57760 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57770 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57774 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57780 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57796 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57802 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59898 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59912 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59928 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59928 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59462 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59482 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59486 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59500 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59504 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36656 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36660 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59392 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59402 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59406 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59414 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59418 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51742 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51746 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51750 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51746 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46682 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46690 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46704 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46714 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46722 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46726 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38762 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38776 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38778 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38778 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44128 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44152 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44162 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44170 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44172 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57150 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57166 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57172 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57166 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49148 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49164 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49174 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49190 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49194 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49208 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43924 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43932 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43946 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43924 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53816 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53822 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53824 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53828 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53840 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53854 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46060 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46074 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46084 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46084 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48240 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48250 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48260 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48276 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48278 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48280 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37880 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37894 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37906 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37906 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39386 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39402 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39412 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39420 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39436 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39444 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55352 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55356 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55370 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55356 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33148 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33162 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33168 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33176 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33186 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33190 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39784 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39786 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39802 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39802 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58500 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58512 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58518 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58526 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58542 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58546 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52800 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52814 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52822 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52822 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36166 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36168 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36178 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36180 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36194 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36206 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53808 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53822 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53838 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53838 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44652 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44666 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44674 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44688 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44704 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44714 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35748 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35754 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35770 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35770 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45030 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45036 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45046 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45048 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45062 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45072 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53368 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53370 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53380 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53370 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48712 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48716 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48732 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48744 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48756 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48764 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54912 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54936 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53780 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53790 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53798 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53802 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53814 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53824 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44260 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44272 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44274 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44272 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59406 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59420 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59422 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59432 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59438 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59450 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35110 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35114 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35124 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35114 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60902 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60904 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60908 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60910 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60922 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60938 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46678 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46692 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46698 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46698 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60350 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60352 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60354 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60370 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60376 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60380 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60832 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60848 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60852 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60848 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43164 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43180 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43194 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43198 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43208 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43222 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37036 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37046 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37056 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37046 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34630 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34632 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34646 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34662 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34674 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34686 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59734 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59736 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59744 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59744 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47738 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47750 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47756 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47770 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47776 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47790 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56038 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56050 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56056 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56050 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44294 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44304 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44310 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44314 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44328 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44332 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33138 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33150 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33152 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33152 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60722 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60738 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60742 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60758 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60770 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60786 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33462 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33472 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33474 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33472 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44438 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44446 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44450 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44458 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44468 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44484 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40494 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40506 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40508 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40508 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48236 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48242 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48258 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48262 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48278 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48290 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51632 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51646 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51632 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43858 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43874 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43880 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43884 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43896 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43900 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56242 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56248 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56252 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56248 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41102 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41116 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41120 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41124 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41130 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41138 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34438 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34442 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34450 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34450 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36346 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36362 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36372 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36374 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36386 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36398 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60458 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60470 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37426 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37432 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37438 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37446 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37448 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37452 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52922 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52924 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52930 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52924 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42018 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42022 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42028 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42030 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42038 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42050 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49092 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49094 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49104 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49104 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53718 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53734 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53742 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53744 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53760 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53776 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34870 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34882 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34896 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34882 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35334 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35340 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35346 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35352 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35362 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35374 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34442 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34456 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34466 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34456 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53808 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53824 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53826 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53838 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53848 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53852 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45930 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45940 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45950 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45940 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50190 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50206 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50222 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50226 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50234 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50246 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44384 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44390 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44406 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44384 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55018 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55026 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55028 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55040 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55044 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55058 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50500 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50504 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50516 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50516 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37096 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37102 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37118 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37130 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37144 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37150 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51884 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51898 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51914 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51914 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54896 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54898 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54902 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54916 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54936 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37518 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37520 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37536 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37520 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56604 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56630 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56636 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56662 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34506 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34522 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34536 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34522 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55024 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55032 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55046 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55062 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55064 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55080 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46894 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46910 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46922 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46910 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47208 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47222 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47230 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47244 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47250 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47260 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59096 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59102 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59104 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59102 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55414 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55418 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55430 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55444 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55460 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55468 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58054 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58070 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58074 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58070 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35270 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35282 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35290 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35302 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35314 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35326 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41372 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41380 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41390 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41390 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43056 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43072 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43076 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43080 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43086 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43100 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38642 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38650 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38662 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38650 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36176 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36188 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36202 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36204 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36206 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36210 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53510 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53526 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53542 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53526 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54802 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54816 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54822 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54832 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54838 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54854 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48212 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48216 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48220 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48216 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54422 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54432 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54434 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54440 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54444 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54446 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59226 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59236 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59236 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56500 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56508 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56522 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56530 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56536 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59412 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59424 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59434 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59434 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43240 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43252 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43266 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43274 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43278 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43294 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41358 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41370 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41380 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41358 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49306 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49322 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49338 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49348 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49358 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49360 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47530 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47546 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47562 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47546 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34962 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34966 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34982 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34990 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35002 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35006 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37630 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37632 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37632 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48268 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48278 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48280 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48288 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48292 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48294 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49774 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49778 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49790 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49790 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38010 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38016 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38030 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38042 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38056 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38064 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57882 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57888 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57898 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57888 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57364 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57372 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57388 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57404 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57406 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57410 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45050 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45052 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45062 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45062 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44302 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44318 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44324 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44340 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44352 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44364 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58138 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58146 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58162 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58146 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48072 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48080 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48092 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48098 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48112 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48126 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39450 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39454 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39466 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39466 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52032 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52038 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52042 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52044 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52054 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52066 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33816 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33826 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33830 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33826 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59414 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59430 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59442 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59456 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59480 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56994 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57010 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57012 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57012 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41504 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41516 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41520 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41522 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41524 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55158 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55158 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47454 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47458 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47466 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47472 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47474 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47476 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48866 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48882 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48884 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48884 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35610 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35622 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35630 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35646 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35656 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35662 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54952 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54960 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54960 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48218 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48232 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48246 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48252 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48268 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48282 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51138 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51142 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51150 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51142 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43924 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43934 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43940 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43944 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43952 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43954 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37532 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37534 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37538 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37534 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59600 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59612 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59616 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59620 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59636 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59644 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46580 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46596 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46602 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46596 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46540 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46550 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46560 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46568 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46572 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46582 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45198 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45202 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45210 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45202 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53184 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53186 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53198 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53208 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53232 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38930 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38932 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38948 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38948 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41168 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41172 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41188 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41198 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41212 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41214 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43034 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43042 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43058 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43042 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55258 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55270 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55276 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55290 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55300 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55310 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58508 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58518 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58532 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58518 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34260 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34264 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34268 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34276 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34286 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34294 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39890 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39902 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39908 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39902 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59970 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59990 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59996 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60004 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60020 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34838 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34848 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34858 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34848 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44334 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44348 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44350 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44356 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44360 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44370 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53652 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53656 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53668 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53656 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43292 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43294 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43310 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43318 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43328 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43342 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38558 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38570 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38586 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38570 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47848 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47850 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47864 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47872 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47882 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47896 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52726 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52732 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52748 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52732 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56368 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56374 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56388 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56400 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56410 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56418 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36260 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36262 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36264 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36262 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32818 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32826 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32842 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32858 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32860 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:32868 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56928 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56942 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56954 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56954 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39152 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39168 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39182 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39188 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39200 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39202 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55452 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55458 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55466 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55466 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51570 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51576 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51578 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51584 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51600 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51614 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42234 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42244 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42248 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42244 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36668 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36674 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36690 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36692 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36694 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36708 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42050 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42066 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42080 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42066 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35530 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35538 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35544 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35548 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35560 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55468 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55476 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55484 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55476 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51170 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51176 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51192 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51208 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51212 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51222 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49762 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49772 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59218 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59230 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59240 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59260 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59276 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53420 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53422 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53430 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53430 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40580 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40586 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40598 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40602 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40616 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40630 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37642 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37646 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37652 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37646 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46304 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46318 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46328 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46338 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46346 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46360 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33442 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33454 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33466 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33466 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40176 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40190 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40202 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40212 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40222 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40236 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50398 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50408 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50412 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50408 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40982 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40992 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41000 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41002 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41008 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41022 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34678 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34692 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34708 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34692 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35278 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35292 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35298 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35310 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35324 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35330 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49806 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49812 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49814 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49814 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35724 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35738 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35748 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35764 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35774 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35778 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35218 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35220 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35222 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35222 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53728 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53736 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53752 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53762 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53766 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53780 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42856 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42866 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42878 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42866 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57482 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57498 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57508 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57520 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57526 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57528 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34000 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34010 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34016 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34016 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45868 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45870 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45882 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45896 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45904 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45914 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52604 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52610 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52622 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52610 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46694 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46704 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46716 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46718 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46732 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46736 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58412 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58424 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58428 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58428 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44688 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44690 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44694 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44700 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44714 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44730 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54132 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54138 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54148 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54148 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39472 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39484 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39496 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39498 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39514 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39520 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40918 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40932 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40940 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40932 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55584 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55588 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55596 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55612 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55618 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55628 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34798 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34814 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34830 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34830 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60464 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60476 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60478 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60484 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60496 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60502 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52028 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52030 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52044 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52030 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51862 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51866 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51880 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51890 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51900 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51902 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49818 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49820 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49836 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49820 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49038 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49054 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49064 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49068 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49072 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49078 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55158 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50838 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50856 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50868 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50878 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50886 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35542 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35546 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36456 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36466 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36478 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36492 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36500 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36502 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38410 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38412 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38428 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38412 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51324 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51332 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51344 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51348 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51364 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51378 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39350 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39360 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39370 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39370 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52796 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52806 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52814 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52830 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52832 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52846 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53998 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54006 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54010 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54010 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50368 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50380 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50386 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50406 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50414 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39230 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39236 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39250 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39250 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49320 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49328 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49336 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49350 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49364 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49370 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39882 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39886 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39890 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39890 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39164 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39166 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39170 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39184 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39188 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39204 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56014 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56022 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53686 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53696 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53700 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53712 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53714 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53728 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45052 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45064 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45068 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45068 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60168 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60170 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60172 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60180 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60188 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60200 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37146 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37160 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37174 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37174 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42444 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42454 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42468 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42474 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42486 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42500 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55914 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55920 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55920 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51498 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51504 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51516 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51528 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51542 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51546 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36662 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36678 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57634 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57636 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57650 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57654 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57670 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57672 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57488 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57502 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57514 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57502 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41628 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41640 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41652 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41668 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41682 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41684 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52768 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52776 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52790 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52776 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36102 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36104 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36118 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36128 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36138 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36146 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36266 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36282 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36294 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36282 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45598 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45610 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45622 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45634 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45646 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45656 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48316 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48322 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48326 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48326 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46274 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46284 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46290 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46294 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46296 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46312 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59400 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59422 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56636 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56642 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56664 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56678 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40724 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40732 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40734 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40732 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33320 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33330 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33334 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33346 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33352 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33362 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42568 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42580 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42584 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42584 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47266 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47272 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47274 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47288 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47298 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47306 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55968 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55982 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55994 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55982 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39552 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39554 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39568 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39582 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39588 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39604 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53370 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53382 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53396 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53382 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36562 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36578 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36586 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36600 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36602 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36614 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59314 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59320 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59336 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59336 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54572 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54578 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54594 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54608 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54624 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54636 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36378 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36384 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36390 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36384 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58892 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58906 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58910 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58922 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58932 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58948 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59010 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59018 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59026 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59026 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41066 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41072 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41084 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41098 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41100 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41102 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33248 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33262 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33262 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38192 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38194 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38200 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38208 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38214 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38220 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45786 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45802 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45816 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45816 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56896 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56902 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56904 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56930 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56944 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44950 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44966 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44968 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44968 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53296 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53304 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53310 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53326 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53350 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50366 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50370 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50372 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50372 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43678 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43690 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43704 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43718 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43732 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43742 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33622 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33638 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33622 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49060 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49070 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49076 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49092 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49096 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49110 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37030 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37040 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37054 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37054 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43070 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43072 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43074 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43090 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43102 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43118 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44774 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44778 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44788 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44778 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36654 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36668 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36670 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36684 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36700 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36710 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38318 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38328 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38332 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38332 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36546 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36554 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36562 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36566 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36570 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36580 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40888 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40896 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40898 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40896 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38400 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38406 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38418 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38424 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38430 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38442 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38726 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38740 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38756 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38740 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45638 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45640 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45652 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45658 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45664 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45672 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40310 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40318 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40320 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40318 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46132 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46140 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46152 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46166 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46174 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46180 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40674 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40686 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40688 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40686 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37122 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37128 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37144 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37154 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37164 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37170 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35036 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35050 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35056 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35050 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44248 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44252 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44258 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44272 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44288 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44304 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37046 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37050 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37052 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37052 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44888 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44902 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44914 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44926 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44942 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44958 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54262 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54272 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54280 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54280 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33102 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33112 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33114 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33120 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33136 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33150 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52104 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52106 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52110 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52106 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42554 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42564 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42580 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42594 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42604 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42608 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36834 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36842 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36844 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36842 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46244 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46256 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46258 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46274 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46278 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46292 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40310 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40314 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40322 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40322 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54648 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54654 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54658 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54670 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54688 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40468 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40482 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40490 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40482 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37332 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37342 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37344 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37360 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37366 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37378 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46252 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46268 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46274 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46268 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59552 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59554 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59568 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59576 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59578 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59592 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58126 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58134 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58138 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58134 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37324 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37334 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37350 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37356 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37358 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37372 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39104 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39116 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39120 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39116 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49382 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49394 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49414 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49416 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49420 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48492 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48502 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48512 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48512 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52374 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52390 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52396 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52410 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52416 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52428 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50480 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50492 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50498 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50492 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45028 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45030 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45042 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45052 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45066 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45078 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50562 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50566 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50576 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50576 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37508 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37522 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37536 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37548 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37558 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37572 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37296 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37310 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37324 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37324 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40616 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40620 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40634 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40644 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40646 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:40652 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35118 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35122 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35132 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35122 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37612 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37626 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37630 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37646 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37648 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:37664 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46196 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46206 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46216 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46216 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36388 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36396 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36406 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36418 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36432 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36444 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58636 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58644 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58648 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58662 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58670 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58672 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58688 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58690 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58700 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58704 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58706 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58710 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54712 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54724 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54738 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54738 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55258 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55274 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55286 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55296 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55304 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55308 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35546 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35560 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35562 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35562 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48208 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48218 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48230 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48244 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48254 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48264 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44788 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44790 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44792 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44808 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44824 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44808 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44826 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44842 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44858 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44868 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44882 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44898 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44906 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44910 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44920 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44924 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53986 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53998 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54002 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53998 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54006 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54020 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54030 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54030 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55150 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55162 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55176 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55188 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55210 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59414 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59424 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59428 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59428 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35596 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35598 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35608 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35618 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35624 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35618 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35634 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35636 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35640 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35654 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53934 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53946 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53948 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53946 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33272 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33282 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33292 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33292 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39870 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39874 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39890 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39898 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39910 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39916 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57516 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57530 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57534 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57530 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32920 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32932 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32942 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32942 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33132 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33148 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33160 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33174 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33180 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33192 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53924 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53940 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53940 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52822 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52836 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52844 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52844 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43394 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43410 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43412 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43428 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43434 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43444 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34086 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34096 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34098 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34098 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34834 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34842 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34852 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34852 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50662 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50676 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50690 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50702 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50716 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50720 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50096 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50110 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50120 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50110 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47738 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47744 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47748 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47744 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48808 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48818 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48820 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48834 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48842 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48844 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41070 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41076 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41092 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41076 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39580 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39594 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39610 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39610 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56928 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56940 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56946 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56952 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56964 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56976 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41022 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41026 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41036 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41026 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48126 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48136 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48146 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48136 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44278 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44288 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44304 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44318 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44332 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44338 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35740 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35756 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35772 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35756 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49938 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49944 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49950 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49944 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34040 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34046 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34062 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34076 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34092 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34104 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58012 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58016 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58020 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58016 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35160 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35164 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35178 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35160 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49142 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49152 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49166 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49180 - "GET /api/inference/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/docs/summary HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49206 - "GET /api/mcp/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44588 - "GET /api/status/system HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44604 - "GET /api/lm/indicator HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44610 - "GET /api/rerank/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44610 - "GET /api/status/explain HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [665352]

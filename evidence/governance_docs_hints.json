@@ -1,0 +1,13 @@
+{
+  "type": "hints_envelope",
+  "version": "1.0",
+  "schema": "governance.docs-hints.v1",
+  "generated_at": "2025-11-27T19:29:49.870161+00:00",
+  "items": [
+    "governance.docs: 19 rule/doc file(s) modified: .cursor/rules/027-docs-sync-gate.mdc, .cursor/rules/046-ci-hermetic-fallbacks.mdc, .cursor/rules/050-ops-contract.mdc (+16 more)",
+    "governance.rules: New rule detected: 010-task-brief.mdc"
+  ],
+  "count": 2,
+  "context": "governance_documentation",
+  "rule_reference": "026, 065"
+}

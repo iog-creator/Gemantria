@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "checks": {
+    "receipt_exists": true,
+    "receipt_json_valid": true,
+    "tv_suite_ok": true,
+    "pytest_exit_zero": true
+  },
+  "counts": {
+    "pytest_exit_code": 0
+  },
+  "details": {
+    "path": "/home/mccoy/Projects/Gemantria.v2/evidence/tv_coverage_receipt.json",
+    "suite": "TV-01..TV-05",
+    "timestamp": "2025-11-20T23:43:12.554390Z"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "checks": {
+    "coverage_exists": true,
+    "coverage_json_valid": true,
+    "codes_valid": true,
+    "all_codes_present_in_coverage": true,
+    "all_codes_marked_covered": true
+  },
+  "counts": {
+    "violation_codes": 7,
+    "missing_coverage_entries": 0,
+    "uncovered_codes": 0
+  },
+  "details": {
+    "path": "/home/mccoy/Projects/Gemantria.v2/evidence/gatekeeper_coverage.json",
+    "missing_coverage_entries": [],
+    "uncovered_codes": []
+  }
+}

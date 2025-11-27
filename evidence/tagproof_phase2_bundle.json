@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "timestamp": "2025-11-21T16:14:32.353114+00:00",
+  "components": {
+    "tv_coverage": {
+      "error": "missing"
+    },
+    "gatekeeper_coverage": {
+      "error": "missing"
+    },
+    "regeneration_receipt": {
+      "error": "missing"
+    },
+    "regeneration_guard": {
+      "error": "missing"
+    },
+    "browser_screenshot": {
+      "error": "missing"
+    },
+    "tv_coverage_guard": {
+      "ok": true,
+      "checks": {
+        "receipt_exists": true,
+        "receipt_json_valid": true,
+        "tv_suite_ok": true,
+        "pytest_exit_zero": true
+      },
+      "counts": {
+        "pytest_exit_code": 0
+      },
+      "details": {
+        "path": "/home/mccoy/Projects/Gemantria.v2/evidence/tv_coverage_receipt.json",
+        "suite": "TV-01..TV-05",
+        "timestamp": "2025-11-20T23:43:12.554390Z"
+      }
+    },
+    "gatekeeper_coverage_guard": {
+      "ok": true,
+      "checks": {
+        "coverage_exists": true,
+        "coverage_json_valid": true,
+        "codes_valid": true,
+        "all_codes_present_in_coverage": true,
+        "all_codes_marked_covered": true
+      },
+      "counts": {
+        "violation_codes": 7,
+        "missing_coverage_entries": 0,
+        "uncovered_codes": 0
+      },
+      "details": {
+        "path": "/home/mccoy/Projects/Gemantria.v2/evidence/gatekeeper_coverage.json",
+        "missing_coverage_entries": [],
+        "uncovered_codes": []
+      }
+    },
+    "mcp_db_ro_guard": {
+      "ok": true,
+      "probe_requested": false,
+      "used_psql": true,
+      "dsn_present": true,
+      "notes": [
+        "probe skipped (STRICT_DB_PROBE=0)"
+      ]
+    },
+    "mcp_catalog_summary": {
+      "generated_at": "2025-11-21T16:14:32.352922+00:00",
+      "available": false,
+      "tools_count": 0,
+      "error": "DSN not available"
+    }
+  },
+  "meta": {
+    "phase": 2,
+    "plan": "PLAN-080",
+    "notes": "Phase-2 tagproof bundle",
+    "errors": {
+      "tv_coverage": "missing",
+      "gatekeeper_coverage": "missing",
+      "regeneration_receipt": "missing",
+      "regeneration_guard": "missing",
+      "browser_screenshot": "missing"
+    }
+  }
+}

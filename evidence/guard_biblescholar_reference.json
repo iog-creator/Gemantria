@@ -1,0 +1,27 @@
+{
+  "guard": "guard_biblescholar_reference",
+  "episode": "Phase-6P",
+  "mode": "HINT",
+  "overall_ok": true,
+  "checks": {
+    "file_exists": {
+      "exists": true
+    },
+    "schema": {
+      "schema_ok": true
+    },
+    "structure": {
+      "structure_ok": true,
+      "issues": []
+    },
+    "timestamp": {
+      "timestamp_ok": true,
+      "age_hours": 0.0001242475
+    },
+    "questions_structure": {
+      "questions_structure_ok": true,
+      "total_questions": 0,
+      "issues": null
+    }
+  }
+}

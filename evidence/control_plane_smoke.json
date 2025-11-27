@@ -1,0 +1,38 @@
+{
+  "schema": "control",
+  "generated_at": "2025-11-21T06:56:21.556168+00:00",
+  "ok": true,
+  "connection_ok": true,
+  "tables": [
+    {
+      "name": "tool_catalog",
+      "insert_ok": true,
+      "select_ok": true,
+      "error": null
+    },
+    {
+      "name": "capability_rule",
+      "insert_ok": true,
+      "select_ok": true,
+      "error": null
+    },
+    {
+      "name": "doc_fragment",
+      "insert_ok": true,
+      "select_ok": true,
+      "error": null
+    },
+    {
+      "name": "capability_session",
+      "insert_ok": true,
+      "select_ok": true,
+      "error": null
+    },
+    {
+      "name": "agent_run",
+      "insert_ok": true,
+      "select_ok": true,
+      "error": null
+    }
+  ]
+}

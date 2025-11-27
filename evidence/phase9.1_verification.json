@@ -1,0 +1,62 @@
+{
+  "phase": "9.1",
+  "status": "COMPLETE",
+  "timestamp": "2025-11-22T21:39:01Z",
+  "verification": {
+    "mcp_schema": {
+      "status": "created",
+      "schema_file": "db/sql/078_mcp_knowledge.sql",
+      "tables": ["mcp.tools", "mcp.endpoints", "mcp.logs"],
+      "view": "mcp.v_catalog"
+    },
+    "biblescholar_envelope": {
+      "status": "ingested",
+      "file": "share/mcp/biblescholar_envelope.json",
+      "tools_inserted": 4,
+      "tools_updated": 0,
+      "endpoints_inserted": 4,
+      "endpoints_updated": 0,
+      "tools": [
+        "bible.semantic_search",
+        "bible.cross_language",
+        "bible.lexicon_lookup",
+        "bible.verse_insights"
+      ]
+    },
+    "kb_registry": {
+      "status": "updated",
+      "biblescholar_docs_count": 6,
+      "sample_docs": [
+        "schemas/biblescholar/SCHEMA_INDEX.md",
+        "docs/rfcs/RFC-081-unified-ui-and-biblescholar-module.md",
+        "docs/projects/biblescholar/ARCHITECTURE.md",
+        "docs/projects/biblescholar/README.md",
+        "schemas/biblescholar/README.md",
+        "agentpm/biblescholar/AGENTS.md"
+      ]
+    },
+    "pm_workflow": {
+      "status": "documented",
+      "rule_file": ".cursor/rules/053-pm-dms-integration.mdc",
+      "workflow_ready": true
+    }
+  },
+  "database_status": {
+    "connection": "active",
+    "dsn_source": "centralized_loader",
+    "mcp_schema_exists": true,
+    "tools_accessible": true,
+    "kb_docs_accessible": true
+  },
+  "next_actions": {
+    "pm_queries": [
+      "pmagent kb registry by-subsystem --owning-subsystem=biblescholar",
+      "Query control.mcp_tool_catalog WHERE tags @> '{biblescholar}'",
+      "pmagent status kb",
+      "pmagent plan kb list"
+    ],
+    "phase_10_ready": true,
+    "note": "PM can now use DMS-first workflow for Phase 10 planning"
+  }
+}
+

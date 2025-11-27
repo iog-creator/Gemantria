@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "checks": {
+    "ok_browser": true,
+    "ok_index": true,
+    "ok_catalog": true,
+    "ok_endpoints": true,
+    "ok_compliance_summary": true,
+    "ok_compliance_timeseries": true,
+    "ok_compliance_heatmap": true,
+    "ok_violations": true,
+    "ok_guard_receipts": true,
+    "endpoints_count": 3
+  },
+  "screenshots": {
+    "index": "evidence/webproof/index.png",
+    "catalog": "evidence/webproof/catalog.png",
+    "compliance_summary": "evidence/webproof/compliance_summary.png",
+    "compliance_timeseries": "evidence/webproof/compliance_timeseries.png",
+    "compliance_heatmap": "evidence/webproof/compliance_heatmap.png",
+    "violations": "evidence/webproof/violations.png",
+    "guard_receipts": "evidence/webproof/guard_receipts.png"
+  }
+}

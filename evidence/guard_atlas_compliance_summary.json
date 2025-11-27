@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "errors": [],
+  "checks": {
+    "compliance_summary_json": {
+      "ok": true,
+      "errors": []
+    },
+    "dashboard_html": {
+      "ok": true,
+      "errors": []
+    }
+  }
+}

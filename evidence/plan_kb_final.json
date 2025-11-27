@@ -1,0 +1,28 @@
+{
+  "available": true,
+  "total_items": 2,
+  "by_subsystem": {
+    "agentpm": 1,
+    "webui": 1
+  },
+  "items": [
+    {
+      "id": "subsystem:agentpm",
+      "title": "Subsystem 'agentpm' documentation",
+      "subsystem": "agentpm",
+      "type": "other",
+      "severity": "low_coverage",
+      "reason": "Subsystem has only 1 document(s) (low coverage)",
+      "suggested_action": "Add more documentation for agentpm subsystem"
+    },
+    {
+      "id": "subsystem:webui",
+      "title": "Subsystem 'webui' documentation",
+      "subsystem": "webui",
+      "type": "other",
+      "severity": "low_coverage",
+      "reason": "Subsystem has only 1 document(s) (low coverage)",
+      "suggested_action": "Add more documentation for webui subsystem"
+    }
+  ]
+}

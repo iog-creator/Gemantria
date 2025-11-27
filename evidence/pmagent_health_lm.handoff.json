@@ -1,0 +1,17 @@
+✓ Model already installed: granite4:tiny-h
+✓ Model already installed: granite-embedding:278m
+⚠ Model not found: Christian-Bible-Expert-v2.0-12B
+Pulling model: Christian-Bible-Expert-v2.0-12B...
+Pull status: 
+✓ Model already installed: granite4:tiny-h
+{
+  "ok": false,
+  "mode": "lm_off",
+  "details": {
+    "endpoint": "http://127.0.0.1:11434",
+    "provider": "ollama",
+    "errors": [
+      "models_missing: Christian-Bible-Expert-v2.0-12B"
+    ]
+  }
+}

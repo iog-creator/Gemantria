@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "mode": "HINT",
+  "schema_exists": false,
+  "tables_present": false,
+  "view_exists": false,
+  "details": {
+    "schema": {
+      "exists": false,
+      "error": null
+    },
+    "notes": [
+      "mcp schema missing"
+    ]
+  },
+  "generated_at": "2025-11-21T18:19:33.169763Z"
+}

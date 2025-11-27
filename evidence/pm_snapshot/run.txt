@@ -1,0 +1,11 @@
+EVID: DOC_PATH /home/mccoy/Projects/Gemantria.v2/share/pm.snapshot.md
+EVID: JSON_PATH /home/mccoy/Projects/Gemantria.v2/evidence/pm_snapshot/snapshot.json
+EVID: MANIFEST_COUNT 40
+EVID: BIBLE_DSN_REDACT postgresql://<REDACTED>/bible_db
+EVID: GEMATRIA_DSN_REDACT postgresql://<REDACTED>/gematria
+EVID: DB_HEALTH_OK True
+EVID: DB_HEALTH_MODE ready
+EVID: OVERALL_OK True
+EVID: LM_MODE lm_ready
+EVID: REALITY_CHECK_OK True
+EVID: AI_TRACKING_MODE db_on

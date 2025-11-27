@@ -1,0 +1,11 @@
+{
+  "generated_at": "2025-11-24T16:31:10.039298+00:00",
+  "total_rules_scanned": 71,
+  "conflicts_found": 0,
+  "findings": [],
+  "notes": [
+    "Scanned 71 rule files from /home/mccoy/Projects/Gemantria.v2/.cursor/rules",
+    "Known conflicts detected using pattern matching",
+    "Recommendation: Review findings and update rules to resolve conflicts"
+  ]
+}

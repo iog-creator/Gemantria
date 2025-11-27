@@ -1,0 +1,17 @@
+{
+  "episode": "E88",
+  "ok": true,
+  "checks": {
+    "violation_pages": {
+      "all_pages_exist": true,
+      "missing_pages": [],
+      "found_pages": [],
+      "total_codes": 0
+    },
+    "backlinks": {
+      "all_backlinks_present": true,
+      "pages_with_issues": [],
+      "pages_ok": []
+    }
+  }
+}

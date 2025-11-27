@@ -1,0 +1,32 @@
+[Unit]
+Description=Gemantria API Server
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+WorkingDirectory=/home/mccoy/Projects/Gemantria.v2
+Environment="PATH=/home/mccoy/Projects/Gemantria.v2/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="VIRTUAL_ENV=/home/mccoy/Projects/Gemantria.v2/.venv"
+Environment="API_PORT=8000"
+Environment="API_HOST=0.0.0.0"
+ExecStart=/home/mccoy/Projects/Gemantria.v2/.venv/bin/python3 -m uvicorn src.services.api_server:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gemantria-api
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=2G
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+

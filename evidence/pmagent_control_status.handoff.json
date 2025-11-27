@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "mode": "ready",
+  "reason": null,
+  "tables": {
+    "public.ai_interactions": {
+      "present": true,
+      "row_count": 1,
+      "latest_created_at": "2025-11-07T11:11:49.732991-08:00"
+    },
+    "public.governance_artifacts": {
+      "present": true,
+      "row_count": 126,
+      "latest_created_at": "2025-11-20T11:11:09.979421-08:00"
+    },
+    "control.agent_run": {
+      "present": true,
+      "row_count": 0,
+      "latest_created_at": null
+    },
+    "control.tool_catalog": {
+      "present": true,
+      "row_count": 0,
+      "latest_created_at": null
+    },
+    "gematria.graph_stats_snapshots": {
+      "present": true,
+      "row_count": 0,
+      "latest_created_at": null
+    }
+  }
+}

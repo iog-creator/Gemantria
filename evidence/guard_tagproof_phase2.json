@@ -1,0 +1,26 @@
+{
+  "ok": false,
+  "checks": {
+    "bundle_exists": true,
+    "tv_coverage_ok": true,
+    "gatekeeper_coverage_ok": true,
+    "regeneration_ok": true,
+    "browser_screenshot_ok": true,
+    "mcp_db_ro_ok": false
+  },
+  "counts": {
+    "components_total": 5,
+    "components_missing": 1,
+    "components_ok": 4,
+    "components_failed": 0
+  },
+  "details": {
+    "mode": "STRICT",
+    "missing_components": [
+      "mcp_db_ro_guard"
+    ],
+    "component_errors": {
+      "mcp_db_ro_guard": "missing from bundle"
+    }
+  }
+}

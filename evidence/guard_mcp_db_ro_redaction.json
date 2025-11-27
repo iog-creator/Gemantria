@@ -1,0 +1,22 @@
+{
+  "ok": false,
+  "mode": "HINT",
+  "generated_at": "2025-11-21T18:19:33.373199Z",
+  "dsn_present": true,
+  "dsn_redacted": true,
+  "ro_access": false,
+  "view_accessible": false,
+  "details": {
+    "dsn_source": "unknown",
+    "ro_check": {
+      "read_ok": true,
+      "write_denied": false,
+      "error": null
+    },
+    "view_check": {
+      "exists": false,
+      "error": null
+    },
+    "error": "mcp.v_catalog view missing"
+  }
+}

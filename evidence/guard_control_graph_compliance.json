@@ -1,0 +1,32 @@
+{
+  "guard": "guard_control_graph_compliance",
+  "episode": "E90",
+  "overall_ok": true,
+  "checks": {
+    "file_exists": {
+      "exists": true
+    },
+    "schema": {
+      "schema_ok": true
+    },
+    "structure": {
+      "structure_ok": true,
+      "issues": []
+    },
+    "timestamp": {
+      "timestamp_ok": true,
+      "age_hours": 0.00012992138888888888
+    },
+    "metrics_present": {
+      "metrics_present": false,
+      "counts": {
+        "tools": 0,
+        "nodes": 0,
+        "patterns": 0,
+        "batches": 0
+      },
+      "total_entities": 0
+    }
+  },
+  "mode": "HINT"
+}

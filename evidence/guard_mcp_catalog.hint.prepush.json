@@ -1,0 +1,13 @@
+{
+  "ok_repo": true,
+  "exists": {
+    "catalog": true,
+    "endpoints_sql": true,
+    "atlas_flow": true
+  },
+  "notes": [
+    "HINT: Catalog + endpoints + atlas flow should be present.",
+    "HINT: Budget<=12 endpoints; outputs must be bounded JSON (k<=25).",
+    "HINT: RO-on-tag DSN policy enforced by STRICT guard and CI."
+  ]
+}
