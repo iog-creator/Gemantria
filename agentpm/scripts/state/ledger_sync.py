@@ -26,8 +26,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from scripts.config.env import get_rw_dsn  # noqa: E402
 import psycopg  # noqa: E402
+
+from scripts.config.env import get_rw_dsn  # noqa: E402
 
 
 def compute_file_hash(file_path: Path) -> str:
@@ -90,8 +91,7 @@ def sync_ledger() -> int:
 
     # Connect to database
     try:
-        with psycopg.connect(dsn) as conn:
-            with conn.cursor() as cur:
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
                 inserted = 0
                 skipped = 0
 

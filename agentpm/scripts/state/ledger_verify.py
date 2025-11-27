@@ -56,18 +56,26 @@ def generate_intelligent_analysis(summary: dict) -> str | None:
 Status: {context["verification_status"]}
 Total artifacts tracked: {context["total_artifacts"]}
 Current (in sync): {context["current_count"]}
-Stale (out of sync): {len(context["stale_artifacts"])} - {", ".join(context["stale_artifacts"]) if context["stale_artifacts"] else "none"}
-Missing: {len(context["missing_artifacts"])} - {", ".join(context["missing_artifacts"]) if context["missing_artifacts"] else "none"}
+Stale (out of sync): {len(context["stale_artifacts"])} - {
+    ", ".join(context["stale_artifacts"]) if context["stale_artifacts"] else "none"
+}
+Missing: {len(context["missing_artifacts"])} - {
+    ", ".join(context["missing_artifacts"]) if context["missing_artifacts"] else "none"
+}
 
 Provide a concise, actionable analysis (2-4 sentences) that:
 1. Explains what the verification found in plain language
 2. Identifies the specific issue(s) if any
-3. Provides clear next steps (e.g., "Run 'make state.sync' to update the ledger for AGENTS.md and MASTER_PLAN.md")
+3. Provides clear next steps (e.g., "Run 'make state.sync' to update the ledger for "
+   "AGENTS.md and MASTER_PLAN.md")
 4. Explains the impact (e.g., "This blocks reality.green from passing")
 
 Do not use generic phrases like "one or more checks failed". Be specific and actionable."""
 
-        system_prompt = "You are a system administrator assistant. Provide clear, specific, actionable guidance for fixing system state issues."
+        system_prompt = (
+            "You are a system administrator assistant. "
+            "Provide clear, specific, actionable guidance for fixing system state issues."
+        )
 
         # Call Granite explicitly for reasoning (per user requirement)
         # Get Granite model from config to ensure we use it directly
@@ -78,7 +86,12 @@ Do not use generic phrases like "one or more checks failed". Be specific and act
         try:
             # Use explicit model parameter to ensure Granite is used
             if granite_model:
-                analysis = chat(prompt, model=granite_model, model_slot="local_agent", system=system_prompt)
+                analysis = chat(
+                    prompt,
+                    model=granite_model,
+                    model_slot="local_agent",
+                    system=system_prompt,
+                )
             else:
                 # Fallback to slot-based routing
                 analysis = chat(prompt, model_slot="local_agent", system=system_prompt)
@@ -158,8 +171,7 @@ def verify_ledger() -> tuple[int, dict]:
 
     # Connect to database
     try:
-        with psycopg.connect(dsn) as conn:
-            with conn.cursor() as cur:
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
                 results = []
                 all_current = True
                 stale = []
@@ -235,11 +247,15 @@ def verify_ledger() -> tuple[int, dict]:
 
                 for result in results:
                     status_icon = "✓" if result["status"] == "current" else "✗"
-                    print(f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}")
+                    name = result['name']
+                    source = result['source_of_truth']
+                    status = result['status']
+                    print(f"{name:<40} {source:<30} {status_icon} {status:<10}")
 
                 print("-" * 80)
+                current_count = len([r for r in results if r['status'] == 'current'])
                 print(
-                    f"Total: {len(results)}, Current: {len([r for r in results if r['status'] == 'current'])}, "
+                    f"Total: {len(results)}, Current: {current_count}, "
                     f"Stale: {len(stale)}, Missing: {len(missing)}"
                 )
                 print("=" * 80)
@@ -275,9 +291,11 @@ def verify_ledger() -> tuple[int, dict]:
                         # Fallback to rule-based message if LM unavailable
                         print("💡 Next steps:")
                         if stale:
-                            print(f"   Run 'make state.sync' to update ledger for: {', '.join(stale)}")
+                            stale_str = ', '.join(stale)
+                            print(f"   Run 'make state.sync' to update ledger for: {stale_str}")
                         if missing:
-                            print(f"   Run 'make state.sync' to add missing entries: {', '.join(missing)}")
+                            missing_str = ', '.join(missing)
+                            print(f"   Run 'make state.sync' to add missing entries: {missing_str}")
                         print()
                 else:
                     print("✅ LEDGER VERIFICATION PASSED")

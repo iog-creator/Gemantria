@@ -81,7 +81,7 @@ def run_planning_prompt(
     elif planning_provider in ("ollama", "lmstudio"):
         # Route to Nemotron via Ollama/LM Studio adapter
         model_name = planning_model or "nvidia/nemotron-nano-12b-v2"
-        params = _nemotron_reasoning_params()
+        _nemotron_reasoning_params()  # Load params for model config
         system_prompt = NEMOTRON_REASONING_SYSTEM
 
         # Determine if fast mode is needed (based on prompt characteristics)

@@ -26,6 +26,7 @@ ignore = [
 
 # Hebrew/core modules legitimately use non-ASCII; allow ambiguous unicode there
 "src/core/**/*.py" = ["RUF001","RUF002","RUF003","I001","UP037"]
+"agentpm/modules/gematria/**/*.py" = ["RUF001"]  # Hebrew letters in test data and mappings
 
 # Graph entrypoint has import-order/bootstrap nuances; allow module-top import placement + style nit
 "src/graph/graph.py" = ["E402","UP028"]
@@ -47,3 +48,6 @@ ignore = [
 
 # Deprecated scripts: allow import placement for path setup
 "scripts/_deprecated/**/*.py" = ["E402"]
+
+# Exclude genai-toolbox notebooks from linting (external dependency)
+"genai-toolbox/**/*.ipynb" = ["F811", "F402"]

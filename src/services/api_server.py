@@ -3153,11 +3153,11 @@ async def get_patterns(
         import psycopg2
         import psycopg2.extras
         from scripts.config.env import get_rw_dsn
-    except ImportError:
+    except ImportError as err:
         raise HTTPException(
             status_code=500,
             detail="Database driver not available",
-        )
+        ) from err
 
     dsn = get_rw_dsn()
     if not dsn:
@@ -3245,7 +3245,7 @@ async def get_patterns(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to retrieve patterns: {e!s}",
-        )
+        ) from e
 
 
 @app.get("/api/v1/network/{concept_id}")
