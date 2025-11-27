@@ -383,7 +383,6 @@ def get_lm_model_config() -> dict[str, str | None]:
         "vision_provider": vision_provider,
         "vision_model": vision_model,
         "lmstudio_base_url": lmstudio_base_url,
-        "ollama_base_url": ollama_base_url,
     }
 
 
