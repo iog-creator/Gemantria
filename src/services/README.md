@@ -78,7 +78,7 @@ BIBLE_DB_DSN=postgresql://user:pass@localhost:5432/bible_db
 
 **Supported Models**:
 
-- **Embedding**: `text-embedding-bge-m3` (primary), `text-embedding-qwen3-embedding-0.6b` (fallback)
+- **Embedding**: `text-embedding-bge-m3` (primary)
 - **Bi-Encoder Proxy**: Semantic similarity via embedding cosine similarity (replaces reranker models)
 - **Theology**: `christian-bible-expert-v2.0-12b`
 - **Math**: `self-certainty-qwen3-1.7b-base-math`

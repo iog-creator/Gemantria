@@ -19,7 +19,7 @@ script_dir = Path(__file__).parent
 project_root = script_dir.parent
 sys.path.insert(0, str(project_root))
 
-from src.nodes.math_verifier import math_verifier_node  # noqa: E402
+from agentpm.modules.gematria.utils.math_verifier import math_verifier_node  # noqa: E402
 from src.infra.env_loader import ensure_env_loaded  # noqa: E402
 
 ensure_env_loaded()

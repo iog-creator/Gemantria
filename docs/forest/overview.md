@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-11-20 19:09:46
+Generated: 2025-11-27 11:29:49
 
 ## Active Rules
 
@@ -73,6 +73,8 @@ Generated: 2025-11-20 19:09:46
 - Rule 066-lm-studio-appimage-update: ---
 - Rule 067-atlas-webproof: Rule 067 — Atlas Webproof (Browser-Verified UI)
 - Rule 068-gpt-docs-sync: ---
+- Rule 069-always-use-dms-first: Rule 069 — Always Use DMS First (Planning Queries)
+- Rule 070-gotchas-check: ---
 
 ## CI Workflows
 

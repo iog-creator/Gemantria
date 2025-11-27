@@ -268,10 +268,41 @@ def main() -> int:
     else:
         print("❌ REALITY RED: One or more checks failed")
         print()
+        # Print failure summary prominently
+        print("FAILURE SUMMARY:")
+        print("-" * 60)
+        failed_checks = [check for check in checks if not check.passed]
+        for check in failed_checks:
+            print(f"❌ {check.name}: {check.message}")
+            if check.details:
+                if "issues" in check.details:
+                    for issue in check.details["issues"]:
+                        print(f"   • {issue}")
+                elif check.details.get("stale"):
+                    print(f"   • Stale artifacts: {', '.join(check.details['stale'])}")
+                elif check.details.get("missing"):
+                    print(f"   • Missing artifacts: {', '.join(check.details['missing'])}")
+                elif check.details.get("output"):
+                    # Show first few lines of output for context
+                    output_lines = check.details["output"].split("\n")[:5]
+                    for line in output_lines:
+                        if line.strip():
+                            print(f"   {line}")
+        print("-" * 60)
+        print()
         print("System is NOT ready. Fix the issues above before:")
         print("  - Declaring a feature 'complete'")
         print("  - Opening a PR for main")
         print("  - Generating a new share/ snapshot for other agents")
+        print()
+        print("Quick fixes:")
+        for check in failed_checks:
+            if "AGENTS.md" in check.name:
+                print("  - Run: make housekeeping  # Updates AGENTS.md files")
+            elif "Ledger" in check.name:
+                print("  - Run: make state.sync    # Updates ledger")
+            elif "Share" in check.name:
+                print("  - Run: make share.sync    # Syncs share/ directory")
         print()
         print("Run individual checks to diagnose:")
         print("  - make book.smoke              # DB health")

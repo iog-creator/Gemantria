@@ -54,7 +54,8 @@ def chat(
             raise RuntimeError("LM Studio is disabled (LM_STUDIO_ENABLED=false)")
 
         # Local LM Studio on 127.0.0.1 (no internet)
-        base_url = cfg.get("theology_lmstudio_base_url", "http://127.0.0.1:1234")
+        # Default to base_url from config (which defaults to 9994), not hardcoded 1234
+        base_url = cfg.get("theology_lmstudio_base_url") or cfg.get("base_url", "http://127.0.0.1:9994/v1")
         api_key = cfg.get("theology_lmstudio_api_key", "changeme")
 
         # Ensure base_url is localhost/127.0.0.1 (security check)
@@ -68,7 +69,11 @@ def chat(
         messages.append({"role": "user", "content": prompt})
 
         # Call LM Studio chat/completions endpoint
-        url = f"{base_url.rstrip('/')}/v1/chat/completions"
+        clean_base = base_url.rstrip("/")
+        if clean_base.endswith("/v1"):
+            clean_base = clean_base[:-3]
+        url = f"{clean_base}/v1/chat/completions"
+
         headers = {"Content-Type": "application/json"}
         if api_key and api_key != "changeme":
             headers["Authorization"] = f"Bearer {api_key}"
@@ -81,7 +86,8 @@ def chat(
         }
 
         try:
-            response = requests.post(url, json=payload, headers=headers, timeout=30.0)
+            # Increased timeout to 300s to allow for model loading
+            response = requests.post(url, json=payload, headers=headers, timeout=300.0)
             response.raise_for_status()
             data = response.json()
 

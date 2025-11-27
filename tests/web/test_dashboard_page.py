@@ -105,3 +105,44 @@ def test_dashboard_page_has_auto_refresh():
     content = response.text
     assert "setInterval" in content
     assert "30000" in content
+
+
+def test_dashboard_page_contains_rerank_metrics_tile():
+    """Test that /dashboard contains Rerank / Edge Strength Metrics tile."""
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+    content = response.text
+    assert "Rerank / Edge Strength Metrics" in content
+    assert "rerank-metrics-card" in content
+
+
+def test_dashboard_page_fetches_rerank_summary_api():
+    """Test that /dashboard page JavaScript fetches /api/rerank/summary."""
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+    content = response.text
+    assert "/api/rerank/summary" in content
+
+
+def test_dashboard_page_contains_rerank_chart_container():
+    """Test that /dashboard contains rerank chart container."""
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+    content = response.text
+    assert "rerank-chart-container" in content
+    assert "rerank-chart" in content
+    assert "Edge Strength Distribution" in content
+
+
+def test_dashboard_page_contains_rerank_explanatory_text():
+    """Test that /dashboard contains explanatory text about edge_strength."""
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+    content = response.text
+    assert "Edge Strength" in content
+    # Check for edge strength formula components
+    assert "0.5" in content and "cosine" in content and "rerank_score" in content
+    assert "strong" in content.lower()
+    assert "weak" in content.lower()
+    assert "≥0.90" in content or "0.90" in content
+    assert "≥0.75" in content or "0.75" in content

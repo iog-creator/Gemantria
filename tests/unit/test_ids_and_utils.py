@@ -1,4 +1,4 @@
-from src.core.hebrew_utils import calc_string
+from agentpm.modules.gematria.utils.hebrew_utils import calc_string
 from src.core.ids import content_hash, normalize_hebrew, uuidv7_surrogate
 
 

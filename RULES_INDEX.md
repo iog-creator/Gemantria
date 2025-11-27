@@ -108,9 +108,9 @@
 | 047 | 047-reserved.mdc | RESERVED |
 | 048 | 048-reserved.mdc | RESERVED |
 | 049 | 049-gpt5-contract-v5.2.mdc | GPT-5 Contract v5.2 |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) — Strict activation + SSOT checks, LOUD FAIL pattern, evidence-first protocol, 4-block output standard. Tool priority: local+gh → codex → gemini/mcp. |
+| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) — Required evidence set for PR handoffs, browser verification mandatory for visual/web outputs, non-required reviews advisory only. |
+| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) — Tool order: local+gh → codex (if available) → gemini/mcp for long governance files. Planning lane (Gemini CLI + Codex) for backend planning/coding/math; non-theology. |
 | 053 | 053-idempotence.mdc | Idempotent Baseline |
 | 062 | (inline) | Rerank thresholds: HINT on main, STRICT on tags; SSOT in `configs/rerank_blend.json`; guard `guard.rerank.thresholds` |
 | 054 | 054-reuse-first.mdc | Reuse-First, No-Scaffold-When-Exists |
@@ -129,7 +129,8 @@
 | 066 | 066-lm-studio-appimage-update.mdc | LM Studio AppImage update and dock integration procedure |
 | 067 | 067-atlas-webproof.mdc | Atlas Webproof (Browser-Verified UI) — Run `make atlas.viewer.validate` and `make atlas.webproof`; attach JSON + screenshots; `STRICT_WEBPROOF=1` for tags. **Always-Apply for docs/atlas/* edits.** |
 | 068 | 068-gpt-docs-sync.mdc | GPT Documentation Sync (AlwaysApply) |
-| 069 | 069-reality-green.mdc | Reality Green Truth Gate (Option C - DB is SSOT) — `make reality.green` validates DB health, control-plane health, AGENTS.md sync, share sync, and required exports. Only passes when system is up to date and consistent. Required before: declaring features complete, opening PRs for main, generating share/ snapshots. |
+| 069 | 069-always-use-dms-first.mdc | Rule 069 — Always Use DMS First (Planning Queries) |
+| 070 | 070-gotchas-check.mdc | 070 — Gotchas Check (AlwaysApply) — Mandatory pre-work and post-work gotchas analysis for all workflows |
 
 ---
 
@@ -163,3 +164,10 @@
 - [Doc Control Panel Data Contract](docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md) - JSON export formats for orchestrator dashboard (DM-002)
 - [PM + OPS Behavioral Contract](docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md)
 - [Cursor Workflow Contract (Installed)](docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md)
+
+## Planning Lane & Model Configuration Runbooks
+
+- [Gemini CLI Runbook](docs/runbooks/GEMINI_CLI.md) - Setup and usage for Gemini CLI planning provider
+- [Codex CLI Runbook](docs/runbooks/CODEX_CLI.md) - Setup and usage for OpenAI Codex CLI planning provider
+- [PM Agent Current vs Intended](docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md) - pmagent command status and capabilities
+- [Prompting Guide for Core LLM Models](Prompting%20Guide%20for%20Our%20Core%20LLM%20models.md) - Design-level spec for Granite 4.0 + BGE-M3 + Granite Reranker stack

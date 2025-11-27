@@ -26,3 +26,13 @@ rules:
     description: "Run lint/tests (frontend) and ruff gates (backend) before merge."
   - id: 056-5
     description: "No Node changes in CI unless explicitly approved; UI work remains hermetic/local by default."
+  - id: 056-6
+    description: "SVG icons MUST have explicit inline size constraints: `style={{ width: '20px', height: '20px', flexShrink: 0 }}`. Tailwind classes alone (h-5 w-5) are insufficient; SVGs can scale to viewport width without explicit constraints."
+  - id: 056-7
+    description: "Live Search features MUST default to `liveMode = true` (not false). Users expect live data by default; static mode is a fallback only."
+  - id: 056-8
+    description: "API endpoints MUST match backend contracts exactly. Use GET with query parameters (e.g., `q=...`) not POST with body when backend expects GET. Verify endpoint signatures in router files before implementing frontend calls."
+  - id: 056-9
+    description: "Browser verification is MANDATORY for all UI work. Use browser_snapshot and browser_take_screenshot to verify visual state. Do not claim fixes are complete without visual verification."
+  - id: 056-10
+    description: "After updating UI documentation (AGENTS.md, runbooks, cursor rules), you MUST update the DMS: run docs_inventory.py then reindex_knowledge.py. The DMS is the authoritative source; direct file edits are incomplete without DMS registration."

@@ -23,8 +23,8 @@ const TabButton: React.FC<{
     <button
         onClick={onClick}
         className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${active
-                ? 'bg-white text-blue-600 border-t-2 border-blue-600 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            ? 'bg-white text-blue-600 border-t-2 border-blue-600 shadow-sm'
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
             }`}
     >
         {children}
@@ -93,7 +93,7 @@ const DocControlPanel: React.FC = () => {
     if (!summary) return null;
 
     return (
-        <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+        <div className="p-6 max-w-7xl mx-auto bg-gray-50 h-full overflow-auto">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Doc Control Panel</h1>
                 <div className="text-xs text-gray-400">

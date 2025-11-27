@@ -1,5 +1,36 @@
 {
-  "nodes": [{"id": "test-1", "label": "Test Node", "cluster": 1}],
-  "edges": [],
-  "metadata": {"export_timestamp": "2025-11-15T12:00:00Z"}
+  "schema": {
+    "id": "SSOT_graph.v1",
+    "version": 1
+  },
+  "meta": {
+    "generated_at": "2025-11-12T03:45:31Z",
+    "links": {
+      "atlas_index": "share/atlas/index.html",
+      "atlas_node_prefix": "share/atlas/nodes/",
+      "atlas_graph_view": "share/atlas/graph.html"
+    },
+    "provenance_rollup": {
+      "models": [
+        "qwen2.5"
+      ],
+      "seeds": [
+        42
+      ],
+      "ts_min": "2025-01-01T00:00:00Z",
+      "ts_max": "2025-01-01T00:00:02Z"
+    }
+  },
+  "nodes": [
+    {
+      "idx": 0
+    },
+    {
+      "idx": 1
+    },
+    {
+      "idx": 2
+    }
+  ],
+  "edges": []
 }

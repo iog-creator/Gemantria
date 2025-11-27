@@ -1,6 +1,6 @@
-# KB Document Registry (KB-Reg:M1)
+# AGENTS.md — agentpm/kb
 
-## Purpose
+## Directory Purpose
 
 The KB document registry tracks knowledge-base documents (AGENTS.md, SSOT docs, rules, runbooks, ADRs, etc.) with structured metadata including:
 

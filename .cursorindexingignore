@@ -1,23 +1,42 @@
 # Mirror of .cursorignore, but *only* for indexing scope
+# This file controls what Cursor indexes for code intelligence
 
-share/**
-
+# Build artifacts
 _artifacts/**
+build/**
+dist/**
+*.egg-info/**
 
-node_modules/**
-
+# Environments / vendors / caches
 .venv/**
+env/**
+venv/**
+node_modules/**
+**/node_modules/**
 
 **/.pytest_cache/**
-
 **/__pycache__/**
+*.pyc
+*.pyo
+*.pyd
 
+# Generated/exported data (not source code)
+share/**
+archive/**
+evidence/**
+exports/**
+logs/**
+backups/**
+ui/out/**
+
+# VCS
 .git/**
 
+# Heavy data files
 **/*.parquet
-
 **/*.feather
-
 **/*.csv
-
+**/*.npz
+**/*.npy
 dumps/**
+data/**

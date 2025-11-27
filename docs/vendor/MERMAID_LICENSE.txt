@@ -1,3 +1,0 @@
-Mermaid JS — MIT License
-Upstream: https://github.com/mermaid-js/mermaid
-Vendored for hermetic builds (no CDN in CI).

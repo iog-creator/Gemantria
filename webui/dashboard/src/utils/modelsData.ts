@@ -12,6 +12,7 @@ export interface LMIndicatorData {
     top_error_reason?: string | null;
     window_days?: number;
     generated_at?: string;
+    error?: string | null;
 }
 
 export interface LMUsage7dData {
@@ -43,6 +44,7 @@ export interface LMHealth7dData {
     success_rate?: number;
     avg_latency_ms?: number;
     error_rate?: number;
+    total_calls?: number;
     error_types?: Record<string, number>;
     recent_errors?: Array<Record<string, unknown>>;
     error?: string | null;

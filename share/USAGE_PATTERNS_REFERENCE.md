@@ -480,17 +480,37 @@ from scripts.config.env import get_rw_dsn
 dsn = get_rw_dsn()
 ```
 
-### ❌ Anti-Pattern 5: Not Handling DB-Off Mode
+### ❌ Anti-Pattern 5: Not Handling DB-Off Mode Correctly
+
+**CRITICAL**: Distinguish between commands that REQUIRE the database vs those that can work without it.
 
 ```python
-# ❌ WRONG - Crashes when DB unavailable
+# ❌ WRONG - Operational command that crashes when DB unavailable
 from scripts.config.env import get_rw_dsn
 import psycopg
 
 dsn = get_rw_dsn()
 conn = psycopg.connect(dsn)  # Raises exception if DB unavailable
 
-# ✅ CORRECT - Graceful degradation
+# ✅ CORRECT - Operational command (REQUIRES DB) - must fail
+from scripts.config.env import get_rw_dsn
+import psycopg
+import sys
+
+dsn = get_rw_dsn()
+if not dsn:
+    print("ERROR: GEMATRIA_DSN not set. This command requires the database.", file=sys.stderr)
+    sys.exit(1)
+
+try:
+    with psycopg.connect(dsn) as conn:
+        # Use connection for required operations
+        pass
+except psycopg.OperationalError as e:
+    print(f"ERROR: Database unavailable. This command requires the database: {e}", file=sys.stderr)
+    sys.exit(1)
+
+# ✅ CORRECT - Observability command (can handle db_off) - graceful degradation
 from scripts.config.env import get_rw_dsn
 import psycopg
 
@@ -500,7 +520,7 @@ if not dsn:
 
 try:
     with psycopg.connect(dsn) as conn:
-        # Use connection
+        # Use connection for optional operations
         pass
 except psycopg.OperationalError:
     return {"ok": False, "mode": "db_off"}
@@ -536,7 +556,8 @@ When writing code that uses LM Studio or databases:
 - [ ] Use `get_lm_studio_settings()` or `get_lm_studio_enabled()` for LM Studio configuration
 - [ ] Use `lm_studio_chat()` or `lm_studio_chat_with_logging()` for LM Studio calls
 - [ ] Use `guarded_lm_call()` for budget enforcement and fallback support
-- [ ] Handle `db_off` mode gracefully (hermetic behavior)
+- [ ] **CRITICAL**: Distinguish between operational commands (REQUIRE DB - must fail) vs observability (can handle db_off gracefully)
+- [ ] Handle `db_off` mode gracefully ONLY for observability/status commands (hermetic behavior)
 - [ ] Handle `lm_off` mode gracefully (hermetic behavior)
 - [ ] Never use `os.getenv()` directly for DSNs or LM Studio config
 - [ ] Never make direct HTTP calls to LM Studio

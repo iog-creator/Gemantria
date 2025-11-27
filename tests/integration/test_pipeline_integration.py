@@ -220,7 +220,7 @@ class TestPipelineIntegration:
         # This tests that our integration didn't break existing imports
         try:
             from src.graph.graph import run_pipeline, get_graph
-            from src.nodes.collect_nouns_db import collect_nouns_for_book
+            from agentpm.modules.gematria.utils.collect_nouns_db import collect_nouns_for_book
             from src.nodes.enrichment import enrichment_node
             from src.nodes.network_aggregator import network_aggregator_node
             from src.nodes.confidence_validator import confidence_validator_node

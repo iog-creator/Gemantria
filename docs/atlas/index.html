@@ -33,7 +33,18 @@ h1{margin:0 0 8px 0} pre{background:#f6f8fa;padding:12px;border-radius:8px;overf
 <div class="card">
   <h2>Governance Search</h2>
   <p>Search Tier-0 governance docs via semantic similarity (Phase-8D).</p>
-  <ul><li><a href="/governance-search">Open search interface</a></li></ul>
+  <ul><li><a href="/governance-search" rel="external" data-external="true">Open search interface</a></li></ul>
+</div>
+
+<div class="card">
+  <h2>LM Insights</h2>
+  <p>Real-time monitoring of Ollama and LM Studio inference models (Phase 9).</p>
+  <ul><li><a href="/lm-insights" rel="external" data-external="true">View inference models insight</a></li></ul>
+</div>
+
+<div class="card" id="mcp-proof-tile" style="display:none">
+  <h2>Knowledge MCP Proof</h2>
+  <div id="mcp-proof-content">Loading proof snapshot...</div>
 </div>
 
 <script>
@@ -47,6 +58,35 @@ h1{margin:0 0 8px 0} pre{background:#f6f8fa;padding:12px;border-radius:8px;overf
   fetch('mcp_flow.mmd').then(r=>r.ok?r.text():Promise.reject()).then(renderFlow).catch(()=> {
     document.querySelector('.mermaid').textContent = 'mcp_flow.mmd (open this file in a Mermaid viewer)';
   });
+})();
+</script>
+<script>
+(function(){
+  const tile = document.getElementById('mcp-proof-tile');
+  const content = document.getElementById('mcp-proof-content');
+  fetch('../../share/mcp/knowledge_mcp_proof.json')
+    .then(r=>r.ok?r.json():Promise.reject())
+    .then(data=>{
+      const overallOk = data.overall_ok || false;
+      const badge = overallOk ? '<span class="badge" style="background:#d4edda;border-color:#c3e6cb;color:#155724">✓ OK</span>' : '<span class="badge" style="background:#f8d7da;border-color:#f5c6cb;color:#721c24">✗ FAIL</span>';
+      let html = '<h3>Proof Status ' + badge + '</h3>';
+      html += '<p>Generated: ' + (data.generated_at || 'unknown') + '</p>';
+      html += '<p>Components:</p><ul>';
+      const comps = data.components || {};
+      for(const [name, comp] of Object.entries(comps)){
+        const status = comp.ok ? '✓' : '✗';
+        const present = comp.present ? 'present' : 'missing';
+        html += '<li>' + status + ' ' + name + ': ' + present + '</li>';
+      }
+      html += '</ul>';
+      html += '<p><a href="../../share/mcp/knowledge_mcp_proof.json">View JSON</a> | <a href="../../share/mcp/knowledge_mcp_proof.txt">View TXT</a></p>';
+      content.innerHTML = html;
+      tile.style.display = 'block';
+    })
+    .catch(()=>{
+      // File missing, hide tile gracefully
+      tile.style.display = 'none';
+    });
 })();
 </script>
 <script>

@@ -70,22 +70,27 @@ All core development phases are complete. The system is operational with:
 ### Active Development Workstreams
 
 **PLAN-072: Extraction Agents Correctness & Resume Docs Management** (📋 **Planned**)
-- **M1** ⏳ PENDING: DMS guard fixes — ensure documentation management guards are hermetic and pass in CI.
-- **M2+** ✅ PASS: Extraction agents provenance (TVs E06–E10) — implemented provenance logic (`ensure_provenance`, `guard_provenance`, `stamp_batch`) with full test coverage, guard integration, and AGENTS.md documentation. All 5 TVs (E06–E10) implemented, tested, guarded (PR #499). Artifacts: `agentpm/extractors/provenance.py`, `agentpm/tests/extractors/test_extraction_provenance_e06_e10.py`, `agentpm/extractors/AGENTS.md`, `scripts/ci/guard_extraction_agents.py`. Targets: `guard.extractors`.
-- **M2** ⏳ PENDING: Extraction agents correctness — define TVs for extraction correctness (TV-E01..E05) with golden fixtures, add hermetic guard `guard_extraction_agents.py` (no DB/network), wire pytest collection under `agentpm/tests/extractors/` (unit-only). Artifacts: `agentpm/tests/extractors/test_extraction_correctness.py`, `agentpm/tests/extractors/fixtures/*.json`, `scripts/ci/guard_extraction_agents.py`. Targets: `guard.extractors`.
-- **M3** ⏳ PENDING: Visualization hooks — wire extraction outputs to visualization components, ensure data flows correctly from extraction → visualization, add visual verification (browser tools) for rendered outputs.
+- **M1** ✅ COMPLETE: DMS guard fixes — ensure documentation management guards are hermetic and pass in CI. Implemented HINT/STRICT mode support for `guard_docs_db_ssot.py` (DB-off tolerance in HINT mode, fail-closed in STRICT mode). Created `agentpm/tests/docs/test_dms_guards.py` with 7 tests covering HINT/STRICT behavior (all passing). Updated Makefile with `guard.docs.db.ssot` (HINT) and `guard.docs.db.ssot.strict` (STRICT) targets. Documentation updated: `scripts/AGENTS.md`, `agentpm/tests/docs/AGENTS.md`. See `docs/SSOT/PLAN_072_M1_DMS_GUARDS.md`.
+- **M2** ✅ COMPLETE: Extraction agents provenance (TVs E06–E10) — implemented provenance logic (`ensure_provenance`, `guard_provenance`, `stamp_batch`) with full test coverage, guard integration, and AGENTS.md documentation. All 5 TVs (E06–E10) implemented, tested, guarded (PR #499). Artifacts: `agentpm/extractors/provenance.py`, `agentpm/tests/extractors/test_extraction_provenance_e06_e10.py`, `agentpm/extractors/AGENTS.md`, `scripts/ci/guard_extraction_agents.py`. Targets: `guard.extractors`.
+- **M3** ✅ COMPLETE: Visualization hooks — Wired E21–E25 proofs into Atlas dashboards and control widgets. Created `scripts/atlas/generate_mcp_status_cards.py` to generate `share/atlas/control_plane/mcp_status_cards.json`. Updated Atlas HTML pages: `compliance_summary.html` (MCP status cards tile), `guard_receipts.html` (proof links), `violations.html` (proof status table). Extended `agentpm/control_widgets/adapter.py` with `load_mcp_status_cards_widget_props()` function. Tests: `agentpm/tests/control_widgets/test_m2_visualization.py` (5 tests, all passing). Guards: `guard_control_widgets`, `guard_browser_verification` passing. Browser verification: all 7 pages verified.
 
 **PLAN-092: AgentPM-Next Planning Workflows** (📋 **Planned**)
 - **M1** ✅ PASS: KB registry-powered planning surface (`pmagent plan kb`) — implemented `build_kb_doc_worklist()` that produces prioritized documentation worklist from KB registry status and hints (missing > stale > out_of_sync > low_coverage > info), grouped by subsystem with suggested actions. Hermetic: read-only, no writes, no LM calls. CLI command `pmagent plan kb` returns JSON worklist + human-readable summary. All tests passing (6/6). Artifacts: `agentpm/plan/kb.py`, `agentpm/tests/cli/test_pmagent_plan_kb.py`, `pmagent/cli.py` (plan_kb command). Targets: `pmagent plan kb`. (PR #580)
 - **M2** ✅ PASS: Orchestrated doc-fix runs — consume `pmagent plan kb` worklist (by severity and subsystem) and define concrete automation/assistant behaviors around it. Implement `pmagent plan kb fix` or similar command that processes worklist items, suggests fixes, and optionally applies them (with confirmation). Integration with KB registry freshness tracking to update `last_refreshed_at` after fixes. Artifacts: `agentpm/plan/fix.py`, `agentpm/tests/cli/test_pmagent_plan_kb_fix.py`. Targets: `pmagent plan kb fix`. (PR #581)
 - **M3** ✅ PASS: Doc-health control loop & reporting — `pmagent report kb` aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. `pm.snapshot` now includes an advisory "Documentation Health" section with fresh ratios, missing/stale counts, and fix activity. Artifacts: `agentpm/status/kb_metrics.py`, `pmagent/cli.py` (report_kb), `agentpm/tests/cli/test_pmagent_report_kb.py`. Targets: `pmagent report kb`. (PR #582)
 - **M4** ✅ PASS: Atlas UI Integration — `/status` page now visualizes KB doc health metrics (freshness score, fixes applied, missing/stale counts) in the "Documentation Health" card. `/api/status/system` endpoint includes `kb_doc_health` data for UI consumption. UI elements include metrics container, freshness percentage, fixes counter, and missing/stale breakdown. JavaScript loads and displays metrics from API response with graceful fallbacks. Tests verify HTML elements and API integration. (PR #583)
+- **Planning Lane (NEW)**: pmagent now owns a **planning slot** that can dispatch coding/maths/planning tasks to Gemini CLI or OpenAI Codex when `PLANNING_PROVIDER` is set. These CLIs are governed like any other inference provider: configuration lives in `env_example.txt`, adapters are hermetic, and AI tracking captures every run. Operators drive the lane through `pmagent tools.plan`, `pmagent tools.gemini`, or `pmagent tools.codex` (see `docs/runbooks/GEMINI_CLI.md` + `docs/runbooks/CODEX_CLI.md`). The planning lane is explicitly **non-theology**: gematria/theology pipelines stay on LM Studio/Ollama, while planning helpers are reserved for backend work, decomposition, and math-heavy reasoning. Large-context, multi-agent runs are allowed, but CI/dev defaults keep the CLIs disabled unless an operator opts in.
 
 **PLAN-073: MCP Strict DB Live & Receipts/Guards** (✅ **Complete**)
 - **M12** ✅ PASS: Index summary receipt, chip coverage guard, trace badge, roundtrip guard, manifest linkage (E56–E60).
 - **Complete** ✅ PASS: Wrap-up receipts/guards E61–E65 (badges rollup, chip-id uniqueness, sitemap min, manifest consistency, stale sweep).
 - **M3** ✅ PASS: MCP strict live handshake, DB smoke, Atlas chip inject, strict trace (E11–E15, PR #457).
-- **M4** ⏳ PENDING: Strict DB live proofs E16–E20 (checkpointer driver proof, DB SELECT 1 guard, Atlas chip latency, DSN host hash redaction, error path guard).
+- **M4** ✅ PASS: Strict DB live proofs E16–E20 (checkpointer driver proof, DB SELECT 1 guard, Atlas chip latency, DSN host hash redaction, error path guard). All 5 tests passing. Proof artifacts: `share/mcp/pg_checkpointer.handshake.json`, `share/mcp/db_select1.ok.json`, `share/atlas/db_proof_chip.json`, `share/mcp/db_error.guard.json`. Make target: `make mcp.strict.live.full`.
+- **M2** ✅ PASS: Strict DB RO proofs E21–E25 (POR proof, schema proof, gatekeeper coverage, tagproof bundle, complete bundle aggregate). All 5 tests passing. Proof artifacts: `share/mcp/por_proof.json`, `share/mcp/schema_proof.json`, `share/mcp/gatekeeper_proof.json`, `share/mcp/tagproof_proof.json`, `share/mcp/bundle_proof.json`. Make target: `make mcp.strict.live.phase2`.
+- **M3** ✅ PASS: Visualization Hooks — Wired E21–E25 proofs into Atlas dashboards and control widgets. Created `scripts/atlas/generate_mcp_status_cards.py` to generate `share/atlas/control_plane/mcp_status_cards.json`. Updated Atlas HTML pages: `compliance_summary.html` (MCP status cards tile), `guard_receipts.html` (proof links), `violations.html` (proof status table). Extended `agentpm/control_widgets/adapter.py` with `load_mcp_status_cards_widget_props()` function. Tests: `agentpm/tests/control_widgets/test_m2_visualization.py` (5 tests, all passing). Guards: `guard_control_widgets`, `guard_browser_verification` passing. Browser verification: all 7 pages verified.
+
+**PLAN-073 M1: Knowledge MCP Foundation** (✅ **COMPLETE**)
+- All E01–E05 components implemented and tested. See detailed section above (lines 93-98) and `docs/SSOT/PLAN_073_M1_KNOWLEDGE_MCP.md` for full implementation details.
 
 **PLAN-074 M14: Atlas UI Tiles + Guards** (✅ **Complete**)
 - **E66** ✅ PASS: Versioned graph rollup metrics (receipt+guard) (PR #480)
@@ -126,23 +131,23 @@ All core development phases are complete. The system is operational with:
 
 - **E87** ✅ PASS: Violation Time-Series & Heatmaps — Time-series dashboard `docs/atlas/dashboard/compliance_timeseries.html` with code/tool trends, heatmap dashboard `docs/atlas/dashboard/compliance_heatmap.html` with tool×code matrix visualization. JSON export `share/atlas/control_plane/compliance_timeseries.json` with series_by_code, series_by_tool, heatmap_tool_by_code. Guard `scripts/guards/guard_atlas_compliance_timeseries.py` validates structure and backlinks. Make targets `atlas.compliance.timeseries` + `atlas.compliance.heatmap` + `guard.atlas.compliance.timeseries` working. Tests `agentpm/tests/atlas/test_e87_compliance_timeseries.py` (12 tests, all passing). Webproof and reality.green passing.
 
-- **E88** ⏳ PENDING: Violation → Node & Pattern Drilldowns — For each violation: HTML page `docs/atlas/webproof/violations/<violation_id>.html`, Links to Node page, Pattern page, Guard receipt. Generator script: `scripts/atlas/generate_violation_pages.py`. Guard verifying every violation in the export has an HTML page, backlinks to receipts, nodes, patterns. Artifacts: `docs/atlas/webproof/violations/<violation_id>.html`, `scripts/atlas/generate_violation_pages.py`. Targets: `atlas.compliance.drilldowns`, `guard.atlas.compliance.drilldowns`.
+- **E88** ✅ PASS: Violation → Node & Pattern Drilldowns — For each violation code: HTML page `docs/atlas/webproof/violations/<violation_code>.html`, Links to Node pages, Pattern pages, Guard receipts, Compliance dashboards. Generator script: `scripts/atlas/generate_violation_pages.py`. Guard `scripts/guards/guard_atlas_compliance_drilldowns.py` verifying every violation code in exports has an HTML page with required backlinks. Artifacts: `docs/atlas/webproof/violations/*.html`, `scripts/atlas/generate_violation_pages.py`, `scripts/guards/guard_atlas_compliance_drilldowns.py`. Targets: `atlas.compliance.drilldowns`, `guard.atlas.compliance.drilldowns`. All guards passing.
 
-- **E89** ⏳ PENDING: Unified Violation Browser — `docs/atlas/browser/violations.html` with Search, Filter (code, tool, ring, timestamp), Sort (severity, time, tool). Links to Summary + time-series dashboards, Drilldown pages, Raw JSON + guard verdicts. Guard to ensure filters and basic UX elements present, all key links resolve. Artifacts: `docs/atlas/browser/violations.html`. Targets: `atlas.violation.browser`, `guard.atlas.violation.browser`.
+- **E89** ✅ PASS: Unified Violation Browser — `docs/atlas/browser/violations.html` with Search, Filter (code), Sort (code, count-7d, count-30d, count-total). Links to Summary + time-series dashboards, Drilldown pages, Raw JSON exports, Guard receipts. Generator script: `scripts/atlas/generate_violation_browser.py`. Guard `scripts/guards/guard_atlas_violation_browser.py` validates filters, UI elements, and backlinks. Artifacts: `docs/atlas/browser/violations.html`, `scripts/atlas/generate_violation_browser.py`, `scripts/guards/guard_atlas_violation_browser.py`. Targets: `atlas.violation.browser`, `guard.atlas.violation.browser`. Browser verification passed.
 
-- **E90** ⏳ PENDING: Compliance Metrics in Graph Stats — New export: `share/atlas/control_plane/graph_compliance.json`. Metrics per Node, Pattern, Tool, Extraction batch. Integration into Graph stats pages, Node pages (compliance chips), Possibly a dedicated `graph_compliance.html` dashboard. Guards + webproof to verify metrics wired into Atlas. Artifacts: `scripts/db/control_graph_compliance_metrics_export.py`, `share/atlas/control_plane/graph_compliance.json`. Targets: `control.graph.compliance.export`, `guard.control.graph.compliance`, `atlas.graph.compliance`, `guard.atlas.graph.compliance`.
+- **E90** ✅ PASS: Compliance Metrics in Graph Stats — Export `share/atlas/control_plane/graph_compliance.json` with metrics per Tool, Node, Pattern, and Extraction batch. Aggregates violations from `control.agent_run` over 30-day window. Generator script: `scripts/db/control_graph_compliance_metrics_export.py`. Guard `scripts/guards/guard_control_graph_compliance.py` validates structure, schema, timestamp, and metrics presence. Linked from violations browser. Artifacts: `share/atlas/control_plane/graph_compliance.json`, `scripts/db/control_graph_compliance_metrics_export.py`, `scripts/guards/guard_control_graph_compliance.py`. Targets: `control.graph.compliance.export`, `guard.control.graph.compliance`. Browser verification passed.
 
 **PLAN-079: Guard Receipts, Screenshot Determinism, and Browser Validation** (📋 **Planned**)
 
 - **E91** ✅ PASS: Guard Receipts Index & Browser — Searchable index `docs/atlas/browser/guard_receipts.html` with all guard receipts, backlinks to compliance dashboards and violations browser, filter by status. Guard `scripts/guards/guard_atlas_guard_receipts.py` validates HTML structure, backlinks, E91 badge. Tests `agentpm/tests/atlas/test_e91_guard_receipts_index.py` (6 tests, all passing). Make targets `atlas.guard.receipts` + `guard.atlas.guard.receipts` working. Browser verification passed.
 
-- **E92** ⏳ PENDING: Screenshot Manifest Guard — Strengthen/extend from M14 screenshot manifest guard. Ensure all Atlas pages have screenshots, screenshots are deterministic (same content = same hash), manifest includes all required pages. Guard verifies screenshot manifest completeness, hash consistency. Artifacts: `scripts/guards/guard_screenshot_manifest.py`, `evidence/guard_screenshot_manifest.json`. Targets: `guard.screenshot.manifest`.
+- **E92** ✅ PASS: Screenshot Manifest Guard — Guard `scripts/guards/guard_screenshot_manifest.py` validates screenshot manifest structure, hash determinism, and Atlas page coverage. Checks manifest at `share/atlas/screenshots/manifest.json` (primary) or `evidence/` fallbacks. Validates JSON structure, non-empty entries, hash shape consistency (when hash fields present), and reports coverage gaps. Tests `agentpm/tests/atlas/test_e92_screenshot_manifest_guard.py` (6 tests, all passing). Make target `guard.screenshot.manifest` working. Guard passes when manifest structure and hash determinism are valid (coverage is advisory/HINT mode).
 
-- **E93** ⏳ PENDING: Browser Verification Guard — Receipts for key Atlas pages via browser automation. Verify pages render correctly, links work, interactive elements functional. Guard verifies browser verification receipts exist for all key pages. Artifacts: `scripts/guards/guard_browser_verification.py`, `evidence/guard_browser_verification.json`. Targets: `guard.browser.verification`.
+- **E93** ✅ PASS: Browser Verification Guard — Guard `scripts/guards/guard_browser_verification.py` validates browser verification receipts for key Atlas pages. Checks `evidence/webproof/report.json` and screenshots, verifies core pages (index.html, mcp_catalog_view.html) are covered, reports optional pages as HINT mode. Validates report structure, screenshot presence, and page coverage. Tests `agentpm/tests/atlas/test_e93_browser_verification_guard.py` (6 tests, all passing). Make target `guard.browser.verification` working. Guard passes when core pages verified and report structure valid.
 
-- **E94** ⏳ PENDING: Screenshot ↔ Tagproof Integration — Ensure tagproof bundle references all screenshots, screenshots included in tagproof artifacts, manifest validated in tagproof. Guard verifies tagproof includes screenshots, manifest consistency. Artifacts: `scripts/guards/guard_tagproof_screenshots.py`, `evidence/guard_tagproof_screenshots.json`. Targets: `guard.tagproof.screenshots`.
+- **E94** ✅ PASS: Screenshot ↔ Tagproof Integration — Guard `scripts/guards/guard_tagproof_screenshots.py` discovers tagproof directories (`tagproof/`, `share/releases/*/tagproof`), PNG screenshots, and flexible screenshot manifest JSONs, then verifies manifest coverage and consistency. Emits JSON verdict to stdout and optional evidence file `evidence/guard_tagproof_screenshots.json` when invoked with `--write-evidence`. Checks `tagproof_dir_exists`, `has_tagproof_screenshots`, `manifest_nonempty`, `all_screenshots_listed`, and `no_manifest_orphans` with detailed debug lists for unlisted screenshots and orphan manifest entries. Tests `agentpm/tests/atlas/test_e94_tagproof_screenshots_guard.py` (3 tests, all passing). Make target `guard.tagproof.screenshots` wired to write evidence JSON for tag/CI lanes.
 
-- **E95** ⏳ PENDING: Atlas Links Integrity Sweep — Scan for broken links across all Atlas pages, verify internal links resolve, external links accessible (or marked as external). Guard verifies no broken internal links, external links properly marked. Artifacts: `scripts/guards/guard_atlas_links.py`, `evidence/guard_atlas_links.json`. Targets: `guard.atlas.links`.
+- **E95** ✅ PASS: Atlas Links Integrity Sweep — Guard `scripts/guards/guard_atlas_links.py` scans all Atlas HTML pages for broken links, verifies internal links resolve within `docs/atlas/`, and ensures external links are marked (class/rel/data-external). Handles absolute paths (`/...`) as app routes (tracked separately), whitelists evidence/share links (diagnostic, reported but non-blocking), and validates true internal links. Emits JSON verdict with checks, counts, and details. Tests `agentpm/tests/atlas/test_e95_atlas_links_guard.py` (5 tests, all passing). Make target `guard.atlas.links` working. Integrated into E99 guard. Guard passes when no broken internal links and all external links properly marked.
 
 **PLAN-080: Phase-1+2 Verification Sweep & Tagproof** (✅ **Complete**)
 
@@ -164,15 +169,15 @@ All core development phases are complete. The system is operational with:
 - ✅ E102: Tagproof/Atlas wiring + MCP RO proof guard (dynamic components_total, STRICT mode enforcement)
 - ✅ E103: Catalog integration into pm.snapshot + end-to-end TVs + tagproof evidence (read-only catalog access, TVs 06–07, bundle generation).
 
-**PLAN-081: Orchestrator Dashboard Polish** (📋 **Planned**)
-- ⏳ PENDING: Add "MCP RO Proof" tile showing endpoint count + last tagproof timestamp. Add Browser-Verified Badge linking to browser verification screenshots (`browser_verified_index.png`, `browser_verified_mcp_catalog_view.png`). Keep clean, "semi-technical orchestrator" aesthetic; no backend changes. Artifacts: `webui/graph/components/MCPROProofTile.tsx`, `webui/graph/components/BrowserVerifiedBadge.tsx`. Integration into main orchestrator dashboard view with responsive layout and accessibility.
+**PLAN-081: Orchestrator Dashboard Polish** ✅ **COMPLETE** (2025-11-21)
+- ✅ E101: MCP RO Proof Tile & Browser-Verified Badge — Added "MCP RO Proof" tile component (`webui/orchestrator-shell/MCPROProofTile.tsx`) showing endpoint count, last tagproof timestamp, and individual proof statuses (E21-E24). Added Browser-Verified Badge component (`webui/orchestrator-shell/BrowserVerifiedBadge.tsx`) linking to browser verification screenshots with verified page count and screenshot count. Both components integrated into `OrchestratorOverview.tsx` (badge at top, tile in dedicated section). Components fetch data from `/exports/mcp/bundle_proof.json` and `/exports/evidence/webproof/report.json`. No backend changes; UI-only implementation with clean, semi-technical orchestrator aesthetic. Browser verification completed. Share synced. Quality gates passing.
 
-**Phase-1 Control Plane: Guarded Tool Calls** (Implementation Complete)
+**Phase-1 Control Plane: Guarded Tool Calls** ✅ **COMPLETE** (2025-11-21)
 - ✅ PR-1: Control Plane DDL + Health Guard
 - ✅ PR-2: Gatekeeper + PoR (TV-01)
 - ✅ PR-3: Guard Shim + TVs 02–05
 - ✅ PR-4: Atlas Compliance Export
-- ⏳ Pending: Final test hardening in CI, governance wiring
+- ✅ Governance + CI Wiring: STRICT/HINT mode support added to all control-plane guards (`guard_control_graph_compliance.py`, `guard_control_widgets.py`, `guard_biblescholar_reference.py`). Tag lanes (`ops.tagproof` Makefile target and `tagproof.yml` workflow) now enforce STRICT mode for control-plane exports/guards. All compliance exports linked in Atlas UI pages (compliance_summary.html, compliance_timeseries.html, compliance_heatmap.html, violations.html, guard_receipts.html). Atlas links validation passing (83 internal links, 0 broken).
 
 #### Postgres Control Plane & Governance Recording (Current Reality)
 
@@ -468,36 +473,39 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
   - `agentpm/biblescholar/vector_flow.py` — Verse-similarity flow wrapper
   - Read-only vector similarity using pgvector cosine distance
   - DB-off mode handling (graceful degradation)
-- **6P**: BibleScholar Reference Answer Slice 📋 **PLANNING** (design doc only)
-  - Single E2E BibleScholar interaction using LM Studio (guarded), bible_db (read-only), Gematria adapter, and optional knowledge slice
+- **6P**: BibleScholar Reference Answer Slice ✅ **COMPLETE** (2025-11-21)
+  - Single E2E BibleScholar interaction using LM Studio (guarded) or ollama, bible_db (read-only), Gematria adapter, and optional knowledge slice
   - Inputs: Natural-language question + optional verse reference
   - Flow: Resolve verse context → Retrieve Gematria patterns → Perform LM Studio guarded call → Synthesize output with justification + trace
   - Outputs: `{ answer: str, trace: [...], context_used: {...} }`
   - Constraints: No new DSNs, must pass db_off hermetic mode, budget enforcement + provenance required
   - Dependencies: 6J, 6M, 6O, 6A, 6B, 6C (all COMPLETE)
+  - **Control-plane export**: `scripts/db/control_biblescholar_reference_export.py` → `share/atlas/control_plane/biblescholar_reference.json` (tracks questions, answers, verse refs, metadata from `control.agent_run`)
+  - **Guard**: `scripts/guards/guard_biblescholar_reference.py` validates export structure, schema, timestamp, and questions array
+  - **Atlas viewer**: `docs/atlas/browser/biblescholar_reference.html` displays questions, answers, verse references, and metadata with search/filter
+  - **Tests**: `agentpm/tests/atlas/test_phase6p_biblescholar_reference_guard.py` (5 tests, all passing)
+  - **Make targets**: `control.biblescholar.reference.export`, `guard.biblescholar.reference`
   - See `docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md` for design details
-- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) 📘 PLANNING
-- **6E**: Governance & SSOT updates 📘 PLANNING
+- **6D**: Downstream app read-only wiring (StoryMaker + BibleScholar) ✅ **COMPLETE** (2025-11-21)
+  - Control-plane widget adapters for graph compliance and BibleScholar reference exports
+  - Adapter module: `agentpm/control_widgets/adapter.py` with `load_graph_compliance_widget_props()` and `load_biblescholar_reference_widget_props()`
+  - Hermetic, fail-closed adapters (file-only, offline-safe defaults)
+  - Status snapshot integration: `pmagent status snapshot` includes control_widgets summary
+  - Guard: `scripts/guards/guard_control_widgets.py` validates adapter module and widget functions
+  - Documentation: `docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md` with integration guide for StoryMaker and BibleScholar
+  - Atlas pages updated with Phase-6D integration links
+  - Tests: `agentpm/tests/control_widgets/test_adapter.py` (6 tests, all passing)
+  - Make targets: `guard.control.widgets`
+- **6E** ✅ PASS: Governance & SSOT Refresh — Reconciled governance docs, AGENTS files, and SSOT surfaces after Phase-7 work. Updated root `AGENTS.md` with planning lane runbook references (`docs/runbooks/GEMINI_CLI.md`, `docs/runbooks/CODEX_CLI.md`) and browser verification requirements (Rule-051 + Rule-067) in UI Generation and Cursor Execution Profile sections. Refreshed `RULES_INDEX.md` summaries for 050/051/052 with planning lane and browser verification details. All governance/runbook links verified. Validation checks (rules index, agents presence, share sync, ruff) all clean.
 
 **Goal**: Move from "LM off" → controlled, observable usage & DB-backed knowledge.
 
 ### Phase-7: Runtime Bring-Up Completion (Planning)
 
-- **7A**: Control-Plane Bring-Up (Migration 040) 📋 PLANNING
-  - Safely apply migration 040 (dev only)
-  - Create the `control` schema and verify required tables/views
-  - Re-run the pipeline step previously blocked on "missing control schema"
-- **7B**: LM Studio & Model Configuration Normalization 📋 PLANNING
-  - Standardize env vars (`THEOLOGY_MODEL`, `MATH_MODEL`, `EMBEDDING_MODEL`, `RERANKER_MODEL`)
-  - Align LM Studio adapter defaults with env configuration
-  - Update env_example.txt + GPT reference docs
-- **7C**: Snapshot Integrity & Drift Review 📋 PLANNING
-  - Compare 21-file GPT snapshot contracts vs current repo
-  - Classify drift (RED/YELLOW/GREEN)
-  - Minimal remediation PRs to realign repo with SSOT or update SSOT accordingly
-- **7D**: Runtime & Bring-Up UX Polish (Optional) 📋 PLANNING
-  - Improve pmagent bringup / mcp UX for non-expert users
-  - Enhanced help text, clearer Reality Check messages, wizard-style flows
+- **7A** ✅ PASS: Control-Plane Bring-Up (Migration 040) — Applied `migrations/040_control_plane_schema.sql` via `python scripts/db/migrate_control.py` (idempotent), ran `STRICT_MODE=STRICT python scripts/guards/guard_control_plane_health.py`, captured `evidence/control_plane_smoke.json`, refreshed `share/atlas/control_plane/{schema_snapshot.json,mv_schema.json}` plus compliance exports, and re-verified Atlas guards (`guard_atlas_compliance_timeseries`, `guard_compliance_summary_backlinks`, `guard_browser_verification`). `share/atlas/control_plane/mcp_catalog.json` currently reports the `mcp_tool_catalog` view as missing (expected until view lands), and schema snapshot introspection still logs `operator does not exist: oid = text` warnings (documented for follow-up in 7B), but control-plane health + smoke tests are green and artifacts refreshed.
+- **7B** ✅ PASS: LM Studio & Model Configuration Normalization — Canonicalized model-slot env vars and provider overrides in `env_example.txt` (per-slot providers, theology slot base/API key, `OLLAMA_ENABLED`) and documented them in *Prompting Guide for Our Core LLM models.md*. Added `THEOLOGY_LMSTUDIO_*` helpers plus reaffirmed Phase-7F routing contract via `scripts/config/env.py`. Resolved 7A follow-ups: `scripts/db/control_schema_snapshot.py` now casts `('control.' || table_name)::regclass` (no more `oid = text` warnings) and new helper SQL `scripts/db/sql/control_mcp_tool_catalog.sql` builds the `control.mcp_tool_catalog` view (consumed by `scripts/db/control_mcp_catalog_export.py`, which now reports `view_name` + OK status). `share/atlas/control_plane/{schema_snapshot.json,mcp_catalog.json}` refreshed with green evidence.
+- **7C** ✅ PASS: Snapshot Integrity & Drift Review — Validated all snapshot/export artifacts (control-plane schema/MVs, ledger, pm snapshot, Atlas compliance artifacts, browser receipts) are consistent, drift-free, and covered by guards. Created `scripts/guards/guard_snapshot_drift.py` to validate snapshot file existence, structure, and ledger sync status. All snapshots refreshed: `share/atlas/control_plane/{schema_snapshot.json,mv_schema.json,mcp_catalog.json,compliance_summary.json,compliance_timeseries.json}`, `share/pm.snapshot.md`. Ledger verification shows all 9 tracked artifacts current. Guard outputs: `guard_control_plane_health` (STRICT), `guard_atlas_compliance_timeseries`, `guard_browser_verification`, `guard_snapshot_drift` all PASS. Evidence: `evidence/guard_snapshot_drift.json`.
+- **7D** ✅ PASS: Runtime & Bring-Up UX Polish — Improved pmagent bringup/mcp UX for non-expert users through enhanced Reality Check messages (clearer component labels, user-friendly status indicators, helpful tips), refreshed browser verification receipts for all 7 required Atlas pages (compliance_summary, compliance_timeseries, compliance_heatmap, violations, guard_receipts), and updated `scripts/ci/atlas_webproof.sh` to generate screenshots and report entries for all dashboard pages. Browser verification guard now passes with all pages verified. Reality Check output now uses clearer labels ("Environment & Database Config", "Language Models & Services", etc.) and provides helpful tips for HINT vs STRICT modes.
 
 - **7E**: Core LLM Prompting Guide (Design Doc) ✅ COMPLETE (docs only)
   - `Prompting Guide for Our Core LLM models.md` documents the Granite 4.0 + BGE-M3 + Granite Reranker stack, chat templates, embedding usage, and reranker prompting.
@@ -518,30 +526,32 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 ### PLAN-078: Compliance Dashboards (Phase-2 Milestone)
 - [x] E86: Compliance Summary Dashboard
 - [x] E87: Violation Time-Series + Heatmaps
-- [ ] E88: Violation → Node & Pattern Drilldowns
-- [ ] E89: Unified Violation Browser
-- [ ] E90: Compliance Metrics in Graph Stats
+- [x] E88: Violation → Node & Pattern Drilldowns
+- [x] E89: Unified Violation Browser
+- [x] E90: Compliance Metrics in Graph Stats
 
 **PLAN-078 Completion Criteria:** Phase-2 is done when all dashboards render correctly in browser verification, all charts link to correct JSON exports, violation browser functional with search/sort/filter, violation drilldowns render correctly + screenshots stable, all guards produce `ok=true`, tag lane STRICT validates all Atlas dashboards/webproofs/backlinks/screenshots/relevant JSON exports, tagproof bundle includes compliance dashboards/drilldowns/knowledge-MCP pages/screenshots/guard receipts with zero broken links. When complete → **Phase 2 is officially finished** → unlocks **Phase 3** (LM Studio + Knowledge Plane).
 
 ### PLAN-079: Guard Receipts, Screenshot Determinism, and Browser Validation
 - [x] E91: Guard Receipts Index & Browser
-- [ ] E92: Screenshot Manifest Guard
-- [ ] E93: Browser Verification Guard
-- [ ] E94: Screenshot ↔ Tagproof Integration
-- [ ] E95: Atlas Links Integrity Sweep
+- [x] E92: Screenshot Manifest Guard
+- [x] E93: Browser Verification Guard
+- [x] E94: Screenshot ↔ Tagproof Integration
+- [x] E95: Atlas Links Integrity Sweep
 
 ### PLAN-080: Phase-1+2 Verification Sweep & Tagproof
 - [x] E96: TV-01…TV-05 Re-Run & Coverage Receipt
 - [x] E97: Gatekeeper / Guard Shim Coverage Audit
 - [x] E98: Full Extraction & Atlas + Exports Regeneration
 - [x] E99: Browser Verification & Screenshot Check (Integrated)
-- [ ] E100: Strict Tag Lane / Tagproof "Phase-2 Ready" Bundle
+- [x] E100: Strict Tag Lane / Tagproof "Phase-2 Ready" Bundle ✅ PASS
+
+### PLAN-081: Orchestrator Dashboard Polish
+- [x] E101: MCP RO Proof Tile & Browser-Verified Badge ✅ PASS
+- **Vision anchor**: Orchestrator dashboard UX and the non-technical orchestrator role are defined in `docs/SSOT/Orchestrator Dashboard - Vision.md`; PLAN‑081 and any future orchestrator UI work must keep that document as the north star for layout, tone, and interaction.
 
 ### Phase-1 Control Plane (Testing & Governance)
-- [ ] Final test hardening in CI (STRICT vs HINT mode)
-- [ ] Governance wiring (tag lanes run guards/exports)
-- [ ] Atlas UI linkage for compliance exports
+- ✅ **COMPLETE** — Superseded by "Phase-1 Control Plane: Guarded Tool Calls ✅ COMPLETE" section above (line 180). All governance wiring, STRICT/HINT mode support, and Atlas UI linkage completed.
 
 ### Medium-term (Q1 2026)
 - [ ] Phase 12: Advanced Pattern Mining
@@ -550,6 +560,7 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 - [ ] Phase 15: API Gateway
 
 ### Long-term Vision
+- **Chat-first Orchestrator Dashboard** — Conversation-driven dashboard experience for non-technical orchestrators, as defined in `docs/SSOT/Orchestrator Dashboard - Vision.md`.
 - **Complete Biblical Analytics Suite** — Full corpus analysis
 - **Interactive Exploration Platform** — Web-based discovery tools
 - **Academic Research Integration** — Scholar collaboration features
@@ -593,9 +604,11 @@ the shared LM widget contract. All adapters are hermetic and fail-closed (offlin
 
 The Gemantria project represents a comprehensive approach to biblical text analysis, combining rigorous mathematical methods with AI-powered insights and interactive visualization. Through careful phase planning, strict governance, and mathematical validation, we deliver reliable, reproducible results for biblical research and exploration.
 
-**Current Focus**: Phase 8 temporal analytics completion and Phase 11 unified envelope stabilization.
+**Current Focus**: Phase 12 advanced pattern mining capabilities.
 
-**Next Milestone**: Phase 12 advanced pattern mining capabilities.
+**Next Milestone**: Phase 13 multi-language support.
+
+> **Note**: Phase 12 is now **Active**.
 
 <!-- RULES_TABLE_START -->
 | # | Title |
@@ -669,4 +682,5 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 066 | # --- |
 | 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | # --- |
+| 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
 <!-- RULES_TABLE_END -->

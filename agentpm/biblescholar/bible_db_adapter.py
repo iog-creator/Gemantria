@@ -136,6 +136,47 @@ class BibleDbAdapter:
             self._db_status = "unavailable"
             return None
 
+    def get_verse_by_id(self, verse_id: int) -> VerseRecord | None:
+        """Get a single verse by ID.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            VerseRecord if found, None if not found or DB unavailable.
+        """
+        if not self._ensure_engine():
+            return None
+
+        try:
+            query = text(
+                """
+                SELECT verse_id, book_name, chapter_num, verse_num, text, translation_source
+                FROM bible.verses
+                WHERE verse_id = :verse_id
+                LIMIT 1
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                row = result.fetchone()
+
+                if row is None:
+                    return None
+
+                return VerseRecord(
+                    verse_id=row[0],
+                    book_name=row[1],
+                    chapter_num=row[2],
+                    verse_num=row[3],
+                    text=row[4],
+                    translation_source=row[5],
+                )
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return None
+
     def get_passage(
         self,
         book_name: str,
@@ -209,6 +250,127 @@ class BibleDbAdapter:
             self._db_status = "unavailable"
             return []
 
+    def search_verses(self, query: str, translation_source: str = "KJV", limit: int = 20) -> list[VerseRecord]:
+        """Search verses by keyword in text content.
+
+        Args:
+            query: Search keyword (case-insensitive).
+            translation_source: Translation identifier (default: "KJV").
+            limit: Maximum number of results to return (default: 20).
+
+        Returns:
+            List of VerseRecord objects matching the query, ordered by book, chapter, verse.
+            Empty list if no matches found or DB unavailable.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query_sql = text(
+                """
+                SELECT verse_id, book_name, chapter_num, verse_num, text, translation_source
+                FROM bible.verses
+                WHERE text ILIKE :query_pattern
+                  AND translation_source = :translation_source
+                ORDER BY book_name, chapter_num, verse_num
+                LIMIT :limit
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(
+                    query_sql,
+                    {
+                        "query_pattern": f"%{query}%",
+                        "translation_source": translation_source,
+                        "limit": limit,
+                    },
+                )
+
+                verses = []
+                for row in result:
+                    verses.append(
+                        VerseRecord(
+                            verse_id=row[0],
+                            book_name=row[1],
+                            chapter_num=row[2],
+                            verse_num=row[3],
+                            text=row[4],
+                            translation_source=row[5],
+                        )
+                    )
+
+                return verses
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def get_verses_by_strongs(
+        self, strongs_id: str, translation_source: str = "KJV", limit: int = 20
+    ) -> list[VerseRecord]:
+        """Get verses containing a specific Strong's number (Hebrew or Greek word).
+
+        Args:
+            strongs_id: Strong's number (e.g., "H7965" for shalom, "G0026" for agape).
+            translation_source: Translation identifier (default: "KJV").
+            limit: Maximum number of results to return (default: 20).
+
+        Returns:
+            List of VerseRecord objects containing the Strong's word.
+            Empty list if no verses found or DB unavailable.
+        """
+        if not self._ensure_engine():
+            return []
+
+        # Determine which table to query based on Strong's prefix
+        if strongs_id.startswith("H"):
+            word_table = "bible.hebrew_ot_words"
+        elif strongs_id.startswith("G"):
+            word_table = "bible.greek_nt_words"
+        else:
+            return []  # Invalid Strong's ID format
+
+        try:
+            query_sql = text(
+                f"""
+                SELECT DISTINCT v.verse_id, v.book_name, v.chapter_num, v.verse_num, v.text, v.translation_source
+                FROM bible.verses v
+                JOIN {word_table} w ON v.verse_id = w.verse_id
+                WHERE w.strongs_id = :strongs_id
+                  AND v.translation_source = :translation_source
+                ORDER BY v.book_name, v.chapter_num, v.verse_num
+                LIMIT :limit
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(
+                    query_sql,
+                    {
+                        "strongs_id": strongs_id,
+                        "translation_source": translation_source,
+                        "limit": limit,
+                    },
+                )
+
+                verses = []
+                for row in result:
+                    verses.append(
+                        VerseRecord(
+                            verse_id=row[0],
+                            book_name=row[1],
+                            chapter_num=row[2],
+                            verse_num=row[3],
+                            text=row[4],
+                            translation_source=row[5],
+                        )
+                    )
+
+                return verses
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
     @property
     def db_status(self) -> Literal["available", "unavailable", "db_off"]:
         """Get current database status.
@@ -220,3 +382,100 @@ class BibleDbAdapter:
         """
         self._ensure_engine()  # Update status
         return self._db_status
+
+    def get_proper_names_for_verse(self, verse_id: int) -> list[dict]:
+        """Get proper names associated with a verse.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            List of dictionaries containing proper name details.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT pn.unified_name, pn.description, pn.type
+                FROM bible.proper_names pn
+                JOIN bible.verse_word_links vwl ON pn.proper_name_id = vwl.word_id
+                WHERE vwl.verse_id = :verse_id
+                  AND vwl.word_type = 'proper_name'
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                return [{"name": row[0], "description": row[1], "type": row[2]} for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def get_word_links_for_verse(self, verse_id: int) -> list[dict]:
+        """Get word links for a verse.
+
+        Args:
+            verse_id: The verse ID.
+
+        Returns:
+            List of dictionaries containing word link details.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT word_id, word_type
+                FROM bible.verse_word_links
+                WHERE verse_id = :verse_id
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                return [{"word_id": row[0], "word_type": row[1]} for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def get_cross_references(self, book_name: str, chapter_num: int, verse_num: int) -> list[str]:
+        """Get cross-references for a verse.
+
+        Args:
+            book_name: Book name.
+            chapter_num: Chapter number.
+            verse_num: Verse number.
+
+        Returns:
+            List of cross-reference strings.
+        """
+        if not self._ensure_engine():
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT target_book, target_chapter, target_verse
+                FROM bible.versification_mappings
+                WHERE source_book = :book_name
+                  AND source_chapter = :chapter_num
+                  AND source_verse = :verse_num
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(
+                    query,
+                    {
+                        "book_name": book_name,
+                        "chapter_num": chapter_num,
+                        "verse_num": verse_num,
+                    },
+                )
+                return [f"{row[0]} {row[1]}:{row[2]}" for row in result]
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []

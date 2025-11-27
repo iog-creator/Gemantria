@@ -11,36 +11,104 @@ It is intentionally narrow: it only supports the features we need for AgentPM.
 from __future__ import annotations
 
 import json
+import logging
 import math
+import os
 from typing import List, Sequence
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from scripts.config.env import get_lm_model_config
+from src.utils.json_sanitize import coerce_json_one_line
 
 
 TextLike = str | Sequence[str]
 
+# Granite rerank configuration
+GRANITE_RERANK_NUM_PREDICT = int(os.getenv("GRANITE_RERANK_NUM_PREDICT", "4096"))
+MAX_DOC_CHARS = 1024  # Truncate documents to stay within ~8K token envelope
+
+
+class OllamaAPIError(Exception):
+    """Raised when Ollama API calls fail (HTTP errors, timeouts, connection errors)."""
+
+    def __init__(self, message: str, status_code: int | None = None, error_type: str = "unknown"):
+        super().__init__(message)
+        self.status_code = status_code
+        self.error_type = error_type  # "http_error", "timeout", "connection_error", "unknown"
+
 
 def _post_json(base_url: str, path: str, payload: dict) -> dict:
-    """POST JSON to Ollama and return the parsed response."""
+    """POST JSON to Ollama and return the parsed response.
+
+    Raises:
+        OllamaAPIError: If HTTP error (4xx/5xx), timeout, or connection error occurs.
+    """
     url = base_url.rstrip("/") + path
     data = json.dumps(payload).encode("utf-8")
     req = Request(url, data=data, headers={"Content-Type": "application/json"})
-    with urlopen(req, timeout=60) as resp:  # noqa: S310
-        raw = resp.read().decode("utf-8")
     try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return {"raw": raw}
+        with urlopen(req, timeout=60) as resp:  # noqa: S310
+            raw = resp.read().decode("utf-8")
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            return {"raw": raw}
+    except HTTPError as e:
+        # HTTP 4xx/5xx errors
+        status_code = e.code if hasattr(e, "code") else None
+        raise OllamaAPIError(
+            f"Ollama API HTTP error: {e.reason or 'Unknown error'}",
+            status_code=status_code,
+            error_type="http_error",
+        ) from e
+    except URLError as e:
+        # Connection errors, timeouts, DNS failures
+        error_msg = str(e.reason) if hasattr(e, "reason") else str(e)
+        error_type = "timeout" if "timed out" in error_msg.lower() else "connection_error"
+        raise OllamaAPIError(
+            f"Ollama API connection error: {error_msg}",
+            error_type=error_type,
+        ) from e
+    except Exception as e:
+        # Catch-all for other unexpected errors
+        raise OllamaAPIError(
+            f"Ollama API unexpected error: {e!s}",
+            error_type="unknown",
+        ) from e
 
 
 def _get_json(base_url: str, path: str) -> dict:
-    """GET JSON from Ollama API."""
+    """GET JSON from Ollama API.
+
+    Raises:
+        OllamaAPIError: If HTTP error (4xx/5xx), timeout, or connection error occurs.
+    """
     url = base_url.rstrip("/") + path
     req = Request(url, headers={"Content-Type": "application/json"})
-    with urlopen(req, timeout=10) as resp:  # noqa: S310
-        raw = resp.read().decode("utf-8")
-        return json.loads(raw)
+    try:
+        with urlopen(req, timeout=10) as resp:  # noqa: S310
+            raw = resp.read().decode("utf-8")
+            return json.loads(raw)
+    except HTTPError as e:
+        status_code = e.code if hasattr(e, "code") else None
+        raise OllamaAPIError(
+            f"Ollama API HTTP error: {e.reason or 'Unknown error'}",
+            status_code=status_code,
+            error_type="http_error",
+        ) from e
+    except URLError as e:
+        error_msg = str(e.reason) if hasattr(e, "reason") else str(e)
+        error_type = "timeout" if "timed out" in error_msg.lower() else "connection_error"
+        raise OllamaAPIError(
+            f"Ollama API connection error: {error_msg}",
+            error_type=error_type,
+        ) from e
+    except Exception as e:
+        raise OllamaAPIError(
+            f"Ollama API unexpected error: {e!s}",
+            error_type="unknown",
+        ) from e
 
 
 def list_installed_models(base_url: str | None = None) -> list[str]:
@@ -185,71 +253,122 @@ def rerank(
 def _rerank_embedding_only(
     query: str, docs: list[str], model: str | None, model_slot: str | None, cfg: dict
 ) -> list[tuple[str, float]]:
-    """Rerank using embedding similarity (Granite embeddings)."""
+    """Rerank using embedding similarity (Granite embeddings).
+
+    Returns safe fallback (equal scores) if API calls fail.
+    """
     base_url = cfg.get("ollama_base_url", "http://127.0.0.1:11434")
     embedding_model = cfg.get("embedding_model")
+    logger = logging.getLogger(__name__)
 
     if not embedding_model:
-        raise RuntimeError("No EMBEDDING_MODEL configured for embedding_only rerank strategy")
+        logger.warning("HINT: No EMBEDDING_MODEL configured for embedding_only rerank strategy; returning equal scores")
+        return [(doc, 0.5) for doc in docs]
 
-    # Embed query
-    query_embed_payload = {"model": embedding_model, "prompt": query}
-    query_embed_data = _post_json(base_url, "/api/embeddings", query_embed_payload)
-    if "embedding" not in query_embed_data:
-        raise RuntimeError(f"Query embedding response missing 'embedding': {query_embed_data!r}")
-    query_embedding = query_embed_data["embedding"]
-    if not isinstance(query_embedding, list) or not query_embedding:
-        raise RuntimeError(f"Invalid query embedding format: {type(query_embedding)}")
+    try:
+        # Embed query
+        query_embed_payload = {"model": embedding_model, "prompt": query}
+        query_embed_data = _post_json(base_url, "/api/embeddings", query_embed_payload)
+        if "embedding" not in query_embed_data:
+            logger.warning(
+                f"HINT: Query embedding response missing 'embedding': {query_embed_data!r}; returning equal scores"
+            )
+            return [(doc, 0.5) for doc in docs]
+        query_embedding = query_embed_data["embedding"]
+        if not isinstance(query_embedding, list) or not query_embedding:
+            logger.warning(f"HINT: Invalid query embedding format: {type(query_embedding)}; returning equal scores")
+            return [(doc, 0.5) for doc in docs]
 
-    # Embed documents
-    doc_embeddings: list[list[float]] = []
-    for doc in docs:
-        doc_embed_payload = {"model": embedding_model, "prompt": doc}
-        doc_embed_data = _post_json(base_url, "/api/embeddings", doc_embed_payload)
-        if "embedding" not in doc_embed_data:
-            raise RuntimeError(f"Doc embedding response missing 'embedding': {doc_embed_data!r}")
-        doc_embedding = doc_embed_data["embedding"]
-        if not isinstance(doc_embedding, list) or not doc_embedding:
-            raise RuntimeError(f"Invalid doc embedding format: {type(doc_embedding)}")
-        doc_embeddings.append(doc_embedding)
+        # Embed documents
+        doc_embeddings: list[list[float]] = []
+        for doc in docs:
+            try:
+                doc_embed_payload = {"model": embedding_model, "prompt": doc}
+                doc_embed_data = _post_json(base_url, "/api/embeddings", doc_embed_payload)
+                if "embedding" not in doc_embed_data:
+                    logger.warning(
+                        f"HINT: Doc embedding response missing 'embedding' for doc {doc[:50]!r}; skipping this doc"
+                    )
+                    continue
+                doc_embedding = doc_embed_data["embedding"]
+                if not isinstance(doc_embedding, list) or not doc_embedding:
+                    logger.warning(f"HINT: Invalid doc embedding format for doc {doc[:50]!r}; skipping this doc")
+                    continue
+                doc_embeddings.append(doc_embedding)
+            except OllamaAPIError as e:
+                logger.warning(
+                    f"HINT: Ollama API error while embedding doc {doc[:50]!r} "
+                    f"({e.error_type}, status={e.status_code}): {e!s}; skipping this doc"
+                )
+                continue
 
-    # Compute cosine similarity scores
-    scores: list[tuple[str, float]] = []
-    for doc, doc_emb in zip(docs, doc_embeddings, strict=True):
-        # Cosine similarity: dot product / (norm(query) * norm(doc))
-        dot_product = sum(
-            q * d
-            for q, d in zip(query_embedding, doc_emb, strict=True)
-            if isinstance(q, (int, float)) and isinstance(d, (int, float))
+        if not doc_embeddings or len(doc_embeddings) != len(docs):
+            logger.warning(
+                f"HINT: Failed to embed all documents ({len(doc_embeddings)}/{len(docs)} succeeded); "
+                "returning equal scores"
+            )
+            return [(doc, 0.5) for doc in docs]
+
+        # Compute cosine similarity scores
+        scores: list[tuple[str, float]] = []
+        for doc, doc_emb in zip(docs, doc_embeddings, strict=True):
+            # Cosine similarity: dot product / (norm(query) * norm(doc))
+            dot_product = sum(
+                q * d
+                for q, d in zip(query_embedding, doc_emb, strict=True)
+                if isinstance(q, (int, float)) and isinstance(d, (int, float))
+            )
+            query_norm = math.sqrt(sum(x * x for x in query_embedding if isinstance(x, (int, float))))
+            doc_norm = math.sqrt(sum(x * x for x in doc_emb if isinstance(x, (int, float))))
+            if query_norm > 0 and doc_norm > 0:
+                similarity = dot_product / (query_norm * doc_norm)
+            else:
+                similarity = 0.0
+            # Normalize to [0.0, 1.0] (cosine similarity is already in [-1, 1], shift to [0, 1])
+            normalized_score = (similarity + 1.0) / 2.0
+            scores.append((doc, normalized_score))
+
+        # Sort by score (highest first)
+        scores.sort(key=lambda x: x[1], reverse=True)
+        return scores
+
+    except OllamaAPIError as e:
+        logger.warning(
+            f"HINT: Ollama API error during embedding_only rerank "
+            f"({e.error_type}, status={e.status_code}): {e!s}; returning equal scores"
         )
-        query_norm = math.sqrt(sum(x * x for x in query_embedding if isinstance(x, (int, float))))
-        doc_norm = math.sqrt(sum(x * x for x in doc_emb if isinstance(x, (int, float))))
-        if query_norm > 0 and doc_norm > 0:
-            similarity = dot_product / (query_norm * doc_norm)
-        else:
-            similarity = 0.0
-        # Normalize to [0.0, 1.0] (cosine similarity is already in [-1, 1], shift to [0, 1])
-        normalized_score = (similarity + 1.0) / 2.0
-        scores.append((doc, normalized_score))
-
-    # Sort by score (highest first)
-    scores.sort(key=lambda x: x[1], reverse=True)
-    return scores
+        return [(doc, 0.5) for doc in docs]
+    except Exception as e:
+        logger.warning(f"HINT: Unexpected error during embedding_only rerank: {e!s}; returning equal scores")
+        return [(doc, 0.5) for doc in docs]
 
 
 def _rerank_granite_llm(
     query: str, docs: list[str], model: str | None, model_slot: str | None, cfg: dict
 ) -> list[tuple[str, float]]:
-    """Rerank using Granite LLM with structured prompt."""
+    """Rerank using Granite LLM with structured prompt.
+
+    Aligned with Prompting Guide: truncates documents to stay within ~8K token envelope,
+    uses explicit JSON-only prompt, sets num_predict for sufficient generation tokens,
+    and falls back to embedding_only on failure.
+    """
     base_url = cfg.get("ollama_base_url", "http://127.0.0.1:11434")
     reranker_model = model or cfg.get("reranker_model") or cfg.get("local_agent_model")
 
     if not reranker_model:
         raise RuntimeError("No RERANKER_MODEL or LOCAL_AGENT_MODEL configured for granite_llm rerank strategy")
 
-    # Build structured prompt for ranking
-    docs_text = "\n".join(f"{i + 1}. {doc}" for i, doc in enumerate(docs))
-    system_prompt = "You are a ranking model. Given a query and numbered candidate documents, return a JSON list of objects with 'index' (1-based) and 'score' (0.0 to 1.0) fields, sorted by relevance (highest first)."
+    # Truncate documents to fixed window (per Prompting Guide: keep within ~8K tokens)
+    truncated_docs = [doc[:MAX_DOC_CHARS] for doc in docs]
+    docs_text = "\n".join(f"{i + 1}. {doc}" for i, doc in enumerate(truncated_docs))
+
+    # Strengthened prompt: demand ONLY [{index, score}] JSON, no document content
+    system_prompt = (
+        "You are a ranking model. Given a query and numbered candidate documents, "
+        "return ONLY a JSON array of objects with 'index' (1-based) and 'score' (0.0 to 1.0). "
+        "Do NOT include any document content or extra fields.\n"
+        'Example: [{"index": 1, "score": 0.95}, {"index": 2, "score": 0.75}]'
+    )
     user_prompt = f"""Query: {query}
 
 Candidate documents:
@@ -257,7 +376,7 @@ Candidate documents:
 
 Return JSON list: [{{"index": 1, "score": 0.95}}, {{"index": 2, "score": 0.75}}, ...]"""
 
-    # Call Granite LLM
+    # Call Granite LLM with num_predict for sufficient generation tokens
     chat_payload = {
         "model": reranker_model,
         "messages": [
@@ -266,10 +385,20 @@ Return JSON list: [{{"index": 1, "score": 0.95}}, {{"index": 2, "score": 0.75}},
         ],
         "temperature": 0.0,
         "format": "json",
+        "num_predict": GRANITE_RERANK_NUM_PREDICT,
     }
 
     try:
-        chat_data = _post_json(base_url, "/api/chat", chat_payload)
+        try:
+            chat_data = _post_json(base_url, "/api/chat", chat_payload)
+        except OllamaAPIError as e:
+            # HTTP/connection error: fall back to embedding_only
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                f"HINT: Ollama API error during granite_llm rerank "
+                f"({e.error_type}, status={e.status_code}): {e!s}; falling back to embedding_only"
+            )
+            return _rerank_embedding_only(query, docs, model, model_slot, cfg)
 
         # Handle streaming responses (Ollama returns multiple JSON objects)
         if "raw" in chat_data:
@@ -297,19 +426,30 @@ Return JSON list: [{{"index": 1, "score": 0.95}}, {{"index": 2, "score": 0.75}},
         if not isinstance(content, str):
             raise RuntimeError(f"Chat response content is not a string: {type(content)}")
 
-        # Parse JSON response
+        # Parse JSON response with repair logic (handles truncation/code-fence noise)
         try:
-            rankings = json.loads(content)
+            cleaned_content = coerce_json_one_line(content)
+            rankings = json.loads(cleaned_content)
         except json.JSONDecodeError as e:
-            raise RuntimeError(
-                f"Failed to parse JSON from Granite LLM response: {e!s}. Content: {content[:200]}"
-            ) from e
+            # Log HINT and fall back to embedding_only instead of raising
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                f"HINT: Granite LLM rerank JSON parse failed, falling back to embedding_only: {e!s}. "
+                f"Content preview: {content[:200]}"
+            )
+            return _rerank_embedding_only(query, docs, model, model_slot, cfg)
 
         # Handle both list and single dict responses
         if isinstance(rankings, dict):
             rankings = [rankings]
         elif not isinstance(rankings, list):
-            raise RuntimeError(f"Expected JSON list or dict, got {type(rankings)}: {rankings!r}")
+            # If response shape is wrong, fall back to embedding_only
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                f"HINT: Granite LLM rerank returned unexpected type {type(rankings)}, "
+                f"falling back to embedding_only. Response: {rankings!r}"
+            )
+            return _rerank_embedding_only(query, docs, model, model_slot, cfg)
 
         # Build (doc, score) tuples from rankings
         doc_scores: dict[int, float] = {}
@@ -333,5 +473,16 @@ Return JSON list: [{{"index": 1, "score": 0.95}}, {{"index": 2, "score": 0.75}},
         scores.sort(key=lambda x: x[1], reverse=True)
         return scores
 
+    except OllamaAPIError as e:
+        # HTTP/connection error: fall back to embedding_only
+        logger = logging.getLogger(__name__)
+        logger.warning(
+            f"HINT: Ollama API error during granite_llm rerank "
+            f"({e.error_type}, status={e.status_code}): {e!s}; falling back to embedding_only"
+        )
+        return _rerank_embedding_only(query, docs, model, model_slot, cfg)
     except Exception as e:
-        raise RuntimeError(f"Granite LLM rerank call failed: {e!s}") from e
+        # On any other exception, log HINT and fall back to embedding_only
+        logger = logging.getLogger(__name__)
+        logger.warning(f"HINT: Granite LLM rerank call failed ({e!s}), falling back to embedding_only")
+        return _rerank_embedding_only(query, docs, model, model_slot, cfg)

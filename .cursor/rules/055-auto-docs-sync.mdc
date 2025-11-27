@@ -6,3 +6,18 @@ globs: []
 # 055 — Auto-Docs Sync Pass (AlwaysApply)
 
 After every change/PR, run comprehensive docs pass (update AGENTS.md/rules/forest/hints). Fail-closed if skipped—critical error. CI enforces via rules_guard.py.
+
+## DMS Update (MANDATORY)
+
+**After updating any documentation, you MUST update the DMS:**
+
+```bash
+# 1. Update document inventory
+source .venv/bin/activate
+PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/docs_inventory.py
+
+# 2. Reindex knowledge base for semantic search
+PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/reindex_knowledge.py
+```
+
+**This is not optional.** The DMS is the authoritative source for documentation discovery and semantic search. Direct file edits without DMS updates are incomplete.

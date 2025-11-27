@@ -5,10 +5,15 @@ from __future__ import annotations
 This module provides read-only access to bible_db for verse vector similarity queries.
 It uses centralized DSN loaders and handles DB-off mode gracefully.
 
+Uses 1024-dimensional embeddings from bible.verse_embeddings table (BGE-M3 compatible).
+Previously used 768-dim embeddings from bible.verses.embedding (deprecated).
+
 See:
 - docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md
-- agentpm/biblescholar/AGENTS.md
-"""
+- agentpm/biblescholar/AGENTS.md.
+
+Canonical embedding dimension: 1024 (BGE-M3 compatible).
+The deprecated bible.verses.embedding column (vector(768)) should not be used."""
 
 from dataclasses import dataclass
 from typing import Literal
@@ -45,7 +50,9 @@ class VerseSimilarityResult:
 class BibleVectorAdapter:
     """Read-only adapter for bible_db vector similarity queries.
 
-    This adapter provides SELECT-only access to bible.verses with vector similarity search.
+    This adapter provides SELECT-only access to bible.verse_embeddings with vector similarity search.
+    Uses 1024-dimensional embeddings (BGE-M3 compatible) from verse_embeddings table.
+    Joins with bible.verses to retrieve verse text and metadata.
     It uses pgvector's cosine distance operator (<->) for similarity calculations.
     It never performs INSERT, UPDATE, or DELETE operations.
 
@@ -100,11 +107,11 @@ class BibleVectorAdapter:
             return []
 
         try:
-            # First, get the source verse's embedding
+            # First, get the source verse's embedding from verse_embeddings (1024-dim)
             source_query = text(
                 """
                 SELECT embedding
-                FROM bible.verses
+                FROM bible.verse_embeddings
                 WHERE verse_id = :verse_id
                   AND embedding IS NOT NULL
                 LIMIT 1
@@ -122,7 +129,7 @@ class BibleVectorAdapter:
                 if source_embedding is None:
                     return []
 
-                # Build similarity query
+                # Build similarity query - join verse_embeddings with verses to get text
                 if translation_source:
                     similarity_query = text(
                         """
@@ -133,12 +140,13 @@ class BibleVectorAdapter:
                             v.verse_num,
                             v.text,
                             v.translation_source,
-                            1 - (v.embedding <-> :source_embedding) AS similarity_score
-                        FROM bible.verses v
-                        WHERE v.embedding IS NOT NULL
-                          AND v.verse_id != :verse_id
+                            1 - (ve.embedding <-> :source_embedding) AS similarity_score
+                        FROM bible.verse_embeddings ve
+                        JOIN bible.verses v ON v.verse_id = ve.verse_id
+                        WHERE ve.embedding IS NOT NULL
+                          AND ve.verse_id != :verse_id
                           AND v.translation_source = :translation_source
-                        ORDER BY v.embedding <-> :source_embedding
+                        ORDER BY ve.embedding <-> :source_embedding
                         LIMIT :limit
                         """
                     )
@@ -158,11 +166,12 @@ class BibleVectorAdapter:
                             v.verse_num,
                             v.text,
                             v.translation_source,
-                            1 - (v.embedding <-> :source_embedding) AS similarity_score
-                        FROM bible.verses v
-                        WHERE v.embedding IS NOT NULL
-                          AND v.verse_id != :verse_id
-                        ORDER BY v.embedding <-> :source_embedding
+                            1 - (ve.embedding <-> :source_embedding) AS similarity_score
+                        FROM bible.verse_embeddings ve
+                        JOIN bible.verses v ON v.verse_id = ve.verse_id
+                        WHERE ve.embedding IS NOT NULL
+                          AND ve.verse_id != :verse_id
+                        ORDER BY ve.embedding <-> :source_embedding
                         LIMIT :limit
                         """
                     )
@@ -218,16 +227,18 @@ class BibleVectorAdapter:
             return []
 
         try:
-            # First, get the source verse's verse_id and embedding
+            # First, get the source verse's verse_id and embedding from verse_embeddings (1024-dim)
+            # Need to join with verses to get verse_id from book/chapter/verse
             source_query = text(
                 """
-                SELECT verse_id, embedding
-                FROM bible.verses
-                WHERE book_name = :book_name
-                  AND chapter_num = :chapter_num
-                  AND verse_num = :verse_num
-                  AND translation_source = :translation_source
-                  AND embedding IS NOT NULL
+                SELECT v.verse_id, ve.embedding
+                FROM bible.verses v
+                JOIN bible.verse_embeddings ve ON ve.verse_id = v.verse_id
+                WHERE v.book_name = :book_name
+                  AND v.chapter_num = :chapter_num
+                  AND v.verse_num = :verse_num
+                  AND v.translation_source = :translation_source
+                  AND ve.embedding IS NOT NULL
                 LIMIT 1
                 """
             )
@@ -252,7 +263,7 @@ class BibleVectorAdapter:
                 if source_embedding is None:
                     return []
 
-                # Find similar verses
+                # Find similar verses - join verse_embeddings with verses to get text
                 similarity_query = text(
                     """
                     SELECT
@@ -262,11 +273,12 @@ class BibleVectorAdapter:
                         v.verse_num,
                         v.text,
                         v.translation_source,
-                        1 - (v.embedding <-> :source_embedding) AS similarity_score
-                    FROM bible.verses v
-                    WHERE v.embedding IS NOT NULL
-                      AND v.verse_id != :verse_id
-                    ORDER BY v.embedding <-> :source_embedding
+                        1 - (ve.embedding <-> :source_embedding) AS similarity_score
+                    FROM bible.verse_embeddings ve
+                    JOIN bible.verses v ON v.verse_id = ve.verse_id
+                    WHERE ve.embedding IS NOT NULL
+                      AND ve.verse_id != :verse_id
+                    ORDER BY ve.embedding <-> :source_embedding
                     LIMIT :limit
                     """
                 )
@@ -281,6 +293,104 @@ class BibleVectorAdapter:
                 )
 
                 similar_verses = []
+                for row in result:
+                    similar_verses.append(
+                        VerseSimilarityResult(
+                            verse_id=row[0],
+                            book_name=row[1],
+                            chapter_num=row[2],
+                            verse_num=row[3],
+                            text=row[4],
+                            translation_source=row[5],
+                            similarity_score=float(row[6]),
+                        )
+                    )
+
+                return similar_verses
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return []
+
+    def find_similar_by_embedding(
+        self,
+        query_embedding: list[float],
+        limit: int = 10,
+        translation_source: str | None = None,
+    ) -> list[VerseSimilarityResult]:
+        """Find similar verses by query embedding using vector similarity.
+
+        Args:
+            query_embedding: Query embedding vector (1024-dim from BGE-M3).
+            limit: Maximum number of results to return (default: 10).
+            translation_source: Optional translation filter (e.g., "KJV").
+
+        Returns:
+            List of VerseSimilarityResult objects, ordered by similarity (highest first).
+            Empty list if DB unavailable.
+        """
+        # Validate embedding dimension (BGE-M3 requires 1024-dim)
+        if len(query_embedding) != 1024:
+            raise ValueError(
+                f"Query embedding must be 1024-dimensional (BGE-M3 compatible), got {len(query_embedding)}-dimensional"
+            )
+
+        if not self._ensure_engine():
+            return []
+
+        try:
+            # Convert embedding to pgvector format (string representation)
+            embedding_str = f"[{','.join(map(str, query_embedding))}]"
+
+            if translation_source:
+                # Format embedding directly in SQL to avoid parameter binding issues with ::vector
+                similarity_query = text(
+                    f"""
+                    SELECT
+                        v.verse_id,
+                        v.book_name,
+                        v.chapter_num,
+                        v.verse_num,
+                        v.text,
+                        v.translation_source,
+                        1 - (ve.embedding <-> '{embedding_str}'::vector) AS similarity_score
+                    FROM bible.verses v
+                    JOIN bible.verse_embeddings ve ON v.verse_id = ve.verse_id
+                    WHERE ve.embedding IS NOT NULL
+                      AND v.translation_source = :translation_source
+                    ORDER BY ve.embedding <-> '{embedding_str}'::vector
+                    LIMIT :limit
+                    """
+                )
+                params = {
+                    "translation_source": translation_source,
+                    "limit": limit,
+                }
+            else:
+                similarity_query = text(
+                    f"""
+                    SELECT
+                        v.verse_id,
+                        v.book_name,
+                        v.chapter_num,
+                        v.verse_num,
+                        v.text,
+                        v.translation_source,
+                        1 - (ve.embedding <-> '{embedding_str}'::vector) AS similarity_score
+                    FROM bible.verses v
+                    JOIN bible.verse_embeddings ve ON v.verse_id = ve.verse_id
+                    WHERE ve.embedding IS NOT NULL
+                    ORDER BY ve.embedding <-> '{embedding_str}'::vector
+                    LIMIT :limit
+                    """
+                )
+                params = {
+                    "limit": limit,
+                }
+
+            with self._engine.connect() as conn:
+                result = conn.execute(similarity_query, params)
+                similar_verses = []
+
                 for row in result:
                     similar_verses.append(
                         VerseSimilarityResult(

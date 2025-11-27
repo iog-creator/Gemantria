@@ -10,7 +10,7 @@ The LM Router provides centralized task classification and model slot selection 
 
 ## Core Responsibilities
 
-1. **Task Classification**: Analyze task metadata to determine the appropriate model slot (theology, math, local_agent, embedding, reranker).
+1. **Task Classification**: Analyze task metadata to determine the appropriate model slot (theology, math, local_agent, embedding, reranker, planning, vision).
 2. **Model Slot Selection**: Choose the correct slot based on task domain and requirements.
 3. **Provider Selection**: Respect per-slot provider configuration (Ollama vs LM Studio) without duplicating adapter logic.
 4. **Deterministic Behavior**: Same inputs produce the same routing decisions (no randomness in routing logic).
@@ -24,12 +24,14 @@ Input structure describing a task that needs an LM operation:
 ```python
 @dataclass
 class RouterTask:
-    kind: str  # Task type: "chat", "embed", "rerank", "math_verification", "theology_enrichment", etc.
-    domain: str | None  # Domain: "theology", "math", "general", "bible", "greek", "hebrew", etc.
+    kind: str  # Task type: "chat", "embed", "rerank", "math_verification", "theology_enrichment", "vision", "planning", etc.
+    domain: str | None  # Domain: "theology", "math", "general", "bible", "greek", "hebrew", "planning", etc.
     language: str | None  # Language hint: "hebrew", "greek", "english", etc.
     needs_tools: bool  # Whether task requires tool-calling capabilities
     max_tokens: int | None  # Maximum tokens for response (optional)
     temperature: float | None  # Temperature preference (optional, router may override)
+    has_images: bool  # Whether task contains images (for vision routing)
+    modality: str | None  # Task modality: "text" or "vision_text"
 ```
 
 ### RouterDecision
@@ -39,11 +41,16 @@ Output structure describing the chosen model and configuration:
 ```python
 @dataclass
 class RouterDecision:
-    slot: str  # Model slot: "theology", "math", "local_agent", "embedding", "reranker"
+    slot: str  # Model slot: "theology", "math", "local_agent", "embedding", "reranker", "planning", "vision"
     provider: str  # Provider: "ollama" or "lmstudio"
-    model_name: str  # Concrete model ID (e.g., "granite4:tiny-h", "christian-bible-expert-v2.0-12b")
+    model_name: str  # Concrete model ID (e.g., "granite4:tiny-h", "christian-bible-expert-v2.0-12b", "nvidia/nemotron-nano-12b-v2", "qwen3-vl-4b")
     temperature: float  # Recommended temperature (defaults from Prompting Guide)
     extra_params: dict[str, Any]  # Additional parameters (e.g., tool_choice, response_format)
+
+@dataclass
+class RouterResult:
+    slot: str  # Model slot name
+    model: ModelRegistryConfig  # Full model configuration with modality and role
 ```
 
 ### Router Function
@@ -74,6 +81,10 @@ The router uses rule-based mapping (fast path) driven by `RouterTask.kind` and `
 - **`kind == "rerank"`** → `slot = "reranker"`
 - **`kind == "math_verification"` or `domain == "math"`** → `slot = "math"` (if configured) or fallback to `"local_agent"`
 - **`kind == "theology_enrichment"` or `domain == "theology"` or `domain == "bible"`** → `slot = "theology"`
+- **Vision tasks** (detected via `_detect_vision_task()`) → `slot = "vision"` (if configured) or fallback to `"local_agent"`
+  - Explicit: `kind == "vision"` or `modality == "vision_text"`
+  - Implicit: `has_images == True` or vision-related keywords in prompt
+- **`kind == "planning"` or `domain == "planning"`** → `slot = "planning"` (if configured) or fallback to `"local_agent"`
 - **`needs_tools == True`** → `slot = "local_agent"` (Granite 4.0 tool-calling)
 - **Default** → `slot = "local_agent"` (general fallback)
 
@@ -84,6 +95,8 @@ Provider is determined by per-slot environment variables (via `get_lm_model_conf
 - `LOCAL_AGENT_PROVIDER` → local_agent slot
 - `EMBEDDING_PROVIDER` → embedding slot
 - `RERANKER_PROVIDER` → reranker slot
+- `PLANNING_PROVIDER` → planning slot (default: "granite")
+- `VISION_PROVIDER` → vision slot (default: "lmstudio")
 - Falls back to `INFERENCE_PROVIDER` if slot-specific provider not set
 
 ### Model Selection
@@ -94,10 +107,14 @@ Model is determined by per-slot environment variables:
 - `MATH_MODEL` → math slot (optional, falls back to `LOCAL_AGENT_MODEL`)
 - `EMBEDDING_MODEL` → embedding slot
 - `RERANKER_MODEL` → reranker slot
+- `PLANNING_MODEL` → planning slot (default: "granite-4.0-small", can be "nvidia/nemotron-nano-12b-v2")
+- `VISION_MODEL` → vision slot (default: "qwen3-vl-4b")
 
 ### Temperature Defaults (from Prompting Guide)
 
 - **Theology tasks**: `0.35` (enrichment) or `0.6` (reasoning)
+- **Planning tasks**: `0.2` (default), `0.6` (Nemotron reasoning mode), `0.0` (Nemotron fast mode)
+- **Vision tasks**: `0.7` (multimodal understanding)
 - **Math tasks**: `0.0` (deterministic verification)
 - **General/Agent tasks**: `0.6` (reasoning, default from Prompting Guide)
 - **Embedding/Rerank**: N/A (not applicable)
@@ -108,6 +125,43 @@ Model is determined by per-slot environment variables:
 2. **Fallback Behavior**: If a specific slot's model is not configured, fall back to `local_agent` slot (if available) or raise `RuntimeError` with a clear message.
 3. **Provider Availability**: Router checks provider enable flags (`OLLAMA_ENABLED`, `LM_STUDIO_ENABLED`) and raises `RuntimeError` if the required provider is disabled.
 4. **Hermetic Mode**: Router supports a "dry-run" mode that returns static decisions without checking provider availability (for CI/tests).
+
+## Rerank Error-Tolerance Rules
+
+For `kind == "rerank"` tasks, downstream adapters **MUST** implement error-tolerant behavior:
+
+1. **HTTP Errors (4xx/5xx)**: If the provider (Ollama/LM Studio) returns HTTP errors (404, 500, etc.):
+   - Adapter raises `OllamaAPIError` with `error_type="http_error"` and `status_code` set
+   - Rerank functions catch `OllamaAPIError` and log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring (deterministic cosine similarity)
+   - If `embedding_only` also fails, return equal scores (0.5) for all documents
+   - Continue pipeline execution (do not raise exceptions)
+
+2. **Connection Errors & Timeouts**: If the provider is unreachable or times out:
+   - Adapter raises `OllamaAPIError` with `error_type="connection_error"` or `"timeout"`
+   - Rerank functions catch `OllamaAPIError` and log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring, then equal scores if that also fails
+   - Continue pipeline execution (do not raise exceptions)
+
+3. **JSON Parse Errors**: If the reranker model returns malformed or truncated JSON:
+   - Log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring (deterministic cosine similarity)
+   - Continue pipeline execution (do not raise exceptions)
+
+4. **Edge Strength Computation**: Even when fallback occurs:
+   - Compute `edge_strength = α*cosine + (1-α)*rerank_score` using available scores
+   - If rerank scores are unavailable (fallback to equal scores), use default rerank_score (0.5)
+   - Pipeline must not fail due to missing rerank scores
+   - `make eval.reclassify` remains valid even when rerank fails (uses available edge_strength values)
+
+5. **Router Decision Stability**: Router decisions remain deterministic regardless of adapter fallback behavior. Fallback is an **adapter concern**, not a routing change. The router continues to route `kind == "rerank"` to the `reranker` slot; adapters handle errors internally.
+
+**Implementation Reference**: 
+- `agentpm/adapters/ollama.OllamaAPIError` - Custom exception for HTTP/connection/timeout errors
+- `agentpm/adapters/ollama._post_json()` / `_get_json()` - HTTP error handling with `OllamaAPIError` raising
+- `agentpm/adapters/ollama._rerank_granite_llm()` - Catches `OllamaAPIError` and falls back to `embedding_only`
+- `agentpm/adapters/ollama._rerank_embedding_only()` - Catches `OllamaAPIError` and returns equal scores (0.5)
+- `tests/unit/test_ollama_rerank_failures.py` - Comprehensive test coverage for all failure modes
 
 ## Integration with Existing Adapters
 

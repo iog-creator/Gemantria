@@ -12,8 +12,24 @@ import json
 import sys
 from pathlib import Path
 
-from sqlalchemy import text
-from sqlalchemy.exc import OperationalError, ProgrammingError
+try:
+    from sqlalchemy import text
+    from sqlalchemy.exc import OperationalError, ProgrammingError
+
+    SQLALCHEMY_AVAILABLE = True
+except ImportError:
+    SQLALCHEMY_AVAILABLE = False
+
+    # Define dummy classes/functions when sqlalchemy is not available
+    def text(query_str):
+        return query_str
+
+    class OperationalError(Exception):
+        pass
+
+    class ProgrammingError(Exception):
+        pass
+
 
 # Add project root to path
 ROOT = Path(__file__).resolve().parent.parent.parent

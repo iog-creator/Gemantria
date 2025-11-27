@@ -26,7 +26,6 @@ __pycache__/
 *.pyc
 exports/ai_nouns.enriched.json
 **/__pycache__/
-evidence/
 share/evidence/
 archive/
 ui/out/
@@ -40,6 +39,43 @@ prompts/run_*.jsonl
 # Allow orchestrator summaries to be committed (generated from evidence)
 !docs/evidence/
 !docs/evidence/*.md
+
+# Evidence folder: ignore by default, but allow important files
+# Un-ignore the directory first, then ignore contents, then allow specific patterns
+!evidence/
+evidence/*
+# Allow important evidence files to be tracked
+!evidence/guard_*.json
+!evidence/governance_*.json
+!evidence/*_guard*.json
+!evidence/governance_docs_hints.json
+!evidence/pm_snapshot/
+!evidence/pm_snapshot/*.json
+# PM agent evidence
+!evidence/pmagent_*.json
+!evidence/status_*.json
+!evidence/plan_*.json
+# MCP evidence
+!evidence/mcp_*.json
+# Tagproof evidence
+!evidence/tagproof_*.json
+!evidence/tv_*.json
+!evidence/regenerate_*.json
+# Phase verification
+!evidence/phase*.json
+# Browser/screenshot evidence
+!evidence/browser_*.json
+!evidence/*screenshot*.json
+# Control plane evidence
+!evidence/control_*.json
+# Coverage and chip evidence
+!evidence/*coverage*.json
+!evidence/*chip*.json
+# Other important receipts
+!evidence/*.receipt.json
+!evidence/*_receipt.json
+# Output files that are evidence
+!evidence/*.out.json
 .server.pid
 json,sys
 .env.local

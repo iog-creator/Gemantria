@@ -9,4 +9,29 @@ alwaysApply: false
 ---
 
 # Rule 027 — Docs Sync Gate
+
 Code changes must update AGENTS.md/ADR/SSOT. Enforcement via rules_guard.py + system-enforcement.yml.
+
+## DMS Update Requirement (MANDATORY)
+
+**After ANY documentation change, you MUST update the DMS (Document Management System):**
+
+1. **Run docs inventory:**
+   ```bash
+   source .venv/bin/activate
+   PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/docs_inventory.py
+   ```
+
+2. **Reindex knowledge base:**
+   ```bash
+   PYTHONPATH=/home/mccoy/Projects/Gemantria.v2:$PYTHONPATH python3 agentpm/scripts/reindex_knowledge.py
+   ```
+
+3. **Verify registration:**
+   ```bash
+   pmagent kb registry list | grep -i "<your-doc-name>"
+   ```
+
+**Why:** The DMS is the single source of truth for documentation. Direct file edits are not sufficient; all docs must be registered and indexed in the DMS for semantic search and PM agent discovery.
+
+**Failure to update DMS = incomplete workflow.**

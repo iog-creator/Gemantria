@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-20T19:09:46-08:00_
+_Generated: 2025-11-27T10:18:25-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -63,8 +63,8 @@ _Generated: 2025-11-20T19:09:46-08:00_
 
 ## System Health (DB + LM + Graph)
 
-- LM Status: `✗ lm_off`
-- LM Mode: `lm_off`
+- LM Status: `✓ Ready`
+- LM Mode: `lm_ready`
 - Graph Status: `✓ Ready`
 - Graph Mode: `db_on`
 
@@ -78,29 +78,28 @@ _Generated: 2025-11-20T19:09:46-08:00_
 
 - Overall: `✓ OK`
 - Mode: `HINT`
-- Hints: 3 hint(s)
-  - LM configuration incomplete
+- Hints: 2 hint(s)
   - KB: Subsystem 'agentpm' has low document coverage (1 doc(s))
   - KB: Subsystem 'webui' has low document coverage (1 doc(s))
 
 ## AI Tracking Summary
 
-- Status: `✗ db_off`
-- Mode: `db_off`
-- Note: AI tracking query failed: relation "control.agent_run_cli" does not exist
-LINE 7:                     FROM control.agent_run_cli
-                                 ^
+- Status: `✓ Active`
+- Mode: `db_on`
+- Runtime LM calls (agent_run): 2159 total, 2152 last 24h
+- CLI commands (agent_run_cli): 16 total, 3 last 24h, 3 success, 0 errors
 
 ## Eval Insights Summary (Advisory Analytics)
 
 _Note: Eval insights are export-driven analytics (Phase-8/10) and are advisory only. They do not affect system health gates._
 
-- LM Indicator: `✗ Unavailable`
-  - Note: LM indicator export not available (file missing)
-- DB Health Snapshot: `✗ Unavailable`
-  - Note: DB health snapshot not available (file missing; run `make pm.snapshot`)
-- Edge Class Counts: `✗ Unavailable`
-  - Note: Edge class counts export not available (file missing)
+- LM Indicator: `✓ Available`
+  - Status: unknown
+  - Success rate: 0.0%
+- DB Health Snapshot: `✓ Available`
+  - Mode: unknown
+- Edge Class Counts: `✓ Available`
+  - Strong: 0, Weak: 0, Other: 0
 
 ## KB Registry Summary (Advisory)
 
@@ -130,7 +129,5 @@ _Note: Documentation health metrics are advisory-only and do not affect system h
     - root: 100.0% fresh (missing=0, stale=0)
     - webui: 100.0% fresh (missing=0, stale=0)
 - Missing documents: `0`
-- Fixes applied (last 7 days): `0`
-  - Notes:
-    - No plan_kb_fix manifests directory; treating fixes_applied_last_7d as 0
+- Fixes applied (last 7 days): `2`
 

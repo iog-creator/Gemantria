@@ -243,6 +243,12 @@ def get_lm_model_config() -> dict[str, str | None]:
         - granite_local_agent_model: str | None - Granite local agent model ID reference
         - legacy_profile_defaults: dict - Reference defaults for LEGACY profile slots
         - granite_profile_defaults: dict - Reference defaults for GRANITE profile slots
+        - planning_provider: str | None - Optional planning lane provider (Gemini/Codex/local)
+        - planning_model: str | None - Model/CLI identifier for planning lane
+        - gemini_enabled: bool - Whether Gemini CLI integrations are allowed
+        - codex_enabled: bool - Whether Codex CLI integrations are allowed
+        - gemini_cli_path: str - CLI executable path for Gemini
+        - codex_cli_path: str - CLI executable path for Codex
 
     Legacy Support:
         - LM_EMBED_MODEL → EMBEDDING_MODEL (deprecated, will be removed in Phase-8)
@@ -283,12 +289,31 @@ def get_lm_model_config() -> dict[str, str | None]:
 
     embedding = env("EMBEDDING_MODEL") or legacy_defaults["embedding_model"]
     theology = env("THEOLOGY_MODEL") or legacy_defaults["theology_model"]
-    theology_lmstudio_base_url = env("THEOLOGY_LMSTUDIO_BASE_URL", "http://127.0.0.1:1234")
+    theology_lmstudio_base_url = env("THEOLOGY_LMSTUDIO_BASE_URL") or base_url
     theology_lmstudio_api_key = env("THEOLOGY_LMSTUDIO_API_KEY")
     local_agent = env("LOCAL_AGENT_MODEL") or legacy_defaults["local_agent_model"]
     math_model = env("MATH_MODEL")
     reranker = env("RERANKER_MODEL") or legacy_defaults["reranker_model"]
     reranker_strategy = env("RERANKER_STRATEGY", "embedding_only")
+
+    # Planning lane (Codex CLI helper; Gemini CLI deprecated for local inference)
+    planning_provider_raw = env("PLANNING_PROVIDER", "granite").strip().lower()
+    planning_provider = planning_provider_raw if planning_provider_raw else "granite"
+    planning_model = env("PLANNING_MODEL") or "granite-4.0-small"
+    gemini_enabled = env("GEMINI_ENABLED", "false").lower() in (
+        "1",
+        "true",
+        "yes",
+    )  # Deprecated: disabled by default for local inference
+    codex_enabled = env("CODEX_ENABLED", "false").lower() in ("1", "true", "yes")
+    gemini_cli_path = env("GEMINI_CLI_PATH") or "gemini"
+    codex_cli_path = env("CODEX_CLI_PATH") or "codex"
+
+    # Vision lane (Qwen3-VL-4B for multimodal tasks)
+    vision_provider = env("VISION_PROVIDER", "lmstudio").strip().lower()
+    vision_model = env("VISION_MODEL", "qwen3-vl-4b")
+    lmstudio_base_url = env("LMSTUDIO_BASE_URL", "http://localhost:1234/v1")
+    ollama_base_url = env("OLLAMA_BASE_URL", "http://localhost:11434")
 
     # Phase-7F: Normalize model names for Ollama when provider is ollama
     if provider == "ollama":
@@ -349,6 +374,15 @@ def get_lm_model_config() -> dict[str, str | None]:
         "granite_local_agent_model": granite_models["local_agent_model"],
         "legacy_profile_defaults": legacy_defaults.copy(),
         "granite_profile_defaults": granite_defaults.copy(),
+        "planning_provider": planning_provider,
+        "planning_model": planning_model,
+        "gemini_enabled": gemini_enabled,
+        "codex_enabled": codex_enabled,
+        "gemini_cli_path": gemini_cli_path,
+        "codex_cli_path": codex_cli_path,
+        "vision_provider": vision_provider,
+        "vision_model": vision_model,
+        "lmstudio_base_url": lmstudio_base_url,
     }
 
 

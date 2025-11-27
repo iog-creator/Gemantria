@@ -19,6 +19,7 @@ Describes service-level integrations (database + LM Studio) that provide externa
 | lmstudio_client.py       | Qwen3 embedding/rerank client   | ADR-010, ADR-015 |
 | rerank_via_embeddings.py | Bi-encoder rerank proxy         | ADR-026          |
 | api_server.py            | Analytics REST API server       | ADR-023, ADR-025 |
+| dashboard.py             | Dashboard API router            | PLAN-081         |
 | config.py                | Env loader & runtime settings   | ADR-002          |
 
 ## Service Contracts
@@ -63,8 +64,23 @@ Describes service-level integrations (database + LM Studio) that provide externa
   - **Forecasting**: `GET /api/v1/forecast` - Predictive pattern modeling (Phase 8)
   - **Network**: `GET /api/v1/network/{concept_id}` - Concept subgraph exploration
   - **Docs Search**: `GET /api/docs/search` - Semantic search over governance/docs (Phase-8D)
+  - **Rerank Metrics**: `GET /api/rerank/summary` - Rerank/edge strength metrics summary (nodes, edges, strong/weak edge counts, avg_edge_strength)
+  - **Inference Models**: `GET /api/inference/models` - Unified inference model activity from Ollama and LM Studio (available models list, active/recent requests, base URLs)
 - **Filtering & Pagination**: Efficient parameter-based filtering with result limits
 - **Error Handling**: Structured error responses with appropriate HTTP status codes
+
+### Dashboard Service (routers/dashboard.py)
+
+- **Purpose**: Dedicated router for Orchestrator Dashboard endpoints
+- **Endpoints**:
+  - `POST /api/inference/test`: Connectivity check for Ollama and LM Studio
+  - `POST /api/docs/refresh`: Triggers documentation dashboard refresh
+  - `GET /api/docs/summary`: Serves docs summary JSON
+  - `GET /api/mcp/status`: Returns MCP bundle proof status
+  - `POST /api/mcp/test`: Triggers MCP proof generation
+  - `POST /api/mcp/refresh`: Alias for MCP test
+- **Integration**: Mounted by `api_server.py`
+
 
 ### Configuration Service (config.py)
 

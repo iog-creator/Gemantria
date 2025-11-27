@@ -10,15 +10,16 @@ Phase-6: Added guarded_lm_call() wrapper that respects LM_STUDIO_ENABLED flag.
 
 from __future__ import annotations
 
+import json
 import time
 from typing import Any, Callable
 
 from agentpm.adapters.lm_studio import lm_studio_chat
 from agentpm.runtime.lm_budget import check_lm_budget
-from scripts.config.env import get_lm_studio_enabled, get_rw_dsn
+from scripts.config.env import get_lm_model_config, get_lm_studio_enabled, get_rw_dsn
 
 
-def _write_agent_run(
+def write_agent_run(
     tool: str,
     args_json: dict[str, Any],
     result_json: dict[str, Any],
@@ -50,9 +51,9 @@ def _write_agent_run(
                 """,
                 (
                     tool,
-                    psycopg.types.json.dumps(args_json),
-                    psycopg.types.json.dumps(result_json),
-                    psycopg.types.json.dumps(violations_json or []),
+                    json.dumps(args_json),
+                    json.dumps(result_json),
+                    json.dumps(violations_json or []),
                 ),
             )
             run_id = cur.fetchone()[0]
@@ -69,6 +70,7 @@ def lm_studio_chat_with_logging(
     temperature: float = 0.0,
     max_tokens: int = 512,
     timeout: float = 30.0,
+    model_slot: str | None = None,
 ) -> dict[str, Any]:
     """
     Call LM Studio adapter with control-plane logging.
@@ -100,13 +102,77 @@ def lm_studio_chat_with_logging(
         "timeout": timeout,
     }
 
-    # Call LM Studio adapter
-    result = lm_studio_chat(
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        timeout=timeout,
-    )
+    # Route to correct provider based on model_slot
+    cfg = get_lm_model_config()
+
+    # Determine provider for this slot
+    if model_slot == "theology":
+        slot_provider = cfg.get("theology_provider", "lmstudio")
+    elif model_slot == "local_agent":
+        slot_provider = cfg.get("local_agent_provider") or cfg.get("provider", "lmstudio")
+    elif model_slot == "math":
+        slot_provider = cfg.get("provider", "lmstudio")
+    else:
+        slot_provider = cfg.get("provider", "lmstudio")
+
+    slot_provider = slot_provider.strip()
+
+    # Route to Ollama if slot provider is ollama and enabled
+    if slot_provider == "ollama" and cfg.get("ollama_enabled", True):
+        try:
+            from agentpm.adapters import ollama as ollama_adapter
+
+            if ollama_adapter is not None:
+                # Extract system and user messages for Ollama
+                system_msg = None
+                user_prompt = ""
+                for msg in messages:
+                    if msg["role"] == "system":
+                        system_msg = msg["content"]
+                    elif msg["role"] == "user":
+                        user_prompt = msg["content"]
+
+                # Call Ollama adapter
+                response_text = ollama_adapter.chat(
+                    prompt=user_prompt,
+                    model_slot=model_slot,
+                    system=system_msg,
+                )
+
+                # Convert to lm_studio_chat format
+                result = {
+                    "ok": True,
+                    "mode": "lm_on",
+                    "reason": None,
+                    "response": {"choices": [{"message": {"content": response_text}}]},
+                }
+            else:
+                # Fallback to lm_studio_chat if Ollama adapter unavailable
+                result = lm_studio_chat(
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                    model_slot=model_slot,
+                )
+        except Exception:
+            # Fallback to lm_studio_chat on error
+            result = lm_studio_chat(
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                timeout=timeout,
+                model_slot=model_slot,
+            )
+    else:
+        # Use LM Studio (default)
+        result = lm_studio_chat(
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout=timeout,
+            model_slot=model_slot,
+        )
 
     # Calculate latency
     latency_ms = int((time.time() - start_time) * 1000)
@@ -140,7 +206,7 @@ def lm_studio_chat_with_logging(
         )
 
     # Log to control-plane (graceful no-op if DB unavailable)
-    _write_agent_run(
+    write_agent_run(
         tool="lm_studio",
         args_json=args_json,
         result_json=result_json,
@@ -160,6 +226,7 @@ def guarded_lm_call(
     fallback_fn: Callable[[list[dict[str, str]], dict[str, Any]], dict[str, Any]] | None = None,
     fallback_kwargs: dict[str, Any] | None = None,
     app_name: str | None = None,
+    model_slot: str | None = None,
 ) -> dict[str, Any]:
     """
     Phase-6: Guarded LM Studio call wrapper with call_site tracking and budget enforcement.
@@ -227,7 +294,7 @@ def guarded_lm_call(
             fallback_kwargs = fallback_kwargs or {}
             result = fallback_fn(messages, fallback_kwargs)
             # Log budget exceeded to control-plane
-            _write_agent_run(
+            write_agent_run(
                 tool="lm_studio",
                 args_json={
                     "call_site": call_site,
@@ -255,7 +322,7 @@ def guarded_lm_call(
                 "call_site": call_site,
             }
         # No fallback - return budget exceeded response
-        _write_agent_run(
+        write_agent_run(
             tool="lm_studio",
             args_json={
                 "call_site": call_site,
@@ -289,6 +356,7 @@ def guarded_lm_call(
         temperature=temperature,
         max_tokens=max_tokens,
         timeout=timeout,
+        model_slot=model_slot,
     )
 
     # Add app_name and call_site to result for observability

@@ -1,6 +1,0 @@
-EVID: DOC_PATH /home/mccoy/Projects/Gemantria.v2/share/pm.snapshot.md
-EVID: MANIFEST_COUNT 21
-EVID: BIBLE_DSN_REDACT (unset)
-EVID: GEMATRIA_DSN_REDACT postgresql://<REDACTED>/gematria
-EVID: DB_HEALTH_OK False
-EVID: DB_HEALTH_MODE db_off

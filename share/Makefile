@@ -475,7 +475,7 @@ guard.prompt.ssot: ## Enforce GPT System Prompt SSOT structure
 
 # --- Tag proof (STRICT DSN tracks) ---
 .PHONY: ops.tagproof
-ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof + doc vectors
+ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof + doc vectors + control-plane
 	@echo "[tagproof] STRICT triad (DB mirror)"
 	@STRICT_ALWAYS_APPLY=1 $(MAKE) -s guard.alwaysapply.dbmirror
 	@echo "[tagproof] STRICT prompt SSOT"
@@ -490,6 +490,16 @@ ops.tagproof: ## Tag proof (STRICT): Triad + DSN centralization + DSN proof + do
 	@STRICT_MODE=STRICT $(MAKE) -s guard.docs.fragments
 	@echo "[tagproof] STRICT doc embeddings (Tier-0)"
 	@STRICT_MODE=STRICT $(MAKE) -s guard.docs.embeddings
+	@echo "[tagproof] Control-plane exports"
+	@$(MAKE) -s control.graph.compliance.export
+	@$(MAKE) -s control.biblescholar.reference.export
+	@echo "[tagproof] STRICT control-plane guards"
+	@STRICT_MODE=1 $(MAKE) -s guard.control.graph.compliance --write-evidence guard_control_graph_compliance.json
+	@STRICT_MODE=1 $(MAKE) -s guard.biblescholar.reference --write-evidence guard_biblescholar_reference.json
+	@STRICT_MODE=1 $(MAKE) -s guard.control.widgets --write-evidence guard_control_widgets.json
+	@echo "[tagproof] Atlas compliance dashboards"
+	@$(MAKE) -s atlas.compliance.summary
+	@STRICT_MODE=1 $(MAKE) -s guard.atlas.compliance.summary
 
 # Atlas housekeeping (HINT + STRICT lanes, no nightly)
 .PHONY: housekeeping.atlas
@@ -534,6 +544,12 @@ housekeeping.db.gate:
 	@echo "✅ DB connectivity verified"
 
 housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
+
+# ---- Work Completion Gate (AWCG) -------------------------------------------
+.PHONY: work.complete
+work.complete:
+	@echo "Running Automatic Work Completion Gate (AWCG)..."
+	@python3 scripts/ops/work_completion_gate.py --work-type "manual" --description "Manual work completion gate" || true
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
@@ -664,8 +680,14 @@ eval.graph.calibrate.adv:
 eval.xrefs.badges:
 	@python3 scripts/eval/xrefs_badges.py
 
+.PHONY: eval.reclassify
+eval.reclassify:
+	@echo ">> Reclassifying edges by strength thresholds..."
+	@PYTHONPATH=. $(PYTHON) scripts/eval/reclassify_edges.py
+	@test -f share/eval/edges/edge_class_counts.json && echo "[OK] Edge class counts written to share/eval/edges/edge_class_counts.json" || echo "[HINT] No graph_latest.json found; edge class counts not generated (hermetic/empty-DB run)"
+
 .PHONY: eval.package
-eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank eval.badges.patterns share.sync
+eval.package: eval.graph.calibrate.adv eval.xrefs.badges eval.badges.rerank eval.badges.patterns eval.reclassify share.sync
 	@echo "[eval.package] OK"
 
 # --- eval: rerank quality badge (from blend report) ---
@@ -1050,6 +1072,72 @@ atlas.compliance.export:
 	@echo ">> Exporting compliance data to Atlas"
 	@PYTHONPATH=. python3 scripts/exports/export_compliance.py
 
+export.biblescholar.summary:
+	@echo "[export.biblescholar.summary] Generating BibleScholar summary"
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_summary.py
+	@echo "[export.biblescholar.summary] Export: share/exports/biblescholar/summary.json"
+
+export.biblescholar.search:
+	@echo "[export.biblescholar.search] Generating BibleScholar search results"
+	@if [ -z "$(QUERY)" ]; then \
+		echo "ERROR: QUERY parameter required. Example: make export.biblescholar.search QUERY=\"Jesus\""; \
+		exit 1; \
+	fi
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_search.py \
+		--query "$(QUERY)" \
+		--translation "$(or $(TRANSLATION),KJV)" \
+		--limit "$(or $(LIMIT),20)"
+	@echo "[export.biblescholar.search] Export: share/exports/biblescholar/search.json"
+
+export.biblescholar.lexicon:
+	@echo "[export.biblescholar.lexicon] Generating BibleScholar lexicon entry"
+	@if [ -z "$(STRONGS)" ]; then \
+		echo "ERROR: STRONGS parameter required. Example: make export.biblescholar.lexicon STRONGS=\"H1\""; \
+		exit 1; \
+	fi
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_lexicon.py \
+		--strongs "$(STRONGS)"
+	@echo "[export.biblescholar.lexicon] Export: share/exports/biblescholar/lexicon.json"
+
+export.biblescholar.insights:
+	@echo "[export.biblescholar.insights] Generating BibleScholar insights"
+	@if [ -z "$(REF)" ]; then \
+		echo "ERROR: REF parameter required. Example: make export.biblescholar.insights REF=\"Gen.1.1\""; \
+		exit 1; \
+	fi
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_insights.py \
+		--ref "$(REF)" \
+		$(if $(TRANSLATIONS),--translations $(TRANSLATIONS)) \
+		$(if $(NO_LEXICON),--no-lexicon) \
+		$(if $(NO_SIMILAR),--no-similar) \
+		--similarity-limit "$(or $(SIMILARITY_LIMIT),5)"
+	@echo "[export.biblescholar.insights] Export: share/exports/biblescholar/insights.json"
+
+.PHONY: export.biblescholar.semantic
+export.biblescholar.semantic:
+	@echo "[export.biblescholar.semantic] Generating semantic search results"
+	@if [ -z "$(QUERY)" ]; then \
+		echo "ERROR: QUERY parameter required. Example: make export.biblescholar.semantic QUERY=\"hope in difficult times\""; \
+		exit 1; \
+	fi
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_semantic_search.py \
+		--query "$(QUERY)" \
+		--limit $(or $(LIMIT),20) \
+		--translation $(or $(TRANSLATION),KJV)
+	@echo "[export.biblescholar.semantic] Export: share/exports/biblescholar/semantic_search.json"
+
+.PHONY: export.biblescholar.crosslang
+export.biblescholar.crosslang:
+	@echo "[export.biblescholar.crosslang] Generating cross-language connections"
+	@if [ -z "$(STRONGS)" ]; then \
+		echo "ERROR: STRONGS parameter required. Example: make export.biblescholar.crosslang STRONGS=\"H7965\""; \
+		exit 1; \
+	fi
+	@PYTHONPATH=. python3 scripts/exports/export_biblescholar_cross_language.py \
+		--strongs "$(STRONGS)" \
+		--limit $(or $(LIMIT),10)
+	@echo "[export.biblescholar.crosslang] Export: share/exports/biblescholar/cross_language.json"
+
 # --- DB plan / readiness (HINT posture; no secrets) ---
 .PHONY: db.plan db.readiness db.apply.hint
 db.plan:
@@ -1372,7 +1460,7 @@ ai.ingest:
 
 ai.nouns:
 	@echo ">> AI Noun Discovery Agent: Shards→SSOT ai-nouns"
-	@PYTHONPATH=$(shell pwd) BOOK=$${BOOK:-Genesis} python3 scripts/ai_noun_discovery.py $${RESUME_FROM:+--resume-from $${RESUME_FROM}}
+	@PYTHONPATH=$(shell pwd) BOOK=$${BOOK:-Genesis} python3 agentpm/modules/gematria/scripts/ai_noun_discovery.py $${RESUME_FROM:+--resume-from $${RESUME_FROM}}
 
 ai.enrich:
 	@echo ">> Enrichment Agent: ai_nouns→ai_nouns.enriched"
@@ -1380,7 +1468,7 @@ ai.enrich:
 
 ai.verify.math:
 	@echo ">> Math Verifier Agent (gematria sanity via MATH_MODEL=$${MATH_MODEL:-self-certainty-qwen3-1.7b-base-math})"
-	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 scripts/math_verifier.py
+	@PYTHONPATH=$(shell pwd) INPUT=$${INPUT:-exports/ai_nouns.enriched.json} OUTPUT=$${OUTPUT:-exports/ai_nouns.enriched.json} BOOK=$${BOOK:-Genesis} python3 agentpm/modules/gematria/scripts/math_verifier.py
 
 sandbox.smoke:
 	@echo ">> TS Sandbox Smoke (PoC, gate-aware, hermetic hello-world)"
@@ -1392,8 +1480,11 @@ graph.build:
 
 graph.score:
 	@echo ">> Rerank Agent: graph_latest→graph_latest.scored"
-	@# TODO: wire to reranking script
-	@echo "GRAPH_SCORE_OK"
+	@PYTHONPATH=$(shell pwd) python3 scripts/score_graph.py
+
+graph.stats:
+	@echo ">> Graph Stats: graph_latest.scored→graph_stats (Rule 022)"
+	@PYTHONPATH=$(shell pwd) python3 scripts/analytics/graph_stats_from_json.py
 
 analytics.export:
 	@echo "HINT: analytics: starting (file-first)"
@@ -1463,7 +1554,7 @@ doctor.db:
 	@PYTHONPATH=$(shell pwd) python3 scripts/doctor_db.py
 
 ai.nouns.resume:
-	python3 scripts/ai_noun_discovery.py --resume-from $(RESUME_FROM)
+	python3 agentpm/modules/gematria/scripts/ai_noun_discovery.py --resume-from $(RESUME_FROM)
 
 ai.nouns.only:
 	$(MAKE) ai.nouns BOOK=$(BOOK) RESUME_FROM= ONLY=$(ONLY)
@@ -1892,6 +1983,31 @@ guard.mcp.sse:
 	@ENABLE_LMSTUDIO_MCP=$${ENABLE_LMSTUDIO_MCP:-0}; \
 	$${PYTHON3:-python3} scripts/ci/guard_mcp_live.py | tee evidence/guard_mcp_live.json
 
+# --- Service Status Check (MANDATORY BEFORE TROUBLESHOOTING) ---
+.PHONY: services.check
+services.check: ## Check status of all required services (.venv, API server, Vite dev server)
+	@bash scripts/check_services.sh
+
+# --- API Server Management (Hardened) ---
+.PHONY: api.start api.stop api.restart api.status api.watch api.health
+api.start: ## Start API server with process manager
+	@bash scripts/api_server_manager.sh start
+
+api.stop: ## Stop API server
+	@bash scripts/api_server_manager.sh stop
+
+api.restart: ## Restart API server
+	@bash scripts/api_server_manager.sh restart
+
+api.status: ## Check API server status
+	@bash scripts/api_server_manager.sh status
+
+api.watch: ## Start API server with auto-restart watcher
+	@bash scripts/api_server_manager.sh watch
+
+api.health: ## Check API server health endpoint
+	@curl -s http://localhost:8000/api/health | python3 -m json.tool || echo "API server not responding"
+
 # --- Bring-up verification script ---
 .PHONY: bringup.001
 bringup.001: ## Run bring-up 001: environment gate, LM Studio readiness, minimal pipeline, guards, evidence
@@ -1938,11 +2054,59 @@ dsns.echo: ## Print redacted DSNs for operator sanity (never prints secrets)
 		echo "Create .env.local with BIBLE_DB_DSN and GEMATRIA_DSN"; \
 	fi
 
-.PHONY: guard.mcp.db.ro
+# PLAN-073 M1 E02: RO-DSN Guard + Redaction Proof
+.PHONY: mcp.dsn.echo guard.mcp.db.ro
+mcp.dsn.echo:
+	@echo "[mcp.dsn.echo] Echoing redacted RO DSN"
+	@$(PYTHON) scripts/mcp/echo_dsn_ro.py
+
 guard.mcp.db.ro:
-	@echo "Running MCP DB RO guard (STRICT_DB_PROBE=$(STRICT_DB_PROBE))"
-	@STRICT_DB_PROBE=$(STRICT_DB_PROBE) ATLAS_DSN=$(ATLAS_DSN) GEMATRIA_RO_DSN=$(GEMATRIA_RO_DSN) GEMATRIA_DSN=$(GEMATRIA_DSN) \
-		$(PYTHON) scripts/ci/guard_mcp_db_ro.py | tee evidence/guard_mcp_db_ro.final.json
+	@echo "[guard.mcp.db.ro] Validating MCP RO DSN + redaction"
+	@$(PYTHON) scripts/ci/guard_mcp_db_ro.py
+
+# PLAN-073 M1 E01: Knowledge MCP Schema Management
+.PHONY: mcp.schema.apply mcp.schema.seed guard.mcp.schema
+mcp.schema.apply:
+	@echo "[mcp.schema.apply] Applying Knowledge MCP schema"
+	@psql "$(GEMATRIA_DSN)" -f db/sql/078_mcp_knowledge.sql
+
+mcp.schema.seed:
+	@echo "[mcp.schema.seed] Seeding Knowledge MCP with example data"
+	@psql "$(GEMATRIA_DSN)" -f db/sql/078_mcp_knowledge_seed.sql
+
+guard.mcp.schema:
+	@echo "[guard.mcp.schema] Validating Knowledge MCP schema presence"
+	@$(PYTHON) scripts/guards/guard_mcp_schema.py
+
+# PLAN-073 M1 E03: Envelope Ingestion
+.PHONY: mcp.ingest mcp.ingest.default
+mcp.ingest:
+	@echo "[mcp.ingest] Ingesting Knowledge MCP envelope"
+	@$(PYTHON) scripts/mcp/ingest_envelope.py --envelope "$(ENVELOPE)"
+
+mcp.ingest.default:
+	@echo "[mcp.ingest.default] Ingesting default Knowledge MCP envelope"
+	@$(PYTHON) scripts/mcp/ingest_envelope.py --envelope share/mcp/envelope.json
+
+# PLAN-073 M1 E04: Query Roundtrip
+.PHONY: mcp.query guard.mcp.query
+mcp.query:
+	@echo "[mcp.query] Querying Knowledge MCP catalog (minimal roundtrip)"
+	@$(PYTHON) scripts/mcp/query_catalog.py
+
+guard.mcp.query:
+	@echo "[guard.mcp.query] Validating Knowledge MCP query roundtrip"
+	@$(PYTHON) scripts/guards/guard_mcp_query.py
+
+# PLAN-073 M1 E05: Proof Snapshot
+.PHONY: mcp.proof.snapshot guard.mcp.proof
+mcp.proof.snapshot:
+	@echo "[mcp.proof.snapshot] Generating Knowledge MCP proof snapshot"
+	@$(PYTHON) scripts/mcp/generate_proof_snapshot.py
+
+guard.mcp.proof:
+	@echo "[guard.mcp.proof] Validating Knowledge MCP proof snapshot"
+	@$(PYTHON) scripts/guards/guard_mcp_proof.py
 
 .PHONY: guard.schema.naming
 guard.schema.naming:
@@ -2058,6 +2222,32 @@ mcp.db.error.guard:
 	STRICT=1 CHECKPOINTER=postgres ./scripts/mcp_db_error_guard.py | tee evidence/mcp_db_error_guard.out.json
 
 mcp.strict.live.full: mcp.pg_checkpointer.handshake mcp.db.select1.guard atlas.db_proof.inject mcp.db.error.guard
+
+# PLAN-072 M2: Strict DB RO Proofs E21-E25
+.PHONY: mcp.strict.live.phase2 mcp.proof.e21.por mcp.proof.e22.schema mcp.proof.e23.gatekeeper mcp.proof.e24.tagproof mcp.proof.e25.bundle
+
+mcp.proof.e21.por:
+	@echo "[mcp.proof.e21.por] Generating POR proof"
+	@PYTHONPATH=. python3 scripts/mcp/proof_e21_por.py | tee evidence/mcp_proof_e21_por.out.json
+
+mcp.proof.e22.schema:
+	@echo "[mcp.proof.e22.schema] Generating schema proof"
+	@PYTHONPATH=. python3 scripts/mcp/proof_e22_schema.py | tee evidence/mcp_proof_e22_schema.out.json
+
+mcp.proof.e23.gatekeeper:
+	@echo "[mcp.proof.e23.gatekeeper] Generating gatekeeper proof"
+	@PYTHONPATH=. python3 scripts/mcp/proof_e23_gatekeeper.py | tee evidence/mcp_proof_e23_gatekeeper.out.json
+
+mcp.proof.e24.tagproof:
+	@echo "[mcp.proof.e24.tagproof] Generating tagproof proof"
+	@PYTHONPATH=. python3 scripts/mcp/proof_e24_tagproof.py | tee evidence/mcp_proof_e24_tagproof.out.json
+
+mcp.proof.e25.bundle:
+	@echo "[mcp.proof.e25.bundle] Generating bundle proof"
+	@PYTHONPATH=. python3 scripts/mcp/proof_e25_bundle.py | tee evidence/mcp_proof_e25_bundle.out.json
+
+mcp.strict.live.phase2: mcp.proof.e21.por mcp.proof.e22.schema mcp.proof.e23.gatekeeper mcp.proof.e24.tagproof mcp.proof.e25.bundle
+	@echo "[mcp.strict.live.phase2] All E21-E25 proofs generated"
 
 ## MCP M5 targets
 .PHONY: mcp.runtime.checkpointer mcp.session.trace atlas.trace.inject guard.mcp.env_mismatch mcp.runtime.proofs
@@ -2300,6 +2490,70 @@ guard.atlas.compliance.timeseries:
 	@echo "[guard.atlas.compliance.timeseries] Validating compliance timeseries dashboards"
 	@python3 scripts/guards/guard_atlas_compliance_timeseries.py
 
+# PLAN-078 E88 — Violation Drilldown Pages
+.PHONY: atlas.compliance.drilldowns guard.atlas.compliance.drilldowns
+
+atlas.compliance.drilldowns:
+	@echo "[atlas.compliance.drilldowns] Generating violation drilldown pages"
+	@PYTHONPATH=. python3 scripts/atlas/generate_violation_pages.py
+	@echo "[atlas.compliance.drilldowns] Pages: docs/atlas/webproof/violations/*.html"
+
+guard.atlas.compliance.drilldowns:
+	@echo "[guard.atlas.compliance.drilldowns] Validating violation drilldown pages"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_compliance_drilldowns.py --write-evidence evidence/guard_atlas_compliance_drilldowns.json
+
+# PLAN-078 E89 — Violation Browser
+.PHONY: atlas.violation.browser guard.atlas.violation.browser
+
+atlas.violation.browser:
+	@echo "[atlas.violation.browser] Generating violations browser"
+	@PYTHONPATH=. python3 scripts/atlas/generate_violation_browser.py
+	@echo "[atlas.violation.browser] Browser: docs/atlas/browser/violations.html"
+
+guard.atlas.violation.browser:
+	@echo "[guard.atlas.violation.browser] Validating violations browser"
+	@PYTHONPATH=. python3 scripts/guards/guard_atlas_violation_browser.py --write-evidence guard_atlas_violation_browser.json
+
+# PLAN-078 E90 — Graph Compliance Metrics
+.PHONY: control.graph.compliance.export guard.control.graph.compliance
+
+control.graph.compliance.export:
+	@echo "[control.graph.compliance.export] Exporting graph compliance metrics"
+	@PYTHONPATH=. python3 scripts/db/control_graph_compliance_metrics_export.py
+	@echo "[control.graph.compliance.export] Export: share/atlas/control_plane/graph_compliance.json"
+
+guard.control.graph.compliance:
+	@echo "[guard.control.graph.compliance] Validating graph compliance metrics export"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_graph_compliance.py --write-evidence guard_control_graph_compliance.json
+
+# Phase-6P — BibleScholar Reference Answer Slice
+.PHONY: control.biblescholar.reference.export guard.biblescholar.reference
+
+control.biblescholar.reference.export:
+	@echo "[control.biblescholar.reference.export] Exporting BibleScholar reference questions and answers"
+	@PYTHONPATH=. python3 scripts/db/control_biblescholar_reference_export.py
+	@echo "[control.biblescholar.reference.export] Export: share/atlas/control_plane/biblescholar_reference.json"
+
+guard.biblescholar.reference:
+	@echo "[guard.biblescholar.reference] Validating BibleScholar reference export"
+	@PYTHONPATH=. python3 scripts/guards/guard_biblescholar_reference.py --write-evidence guard_biblescholar_reference.json
+
+# Phase D — Autopilot Summary Export
+.PHONY: control.autopilot.summary.export guard.control.autopilot.summary
+
+control.autopilot.summary.export:
+	@echo "[control.autopilot.summary.export] Exporting autopilot summary metrics"
+	@PYTHONPATH=. python3 scripts/db/control_autopilot_summary_export.py
+	@echo "[control.autopilot.summary.export] Export: share/atlas/control_plane/autopilot_summary.json"
+
+guard.control.autopilot.summary:
+	@echo "[guard.control.autopilot.summary] Validating autopilot summary export"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_autopilot_summary.py --write-evidence guard_control_autopilot_summary.json
+
+guard.control.widgets:
+	@echo "[guard.control.widgets] Validating Phase-6D control-plane widget adapters"
+	@PYTHONPATH=. python3 scripts/guards/guard_control_widgets.py --write-evidence guard_control_widgets.json
+
 # PLAN-079 E91 — Guard Receipts Index
 atlas.guard.receipts:
 	@echo "[atlas.guard.receipts] Generating guard receipts index"
@@ -2324,7 +2578,7 @@ guard.browser.verification:
 # --- PLAN-079 E94: Screenshot ↔ Tagproof Integration ---
 guard.tagproof.screenshots:
 	@echo "[guard.tagproof.screenshots] Validating tagproof screenshot integration"
-	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_screenshots.py
+	@PYTHONPATH=. python3 scripts/guards/guard_tagproof_screenshots.py --write-evidence evidence/guard_tagproof_screenshots.json
 
 # --- PLAN-079 E95: Atlas Links Integrity Sweep ---
 guard.atlas.links:
@@ -2500,8 +2754,11 @@ governance.ingest.docs.dryrun:
 # Governance Doc Registry — guards (HINT posture)
 # -----------------------------------------------------------------------------
 
-guard.docs.db.ssot:
+guard.docs.db.ssot: ## DMS guard: validate docs DB SSOT (HINT mode, non-blocking)
 	@PYTHONPATH=. python scripts/guards/guard_docs_db_ssot.py
+
+guard.docs.db.ssot.strict: ## DMS guard: validate docs DB SSOT (STRICT mode, blocking)
+	@STRICT_MODE=1 PYTHONPATH=. python scripts/guards/guard_docs_db_ssot.py
 
 ci.guards.docs:
 	@PYTHONPATH=. python scripts/guards/guard_docs_db_ssot.py

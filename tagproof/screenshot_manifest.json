@@ -1,0 +1,12 @@
+{
+  "generated_at": "2025-11-21T06:45:00Z",
+  "items": [
+    {"page": "docs/atlas/index.html", "screenshot": "screenshots/index.png"},
+    {"page": "docs/atlas/mcp_catalog_view.html", "screenshot": "screenshots/m4b_dashboard_advisory.png"},
+    {"page": "docs/atlas/dashboard/compliance_summary.html", "screenshot": "screenshots/compliance_summary.png"},
+    {"page": "docs/atlas/dashboard/compliance_timeseries.html", "screenshot": "screenshots/compliance_timeseries.png"},
+    {"page": "docs/atlas/dashboard/compliance_heatmap.html", "screenshot": "screenshots/compliance_heatmap.png"},
+    {"page": "docs/atlas/browser/violations.html", "screenshot": "screenshots/violations.png"},
+    {"page": "docs/atlas/browser/guard_receipts.html", "screenshot": "screenshots/guard_receipts.png"}
+  ]
+}

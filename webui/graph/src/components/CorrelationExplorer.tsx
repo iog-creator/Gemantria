@@ -1,292 +1,326 @@
-import { useEffect, useState, useMemo } from "react";
-import { scaleLinear } from "@visx/scale";
-import { Circle, Line } from "@visx/shape";
+import React, { useState, useEffect, useMemo } from 'react';
+import ReactFlow, {
+    Node,
+    Edge,
+    useNodesState,
+    useEdgesState,
+    Controls,
+    Background,
+    BackgroundVariant,
+    Panel,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 
-interface CorrelationNode {
-  id: string;
-  label: string;
-  type: string;
-}
-
-interface CorrelationEdge {
-  source: string;
-  target: string;
-  correlation: number;
-  weight: number;
-  p_value: number;
-  metric: string;
-  cluster_source?: number;
-  cluster_target?: number;
-  significance: "significant" | "not_significant";
-}
-
-interface CorrelationNetwork {
-  nodes: CorrelationNode[];
-  edges: CorrelationEdge[];
-  metadata: {
-    node_count: number;
-    edge_count: number;
-    connected_components: number;
-    is_connected: boolean;
-    avg_weighted_degree?: number;
-    max_weighted_degree?: number;
-    avg_clustering_coeff?: number;
-    correlation_threshold: number;
-    total_input_correlations: number;
-    filtered_correlations: number;
-    correlation_methods: string[];
-    export_timestamp: string;
-    top_weighted_degree_nodes?: Array<{
-      node: string;
-      weighted_degree: number;
-    }>;
-  };
-}
-
-export default function CorrelationExplorer() {
-  const [data, setData] = useState<CorrelationNetwork | null>(null);
-  const [correlationThreshold, setCorrelationThreshold] = useState(0.4);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/exports/graph_correlation_network.json")
-      .then(async (r) => {
-        if (r.ok) {
-          const correlationData = await r.json();
-          setData(correlationData);
-        } else {
-          setError("Correlation network data not available");
-        }
-      })
-      .catch(() => {
-        setError("Failed to load correlation network data");
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const filteredData = useMemo(() => {
-    if (!data) return null;
-
-    const filteredEdges = data.edges.filter(
-      (edge) => Math.abs(edge.correlation) >= correlationThreshold,
-    );
-
-    // Get unique nodes from filtered edges
-    const nodeIds = new Set<string>();
-    filteredEdges.forEach((edge) => {
-      nodeIds.add(edge.source);
-      nodeIds.add(edge.target);
-    });
-
-    const filteredNodes = data.nodes.filter((node) => nodeIds.has(node.id));
-
-    return {
-      ...data,
-      nodes: filteredNodes,
-      edges: filteredEdges,
-      metadata: {
-        ...data.metadata,
-        node_count: filteredNodes.length,
-        edge_count: filteredEdges.length,
-      },
+// --- Types ---
+interface GraphStats {
+    nodes: number;
+    edges: number;
+    clusters: number;
+    density: number;
+    centrality: {
+        avg_degree: number;
+        avg_betweenness: number;
     };
-  }, [data, correlationThreshold]);
-
-  if (loading) {
-    return <div className="p-4">Loading correlation network…</div>;
-  }
-
-  if (error || !data) {
-    return (
-      <div className="p-4 text-red-600">
-        {error || "No correlation network data available"}
-      </div>
-    );
-  }
-
-  if (!filteredData || filteredData.edges.length === 0) {
-    return (
-      <div className="p-4">
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            Correlation Threshold: {correlationThreshold.toFixed(2)}
-          </label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={correlationThreshold}
-            onChange={(e) =>
-              setCorrelationThreshold(parseFloat(e.target.value))
-            }
-            className="w-full"
-          />
-        </div>
-        <div className="text-gray-600">
-          No correlations found above threshold{" "}
-          {correlationThreshold.toFixed(2)}. Try lowering the threshold.
-        </div>
-      </div>
-    );
-  }
-
-  const width = 600;
-  const height = 400;
-
-  // Create a simple node-link diagram layout
-  const nodes = filteredData.nodes.map((node, i) => ({
-    ...node,
-    x: (i % 5) * 100 + 50, // Simple grid layout
-    y: Math.floor(i / 5) * 100 + 50,
-  }));
-
-  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
-
-  // Color scale for correlation strength
-  const colorScale = scaleLinear({
-    domain: [-1, 1],
-    range: ["#ff4444", "#4444ff"], // Red for negative, blue for positive
-  });
-
-  return (
-    <div className="p-4">
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">
-          Correlation Network Explorer
-        </h3>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="text-sm">
-            <strong>Nodes:</strong> {filteredData.metadata.node_count} |
-            <strong> Edges:</strong> {filteredData.metadata.edge_count} |
-            <strong> Threshold:</strong> ≥{correlationThreshold.toFixed(2)}
-          </div>
-          <div className="text-sm">
-            <strong>Components:</strong>{" "}
-            {filteredData.metadata.connected_components} |
-            <strong> Connected:</strong>{" "}
-            {filteredData.metadata.is_connected ? "Yes" : "No"}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            Correlation Threshold: {correlationThreshold.toFixed(2)}
-          </label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={correlationThreshold}
-            onChange={(e) =>
-              setCorrelationThreshold(parseFloat(e.target.value))
-            }
-            className="w-full"
-          />
-        </div>
-
-        {filteredData.metadata.top_weighted_degree_nodes && (
-          <div className="mb-4">
-            <h4 className="text-sm font-medium mb-1">
-              Top Connected Concepts:
-            </h4>
-            <div className="text-xs space-y-1">
-              {filteredData.metadata.top_weighted_degree_nodes
-                .slice(0, 3)
-                .map((node) => (
-                  <div key={node.node} className="flex justify-between">
-                    <span>
-                      {node.node.slice(0, 20)}
-                      {node.node.length > 20 ? "..." : ""}
-                    </span>
-                    <span className="font-mono">
-                      {node.weighted_degree.toFixed(2)}
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="border rounded-lg p-4 bg-white">
-        <svg width={width} height={height}>
-          <rect width={width} height={height} fill="#f8f9fa" />
-
-          {/* Edges */}
-          {filteredData.edges.map((edge, i) => {
-            const sourceNode = nodeMap.get(edge.source);
-            const targetNode = nodeMap.get(edge.target);
-
-            if (!sourceNode || !targetNode) return null;
-
-            return (
-              <Line
-                key={`edge-${i}`}
-                from={{ x: sourceNode.x, y: sourceNode.y }}
-                to={{ x: targetNode.x, y: targetNode.y }}
-                stroke={colorScale(edge.correlation)}
-                strokeWidth={Math.abs(edge.weight) * 3 + 1}
-                strokeOpacity={edge.significance === "significant" ? 1 : 0.6}
-              />
-            );
-          })}
-
-          {/* Nodes */}
-          {nodes.map((node) => (
-            <g key={`node-${node.id}`}>
-              <Circle
-                cx={node.x}
-                cy={node.y}
-                r={8}
-                fill="#666"
-                stroke="#fff"
-                strokeWidth={2}
-              />
-              <text
-                x={node.x}
-                y={node.y - 12}
-                textAnchor="middle"
-                fontSize="10px"
-                fill="#333"
-                className="pointer-events-none"
-              >
-                {node.label.slice(0, 8)}
-                {node.label.length > 8 ? "..." : ""}
-              </text>
-            </g>
-          ))}
-        </svg>
-      </div>
-
-      <div className="mt-4 text-xs text-gray-600">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <strong>Legend:</strong>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="w-4 h-1 bg-blue-500"></div>
-              <span>Positive correlation</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-1 bg-red-500"></div>
-              <span>Negative correlation</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-1 bg-gray-400 opacity-60"></div>
-              <span>Not significant (p ≥ 0.05)</span>
-            </div>
-          </div>
-          <div>
-            <strong>Methods:</strong>{" "}
-            {data.metadata.correlation_methods.join(", ") || "Unknown"}
-            <br />
-            <strong>Updated:</strong>{" "}
-            {new Date(data.metadata.export_timestamp).toLocaleString()}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    generated_at?: string;
 }
+
+interface GraphNode {
+    id: string;
+    surface?: string;
+    hebrew?: string;
+    gematria?: number;
+    class?: string;
+    [key: string]: any;
+}
+
+interface GraphEdge {
+    source: string;
+    target: string;
+    cosine?: number;
+    rerank_score?: number;
+    edge_strength?: number;
+    class?: string;
+    [key: string]: any;
+}
+
+interface ScoredGraph {
+    schema: string;
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+    metadata?: any;
+}
+
+// --- Components ---
+
+const GlassPanel = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+    <div className={`backdrop-blur-xl bg-slate-900/60 border border-white/10 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 ${className}`}>
+        {children}
+    </div>
+);
+
+const StatBadge = ({ label, value, subtext }: { label: string; value: string | number; subtext?: string }) => (
+    <div className="flex flex-col items-center justify-center px-4 py-2">
+        <div className="text-2xl font-light text-white tracking-tight">{value}</div>
+        <div className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">{label}</div>
+        {subtext && <div className="text-[9px] text-slate-500 mt-0.5">{subtext}</div>}
+    </div>
+);
+
+const CorrelationExplorer: React.FC = () => {
+    // --- State ---
+    const [stats, setStats] = useState<GraphStats | null>(null);
+    const [graph, setGraph] = useState<ScoredGraph | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Controls
+    const [edgeStrengthThreshold, setEdgeStrengthThreshold] = useState(0.75);
+    const [filterByClass, setFilterByClass] = useState<'all' | 'strong' | 'weak' | 'very_weak'>('all');
+    const [isFiltersOpen, setIsFiltersOpen] = useState(true);
+
+    // React Flow
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+    // --- Data Loading ---
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const [statsRes, graphRes] = await Promise.all([
+                    fetch('/exports/graph_stats.json', { cache: 'no-store' }),
+                    fetch('/exports/graph_latest.json', { cache: 'no-store' })
+                ]);
+
+                if (!statsRes.ok) throw new Error(`Stats load failed: ${statsRes.status}`);
+                if (!graphRes.ok) throw new Error(`Graph load failed: ${graphRes.status}`);
+
+                const statsData = await statsRes.json();
+                const graphData = await graphRes.json();
+
+                setStats(statsData);
+                setGraph(graphData);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Unknown error');
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, []);
+
+    // --- Graph Processing ---
+    const filteredGraph = useMemo(() => {
+        if (!graph) return { nodes: [], edges: [] };
+
+        const filteredEdges = graph.edges.filter((edge) => {
+            const strength = edge.edge_strength || edge.cosine || 0;
+            if (strength < edgeStrengthThreshold) return false;
+            if (filterByClass !== 'all' && edge.class !== filterByClass) return false;
+            return true;
+        });
+
+        const nodeIds = new Set<string>();
+        filteredEdges.forEach((e) => { nodeIds.add(e.source); nodeIds.add(e.target); });
+        const filteredNodes = graph.nodes.filter((n) => nodeIds.has(n.id));
+
+        return { nodes: filteredNodes, edges: filteredEdges };
+    }, [graph, edgeStrengthThreshold, filterByClass]);
+
+    const { flowNodes, flowEdges } = useMemo(() => {
+        if (!filteredGraph.nodes.length) return { flowNodes: [], flowEdges: [] };
+
+        const cols = Math.ceil(Math.sqrt(filteredGraph.nodes.length));
+
+        const nodes: Node[] = filteredGraph.nodes.map((node, index) => {
+            const row = Math.floor(index / cols);
+            const col = index % cols;
+            const label = node.surface || node.hebrew || node.id;
+
+            // Ethereal Node Styling
+            return {
+                id: node.id,
+                type: 'default',
+                position: { x: col * 250, y: row * 250 }, // More space
+                data: { label },
+                style: {
+                    background: 'rgba(15, 23, 42, 0.8)', // Slate-900 with opacity
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '50%',
+                    width: 120,
+                    height: 120,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    fontSize: '14px',
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 300,
+                    letterSpacing: '0.05em',
+                    boxShadow: '0 0 20px rgba(56, 189, 248, 0.1)', // Subtle blue glow
+                    backdropFilter: 'blur(4px)',
+                    transition: 'all 0.3s ease',
+                },
+            };
+        });
+
+        const edges: Edge[] = filteredGraph.edges.map((edge, index) => {
+            const strength = edge.edge_strength || edge.cosine || 0;
+            // Starlight Edge Styling
+            const opacity = Math.max(0.1, strength - 0.2); // Fade out weak edges
+            const width = strength * 2;
+
+            return {
+                id: `e-${index}`,
+                source: edge.source,
+                target: edge.target,
+                style: {
+                    stroke: `rgba(255, 255, 255, ${opacity})`, // White starlight
+                    strokeWidth: width,
+                },
+                animated: strength > 0.9, // Only animate strong connections
+            };
+        });
+
+        return { flowNodes: nodes, flowEdges: edges };
+    }, [filteredGraph]);
+
+    useEffect(() => {
+        setNodes(flowNodes);
+        setEdges(flowEdges);
+    }, [flowNodes, flowEdges, setNodes, setEdges]);
+
+    // --- Render ---
+    if (loading) return <div className="h-screen w-screen bg-slate-950 flex items-center justify-center text-slate-400 font-light tracking-widest animate-pulse">INITIALIZING VISUALIZATION...</div>;
+    if (error) return <div className="h-screen w-screen bg-slate-950 flex items-center justify-center text-red-400 font-light">{error}</div>;
+    if (!stats) return null;
+
+    return (
+        <div className="h-screen w-screen bg-slate-950 relative overflow-hidden font-sans text-slate-200">
+            {/* Background Ambient Effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black opacity-80 pointer-events-none" />
+
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                fitView
+                minZoom={0.1}
+                maxZoom={4}
+                defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
+                proOptions={{ hideAttribution: true }}
+            >
+                <Background
+                    variant={BackgroundVariant.Dots}
+                    gap={30}
+                    size={1}
+                    color="rgba(255, 255, 255, 0.05)"
+                />
+                <Controls
+                    className="bg-slate-800/50 border-white/10 fill-white"
+                    showInteractive={false}
+                />
+
+                {/* --- Floating UI Panels --- */}
+
+                {/* Top Right: Key Metrics */}
+                <Panel position="top-right" className="m-6">
+                    <GlassPanel className="flex divide-x divide-white/10">
+                        <StatBadge label="Nodes" value={stats.nodes} />
+                        <StatBadge label="Edges" value={stats.edges} />
+                        <StatBadge label="Clusters" value={stats.clusters} />
+                        <StatBadge label="Visible" value={filteredGraph.edges.length} subtext={`${((filteredGraph.edges.length / stats.edges) * 100).toFixed(0)}%`} />
+                    </GlassPanel>
+                </Panel>
+
+                {/* Top Left: Title & Filters */}
+                <Panel position="top-left" className="m-6 max-w-xs">
+                    <GlassPanel className="p-5">
+                        <div className="flex justify-between items-start mb-4">
+                            <div>
+                                <h1 className="text-lg font-medium text-white tracking-tight">Correlation Explorer</h1>
+                                <p className="text-xs text-slate-400 mt-1">Semantic Network Visualization</p>
+                            </div>
+                            <button
+                                onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+                                className="text-xs text-slate-500 hover:text-white transition-colors"
+                            >
+                                {isFiltersOpen ? 'Hide' : 'Show'}
+                            </button>
+                        </div>
+
+                        {isFiltersOpen && (
+                            <div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                                {/* Strength Slider */}
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-xs">
+                                        <span className="text-slate-400">Connection Strength</span>
+                                        <span className="text-white font-mono">{edgeStrengthThreshold.toFixed(2)}</span>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.05"
+                                        value={edgeStrengthThreshold}
+                                        onChange={(e) => setEdgeStrengthThreshold(parseFloat(e.target.value))}
+                                        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-white"
+                                    />
+                                    <div className="flex justify-between text-[10px] text-slate-600">
+                                        <span>Loose</span>
+                                        <span>Strict</span>
+                                    </div>
+                                </div>
+
+                                {/* Class Filter */}
+                                <div className="space-y-2">
+                                    <span className="text-xs text-slate-400 block">Filter by Class</span>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['all', 'strong', 'weak'].map((opt) => (
+                                            <button
+                                                key={opt}
+                                                onClick={() => setFilterByClass(opt as any)}
+                                                className={`px-3 py-1 text-xs rounded-full border transition-all ${filterByClass === opt
+                                                    ? 'bg-white text-slate-900 border-white font-medium'
+                                                    : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
+                                                    }`}
+                                            >
+                                                {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </GlassPanel>
+                </Panel>
+
+                {/* Bottom Right: Legend */}
+                <Panel position="bottom-right" className="m-6">
+                    <GlassPanel className="p-3">
+                        <div className="flex items-center gap-4 text-[10px] text-slate-400">
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-2 h-2 rounded-full bg-slate-900 border border-white/50 shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+                                <span>Concept Node</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-8 h-0.5 bg-white/50"></div>
+                                <span>Correlation</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-8 h-0.5 border-t border-dashed border-white/30"></div>
+                                <span>Weak Link</span>
+                            </div>
+                        </div>
+                    </GlassPanel>
+                </Panel>
+
+            </ReactFlow>
+        </div>
+    );
+};
+
+export default CorrelationExplorer;

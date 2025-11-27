@@ -1,2 +1,0 @@
-migrations/000_base.sql
-migrations/001_runs_ledger.sql

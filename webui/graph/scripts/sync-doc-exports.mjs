@@ -20,11 +20,15 @@ const sourceDir = join(repoRoot, 'share/exports/docs-control');
 const lmSourceDir = join(repoRoot, 'share/atlas/control_plane');
 const dbSourceDir = join(repoRoot, 'share/evidence');
 const autopilotSourceDir = join(repoRoot, 'share/autopilot');
+const biblescholarSourceDir = join(repoRoot, 'share/exports/biblescholar');
+const graphSourceDir = join(repoRoot, 'share/exports');
 
 const targetDir = join(repoRoot, 'webui/graph/public/exports/docs-control');
 const lmTargetDir = join(repoRoot, 'webui/graph/public/exports/control-plane');
 const dbTargetDir = join(repoRoot, 'webui/graph/public/exports/evidence');
 const autopilotTargetDir = join(repoRoot, 'webui/graph/public/exports/autopilot');
+const biblescholarTargetDir = join(repoRoot, 'webui/graph/public/exports/biblescholar');
+const graphTargetDir = join(repoRoot, 'webui/graph/public/exports');
 
 function syncFiles() {
   try {
@@ -58,7 +62,7 @@ function syncFiles() {
 
     console.log(`\n✓ Synced ${copied} file(s) to ${targetDir}`);
 
-    // Sync LM Indicator and System Health
+    // Sync LM Indicator, System Health, and Autopilot Summary
     mkdirSync(lmTargetDir, { recursive: true });
     if (statSync(join(lmSourceDir, 'lm_indicator.json')).isFile()) {
       copyFileSync(join(lmSourceDir, 'lm_indicator.json'), join(lmTargetDir, 'lm_indicator.json'));
@@ -67,6 +71,10 @@ function syncFiles() {
     if (statSync(join(lmSourceDir, 'system_health.json')).isFile()) {
       copyFileSync(join(lmSourceDir, 'system_health.json'), join(lmTargetDir, 'system_health.json'));
       console.log(`Copied: system_health.json`);
+    }
+    if (statSync(join(lmSourceDir, 'autopilot_summary.json')).isFile()) {
+      copyFileSync(join(lmSourceDir, 'autopilot_summary.json'), join(lmTargetDir, 'autopilot_summary.json'));
+      console.log(`Copied: autopilot_summary.json`);
     }
 
     // Sync DB Health (using latest guard_all_validation as proxy if needed, or specific db health file)
@@ -96,6 +104,45 @@ function syncFiles() {
     } catch (error) {
       // Autopilot directory may not exist yet - that's OK
       console.log('Note: Autopilot logs directory not found (will be created when first command runs)');
+    }
+
+    // Sync BibleScholar exports
+    mkdirSync(biblescholarTargetDir, { recursive: true });
+    try {
+      if (statSync(biblescholarSourceDir).isDirectory()) {
+        const biblescholarFiles = readdirSync(biblescholarSourceDir).filter(f => f.endsWith('.json'));
+        for (const file of biblescholarFiles) {
+          const sourcePath = join(biblescholarSourceDir, file);
+          const targetPath = join(biblescholarTargetDir, file);
+          copyFileSync(sourcePath, targetPath);
+          console.log(`Copied: ${file} (biblescholar)`);
+        }
+      }
+    } catch (error) {
+      // BibleScholar directory may not exist yet - that's OK
+      console.log('Note: BibleScholar exports directory not found (run export scripts to generate)');
+    }
+
+    // Sync graph data files (graph_latest.json, graph_stats.json, etc.)
+    try {
+      if (statSync(graphSourceDir).isDirectory()) {
+        const graphFiles = ['graph_latest.json', 'graph_stats.json', 'graph_patterns.json', 'temporal_patterns.json', 'pattern_forecast.json'];
+        for (const file of graphFiles) {
+          const sourcePath = join(graphSourceDir, file);
+          const targetPath = join(graphTargetDir, file);
+          try {
+            if (statSync(sourcePath).isFile()) {
+              copyFileSync(sourcePath, targetPath);
+              console.log(`Copied: ${file} (graph)`);
+            }
+          } catch (err) {
+            // File doesn't exist - that's OK, skip it
+            console.log(`Note: ${file} not found in share/exports (run export scripts to generate)`);
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Note: Graph exports directory not found (run export scripts to generate)');
     }
 
   } catch (error) {

@@ -460,5 +460,131 @@ class TestVectorNormalization(unittest.TestCase):
         self.assertIn("candidate index 0", error_msg)
 
 
+class TestGraniteRerankFallback(unittest.TestCase):
+    """Test Granite rerank fallback behavior on JSON/HTTP errors."""
+
+    @patch("agentpm.adapters.ollama._post_json")
+    @patch("agentpm.adapters.ollama.get_lm_model_config")
+    def test_granite_rerank_falls_back_on_bad_json(self, mock_config, mock_post_json):
+        """Test Granite rerank falls back to embedding_only when JSON parse fails."""
+        from agentpm.adapters.ollama import rerank
+
+        # Mock config to use granite_llm strategy
+        mock_config.return_value = {
+            "reranker_strategy": "granite_llm",
+            "reranker_model": "granite4:tiny-h",
+            "ollama_base_url": "http://127.0.0.1:11434",
+            "embedding_model": "granite-embedding:278m",
+        }
+
+        # Track calls to verify fallback behavior
+        call_count = {"chat": 0, "embed": 0}
+
+        def mock_post_side_effect(base_url, path, payload=None):
+            if path == "/api/chat":
+                call_count["chat"] += 1
+                # Return malformed JSON (truncated response that can't be parsed)
+                return {
+                    "message": {
+                        "content": '{"index": 1, "score": 0.95, "documents": [{"concept_id": "be66bc81", "concept_name": "", "hebrew_text": "",'  # Truncated
+                    }
+                }
+            elif path == "/api/embeddings":
+                call_count["embed"] += 1
+                # Return valid embedding for fallback
+                return {"embedding": [0.1] * 768}
+
+        mock_post_json.side_effect = mock_post_side_effect
+
+        query = "test query"
+        docs = ["document 1", "document 2"]
+
+        # Should not raise; should fall back to embedding_only
+        with self.assertLogs("agentpm.adapters.ollama", level="WARNING") as log:
+            results = rerank(query, docs, model_slot="reranker")
+
+        # Verify fallback occurred (results from embedding_only)
+        self.assertIsInstance(results, list)
+        self.assertEqual(len(results), 2)
+        for doc, score in results:
+            self.assertIsInstance(doc, str)
+            self.assertIsInstance(score, float)
+            self.assertGreaterEqual(score, 0.0)
+            self.assertLessEqual(score, 1.0)
+
+        # Verify chat was attempted and embeddings were called for fallback
+        self.assertEqual(call_count["chat"], 1, "Chat endpoint should be called once")
+        self.assertEqual(call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)")
+
+        # Verify HINT log was emitted
+        self.assertTrue(
+            any("Granite LLM rerank JSON parse failed" in record.message for record in log.records),
+            "Expected HINT log about JSON parse failure",
+        )
+
+    @patch("agentpm.adapters.ollama._post_json")
+    @patch("agentpm.adapters.ollama.get_lm_model_config")
+    def test_granite_rerank_falls_back_on_http_error(self, mock_config, mock_post_json):
+        """Test Granite rerank falls back to embedding_only on HTTP 404 error."""
+        from urllib.error import HTTPError
+
+        from agentpm.adapters.ollama import rerank
+
+        # Mock config to use granite_llm strategy
+        mock_config.return_value = {
+            "reranker_strategy": "granite_llm",
+            "reranker_model": "granite4:tiny-h",
+            "ollama_base_url": "http://127.0.0.1:11434",
+            "embedding_model": "granite-embedding:278m",
+        }
+
+        # Mock _post_json to raise HTTPError(404) on chat call, then return embeddings for fallback
+        call_count = {"chat": 0, "embed": 0}
+
+        def mock_post_side_effect(base_url, path, payload=None):
+            if path == "/api/chat":
+                call_count["chat"] += 1
+                # Simulate HTTP 404 error
+                raise HTTPError(
+                    url="http://127.0.0.1:11434/api/chat",
+                    code=404,
+                    msg="Not Found",
+                    hdrs=None,
+                    fp=None,
+                )
+            elif path == "/api/embeddings":
+                call_count["embed"] += 1
+                # Return valid embedding for fallback (query + 2 docs = 3 calls)
+                return {"embedding": [0.1] * 768}
+
+        mock_post_json.side_effect = mock_post_side_effect
+
+        query = "test query"
+        docs = ["document 1", "document 2"]
+
+        # Should not raise; should fall back to embedding_only
+        with self.assertLogs("agentpm.adapters.ollama", level="WARNING") as log:
+            results = rerank(query, docs, model_slot="reranker")
+
+        # Verify fallback occurred (results from embedding_only)
+        self.assertIsInstance(results, list)
+        self.assertEqual(len(results), 2)
+        for doc, score in results:
+            self.assertIsInstance(doc, str)
+            self.assertIsInstance(score, float)
+            self.assertGreaterEqual(score, 0.0)
+            self.assertLessEqual(score, 1.0)
+
+        # Verify chat was attempted and embeddings were called for fallback
+        self.assertEqual(call_count["chat"], 1, "Chat endpoint should be called once")
+        self.assertEqual(call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)")
+
+        # Verify HINT log was emitted
+        self.assertTrue(
+            any("Granite LLM rerank call failed" in record.message for record in log.records),
+            "Expected HINT log about HTTP error",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

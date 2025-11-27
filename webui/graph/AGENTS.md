@@ -1,6 +1,6 @@
 # AGENTS.md — webui/graph
 
-## Purpose
+## Directory Purpose
 
 This directory contains the legacy Graph Dashboard web UI and related assets.
 

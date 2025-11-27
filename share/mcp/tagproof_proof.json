@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "method": "tagproof_bundle",
+  "mode": "HINT",
+  "components_count": 9,
+  "required_present": true,
+  "no_errors": true,
+  "component_errors": null,
+  "generated_at": "2025-11-21T07:01:42.554092+00:00"
+}

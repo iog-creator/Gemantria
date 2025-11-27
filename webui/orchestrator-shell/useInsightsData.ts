@@ -90,8 +90,8 @@ export function useInsightsData(): OrchestratorInsights {
                     // Extract LM slot info if available (future: per-slot breakdown)
                     // For now, we'll use aggregate LM status from lm_indicator
                     if (lmHealth) {
-                        const provider = (lmHealth.details as any)?.provider || 'unknown';
-                        const endpoint = (lmHealth.details as any)?.endpoint || 'unknown';
+                        const provider = (lmHealth as any).details?.provider || 'unknown';
+                        const endpoint = (lmHealth as any).details?.endpoint || 'unknown';
                         // Note: Per-slot breakdown would require additional export structure
                         // For v1, we show aggregate status in lmSummary
                     }
@@ -142,7 +142,7 @@ export function useInsightsData(): OrchestratorInsights {
                     }
 
                     // Generate insights/hints from LM data
-                    if (status === 'healthy' && successRate !== null && successRate > 0.95) {
+                    if (status === 'healthy' && successRate != null && successRate > 0.95) {
                         hints.push(`LM success rate is above 95% in the last ${windowDays} days.`);
                     }
                     if (status === 'degraded' || status === 'offline') {

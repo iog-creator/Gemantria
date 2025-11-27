@@ -80,6 +80,14 @@ def run_command(cmd: list, description: str) -> bool:
         return False
 
 
+def generate_schema_docs():
+    """Generate schema documentation."""
+    return run_command(
+        [sys.executable, "scripts/generate_schema_docs.py"],
+        "Generating schema documentation",
+    )
+
+
 def update_governance_artifacts():
     """Update governance artifacts in database."""
     return run_command(
@@ -181,6 +189,7 @@ def main():
     print()
 
     operations = [
+        ("Generate schema documentation", generate_schema_docs),
         ("Update governance artifacts", update_governance_artifacts),
         ("Run document management hints", run_document_hints),
         ("Validate governance compliance", validate_governance_compliance),

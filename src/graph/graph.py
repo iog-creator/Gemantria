@@ -24,11 +24,11 @@ from src.graph.state import PipelineState
 from src.graph.batch_processor import BatchProcessor, BatchAbortError
 from src.nodes import network_aggregator
 from src.nodes.enrichment import enrichment_node
-from src.nodes.ai_noun_discovery import discover_nouns_for_book
+from agentpm.modules.gematria.utils.ai_noun_discovery import discover_nouns_for_book
 from src.nodes.graph_scorer import graph_scorer_node
-from src.nodes.math_verifier import math_verifier_node
+from agentpm.modules.gematria.utils.math_verifier import math_verifier_node
 from src.services.expert_agent import analyze_theological
-from src.ssot.noun_adapter import adapt_ai_noun
+from agentpm.modules.gematria.utils.noun_adapter import adapt_ai_noun
 from src.infra.runs_ledger import (
     create_run,
     update_run_status,

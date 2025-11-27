@@ -1,0 +1,13 @@
+{
+  "schema": "biblescholar_reference_v1",
+  "generated_at": "2025-11-21T18:21:39.496792+00:00",
+  "ok": true,
+  "connection_ok": true,
+  "questions": [],
+  "summary": {
+    "total_questions": 0,
+    "by_mode": {},
+    "by_verse_ref": {}
+  },
+  "window_days": 30
+}

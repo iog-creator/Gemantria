@@ -1,0 +1,69 @@
+{
+  "strongs_id": "H7965",
+  "lemma": "H7965",
+  "hebrew_verses": [
+    {
+      "verse_id": 53260,
+      "book_name": "1Ch",
+      "chapter_num": 18,
+      "verse_num": 10,
+      "text": "He sent Hadoram his son to king David, to enquire of his welfare, and to congratulate him, because he had fought against Hadarezer, and smitten him; (for Hadarezer had war with Tou;) and {with him} all manner of vessels of gold and silver and brass. {Hadoram: also called, Joram} {to enquire...: or, to salute} {to congratulate: Heb. to bless} {had war: Heb. was the man of wars}",
+      "translation_source": "KJV"
+    },
+    {
+      "verse_id": 53333,
+      "book_name": "1Ch",
+      "chapter_num": 22,
+      "verse_num": 9,
+      "text": "Behold, a son shall be born to thee, who shall be a man of rest; and I will give him rest from all his enemies round about: for his name shall be Solomon, and I will give peace and quietness unto Israel in his days. {Solomon: that is, Peaceable}",
+      "translation_source": "KJV"
+    },
+    {
+      "verse_id": 51134,
+      "book_name": "1Ki",
+      "chapter_num": 2,
+      "verse_num": 5,
+      "text": "Moreover thou knowest also what Joab the son of Zeruiah did to me, {and} what he did to the two captains of the hosts of Israel, unto Abner the son of Ner, and unto Amasa the son of Jether, whom he slew, and shed the blood of war in peace, and put the blood of war upon his girdle that {was} about his loins, and in his shoes that {were} on his feet. {shed: Heb. put}",
+      "translation_source": "KJV"
+    },
+    {
+      "verse_id": 51135,
+      "book_name": "1Ki",
+      "chapter_num": 2,
+      "verse_num": 6,
+      "text": "Do therefore according to thy wisdom, and let not his hoar head go down to the grave in peace.",
+      "translation_source": "KJV"
+    },
+    {
+      "verse_id": 51142,
+      "book_name": "1Ki",
+      "chapter_num": 2,
+      "verse_num": 13,
+      "text": "And Adonijah the son of Haggith came to Bathsheba the mother of Solomon. And she said, Comest thou peaceably? And he said, Peaceably.",
+      "translation_source": "KJV"
+    }
+  ],
+  "connections": [
+    {
+      "hebrew_verse": {
+        "verse_id": 51134,
+        "book_name": "1Ki",
+        "chapter_num": 2,
+        "verse_num": 5,
+        "text": "Moreover thou knowest also what Joab the son of Zeruiah did to me, {and} what he did to the two captains of the hosts of Israel, unto Abner the son of Ner, and unto Amasa the son of Jether, whom he slew, and shed the blood of war in peace, and put the blood of war upon his girdle that {was} about his loins, and in his shoes that {were} on his feet. {shed: Heb. put}",
+        "translation_source": "KJV"
+      },
+      "greek_verse": {
+        "verse_id": 125803,
+        "book_name": "Mat",
+        "chapter_num": 23,
+        "verse_num": 35,
+        "text": "that upon you may come all the righteous blood shed on the earth, from the blood of Abel the righteous unto the blood of Zachariah son of Barachiah, whom ye slew between the sanctuary and the altar.",
+        "translation_source": "ASV"
+      },
+      "similarity_score": 0.19160898879762533
+    }
+  ],
+  "total_connections": 1,
+  "generated_at": "2025-11-22T21:19:42.184269+00:00"
+}

@@ -18,6 +18,8 @@ The `docs/runbooks/` directory contains operational runbooks that provide step-b
 - **HANDOFF_WORKFLOW.md** - Agent handoff procedures and evidence requirements
 - **MCP_KNOWLEDGE_DB.md** - MCP Knowledge Database setup and usage (Postgres catalog-as-a-service)
 - **MCP_SSE_AUTO_START.md** - LM Studio MCP SSE server auto-start configuration
+- **VECTOR_DMS_WALKTHROUGH.md** - Vector DMS semantic search system walkthrough and usage guide
+- **BIBLESCHOLAR_API_VERIFICATION.md** - BibleScholar API endpoints verification and usage
 
 ### Runbook Categories
 

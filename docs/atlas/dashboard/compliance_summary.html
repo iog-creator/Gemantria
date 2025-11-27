@@ -43,6 +43,15 @@ th { background: #f0f0f0; font-weight: bold; }
   <li><a href="../../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-top-violations-7d-json">Raw JSON: share/atlas/control_plane/top_violations_7d.json</a></li>
   <li><a href="../../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-top-violations-30d-json">Raw JSON: share/atlas/control_plane/top_violations_30d.json</a></li>
   <li><a href="../../../evidence/guard_atlas_compliance_summary.json" data-testid="backlink-guard-atlas-compliance-summary-json">Guard Verdict: evidence/guard_atlas_compliance_summary.json</a></li>
+  <li><a href="../browser/biblescholar_reference.html" data-testid="backlink-biblescholar-reference">BibleScholar Reference Answer Slice (Phase-6P)</a></li>
+  <li><a href="../../../share/atlas/control_plane/graph_compliance.json" data-testid="backlink-graph-compliance-json">Raw JSON: share/atlas/control_plane/graph_compliance.json</a></li>
+  <li><a href="/docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md" rel="external" data-external="true" data-testid="backlink-phase6d-runbook">Phase-6D Integration Guide (Downstream Apps)</a></li>
+  <li><a href="../../../share/atlas/control_plane/mcp_status_cards.json" data-testid="backlink-mcp-status-cards-json">Raw JSON: share/atlas/control_plane/mcp_status_cards.json (PLAN-072 M3)</a></li>
+  <li><a href="../../../share/mcp/por_proof.json" data-testid="backlink-por-proof-json">E21 POR Proof: share/mcp/por_proof.json</a></li>
+  <li><a href="../../../share/mcp/schema_proof.json" data-testid="backlink-schema-proof-json">E22 Schema Proof: share/mcp/schema_proof.json</a></li>
+  <li><a href="../../../share/mcp/gatekeeper_proof.json" data-testid="backlink-gatekeeper-proof-json">E23 Gatekeeper Proof: share/mcp/gatekeeper_proof.json</a></li>
+  <li><a href="../../../share/mcp/tagproof_proof.json" data-testid="backlink-tagproof-proof-json">E24 Tagproof Proof: share/mcp/tagproof_proof.json</a></li>
+  <li><a href="../../../share/mcp/bundle_proof.json" data-testid="backlink-bundle-proof-json">E25 Bundle Proof: share/mcp/bundle_proof.json</a></li>
 </ul>
 </div>
 
@@ -93,6 +102,47 @@ th { background: #f0f0f0; font-weight: bold; }
         html += '</tbody></table>';
         html += '</div>';
       }
+      
+      // MCP Status Cards Tile (PLAN-072 M3)
+      fetch('../../../share/atlas/control_plane/mcp_status_cards.json')
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load mcp_status_cards.json')))
+        .then(mcpData => {
+          const cards = mcpData.cards || {};
+          const summary = mcpData.summary || {};
+          
+          html += '<div class="tile">';
+          html += '<h3>MCP Proof Status (E21-E25)</h3>';
+          html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1em; margin-top: 1em;">';
+          
+          const cardOrder = ['e21_por', 'e22_schema', 'e23_gatekeeper', 'e24_tagproof', 'e25_bundle'];
+          for (const cardName of cardOrder) {
+            const card = cards[cardName];
+            if (card) {
+              const statusClass = card.ok ? 'ok' : 'error';
+              html += '<div style="border: 1px solid #ddd; border-radius: 4px; padding: 0.75em; background: white;">';
+              html += '<div style="font-weight: bold; margin-bottom: 0.5em;">' + card.label + '</div>';
+              html += '<div class="' + statusClass + '" style="font-size: 0.9em;">Status: ' + card.status.toUpperCase() + '</div>';
+              if (card.details && card.details.generated_at) {
+                html += '<div style="font-size: 0.8em; color: #666; margin-top: 0.5em;">' + new Date(card.details.generated_at).toLocaleString() + '</div>';
+              }
+              html += '</div>';
+            }
+          }
+          
+          html += '</div>';
+          html += '<div style="margin-top: 1em; padding-top: 1em; border-top: 1px solid #ddd;">';
+          html += '<div class="metric"><span class="metric-value">' + (summary.ok_count || 0) + '</span><br><span class="metric-label">OK</span></div>';
+          html += '<div class="metric"><span class="metric-value">' + (summary.failed_count || 0) + '</span><br><span class="metric-label">Failed</span></div>';
+          html += '<div class="metric"><span class="metric-value">' + (summary.total_cards || 0) + '</span><br><span class="metric-label">Total</span></div>';
+          html += '</div>';
+          html += '</div>';
+          
+          contentDiv.innerHTML = html;
+        })
+        .catch(err => {
+          console.error('Error loading MCP status cards:', err);
+          // Continue with existing content even if MCP cards fail
+        });
       
       // Top Offenders Tile
       if (topOffenders.length > 0) {

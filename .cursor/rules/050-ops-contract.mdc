@@ -53,6 +53,7 @@ Cursor **must** declare the tool and files used.
 2. **Codex** — edits/patches/re-writes
    *If unavailable → print `Codex disabled (401)` and fallback*
 3. **Gemini / MCP** — long-context reasoning or large docs
+   - pmagent’s **planning lane** treats Codex and Gemini CLI as optional planning/coding/maths providers. They are configured via `PLANNING_PROVIDER` / `PLANNING_MODEL` and CLI paths. When disabled, pmagent falls back to the Granite local_agent slot; theology slots remain LM Studio/Ollama-only.
 
 ### Files Referenced
 
@@ -128,11 +129,13 @@ make ci.exports.smoke
 
 **After making ANY changes, Cursor MUST complete this checklist:**
 
-1. **Run housekeeping**: `make housekeeping` (Rule 058 - MANDATORY)
-2. **Check hints**: If rule/docs changed, verify hints emitted (Rule 026)
-3. **Verify share sync**: Check `share/` updated (Rule 030)
-4. **Check related rules**: Review "Related Rules" sections for updates needed
-5. **Commit generated files**: Share sync, evidence, forest updates, etc.
+1. **Pre-work gotchas check** (Rule 070): Analyze potential issues before starting
+2. **Run housekeeping**: `make housekeeping` (Rule 058 - MANDATORY)
+3. **Post-work gotchas review** (Rule 070): Review issues introduced or missed after completion
+4. **Check hints**: If rule/docs changed, verify hints emitted (Rule 026)
+5. **Verify share sync**: Check `share/` updated (Rule 030)
+6. **Check related rules**: Review "Related Rules" sections for updates needed
+7. **Commit generated files**: Share sync, evidence, forest updates, etc.
 
 **DO NOT** commit changes without completing this checklist. This is non-negotiable.
 
@@ -145,10 +148,10 @@ gh pr checks <N> --required --json name,state
 
 ## 6 · Output Shape (4-Block Standard)
 
-1. **Goal** — one sentence defining the action.
+1. **Goal** — one sentence defining the action. **MUST include pre-work gotchas analysis (Rule 070)**.
 2. **Commands** — runnable shell/gh/make lines only.
 3. **Evidence to return** — numbered list of expected outputs.
-4. **Next gate** — what to do after I see the evidence.
+4. **Next gate** — what to do after I see the evidence. **MUST include post-work gotchas review (Rule 070)**.
 
    Each command block begins with:
 
@@ -172,7 +175,14 @@ make eval.graph.calibrate.adv
 make ci.exports.smoke
 ```
 
-If DB/services down → "correct hermetic behavior."
+Hermetic smokes are required for CI and for **initial safety checks**, but they are **not sufficient** to declare any DB/LM‑touching feature "done."
+
+- For features that exercise DB or LM (pipelines, BibleScholar, Knowledge MCP, control‑plane exports, etc.), Cursor must:
+  - Run the hermetic bundle above, **and then**
+  - Run at least one **live DB+LM execution of the relevant flow** whenever the operator has indicated DB/LM should be up.
+- Persistent `db_off` / `lm_off` / similar HINTs in that live context are a **failure to investigate**, not "correct hermetic behavior."
+
+In CI and explicitly hermetic runs (where DB/LM are intentionally off), DB/services down → "correct hermetic behavior."
 
 ## 9 · Non-Required Automated Reviews
 

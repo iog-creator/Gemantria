@@ -311,7 +311,7 @@ def summarize_live_status(verdict: dict[str, Any]) -> str:
 
     # HINT-mode extra note to avoid confusion
     if mode == "HINT":
-        parts.append("(HINT is CI/dev-only; this does NOT guarantee services are live)")
+        parts.append("(HINT mode: CI/dev-friendly; services may be offline)")
 
     return " | ".join(parts)
 
@@ -338,18 +338,18 @@ def print_human_summary(verdict: dict[str, Any], file=None) -> None:
     print(f"[pmagent] reality.check (mode={mode})", file=file)
     print("", file=file)
 
-    # Status lines
+    # Status lines with clearer labels
     components = [
-        ("Env / DSN", verdict.get("env", {}).get("ok", False)),
-        ("DB / Control", verdict.get("db", {}).get("ok", False)),
-        ("LM / Models", verdict.get("lm", {}).get("ok", False)),
-        ("Exports / Atlas", verdict.get("exports", {}).get("ok", False)),
-        ("Eval smoke", verdict.get("eval_smoke", {}).get("ok", False)),
+        ("Environment & Database Config", verdict.get("env", {}).get("ok", False)),
+        ("Database & Control Plane", verdict.get("db", {}).get("ok", False)),
+        ("Language Models & Services", verdict.get("lm", {}).get("ok", False)),
+        ("Exports & Atlas Dashboards", verdict.get("exports", {}).get("ok", False)),
+        ("Evaluation Smoke Tests", verdict.get("eval_smoke", {}).get("ok", False)),
     ]
 
     for name, ok in components:
-        status = "OK" if ok else "FAIL"
-        print(f"{name}: {status}", file=file)
+        status = "✓ OK" if ok else "✗ FAIL"
+        print(f"{name:.<35} {status}", file=file)
 
     # Hints section
     if hints:
@@ -358,7 +358,20 @@ def print_human_summary(verdict: dict[str, Any], file=None) -> None:
         for hint in hints:
             print(f"- {hint}", file=file)
 
-    # Overall result
+    # Overall result with clearer messaging
     print("", file=file)
-    result_msg = "PASS" if overall_ok else "FAIL"
-    print(f"Result: {mode} mode: overall {result_msg}", file=file)
+    if overall_ok:
+        if mode.upper() == "HINT":
+            print(
+                f"✓ Result: {mode.upper()} mode passed (system ready for development/testing)",
+                file=file,
+            )
+        else:
+            print(f"✓ Result: {mode.upper()} mode passed (system ready for production use)", file=file)
+    else:
+        print(f"✗ Result: {mode.upper()} mode failed (see hints/errors above)", file=file)
+        if mode.upper() == "HINT":
+            print(
+                "  Tip: HINT mode allows some components to be offline. Use --mode strict for full validation.",
+                file=file,
+            )

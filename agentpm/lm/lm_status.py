@@ -41,6 +41,9 @@ def check_ollama_health(base_url: str) -> str:
 def check_lmstudio_health(base_url: str) -> str:
     """Check if LM Studio service is reachable.
 
+    Uses a TCP connection test to avoid HTTP endpoint errors.
+    Per docs: health checks should verify server reachability without loading models.
+
     Args:
         base_url: LM Studio base URL (e.g., "http://127.0.0.1:9994")
 
@@ -52,13 +55,23 @@ def check_lmstudio_health(base_url: str) -> str:
         return "UNKNOWN"
 
     try:
-        # Try lightweight endpoint (models list or root)
-        url = f"{base_url.rstrip('/')}/v1/models"
-        response = requests.get(url, timeout=2.0)
-        if response.status_code == 200:
+        import socket
+        from urllib.parse import urlparse
+
+        # Parse URL to get host and port
+        parsed = urlparse(base_url)
+        host = parsed.hostname or "127.0.0.1"
+        port = parsed.port or (9994 if "9994" in base_url else 1234)
+
+        # Use TCP socket connection test (lightweight, no HTTP overhead)
+        # This just checks if the port is open, doesn't trigger any HTTP endpoints
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(2.0)
+        result = sock.connect_ex((host, port))
+        sock.close()
+
+        if result == 0:
             return "OK"
-        return "DOWN"
-    except requests.exceptions.ConnectionError:
         return "DOWN"
     except Exception:
         return "UNKNOWN"

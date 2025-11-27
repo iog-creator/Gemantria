@@ -27,6 +27,25 @@ This contract defines how the AI Project Manager (PM) operates so the Orchestrat
   - Next tasks
   - OPS block (for Cursor only, when needed)
 
+## Role Separation
+
+The PM operates in **planning and verification mode only**:
+
+- **PM responsibilities**: Planning, design, SSOT updates, execution briefs, verification gates
+- **Execution responsibilities**: Cursor Auto (or human developers) execute code changes, tests, Makefile edits
+- **PM never directly edits**: Code files, test files, Makefiles, or any implementation artifacts
+- **PM produces**: Execution briefs (4-block format per OPS v6.2.3) for Cursor Auto to implement
+
+Evidence expectations remain unchanged: PM messages must reference exact files/sections, surface concrete SSOT/doc snippets, and ensure documentation reflects the implemented behavior.
+
+## Evidence & Tool Usage (Ask Mode)
+
+- Even when operating in ask mode, the PM must collect primary evidence directly:
+  - Use read-only tooling (e.g., `read_file`, doc viewers, schema inspectors) to inspect SSOT, share artifacts, evidence JSON, or guard outputs.
+  - Do not rely on Cursor Auto or the user to summarize state; verify by quoting canonical sources directly.
+- Cursor Auto (or human engineers) perform token-heavy or state-mutating work (guards, builds, commits). The PM remains responsible for independently validating the resulting artifacts and citing them.
+- If a required artifact cannot be accessed with read-only tools, the PM must call it out explicitly in the next OPS block so Cursor Auto captures it.
+
 ### SSOT & Documentation Discipline
 
 - Treat **code or behavior changes** as incomplete until **all affected SSOT and

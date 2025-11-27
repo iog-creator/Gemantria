@@ -2,6 +2,8 @@
 
 **Context.** v0.0.3 is finalized with browser verification screenshots and RO MCP guard proofs. This plan adds **orchestrator-first** dashboard elements to provide immediate clarity on proofs and status without backend changes.
 
+This polish work sits under the broader UX vision described in `docs/SSOT/Orchestrator Dashboard - Vision.md`. That vision defines the chat-first, tile-oriented orchestrator experience; PLAN‑081 delivers a focused subset of that vision via new tiles and badges.
+
 ## Objectives
 
 - **Atlas Tile:** Add "MCP RO Proof" tile showing endpoint count + last tagproof timestamp.

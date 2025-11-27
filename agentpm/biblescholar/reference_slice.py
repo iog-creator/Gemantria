@@ -22,7 +22,7 @@ from agentpm.biblescholar.bible_passage_flow import parse_reference
 from agentpm.biblescholar.gematria_flow import compute_verse_gematria
 from agentpm.biblescholar.vector_flow import similar_verses_for_reference
 from agentpm.runtime.lm_logging import guarded_lm_call
-from src.utils.osis import normalize_book_to_osis
+from agentpm.modules.gematria.utils.osis import normalize_book_to_osis
 
 
 @dataclass

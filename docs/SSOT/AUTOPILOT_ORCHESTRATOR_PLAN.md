@@ -130,7 +130,7 @@ and guards are implemented.
 * Keep Autopilot local-only.
 * Improve copy to clarify no backend effect.
 
-**Phase B (next)** — Backend stub + logging
+**Phase B (complete)** — Backend stub + logging
 
 * Implement a backend endpoint that:
   * Accepts intents.
@@ -138,7 +138,7 @@ and guards are implemented.
   * ALWAYS responds with `accepted: false` or `status: "planned"` (no actions).
 * Wire the Shell to call this endpoint **only in dev** behind a feature flag.
 
-**Phase C** — Guarded pmagent integration
+**Phase C (complete)** — Guarded pmagent integration
 
 * Implement a Guarded Tool Calls adapter that:
   * Maps certain intents to **explicit pmagent invocations**.
@@ -147,7 +147,7 @@ and guards are implemented.
     * Limited to approved commands,
     * Reversible or non-destructive where possible.
 
-**Phase D** — Evidence-driven dashboards
+**Phase D (complete)** — Evidence-driven dashboards
 
 * Expose Autopilot plans and results in:
   * Atlas dashboards,

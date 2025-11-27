@@ -1,4 +1,4 @@
-from src.utils.osis import extract_verse_references
+from agentpm.modules.gematria.utils.osis import extract_verse_references
 
 
 def test_extract_osis_psalm_isaiah():

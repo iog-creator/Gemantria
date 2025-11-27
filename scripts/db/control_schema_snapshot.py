@@ -97,7 +97,7 @@ def get_table_info(cur: psycopg.Cursor, table_name: str) -> dict:
         SELECT a.attname
         FROM pg_index i
         JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
-        WHERE i.indrelid = 'control.' || %s::regclass
+        WHERE i.indrelid = ('control.' || %s)::regclass
           AND i.indisprimary
         ORDER BY a.attnum
         """,

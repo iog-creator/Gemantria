@@ -58,6 +58,16 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ATLAS_ROOT = ROOT / "docs" / "atlas"
 
+# Whitelist patterns for allowed out-of-scope links (diagnostic/evidence/share links)
+# These are reported in details but don't fail the guard
+# Atlas pages legitimately link to JSON exports in share/ and evidence/ directories
+EVIDENCE_WHITELIST_PATTERNS = [
+    r"\.\./\.\./evidence",
+    r"\.\./\.\./\.\./evidence",
+    r"\.\./\.\./\.\./share/",
+    r"\.\./\.\./share/",
+]
+
 # Very simple <a> tag matcher; good enough for guard purposes.
 A_TAG_RE = re.compile(
     r"<a\b([^>]*?)>",
@@ -114,7 +124,23 @@ def _is_external(href: str) -> bool:
     return lower.startswith("http://") or lower.startswith("https://")
 
 
+def _is_absolute_path(href: str) -> bool:
+    """Check if href is an absolute path starting with '/'."""
+    return href.strip().startswith("/")
+
+
+def _is_whitelisted(href: str) -> bool:
+    """Check if href matches whitelist patterns for evidence/diagnostic links."""
+    import re
+
+    for pattern in EVIDENCE_WHITELIST_PATTERNS:
+        if re.search(pattern, href):
+            return True
+    return False
+
+
 def _is_internal(href: str) -> bool:
+    """Check if href is a relative internal link (not external, not absolute, not special)."""
     lower = href.lower().strip()
     if not lower:
         return False
@@ -124,6 +150,8 @@ def _is_internal(href: str) -> bool:
         return False
     if lower.startswith("javascript:"):
         return False
+    if lower.startswith("/"):
+        return False  # Absolute paths are handled separately
     if "://" in lower:
         return False
     return True
@@ -152,28 +180,14 @@ def main() -> int:
     broken_internal = []
     external_links = 0
     unmarked_external = []
+    absolute_paths = []  # Absolute paths starting with /
+    whitelisted_links = []  # Evidence/diagnostic links that are whitelisted
 
     for html_path in html_files:
         rel_source = html_path.relative_to(ROOT).as_posix()
         text = html_path.read_text(encoding="utf-8", errors="ignore")
         for attrs, href in _parse_links(text):
-            if _is_internal(href):
-                internal_links += 1
-                resolved = (html_path.parent / href).resolve()
-                try:
-                    # Map back to ROOT-relative path if under ROOT
-                    resolved_rel = resolved.relative_to(ROOT).as_posix()
-                except ValueError:
-                    resolved_rel = resolved.as_posix()
-                if not resolved.exists():
-                    broken_internal.append(
-                        {
-                            "source": rel_source,
-                            "href": href,
-                            "resolved": resolved_rel,
-                        }
-                    )
-            elif _is_external(href):
+            if _is_external(href):
                 external_links += 1
                 if not _is_marked_external(attrs):
                     unmarked_external.append(
@@ -182,11 +196,62 @@ def main() -> int:
                             "href": href,
                         }
                     )
+            elif _is_absolute_path(href):
+                # Absolute paths are app-level routes, not file paths
+                # They should be marked as external or handled specially
+                absolute_paths.append(
+                    {
+                        "source": rel_source,
+                        "href": href,
+                        "marked_external": _is_marked_external(attrs),
+                    }
+                )
+            elif _is_internal(href):
+                # Check if whitelisted (evidence links)
+                if _is_whitelisted(href):
+                    whitelisted_links.append(
+                        {
+                            "source": rel_source,
+                            "href": href,
+                        }
+                    )
+                    # Whitelisted links don't count as broken, but are tracked
+                    continue
+
+                internal_links += 1
+                resolved = (html_path.parent / href).resolve()
+                try:
+                    # Map back to ROOT-relative path if under ROOT
+                    resolved_rel = resolved.relative_to(ROOT).as_posix()
+                except ValueError:
+                    resolved_rel = resolved.as_posix()
+
+                # Only check if file exists and is within docs/atlas/ for true internal links
+                if not resolved.exists():
+                    broken_internal.append(
+                        {
+                            "source": rel_source,
+                            "href": href,
+                            "resolved": resolved_rel,
+                        }
+                    )
+                elif not str(resolved).startswith(str(ATLAS_ROOT)):
+                    # Link resolves outside docs/atlas/ - treat as broken internal
+                    broken_internal.append(
+                        {
+                            "source": rel_source,
+                            "href": href,
+                            "resolved": resolved_rel,
+                            "note": "resolves outside docs/atlas/",
+                        }
+                    )
 
     counts["internal_links"] = internal_links
     counts["broken_internal_links"] = len(broken_internal)
     counts["external_links"] = external_links
     counts["unmarked_external_links"] = len(unmarked_external)
+    counts["absolute_paths"] = len(absolute_paths)
+    counts["whitelisted_links"] = len(whitelisted_links)
 
     checks["no_broken_internal_links"] = len(broken_internal) == 0
     # External links must be explicitly marked as external.
@@ -194,6 +259,8 @@ def main() -> int:
 
     details["broken_internal_links"] = broken_internal[:64]
     details["unmarked_external_links"] = unmarked_external[:64]
+    details["absolute_paths"] = absolute_paths[:64]
+    details["whitelisted_links"] = whitelisted_links[:64]
 
     ok = all(checks.values())
     verdict = {

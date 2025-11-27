@@ -2,6 +2,12 @@
 
 _artifacts/**
 
+build/**
+
+dist/**
+
+*.egg-info/**
+
 # Environments / vendors / caches (not indexed but accessible)
 
 .venv/**
@@ -12,9 +18,19 @@ venv/**
 
 node_modules/**
 
+**/node_modules/**
+
 **/.pytest_cache/**
 
 **/__pycache__/**
+
+*.pyc
+
+*.pyo
+
+*.pyd
+
+.Python
 
 # Heavy or binary data (not indexed but accessible)
 
@@ -32,6 +48,22 @@ dumps/**
 
 data/**
 
+# Generated/exported data
+
+share/**
+
+archive/**
+
+evidence/**
+
+exports/**
+
+logs/**
+
+backups/**
+
+ui/out/**
+
 # VCS and editor internals
 
 .git/**
@@ -41,6 +73,9 @@ data/**
 .vscode/**
 
 .idea/**
+
+# Environment files (keep examples)
+
 !.env
 !.env.local
 !.env.example

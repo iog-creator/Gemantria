@@ -24,6 +24,7 @@ The `docs/SSOT/` directory contains Single Source of Truth documents that define
 - **data_flow_visual.md**: Visual representations of data flows
 - **jsonld-schema.md**: JSON-LD and semantic web standards
 - **rdf-ontology.md**: RDF ontology definitions and namespaces
+- **Orchestrator Dashboard - Vision.md**: Vision document for the orchestrator-facing dashboard and chat-first orchestrator workflow
 
 ## SSOT Standards
 

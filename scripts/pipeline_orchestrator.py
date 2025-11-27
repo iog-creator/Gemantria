@@ -331,7 +331,7 @@ def run_analysis(operation: str) -> Dict[str, Any]:
         return {"success": False, "operation": operation, "error": str(e)}
 
 
-def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", dim: int = 1024) -> Dict[str, Any]:
+def run_embeddings_backfill(model: str = "text-embedding-bge-m3", dim: int = 1024) -> Dict[str, Any]:
     """
     Run embeddings backfill for existing nouns.
     """
@@ -401,9 +401,7 @@ def main():
 
     # Embeddings command
     embeddings_parser = subparsers.add_parser("embeddings", help="Embeddings backfill")
-    embeddings_parser.add_argument(
-        "--model", default="text-embedding-qwen3-embedding-0.6b", help="Embedding model name"
-    )
+    embeddings_parser.add_argument("--model", default="text-embedding-bge-m3", help="Embedding model name")
     embeddings_parser.add_argument("--dim", type=int, default=1024, help="Embedding dimension")
 
     # Full workflow command
@@ -411,6 +409,12 @@ def main():
     full_parser.add_argument("--book", default="Genesis", help="Book to process")
     full_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
     full_parser.add_argument("--skip-analysis", action="store_true", help="Skip analysis step")
+    full_parser.add_argument(
+        "--nouns-json",
+        dest="nouns_json",
+        default=None,
+        help="Optional path to ai-nouns envelope; skips discovery if supplied.",
+    )
 
     args = parser.parse_args()
 

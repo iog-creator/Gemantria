@@ -133,7 +133,7 @@ export function useAutopilot() {
                         return {
                             ...cmd,
                             lastRun: log.timestamp,
-                            status: log.success ? 'success' : 'error',
+                            status: (log.success ? 'success' : 'error') as 'success' | 'error',
                             output: log.output,
                         };
                     }

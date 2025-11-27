@@ -1,7 +1,0 @@
-CONTROL_TABLES: mode=db_off (driver_missing: Postgres database driver not avail)
-{
-  "ok": false,
-  "mode": "db_off",
-  "error": "driver_missing: Postgres database driver not available",
-  "tables": {}
-}
