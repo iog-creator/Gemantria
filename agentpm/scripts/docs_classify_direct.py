@@ -100,7 +100,7 @@ def review_current_batch() -> None:
     for item in items:
         path = item["path"]
         doc_type = item.get("doc_type", "unknown")
-        title = item.get("title", "")
+        # title = item.get("title", "")  # Unused for now
 
         # Classification logic (DM-002 heuristics)
         # 1. Prefer paths under docs/SSOT/ as canonical
