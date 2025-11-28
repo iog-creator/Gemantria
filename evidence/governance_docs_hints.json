@@ -2,12 +2,11 @@
   "type": "hints_envelope",
   "version": "1.0",
   "schema": "governance.docs-hints.v1",
-  "generated_at": "2025-11-27T19:29:49.870161+00:00",
+  "generated_at": "2025-11-27T21:55:26.309254+00:00",
   "items": [
-    "governance.docs: 19 rule/doc file(s) modified: .cursor/rules/027-docs-sync-gate.mdc, .cursor/rules/046-ci-hermetic-fallbacks.mdc, .cursor/rules/050-ops-contract.mdc (+16 more)",
-    "governance.rules: New rule detected: 010-task-brief.mdc"
+    "governance.docs: 7 rule/doc file(s) changed in last 24h: docs/SSOT/HANDOFF_GENERATION_DESIGN.md, docs/SSOT/auto_schema_output.md, docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md (+4 more)"
   ],
-  "count": 2,
+  "count": 1,
   "context": "governance_documentation",
   "rule_reference": "026, 065"
 }

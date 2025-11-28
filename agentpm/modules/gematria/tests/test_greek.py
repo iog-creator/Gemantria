@@ -5,7 +5,6 @@ Tests Rule G-001 compliance and 27-letter Isopsephy system.
 
 from __future__ import annotations
 
-import pytest
 
 from agentpm.modules.gematria import greek
 
