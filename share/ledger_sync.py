@@ -27,7 +27,6 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
 import psycopg  # noqa: E402
-
 from scripts.config.env import get_rw_dsn  # noqa: E402
 
 

@@ -67,7 +67,10 @@ def validate_adapter_dimension() -> tuple[bool, str]:
             if "deprecated" in line.lower() or "previously" in line.lower():
                 continue
             # This is actual code usage - fail
-            return False, f"Adapter references verses.embedding in code (line {i + 1}): {stripped[:60]}"
+            return (
+                False,
+                f"Adapter references verses.embedding in code (line {i + 1}): {stripped[:60]}",
+            )
 
     return True, "Adapter uses canonical 1024-dim from verse_embeddings"
 

@@ -24,9 +24,20 @@ TOOLS = [
             "input": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search keyword (minimum 2 characters)"},
-                    "translation": {"type": "string", "default": "KJV", "description": "Translation identifier"},
-                    "limit": {"type": "integer", "default": 10, "description": "Maximum number of results"},
+                    "query": {
+                        "type": "string",
+                        "description": "Search keyword (minimum 2 characters)",
+                    },
+                    "translation": {
+                        "type": "string",
+                        "default": "KJV",
+                        "description": "Translation identifier",
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Maximum number of results",
+                    },
                 },
                 "required": ["query"],
             },
@@ -47,7 +58,12 @@ TOOLS = [
         "io_schema": {
             "input": {
                 "type": "object",
-                "properties": {"strongs_id": {"type": "string", "description": "Strong's number (e.g., 'H1', 'G1')"}},
+                "properties": {
+                    "strongs_id": {
+                        "type": "string",
+                        "description": "Strong's number (e.g., 'H1', 'G1')",
+                    }
+                },
                 "required": ["strongs_id"],
             },
             "output": {

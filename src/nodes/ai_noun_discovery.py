@@ -173,7 +173,12 @@ class AINounDiscovery:
         discovered_nouns = self._ai_discover_nouns(raw_text, book, language)
 
         log_json(
-            LOG, 20, "ai_noun_discovery_complete", book=book, language=language, nouns_discovered=len(discovered_nouns)
+            LOG,
+            20,
+            "ai_noun_discovery_complete",
+            book=book,
+            language=language,
+            nouns_discovered=len(discovered_nouns),
         )
 
         return discovered_nouns
@@ -244,7 +249,14 @@ class AINounDiscovery:
         except Exception as e:
             log_json(LOG, 40, "raw_text_extraction_error", book=db_book, language=language, error=str(e))
             # Fallback to mock text for testing when database is unavailable
-            log_json(LOG, 30, "using_mock_text", book=db_book, language=language, reason="database_unavailable")
+            log_json(
+                LOG,
+                30,
+                "using_mock_text",
+                book=db_book,
+                language=language,
+                reason="database_unavailable",
+            )
 
             if language == "HE":
                 # Mock Hebrew text (Genesis 1)

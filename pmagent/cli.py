@@ -2455,7 +2455,10 @@ def flow_noun_discovery(
                 file=sys.stderr,
             )
             print(f"Mode: {mode}", file=sys.stderr)
-            print(f"Governance Check: {'ENABLED' if governance_check else 'DISABLED'}", file=sys.stderr)
+            print(
+                f"Governance Check: {'ENABLED' if governance_check else 'DISABLED'}",
+                file=sys.stderr,
+            )
             print("\nExecuting noun discovery...\n", file=sys.stderr)
 
         # Execute discovery
@@ -2507,7 +2510,8 @@ def flow_noun_discovery(
                     classification = noun.get("class", "N/A")
                     lang = noun.get("language", "N/A")
                     print(
-                        f"  {i}. {surface} (gematria={gematria}, class={classification}, lang={lang})", file=sys.stderr
+                        f"  {i}. {surface} (gematria={gematria}, class={classification}, lang={lang})",
+                        file=sys.stderr,
                     )
 
         mark_agent_run_success(run, result)

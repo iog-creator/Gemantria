@@ -129,7 +129,11 @@ def find_patterns(graph_latest: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "id": str(uuid.uuid4()),
                 "name": f"clique_{idx}",
                 "type": "maximal_clique",
-                "definition": {"node_count": len(clique), "node_ids": list(clique), "algorithm": "find_cliques"},
+                "definition": {
+                    "node_count": len(clique),
+                    "node_ids": list(clique),
+                    "algorithm": "find_cliques",
+                },
                 "metadata": {
                     "is_complete": True,  # Cliques are complete subgraphs
                 },

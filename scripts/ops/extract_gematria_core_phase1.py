@@ -80,8 +80,14 @@ def verify_extraction():
     # Check for old import patterns in src/
     print("🔍 Checking for old import patterns in src/...")
     old_patterns = [
-        ("from src.core.hebrew_utils import", "from agentpm.modules.gematria.utils.hebrew_utils import"),
-        ("from src.nodes.math_verifier import", "from agentpm.modules.gematria.utils.math_verifier import"),
+        (
+            "from src.core.hebrew_utils import",
+            "from agentpm.modules.gematria.utils.hebrew_utils import",
+        ),
+        (
+            "from src.nodes.math_verifier import",
+            "from agentpm.modules.gematria.utils.math_verifier import",
+        ),
     ]
 
     violations_found = []

@@ -75,7 +75,8 @@ def generate_schema_docs():
     # Insert before update_governance_artifacts
     if "def update_governance_artifacts():" in content:
         content = content.replace(
-            "def update_governance_artifacts():", new_function + "\n\ndef update_governance_artifacts():"
+            "def update_governance_artifacts():",
+            new_function + "\n\ndef update_governance_artifacts():",
         )
     else:
         print("❌ Could not find update_governance_artifacts function to insert before")
@@ -85,7 +86,8 @@ def generate_schema_docs():
     # We want to insert it at the start of operations list
     if "operations = [" in content:
         content = content.replace(
-            "operations = [", 'operations = [\n        ("Generate schema documentation", generate_schema_docs),'
+            "operations = [",
+            'operations = [\n        ("Generate schema documentation", generate_schema_docs),',
         )
     else:
         print("❌ Could not find operations list")

@@ -132,7 +132,8 @@ def update_api_router():
         for i, line in enumerate(lines):
             if "api_get_contextual_insights" in lines[max(0, i - 5) : i + 1] and old_contextual in line:
                 lines[i] = line.replace(
-                    old_contextual, 'translations=["KJV", "ESV"],  # TODO: Make this configurable via query param'
+                    old_contextual,
+                    'translations=["KJV", "ESV"],  # TODO: Make this configurable via query param',
                 )
                 print("  ✓ Updated contextual insights endpoint comment")
                 break

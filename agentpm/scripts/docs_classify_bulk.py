@@ -90,7 +90,12 @@ def classify_unreviewed_documents(dry_run: bool = False, limit: int | None = Non
             elif path in ["SEMANTIC_SEARCH_STATUS.md", "walkthrough.md", "walkthrough.md.resolved"]:
                 archive_paths.append(path)
                 print(f"→ ARCHIVE: {path} (Status/walkthrough doc)")
-            elif path in ["NEXT_STEPS.md", "PROGRESS_SUMMARY.md", "MASTER_PLAN.md", "RULES_INDEX.md"]:
+            elif path in [
+                "NEXT_STEPS.md",
+                "PROGRESS_SUMMARY.md",
+                "MASTER_PLAN.md",
+                "RULES_INDEX.md",
+            ]:
                 canonical_paths.append(path)
                 print(f"✓ CANONICAL: {path} (Planning/governance doc)")
             elif path.startswith("MCP_") and path.endswith(".md"):

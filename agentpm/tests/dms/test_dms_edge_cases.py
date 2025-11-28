@@ -131,7 +131,10 @@ def test_dms_e02_phase_misalignment(db_connection, ensure_migration_053):
     Expected: dms_staleness.metrics.phase_currency.docs_for_old_phases count increases,
     Phase Misalignment Warning generated.
     """
-    from agentpm.dms.staleness import compute_dms_staleness_metrics, get_current_phase_from_master_plan
+    from agentpm.dms.staleness import (
+        compute_dms_staleness_metrics,
+        get_current_phase_from_master_plan,
+    )
 
     current_phase = get_current_phase_from_master_plan()
     if current_phase is None or current_phase < 6:

@@ -26,7 +26,7 @@ ignore = [
 
 # Hebrew/core modules legitimately use non-ASCII; allow ambiguous unicode there
 "src/core/**/*.py" = ["RUF001","RUF002","RUF003","I001","UP037"]
-"agentpm/modules/gematria/**/*.py" = ["RUF001"]  # Hebrew letters in test data and mappings
+"agentpm/modules/gematria/**/*.py" = ["RUF001", "RUF002", "RUF003"]  # Hebrew/Greek letters in test data, mappings, and documentation
 
 # Graph entrypoint has import-order/bootstrap nuances; allow module-top import placement + style nit
 "src/graph/graph.py" = ["E402","UP028"]

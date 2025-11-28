@@ -90,7 +90,9 @@ def detect_known_conflicts(rules_dir: Path) -> list[ConflictFinding]:
         # Check for explicit context scope markers that resolve the conflict
         rule_046_has_context_scope = bool(
             re.search(
-                r"THIS RULE APPLIES.*CI/HERMETIC|applies.*CI/hermetic.*only|CI/HERMETIC.*ONLY", rule_046_content, re.I
+                r"THIS RULE APPLIES.*CI/HERMETIC|applies.*CI/hermetic.*only|CI/HERMETIC.*ONLY",
+                rule_046_content,
+                re.I,
             )
         )
         rule_062_has_context_scope = bool(
@@ -211,7 +213,15 @@ def scan_rules_for_patterns(rules_dir: Path) -> list[ConflictFinding]:
             # This is a simple heuristic - could be enhanced with semantic analysis
             if must_patterns.search(content_1) and may_patterns.search(content_2):
                 # Check if they mention similar concepts
-                common_terms = ["db", "database", "service", "hermetic", "live", "CI", "environment"]
+                common_terms = [
+                    "db",
+                    "database",
+                    "service",
+                    "hermetic",
+                    "live",
+                    "CI",
+                    "environment",
+                ]
                 if any(term in content_1.lower() and term in content_2.lower() for term in common_terms):
                     # Potential conflict - but we'll only flag known ones
                     pass

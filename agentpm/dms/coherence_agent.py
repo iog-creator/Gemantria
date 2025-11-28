@@ -270,7 +270,12 @@ def load_canonical_documents() -> list[dict[str, Any]]:
                 content = "[Could not load content]"
 
             documents.append(
-                {"id": str(row["id"]), "title": row.get("title", row["path"]), "path": row["path"], "content": content}
+                {
+                    "id": str(row["id"]),
+                    "title": row.get("title", row["path"]),
+                    "path": row["path"],
+                    "content": content,
+                }
             )
 
         return documents
@@ -356,8 +361,16 @@ def compute_coherence_metrics() -> dict[str, Any]:
                 for contradiction in result.contradictions:
                     contradictions_found.append(
                         {
-                            "doc_a": {"id": doc_a["id"], "title": doc_a["title"], "path": doc_a["path"]},
-                            "doc_b": {"id": doc_b["id"], "title": doc_b["title"], "path": doc_b["path"]},
+                            "doc_a": {
+                                "id": doc_a["id"],
+                                "title": doc_a["title"],
+                                "path": doc_a["path"],
+                            },
+                            "doc_b": {
+                                "id": doc_b["id"],
+                                "title": doc_b["title"],
+                                "path": doc_b["path"],
+                            },
                             "topic": contradiction.get("topic", "unknown"),
                             "claim_a": contradiction.get("claim_a", ""),
                             "claim_b": contradiction.get("claim_b", ""),

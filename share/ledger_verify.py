@@ -25,8 +25,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from scripts.config.env import get_rw_dsn, get_lm_model_config  # noqa: E402
 import psycopg  # noqa: E402
+from scripts.config.env import get_lm_model_config, get_rw_dsn  # noqa: E402
 
 
 def generate_intelligent_analysis(summary: dict) -> str | None:
@@ -255,7 +255,8 @@ def verify_ledger() -> tuple[int, dict]:
             print("-" * 80)
             current_count = len([r for r in results if r["status"] == "current"])
             print(
-                f"Total: {len(results)}, Current: {current_count}, Stale: {len(stale)}, Missing: {len(missing)}"
+                f"Total: {len(results)}, Current: {current_count}, "
+                f"Stale: {len(stale)}, Missing: {len(missing)}"
             )
             print("=" * 80)
             print()
