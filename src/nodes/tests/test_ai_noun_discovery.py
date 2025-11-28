@@ -1,9 +1,6 @@
 """Tests for AI Noun Discovery LOUD FAIL enforcement (Phase 14 PR 14.2)."""
 
 import os
-import tempfile
-from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 

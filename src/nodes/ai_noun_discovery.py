@@ -52,20 +52,20 @@ class AINounDiscovery:
         if not os.path.exists(seed_path):
             raise RuntimeError(
                 f"\n\n"
-                f"{'='*80}\n"
+                f"{'=' * 80}\n"
                 f"LOUD FAIL (Rule 046): DB seed source unavailable\n"
-                f"{'='*80}\n\n"
+                f"{'=' * 80}\n\n"
                 f"AI Noun Discovery requires deterministic seed file: {seed_path}\n\n"
                 f"The seed file provides DB-verified nouns from bible.v_morph_tokens.\n"
                 f"Falling back to LLM-only mode is PROHIBITED per Correctness Priority 1:\n"
                 f"  Code > DB > LLM (DB seeds are authoritative ground truth)\n\n"
                 f"To generate the required seed file, run:\n"
                 f"  python scripts/ingest_bible_db_morphology.py --out {seed_path}\n\n"
-                f"{'='*80}\n"
+                f"{'=' * 80}\n"
             )
 
         try:
-            with open(seed_path, "r", encoding="utf-8") as f:
+            with open(seed_path, encoding="utf-8") as f:
                 envelope = json.load(f)
 
             nodes = envelope.get("nodes", [])

@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 from sqlalchemy import Engine
 from sqlalchemy.exc import OperationalError
 
-from agentpm.modules.gematria.cache import CachedGematriaValue, GematriaCache
+from agentpm.modules.gematria.cache import GematriaCache
 
 
 class TestGematriaCache:

@@ -1,4 +1,3 @@
-from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
@@ -6,11 +5,19 @@ from scripts.config.env import get_rw_dsn
 """
 update_share.py — refresh a flat share/ folder with current canonical files.
 
-- Reads share/SHARE_MANIFEST.json
-- Copies/overwrites each item into share/ (flat)
-- For large JSON exports, writes a small head preview as valid JSON when possible
-- Reports which files were changed
-- Exits nonzero if files were changed (useful for CI/change detection)
+CRITICAL BEHAVIOR:
+- share/ contains ONLY the files specified in SHARE_MANIFEST.json (flat, no subdirectories)
+- All subdirectories and files not in manifest are REMOVED on each sync
+- Files are generated fresh from Postgres when needed (e.g., pm.snapshot.md)
+- This ensures share/ is a clean, flat directory ready for PM handoff
+
+SYNC PROCESS:
+1. Reads docs/SSOT/SHARE_MANIFEST.json
+2. REMOVES all subdirectories and files not in manifest
+3. Copies/overwrites each manifest item into share/ (flat layout only)
+4. For large JSON exports, writes a small head preview as valid JSON when possible
+5. Reports which files were changed
+6. Exits nonzero if files were changed (useful for CI/change detection)
 
 USAGE:
   python scripts/update_share.py          # Sync and report changes
@@ -36,6 +43,7 @@ SHARE = ROOT / "share"
 # Database integration (optional - hermetic behavior per Rule 046)
 try:
     import psycopg
+    from scripts.config.env import get_rw_dsn
 
     GEMATRIA_DSN = get_rw_dsn()
     DB_AVAILABLE = bool(GEMATRIA_DSN)
@@ -253,6 +261,21 @@ def main():
 
     # Ensure share/ exists; **flat** layout only
     SHARE.mkdir(parents=True, exist_ok=True)
+
+    # CLEANUP: Remove all subdirectories and files not in manifest
+    # This ensures share/ contains ONLY the files specified in the manifest
+    manifest_dst_paths = {ROOT / it.get("dst") for it in items if it.get("dst")}
+    manifest_dst_paths.add(SHARE / "SHARE_MANIFEST.json")  # Keep manifest itself
+
+    # Remove all subdirectories
+    for item in SHARE.iterdir():
+        if item.is_dir():
+            print(f"[update_share] Removing subdirectory: {item.relative_to(ROOT)}")
+            shutil.rmtree(item)
+        elif item.is_file() and item not in manifest_dst_paths:
+            # Remove files not in manifest
+            print(f"[update_share] Removing file not in manifest: {item.relative_to(ROOT)}")
+            item.unlink()
 
     copied_count = 0
     timestamp_updated_count = 0

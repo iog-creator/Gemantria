@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-28T09:11:35-08:00_
+_Generated: 2025-11-28T11:31:47-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -78,16 +78,15 @@ _Generated: 2025-11-28T09:11:35-08:00_
 
 - Overall: `✓ OK`
 - Mode: `HINT`
-- Hints: 2 hint(s)
-  - KB: Subsystem 'agentpm' has low document coverage (1 doc(s))
-  - KB: Subsystem 'webui' has low document coverage (1 doc(s))
+- Hints: 1 hint(s)
+  - KB: KB registry file not found (registry may not be seeded yet)
 
 ## AI Tracking Summary
 
 - Status: `✓ Active`
 - Mode: `db_on`
 - Runtime LM calls (agent_run): 2159 total, 0 last 24h
-- CLI commands (agent_run_cli): 19 total, 4 last 24h, 3 success, 0 errors
+- CLI commands (agent_run_cli): 19 total, 3 last 24h, 3 success, 0 errors
 
 ## Eval Insights Summary (Advisory Analytics)
 
@@ -104,29 +103,19 @@ _Note: Eval insights are export-driven analytics (Phase-8/10) and are advisory o
 
 _Note: KB registry is advisory-only and read-only in CI. It does not affect system health gates._
 
-- Status: `✓ Available`
-- Total documents: `9`
-- Valid: `✓ Yes`
+- Status: `✗ Unavailable`
+- Note: KB registry file not found
 
 ## KB Hints (Advisory)
 
 _Note: KB hints are advisory-only and do not affect system health gates._
 
-- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'agentpm' has low document coverage (1 doc(s))
-  - Subsystem: agentpm, Current docs: 1
-- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'webui' has low document coverage (1 doc(s))
-  - Subsystem: webui, Current docs: 1
+- INFO **[INFO] KB_REGISTRY_UNAVAILABLE**: KB registry file not found (registry may not be seeded yet)
 
 ## Documentation Health (Advisory)
 
 _Note: Documentation health metrics are advisory-only and do not affect system health gates._
 
-- Overall freshness: `100.0%`
-  - By subsystem:
-    - agentpm: 100.0% fresh (missing=0, stale=0)
-    - docs: 100.0% fresh (missing=0, stale=0)
-    - root: 100.0% fresh (missing=0, stale=0)
-    - webui: 100.0% fresh (missing=0, stale=0)
-- Missing documents: `0`
-- Fixes applied (last 7 days): `2`
+- Status: `✗ Unavailable`
+- Note: KB doc-health metrics unavailable
 

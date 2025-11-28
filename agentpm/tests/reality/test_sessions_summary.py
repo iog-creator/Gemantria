@@ -135,7 +135,11 @@ def test_summarize_tracked_sessions_respects_limit(tmp_path: Path, monkeypatch) 
             "id": f"NEXT_STEPS:{i}",
             "title": f"Test task {i}",
             "source": "NEXT_STEPS",
-            "plan": {"current_focus": f"Phase {i}", "next_milestone": f"M{i}", "raw_line": f"- Task {i}"},
+            "plan": {
+                "current_focus": f"Phase {i}",
+                "next_milestone": f"M{i}",
+                "raw_line": f"- Task {i}",
+            },
             "posture": {"mode": "live"},
             "timestamp": f"2024-01-0{i + 1}T00:00:00Z",
         }

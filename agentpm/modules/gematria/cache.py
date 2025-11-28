@@ -76,9 +76,7 @@ class GematriaCache:
             self._db_available = False
             return False
 
-    def get(
-        self, language: str, strongs_id: str, surface: str, system: str
-    ) -> int | None:
+    def get(self, language: str, strongs_id: str, surface: str, system: str) -> int | None:
         """Get cached gematria value.
 
         Args:
@@ -177,9 +175,7 @@ class GematriaCache:
             self._db_available = False
             return False
 
-    def batch_populate(
-        self, source: str, system: str = "mispar_hechrachi", limit: int | None = None
-    ) -> dict:
+    def batch_populate(self, source: str, system: str = "mispar_hechrachi", limit: int | None = None) -> dict:
         """Batch populate cache from hebrew_ot_words or greek_nt_words.
 
         Args:

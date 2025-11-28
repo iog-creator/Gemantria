@@ -682,4 +682,6 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 066 | # --- |
 | 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | # --- |
+| 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
+| 070 | # --- |
 <!-- RULES_TABLE_END -->

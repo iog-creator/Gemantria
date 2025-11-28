@@ -85,6 +85,7 @@ class LexiconAdapter:
         """Convert textual verse reference to integer verse_id for Greek tables.
 
         Phase 14 PR 14.3: Adapter layer queries verses table to get verse_id.
+        Uses DB-ONLY logic to resolve book abbreviations (e.g., "Mark" -> "Mrk").
 
         Args:
             verse_ref: Verse reference in format "Book.Chapter.Verse" (e.g., "Mark.1.1").
@@ -96,38 +97,27 @@ class LexiconAdapter:
             return None
 
         try:
-            parts = verse_ref.split(".")
-            if len(parts) != 3:
-                return None
-            book, chapter, verse = parts
-            chapter_num = int(chapter)
-            verse_num = int(verse)
-        except (ValueError, AttributeError):
-            return None
+            # Parse reference using the pure-function parser first
+            # This handles "Mark 1:1" -> book="Mrk", chapter=1, verse=1
+            from agentpm.biblescholar.reference_parser import parse_reference
 
-        book_abbrev_map = {
-            "Mark": "Mrk",
-            "Matthew": "Mat",
-            "Luke": "Luk",
-            "John": "Jhn",
-        }
-        book_name = book_abbrev_map.get(book, book)
+            parsed = parse_reference(verse_ref)
 
-        try:
-            query = text(
-                """
-                SELECT verse_id
-                FROM bible.verses
-                WHERE book_name = :book_name
-                  AND chapter_num = :chapter_num
-                  AND verse_num = :verse_num
-                LIMIT 1
-                """
-            )
+            # Query the DB for the verse_id using the parsed components
+            # We prioritize the KJV translation as the anchor for Greek words
+            query = text("""
+                SELECT verse_id 
+                FROM bible.verses 
+                WHERE book_name = :book 
+                  AND chapter_num = :chapter 
+                  AND verse_num = :verse 
+                  AND translation_source = 'KJV'
+            """)
+
             with self._engine.connect() as conn:
                 result = conn.execute(
                     query,
-                    {"book_name": book_name, "chapter_num": chapter_num, "verse_num": verse_num},
+                    {"book": parsed.book, "chapter": parsed.chapter, "verse": parsed.verse},
                 )
                 row = result.fetchone()
                 return row[0] if row else None

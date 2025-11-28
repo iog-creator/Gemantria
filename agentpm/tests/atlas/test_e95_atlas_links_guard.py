@@ -30,7 +30,12 @@ def test_guard_atlas_links_has_debug_lists():
     result = _run_guard()
     data = json.loads(result.stdout)
     details = data.get("details") or {}
-    for key in ("broken_internal_links", "unmarked_external_links", "absolute_paths", "whitelisted_links"):
+    for key in (
+        "broken_internal_links",
+        "unmarked_external_links",
+        "absolute_paths",
+        "whitelisted_links",
+    ):
         assert key in details
 
 
