@@ -527,7 +527,10 @@ def plan_next(
                 overall_ok = reality.get("overall_ok", False)
                 level = status.get("level", "UNKNOWN")
                 headline = status.get("headline", "No status available")
-                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(
+                    f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})",
+                    file=sys.stderr,
+                )
                 print(f"  {headline}", file=sys.stderr)
             else:
                 print(f"\nSystem Posture: {mode} (commands unavailable)", file=sys.stderr)
@@ -592,7 +595,10 @@ def plan_open(
                 overall_ok = reality.get("overall_ok", False)
                 level = status.get("level", "UNKNOWN")
                 headline = status.get("headline", "No status available")
-                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(
+                    f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})",
+                    file=sys.stderr,
+                )
                 print(f"  {headline}", file=sys.stderr)
                 print(f"  Mode: {mode}", file=sys.stderr)
             else:
@@ -643,7 +649,9 @@ def plan_reality_loop(
         if result.get("available", False) and result.get("envelope_path"):
             envelope = result.get("envelope", {})
             if envelope:
-                from agentpm.reality.capability_envelope_validator import validate_and_optionally_persist  # noqa: E402, PLC0415
+                from agentpm.reality.capability_envelope_validator import (
+                    validate_and_optionally_persist,
+                )  # noqa: E402, PLC0415
 
                 tracking_result = validate_and_optionally_persist(envelope, tracking_enabled=track_session)
 
@@ -689,7 +697,10 @@ def plan_reality_loop(
                 overall_ok = reality.get("overall_ok", False)
                 level = status.get("level", "UNKNOWN")
                 headline = status.get("headline", "No status available")
-                print(f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})", file=sys.stderr)
+                print(
+                    f"\nSystem Posture: {level} ({'OK' if overall_ok else 'ISSUES'})",
+                    file=sys.stderr,
+                )
                 print(f"  {headline}", file=sys.stderr)
                 print(f"  Mode: {mode}", file=sys.stderr)
             else:
@@ -699,7 +710,10 @@ def plan_reality_loop(
 
         # Show dry-run command if provided
         if result.get("dry_run_command"):
-            print(f"\nSession dry-run command (not executed): {result['dry_run_command']}", file=sys.stderr)
+            print(
+                f"\nSession dry-run command (not executed): {result['dry_run_command']}",
+                file=sys.stderr,
+            )
 
         # Show tracking status
         if tracking_result is not None:
@@ -709,7 +723,10 @@ def plan_reality_loop(
                 written = tracking.get("written", False)
                 agent_run_id = tracking.get("agent_run_cli_id")
                 if mode == "db_on" and written and agent_run_id:
-                    print(f"\nTracking: persisted to control.agent_run_cli (id: {agent_run_id})", file=sys.stderr)
+                    print(
+                        f"\nTracking: persisted to control.agent_run_cli (id: {agent_run_id})",
+                        file=sys.stderr,
+                    )
                 elif mode == "db_off":
                     print(f"\nTracking: DB unavailable (mode: {mode})", file=sys.stderr)
                 elif mode == "error":

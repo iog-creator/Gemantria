@@ -33,7 +33,10 @@ def main() -> int:
     dsn = get_ro_dsn()
 
     if not dsn:
-        print("HINT: No RO DSN available (check GEMATRIA_RO_DSN, ATLAS_DSN_RO, ATLAS_DSN)", file=sys.stderr)
+        print(
+            "HINT: No RO DSN available (check GEMATRIA_RO_DSN, ATLAS_DSN_RO, ATLAS_DSN)",
+            file=sys.stderr,
+        )
         return 0
 
     # Determine which source was used

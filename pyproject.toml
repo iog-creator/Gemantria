@@ -24,6 +24,7 @@ pythonpath = ["."]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+exclude = ["genai-toolbox"]  # External submodule, exclude from our linting
 
 [tool.ruff.lint]
 select = ["E","F","I","UP","B","SIM"]

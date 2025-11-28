@@ -135,7 +135,7 @@ def generate_tool_embeddings(dry_run: bool = False) -> None:
                 continue
 
         # Summary
-        LOG.info(f"Embedding generation complete:")
+        LOG.info("Embedding generation complete:")
         LOG.info(f"  - Updated: {updated_count}")
         LOG.info(f"  - Failed: {failed_count}")
         LOG.info(f"  - Dry run: {dry_run}")

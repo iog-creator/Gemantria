@@ -206,7 +206,10 @@ def main() -> int:
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
             return 1
         else:
-            print(f"[guard_mcp_schema] HINT: Database connection failed: {e} (HINT mode)", file=sys.stderr)
+            print(
+                f"[guard_mcp_schema] HINT: Database connection failed: {e} (HINT mode)",
+                file=sys.stderr,
+            )
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
             return 0

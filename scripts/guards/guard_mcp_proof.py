@@ -69,7 +69,10 @@ def _validate_overall_ok_consistency(snapshot: dict) -> tuple[bool, str | None]:
     )
 
     if overall_ok != required_ok:
-        return False, f"overall_ok ({overall_ok}) inconsistent with required components ({required_ok})"
+        return (
+            False,
+            f"overall_ok ({overall_ok}) inconsistent with required components ({required_ok})",
+        )
 
     return True, None
 
@@ -115,12 +118,18 @@ def main() -> int:
         if is_strict:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_proof] ERROR: Failed to parse snapshot (STRICT mode): {e}", file=sys.stderr)
+            print(
+                f"[guard_mcp_proof] ERROR: Failed to parse snapshot (STRICT mode): {e}",
+                file=sys.stderr,
+            )
             return 1
         else:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_proof] HINT: Failed to parse snapshot (HINT mode): {e}", file=sys.stderr)
+            print(
+                f"[guard_mcp_proof] HINT: Failed to parse snapshot (HINT mode): {e}",
+                file=sys.stderr,
+            )
             return 0
 
     # Validate against schema
@@ -135,12 +144,18 @@ def main() -> int:
             if is_strict:
                 print(json.dumps(verdict, indent=2))
                 EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-                print(f"[guard_mcp_proof] ERROR: Schema validation failed (STRICT mode): {e.message}", file=sys.stderr)
+                print(
+                    f"[guard_mcp_proof] ERROR: Schema validation failed (STRICT mode): {e.message}",
+                    file=sys.stderr,
+                )
                 return 1
             else:
                 print(json.dumps(verdict, indent=2))
                 EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-                print(f"[guard_mcp_proof] HINT: Schema validation failed (HINT mode): {e.message}", file=sys.stderr)
+                print(
+                    f"[guard_mcp_proof] HINT: Schema validation failed (HINT mode): {e.message}",
+                    file=sys.stderr,
+                )
                 return 0
     else:
         # Schema missing, skip validation in HINT mode
@@ -164,12 +179,18 @@ def main() -> int:
         if is_strict:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_proof] ERROR: Overall OK inconsistency (STRICT mode): {error_msg}", file=sys.stderr)
+            print(
+                f"[guard_mcp_proof] ERROR: Overall OK inconsistency (STRICT mode): {error_msg}",
+                file=sys.stderr,
+            )
             return 1
         else:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_proof] HINT: Overall OK inconsistency (HINT mode): {error_msg}", file=sys.stderr)
+            print(
+                f"[guard_mcp_proof] HINT: Overall OK inconsistency (HINT mode): {error_msg}",
+                file=sys.stderr,
+            )
             return 0
 
     # All checks passed

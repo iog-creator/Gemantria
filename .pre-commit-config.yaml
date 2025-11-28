@@ -3,7 +3,7 @@ repos:
     rev: v0.6.9
     hooks:
       - id: ruff
-        args: ["--force-exclude","--config","pyproject.toml"]
+        args: ["--config","pyproject.toml"]
       - id: ruff-format
         args: ["--config","pyproject.toml"]
   - repo: local

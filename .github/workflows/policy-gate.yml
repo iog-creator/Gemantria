@@ -17,3 +17,20 @@ jobs:
       # A) Conventional Commits on all PR commits
       - name: Conventional Commits
         uses: wagoid/commitlint-github-action@v6
+
+      # B) Detect --no-verify bypass (Rule 042)
+      - name: Detect pre-commit bypass
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          echo "Checking for --no-verify in commit messages..."
+          # Get all commits in the PR
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          if git log --format="%B" "$BASE_SHA..$HEAD_SHA" | grep -qiE '--no-verify|no-verify|skip.*hook|bypass.*pre-commit'; then
+            echo "::error::Commit message contains --no-verify or similar bypass indicator"
+            echo "Rule 042 prohibits bypassing pre-commit hooks except in documented emergencies."
+            echo "Please remove --no-verify from commit message or document the emergency."
+            exit 1
+          fi
+          echo "✓ No pre-commit bypass detected"

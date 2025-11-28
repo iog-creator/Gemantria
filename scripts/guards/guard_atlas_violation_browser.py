@@ -187,7 +187,10 @@ def main() -> int:
     verdict["checks"]["file_exists"] = file_check
     if not file_check["exists"]:
         verdict["overall_ok"] = False
-        print(f"[guard_atlas_violation_browser] FAIL: {file_check.get('error', 'File missing')}", file=sys.stderr)
+        print(
+            f"[guard_atlas_violation_browser] FAIL: {file_check.get('error', 'File missing')}",
+            file=sys.stderr,
+        )
         if args.write_evidence:
             EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
             evidence_file = EVIDENCE_DIR / args.write_evidence

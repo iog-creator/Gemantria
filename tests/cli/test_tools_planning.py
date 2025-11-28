@@ -44,7 +44,10 @@ def test_tools_plan_prints_response(mock_run, mock_summary, mock_create, mock_su
 @patch("pmagent.cli.mark_agent_run_success")
 @patch("pmagent.cli.create_agent_run", return_value="run-2")
 @patch("pmagent.cli.get_lm_model_config")
-@patch("pmagent.cli.planning_adapter.summarize_result", return_value={"ok": False, "reason": "cli_not_found:gemini"})
+@patch(
+    "pmagent.cli.planning_adapter.summarize_result",
+    return_value={"ok": False, "reason": "cli_not_found:gemini"},
+)
 @patch("pmagent.cli.gemini_cli_adapter.run")
 def test_tools_gemini_handles_disabled_cli(mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error):
     """tools.gemini should surface CLI errors without crashing."""
@@ -73,7 +76,10 @@ def test_tools_gemini_handles_disabled_cli(mock_run, mock_summary, mock_cfg, moc
 @patch("pmagent.cli.mark_agent_run_success")
 @patch("pmagent.cli.create_agent_run", return_value="run-3")
 @patch("pmagent.cli.get_lm_model_config")
-@patch("pmagent.cli.planning_adapter.summarize_result", return_value={"ok": False, "reason": "codex_disabled"})
+@patch(
+    "pmagent.cli.planning_adapter.summarize_result",
+    return_value={"ok": False, "reason": "codex_disabled"},
+)
 @patch("pmagent.cli.codex_cli_adapter.run")
 def test_tools_codex_reports_disabled_state(mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error):
     """tools.codex should report disabled state cleanly."""
