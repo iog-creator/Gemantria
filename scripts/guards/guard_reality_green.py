@@ -48,7 +48,11 @@ def run_subprocess_check(script_path: Path, args: list[str] | None = None) -> tu
         cmd.extend(args)
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, check=False)
-        return result.returncode, result.stdout, result.stderr
+        # Filter Cursor IDE integration noise (orchestrator-friendly output)
+        stderr_filtered = "\n".join(
+            line for line in result.stderr.split("\n") if "dump_bash_state: command not found" not in line
+        )
+        return result.returncode, result.stdout, stderr_filtered
     except Exception as e:
         return 1, "", str(e)
 

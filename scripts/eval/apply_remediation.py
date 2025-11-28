@@ -38,13 +38,17 @@ def _run_command(cmd: str, description: str) -> dict[str, Any]:
         )
 
         success = result.returncode == 0
+        # Filter Cursor IDE integration noise (orchestrator-friendly output)
+        stderr_filtered = "\n".join(
+            line for line in result.stderr.split("\n") if "dump_bash_state: command not found" not in line
+        )
         output = {
             "command": cmd,
             "description": description,
             "returncode": result.returncode,
             "success": success,
             "stdout": result.stdout.strip(),
-            "stderr": result.stderr.strip(),
+            "stderr": stderr_filtered.strip(),
             "timestamp": int(time.time()),
         }
 

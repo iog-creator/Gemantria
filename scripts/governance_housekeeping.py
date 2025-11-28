@@ -67,13 +67,18 @@ def run_command(cmd: list, description: str) -> bool:
     print(f"🔧 {description}...")
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+        # Filter Cursor IDE integration noise (orchestrator-friendly output)
+        stderr_filtered = "\n".join(
+            line for line in result.stderr.split("\n") if "dump_bash_state: command not found" not in line
+        )
         if result.returncode == 0:
             print(f"✅ {description} completed successfully")
             return True
         else:
             print(f"❌ {description} failed:")
             print(f"  STDOUT: {result.stdout}")
-            print(f"  STDERR: {result.stderr}")
+            if stderr_filtered.strip():
+                print(f"  STDERR: {stderr_filtered}")
             return False
     except Exception as e:
         print(f"❌ {description} error: {e}")

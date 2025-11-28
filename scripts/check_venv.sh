@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+# Filter Cursor IDE integration noise (orchestrator-friendly output)
+exec 2> >(grep -v "dump_bash_state: command not found" >&2 || true)
+
 EXPECTED_VENV="/home/mccoy/Projects/Gemantria.v2/.venv"
 
 if [ -z "${VIRTUAL_ENV:-}" ]; then

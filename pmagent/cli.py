@@ -88,6 +88,8 @@ from agentpm.plan.next import (  # noqa: E402
 )
 from agentpm.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
 from agentpm.kb.registry import REPO_ROOT  # noqa: E402
+from agentpm.handoff.service import generate_handoff  # noqa: E402
+from agentpm.handoff.templates import render_markdown  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -98,6 +100,8 @@ control_app = typer.Typer(help="Control-plane operations")
 app.add_typer(control_app, name="control")
 ask_app = typer.Typer(help="Ask questions using SSOT documentation")
 app.add_typer(ask_app, name="ask")
+handoff_app = typer.Typer(help="Handoff Service (Phase 1.5) - DMS-grounded context generation")
+app.add_typer(handoff_app, name="handoff")
 reality_app = typer.Typer(help="Reality checks for automated bring-up")
 app.add_typer(reality_app, name="reality-check")
 reality_validate_app = typer.Typer(help="Reality validation commands")
@@ -2180,6 +2184,82 @@ def kb_registry_validate(
         sys.exit(0 if validation["valid"] else 1)
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+# ===============================
+# HANDOFF SERVICE (Phase 1.5)
+# ===============================
+
+
+@handoff_app.command("generate", help="Generate handoff report from DMS")
+def handoff_generate(
+    type: str = typer.Option(..., "--type", help="Report type: 'system-state' or 'role'"),
+    role: str = typer.Option("orchestrator", "--role", help="Role name (for role type)"),
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON (for system-state)"),
+    output: str = typer.Option(None, "--output", "-o", help="Output file path (optional)"),
+) -> None:
+    """
+    Generate handoff report from DMS (control.* tables).
+
+    Phase 1.5 Handoff Service: Enforces DMS-first context generation
+    to eliminate file-based context drift and create authoritative SSOT.
+    """
+    try:
+        # Generate handoff context from DMS
+        handoff_context = generate_handoff(
+            handoff_type=type,
+            scope_id=None,
+            role=role if type == "role" else None,
+            out_format="json" if json_only else "markdown",
+        )
+
+        if type == "system-state":
+            if output:
+                output_path = Path(output)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(output_path, "w") as f:
+                    json.dump(handoff_context, f, indent=2)
+                if not json_only:
+                    print(f"System state report saved to: {output_path}", file=sys.stderr)
+            else:
+                if json_only:
+                    print(json.dumps(handoff_context, indent=2))
+                else:
+                    print("System State Report (from DMS):", file=sys.stderr)
+                    print(f"  Generated: {handoff_context.get('generated_at', 'unknown')}", file=sys.stderr)
+                    verification = handoff_context.get("verification", {})
+                    live = verification.get("live", {})
+                    print(f"  DB Health: {live.get('db_health', 'unknown')}", file=sys.stderr)
+                    print("", file=sys.stderr)
+                    print("Full JSON:", file=sys.stderr)
+                    print(json.dumps(handoff_context, indent=2))
+
+        elif type == "role":
+            markdown = render_markdown(handoff_context)
+
+            if output:
+                output_path = Path(output)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(output_path, "w") as f:
+                    f.write(markdown)
+                print(f"Role handoff report saved to: {output_path}", file=sys.stderr)
+            else:
+                print(markdown)
+
+        else:
+            print(f"ERROR: Unknown type '{type}'. Use 'system-state' or 'role'.", file=sys.stderr)
+            sys.exit(1)
+
+        sys.exit(0)
+
+    except Exception as e:
+        error_msg = {"error": str(e)}
+        if json_only:
+            print(json.dumps(error_msg, indent=2))
+        else:
+            print(f"ERROR: Failed to generate handoff report: {e}", file=sys.stderr)
+            print(json.dumps(error_msg, indent=2))
         sys.exit(1)
 
 

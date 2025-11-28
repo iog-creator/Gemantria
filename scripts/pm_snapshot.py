@@ -31,6 +31,8 @@ def redact(dsn: str) -> str:
 def run(cmd: list[str], env=None) -> tuple[int, str, str]:
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
     out, err = p.communicate()
+    # Filter Cursor IDE integration noise (orchestrator-friendly output)
+    err = "\n".join(line for line in err.split("\n") if "dump_bash_state: command not found" not in line)
     return p.returncode, out.strip(), err.strip()
 
 

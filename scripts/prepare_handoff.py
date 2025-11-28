@@ -25,7 +25,13 @@ def run_cmd(cmd: list[str], capture_output: bool = True) -> tuple[int, str, str]
     """Run a shell command and return exit code, stdout, stderr."""
     try:
         result = subprocess.run(cmd, capture_output=capture_output, text=True, check=False, timeout=30)
-        return result.returncode, result.stdout.strip(), result.stderr.strip()
+        # Filter Cursor IDE integration noise (orchestrator-friendly output)
+        stderr_filtered = (
+            "\n".join(line for line in result.stderr.split("\n") if "dump_bash_state: command not found" not in line)
+            if capture_output and result.stderr
+            else result.stderr
+        )
+        return result.returncode, result.stdout.strip(), stderr_filtered.strip()
     except subprocess.TimeoutExpired:
         return 1, "", "Command timed out"
     except Exception as e:

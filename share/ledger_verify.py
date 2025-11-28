@@ -92,134 +92,120 @@ def verify_ledger() -> tuple[int, dict]:
 
     # Connect to database
     try:
-        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-            results = []
-            all_current = True
-            stale = []
-            missing = []
+        with psycopg.connect(dsn) as conn:
+            with conn.cursor() as cur:
+                results = []
+                all_current = True
+                stale = []
+                missing = []
 
-            for file_path, name, source_of_truth in artifacts:
-                # Check if file exists
-                if not file_path.exists():
-                    status = "missing"
-                    current_hash = None
-                    ledger_hash = None
-                    all_current = False
-                    missing.append(name)
-                    results.append(
-                        {
-                            "name": name,
-                            "source_of_truth": source_of_truth,
-                            "status": status,
-                            "ledger_hash": ledger_hash,
-                            "current_hash": current_hash,
-                        }
-                    )
-                    continue
+                for file_path, name, source_of_truth in artifacts:
+                    # Check if file exists
+                    if not file_path.exists():
+                        status = "missing"
+                        current_hash = None
+                        ledger_hash = None
+                        all_current = False
+                        missing.append(name)
+                        results.append(
+                            {
+                                "name": name,
+                                "source_of_truth": source_of_truth,
+                                "status": status,
+                                "ledger_hash": ledger_hash,
+                                "current_hash": current_hash,
+                            }
+                        )
+                        continue
 
-                # Compute current hash
-                current_hash = compute_file_hash(file_path)
+                    # Compute current hash
+                    current_hash = compute_file_hash(file_path)
 
-                # Look up most recent row in ledger
-                cur.execute(
-                    """
+                    # Look up most recent row in ledger
+                    cur.execute(
+                        """
                         SELECT hash, status, generated_at
                         FROM control.system_state_ledger
                         WHERE name = %s AND source_of_truth = %s
                         ORDER BY generated_at DESC
                         LIMIT 1
                         """,
-                    (name, source_of_truth),
-                )
+                        (name, source_of_truth),
+                    )
 
-                row = cur.fetchone()
+                    row = cur.fetchone()
 
-                if row is None:
-                    # No ledger entry found
-                    status = "missing"
-                    ledger_hash = None
-                    all_current = False
-                    missing.append(name)
-                else:
-                    ledger_hash = row[0]
-                    if current_hash == ledger_hash:
-                        status = "current"
-                    else:
-                        status = "stale"
+                    if row is None:
+                        # No ledger entry found
+                        status = "missing"
+                        ledger_hash = None
                         all_current = False
-                        stale.append(name)
+                        missing.append(name)
+                    else:
+                        ledger_hash = row[0]
+                        if current_hash == ledger_hash:
+                            status = "current"
+                        else:
+                            status = "stale"
+                            all_current = False
+                            stale.append(name)
 
-                results.append(
-                    {
-                        "name": name,
-                        "source_of_truth": source_of_truth,
-                        "status": status,
-                        "ledger_hash": ledger_hash[:16] + "..." if ledger_hash else None,
-                        "current_hash": current_hash[:16] + "..." if current_hash else None,
-                    }
+                    results.append(
+                        {
+                            "name": name,
+                            "source_of_truth": source_of_truth,
+                            "status": status,
+                            "ledger_hash": ledger_hash[:16] + "..." if ledger_hash else None,
+                            "current_hash": current_hash[:16] + "..." if current_hash else None,
+                        }
+                    )
+
+                # Print summary table
+                print("=" * 80)
+                print("LEDGER VERIFICATION SUMMARY")
+                print("=" * 80)
+                print(f"{'Name':<40} {'Source':<30} {'Status':<10}")
+                print("-" * 80)
+
+                for result in results:
+                    status_icon = "✓" if result["status"] == "current" else "✗"
+                    print(
+                        f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}"
+                    )
+
+                print("-" * 80)
+                print(
+                    f"Total: {len(results)}, Current: {len([r for r in results if r['status'] == 'current'])}, "
+                    f"Stale: {len(stale)}, Missing: {len(missing)}"
                 )
-
-            # Print summary table
-            print("=" * 80)
-            print("LEDGER VERIFICATION SUMMARY")
-            print("=" * 80)
-            print(f"{'Name':<40} {'Source':<30} {'Status':<10}")
-            print("-" * 80)
-
-            for result in results:
-                status_icon = "✓" if result["status"] == "current" else "✗"
-                name = result["name"]
-                source = result["source_of_truth"]
-                status = result["status"]
-                print(f"{name:<40} {source:<30} {status_icon} {status:<10}")
-            current_count = len([r for r in results if r["status"] == "current"])
-            print(
-                f"Total: {len(results)}, Current: {current_count}, "
-                f"Stale: {len(stale)}, Missing: {len(missing)}"
-            )
-            print("-" * 80)
-            current_count = len([r for r in results if r["status"] == "current"])
-            print(
-                f"Total: {len(results)}, Current: {current_count}, "
-                f"Stale: {len(stale)}, Missing: {len(missing)}"
-            )
-            print("-" * 80)
-            current_count = len([r for r in results if r["status"] == "current"])
-            print(
-                f"Total: {len(results)}, Current: {current_count}, "
-                f"Stale: {len(stale)}, Missing: {len(missing)}"
-            )
-            print("-" * 80)
-            current_count = len([r for r in results if r["status"] == "current"])
-            print(
-                f"Total: {len(results)}, Current: {current_count}, "
-                f"Stale: {len(stale)}, Missing: {len(missing)}"
-            )
-            if not all_current:
-                print("❌ LEDGER VERIFICATION FAILED")
-                if stale:
-                    print(f"   Stale artifacts ({len(stale)}): {', '.join(stale)}")
-                    print("   Run 'make state.sync' to update ledger")
-                if missing:
-                    print(f"   Missing artifacts ({len(missing)}): {', '.join(missing)}")
-                    print("   Run 'make state.sync' to add missing entries")
-                print()
-            else:
-                print("✅ LEDGER VERIFICATION PASSED")
-                print("   All tracked artifacts are current")
+                print("=" * 80)
                 print()
 
-            # Return JSON summary
-            summary = {
-                "ok": all_current,
-                "total": len(results),
-                "current": len([r for r in results if r["status"] == "current"]),
-                "stale": stale,
-                "missing": missing,
-                "results": results,
-            }
+                if not all_current:
+                    print("❌ LEDGER VERIFICATION FAILED")
+                    if stale:
+                        print(f"   Stale artifacts ({len(stale)}): {', '.join(stale)}")
+                        print("   Run 'make state.sync' to update ledger")
+                    if missing:
+                        print(f"   Missing artifacts ({len(missing)}): {', '.join(missing)}")
+                        print("   Run 'make state.sync' to add missing entries")
+                    print()
+                else:
+                    print("✅ LEDGER VERIFICATION PASSED")
+                    print("   All tracked artifacts are current")
+                    print()
 
-            return 0 if all_current else 1, summary
+                # Return JSON summary
+                summary = {
+                    "ok": all_current,
+                    "total": len(results),
+                    "current": len([r for r in results if r["status"] == "current"]),
+                    "stale": stale,
+                    "missing": missing,
+                    "results": results,
+                }
+
+                return 0 if all_current else 1, summary
 
     except Exception as e:
         print(f"ERROR: Database connection failed: {e}", file=sys.stderr)

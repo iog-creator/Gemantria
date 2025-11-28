@@ -97,6 +97,10 @@
 - import orchestrator-shell.css for proper styling
 - verify Phase-9B UI integration complete
 
+- PR 14.4 Certified Complete: Relationship Tables PoC (Track 4). Phase 14 fully certified.
+
+- Fix Ruff errors in ledger_verify.py and ledger_sync.py
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
