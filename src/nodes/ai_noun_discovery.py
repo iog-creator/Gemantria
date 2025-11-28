@@ -35,6 +35,55 @@ class AINounDiscovery:
             "Deuteronomy": "Deu",
         }
 
+    def _get_db_seed_nouns(self) -> List[Dict[str, Any]]:
+        """Load deterministic noun seeds from ai_nouns.db_morph.json.
+
+        Phase 14 PR 14.2: Enforce LOUD FAIL (Rule 046) when DB seed source unavailable.
+        Correctness Priority 1: Code > DB > LLM (DB seeds are authoritative ground truth).
+
+        Returns:
+            List of DB-seed nouns from bible.v_morph_tokens.
+
+        Raises:
+            RuntimeError: LOUD FAIL if DB seed source unavailable (Rule 046).
+        """
+        seed_path = "exports/ai_nouns.db_morph.json"
+
+        if not os.path.exists(seed_path):
+            raise RuntimeError(
+                f"\n\n"
+                f"{'='*80}\n"
+                f"LOUD FAIL (Rule 046): DB seed source unavailable\n"
+                f"{'='*80}\n\n"
+                f"AI Noun Discovery requires deterministic seed file: {seed_path}\n\n"
+                f"The seed file provides DB-verified nouns from bible.v_morph_tokens.\n"
+                f"Falling back to LLM-only mode is PROHIBITED per Correctness Priority 1:\n"
+                f"  Code > DB > LLM (DB seeds are authoritative ground truth)\n\n"
+                f"To generate the required seed file, run:\n"
+                f"  python scripts/ingest_bible_db_morphology.py --out {seed_path}\n\n"
+                f"{'='*80}\n"
+            )
+
+        try:
+            with open(seed_path, "r", encoding="utf-8") as f:
+                envelope = json.load(f)
+
+            nodes = envelope.get("nodes", [])
+            log_json(LOG, 20, "db_seeds_loaded", seed_count=len(nodes), source="bible.v_morph_tokens")
+
+            # Mark all seeds with db_seed flag for downstream enforcement
+            for node in nodes:
+                node["db_seed"] = True
+
+            return nodes
+
+        except (json.JSONDecodeError, KeyError) as e:
+            raise RuntimeError(
+                f"LOUD FAIL (Rule 046): DB seed file corrupt or invalid: {seed_path}\n"
+                f"Error: {e}\n"
+                f"Re-generate the file with: python scripts/ingest_bible_db_morphology.py"
+            ) from e
+
     def discover_nouns_for_book(self, book: str) -> List[Dict[str, Any]]:
         """
         Use AI to organically discover and analyze nouns from Hebrew text.
@@ -103,12 +152,49 @@ class AINounDiscovery:
             return """בראשית ברא אלהים את השמים ואת הארץ והארץ היתה תהו ובהו וחשך על פני תהום ורוח אלהים מרחפת על פני המים ויאמר אלהים יהי אור ויהי אור וירא אלהים את האור כי טוב ויבדל אלהים בין האור ובין החשך ויקרא אלהים לאור יום ולחשך קרא לילה ויהי ערב ויהי בקר יום אחד ויאמר אלהים יהי רקיע בתוך המים ויהי מבדיל בין מים למים ויעש אלהים את הרקיע ויבדל בין המים אשר מתחת לרקיע ובין המים אשר מעל לרקיע ויהי כן ויקרא אלהים לרקיע שמים ויהי ערב ויהי בקר יום שני ויאמר אלהים יקוו המים מתחת השמים אל מקום אחד ותראה היבשה ויהי כן ויקרא אלהים ליבשה ארץ ולמקוה המים קרא ימים וירא אלהים כי טוב ויאמר אלהים תדשא הארץ דשא עשב מזריע זרע עץ פרי עשה פרי למינו אשר זרעו בו על הארץ ויהי כן ותוצא הארץ דשא עשב מזריע זרע למינהו ועץ עשה פרי אשר זרעו בו למינו וירא אלהים כי טוב ויהי ערב ויהי בקר יום שלישי ויאמר אלהים יהי מארת ברקיע השמים להבדיל בין היום ובין הלילה והיו לאתת ולמועדים ולימים ושנים והיו למאורת ברקיע השמים להאיר על הארץ ויהי כן ויעש אלהים שני מאורת גדלים את המאור הגדל לממשלת היום ואת המאור הקטן לממשלת הלילה ואת הכוכבים ויתן אתם אלהים ברקיע השמים להאיר על הארץ ולמשל ביום ובלילה ולהבדיל בין האור ובין החשך וירא אלהים כי טוב ויהי ערב ויהי בקר יום רביעי ויאמר אלהים ישרצו המים שרץ נפש חיה ועוף יעופף על הארץ על פני רקיע השמים ויברא אלהים את התנינם הגדלים ואת כל נפש החיה הרמשת אשר שרצו המים למינהם ואת כל עוף כנף למינהו וירא אלהים כי טוב ויברך אתם אלהים לאמר פרו ורבו ומלאו את המים בימים והעוף ירב בארץ ויהי ערב ויהי בקר יום חמישי ויאמר אלהים תוצא הארץ נפש חיה למינה בהמה ורמש וחיתו ארץ למינה ויהי כן ויעש אלהים את חית הארץ למינה ואת הבהמה למינה ואת כל רמש האדמה למינהו וירא אלהים כי טוב ויאמר אלהים נעשה אדם בצלמנו כדמותנו וירדו בדגת הים ובעוף השמים ובבהמה ובכל הארץ ובכל הרמש הרמש על הארץ ויברא אלהים את האדם בצלמו בצלם אלהים ברא אתו זכר ונקבה ברא אתם ויברך אתם אלהים ויאמר להם אלהים פרו ורבו ומלאו את הארץ וכבשה ורדו בדגת הים ובעוף השמים ובכל חיה הרמשת על הארץ ויאמר אלהים הנה נתתי לכם את כל עשב זורע זרע אשר על פני כל הארץ ואת כל העץ אשר בו פרי עץ זורע זרע לכם יהיה לאכלה ולכל חית הארץ ולכל עוף השמים ולכל רמש על הארץ אשר בו נפש חיה את כל ירק עשב לאכלה ויהי כן וירא אלהים את כל אשר עשה והנה טוב מאד ויהי ערב ויהי בקר יום הששי"""
 
     def _ai_discover_nouns(self, hebrew_text: str, book: str) -> List[Dict[str, Any]]:
-        """Use AI to discover and analyze nouns from Hebrew text."""
+        """Use AI to discover and analyze nouns from Hebrew text.
+
+        Phase 14 PR 14.2: Loads DB seeds first (LOUD FAIL if missing),
+        then instructs LLM to classify seeds and discover additional nouns.
+        """
+
+        # PHASE 14 PR 14.2: Load DB seeds (LOUD FAIL if missing)
+        try:
+            db_seeds = self._get_db_seed_nouns()
+            log_json(LOG, 20, "db_seeds_loaded_for_ai", count=len(db_seeds))
+        except RuntimeError:
+            # LOUD FAIL - do not catch, let it propagate
+            raise
 
         # Sample the text for analysis (avoid token limits)
         sampled_text = self._sample_text(hebrew_text)
 
-        prompt = f"""Extract significant Hebrew nouns from this Hebrew text. Return ONLY JSON:
+        # PHASE 14 PR 14.2: Updated system prompt with DB SEED PRIORITY
+        system_prompt = """You are a METADATA EXTRACTION AI under STRICT GOVERNANCE.
+
+**DB SEED PRIORITY (Correctness Priority 1: Code > DB > LLM):**
+You will receive DB-verified nouns marked with `db_seed=true`.
+These come from bible.v_morph_tokens and are AUTHORITATIVE.
+
+YOU MUST NOT:
+- Override DB seed classifications
+- Modify DB seed surface forms
+- Exclude DB seeds from your output
+- Change DB seed metadata
+
+YOUR ROLE:
+1. Classify DB seeds by type (person/place/thing) if not already classified
+2. Discover ADDITIONAL nouns NOT in the DB seed list
+3. Return ALL DB seeds unchanged in output
+
+HIERARCHY: Code > DB > LLM (DB seeds are ground truth)
+
+Respond with ONLY valid JSON. No explanations, no markdown."""
+
+        prompt = f"""You have been provided with {len(db_seeds)} DB-verified noun seeds.
+These are marked with db_seed=true and MUST appear unchanged in your output.
+
+Extract significant Hebrew nouns from this Hebrew text. Return ONLY JSON:
 
 {{
   "nouns": [
@@ -170,7 +256,7 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
                 [
                     {
                         "role": "system",
-                        "content": "You are a data extraction AI. You must respond with ONLY valid JSON. No explanations, no markdown, no additional text. Start your response with { and end with }.",
+                        "content": system_prompt,
                     },
                     {"role": "user", "content": prompt},
                 ]

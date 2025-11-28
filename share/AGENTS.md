@@ -21,6 +21,23 @@ See `docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md` for current vs intended state of 
 
 See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation design and validation schema.
 
+## PM DMS Integration (Rule-053) ⭐ NEW
+
+**Phase 9.1**: PM must query **Postgres DMS (control plane)** BEFORE file searching.
+
+**DMS-First Workflow**:
+1. **Documentation**: `pmagent kb registry by-subsystem --owning-subsystem=<project>`
+2. **Tool Catalog**: `SELECT * FROM control.mcp_tool_catalog WHERE tags @> '{<project>}'`
+3. **Project Status**: `pmagent status kb` and `pmagent plan kb list`
+4. **File Search** (LAST RESORT): Only if content not in DMS
+
+**Feature Registration**:
+- After building new tool/module: Create MCP envelope → `make mcp.ingest` → Update KB registry
+- PM learns capabilities automatically through DMS registration
+- **Goal**: PM and project develop together
+
+See `.cursor/rules/053-pm-dms-integration.mdc` and `docs/SSOT/PM_CONTRACT.md` Section 2.6 for full workflow.
+
 ## Environment
 - venv: `python -m venv .venv && source .venv/bin/activate`
 - install: `make deps`

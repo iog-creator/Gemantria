@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-21T11:15:40-08:00_
+_Generated: 2025-11-28T09:11:35-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -63,8 +63,8 @@ _Generated: 2025-11-21T11:15:40-08:00_
 
 ## System Health (DB + LM + Graph)
 
-- LM Status: `✗ lm_off`
-- LM Mode: `lm_off`
+- LM Status: `✓ Ready`
+- LM Mode: `lm_ready`
 - Graph Status: `✓ Ready`
 - Graph Mode: `db_on`
 
@@ -78,18 +78,16 @@ _Generated: 2025-11-21T11:15:40-08:00_
 
 - Overall: `✓ OK`
 - Mode: `HINT`
-- Hints: 3 hint(s)
-  - LM configuration incomplete
+- Hints: 2 hint(s)
   - KB: Subsystem 'agentpm' has low document coverage (1 doc(s))
   - KB: Subsystem 'webui' has low document coverage (1 doc(s))
 
 ## AI Tracking Summary
 
-- Status: `✗ db_off`
-- Mode: `db_off`
-- Note: AI tracking query failed: relation "control.agent_run_cli" does not exist
-LINE 7:                     FROM control.agent_run_cli
-                                 ^
+- Status: `✓ Active`
+- Mode: `db_on`
+- Runtime LM calls (agent_run): 2159 total, 0 last 24h
+- CLI commands (agent_run_cli): 19 total, 4 last 24h, 3 success, 0 errors
 
 ## Eval Insights Summary (Advisory Analytics)
 
@@ -130,7 +128,5 @@ _Note: Documentation health metrics are advisory-only and do not affect system h
     - root: 100.0% fresh (missing=0, stale=0)
     - webui: 100.0% fresh (missing=0, stale=0)
 - Missing documents: `0`
-- Fixes applied (last 7 days): `0`
-  - Notes:
-    - No plan_kb_fix manifests directory; treating fixes_applied_last_7d as 0
+- Fixes applied (last 7 days): `2`
 

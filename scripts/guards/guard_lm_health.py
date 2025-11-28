@@ -12,7 +12,6 @@ Phase-7E: Added Ollama provider support with automatic model discovery.
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 

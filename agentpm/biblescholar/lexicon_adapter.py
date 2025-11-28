@@ -54,9 +54,9 @@ class LexiconAdapter:
     """
 
     def __init__(self) -> None:
-        """Initialize the adapter (lazy engine initialization)."""
+        """Initialize the lexicon adapter (lazy engine initialization)."""
         self._engine = None
-        self._db_status: Literal["available", "unavailable", "db_off"] = "db_off"
+        self._db_status = "unknown"
 
     def _ensure_engine(self) -> bool:
         """Ensure database engine is available.
@@ -68,7 +68,7 @@ class LexiconAdapter:
             Sets self._db_status based on engine availability.
         """
         if self._engine is not None:
-            return True
+            return self._db_status == "available"
 
         try:
             self._engine = get_bible_engine()
@@ -80,6 +80,59 @@ class LexiconAdapter:
         except (OperationalError, ProgrammingError):
             self._db_status = "unavailable"
             return False
+
+    def _verse_ref_to_id(self, verse_ref: str) -> int | None:
+        """Convert textual verse reference to integer verse_id for Greek tables.
+
+        Phase 14 PR 14.3: Adapter layer queries verses table to get verse_id.
+
+        Args:
+            verse_ref: Verse reference in format "Book.Chapter.Verse" (e.g., "Mark.1.1").
+
+        Returns:
+            Integer verse_id if found, None if verse not found or DB unavailable.
+        """
+        if not self._ensure_engine():
+            return None
+
+        try:
+            parts = verse_ref.split(".")
+            if len(parts) != 3:
+                return None
+            book, chapter, verse = parts
+            chapter_num = int(chapter)
+            verse_num = int(verse)
+        except (ValueError, AttributeError):
+            return None
+
+        book_abbrev_map = {
+            "Mark": "Mrk",
+            "Matthew": "Mat",
+            "Luke": "Luk",
+            "John": "Jhn",
+        }
+        book_name = book_abbrev_map.get(book, book)
+
+        try:
+            query = text(
+                """
+                SELECT verse_id
+                FROM bible.verses
+                WHERE book_name = :book_name
+                  AND chapter_num = :chapter_num
+                  AND verse_num = :verse_num
+                LIMIT 1
+                """
+            )
+            with self._engine.connect() as conn:
+                result = conn.execute(
+                    query,
+                    {"book_name": book_name, "chapter_num": chapter_num, "verse_num": verse_num},
+                )
+                row = result.fetchone()
+                return row[0] if row else None
+        except (OperationalError, ProgrammingError):
+            return None
 
     @property
     def db_status(self) -> Literal["available", "unavailable", "db_off"]:
@@ -162,6 +215,63 @@ class LexiconAdapter:
                     usage=row[5],
                     gloss=row[6],
                 )
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return None
+
+    def get_greek_words_for_verse(self, verse_ref: str) -> list[dict] | None:
+        """Get all Greek words for a verse using textual reference.
+
+        Phase 14 PR 14.3: Queries verses table for verse_id, then queries greek_nt_words.
+
+        Args:
+            verse_ref: Verse reference (e.g., "Mark.1.1").
+
+        Returns:
+            List of Greek word dictionaries, empty list if no words, None if DB unavailable.
+        """
+        if not self._ensure_engine():
+            return None
+
+        verse_id = self._verse_ref_to_id(verse_ref)
+        if verse_id is None:
+            return []
+
+        try:
+            query = text(
+                """
+                SELECT
+                    w.word_position,
+                    w.word_text AS surface,
+                    w.strongs_id,
+                    w.grammar_code,
+                    e.lemma,
+                    e.gloss
+                FROM bible.greek_nt_words w
+                LEFT JOIN bible.greek_entries e ON w.strongs_id = e.strongs_id
+                WHERE w.verse_id = :verse_id
+                ORDER BY w.word_position
+                """
+            )
+            with self._engine.connect() as conn:
+                result = conn.execute(query, {"verse_id": verse_id})
+                rows = result.fetchall()
+
+                words = []
+                for row in rows:
+                    words.append(
+                        {
+                            "word_position": row[0],
+                            "surface": row[1],
+                            "strongs_id": row[2],
+                            "grammar_code": row[3],
+                            "lemma": row[4],
+                            "gloss": row[5],
+                            "language": "GR",
+                        }
+                    )
+                return words
+
         except (OperationalError, ProgrammingError):
             self._db_status = "unavailable"
             return None
