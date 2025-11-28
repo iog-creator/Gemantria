@@ -101,6 +101,8 @@
 
 - Fix Ruff errors in ledger_verify.py and ledger_sync.py
 
+- PR 14.5 FINAL MERGE: Certified Phase 14 (Data Enrichment, Morph Fixes, Gematria Cache, Relationship PoC)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
