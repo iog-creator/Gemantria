@@ -2,7 +2,7 @@
   "type": "hints_envelope",
   "version": "1.0",
   "schema": "governance.docs-hints.v1",
-  "generated_at": "2025-11-27T21:55:26.309254+00:00",
+  "generated_at": "2025-11-28T16:09:26.405642+00:00",
   "items": [
     "governance.docs: 7 rule/doc file(s) changed in last 24h: docs/SSOT/HANDOFF_GENERATION_DESIGN.md, docs/SSOT/auto_schema_output.md, docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md (+4 more)"
   ],
