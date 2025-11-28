@@ -14,6 +14,7 @@ Prevent Cursor from ignoring Codex/Gemini when context is large.
 1. local+gh
 2. codex (if available; else declare 401 and fall back)
 3. gemini/mcp for long governance files
+   - When `PLANNING_PROVIDER` is set, pmagent uses Codex/Gemini CLI as planning-slot tools for math/coding/planning tasks. These providers never service theology/gematria lanes and fall back to Granite local_agent when disabled.
 
 ## Files to reference
 

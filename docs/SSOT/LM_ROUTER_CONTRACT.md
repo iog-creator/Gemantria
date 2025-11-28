@@ -109,6 +109,43 @@ Model is determined by per-slot environment variables:
 3. **Provider Availability**: Router checks provider enable flags (`OLLAMA_ENABLED`, `LM_STUDIO_ENABLED`) and raises `RuntimeError` if the required provider is disabled.
 4. **Hermetic Mode**: Router supports a "dry-run" mode that returns static decisions without checking provider availability (for CI/tests).
 
+## Rerank Error-Tolerance Rules
+
+For `kind == "rerank"` tasks, downstream adapters **MUST** implement error-tolerant behavior:
+
+1. **HTTP Errors (4xx/5xx)**: If the provider (Ollama/LM Studio) returns HTTP errors (404, 500, etc.):
+   - Adapter raises `OllamaAPIError` with `error_type="http_error"` and `status_code` set
+   - Rerank functions catch `OllamaAPIError` and log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring (deterministic cosine similarity)
+   - If `embedding_only` also fails, return equal scores (0.5) for all documents
+   - Continue pipeline execution (do not raise exceptions)
+
+2. **Connection Errors & Timeouts**: If the provider is unreachable or times out:
+   - Adapter raises `OllamaAPIError` with `error_type="connection_error"` or `"timeout"`
+   - Rerank functions catch `OllamaAPIError` and log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring, then equal scores if that also fails
+   - Continue pipeline execution (do not raise exceptions)
+
+3. **JSON Parse Errors**: If the reranker model returns malformed or truncated JSON:
+   - Log a HINT-level warning (non-fatal)
+   - Fall back to `embedding_only` scoring (deterministic cosine similarity)
+   - Continue pipeline execution (do not raise exceptions)
+
+4. **Edge Strength Computation**: Even when fallback occurs:
+   - Compute `edge_strength = α*cosine + (1-α)*rerank_score` using available scores
+   - If rerank scores are unavailable (fallback to equal scores), use default rerank_score (0.5)
+   - Pipeline must not fail due to missing rerank scores
+   - `make eval.reclassify` remains valid even when rerank fails (uses available edge_strength values)
+
+5. **Router Decision Stability**: Router decisions remain deterministic regardless of adapter fallback behavior. Fallback is an **adapter concern**, not a routing change. The router continues to route `kind == "rerank"` to the `reranker` slot; adapters handle errors internally.
+
+**Implementation Reference**: 
+- `agentpm/adapters/ollama.OllamaAPIError` - Custom exception for HTTP/connection/timeout errors
+- `agentpm/adapters/ollama._post_json()` / `_get_json()` - HTTP error handling with `OllamaAPIError` raising
+- `agentpm/adapters/ollama._rerank_granite_llm()` - Catches `OllamaAPIError` and falls back to `embedding_only`
+- `agentpm/adapters/ollama._rerank_embedding_only()` - Catches `OllamaAPIError` and returns equal scores (0.5)
+- `tests/unit/test_ollama_rerank_failures.py` - Comprehensive test coverage for all failure modes
+
 ## Integration with Existing Adapters
 
 The router does **not** duplicate HTTP/adapter logic. It produces `RouterDecision` objects that downstream code uses to call existing adapters:

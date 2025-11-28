@@ -61,6 +61,13 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - **Qwen reranker**: fallback only, not the primary reranker.
     - `THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B` (via theology adapter)
   - **Retrieval Profile (Phase-7C)**: `RETRIEVAL_PROFILE=DEFAULT` (default) uses Granite stack. Setting `RETRIEVAL_PROFILE=GRANITE` or `BIBLE` switches retrieval embeddings/rerankers accordingly. Granite IDs are resolved via `GRANITE_EMBEDDING_MODEL`, `GRANITE_RERANKER_MODEL`, and `GRANITE_LOCAL_AGENT_MODEL`. Misconfigured Granite profiles emit a `HINT` and fall back to DEFAULT for hermetic runs.
+  - **Planning Lane (Gemini CLI + Codex)**: pmagent exposes a **planning slot** for backend planning, coding refactors, and math-heavy reasoning. This lane is intentionally **non-theology** and never substitutes for gematria/theology slots.
+    - Configure via `PLANNING_PROVIDER` (`gemini`, `codex`, `lmstudio`, `ollama`) and `PLANNING_MODEL`. Optional toggles: `GEMINI_ENABLED`, `CODEX_ENABLED`, `GEMINI_CLI_PATH`, `CODEX_CLI_PATH`.
+    - pmagent calls CLI adapters (`agentpm/adapters/gemini_cli.py`, `agentpm/adapters/codex_cli.py`) with structured prompts, logs runs through `agentpm.runtime.lm_logging`, and records outcomes in `control.agent_run`.
+    - If the selected CLI is unavailable, pmagent fails closed with `mode="lm_off"` and optionally falls back to the Granite local_agent slot—never to theology.
+    - Multi-agent planning is permitted: pmagent may spin up multiple planning calls (Gemini/Codex instances) for decomposition tasks, each tracked with its own agent_run row. Context windows are large, but prompts must still cite SSOT docs; no theology, scripture exegesis, or gematria scoring is delegated to these tools.
+    - Planning lane usage is opt-in per operator; CI remains hermetic (planning CLIs disabled unless explicitly allowed).
+    - **Runbooks**: See `docs/runbooks/GEMINI_CLI.md` and `docs/runbooks/CODEX_CLI.md` for setup and usage details.
 
 ### LM Status Command
 
@@ -329,6 +336,7 @@ This process eliminates stale bytecode as a source of errors.
 - Frontend: `npm run lint && npm run test` (if present)
 - Backend: `ruff format --check . && ruff check .`
 - Security: run static checks where configured
+- **Browser verification (Rule-051 + Rule-067)**: When modifying Atlas HTML, CSS, or visual artifacts, use Cursor's browser tool to verify visual content. See `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md` for workflow. Run `make atlas.webproof` or `make browser.verify` to generate screenshots and receipts. **MANDATORY: Cursor MUST perform browser verification proactively for ALL UI/visual work without waiting for user reminders.**
 - PR must include "Model Usage" block (see template).
 
 ### Runbook: Postgres checkpointer
@@ -433,6 +441,33 @@ This repo expects Cursor to **show its work** in a fixed shape so that GPT-5 and
 3. **Evidence to return** — which command outputs we expect to see pasted back
 4. **Next gate** — what happens once the evidence is pasted
 
+### PM ↔ Cursor Auto Cadence (PM lane)
+
+- In the **PM lane**, the Project Manager agent (governed by `docs/SSOT/PM_CONTRACT.md`) is responsible for:
+  - Choosing the next work item from `MASTER_PLAN.md` / `share/MASTER_PLAN.md` / `NEXT_STEPS.md`.
+  - Emitting the 4‑block (Goal, Commands, Evidence to return, Next gate) **for Cursor Auto**, not the human orchestrator.
+- **Cursor Auto** must:
+  - Treat the Commands block as the only source of actions for that step.
+  - Execute those commands, then report back evidence in the agreed shape.
+  - Avoid asking the orchestrator for infra/env decisions; those belong to PM/OPS.
+- The **orchestrator** only provides high‑level direction and accepts plain‑English summaries; they never run commands by hand in this workflow.
+
+- For any work that touches **DB or LM**, each 4‑block **Commands** section MUST:
+  - Re‑establish baseline posture (venv check, repo root + branch, `git status -sb`).
+  - Run the hermetic bundle and posture checks:
+    - `ruff format --check . && ruff check .`
+    - `make book.smoke`
+    - `make eval.graph.calibrate.adv`
+    - `make ci.exports.smoke`
+    - `make reality.green`
+  - Include at least one **live DB+LM execution** of the specific feature path (for example: a Knowledge MCP round‑trip, a BibleScholar reference slice export + guard, a control‑plane metrics/widgets export + guard, an LM insights slice around `/api/lm/indicator` + `/lm-insights`, or a router + `math_verifier` run).
+  - **MANDATORY: Add browser verification (`make browser.verify` / `make atlas.webproof`) whenever Atlas or WebUI pages are involved. Cursor MUST perform browser verification proactively without waiting for user reminders. Use `browser_snapshot` and `browser_take_screenshot` to verify all UI components before completing the task.**
+
+- **Phase advancement discipline**:
+  - Phase/PLAN status is driven **only** by `MASTER_PLAN.md` / `share/MASTER_PLAN.md` / `NEXT_STEPS.md`.
+  - “Next Milestone” banners (for example, *Phase 12 advanced pattern mining capabilities*) are **future guidance**, not instructions to start work.
+  - PM must not advance to Phase 12 (or any future phase) solely because it is labeled as “Next Milestone” without the preceding Phases’ hermetic + live gates being explicitly marked complete.
+
 **Minimum evidence per PR session:**
 
 ```bash
@@ -444,6 +479,25 @@ make book.smoke
 make eval.graph.calibrate.adv
 make ci.exports.smoke
 ```
+
+### Live vs Hermetic Runs (DB + LM Posture)
+
+Once the project has been brought up at least once with **real DB and LM services running** (Postgres + LM Studio/Ollama), Cursor Auto must assume that:
+
+- **Hermetic/HINT-only runs are not enough to call a feature “done”** if that feature touches DB or LM.
+- For any PLAN/Phase item that exercises DB or LM (pipelines, BibleScholar, Knowledge MCP, control-plane exports, LM router, etc.):
+  - First run the hermetic/HINT-mode checks (smokes, guards, unit tests) to keep CI/dev safe.
+  - Then run at least one **live DB‑on + LM‑on** execution of the relevant flow (for example:
+    - `make reality.green` / `make bringup.live`,
+    - A small `make book.go` run,
+    - A real BibleScholar interaction,
+    - A Knowledge MCP query against `mcp.v_catalog`).
+  - Treat `db_off` / `lm_off` in that live step as a **failure to be investigated**, not “correct hermetic behavior”.
+- Cursor Auto must not mark a PLAN/Phase item as ✅ COMPLETE or update `MASTER_PLAN.md` / `share/MASTER_PLAN.md` / `NEXT_STEPS.md` to “Complete” on the basis of hermetic evidence alone when live DB/LM usage is part of the design.
+- If live tests cannot be executed (DB/LM genuinely unavailable), Cursor Auto must:
+  - Surface that explicitly in the Evidence / Next gate blocks,
+  - Leave the item as blocked/partial rather than complete,
+  - Propose a clear follow-up gate (“Run live DB+LM flow once services are up”).
 
 **GitHub PR policy for automated tools:**
 
@@ -466,6 +520,38 @@ make ci.exports.smoke
 * Do **not** re-run discovery (`gh pr list …`) more than once per handoff unless the previous output showed conflicts.
 * Do **not** propose alternative tooling (Black, isort, flake8) — SSOT is `ruff`.
 * **File Verification (Rule-046)**: All file operations MUST verify existence first using explicit checks (`test -f`, `os.path.exists`, `head`) before reading/writing. Missing critical files emit LOUD FAIL per Rule-039 (no auto-creation, fail-closed). Treat missing critical files as infra/contract breach.
+* **Browser Verification (Rule-051 + Rule-067)**: When modifying `docs/atlas/*` HTML, CSS, or visual artifacts, browser verification is **mandatory**. Use `make browser.verify` or follow `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md`. Screenshots must be saved to `evidence/webproof/` and included in PR evidence. **CRITICAL: Cursor MUST perform browser verification proactively for ANY UI/visual work without waiting for user reminders. This is a mandatory workflow step, not optional.**
+
+## External PM / Planning Agents (Provider-Agnostic)
+
+External planning agents (Gemini CLI, Codex, Granite local agents, or any other model) are allowed to act as the PM implementation engine **only** when they follow the same governance and SSOT rules as pmagent:
+
+- **Required view of the repo**:
+  - The agent must be started with its working directory at the **repo root** and must be able to read:
+    - `AGENTS.md` (this file),
+    - `RULES_INDEX.md`,
+    - `.cursor/rules/*.mdc` (especially 050, 051, 052, 062),
+    - `docs/SSOT/PM_CONTRACT.md`,
+    - `docs/SSOT/MASTER_PLAN.md`,
+    - `NEXT_STEPS.md`,
+    - And the relevant directory‑level `AGENTS.md` files for the areas it is modifying.
+  - If any of these are missing or unreadable, the agent must **fail‑closed** and ask the operator to fix the environment instead of proceeding with partial context.
+
+- **Planning truth sources (read‑only):**
+  1. `docs/SSOT/PM_CONTRACT.md`,
+  2. `docs/SSOT/MASTER_PLAN.md` (Active Development Workstreams + PLAN checklists),
+  3. `NEXT_STEPS.md` (latest Next Gate / Next Steps),
+  4. `.cursor/rules/` governance files (at minimum 050, 051, 052, 062),
+  5. Directory‑level `AGENTS.md` files and relevant SSOT/runbooks (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`, `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`).
+
+- **Output shape for PM decisions:**
+  - All external PM agents must speak in the same 4‑block OPS format:
+    - **Goal**, **Commands**, **Evidence to return**, **Next gate**.
+  - The **Commands** block must target **pmagent and Make** (for example, `pmagent plan next --with-status`, `pmagent plan reality-loop --track-session --dry-run-command "make book.go"`, `pmagent plan history`, `pmagent reality validate-capability-envelope ...`) and the standard OPS bundle (ruff, smokes, `make reality.green`), not ad‑hoc shell one‑offs.
+
+- **No direct DB / network access:**
+  - External planning agents must treat the file system (SSOT docs, `evidence/pmagent/` envelopes, share/ exports) as primary.
+  - Any DB or LM usage is mediated by existing commands (`pmagent reality-check check`, `make reality.green`, etc.) and must respect `db_off` / `lm_off` modes.
 
 ## Rules (summary)
 - Normalize Hebrew: **NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC**
@@ -481,6 +567,13 @@ make ci.exports.smoke
 All exported edges now carry a `rerank` score and an `edge_strength = 0.5*cos + 0.5*rerank`.
 Edges are classified as **strong** (≥0.90), **weak** (≥0.75), or **other**.
 Counts are emitted to `share/eval/edges/edge_class_counts.json` for telemetry.
+- **Make Target**: `make eval.reclassify` — Runs `scripts/eval/reclassify_edges.py` to generate edge class counts from `exports/graph_latest.json` (or `share/eval/edges/edge_inputs.json` if present). Thresholds configurable via `EDGE_STRONG` (default 0.90) and `EDGE_WEAK` (default 0.75). Hermetic: emits HINT if `graph_latest.json` is missing (empty-DB/CI runs).
+- **Ollama Rerank Failure Handling**: Ollama rerank adapter (`agentpm/adapters/ollama.py`) implements robust failure handling:
+  - **HTTP errors (404, 500, etc.)**: Raises `OllamaAPIError` with `error_type="http_error"`; rerank functions catch and fall back to `embedding_only`, then equal scores (0.5) if that also fails
+  - **Connection errors & timeouts**: Raises `OllamaAPIError` with `error_type="connection_error"` or `"timeout"`; same fallback chain
+  - **JSON parse errors**: Falls back to `embedding_only` (existing behavior)
+  - **Pipeline resilience**: Rerank failures never crash the pipeline; HINT-level warnings logged; `make eval.reclassify` remains valid even when rerank fails (uses available edge_strength values)
+  - **Test coverage**: `tests/unit/test_ollama_rerank_failures.py` (8 tests) validates all failure modes
 
 ### SSOT Blend Validation (Phase-10)
 Hermetic validation enforces `edge_strength = α*cosine + (1-α)*rerank_score` contract (Rule-045).
@@ -841,6 +934,15 @@ The orchestrator persists `exports/graph_latest.json` and `exports/graph_stats.j
   - **HINT mode (hermetic / PR):** DB/env must be correct; LM/exports/eval may be offline and produce hints without failing the run.
   - **STRICT mode (live-ready):** DB, control-plane, and LM providers must be reachable; failures are treated as errors and reflected in `overall_ok=false`.
   - **Unified bringup:** `make bringup.live` composes `pmagent reality-check check --mode strict --no-dashboards` with `make bringup.001` to provide a single live bringup gate for humans.
+
+#### 14. Autopilot Agent (Backend Stub)
+- **Purpose:** Handles Orchestrator Shell intents via HTTP API
+- **Reads:** Intent payloads from Shell
+- **Writes:** Structured plan responses (stubbed in Phase B)
+- **System Prompt:** (Future) Map user intent to guarded pmagent commands.
+- **pmagent Command:** `pmagent autopilot serve --port 8006`
+  - **Phase B:** Stubbed response (accepted=False, status="planned")
+  - **Logging:** Logs intents to stdout/logs for analysis
 
 ### Support Agents (Resilience & Governance)
 
@@ -1494,44 +1596,8 @@ Merges are permitted only when **all** are true:
 | 048 | `048-reserved.mdc` | reserved | **Default-Apply** |
 | 049 | `049-gpt5-contract-v5.2.mdc` | gpt5 contract v5.2 | **Default-Apply** |
 | 050 | `050-ops-contract.mdc` | 🧭 Gemantria — OPS Contract v6.2.3 | **Always-Apply** |
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
 | 051 | `051-cursor-insight.mdc` | 051 — Cursor Insight & Handoff (AlwaysApply) | **Always-Apply** |
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
 | 052 | `052-tool-priority.mdc` | 052 — Tool Priority & Context Guidance (AlwaysApply) | **Always-Apply** |
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
-- Rule-050
-- Rule-051
-- Rule-052
 | 053 | `053-idempotence.mdc` | 053 — Idempotent Baseline (OPS v6.2.1) | **Default-Apply** |
 | 054 | `054-reuse-first.mdc` | Rule-054 — Reuse-First, No-Scaffold-When-Exists (AlwaysApply: true) | **Default-Apply** |
 | 055 | `055-auto-docs-sync.mdc` | 055 — Auto-Docs Sync Pass (AlwaysApply) | **Default-Apply** |
@@ -1544,6 +1610,10 @@ Merges are permitted only when **all** are true:
 | 062 | `062-environment-validation.mdc` | Environment Validation (Always Required) | **Default-Apply** |
 | 063 | `063-git-safety.mdc` | Git Safety (No Destructive Operations) | **Default-Apply** |
 | 064 | `064-ai-tracking-contract.mdc` | ai tracking contract | **Default-Apply** |
+| 065 | `065-auto-normalize.mdc` | Rule 065 — Auto-Normalize on Branch Switch & PR Events | **Default-Apply** |
+| 066 | `066-lm-studio-appimage-update.mdc` | 066 — LM Studio AppImage Update & Dock Integration | **Default-Apply** |
+| 067 | `067-atlas-webproof.mdc` | Rule 067 — Atlas Webproof (Browser-Verified UI) | **Default-Apply** |
+| 068 | `068-gpt-docs-sync.mdc` | 068 — GPT Documentation Sync (AlwaysApply) | **Default-Apply** |
 <!-- RULES_INVENTORY:END -->
 
 

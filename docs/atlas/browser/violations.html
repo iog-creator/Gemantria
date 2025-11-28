@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Violations Browser — E89</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 1.5rem; max-width: 1400px; }
+    h1 { margin-bottom: 0.25rem; }
+    .subtitle { color: #555; margin-bottom: 1rem; }
+    .badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+    .filters { display: flex; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; align-items: center; }
+    .filters input, .filters select {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .filters input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+    th, td { border-bottom: 1px solid #ddd; padding: 0.6rem 0.8rem; text-align: left; }
+    th { background: #fafafa; font-weight: 600; cursor: pointer; user-select: none; }
+    th:hover { background: #f0f0f0; }
+    th.sort-asc::after { content: " ▲"; font-size: 0.7em; }
+    th.sort-desc::after { content: " ▼"; font-size: 0.7em; }
+    tr:hover { background: #f5f5ff; }
+    .count { text-align: right; font-variant-numeric: tabular-nums; }
+    .backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+    .backlinks ul { list-style: none; padding: 0; }
+    .backlinks li { margin: 0.5em 0; }
+    .backlinks a { color: #0066cc; text-decoration: none; }
+    .backlinks a:hover { text-decoration: underline; }
+    .no-results { padding: 2rem; text-align: center; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Violations Browser <span class="badge">E89</span></h1>
+  <div class="subtitle">
+    PLAN-078 E89 · Unified Violation Browser · Generated at <code>2025-11-21T05:37:09.651775+00:00</code>
+  </div>
+
+  <div class="filters">
+    <input id="search" type="text" placeholder="Search violation code or description…" />
+    <select id="codeFilter">
+      <option value="">All codes</option>
+
+    </select>
+    <select id="sortBy">
+      <option value="code">Sort by Code</option>
+      <option value="count-total" selected>Sort by Total Count</option>
+      <option value="count-7d">Sort by 7d Count</option>
+      <option value="count-30d">Sort by 30d Count</option>
+    </select>
+    <select id="sortOrder">
+      <option value="desc" selected>Descending</option>
+      <option value="asc">Ascending</option>
+    </select>
+  </div>
+
+  <table id="violationsTable">
+    <thead>
+      <tr>
+        <th data-sort="code">Violation Code</th>
+        <th data-sort="description">Description</th>
+        <th data-sort="count-7d" class="sort-desc">7d Count</th>
+        <th data-sort="count-30d">30d Count</th>
+        <th data-sort="count-total">Total Count</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="6" class="no-results">No violations found</td></tr>
+    </tbody>
+  </table>
+
+  <div class="backlinks">
+    <h2>Related Dashboards & Exports</h2>
+    <ul>
+      <li><a href="../dashboard/compliance_summary.html" data-testid="backlink-compliance-summary">Compliance Summary Dashboard (E86)</a></li>
+      <li><a href="../dashboard/compliance_timeseries.html" data-testid="backlink-compliance-timeseries">Compliance Time-Series Dashboard (E87)</a></li>
+      <li><a href="guard_receipts.html" data-testid="backlink-guard-receipts">Guard Receipts Index (E91)</a></li>
+      <li><a href="../../share/atlas/control_plane/compliance_summary.json" data-testid="backlink-json-summary">Compliance Summary JSON</a></li>
+      <li><a href="../../share/atlas/control_plane/top_violations_7d.json" data-testid="backlink-json-7d">Top Violations 7d JSON</a></li>
+      <li><a href="../../share/atlas/control_plane/top_violations_30d.json" data-testid="backlink-json-30d">Top Violations 30d JSON</a></li>
+      <li><a href="../../share/atlas/control_plane/graph_compliance.json" data-testid="backlink-json-graph-compliance">Graph Compliance Metrics JSON (E90)</a></li>
+      <li><a href="../../../evidence" data-testid="backlink-evidence-dir">Evidence Directory</a></li>
+      <li><a href="../../share/atlas/control_plane/mcp_status_cards.json" data-testid="backlink-mcp-status-cards-json">MCP Status Cards (PLAN-072 M3)</a></li>
+    </ul>
+  </div>
+  
+  <!-- MCP Proof Status Table (PLAN-072 M3) -->
+  <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #ddd;">
+    <h2>MCP Proof Status (E21-E25)</h2>
+    <table id="mcpProofsTable" style="margin-top: 1rem;">
+      <thead>
+        <tr>
+          <th>Proof</th>
+          <th>Status</th>
+          <th>Method</th>
+          <th>Details</th>
+          <th>Generated At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5" class="no-results">Loading proof status...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    // Load MCP status cards
+    fetch('../../share/atlas/control_plane/mcp_status_cards.json')
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load mcp_status_cards.json')))
+      .then(mcpData => {
+        const cards = mcpData.cards || {};
+        const tbody = document.querySelector('#mcpProofsTable tbody');
+        tbody.innerHTML = '';
+        
+        const cardOrder = ['e21_por', 'e22_schema', 'e23_gatekeeper', 'e24_tagproof', 'e25_bundle'];
+        for (const cardName of cardOrder) {
+          const card = cards[cardName];
+          if (card) {
+            const row = document.createElement('tr');
+            const statusClass = card.ok ? 'status-ok' : 'status-fail';
+            const details = card.details || {};
+            let detailsText = '';
+            
+            if (cardName === 'e21_por') {
+              detailsText = `Steps: ${details.steps_count || 0}, All OK: ${details.all_steps_ok || false}`;
+            } else if (cardName === 'e22_schema') {
+              detailsText = `Schema: ${details.schema || 'unknown'}, Tables: ${details.tables_count || 0}`;
+            } else if (cardName === 'e23_gatekeeper') {
+              detailsText = `Codes: ${details.violation_codes_count || 0}, All Covered: ${details.all_covered || false}`;
+            } else if (cardName === 'e24_tagproof') {
+              detailsText = `Components: ${details.components_count || 0}, Mode: ${details.mode || 'unknown'}`;
+            } else if (cardName === 'e25_bundle') {
+              detailsText = `Proofs: ${details.proofs_count || 0}, All OK: ${details.all_ok || false}`;
+            }
+            
+            row.innerHTML = `
+              <td><strong>${cardName.toUpperCase()}</strong></td>
+              <td class="${statusClass}">${card.status.toUpperCase()}</td>
+              <td>${details.method || 'unknown'}</td>
+              <td>${detailsText}</td>
+              <td>${details.generated_at ? new Date(details.generated_at).toLocaleString() : 'N/A'}</td>
+            `;
+            tbody.appendChild(row);
+          }
+        }
+        
+        if (tbody.children.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="no-results">No proof data available</td></tr>';
+        }
+      })
+      .catch(err => {
+        console.error('Error loading MCP status cards:', err);
+        const tbody = document.querySelector('#mcpProofsTable tbody');
+        tbody.innerHTML = '<tr><td colspan="5" class="no-results">Failed to load proof status</td></tr>';
+      });
+  </script>
+
+  <script>
+    const searchInput = document.getElementById("search");
+    const codeFilter = document.getElementById("codeFilter");
+    const sortBy = document.getElementById("sortBy");
+    const sortOrder = document.getElementById("sortOrder");
+    const table = document.getElementById("violationsTable");
+    const rows = Array.from(table.querySelectorAll("tbody tr"));
+    const headers = Array.from(table.querySelectorAll("thead th"));
+
+    let currentSort = { column: "count-total", order: "desc" };
+
+    function applyFilters() {
+      const q = searchInput.value.toLowerCase();
+      const code = codeFilter.value;
+      
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        const rowCode = row.getAttribute("data-code") || "";
+        const matchesText = !q || text.includes(q);
+        const matchesCode = !code || rowCode === code;
+        row.style.display = (matchesText && matchesCode) ? "" : "none";
+      });
+    }
+
+    function sortTable() {
+      const column = sortBy.value;
+      const order = sortOrder.value;
+      currentSort = { column, order };
+
+      // Update header indicators
+      headers.forEach(th => {
+        th.classList.remove("sort-asc", "sort-desc");
+        if (th.getAttribute("data-sort") === column) {
+          th.classList.add(order === "asc" ? "sort-asc" : "sort-desc");
+        }
+      });
+
+      // Sort rows
+      const visibleRows = rows.filter(r => r.style.display !== "none");
+      const tbody = table.querySelector("tbody");
+      
+      visibleRows.sort((a, b) => {
+        let aVal, bVal;
+        
+        if (column === "code") {
+          aVal = a.getAttribute("data-code") || "";
+          bVal = b.getAttribute("data-code") || "";
+        } else if (column === "count-total") {
+          aVal = parseInt(a.getAttribute("data-count-total") || "0");
+          bVal = parseInt(b.getAttribute("data-count-total") || "0");
+        } else if (column === "count-7d") {
+          const aCell = a.cells[2];
+          const bCell = b.cells[2];
+          aVal = parseInt(aCell?.textContent || "0");
+          bVal = parseInt(bCell?.textContent || "0");
+        } else if (column === "count-30d") {
+          const aCell = a.cells[3];
+          const bCell = b.cells[3];
+          aVal = parseInt(aCell?.textContent || "0");
+          bVal = parseInt(bCell?.textContent || "0");
+        } else {
+          aVal = a.cells[1]?.textContent || "";
+          bVal = b.cells[1]?.textContent || "";
+        }
+
+        if (typeof aVal === "string") {
+          return order === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+          return order === "asc" ? aVal - bVal : bVal - aVal;
+        }
+      });
+
+      // Re-append sorted rows
+      visibleRows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Header click sorting
+    headers.forEach(th => {
+      if (th.getAttribute("data-sort")) {
+        th.addEventListener("click", () => {
+          const col = th.getAttribute("data-sort");
+          if (currentSort.column === col) {
+            sortOrder.value = currentSort.order === "asc" ? "desc" : "asc";
+          } else {
+            sortBy.value = col;
+            sortOrder.value = "desc";
+          }
+          sortTable();
+        });
+      }
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+    codeFilter.addEventListener("change", applyFilters);
+    sortBy.addEventListener("change", sortTable);
+    sortOrder.addEventListener("change", sortTable);
+
+    // Initial sort
+    sortTable();
+  </script>
+</body>
+</html>

@@ -18,7 +18,7 @@ Subdirectories (e.g. `agentpm/db/`, `agentpm/control_plane/`, `agentpm/runtime/`
     - `scripts.config.env.get_rw_dsn()` / `get_ro_dsn()` / `get_bible_db_dsn()`
     - `agentpm.db.loader.get_control_engine()` / `get_bible_engine()`
   - DSNs are resolved from environment (`GEMATRIA_DSN`, `ATLAS_DSN_RW`, `BIBLE_DB_DSN`, etc.); **no direct `os.getenv()` for DSNs**.
-- **AI tracking tables (Rule-061/064 / AGENTS root contract)**
+  - **AI tracking tables (Rule-061/064 / AGENTS root contract)**
   - AI interaction and governance artifacts live in the `gematria` database:
     - `control.agent_run` - Runtime LM calls and tool executions (written by `agentpm.runtime.lm_logging._write_agent_run()`)
     - `control.agent_run_cli` - CLI command executions (written by `agentpm.control_plane.create_agent_run()` / `mark_agent_run_success()` / `mark_agent_run_error()`)
@@ -32,6 +32,12 @@ Subdirectories (e.g. `agentpm/db/`, `agentpm/control_plane/`, `agentpm/runtime/`
     - **DB-off**: When DSN is unavailable, `psycopg` is missing, or DB write fails, all tracking functions return `None` gracefully (no exceptions raised)
     - This ensures CI and hermetic tests can run without database access
   - All writes are routed through centralized DSN loaders (`scripts.config.env.get_rw_dsn()`); never use `os.getenv()` directly
+  - **Capability Session → AI Tracking Mapping (Design-only, no writes yet):**
+    - `capability_session` envelopes (from `pmagent plan reality-loop`) have a **future contract** for mapping to `control.agent_run_cli`
+    - Mapping design: See `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`
+    - Hermetic validator: `agentpm.reality.capability_envelope_validator` validates envelopes against the contract without writing to DB
+    - CLI validation: `pmagent reality validate-capability-envelope` and `validate-capability-history` check envelope structure
+    - **Writer path (not yet implemented):** Will use `agentpm.control_plane.create_agent_run()` helper behind explicit opt-in flag
 - **Control-plane exports**
   - Control-plane helpers in `agentpm.control_plane` read/write Postgres-backed views and exports (e.g. LM indicator, control status, tool catalog).
   - These exports are consumed by Atlas dashboards, pmagent CLI commands, and reality-check flows.

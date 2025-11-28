@@ -37,14 +37,30 @@ export function useGraphData(graphUrl: string = "/exports/graph_latest.json") {
         }
 
         // Transform the data to match our expected format
-        const nodes: GraphNode[] = rawData.nodes.map((node: any) => ({
-          id: node.id,
-          label: node.label || node.id,
-          cluster: node.cluster,
-          degree: node.degree,
-          betweenness: node.betweenness,
-          eigenvector: node.eigenvector,
-        }));
+        // Handle both SSOT format (with schema/meta) and legacy format
+        const nodesArray = rawData.nodes || [];
+        const nodes: GraphNode[] = nodesArray.map((node: any) => {
+          // Handle placeholder data with only idx
+          if (node.idx !== undefined && !node.id) {
+            return {
+              id: `node-${node.idx}`,
+              label: `Node ${node.idx}`,
+              cluster: node.cluster || 0,
+              degree: node.degree,
+              betweenness: node.betweenness,
+              eigenvector: node.eigenvector,
+            };
+          }
+          // Handle normal format
+          return {
+            id: node.id || node.noun_id || String(node.idx || 'unknown'),
+            label: node.label || node.surface || node.id || String(node.idx || 'unknown'),
+            cluster: node.cluster,
+            degree: node.degree,
+            betweenness: node.betweenness,
+            eigenvector: node.eigenvector,
+          };
+        });
 
         const edges: GraphEdge[] = rawData.edges.map((edge: any) => ({
           source: edge.source,

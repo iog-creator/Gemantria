@@ -168,6 +168,115 @@ class TestBibleDbAdapter:
         assert status == "available"
         mock_get_engine.assert_called_once()
 
+    @patch("agentpm.biblescholar.bible_db_adapter.get_bible_engine")
+    def test_search_verses_success(self, mock_get_engine):
+        """Test successful verse search."""
+        mock_engine = MagicMock(spec=Engine)
+        mock_conn = MagicMock()
+        mock_result = MagicMock()
+
+        # Mock multiple rows
+        mock_rows = [
+            MagicMock(),
+            MagicMock(),
+        ]
+
+        mock_rows[0].__getitem__.side_effect = lambda i: {
+            0: 1,
+            1: "Genesis",
+            2: 1,
+            3: 1,
+            4: "In the beginning God created",
+            5: "KJV",
+        }[i]
+
+        mock_rows[1].__getitem__.side_effect = lambda i: {
+            0: 2,
+            1: "John",
+            2: 1,
+            3: 1,
+            4: "In the beginning was the Word",
+            5: "KJV",
+        }[i]
+
+        mock_result.__iter__.return_value = iter(mock_rows)
+        mock_conn.execute.return_value = mock_result
+        mock_engine.connect.return_value.__enter__.return_value = mock_conn
+        mock_get_engine.return_value = mock_engine
+
+        adapter = BibleDbAdapter()
+        verses = adapter.search_verses("beginning", "KJV", 20)
+
+        assert len(verses) == 2
+        assert all(isinstance(v, VerseRecord) for v in verses)
+        assert verses[0].book_name == "Genesis"
+        assert verses[1].book_name == "John"
+        # Verify query was called with ILIKE pattern
+        call_args = mock_conn.execute.call_args
+        assert "%beginning%" in str(call_args)
+
+    @patch("agentpm.biblescholar.bible_db_adapter.get_bible_engine")
+    def test_search_verses_no_results(self, mock_get_engine):
+        """Test search with no results returns empty list."""
+        mock_engine = MagicMock(spec=Engine)
+        mock_conn = MagicMock()
+        mock_result = MagicMock()
+
+        mock_result.__iter__.return_value = iter([])
+        mock_conn.execute.return_value = mock_result
+        mock_engine.connect.return_value.__enter__.return_value = mock_conn
+        mock_get_engine.return_value = mock_engine
+
+        adapter = BibleDbAdapter()
+        verses = adapter.search_verses("nonexistentword", "KJV", 20)
+
+        assert verses == []
+
+    @patch("agentpm.biblescholar.bible_db_adapter.get_bible_engine")
+    def test_search_verses_with_limit(self, mock_get_engine):
+        """Test search respects limit parameter."""
+        mock_engine = MagicMock(spec=Engine)
+        mock_conn = MagicMock()
+        mock_result = MagicMock()
+
+        mock_result.__iter__.return_value = iter([])
+        mock_conn.execute.return_value = mock_result
+        mock_engine.connect.return_value.__enter__.return_value = mock_conn
+        mock_get_engine.return_value = mock_engine
+
+        adapter = BibleDbAdapter()
+        adapter.search_verses("test", "KJV", limit=10)
+
+        # Verify limit was passed to query parameters
+        call_args = mock_conn.execute.call_args
+        # call_args[0] contains positional args: (query_text, params_dict)
+        params = call_args[0][1]
+        assert params["limit"] == 10
+
+    @patch("agentpm.biblescholar.bible_db_adapter.get_bible_engine")
+    def test_search_verses_db_unavailable(self, mock_get_engine):
+        """Test DB unavailable returns empty list."""
+        mock_get_engine.side_effect = OperationalError("Connection failed", None, None)
+
+        adapter = BibleDbAdapter()
+        verses = adapter.search_verses("test", "KJV")
+
+        assert verses == []
+        assert adapter.db_status == "unavailable"
+
+    @patch("agentpm.biblescholar.bible_db_adapter.get_bible_engine")
+    def test_search_verses_db_off(self, mock_get_engine):
+        """Test DB off (DSN not set) returns empty list."""
+        from agentpm.db.loader import DbUnavailableError
+
+        mock_get_engine.side_effect = DbUnavailableError("BIBLE_DB_DSN not set")
+
+        adapter = BibleDbAdapter()
+        verses = adapter.search_verses("test", "KJV")
+
+        assert verses == []
+        assert adapter.db_status == "db_off"
+
     def test_adapter_no_write_methods(self):
         """Test that adapter only exposes read methods (no INSERT/UPDATE/DELETE)."""
         adapter = BibleDbAdapter()

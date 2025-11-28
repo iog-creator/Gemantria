@@ -1,0 +1,66 @@
+{
+    "$id": "gemantria://v1/mcp_proof_snapshot.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Knowledge MCP Proof Snapshot (v1)",
+    "type": "object",
+    "required": ["schema", "generated_at", "components", "artifacts", "overall_ok"],
+    "properties": {
+        "schema": {"const": "mcp_proof_snapshot.v1"},
+        "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC3339 timestamp when snapshot was generated"
+        },
+        "components": {
+            "type": "object",
+            "required": ["e01_schema", "e02_ro_dsn", "e03_ingest", "e04_query"],
+            "properties": {
+                "e01_schema": {
+                    "type": "object",
+                    "required": ["ok", "present"],
+                    "properties": {
+                        "ok": {"type": "boolean", "description": "Schema guard passed"},
+                        "present": {"type": "boolean", "description": "Evidence file present"},
+                        "details": {"type": "object", "description": "Additional details from guard"}
+                    }
+                },
+                "e02_ro_dsn": {
+                    "type": "object",
+                    "required": ["ok", "present"],
+                    "properties": {
+                        "ok": {"type": "boolean", "description": "RO DSN guard passed"},
+                        "present": {"type": "boolean", "description": "Evidence file present"},
+                        "details": {"type": "object", "description": "Additional details from guard"}
+                    }
+                },
+                "e03_ingest": {
+                    "type": "object",
+                    "required": ["ok", "present"],
+                    "properties": {
+                        "ok": {"type": "boolean", "description": "Ingest envelope present (optional)"},
+                        "present": {"type": "boolean", "description": "Envelope file present"},
+                        "details": {"type": "object", "description": "Additional details"}
+                    }
+                },
+                "e04_query": {
+                    "type": "object",
+                    "required": ["ok", "present"],
+                    "properties": {
+                        "ok": {"type": "boolean", "description": "Query guard passed"},
+                        "present": {"type": "boolean", "description": "Evidence file present"},
+                        "details": {"type": "object", "description": "Additional details from guard"}
+                    }
+                }
+            }
+        },
+        "artifacts": {
+            "type": "array",
+            "items": {"type": "string", "description": "Relative paths to evidence files and exports"},
+            "description": "List of artifact paths relative to repo root"
+        },
+        "overall_ok": {
+            "type": "boolean",
+            "description": "True if all required components (E01, E02, E04) are ok"
+        }
+    }
+}

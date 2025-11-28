@@ -12,7 +12,6 @@ Phase-7E: Added Ollama provider support with automatic model discovery.
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -20,8 +19,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-# Import LM Studio adapter (E402: imports after sys.path modification)
-from agentpm.adapters.lm_studio import lm_studio_chat  # noqa: E402
+# Import lightweight health check (doesn't trigger model loads)
+from agentpm.lm.lm_status import check_lmstudio_health, check_ollama_health  # noqa: E402
 from scripts.config.env import get_lm_model_config, get_lm_studio_settings  # noqa: E402
 
 
@@ -94,17 +93,15 @@ def check_lm_health() -> dict:
                     result["details"]["warnings"] = result["details"].get("warnings", [])
                     result["details"]["warnings"].append(f"embeddings_skipped: {','.join(skipped)}")
 
-            # Test Ollama with a simple chat call
-            from agentpm.adapters.lm_studio import chat
+            # Test Ollama with lightweight health check (doesn't trigger model loads)
+            service_status = check_ollama_health(base_url)
 
-            try:
-                response = chat("hi", model_slot="local_agent")
-                if response:
-                    result["ok"] = True
-                    result["mode"] = "lm_ready"
-                    return result
-            except Exception as e:
-                result["details"]["errors"].append(f"ollama_chat_test_failed: {e!s}")
+            if service_status == "OK":
+                result["ok"] = True
+                result["mode"] = "lm_ready"
+                return result
+            else:
+                result["details"]["errors"].append(f"ollama_unreachable: {service_status}")
                 return result
 
         except ImportError:
@@ -116,29 +113,26 @@ def check_lm_health() -> dict:
 
     # LM Studio path (legacy)
     settings = get_lm_studio_settings()
-    if not settings.get("enabled") or not settings.get("base_url") or not settings.get("model"):
+    if not settings.get("enabled") or not settings.get("base_url"):
         result["details"]["errors"].append("lm_studio_disabled_or_unconfigured")
         return result
 
-    # Health check: minimal chat completion request using adapter
-    # Use tiny prompt and low max_tokens for fast response
-    timeout = float(os.getenv("LM_HEALTH_TIMEOUT", "1.0"))
-    health_result = lm_studio_chat(
-        messages=[{"role": "user", "content": "hi"}],
-        max_tokens=1,
-        temperature=0.0,
-        timeout=timeout,
-    )
+    # Health check: lightweight connection test (doesn't trigger model loads)
+    # Use the lightweight health check from lm_status.py which only verifies server reachability
+    base_url = settings.get("base_url", "http://127.0.0.1:1234")
+    # Remove /v1 suffix if present for health check
+    clean_base = base_url.rstrip("/")
+    if clean_base.endswith("/v1"):
+        clean_base = clean_base[:-3]
 
-    # Map adapter response to health check format
-    if health_result.get("ok") and health_result.get("mode") == "lm_on":
+    service_status = check_lmstudio_health(clean_base)
+
+    if service_status == "OK":
         result["ok"] = True
         result["mode"] = "lm_ready"
         return result
     else:
-        # Extract error reason from adapter response
-        reason = health_result.get("reason", "unknown_error")
-        result["details"]["errors"].append(reason)
+        result["details"]["errors"].append(f"lm_studio_unreachable: {service_status}")
         return result
 
 

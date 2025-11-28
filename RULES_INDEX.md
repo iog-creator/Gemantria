@@ -108,9 +108,9 @@
 | 047 | 047-reserved.mdc | RESERVED |
 | 048 | 048-reserved.mdc | RESERVED |
 | 049 | 049-gpt5-contract-v5.2.mdc | GPT-5 Contract v5.2 |
-| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) |
-| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) |
-| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) |
+| 050 | 050-ops-contract.mdc | OPS Contract v6.2.3 (AlwaysApply) — Strict activation + SSOT checks, LOUD FAIL pattern, evidence-first protocol, 4-block output standard. Tool priority: local+gh → codex → gemini/mcp. |
+| 051 | 051-cursor-insight.mdc | Cursor Insight & Handoff (AlwaysApply) — Required evidence set for PR handoffs, browser verification mandatory for visual/web outputs, non-required reviews advisory only. |
+| 052 | 052-tool-priority.mdc | Tool Priority & Context Guidance (AlwaysApply) — Tool order: local+gh → codex (if available) → gemini/mcp for long governance files. Planning lane (Gemini CLI + Codex) for backend planning/coding/math; non-theology. |
 | 053 | 053-idempotence.mdc | Idempotent Baseline |
 | 062 | (inline) | Rerank thresholds: HINT on main, STRICT on tags; SSOT in `configs/rerank_blend.json`; guard `guard.rerank.thresholds` |
 | 054 | 054-reuse-first.mdc | Reuse-First, No-Scaffold-When-Exists |
@@ -163,3 +163,10 @@
 - [Doc Control Panel Data Contract](docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md) - JSON export formats for orchestrator dashboard (DM-002)
 - [PM + OPS Behavioral Contract](docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md)
 - [Cursor Workflow Contract (Installed)](docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md)
+
+## Planning Lane & Model Configuration Runbooks
+
+- [Gemini CLI Runbook](docs/runbooks/GEMINI_CLI.md) - Setup and usage for Gemini CLI planning provider
+- [Codex CLI Runbook](docs/runbooks/CODEX_CLI.md) - Setup and usage for OpenAI Codex CLI planning provider
+- [PM Agent Current vs Intended](docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md) - pmagent command status and capabilities
+- [Prompting Guide for Core LLM Models](Prompting%20Guide%20for%20Our%20Core%20LLM%20models.md) - Design-level spec for Granite 4.0 + BGE-M3 + Granite Reranker stack

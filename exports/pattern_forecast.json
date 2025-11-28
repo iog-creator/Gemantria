@@ -15,8 +15,8 @@
       "arima": 0
     },
     "average_metrics": {
-      "rmse": null,
-      "mae": null
+      "rmse": 0.0,
+      "mae": 0.0
     }
   }
 }

@@ -312,13 +312,15 @@ for entry in result.entries:
 - `VerseSimilarityResult` dataclass with fields: `verse_id`, `book_name`, `chapter_num`, `verse_num`, `text`, `translation_source`, `similarity_score` (0.0 to 1.0, higher is more similar)
 
 **Tables Used**:
-- `bible.verses` - Verse storage with `embedding vector(768)` column (HNSW index for similarity search)
+- `bible.verse_embeddings` - Embedding storage with `embedding vector(1024)` column (1024-dim, BGE-M3 compatible)
+- `bible.verses` - Verse text storage (joined with verse_embeddings to get text and metadata)
 
 **Vector Similarity**:
 - Uses pgvector's cosine distance operator `<->` for similarity calculations
 - Similarity score: `1 - (embedding <-> source_embedding)` (converts distance to similarity, 0.0 to 1.0)
 - Results ordered by similarity (highest first)
 - Requires `embedding IS NOT NULL` for both source and target verses
+- Uses 1024-dimensional embeddings from `verse_embeddings` table (BGE-M3 compatible)
 
 **Error Handling**:
 - DB unavailable: Returns empty list
@@ -365,6 +367,163 @@ for verse in similar:
 - Tests in `agentpm/biblescholar/tests/test_vector_adapter.py`
 - Tests in `agentpm/biblescholar/tests/test_vector_flow.py`
 - Tests verify: SQL query shapes, DB-off handling, no write operations, vector similarity calculations, reference parsing
+
+### Reference Parser (Phase-7A)
+
+- **Module**: `agentpm/biblescholar/reference_parser.py`
+- **Purpose**: Pure-function parser for Bible references. Supports standard formats ("John 3:16"), verse ranges ("Gen 1:1-5"), and OSIS format ("Gen.1.1"). Replaces legacy `bible_reference_parser.py`.
+- **Dependencies**: None (Pure Python)
+- **Non-goals**:
+  - No database access
+  - No validation against book existence (normalization only)
+
+**API**:
+- `ParsedReference` dataclass:
+  - `book: str` (Normalized abbreviation, e.g., "Gen")
+  - `chapter: int`
+  - `verse: int | None`
+  - `end_verse: int | None`
+  - `translation: str` (Default "KJV")
+- `parse_reference(ref: str) -> ParsedReference`
+- `normalize_book_name(book_name: str) -> str`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.reference_parser import parse_reference
+
+# Standard format
+ref = parse_reference("John 3:16")
+assert ref.book == "Joh"
+assert ref.chapter == 3
+assert ref.verse == 16
+
+# Verse range
+ref = parse_reference("Gen 1:1-5")
+assert ref.book == "Gen"
+assert ref.chapter == 1
+assert ref.verse == 1
+assert ref.end_verse == 5
+
+# OSIS format
+ref = parse_reference("Gen.1.1")
+assert ref.book == "Gen"
+
+# Numbered books
+ref = parse_reference("1 Corinthians 13:4")
+assert ref.book == "1Co"
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_reference_parser.py`
+- Covers: Normalization, standard/OSIS formats, ranges, error handling
+
+### Keyword Search Flow (Phase-7D)
+
+- **Module**: `agentpm/biblescholar/search_flow.py`
+- **Purpose**: Keyword search across verses using `ILIKE` (case-insensitive).
+- **Dependencies**:
+  - `agentpm.biblescholar.bible_db_adapter`
+- **Non-goals**:
+  - No full-text search engine (simple SQL match only)
+  - No semantic search (use vector flow for that)
+
+**API**:
+- `search_verses(query: str, translation: str = "KJV", limit: int = 20) -> list[VerseRecord]`
+  - Validates query length (min 2 chars)
+  - Delegates to `BibleDbAdapter.search_verses`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.search_flow import search_verses
+
+# Basic search
+results = search_verses("beginning", "KJV", limit=5)
+for verse in results:
+    print(f"{verse.book_name} {verse.chapter_num}:{verse.verse_num} - {verse.text}")
+
+# Different translation
+results = search_verses("love", "ESV")
+```
+
+- Tests in `agentpm/biblescholar/tests/test_bible_db_adapter.py`
+- Covers: Query validation, empty results, limit handling, DB-off mode
+
+### Contextual Insights Flow (Phase-8A)
+
+- **Module**: `agentpm/biblescholar/insights_flow.py`
+- **Purpose**: Aggregates verse data (text, lexicon, similar verses) into a unified context object and formats it for LLM consumption.
+- **Dependencies**:
+  - `agentpm.biblescholar.bible_passage_flow`
+  - `agentpm.biblescholar.lexicon_flow`
+  - `agentpm.biblescholar.vector_flow`
+- **Non-goals**:
+  - No direct LLM calls (formatting only)
+
+**API**:
+- `VerseContext` dataclass:
+  - `reference: str`
+  - `primary_text: str` (KJV)
+  - `secondary_texts: dict[str, str]`
+  - `lexicon_entries: list[LexiconEntry]`
+  - `similar_verses: list[VerseSimilarityResult]`
+- `get_verse_context(ref: str, translations: list[str], include_lexicon: bool, include_similar: bool) -> VerseContext`
+- `format_context_for_llm(context: VerseContext) -> str`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.insights_flow import get_verse_context, format_context_for_llm
+
+# Get full context
+context = get_verse_context("Genesis 1:1", translations=["ESV"])
+
+# Format for LLM
+prompt_context = format_context_for_llm(context)
+print(prompt_context)
+# Output:
+# # Context: Genesis 1:1
+# ## Text (KJV)
+# > In the beginning...
+# ...
+```
+
+- Tests in `agentpm/biblescholar/tests/test_insights_flow.py`
+- Covers: Aggregation logic, formatting output, missing data handling
+
+### Cross-Language Flow (Phase-8B)
+
+- **Module**: `agentpm/biblescholar/cross_language_flow.py`
+- **Purpose**: Advanced word analysis and cross-language (Hebrew/Greek) connections using lexicon adapter and vector search.
+- **Dependencies**:
+  - `agentpm.biblescholar.lexicon_flow`
+  - `agentpm.biblescholar.vector_flow`
+- **Non-goals**:
+  - No full semantic mapping (heuristic based on vector similarity)
+
+**API**:
+- `WordAnalysis` dataclass:
+  - `strongs_id`, `lemma`, `gloss`, `occurrence_count`, `related_verses`
+- `CrossLanguageMatch` dataclass:
+  - `source_strongs`, `target_strongs`, `target_lemma`, `similarity_score`, `common_verses`
+- `analyze_word_in_context(ref: str, strongs_id: str) -> WordAnalysis`
+- `find_cross_language_connections(strongs_id: str, reference: str, limit: int) -> list[CrossLanguageMatch]`
+
+**Usage Example**:
+```python
+from agentpm.biblescholar.cross_language_flow import analyze_word_in_context, find_cross_language_connections
+
+# Analyze word
+analysis = analyze_word_in_context("Genesis 1:1", "H7225")
+print(f"{analysis.lemma}: {analysis.occurrence_count} occurrences")
+
+# Find connections
+matches = find_cross_language_connections("H7225")
+for match in matches:
+    print(f"Match: {match.target_lemma} ({match.target_strongs}) - Score: {match.similarity_score}")
+```
+
+**Testing**:
+- Tests in `agentpm/biblescholar/tests/test_cross_language_flow.py`
+- Covers: Word analysis, cross-language matching logic, error handling
 
 ## Future Extensions
 

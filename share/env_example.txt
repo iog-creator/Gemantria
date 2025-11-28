@@ -53,6 +53,8 @@ LM_STUDIO_ENABLED=true
 
 # Default: LM Studio (recommended provider for local strict bringup)
 INFERENCE_PROVIDER=lmstudio
+# Optional provider toggles (defaults keep both runtimes available)
+OLLAMA_ENABLED=true
 
 # LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)
 LM_STUDIO_HOST=  # e.g. http://127.0.0.1:9994 (set in your .env)
@@ -66,6 +68,22 @@ OPENAI_API_KEY=sk-local-placeholder
 
 # Ollama base URL (used when INFERENCE_PROVIDER=ollama)
 OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# Per-slot provider overrides (default to INFERENCE_PROVIDER)
+LOCAL_AGENT_PROVIDER=
+EMBEDDING_PROVIDER=
+RERANKER_PROVIDER=
+THEOLOGY_PROVIDER=
+
+# === Planning Lane (Gemini CLI + Codex) ===
+# pmagent uses these variables to decide which helper CLI to call for planning/coding/maths tasks.
+# Leaving PLANNING_PROVIDER empty falls back to the Granite local_agent slot.
+PLANNING_PROVIDER=
+PLANNING_MODEL=
+GEMINI_ENABLED=true
+GEMINI_CLI_PATH=gemini
+CODEX_ENABLED=false
+CODEX_CLI_PATH=codex
 
 # === Canonical LM Model IDs (slots) ===
 # These slots are provider-agnostic. The runtime picks the right host
@@ -97,6 +115,8 @@ RERANKER_MODEL=granite4:tiny-h
 # Theology / Bible expert model
 # Used for noun discovery, enrichment, and general theological analysis
 THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+THEOLOGY_LMSTUDIO_BASE_URL=http://127.0.0.1:1234
+THEOLOGY_LMSTUDIO_API_KEY=sk-local-placeholder
 
 # Optional: math-heavy model for numeric/reasoning tasks
 # Used for gematria calculation verification

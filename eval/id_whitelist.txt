@@ -1,3 +1,0 @@
-# Node IDs (one per line) to be whitelisted for audit purposes (dev-only).
-# Lines starting with '#' are ignored.
-EXAMPLE_WHITELIST_ID

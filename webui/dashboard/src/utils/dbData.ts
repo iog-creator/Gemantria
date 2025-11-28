@@ -44,22 +44,43 @@ async function fetchJsonSafe<T>(path: string): Promise<T | null> {
 }
 
 /**
- * Fetch DB health from system health export (components.db).
- * Falls back to evidence/guard validation if system health not available.
+ * Fetch DB health from /api/status/system (preferred, live data).
+ * Falls back to system health export if API unavailable.
  */
 export const getDBHealth = async (): Promise<DBHealthData | null> => {
-    // Try system health export first (preferred)
+    // Try API endpoint first (preferred - live data)
+    try {
+        const response = await fetch('/api/status/system');
+        if (response.ok) {
+            const statusData = await response.json();
+            const dbData = statusData.db || {};
+            
+            // Map API response to expected format
+            const dbHealth: DBHealthData = {
+                ok: dbData.reachable && dbData.mode === 'ready',
+                mode: dbData.mode || 'unknown',
+                checks: {
+                    // Infer checks from mode and reachable status
+                    driver_available: dbData.mode !== 'db_off',
+                    connection_ok: dbData.reachable || false,
+                    graph_stats_ready: dbData.mode === 'ready',
+                },
+                details: {
+                    errors: dbData.mode === 'db_off' || dbData.mode === 'partial' 
+                        ? [dbData.notes || 'Database check failed'] 
+                        : [],
+                },
+            };
+            return dbHealth;
+        }
+    } catch (error) {
+        console.warn('Failed to fetch DB health from API, trying exports:', error);
+    }
+
+    // Fallback: Try system health export
     const systemHealth = await fetchJsonSafe<SystemHealthData>(`${BASE_URL}/control-plane/system_health.json`);
     if (systemHealth?.components?.db) {
         return systemHealth.components.db;
-    }
-
-    // Fallback: Try evidence/guard validation (may contain DB health info)
-    const guardValidation = await fetchJsonSafe<{ data?: { db_health?: DBHealthData } }>(
-        `${BASE_URL}/evidence/latest_guard_validation.json`
-    );
-    if (guardValidation?.data?.db_health) {
-        return guardValidation.data.db_health;
     }
 
     // If neither available, return null (hermetic behavior)

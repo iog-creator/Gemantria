@@ -10,6 +10,7 @@ This runbook summarizes how Cursor and other IDE-integrated agents should behave
 ## Day-to-Day Expectations
 
 - Always follow OPS blocks from the PM as the primary instructions.
+- Treat the PM as planning/verification only: Cursor Auto (or human implementers) execute all code/tests/Makefile changes per the PM contract’s Role Separation section.
 - Use SSOT + DMS as the source of truth, not old chats or random attachments.
 - Fix technical errors autonomously and report back with:
   - What was run

@@ -5,6 +5,7 @@ import TemporalExplorer from "../dashboard/src/components/TemporalExplorer";
 import ForecastDashboard from "../dashboard/ForecastDashboard";
 import ModelsPanel from "./ModelsPanel";
 import DbPanel from "./DbPanel";
+import BibleScholarPanel from "./BibleScholarPanel";
 import InsightsPanel from "./InsightsPanel";
 import CompliancePanel from "./CompliancePanel";
 import AutopilotPanel from "./AutopilotPanel";
@@ -20,13 +21,14 @@ export default function MainCanvas({ activeTool }: MainCanvasProps) {
             {activeTool === "docs" && <DocControlPanel />}
             {activeTool === "models" && <ModelsPanel />}
             {activeTool === "db" && <DbPanel />}
+            {activeTool === "biblescholar" && <BibleScholarPanel />}
             {activeTool === "graph" && <GraphDashboard embedded={true} />}
             {activeTool === "temporal" && <TemporalExplorer />}
             {activeTool === "forecast" && <ForecastDashboard />}
             {activeTool === "insights" && <InsightsPanel />}
             {activeTool === "compliance" && <CompliancePanel />}
             {activeTool === "autopilot" && <AutopilotPanel />}
-            {!["overview", "docs", "models", "db", "graph", "temporal", "forecast", "insights", "compliance", "autopilot"].includes(activeTool) && (
+            {!["overview", "docs", "models", "db", "biblescholar", "graph", "temporal", "forecast", "insights", "compliance", "autopilot"].includes(activeTool) && (
                 <div className="p-8">
                     <p>Orchestrator Shell — {activeTool} (placeholder)</p>
                 </div>

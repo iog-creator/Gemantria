@@ -69,6 +69,303 @@ STRICT_AI_TRACKING=1 python3 scripts/guards/guard_ai_tracking_contract.py
 - **Migrations**: 015 (governance_artifacts), 016 (ai_interactions)
 - **CI**: HINT on PRs, STRICT on tags (gated by `vars.STRICT_DB_MIRROR_CI`)
 
+### `guards/guard_mcp_schema.py` — Knowledge MCP Schema Guard (PLAN-073 M1 E01)
+
+**Purpose:** Validates that the Knowledge MCP schema, tables, and view exist in the database.
+
+**Modes:**
+- **HINT mode (default)**: Tolerates missing DB/schema, emits hints, exits 0
+- **STRICT mode**: Requires schema/tables/view to exist, fails if missing
+
+**Checks:**
+- Schema `mcp` exists
+- Tables: `mcp.tools`, `mcp.endpoints`, `mcp.logs`
+- View: `mcp.v_catalog`
+
+**Usage:**
+```bash
+make guard.mcp.schema              # HINT mode (default, hermetic-friendly)
+STRICT_MODE=1 make guard.mcp.schema  # STRICT mode (fail-closed)
+python scripts/guards/guard_mcp_schema.py
+```
+
+**Output:**
+- JSON verdict to `evidence/guard_mcp_schema.json`
+- Fields: `ok`, `mode`, `schema_exists`, `tables_present`, `view_exists`, `details`, `generated_at`
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **Schema**: `db/sql/078_mcp_knowledge.sql`
+- **Seed**: `db/sql/078_mcp_knowledge_seed.sql` (optional)
+
+### `mcp/echo_dsn_ro.py` — RO DSN Echo Helper (PLAN-073 M1 E02)
+
+**Purpose:** Prints a single redacted RO DSN line showing which DSN source was used.
+
+**Behavior:**
+- Uses centralized DSN loader (`get_ro_dsn()`) for consistency
+- Prints format: `postgresql://<REDACTED>@host:port/database (source: GEMATRIA_RO_DSN)`
+- Shows which DSN source was picked (GEMATRIA_RO_DSN, ATLAS_DSN_RO, ATLAS_DSN, etc.)
+- Never prints raw credentials
+
+**Usage:**
+```bash
+make mcp.dsn.echo              # Echo redacted RO DSN
+python scripts/mcp/echo_dsn_ro.py
+```
+
+**Output:**
+- Single line to stdout: redacted DSN + source
+- HINT message to stderr if no DSN available (exits 0)
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **DSN Loader**: `scripts/config/env.py` (`get_ro_dsn()`)
+
+### `guards/guard_docs_db_ssot.py` — Docs DB SSOT Guard (PLAN-072 M1)
+
+**Purpose:** Validates that the control-plane doc registry in Postgres is in sync with canonical documentation files in the repo.
+
+**Modes:**
+- **HINT mode (default)**: Tolerates missing DB or partial sync, emits hints, exits 0 (non-blocking)
+- **STRICT mode**: Requires DB access and full sync, exits 1 if `ok=false` (blocking)
+
+**Checks:**
+- Local docs discovery (AGENTS.md, MASTER_PLAN.md, RULES_INDEX.md, docs/SSOT/**, docs/runbooks/**)
+- Registry sync (all local docs present in `control.doc_registry`)
+- Version sync (all registry docs have entries in `control.doc_version`)
+
+**Usage:**
+```bash
+make guard.docs.db.ssot              # HINT mode (default, non-blocking for PR CI)
+make guard.docs.db.ssot.strict       # STRICT mode (fail-closed for tag builds)
+python scripts/guards/guard_docs_db_ssot.py
+STRICT_MODE=1 python scripts/guards/guard_docs_db_ssot.py
+```
+
+**Output:**
+- JSON verdict to stdout
+- Fields: `ok`, `mode` ("ready" | "db_off" | "partial"), `reason`, `details` (missing_registry_docs, missing_versions, counts), `hints` (HINT mode only), `generated_at`
+
+**Exit Codes:**
+- HINT mode: Always 0 (non-blocking, even when `ok=false`)
+- STRICT mode: 0 if `ok=true`, 1 if `ok=false` (blocking)
+
+**CI Integration:**
+- PR CI: Run in HINT mode (non-blocking, advisory only)
+- Tag builds: Run in STRICT mode (fail-closed, requires full sync)
+
+**Related:**
+- **PLAN-072 M1**: DMS guard fixes — See `docs/SSOT/PLAN_072_M1_DMS_GUARDS.md`
+- **Rule-027**: Docs Sync Gate
+- **Rule-055**: Auto-Docs Sync Pass
+- **Tests**: `agentpm/tests/docs/test_dms_guards.py`
+
+### `guards/guard_docs_consistency.py` — Docs Consistency Guard (PLAN-072)
+
+**Purpose:** Hermetic guard (no network/DB dependencies) that validates documentation consistency patterns across governance files.
+
+**Checks:**
+- Required patterns present (RFC3339 timestamps, make housekeeping, etc.)
+- Forbidden patterns absent (epoch timestamps, disallowed flags, etc.)
+
+**Usage:**
+```bash
+make guard.docs.consistency
+make docs.audit              # Runs guard.docs.consistency
+python scripts/guards/guard_docs_consistency.py
+```
+
+**Output:**
+- JSON verdict to stdout
+- Fields: `scanned`, `ok`, `fails`, `fail_list`, `errors`
+
+**Related:**
+- **PLAN-072**: DMS guard fixes
+- **Rule-027**: Docs Sync Gate
+
+### `ci/guard_mcp_db_ro.py` — MCP DB RO Guard + Redaction Proof (PLAN-073 M1 E02)
+
+**Purpose:** Validates RO DSN connectivity, mcp.v_catalog accessibility, and DSN redaction.
+
+**Modes:**
+- **HINT mode (default)**: Tolerates missing DB/DSN, emits hints, exits 0
+- **STRICT mode**: Requires RO DSN + mcp.v_catalog, fails if missing
+
+**Checks:**
+- DSN presence (via centralized loader `get_ro_dsn()`)
+- DSN redaction (all DSN strings in output are redacted)
+- RO access (read works, writes denied)
+- View accessibility (`mcp.v_catalog` exists and is accessible)
+
+**Usage:**
+```bash
+make guard.mcp.db.ro              # HINT mode (default, hermetic-friendly)
+STRICT_MODE=1 make guard.mcp.db.ro  # STRICT mode (fail-closed)
+python scripts/ci/guard_mcp_db_ro.py
+```
+
+**Output:**
+- JSON verdict to `evidence/guard_mcp_db_ro_redaction.json`
+- Fields: `ok`, `mode`, `dsn_present`, `dsn_redacted`, `ro_access`, `view_accessible`, `details`, `generated_at`
+
+**Redaction Proof:**
+- Validates all DSN strings in logs/artifacts are redacted
+- Generates redaction proof artifact with `dsn_redacted` boolean
+- Ensures no raw credentials appear in output
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **DSN Loader**: `scripts/config/env.py` (`get_ro_dsn()`, `redact()`)
+- **Echo Helper**: `scripts/mcp/echo_dsn_ro.py`
+
+### `mcp/ingest_envelope.py` — Knowledge MCP Envelope Ingest (PLAN-073 M1 E03)
+
+**Purpose:** Reads envelope JSON, validates against schema, and inserts/updates mcp.tools and mcp.endpoints.
+
+**Behavior:**
+- Validates envelope JSON against `schemas/mcp_ingest_envelope.v1.schema.json`
+- Uses centralized DSN loader (`get_rw_dsn()`) for RW database access
+- Idempotent: `INSERT ... ON CONFLICT DO UPDATE` ensures same envelope → same final DB state
+- Hermetic-friendly: HINT mode tolerates missing DB/envelope, exits 0; STRICT mode fails
+
+**Schema Fields:**
+- `schema`: `"mcp_ingest_envelope.v1"`
+- `generated_at`: RFC3339 timestamp
+- `tools[]`: Array of tool objects (name, description, tags[], cost_est?, visibility?)
+- `endpoints[]`: Array of endpoint objects (name, path, method, auth?, notes?)
+
+**Usage:**
+```bash
+make mcp.ingest.default              # Ingest default envelope (share/mcp/envelope.json)
+make mcp.ingest ENVELOPE=path/to/envelope.json  # Ingest custom envelope
+python scripts/mcp/ingest_envelope.py --envelope share/mcp/envelope.json
+```
+
+**Output:**
+- Prints counts: `Tools: X inserted, Y updated, Z skipped`
+- Prints counts: `Endpoints: X inserted, Y updated, Z skipped`
+- HINT message to stderr if DB/envelope unavailable (exits 0 in HINT mode)
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **Schema**: `schemas/mcp_ingest_envelope.v1.schema.json`
+- **DSN Loader**: `scripts/config/env.py` (`get_rw_dsn()`)
+- **Tables**: `mcp.tools`, `mcp.endpoints`
+
+### `mcp/query_catalog.py` — Knowledge MCP Catalog Query (PLAN-073 M1 E04)
+
+**Purpose:** Executes a minimal query against `mcp.v_catalog` and outputs JSON array with deterministic ordering.
+
+**Behavior:**
+- Uses centralized RO DSN loader (`get_ro_dsn()`) for read-only access
+- Query: `SELECT * FROM mcp.v_catalog ORDER BY name LIMIT 10`
+- Outputs JSON array to stdout (deterministic ordering by name)
+- Hermetic-friendly: HINT mode tolerates missing DB/view, exits 0 with empty array; STRICT mode fails
+
+**Usage:**
+```bash
+make mcp.query              # Query catalog
+python scripts/mcp/query_catalog.py
+```
+
+**Output:**
+- JSON array of catalog entries (each with: name, desc, tags, cost_est, visibility, path, method, auth)
+- Empty array `[]` if DB/view unavailable (HINT mode)
+- HINT message to stderr if DB unavailable (HINT mode)
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **View**: `mcp.v_catalog`
+- **DSN Loader**: `scripts/config/env.py` (`get_ro_dsn()`)
+- **Guard**: `scripts/guards/guard_mcp_query.py`
+
+### `guards/guard_mcp_query.py` — Knowledge MCP Query Guard (PLAN-073 M1 E04)
+
+**Purpose:** Validates that `query_catalog.py` executes successfully and produces deterministic output.
+
+**Behavior:**
+- Calls `query_catalog.py` via subprocess
+- Validates output is valid JSON array
+- Validates each item has expected keys (name, desc, tags, cost_est, visibility, path, method, auth)
+- Writes verdict to `evidence/guard_mcp_query.json`
+- HINT/STRICT modes: HINT tolerates failures, STRICT requires success
+
+**Usage:**
+```bash
+make guard.mcp.query              # HINT mode (default, hermetic-friendly)
+STRICT_MODE=1 make guard.mcp.query  # STRICT mode (fail-closed)
+python scripts/guards/guard_mcp_query.py
+```
+
+**Output:**
+- JSON verdict to `evidence/guard_mcp_query.json`
+- Fields: `ok`, `mode`, `query_executed`, `output_valid`, `output_count`, `details`, `generated_at`
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **Query Script**: `scripts/mcp/query_catalog.py`
+- **View**: `mcp.v_catalog`
+
+### `mcp/generate_proof_snapshot.py` — Knowledge MCP Proof Snapshot Generator (PLAN-073 M1 E05)
+
+**Purpose:** Aggregates E01-E04 proof artifacts into a unified snapshot with JSON and text outputs.
+
+**Behavior:**
+- Reads evidence files from `evidence/` directory:
+  - `guard_mcp_schema.json` (E01)
+  - `guard_mcp_db_ro.final.json` (E02)
+  - `guard_mcp_query.json` (E04)
+- Optionally reads `share/mcp/envelope.json` (E03, optional)
+- Computes `overall_ok` (all required components E01, E02, E04 must be ok)
+- Validates snapshot against `schemas/mcp_proof_snapshot.v1.schema.json`
+- Writes:
+  - `share/mcp/knowledge_mcp_proof.json` (structured JSON)
+  - `share/mcp/knowledge_mcp_proof.txt` (human-readable summary)
+- Hermetic-friendly: HINT mode tolerates missing components, STRICT mode fails if overall_ok=False
+
+**Usage:**
+```bash
+make mcp.proof.snapshot              # Generate snapshot
+python scripts/mcp/generate_proof_snapshot.py
+```
+
+**Output:**
+- JSON file with `schema`, `generated_at`, `components`, `artifacts`, `overall_ok`
+- Text file with human-readable summary
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **Schema**: `schemas/mcp_proof_snapshot.v1.schema.json`
+- **Guard**: `scripts/guards/guard_mcp_proof.py`
+
+### `guards/guard_mcp_proof.py` — Knowledge MCP Proof Guard (PLAN-073 M1 E05)
+
+**Purpose:** Validates that the proof snapshot exists, matches its schema, and `overall_ok` is consistent with component statuses.
+
+**Behavior:**
+- Validates `share/mcp/knowledge_mcp_proof.json` exists
+- Validates snapshot against `schemas/mcp_proof_snapshot.v1.schema.json`
+- Validates `overall_ok` consistency (must match required components: E01, E02, E04)
+- Writes verdict to `evidence/guard_mcp_proof.json`
+- HINT/STRICT modes: HINT tolerates missing/invalid snapshot, STRICT requires valid snapshot with overall_ok=True
+
+**Usage:**
+```bash
+make guard.mcp.proof              # HINT mode (default, hermetic-friendly)
+STRICT_MODE=1 make guard.mcp.proof  # STRICT mode (fail-closed)
+python scripts/guards/guard_mcp_proof.py
+```
+
+**Output:**
+- JSON verdict to `evidence/guard_mcp_proof.json`
+- Fields: `ok`, `mode`, `snapshot_present`, `snapshot_valid`, `overall_ok_consistent`, `details`, `generated_at`
+
+**Related:**
+- **RFC-078**: Postgres Knowledge MCP
+- **Snapshot Generator**: `scripts/mcp/generate_proof_snapshot.py`
+- **Schema**: `schemas/mcp_proof_snapshot.v1.schema.json`
+
 ### `guards/guard_db_health.py` — DB Health Guard (Phase-3A)
 
 **Purpose:** Check database health posture (driver availability, connection status, table readiness)
@@ -973,6 +1270,65 @@ make guard.tagproof.phase2
 - **Phase-2 Tagproof**: Validates complete system readiness before merge
 - **MCP Integration**: Includes MCP catalog validation in STRICT mode
 - **CI/CD**: Used for automated PR validation and merge gates
+
+### `guards/guard_snapshot_drift.py` — Snapshot Integrity & Drift Review (PLAN-079 7C)
+
+**Purpose:** Validates that all snapshot/export artifacts are consistent, drift-free, and covered by guards. Compares current snapshots against expected baselines and reports drift status.
+
+**Rule References:** Rule 037 (Data Persistence Completeness), Rule 038 (Exports Smoke Gate), Rule 039 (Execution Contract), Rule 050 (OPS Contract)
+
+**Capabilities:**
+- **Snapshot File Validation**: Checks existence and structure of all expected snapshot files
+- **Structure Validation**: Validates JSON structure, timestamps, and required fields
+- **Ledger Integration**: Optionally checks system state ledger for artifact tracking
+- **Hermetic Fallbacks**: Gracefully handles missing DB/ledger with appropriate error messages
+
+**Usage:**
+```bash
+# Run snapshot drift guard
+python scripts/guards/guard_snapshot_drift.py
+
+# Via Makefile
+make guard.snapshot.drift
+
+# Strict mode (requires all snapshots)
+python scripts/guards/guard_snapshot_drift.py --strict
+```
+
+**Monitored Snapshots:**
+- `share/atlas/control_plane/schema_snapshot.json`
+- `share/atlas/control_plane/mv_schema.json`
+- `share/atlas/control_plane/mcp_catalog.json`
+- `share/atlas/control_plane/compliance_summary.json`
+- `share/atlas/control_plane/compliance_timeseries.json`
+- `share/pm.snapshot.md`
+
+**Output:**
+```json
+{
+  "ok": true,
+  "checks": {
+    "all_snapshots_exist": true,
+    "all_snapshots_valid": true,
+    "ledger_available": false
+  },
+  "counts": {
+    "total_snapshots": 6,
+    "valid_snapshots": 6,
+    "missing_snapshots": 0
+  },
+  "details": {
+    "snapshot_files": {...},
+    "ledger": {"available": false, "entry_count": 0}
+  },
+  "generated_at": "2025-11-21T16:45:15.346550Z"
+}
+```
+
+**Integration:**
+- **PLAN-079 7C**: Snapshot integrity validation component
+- **Reality Green**: Included in full system truth gate validation
+- **CI/CD**: Used for automated snapshot validation in PR/tag workflows
 
 ### `guard_reality_green.py` — Reality Green Truth Gate
 

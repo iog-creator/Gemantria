@@ -1,0 +1,65 @@
+{
+  "schema": "mcp_ingest_envelope.v1",
+  "generated_at": "2025-11-22T21:39:01Z",
+  "tools": [
+    {
+      "name": "bible.semantic_search",
+      "description": "Semantic search across 116k Bible verses using BGE-M3 (1024-dim) embeddings and pgvector cosine similarity",
+      "tags": ["biblescholar", "search", "semantic", "pgvector", "bge-m3"],
+      "cost_est": 0.5,
+      "visibility": "internal"
+    },
+    {
+      "name": "bible.cross_language",
+      "description": "Find Hebrew (OT) ↔ Greek (NT) semantic connections using vector similarity",
+      "tags": ["biblescholar", "cross-language", "hebrew", "greek", "semantic"],
+      "cost_est": 0.5,
+      "visibility": "internal"
+    },
+    {
+      "name": "bible.lexicon_lookup",
+      "description": "Lookup Hebrew/Greek lexicon entries by Strong's number",
+      "tags": ["biblescholar", "lexicon", "strongs", "hebrew", "greek"],
+      "cost_est": 0.1,
+      "visibility": "internal"
+    },
+    {
+      "name": "bible.verse_insights",
+      "description": "Aggregate verse context (text + lexicon + similar verses) for LLM consumption",
+      "tags": ["biblescholar", "insights", "context", "aggregation"],
+      "cost_est": 0.5,
+      "visibility": "internal"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "semantic_search_export",
+      "path": "/api/bible/semantic-search",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Semantic search endpoint. Query param: query, limit, translation. Generates share/exports/biblescholar/semantic_search.json via make export.biblescholar.semantic"
+    },
+    {
+      "name": "cross_language_export",
+      "path": "/api/bible/cross-language",
+      "method": "POST",
+      "auth": "none",
+      "notes": "Cross-language search endpoint. Body: strongs_id, limit. Generates share/exports/biblescholar/cross_language.json via make export.biblescholar.crosslang"
+    },
+    {
+      "name": "lexicon_lookup_export",
+      "path": "/api/bible/lexicon",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Lexicon lookup endpoint. Query param: strongs_id. Generates share/exports/biblescholar/lexicon.json via make export.biblescholar.lexicon"
+    },
+    {
+      "name": "verse_insights_export",
+      "path": "/api/bible/insights",
+      "method": "GET",
+      "auth": "none",
+      "notes": "Verse insights endpoint. Query param: reference. Generates share/exports/biblescholar/insights.json via make export.biblescholar.insights"
+    }
+  ]
+}
+

@@ -17,6 +17,26 @@ Provides read-only access to MCP (Model Context Protocol) catalog data stored in
 
 **Error Handling**: Returns structured error information when DSN/view unavailable, never throws exceptions.
 
+### Ollama Adapter (`ollama.py`)
+
+Provides adapter for Ollama API (chat, embeddings, reranking) with error-tolerant fallback behavior.
+
+**Purpose**: Bridges Ollama API calls with the Gematria pipeline, providing hermetic fallbacks and error tolerance.
+
+**Key Functions**:
+- `chat()` - Chat completions via Ollama API
+- `embed()` - Text embeddings via Ollama API
+- `rerank()` - Document reranking with Granite LLM or embedding-only fallback
+- `_rerank_granite_llm()` - Granite LLM-based reranking with structured JSON prompts
+
+**Granite Reranker Configuration**:
+- **Document Truncation**: `MAX_DOC_CHARS=1024` - Each candidate document truncated to stay within ~8K token envelope
+- **Generation Limit**: `GRANITE_RERANK_NUM_PREDICT=4096` (default) - Sets `num_predict` for sufficient generation tokens
+- **JSON-Only Contract**: Model must return `[{"index": 1, "score": 0.95}, ...]` format only
+- **Error-Tolerant Fallback**: On JSON parse errors or HTTP errors, logs HINT and falls back to `embedding_only` scoring (non-fatal)
+
+**Error Handling**: All rerank errors are non-fatal; pipeline continues with embedding-only scores when Granite rerank fails.
+
 ## API Contracts
 
 ### `catalog_read_ro() -> dict[str, Any]`

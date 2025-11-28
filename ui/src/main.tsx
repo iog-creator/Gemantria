@@ -2,10 +2,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { App } from './app';
+import OrchestratorApp from './app/OrchestratorApp';
+import '../../webui/graph/src/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <OrchestratorApp />
   </React.StrictMode>,
 );

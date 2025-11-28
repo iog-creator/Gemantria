@@ -1,15 +1,15 @@
 {
   "avg_latency_ms": 0.0,
-  "connection_ok": false,
-  "error": "database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?",
-  "error_rate": 1.0,
+  "connection_ok": true,
+  "error": null,
+  "error_rate": 0.0,
   "error_types": {},
-  "generated_at": "2025-11-15T02:33:53.493424+00:00",
+  "generated_at": "2025-11-21T18:29:21.457625+00:00",
   "health_score": 0.0,
-  "ok": false,
+  "ok": true,
   "recent_errors": [],
   "schema": "control",
-  "since": "2025-11-08T02:33:53.493423+00:00",
+  "since": "2025-11-14T18:29:21.455001+00:00",
   "success_rate": 0.0,
   "window_days": 7
 }

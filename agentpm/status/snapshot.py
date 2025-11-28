@@ -643,4 +643,39 @@ def get_system_snapshot(
                 "error": f"Failed to read MCP catalog: {e}",
             }
 
+    # Add control-plane widget summaries (Phase-6D: downstream app read-only wiring)
+    try:
+        from agentpm.control_widgets.adapter import (
+            load_biblescholar_reference_widget_props,
+            load_graph_compliance_widget_props,
+        )
+
+        graph_compliance_props = load_graph_compliance_widget_props()
+        biblescholar_reference_props = load_biblescholar_reference_widget_props()
+
+        snapshot["control_widgets"] = {
+            "graph_compliance": {
+                "status": graph_compliance_props["status"],
+                "label": graph_compliance_props["label"],
+                "metrics": {
+                    "totalRunsWithViolations": graph_compliance_props["metrics"]["totalRunsWithViolations"],
+                    "windowDays": graph_compliance_props["metrics"]["windowDays"],
+                },
+            },
+            "biblescholar_reference": {
+                "status": biblescholar_reference_props["status"],
+                "label": biblescholar_reference_props["label"],
+                "metrics": {
+                    "totalQuestions": biblescholar_reference_props["metrics"]["totalQuestions"],
+                    "windowDays": biblescholar_reference_props["metrics"]["windowDays"],
+                },
+            },
+        }
+    except Exception as e:
+        snapshot["control_widgets"] = {
+            "error": f"Failed to load control-plane widgets: {e}",
+            "graph_compliance": {"status": "unknown"},
+            "biblescholar_reference": {"status": "unknown"},
+        }
+
     return snapshot

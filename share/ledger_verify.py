@@ -168,15 +168,15 @@ def verify_ledger() -> tuple[int, dict]:
 
             for result in results:
                 status_icon = "✓" if result["status"] == "current" else "✗"
-                name = result["name"]
-                source = result["source_of_truth"]
-                status = result["status"]
-                print(f"{name:<40} {source:<30} {status_icon} {status:<10}")
+                print(
+                    f"{result['name']:<40} {result['source_of_truth']:<30} "
+                    f"{status_icon} {result['status']:<10}"
+                )
 
             print("-" * 80)
-            current_count = len([r for r in results if r["status"] == "current"])
             print(
-                f"Total: {len(results)}, Current: {current_count}, "
+                f"Total: {len(results)}, "
+                f"Current: {len([r for r in results if r['status'] == 'current'])}, "
                 f"Stale: {len(stale)}, Missing: {len(missing)}"
             )
             print("=" * 80)

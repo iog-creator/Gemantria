@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BibleScholar Reference Answer Slice — Phase-6P</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+h1 { color: #1a1a1a; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+h2 { color: #333; margin-top: 1.5em; }
+.tile { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: #f9f9f9; }
+.tile h3 { margin-top: 0; color: #555; }
+.metric { display: inline-block; margin: 0.5em 1em 0.5em 0; padding: 0.5em 1em; background: white; border-radius: 4px; border: 1px solid #ccc; }
+.metric-value { font-size: 1.5em; font-weight: bold; color: #0066cc; }
+.metric-label { font-size: 0.9em; color: #666; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+th, td { padding: 0.5em; text-align: left; border-bottom: 1px solid #ddd; }
+th { background: #f0f0f0; font-weight: bold; }
+.question-entry { border: 1px solid #ddd; border-radius: 8px; padding: 1em; margin: 1em 0; background: white; }
+.question-entry h4 { margin-top: 0; color: #0066cc; }
+.question-entry .verse-ref { color: #666; font-style: italic; margin: 0.5em 0; }
+.question-entry .answer { margin: 1em 0; padding: 0.5em; background: #f5f5f5; border-radius: 4px; }
+.question-entry .metadata { font-size: 0.85em; color: #666; margin-top: 0.5em; }
+.backlinks { background: #f5f5f5; padding: 1em; border-radius: 8px; margin: 1em 0; }
+.backlinks ul { list-style: none; padding: 0; }
+.backlinks li { margin: 0.5em 0; }
+.backlinks a { color: #0066cc; text-decoration: none; }
+.backlinks a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #eef; border: 1px solid #ccd; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-left: 0.5em; }
+.loading { color: #666; font-style: italic; }
+.error { color: #dc3545; }
+.ok { color: #28a745; }
+.filter-controls { margin: 1em 0; }
+.filter-controls input, .filter-controls select {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}
+</style>
+</head>
+<body>
+<h1>BibleScholar Reference Answer Slice <span class="badge">Phase-6P</span></h1>
+<p><a href="../index.html">← Back to Atlas</a></p>
+
+<div id="dashboard-content">
+  <div class="loading">Loading BibleScholar reference data...</div>
+</div>
+
+<div class="backlinks">
+<h2>Evidence Backlinks</h2>
+<ul>
+  <li><a href="../../../share/atlas/control_plane/biblescholar_reference.json" data-testid="backlink-biblescholar-reference-json">Raw JSON: share/atlas/control_plane/biblescholar_reference.json</a></li>
+  <li><a href="../../../evidence/guard_biblescholar_reference.json" data-testid="backlink-guard-biblescholar-reference-json">Guard Verdict: evidence/guard_biblescholar_reference.json</a></li>
+  <li><a href="../dashboard/compliance_summary.html" data-testid="backlink-compliance-summary">Compliance Summary Dashboard (E86)</a></li>
+  <li><a href="violations.html" data-testid="backlink-violations-browser">Violations Browser (E89)</a></li>
+  <li><a href="/docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md" rel="external" data-external="true" data-testid="backlink-phase6d-runbook">Phase-6D Integration Guide (Downstream Apps)</a></li>
+</ul>
+</div>
+
+<script>
+(function() {
+  const contentDiv = document.getElementById('dashboard-content');
+  
+  // Load biblescholar_reference.json
+  fetch('../../../share/atlas/control_plane/biblescholar_reference.json')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Failed to load biblescholar_reference.json')))
+    .then(data => {
+      const questions = data.questions || [];
+      const summary = data.summary || {};
+      const totalQuestions = summary.total_questions || 0;
+      const byMode = summary.by_mode || {};
+      const byVerseRef = summary.by_verse_ref || {};
+      
+      let html = '';
+      
+      // Summary Tile
+      html += '<div class="tile">';
+      html += '<h3>Summary</h3>';
+      html += '<div class="metric"><span class="metric-value">' + totalQuestions + '</span><br><span class="metric-label">Total Questions</span></div>';
+      for (const [mode, count] of Object.entries(byMode)) {
+        html += '<div class="metric"><span class="metric-value">' + count + '</span><br><span class="metric-label">' + mode + '</span></div>';
+      }
+      html += '</div>';
+      
+      // Questions by Verse Reference Tile
+      if (Object.keys(byVerseRef).length > 0) {
+        html += '<div class="tile">';
+        html += '<h3>Questions by Verse Reference</h3>';
+        html += '<table><thead><tr><th>Verse Reference</th><th>Count</th></tr></thead><tbody>';
+        const sortedVerseRefs = Object.entries(byVerseRef).sort((a, b) => b[1] - a[1]);
+        for (const [verseRef, count] of sortedVerseRefs) {
+          html += '<tr><td>' + verseRef + '</td><td>' + count + '</td></tr>';
+        }
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+      
+      // Filter Controls
+      html += '<div class="filter-controls">';
+      html += '<input type="text" id="searchInput" placeholder="Search questions or answers…" />';
+      html += '<select id="modeFilter"><option value="">All modes</option>';
+      for (const mode of Object.keys(byMode)) {
+        html += '<option value="' + mode + '">' + mode + '</option>';
+      }
+      html += '</select>';
+      html += '</div>';
+      
+      // Questions List
+      html += '<div id="questionsList">';
+      if (questions.length === 0) {
+        html += '<div class="tile"><p class="error">No questions found. Ensure BibleScholar reference exports are generated.</p></div>';
+      } else {
+        for (const q of questions) {
+          const question = q.question || 'N/A';
+          const verseRef = q.verse_ref || null;
+          const answer = q.answer || 'No answer available';
+          const metadata = q.metadata || {};
+          const created_at = q.created_at || 'Unknown';
+          const mode = metadata.mode || 'unknown';
+          const ok = metadata.ok || false;
+          const latency_ms = metadata.latency_ms || 0;
+          const tokens_used = metadata.tokens_used || 0;
+          
+          html += '<div class="question-entry" data-mode="' + mode + '">';
+          html += '<h4>' + escapeHtml(question) + '</h4>';
+          if (verseRef) {
+            html += '<div class="verse-ref">Verse: ' + escapeHtml(verseRef) + '</div>';
+          }
+          html += '<div class="answer">' + escapeHtml(answer) + '</div>';
+          html += '<div class="metadata">';
+          html += 'Mode: <strong>' + mode + '</strong> | ';
+          html += 'Status: <strong class="' + (ok ? 'ok' : 'error') + '">' + (ok ? 'OK' : 'Failed') + '</strong> | ';
+          html += 'Latency: ' + latency_ms + 'ms | ';
+          html += 'Tokens: ' + tokens_used + ' | ';
+          html += 'Created: ' + new Date(created_at).toLocaleString();
+          html += '</div>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+      
+      contentDiv.innerHTML = html;
+      
+      // Add filter functionality
+      const searchInput = document.getElementById('searchInput');
+      const modeFilter = document.getElementById('modeFilter');
+      const questionsList = document.getElementById('questionsList');
+      const questionEntries = questionsList.querySelectorAll('.question-entry');
+      
+      function filterQuestions() {
+        const searchTerm = (searchInput.value || '').toLowerCase();
+        const selectedMode = modeFilter.value || '';
+        
+        questionEntries.forEach(entry => {
+          const text = entry.textContent.toLowerCase();
+          const mode = entry.getAttribute('data-mode') || '';
+          const matchesSearch = !searchTerm || text.includes(searchTerm);
+          const matchesMode = !selectedMode || mode === selectedMode;
+          
+          if (matchesSearch && matchesMode) {
+            entry.style.display = 'block';
+          } else {
+            entry.style.display = 'none';
+          }
+        });
+      }
+      
+      if (searchInput) searchInput.addEventListener('input', filterQuestions);
+      if (modeFilter) modeFilter.addEventListener('change', filterQuestions);
+    })
+    .catch(err => {
+      contentDiv.innerHTML = '<div class="tile"><p class="error">Error loading BibleScholar reference data: ' + err.message + '</p></div>';
+    });
+  
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+})();
+</script>
+
+<hr>
+<small>Generated at <span id="generated-at"></span></small>
+<script>
+  document.getElementById('generated-at').textContent = new Date().toISOString();
+</script>
+</body>
+</html>
+

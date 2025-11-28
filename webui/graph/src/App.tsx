@@ -17,7 +17,8 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<GraphDashboard />} />
+        <Route path="/" element={<OrchestratorShell />} />
+        <Route path="/graph" element={<GraphDashboard />} />
         <Route path="/temporal" element={<TemporalExplorer />} />
         <Route path="/forecast" element={<ForecastDashboard />} />
         <Route path="/docs" element={<DocControlPanel />} />

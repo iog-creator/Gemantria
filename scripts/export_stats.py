@@ -964,7 +964,7 @@ def export_forecast(db):
         "total_forecasts": 0,
         "books_forecasted": [],
         "model_distribution": {"naive": 0, "sma": 0, "arima": 0},
-        "average_metrics": {"rmse": None, "mae": None},
+        "average_metrics": {"rmse": 0.0, "mae": 0.0},
     }
 
     try:
@@ -1066,8 +1066,8 @@ def export_forecast(db):
         if forecasts:
             rmses = [f["rmse"] for f in forecasts if "rmse" in f]
             maes = [f["mae"] for f in forecasts if "mae" in f]
-            metadata["average_metrics"]["rmse"] = sum(rmses) / len(rmses) if rmses else None
-            metadata["average_metrics"]["mae"] = sum(maes) / len(maes) if maes else None
+            metadata["average_metrics"]["rmse"] = sum(rmses) / len(rmses) if rmses else 0.0
+            metadata["average_metrics"]["mae"] = sum(maes) / len(maes) if maes else 0.0
 
         LOG.info(f"Generated {len(forecasts)} forecasts across {len(metadata['books_forecasted'])} books")
 

@@ -13,6 +13,8 @@ in Gemantria (and future BibleScholar). It:
 This document is the **single source of truth** for the Shell's layout and
 behavior. WebUI code MUST implement this contract.
 
+**Related vision**: The overarching UX and interaction model for the orchestrator dashboard is described in `docs/SSOT/Orchestrator Dashboard - Vision.md`. This Shell contract implements that vision for the current release.
+
 ---
 
 ## 2. Layout Overview

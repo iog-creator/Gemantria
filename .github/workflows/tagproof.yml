@@ -36,6 +36,19 @@ jobs:
           STRICT_WEBPROOF=1 bash scripts/ci/atlas_webproof.sh
       - name: MCP Knowledge DB (STRICT)
         run: make guard.mcp.db.ro STRICT_DB_PROBE=1
+      - name: Control-plane exports (STRICT)
+        run: |
+          make control.graph.compliance.export
+          make control.biblescholar.reference.export
+      - name: Control-plane guards (STRICT)
+        run: |
+          STRICT_MODE=1 make guard.control.graph.compliance --write-evidence guard_control_graph_compliance.json
+          STRICT_MODE=1 make guard.biblescholar.reference --write-evidence guard_biblescholar_reference.json
+          STRICT_MODE=1 make guard.control.widgets --write-evidence guard_control_widgets.json
+      - name: Atlas compliance dashboards (STRICT)
+        run: |
+          make atlas.compliance.summary
+          STRICT_MODE=1 make guard.atlas.compliance.summary
       - name: Show masked DSN proof JSON
         run: |
           test -f docs/evidence/atlas_proof_dsn.json && \

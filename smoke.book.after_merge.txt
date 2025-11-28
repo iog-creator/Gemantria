@@ -1,9 +1,0 @@
-Makefile:819: warning: overriding recipe for target 'phase8.temporal'
-Makefile:724: warning: ignoring old recipe for target 'phase8.temporal'
-Makefile:1618: warning: overriding recipe for target 'rerank.smoke'
-Makefile:1612: warning: ignoring old recipe for target 'rerank.smoke'
-Traceback (most recent call last):
-  File "/home/mccoy/Projects/Gemantria.v2/scripts/smokes/book_smoke.py", line 17, in <module>
-    from gemantria.dsn import dsn_rw
-ModuleNotFoundError: No module named 'gemantria'
-make: *** [Makefile:1220: book.smoke] Error 1
