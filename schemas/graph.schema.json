@@ -18,33 +18,33 @@
                     "surface": {
                         "type": "string",
                         "minLength": 1,
-                        "description": "Ketiv (written form) - primary for gematria calculations per ADR-002",
+                        "description": "Ketiv (written form) - primary for gematria calculations per ADR-002"
                     },
                     "book": {"type": "string"},
                     "variant_type": {
                         "type": ["string", "null"],
                         "enum": ["ketiv", "qere", "other", null],
-                        "description": "Type of textual variant (ketiv, qere, or other)",
+                        "description": "Type of textual variant (ketiv, qere, or other)"
                     },
                     "variant_surface": {
                         "type": ["string", "null"],
-                        "description": "Alternative surface form (e.g., Qere reading when surface is Ketiv)",
+                        "description": "Alternative surface form (e.g., Qere reading when surface is Ketiv)"
                     },
                     "span_start": {
                         "type": ["integer", "null"],
-                        "description": "Character position where variant begins in source text",
+                        "description": "Character position where variant begins in source text"
                     },
                     "span_end": {
                         "type": ["integer", "null"],
-                        "description": "Character position where variant ends in source text",
+                        "description": "Character position where variant ends in source text"
                     },
                     "is_ketiv": {
                         "type": "boolean",
                         "default": true,
-                        "description": "TRUE if surface is Ketiv (written form), FALSE if Qere (read form). Ketiv is primary for gematria per ADR-002.",
-                    },
-                },
-            },
+                        "description": "TRUE if surface is Ketiv (written form), FALSE if Qere (read form). Ketiv is primary for gematria per ADR-002."
+                    }
+                }
+            }
         },
         "edges": {
             "type": "array",
@@ -59,10 +59,10 @@
                     "cosine": {"type": "number", "minimum": 0, "maximum": 1},
                     "rerank_score": {"type": "number", "minimum": 0, "maximum": 1},
                     "class": {"enum": ["strong", "weak", "very_weak"]},
-                    "analysis": {"type": "object"},
-                },
-            },
-        },
+                    "analysis": {"type": "object"}
+                }
+            }
+        }
     },
-    "additionalProperties": false,
+    "additionalProperties": false
 }
