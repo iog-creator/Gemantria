@@ -157,7 +157,10 @@ def main() -> int:
     else:
         print("[guard_atlas_compliance_drilldowns] Verdict: FAIL", file=sys.stderr)
         if not pages_check["all_pages_exist"]:
-            print(f"[guard_atlas_compliance_drilldowns] Missing pages: {pages_check['missing_pages']}", file=sys.stderr)
+            print(
+                f"[guard_atlas_compliance_drilldowns] Missing pages: {pages_check['missing_pages']}",
+                file=sys.stderr,
+            )
         if not backlinks_check["all_backlinks_present"]:
             print(
                 f"[guard_atlas_compliance_drilldowns] Pages with missing backlinks: {backlinks_check['pages_with_issues']}",

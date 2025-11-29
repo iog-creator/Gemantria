@@ -155,7 +155,10 @@ def main() -> int:
     if not file_check["exists"]:
         if strict_mode:
             verdict["overall_ok"] = False
-            print(f"[guard_biblescholar_reference] FAIL: {file_check.get('error', 'File missing')}", file=sys.stderr)
+            print(
+                f"[guard_biblescholar_reference] FAIL: {file_check.get('error', 'File missing')}",
+                file=sys.stderr,
+            )
             if args.write_evidence:
                 EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
                 evidence_file = EVIDENCE_DIR / args.write_evidence
@@ -186,7 +189,10 @@ def main() -> int:
                 evidence_file.write_text(json.dumps(verdict, indent=2))
             return 1
         else:
-            print(f"[guard_biblescholar_reference] HINT: Failed to parse JSON: {e} (HINT mode)", file=sys.stderr)
+            print(
+                f"[guard_biblescholar_reference] HINT: Failed to parse JSON: {e} (HINT mode)",
+                file=sys.stderr,
+            )
             if args.write_evidence:
                 EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
                 evidence_file = EVIDENCE_DIR / args.write_evidence
@@ -199,7 +205,10 @@ def main() -> int:
     if not schema_check["schema_ok"]:
         if strict_mode:
             verdict["overall_ok"] = False
-            print(f"[guard_biblescholar_reference] FAIL: Schema issue: {schema_check.get('error')}", file=sys.stderr)
+            print(
+                f"[guard_biblescholar_reference] FAIL: Schema issue: {schema_check.get('error')}",
+                file=sys.stderr,
+            )
         else:
             print(
                 f"[guard_biblescholar_reference] HINT: Schema issue: {schema_check.get('error')} (HINT mode)",

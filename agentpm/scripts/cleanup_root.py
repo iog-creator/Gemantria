@@ -198,7 +198,11 @@ def main() -> None:
 
         moves.append(
             CleanupMove(
-                path=str(source_path.relative_to(REPO_ROOT)), target=target_rel, moved=moved, error=error, reason=reason
+                path=str(source_path.relative_to(REPO_ROOT)),
+                target=target_rel,
+                moved=moved,
+                error=error,
+                reason=reason,
             )
         )
 

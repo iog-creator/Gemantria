@@ -85,7 +85,12 @@ def test_export_autopilot_summary_stats_structure():
 def test_guard_passes():
     """Test that guard script passes on valid export."""
     result = subprocess.run(
-        [sys.executable, str(GUARD_SCRIPT), "--write-evidence", "guard_control_autopilot_summary.json"],
+        [
+            sys.executable,
+            str(GUARD_SCRIPT),
+            "--write-evidence",
+            "guard_control_autopilot_summary.json",
+        ],
         cwd=str(REPO),
         capture_output=True,
         text=True,

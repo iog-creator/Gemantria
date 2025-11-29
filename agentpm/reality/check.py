@@ -362,7 +362,10 @@ def print_human_summary(verdict: dict[str, Any], file=None) -> None:
     print("", file=file)
     if overall_ok:
         if mode.upper() == "HINT":
-            print(f"✓ Result: {mode.upper()} mode passed (system ready for development/testing)", file=file)
+            print(
+                f"✓ Result: {mode.upper()} mode passed (system ready for development/testing)",
+                file=file,
+            )
         else:
             print(f"✓ Result: {mode.upper()} mode passed (system ready for production use)", file=file)
     else:

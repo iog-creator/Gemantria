@@ -85,7 +85,10 @@ def main() -> int:
             similarity_limit=args.similarity_limit,
         )
     except Exception as e:
-        print(f"WARNING: Failed to get verse context: {e}. Exporting with null context.", file=sys.stderr)
+        print(
+            f"WARNING: Failed to get verse context: {e}. Exporting with null context.",
+            file=sys.stderr,
+        )
         context = None
 
     # Build export structure

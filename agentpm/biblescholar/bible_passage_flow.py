@@ -253,7 +253,12 @@ def fetch_passage(
     if parsed.end_verse is not None and parsed.verse is not None:
         # Range within same chapter
         return adapter.get_passage(
-            parsed.book, parsed.chapter, parsed.verse, parsed.chapter, parsed.end_verse, translation_source
+            parsed.book,
+            parsed.chapter,
+            parsed.verse,
+            parsed.chapter,
+            parsed.end_verse,
+            translation_source,
         )
 
     # Single verse

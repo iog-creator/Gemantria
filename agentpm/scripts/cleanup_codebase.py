@@ -100,7 +100,19 @@ def is_temporary_file(path: Path) -> bool:
     if name in config_files:
         return False
 
-    patterns = ["tmp_", "temp_", "old_", "backup_", ".old", ".bak", ".backup", "_old", "_backup", "_deprecated", ".tmp"]
+    patterns = [
+        "tmp_",
+        "temp_",
+        "old_",
+        "backup_",
+        ".old",
+        ".bak",
+        ".backup",
+        "_old",
+        "_backup",
+        "_deprecated",
+        ".tmp",
+    ]
     return any(name.startswith(p) or name.endswith(p) for p in patterns)
 
 
@@ -259,7 +271,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Comprehensive codebase cleanup")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be moved without actually moving")
     parser.add_argument(
-        "--check-references", action="store_true", help="Check files against SSOT/AGENTS.md before archiving"
+        "--check-references",
+        action="store_true",
+        help="Check files against SSOT/AGENTS.md before archiving",
     )
     parser.add_argument("--list-only", action="store_true", help="Just list candidates without moving")
     args = parser.parse_args()
@@ -338,7 +352,13 @@ def main() -> None:
         moved, error = move_file(source_file, target_file, args.dry_run)
 
         moves.append(
-            {"path": candidate.path, "target": target_rel, "moved": moved, "error": error, "reason": candidate.reason}
+            {
+                "path": candidate.path,
+                "target": target_rel,
+                "moved": moved,
+                "error": error,
+                "reason": candidate.reason,
+            }
         )
 
         if moved:

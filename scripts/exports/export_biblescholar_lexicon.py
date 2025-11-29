@@ -55,7 +55,10 @@ def main() -> int:
         # Get actual DB status after attempting fetch
         db_status = adapter.db_status
     except Exception as e:
-        print(f"WARNING: Failed to fetch lexicon entry: {e}. Exporting with null entry.", file=sys.stderr)
+        print(
+            f"WARNING: Failed to fetch lexicon entry: {e}. Exporting with null entry.",
+            file=sys.stderr,
+        )
         entry = None
         db_status = adapter.db_status
 

@@ -105,12 +105,18 @@ def main() -> int:
         if is_strict:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_query] ERROR: Query script failed (STRICT mode): {stderr}", file=sys.stderr)
+            print(
+                f"[guard_mcp_query] ERROR: Query script failed (STRICT mode): {stderr}",
+                file=sys.stderr,
+            )
             return 1
         else:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_query] HINT: Query script failed (HINT mode): {stderr}", file=sys.stderr)
+            print(
+                f"[guard_mcp_query] HINT: Query script failed (HINT mode): {stderr}",
+                file=sys.stderr,
+            )
             return 0
 
     verdict["query_executed"] = True
@@ -125,12 +131,18 @@ def main() -> int:
         if is_strict:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_query] ERROR: Output validation failed (STRICT mode): {error_msg}", file=sys.stderr)
+            print(
+                f"[guard_mcp_query] ERROR: Output validation failed (STRICT mode): {error_msg}",
+                file=sys.stderr,
+            )
             return 1
         else:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(f"[guard_mcp_query] HINT: Output validation failed (HINT mode): {error_msg}", file=sys.stderr)
+            print(
+                f"[guard_mcp_query] HINT: Output validation failed (HINT mode): {error_msg}",
+                file=sys.stderr,
+            )
             return 0
 
     # Count items
