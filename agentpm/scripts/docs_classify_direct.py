@@ -100,7 +100,6 @@ def review_current_batch() -> None:
     for item in items:
         path = item["path"]
         doc_type = item.get("doc_type", "unknown")
-        title = item.get("title", "")
 
         # Classification logic (DM-002 heuristics)
         # 1. Prefer paths under docs/SSOT/ as canonical
@@ -145,7 +144,7 @@ def review_current_batch() -> None:
                 print(f"→ ARCHIVE: {path} (Default: archive candidate)")
 
     print("\n" + "=" * 80)
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Canonical: {len(canonical_paths)}")
     print(f"   Archive: {len(archive_paths)}")
 

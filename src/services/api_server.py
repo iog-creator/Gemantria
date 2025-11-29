@@ -15,6 +15,7 @@ Usage:
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,20 @@ ensure_env_loaded()
 
 # Initialize logger
 LOG = get_logger("api_server")
+
+# Cache for system status endpoint (Phase 4: Status Polling Performance)
+# TTL: 5 minutes (300 seconds) to reduce expensive DB/LM coherence checks
+_STATUS_CACHE_TTL = int(os.getenv("STATUS_CACHE_TTL", "300"))  # 5 minutes default
+_status_cache: dict[str, tuple[dict[str, Any], float]] = {}  # {endpoint: (data, timestamp)}
+
+# Metrics for status endpoint (Phase 4: Status Polling Performance)
+_status_metrics = {
+    "total_calls": 0,
+    "cache_hits": 0,
+    "cache_misses": 0,
+    "total_latency_ms": 0.0,
+    "last_call_time": None,
+}
 
 
 # --- DTOs (public API surface) -------------------------------------------------
@@ -173,6 +188,11 @@ async def health_check() -> HealthResponse:
 async def get_system_status_endpoint() -> JSONResponse:
     """Get system status (DB + LM health snapshot).
 
+    Phase 4: Status Polling Performance Optimization
+    - Caches results with TTL (default: 5 minutes) to reduce expensive DB/LM coherence checks
+    - Expensive operations (DB health, LM status, AI tracking, share manifest) are cached
+    - Cache TTL configurable via STATUS_CACHE_TTL env var (seconds)
+
     Returns:
         JSON with db and lm health status, plus optional AI tracking and share manifest:
         {
@@ -205,6 +225,30 @@ async def get_system_status_endpoint() -> JSONResponse:
             } (optional)
         }
     """
+    endpoint = "/api/status/system"
+    current_time = time.time()
+    request_start = time.time()
+
+    # Update metrics
+    _status_metrics["total_calls"] += 1
+    _status_metrics["last_call_time"] = current_time
+
+    # Check cache
+    if endpoint in _status_cache:
+        cached_data, cached_time = _status_cache[endpoint]
+        age = current_time - cached_time
+        if age < _STATUS_CACHE_TTL:
+            _status_metrics["cache_hits"] += 1
+            latency_ms = (time.time() - request_start) * 1000
+            _status_metrics["total_latency_ms"] += latency_ms
+            LOG.debug(f"Status cache hit (age: {age:.1f}s, TTL: {_STATUS_CACHE_TTL}s, latency: {latency_ms:.1f}ms)")
+            return JSONResponse(content=cached_data)
+
+    # Cache miss or expired - fetch fresh data
+    _status_metrics["cache_misses"] += 1
+    LOG.debug("Status cache miss - fetching fresh data")
+    fetch_start = time.time()
+
     try:
         # Use unified snapshot helper for consistency with pm.snapshot
         from agentpm.status.snapshot import get_system_snapshot
@@ -234,12 +278,39 @@ async def get_system_status_endpoint() -> JSONResponse:
         if "kb_doc_health" in snapshot:
             response["kb_doc_health"] = snapshot["kb_doc_health"]
 
+        # Update cache
+        _status_cache[endpoint] = (response, current_time)
+
+        fetch_duration = time.time() - fetch_start
+        total_latency_ms = (time.time() - request_start) * 1000
+        _status_metrics["total_latency_ms"] += total_latency_ms
+
+        # Log metrics periodically (every 10 calls)
+        if _status_metrics["total_calls"] % 10 == 0:
+            avg_latency_ms = _status_metrics["total_latency_ms"] / _status_metrics["total_calls"]
+            cache_hit_rate = (
+                _status_metrics["cache_hits"] / (_status_metrics["cache_hits"] + _status_metrics["cache_misses"]) * 100
+                if (_status_metrics["cache_hits"] + _status_metrics["cache_misses"]) > 0
+                else 0
+            )
+            LOG.info(
+                f"Status endpoint metrics: calls={_status_metrics['total_calls']}, "
+                f"cache_hit_rate={cache_hit_rate:.1f}%, avg_latency={avg_latency_ms:.1f}ms"
+            )
+
+        LOG.info(
+            f"Status endpoint: fetched in {fetch_duration:.2f}s, cached for {_STATUS_CACHE_TTL}s, "
+            f"total_latency={total_latency_ms:.1f}ms"
+        )
+
         return JSONResponse(content=response)
     except Exception as e:
         LOG.error(f"Error getting system status: {e}")
         # Fallback to original implementation if snapshot helper fails
         try:
             status = get_system_status()
+            # Cache fallback response too (shorter TTL for errors)
+            _status_cache[endpoint] = (status, current_time)
             return JSONResponse(content=status)
         except Exception as fallback_error:
             raise HTTPException(
