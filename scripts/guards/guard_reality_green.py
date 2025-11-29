@@ -212,6 +212,34 @@ def check_ledger_verification() -> CheckResult:
         )
 
 
+def check_ketiv_primary_policy() -> CheckResult:
+    """Check that Ketiv-primary policy is enforced (Phase 2, ADR-002)."""
+    try:
+        exit_code, stdout, stderr = run_subprocess_check(ROOT / "scripts" / "guards" / "guard_ketiv_primary.py", [])
+
+        if exit_code == 0:
+            return CheckResult(
+                "Ketiv-Primary Policy",
+                True,
+                "Ketiv-primary policy enforced (gematria uses written form per ADR-002)",
+                {"output": stdout},
+            )
+        else:
+            return CheckResult(
+                "Ketiv-Primary Policy",
+                False,
+                f"Ketiv-primary policy violation detected: {stderr[:200] if stderr else stdout[:200]}",
+                {"exit_code": exit_code, "output": stdout, "error": stderr},
+            )
+    except Exception as e:
+        return CheckResult(
+            "Ketiv-Primary Policy",
+            False,
+            f"Failed to run Ketiv-primary guard: {e}",
+            {"error": str(e)},
+        )
+
+
 def main() -> int:
     """Run all reality green checks and report results."""
     print("🔍 REALITY GREEN - Full System Truth Gate")
@@ -224,6 +252,7 @@ def main() -> int:
         check_agents_md_sync(),
         check_share_sync(),
         check_ledger_verification(),  # Must pass: all artifacts must be current in ledger
+        check_ketiv_primary_policy(),  # Phase 2: Ketiv-primary policy enforcement (ADR-002)
         check_webui_shell_sanity(),
     ]
 
