@@ -63,7 +63,7 @@ These schemas document the actual database structure used in BibleScholarProject
 #### `bible.verses`
 - Primary verse storage
 - Fields: `verse_id`, `book_name`, `chapter_num`, `verse_num`, `text`, `translation_source`
-- Vector embedding: `embedding vector(768)` with HNSW index
+- **Note:** Vector embeddings are stored in `bible.verse_embeddings.embedding` (vector(1024)), not in this table
 - Unique constraint: `(book_name, chapter_num, verse_num, translation_source)`
 
 #### `bible.hebrew_ot_words`
@@ -90,10 +90,10 @@ These schemas document the actual database structure used in BibleScholarProject
 
 ### Vector Embeddings
 
-- **Verse embeddings**: `vector(768)` stored in `verses.embedding` column
-- **Separate embeddings**: `vector(1024)` in `verse_embeddings` table
-- **Indexes**: HNSW for verses, IVFFlat for verse_embeddings
+- **Verse embeddings**: `vector(1024)` stored in `bible.verse_embeddings.embedding` column (canonical source)
+- **Indexes**: IVFFlat for verse_embeddings (1024-dim)
 - **LangChain embeddings**: `vector(1024)` in `langchain_pg_embedding` table
+- **Note:** The deprecated `bible.verses.embedding` (vector(768)) column has been removed per Phase 3 migration
 
 ### Foreign Key Relationships
 
@@ -111,7 +111,7 @@ bible.books (book_id)
 ### For Gemantria.v2 Integration
 
 1. **Read-only access**: BibleScholar uses `bible_db` as read-only source
-2. **Vector compatibility**: Both use pgvector, but different dimensions (768 vs 1024)
+2. **Vector compatibility**: All embeddings use pgvector with 1024 dimensions (bible.verse_embeddings.embedding)
 3. **Verse references**: OSIS format compatibility needed
 4. **Hebrew text**: Normalization may differ from Gemantria's ADR-002 standard
 5. **Strong's numbers**: Common identifier for cross-referencing
@@ -123,7 +123,7 @@ bible.books (book_id)
 | Database | `bible_db` | `gematria` |
 | Schema | `bible` | `gematria` |
 | Verse ID | Integer | UUID |
-| Embedding dim | 768/1024 | 1024 |
+| Embedding dim | 1024 | 1024 |
 | Hebrew storage | Separate words table | In concepts table |
 | Gematria | Not stored | Core feature |
 

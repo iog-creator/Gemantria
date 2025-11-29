@@ -437,8 +437,7 @@ CREATE TABLE bible.verses (
     text text NOT NULL,
     translation_source character varying(10) NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    embedding public.vector(768)
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
