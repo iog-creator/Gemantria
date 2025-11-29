@@ -3,11 +3,9 @@ repos:
     rev: v0.6.9
     hooks:
       - id: ruff
-        args: ["--config","pyproject.toml"]
-        exclude: ^genai-toolbox/|\.md$|^docs/
+        args: ["--config","pyproject.toml", "--exclude", "genai-toolbox", "--exclude", "**/*.md", "--exclude", "docs/**"]
       - id: ruff-format
-        args: ["--config","pyproject.toml"]
-        exclude: ^genai-toolbox/|\.md$|^docs/
+        args: ["--config","pyproject.toml", "--exclude", "genai-toolbox", "--exclude", "**/*.md", "--exclude", "docs/**"]
   - repo: local
     hooks:
       - id: agents_md_lint
