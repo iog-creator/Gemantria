@@ -43,7 +43,9 @@ def search_verses(
     return adapter.search_verses(query.strip(), translation, limit)
 
 
-def get_db_status(adapter: BibleDbAdapter | None = None) -> Literal["available", "unavailable", "db_off"]:
+def get_db_status(
+    adapter: BibleDbAdapter | None = None,
+) -> Literal["available", "unavailable", "db_off"]:
     """Get current database status.
 
     Args:

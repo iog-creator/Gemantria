@@ -145,7 +145,7 @@ def review_current_batch() -> None:
                 print(f"→ ARCHIVE: {path} (Default: archive candidate)")
 
     print("\n" + "=" * 80)
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Canonical: {len(canonical_paths)}")
     print(f"   Archive: {len(archive_paths)}")
 

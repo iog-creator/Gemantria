@@ -18,7 +18,7 @@ import shutil
 import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
@@ -35,7 +35,7 @@ class ArchiveMove:
     path: str
     target: str
     moved: bool
-    error: Optional[str] = None
+    error: str | None = None
 
 
 def fetch_all_archive_candidates(conn: psycopg.Connection) -> List[str]:
@@ -70,7 +70,7 @@ def compute_target_path(source_path: str) -> Path:
     return ARCHIVE_BASE / source_path
 
 
-def move_file(source: Path, target: Path, dry_run: bool) -> tuple[bool, Optional[str]]:
+def move_file(source: Path, target: Path, dry_run: bool) -> tuple[bool, str | None]:
     """Move a file to the archive location."""
     if not source.exists():
         return False, "Source file does not exist"
@@ -175,7 +175,7 @@ def main() -> None:
                 json.dump(receipt, f, indent=2, ensure_ascii=False)
 
             print(f"\n✓ Receipt written to: {RECEIPT_PATH}")
-            print(f"\nSummary:")
+            print("\nSummary:")
             print(f"  Total candidates: {len(candidate_paths)}")
             print(f"  Successfully moved: {len(moved_paths)}")
             print(f"  Failed: {len(moves) - len(moved_paths)}")

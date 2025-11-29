@@ -148,7 +148,9 @@ def find_cross_language_connections(strongs_id: str, limit: int = 10) -> CrossLa
         for greek_verse in greek_matches[:2]:
             connections.append(
                 CrossLanguageConnection(
-                    hebrew_verse=heb_verse, greek_verse=greek_verse, similarity_score=greek_verse.similarity_score
+                    hebrew_verse=heb_verse,
+                    greek_verse=greek_verse,
+                    similarity_score=greek_verse.similarity_score,
                 )
             )
 
