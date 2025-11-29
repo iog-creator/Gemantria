@@ -14,7 +14,22 @@ Establish standardized Hebrew normalization and gematria calculation rules:
 1. **Normalization**: NFKD → strip combining → strip maqaf (U+05BE) / sof pasuq (U+05C3) / punctuation → NFC
 2. **Gematria Method**: Mispar Hechrachi (finals = regular letters)
 3. **Calculation**: Surface-form gematria with preserved calculation strings
-4. **Variants**: Ketiv primary; variants recorded with variant_type and span information
+4. **Variants**: **Ketiv primary** (written form is primary for gematria calculations); variants recorded with variant_type and span information
+
+### Ketiv-Primary Policy (Numeric SSOT)
+
+**Ketiv (written form) is the primary source for gematria calculations.** This is the numeric SSOT (Single Source of Truth) for all gematria values.
+
+- **Ketiv** (כתיב): The written form in the Masoretic text is stored in the `surface` field and used for all gematria calculations
+- **Qere** (קרי): The read form (when different from Ketiv) is recorded as a variant in `variant_surface` and is **not** used for gematria calculations
+- **Rationale**: The written text (Ketiv) is the canonical form preserved in manuscripts; gematria calculations must be consistent and reproducible based on the written form
+
+**Rejected Alternative: Qere-First Policy**
+
+A Qere-first policy (where the read form would be primary for gematria) was considered but **explicitly rejected** for this implementation:
+- **Rejection Date**: Phase 2 (2025-01)
+- **Reason**: Ketiv represents the canonical written text; gematria calculations must be based on the preserved manuscript form, not the vocalized reading tradition
+- **Status**: This alternative is archived, not active policy. Any future reconsideration would require a new ADR superseding this decision.
 
 ## Rationale
 

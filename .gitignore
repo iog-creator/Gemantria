@@ -49,3 +49,4 @@ share/eval/
 
 # Local scratch PR body files
 tmp_pr_body*.md
+genai-toolbox/

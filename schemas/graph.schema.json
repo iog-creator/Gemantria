@@ -1,105 +1,68 @@
 {
-  "$id": "gemantria://v1/graph.schema.json",
-  "title": "Graph SSOT",
-  "type": "object",
-  "required": [
-    "schema",
-    "generated_at",
-    "nodes",
-    "edges"
-  ],
-  "properties": {
-    "schema": {
-      "const": "gemantria/graph.v1"
+    "$id": "gemantria://v1/graph.schema.json",
+    "title": "Graph SSOT",
+    "type": "object",
+    "required": ["schema", "generated_at", "nodes", "edges"],
+    "properties": {
+        "schema": {"const": "gemantria/graph.v1"},
+        "book": {"type": "string"},
+        "generated_at": {"type": "string", "format": "date-time"},
+        "nodes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "surface"],
+                "properties": {
+                    "id": {"type": "string"},
+                    "lemma": {"type": ["string", "null"]},
+                    "surface": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Ketiv (written form) - primary for gematria calculations per ADR-002",
+                    },
+                    "book": {"type": "string"},
+                    "variant_type": {
+                        "type": ["string", "null"],
+                        "enum": ["ketiv", "qere", "other", null],
+                        "description": "Type of textual variant (ketiv, qere, or other)",
+                    },
+                    "variant_surface": {
+                        "type": ["string", "null"],
+                        "description": "Alternative surface form (e.g., Qere reading when surface is Ketiv)",
+                    },
+                    "span_start": {
+                        "type": ["integer", "null"],
+                        "description": "Character position where variant begins in source text",
+                    },
+                    "span_end": {
+                        "type": ["integer", "null"],
+                        "description": "Character position where variant ends in source text",
+                    },
+                    "is_ketiv": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "TRUE if surface is Ketiv (written form), FALSE if Qere (read form). Ketiv is primary for gematria per ADR-002.",
+                    },
+                },
+            },
+        },
+        "edges": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["src", "dst", "type", "weight"],
+                "properties": {
+                    "src": {"type": "string"},
+                    "dst": {"type": "string"},
+                    "type": {"enum": ["semantic", "cooccur", "theology", "other"]},
+                    "weight": {"type": "number", "minimum": 0, "maximum": 1},
+                    "cosine": {"type": "number", "minimum": 0, "maximum": 1},
+                    "rerank_score": {"type": "number", "minimum": 0, "maximum": 1},
+                    "class": {"enum": ["strong", "weak", "very_weak"]},
+                    "analysis": {"type": "object"},
+                },
+            },
+        },
     },
-    "book": {
-      "type": "string"
-    },
-    "generated_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "nodes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "surface"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "lemma": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "surface": {
-            "type": "string",
-            "minLength": 1
-          },
-          "book": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "edges": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "src",
-          "dst",
-          "type",
-          "weight"
-        ],
-        "properties": {
-          "src": {
-            "type": "string"
-          },
-          "dst": {
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "semantic",
-              "cooccur",
-              "theology",
-              "other"
-            ]
-          },
-          "weight": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-          },
-          "cosine": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-          },
-          "rerank_score": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-          },
-          "class": {
-            "enum": [
-              "strong",
-              "weak",
-              "very_weak"
-            ]
-          },
-          "analysis": {
-            "type": "object"
-          }
-        }
-      }
-    }
-  },
-  "additionalProperties": false
+    "additionalProperties": false,
 }
