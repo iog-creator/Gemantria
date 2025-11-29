@@ -103,6 +103,13 @@ guard.graph.correlations.schema:
 		--data-glob "ui/out/**/*.json" \
 		--filename-contains correlations
 
+# Guard: Ketiv-primary policy (Phase 2)
+.PHONY: guard.ketiv.primary
+guard.ketiv.primary:
+	@mkdir -p evidence
+	@PYTHONPATH=. python3 scripts/guards/guard_ketiv_primary.py --export exports/graph_latest.json > evidence/guard_ketiv_primary.json 2>&1 || true
+	@cat evidence/guard_ketiv_primary.json
+
 # Guard: jsonschema import (STRICT at tag-time, HINT on PRs)
 .PHONY: guard.jsonschema.import
 guard.jsonschema.import:

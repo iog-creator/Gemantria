@@ -36,9 +36,51 @@ MAP: dict[str, int] = {
 
 
 def calculate_gematria(word: str) -> int:
+    """
+    Calculate gematria value for Hebrew word using Mispar Hechrachi.
+
+    Per ADR-002: This function uses the surface form (Ketiv) for calculations.
+    If a noun has variants, the Ketiv (written form) should be passed here,
+    not the Qere (read form).
+
+    Args:
+        word: Hebrew text (should be Ketiv if variant exists)
+
+    Returns:
+        Sum of letter values according to Mispar Hechrachi
+    """
     return sum(MAP.get(ch, 0) for ch in word)
 
 
 def calc_string(word: str) -> str:
     parts = [f"{ch}({MAP.get(ch, 0)})" for ch in word]
     return " + ".join(parts) + f" = {calculate_gematria(word)}"
+
+
+def get_ketiv_for_gematria(noun: dict) -> str:
+    """
+    Get the Ketiv (written form) from a noun for gematria calculation.
+
+    Per ADR-002 Ketiv-primary policy: gematria calculations must use
+    the Ketiv (written form), not the Qere (read form).
+
+    Args:
+        noun: Noun dictionary with 'surface' and optional 'variant_surface', 'is_ketiv'
+
+    Returns:
+        Ketiv text to use for gematria calculation
+    """
+    surface = noun.get("surface", "")
+    is_ketiv = noun.get("is_ketiv", True)
+
+    # If surface is Ketiv (default), use it
+    if is_ketiv:
+        return surface
+
+    # If surface is Qere, variant_surface should be Ketiv
+    variant_surface = noun.get("variant_surface", "")
+    if variant_surface:
+        return variant_surface
+
+    # Fallback: use surface (assume it's Ketiv if no variant info)
+    return surface
