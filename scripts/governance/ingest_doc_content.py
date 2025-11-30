@@ -35,6 +35,8 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
+import pdfplumber
+
 from agentpm.db.loader import get_control_engine
 
 
@@ -63,6 +65,43 @@ def normalize_content(content: str) -> str:
     # Normalize newlines
     content = content.replace("\r\n", "\n").replace("\r", "\n")
     return content
+
+
+def chunk_pdf(file_path: Path) -> List[Fragment]:
+    """
+    Chunk PDF content into fragments (one fragment per page).
+
+    Args:
+        file_path: Path to PDF file
+
+    Returns:
+        List of Fragment objects with fragment_type='page' and fragment_index=0..N-1
+    """
+    fragments: List[Fragment] = []
+    fragment_index = 0
+
+    try:
+        with pdfplumber.open(file_path) as pdf:
+            for page_num, page in enumerate(pdf.pages, start=1):
+                # Extract text from page
+                text_content = page.extract_text()
+                if text_content:
+                    # Normalize content
+                    text_content = normalize_content(text_content)
+                    fragments.append(
+                        Fragment(
+                            fragment_index=fragment_index,
+                            fragment_type="page",
+                            content=text_content,
+                        )
+                    )
+                    fragment_index += 1
+    except Exception as exc:
+        print(f"[WARN] Failed to extract PDF {file_path}: {exc}", file=sys.stderr)
+        # Return empty list on error (don't crash the pipeline)
+        return []
+
+    return fragments
 
 
 def chunk_markdown(content: str) -> List[Fragment]:
@@ -228,14 +267,18 @@ def ingest_doc_content(
                 )
                 continue
 
-            # Read and chunk
+            # Read and chunk based on file type
             try:
-                content = file_path.read_text(encoding="utf-8")
+                if file_path.suffix.lower() == ".pdf":
+                    # PDF: chunk by page
+                    fragments = chunk_pdf(file_path)
+                else:
+                    # Markdown or other text: read as text and chunk
+                    content = file_path.read_text(encoding="utf-8")
+                    fragments = chunk_markdown(content)
             except Exception as exc:
                 print(f"[WARN] Failed to read {repo_path}: {exc}", file=sys.stderr)
                 continue
-
-            fragments = chunk_markdown(content)
 
             if dry_run:
                 print(f"[DRY-RUN] {logical_name}: {len(fragments)} fragments", file=sys.stderr)
