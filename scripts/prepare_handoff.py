@@ -12,6 +12,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# Add project root to path for imports
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 # Try to import clipboard library, fallback to platform-specific commands
 try:
     import pyperclip
@@ -19,6 +23,14 @@ try:
     HAS_PYPERCLIP = True
 except ImportError:
     HAS_PYPERCLIP = False
+
+# Import hint registry (graceful degradation if unavailable)
+try:
+    from agentpm.hints.registry import load_hints_for_flow
+
+    HAS_HINT_REGISTRY = True
+except ImportError:
+    HAS_HINT_REGISTRY = False
 
 
 def run_cmd(cmd: list[str], capture_output: bool = True) -> tuple[int, str, str]:
@@ -88,6 +100,19 @@ def generate_handoff_content() -> str:
     pr_info = get_active_pr()
     timestamp = datetime.now().isoformat()
 
+    # Load hints from DMS (graceful degradation if unavailable)
+    hints = {"required": [], "suggested": []}
+    if HAS_HINT_REGISTRY:
+        try:
+            hints = load_hints_for_flow(
+                scope="handoff",
+                applies_to={"flow": "handoff.generate"},
+                mode="HINT",  # Graceful degradation
+            )
+        except Exception:
+            # If DMS unavailable, continue with empty hints
+            pass
+
     # Build the handoff content
     lines = [
         "# Handoff — Rule 051 (Cursor Insight & Handoff)",
@@ -96,45 +121,70 @@ def generate_handoff_content() -> str:
         "## Goal",
         "Continue work from previous chat session with full context and baseline evidence.",
         "",
-        "## Baseline Evidence",
-        "",
-        "### 1. Repository Information",
-        "```bash",
-        "git rev-parse --show-toplevel",
-        "```",
-        f"**Output:** `{git_info['repo_root']}`",
-        "",
-        "```bash",
-        "git rev-parse --abbrev-ref HEAD",
-        "```",
-        f"**Output:** `{git_info['branch']}`",
-        "",
-        "```bash",
-        "git status -sb",
-        "```",
-        "**Output:**",
-        "```",
-        git_info["status"],
-        "```",
-        "",
-        "### 2. Hermetic Test Bundle",
-        "",
-        "```bash",
-        "ruff format --check . && ruff check .",
-        "```",
-        "*Run and paste output*",
-        "",
-        "```bash",
-        "make book.smoke",
-        "```",
-        "*Run and paste output*",
-        "",
-        "```bash",
-        "make ci.exports.smoke",
-        "```",
-        "*Run and paste output*",
-        "",
     ]
+
+    # Add required hints section if any exist
+    if hints.get("required"):
+        lines.extend(
+            [
+                "## Required Hints",
+                "",
+            ],
+        )
+        for hint in hints["required"]:
+            payload = hint.get("payload", {})
+            text_content = payload.get("text", "")
+            if text_content:
+                lines.append(f"- **{hint.get('logical_name', 'hint')}**: {text_content}")
+            commands = payload.get("commands", [])
+            if commands:
+                lines.append("  Commands:")
+                for cmd in commands:
+                    lines.append(f"    - `{cmd}`")
+        lines.append("")
+
+    lines.extend(
+        [
+            "## Baseline Evidence",
+            "",
+            "### 1. Repository Information",
+            "```bash",
+            "git rev-parse --show-toplevel",
+            "```",
+            f"**Output:** `{git_info['repo_root']}`",
+            "",
+            "```bash",
+            "git rev-parse --abbrev-ref HEAD",
+            "```",
+            f"**Output:** `{git_info['branch']}`",
+            "",
+            "```bash",
+            "git status -sb",
+            "```",
+            "**Output:**",
+            "```",
+            git_info["status"],
+            "```",
+            "",
+            "### 2. Hermetic Test Bundle",
+            "",
+            "```bash",
+            "ruff format --check . && ruff check .",
+            "```",
+            "*Run and paste output*",
+            "",
+            "```bash",
+            "make book.smoke",
+            "```",
+            "*Run and paste output*",
+            "",
+            "```bash",
+            "make ci.exports.smoke",
+            "```",
+            "*Run and paste output*",
+            "",
+        ]
+    )
 
     # Add PR information if available
     if pr_info:

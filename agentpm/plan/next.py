@@ -12,6 +12,14 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+# Import hint registry (graceful degradation if unavailable)
+try:
+    from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
+
+    HAS_HINT_REGISTRY = True
+except ImportError:
+    HAS_HINT_REGISTRY = False
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MASTER_PLAN_PATH = REPO_ROOT / "docs" / "SSOT" / "MASTER_PLAN.md"
 DEFAULT_NEXT_STEPS_PATH = REPO_ROOT / "NEXT_STEPS.md"
@@ -287,6 +295,19 @@ def build_capability_session(
 
     if with_status:
         session["posture"] = plan_result.get("posture", {"mode": "hermetic"})
+
+    # Load hints from DMS and embed into envelope (graceful degradation if unavailable)
+    if HAS_HINT_REGISTRY:
+        try:
+            hints = load_hints_for_flow(
+                scope="agentpm",
+                applies_to={"flow": "capability_session", "agent": "pm"},
+                mode="HINT",  # Graceful degradation
+            )
+            session = embed_hints_in_envelope(session, hints)
+        except Exception:
+            # If DMS unavailable, continue without hints
+            pass
 
     return session
 

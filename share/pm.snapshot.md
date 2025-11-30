@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-21T11:15:40-08:00_
+_Generated: 2025-11-29T18:43:19-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -16,24 +16,14 @@ _Generated: 2025-11-21T11:15:40-08:00_
 
 ### DB Health Guard
 
-- Status: `✓ Ready`
-- Mode: `ready`
-- Driver available: `✓`
-- Connection OK: `✓`
-- Graph stats ready: `✓`
+- Status: `✗ error`
+- Mode: `error`
 
 ```json
 {
-  "ok": true,
-  "mode": "ready",
-  "checks": {
-    "driver_available": true,
-    "connection_ok": true,
-    "graph_stats_ready": true
-  },
-  "details": {
-    "errors": []
-  }
+  "ok": false,
+  "mode": "error",
+  "error": "guard_db_health failed: No module named 'sqlalchemy'"
 }
 ```
 
@@ -59,78 +49,60 @@ _Generated: 2025-11-21T11:15:40-08:00_
 
 - Status: `✗ Error`
 - File count: `0`
-- Error: Manifest file not found: /home/mccoy/Projects/docs/SSOT/SHARE_MANIFEST.json
+- Error: Failed to read manifest: No module named 'sqlalchemy'
 
 ## System Health (DB + LM + Graph)
 
-- LM Status: `✗ lm_off`
-- LM Mode: `lm_off`
-- Graph Status: `✓ Ready`
-- Graph Mode: `db_on`
+- LM Status: `✗ error`
+- LM Mode: `error`
+- Graph Status: `✗ error`
+- Graph Mode: `error`
 
 ## Status Explanation
 
-- Level: `OK`
-- Headline: All systems nominal
-- Details: Database is ready and all checks passed. All 4 LM slot(s) are operational....
+- Level: `ERROR`
+- Headline: Status explanation unavailable
+- Details: Failed to generate explanation: No module named 'sqlalchemy'...
 
 ## Reality Check
 
-- Overall: `✓ OK`
+- Overall: `✗ FAILED`
 - Mode: `HINT`
-- Hints: 3 hint(s)
-  - LM configuration incomplete
-  - KB: Subsystem 'agentpm' has low document coverage (1 doc(s))
-  - KB: Subsystem 'webui' has low document coverage (1 doc(s))
 
 ## AI Tracking Summary
 
 - Status: `✗ db_off`
 - Mode: `db_off`
-- Note: AI tracking query failed: relation "control.agent_run_cli" does not exist
-LINE 7:                     FROM control.agent_run_cli
-                                 ^
+- Note: AI tracking failed: No module named 'sqlalchemy'
 
 ## Eval Insights Summary (Advisory Analytics)
 
 _Note: Eval insights are export-driven analytics (Phase-8/10) and are advisory only. They do not affect system health gates._
 
 - LM Indicator: `✗ Unavailable`
-  - Note: LM indicator export not available (file missing)
+  - Note: LM indicator export not found
 - DB Health Snapshot: `✗ Unavailable`
-  - Note: DB health snapshot not available (file missing; run `make pm.snapshot`)
+  - Note: DB health export not found
 - Edge Class Counts: `✗ Unavailable`
-  - Note: Edge class counts export not available (file missing)
+  - Note: Edge class counts export not found
 
 ## KB Registry Summary (Advisory)
 
 _Note: KB registry is advisory-only and read-only in CI. It does not affect system health gates._
 
-- Status: `✓ Available`
-- Total documents: `9`
-- Valid: `✓ Yes`
+- Status: `✗ Unavailable`
+- Note: KB registry unavailable: No module named 'sqlalchemy'
 
 ## KB Hints (Advisory)
 
 _Note: KB hints are advisory-only and do not affect system health gates._
 
-- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'agentpm' has low document coverage (1 doc(s))
-  - Subsystem: agentpm, Current docs: 1
-- INFO **[INFO] KB_LOW_COVERAGE_SUBSYSTEM**: Subsystem 'webui' has low document coverage (1 doc(s))
-  - Subsystem: webui, Current docs: 1
+- ✓ No KB registry issues detected
 
 ## Documentation Health (Advisory)
 
 _Note: Documentation health metrics are advisory-only and do not affect system health gates._
 
-- Overall freshness: `100.0%`
-  - By subsystem:
-    - agentpm: 100.0% fresh (missing=0, stale=0)
-    - docs: 100.0% fresh (missing=0, stale=0)
-    - root: 100.0% fresh (missing=0, stale=0)
-    - webui: 100.0% fresh (missing=0, stale=0)
-- Missing documents: `0`
-- Fixes applied (last 7 days): `0`
-  - Notes:
-    - No plan_kb_fix manifests directory; treating fixes_applied_last_7d as 0
+- Status: `✗ Unavailable`
+- Note: KB doc-health metrics unavailable
 

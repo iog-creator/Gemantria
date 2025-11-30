@@ -3,7 +3,7 @@
 Control-plane schema snapshot generator.
 
 Introspects the control schema tables and emits a JSON snapshot to
-share/atlas/control_plane/schema_snapshot.json.
+share/schema_snapshot.json.
 
 Uses centralized DSN loader (never os.getenv directly).
 Tolerates empty/nonexistent DB (exits 0, writes empty snapshot for CI tolerance).
@@ -30,7 +30,7 @@ except ImportError:
         file=sys.stderr,
     )
     # Write empty snapshot for CI tolerance
-    output_file = REPO / "share" / "atlas" / "control_plane" / "schema_snapshot.json"
+    output_file = REPO / "share" / "schema_snapshot.json"
     output_file.parent.mkdir(parents=True, exist_ok=True)
     output_file.write_text(
         json.dumps(
@@ -49,7 +49,7 @@ DSN = get_rw_dsn()
 if not DSN:
     print("SKIP: GEMATRIA_DSN not set (empty-DB tolerance).", file=sys.stderr)
     # Write empty snapshot for CI tolerance
-    output_file = REPO / "share" / "atlas" / "control_plane" / "schema_snapshot.json"
+    output_file = REPO / "share" / "schema_snapshot.json"
     output_file.parent.mkdir(parents=True, exist_ok=True)
     output_file.write_text(
         json.dumps(
@@ -167,7 +167,7 @@ def get_table_info(cur: psycopg.Cursor, table_name: str) -> dict:
 
 def main() -> int:
     """Generate schema snapshot."""
-    output_file = REPO / "share" / "atlas" / "control_plane" / "schema_snapshot.json"
+    output_file = REPO / "share" / "schema_snapshot.json"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     try:

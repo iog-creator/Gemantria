@@ -5,10 +5,11 @@
 """
 sync_share.py — standard share sync entrypoint.
 
-Phase-8B: Now supports doc registry-driven sync with manifest fallback.
+DMS-only sync: syncs share/ from control.doc_registry only.
 
-- First attempts to sync from control.doc_registry (when DB is available).
-- Falls back to update_share.py (manifest-based) if registry is unavailable or empty.
+- Requires DMS doc registry to be populated with share_path-enabled docs.
+- Fail-closed: exits with error if registry is unavailable or has no share_path-enabled docs.
+- No manifest fallback: registry is the single source of truth for share/ sync.
 """
 
 from __future__ import annotations
@@ -40,17 +41,26 @@ def _sync_from_registry() -> bool:
     """
     Attempt to sync share/ from the control.doc_registry.
 
-    Returns True if registry-based sync was performed, False if the caller
-    should fall back to manifest-based behavior.
+    Returns True if registry-based sync was performed.
+    Raises SystemExit(1) if registry is unavailable or has no share_path-enabled docs.
+
+    This function is fail-closed: it never falls back to manifest-based behavior.
     """
     if not DB_AVAILABLE:
-        return False
+        print(
+            "[sync_share] ERROR: Database not available for registry sync. DMS doc registry is required.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1) from None
 
     try:
         engine = get_control_engine()
     except Exception as exc:  # pragma: no cover - defensive
-        print(f"[sync_share] NOTE: DB not available for registry sync: {exc}", file=sys.stderr)
-        return False
+        print(
+            f"[sync_share] ERROR: Unable to get control-plane engine: {exc}",
+            file=sys.stderr,
+        )
+        raise SystemExit(1) from exc
 
     try:
         with engine.connect() as conn:
@@ -68,10 +78,11 @@ def _sync_from_registry() -> bool:
 
             if not rows:
                 print(
-                    "[sync_share] Registry has no share_path-enabled docs; falling back to manifest.",
+                    "[sync_share] ERROR: DMS doc registry has no share_path-enabled docs. "
+                    "Manifest fallback is forbidden. Run: make governance.ingest.docs",
                     file=sys.stderr,
                 )
-                return False
+                raise SystemExit(1)
 
             SHARE_ROOT.mkdir(parents=True, exist_ok=True)
 
@@ -95,26 +106,28 @@ def _sync_from_registry() -> bool:
                 print(f"[sync_share] registry copy: {logical_name}: {repo_path} -> {share_path}")
 
         return True
+    except SystemExit:
+        raise
     except Exception as exc:  # pragma: no cover - defensive
         print(
-            f"[sync_share] NOTE: Registry sync failed: {exc}; falling back to manifest.",
+            f"[sync_share] ERROR: Registry sync failed: {exc}",
             file=sys.stderr,
         )
-        return False
+        raise SystemExit(1) from exc
 
 
 def main(argv: List[str] | None = None) -> int:
     """
-    Main entrypoint: try registry sync first, fall back to manifest-based sync.
-    """
-    # First try to sync from the doc registry. If that fails or is empty, fall
-    # back to manifest-based behavior so existing pipelines keep working.
-    used_registry = _sync_from_registry()
-    if not used_registry:
-        # Fall back to existing update_share.py behavior
-        from scripts.update_share import main as update_main  # noqa: PLC0415
+    Main entrypoint: sync share/ from DMS doc registry only.
 
-        return update_main()  # update_share.main() doesn't take argv
+    This function is fail-closed: it requires the registry to be populated with
+    share_path-enabled docs. No manifest fallback is performed.
+    """
+    # Sync from the doc registry. This will raise SystemExit(1) if:
+    # - Database is unavailable
+    # - Registry has no share_path-enabled docs
+    # - Any other error occurs during sync
+    _sync_from_registry()
     return 0
 
 

@@ -71,3 +71,6 @@
 | 066 | 066-lm-studio-appimage-update.mdc | # --- |
 | 067 | 067-atlas-webproof.mdc | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | 068-gpt-docs-sync.mdc | # --- |
+| 069 | 069-always-use-dms-first.mdc | # Rule 069 — Always Use DMS First (Planning Queries) |
+| 070 | 070-gotchas-check.mdc | # --- |
+| 071 | 071-portable-json-not-plan-ssot.mdc | # Rule 071 — Portable JSON is not Plan SSOT |

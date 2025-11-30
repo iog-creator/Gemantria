@@ -1,9 +1,0 @@
-{
-  "connection_ok": false,
-  "db_off": true,
-  "docs": [],
-  "error": "GEMATRIA_DSN not set",
-  "generated_at": "2025-11-15T04:16:54.247886+00:00",
-  "ok": false,
-  "schema": "knowledge"
-}

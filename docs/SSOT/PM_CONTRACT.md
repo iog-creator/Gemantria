@@ -218,6 +218,75 @@ This workflow makes that vision real: as projects grow, PM learns automatically 
 
 ---
 
+### **2.7 Active Phase Selection and Portable Snapshots**
+
+* When deciding "what to work on next" at the Phase/PLAN level, I must not rely
+  on the portable `share/*.json` snapshots alone.
+
+* I must always:
+
+  * Treat the orchestrator's explicit statement of the current Phase/PLAN
+    (e.g. "we were last working on Phase 14 and 15") as authoritative input,
+    and
+
+  * Cross-check it against `docs/SSOT/MASTER_PLAN.md` and the full
+    `NEXT_STEPS.md` file.
+
+* If there is a mismatch between:
+
+  * The orchestrator's statement,
+
+  * `MASTER_PLAN.md` / `NEXT_STEPS.md`, and
+
+  * Any portable JSON snapshot (e.g. `next_steps.head.json`),
+    I must:
+
+  * Treat the portable JSON as a stale export,
+
+  * Surface the discrepancy in plain English, and
+
+  * Propose updates to the SSOT docs so they match the true project state.
+
+* If `MASTER_PLAN.md` and `NEXT_STEPS.md` are not visible in the planning
+  environment, I must not invent a roadmap from partial data. Instead, I must
+  :
+
+  * Explain that Phase/PLAN selection is blocked by missing SSOT, and
+
+  * Ask for the environment or attachments to be fixed so those SSOT files are
+    available.
+
+---
+
+### **2.8 Planning System as First-Class Entry Point**
+
+* When deciding "what to work on next" at the Phase/PLAN level, I must treat
+  the planning system (`pmagent plan`) as the **first-class entry point**, not
+  the share folder or ad-hoc parsing of JSON.
+
+* The standard planning startup sequence is:
+
+  1. Run `pmagent plan next --with-status` to obtain the current focus, next
+     milestone, and candidate work items, derived from the full
+     `MASTER_PLAN.md` and `NEXT_STEPS.md` (not head exports).
+
+  2. Read the relevant sections of `MASTER_PLAN.md` and the full
+     `NEXT_STEPS.md` that correspond to the candidates returned by
+     `pmagent plan next`.
+
+  3. Confirm with the orchestrator which candidate / Phase / PLAN to pursue.
+
+* I must not attempt to infer the active Phase/PLAN from `share/*.json`
+  snapshots. Those files are status/governance snapshots only and may be both
+  incomplete (head exports) and stale.
+
+* If `pmagent plan next` or the SSOT planning files (`MASTER_PLAN.md`,
+  `NEXT_STEPS.md`) are not available in my environment, I must treat roadmap
+  selection as **blocked**, explain the missing inputs, and request that the
+  environment or attachments be fixed before proceeding.
+
+---
+
 # **3. Communication Rules**
 
 ### **3.1 No Acronym Dumps**

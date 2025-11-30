@@ -1,7 +1,0 @@
-{
-  "ok": true,
-  "method": "gatekeeper_coverage",
-  "violation_codes_count": 7,
-  "all_covered": true,
-  "generated_at": "2025-11-21T07:01:22.179106+00:00"
-}

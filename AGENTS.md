@@ -302,7 +302,34 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
 - All DSN access must use centralized loaders (`scripts.config.env` or `src.gemantria.dsn`); never `os.getenv()` directly
 
 ## Workflow (small green PRs)
-- Branch `feature/<short>` → **write tests first** → code → `make lint type test.unit test.int coverage.report` → commit → push → PR.
+
+**CRITICAL: Local Gates Are Primary (Rule 050 §5.5)**
+
+Before **any** push or PR creation, **mandatory local gates** must pass:
+
+```bash
+ruff format --check . && ruff check .
+make book.smoke
+make ci.exports.smoke
+make reality.green STRICT
+```
+
+**If any local gate fails:**
+- **DO NOT** push
+- **DO NOT** open a PR
+- Fix issues locally where error messages are readable
+- Re-run gates until all pass
+
+**Only after all local gates pass:**
+- Push to remote
+- Open/update PR
+- Continue with other work (do not wait for CI)
+
+**CI is a mirror, not the gate.** CI may flake, be slow, or fail due to infrastructure. It must **never** be treated as a blocking dependency. "Waiting for CI" is not a valid state.
+
+### Standard Workflow Steps
+
+- Branch `feature/<short>` → **write tests first** → code → run local gates → commit → push → PR.
 - Coverage ≥98%.
 - Commit msg: `feat(area): what [no-mocks, deterministic, ci:green]`
 - PR: Goal, Files, Tests, Acceptance.
@@ -811,6 +838,9 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 066 | # --- |
 | 067 | # Rule 067 — Atlas Webproof (Browser-Verified UI) |
 | 068 | # --- |
+| 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
+| 070 | # --- |
+| 071 | # Rule 071 — Portable JSON is not Plan SSOT |
 <!-- RULES_INVENTORY_END -->
 
 ---

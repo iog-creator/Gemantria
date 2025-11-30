@@ -177,6 +177,18 @@ except Exception as e:
             "error": f"Failed to read manifest: {e2}",
         }
 
+    # Gather eval insights summary (advisory-only, non-gating)
+    eval_insights_summary = {}
+    try:
+        from agentpm.status.snapshot import get_eval_insights_summary
+
+        eval_insights_summary = get_eval_insights_summary()
+    except Exception as e2:
+        eval_insights_summary = {
+            "ok": False,
+            "error": f"Eval insights unavailable: {e2}",
+        }
+
     # Gather KB registry summary (advisory-only, non-gating)
     kb_registry_summary = {
         "available": False,

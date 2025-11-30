@@ -21,6 +21,14 @@ from agentpm.tools.system import health as tool_health
 from scripts.config.env import get_rw_dsn
 from scripts.guards.guard_db_health import check_db_health
 
+# Import hint registry (graceful degradation if unavailable)
+try:
+    from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
+
+    HAS_HINT_REGISTRY = True
+except ImportError:
+    HAS_HINT_REGISTRY = False
+
 
 def get_ai_tracking_summary() -> dict[str, Any]:
     """Get AI tracking summary from control.agent_run and control.agent_run_cli.
@@ -677,5 +685,18 @@ def get_system_snapshot(
             "graph_compliance": {"status": "unknown"},
             "biblescholar_reference": {"status": "unknown"},
         }
+
+    # Load hints from DMS and embed into snapshot (graceful degradation if unavailable)
+    if HAS_HINT_REGISTRY:
+        try:
+            dms_hints = load_hints_for_flow(
+                scope="status_api",
+                applies_to={"flow": "status_snapshot"},
+                mode=reality_check_mode,  # Use same mode as reality_check
+            )
+            snapshot = embed_hints_in_envelope(snapshot, dms_hints)
+        except Exception:
+            # If DMS unavailable, continue without hints
+            pass
 
     return snapshot

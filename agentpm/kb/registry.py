@@ -183,7 +183,10 @@ def load_registry(registry_path: Path | None = None) -> KBDocumentRegistry:
         return KBDocumentRegistry()
 
     try:
-        content = registry_path.read_text()
+        content = registry_path.read_text().strip()
+        # Handle empty file (created but not populated)
+        if not content:
+            return KBDocumentRegistry()
         data = json.loads(content)
         return KBDocumentRegistry.from_dict(data)
     except json.JSONDecodeError as e:

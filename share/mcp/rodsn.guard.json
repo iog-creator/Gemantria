@@ -1,9 +1,0 @@
-{
-  "ok": false,
-  "errors": [
-    "GEMATRIA_DSN not set"
-  ],
-  "strict": false,
-  "dsn_redacted": null,
-  "generated_at": "2025-11-21T09:09:40Z"
-}

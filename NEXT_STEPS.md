@@ -1,4 +1,4 @@
-<!-- Handoff updated: 2025-11-21T11:15:40.102369 -->
+<!-- Handoff updated: 2025-11-29T18:21:16.832163 -->
 # PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary
 
 ## Goal
@@ -130,3 +130,16 @@
 - BibleScholar migration is functionally complete (backend + UI)
 - Consider: System health check (`make reality.green`), documentation updates, or new feature development
 - See `docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md` for architecture details
+
+## ✅ RESOLVED — Share Manifest Drift (Governance / Housekeeping)
+
+* **Status**: Resolved (2025-11-30)
+
+* **Current State**: `share/` now contains **35 Markdown files** (all JSON files are automatically converted to Markdown during housekeeping):
+  * **14 core PM artifacts** (pm_snapshot.md, planning_context.md, kb_registry.md, doc_registry.md, doc_sync_state.md, doc_version.md, governance_freshness.md, hint_registry.md, live_posture.md, schema_snapshot.md, planning_lane_status.md, agents_md.head.md, pm_contract.head.md, next_steps.head.md)
+  * **21 documentation files** (MASTER_PLAN.md, RULES_INDEX.md, AGENTS.md, various intake/migration plans, etc.)
+
+* **SHARE_MANIFEST.json**: Formally deprecated with deprecation notice added. The manifest no longer reflects the current share/ structure (35 Markdown files vs 39 old items). The share/ directory is now **auto-generated** via `make pm.share.artifacts` during housekeeping, and DMS is the SSOT for document tracking.
+
+* **Documentation Updated**: `docs/SSOT/SHARE_FOLDER_STRUCTURE.md` updated to reflect current state (all Markdown, auto-generated, flat structure).
+

@@ -1,7 +1,0 @@
-{
-  "ok": true,
-  "method": "schema_snapshot",
-  "schema": "control",
-  "tables_count": 14,
-  "generated_at": "2025-11-21T07:01:22.034038+00:00"
-}

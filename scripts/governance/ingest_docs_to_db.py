@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -159,6 +160,26 @@ def get_git_commit() -> str | None:
         return None
 
 
+def load_share_manifest_mapping() -> dict[str, str]:
+    """
+    Load SHARE_MANIFEST.json and create a mapping from repo_path (src) to share_path (dst).
+
+    Returns a dict mapping repo-relative paths to share-relative paths.
+    """
+    manifest_path = REPO_ROOT / "docs" / "SSOT" / "SHARE_MANIFEST.json"
+    if not manifest_path.exists():
+        return {}
+
+    try:
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        items = manifest.get("items", [])
+        # Map src (repo path) -> dst (share path)
+        return {item["src"]: item["dst"] for item in items if "src" in item and "dst" in item}
+    except Exception:
+        return {}
+
+
 def ingest_docs(dry_run: bool = False) -> int:
     """
     Ingest documentation metadata into control.doc_registry / control.doc_version.
@@ -208,6 +229,9 @@ def ingest_docs(dry_run: bool = False) -> int:
         print(f"ERROR: Unable to get control-plane engine: {exc}", file=sys.stderr)
         return 1
 
+    # Load share manifest mapping for gap-filling share_path
+    manifest_mapping = load_share_manifest_mapping()
+
     with engine.begin() as conn:
         for target in existing_targets:
             contents = target.repo_path.read_bytes()
@@ -215,15 +239,22 @@ def ingest_docs(dry_run: bool = False) -> int:
             size_bytes = target.repo_path.stat().st_size
             repo_rel = str(target.repo_path.relative_to(REPO_ROOT))
 
-            # Upsert registry row.
+            # Determine share_path: use manifest mapping if available, otherwise NULL
+            # The ON CONFLICT clause will preserve existing non-NULL share_path values
+            share_path_from_manifest = manifest_mapping.get(repo_rel)
+
+            # Upsert registry row with idempotent share_path handling:
+            # - On INSERT: use share_path from manifest (or NULL)
+            # - On CONFLICT: preserve existing share_path if not NULL, otherwise set from manifest
             row = conn.execute(
                 text(
                     """
                     INSERT INTO control.doc_registry (logical_name, role, repo_path, share_path, is_ssot, enabled)
-                    VALUES (:logical_name, :role, :repo_path, NULL, :is_ssot, TRUE)
+                    VALUES (:logical_name, :role, :repo_path, :share_path, :is_ssot, TRUE)
                     ON CONFLICT (logical_name) DO UPDATE SET
                         role = EXCLUDED.role,
                         repo_path = EXCLUDED.repo_path,
+                        share_path = COALESCE(control.doc_registry.share_path, EXCLUDED.share_path),
                         is_ssot = EXCLUDED.is_ssot,
                         enabled = EXCLUDED.enabled,
                         updated_at = NOW()
@@ -234,6 +265,7 @@ def ingest_docs(dry_run: bool = False) -> int:
                     "logical_name": target.logical_name,
                     "role": target.role,
                     "repo_path": repo_rel,
+                    "share_path": share_path_from_manifest,
                     "is_ssot": target.is_ssot,
                 },
             ).one()

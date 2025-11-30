@@ -93,6 +93,10 @@
 
 - PLAN-092 M1-M4 complete + E87/E91 artifacts (#583)
 
+- Phase 3 - Vector Dimension Cleanup (#589)
+- Phase 2 - Ketiv/Qere Policy & Numeric SSOT (#588)
+- Phase 1 - Code Hygiene Restoration (#587)
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
