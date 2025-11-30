@@ -110,7 +110,7 @@ if [ -z "${VIRTUAL_ENV:-}" ] || [ "${VIRTUAL_ENV}" != "/home/mccoy/Projects/Gema
 fi
 ```
 
-Before proposing changes:
+**Before proposing changes OR pushing code:**
 
 ```bash
 git rev-parse --show-toplevel
@@ -143,6 +143,74 @@ For PR work:
 gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks
 gh pr checks <N> --required --json name,state
 ```
+
+## 5.5 · Local Gates Are Primary (CI Is Secondary)
+
+**CRITICAL WORKFLOW RULE:** Local checks are the **primary truth gate**. CI is a **remote mirror only** and must never be treated as a blocking dependency.
+
+### Mandatory Pre-Push/PR Checklist
+
+Before **any** push or PR creation, Cursor **must** run these local gates:
+
+```bash
+ruff format --check . && ruff check .
+make book.smoke
+make ci.exports.smoke
+make reality.green STRICT
+```
+
+**If any local gate fails:**
+- **DO NOT** push
+- **DO NOT** open a PR
+- Fix issues locally where error messages are readable
+- Re-run gates until all pass
+
+**Only after all local gates pass:**
+- Push to remote
+- Open/update PR
+- Continue with other work (do not wait for CI)
+
+### CI Is a Mirror, Not the Gate
+
+- CI is allowed to:
+  - Flake (infrastructure issues)
+  - Be slow (queue delays)
+  - Fail due to transient errors
+- CI must **never** be treated as:
+  > "We can't proceed until GitHub tells us what to think."
+
+### "Waiting for CI" Is Not a Valid State
+
+Cursor/PM are **not allowed** to say:
+- "We're blocked waiting for CI"
+- "We can't proceed until CI completes"
+
+**Approved stances:**
+- "Local gates are green; CI is pending, we continue planning/work"
+- "Local gates are green; CI disagrees → we reproduce locally and debug"
+- "Local gates failed; fixing locally before push"
+
+**No more passive waiting** as if CI were the decision-maker.
+
+### Phase-Level Failure Reporting
+
+If CI fails, the explanation must be **phase-level**, not job-level:
+- ❌ "Job 12 failed with exit code 1"
+- ✅ "Phase 3 vector migration failed because `graph-stats.schema.json` didn't match the DB; here's what we changed"
+
+### You Don't Need GitHub to Move Phases
+
+Operator involvement stays at:
+- "Is Phase 4 functionally complete?"
+- "Are all local gates green?"
+- "Okay, move to Phase 5"
+
+The details of:
+- Which PR is open
+- Which CI job is pending
+- Which branch name is used
+
+→ That stays in Cursor-land and does not block phase progression.
 
 ## 6 · Output Shape (4-Block Standard)
 
@@ -286,3 +354,4 @@ Merges are permitted only when **all** are true:
 * **Output:** 4 blocks
 * **Failure:** LOUD FAIL v6.2
 * **Chain:** 039→041→046→050→051→052→**053**
+* **Local Gates Primary:** Ruff + smokes + reality.green must pass before push/PR; CI is mirror only, never blocking

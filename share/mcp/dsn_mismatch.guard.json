@@ -1,8 +1,0 @@
-{
-  "ok": true,
-  "errors": [],
-  "generated_at": "2025-11-12T09:08:41Z",
-  "env_dsn": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
-  "make_dsn": "postgresql://<REDACTED>@/gematria?host=/var/run/postgresql",
-  "mismatch": false
-}

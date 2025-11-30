@@ -1,8 +1,0 @@
-{
-  "strict": true,
-  "driver": "postgres",
-  "checkpointer": "postgres",
-  "method": "pg-checkpointer-handshake",
-  "ok": true,
-  "generated_at": "2025-11-20T22:56:13Z"
-}

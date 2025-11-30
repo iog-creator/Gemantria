@@ -182,11 +182,70 @@ share.sync:
 		fi; \
 	}
 
-.PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke
+.PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke pm.share.artifacts plan.next plan.history pm.share.planning_context
 
 pm.snapshot:
 	@echo "[pm.snapshot] generating PM Snapshot via DSN-aware script"
 	@PYTHONPATH=. python3 scripts/pm_snapshot.py | tee evidence/pm_snapshot/run.txt || echo "⚠️  pm.snapshot had issues (non-fatal)"
+
+pm.share.artifacts:
+	@echo "[pm.share.artifacts] generating PM share package artifacts"
+	@mkdir -p share
+	@echo ">> Exporting DMS tables (full dumps)"
+	@PYTHONPATH=. python3 scripts/db/export_dms_tables.py || echo "⚠️  DMS table exports had issues (non-fatal)"
+	@echo ">> Exporting governance freshness (summary)"
+	@PYTHONPATH=. python3 scripts/db/export_governance_freshness.py || echo "⚠️  Governance freshness export had issues (non-fatal)"
+	@echo ">> Exporting planning lane status"
+	@PYTHONPATH=. python3 scripts/db/export_planning_lane_status.py || echo "⚠️  Planning lane status export had issues (non-fatal)"
+	@echo ">> Exporting schema snapshot"
+	@PYTHONPATH=. python3 scripts/db/control_schema_snapshot.py || echo "⚠️  Schema snapshot had issues (non-fatal)"
+	@echo ">> Exporting PM contract/state (head extracts)"
+	@PYTHONPATH=. python3 scripts/util/export_head_json.py AGENTS.md --output share/agents_md.head.json || echo "⚠️  AGENTS.md head export had issues (non-fatal)"
+	@PYTHONPATH=. python3 scripts/util/export_head_json.py docs/SSOT/PM_CONTRACT.md --output share/pm_contract.head.json || echo "⚠️  PM_CONTRACT.md head export had issues (non-fatal)"
+	@PYTHONPATH=. python3 scripts/util/export_head_json.py NEXT_STEPS.md --output share/next_steps.head.json || echo "⚠️  NEXT_STEPS.md head export had issues (non-fatal)"
+	@echo ">> Exporting PM snapshot (JSON)"
+	@PYTHONPATH=. python3 scripts/util/export_pm_snapshot_json.py || echo "⚠️  PM snapshot JSON export had issues (non-fatal)"
+	@echo ">> Exporting live system posture"
+	@PYTHONPATH=. python3 scripts/status/export_live_posture.py || echo "⚠️  Live posture export had issues (non-fatal)"
+	@echo ">> Exporting planning context (full, not head)"
+	@mkdir -p share
+	@pmagent plan next --json-only > share/planning_context.json 2>/dev/null || echo "⚠️  Planning context export had issues (non-fatal)"
+	@echo ">> Seeding KB registry (if not already seeded)"
+	@PYTHONPATH=. python3 scripts/kb/seed_registry.py || echo "⚠️  KB registry seeding had issues (non-fatal)"
+	@echo ">> Exporting KB registry (for DMS integration)"
+	@mkdir -p share
+	@if pmagent kb registry list --json-only > share/kb_registry.json 2>/dev/null; then \
+		if [ -s share/kb_registry.json ]; then \
+			echo "✅ KB registry exported"; \
+		else \
+			echo "⚠️  KB registry is empty (not seeded yet)"; \
+			echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+		fi; \
+	else \
+		echo "⚠️  KB registry export had issues (non-fatal)"; \
+		echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+	fi
+	@echo ">> Generating PM system introspection evidence pack"
+	@PYTHONPATH=. python3 scripts/util/export_pm_introspection_evidence.py || echo "⚠️  PM introspection evidence pack had issues (non-fatal)"
+	@echo ">> Converting JSON files to Markdown (root of share/ only)"
+	@for json_file in share/*.json; do \
+		if [ -f "$$json_file" ]; then \
+			PYTHONPATH=. python3 scripts/util/json_to_markdown.py "$$json_file" && rm -f "$$json_file" || echo "⚠️  Failed to convert $$json_file (non-fatal)"; \
+		fi; \
+	done
+	@echo "✅ All JSON files converted to Markdown and removed"
+	@echo "✅ PM share artifacts generation complete"
+
+plan.next:
+	@pmagent plan next --with-status
+
+plan.history:
+	@pmagent plan history --limit 10
+
+pm.share.planning_context:
+	@mkdir -p share
+	@pmagent plan next --json-only > share/planning_context.json
+	@echo "✅ Planning context exported to share/planning_context.json"
 
 snapshot.db.health.smoke:
 	@echo "[snapshot.db.health.smoke] Verifying DB health integration in pm.snapshot"
@@ -550,8 +609,8 @@ housekeeping.db.gate:
 	@PYTHONPATH=. $(PYTHON) -c "from scripts.guards.guard_db_health import check_db_health; import sys; h = check_db_health(); ok = h.get('ok', False) and h.get('mode') == 'ready'; sys.exit(0 if ok else 1)" || (echo "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - housekeeping cannot proceed."; echo "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured."; exit 1)
 	@echo "✅ DB connectivity verified"
 
-housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update
-	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot)"
+housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
+	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot + pm.share.artifacts)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
 	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"

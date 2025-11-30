@@ -25,6 +25,14 @@ from scripts.guards.guard_lm_health import check_lm_health
 from scripts.control.control_summary import compute_control_summary
 from agentpm.lm.lm_status import compute_lm_status
 
+# Import hint registry (graceful degradation if unavailable)
+try:
+    from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
+
+    HAS_HINT_REGISTRY = True
+except ImportError:
+    HAS_HINT_REGISTRY = False
+
 
 # Hermetic JSON loader pattern from existing code
 def load_json_file(path: Path) -> dict[str, Any] | None:
@@ -281,6 +289,29 @@ def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str
         "kb_hints": kb_hints,  # Structured KB hints (KB-Reg:M4)
         "overall_ok": not hard_fail,
     }
+
+    # Load hints from DMS and embed into verdict (graceful degradation if unavailable)
+    if HAS_HINT_REGISTRY:
+        try:
+            dms_hints = load_hints_for_flow(
+                scope="status_api",
+                applies_to={"flow": "reality_check"},
+                mode=mode,  # Use same mode as reality_check
+            )
+            # Merge DMS hints with runtime hints (DMS REQUIRED hints take precedence)
+            # Runtime hints are kept for backward compatibility
+            verdict = embed_hints_in_envelope(verdict, dms_hints)
+            # Also add DMS hint text to runtime hints list for backward compatibility
+            for req_hint in dms_hints.get("required", []):
+                payload = req_hint.get("payload", {})
+                text_content = payload.get("text", "")
+                if text_content:
+                    hint_text = f"DMS-REQUIRED: {text_content}"
+                    if hint_text not in verdict["hints"]:
+                        verdict["hints"].insert(0, hint_text)  # Prepend to maintain priority
+        except Exception:
+            # If DMS unavailable, continue with runtime hints only
+            pass
 
     return verdict
 

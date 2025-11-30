@@ -47,7 +47,7 @@ This document maps **BibleScholarProjectClean** (Flask/Jinja + API + database la
 - `schemas/biblescholar/bible_db_verses_structure.sql` (120 lines)
   - Focused schema for `bible.verses` table
   - Includes indexes and constraints specific to verses
-  - Vector embedding index (HNSW) for `embedding vector(768)`
+  - Vector embedding index (IVFFlat) for `bible.verse_embeddings.embedding vector(1024)` (768-D column removed in Phase 3)
 
 - `schemas/biblescholar/bible_db_versification_structure.sql` (94 lines)
   - Versification mapping table structure
@@ -56,7 +56,7 @@ This document maps **BibleScholarProjectClean** (Flask/Jinja + API + database la
 - `schemas/biblescholar/SCHEMA_INDEX.md`
   - Comprehensive schema documentation
   - Table descriptions, field details, foreign key relationships
-  - Vector embedding details (768 vs 1024 dimensions)
+  - Vector embedding details (1024 dimensions only - 768-D column removed in Phase 3)
   - Integration notes for Gemantria.v2
 
 - `share/schemas/SCHEMA_REGISTRY.md`
@@ -123,7 +123,7 @@ This section provides a bridge from "what exists" (Current State) to "how we'll 
 
 **Primary Tables:**
 - `bible.books` — Bible book metadata (book_id, name, testament, chapters)
-- `bible.verses` — Verse text storage (verse_id, book_name, chapter_num, verse_num, text, translation_source, embedding vector(768))
+- `bible.verses` — Verse text storage (verse_id, book_name, chapter_num, verse_num, text, translation_source) - Note: embeddings stored in verse_embeddings table
 - `bible.book_abbreviations` — Book name abbreviations for reference parsing
 
 **Word-Level Tables:**
@@ -137,7 +137,7 @@ This section provides a bridge from "what exists" (Current State) to "how we'll 
 - `bible.greek_morphology_codes` — Greek morphology definitions
 
 **Vector Embeddings:**
-- `bible.verses.embedding` — `vector(768)` stored directly in verses table (HNSW index)
+- `bible.verse_embeddings.embedding` — `vector(1024)` stored in separate table (IVFFlat index) - canonical source for vector similarity
 - `bible.verse_embeddings` — Separate embeddings table with `vector(1024)` (IVFFlat index)
 - `public.langchain_pg_embedding` — LangChain embeddings `vector(1024)`
 
@@ -161,7 +161,7 @@ bible.books (book_id)
 
 - **Unique constraint on verses**: `(book_name, chapter_num, verse_num, translation_source)`
 - **Unique constraint on Hebrew entries**: `strongs_id`
-- **Vector indexes**: HNSW for `verses.embedding` (768-dim), IVFFlat for `verse_embeddings.embedding` (1024-dim)
+- **Vector indexes**: IVFFlat for `verse_embeddings.embedding` (1024-dim) - canonical source (768-dim column removed in Phase 3)
 - **Word indexes**: Indexed on `verse_id` and `strongs_id` for fast lookups
 
 ### BibleScholar Rule (Schema-Enforced)
@@ -177,7 +177,7 @@ This rule is reflected in the schema design:
 
 ### Vector Dimension Considerations
 
-- **Two embedding dimensions**: 768 (verses.embedding) and 1024 (verse_embeddings, langchain)
+- **Embedding dimension**: 1024 (verse_embeddings.embedding, langchain) - canonical source (768-dim column removed in Phase 3)
 - **Different index types**: HNSW for 768-dim, IVFFlat for 1024-dim
 - **Integration challenge**: Gemantria.v2 uses 1024-dim embeddings; may need dimension alignment or adapter layer
 
@@ -190,7 +190,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 ### 4.1 Core Bible DB + Reference Parsing
 
 **Schema Tables:**
-- `bible.verses` — Primary verse storage (verse_id, book_name, chapter_num, verse_num, text, translation_source, embedding vector(768))
+- `bible.verses` — Primary verse storage (verse_id, book_name, chapter_num, verse_num, text, translation_source) - embeddings in verse_embeddings table
 - `bible.books` — Book metadata (book_id, name, testament, chapters)
 - `bible.book_abbreviations` — Book name abbreviations (book_name, abbreviation, source)
 
@@ -209,7 +209,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 ### 4.2 Search (Keyword + Vector)
 
 **Schema Tables:**
-- `bible.verses` — Keyword search on `text` column, vector search on `embedding vector(768)` (HNSW index)
+- `bible.verses` — Keyword search on `text` column; vector search uses `bible.verse_embeddings.embedding vector(1024)` (IVFFlat index)
 - `bible.verse_embeddings` — Separate embeddings table with `embedding vector(1024)` (IVFFlat index) for semantic search
 
 **BibleScholar modules:**
@@ -219,7 +219,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 
 **Features:**
 - Keyword search across verses → full-text search on `bible.verses.text`
-- Vector/semantic search using pgvector embeddings → similarity search on `bible.verses.embedding` (768-dim) or `bible.verse_embeddings.embedding` (1024-dim)
+- Vector/semantic search using pgvector embeddings → similarity search on `bible.verse_embeddings.embedding` (1024-dim) - canonical source
 - Multi-translation search → filters by `translation_source` column
 - Search result ranking and filtering
 
@@ -304,7 +304,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 | **Lexicon lookup (Hebrew)** | `src/api/lexicon_api.py` | Future `agentpm/biblescholar/lexicon_adapter.py` | `bible.hebrew_entries`, `bible.hebrew_ot_words`, `bible.hebrew_morphology_codes` | Bible DB RO | Phase-7C |
 | **Lexicon lookup (Greek)** | `src/api/lexicon_api.py` | Future `agentpm/biblescholar/lexicon_adapter.py` | `bible.greek_entries`, `bible.greek_nt_words`, `bible.greek_morphology_codes` | Bible DB RO | Phase-7C |
 | **Keyword search** | `src/api/search_api.py` | Future `agentpm/biblescholar/search_flow.py` | `bible.verses` (text column, translation_source filter) | Bible DB RO | Phase-7D |
-| **Vector search** | `src/api/vector_search_api.py` | Control-plane Knowledge Slice + future BibleScholar search flow | `bible.verses.embedding` (vector(768)), `bible.verse_embeddings.embedding` (vector(1024)) | DB + embeddings | Phase-7E |
+| **Vector search** | `src/api/vector_search_api.py` | Control-plane Knowledge Slice + future BibleScholar search flow | `bible.verse_embeddings.embedding` (vector(1024)) - canonical source | DB + embeddings | Phase-7E |
 | **Contextual insights** | `src/api/contextual_insights_api.py` | Future `agentpm/biblescholar/insights_flow.py` | `bible.verse_word_links`, `bible.proper_names`, `bible.versification_mappings` | DB + LM (DB-grounded) | Phase-8A |
 | **Cross-language search** | `src/api/cross_language_api.py` | Future `agentpm/biblescholar/cross_language_flow.py` | `bible.hebrew_ot_words`, `bible.greek_nt_words`, `bible.verse_word_links` | DB + embeddings | Phase-8B |
 | **LM status indicator** | `src/utils/lm_indicator_adapter.py` | `agentpm/lm_widgets/adapter.py` (Phase-5) | (Control-plane exports, not bible_db) | Control-plane exports | **DONE (Phase-5)** |
@@ -321,7 +321,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 | **Lexicon entries** | `bible_db.bible.hebrew_entries.strongs_id`, `bible_db.bible.greek_entries.strongs_id` (lemma, transliteration, definition, usage, gloss) | Future `bible_db` adapter (RO) | **DB-ONLY** | Strong's number lookups, unique constraint on strongs_id |
 | **Morphology codes** | `bible_db.bible.hebrew_morphology_codes`, `bible_db.bible.greek_morphology_codes` (code, description, part_of_speech, morphology_type) | Future `bible_db` adapter (RO) | **DB-ONLY** | Grammar explanations for morphology codes |
 | **Gematria values** | (Computed, not stored) | `agentpm.modules.gematria.core` | **Pure function (no DB)** | Deterministic calculation from Hebrew text |
-| **Vector embeddings** | `bible_db.bible.verses.embedding` (vector(768)), `bible_db.bible.verse_embeddings.embedding` (vector(1024)) | Control-plane Knowledge Slice or direct `bible_db` RO | **DB + embeddings** | Semantic search, dimension mismatch (768 vs 1024) |
+| **Vector embeddings** | `bible_db.bible.verse_embeddings.embedding` (vector(1024)) - canonical source | Control-plane Knowledge Slice or direct `bible_db` RO | **DB + embeddings** | Semantic search (768-D column removed in Phase 3) |
 | **Cross-references** | `bible_db.bible.versification_mappings` (source_tradition, source_book, source_chapter, source_verse, target_*) | Future `bible_db` adapter (RO) | **DB-ONLY** | Cross-tradition verse mappings |
 | **Proper names** | `bible_db.bible.proper_names` (unified_name, description, relationships) | Future `bible_db` adapter (RO) | **DB-ONLY** | Proper name entries with contextual relationships |
 | **LM explanations** | LM Studio via BibleScholar (DB-grounded) | Control-plane tracked LM calls | **LM-backed, DB-grounded** | DB data from `bible` schema → LM formatting only, never invents content |
@@ -504,7 +504,7 @@ All BibleScholar adapters in AgentPM are **read-only**:
 
 **Considerations:**
 - BibleScholar has its own `verse_embeddings` table in `bible_db` with `vector(1024)`
-- BibleScholar also has `verses.embedding` with `vector(768)` (HNSW index)
+- BibleScholar uses `verse_embeddings.embedding` with `vector(1024)` (IVFFlat index) - canonical source (768-D column removed in Phase 3)
 - Control-plane Knowledge Slice may have different embeddings (likely 1024-dim)
 - **Schema shows dimension mismatch**: 768 vs 1024 dimensions
 - May need adapter to bridge between systems or dimension conversion
@@ -513,7 +513,7 @@ All BibleScholar adapters in AgentPM are **read-only**:
 **Risk:** Duplicate embedding storage and inconsistent search results due to dimension mismatch.
 
 **Mitigation:** 
-- Evaluate embedding models and dimensions (768 vs 1024)
+- Embedding dimension standardized to 1024 (bible.verse_embeddings.embedding) - Phase 3 complete
 - Consider unified approach or dimension adapter
 - Document which embedding table to use for which use case
 - May need to standardize on one dimension or provide conversion layer

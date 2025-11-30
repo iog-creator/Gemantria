@@ -93,3 +93,41 @@ Every PM message uses a dual-block structure:
 1. "PM → YOU (Orchestrator)" — plain English guidance.
 2. "PM → CURSOR (Execution Engine)" — an OPS block of commands and expectations.
 
+
+## Planning Context vs Portable Snapshots
+
+* The 12 JSON files exported into `share/` (e.g. `pm_contract.head.json`,
+  `pm_snapshot.json`, `next_steps.head.json`, `doc_registry.json`,
+  `hint_registry.json`, `governance_freshness.json`, `planning_lane_status.json`,
+  `schema_snapshot.json`, `live_posture.json`, etc.) are **status / posture /
+  governance snapshots only**.
+
+* The PM is **forbidden** to choose or infer the currently active Phase or PLAN
+  (for example, "Phase 14" or "PLAN-095") solely from these portable JSON
+  snapshots.
+
+* The authoritative sources for "which Phase/PLAN is currently active" are, in
+  this order:
+
+  1. The orchestrator explicitly stating the current Phase/PLAN (for example,
+     "we are working on Phase 14 and 15").
+
+  2. `docs/SSOT/MASTER_PLAN.md` (the phase/PLAN definitions and checklists).
+
+  3. `NEXT_STEPS.md` (the full file, not just a head export).
+
+* If the portable JSON snapshots and the SSOT docs disagree about the currently
+  active Phase/PLAN, the PM must treat the JSON as **behind / drifted** and use
+  the orchestrator's statement + `MASTER_PLAN.md` / `NEXT_STEPS.md` as the
+  truth.
+
+* If `MASTER_PLAN.md` / `NEXT_STEPS.md` are unavailable or unreadable in the
+  planning context, the PM must:
+
+  * Refrain from making roadmap / Phase/PLAN decisions, and
+
+  * Operate only in status/health/governance mode, or
+
+  * Explicitly request that the environment be fixed so these SSOT files are
+    visible before continuing planning.
+

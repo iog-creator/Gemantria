@@ -17,21 +17,25 @@ Cursor must stop exploratory / unfocused tool flurries and instead **emit the ex
 
 ## Required Evidence Set
 
+**CRITICAL:** Local gates (steps 4) are **primary**; CI status (step 5) is **informational only**. Never block on CI.
+
 Cursor **must** paste, in this order:
 
 1. `git rev-parse --show-toplevel`
 2. `git rev-parse --abbrev-ref HEAD`
 3. `git status -sb`
-4. One hermetic block (all 3, even if they no-op):
+4. **Local gates (PRIMARY - must pass before push/PR):**
    - `ruff format --check . && ruff check .`
    - `make book.smoke`
    - `make ci.exports.smoke`
-5. For the active PR **N**:
+   - `make reality.green STRICT`
+5. For the active PR **N** (if exists; **informational only**, not blocking):
    - `gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks`
    - `gh pr checks <N> --required --json name,state`
 6. If `gh pr checks ...` shows **all required = SUCCESS**, Cursor must **explicitly state**:
    > "Non-required automated review present → advisory only per 041 + 050. Standard merge allowed."
-7. **Browser verification (MANDATORY for UI/visual work)**: 
+7. **Never state:** "Waiting for CI" or "Blocked on CI". If local gates pass, proceed with work.
+8. **Browser verification (MANDATORY for UI/visual work)**: 
    - **If the work involves ANY web pages, HTML, UI components, React components, dashboards, charts, visualizations, or documentation sites, Cursor MUST use browser tools to visually verify BEFORE completing the task.**
    - **Do NOT wait for user reminders. Do this proactively as part of the workflow.**
    - Use `browser_snapshot` to capture accessibility snapshots of rendered pages

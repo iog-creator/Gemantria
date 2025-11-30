@@ -1,4 +1,8 @@
 {
+  "_deprecated": true,
+  "_deprecation_date": "2025-11-30",
+  "_deprecation_reason": "share/ directory is now auto-generated via make pm.share.artifacts. DMS is SSOT. This manifest no longer reflects the current share/ structure (35 Markdown files, not 39 JSON/other files).",
+  "_note": "Kept for historical reference only. Do not use for validation or synchronization.",
   "items": [
     {
       "src": ".github/pull_request_template.md",
