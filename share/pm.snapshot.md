@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-29T18:43:19-08:00_
+_Generated: 2025-11-29T19:15:54-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -16,14 +16,24 @@ _Generated: 2025-11-29T18:43:19-08:00_
 
 ### DB Health Guard
 
-- Status: `✗ error`
-- Mode: `error`
+- Status: `✓ Ready`
+- Mode: `ready`
+- Driver available: `✓`
+- Connection OK: `✓`
+- Graph stats ready: `✓`
 
 ```json
 {
-  "ok": false,
-  "mode": "error",
-  "error": "guard_db_health failed: No module named 'sqlalchemy'"
+  "ok": true,
+  "mode": "ready",
+  "checks": {
+    "driver_available": true,
+    "connection_ok": true,
+    "graph_stats_ready": true
+  },
+  "details": {
+    "errors": []
+  }
 }
 ```
 
@@ -49,55 +59,59 @@ _Generated: 2025-11-29T18:43:19-08:00_
 
 - Status: `✗ Error`
 - File count: `0`
-- Error: Failed to read manifest: No module named 'sqlalchemy'
+- Error: Manifest file not found: /home/mccoy/Projects/docs/SSOT/SHARE_MANIFEST.json
 
 ## System Health (DB + LM + Graph)
 
-- LM Status: `✗ error`
-- LM Mode: `error`
-- Graph Status: `✗ error`
-- Graph Mode: `error`
+- LM Status: `✓ Ready`
+- LM Mode: `lm_ready`
+- Graph Status: `✓ Ready`
+- Graph Mode: `db_on`
 
 ## Status Explanation
 
-- Level: `ERROR`
-- Headline: Status explanation unavailable
-- Details: Failed to generate explanation: No module named 'sqlalchemy'...
+- Level: `OK`
+- Headline: All systems nominal
+- Details: Database is ready and all checks passed. All 4 LM slot(s) are operational....
 
 ## Reality Check
 
-- Overall: `✗ FAILED`
+- Overall: `✓ OK`
 - Mode: `HINT`
+- Hints: 2 hint(s)
+  - DMS-REQUIRED: reality.green STRICT must pass all required checks before declaring system ready.
+  - KB: KB registry file not found (registry may not be seeded yet)
 
 ## AI Tracking Summary
 
-- Status: `✗ db_off`
-- Mode: `db_off`
-- Note: AI tracking failed: No module named 'sqlalchemy'
+- Status: `✓ Active`
+- Mode: `db_on`
+- Runtime LM calls (agent_run): 2159 total, 0 last 24h
+- CLI commands (agent_run_cli): 35 total, 14 last 24h, 3 success, 0 errors
 
 ## Eval Insights Summary (Advisory Analytics)
 
 _Note: Eval insights are export-driven analytics (Phase-8/10) and are advisory only. They do not affect system health gates._
 
 - LM Indicator: `✗ Unavailable`
-  - Note: LM indicator export not found
+  - Note: LM indicator export not available (file missing)
 - DB Health Snapshot: `✗ Unavailable`
-  - Note: DB health export not found
+  - Note: DB health snapshot not available (file missing; run `make pm.snapshot`)
 - Edge Class Counts: `✗ Unavailable`
-  - Note: Edge class counts export not found
+  - Note: Edge class counts export not available (file missing)
 
 ## KB Registry Summary (Advisory)
 
 _Note: KB registry is advisory-only and read-only in CI. It does not affect system health gates._
 
 - Status: `✗ Unavailable`
-- Note: KB registry unavailable: No module named 'sqlalchemy'
+- Note: KB registry file not found
 
 ## KB Hints (Advisory)
 
 _Note: KB hints are advisory-only and do not affect system health gates._
 
-- ✓ No KB registry issues detected
+- INFO **[INFO] KB_REGISTRY_UNAVAILABLE**: KB registry file not found (registry may not be seeded yet)
 
 ## Documentation Health (Advisory)
 

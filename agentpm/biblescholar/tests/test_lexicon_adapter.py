@@ -14,10 +14,10 @@ class TestLexiconAdapter:
     """Test LexiconAdapter read-only operations."""
 
     def test_adapter_initialization(self):
-        """Test adapter initializes with db_off status."""
+        """Test adapter initializes with unknown status."""
         adapter = LexiconAdapter()
         assert adapter._engine is None
-        assert adapter._db_status == "db_off"
+        assert adapter._db_status == "unknown"
 
     @patch("agentpm.biblescholar.lexicon_adapter.get_bible_engine")
     def test_get_hebrew_entry_success(self, mock_get_engine):

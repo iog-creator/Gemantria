@@ -1,0 +1,17 @@
+{
+    "schema": "gemantria/greek-hebrew-map.v1",
+    "description": "Cross-language Strong's number mappings (Greek to Hebrew)",
+    "source": "Hand-curated from lexical equivalents",
+    "mappings": {
+        "G2316": "H430",
+        "G2424": "H3091",
+        "G26": "H157",
+        "G3056": "H1697",
+        "G444": "H120",
+        "G932": "H4438",
+        "G2962": "H3068",
+        "G3772": "H8064",
+        "G1093": "H776",
+        "G5547": "H4899"
+    }
+}

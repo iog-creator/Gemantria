@@ -1,0 +1,188 @@
+{
+  "batch_id": "20251130-031057",
+  "items": [
+    {
+      "path": "docs/SSOT/auto_schema_output.md",
+      "doc_type": "ssot",
+      "status": "unreviewed",
+      "title": "Auto-Generated Schema Documentation",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T10:38:34.067368-08:00"
+    },
+    {
+      "path": ".cursor/rules/070-gotchas-check.mdc",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "070 \u2014 Gotchas Check (AlwaysApply)",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T10:34:53.708078-08:00"
+    },
+    {
+      "path": "docs/session_summaries/2025-11-27-ledger-llm-phase4-recert.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Chat Summary & PM Handoff",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T10:20:59.718638-08:00"
+    },
+    {
+      "path": "agentpm/scripts/state/AGENTS.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "AGENTS.md - State Management Scripts",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T10:13:10.934506-08:00"
+    },
+    {
+      "path": "agentpm/biblescholar/tests/AGENTS.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "AGENTS.md - BibleScholar Tests",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T09:57:36.532241-08:00"
+    },
+    {
+      "path": "docs/SSOT/HANDOFF_GENERATION_DESIGN.md",
+      "doc_type": "ssot",
+      "status": "unreviewed",
+      "title": "On-Demand Handoff Generation System Design",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T08:31:40.847835-08:00"
+    },
+    {
+      "path": "docs/handoff/2025-11-27-chat-summary-pm-handoff.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Chat Summary & PM Handoff \u2014 2025-11-27",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-27T07:53:30.071275-08:00"
+    },
+    {
+      "path": "docs/POST_ENHANCEMENT_AUDIT_WALKTHROUGH.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Post-Enhancement Governance Audit Walkthrough",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T09:22:18.288590-08:00"
+    },
+    {
+      "path": "docs/runbooks/TERMINAL_VENV_AUTO_ACTIVATION.md",
+      "doc_type": "runbook",
+      "status": "unreviewed",
+      "title": "Terminal Venv Auto-Activation",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T09:14:36.741184-08:00"
+    },
+    {
+      "path": "docs/ARCHITECTURAL_ENHANCEMENTS_WALKTHROUGH.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Architectural Enhancements Walkthrough (Pre-Phase 13)",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T09:00:15.709820-08:00"
+    },
+    {
+      "path": "docs/DMS_STABILIZATION_WALKTHROUGH.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "DMS Edge Case Testing & Stabilization Walkthrough",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T08:42:13.756904-08:00"
+    },
+    {
+      "path": "agentpm/dms/AGENTS.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "AGENTS.md - agentpm/dms Directory",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T08:16:23.448491-08:00"
+    },
+    {
+      "path": "docs/DMS_BUGS_FOUND_2025-11-26.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "DMS Edge Case Testing - Bugs Found Report",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T07:56:47.350913-08:00"
+    },
+    {
+      "path": "docs/runbooks/DMS_UI_VERIFICATION.md",
+      "doc_type": "runbook",
+      "status": "unreviewed",
+      "title": "DMS UI Verification Runbook",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-26T07:51:49.447354-08:00"
+    },
+    {
+      "path": "docs/plans/PHASE_12_PATTERN_MINING.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Phase 12 Pattern Mining",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T19:33:43.767559-08:00"
+    },
+    {
+      "path": "docs/subsystems/AGENTS.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "AGENTS.md - docs/subsystems Directory",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T18:20:53.469041-08:00"
+    },
+    {
+      "path": "docs/subsystems/webui.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Webui Subsystem Documentation",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T18:19:50.620169-08:00"
+    },
+    {
+      "path": "docs/subsystems/agentpm.md",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Agentpm Subsystem Documentation",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T18:19:50.620119-08:00"
+    },
+    {
+      "path": "reality_output_2.txt",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Reality Output 2",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T10:56:45.534849-08:00"
+    },
+    {
+      "path": "reality_output.txt",
+      "doc_type": "reference",
+      "status": "unreviewed",
+      "title": "Reality Output",
+      "snippet": "",
+      "guess": "unknown",
+      "last_modified": "2025-11-25T10:53:22.106677-08:00"
+    }
+  ],
+  "batch_size": 20,
+  "remaining_estimate": 5,
+  "generated_at": "2025-11-30T03:10:57.732472+00:00"
+}

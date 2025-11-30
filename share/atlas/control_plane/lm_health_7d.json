@@ -1,0 +1,68 @@
+{
+  "avg_latency_ms": 419.1209302325581,
+  "connection_ok": true,
+  "error": null,
+  "error_rate": 0.6744186046511628,
+  "error_types": {
+    "lm_studio_error": 1450
+  },
+  "generated_at": "2025-11-30T03:10:33.029133+00:00",
+  "health_score": 0.32558139534883723,
+  "ok": true,
+  "recent_errors": [
+    {
+      "created_at": "2025-11-26T16:50:07.647156-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa1480>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.639238-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa1260>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.630557-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa1040>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.622297-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa0e20>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.613685-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa0c00>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.605541-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa09e0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.597956-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa07c0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.590658-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa05a0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.582454-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa0380>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    },
+    {
+      "created_at": "2025-11-26T16:50:07.573601-08:00",
+      "reason": "connection_error: HTTPConnectionPool(host='127.0.0.1', port=9994): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7b1f9aaa0160>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+      "type": "lm_studio_error"
+    }
+  ],
+  "schema": "control",
+  "since": "2025-11-23T03:10:33.016878+00:00",
+  "success_rate": 0.32558139534883723,
+  "window_days": 7
+}
