@@ -686,3 +686,24 @@ The Gemantria project represents a comprehensive approach to biblical text analy
 | 070 | # --- |
 | 071 | # Rule 071 — Portable JSON is not Plan SSOT |
 <!-- RULES_TABLE_END -->
+
+
+
+---
+
+## Phase 14 — BibleScholar Relationship Tables & Cross-Language Enhancement
+
+Status: **LANDED** (merged via PR #592 on `main`).
+
+See: `docs/SSOT/PHASE_14_SEMANTIC_RECORD.md` for the full semantic record:
+
+* Phase objectives and tracks
+* Artifacts (modules, scripts, tests, config)
+* Technical deltas by subsystem
+* Expected post-Phase-14 system state
+* Phase-14 → Phase-15 handoff intent
+
+Notes:
+
+* This phase re-lands previous Phase-14 work in a governance-aligned way.
+* Supersedes the old conflicted PR #586.

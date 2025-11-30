@@ -1,12 +1,12 @@
 # schema_snapshot
 
-**Generated**: 2025-11-30T02:21:28.515354+00:00
+**Generated**: 2025-11-30T03:25:26.210679+00:00
 **Source**: `schema_snapshot.json`
 
 ---
 
 - **schema**: `control`
-- **generated_at**: `2025-11-30T02:21:17.322492+00:00`
+- **generated_at**: `2025-11-30T03:25:15.024753+00:00`
 - **tables**:
   1. Item:
     - **name**: `agent_run`

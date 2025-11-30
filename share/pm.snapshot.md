@@ -1,6 +1,6 @@
 # PM Snapshot — GemantriaV.2
 
-_Generated: 2025-11-29T19:15:54-08:00_
+_Generated: 2025-11-29T19:25:27-08:00_
 
 ## Posture (DSNs + STRICT flags)
 
@@ -87,7 +87,7 @@ _Generated: 2025-11-29T19:15:54-08:00_
 - Status: `✓ Active`
 - Mode: `db_on`
 - Runtime LM calls (agent_run): 2159 total, 0 last 24h
-- CLI commands (agent_run_cli): 35 total, 14 last 24h, 3 success, 0 errors
+- CLI commands (agent_run_cli): 39 total, 18 last 24h, 3 success, 0 errors
 
 ## Eval Insights Summary (Advisory Analytics)
 

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ContextualChunk",
+  "type": "object",
+  "properties": {
+    "verse_id": { "type": "integer" },
+    "text": { "type": "string" },
+    "lemmas": { "type": "array", "items": { "type": "string" } },
+    "morph_tokens": { "type": "array", "items": { "type": "string" } },
+    "proper_names": { "type": "array", "items": { "type": "string" } },
+    "xlang_lemmas": { "type": "array", "items": { "type": "string" } },
+    "entities": {
+      "type": "object",
+      "properties": {
+        "person": { "type": "array", "items": { "type": "string" } },
+        "place": { "type": "array", "items": { "type": "string" } },
+        "object": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "verse_links": { "type": "array", "items": { "type": "string" } },
+    "gematria": { "type": "object" }
+  },
+  "required": ["verse_id", "text"]
+}

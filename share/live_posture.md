@@ -1,12 +1,12 @@
 # live_posture
 
-**Generated**: 2025-11-30T02:21:28.399125+00:00
+**Generated**: 2025-11-30T03:25:26.097035+00:00
 **Source**: `live_posture.json`
 
 ---
 
 - **schema**: `live_posture.v1`
-- **generated_at**: `2025-11-30T02:21:18.471429+00:00`
+- **generated_at**: `2025-11-30T03:25:16.191031+00:00`
 - **db**:
   - **mode**: `ready`
   - **ok**: `true`

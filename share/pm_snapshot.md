@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-11-30T02:21:28.496470+00:00
+**Generated**: 2025-11-30T03:25:26.187576+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-11-29T18:21:18-08:00`
+- **generated_at**: `2025-11-29T19:25:15-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -78,26 +78,21 @@
   - **headline**: `All systems nominal`
   - **details**: `Database is ready and all checks passed. All 4 LM slot(s) are operational.`
   - **documentation**:
-    - **available**: `true`
+    - **available**: `false`
     - **total**: `0`
     - **by_subsystem**:
     - **by_type**:
     - **hints**:
       1. Item:
         - **level**: `INFO`
-        - **code**: `KB_EMPTY_REGISTRY`
-        - **message**: `KB registry exists but contains no documents (may need seeding)`
+        - **code**: `KB_REGISTRY_UNAVAILABLE`
+        - **message**: `KB registry file not found (registry may not be seeded yet)`
     - **key_docs**:
     - **freshness**:
-      - **total**: `0`
-      - **stale_count**: `0`
-      - **missing_count**: `0`
-      - **out_of_sync_count**: `0`
-      - **fresh_count**: `0`
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-11-30T02:21:18.050434+00:00`
+  - **timestamp**: `2025-11-30T03:25:15.745239+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -111,7 +106,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-11-30T02:21:18.050451+00:00`
+    - **generated_at**: `2025-11-30T03:25:15.745261+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -144,7 +139,7 @@
         - **error**: `null`
         - **tables**:
           - **control.agent_run**: `2159`
-          - **control.agent_run_cli**: `31`
+          - **control.agent_run_cli**: `36`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
           - **control.doc_embedding**: `2963`
@@ -157,7 +152,7 @@
           - **control.kb_document**: `4238`
           - **control.rule_definition**: `69`
           - **control.rule_source**: `138`
-          - **control.system_state_ledger**: `339`
+          - **control.system_state_ledger**: `360`
           - **control.tool_catalog**: `7`
           - **gematria.ai_embeddings**: `1`
           - **gematria.checkpoints**: `4`
@@ -204,8 +199,8 @@
           - **public.document_access_log**: `1`
           - **public.document_sections**: `397`
           - **public.governance_artifacts**: `131`
-          - **public.governance_compliance_log**: `225`
-          - **public.hint_emissions**: `713`
+          - **public.governance_compliance_log**: `226`
+          - **public.hint_emissions**: `719`
           - **public.hypotheses**: `0`
           - **public.integration_log**: `0`
           - **public.isolation_patterns**: `0`
@@ -787,7 +782,16 @@
       - **errors**:
   - **exports**:
     - **ok**: `true`
-    - **lm_indicator**: `null`
+    - **lm_indicator**:
+      - **db_off**: `false`
+      - **error_rate**: `0.6744186046511628`
+      - **generated_at**: `2025-11-30T03:10:33.295305+00:00`
+      - **reason**: `high_error_rate`
+      - **status**: `degraded`
+      - **success_rate**: `0.32558139534883723`
+      - **top_error_reason**: `lm_studio_error`
+      - **total_calls**: `2150`
+      - **window_days**: `7`
     - **compliance_head**: `null`
     - **kb_docs_head**: `null`
     - **mcp_catalog**: `null`
@@ -801,12 +805,12 @@
       2. `eval.graph.calibrate.adv: OK`
   - **hints**:
     1. `DMS-REQUIRED: reality.green STRICT must pass all required checks before declaring system ready.`
-    2. `KB: KB registry exists but contains no documents (may need seeding)`
+    2. `KB: KB registry file not found (registry may not be seeded yet)`
   - **kb_hints**:
     1. Item:
       - **level**: `INFO`
-      - **code**: `KB_EMPTY_REGISTRY`
-      - **message**: `KB registry exists but contains no documents (may need seeding)`
+      - **code**: `KB_REGISTRY_UNAVAILABLE`
+      - **message**: `KB registry file not found (registry may not be seeded yet)`
   - **overall_ok**: `true`
   - **required_hints**:
     1. Item:
@@ -833,9 +837,9 @@
       - **last_24h**: `0`
       - **last_7d**: `2154`
     - **agent_run_cli**:
-      - **total**: `31`
-      - **last_24h**: `10`
-      - **last_7d**: `31`
+      - **total**: `36`
+      - **last_24h**: `15`
+      - **last_7d**: `36`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:
@@ -853,7 +857,7 @@
     - **note**: `Edge class counts export not available (file missing)`
     - **available**: `false`
 - **kb_registry**:
-  - **available**: `true`
+  - **available**: `false`
   - **total**: `0`
   - **valid**: `true`
   - **errors_count**: `0`
@@ -861,10 +865,10 @@
 - **kb_hints**:
   1. Item:
     - **level**: `INFO`
-    - **code**: `KB_EMPTY_REGISTRY`
-    - **message**: `KB registry exists but contains no documents (may need seeding)`
+    - **code**: `KB_REGISTRY_UNAVAILABLE`
+    - **message**: `KB registry file not found (registry may not be seeded yet)`
 - **kb_doc_health**:
-  - **available**: `true`
+  - **available**: `false`
   - **metrics**:
     - **kb_fresh_ratio**:
       - **overall**: `null`
@@ -873,13 +877,13 @@
       - **overall**: `0`
       - **by_subsystem**:
     - **kb_stale_count_by_subsystem**:
-    - **kb_fixes_applied_last_7d**: `2`
+    - **kb_fixes_applied_last_7d**: `0`
     - **kb_debt_burned_down**:
       - **overall**: `null`
       - **by_subsystem**:
       - **note**: `insufficient_history`
     - **notes**:
-      1. `Registry is empty; kb_fresh_ratio_overall is unknown`
+      1. `KB registry not found; metrics unavailable`
 - **mcp_catalog**:
   - **available**: `false`
   - **tools_count**: `0`

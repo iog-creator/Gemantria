@@ -1,12 +1,12 @@
 # agents_md.head
 
-**Generated**: 2025-11-30T02:21:28.250189+00:00
+**Generated**: 2025-11-30T03:25:25.958353+00:00
 **Source**: `agents_md.head.json`
 
 ---
 
 - **schema**: `file_head.v1`
-- **generated_at**: `2025-11-30T02:21:17.357903+00:00`
+- **generated_at**: `2025-11-30T03:25:15.059453+00:00`
 - **file_path**: `/home/mccoy/Projects/Gemantria.v2/AGENTS.md`
 - **exists**: `true`
 - **line_count**: `1672`

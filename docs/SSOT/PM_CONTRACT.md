@@ -1,7 +1,7 @@
 # PM Contract — Project Manager Operating Agreement
 
-**Version:** 1.0  
-**Last Updated:** 2025-11-16  
+**Version:** 1.1  
+**Last Updated:** 2025-11-30  
 **Governance:** OPS Contract v6.2.3
 
 ---
@@ -537,6 +537,99 @@ If I discover that an existing rule, prompt, or workflow (including this contrac
   - Drive Cursor Auto to run ruff/guards/housekeeping so the new governance is synced and enforced.
 
 I am not allowed to keep following obviously bad or outdated rules just because they exist; my job as PM is to **notice, escalate, and then fix the governance** with your approval.
+
+### **6.8 Phase Postmortem & Impact Analysis**
+
+When a Phase is **LANDED** (merged to `main` and documented in SSOT), I must produce a **formal Phase Postmortem & Impact Analysis** document. This serves as:
+
+* The **official project-level closure analysis** for the completed phase
+* The **entry requirements document** for the next phase
+* A **traceability record** linking the phase's semantic record to its impact
+
+#### **Required Postmortem Structure**
+
+The postmortem must include:
+
+1. **What Phase X Accomplished**
+   * Prior gaps that existed
+   * Solutions delivered by Phase X
+   * Key capabilities added
+
+2. **Phase X Delivered Artifacts**
+   * New modules/files created
+   * Modified modules/files
+   * Support scripts and diagnostics
+   * Configuration assets
+   * Tests (new and updated)
+   * Documentation (semantic record, SSOT updates)
+
+3. **Technical Deltas Introduced**
+   * New architectural patterns or invariants
+   * Behavioral changes (e.g., `_db_status` semantics)
+   * Normalization rules established
+   * Test style improvements
+   * Governance alignment changes
+
+4. **Risks Removed**
+   * Before Phase X: What problems existed
+   * After Phase X: How those problems are solved
+   * What guarantees are now in place
+
+5. **Dependencies Phase X+1 Must Respect**
+   * Invariants that must not be broken
+   * Contracts that must be preserved
+   * Behavioral guarantees that must be maintained
+   * Mapping semantics that must be respected
+
+6. **Impact on Other Subsystems**
+   * How Phase X affects each major subsystem:
+     * Directly modified subsystems
+     * RAG system impact
+     * Gematria impact
+     * LM stack / AI layer impact
+     * Governance impact
+
+7. **What Phase X Did NOT Do (Carried Forward)**
+   * Explicitly deferred items
+   * Future enhancements not in scope
+   * Items that become Phase X+1 starting points
+
+8. **Official Phase-X → Phase-X+1 Handoff Requirements**
+   * Concrete expectations for the next phase
+   * Required behaviors and constraints
+   * Integration points that must be respected
+
+#### **Postmortem Workflow**
+
+1. **After Phase Lands**: Once a phase is merged to `main` and marked LANDED in `NEXT_STEPS.md` and `MASTER_PLAN.md`, I must:
+   * Reference the phase's semantic record (e.g., `docs/SSOT/PHASE_X_SEMANTIC_RECORD.md`)
+   * Review the rescue/landing PR contents
+   * Incorporate results from the governance & health sweep (Step B)
+   * Produce the complete postmortem document
+
+2. **Postmortem Location**: The postmortem is produced as a **PM-mode document** (not automatically committed). The orchestrator decides whether to:
+   * Commit it to `docs/handoff/PHASE_X_POSTMORTEM.md`
+   * Include it in the phase's semantic record
+   * Keep it as PM context only
+
+3. **Usage for Next Phase**: The postmortem becomes the **foundation** for Phase X+1 planning:
+   * Phase X+1 must respect all dependencies listed in section 5
+   * Phase X+1 must build on capabilities listed in section 1
+   * Phase X+1 must address deferred items from section 7
+   * Phase X+1 must follow handoff requirements from section 8
+
+#### **Example Reference**
+
+See the **Phase 14 Postmortem & Impact Analysis** (produced 2025-11-30) as the canonical example of this structure and depth. The Phase 14 postmortem demonstrates:
+
+* Complete analysis of what Phase 14 accomplished (DB-only lexicon adapter, cross-language flows, relationship tables PoC)
+* Full artifact inventory (7 new modules, 3 updated adapters, diagnostic scripts, tests, semantic record)
+* Technical deltas documented (DB-ONLY guarantees, strict mapping semantics, normalization rules)
+* Risks removed (LLM hallucination risk eliminated, deterministic cross-language connections)
+* Dependencies for Phase 15 (DB-only guarantees, deterministic flows, relationship table contracts)
+* Impact analysis across subsystems (BibleScholar, RAG system, Gematria, LM stack, Governance)
+* Deferred items clearly listed (full relationship table population, large-scale mapping, RAG integration)
+* Handoff requirements for Phase 15 (DB-only context, no LLM factual authority, chunking logic requirements)
 
 ---
 
