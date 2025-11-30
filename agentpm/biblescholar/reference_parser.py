@@ -87,7 +87,7 @@ _BOOK_NAME_MAPPING: dict[str, str] = {
     # New Testament
     "Matthew": "Mat",
     "Matt": "Mat",
-    "Mark": "Mar",
+    "Mark": "Mrk",
     "Luke": "Luk",
     "John": "Joh",
     "Acts": "Act",

@@ -1,0 +1,19 @@
+{
+  "connection_ok": true,
+  "db_off": false,
+  "error": null,
+  "error_rate": 0.6744186046511628,
+  "failed_calls": 1450,
+  "generated_at": "2025-11-30T03:10:33.295305+00:00",
+  "lm_studio_calls": null,
+  "lm_studio_usage_ratio": null,
+  "ok": true,
+  "remote_calls": null,
+  "schema": "control",
+  "since": "2025-11-23T03:10:33.295299+00:00",
+  "success_rate": 0.32558139534883723,
+  "successful_calls": 700,
+  "top_error_reason": "lm_studio_error",
+  "total_calls": 2150,
+  "window_days": 7
+}

@@ -10,9 +10,11 @@ See:
 
 from __future__ import annotations
 
+import json
+import os
 from collections import Counter
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Dict, Literal
 
 from agentpm.biblescholar.bible_passage_flow import parse_reference
 from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
@@ -56,6 +58,78 @@ class CrossLanguageMatch:
     target_lemma: str
     similarity_score: float
     common_verses: list[str]
+
+
+# Path to the Greek-to-Hebrew Strong's mapping file
+MAPPING_FILE = "config/greek_to_hebrew_strongs.json"
+
+
+def resolve_cross_language_lemma(greek_strongs: str) -> Dict[str, Any] | None:
+    """Resolve a Greek Strong's number to its Hebrew equivalent and lemma.
+
+    Phase 14 PR 14.3: Track 3 - Cross-Language Lemma Resolution.
+    Uses a static JSON mapping file to link Greek terms to Hebrew equivalents,
+    then queries the Hebrew lexicon for the lemma.
+
+    Args:
+        greek_strongs: Greek Strong's number (e.g., "G2316").
+
+    Returns:
+        Dictionary with mapping details or None if no mapping exists.
+        Format:
+        {
+            "greek_strongs": "G2316",
+            "hebrew_strongs": "H430",
+            "hebrew_lemma": "אֱלֹהִים",
+            "mapping_source": "static_map"
+        }
+    """
+    if not os.path.exists(MAPPING_FILE):
+        return None
+
+    try:
+        with open(MAPPING_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+            mappings = data.get("mappings", {})
+    except (json.JSONDecodeError, OSError):
+        return None
+
+    hebrew_strongs = mappings.get(greek_strongs)
+    if not hebrew_strongs:
+        return None
+
+    # Fetch Hebrew lemma from DB using LexiconAdapter
+    adapter = LexiconAdapter()
+    # We need to find the entry with this Strong's ID
+    # Since LexiconAdapter is read-only and doesn't have a direct "get_by_strongs" method exposed publicly in the interface shown,
+    # we might need to add one or use a direct query here if the adapter allows.
+    # Looking at LexiconAdapter, it seems to lack a direct "get_entry_by_strongs" method in the snippet.
+    # However, fetch_lexicon_entry in lexicon_flow might be useful, or we can add a helper here.
+
+    # Let's use a direct DB query via the adapter's engine for now to ensure we get the lemma
+    # This keeps it contained within the flow logic using the adapter's connection
+    if not adapter._ensure_engine():
+        return None
+
+    try:
+        from sqlalchemy import text
+
+        query = text("SELECT lemma FROM bible.hebrew_entries WHERE strongs_id = :strongs_id LIMIT 1")
+        with adapter._engine.connect() as conn:
+            result = conn.execute(query, {"strongs_id": hebrew_strongs}).fetchone()
+            hebrew_lemma = result[0] if result else None
+    except Exception:
+        hebrew_lemma = None
+
+    if not hebrew_lemma:
+        return None
+
+    return {
+        "greek_strongs": greek_strongs,
+        "hebrew_strongs": hebrew_strongs,
+        "hebrew_lemma": hebrew_lemma,
+        "mapping_source": "static_map",
+    }
 
 
 def analyze_word_in_context(ref: str, strongs_id: str) -> WordAnalysis | None:
