@@ -140,6 +140,48 @@ def iter_additional_docs() -> Iterable[DocTarget]:
             )
 
 
+def iter_pdf_docs() -> Iterable[DocTarget]:
+    """
+    Discover PDF documentation files in docs/ directory.
+
+    Phase 1: PDF discovery only (no parsing yet).
+    Assigns roles based on filename patterns:
+    - "audit" -> role="audit"
+    - "architecture" or "design" -> role="architecture"
+    - "reference" -> role="reference"
+    - default -> role="documentation"
+    """
+    docs_root = REPO_ROOT / "docs"
+    if not docs_root.is_dir():
+        return
+
+    for path in docs_root.glob("*.pdf"):
+        # Skip if not a file or outside docs root
+        if not path.is_file():
+            continue
+
+        # Determine role based on filename patterns
+        filename_lower = path.name.lower()
+        if "audit" in filename_lower:
+            role = "audit"
+        elif "architecture" in filename_lower or "design" in filename_lower:
+            role = "architecture"
+        elif "reference" in filename_lower or "master" in filename_lower:
+            role = "reference"
+        else:
+            role = "documentation"
+
+        # Create logical name from relative path
+        logical_name = f"PDF::{path.relative_to(REPO_ROOT)}"
+
+        yield DocTarget(
+            logical_name=logical_name,
+            role=role,
+            repo_path=path,
+            is_ssot=True,
+        )
+
+
 def sha256_bytes(data: bytes) -> str:
     """Return hex-encoded SHA-256 hash for the given bytes."""
     h = hashlib.sha256()
@@ -193,6 +235,8 @@ def ingest_docs(dry_run: bool = False) -> int:
     # Phase-8: treat all AGENTS*.md docs as SSOT for the agent framework.
     targets.extend(iter_agents_docs())
     targets.extend(iter_additional_docs())
+    # Layer 3 Phase 1: PDF discovery (no parsing yet)
+    targets.extend(iter_pdf_docs())
 
     existing_targets: List[DocTarget] = []
     for t in targets:

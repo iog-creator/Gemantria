@@ -10,6 +10,7 @@ SSOT: Registry entries live in share/kb_registry.json (read-only in CI per Rule-
 
 from __future__ import annotations
 
+from agentpm.kb.classify import classify_fragment
 from agentpm.kb.registry import (
     KBDocument,
     KBDocumentRegistry,
@@ -23,6 +24,7 @@ __all__ = [
     "KBDocument",
     "KBDocumentRegistry",
     "analyze_freshness",
+    "classify_fragment",
     "load_registry",
     "save_registry",
     "validate_registry",
