@@ -45,6 +45,43 @@ def _sync_from_registry() -> bool:
     Raises SystemExit(1) if registry is unavailable or has no share_path-enabled docs.
 
     This function is fail-closed: it never falls back to manifest-based behavior.
+
+    **Contract (DMS SSOT Enforcement):**
+
+    1. **DMS as Single Source of Truth**
+       - Query `control.doc_registry` for all rows where:
+         - `share_path IS NOT NULL`
+         - `enabled = TRUE`
+       - Build set of expected share paths from registry (no filesystem discovery).
+
+    2. **Populate share/ from DMS**
+       - For each enabled doc with a `share_path`:
+         - Copy source file from `repo_path` to `share_path`.
+         - Create parent directories if needed.
+         - Log each copy operation.
+
+    3. **Delete Stale Files (Enforce Registry-Only)**
+       - For any `.md` file in `share/` root NOT in expected set:
+         - Delete it immediately (stale/obsolete file).
+       - This prevents drift: files not in registry are removed.
+
+    4. **Delete Stale Subdirectories (Enforce Flat Structure)**
+       - For any subdirectory in `share/`:
+         - Recursively remove it (enforce flat structure per SHARE_FOLDER_STRUCTURE.md).
+       - Prevents legacy subdirs (e.g., `atlas/`, `exports/`, `runtime/`) from persisting.
+
+    5. **Fail-Closed on DB Unavailability**
+       - If Postgres/control schema unreachable:
+         - Exit non-zero (SystemExit(1)).
+         - Print error to stderr.
+         - Do NOT proceed with filesystem-only sync.
+       - Principle: If SSOT is unreachable, we do not trust the filesystem view.
+
+    **Why This Matters:**
+    - Prevents "zombie files" (41 stale files when registry says 17).
+    - Prevents subdirectory drift (old `atlas/`, `exports/` persisting).
+    - Ensures `make housekeeping` can self-heal share/ folder.
+    - Aligns share/ with DMS registry on every sync (no manual cleanup needed).
     """
     if not DB_AVAILABLE:
         print(
@@ -86,6 +123,8 @@ def _sync_from_registry() -> bool:
 
             SHARE_ROOT.mkdir(parents=True, exist_ok=True)
 
+            # Step 1: Collect all expected share paths from registry (SSOT)
+            expected_share_paths = set()
             for logical_name, repo_rel, share_rel, enabled in rows:
                 repo_path = REPO_ROOT / repo_rel
                 # Handle both relative and absolute share paths
@@ -101,9 +140,30 @@ def _sync_from_registry() -> bool:
                     )
                     continue
 
+                expected_share_paths.add(share_path)
                 share_path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(repo_path, share_path)
                 print(f"[sync_share] registry copy: {logical_name}: {repo_path} -> {share_path}")
+
+            # Step 2: Clean up files in share/ that are NOT in the registry
+            # Only clean up .md files in the root of share/ (enforce registry-only)
+            if SHARE_ROOT.is_dir():
+                for share_file in SHARE_ROOT.iterdir():
+                    if share_file.is_file() and share_file.suffix == ".md":
+                        if share_file not in expected_share_paths:
+                            print(
+                                f"[sync_share] cleanup: removing stale file not in registry: {share_file.name}",
+                                file=sys.stderr,
+                            )
+                            share_file.unlink()
+                    elif share_file.is_dir():
+                        # Step 3: Remove all subdirectories to enforce flat structure
+                        # (per SHARE_FOLDER_STRUCTURE.md: "Flat directory structure - no subdirectories")
+                        print(
+                            f"[sync_share] cleanup: removing subdirectory: {share_file.name}",
+                            file=sys.stderr,
+                        )
+                        shutil.rmtree(share_file)
 
         return True
     except SystemExit:
