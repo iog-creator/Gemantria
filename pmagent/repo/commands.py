@@ -11,6 +11,7 @@ from .logic import (
     safe_merge_to_main,
     cleanup_merged_branches,
     get_branch_status,
+    check_branch_protection,
 )
 
 app = typer.Typer(help="Repository introspection and git workflow commands.")
@@ -189,4 +190,29 @@ def branch_status() -> None:
         typer.echo(msg)
 
     if not result["success"]:
+        raise typer.Exit(code=1)
+
+
+@app.command("guard-branch")
+def guard_branch(
+    allow_release: bool = typer.Option(
+        False,
+        "--allow-release",
+        help="Allow running on protected branch (e.g. for release tags)",
+    ),
+) -> None:
+    """
+    Guard against direct work on protected branches (main).
+
+    Returns exit code 1 if on a protected branch, 0 otherwise.
+    Use in pre-commit hooks or scripts to enforce branch policy.
+    """
+    result = check_branch_protection(allow_release=allow_release)
+
+    for msg in result["messages"]:
+        typer.echo(msg)
+
+    if not result["success"]:
+        if result.get("error"):
+            typer.echo(f"\n{result['error']}")
         raise typer.Exit(code=1)

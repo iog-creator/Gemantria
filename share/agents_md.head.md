@@ -1,15 +1,15 @@
 # agents_md.head
 
-**Generated**: 2025-12-01T16:35:03.605742+00:00
+**Generated**: 2025-12-01T16:48:20.064218+00:00
 **Source**: `agents_md.head.json`
 
 ---
 
 - **schema**: `file_head.v1`
-- **generated_at**: `2025-12-01T16:34:52.798262+00:00`
+- **generated_at**: `2025-12-01T16:48:09.038840+00:00`
 - **file_path**: `/home/mccoy/Projects/Gemantria.v2/AGENTS.md`
 - **exists**: `true`
-- **line_count**: `1694`
+- **line_count**: `1695`
 - **head_lines**:
   1. `# AGENTS.md — Gemantria Agent Framework`
   2. `<!-- alwaysapply.sentinel: 050,051,052 source=ai_interactions -->`

@@ -680,3 +680,49 @@ def run_quarantine_candidates(write_share: bool = False) -> None:
         (SHARE_EXPORT_DIR / "quarantine_candidates.json").write_text(
             json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
         )
+
+
+def check_branch_protection(protected_branches: List[str] | None = None, allow_release: bool = False) -> Dict[str, any]:
+    """
+    Check if the current branch is protected (e.g. main) and should be blocked
+    from direct commits/work.
+
+    Args:
+        protected_branches: List of branch names to protect. Default: ["main"]
+        allow_release: If True, allow work on protected branches (e.g. for release tags)
+
+    Returns:
+        Status dict. If success=False, the action should be blocked.
+    """
+    if protected_branches is None:
+        protected_branches = ["main"]
+
+    result = {"success": False, "messages": []}
+
+    try:
+        # Get current branch
+        current = _run_git(["branch", "--show-current"]).stdout.strip()
+        if not current:
+            result["error"] = "Not on a branch (detached HEAD)"
+            return result
+
+        result["branch"] = current
+
+        if current in protected_branches:
+            if allow_release:
+                result["success"] = True
+                result["messages"].append(f"⚠️  Running on protected branch '{current}' (allow_release=True)")
+            else:
+                result["success"] = False
+                result["error"] = f"BLOCKED: Direct work on protected branch '{current}' is forbidden."
+                result["messages"].append(f"❌ You are on '{current}'.")
+                result["messages"].append("💡 Please create a feature branch: pmagent repo branch-create <name>")
+        else:
+            result["success"] = True
+            result["messages"].append(f"✅ Branch '{current}' is safe for work")
+
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+
+    return result

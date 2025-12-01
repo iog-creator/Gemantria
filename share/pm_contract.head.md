@@ -1,12 +1,12 @@
 # pm_contract.head
 
-**Generated**: 2025-12-01T16:35:03.821260+00:00
+**Generated**: 2025-12-01T16:48:20.286929+00:00
 **Source**: `pm_contract.head.json`
 
 ---
 
 - **schema**: `file_head.v1`
-- **generated_at**: `2025-12-01T16:34:52.819650+00:00`
+- **generated_at**: `2025-12-01T16:48:09.059911+00:00`
 - **file_path**: `/home/mccoy/Projects/Gemantria.v2/docs/SSOT/PM_CONTRACT.md`
 - **exists**: `true`
 - **line_count**: `605`

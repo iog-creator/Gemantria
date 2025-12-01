@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-12-01T16:35:03.839596+00:00
+**Generated**: 2025-12-01T16:48:20.305593+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-12-01T08:34:53-08:00`
+- **generated_at**: `2025-12-01T08:48:09-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -92,7 +92,7 @@
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-12-01T16:34:53.488863+00:00`
+  - **timestamp**: `2025-12-01T16:48:09.730198+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -106,7 +106,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-12-01T16:34:53.488892+00:00`
+    - **generated_at**: `2025-12-01T16:48:09.730229+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -139,7 +139,7 @@
         - **error**: `null`
         - **tables**:
           - **control.agent_run**: `2270`
-          - **control.agent_run_cli**: `74`
+          - **control.agent_run_cli**: `77`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
           - **control.doc_embedding**: `2963`
@@ -199,8 +199,8 @@
           - **public.document_access_log**: `1`
           - **public.document_sections**: `398`
           - **public.governance_artifacts**: `131`
-          - **public.governance_compliance_log**: `237`
-          - **public.hint_emissions**: `785`
+          - **public.governance_compliance_log**: `238`
+          - **public.hint_emissions**: `791`
           - **public.hypotheses**: `0`
           - **public.integration_log**: `0`
           - **public.isolation_patterns**: `0`
@@ -856,9 +856,9 @@
       - **last_24h**: `111`
       - **last_7d**: `2265`
     - **agent_run_cli**:
-      - **total**: `74`
-      - **last_24h**: `34`
-      - **last_7d**: `74`
+      - **total**: `77`
+      - **last_24h**: `37`
+      - **last_7d**: `77`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:
