@@ -156,8 +156,11 @@ class RerankerAdapter:
 
         # Check LM availability
         if not self._ensure_lm():
-            # Hermetic fallback: return original ranking
-            return chunks
+            # Wave-3: LM-off = LOUD FAIL
+            raise RuntimeError(
+                "LOUD FAIL: Reranker service unavailable. "
+                "Wave-3 requires LM to be available for reranking."
+            )
 
         # Compute reranker scores for each chunk
         for chunk in chunks:
