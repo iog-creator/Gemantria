@@ -136,6 +136,7 @@ app.add_typer(autopilot_app, name="autopilot")
 
 # Import and register repo commands
 from pmagent.repo.commands import app as repo_app  # noqa: E402
+
 app.add_typer(repo_app, name="repo")
 
 

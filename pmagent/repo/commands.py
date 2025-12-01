@@ -78,14 +78,14 @@ def branch_create(
 ) -> None:
     """
     Create new branch from fresh main (prevents branch drift).
-    
+
     Automatically fetches latest, checks out main, pulls, then creates new branch.
     """
     result = create_branch(name, base)
-   
+
     for msg in result["messages"]:
         typer.echo(msg)
-    
+
     if not result["success"]:
         raise typer.Exit(code=1)
 
@@ -100,14 +100,14 @@ def branch_update(
 ) -> None:
     """
     Update current branch with latest main (prevents getting behind).
-    
+
     Fetches latest main and merges or rebases your branch onto it.
     """
     result = update_branch_from_main(strategy)
-    
+
     for msg in result["messages"]:
         typer.echo(msg)
-    
+
     if not result["success"]:
         raise typer.Exit(code=1)
 
@@ -122,19 +122,19 @@ def branch_merge(
 ) -> None:
     """
     Safely merge current branch to main (prevents destructive merges).
-    
+
     Runs guard checks to prevent deleting code, then merges to main.
     """
     result = safe_merge_to_main(force)
-    
+
     for msg in result["messages"]:
         typer.echo(msg)
-    
+
     if result.get("guard_checks"):
         typer.echo("\nGuard checks:")
         for k, v in result["guard_checks"].items():
             typer.echo(f"  {k}: {v}")
-    
+
     if not result["success"]:
         raise typer.Exit(code=1)
 
@@ -149,14 +149,14 @@ def branch_cleanup(
 ) -> None:
     """
     Delete branches that have been merged to main.
-    
+
     Default is dry-run. Use --execute to actually delete.
     """
     result = cleanup_merged_branches(dry_run=not execute)
-    
+
     for msg in result["messages"]:
         typer.echo(msg)
-    
+
     if not result["success"]:
         raise typer.Exit(code=1)
 
@@ -165,14 +165,13 @@ def branch_cleanup(
 def branch_status() -> None:
     """
     Show status of current branch vs main.
-    
+
     Shows commits ahead/behind, age, and warnings.
     """
     result = get_branch_status()
-    
+
     for msg in result["messages"]:
         typer.echo(msg)
-    
+
     if not result["success"]:
         raise typer.Exit(code=1)
-
