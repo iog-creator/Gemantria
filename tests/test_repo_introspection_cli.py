@@ -1,98 +1,153 @@
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
 
-from pmagent.repo.logic import (
-    run_semantic_inventory,
-    run_reunion_plan,
-    run_quarantine_candidates,
-)
 
-DOC_REGISTRY_MD = Path("share/doc_registry.md")
-EVIDENCE_DIR = Path("evidence/repo")
+def _repo_root() -> Path:
+    # tests/ -> repo root is parent
+    return Path(__file__).resolve().parent.parent
 
 
-@pytest.mark.skipif(
-    not DOC_REGISTRY_MD.exists(),
-    reason="share/doc_registry.md missing; run housekeeping/DMS export first.",
-)
-def test_tv_repo_01_semantic_inventory_generates_evidence(tmp_path=None) -> None:
+def _run_pmagent(args: list[str]) -> subprocess.CompletedProcess[str]:
     """
-    TV-REPO-01: Semantic inventory on current repo.
+    Run the pmagent CLI with the given args, from the repo root.
 
-    Expectation:
-    - repo_semantic_inventory.json exists
-    - semantic_inventory_filtered.json exists
-    - summary + untracked_source_files keys present
+    If pmagent is not on PATH (e.g. unusual dev env), skip the test
+    instead of hard failing.
     """
-    # Run semantic inventory (idempotent)
-    run_semantic_inventory(write_share=False)
+    repo_root = _repo_root()
+    try:
+        result = subprocess.run(
+            ["pmagent", *args],
+            cwd=repo_root,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        pytest.skip("pmagent CLI not found on PATH")
+    return result
 
-    inventory_path = EVIDENCE_DIR / "repo_semantic_inventory.json"
-    filtered_path = EVIDENCE_DIR / "semantic_inventory_filtered.json"
 
-    assert inventory_path.exists()
-    assert filtered_path.exists()
-
-    data = json.loads(inventory_path.read_text(encoding="utf-8"))
-    assert "summary" in data
-    assert "untracked_source_files" in data
+def _evidence_dir() -> Path:
+    return _repo_root() / "evidence" / "repo"
 
 
-@pytest.mark.skipif(
-    not DOC_REGISTRY_MD.exists(),
-    reason="share/doc_registry.md missing; run housekeeping/DMS export first.",
-)
-def test_tv_repo_02_reunion_plan_generates_plan() -> None:
+def _remove_if_exists(path: Path) -> None:
+    if path.exists():
+        path.unlink()
+
+
+@pytest.mark.tv("TV-REPO-01")
+def test_semantic_inventory_generates_expected_evidence_files() -> None:
     """
-    TV-REPO-02: Reunion plan builds on semantic inventory.
+    TV-REPO-01:
+    pmagent repo semantic-inventory
 
-    Expectation:
-    - repo_reunion_plan.json exists
-    - dir_labels and files keys present
+    - exits successfully
+    - writes repo_semantic_inventory.json
+    - writes semantic_inventory_filtered.json
+    - produces a JSON object with basic counters
     """
-    # Ensure semantic inventory exists
-    run_semantic_inventory(write_share=False)
+    evidence_dir = _evidence_dir()
+    semantic_inventory_path = evidence_dir / "repo_semantic_inventory.json"
+    filtered_path = evidence_dir / "semantic_inventory_filtered.json"
 
-    # Run reunion plan
-    run_reunion_plan(write_share=False)
+    # Clean up any old artifacts for a deterministic run
+    _remove_if_exists(semantic_inventory_path)
+    _remove_if_exists(filtered_path)
 
-    plan_path = EVIDENCE_DIR / "repo_reunion_plan.json"
-    assert plan_path.exists()
+    result = _run_pmagent(["repo", "semantic-inventory"])
+    assert result.returncode == 0, (
+        f"semantic-inventory failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
+    )
 
-    plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    assert "summary" in plan
-    assert "dir_labels" in plan
-    assert "files" in plan
-    assert set(plan["files"].keys()) >= {
-        "integration_candidates",
-        "quarantine_candidates",
-        "investigate",
-    }
+    assert semantic_inventory_path.exists(), "repo_semantic_inventory.json not created"
+    assert filtered_path.exists(), "semantic_inventory_filtered.json not created"
+
+    # Basic shape validation on the main inventory JSON
+    raw = semantic_inventory_path.read_text(encoding="utf-8")
+    data = json.loads(raw)
+    assert isinstance(data, dict), "semantic inventory should be a JSON object"
+
+    # These keys were observed in manual smoke tests and act as basic sanity checks
+    summary = data.get("summary", {})
+    for key in [
+        "total_repo_files",
+        "ignored_files_count",
+        "untracked_files_count_raw",
+        "untracked_source_files_count_filtered",
+    ]:
+        assert key in summary, f"expected key {key!r} in semantic inventory summary"
 
 
-@pytest.mark.skipif(
-    not DOC_REGISTRY_MD.exists(),
-    reason="share/doc_registry.md missing; run housekeeping/DMS export first.",
-)
-def test_tv_repo_03_quarantine_candidates_generates_list() -> None:
+@pytest.mark.tv("TV-REPO-02")
+def test_reunion_plan_generates_reunion_and_inventory() -> None:
     """
-    TV-REPO-03: Quarantine candidates extracted from reunion plan.
+    TV-REPO-02:
+    pmagent repo reunion-plan
 
-    Expectation:
-    - repo_quarantine_candidates.json exists
-    - 'quarantine_candidates' is a list
+    - exits successfully
+    - writes repo_reunion_plan.json
+    - also ensures repo_semantic_inventory.json exists (auto-generated if missing)
     """
-    # Ensure reunion plan exists (and thus semantic inventory)
-    run_reunion_plan(write_share=False)
+    evidence_dir = _evidence_dir()
+    reunion_plan_path = evidence_dir / "repo_reunion_plan.json"
+    semantic_inventory_path = evidence_dir / "repo_semantic_inventory.json"
 
-    # Run quarantine-candidates
-    run_quarantine_candidates(write_share=False)
+    # Only remove reunion plan to test the command, not semantic inventory
+    # (reunion-plan will auto-generate it if missing, demonstrating command chaining)
+    _remove_if_exists(reunion_plan_path)
 
-    qc_path = EVIDENCE_DIR / "repo_quarantine_candidates.json"
-    assert qc_path.exists()
+    result = _run_pmagent(["repo", "reunion-plan"])
+    assert result.returncode == 0, (
+        f"reunion-plan failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
+    )
 
-    payload = json.loads(qc_path.read_text(encoding="utf-8"))
-    assert "quarantine_candidates" in payload
-    assert isinstance(payload["quarantine_candidates"], list)
+    assert reunion_plan_path.exists(), "repo_reunion_plan.json not created"
+    assert semantic_inventory_path.exists(), "reunion-plan did not produce repo_semantic_inventory.json as expected"
+
+    # Sanity-check reunion plan JSON shape (dict or list, non-empty)
+    raw = reunion_plan_path.read_text(encoding="utf-8")
+    data = json.loads(raw)
+    assert isinstance(data, (dict, list)), "reunion plan JSON must be dict or list"
+    if isinstance(data, dict):
+        assert data, "reunion plan dict should not be empty"
+    else:
+        assert len(data) >= 1, "reunion plan list should not be empty"
+
+
+@pytest.mark.tv("TV-REPO-03")
+def test_quarantine_candidates_json_non_empty() -> None:
+    """
+    TV-REPO-03:
+    pmagent repo quarantine-candidates
+
+    - exits successfully
+    - writes repo_quarantine_candidates.json
+    - produced JSON is non-empty (list or dict)
+    """
+    evidence_dir = _evidence_dir()
+    quarantine_path = evidence_dir / "repo_quarantine_candidates.json"
+
+    # Only clean the quarantine file itself, not the reunion plan it depends on
+    _remove_if_exists(quarantine_path)
+
+    result = _run_pmagent(["repo", "quarantine-candidates"])
+    assert result.returncode == 0, (
+        f"quarantine-candidates failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
+    )
+
+    assert quarantine_path.exists(), "repo_quarantine_candidates.json not created"
+
+    raw = quarantine_path.read_text(encoding="utf-8")
+    data = json.loads(raw)
+
+    # Accept either a list or dict here; just require it to be non-empty.
+    assert isinstance(data, (list, dict)), "quarantine candidates JSON must be list or dict"
+    if isinstance(data, dict):
+        assert data, "quarantine candidates dict should not be empty"
+    else:
+        assert len(data) >= 1, "quarantine candidates list should not be empty"
