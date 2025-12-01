@@ -17,9 +17,7 @@ from agentpm.kb.registry import load_registry, REGISTRY_PATH
 from agentpm.status.snapshot import get_kb_status_view, get_kb_hints
 
 
-def build_kb_doc_worklist(
-    now: datetime | None = None, registry_path: Path | None = None
-) -> dict[str, Any]:
+def build_kb_doc_worklist(now: datetime | None = None, registry_path: Path | None = None) -> dict[str, Any]:
     """Build a prioritized worklist of documentation tasks from KB registry.
 
     Reads kb_status_view + kb_hints and produces a prioritized worklist:

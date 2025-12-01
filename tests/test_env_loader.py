@@ -134,9 +134,7 @@ def test_bible_db_dsn_precedence_prefers_bible_ro_dsn():
 
 def test_bible_db_dsn_precedence_falls_back_to_ro_dsn():
     """RO_DSN is used when BIBLE_RO_DSN is not set."""
-    with temp_env(
-        BIBLE_RO_DSN=None, RO_DSN="postgresql://u:p@h:5432/ro", ATLAS_DSN_RO=None, ATLAS_DSN=None
-    ):
+    with temp_env(BIBLE_RO_DSN=None, RO_DSN="postgresql://u:p@h:5432/ro", ATLAS_DSN_RO=None, ATLAS_DSN=None):
         assert env.get_bible_db_dsn() == "postgresql://u:p@h:5432/ro"
 
 

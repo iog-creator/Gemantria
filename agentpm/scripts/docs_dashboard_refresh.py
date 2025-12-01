@@ -164,9 +164,7 @@ def generate_archive_candidates(conn: Any) -> None:
             "directory": directory,
             "count": info["count"],
             "example_paths": info["examples"][:3],  # Limit to 3 examples
-            "confidence": "safe_cluster"
-            if info["count"] >= 3 and "archive" in directory.lower()
-            else "mixed_cluster",
+            "confidence": "safe_cluster" if info["count"] >= 3 and "archive" in directory.lower() else "mixed_cluster",
             "notes": f"Detected {info['count']} archive candidates in directory",
         }
         for directory, info in groups.items()

@@ -91,9 +91,7 @@ def check_backlinks(html_file: Path, artifact_name: str) -> tuple[bool, List[str
             if expected_path in href or href.endswith(expected_path.split("/")[-1]):
                 found.append(testid)
             else:
-                missing.append(
-                    f"Backlink {testid} points to wrong path: {href} (expected: {expected_path})"
-                )
+                missing.append(f"Backlink {testid} points to wrong path: {href} (expected: {expected_path})")
 
     if missing:
         return False, missing

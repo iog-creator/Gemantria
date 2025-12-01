@@ -332,12 +332,8 @@ def ingest_doc_content(
 
 def main() -> int:
     """CLI entry point."""
-    parser = argparse.ArgumentParser(
-        description="Ingest document content into control.doc_fragment"
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Compute chunks but don't write to DB"
-    )
+    parser = argparse.ArgumentParser(description="Ingest document content into control.doc_fragment")
+    parser.add_argument("--dry-run", action="store_true", help="Compute chunks but don't write to DB")
     parser.add_argument("--limit", type=int, help="Limit number of docs processed")
     parser.add_argument(
         "--only-agents",

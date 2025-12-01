@@ -28,16 +28,10 @@ def badge(text, ok=True):
 
 
 def main():
-    text = (
-        (EVAL / "quality_report.txt").read_text(encoding="utf-8")
-        if (EVAL / "quality_report.txt").exists()
-        else ""
-    )
+    text = (EVAL / "quality_report.txt").read_text(encoding="utf-8") if (EVAL / "quality_report.txt").exists() else ""
     failed = "FAIL:" in text
     OUT.write_text(badge("PASS" if not failed else "FAIL", ok=not failed), encoding="utf-8")
-    print(
-        f"[quality.badge] wrote {OUT.relative_to(ROOT)} status={'PASS' if not failed else 'FAIL'}"
-    )
+    print(f"[quality.badge] wrote {OUT.relative_to(ROOT)} status={'PASS' if not failed else 'FAIL'}")
     return 0
 
 

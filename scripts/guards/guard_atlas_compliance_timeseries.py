@@ -52,18 +52,10 @@ def check_json_structure() -> dict[str, bool]:
         # Check array structures
         series_by_code_ok = isinstance(data.get("series_by_code"), list)
         series_by_tool_ok = isinstance(data.get("series_by_tool"), list)
-        heatmap_ok = (
-            isinstance(data.get("heatmap_tool_by_code"), dict)
-            and "entries" in data["heatmap_tool_by_code"]
-        )
+        heatmap_ok = isinstance(data.get("heatmap_tool_by_code"), dict) and "entries" in data["heatmap_tool_by_code"]
 
         structure_ok = (
-            has_fields
-            and episode_ok
-            and schema_ok
-            and series_by_code_ok
-            and series_by_tool_ok
-            and heatmap_ok
+            has_fields and episode_ok and schema_ok and series_by_code_ok and series_by_tool_ok and heatmap_ok
         )
 
         return {

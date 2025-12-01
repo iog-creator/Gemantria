@@ -164,9 +164,7 @@ class TestSystemHealth:
                             "graph_stats_ready": False,
                         },
                         "details": {
-                            "errors": [
-                                "graph_stats_table_missing: gematria.graph_stats_snapshots does not exist"
-                            ]
+                            "errors": ["graph_stats_table_missing: gematria.graph_stats_snapshots does not exist"]
                         },
                     }
                 )
@@ -263,9 +261,7 @@ class TestSystemHealth:
         assert result["components"]["db"]["mode"] == "ready"
         assert result["components"]["lm"]["mode"] == "unknown"
         assert result["components"]["graph"]["mode"] == "db_on"
-        assert "malformed or missing JSON from lm_health" in str(
-            result["components"]["lm"]["details"]["errors"]
-        )
+        assert "malformed or missing JSON from lm_health" in str(result["components"]["lm"]["details"]["errors"])
 
     @patch("scripts.system.system_health.compute_system_health")
     def test_main_outputs_json(self, mock_compute_health, capsys):

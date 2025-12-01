@@ -87,11 +87,7 @@ class TestDbHealthSmoke:
                 "connection_ok": True,
                 "graph_stats_ready": False,
             },
-            "details": {
-                "errors": [
-                    "graph_stats_table_missing: gematria.graph_stats_snapshots does not exist"
-                ]
-            },
+            "details": {"errors": ["graph_stats_table_missing: gematria.graph_stats_snapshots does not exist"]},
         }
 
         summary = print_summary(health_json)

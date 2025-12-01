@@ -168,9 +168,7 @@ def check_lm_budget(app_name: str, tokens: int | None = None) -> bool:
 
                 # Check request limit
                 if used_requests >= max_requests:
-                    logger.warning(
-                        f"Budget exceeded for {app_name}: {used_requests}/{max_requests} requests"
-                    )
+                    logger.warning(f"Budget exceeded for {app_name}: {used_requests}/{max_requests} requests")
                     return False
 
                 # Check token limit (with estimated tokens for this call)

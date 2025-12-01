@@ -159,9 +159,7 @@ def review_current_batch() -> None:
                 updated, missing = classify_documents(archive_paths, "archive_candidate", False)
                 print(f"✓ Classified {updated} as archive candidates ({missing} not found)")
 
-            print(
-                "\n✅ Classification complete! Run 'pmagent docs dashboard-refresh' to update exports."
-            )
+            print("\n✅ Classification complete! Run 'pmagent docs dashboard-refresh' to update exports.")
         else:
             print("\n❌ Classification cancelled")
     else:
@@ -174,9 +172,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Direct document classification")
     parser.add_argument("--canonical", nargs="+", help="Mark paths as canonical")
     parser.add_argument("--archive", nargs="+", help="Mark paths as archive candidates")
-    parser.add_argument(
-        "--batch-review", action="store_true", help="Review and classify current batch"
-    )
+    parser.add_argument("--batch-review", action="store_true", help="Review and classify current batch")
 
     args = parser.parse_args()
 

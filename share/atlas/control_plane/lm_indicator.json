@@ -1,4 +1,0 @@
-{
-  "status": "captured",
-  "output": "LM_HEALTH: mode=lm_ready (ok)\n{\n  \"ok\": true,\n  \"mode\": \"lm_ready\",\n  \"details\": {\n    \"endpoint\": \"http://127.0.0.1:9994/v1\",\n    \"provider\": \"lmstudio\",\n    \"errors\": []\n  }\n}\n"
-}

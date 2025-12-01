@@ -29,9 +29,7 @@ from agentpm.db.loader import (
 def main() -> int:
     """CLI entrypoint."""
     if len(sys.argv) < 2:
-        print(
-            json.dumps({"ok": False, "error": "Usage: db_head <graph|stats> [--limit N]"}, indent=2)
-        )
+        print(json.dumps({"ok": False, "error": "Usage: db_head <graph|stats> [--limit N]"}, indent=2))
         return 1
 
     kind = sys.argv[1]

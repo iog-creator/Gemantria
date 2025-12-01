@@ -52,9 +52,7 @@ def main() -> int:
         if ok_sz and ok_sh:
             lines.append(f"OK\t{path}")
         else:
-            lines.append(
-                f"MISMATCH\t{path}\tgot_size={sz}\texp_size={exp_sz}\tgot_sha256={sh}\texp_sha256={exp_sha}"
-            )
+            lines.append(f"MISMATCH\t{path}\tgot_size={sz}\texp_size={exp_sz}\tgot_sha256={sh}\texp_sha256={exp_sha}")
             bad += 1
     header = f"[integrity] checked={len(artifacts)} mismatches={bad}"
     print(header)

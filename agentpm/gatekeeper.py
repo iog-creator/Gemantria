@@ -39,9 +39,7 @@ def check_violations(result: dict[str, Any]) -> list[dict[str, Any]]:
 
     # Basic violation checks
     if not result.get("ok", False):
-        violations.append(
-            {"code": "TOOL_ERROR", "severity": "ERROR", "message": "Tool execution failed"}
-        )
+        violations.append({"code": "TOOL_ERROR", "severity": "ERROR", "message": "Tool execution failed"})
 
     # Add more violation checks as needed
     # (e.g., schema validation, budget limits, etc.)

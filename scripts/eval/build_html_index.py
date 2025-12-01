@@ -57,12 +57,8 @@ def main() -> int:
         "        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; "
         "border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }"
     )
-    html.append(
-        "        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }"
-    )
-    html.append(
-        "        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }"
-    )
+    html.append("        h1 { color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; }")
+    html.append("        .summary { background: #f1f8ff; padding: 15px; border-radius: 6px; margin: 20px 0; }")
     html.append("        .summary strong { color: #007acc; }")
     html.append(
         "        .artifacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); "
@@ -90,11 +86,11 @@ def main() -> int:
     strict_badge = badges_dir / "strict_gate.svg"
     badges_html = ""
     if report_badge.exists():
-        badges_html += '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
-    if strict_badge.exists():
         badges_html += (
-            '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
+            '<img alt="report" src="badges/report_status.svg" style="vertical-align:middle;margin-right:8px;">'
         )
+    if strict_badge.exists():
+        badges_html += '<img alt="strict" src="badges/strict_gate.svg" style="vertical-align:middle;">'
     if badges_html:
         html.append(f"<div>{badges_html}</div>")
     html.append("")

@@ -36,9 +36,7 @@ class TestConfidenceGates:
         # Score below soft but above hard - should warn
         result = evaluate_confidence(0.92)
         assert result == "warn"
-        mock_client.emit.assert_called_once_with(
-            {"event": "ai_conf_soft_warn", "run_id": None, "node": None}
-        )
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_hard_fail(self, mock_get_client):
@@ -50,9 +48,7 @@ class TestConfidenceGates:
         result = evaluate_confidence(0.85)
         assert result == "fail"
         # Should emit hard fail event
-        mock_client.emit.assert_called_once_with(
-            {"event": "ai_conf_hard_fail", "run_id": None, "node": None}
-        )
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_hard_fail", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_boundary_soft(self, mock_get_client):
@@ -63,9 +59,7 @@ class TestConfidenceGates:
         # Score exactly at soft threshold - should warn (since 0.90 is not < 0.90)
         result = evaluate_confidence(0.90)
         assert result == "warn"
-        mock_client.emit.assert_called_once_with(
-            {"event": "ai_conf_soft_warn", "run_id": None, "node": None}
-        )
+        mock_client.emit.assert_called_once_with({"event": "ai_conf_soft_warn", "run_id": None, "node": None})
 
     @patch("src.nodes.enrichment.get_metrics_client")
     def test_evaluate_confidence_boundary_hard(self, mock_get_client):

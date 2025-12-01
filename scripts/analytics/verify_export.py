@@ -14,7 +14,5 @@ ts = doc.get("generated_at", "")
 ok_ts = bool(re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z$", ts))
 nodes = doc.get("nodes", [])
 edges = doc.get("edges", [])
-print(
-    f"[analytics.verify] generated_at RFC3339: {'OK' if ok_ts else 'FAIL'}; nodes={len(nodes)} edges={len(edges)}"
-)
+print(f"[analytics.verify] generated_at RFC3339: {'OK' if ok_ts else 'FAIL'}; nodes={len(nodes)} edges={len(edges)}")
 sys.exit(0 if ok_ts else 3)

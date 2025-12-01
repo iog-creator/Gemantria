@@ -73,12 +73,8 @@ def test_maybe_persist_capability_session_db_on_happy_path() -> None:
 
     mock_create_agent_run = MagicMock(return_value=mock_agent_run)
 
-    with patch(
-        "agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"
-    ):
-        with patch(
-            "agentpm.reality.capability_envelope_writer.create_agent_run", mock_create_agent_run
-        ):
+    with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
+        with patch("agentpm.reality.capability_envelope_writer.create_agent_run", mock_create_agent_run):
             result = maybe_persist_capability_session(envelope, tracking_enabled=True)
 
     assert result["written"] is True
@@ -110,12 +106,8 @@ def test_maybe_persist_capability_session_uses_default_command_when_no_dry_run()
 
     mock_create_agent_run = MagicMock(return_value=mock_agent_run)
 
-    with patch(
-        "agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"
-    ):
-        with patch(
-            "agentpm.reality.capability_envelope_writer.create_agent_run", mock_create_agent_run
-        ):
+    with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
+        with patch("agentpm.reality.capability_envelope_writer.create_agent_run", mock_create_agent_run):
             result = maybe_persist_capability_session(envelope, tracking_enabled=True)
 
     assert result["written"] is True
@@ -139,12 +131,8 @@ def test_maybe_persist_capability_session_handles_create_agent_run_none() -> Non
         "posture": {"mode": "live"},
     }
 
-    with patch(
-        "agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"
-    ):
-        with patch(
-            "agentpm.reality.capability_envelope_writer.create_agent_run", return_value=None
-        ):
+    with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
+        with patch("agentpm.reality.capability_envelope_writer.create_agent_run", return_value=None):
             result = maybe_persist_capability_session(envelope, tracking_enabled=True)
 
     assert result["written"] is False
@@ -165,9 +153,7 @@ def test_maybe_persist_capability_session_handles_exceptions() -> None:
         "posture": {"mode": "live"},
     }
 
-    with patch(
-        "agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"
-    ):
+    with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
         with patch(
             "agentpm.reality.capability_envelope_writer.create_agent_run",
             side_effect=Exception("DB connection failed"),
@@ -200,9 +186,7 @@ def test_validate_and_optionally_persist_includes_tracking_block_when_enabled_an
     mock_agent_run = MagicMock(spec=AgentRun)
     mock_agent_run.id = "test-uuid-789"
 
-    with patch(
-        "agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"
-    ):
+    with patch("agentpm.reality.capability_envelope_writer.get_rw_dsn", return_value="postgresql://test"):
         with patch(
             "agentpm.reality.capability_envelope_writer.create_agent_run",
             return_value=mock_agent_run,

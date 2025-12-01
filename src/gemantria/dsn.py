@@ -35,12 +35,7 @@ def dsn_ro() -> str:
 
 def dsn_rw() -> str:
     """Read-write DSN (main app database)."""
-    return (
-        _get("GEMATRIA_DSN")
-        or _get("GEMATRIA_RW_DSN")
-        or _get("GEMATRIA_DSN_RW")
-        or _get("AI_AUTOMATION_DSN")
-    )
+    return _get("GEMATRIA_DSN") or _get("GEMATRIA_RW_DSN") or _get("GEMATRIA_DSN_RW") or _get("AI_AUTOMATION_DSN")
 
 
 def dsn_atlas() -> str:

@@ -41,9 +41,7 @@ def answer_doc_question(question: str) -> dict[str, Any]:
         section_body = section.get("body", "")[:500]  # Limit excerpt length
         context_parts.append(f"- {section_title}\n  {section_body}")
 
-    context_text = (
-        "\n\n".join(context_parts) if context_parts else "No relevant documentation found."
-    )
+    context_text = "\n\n".join(context_parts) if context_parts else "No relevant documentation found."
 
     # Prepare LM messages
     system_prompt = "Answer strictly using the provided project documentation. If the documentation does not contain relevant information, say so clearly."

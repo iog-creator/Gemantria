@@ -156,9 +156,7 @@ def seed_hint_registry(discovery_catalog_path: Path | None = None) -> int:
 
             for hint_data in catalog.get("hints", []):
                 # Map discovery catalog to registry format
-                logical_name = (
-                    hint_data.get("logical_name") or hint_data.get("text", "").split(":")[0]
-                )
+                logical_name = hint_data.get("logical_name") or hint_data.get("text", "").split(":")[0]
                 if not logical_name:
                     continue
 

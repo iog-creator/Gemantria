@@ -37,9 +37,7 @@ def test_guard_strict_mode_fails_on_missing_embeddings(monkeypatch: pytest.Monke
     ]
     mock_conn.execute.return_value.fetchall.return_value = mock_rows
 
-    monkeypatch.setattr(
-        "scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine
-    )
+    monkeypatch.setattr("scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine)
     monkeypatch.setenv("STRICT_MODE", "1")
 
     result = mod.main()
@@ -61,9 +59,7 @@ def test_guard_hint_mode_allows_missing_embeddings(monkeypatch: pytest.MonkeyPat
     ]
     mock_conn.execute.return_value.fetchall.return_value = mock_rows
 
-    monkeypatch.setattr(
-        "scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine
-    )
+    monkeypatch.setattr("scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine)
     monkeypatch.delenv("STRICT_MODE", raising=False)
 
     result = mod.main()
@@ -85,9 +81,7 @@ def test_guard_all_embeddings_present(monkeypatch: pytest.MonkeyPatch) -> None:
     ]
     mock_conn.execute.return_value.fetchall.return_value = mock_rows
 
-    monkeypatch.setattr(
-        "scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine
-    )
+    monkeypatch.setattr("scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine)
 
     result = mod.main()
     # Should exit 0 when all embeddings are present
@@ -105,9 +99,7 @@ def test_guard_no_agents_docs(monkeypatch: pytest.MonkeyPatch) -> None:
     # Mock query result: no docs
     mock_conn.execute.return_value.fetchall.return_value = []
 
-    monkeypatch.setattr(
-        "scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine
-    )
+    monkeypatch.setattr("scripts.guards.guard_doc_embeddings.get_control_engine", lambda: mock_engine)
 
     result = mod.main()
     # Should exit 0 when no docs to check

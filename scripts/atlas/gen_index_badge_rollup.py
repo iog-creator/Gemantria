@@ -29,16 +29,12 @@ roll = {
         "latency_present": bool(lat.get("schema")) or bool(lat.get("present")),
         "trace_present": bool(trc.get("present")),
         "reranker_present": bool(rerank.get("schema")) or bool(rerank.get("present")),
-        "reranker_count": len(rerank.get("items", []))
-        if isinstance(rerank.get("items"), list)
-        else 0,
+        "reranker_count": len(rerank.get("items", [])) if isinstance(rerank.get("items"), list) else 0,
     },
 }
 
 roll["ok"] = (
-    roll["badges"]["latency_present"]
-    and roll["badges"]["trace_present"]
-    and roll["badges"]["reranker_present"]
+    roll["badges"]["latency_present"] and roll["badges"]["trace_present"] and roll["badges"]["reranker_present"]
 )
 
 out = root / "badges/index_rollup.json"

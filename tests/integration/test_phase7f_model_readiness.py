@@ -95,9 +95,9 @@ class TestSlot1LocalAgent:
         assert isinstance(response, str), "Response should be a string"
         assert len(response) > 0, "Response should not be empty"
         # Check if response contains expected text (case-insensitive)
-        assert (
-            "granite" in response.lower() or "ready" in response.lower()
-        ), f"Response should mention GRANITE-READY, got: {response[:100]}"
+        assert "granite" in response.lower() or "ready" in response.lower(), (
+            f"Response should mention GRANITE-READY, got: {response[:100]}"
+        )
 
 
 class TestSlot2Embedding:
@@ -110,9 +110,9 @@ class TestSlot2Embedding:
 
         assert provider == "ollama", f"Expected provider=ollama, got {provider}"
         assert embedding is not None, "EMBEDDING_MODEL not configured"
-        assert (
-            "granite" in embedding.lower() or "embedding" in embedding.lower()
-        ), f"Expected Granite embedding model, got {embedding}"
+        assert "granite" in embedding.lower() or "embedding" in embedding.lower(), (
+            f"Expected Granite embedding model, got {embedding}"
+        )
 
     def test_granite_embedding(self, model_config):
         """Test Granite embeddings via Ollama adapter."""
@@ -129,9 +129,7 @@ class TestSlot2Embedding:
         for i, emb_vec in enumerate(embeddings):
             assert isinstance(emb_vec, list), f"Embedding {i} should be a list"
             assert len(emb_vec) > 0, f"Embedding {i} should have dimension > 0"
-            assert all(
-                isinstance(x, (int, float)) for x in emb_vec
-            ), f"Embedding {i} should contain numbers"
+            assert all(isinstance(x, (int, float)) for x in emb_vec), f"Embedding {i} should contain numbers"
 
 
 class TestSlot3Reranker:
@@ -180,9 +178,7 @@ class TestSlot3Reranker:
 
         # Check that results are sorted by score (highest first)
         scores = [score for _, score in results]
-        assert scores == sorted(
-            scores, reverse=True
-        ), "Results should be sorted by score (highest first)"
+        assert scores == sorted(scores, reverse=True), "Results should be sorted by score (highest first)"
 
         # Verify reranker strategy is used
         strategy = model_config.get("reranker_strategy", "embedding_only")
@@ -201,9 +197,9 @@ class TestSlot4Theology:
         provider = model_config.get("theology_provider", "theology").strip()
 
         assert theology is not None, "THEOLOGY_MODEL not configured"
-        assert (
-            "christian" in theology.lower() or "bible" in theology.lower()
-        ), f"Expected Christian/Bible model, got {theology}"
+        assert "christian" in theology.lower() or "bible" in theology.lower(), (
+            f"Expected Christian/Bible model, got {theology}"
+        )
         assert provider in (
             "lmstudio",
             "ollama",
@@ -216,13 +212,9 @@ class TestSlot4Theology:
         if provider == "lmstudio":
             _skip_if_theology_lmstudio_unavailable()
         elif provider == "ollama":
-            _skip_if_model_missing(
-                model_config.get("theology_model", "Christian-Bible-Expert-v2.0-12B")
-            )
+            _skip_if_model_missing(model_config.get("theology_model", "Christian-Bible-Expert-v2.0-12B"))
         else:
-            pytest.skip(
-                f"Phase-7F: theology_provider is '{provider}', not 'lmstudio' or 'ollama'; skipping."
-            )
+            pytest.skip(f"Phase-7F: theology_provider is '{provider}', not 'lmstudio' or 'ollama'; skipping.")
 
         from agentpm.adapters.lm_studio import chat
 
@@ -247,9 +239,9 @@ class TestSlot4Theology:
             "eternal",
             "life",
         ]
-        assert any(
-            keyword in response_lower for keyword in theological_keywords
-        ), f"Response should contain theological content, got: {response[:200]}"
+        assert any(keyword in response_lower for keyword in theological_keywords), (
+            f"Response should contain theological content, got: {response[:200]}"
+        )
 
 
 class TestEndToEndPipeline:
@@ -304,13 +296,9 @@ class TestEndToEndPipeline:
         if provider == "lmstudio":
             _skip_if_theology_lmstudio_unavailable()
         elif provider == "ollama":
-            _skip_if_model_missing(
-                model_config.get("theology_model", "Christian-Bible-Expert-v2.0-12B")
-            )
+            _skip_if_model_missing(model_config.get("theology_model", "Christian-Bible-Expert-v2.0-12B"))
         else:
-            pytest.skip(
-                f"Phase-7F: theology_provider is '{provider}', not 'lmstudio' or 'ollama'; skipping."
-            )
+            pytest.skip(f"Phase-7F: theology_provider is '{provider}', not 'lmstudio' or 'ollama'; skipping.")
 
         final_prompt = f"Question: {query}\nContext: {top_doc}\nProvide a theological answer."
         theology_response = chat(final_prompt, model_slot="theology")
@@ -321,9 +309,9 @@ class TestEndToEndPipeline:
         # Verify theological content
         theology_lower = theology_response.lower()
         theological_keywords = ["moses", "red sea", "israel", "egypt", "god", "miracle"]
-        assert any(
-            keyword in theology_lower for keyword in theological_keywords
-        ), f"Theology response should mention Moses/Red Sea, got: {theology_response[:200]}"
+        assert any(keyword in theology_lower for keyword in theological_keywords), (
+            f"Theology response should mention Moses/Red Sea, got: {theology_response[:200]}"
+        )
 
         # Verify provider configuration
         provider = model_config.get("provider", "").strip()

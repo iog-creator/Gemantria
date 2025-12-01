@@ -38,9 +38,7 @@ def test_e49_node_drilldown_coverage_receipt():
 
 def test_e50_filter_apply_drift_guard_receipt():
     sh("make -s m10.proofs")
-    fresh = json.loads(
-        pathlib.Path("evidence/guard_m10_filter_apply_drift.verdict.json").read_text()
-    )
+    fresh = json.loads(pathlib.Path("evidence/guard_m10_filter_apply_drift.verdict.json").read_text())
     assert fresh["ok"] is True
     # forced drift path
     env = dict(os.environ)

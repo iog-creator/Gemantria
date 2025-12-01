@@ -56,11 +56,7 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
     for noun in nouns:
         hebrew = noun.get("hebrew", noun.get("surface", noun.get("name", "")))
         # Skip empty, null, or "Unknown" Hebrew
-        if (
-            not hebrew
-            or not hebrew.strip()
-            or hebrew.strip().lower() in ("unknown", "null", "none")
-        ):
+        if not hebrew or not hebrew.strip() or hebrew.strip().lower() in ("unknown", "null", "none"):
             log_json(LOG, 20, "skipping_invalid_hebrew", noun=noun.get("name"), hebrew=hebrew)
             continue
         # Skip Strong's numbers (H#### format) - these aren't Hebrew text
@@ -164,9 +160,7 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
             try:
                 # Use the corresponding prompt from our pre-built prompts array
                 prompt_idx = i + j  # Global index in the prompts array
-                content = (
-                    prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
-                )
+                content = prompts[prompt_idx] if prompt_idx < len(prompts) else build_enrichment_prompt(n)
                 # Debug: log if "Unknown" appears in prompt
                 if "Unknown" in content:
                     log_json(
@@ -184,9 +178,7 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                         noun_verse=n.get("primary_verse"),
                         prompt_preview=content[:200],
                     )
-                messages_batch.append(
-                    [{"role": "system", "content": sys_msg}, {"role": "user", "content": content}]
-                )
+                messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
             except Exception as e:
                 log_json(LOG, 40, "template_format_error", noun=n.get("name"), error=str(e))
                 # Fallback: use basic format (no "Unknown" fallbacks)
@@ -194,15 +186,11 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                 hebrew = n.get("hebrew", n.get("surface", ""))
                 verse = n.get("primary_verse", "")
                 content = f"Noun: {name}\nHebrew: {escape_hebrew(hebrew)}\nPrimary Verse: {verse}\nTask: Provide theological analysis. Return JSON with insight and confidence."
-                messages_batch.append(
-                    [{"role": "system", "content": sys_msg}, {"role": "user", "content": content}]
-                )
+                messages_batch.append([{"role": "system", "content": sys_msg}, {"role": "user", "content": content}])
 
         # Call LM Studio with batched requests (via routing bridge with control-plane logging)
         try:
-            outs = chat_completion_with_routing(
-                messages_batch, model=theology_model, temperature=0.0, max_tokens=8192
-            )
+            outs = chat_completion_with_routing(messages_batch, model=theology_model, temperature=0.0, max_tokens=8192)
             batch_lat_ms = int((time.time() - batch_start) * 1000)
 
             # Process responses
@@ -220,8 +208,7 @@ def enrichment_node(state: dict, progress_callback=None) -> dict:
                                 raise
                             # Re-prompt this single item with stricter instruction
                             retry_prompt = (
-                                build_enrichment_prompt(n)
-                                + "\nReturn only valid JSON; previous reply was invalid."
+                                build_enrichment_prompt(n) + "\nReturn only valid JSON; previous reply was invalid."
                             )
                             messages = [
                                 {"role": "system", "content": sys_msg},

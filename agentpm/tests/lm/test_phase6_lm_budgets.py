@@ -152,9 +152,7 @@ def test_check_lm_budget_exceeded_tokens_returns_false(monkeypatch):
 def test_guarded_lm_call_respects_budget(monkeypatch):
     """If budget is exceeded, guarded_lm_call should skip LM Studio and use fallback."""
     # Mock budget check to return False (exceeded) - need to mock where it's imported
-    monkeypatch.setattr(
-        "agentpm.runtime.lm_logging.check_lm_budget", lambda app_name, tokens=None: False
-    )
+    monkeypatch.setattr("agentpm.runtime.lm_logging.check_lm_budget", lambda app_name, tokens=None: False)
     monkeypatch.setenv("LM_STUDIO_ENABLED", "true")
 
     # Mock _write_agent_run to avoid DB calls

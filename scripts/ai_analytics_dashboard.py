@@ -101,9 +101,7 @@ def show_dashboard():
                 usage_count = row[1]
                 success_rate = row[2] or 0
                 status_icon = "🟢" if success_rate > 0.9 else "🟡" if success_rate > 0.7 else "🔴"
-                print(
-                    f"  {status_icon} {tool_name}: {usage_count} uses, {success_rate:.1%} success"
-                )
+                print(f"  {status_icon} {tool_name}: {usage_count} uses, {success_rate:.1%} success")
 
         # User feedback
         cur.execute("""
@@ -115,9 +113,7 @@ def show_dashboard():
         avg_rating = row[0] or 0
         total_feedback = row[1] or 0
         if total_feedback > 0:
-            print(
-                f"\n⭐ User Satisfaction (7d): {avg_rating:.1f}/5.0 from {total_feedback} ratings"
-            )
+            print(f"\n⭐ User Satisfaction (7d): {avg_rating:.1f}/5.0 from {total_feedback} ratings")
 
         cur.close()
         conn.close()
@@ -319,9 +315,7 @@ def show_alerts():
 
 def main():
     parser = argparse.ArgumentParser(description="AI Analytics Dashboard")
-    parser.add_argument(
-        "command", choices=["dashboard", "trends", "insights", "alerts"], help="Command to run"
-    )
+    parser.add_argument("command", choices=["dashboard", "trends", "insights", "alerts"], help="Command to run")
     parser.add_argument("--days", type=int, default=30, help="Number of days for trend analysis")
 
     args = parser.parse_args()

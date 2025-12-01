@@ -60,9 +60,7 @@ class EvidenceLogger:
         # Also write to individual evidence file
         self._write_evidence_file(event_type, evidence_entry)
 
-    def log_performance(
-        self, operation: str, duration_ms: float, metadata: Dict[str, Any] | None = None
-    ) -> None:
+    def log_performance(self, operation: str, duration_ms: float, metadata: Dict[str, Any] | None = None) -> None:
         """
         Log performance metrics for an operation.
 
@@ -81,9 +79,7 @@ class EvidenceLogger:
 
         self.log_evidence("performance", data)
 
-    def log_validation_result(
-        self, validation_type: str, passed: bool, details: Dict[str, Any]
-    ) -> None:
+    def log_validation_result(self, validation_type: str, passed: bool, details: Dict[str, Any]) -> None:
         """
         Log validation results.
 
@@ -97,9 +93,7 @@ class EvidenceLogger:
         level = "INFO" if passed else "ERROR"
         self.log_evidence("validation", data, level)
 
-    def log_agent_result(
-        self, success: bool, output_summary: Dict[str, Any], error_details: str | None = None
-    ) -> None:
+    def log_agent_result(self, success: bool, output_summary: Dict[str, Any], error_details: str | None = None) -> None:
         """
         Log the final result of an agent execution.
 

@@ -179,9 +179,7 @@ def generate(
     # Index
     node_links = "\n  ".join(f'<a href="nodes/{i}.html">Node {i}</a>' for i in nodes[:50])
     (root / "index.html").write_text(
-        INDEX_HTML.format(
-            ts=ts, node_links=node_links, nodes_count=len(nodes), jumpers_count=len(nodes)
-        ),
+        INDEX_HTML.format(ts=ts, node_links=node_links, nodes_count=len(nodes), jumpers_count=len(nodes)),
         encoding="utf-8",
     )
 
@@ -204,9 +202,7 @@ def generate(
     }
     for i in nodes:
         # jumper node page
-        (root / "jumpers" / "idx" / f"{i}.html").write_text(
-            JUMPER_NODE_HTML.format(i=i), encoding="utf-8"
-        )
+        (root / "jumpers" / "idx" / f"{i}.html").write_text(JUMPER_NODE_HTML.format(i=i), encoding="utf-8")
 
         # node page
         a = audits.get(i, {"batch_id": "", "provenance_hash": "", "provenance": {}})
@@ -260,9 +256,7 @@ def generate(
         '<main role="main">'
         "<h1>Atlas — Sitemap</h1>"
         f"<p>Nodes: {len(nodes)} • Jumpers: {len(nodes)}</p>"
-        "<ul>"
-        + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500])
-        + "</ul></main></html>"
+        "<ul>" + "".join(f'<li><a href="nodes/{i}.html">Node {i}</a></li>' for i in nodes[:500]) + "</ul></main></html>"
     )
     (root / "sitemap.html").write_text(sm_html, encoding="utf-8")
     paths["sitemap_html"] = str(root / "sitemap.html")

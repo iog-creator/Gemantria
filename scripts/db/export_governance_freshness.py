@@ -125,9 +125,7 @@ def export_governance_freshness(conn: psycopg.Connection) -> dict[str, Any]:
             else:
                 last_update_dt = None
             if last_update_dt is None or (updated_at and updated_at > last_update_dt):
-                rule_data[rule_ref]["last_artifact_update"] = (
-                    updated_at.isoformat() if updated_at else None
-                )
+                rule_data[rule_ref]["last_artifact_update"] = updated_at.isoformat() if updated_at else None
                 if is_stale:
                     rule_data[rule_ref]["stale"] = True
 
@@ -147,9 +145,7 @@ def export_governance_freshness(conn: psycopg.Connection) -> dict[str, Any]:
             else:
                 oldest_stale_dt = None
             if oldest_stale_dt is None or (updated_at and updated_at < oldest_stale_dt):
-                artifact_type_data[artifact_type]["oldest_stale"] = (
-                    updated_at.isoformat() if updated_at else None
-                )
+                artifact_type_data[artifact_type]["oldest_stale"] = updated_at.isoformat() if updated_at else None
         else:
             artifact_type_data[artifact_type]["fresh"] += 1
 
@@ -172,9 +168,7 @@ def export_governance_freshness(conn: psycopg.Connection) -> dict[str, Any]:
             else:
                 last_hint_dt = None
             if last_hint_dt is None or (emitted_at and emitted_at > last_hint_dt):
-                rule_data[rule_ref]["last_hint_emission"] = (
-                    emitted_at.isoformat() if emitted_at else None
-                )
+                rule_data[rule_ref]["last_hint_emission"] = emitted_at.isoformat() if emitted_at else None
 
     # Calculate summary
     artifacts_total = len(artifacts)

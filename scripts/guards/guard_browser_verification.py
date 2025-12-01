@@ -81,20 +81,14 @@ def main() -> int:
     if report_doc is not None and isinstance(report_doc, dict):
         if isinstance(report_doc.get("ok"), bool):
             report_ok_flag = report_doc["ok"]
-        checks["report_ok_flag_true_when_present"] = (report_ok_flag is True) or (
-            report_ok_flag is None
-        )
+        checks["report_ok_flag_true_when_present"] = (report_ok_flag is True) or (report_ok_flag is None)
 
         # Extract checks dict if present
-        report_checks = (
-            report_doc.get("checks", {}) if isinstance(report_doc.get("checks"), dict) else {}
-        )
+        report_checks = report_doc.get("checks", {}) if isinstance(report_doc.get("checks"), dict) else {}
 
         # Extract screenshots dict if present
         report_screenshots = (
-            report_doc.get("screenshots", {})
-            if isinstance(report_doc.get("screenshots"), dict)
-            else {}
+            report_doc.get("screenshots", {}) if isinstance(report_doc.get("screenshots"), dict) else {}
         )
 
         # Check each required page
@@ -126,9 +120,7 @@ def main() -> int:
     checks["core_pages_verified"] = len(core_missing) == 0 if checks["report_json_valid"] else False
 
     # All required pages is advisory (HINT mode) - not a hard failure
-    checks["all_required_pages_have_receipts"] = (
-        len(pages_missing) == 0 if checks["report_json_valid"] else False
-    )
+    checks["all_required_pages_have_receipts"] = len(pages_missing) == 0 if checks["report_json_valid"] else False
 
     # Basic screenshot sanity: at least as many screenshots as verified pages (soft check)
     checks["screenshot_count_reasonable"] = counts["screenshots"] >= min(len(pages_verified), 1)
@@ -137,9 +129,7 @@ def main() -> int:
     details["webproof_dir"] = str(WEBPROOF_DIR)
     details["pages_verified"] = pages_verified
     details["missing_required_pages"] = pages_missing
-    details["core_pages_missing"] = (
-        [p for p in core_pages if p in pages_missing] if checks["report_json_valid"] else []
-    )
+    details["core_pages_missing"] = [p for p in core_pages if p in pages_missing] if checks["report_json_valid"] else []
 
     # Final verdict: require core checks (dir, report, core pages), but allow missing optional pages
     required_checks = [

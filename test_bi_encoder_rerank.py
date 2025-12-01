@@ -105,9 +105,7 @@ def test_bi_encoder_rerank():
 
     for input_text, expected in test_cases:
         result = _norm(input_text)
-        assert (
-            result == expected
-        ), f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
+        assert result == expected, f"Normalization failed: '{input_text}' -> '{result}' != '{expected}'"
         print(f"   '{input_text}' -> '{result}' ✅")
 
     print("   ✅ Text normalization test PASSED")

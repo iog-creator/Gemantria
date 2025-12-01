@@ -22,9 +22,7 @@ def badge(label: str, text: str):
     lw = max(60, 6 * len(label))  # crude text fit
     rw = max(50, 7 * len(text))
     w = lw + rw
-    return TPL.format(
-        w=w, lw=lw, rw=rw, lx=lw / 2, rx=lw + rw / 2, label=label, text=text, color=color
-    )
+    return TPL.format(w=w, lw=lw, rw=rw, lx=lw / 2, rx=lw + rw / 2, label=label, text=text, color=color)
 
 
 if __name__ == "__main__":

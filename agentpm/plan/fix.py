@@ -136,9 +136,7 @@ def build_fix_actions(
 
     # Load registry for doc details if needed
     registry: KBDocumentRegistry | None = None
-    if registry_path or any(
-        item.get("severity") in ["missing", "stale", "out_of_sync"] for item in filtered_items
-    ):
+    if registry_path or any(item.get("severity") in ["missing", "stale", "out_of_sync"] for item in filtered_items):
         try:
             actual_registry_path = registry_path if registry_path else REGISTRY_PATH
             registry = load_registry(actual_registry_path)
@@ -162,9 +160,7 @@ def build_fix_actions(
         # Determine action type based on severity
         if severity == "missing":
             action_type = "create_stub_doc"
-            description = item.get(
-                "suggested_action", f"Create stub document for {item.get('title', item_id)}"
-            )
+            description = item.get("suggested_action", f"Create stub document for {item.get('title', item_id)}")
         elif severity == "stale":
             action_type = "mark_stale_and_suggest_update"
             description = item.get(
@@ -173,19 +169,13 @@ def build_fix_actions(
             )
         elif severity == "out_of_sync":
             action_type = "sync_metadata"
-            description = item.get(
-                "suggested_action", f"Sync metadata for {item.get('title', item_id)}"
-            )
+            description = item.get("suggested_action", f"Sync metadata for {item.get('title', item_id)}")
         elif severity == "low_coverage":
             action_type = "propose_new_docs"
-            description = item.get(
-                "suggested_action", f"Propose new docs for {subsystem} subsystem"
-            )
+            description = item.get("suggested_action", f"Propose new docs for {subsystem} subsystem")
         else:
             action_type = "no_op"
-            description = item.get(
-                "suggested_action", f"Advisory note for {item.get('title', item_id)}"
-            )
+            description = item.get("suggested_action", f"Advisory note for {item.get('title', item_id)}")
 
         action = FixAction(
             id=item_id,
@@ -265,10 +255,7 @@ def mark_stale_note(doc_path: Path, note: str | None = None) -> None:
                 in_stale_note = False
                 # Add updated note
                 timestamp = datetime.now(UTC).isoformat()
-                note_text = (
-                    note
-                    or "Document may be stale per KB freshness rules. Please review and update if needed."
-                )
+                note_text = note or "Document may be stale per KB freshness rules. Please review and update if needed."
                 new_lines.append(f"<!-- STALENESS NOTE (updated {timestamp}) -->")
                 new_lines.append(f"**Note:** {note_text}")
                 new_lines.append("<!-- END STALENESS NOTE -->")
@@ -279,10 +266,7 @@ def mark_stale_note(doc_path: Path, note: str | None = None) -> None:
     else:
         # Append new note
         timestamp = datetime.now(UTC).isoformat()
-        note_text = (
-            note
-            or "Document may be stale per KB freshness rules. Please review and update if needed."
-        )
+        note_text = note or "Document may be stale per KB freshness rules. Please review and update if needed."
         stale_section = f"""
 
 ---

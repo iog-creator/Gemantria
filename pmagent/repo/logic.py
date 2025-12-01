@@ -89,9 +89,7 @@ def _load_dms_tracked_paths() -> Set[str]:
             try:
                 repo_idx = [c.lower() for c in cells].index("repo_path")
             except ValueError as exc:
-                raise RuntimeError(
-                    "Could not find 'repo_path' column in share/doc_registry.md header"
-                ) from exc
+                raise RuntimeError("Could not find 'repo_path' column in share/doc_registry.md header") from exc
             continue
 
         if header is None or repo_idx is None:
@@ -305,14 +303,8 @@ def safe_merge_to_main(force: bool = False) -> Dict[str, any]:
 
                 # Parse insertions/deletions
 
-                insertions = (
-                    int(re.search(r"(\d+) insertion", stats).group(1))
-                    if "insertion" in stats
-                    else 0
-                )
-                deletions = (
-                    int(re.search(r"(\d+) deletion", stats).group(1)) if "deletion" in stats else 0
-                )
+                insertions = int(re.search(r"(\d+) insertion", stats).group(1)) if "insertion" in stats else 0
+                deletions = int(re.search(r"(\d+) deletion", stats).group(1)) if "deletion" in stats else 0
 
                 result["guard_checks"]["insertions"] = insertions
                 result["guard_checks"]["deletions"] = deletions
@@ -320,9 +312,7 @@ def safe_merge_to_main(force: bool = False) -> Dict[str, any]:
                 # Check for destructive merge
                 if deletions > insertions:
                     net = deletions - insertions
-                    result["error"] = (
-                        f"BLOCKED: Would delete {net} net lines (potential destructive merge)"
-                    )
+                    result["error"] = f"BLOCKED: Would delete {net} net lines (potential destructive merge)"
                     result["messages"].append("❌ Merge blocked - use force=True to override")
                     result["guard_checks"]["blocked"] = True
                     return result
@@ -379,10 +369,7 @@ def cleanup_merged_branches(dry_run: bool = True, force: bool = False) -> Dict[s
         local_branches = [
             b.strip().replace("* ", "")
             for b in merged_result.stdout.split("\n")
-            if b.strip()
-            and b.strip() != "main"
-            and b.strip() != current_branch
-            and not b.strip().startswith("origin/")
+            if b.strip() and b.strip() != "main" and b.strip() != current_branch and not b.strip().startswith("origin/")
         ]
 
         # Get REMOTE merged branches
@@ -403,18 +390,14 @@ def cleanup_merged_branches(dry_run: bool = True, force: bool = False) -> Dict[s
 
         if dry_run:
             if local_branches:
-                result["messages"].append(
-                    f"Would delete {len(local_branches)} local merged branches:"
-                )
+                result["messages"].append(f"Would delete {len(local_branches)} local merged branches:")
                 for b in local_branches[:10]:  # Show first 10
                     result["messages"].append(f"  - {b}")
                 if len(local_branches) > 10:
                     result["messages"].append(f"  ... and {len(local_branches) - 10} more")
 
             if remote_branches:
-                result["messages"].append(
-                    f"\nWould delete {len(remote_branches)} remote merged branches:"
-                )
+                result["messages"].append(f"\nWould delete {len(remote_branches)} remote merged branches:")
                 for b in remote_branches[:10]:  # Show first 10
                     result["messages"].append(f"  - origin/{b}")
                 if len(remote_branches) > 10:
@@ -435,17 +418,13 @@ def cleanup_merged_branches(dry_run: bool = True, force: bool = False) -> Dict[s
                     except subprocess.CalledProcessError as e:
                         result["failed"].append({"branch": b, "error": str(e.stderr)})
                         if "not fully merged" in e.stderr:
-                            result["messages"].append(
-                                f"  ⚠ {b} not fully merged (use --force to delete anyway)"
-                            )
+                            result["messages"].append(f"  ⚠ {b} not fully merged (use --force to delete anyway)")
                         else:
                             result["messages"].append(f"  ✗ Failed to delete {b}")
 
             # Delete remote branches
             if remote_branches:
-                result["messages"].append(
-                    f"\nDeleting {len(remote_branches)} remote branches from origin..."
-                )
+                result["messages"].append(f"\nDeleting {len(remote_branches)} remote branches from origin...")
 
                 for b in remote_branches:
                     try:
@@ -457,9 +436,7 @@ def cleanup_merged_branches(dry_run: bool = True, force: bool = False) -> Dict[s
                         if "unable to delete" in error_msg or "does not exist" in error_msg:
                             result["messages"].append(f"  ⚠ origin/{b} already deleted")
                         else:
-                            result["failed"].append(
-                                {"branch": f"origin/{b}", "error": str(e.stderr)}
-                            )
+                            result["failed"].append({"branch": f"origin/{b}", "error": str(e.stderr)})
                             result["messages"].append(f"  ✗ Failed to delete origin/{b}")
 
         result["success"] = True
@@ -505,9 +482,7 @@ def get_branch_status() -> Dict[str, any]:
             return result
 
         # Commits ahead/behind
-        ahead_behind = (
-            _run_git(["rev-list", "--left-right", "--count", "main...HEAD"]).stdout.strip().split()
-        )
+        ahead_behind = _run_git(["rev-list", "--left-right", "--count", "main...HEAD"]).stdout.strip().split()
 
         result["behind_main"] = int(ahead_behind[0])
         result["ahead_of_main"] = int(ahead_behind[1])
@@ -538,9 +513,7 @@ def get_branch_status() -> Dict[str, any]:
             result["messages"].append("⚠️  Branch is significantly behind main - consider updating")
 
         if age_days > 14:
-            result["messages"].append(
-                "⚠️  Branch is older than 2 weeks - consider merging or closing"
-            )
+            result["messages"].append("⚠️  Branch is older than 2 weeks - consider merging or closing")
 
         result["success"] = True
 
@@ -670,9 +643,7 @@ def run_reunion_plan(write_share: bool = False) -> None:
     filtered = json.loads(filtered_path.read_text(encoding="utf-8"))
     plan = build_reunion_plan(filtered_inventory=filtered)
 
-    (EVIDENCE_DIR / "repo_reunion_plan.json").write_text(
-        json.dumps(plan, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (EVIDENCE_DIR / "repo_reunion_plan.json").write_text(json.dumps(plan, indent=2, sort_keys=True), encoding="utf-8")
 
     if write_share:
         (SHARE_EXPORT_DIR / "reunion_plan.json").write_text(

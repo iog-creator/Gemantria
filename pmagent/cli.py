@@ -479,9 +479,7 @@ def plan_kb_list(
 def plan_next(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
     limit: int = typer.Option(3, "--limit", help="Limit number of suggested tasks"),
-    with_status: bool = typer.Option(
-        False, "--with-status", help="Include system posture (reality-check + status)"
-    ),
+    with_status: bool = typer.Option(False, "--with-status", help="Include system posture (reality-check + status)"),
 ) -> None:
     """Suggest next work items based on MASTER_PLAN.md and NEXT_STEPS.md.
 
@@ -555,13 +553,9 @@ def plan_next(
 
 @plan_app.command("open", help="Open a NEXT_STEPS item as a capability_session envelope")
 def plan_open(
-    candidate_id: str = typer.Argument(
-        ..., help="Candidate id from `pmagent plan next` (e.g. NEXT_STEPS:1)"
-    ),
+    candidate_id: str = typer.Argument(..., help="Candidate id from `pmagent plan next` (e.g. NEXT_STEPS:1)"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
-    with_status: bool = typer.Option(
-        True, "--with-status", help="Include posture (reality+status) when available"
-    ),
+    with_status: bool = typer.Option(True, "--with-status", help="Include posture (reality+status) when available"),
 ) -> None:
     """Open a NEXT_STEPS item as a capability_session envelope.
 
@@ -632,9 +626,7 @@ def plan_open(
         sys.exit(1)
 
 
-@plan_app.command(
-    "reality-loop", help="Run a single plan+posture loop and persist a capability_session envelope"
-)
+@plan_app.command("reality-loop", help="Run a single plan+posture loop and persist a capability_session envelope")
 def plan_reality_loop(
     limit: int = typer.Option(3, "--limit", help="Max candidates to consider from NEXT_STEPS"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON summary"),
@@ -666,9 +658,7 @@ def plan_reality_loop(
                     validate_and_optionally_persist,
                 )  # noqa: E402, PLC0415
 
-                tracking_result = validate_and_optionally_persist(
-                    envelope, tracking_enabled=track_session
-                )
+                tracking_result = validate_and_optionally_persist(envelope, tracking_enabled=track_session)
 
         # Always print JSON summary to stdout
         summary = {
@@ -688,9 +678,7 @@ def plan_reality_loop(
         if not result.get("available", False):
             error = result.get("error", "unknown")
             print(f"No capability session created: {error}", file=sys.stderr)
-            print(
-                "(This is advisory only; no candidates available in NEXT_STEPS.md)", file=sys.stderr
-            )
+            print("(This is advisory only; no candidates available in NEXT_STEPS.md)", file=sys.stderr)
             sys.exit(0)
 
         # Print human summary to stderr
@@ -751,9 +739,7 @@ def plan_reality_loop(
                     print(f"\nTracking: error ({error_msg})", file=sys.stderr)
             elif not track_session:
                 # Tracking disabled (validation ran but no tracking block)
-                print(
-                    "\nTracking: disabled (use --track-session to persist to DB)", file=sys.stderr
-                )
+                print("\nTracking: disabled (use --track-session to persist to DB)", file=sys.stderr)
         elif result.get("available", False) and not track_session:
             # Envelope created but tracking not attempted (shouldn't happen, but handle gracefully)
             print("\nTracking: disabled (use --track-session to persist to DB)", file=sys.stderr)
@@ -851,13 +837,9 @@ def autopilot_serve(
 @plan_kb_app.command("fix", help="Execute doc fixes from KB worklist")
 def plan_kb_fix(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
-    dry_run: bool = typer.Option(
-        True, "--dry-run/--apply", help="Dry-run mode (default) or apply fixes"
-    ),
+    dry_run: bool = typer.Option(True, "--dry-run/--apply", help="Dry-run mode (default) or apply fixes"),
     subsystem: str | None = typer.Option(None, "--subsystem", help="Filter to specific subsystem"),
-    min_severity: str | None = typer.Option(
-        None, "--min-severity", help="Filter to severity level or higher"
-    ),
+    min_severity: str | None = typer.Option(None, "--min-severity", help="Filter to severity level or higher"),
     limit: int = typer.Option(50, "--limit", help="Limit number of actions processed"),
     allow_stubs_for_low_coverage: bool = typer.Option(
         False,
@@ -937,17 +919,13 @@ def plan_kb_fix(
         for action in actions:
             severity = action.severity
             action_type = action.action_type
-            output["summary"]["by_severity"][severity] = (
-                output["summary"]["by_severity"].get(severity, 0) + 1
-            )
+            output["summary"]["by_severity"][severity] = output["summary"]["by_severity"].get(severity, 0) + 1
             output["summary"]["by_action_type"][action_type] = (
                 output["summary"]["by_action_type"].get(action_type, 0) + 1
             )
 
         # Log manifest if apply mode
-        if not dry_run and (
-            apply_result.get("files_created") or apply_result.get("files_modified")
-        ):
+        if not dry_run and (apply_result.get("files_created") or apply_result.get("files_modified")):
             manifest_dir = REPO_ROOT / "evidence" / "plan_kb_fix"
             manifest_dir.mkdir(parents=True, exist_ok=True)
             manifest_path = manifest_dir / f"run-{now.strftime('%Y%m%d-%H%M%S')}.json"
@@ -963,9 +941,7 @@ def plan_kb_fix(
             skipped = output["summary"]["actions_skipped"]
             by_severity = output["summary"]["by_severity"]
 
-            severity_counts = ", ".join(
-                [f"{count} {sev}" for sev, count in sorted(by_severity.items())]
-            )
+            severity_counts = ", ".join([f"{count} {sev}" for sev, count in sorted(by_severity.items())])
             print(f"Doc-fix run ({mode_str}) — {total} actions: {severity_counts}", file=sys.stderr)
             print(f"  Applied: {applied}, Skipped: {skipped}", file=sys.stderr)
 
@@ -1009,9 +985,7 @@ def plan_kb_fix(
 
 @report_app.command("kb", help="Report KB doc-health metrics (M1+M2 aggregate)")
 def report_kb(
-    json_only: bool = typer.Option(
-        True, "--json-only/--human", help="Print only JSON (default) or human summary"
-    ),
+    json_only: bool = typer.Option(True, "--json-only/--human", help="Print only JSON (default) or human summary"),
 ) -> None:
     """Report KB documentation health metrics based on registry + M2 manifests.
 
@@ -1072,9 +1046,7 @@ def report_kb(
     sys.exit(0)
 
 
-@tools_app.command(
-    "plan", help="Run prompt via configured planning provider (Gemini/Codex/local fallback)"
-)
+@tools_app.command("plan", help="Run prompt via configured planning provider (Gemini/Codex/local fallback)")
 def tools_plan(
     prompt: str = typer.Argument(..., help="Prompt text; use '-' to read from stdin"),
     prompt_file: Path | None = typer.Option(  # noqa: B008
@@ -1301,13 +1273,9 @@ def control_schema(
     sys.exit(0)
 
 
-@control_app.command(
-    "pipeline-status", help="Summarize recent pipeline runs from control.agent_run"
-)
+@control_app.command("pipeline-status", help="Summarize recent pipeline runs from control.agent_run")
 def control_pipeline_status(
-    window_hours: int = typer.Option(
-        24, "--window-hours", help="Time window in hours (default: 24)"
-    ),
+    window_hours: int = typer.Option(24, "--window-hours", help="Time window in hours (default: 24)"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
 ) -> None:
     """Summarize recent pipeline runs from control.agent_run table."""
@@ -1324,9 +1292,7 @@ def control_pipeline_status(
     sys.exit(0)
 
 
-@control_app.command(
-    "summary", help="Aggregated control-plane summary (status/tables/schema/pipeline-status)"
-)
+@control_app.command("summary", help="Aggregated control-plane summary (status/tables/schema/pipeline-status)")
 def control_summary(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
 ) -> None:
@@ -1406,9 +1372,7 @@ def reality_check_live() -> None:
     raise typer.Exit(code=proc.returncode)
 
 
-@reality_app.command(
-    "check", help="Run comprehensive reality check (env + DB + LM + exports + eval)"
-)
+@reality_app.command("check", help="Run comprehensive reality check (env + DB + LM + exports + eval)")
 def reality_check_check(
     mode: str = typer.Option("hint", "--mode", help="Mode: hint (default) or strict"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
@@ -1535,9 +1499,7 @@ def reality_sessions(
                 mode = session.get("posture_mode", "unknown")
                 dry_run = session.get("dry_run_command")
                 dry_run_str = f" (cmd: {dry_run[:30]}...)" if dry_run else ""
-                print(
-                    f"    {i}. [{session_id}] {title} (mode: {mode}){dry_run_str}", file=sys.stderr
-                )
+                print(f"    {i}. [{session_id}] {title} (mode: {mode}){dry_run_str}", file=sys.stderr)
 
         db_mode = tracking.get("db_mode", "unknown")
         enabled_hint = tracking.get("enabled_hint", False)
@@ -1611,9 +1573,7 @@ def reality_validate_capability_history(
                     print(f"      • {error}", file=sys.stderr)
 
         if report.get("files_with_warnings"):
-            print(
-                f"\n  Files with warnings ({len(report['files_with_warnings'])}):", file=sys.stderr
-            )
+            print(f"\n  Files with warnings ({len(report['files_with_warnings'])}):", file=sys.stderr)
             for file_info in report["files_with_warnings"][:5]:  # Show first 5
                 print(f"    - {file_info['file_path']}", file=sys.stderr)
 
@@ -1648,9 +1608,7 @@ def bringup_full() -> None:
     raise typer.Exit(code=proc.returncode)
 
 
-@mcp_app.command(
-    "sse", help="Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)"
-)
+@mcp_app.command("sse", help="Ensure MCP SSE server is running (auto-start if AUTO_START_MCP_SSE=1)")
 def mcp_sse_ensure() -> None:
     """Ensure MCP SSE server is running on port 8005 (for LM Studio bridge)."""
     import subprocess
@@ -1731,9 +1689,7 @@ def docs_duplicates_report() -> None:
     print("✓ Duplicates report generated successfully")
 
 
-@docs_app.command(
-    "dm002-preview", help="Preview canonical vs archive classification (DM-002, preview-only)"
-)
+@docs_app.command("dm002-preview", help="Preview canonical vs archive classification (DM-002, preview-only)")
 def docs_dm002_preview() -> None:
     """Preview canonical vs archive classification from duplicates report (no DB writes, no file moves)."""
     try:
@@ -1748,9 +1704,7 @@ def docs_dm002_preview() -> None:
         raise typer.Exit(code=1) from e
 
 
-@docs_app.command(
-    "dm002-sync", help="Sync canonical/archive classification from preview into DB (DM-002)"
-)
+@docs_app.command("dm002-sync", help="Sync canonical/archive classification from preview into DB (DM-002)")
 def docs_dm002_sync() -> None:
     """DM-002: sync canonical/archive classification from DOC_DM002_CANONICAL_PREVIEW.md into control.kb_document. No file moves or deletions."""
     try:
@@ -1765,9 +1719,7 @@ def docs_dm002_sync() -> None:
         raise typer.Exit(code=1) from e
 
 
-@docs_app.command(
-    "dm002-summary", help="Summarize document classification from DB (DM-002, read-only)"
-)
+@docs_app.command("dm002-summary", help="Summarize document classification from DB (DM-002, read-only)")
 def docs_dm002_summary() -> None:
     """DM-002: summarize doc registry classification (DB-only, read-only)."""
     try:
@@ -2085,9 +2037,7 @@ def kb_registry_show(
 
 @registry_app.command("by-subsystem", help="List KB documents by owning subsystem")
 def kb_registry_by_subsystem(
-    owning_subsystem: str = typer.Option(
-        ..., "--owning-subsystem", help="Owning subsystem to filter by"
-    ),
+    owning_subsystem: str = typer.Option(..., "--owning-subsystem", help="Owning subsystem to filter by"),
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
     registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),
 ) -> None:
@@ -2199,9 +2149,7 @@ def kb_registry_summary(
     sys.exit(0)
 
 
-@registry_app.command(
-    "validate", help="Validate registry entries (check file existence, duplicates)"
-)
+@registry_app.command("validate", help="Validate registry entries (check file existence, duplicates)")
 def kb_registry_validate(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
     registry_path: str = typer.Option(None, "--registry-path", help="Path to registry JSON file"),

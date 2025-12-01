@@ -73,16 +73,8 @@ def main() -> int:
         "schema_snapshot": ROOT / "share" / "atlas" / "control_plane" / "schema_snapshot.json",
         "mv_schema": ROOT / "share" / "atlas" / "control_plane" / "mv_schema.json",
         "mcp_catalog": ROOT / "share" / "atlas" / "control_plane" / "mcp_catalog.json",
-        "compliance_summary": ROOT
-        / "share"
-        / "atlas"
-        / "control_plane"
-        / "compliance_summary.json",
-        "compliance_timeseries": ROOT
-        / "share"
-        / "atlas"
-        / "control_plane"
-        / "compliance_timeseries.json",
+        "compliance_summary": ROOT / "share" / "atlas" / "control_plane" / "compliance_summary.json",
+        "compliance_timeseries": ROOT / "share" / "atlas" / "control_plane" / "compliance_timeseries.json",
         "pm_snapshot": ROOT / "share" / "pm.snapshot.md",
     }
 
@@ -93,11 +85,7 @@ def main() -> int:
 
     for name, file_path in snapshot_files.items():
         status = check_file_exists(file_path)
-        structure = (
-            check_snapshot_structure(file_path)
-            if file_path.suffix == ".json"
-            else {"valid": status["exists"]}
-        )
+        structure = check_snapshot_structure(file_path) if file_path.suffix == ".json" else {"valid": status["exists"]}
         file_status[name] = {
             "path": str(file_path.relative_to(ROOT)),
             "exists": status["exists"],

@@ -97,9 +97,7 @@ def export() -> int:
             }
             with open(out_path, "w", encoding="utf-8") as f:
                 json.dump(stub, f, ensure_ascii=False, indent=2)
-            print(
-                f"[export_ai_tracking] No ai_interactions table in {schemas}; wrote stub {out_path}"
-            )
+            print(f"[export_ai_tracking] No ai_interactions table in {schemas}; wrote stub {out_path}")
             return 0
 
         # Get interactions count
@@ -115,9 +113,7 @@ def export() -> int:
         interactions = list(cur.fetchall())
 
         # Get recent governance artifacts (limit for export size)
-        cur.execute(
-            f"select * from {schema}.governance_artifacts order by last_updated desc limit 500"
-        )
+        cur.execute(f"select * from {schema}.governance_artifacts order by last_updated desc limit 500")
         governance = list(cur.fetchall())
 
     doc = {

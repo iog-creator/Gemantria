@@ -272,12 +272,8 @@ def export_fragments_to_db(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Export code fragments and embeddings to control-plane DB."
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Perform a dry run without writing to DB."
-    )
+    parser = argparse.ArgumentParser(description="Export code fragments and embeddings to control-plane DB.")
+    parser.add_argument("--dry-run", action="store_true", help="Perform a dry run without writing to DB.")
     parser.add_argument("--project-id", type=int, default=1, help="Project ID for the fragments.")
     parser.add_argument(
         "--model-name",

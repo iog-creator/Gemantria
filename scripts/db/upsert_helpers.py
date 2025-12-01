@@ -15,9 +15,7 @@ def upsert_node(surface: str, kind: str = "concept", meta: dict | None = None) -
     """Upsert a node. Note: 'kind' maps to 'class' column; 'meta' is stored in evidence if needed."""
     with get_pool().connection() as conn, conn.cursor(row_factory=dict_row) as cur:
         # Ensure a uniqueness surface index exists (idempotent)
-        cur.execute(
-            "CREATE UNIQUE INDEX IF NOT EXISTS uq_nodes_surface ON gematria.nodes(surface);"
-        )
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS uq_nodes_surface ON gematria.nodes(surface);")
         # Schema uses 'class' not 'kind'; no 'meta' column, so we ignore it or could store in a future JSONB column
         cur.execute(
             """
@@ -33,9 +31,7 @@ def upsert_node(surface: str, kind: str = "concept", meta: dict | None = None) -
         return str(node_id)
 
 
-def upsert_edge(
-    src_id: str, dst_id: str, kind: str, weight: float | None = None, meta: dict | None = None
-) -> str:
+def upsert_edge(src_id: str, dst_id: str, kind: str, weight: float | None = None, meta: dict | None = None) -> str:
     meta = meta or {}
     # Store weight in evidence if provided, or use edge_strength column if weight is set
     if weight is not None:
@@ -54,14 +50,10 @@ def upsert_edge(
         return str(edge_id)
 
 
-def upsert_embedding(
-    node_id: str, embedding: list[float], model_name: str = "text-embedding-bge-m3"
-) -> None:
+def upsert_embedding(node_id: str, embedding: list[float], model_name: str = "text-embedding-bge-m3") -> None:
     # Cast JSON array to pgvector with ::vector for correctness/portability.
     with get_pool().connection() as conn, conn.cursor() as cur:
-        cur.execute(
-            "CREATE UNIQUE INDEX IF NOT EXISTS uq_aiemb_node ON gematria.ai_embeddings(node_id);"
-        )
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS uq_aiemb_node ON gematria.ai_embeddings(node_id);")
         cur.execute(
             """
             INSERT INTO gematria.ai_embeddings(node_id, embedding, model_name)
@@ -74,9 +66,7 @@ def upsert_embedding(
 
 
 # Optional: batch pipeline insert (future use)
-def upsert_embeddings_pipeline(
-    rows: list[tuple[str, list[float]]], model_name: str = "text-embedding-bge-m3"
-) -> None:
+def upsert_embeddings_pipeline(rows: list[tuple[str, list[float]]], model_name: str = "text-embedding-bge-m3") -> None:
     if not rows:
         return
     with get_pool().connection() as conn:

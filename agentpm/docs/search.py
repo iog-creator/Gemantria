@@ -85,9 +85,7 @@ def search_docs(
     if len(query_embedding) == 768:
         query_embedding = query_embedding + [0.0] * (1024 - 768)
     elif len(query_embedding) != 1024:
-        result["error"] = (
-            f"Unsupported embedding dimension: {len(query_embedding)}. Expected 768 or 1024."
-        )
+        result["error"] = f"Unsupported embedding dimension: {len(query_embedding)}. Expected 768 or 1024."
         return result
 
     # Convert to JSON string for pgvector

@@ -70,13 +70,9 @@ class TestDbHealthGuard:
         # First connect() succeeds (connection check)
         # Second connect() raises ProgrammingError (table missing)
         mock_engine.connect.side_effect = [
+            MagicMock(__enter__=MagicMock(return_value=mock_conn), __exit__=MagicMock(return_value=None)),
             MagicMock(
-                __enter__=MagicMock(return_value=mock_conn), __exit__=MagicMock(return_value=None)
-            ),
-            MagicMock(
-                __enter__=MagicMock(
-                    side_effect=ProgrammingError("relation does not exist", None, None)
-                ),
+                __enter__=MagicMock(side_effect=ProgrammingError("relation does not exist", None, None)),
                 __exit__=MagicMock(return_value=None),
             ),
         ]

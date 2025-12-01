@@ -33,9 +33,7 @@ def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
         Dict with success status and details
     """
     try:
-        result = subprocess.run(
-            [sys.executable, script_path], capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True, timeout=30)
 
         success = result.returncode == 0
         output = result.stdout.strip()
@@ -75,9 +73,7 @@ def main():
     evidence = get_evidence_logger("guard_all")
 
     try:
-        evidence.log_evidence(
-            "guards_start", {"agent": "guard_all", "purpose": "Comprehensive SSOT validation"}
-        )
+        evidence.log_evidence("guards_start", {"agent": "guard_all", "purpose": "Comprehensive SSOT validation"})
 
         # Define all guards to run
         guards = [
@@ -172,9 +168,7 @@ def run_sql_guard(sql_path: str, description: str) -> Dict[str, Any]:
             }
 
         # Run psql command
-        result = subprocess.run(
-            ["psql", dsn, "-f", sql_path], capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run(["psql", dsn, "-f", sql_path], capture_output=True, text=True, timeout=30)
 
         # Parse psql output - look for errors or empty_hebrew counts
         output_lines = result.stdout.strip().split("\n")

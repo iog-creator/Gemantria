@@ -122,9 +122,7 @@ def compute_lm_status() -> dict[str, Any]:
         elif provider in ("lmstudio", "theology_lmstudio"):
             # For theology, use theology_lmstudio_base_url if available
             if slot_name == "theology":
-                base_url = cfg.get("theology_lmstudio_base_url") or cfg.get(
-                    "base_url", "http://127.0.0.1:9994"
-                )
+                base_url = cfg.get("theology_lmstudio_base_url") or cfg.get("base_url", "http://127.0.0.1:9994")
             else:
                 base_url = cfg.get("base_url", "http://127.0.0.1:9994")
             if cfg.get("lm_studio_enabled", True):

@@ -13,9 +13,7 @@ OUT = pathlib.Path("share/eval/badges/patterns_badge.svg")
 
 def ensure_patterns() -> dict:
     if not PATTERNS.exists():
-        subprocess.run(
-            [sys.executable, "scripts/analytics/export_patterns_from_json.py"], check=False
-        )
+        subprocess.run([sys.executable, "scripts/analytics/export_patterns_from_json.py"], check=False)
     return json.loads(PATTERNS.read_text(encoding="utf-8")) if PATTERNS.exists() else {}
 
 

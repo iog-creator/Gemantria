@@ -99,9 +99,7 @@ def main() -> int:
         if is_strict:
             print(json.dumps(verdict, indent=2))
             EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
-            print(
-                "[guard_mcp_proof] ERROR: Proof snapshot not found (STRICT mode)", file=sys.stderr
-            )
+            print("[guard_mcp_proof] ERROR: Proof snapshot not found (STRICT mode)", file=sys.stderr)
             return 1
         else:
             print(json.dumps(verdict, indent=2))

@@ -13,9 +13,7 @@ def host_hash():
 
 def try_strict_probe():
     # STRICT path: we don't fail if DB is absent; we record HINT vs STRICT
-    dsn = (
-        os.getenv("GEMATRIA_DSN") or os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO") or ""
-    )
+    dsn = os.getenv("GEMATRIA_DSN") or os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO") or ""
     strict = os.getenv("STRICT_DB_PROBE", "0") == "1" or os.getenv("ENFORCE_STRICT", "0") == "1"
     mode = "STRICT" if strict and dsn else "HINT"
     # Light probe: SELECT 1 equivalent (no external calls; we only record mode + hashes)

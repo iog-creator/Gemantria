@@ -174,9 +174,7 @@ def main() -> int:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema exists
-                cur.execute(
-                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
-                )
+                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
                 schema_exists = cur.fetchone()[0]
 
                 if not schema_exists:
@@ -212,9 +210,7 @@ def main() -> int:
                         table_info = get_table_info(cur, table_name)
                         tables.append(table_info)
                     except Exception as e:
-                        print(
-                            f"WARN: Failed to introspect table {table_name}: {e}", file=sys.stderr
-                        )
+                        print(f"WARN: Failed to introspect table {table_name}: {e}", file=sys.stderr)
                         tables.append({"name": table_name, "error": str(e)})
 
                 snapshot = {
@@ -225,9 +221,7 @@ def main() -> int:
 
                 output_file.write_text(json.dumps(snapshot, indent=2))
                 print(f"[control_schema_snapshot] Wrote snapshot to {output_file}")
-                print(
-                    f"[control_schema_snapshot] Found {len(tables)} tables: {', '.join(t['name'] for t in tables)}"
-                )
+                print(f"[control_schema_snapshot] Found {len(tables)} tables: {', '.join(t['name'] for t in tables)}")
                 return 0
 
     except psycopg.Error as e:

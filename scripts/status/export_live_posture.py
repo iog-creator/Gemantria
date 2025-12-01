@@ -91,12 +91,10 @@ def export_live_posture() -> dict[str, Any]:
 
     # Check for Qwen/Granite models
     qwen_available = any(
-        "qwen" in slot.get("model", "").lower() and slot.get("service") in ["OK", "UP"]
-        for slot in lm_slots
+        "qwen" in slot.get("model", "").lower() and slot.get("service") in ["OK", "UP"] for slot in lm_slots
     )
     granite_available = any(
-        "granite" in slot.get("model", "").lower() and slot.get("service") in ["OK", "UP"]
-        for slot in lm_slots
+        "granite" in slot.get("model", "").lower() and slot.get("service") in ["OK", "UP"] for slot in lm_slots
     )
 
     return {
@@ -132,9 +130,7 @@ def main() -> int:
             json.dumps(export_data, indent=2, default=str),
             encoding="utf-8",
         )
-        print(
-            f"✅ Exported live posture: DB={export_data['db']['mode']}, LM slots={len(export_data['lm']['slots'])}"
-        )
+        print(f"✅ Exported live posture: DB={export_data['db']['mode']}, LM slots={len(export_data['lm']['slots'])}")
         return 0
     except Exception as exc:
         print(f"ERROR: Failed to export live posture: {exc}", file=sys.stderr)

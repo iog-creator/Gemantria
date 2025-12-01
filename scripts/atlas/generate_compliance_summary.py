@@ -53,9 +53,7 @@ def calculate_24h_violations(head_data: dict | None) -> int:
     return max(0, int(runs_7d * 0.14))  # ~1/7 of 7d
 
 
-def aggregate_violations_by_code(
-    violations_7d: dict | None, violations_30d: dict | None
-) -> dict[str, dict[str, int]]:
+def aggregate_violations_by_code(violations_7d: dict | None, violations_30d: dict | None) -> dict[str, dict[str, int]]:
     """Aggregate violations by code across windows."""
     by_code: dict[str, dict[str, int]] = {}
 
@@ -69,11 +67,7 @@ def aggregate_violations_by_code(
                 count = item.get("count", 0)
             else:
                 # Handle case where violations is a dict mapping code -> count
-                code = (
-                    str(item)
-                    if not isinstance(item, dict)
-                    else item.get("violation_code", "unknown")
-                )
+                code = str(item) if not isinstance(item, dict) else item.get("violation_code", "unknown")
                 count = violations[item] if isinstance(violations, dict) else item.get("count", 0)
 
             if code not in by_code:
@@ -83,9 +77,7 @@ def aggregate_violations_by_code(
     return by_code
 
 
-def aggregate_violations_by_tool(
-    violations_7d: dict | None, violations_30d: dict | None
-) -> dict[str, dict[str, int]]:
+def aggregate_violations_by_tool(violations_7d: dict | None, violations_30d: dict | None) -> dict[str, dict[str, int]]:
     """Aggregate violations by tool (extracted from violation codes)."""
     by_tool: dict[str, dict[str, int]] = {}
 
@@ -98,11 +90,7 @@ def aggregate_violations_by_tool(
                 code = item.get("violation_code", "unknown")
                 count = item.get("count", 0)
             else:
-                code = (
-                    str(item)
-                    if not isinstance(violations, dict)
-                    else item.get("violation_code", "unknown")
-                )
+                code = str(item) if not isinstance(violations, dict) else item.get("violation_code", "unknown")
                 count = violations[item] if isinstance(violations, dict) else item.get("count", 0)
 
             # Extract tool from violation code (e.g., "guard.dsn.centralized" -> "dsn")
@@ -120,9 +108,7 @@ def aggregate_violations_by_tool(
     return by_tool
 
 
-def get_top_offenders(
-    violations_7d: dict | None, violations_30d: dict | None, limit: int = 10
-) -> list[dict]:
+def get_top_offenders(violations_7d: dict | None, violations_30d: dict | None, limit: int = 10) -> list[dict]:
     """Get top offenders (tools/patterns/nodes) from violations."""
     offenders: dict[str, int] = {}
 
@@ -135,11 +121,7 @@ def get_top_offenders(
                 code = item.get("violation_code", "unknown")
                 count = item.get("count", 0)
             else:
-                code = (
-                    str(item)
-                    if not isinstance(violations, dict)
-                    else item.get("violation_code", "unknown")
-                )
+                code = str(item) if not isinstance(violations, dict) else item.get("violation_code", "unknown")
                 count = violations[item] if isinstance(violations, dict) else item.get("count", 0)
 
             offenders[code] = offenders.get(code, 0) + count
@@ -169,9 +151,7 @@ def generate_compliance_summary() -> dict:
                 else 0
             )
             for item in (
-                violations_7d.get("violations", [])
-                if isinstance(violations_7d.get("violations"), list)
-                else []
+                violations_7d.get("violations", []) if isinstance(violations_7d.get("violations"), list) else []
             )
         )
         if violations_7d and violations_7d.get("violations")
@@ -188,9 +168,7 @@ def generate_compliance_summary() -> dict:
                 else 0
             )
             for item in (
-                violations_30d.get("violations", [])
-                if isinstance(violations_30d.get("violations"), list)
-                else []
+                violations_30d.get("violations", []) if isinstance(violations_30d.get("violations"), list) else []
             )
         )
         if violations_30d and violations_30d.get("violations")

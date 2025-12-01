@@ -64,12 +64,8 @@ def main():
         json.dump(output_data, f, ensure_ascii=False, indent=2)
 
     verified_count = len(output_data.get("nodes", []))
-    math_checks = sum(
-        1 for n in output_data.get("nodes", []) if n.get("analysis", {}).get("math_check")
-    )
-    print(
-        f"MATH_VERIFICATION_COMPLETE {verified_count} nouns processed, {math_checks} with math_check"
-    )
+    math_checks = sum(1 for n in output_data.get("nodes", []) if n.get("analysis", {}).get("math_check"))
+    print(f"MATH_VERIFICATION_COMPLETE {verified_count} nouns processed, {math_checks} with math_check")
 
 
 if __name__ == "__main__":

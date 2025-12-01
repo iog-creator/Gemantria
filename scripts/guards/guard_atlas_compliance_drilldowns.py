@@ -153,9 +153,7 @@ def main() -> int:
     # Print verdict
     if all_ok:
         print("[guard_atlas_compliance_drilldowns] Verdict: PASS")
-        print(
-            f"[guard_atlas_compliance_drilldowns] Found {len(pages_check['found_pages'])} violation pages"
-        )
+        print(f"[guard_atlas_compliance_drilldowns] Found {len(pages_check['found_pages'])} violation pages")
     else:
         print("[guard_atlas_compliance_drilldowns] Verdict: FAIL", file=sys.stderr)
         if not pages_check["all_pages_exist"]:

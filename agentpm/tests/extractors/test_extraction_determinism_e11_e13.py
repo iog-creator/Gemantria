@@ -18,9 +18,7 @@ def test_e11_deterministic_with_injected_clock():
 def test_e12_stable_ordering_is_preserved():
     items = [{"idx": i} for i in range(5)]
     out = provenance.stamp_batch(items, "qwen2.5", 7, base_dt=BASE)
-    assert [r["idx"] for r in out] == [
-        r["idx"] for r in items
-    ], "Output order must match input order"
+    assert [r["idx"] for r in out] == [r["idx"] for r in items], "Output order must match input order"
 
 
 def test_e13_seed_separation_only_changes_seed_field():

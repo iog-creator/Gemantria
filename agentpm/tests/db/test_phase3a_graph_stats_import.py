@@ -40,7 +40,9 @@ class TestGraphStatsImport:
 
         # Mock execute result
         mock_result = MagicMock()
-        mock_result.rowcount = 7  # nodes, edges, clusters, density, centrality, centrality.avg_degree, centrality.avg_betweenness
+        mock_result.rowcount = (
+            7  # nodes, edges, clusters, density, centrality, centrality.avg_degree, centrality.avg_betweenness
+        )
         mock_conn.execute.return_value = mock_result
 
         # Run import

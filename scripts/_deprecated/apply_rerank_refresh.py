@@ -45,9 +45,7 @@ def main() -> int:
         e["class"] = "strong" if strength >= 0.90 else "weak" if strength >= 0.75 else "other"
     GRAPH.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
     path_str = GRAPH.relative_to(ROOT)
-    print(
-        f"[rerank.refresh] updated edges={len(edges)} (filled_from_provider={filled}) → {path_str}"
-    )
+    print(f"[rerank.refresh] updated edges={len(edges)} (filled_from_provider={filled}) → {path_str}")
     return 0
 
 

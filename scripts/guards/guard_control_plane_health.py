@@ -22,9 +22,7 @@ except Exception:
     if strict_mode == "STRICT":
         print("ERROR: psycopg not installed; required in STRICT mode.", file=sys.stderr)
         sys.exit(1)
-    print(
-        "SKIP: psycopg not installed; treating as empty-DB tolerated (HINT mode).", file=sys.stderr
-    )
+    print("SKIP: psycopg not installed; treating as empty-DB tolerated (HINT mode).", file=sys.stderr)
     sys.exit(0)
 
 DSN = get_rw_dsn()
@@ -141,9 +139,7 @@ try:
             sys.exit(0)
 
         # Check materialized views exist
-        cur.execute(
-            "SELECT 1 FROM pg_matviews WHERE schemaname='control' AND matviewname='mv_compliance_7d'"
-        )
+        cur.execute("SELECT 1 FROM pg_matviews WHERE schemaname='control' AND matviewname='mv_compliance_7d'")
         if cur.fetchone() is None:
             if strict_mode == "STRICT":
                 print("ERROR: mv_compliance_7d missing", file=sys.stderr)
@@ -151,9 +147,7 @@ try:
             print("HINT: mv_compliance_7d missing")
             sys.exit(0)
 
-        cur.execute(
-            "SELECT 1 FROM pg_matviews WHERE schemaname='control' AND matviewname='mv_compliance_30d'"
-        )
+        cur.execute("SELECT 1 FROM pg_matviews WHERE schemaname='control' AND matviewname='mv_compliance_30d'")
         if cur.fetchone() is None:
             if strict_mode == "STRICT":
                 print("ERROR: mv_compliance_30d missing", file=sys.stderr)
@@ -199,11 +193,7 @@ try:
 
 except Exception as e:
     # Option C: DB is SSOT - DB-down is always a failure for live gates
-    print(
-        "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr
-    )
+    print("❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr)
     print(f"   Error: {e}", file=sys.stderr)
-    print(
-        "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr
-    )
+    print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr)
     sys.exit(1)

@@ -63,9 +63,7 @@ def main() -> int:
             "generated_at": datetime.now(UTC).isoformat(),
         }
         VERDICT_PATH.write_text(json.dumps(verdict_data, indent=2) + "\n", encoding="utf-8")
-        print(
-            "[guard_control_compliance_webproof_backlinks] FAIL: HTML file missing", file=sys.stderr
-        )
+        print("[guard_control_compliance_webproof_backlinks] FAIL: HTML file missing", file=sys.stderr)
         return 1
 
     try:

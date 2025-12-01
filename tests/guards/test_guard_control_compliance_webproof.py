@@ -25,9 +25,7 @@ def test_guard_control_compliance_webproof_verdict_structure():
 
     # Validate top-level keys
     required_keys = {"ok", "page", "errors", "generated_at"}
-    assert required_keys.issubset(
-        data.keys()
-    ), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate page
     assert data["page"] == "control_compliance.html"

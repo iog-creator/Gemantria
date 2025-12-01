@@ -207,9 +207,7 @@ def run_inventory(repo_root: Path | None = None) -> dict[str, Any]:
                     """
                 )
                 if not cur.fetchone():
-                    result["error"] = (
-                        "control.kb_document table does not exist. Run migration 048 first."
-                    )
+                    result["error"] = "control.kb_document table does not exist. Run migration 048 first."
                     return result
 
             # Find all doc-like files

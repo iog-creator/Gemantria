@@ -36,9 +36,7 @@ def _type_ok(value: Any, t: str | list[str]) -> bool:
     return one(value, t)
 
 
-def _validate(
-    instance: Json, schema: dict[str, Any], path: list[str | int], errs: list[str]
-) -> None:
+def _validate(instance: Json, schema: dict[str, Any], path: list[str | int], errs: list[str]) -> None:
     # type
     if "type" in schema and not _type_ok(instance, schema["type"]):
         errs.append(f"{_loc(path)}: expected type {schema['type']}, got {type(instance).__name__}")

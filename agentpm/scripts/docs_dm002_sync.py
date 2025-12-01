@@ -147,9 +147,7 @@ def main() -> None:
         raise SystemExit(f"preview file not found: {PREVIEW_PATH}")
 
     canonical_map, archive_map = parse_preview(PREVIEW_PATH)
-    print(
-        f"Parsed preview: {len(canonical_map)} canonical, {len(archive_map)} archive_candidate paths"
-    )
+    print(f"Parsed preview: {len(canonical_map)} canonical, {len(archive_map)} archive_candidate paths")
 
     updated_canonical, updated_archive, missing = sync_db(canonical_map, archive_map)
 

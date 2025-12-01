@@ -120,11 +120,7 @@ def node(id_: str, label: str, summary_md: Path, status: str, base_url: str = ""
 def write_human_summary(title: str, verdict_path: Path, out_md: Path) -> None:
     """Render a minimal non-technical summary from an evidence file (JSON or text)."""
     out_md.parent.mkdir(parents=True, exist_ok=True)
-    status = (
-        verdict_status(verdict_path)
-        if verdict_path.suffix != ".svg"
-        else file_presence_status(verdict_path)
-    )
+    status = verdict_status(verdict_path) if verdict_path.suffix != ".svg" else file_presence_status(verdict_path)
     emoji = {"green": "✅", "red": "❌", "grey": "⚪"}.get(status, "⚪")
     raw_link = verdict_path.relative_to(REPO).as_posix()
 
@@ -237,9 +233,7 @@ def build_mermaid(tag: str, statuses: dict[str, str], base_url: str = "") -> str
     )
     parts.append("  end\n\n")
 
-    parts.append(
-        "  TAG --> EJSON\n  TAG --> ERFC\n  TAG --> EACC\n  TAG --> XREF\n  TAG --> BADGES\n\n"
-    )
+    parts.append("  TAG --> EJSON\n  TAG --> ERFC\n  TAG --> EACC\n  TAG --> XREF\n  TAG --> BADGES\n\n")
 
     parts.append(
         "  %% Color classes\n"
@@ -381,15 +375,11 @@ def build_ascii_diagram(tag: str, statuses: dict[str, str]) -> str:
     lines.append(
         f"  {status_symbols[statuses['extraction_acc']]} Extraction accuracy → evidence/guard_extraction_accuracy.json"
     )
-    lines.append(
-        f"  {status_symbols[statuses['xrefs_metrics']]} Xrefs metrics        → evidence/xrefs_metrics.json"
-    )
+    lines.append(f"  {status_symbols[statuses['xrefs_metrics']]} Xrefs metrics        → evidence/xrefs_metrics.json")
     lines.append("")
 
     lines.append("BADGES:")
-    lines.append(
-        f"  {status_symbols[statuses['badges_manifest']]} Badges manifest     → evidence/badges_manifest.json"
-    )
+    lines.append(f"  {status_symbols[statuses['badges_manifest']]} Badges manifest     → evidence/badges_manifest.json")
     lines.append(
         f"  {status_symbols[statuses['badge_exports']]} exports_json.svg    → share/eval/badges/exports_json.svg"
     )
@@ -422,21 +412,11 @@ def main() -> None:
 
     # Write human summaries (orchestrator-friendly)
     write_human_summary("Exports JSON", ITEMS["exports_json"][0], EVIDENCE_DOCS / "exports_json.md")
-    write_human_summary(
-        "RFC3339 timestamps", ITEMS["rfc3339"][0], EVIDENCE_DOCS / "exports_rfc3339.md"
-    )
-    write_human_summary(
-        "Extraction accuracy", ITEMS["extraction_acc"][0], EVIDENCE_DOCS / "extraction_accuracy.md"
-    )
-    write_human_summary(
-        "Xrefs metrics", ITEMS["xrefs_metrics"][0], EVIDENCE_DOCS / "xrefs_metrics.md"
-    )
-    write_human_summary(
-        "Badges manifest", ITEMS["badges_manifest"][0], EVIDENCE_DOCS / "badges_manifest.md"
-    )
-    write_human_summary(
-        "exports_json.svg", ITEMS["badge_exports"][0], EVIDENCE_DOCS / "exports_json_badge.md"
-    )
+    write_human_summary("RFC3339 timestamps", ITEMS["rfc3339"][0], EVIDENCE_DOCS / "exports_rfc3339.md")
+    write_human_summary("Extraction accuracy", ITEMS["extraction_acc"][0], EVIDENCE_DOCS / "extraction_accuracy.md")
+    write_human_summary("Xrefs metrics", ITEMS["xrefs_metrics"][0], EVIDENCE_DOCS / "xrefs_metrics.md")
+    write_human_summary("Badges manifest", ITEMS["badges_manifest"][0], EVIDENCE_DOCS / "badges_manifest.md")
+    write_human_summary("exports_json.svg", ITEMS["badge_exports"][0], EVIDENCE_DOCS / "exports_json_badge.md")
 
     # Generate Mermaid diagram (with base_url for clickable links)
     mermaid = build_mermaid(tag, statuses, base_url)
@@ -453,9 +433,7 @@ def main() -> None:
     ascii_out.write_text(ascii_content, encoding="utf-8")
 
     print(f"Wrote {OUT.relative_to(REPO)} with tag={tag} and statuses={statuses}")
-    print(
-        f"Wrote {html_out.relative_to(REPO)} - open in browser for rendered diagram (base_url={base_url})"
-    )
+    print(f"Wrote {html_out.relative_to(REPO)} - open in browser for rendered diagram (base_url={base_url})")
     print(f"Wrote {ascii_out.relative_to(REPO)} - simple text view for Cursor")
 
 

@@ -71,9 +71,7 @@ def summarize(x):
         "ok": out.get("ok"),
         "strict": out.get("strict"),
         "files_checked": stats.get("files_checked"),
-        "data_files": len(exists.get("data_files", []))
-        if isinstance(exists.get("data_files"), list)
-        else None,
+        "data_files": len(exists.get("data_files", [])) if isinstance(exists.get("data_files"), list) else None,
         "errors": out.get("errors", [])[:3],
         "notes": out.get("notes", [])[:3],
         "rc": x.get("rc"),

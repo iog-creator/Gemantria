@@ -29,10 +29,7 @@ def main() -> int:
     other = len(edges) - strong - weak
 
     top10 = sorted(
-        (
-            (n, (cent.get(n) or {}).get("eigenvector", 0.0))
-            for n in (cent.keys() if isinstance(cent, dict) else [])
-        ),
+        ((n, (cent.get(n) or {}).get("eigenvector", 0.0)) for n in (cent.keys() if isinstance(cent, dict) else [])),
         key=lambda x: x[1],
         reverse=True,
     )[:10]
@@ -57,16 +54,12 @@ def main() -> int:
     md.append("# Eval Run Summary\n")
     if prov.get("git"):
         g = prov["git"]
-        md.append(
-            f"- commit: `{g.get('commit')}`  branch: `{g.get('branch')}`  describe: `{g.get('describe')}`"
-        )
+        md.append(f"- commit: `{g.get('commit')}`  branch: `{g.get('branch')}`  describe: `{g.get('describe')}`")
     md.append(f"- nodes: **{summary['counts']['nodes']}**  edges: **{summary['counts']['edges']}**")
     md.append(f"- edges by class: strong **{strong}**, weak **{weak}**, other **{other}**")
     if summary.get("delta"):
         d = summary["delta"]
-        md.append(
-            f"- delta strong: **{d['delta']['strong']:+d}**, delta weak: **{d['delta']['weak']:+d}**"
-        )
+        md.append(f"- delta strong: **{d['delta']['strong']:+d}**, delta weak: **{d['delta']['weak']:+d}**")
     if summary.get("artifacts") is not None:
         md.append(f"- artifacts cataloged: **{summary['artifacts']}**")
     if top10:

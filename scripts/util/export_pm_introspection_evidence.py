@@ -154,9 +154,7 @@ def get_codebase_refs() -> dict[str, str]:
         ("gotchas", "gotchas_refs"),
     ]
     for pattern, key in searches:
-        output, _ = run_cmd(
-            f"rg '{pattern}' -n agentpm scripts docs .cursor 2>/dev/null | head -100"
-        )
+        output, _ = run_cmd(f"rg '{pattern}' -n agentpm scripts docs .cursor 2>/dev/null | head -100")
         refs[key] = output
     return refs
 

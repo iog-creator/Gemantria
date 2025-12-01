@@ -23,9 +23,7 @@ def test_control_plane_smoke_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "tables"}
-    assert required_keys.issubset(
-        data.keys()
-    ), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"

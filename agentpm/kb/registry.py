@@ -112,9 +112,7 @@ class KBDocumentRegistry(BaseModel):
         default_factory=lambda: datetime.now(UTC).isoformat(),
         description="ISO timestamp when registry was generated",
     )
-    documents: list[KBDocument] = Field(
-        default_factory=list, description="List of registered documents"
-    )
+    documents: list[KBDocument] = Field(default_factory=list, description="List of registered documents")
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -234,9 +232,7 @@ def save_registry(
         raise OSError(f"Failed to write registry file: {e}") from e
 
 
-def validate_registry(
-    registry: KBDocumentRegistry, repo_root: Path | None = None
-) -> dict[str, Any]:
+def validate_registry(registry: KBDocumentRegistry, repo_root: Path | None = None) -> dict[str, Any]:
     """Validate registry entries (check file existence, duplicates, etc.).
 
     Args:
@@ -436,9 +432,7 @@ def analyze_freshness(
         is_stale = False
         if doc.last_refreshed_at:
             try:
-                last_refreshed = datetime.fromisoformat(
-                    doc.last_refreshed_at.replace("Z", "+00:00")
-                )
+                last_refreshed = datetime.fromisoformat(doc.last_refreshed_at.replace("Z", "+00:00"))
                 if last_refreshed.tzinfo is None:
                     last_refreshed = last_refreshed.replace(tzinfo=UTC)
                 age_days = (now - last_refreshed).total_seconds() / 86400

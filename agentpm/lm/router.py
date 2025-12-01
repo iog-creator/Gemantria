@@ -111,11 +111,7 @@ class GraniteRouter:
                 )
 
         # Determine temperature (use task preference or default for slot)
-        temperature = (
-            task.temperature
-            if task.temperature is not None
-            else self._get_default_temperature(slot, task)
-        )
+        temperature = task.temperature if task.temperature is not None else self._get_default_temperature(slot, task)
 
         # Build extra_params based on slot and task requirements
         extra_params = self._build_extra_params(slot, task)
@@ -180,9 +176,7 @@ class GraniteRouter:
         - Falls back to INFERENCE_PROVIDER if slot-specific provider not set
         """
         if slot == "planning":
-            provider = self.config.get("planning_provider") or self.config.get(
-                "provider", "lmstudio"
-            )
+            provider = self.config.get("planning_provider") or self.config.get("provider", "lmstudio")
             provider = str(provider or "").strip()
             return provider or "lmstudio"
         provider_key = f"{slot}_provider"
@@ -275,9 +269,7 @@ class GraniteRouter:
         return params
 
 
-def route_task(
-    task: RouterTask, config: dict[str, Any] | None = None, dry_run: bool = False
-) -> RouterDecision:
+def route_task(task: RouterTask, config: dict[str, Any] | None = None, dry_run: bool = False) -> RouterDecision:
     """Convenience function to route a task.
 
     Args:

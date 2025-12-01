@@ -116,9 +116,7 @@ def test_postgres_checkpointer_list_with_before():
         before_checkpoint[0]["configurable"]["checkpoint_id"],
     )  # (created_at, checkpoint_id)
 
-    next_batch = list(
-        cp.list({"configurable": {"thread_id": thread_id}}, before=before_param, limit=2)
-    )
+    next_batch = list(cp.list({"configurable": {"thread_id": thread_id}}, before=before_param, limit=2))
     assert len(next_batch) == 2
 
     # Should not overlap

@@ -186,9 +186,7 @@ def test_table_insert_select(cur: psycopg.Cursor, table_name: str) -> dict:
                 insert_ok = True
 
         # Test select
-        cur.execute(
-            f"SELECT COUNT(*) FROM control.{table_name} WHERE project_id = %s", (test_project_id,)
-        )
+        cur.execute(f"SELECT COUNT(*) FROM control.{table_name} WHERE project_id = %s", (test_project_id,))
         count = cur.fetchone()[0]
         select_ok = count is not None and count >= 0
 
@@ -214,9 +212,7 @@ def main() -> int:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema exists
-                cur.execute(
-                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
-                )
+                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
                 schema_exists = cur.fetchone()[0]
 
                 if not schema_exists:
@@ -255,9 +251,7 @@ def main() -> int:
 
                 evidence_file.write_text(json.dumps(payload, indent=2))
                 if ok:
-                    print(
-                        f"[control_plane_smoke] DB-on: All tables OK ({len(results)} tables tested)"
-                    )
+                    print(f"[control_plane_smoke] DB-on: All tables OK ({len(results)} tables tested)")
                 else:
                     failed = [t["name"] for t in results if not (t["insert_ok"] and t["select_ok"])]
                     print(

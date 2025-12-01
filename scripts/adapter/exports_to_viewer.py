@@ -48,9 +48,7 @@ bundle = {
 
 # Gather any exports we already produce
 
-cands = glob.glob("exports/**/*.json*", recursive=True) + glob.glob(
-    "exports/**/*.csv", recursive=True
-)
+cands = glob.glob("exports/**/*.json*", recursive=True) + glob.glob("exports/**/*.csv", recursive=True)
 
 if not cands:
     with open(OUTDIR / "bundle.json", "w", encoding="utf-8") as fh:
@@ -97,9 +95,7 @@ for p in cands:
                 continue
 
             if {"concept_id", "lemma"}.issubset(r.keys()):
-                bundle["nodes"].append(
-                    {"id": r.get("concept_id"), "label": r.get("lemma"), "attrs": r}
-                )
+                bundle["nodes"].append({"id": r.get("concept_id"), "label": r.get("lemma"), "attrs": r})
 
             elif {"src_concept_id", "dst_concept_id"}.issubset(r.keys()):
                 bundle["edges"].append(
@@ -133,6 +129,4 @@ if temporal_files:
 with open(OUTDIR / "bundle.json", "w", encoding="utf-8") as fh:
     json.dump(bundle, fh, ensure_ascii=False)
 
-print(
-    f"[adapter] wrote {OUTDIR / 'bundle.json'} with {len(bundle['nodes'])} nodes, {len(bundle['edges'])} edges"
-)
+print(f"[adapter] wrote {OUTDIR / 'bundle.json'} with {len(bundle['nodes'])} nodes, {len(bundle['edges'])} edges")

@@ -18,9 +18,7 @@ def test_e35_node_page_has_view_raw_json_link():
     node_html = _maybe(["share/atlas/nodes/0.html", "share/atlas/nodes/1.html"])
     assert node_html is not None, "node page missing (staged)"
     html = _read(node_html)
-    assert ('id="view-json-raw"' in html) or (
-        "View raw JSON" in html
-    ), "view-raw link not present (staged)"
+    assert ('id="view-json-raw"' in html) or ("View raw JSON" in html), "view-raw link not present (staged)"
 
 
 def test_e36_jumpers_backfill_proof_present():

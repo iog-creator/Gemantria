@@ -182,9 +182,7 @@ def pytest_terminal_summary(terminalreporter: pytest.TerminalReporter, exitstatu
         for path, percentage in minicov.file_coverage.items():
             display_path = _display_path(Path(terminalreporter.config.rootpath), path)
             terminalreporter.write_line(f"  - {display_path}: {percentage:.1f}%")
-        terminalreporter.write_line(
-            f"Overall coverage: {minicov.overall:.1f}% (fail-under={minicov.fail_under:.1f}%)"
-        )
+        terminalreporter.write_line(f"Overall coverage: {minicov.overall:.1f}% (fail-under={minicov.fail_under:.1f}%)")
         if "term-missing" in minicov.reports:
             for path, missing in minicov.missing_lines.items():
                 display_path = _display_path(Path(terminalreporter.config.rootpath), path)

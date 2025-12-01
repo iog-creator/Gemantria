@@ -44,11 +44,7 @@ def main() -> int:
         if not isinstance(url, str) or not url_re.fullmatch(url or ""):
             return write_verdict(False, error="bad_page_url", value=url)
         bl = it.get("backlinks")
-        if (
-            not isinstance(bl, list)
-            or not bl
-            or not all(isinstance(b, str) and b.startswith("/atlas/") for b in bl)
-        ):
+        if not isinstance(bl, list) or not bl or not all(isinstance(b, str) and b.startswith("/atlas/") for b in bl):
             return write_verdict(False, error="bad_backlinks", value=bl)
 
     return write_verdict(True, count=len(items), schema=schema)

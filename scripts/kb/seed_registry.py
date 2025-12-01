@@ -195,9 +195,7 @@ def main() -> None:
         if validation["valid"]:
             print("VALIDATION: ✓ Registry is valid", file=sys.stderr)
         else:
-            print(
-                f"VALIDATION: ✗ Registry has {len(validation['errors'])} error(s)", file=sys.stderr
-            )
+            print(f"VALIDATION: ✗ Registry has {len(validation['errors'])} error(s)", file=sys.stderr)
             for error in validation["errors"][:5]:  # First 5 errors
                 print(f"  - {error}", file=sys.stderr)
             if len(validation["errors"]) > 5:

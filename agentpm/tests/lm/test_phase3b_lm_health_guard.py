@@ -108,9 +108,7 @@ class TestLmHealthGuard:
         assert result["ok"] is False
         assert result["mode"] == "lm_off"
         assert len(result["details"]["errors"]) > 0
-        assert any(
-            "lm_studio_disabled_or_unconfigured" in err for err in result["details"]["errors"]
-        )
+        assert any("lm_studio_disabled_or_unconfigured" in err for err in result["details"]["errors"])
 
     @patch("scripts.guards.guard_lm_health.lm_studio_chat")
     @patch("scripts.guards.guard_lm_health.get_lm_studio_settings")

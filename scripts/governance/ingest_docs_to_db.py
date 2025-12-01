@@ -54,9 +54,7 @@ class DocTarget:
 
 
 CANONICAL_DOCS: List[DocTarget] = [
-    DocTarget(
-        logical_name="AGENTS_ROOT", role="ssot", repo_path=REPO_ROOT / "AGENTS.md", is_ssot=True
-    ),
+    DocTarget(logical_name="AGENTS_ROOT", role="ssot", repo_path=REPO_ROOT / "AGENTS.md", is_ssot=True),
     DocTarget(
         logical_name="MASTER_PLAN",
         role="ssot",

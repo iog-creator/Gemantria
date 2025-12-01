@@ -45,11 +45,7 @@ def get_required_directories() -> list[str]:
     agentpm_dir = ROOT / "agentpm"
     if agentpm_dir.exists():
         for subdir in agentpm_dir.iterdir():
-            if (
-                subdir.is_dir()
-                and not subdir.name.startswith(".")
-                and subdir.name not in EXCLUDED_DIRS
-            ):
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required.append(f"agentpm/{subdir.name}")
 
     # Add all docs subdirectories (excluding cache/generated dirs)
@@ -57,11 +53,7 @@ def get_required_directories() -> list[str]:
     if docs_dir.exists():
         required.append("docs")
         for subdir in docs_dir.iterdir():
-            if (
-                subdir.is_dir()
-                and not subdir.name.startswith(".")
-                and subdir.name not in EXCLUDED_DIRS
-            ):
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required.append(f"docs/{subdir.name}")
 
     # Add webui subdirectories (excluding generated/static dirs)

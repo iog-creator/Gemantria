@@ -21,9 +21,7 @@ from agentpm.control_plane.doc_fragments import (
 )
 
 
-def build_por_checklist(
-    project_id: int, repo_root: pathlib.Path | None = None
-) -> List[Dict[str, Any]]:
+def build_por_checklist(project_id: int, repo_root: pathlib.Path | None = None) -> List[Dict[str, Any]]:
     """
     Build PoR checklist from required document fragments.
     Returns list of fragment entries with src, anchor, sha256, uri.

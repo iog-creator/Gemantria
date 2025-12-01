@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-12-01T16:01:38.090016+00:00
+**Generated**: 2025-12-01T16:09:43.976028+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-12-01T08:01:28-08:00`
+- **generated_at**: `2025-12-01T08:09:33-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -92,7 +92,7 @@
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-12-01T16:01:28.565598+00:00`
+  - **timestamp**: `2025-12-01T16:09:33.433146+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -106,7 +106,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-12-01T16:01:28.565621+00:00`
+    - **generated_at**: `2025-12-01T16:09:33.433168+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -139,7 +139,7 @@
         - **error**: `null`
         - **tables**:
           - **control.agent_run**: `2270`
-          - **control.agent_run_cli**: `68`
+          - **control.agent_run_cli**: `71`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
           - **control.doc_embedding**: `2963`
@@ -152,7 +152,7 @@
           - **control.kb_document**: `4238`
           - **control.rule_definition**: `69`
           - **control.rule_source**: `138`
-          - **control.system_state_ledger**: `365`
+          - **control.system_state_ledger**: `381`
           - **control.tool_catalog**: `7`
           - **gematria.ai_embeddings**: `1`
           - **gematria.checkpoints**: `4`
@@ -199,8 +199,8 @@
           - **public.document_access_log**: `1`
           - **public.document_sections**: `398`
           - **public.governance_artifacts**: `131`
-          - **public.governance_compliance_log**: `235`
-          - **public.hint_emissions**: `773`
+          - **public.governance_compliance_log**: `236`
+          - **public.hint_emissions**: `779`
           - **public.hypotheses**: `0`
           - **public.integration_log**: `0`
           - **public.isolation_patterns**: `0`
@@ -856,9 +856,9 @@
       - **last_24h**: `111`
       - **last_7d**: `2265`
     - **agent_run_cli**:
-      - **total**: `68`
-      - **last_24h**: `28`
-      - **last_7d**: `68`
+      - **total**: `71`
+      - **last_24h**: `31`
+      - **last_7d**: `71`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:

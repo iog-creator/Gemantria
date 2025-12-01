@@ -79,11 +79,7 @@ def check_timestamp(data: dict) -> dict[str, bool | str | float]:
     try:
         generated_at = datetime.fromisoformat(generated_at_str.replace("Z", "+00:00"))
         now = datetime.now(UTC)
-        age = (
-            now - generated_at.replace(tzinfo=UTC)
-            if generated_at.tzinfo is None
-            else now - generated_at
-        )
+        age = now - generated_at.replace(tzinfo=UTC) if generated_at.tzinfo is None else now - generated_at
 
         if age > timedelta(hours=24):
             return {

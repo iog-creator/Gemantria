@@ -261,9 +261,7 @@ async def get_status_explanation_endpoint() -> JSONResponse:
         }
     """
     try:
-        explanation = explain_system_status(
-            use_lm=False
-        )  # Disabled to avoid triggering model loads
+        explanation = explain_system_status(use_lm=False)  # Disabled to avoid triggering model loads
         return JSONResponse(content=explanation)
     except Exception as e:
         LOG.error(f"Error getting status explanation: {e}")
@@ -1330,9 +1328,7 @@ async def get_db_health_timeline_endpoint() -> JSONResponse:
             )
 
         # Remove internal fields
-        db_health_clean = {
-            k: v for k, v in db_health_data.items() if k not in ("available", "note")
-        }
+        db_health_clean = {k: v for k, v in db_health_data.items() if k not in ("available", "note")}
 
         # Transform to timeline shape (single snapshot for now)
         mode = db_health_clean.get("mode", "db_off")
@@ -1343,9 +1339,7 @@ async def get_db_health_timeline_endpoint() -> JSONResponse:
         if mode == "ready" and ok:
             notes = "Database is ready and all checks passed"
         elif mode == "partial":
-            notes = (
-                f"Database connected but some tables missing: {errors[0] if errors else 'unknown'}"
-            )
+            notes = f"Database connected but some tables missing: {errors[0] if errors else 'unknown'}"
         elif mode == "db_off":
             notes = f"Database unavailable: {errors[0] if errors else 'connection failed'}"
         else:
@@ -1487,9 +1481,7 @@ async def get_rerank_summary_endpoint() -> JSONResponse:
         if not graph_stats or nodes == 0:
             response["note"] = "Graph stats not available; run pipeline to populate data."
         elif not edge_data.get("available", False):
-            response["note"] = (
-                "Edge class counts not available; run `make eval.reclassify` to populate."
-            )
+            response["note"] = "Edge class counts not available; run `make eval.reclassify` to populate."
 
         return JSONResponse(content=response)
 
@@ -1724,9 +1716,7 @@ async def db_insights_page() -> HTMLResponse:
 @app.get("/api/bible/passage")
 async def get_bible_passage(
     reference: str = Query(..., description="Bible reference (e.g., 'John 3:16-18')"),
-    use_lm: bool = Query(
-        False, description="Use AI commentary (default: False to avoid model loads)"
-    ),
+    use_lm: bool = Query(False, description="Use AI commentary (default: False to avoid model loads)"),
 ) -> JSONResponse:
     """Get Bible passage and optional commentary.
 
@@ -1906,9 +1896,7 @@ async def keyword_search_endpoint(request: KeywordSearchRequest) -> JSONResponse
         )
 
     try:
-        results = search_verses(
-            query=request.query, translation=request.translation, limit=request.limit
-        )
+        results = search_verses(query=request.query, translation=request.translation, limit=request.limit)
 
         response = {
             "query": request.query,
@@ -2080,9 +2068,7 @@ async def cross_language_endpoint(request: CrossLanguageRequest) -> JSONResponse
 @app.get("/api/bible/insights/{reference}")
 async def insights_endpoint(
     reference: str,
-    translations: str | None = Query(
-        None, description="Comma-separated list of translations (e.g., 'ESV,ASV')"
-    ),
+    translations: str | None = Query(None, description="Comma-separated list of translations (e.g., 'ESV,ASV')"),
     include_lexicon: bool = Query(True, description="Include lexicon entries"),
     include_similar: bool = Query(True, description="Include similar verses"),
     similarity_limit: int = Query(5, ge=1, le=20, description="Number of similar verses (1-20)"),
@@ -2195,9 +2181,7 @@ async def insights_endpoint(
 async def mcp_tools_search_endpoint(
     q: str | None = Query(None, description="Search query (semantic + keyword)"),
     subsystem: str | None = Query(None, description="Filter by subsystem (e.g., 'biblescholar')"),
-    visibility: str | None = Query(
-        None, description="Filter by visibility ('internal' or 'external')"
-    ),
+    visibility: str | None = Query(None, description="Filter by visibility ('internal' or 'external')"),
     limit: int = Query(20, ge=1, le=100, description="Maximum number of results (1-100)"),
 ) -> JSONResponse:
     """Hybrid semantic + keyword search for MCP tools.
@@ -2300,9 +2284,7 @@ async def mcp_tools_search_endpoint(
                                 params["query_embedding"] = str(query_embedding)
                             else:
                                 # Fallback to keyword search
-                                conditions.append(
-                                    '(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)'
-                                )
+                                conditions.append('(name ILIKE %(keyword)s OR "desc" ILIKE %(keyword)s)')
                                 params["keyword"] = f"%{q}%"
                     else:
                         # Fallback to keyword search
@@ -2841,9 +2823,7 @@ async def get_forecasts(
 @app.get("/temporal/patterns")
 async def get_temporal_patterns_filtered(
     book: str = Query("Genesis", description="Biblical book name"),
-    metric: str = Query(
-        None, description="Filter by metric type (frequency, strength, cooccurrence)"
-    ),
+    metric: str = Query(None, description="Filter by metric type (frequency, strength, cooccurrence)"),
 ) -> JSONResponse:
     """
     Retrieve filtered temporal patterns from share/temporal_patterns_latest.json.
@@ -2949,9 +2929,7 @@ async def get_temporal_forecast_filtered(
             return JSONResponse(
                 content={
                     "error": f"Model '{model}' not found",
-                    "available_models": list(
-                        set(f.get("model") for f in data.get("forecasts", []))
-                    ),
+                    "available_models": list(set(f.get("model") for f in data.get("forecasts", []))),
                 },
                 status_code=404,
             )

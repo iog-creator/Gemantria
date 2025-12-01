@@ -193,13 +193,7 @@ def main():
                     )
             files_checked += 1
     else:
-        if (
-            strict
-            and schema_path
-            and not candidates
-            and not args.allow_empty
-            and not is_tag_build()
-        ):
+        if strict and schema_path and not candidates and not args.allow_empty and not is_tag_build():
             ok = False
 
     out = {

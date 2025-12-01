@@ -9,6 +9,4 @@ def extract_nouns_from_bible(book: str) -> list[dict]:
     In the full implementation this will call into bible_db / extraction agents
     and adapt to the AgentPM control-plane.
     """
-    raise NotImplementedError(
-        "extract_nouns_from_bible is not yet implemented; see Gematria module plan."
-    )
+    raise NotImplementedError("extract_nouns_from_bible is not yet implemented; see Gematria module plan.")

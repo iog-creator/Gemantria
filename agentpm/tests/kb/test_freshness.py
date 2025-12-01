@@ -140,10 +140,7 @@ class TestAnalyzeFreshness:
             assert result["summary"]["out_of_sync_count"] == 1
             assert len(result["out_of_sync_docs"]) == 1
             assert result["out_of_sync_docs"][0]["id"] == "out-of-sync-doc"
-            assert (
-                result["out_of_sync_docs"][0]["file_mtime"]
-                > result["out_of_sync_docs"][0]["last_seen_mtime"]
-            )
+            assert result["out_of_sync_docs"][0]["file_mtime"] > result["out_of_sync_docs"][0]["last_seen_mtime"]
 
     def test_analyze_freshness_custom_refresh_interval(self):
         """Test that custom refresh intervals override defaults."""

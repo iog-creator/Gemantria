@@ -35,9 +35,7 @@ def test_usage_dashboard_schema() -> None:
     assert config.get("schema") == "atlas_dashboard", "Invalid schema"
     assert config.get("version") == "1.0", "Invalid version"
     assert config.get("title") == "LM Studio Usage (7d)", "Invalid title"
-    assert (
-        config.get("data_source") == "share/atlas/control_plane/lm_usage_7d.json"
-    ), "Invalid data_source"
+    assert config.get("data_source") == "share/atlas/control_plane/lm_usage_7d.json", "Invalid data_source"
     assert config.get("db_off_safe") is True, "Must be db_off safe"
     assert "panels" in config, "Missing panels"
 
@@ -50,9 +48,7 @@ def test_health_dashboard_schema() -> None:
     assert config.get("schema") == "atlas_dashboard", "Invalid schema"
     assert config.get("version") == "1.0", "Invalid version"
     assert config.get("title") == "LM Studio Health (7d)", "Invalid title"
-    assert (
-        config.get("data_source") == "share/atlas/control_plane/lm_health_7d.json"
-    ), "Invalid data_source"
+    assert config.get("data_source") == "share/atlas/control_plane/lm_health_7d.json", "Invalid data_source"
     assert config.get("db_off_safe") is True, "Must be db_off safe"
     assert "panels" in config, "Missing panels"
 

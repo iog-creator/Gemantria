@@ -207,11 +207,7 @@ def calculate_graph_stats(db):
             import networkx as nx  # noqa: E402
 
             # consider "cosine" as edge weight if present
-            rows = list(
-                db.execute(
-                    "SELECT source_id, target_id, COALESCE(cosine, 0.0) FROM concept_relations"
-                )
-            )  # noqa: E501
+            rows = list(db.execute("SELECT source_id, target_id, COALESCE(cosine, 0.0) FROM concept_relations"))  # noqa: E501
             if rows:
                 G = nx.Graph()
                 for s, t, w in rows:
@@ -220,9 +216,7 @@ def calculate_graph_stats(db):
                 degrees = dict(G.degree())
                 max_possible_degree = len(G.nodes()) - 1
                 degree_centrality = (
-                    {n: d / max_possible_degree for n, d in degrees.items()}
-                    if max_possible_degree > 0
-                    else {}  # noqa: E501
+                    {n: d / max_possible_degree for n, d in degrees.items()} if max_possible_degree > 0 else {}  # noqa: E501
                 )
 
                 # Betweenness (weighted by inverse similarity to prefer stronger ties)
@@ -231,19 +225,11 @@ def calculate_graph_stats(db):
                     for u, v, d in G.edges(data=True)  # noqa: E501
                 }
                 nx.set_edge_attributes(G, inv_weights, name="invw")
-                bet = (
-                    nx.betweenness_centrality(G, weight="invw", normalized=True)
-                    if G.number_of_edges()
-                    else {}
-                )
+                bet = nx.betweenness_centrality(G, weight="invw", normalized=True) if G.number_of_edges() else {}
 
                 # Eigenvector centrality (use weight, already normalized)
                 try:
-                    eig = (
-                        nx.eigenvector_centrality_numpy(G, weight="weight")
-                        if G.number_of_edges()
-                        else {}
-                    )
+                    eig = nx.eigenvector_centrality_numpy(G, weight="weight") if G.number_of_edges() else {}
                 except Exception:
                     eig = {}
 
@@ -252,9 +238,7 @@ def calculate_graph_stats(db):
 
                 stats["centrality"] = {
                     "avg_degree": _avg(degree_centrality),
-                    "max_degree": (
-                        float(max(degree_centrality.values())) if degree_centrality else 0.0
-                    ),
+                    "max_degree": (float(max(degree_centrality.values())) if degree_centrality else 0.0),
                     "avg_betweenness": _avg(bet),
                     "max_betweenness": float(max(bet.values())) if bet else 0.0,
                     "avg_eigenvector": _avg(eig),
@@ -335,12 +319,8 @@ def calculate_graph_stats(db):
     metrics_overview = list(db.execute("SELECT * FROM v_metrics_overview"))
     if metrics_overview:
         stats["cluster_metrics"] = {
-            "avg_cluster_density": (
-                float(metrics_overview[0][3]) if metrics_overview[0][3] else None
-            ),
-            "avg_cluster_diversity": (
-                float(metrics_overview[0][4]) if metrics_overview[0][4] else None
-            ),
+            "avg_cluster_density": (float(metrics_overview[0][3]) if metrics_overview[0][3] else None),
+            "avg_cluster_diversity": (float(metrics_overview[0][4]) if metrics_overview[0][4] else None),
         }
 
     # Health indicators
@@ -348,9 +328,7 @@ def calculate_graph_stats(db):
         "has_nodes": stats["nodes"] > 0,
         "has_edges": stats["edges"] > 0,
         "has_clusters": stats["clusters"] > 0,
-        "density_reasonable": (
-            0.001 <= stats.get("density", 0) <= 0.1 if "density" in stats else False
-        ),
+        "density_reasonable": (0.001 <= stats.get("density", 0) <= 0.1 if "density" in stats else False),
     }
 
     return stats
@@ -403,9 +381,7 @@ def export_correlations(db):
                 LOG.info(f"Loaded {len(correlations)} correlations from database view")
 
         except Exception as db_error:
-            LOG.warning(
-                f"Database correlation view not available ({db_error}), falling back to Python computation"
-            )
+            LOG.warning(f"Database correlation view not available ({db_error}), falling back to Python computation")
             correlations = _compute_correlations_python(db)
 
     except Exception as e:
@@ -415,20 +391,14 @@ def export_correlations(db):
     # Calculate metadata
     if correlations:
         metadata["total_correlations"] = len(correlations)
-        metadata["significant_correlations"] = sum(
-            1 for c in correlations if c.get("p_value", 1.0) < 0.05
-        )
-        metadata["correlation_methods"] = list(
-            set(c.get("metric", "unknown") for c in correlations)
-        )
+        metadata["significant_correlations"] = sum(1 for c in correlations if c.get("p_value", 1.0) < 0.05)
+        metadata["correlation_methods"] = list(set(c.get("metric", "unknown") for c in correlations))
 
     metadata["generated_at"] = now_rfc3339()
 
     # Try to get run_id from recent pipeline runs
     try:
-        run_row = list(
-            db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1")
-        )
+        run_row = list(db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"))
         if run_row:
             metadata["run_id"] = str(run_row[0][0])
     except Exception:
@@ -518,9 +488,7 @@ def _compute_correlations_python(db):
                 processed_pairs += 1
 
             except Exception as e:
-                LOG.warning(
-                    f"Error computing correlation for {concept_a['id']} vs {concept_b['id']}: {e}"
-                )
+                LOG.warning(f"Error computing correlation for {concept_a['id']} vs {concept_b['id']}: {e}")
                 continue
 
         # Sort by absolute correlation strength
@@ -624,15 +592,11 @@ def export_patterns(db):
 
                 # Jaccard similarity
                 jaccard = (
-                    len(shared_concepts) / len(concepts_a.union(concepts_b))
-                    if concepts_a.union(concepts_b)
-                    else 0
+                    len(shared_concepts) / len(concepts_a.union(concepts_b)) if concepts_a.union(concepts_b) else 0
                 )
 
                 # Pattern strength (weighted combination)
-                pattern_strength = (
-                    jaccard * 0.4 + min(confidence_a_to_b, confidence_b_to_a) * 0.4 + support * 0.2
-                )
+                pattern_strength = jaccard * 0.4 + min(confidence_a_to_b, confidence_b_to_a) * 0.4 + support * 0.2
 
                 if pattern_strength >= metadata["analysis_parameters"]["min_pattern_strength"]:
                     pattern_record = {
@@ -648,16 +612,8 @@ def export_patterns(db):
                     }
 
                     # Add cluster information if available
-                    clusters_a = set(
-                        c["cluster_id"]
-                        for c in books_concepts[book_a]
-                        if c["cluster_id"] is not None
-                    )
-                    clusters_b = set(
-                        c["cluster_id"]
-                        for c in books_concepts[book_b]
-                        if c["cluster_id"] is not None
-                    )
+                    clusters_a = set(c["cluster_id"] for c in books_concepts[book_a] if c["cluster_id"] is not None)
+                    clusters_b = set(c["cluster_id"] for c in books_concepts[book_b] if c["cluster_id"] is not None)
 
                     if clusters_a and clusters_b:
                         pattern_record["source_clusters"] = list(clusters_a)
@@ -679,17 +635,13 @@ def export_patterns(db):
 
         # Try to get run_id from recent pipeline runs
         try:
-            run_row = list(
-                db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1")
-            )
+            run_row = list(db.execute("SELECT run_id FROM metrics_log ORDER BY started_at DESC LIMIT 1"))
             if run_row:
                 metadata["run_id"] = str(run_row[0][0])
         except Exception:
             metadata["run_id"] = "unknown"
 
-        LOG.info(
-            f"Generated {len(patterns)} cross-text patterns across {len(metadata['analyzed_books'])} books"
-        )
+        LOG.info(f"Generated {len(patterns)} cross-text patterns across {len(metadata['analyzed_books'])} books")
 
     except Exception as e:
         LOG.warning(f"Could not compute cross-text patterns: {e}")
@@ -752,9 +704,7 @@ def naive_forecast(series, horizon=10):
     std = series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
     forecast = pd.Series([last] * horizon, index=forecast_index)
-    intervals = pd.DataFrame(
-        {"lower": forecast - std, "upper": forecast + std}, index=forecast_index
-    )
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
     return {"forecast": forecast, "intervals": intervals}
 
 
@@ -778,9 +728,7 @@ def sma_forecast(series, window=5, horizon=10):
     std = rolling_std.iloc[-1] if not rolling_std.empty else series.std()
     forecast_index = pd.RangeIndex(len(series), len(series) + horizon)
     forecast = pd.Series([sma] * horizon, index=forecast_index)
-    intervals = pd.DataFrame(
-        {"lower": forecast - std, "upper": forecast + std}, index=forecast_index
-    )
+    intervals = pd.DataFrame({"lower": forecast - std, "upper": forecast + std}, index=forecast_index)
     return {"forecast": forecast, "intervals": intervals}
 
 
@@ -958,9 +906,7 @@ def export_temporal_patterns(db):
             if len(values) < metadata["analysis_parameters"]["min_series_length"]:
                 continue
             window = metadata["analysis_parameters"]["default_window"]
-            rolling = [
-                statistics.mean(values[i : i + window]) for i in range(0, len(values) - window + 1)
-            ]
+            rolling = [statistics.mean(values[i : i + window]) for i in range(0, len(values) - window + 1)]
             change_points = []
             if len(rolling) > 2:
                 st = statistics.pstdev(rolling)
@@ -1081,9 +1027,7 @@ def export_forecast(db):
             if len(values) > horizon:
                 # Use last horizon values as "test" set
                 test_values = values[-horizon:]
-                rmse = np.sqrt(
-                    np.mean([(p - t) ** 2 for p, t in zip(predictions, test_values, strict=True)])
-                )
+                rmse = np.sqrt(np.mean([(p - t) ** 2 for p, t in zip(predictions, test_values, strict=True)]))
                 mae = np.mean([abs(p - t) for p, t in zip(predictions, test_values, strict=True)])
             else:
                 # Estimate based on series variance
@@ -1125,9 +1069,7 @@ def export_forecast(db):
             metadata["average_metrics"]["rmse"] = sum(rmses) / len(rmses) if rmses else 0.0
             metadata["average_metrics"]["mae"] = sum(maes) / len(maes) if maes else 0.0
 
-        LOG.info(
-            f"Generated {len(forecasts)} forecasts across {len(metadata['books_forecasted'])} books"
-        )
+        LOG.info(f"Generated {len(forecasts)} forecasts across {len(metadata['books_forecasted'])} books")
 
     except Exception as e:
         LOG.warning(f"Could not compute forecasts: {e}")

@@ -132,9 +132,7 @@ def main() -> int:
     """Main entrypoint."""
     parser = argparse.ArgumentParser(description="Convert JSON files to markdown")
     parser.add_argument("input", type=Path, help="Input JSON file path")
-    parser.add_argument(
-        "--output", type=Path, help="Output markdown file path (default: input with .md extension)"
-    )
+    parser.add_argument("--output", type=Path, help="Output markdown file path (default: input with .md extension)")
 
     args = parser.parse_args()
 

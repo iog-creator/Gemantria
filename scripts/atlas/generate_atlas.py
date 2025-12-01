@@ -38,9 +38,7 @@ ATLAS_HIDE_MISSING = os.getenv("ATLAS_HIDE_MISSING", "0") == "1"
 
 # Evidence pages live in docs/evidence/*.html; Atlas lives in docs/atlas/index.html
 # Use a relative href so GitHub Pages under /<user>/<repo>/ works correctly.
-BACK_LINK_HTML = (
-    '<p style="margin:0 0 16px"><a href="../atlas/index.html">← Back to Atlas</a></p>\n'
-)
+BACK_LINK_HTML = '<p style="margin:0 0 16px"><a href="../atlas/index.html">← Back to Atlas</a></p>\n'
 
 
 def _hint(msg: str) -> None:
@@ -116,9 +114,7 @@ def _generate_pipeline_flow_historical() -> str:
                     latency_info = f"<br/>p90: {p90:.0f}ms"
                     break
         lines.append(f'    {node_id}["{node}{latency_info}"]:::blue')
-        lines.append(
-            f'    click {node_id} "/evidence/pipeline_flow_historical.html" "View {node} details"'
-        )
+        lines.append(f'    click {node_id} "/evidence/pipeline_flow_historical.html" "View {node} details"')
         if i < len(nodes) - 1:
             lines.append(f"    {node_id} --> {nodes[i + 1].upper().replace('_', '')}")
     lines.append("  end")
@@ -291,9 +287,7 @@ def _generate_knowledge_graph() -> str:
     return "\n".join(lines)
 
 
-def _generate_summary_md(
-    diagram_name: str, title: str, description: str, data: dict[str, Any] | None = None
-) -> str:
+def _generate_summary_md(diagram_name: str, title: str, description: str, data: dict[str, Any] | None = None) -> str:
     """Generate human-readable Markdown summary."""
     lines = [f"# {title}"]
     lines.append("")

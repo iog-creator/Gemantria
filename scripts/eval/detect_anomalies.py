@@ -49,9 +49,7 @@ def main() -> int:
     edges = data.get("edges", [])
     # thresholds (MANDATORY env knobs, with defaults)
     COS_RR_GAP = _f("ANOM_COS_RERANK_GAP", 0.40)  # |cos - rerank| >= gap
-    LOW_STRONG = _f(
-        "ANOM_LOW_STRONG", 0.85
-    )  # edge_strength >= strong_thresh but class not strong (suspect)
+    LOW_STRONG = _f("ANOM_LOW_STRONG", 0.85)  # edge_strength >= strong_thresh but class not strong (suspect)
     HI_OTHER = _f("ANOM_HI_OTHER", 0.70)  # edge_strength >= this but class==other (suspect)
 
     anoms = []

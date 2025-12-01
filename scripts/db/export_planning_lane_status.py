@@ -157,9 +157,7 @@ def export_planning_lane_status(conn: psycopg.Connection) -> dict[str, Any]:
         "generated_at": now_iso(),
         "providers": sorted(providers.values(), key=lambda x: x["provider"]),
         "tools": tools,
-        "last_runs": sorted(last_runs, key=lambda x: x["created_at"] or "", reverse=True)[
-            :10
-        ],  # Last 10 runs
+        "last_runs": sorted(last_runs, key=lambda x: x["created_at"] or "", reverse=True)[:10],  # Last 10 runs
         "db_off": False,
     }
 

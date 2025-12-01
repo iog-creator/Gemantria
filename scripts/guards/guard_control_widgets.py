@@ -98,9 +98,7 @@ def check_widget_functions() -> dict[str, bool | str]:
 def check_export_files() -> dict[str, bool | str]:
     """Check that export files exist (advisory in HINT, required in STRICT)."""
     graph_compliance_path = REPO / "share" / "atlas" / "control_plane" / "graph_compliance.json"
-    biblescholar_reference_path = (
-        REPO / "share" / "atlas" / "control_plane" / "biblescholar_reference.json"
-    )
+    biblescholar_reference_path = REPO / "share" / "atlas" / "control_plane" / "biblescholar_reference.json"
     strict_mode = _is_strict_mode()
 
     result: dict[str, bool | str] = {

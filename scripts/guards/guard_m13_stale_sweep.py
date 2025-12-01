@@ -25,8 +25,6 @@ ok = (len(stale) == 0) and (not force)
 
 verdict = {"ok": ok, "stale_count": len(stale), "forced": force, "threshold_sec": threshold}
 
-pathlib.Path("evidence/guard_m13_stale_sweep.verdict.json").write_text(
-    json.dumps(verdict, indent=2)
-)
+pathlib.Path("evidence/guard_m13_stale_sweep.verdict.json").write_text(json.dumps(verdict, indent=2))
 
 print(json.dumps(verdict))

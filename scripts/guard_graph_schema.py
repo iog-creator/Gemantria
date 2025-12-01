@@ -73,9 +73,7 @@ def main():
     # Check edge strengths are valid numbers between 0 and 1
     for i, edge in enumerate(edges):
         strength = edge.get("edge_strength")
-        if strength is not None and (
-            not isinstance(strength, (int, float)) or not (0 <= strength <= 1)
-        ):
+        if strength is not None and (not isinstance(strength, (int, float)) or not (0 <= strength <= 1)):
             print(f"FAIL_BUSINESS: Edge {i} has invalid edge_strength: {strength} (must be 0-1)")
             return 1
 

@@ -1,5 +1,0 @@
-Usage: pmagent control status [OPTIONS]
-Try 'pmagent control status --help' for help.
-╭─ Error ───────────────────────────────────────────────────────────────────────────╮
-│ No such option: --json Did you mean --json-only?                                  │
-╰───────────────────────────────────────────────────────────────────────────────────╯

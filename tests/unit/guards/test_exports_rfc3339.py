@@ -15,9 +15,7 @@ def _run(env=None):
     if env:
         e.update(env)
 
-    return subprocess.run(
-        [sys.executable, str(SCRIPT)], cwd=str(ROOT), env=e, capture_output=True, text=True
-    )
+    return subprocess.run([sys.executable, str(SCRIPT)], cwd=str(ROOT), env=e, capture_output=True, text=True)
 
 
 def _load():

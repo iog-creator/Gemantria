@@ -97,9 +97,7 @@ def test_guard_passes():
     )
 
     # Guard should exit 0 (pass) or exit 0 in HINT mode even if ok=false
-    assert (
-        result.returncode == 0
-    ), f"Guard should pass (exit 0). Output: {result.stdout}\nError: {result.stderr}"
+    assert result.returncode == 0, f"Guard should pass (exit 0). Output: {result.stdout}\nError: {result.stderr}"
 
     # Check evidence file was created
     evidence_path = EVIDENCE_DIR / "guard_control_autopilot_summary.json"
@@ -124,9 +122,7 @@ def test_export_can_be_generated():
     )
 
     # Export should exit 0 even if DB is empty (hermetic tolerance)
-    assert (
-        result.returncode == 0
-    ), f"Export should exit 0. Output: {result.stdout}\nError: {result.stderr}"
+    assert result.returncode == 0, f"Export should exit 0. Output: {result.stdout}\nError: {result.stderr}"
 
     # Verify file was created
     json_path = CONTROL_PLANE_DIR / "autopilot_summary.json"

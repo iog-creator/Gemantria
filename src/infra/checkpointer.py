@@ -69,9 +69,7 @@ class PostgresCheckpointer(BaseCheckpointSaver):
             )
             return (checkpoint, metadata, parent_config)
 
-    def list(
-        self, config: dict[str, Any], *, before: Any = None, limit: int | None = None
-    ) -> Iterator[Any]:
+    def list(self, config: dict[str, Any], *, before: Any = None, limit: int | None = None) -> Iterator[Any]:
         """List checkpoints for thread with pagination."""
         thread_id = config.get("configurable", {}).get("thread_id")
         if not thread_id:
@@ -148,9 +146,7 @@ class PostgresCheckpointer(BaseCheckpointSaver):
         if not thread_id or not checkpoint_id:
             raise ValueError("thread_id and checkpoint_id required in config")
 
-        parent_checkpoint_id = (
-            checkpoint.get("config", {}).get("configurable", {}).get("checkpoint_id")
-        )
+        parent_checkpoint_id = checkpoint.get("config", {}).get("configurable", {}).get("checkpoint_id")
 
         with self._connect() as conn, conn.cursor() as cur:
             # Atomic upsert
@@ -179,9 +175,7 @@ class PostgresCheckpointer(BaseCheckpointSaver):
 
         return config
 
-    def put_writes(
-        self, config: dict[str, Any], writes: list[tuple[str, Any, Any]], task_id: str
-    ) -> Any:
+    def put_writes(self, config: dict[str, Any], writes: list[tuple[str, Any, Any]], task_id: str) -> Any:
         """Store pending writes."""
         thread_id = config.get("configurable", {}).get("thread_id")
         checkpoint_id = config.get("configurable", {}).get("checkpoint_id")

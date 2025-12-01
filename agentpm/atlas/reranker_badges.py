@@ -61,9 +61,7 @@ def load_reranker_data(mode: str) -> List[Dict[str, Any]]:
                     {
                         "node_id": str(node_id),
                         "score": float(score),
-                        "badge": classify_badge(
-                            float(score), {"high": THRESHOLD_HIGH, "med": THRESHOLD_MED}
-                        ),
+                        "badge": classify_badge(float(score), {"high": THRESHOLD_HIGH, "med": THRESHOLD_MED}),
                         "thresholds": {"high": THRESHOLD_HIGH, "med": THRESHOLD_MED},
                     }
                 )

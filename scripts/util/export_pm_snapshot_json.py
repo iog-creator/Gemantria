@@ -27,9 +27,7 @@ OUT_FILE = OUT_DIR / "pm_snapshot.json"
 def main() -> int:
     """Main entrypoint."""
     parser = argparse.ArgumentParser(description="Export PM snapshot as JSON")
-    parser.add_argument(
-        "--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)"
-    )
+    parser.add_argument("--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)")
 
     args = parser.parse_args()
 

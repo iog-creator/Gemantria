@@ -18,8 +18,6 @@ ok = count >= min_required
 
 verdict = {"ok": ok, "count": count, "min_required": min_required}
 
-pathlib.Path("evidence/guard_m13_sitemap_min.verdict.json").write_text(
-    json.dumps(verdict, indent=2)
-)
+pathlib.Path("evidence/guard_m13_sitemap_min.verdict.json").write_text(json.dumps(verdict, indent=2))
 
 print(json.dumps(verdict))

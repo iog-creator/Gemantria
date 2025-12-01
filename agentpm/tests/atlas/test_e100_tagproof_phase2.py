@@ -101,9 +101,7 @@ def test_bundle_generator_handles_missing_components():
             if "error" in bundle["components"][component_key]:
                 error_msg = bundle["components"][component_key]["error"]
                 # Allow different error messages (PLAN-091 E103)
-                assert (
-                    error_msg in ["missing", "DSN not available"] or "does not exist" in error_msg
-                )
+                assert error_msg in ["missing", "DSN not available"] or "does not exist" in error_msg
     finally:
         # Restore backups
         for filename, backup in backups.items():
@@ -287,9 +285,7 @@ def test_guard_counts_consistency():
     failed = counts["components_failed"]
     missing = counts["components_missing"]
 
-    assert (
-        ok + failed + missing == total
-    ), f"Counts should sum to total: {ok} + {failed} + {missing} = {total}"
+    assert ok + failed + missing == total, f"Counts should sum to total: {ok} + {failed} + {missing} = {total}"
 
 
 @patch.dict("os.environ", {"STRICT_MODE": "1"}, clear=False)
@@ -330,9 +326,7 @@ def test_guard_strict_mode_mcp_ro_required():
         assert result.returncode == 1, "Guard should fail in STRICT mode when MCP RO is missing"
         doc = json.loads(result.stdout)
         assert doc["ok"] is False
-        assert (
-            doc["counts"]["components_total"] == 5
-        ), "STRICT mode should expect 5 components including MCP RO"
+        assert doc["counts"]["components_total"] == 5, "STRICT mode should expect 5 components including MCP RO"
         assert doc["counts"]["components_missing"] == 1
         assert "mcp_db_ro_guard" in doc["details"]["missing_components"]
     finally:

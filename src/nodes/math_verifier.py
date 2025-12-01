@@ -162,18 +162,14 @@ def math_verifier_node(state: dict) -> dict:
                     # Call appropriate adapter based on router decision
                     if decision.provider == "ollama":
                         response_text = (
-                            ollama_chat(
-                                prompt, model=decision.model_name, system=messages[0]["content"]
-                            )
+                            ollama_chat(prompt, model=decision.model_name, system=messages[0]["content"])
                             .strip()
                             .lower()
                         )
                     elif decision.provider == "lmstudio":
                         # Use theology adapter if slot is theology, otherwise lm_studio_chat
                         if decision.slot == "theology":
-                            response_text = (
-                                theology_chat(prompt, system=messages[0]["content"]).strip().lower()
-                            )
+                            response_text = theology_chat(prompt, system=messages[0]["content"]).strip().lower()
                         else:
                             response_text = (
                                 lm_studio_chat(

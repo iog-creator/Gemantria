@@ -25,9 +25,7 @@ class DummyEngine:
         return _Ctx()  # type: ignore[return-value]
 
 
-def test_ingest_docs_dry_run_discovers_docs_and_returns_zero(
-    tmp_path: Path, monkeypatch: Any
-) -> None:  # noqa: ANN001
+def test_ingest_docs_dry_run_discovers_docs_and_returns_zero(tmp_path: Path, monkeypatch: Any) -> None:  # noqa: ANN001
     # Prepare a tiny fake repo structure rooted at tmp_path.
     agents = tmp_path / "AGENTS.md"
     agents.write_text("# AGENTS\n", encoding="utf-8")
@@ -70,9 +68,7 @@ def test_ingest_docs_dry_run_discovers_docs_and_returns_zero(
     def _fake_get_control_engine() -> DummyEngine:
         return DummyEngine()
 
-    monkeypatch.setattr(
-        "scripts.governance.ingest_docs_to_db.get_control_engine", _fake_get_control_engine
-    )
+    monkeypatch.setattr("scripts.governance.ingest_docs_to_db.get_control_engine", _fake_get_control_engine)
 
     # Run in dry-run mode; this should use our fake docs and return 0.
     rc = mod.main(["--dry-run"])

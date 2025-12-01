@@ -120,9 +120,7 @@ Return JSON with: subsystem, doc_role, importance, phase_relevance, should_archi
         # phase_relevance: must be array of strings
         if "phase_relevance" in meta:
             if isinstance(meta["phase_relevance"], list):
-                result["phase_relevance"] = [
-                    str(p) for p in meta["phase_relevance"] if isinstance(p, (str, int))
-                ]
+                result["phase_relevance"] = [str(p) for p in meta["phase_relevance"] if isinstance(p, (str, int))]
 
         # should_archive: must be boolean
         if "should_archive" in meta:

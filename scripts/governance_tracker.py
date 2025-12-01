@@ -69,9 +69,7 @@ def extract_governance_metadata(content: str) -> Tuple[List[str], List[str]]:
     agents = []
 
     # Extract rules
-    rules_match = re.search(
-        r"Related Rules?:\s*(.+?)(?:\n|$)", content, re.MULTILINE | re.IGNORECASE
-    )
+    rules_match = re.search(r"Related Rules?:\s*(.+?)(?:\n|$)", content, re.MULTILINE | re.IGNORECASE)
     if rules_match:
         rules_text = rules_match.group(1)
         # Extract rule numbers like Rule-039, Rule-050, etc.
@@ -79,9 +77,7 @@ def extract_governance_metadata(content: str) -> Tuple[List[str], List[str]]:
         rules.extend([f"Rule-{num}" for num in rule_nums])
 
     # Extract agents
-    agents_match = re.search(
-        r"Related Agents?:\s*(.+?)(?:\n|$)", content, re.MULTILINE | re.IGNORECASE
-    )
+    agents_match = re.search(r"Related Agents?:\s*(.+?)(?:\n|$)", content, re.MULTILINE | re.IGNORECASE)
     if agents_match:
         agents_text = agents_match.group(1)
         # Extract agent file references
@@ -256,12 +252,8 @@ def scan_governance_artifacts() -> List[Dict]:
 def update_governance_db():
     """Update governance artifacts in database."""
     if not check_db_available():
-        print(
-            "HINT: governance.tracker: Database unavailable (hermetic behavior); skipping DB update"
-        )
-        print(
-            f"HINT: governance.tracker: Scanned {len(scan_governance_artifacts())} artifacts (not persisted)"
-        )
+        print("HINT: governance.tracker: Database unavailable (hermetic behavior); skipping DB update")
+        print(f"HINT: governance.tracker: Scanned {len(scan_governance_artifacts())} artifacts (not persisted)")
         return
 
     artifacts = scan_governance_artifacts()
@@ -296,9 +288,7 @@ def update_governance_db():
 def validate_governance_compliance(lenient: bool = False):
     """Validate governance compliance across the system."""
     if not check_db_available():
-        print(
-            "HINT: governance.tracker: Database unavailable (hermetic behavior); skipping compliance validation"
-        )
+        print("HINT: governance.tracker: Database unavailable (hermetic behavior); skipping compliance validation")
         print("HINT: governance.tracker: Compliance validation skipped (DB required)")
         return True  # Return success to allow housekeeping to pass
 
@@ -313,9 +303,7 @@ def validate_governance_compliance(lenient: bool = False):
                     stale_artifacts = cur.fetchall()
 
                     if stale_artifacts:
-                        issues.append(
-                            f"🚨 {len(stale_artifacts)} stale governance artifacts (>24h)"
-                        )
+                        issues.append(f"🚨 {len(stale_artifacts)} stale governance artifacts (>24h)")
 
                 # Check for artifacts without rule references
                 cur.execute("""
@@ -354,9 +342,7 @@ def validate_governance_compliance(lenient: bool = False):
 def generate_governance_report():
     """Generate comprehensive governance health report."""
     if not check_db_available():
-        print(
-            "HINT: governance.tracker: Database unavailable (hermetic behavior); skipping report generation"
-        )
+        print("HINT: governance.tracker: Database unavailable (hermetic behavior); skipping report generation")
         return
 
     try:
@@ -435,9 +421,7 @@ def generate_governance_report():
 def check_stale_artifacts():
     """Check for stale governance artifacts."""
     if not check_db_available():
-        print(
-            "HINT: governance.tracker: Database unavailable (hermetic behavior); skipping stale artifact check"
-        )
+        print("HINT: governance.tracker: Database unavailable (hermetic behavior); skipping stale artifact check")
         return
 
     try:
@@ -464,9 +448,7 @@ def main():
     import sys
 
     if len(sys.argv) < 2:
-        print(
-            "Usage: python scripts/governance_tracker.py {update|validate [--lenient]|report|stale}"
-        )
+        print("Usage: python scripts/governance_tracker.py {update|validate [--lenient]|report|stale}")
         sys.exit(1)
 
     command = sys.argv[1]

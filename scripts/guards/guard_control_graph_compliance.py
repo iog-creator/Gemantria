@@ -86,11 +86,7 @@ def check_timestamp(data: dict) -> dict[str, bool | str]:
     try:
         generated_at = datetime.fromisoformat(generated_at_str.replace("Z", "+00:00"))
         now = datetime.now(UTC)
-        age = (
-            now - generated_at.replace(tzinfo=UTC)
-            if generated_at.tzinfo is None
-            else now - generated_at
-        )
+        age = now - generated_at.replace(tzinfo=UTC) if generated_at.tzinfo is None else now - generated_at
 
         if age > timedelta(hours=24):
             return {
@@ -177,9 +173,7 @@ def main() -> int:
     except Exception as e:
         if strict_mode:
             verdict["overall_ok"] = False
-            print(
-                f"[guard_control_graph_compliance] FAIL: Failed to parse JSON: {e}", file=sys.stderr
-            )
+            print(f"[guard_control_graph_compliance] FAIL: Failed to parse JSON: {e}", file=sys.stderr)
             if args.write_evidence:
                 EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
                 evidence_file = EVIDENCE_DIR / args.write_evidence

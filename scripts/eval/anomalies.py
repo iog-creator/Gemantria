@@ -70,9 +70,7 @@ def main() -> int:
     isb = idstab.get("summary") or {}
     if isb.get("has_previous") and not isb.get("ok", True):
         lines.append("## ❌ ID Stability")
-        lines.append(
-            f"- jaccard={isb.get('jaccard')} added={isb.get('added_ids')} removed={isb.get('removed_ids')}"
-        )
+        lines.append(f"- jaccard={isb.get('jaccard')} added={isb.get('added_ids')} removed={isb.get('removed_ids')}")
         lines.append("")
 
     # 5) Referential integrity: extract counts from report result if present

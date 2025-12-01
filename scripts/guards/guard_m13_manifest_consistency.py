@@ -16,13 +16,9 @@ if not man_p.exists():
 else:
     man = json.loads(man_p.read_text())
     links = {it["path"]: it.get("exists", False) for it in man.get("links", [])}
-    missing = sorted(
-        [p for p in required if not links.get(p, False) or not pathlib.Path(p).exists()]
-    )
+    missing = sorted([p for p in required if not links.get(p, False) or not pathlib.Path(p).exists()])
     verdict = {"ok": len(missing) == 0, "missing": missing, "checked": len(required)}
 
-pathlib.Path("evidence/guard_m13_manifest_consistency.verdict.json").write_text(
-    json.dumps(verdict, indent=2)
-)
+pathlib.Path("evidence/guard_m13_manifest_consistency.verdict.json").write_text(json.dumps(verdict, indent=2))
 
 print(json.dumps(verdict))

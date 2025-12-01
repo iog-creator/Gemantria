@@ -96,9 +96,7 @@ def _validate_envelope_first() -> Dict[str, Any]:
 
             except jsonschema.ValidationError as e:
                 validation_result["passed"] = False
-                validation_result["errors"].append(
-                    f"Envelope schema validation failed: {e.message}"
-                )
+                validation_result["errors"].append(f"Envelope schema validation failed: {e.message}")
             except Exception as e:
                 validation_result["passed"] = False
                 validation_result["errors"].append(f"Envelope validation error: {e}")
@@ -129,9 +127,7 @@ def _validate_envelope_first() -> Dict[str, Any]:
 
             except jsonschema.ValidationError as e:
                 validation_result["passed"] = False
-                validation_result["errors"].append(
-                    f"Temporal schema validation failed: {e.message}"
-                )
+                validation_result["errors"].append(f"Temporal schema validation failed: {e.message}")
             except Exception as e:
                 validation_result["passed"] = False
                 validation_result["errors"].append(f"Temporal validation error: {e}")
@@ -158,9 +154,7 @@ def _validate_envelope_first() -> Dict[str, Any]:
 
             except jsonschema.ValidationError as e:
                 validation_result["passed"] = False
-                validation_result["errors"].append(
-                    f"Forecast schema validation failed: {e.message}"
-                )
+                validation_result["errors"].append(f"Forecast schema validation failed: {e.message}")
             except Exception as e:
                 validation_result["passed"] = False
                 validation_result["errors"].append(f"Forecast validation error: {e}")
@@ -232,9 +226,7 @@ def run_full_pipeline(
         run_id = str(result.get("run_id", "unknown"))
 
         # Log completion
-        log_json(
-            LOG, 20, "pipeline_orchestrator_complete", success=success, run_id=run_id, book=book
-        )
+        log_json(LOG, 20, "pipeline_orchestrator_complete", success=success, run_id=run_id, book=book)
 
         return {
             "success": success,
@@ -339,9 +331,7 @@ def run_analysis(operation: str) -> Dict[str, Any]:
         return {"success": False, "operation": operation, "error": str(e)}
 
 
-def run_embeddings_backfill(
-    model: str = "text-embedding-qwen3-embedding-0.6b", dim: int = 1024
-) -> Dict[str, Any]:
+def run_embeddings_backfill(model: str = "text-embedding-qwen3-embedding-0.6b", dim: int = 1024) -> Dict[str, Any]:
     """
     Run embeddings backfill for existing nouns.
     """
@@ -397,15 +387,9 @@ def main():
 
     # Book processing command
     book_parser = subparsers.add_parser("book", help="Book processing operations")
-    book_parser.add_argument(
-        "operation", choices=["plan", "dry", "go", "stop", "resume"], help="Operation to perform"
-    )
-    book_parser.add_argument(
-        "--config", default="config/book_plan.yaml", help="Book configuration file"
-    )
-    book_parser.add_argument(
-        "--stop-n", type=int, default=5, help="Number of chapters for stop operation"
-    )
+    book_parser.add_argument("operation", choices=["plan", "dry", "go", "stop", "resume"], help="Operation to perform")
+    book_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
+    book_parser.add_argument("--stop-n", type=int, default=5, help="Number of chapters for stop operation")
 
     # Analysis command
     analysis_parser = subparsers.add_parser("analysis", help="Analysis operations")
@@ -425,9 +409,7 @@ def main():
     # Full workflow command
     full_parser = subparsers.add_parser("full", help="Run complete workflow")
     full_parser.add_argument("--book", default="Genesis", help="Book to process")
-    full_parser.add_argument(
-        "--config", default="config/book_plan.yaml", help="Book configuration file"
-    )
+    full_parser.add_argument("--config", default="config/book_plan.yaml", help="Book configuration file")
     full_parser.add_argument("--skip-analysis", action="store_true", help="Skip analysis step")
     full_parser.add_argument(
         "--nouns-json",

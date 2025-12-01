@@ -63,9 +63,7 @@ def guard_provenance(output: Dict[str, Any]) -> None:
         raise ValueError(f"provenance guard: 'seed' must be integer: {e}") from e
 
 
-def stamp_batch(
-    items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt=None
-) -> List[Dict[str, Any]]:
+def stamp_batch(items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt=None) -> List[Dict[str, Any]]:
     """
     Deterministic batch stamping:
     - Accepts injected UTC base datetime (base_dt). If None, uses now() truncated to seconds.

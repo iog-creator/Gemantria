@@ -46,9 +46,7 @@ class TestDocumentGovernanceCompliance:
                     )
                 """)
                 orphaned_sections = cur.fetchone()[0]
-                assert (
-                    orphaned_sections == 0
-                ), f"Found {orphaned_sections} orphaned document sections"
+                assert orphaned_sections == 0, f"Found {orphaned_sections} orphaned document sections"
 
     def test_document_update_triggers_hint_emission(self):
         """Test that document updates trigger appropriate hint emissions."""

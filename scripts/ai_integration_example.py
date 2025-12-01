@@ -56,9 +56,7 @@ def demo_ai_integration():
     monitor.log_tool_usage("read_file", success=True, execution_time_ms=200)
 
     # Failed tool usage
-    monitor.log_tool_usage(
-        "run_terminal_cmd", success=False, execution_time_ms=500, error_details="command not found"
-    )
+    monitor.log_tool_usage("run_terminal_cmd", success=False, execution_time_ms=500, error_details="command not found")
 
     # 3. Log a user query interaction
     print("\n3. Logging user query interaction...")

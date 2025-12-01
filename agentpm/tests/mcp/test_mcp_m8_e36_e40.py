@@ -31,9 +31,7 @@ def test_e38_cross_page_chip_propagation():
     chips = json.loads(pathlib.Path("share/atlas/filter_chips.json").read_text())
     roll = json.loads(pathlib.Path("share/atlas/nodes/node_001/provenance.json").read_text())
     chip_ids = {it["id"] for it in chips["items"]}
-    assert any(
-        cid in chip_ids for cid in roll["filter_chip_ids"]
-    ), "chip IDs must propagate index↔node"
+    assert any(cid in chip_ids for cid in roll["filter_chip_ids"]), "chip IDs must propagate index↔node"
 
 
 def test_e39_db_filter_query_smoke_receipt():
@@ -51,8 +49,6 @@ def test_e40_stale_evidence_guard_receipt():
     # Force stale verdict by setting threshold to 0 for a rerun
     env = dict(os.environ)
     env["M8_STALE_THRESHOLD_SECONDS"] = "0"
-    out = subprocess.check_output(
-        "python3 scripts/guards/guard_m8_stale.py", shell=True, text=True, env=env
-    )
+    out = subprocess.check_output("python3 scripts/guards/guard_m8_stale.py", shell=True, text=True, env=env)
     forced = json.loads(out)
     assert forced["stale"] is True and forced["ok"] is False

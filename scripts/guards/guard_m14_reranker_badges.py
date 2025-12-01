@@ -73,18 +73,14 @@ def main() -> int:
         if not isinstance(thresholds, dict):
             return verdict(False, error="bad_thresholds", index=idx, value=thresholds)
         if "high" not in thresholds or "med" not in thresholds:
-            return verdict(
-                False, error="missing_threshold_keys", index=idx, keys=list(thresholds.keys())
-            )
+            return verdict(False, error="missing_threshold_keys", index=idx, keys=list(thresholds.keys()))
 
         # Validate badge classification matches rule
         score_val = float(score)
         thresh_high = float(thresholds["high"])
         thresh_med = float(thresholds["med"])
 
-        expected_badge = (
-            "high" if score_val >= thresh_high else ("med" if score_val >= thresh_med else "low")
-        )
+        expected_badge = "high" if score_val >= thresh_high else ("med" if score_val >= thresh_med else "low")
         if badge != expected_badge:
             return verdict(
                 False,

@@ -13,9 +13,7 @@ ensure_env_loaded()
 
 
 def get(url, data=None, headers=None, timeout=30):
-    req = urllib.request.Request(
-        url, data=data, headers=headers or {}, method="POST" if data else "GET"
-    )
+    req = urllib.request.Request(url, data=data, headers=headers or {}, method="POST" if data else "GET")
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8")
 

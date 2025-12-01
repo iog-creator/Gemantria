@@ -250,9 +250,7 @@ class AILearningTracker:
                 cur.execute("SELECT * FROM learning_insights_summary")
                 for row in cur.fetchall():
                     success_rate = row[2] / row[1] if row[1] > 0 else 0
-                    print(
-                        f"Pattern: {row[0]}, Total: {row[1]}, Success: {row[2]}, Rate: {success_rate:.1f}%"
-                    )
+                    print(f"Pattern: {row[0]}, Total: {row[1]}, Success: {row[2]}, Rate: {success_rate:.1f}%")
                 # Generate automated insights
                 self.generate_insights()
 

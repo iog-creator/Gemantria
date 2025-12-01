@@ -36,9 +36,7 @@ class DocumentManagementHints:
                 raise ValueError("GEMATRIA_DSN not available (via centralized loader)")
         return self._dsn
 
-    def emit_hint(
-        self, hint_text: str, rule_reference: str = "058", context: str = "document_management"
-    ):
+    def emit_hint(self, hint_text: str, rule_reference: str = "058", context: str = "document_management"):
         """Emit a LOUD HINT for document management."""
         with psycopg.connect(self._get_dsn()) as conn:
             with conn.cursor() as cur:

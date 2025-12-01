@@ -146,9 +146,7 @@ class TestLMStudioAdapter:
 
         mock_response = MagicMock()
         mock_response.status_code = 500
-        mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
-            response=mock_response
-        )
+        mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(response=mock_response)
         mock_post.return_value = mock_response
 
         result = lm_studio_chat([{"role": "user", "content": "test"}])

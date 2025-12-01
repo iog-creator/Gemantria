@@ -33,9 +33,7 @@ def test_lm_status_html_contains_lm_studio() -> None:
 def test_lm_status_html_contains_connection_status() -> None:
     """Test that LM status HTML contains connection status element."""
     content = STATUS_HTML.read_text(encoding="utf-8")
-    assert (
-        "connection-status" in content or "Connection Status" in content
-    ), "Missing connection status"
+    assert "connection-status" in content or "Connection Status" in content, "Missing connection status"
 
 
 def test_lm_status_html_contains_health_metrics() -> None:
@@ -57,11 +55,9 @@ def test_lm_status_html_contains_usage_metrics() -> None:
 def test_lm_status_html_contains_db_off_handling() -> None:
     """Test that LM status HTML handles db_off gracefully."""
     content = STATUS_HTML.read_text(encoding="utf-8")
-    assert (
-        "db-offline" in content
-        or "db_off" in content
-        or "database is currently offline" in content.lower()
-    ), "Missing db_off handling"
+    assert "db-offline" in content or "db_off" in content or "database is currently offline" in content.lower(), (
+        "Missing db_off handling"
+    )
 
 
 def test_lm_status_html_contains_backlink() -> None:

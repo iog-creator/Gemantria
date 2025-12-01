@@ -77,9 +77,7 @@ def guard_cursorignore(mode: str = "HINT") -> dict[str, Any]:
         verdict["message"] = ".cursorignore file is missing"
         verdict["details"]["file_exists"] = False
         if mode == "HINT":
-            verdict["hints"] = [
-                ".cursorignore file is missing - this may cause Cursor visibility issues"
-            ]
+            verdict["hints"] = [".cursorignore file is missing - this may cause Cursor visibility issues"]
         return verdict
 
     verdict["details"]["file_exists"] = True

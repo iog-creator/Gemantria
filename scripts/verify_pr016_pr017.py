@@ -62,9 +62,7 @@ def main():
             with psycopg.connect(args.dsn) as conn:
                 db_nodes = q1(conn, "SELECT COUNT(*) FROM concept_network;")
                 db_edges = q1(conn, "SELECT COUNT(*) FROM concept_relations;")
-                db_clusters = q1(
-                    conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;"
-                )
+                db_clusters = q1(conn, "SELECT COALESCE(MAX(cluster_id)+1,0) FROM concept_clusters;")
         except psycopg.ProgrammingError as e:
             # Tables don't exist (empty CI DB), use zero counts
             if "does not exist" in str(e):

@@ -46,9 +46,7 @@ def main():
         print(msg, file=sys.stderr)
         sys.exit(2 if strict_mode else 0)
 
-    print(
-        f"OK: crossrefs extracted for {nodes_with_crossrefs}/{total_nodes} verse-mentioning nouns."
-    )
+    print(f"OK: crossrefs extracted for {nodes_with_crossrefs}/{total_nodes} verse-mentioning nouns.")
 
 
 if __name__ == "__main__":

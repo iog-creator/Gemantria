@@ -42,9 +42,7 @@ def rerank_passages(
     if cosine_scores is None:
         cosine_scores = [0.5] * len(passages)
     elif len(cosine_scores) != len(passages):
-        raise ValueError(
-            f"cosine_scores length ({len(cosine_scores)}) != passages length ({len(passages)})"
-        )
+        raise ValueError(f"cosine_scores length ({len(cosine_scores)}) != passages length ({len(passages)})")
 
     ranked: list[dict[str, Any]] = []
 

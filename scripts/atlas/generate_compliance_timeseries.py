@@ -52,14 +52,8 @@ def extract_violations_by_code(violations_data: dict | None) -> dict[str, int]:
             count = item.get("count", 0)
         else:
             # Handle case where violations is a dict mapping code -> count
-            code = (
-                str(item) if not isinstance(item, dict) else item.get("violation_code", "unknown")
-            )
-            count = (
-                violations_data["violations"].get(item, 0)
-                if isinstance(violations_data["violations"], dict)
-                else 0
-            )
+            code = str(item) if not isinstance(item, dict) else item.get("violation_code", "unknown")
+            count = violations_data["violations"].get(item, 0) if isinstance(violations_data["violations"], dict) else 0
 
         by_code[code] += count
 
@@ -76,9 +70,7 @@ def extract_tool_from_code(violation_code: str) -> str:
     return "unknown"
 
 
-def create_timeseries_by_code(
-    violations_7d: dict | None, violations_30d: dict | None
-) -> list[dict]:
+def create_timeseries_by_code(violations_7d: dict | None, violations_30d: dict | None) -> list[dict]:
     """Create time-series data by violation code."""
     codes = set()
 
@@ -108,9 +100,7 @@ def create_timeseries_by_code(
     return series
 
 
-def create_timeseries_by_tool(
-    violations_7d: dict | None, violations_30d: dict | None
-) -> list[dict]:
+def create_timeseries_by_tool(violations_7d: dict | None, violations_30d: dict | None) -> list[dict]:
     """Create time-series data by tool."""
     tools = set()
 

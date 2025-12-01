@@ -47,9 +47,7 @@ if port_open:
         req = urllib.request.Request("http://127.0.0.1:8005/sse")
         req.add_header("Accept", "text/event-stream")
         with urllib.request.urlopen(req, timeout=2) as resp:
-            http_ok = resp.status == 200 and "text/event-stream" in resp.headers.get(
-                "Content-Type", ""
-            )
+            http_ok = resp.status == 200 and "text/event-stream" in resp.headers.get("Content-Type", "")
     except Exception:
         http_ok = False
 

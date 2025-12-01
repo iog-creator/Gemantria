@@ -102,9 +102,7 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
             "to_position": curr["position"],
             "gematria_trend": curr["mean_gematria"] - prev["mean_gematria"],
             "range_trend": curr["gematria_range"] - prev["gematria_range"],
-            "direction": "increasing"
-            if curr["mean_gematria"] > prev["mean_gematria"]
-            else "decreasing",
+            "direction": "increasing" if curr["mean_gematria"] > prev["mean_gematria"] else "decreasing",
         }
         trends.append(trend)
 
@@ -196,9 +194,7 @@ def generate_forecast(temporal_patterns: Dict[str, Any], forecast_steps: int = 5
 
         # Generate forecasts
         last_position = max(positions)
-        position_step = (
-            (max(positions) - min(positions)) / len(positions) if len(positions) > 1 else 1
-        )
+        position_step = (max(positions) - min(positions)) / len(positions) if len(positions) > 1 else 1
 
         forecasts = []
         for i in range(1, forecast_steps + 1):
@@ -240,8 +236,7 @@ def generate_forecast(temporal_patterns: Dict[str, Any], forecast_steps: int = 5
             "quality_metrics": {
                 "mse": mse,
                 "rmse": rmse,
-                "r_squared": 1
-                - (sum(r**2 for r in residuals) / sum((y - sum_y / n) ** 2 for y in values))
+                "r_squared": 1 - (sum(r**2 for r in residuals) / sum((y - sum_y / n) ** 2 for y in values))
                 if values
                 else 0,
             },
@@ -277,9 +272,7 @@ def run_phase8_analysis(book: str = "Genesis") -> Dict[str, Any]:
 
     # Run temporal pattern analysis
     temporal_patterns = analyze_temporal_patterns(graph_data, window_size=10)
-    print(
-        f"[Phase-8] Generated {len(temporal_patterns.get('rolling_statistics', []))} rolling statistics"
-    )
+    print(f"[Phase-8] Generated {len(temporal_patterns.get('rolling_statistics', []))} rolling statistics")
 
     # Generate forecasts
     forecast = generate_forecast(temporal_patterns, forecast_steps=5)
@@ -301,9 +294,7 @@ def run_phase8_analysis(book: str = "Genesis") -> Dict[str, Any]:
     with open("exports/pattern_forecast.json", "w", encoding="utf-8") as f:
         json.dump(forecast, f, indent=2, ensure_ascii=False)
 
-    print(
-        "[Phase-8] Results saved to exports/temporal_patterns.json and exports/pattern_forecast.json"
-    )
+    print("[Phase-8] Results saved to exports/temporal_patterns.json and exports/pattern_forecast.json")
 
     return results
 

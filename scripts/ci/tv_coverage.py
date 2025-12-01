@@ -38,11 +38,7 @@ def main() -> int:
         "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "pytest_exit_code": exit_code,
         "suite": "TV-01..TV-05",
-        "notes": (
-            "All test vectors passed."
-            if ok
-            else "One or more TV-01..TV-05 tests failed; see pytest output."
-        ),
+        "notes": ("All test vectors passed." if ok else "One or more TV-01..TV-05 tests failed; see pytest output."),
     }
     EVIDENCE_PATH.parent.mkdir(parents=True, exist_ok=True)
     EVIDENCE_PATH.write_text(json.dumps(receipt, indent=2), encoding="utf-8")

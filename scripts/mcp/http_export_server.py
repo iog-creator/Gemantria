@@ -52,9 +52,7 @@ class H(BaseHTTPRequestHandler):
                     self._json(500, {"ok": False, "error": "exporter_missing"})
                     return
                 # Run exporter as a subprocess to keep PYTHONPATH simple.
-                proc = subprocess.run(
-                    [sys.executable, str(EXPORTER)], cwd=str(ROOT), capture_output=True, text=True
-                )
+                proc = subprocess.run([sys.executable, str(EXPORTER)], cwd=str(ROOT), capture_output=True, text=True)
                 ok = proc.returncode == 0 and OUT.exists()
                 self._json(
                     200 if ok else 500,

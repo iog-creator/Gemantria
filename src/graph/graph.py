@@ -140,9 +140,7 @@ def enrichment_node_wrapper(state: PipelineState) -> PipelineState:
     """LangGraph node for noun enrichment."""
     if state.get("resume_from_enriched"):
         # Pre-enriched nouns supplied; ensure they remain normalized.
-        state["enriched_nouns"] = [
-            adapt_ai_noun(n) for n in state.get("enriched_nouns", state.get("nouns", []))
-        ]
+        state["enriched_nouns"] = [adapt_ai_noun(n) for n in state.get("enriched_nouns", state.get("nouns", []))]
         _save_checkpoint("enrichment", state, {"enriched_nouns": state["enriched_nouns"]})
         state["hints"].append("enrichment: skipped (pre-enriched)")
         return state
@@ -288,21 +286,9 @@ def run_pipeline(
             print(f"🔥🔥🔥 LOUD HINT: {msg} 🔥🔥🔥")
             print(f"HINT: {msg}")
 
-    emit_loud_hint(
-        "pipeline: starting execution for book="
-        + book
-        + " mode="
-        + mode
-        + " (Rule-039 Execution Contract)"
-    )
-    emit_loud_hint(
-        "pipeline: loading environment and creating run (Rule-050 OPS Contract Evidence-First)"
-    )
-    emit_loud_hint(
-        "pipeline: nouns provided="
-        + str(nouns is not None)
-        + " (src/graph/AGENTS.md Batch Processing)"
-    )
+    emit_loud_hint("pipeline: starting execution for book=" + book + " mode=" + mode + " (Rule-039 Execution Contract)")
+    emit_loud_hint("pipeline: loading environment and creating run (Rule-050 OPS Contract Evidence-First)")
+    emit_loud_hint("pipeline: nouns provided=" + str(nouns is not None) + " (src/graph/AGENTS.md Batch Processing)")
 
     # Create run in ledger
     versions = {
@@ -335,14 +321,10 @@ def run_pipeline(
             return bool(noun.get("insights") or noun.get("analysis"))
 
         unenriched_nouns = [
-            adapted
-            for raw, adapted in zip(nouns, provided_adapted, strict=False)
-            if not _has_enrichment(raw)
+            adapted for raw, adapted in zip(nouns, provided_adapted, strict=False) if not _has_enrichment(raw)
         ]
         if len(unenriched_nouns) < len(provided_adapted):
-            emit_loud_hint(
-                f"pipeline: resuming enrichment for {len(unenriched_nouns)} of {len(nouns)} nouns"
-            )
+            emit_loud_hint(f"pipeline: resuming enrichment for {len(unenriched_nouns)} of {len(nouns)} nouns")
         nouns_to_process = unenriched_nouns
         resume_from_enriched = len(unenriched_nouns) == 0 and len(provided_adapted) > 0
 
@@ -415,10 +397,7 @@ def run_pipeline(
         emit_loud_hint("pipeline: executing LangGraph with checkpointer (Rule-039)")
         final_state = graph.invoke(initial_state, config=config)
 
-        if (
-            os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback"
-            or os.getenv("EXPORT_GRAPH_ALWAYS") == "1"
-        ):
+        if os.getenv("NETWORK_AGGREGATOR_MODE", "").lower() == "fallback" or os.getenv("EXPORT_GRAPH_ALWAYS") == "1":
             _persist_graph_exports(final_state.get("graph") or {}, book)
 
         # Update run status to completed
@@ -468,9 +447,7 @@ def run_pipeline(
             "success": False,
             "error": str(e),
             "hints": initial_state.get("hints", []),  # Include hints even on error
-            "enveloped_hints": initial_state.get(
-                "enveloped_hints", {}
-            ),  # Include envelope even on error
+            "enveloped_hints": initial_state.get("enveloped_hints", {}),  # Include envelope even on error
             "batch_result": batch_result,  # Include batch_result even on error
         }
 
@@ -502,9 +479,7 @@ def _persist_graph_exports(graph: dict[str, Any], book: str) -> None:
             "source": "fallback_fast_lane",
         },
     }
-    (export_dir / "graph_latest.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
-    )
+    (export_dir / "graph_latest.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
 
     node_count = len(nodes)
     edge_count = len(edges)
@@ -519,9 +494,7 @@ def _persist_graph_exports(graph: dict[str, Any], book: str) -> None:
         "density": density,
         "generated_at": datetime.now(UTC).isoformat(),
     }
-    (export_dir / "graph_stats.json").write_text(
-        json.dumps(stats, ensure_ascii=False, indent=2) + "\n"
-    )
+    (export_dir / "graph_stats.json").write_text(json.dumps(stats, ensure_ascii=False, indent=2) + "\n")
 
 
 def wrap_hints_node(state: PipelineState) -> PipelineState:

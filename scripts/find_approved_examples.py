@@ -154,11 +154,7 @@ def print_table(rows):
         upd(gi.get("commit", ""), "git_commit")
         upd(gi.get("date", ""), "git_date")
         upd(
-            (
-                (gi.get("msg", "")[:60] + "…")
-                if gi.get("msg", "") and len(gi["msg"]) > 60
-                else gi.get("msg", "")
-            ),
+            ((gi.get("msg", "")[:60] + "…") if gi.get("msg", "") and len(gi["msg"]) > 60 else gi.get("msg", "")),
             "git_msg",
         )
         upd(str(r["looks_like_nouns"]), "looks_like_nouns")
@@ -176,11 +172,7 @@ def print_table(rows):
             str(r["size_kb"]),
             gi.get("commit", ""),
             gi.get("date", ""),
-            (
-                (gi.get("msg", "")[:60] + "…")
-                if gi.get("msg", "") and len(gi["msg"]) > 60
-                else gi.get("msg", "")
-            ),
+            ((gi.get("msg", "")[:60] + "…") if gi.get("msg", "") and len(gi["msg"]) > 60 else gi.get("msg", "")),
             str(r["looks_like_nouns"]),
             str(r["content_flag"]),
         ]

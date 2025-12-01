@@ -12,9 +12,7 @@ except Exception:
     print("[sample.check] install jsonschema: pip install jsonschema", file=sys.stderr)
     sys.exit(2)
 
-SCHEMA = json.loads(
-    Path("examples/enrichment/enrichment_row.schema.json").read_text(encoding="utf-8")
-)
+SCHEMA = json.loads(Path("examples/enrichment/enrichment_row.schema.json").read_text(encoding="utf-8"))
 
 
 def latest_sample():
@@ -37,10 +35,7 @@ def extract_enrichment_from_logs(log_text: str) -> list[dict]:
             continue
         try:
             log_entry = json.loads(line)
-            if (
-                log_entry.get("logger") == "gemantria.enrichment"
-                and log_entry.get("msg") == "noun_enriched"
-            ):
+            if log_entry.get("logger") == "gemantria.enrichment" and log_entry.get("msg") == "noun_enriched":
                 # Convert log entry to enrichment row format
                 row = {
                     "hebrew": log_entry.get("noun", ""),

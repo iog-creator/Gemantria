@@ -113,9 +113,9 @@ def test_checkpoint_resume_compass_correlation():
     # This proves mathematical correctness of checkpoint/resume mechanism
     for node_name in hashes1.keys():
         assert node_name in hashes2, f"Missing hash for node {node_name} in second run"
-        assert (
-            hashes1[node_name] == hashes2[node_name]
-        ), f"COMPASS correlation failed for {node_name}: hash mismatch between runs"
+        assert hashes1[node_name] == hashes2[node_name], (
+            f"COMPASS correlation failed for {node_name}: hash mismatch between runs"
+        )
 
     # Validate final results are also identical
     assert result1["run_id"] == result2["run_id"]
@@ -272,9 +272,7 @@ def test_temporal_test_harness_stop_resume():
     assert len(result_resume["enriched_nouns"]) > 0
     assert len(result_resume["analyzed_nouns"]) > 0
     assert "graph" in result_resume and len(result_resume["graph"].get("nodes", [])) > 0
-    assert (
-        "scored_graph" in result_resume and len(result_resume["scored_graph"].get("edges", [])) > 0
-    )
+    assert "scored_graph" in result_resume and len(result_resume["scored_graph"].get("edges", [])) > 0
 
     # Verify envelope structure (Rule-026 compliance)
     assert result_resume["enveloped_hints"]["type"] == "hints_envelope"

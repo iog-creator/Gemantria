@@ -107,9 +107,7 @@ def test_planning_prompt_uses_gemini_when_configured(mock_run, mock_cfg):
 @patch("agentpm.adapters.planning.gemini_cli.run")
 def test_planning_prompt_falls_back_when_cli_disabled(mock_run, mock_cfg, mock_chat):
     """Planning adapter should fallback to local agent when CLI is unavailable."""
-    mock_run.return_value = PlanningCliResult(
-        ok=False, mode="lm_off", provider="gemini", reason="gemini_disabled"
-    )
+    mock_run.return_value = PlanningCliResult(ok=False, mode="lm_off", provider="gemini", reason="gemini_disabled")
     mock_cfg.return_value = {
         "planning_provider": "gemini",
         "planning_model": "gemini-2.5-pro",

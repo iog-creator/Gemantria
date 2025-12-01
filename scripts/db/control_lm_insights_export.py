@@ -101,9 +101,7 @@ def compute_insights(window_days: int = 7) -> LMInsights7dExport:
         )
 
     # Check if connection is OK
-    connection_ok = usage_data.get("connection_ok", False) and health_data.get(
-        "connection_ok", False
-    )
+    connection_ok = usage_data.get("connection_ok", False) and health_data.get("connection_ok", False)
     db_off = not connection_ok
 
     # If db_off, return db_off payload

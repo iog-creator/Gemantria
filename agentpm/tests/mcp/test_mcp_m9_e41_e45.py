@@ -39,9 +39,7 @@ def test_e44_db_probe_latency_badge_threshold():
     # Force fail path: threshold = 0
     env = dict(os.environ)
     env["M9_LATENCY_THRESHOLD_MS"] = "0"
-    out = subprocess.check_output(
-        "python3 scripts/mcp/probe_db_latency.py", shell=True, text=True, env=env
-    )
+    out = subprocess.check_output("python3 scripts/mcp/probe_db_latency.py", shell=True, text=True, env=env)
     forced = json.loads(out)
     assert forced["ok"] is False and forced["threshold_ms"] == 0
 
@@ -53,8 +51,6 @@ def test_e45_guard_rollup_staleness_window():
     # Force stale
     env = dict(os.environ)
     env["M9_ROLLUP_STALE_THRESHOLD_SECONDS"] = "0"
-    out = subprocess.check_output(
-        "python3 scripts/guards/guard_m9_rollup_stale.py", shell=True, text=True, env=env
-    )
+    out = subprocess.check_output("python3 scripts/guards/guard_m9_rollup_stale.py", shell=True, text=True, env=env)
     forced = json.loads(out)
     assert forced["stale"] is True and forced["ok"] is False

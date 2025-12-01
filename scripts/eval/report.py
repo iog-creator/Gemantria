@@ -25,9 +25,7 @@ def _read_yaml(path: pathlib.Path) -> Any:
         with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
     except Exception as e:
-        raise RuntimeError(
-            "PyYAML is required for eval.report. Please `pip install pyyaml`."
-        ) from e
+        raise RuntimeError("PyYAML is required for eval.report. Please `pip install pyyaml`.") from e
 
 
 def _load_json(path: pathlib.Path) -> Any:

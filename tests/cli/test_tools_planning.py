@@ -25,9 +25,7 @@ runner = typer.testing.CliRunner()
 @patch("pmagent.cli.planning_adapter.run_planning_prompt")
 def test_tools_plan_prints_response(mock_run, mock_summary, mock_create, mock_success, mock_error):
     """tools.plan should print JSON summary and response body."""
-    result_payload = PlanningCliResult(
-        ok=True, mode="lm_on", provider="gemini", response="Step 1\nStep 2"
-    )
+    result_payload = PlanningCliResult(ok=True, mode="lm_on", provider="gemini", response="Step 1\nStep 2")
     mock_run.return_value = result_payload
     mock_summary.return_value = {"ok": True, "provider": "gemini"}
 
@@ -51,9 +49,7 @@ def test_tools_plan_prints_response(mock_run, mock_summary, mock_create, mock_su
     return_value={"ok": False, "reason": "cli_not_found:gemini"},
 )
 @patch("pmagent.cli.gemini_cli_adapter.run")
-def test_tools_gemini_handles_disabled_cli(
-    mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error
-):
+def test_tools_gemini_handles_disabled_cli(mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error):
     """tools.gemini should surface CLI errors without crashing."""
     mock_cfg.return_value = {
         "planning_model": "gemini-2.5-pro",
@@ -85,9 +81,7 @@ def test_tools_gemini_handles_disabled_cli(
     return_value={"ok": False, "reason": "codex_disabled"},
 )
 @patch("pmagent.cli.codex_cli_adapter.run")
-def test_tools_codex_reports_disabled_state(
-    mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error
-):
+def test_tools_codex_reports_disabled_state(mock_run, mock_summary, mock_cfg, mock_create, mock_success, mock_error):
     """tools.codex should report disabled state cleanly."""
     mock_cfg.return_value = {
         "planning_model": "gpt-5-codex",

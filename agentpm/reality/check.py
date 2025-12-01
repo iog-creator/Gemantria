@@ -218,9 +218,7 @@ def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str
     env_result = check_env_and_dsn()
     db_result = check_db_and_control()
     lm_result = check_lm_health_status()
-    exports_result = (
-        check_control_plane_exports() if not skip_dashboards else {"ok": True, "skipped": True}
-    )
+    exports_result = check_control_plane_exports() if not skip_dashboards else {"ok": True, "skipped": True}
     eval_result = run_eval_smoke() if not skip_dashboards else {"ok": True, "skipped": True}
 
     # Build hints based on results
@@ -400,9 +398,7 @@ def print_human_summary(verdict: dict[str, Any], file=None) -> None:
                 file=file,
             )
         else:
-            print(
-                f"✓ Result: {mode.upper()} mode passed (system ready for production use)", file=file
-            )
+            print(f"✓ Result: {mode.upper()} mode passed (system ready for production use)", file=file)
     else:
         print(f"✗ Result: {mode.upper()} mode failed (see hints/errors above)", file=file)
         if mode.upper() == "HINT":

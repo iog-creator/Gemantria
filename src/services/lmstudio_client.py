@@ -139,9 +139,7 @@ def assert_qwen_live(required_models: list[str]) -> QwenHealth:
     print(
         "🔥🔥🔥 LOUD HINT: src/services/AGENTS.md - Qwen Live Gate: Must call assert_qwen_live() before network aggregation 🔥🔥🔥"
     )
-    print(
-        "🔥🔥🔥 LOUD HINT: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation 🔥🔥🔥"
-    )
+    print("🔥🔥🔥 LOUD HINT: ENFORCE_QWEN_LIVE=1 → assert_qwen_live() must pass before any network aggregation 🔥🔥🔥")
     # Check for test-only mock bypass first
     allow_mocks = _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false")
     if allow_mocks:
@@ -303,7 +301,9 @@ class LMStudioClient:
                 resp.raise_for_status()
                 return resp.json()
             except requests.exceptions.ConnectionError as e:
-                error_msg = f"Cannot connect to LM Studio at {HOST}. Is server running? Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                error_msg = (
+                    f"Cannot connect to LM Studio at {HOST}. Is server running? Attempt {attempt + 1}/{RETRY_ATTEMPTS}"
+                )
                 if attempt < RETRY_ATTEMPTS - 1:
                     print(f"Warning: {error_msg}. Retrying in {RETRY_DELAY}s...")
                     time.sleep(RETRY_DELAY)
@@ -321,13 +321,13 @@ class LMStudioClient:
                 raise QwenUnavailableError(error_msg) from e
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 404:
-                    error_msg = f"LM Studio API endpoint not found at {HOST}/v1/chat/completions. Check LM Studio version."
+                    error_msg = (
+                        f"LM Studio API endpoint not found at {HOST}/v1/chat/completions. Check LM Studio version."
+                    )
                 elif e.response.status_code == 400:
                     error_msg = f"Bad request to LM Studio: {e.response.text}"
                 elif e.response.status_code >= 500:
-                    error_msg = (
-                        f"LM Studio server error ({e.response.status_code}): {e.response.text}"
-                    )
+                    error_msg = f"LM Studio server error ({e.response.status_code}): {e.response.text}"
                 else:
                     error_msg = f"LM Studio HTTP {e.response.status_code}: {e.response.text}"
                 raise QwenUnavailableError(error_msg) from e
@@ -343,9 +343,7 @@ class LMStudioClient:
         raise QwenUnavailableError("Unexpected error in _post method")
 
     def generate_insight(self, noun: dict) -> dict:
-        prompt = (
-            f"Provide theological insight (150-250 words) for {noun['hebrew']} ({noun['name']})."
-        )
+        prompt = f"Provide theological insight (150-250 words) for {noun['hebrew']} ({noun['name']})."
         payload = {
             "model": THEOLOGY_MODEL,
             "messages": [{"role": "user", "content": prompt}],
@@ -511,9 +509,7 @@ class LMStudioClient:
 
                 for attempt in range(RETRY_ATTEMPTS):
                     try:
-                        resp = self.session.post(
-                            f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT
-                        )
+                        resp = self.session.post(f"{HOST}/v1/chat/completions", json=payload, timeout=TIMEOUT)
                         resp.raise_for_status()
                         data = resp.json()
 
@@ -644,8 +640,7 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
     if _is_mock_mode():
         # Return mock responses for testing
         return [
-            SimpleNamespace(text='{"insight": "Mock theological insight", "confidence": 0.95}')
-            for _ in messages_batch
+            SimpleNamespace(text='{"insight": "Mock theological insight", "confidence": 0.95}') for _ in messages_batch
         ]
 
     results = []
@@ -691,9 +686,7 @@ def chat_completion(messages_batch: list[list[dict]], model: str, temperature: f
                     if _get_bool_env("ALLOW_MOCKS_FOR_TESTS", "false"):
                         # Test-only fallback
                         results.append(
-                            SimpleNamespace(
-                                text='{"insight": "Fallback theological insight", "confidence": 0.90}'
-                            )
+                            SimpleNamespace(text='{"insight": "Fallback theological insight", "confidence": 0.90}')
                         )
                         break
                     else:
@@ -736,9 +729,7 @@ def safe_json_parse(text: str, required_keys: list[str]) -> dict:
     # Validate required keys
     missing_keys = [key for key in required_keys if key not in data]
     if missing_keys:
-        raise ValueError(
-            f"JSON response missing required keys: {missing_keys}. Parsed data: {data}"
-        )
+        raise ValueError(f"JSON response missing required keys: {missing_keys}. Parsed data: {data}")
 
     return data
 

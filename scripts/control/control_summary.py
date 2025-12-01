@@ -128,9 +128,7 @@ def compute_control_summary() -> dict[str, Any]:
     else:
         # All components are db_off or error - acceptable for hermetic behavior
         # but overall ok=false if any had errors
-        result["ok"] = not any(
-            comp.get("mode") == "error" for comp in components.values() if isinstance(comp, dict)
-        )
+        result["ok"] = not any(comp.get("mode") == "error" for comp in components.values() if isinstance(comp, dict))
 
     return result
 

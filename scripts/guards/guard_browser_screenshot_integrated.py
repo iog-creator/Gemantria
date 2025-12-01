@@ -115,9 +115,7 @@ def _extract_counts(verdict: dict[str, Any] | None, guard_name: str) -> dict[str
 
     # Extract broken links from atlas_links_guard
     if guard_name == "atlas_links_guard":
-        extracted["broken_links"] = counts.get("broken_internal_links", 0) + counts.get(
-            "unmarked_external_links", 0
-        )
+        extracted["broken_links"] = counts.get("broken_internal_links", 0) + counts.get("unmarked_external_links", 0)
 
     # Extract missing screenshots from screenshot/tagproof guards
     if guard_name == "screenshot_manifest_guard":

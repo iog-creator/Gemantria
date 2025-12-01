@@ -325,9 +325,7 @@ def _generate_reference_tooltip_lines(reference: RawBibleScholarReference) -> Li
         lines.append(f"Total questions: {reference.total_questions}")
 
         if reference.by_mode:
-            mode_summary = ", ".join(
-                f"{mode}: {count}" for mode, count in reference.by_mode.items()
-            )
+            mode_summary = ", ".join(f"{mode}: {count}" for mode, count in reference.by_mode.items())
             lines.append(f"Modes: {mode_summary}")
 
         if reference.by_verse_ref:
@@ -364,9 +362,7 @@ def load_graph_compliance_widget_props() -> GraphComplianceWidgetProps:
         return OFFLINE_SAFE_GRAPH_COMPLIANCE
 
     # Normalize status
-    status = _normalize_compliance_status(
-        raw_compliance.ok, raw_compliance.total_runs_with_violations
-    )
+    status = _normalize_compliance_status(raw_compliance.ok, raw_compliance.total_runs_with_violations)
 
     # Generate widget props
     props: GraphComplianceWidgetProps = {
@@ -484,11 +480,7 @@ def load_mcp_status_cards_widget_props() -> MCPStatusCardsWidgetProps:
     color = "green" if status == "ok" else ("yellow" if status == "degraded" else "grey")
 
     # Generate icon
-    icon = (
-        "status-healthy"
-        if status == "ok"
-        else ("status-warning" if status == "degraded" else "status-offline")
-    )
+    icon = "status-healthy" if status == "ok" else ("status-warning" if status == "degraded" else "status-offline")
 
     # Generate tooltip lines
     tooltip_lines = [

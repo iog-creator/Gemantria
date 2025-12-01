@@ -36,9 +36,7 @@ def _mini_repo(tmp: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
 def _run_guard(script: pathlib.Path, cwd: pathlib.Path, **env):
     e = dict(os.environ)
     e.update(env)
-    return subprocess.run(
-        [sys.executable, str(script)], cwd=str(cwd), capture_output=True, text=True, env=e
-    )
+    return subprocess.run([sys.executable, str(script)], cwd=str(cwd), capture_output=True, text=True, env=e)
 
 
 def test_strict_fails_on_schema_violation_graph_stats(tmp_path):
@@ -49,9 +47,7 @@ def test_strict_fails_on_schema_violation_graph_stats(tmp_path):
     del obj["edges"]  # remove required property
     p.write_text(json.dumps(obj))
     cp = _run_guard(script, root, STRICT_TAG_CONTEXT="1")
-    assert (
-        cp.returncode != 0
-    ), f"expected STRICT failure, got rc={cp.returncode}\nSTDERR:\n{cp.stderr}"
+    assert cp.returncode != 0, f"expected STRICT failure, got rc={cp.returncode}\nSTDERR:\n{cp.stderr}"
     verdict = json.loads((root / "evidence" / "exports_guard.verdict.json").read_text())
     assert verdict["ok"] is False
     assert verdict["files"]["graph_stats.json"]["schema_ok"] is False
@@ -62,9 +58,7 @@ def test_strict_fails_when_export_missing(tmp_path):
     # Remove one export entirely
     (root / "exports" / "ai_nouns.json").unlink()
     cp = _run_guard(script, root, STRICT_TAG_CONTEXT="1")
-    assert (
-        cp.returncode != 0
-    ), f"expected STRICT failure, got rc={cp.returncode}\nSTDERR:\n{cp.stderr}"
+    assert cp.returncode != 0, f"expected STRICT failure, got rc={cp.returncode}\nSTDERR:\n{cp.stderr}"
     verdict = json.loads((root / "evidence" / "exports_guard.verdict.json").read_text())
     assert verdict["ok"] is False
     assert verdict["files"]["ai_nouns.json"]["exists"] is False

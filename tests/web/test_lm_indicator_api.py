@@ -23,9 +23,7 @@ from src.services.api_server import app  # noqa: E402
 client = TestClient(app)
 
 
-@patch(
-    "src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json")
-)
+@patch("src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json"))
 @patch("pathlib.Path.exists")
 @patch("pathlib.Path.read_text")
 def test_lm_indicator_returns_snapshot(mock_read_text, mock_exists):
@@ -55,9 +53,7 @@ def test_lm_indicator_returns_snapshot(mock_read_text, mock_exists):
     assert data["snapshot"]["total_calls"] == 1000
 
 
-@patch(
-    "src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json")
-)
+@patch("src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json"))
 @patch("pathlib.Path.exists")
 def test_lm_indicator_handles_missing_file(mock_exists):
     """Test that /api/lm/indicator returns empty snapshot when file is missing."""
@@ -73,9 +69,7 @@ def test_lm_indicator_handles_missing_file(mock_exists):
     assert "not available" in data["note"].lower()
 
 
-@patch(
-    "src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json")
-)
+@patch("src.services.api_server.INDICATOR_PATH", Path("share/atlas/control_plane/lm_indicator.json"))
 @patch("pathlib.Path.exists")
 @patch("pathlib.Path.read_text")
 def test_lm_indicator_handles_invalid_json(mock_read_text, mock_exists):

@@ -13,9 +13,7 @@ from scripts.db.upsert_helpers import upsert_edge, upsert_embedding, upsert_node
 run_id = f"writers-smoke-{uuid4()}"
 client = OpenAI(base_url=base_url())
 emb = (
-    client.embeddings.create(
-        model=os.environ.get("LM_EMBED_MODEL", "text-embedding-3-small"), input=["covenant"]
-    )
+    client.embeddings.create(model=os.environ.get("LM_EMBED_MODEL", "text-embedding-3-small"), input=["covenant"])
     .data[0]
     .embedding
 )

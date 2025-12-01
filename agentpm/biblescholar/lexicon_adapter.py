@@ -266,9 +266,7 @@ class LexiconAdapter:
             self._db_status = "unavailable"
             return None
 
-    def get_entries_for_reference(
-        self, book_name: str, chapter_num: int, verse_num: int
-    ) -> list[LexiconEntry]:
+    def get_entries_for_reference(self, book_name: str, chapter_num: int, verse_num: int) -> list[LexiconEntry]:
         """Get lexicon entries for all words in a verse reference.
 
         This queries hebrew_ot_words and greek_nt_words to find Strong's numbers,

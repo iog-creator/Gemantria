@@ -50,9 +50,7 @@ class ModelRouter:
                 name=os.getenv("ANSWERER_MODEL_ALT", "Qwen2.5-14B-Instruct-GGUF"),
                 fallback=os.getenv("THEOLOGY_MODEL", "christian-bible-expert-v2.0-12b"),
             ),
-            "math": ModelConfig(
-                name=os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")
-            ),
+            "math": ModelConfig(name=os.getenv("MATH_MODEL", "self-certainty-qwen3-1.7b-base-math")),
             "embedding": ModelConfig(name=os.getenv("EMBEDDING_MODEL", "text-embedding-bge-m3")),
             "reranker": ModelConfig(name=os.getenv("RERANKER_MODEL", "qwen.qwen3-reranker-0.6b")),
         }

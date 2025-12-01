@@ -47,9 +47,7 @@ for node in sample["nodes"]:
     if insight:
         crossrefs = extract_verse_references(insight)
         if crossrefs:
-            enrichment["crossrefs"] = [
-                {"label": ref["label"], "osis": ref["osis"]} for ref in crossrefs
-            ]
+            enrichment["crossrefs"] = [{"label": ref["label"], "osis": ref["osis"]} for ref in crossrefs]
 
 with open("exports/ai_nouns.json", "w", encoding="utf-8") as f:
     json.dump(sample, f, ensure_ascii=False, indent=2)

@@ -121,9 +121,7 @@ def format_context_for_llm(context: VerseContext) -> str:
         for entry in context.lexicon_entries:
             # Heuristic for Hebrew vs Greek based on Strong's ID
             lang = "Hebrew" if entry.strongs_id.startswith("H") else "Greek"
-            definition = (
-                entry.gloss if hasattr(entry, "gloss") else getattr(entry, "definition", "")
-            )
+            definition = entry.gloss if hasattr(entry, "gloss") else getattr(entry, "definition", "")
             lines.append(f"- **{entry.lemma}** ({lang} {entry.strongs_id}): {definition}")
         lines.append("")
 
@@ -131,9 +129,7 @@ def format_context_for_llm(context: VerseContext) -> str:
     if context.similar_verses:
         lines.append("## Similar Verses (Semantic)")
         for v in context.similar_verses:
-            lines.append(
-                f"- **{v.book_name} {v.chapter_num}:{v.verse_num}** ({v.similarity_score:.2f}): {v.text}"
-            )
+            lines.append(f"- **{v.book_name} {v.chapter_num}:{v.verse_num}** ({v.similarity_score:.2f}): {v.text}")
         lines.append("")
 
     return "\n".join(lines)
