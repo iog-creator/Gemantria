@@ -153,7 +153,21 @@ git push origin v{major}.{minor}.{patch}
 - Pre-releases: `v{major}.{minor}.{patch}-rc.{n}` (e.g., `v1.3.0-rc.1`)
 - Development tags: `dev/{feature}` (not for releases)
 
-#### 3.2. Create Release via GitHub UI
+#### 3.2. Cleanup Feature Branches
+
+After tagging, clean up branches that were merged:
+
+```bash
+# Delete branches that were merged to main
+pmagent repo branch-cleanup --execute
+
+# Verify cleanup
+git branch -r | wc -l  # Should be minimal (~25 or fewer active branches)
+```
+
+**Policy**: Tags mark stable checkpoints. Once tagged, feature branches should be deleted to keep the repository clean and avoid confusion about "what's in the release."
+
+#### 3.3. Create Release via GitHub UI
 
 1. Go to [Releases](https://github.com/mccoy/Gemantria.v2/releases)
 2. Click "Draft a new release"
@@ -169,7 +183,7 @@ git push origin v{major}.{minor}.{patch}
    - Upload any other relevant evidence files
 7. Click "Publish release"
 
-#### 3.3. Tag Build Verification
+#### 3.4. Tag Build Verification
 
 After pushing the tag, CI will run in **STRICT mode** (not HINT-only):
 
