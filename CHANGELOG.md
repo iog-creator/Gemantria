@@ -105,6 +105,8 @@
 
 - PM handoff for GitHub recovery session
 
+- reconcile AGENTS.md and rules with new branch protection
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
