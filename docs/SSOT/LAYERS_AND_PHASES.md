@@ -32,7 +32,7 @@
 
 ## Layer 4: Code Ingestion & Embeddings
 
-**Status:** 🔄 IN PROGRESS (Phases 1-3 complete, Phase 4-5 invalid)
+**Status:** 🔄 IN PROGRESS (Phases 1-4 complete, Phase 5 ready)
 
 - **Phase 1: Code Discovery** — ✅ COMPLETE (merged, commit 181675ef)
   - **Artifact:** `share/code_registry.json` (919 Python files)
@@ -46,10 +46,9 @@
   - **Artifact:** `share/code_fragments_classified.json` (3,749 tagged fragments)
   - **State:** Merged to main
 
-- **Phase 4: Embedding** — 🔄 WIP (rollback due to schema violation)
-  - **Issue:** Invalid 768-D embeddings (control-plane requires 1024-D)
-  - **Commit:** `fa284b0f` (on branch, NOT merged to main)
-  - **State:** Must be rebuilt with correct 1024-D logic
+- **Phase 4: Embedding** — ✅ COMPLETE (commit 9294df56)
+  - **Artifact:** `share/code_fragments_embedded.json` (3,749 fragments with 1024-D vectors)
+  - **State:** Merged to main, schema-compliant
 
 - **Phase 5: Export** — ⛔️ BLOCKED (embedding invalid, must fix Phase 4 first)
   - **Issue:** Export logic relied on invalid 768-D embedding shape
