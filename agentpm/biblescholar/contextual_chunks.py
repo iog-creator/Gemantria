@@ -100,6 +100,55 @@ def build_contextual_chunks(verse_ref: str) -> list[dict[str, Any]]:
     return [chunk]
 
 
+def expand_context_window(verse_ref: str, window_size: int = 5) -> list[dict[str, Any]]:
+    """Expand context window around a verse (for RAG retrieval).
+
+    Retrieves ±N verses from the seed verse to provide semantic continuity.
+    For window_size=5, returns 5 verses: seed verse ±2 verses.
+
+    Args:
+        verse_ref: Seed verse reference (e.g., "Mark 1:3")
+        window_size: Total window size (default: 5 = ±2 verses)
+
+    Returns:
+        List of contextual chunks for verses in the window.
+        Empty list if seed verse not found or DB unavailable.
+
+    Example:
+        expand_context_window("Mark 1:3", window_size=5)
+        Returns chunks for: Mark 1:1, 1:2, 1:3, 1:4, 1:5
+    """
+    # Parse seed reference
+    try:
+        parsed = parse_reference(verse_ref)
+    except (ValueError, AttributeError):
+        return []
+
+    if parsed.verse is None:
+        return []
+
+    # Calculate window bounds
+    offset = window_size // 2  # For window_size=5, offset=2
+    start_verse = max(1, parsed.verse - offset)
+    end_verse = parsed.verse + offset
+
+    # Build chunks for all verses in window
+    chunks = []
+    for verse_num in range(start_verse, end_verse + 1):
+        # Build reference for this verse
+        window_verse_ref = f"{parsed.book} {parsed.chapter}:{verse_num}"
+
+        # Build chunk for this verse
+        verse_chunks = build_contextual_chunks(window_verse_ref)
+        if verse_chunks:
+            # Mark which verse is the seed
+            for chunk in verse_chunks:
+                chunk["is_seed_verse"] = verse_num == parsed.verse
+            chunks.extend(verse_chunks)
+
+    return chunks
+
+
 def _is_new_testament(book_name: str) -> bool:
     """Check if book is in New Testament."""
     nt_books = {

@@ -525,6 +525,89 @@ for match in matches:
 - Tests in `agentpm/biblescholar/tests/test_cross_language_flow.py`
 - Covers: Word analysis, cross-language matching logic, error handling
 
+### Phase 15 Wave-2: Advanced RAG Engine (Option B - Standard)
+
+- **Status**: Implementation COMPLETE (Testing in progress)
+- **Architecture Profile**: Option B (Standard) - Committed configuration
+  - 5-verse context window (±2 verses from seed)
+  - Cross-language lemma signals from Phase 14 `RelationshipAdapter`
+  - Embedding-based scoring with reranker fallback
+  - 1024-D embeddings (BGE-M3 fidelity)
+  - Ketiv as primary reading for Gematria
+
+**Modules**:
+
+1. **`embedding_adapter.py`** - 1024-D Vector Embeddings
+   - Purpose: Provides 1024-D BGE-M3 compatible embedding retrieval and vector search via pgvector
+   - API:
+     - `get_embedding_for_verse(verse_id: int) -> np.ndarray | None` - Retrieve 1024-D embedding
+     - `compute_query_embedding(query: str) -> np.ndarray | None` - Generate query embedding (Wave-3)
+     - `vector_search(query_embedding, top_k: int) -> list[tuple[int, float]]` - pgvector cosine similarity search
+     - `db_status` property - Returns "available", "unavailable", or "db_off"
+   - Hermetic: Returns `None`/empty list when DB unavailable
+   - Tests: 7 tests in `test_embedding_adapter.py`
+
+2. **`reranker_adapter.py`** - Cross-Encoder Reranking
+   - Purpose: Mandatory reranking layer per Option B to reduce hallucination rate
+   - API:
+     - `rerank_chunks(chunks: list[dict], query: str) -> list[dict]` - Rerank with combined scoring
+     - `lm_status` property - Returns "available", "unavailable", or "lm_off"
+   - Scoring: Combined score = 0.7 * embedding_score + 0.3 * reranker_score
+   - Fallback: Returns original ranking when LM unavailable (hermetic mode)
+   - Tests: 8 tests in `test_reranker_adapter.py`
+
+3. **`rag_retrieval.py`** - RAG Retrieval Orchestrator
+   - Purpose: Main RAG retrieval engine integrating embeddings, reranking, and context expansion
+   - API:
+     - `RAGRetriever.retrieve_contextual_chunks(query: str, top_k: int) -> list[dict]`
+   - Pipeline:
+     1. Compute query embedding (1024-D)
+     2. Vector search via pgvector
+     3. Build chunks with embedding scores
+     4. Apply reranker fallback (updates relevance_score)
+     5. Expand context windows (5-verse, placeholder for Wave-3)
+     6. Enrich with Phase 14 metadata (proper names, Greek words, cross-language hints)
+   - Hermetic: Returns empty list when DB/LM unavailable
+   - Tests: 1 test in `test_rag_retrieval.py` (4 skipped Test Vectors pending)
+
+4. **`contextual_chunks.py`** - Context Window Expansion
+   - Purpose: Build enriched contextual chunks with 5-verse window expansion
+   - API:
+     - `build_contextual_chunks(verse_ref: str) -> list[dict]` - Single verse chunk with Phase 14 enrichment
+     - `expand_context_window(verse_ref: str, window_size: int = 5) -> list[dict]` - ±2 verse expansion
+   - Features:
+     - Integrates `RelationshipAdapter` for proper names
+     - Integrates `LexiconAdapter` for Greek words
+     - Cross-language lemma resolution (Greek→Hebrew hints)
+     - Marks seed verse in window
+   - Hermetic: Returns empty list when DB unavailable
+
+5. **Phase 14 Adapter Batch Methods** - N+1 Query Optimization
+   - `RelationshipAdapter.get_enriched_context_batch(verse_ids: list[int]) -> dict[int, EnrichedContext]`
+     - Optimizes proper name retrieval for multi-verse contexts
+     - Prevents N+1 query problem in 5-verse windows
+   - `LexiconAdapter.get_greek_words_batch(verse_refs: list[str]) -> dict[str, list[dict]]`
+     - Batch Greek word retrieval with single DB query
+     - Optimizes context window queries
+   - Tests: 2 tests in `test_adapter_batch_methods.py`
+
+**Schema**:
+- `docs/SSOT/rag_retrieval.schema.json` - JSON schema for RAG response format
+- `docs/SSOT/PHASE15_WAVE2_SPEC.md` - Complete RAG specification
+
+**Test Coverage**: 20 tests (7 embedding + 8 reranker + 1 RAG + 2 batch + 2 vector)
+
+**Dependencies**:
+- Phase 14 adapters (`RelationshipAdapter`, `LexiconAdapter`)
+- `bible_db.verse_embeddings` table (1024-D pgvector)
+- PostgreSQL with pgvector extension
+- LM Studio/Ollama for reranker (optional, hermetic fallback)
+
+**Non-goals**:
+- No query embedding generation in Wave-2 (placeholder for Wave-3)
+- No full context expansion in Wave-2 (metadata only)
+- No live DB/LM tests yet (hermetic validation only)
+
 ## Future Extensions
 
 - Batch processing for multiple phrases

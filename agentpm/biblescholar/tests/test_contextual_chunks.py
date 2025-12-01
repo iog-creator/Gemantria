@@ -70,4 +70,3 @@ class TestContextualChunks:
                     if "hebrew_strongs" in hint:
                         assert "hebrew_lemma" in hint
                         assert "mapping_source" in hint
-

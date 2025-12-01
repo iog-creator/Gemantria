@@ -349,3 +349,34 @@ class RelationshipAdapter:
         except (OperationalError, ProgrammingError, DbUnavailableError):
             self._db_status = "unavailable"
             return None
+
+    def get_enriched_context_batch(
+        self, verse_ids: list[int], include_word_links: bool = False
+    ) -> dict[int, EnrichedContext]:
+        """Get enriched RAG context for multiple verses (batch query).
+
+        Optimizes context window queries by processing multiple verses together.
+
+        Args:
+            verse_ids: List of verse identifiers
+            include_word_links: Whether to include verse-word links (default: False for performance)
+
+        Returns:
+            Dictionary mapping verse_id to EnrichedContext.
+
+        Note:
+            This is a simplified batch implementation. Full optimization
+            would require complex SQL with GROUP BY. For Phase 15 Wave-2,
+            we iterate per verse but with shared connection.
+        """
+        if not verse_ids or self._db_status == "unavailable":
+            return {}
+
+        result: dict[int, EnrichedContext] = {}
+
+        for verse_id in verse_ids:
+            ctx = self.get_enriched_context(verse_id, include_word_links=include_word_links)
+            if ctx:
+                result[verse_id] = ctx
+
+        return result

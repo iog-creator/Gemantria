@@ -348,3 +348,66 @@ class LexiconAdapter:
         except (OperationalError, ProgrammingError):
             self._db_status = "unavailable"
             return []
+
+    def get_greek_words_batch(self, verse_refs: list[str]) -> dict[str, list[dict]]:
+        """Get Greek words for multiple verses (batch query).
+
+        Optimizes context window queries by fetching all verses in a single query.
+
+        Args:
+            verse_refs: List of verse references (e.g., ["Mark.1.1", "Mark.1.2"])
+
+        Returns:
+            Dictionary mapping verse_ref to list of Greek word dictionaries.
+        """
+        if not verse_refs or not self._ensure_engine():
+            return {}
+
+        try:
+            # Convert verse_refs to verse_ids
+            verse_id_map: dict[int, str] = {}
+            for verse_ref in verse_refs:
+                verse_id = self._verse_ref_to_id(verse_ref)
+                if verse_id:
+                    verse_id_map[verse_id] = verse_ref
+
+            if not verse_id_map:
+                return {}
+
+            # Batch query
+            verse_ids_str = ",".join(map(str, verse_id_map.keys()))
+            query = text(
+                f"""
+                SELECT w.verse_id, w.word_position, w.word_text, w.strongs_id,
+                       w.grammar_code, e.lemma, e.gloss
+                FROM bible.greek_nt_words w
+                LEFT JOIN bible.greek_entries e ON w.strongs_id = e.strongs_id
+                WHERE w.verse_id IN ({verse_ids_str})
+                ORDER BY w.verse_id, w.word_position
+                """
+            )
+
+            with self._engine.connect() as conn:
+                result = conn.execute(query)
+
+                words_by_ref: dict[str, list[dict]] = {ref: [] for ref in verse_refs}
+                for row in result:
+                    verse_ref = verse_id_map.get(row[0])
+                    if verse_ref:
+                        words_by_ref[verse_ref].append(
+                            {
+                                "word_position": row[1],
+                                "surface": row[2],
+                                "strongs_id": row[3],
+                                "grammar_code": row[4],
+                                "lemma": row[5],
+                                "gloss": row[6],
+                                "language": "GR",
+                            }
+                        )
+
+                return words_by_ref
+
+        except (OperationalError, ProgrammingError):
+            self._db_status = "unavailable"
+            return {}

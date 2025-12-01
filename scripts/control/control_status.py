@@ -22,6 +22,10 @@ CONTROL_TABLES = [
     ("public", "ai_interactions"),
     ("public", "governance_artifacts"),
     ("control", "agent_run"),
+    ("control", "agent_run_cli"),
+    ("control", "kb_document"),
+    ("control", "doc_registry"),
+    ("control", "doc_version"),
     ("control", "tool_catalog"),
     ("gematria", "graph_stats_snapshots"),
 ]

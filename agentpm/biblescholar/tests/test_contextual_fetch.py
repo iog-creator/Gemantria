@@ -41,4 +41,3 @@ class TestContextualFetch:
         else:
             # If DB unavailable, should have error message
             assert result.error is not None
-

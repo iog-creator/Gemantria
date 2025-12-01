@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "generated_at": "2025-12-01T19:16:51.485714+00:00",
+  "documents": [
+    {
+      "id": "ssot-master-plan",
+      "title": "Master Plan",
+      "path": "docs/SSOT/MASTER_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "governance",
+        "planning",
+        "ssot"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "source": "seeded",
+        "category": "core_ssot"
+      },
+      "registered_at": "2025-12-01T17:08:18.182815+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot-pmagent-current-vs-intended",
+      "title": "pmagent Current vs Intended State",
+      "path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+      "type": "ssot",
+      "tags": [
+        "governance",
+        "pmagent",
+        "ssot"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "source": "seeded",
+        "category": "core_ssot"
+      },
+      "registered_at": "2025-12-01T17:08:18.182822+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "adr-065-postgres-ssot",
+      "title": "Postgres SSOT",
+      "path": "ADR-065-postgres-ssot.md",
+      "type": "adr",
+      "tags": [
+        "architecture",
+        "database",
+        "ssot"
+      ],
+      "owning_subsystem": "root",
+      "provenance": {
+        "source": "seeded",
+        "category": "key_adr"
+      },
+      "registered_at": "2025-12-01T17:08:18.182827+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "adr-066-lm-studio-control-plane",
+      "title": "LM Studio Control Plane Integration",
+      "path": "ADR-066-lm-studio-control-plane-integration.md",
+      "type": "adr",
+      "tags": [
+        "architecture",
+        "lm",
+        "control-plane"
+      ],
+      "owning_subsystem": "root",
+      "provenance": {
+        "source": "seeded",
+        "category": "key_adr"
+      },
+      "registered_at": "2025-12-01T17:08:18.182830+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "adr-032-bibledb-ssot",
+      "title": "Bible DB as SSOT Roadmap",
+      "path": "ADR-032-bibledb-as-SSOT-roadmap.md",
+      "type": "adr",
+      "tags": [
+        "architecture",
+        "database",
+        "roadmap"
+      ],
+      "owning_subsystem": "root",
+      "provenance": {
+        "source": "seeded",
+        "category": "key_adr"
+      },
+      "registered_at": "2025-12-01T17:08:18.182832+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "runbook-pm-snapshot",
+      "title": "PM Snapshot Current",
+      "path": "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
+      "type": "runbook",
+      "tags": [
+        "ops",
+        "pm",
+        "snapshot"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "source": "seeded",
+        "category": "runbook"
+      },
+      "registered_at": "2025-12-01T17:08:18.182836+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents-md-root",
+      "title": "Root AGENTS.md",
+      "path": "AGENTS.md",
+      "type": "agents_md",
+      "tags": [
+        "governance",
+        "root"
+      ],
+      "owning_subsystem": "root",
+      "provenance": {
+        "source": "seeded",
+        "category": "agents_md"
+      },
+      "registered_at": "2025-12-01T17:08:18.182839+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents-md-agentpm",
+      "title": "agentpm Package AGENTS.md",
+      "path": "agentpm/AGENTS.md",
+      "type": "agents_md",
+      "tags": [
+        "governance",
+        "agentpm"
+      ],
+      "owning_subsystem": "agentpm",
+      "provenance": {
+        "source": "seeded",
+        "category": "agents_md"
+      },
+      "registered_at": "2025-12-01T17:08:18.182843+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents-md-webui-graph",
+      "title": "webui/graph AGENTS.md",
+      "path": "webui/graph/AGENTS.md",
+      "type": "agents_md",
+      "tags": [
+        "governance",
+        "webui"
+      ],
+      "owning_subsystem": "webui",
+      "provenance": {
+        "source": "seeded",
+        "category": "agents_md"
+      },
+      "registered_at": "2025-12-01T17:08:18.182845+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    }
+  ]
+}

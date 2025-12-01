@@ -139,6 +139,11 @@ from pmagent.repo.commands import app as repo_app  # noqa: E402
 
 app.add_typer(repo_app, name="repo")
 
+# Import and register handoff commands
+from pmagent.handoff.commands import app as handoff_app  # noqa: E402
+
+app.add_typer(handoff_app, name="handoff")
+
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
     """Print health JSON to stdout and optional summary to stderr."""
