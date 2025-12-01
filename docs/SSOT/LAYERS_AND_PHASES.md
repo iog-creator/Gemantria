@@ -32,34 +32,29 @@
 
 ## Layer 4: Code Ingestion & Embeddings
 
-**Status:** 🔄 STASHED (not merged)
+**Status:** 🔄 IN PROGRESS (Phases 1-3 complete, Phase 4-5 invalid)
 
-- **Phase 4.1: Code Discovery** — 🔄 STASHED
-  - **Location:** `stash@{0}` on `feature/layer3-ai-doc-ingestion`
-  - **Artifact:** `scripts/governance/ingest_docs_to_db.py` (with `iter_code_files()`)
-  - **State:** WIP, not merged
+- **Phase 1: Code Discovery** — ✅ COMPLETE (merged, commit 181675ef)
+  - **Artifact:** `share/code_registry.json` (919 Python files)
+  - **State:** Merged to main
 
-- **Phase 4.2: Code Fragmentation** — 🔄 STASHED
-  - **Location:** `stash@{0}` on `feature/layer3-ai-doc-ingestion`
-  - **Artifact:** `scripts/governance/ingest_doc_content.py` (with `chunk_python_code()`, `chunk_typescript_code()`)
-  - **State:** WIP, not merged
+- **Phase 2: Fragmentation** — ✅ COMPLETE (merged, commit 2bd52ecb)
+  - **Artifact:** `share/code_fragments.json` (3,749 fragments)
+  - **State:** Merged to main
 
-- **Phase 4.3: Code Embeddings** — 🔄 STASHED
-  - **Location:** `stash@{0}` on `feature/layer3-ai-doc-ingestion`
-  - **Note:** Reuses existing embedding pipeline
-  - **State:** WIP, not merged
+- **Phase 3: Classification** — ✅ COMPLETE (merged, commit eccda205)
+  - **Artifact:** `share/code_fragments_classified.json` (3,749 tagged fragments)
+  - **State:** Merged to main
 
-- **Phase 4.4: Code Classification** — 🔄 STASHED
-  - **Location:** `stash@{0}` on `feature/layer3-ai-doc-ingestion`
-  - **Artifact:** `agentpm/kb/classify.py` (with `classify_code_fragment()`)
-  - **State:** WIP, not merged
+- **Phase 4: Embedding** — 🔄 WIP (rollback due to schema violation)
+  - **Issue:** Invalid 768-D embeddings (control-plane requires 1024-D)
+  - **Commit:** `fa284b0f` (on branch, NOT merged to main)
+  - **State:** Must be rebuilt with correct 1024-D logic
 
-- **Phase 4.5: KB Registry & Search** — 🔄 STASHED
-  - **Location:** `stash@{0}` on `feature/layer3-ai-doc-ingestion`
-  - **Artifacts:** 
-    - `agentpm/kb/search.py` (semantic code search)
-    - `pmagent/cli.py` (with `pmagent kb search` command)
-  - **State:** WIP, not merged
+- **Phase 5: Export** — ⛔️ BLOCKED (embedding invalid, must fix Phase 4 first)
+  - **Issue:** Export logic relied on invalid 768-D embedding shape
+  - **Commit:** `c8bc50bb` (on branch, NOT merged to main)
+  - **State:** Blocked until Phase 4 is corrected
 
 ## Notes
 
