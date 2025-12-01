@@ -86,6 +86,18 @@ def convert_file(input_path: Path, output_path: Path | None = None) -> int:
         print(f"ERROR: Input file does not exist: {input_path}", file=sys.stderr)
         return 1
 
+    # Skip embedding files (too large, not useful as markdown)
+    filename_lower = input_path.name.lower()
+    if "embedding" in filename_lower or "embedded" in filename_lower:
+        print(f"⏭️  Skipping embedding file: {input_path.name} (too large for markdown conversion)")
+        return 0
+
+    # Skip files larger than 1MB (likely binary or too large for markdown)
+    file_size = input_path.stat().st_size
+    if file_size > 1024 * 1024:  # 1MB
+        print(f"⏭️  Skipping large file: {input_path.name} ({file_size / 1024 / 1024:.1f}MB, too large for markdown conversion)")
+        return 0
+
     try:
         # Read JSON
         json_data = json.loads(input_path.read_text(encoding="utf-8"))
