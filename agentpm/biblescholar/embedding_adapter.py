@@ -98,20 +98,42 @@ class EmbeddingAdapter:
     def compute_query_embedding(self, query: str) -> np.ndarray | None:
         """Generate 1024-D query embedding via BGE-M3.
 
+        Phase 15 Wave-3: Wired to real BGE-M3 embedding service.
+        LM-off during Wave-3 = LOUD FAIL (RuntimeError).
+
         Args:
             query: Natural language query string
 
         Returns:
             1024-D numpy array, or None if generation fails
 
-        Note:
-            This is a placeholder for BGE-M3 integration.
-            Phase 15 Wave-2 focuses on retrieval; embedding generation
-            will be wired in Wave-3 when LM Stack is fully integrated.
+        Raises:
+            RuntimeError: If LM service is unavailable (Wave-3 requires LM).
         """
-        # TODO: Wire up BGE-M3 model for query encoding
-        # For now, return None (hermetic mode safe)
-        return None
+        from agentpm.adapters.lm_studio import embed
+
+        try:
+            # Generate embedding via BGE-M3 (routed to Ollama or LM Studio)
+            embeddings = embed(query, model_slot="embedding")
+            if not embeddings or not embeddings[0]:
+                return None
+
+            # Convert to numpy array (1024-D expected)
+            embedding_vector = np.array(embeddings[0], dtype=np.float32)
+
+            # Validate dimensionality (should be 1024 for BGE-M3)
+            if len(embedding_vector) != 1024:
+                raise ValueError(
+                    f"Expected 1024-D embedding, got {len(embedding_vector)}-D. Check EMBEDDING_MODEL configuration."
+                )
+
+            return embedding_vector
+        except RuntimeError as e:
+            # Wave-3: LM-off = LOUD FAIL
+            raise RuntimeError(
+                f"LOUD FAIL: BGE-M3 embedding service unavailable for query embedding. "
+                f"Wave-3 requires LM to be available. Error: {e!s}"
+            ) from e
 
     def vector_search(self, query_embedding: np.ndarray, top_k: int = 5) -> list[tuple[int, float]]:
         """Perform pgvector cosine similarity search.

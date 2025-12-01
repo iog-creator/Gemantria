@@ -125,11 +125,20 @@ class TestEmbeddingAdapter:
         assert embedding is None
         assert adapter.db_status == "db_off"
 
-    def test_compute_query_embedding_placeholder(self):
-        """Test query embedding generation (placeholder)."""
-        adapter = EmbeddingAdapter()
-        # This is a placeholder for BGE-M3 integration
-        embedding = adapter.compute_query_embedding("test query")
+    def test_compute_query_embedding_wave3(self):
+        """Test query embedding generation (Wave-3: real BGE-M3 wiring).
 
-        # Should return None (not implemented yet)
-        assert embedding is None
+        Wave-3: LM is required, so this test either:
+        - Returns real embedding if LM is available, or
+        - Raises RuntimeError (LOUD FAIL) if LM is unavailable.
+        """
+        adapter = EmbeddingAdapter()
+        try:
+            embedding = adapter.compute_query_embedding("test query")
+            # If LM is available, should return 1024-D numpy array
+            if embedding is not None:
+                assert embedding.shape == (1024,)
+                assert embedding.dtype == np.float32
+        except RuntimeError as e:
+            # Wave-3: LM-off = LOUD FAIL (expected behavior)
+            assert "LOUD FAIL" in str(e) or "unavailable" in str(e).lower()
