@@ -139,3 +139,17 @@ After Phase 15 begins:
 - Archive legacy PRs (#424)
 - Plan cleanup of Phase 2–7 / AgentPM branches
 
+---
+
+## 6. Phase 15 Reconciliation Status (PR #593)
+
+- **PR #593 — feat/phase15-init**
+  - Status: ⚠️ **Reconciliation in progress**
+  - Phase 13 & Phase 14 are now reconciled on main (see PHASE13_RECON.md, PHASE14_RECON.md).
+  - Evidence harvested for PR #593:
+    - metadata: `evidence/phase15/pr593_metadata.json`
+    - diff: `evidence/phase15/pr593_diff.patch`
+    - files list: `evidence/phase15/pr593_files.txt`
+  - Final verdict (superseded / partially salvageable / needs clean recon) will be recorded in:
+    - `docs/SSOT/PHASE15_RECON.md`
+
