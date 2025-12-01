@@ -1,4 +1,4 @@
-<!-- Handoff updated: 2025-11-29T18:21:16.832163 -->
+<!-- Handoff updated: 2025-11-30T21:18:32.676143 -->
 # PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary
 
 ## Goal
@@ -143,3 +143,14 @@
 
 * **Documentation Updated**: `docs/SSOT/SHARE_FOLDER_STRUCTURE.md` updated to reflect current state (all Markdown, auto-generated, flat structure).
 
+
+### PR-1 Status: COMPLETE
+
+* Repo introspection subsystem implemented and tested (semantic-inventory, reunion-plan, quarantine-candidates).
+* CLI integration tests (TV-REPO-01..03) added and passing.
+
+### PR-2: Documentation Onboarding (IN PROGRESS)
+
+* Add repo subsystem to root AGENTS.md
+* Add pmagent/AGENTS.md documentation block
+* Update NEXT_STEPS.md lifecycle
