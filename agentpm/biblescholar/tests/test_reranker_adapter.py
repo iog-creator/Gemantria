@@ -8,8 +8,8 @@ Test coverage:
 - Fallback behavior
 """
 
+import pytest
 from unittest.mock import patch
-
 
 from agentpm.biblescholar.reranker_adapter import RerankerAdapter
 
@@ -27,8 +27,15 @@ class TestRerankerAdapterInit:
 class TestRerankerAdapterReranking:
     """Test rerank_chunks method."""
 
-    def test_rerank_chunks_hermetic_fallback(self):
-        """Test hermetic mode returns original ranking."""
+    @patch("agentpm.biblescholar.reranker_adapter.RerankerAdapter._ensure_lm")
+    def test_rerank_chunks_wave3_lm_required(self, mock_ensure_lm):
+        """Test reranking with LM unavailable (Wave-3: LOUD FAIL).
+
+        Wave-3: LM is required, so LM-off should raise RuntimeError.
+        """
+        # Mock LM as unavailable
+        mock_ensure_lm.return_value = False
+
         adapter = RerankerAdapter()
 
         # Mock chunks with initial embedding scores
@@ -40,11 +47,9 @@ class TestRerankerAdapterReranking:
 
         query = "beginning of the gospel"
 
-        # In hermetic mode (LM unavailable), should return original ranking
-        result = adapter.rerank_chunks(chunks, query)
-
-        assert len(result) == 3
-        assert result == chunks  # No change in hermetic mode
+        # Wave-3: LM-off = LOUD FAIL (RuntimeError)
+        with pytest.raises(RuntimeError, match="LOUD FAIL.*Reranker service unavailable"):
+            adapter.rerank_chunks(chunks, query)
 
     @patch("agentpm.biblescholar.reranker_adapter.RerankerAdapter._ensure_lm")
     @patch("agentpm.biblescholar.reranker_adapter.RerankerAdapter._compute_rerank_score")
