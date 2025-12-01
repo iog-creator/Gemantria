@@ -124,6 +124,8 @@
 - ✅ CapabilitiesSidebar integration working
 - ✅ Makefile targets wired for all exports
 
+**BibleScholar UI- [ ] **Automate Housekeeping Commit**: Update `pmagent` to optionally auto-commit after successful housekeeping (User Request).
+- [ ] **Tagging Strategy**: Formalize the use of tags for recovery points.
 **BibleScholar UI Integration Status:** Complete and ready for use. All backend flows (Phase-6 through Phase-8) are operational. System supports both hermetic mode (static JSON) and live mode (DB queries when available).
 
 **Next Recommendations:**
