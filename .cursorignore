@@ -50,6 +50,8 @@ data/**
 
 # Generated/exported data
 
+share/**
+
 archive/**
 
 evidence/**
