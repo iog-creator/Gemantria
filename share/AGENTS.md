@@ -275,6 +275,7 @@ CI posture: HINT on PRs; STRICT on tags behind `vars.STRICT_DB_MIRROR_CI == '1'`
     - **Server URL for LM Studio**: `http://127.0.0.1:8005/sse`
 - GitHub: MCP server active for repository operations (issues, PRs, search, Copilot integration).
 - CI: MyPy configured with `ignore_missing_imports=True` for external deps; DB ensure script runs before verify steps.
+- **Branch Protection**: `pmagent repo guard-branch` enforces "No Direct Work on Main". Use in pre-commit hooks.
 
 ### Make Targets & DSN Precedence
 
