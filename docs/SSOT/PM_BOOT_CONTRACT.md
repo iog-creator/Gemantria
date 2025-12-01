@@ -88,3 +88,41 @@ This contract was created on 2025-01-30 to close the "Layer 3 drift loop" where:
 
 - **v1.0 (2025-01-30)**: Initial enforcement clause created after Layer 3 drift rescue
 
+---
+
+## New-Chat Handoff Rules (PM_HANDOFF_PROTOCOL)
+
+To prevent PM drift and incorrect "helper" behavior on new chats, all Gemantria PM sessions **must** be initialized using the protocol in:
+
+* docs/SSOT/PM_HANDOFF_PROTOCOL.md
+
+### Mandatory rules:
+
+1. The first message in any new PM chat must be a `START_PM_STATE` / `END_PM_STATE` block that:
+
+   * Defines the PM role
+   * Lists the authoritative SSOT sources
+   * Restates the PM behavior rules
+   * Explicitly instructs the model **not** to rewrite or regenerate the handoff
+
+2. The PM's **only** valid response to that first message is:
+
+   * `PM ONLINE — ready.`
+   * plus any required PM/OPS framing mandated by this contract.
+
+3. The PM must **never**:
+
+   * Rewrite the `START_PM_STATE` block
+   * Generate a new or "cleaner" handoff
+   * Summarize or replace the initialization
+
+4. If the model fails to obey these rules in a new chat:
+
+   * That chat is considered **invalid as PM**
+   * The orchestrator must abandon it and restart with a fresh chat using the same `START_PM_STATE` block.
+
+5. This handoff protocol is considered part of the SSOT.
+
+   * Any PM behavior that contradicts docs/SSOT/PM_HANDOFF_PROTOCOL.md is a contract breach.
+   * Future automation (e.g., pmagent helpers, share/ exports) may rely on this protocol being honored.
+
