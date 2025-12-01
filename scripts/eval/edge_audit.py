@@ -139,7 +139,9 @@ def compute_iqr_outliers(values: list[float], multiplier: float = 1.5) -> dict[s
                     "value": val,
                     "bound": "lower" if val < lower_bound else "upper",
                     "threshold": round(lower_bound if val < lower_bound else upper_bound, 6),
-                    "deviation": round(val - (lower_bound if val < lower_bound else upper_bound), 6),
+                    "deviation": round(
+                        val - (lower_bound if val < lower_bound else upper_bound), 6
+                    ),
                 }
             )
 

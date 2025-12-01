@@ -218,7 +218,9 @@ class TestDocumentBuilding(unittest.TestCase):
         self.assertIn("Primary Reference: Genesis 1:1", result)
         self.assertIn("Numerical Value (Gematria): 45", result)
         self.assertIn("Theological Analysis: First man created by God", result)
-        self.assertIn("Document Fingerprint: Adam-אדם-Genesis--", result)  # freq is empty, UUID varies
+        self.assertIn(
+            "Document Fingerprint: Adam-אדם-Genesis--", result
+        )  # freq is empty, UUID varies
 
     def test_build_document_string_missing_primary_verse(self):
         """Test building document string with missing primary_verse uses placeholder."""
@@ -232,7 +234,9 @@ class TestDocumentBuilding(unittest.TestCase):
         self.assertIn("Primary Reference: Genesis (reference)", result)
         self.assertIn("Numerical Value (Gematria): 19", result)
         self.assertIn("Theological Analysis: First woman", result)
-        self.assertIn("Document Fingerprint: Eve-חוה-Genesis--", result)  # freq is empty, UUID varies
+        self.assertIn(
+            "Document Fingerprint: Eve-חוה-Genesis--", result
+        )  # freq is empty, UUID varies
 
     def test_build_document_string_minimal(self):
         """Test building document string with minimal required fields."""
@@ -280,7 +284,9 @@ class TestEdgeStrengthCalculation(unittest.TestCase):
         self.assertGreaterEqual(edge_strength, 0.90)
 
         # Should be classified as strong
-        relation_type = "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
+        relation_type = (
+            "strong" if edge_strength >= 0.90 else "weak" if edge_strength >= 0.75 else None
+        )
         self.assertEqual(relation_type, "strong")
 
     def test_edge_classification_weak(self):
@@ -514,7 +520,9 @@ class TestGraniteRerankFallback(unittest.TestCase):
 
         # Verify chat was attempted and embeddings were called for fallback
         self.assertEqual(call_count["chat"], 1, "Chat endpoint should be called once")
-        self.assertEqual(call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)")
+        self.assertEqual(
+            call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)"
+        )
 
         # Verify HINT log was emitted
         self.assertTrue(
@@ -577,7 +585,9 @@ class TestGraniteRerankFallback(unittest.TestCase):
 
         # Verify chat was attempted and embeddings were called for fallback
         self.assertEqual(call_count["chat"], 1, "Chat endpoint should be called once")
-        self.assertEqual(call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)")
+        self.assertEqual(
+            call_count["embed"], 3, "Embedding endpoint should be called 3 times (query + 2 docs)"
+        )
 
         # Verify HINT log was emitted
         self.assertTrue(

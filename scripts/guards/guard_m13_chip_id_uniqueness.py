@@ -62,6 +62,8 @@ verdict = {
     "unknown_in_apply": unknown_in_apply,
 }
 
-pathlib.Path("evidence/guard_m13_chip_id_uniqueness.verdict.json").write_text(json.dumps(verdict, indent=2))
+pathlib.Path("evidence/guard_m13_chip_id_uniqueness.verdict.json").write_text(
+    json.dumps(verdict, indent=2)
+)
 
 print(json.dumps(verdict))

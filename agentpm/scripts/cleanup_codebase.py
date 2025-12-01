@@ -174,7 +174,11 @@ def find_deprecated_scripts(repo_root: Path) -> List[CleanupCandidate]:
 
         if is_deprecated_script(py_file):
             rel_path = str(py_file.relative_to(repo_root))
-            candidates.append(CleanupCandidate(path=rel_path, reason="deprecated script (contains DEPRECATED marker)"))
+            candidates.append(
+                CleanupCandidate(
+                    path=rel_path, reason="deprecated script (contains DEPRECATED marker)"
+                )
+            )
 
     return candidates
 
@@ -190,7 +194,9 @@ def find_temporary_files(repo_root: Path) -> List[CleanupCandidate]:
         if is_temporary_file(file_path):
             rel_path = str(file_path.relative_to(repo_root))
             candidates.append(
-                CleanupCandidate(path=rel_path, reason="temporary file (tmp_/temp_/old_/backup_ pattern)")
+                CleanupCandidate(
+                    path=rel_path, reason="temporary file (tmp_/temp_/old_/backup_ pattern)"
+                )
             )
 
     return candidates
@@ -231,7 +237,9 @@ def find_orphan_candidates(repo_root: Path) -> List[CleanupCandidate]:
             file_path = repo_root / match
             if file_path.exists() and file_path.is_file():
                 rel_path = str(file_path.relative_to(repo_root))
-                candidates.append(CleanupCandidate(path=rel_path, reason="listed in ORPHANS_CANDIDATE_REPORT.md"))
+                candidates.append(
+                    CleanupCandidate(path=rel_path, reason="listed in ORPHANS_CANDIDATE_REPORT.md")
+                )
     except Exception as e:
         print(f"Warning: Could not parse orphan report: {e}", file=sys.stderr)
 
@@ -269,13 +277,17 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Comprehensive codebase cleanup")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be moved without actually moving")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be moved without actually moving"
+    )
     parser.add_argument(
         "--check-references",
         action="store_true",
         help="Check files against SSOT/AGENTS.md before archiving",
     )
-    parser.add_argument("--list-only", action="store_true", help="Just list candidates without moving")
+    parser.add_argument(
+        "--list-only", action="store_true", help="Just list candidates without moving"
+    )
     args = parser.parse_args()
 
     print("\n🔍 Scanning codebase for cleanup candidates...\n")
@@ -321,7 +333,11 @@ def main() -> None:
     if args.list_only:
         print("Candidates to archive:\n")
         for candidate in unique_candidates:
-            ref_status = f" (referenced {candidate.reference_count}x)" if candidate.referenced else " (not referenced)"
+            ref_status = (
+                f" (referenced {candidate.reference_count}x)"
+                if candidate.referenced
+                else " (not referenced)"
+            )
             print(f"  {candidate.path}")
             print(f"    Reason: {candidate.reason}{ref_status}\n")
         return

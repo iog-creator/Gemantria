@@ -64,7 +64,9 @@ def main() -> int:
     provenance_snapshot = SNAPSHOT_DIR / "provenance.snapshot.json"
     import json  # noqa: E402
 
-    provenance_snapshot.write_text(json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8")
+    provenance_snapshot.write_text(
+        json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8"
+    )
 
     print(f"[eval.snapshot] wrote {manifest_snapshot.relative_to(ROOT)}")
     print(f"[eval.snapshot] wrote {thresholds_snapshot.relative_to(ROOT)}")

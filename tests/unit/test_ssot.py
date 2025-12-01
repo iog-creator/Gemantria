@@ -6,7 +6,9 @@ from src.core import MasterPlan
 
 
 def create_master_plan(tmp_path: Path) -> Path:
-    content = """# MASTER_PLAN\n- PR-000 bootstrap\n- Coverage gate ≥98%\n- No writes to bible_db\n"""
+    content = (
+        """# MASTER_PLAN\n- PR-000 bootstrap\n- Coverage gate ≥98%\n- No writes to bible_db\n"""
+    )
     path = tmp_path / "MASTER_PLAN.md"
     path.write_text(content, encoding="utf-8")
     return path

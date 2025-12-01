@@ -37,7 +37,9 @@ def validate_ketiv_primary(noun: dict[str, Any]) -> list[str]:
     # If variant exists, ensure Ketiv is in surface
     if variant_surface:
         if not is_ketiv:
-            errors.append(f"Noun {noun.get('noun_id', 'unknown')}: surface is Qere but should be Ketiv (per ADR-002)")
+            errors.append(
+                f"Noun {noun.get('noun_id', 'unknown')}: surface is Qere but should be Ketiv (per ADR-002)"
+            )
 
         # Verify gematria is calculated from Ketiv (surface), not Qere
         ketiv = get_ketiv_for_gematria(noun)

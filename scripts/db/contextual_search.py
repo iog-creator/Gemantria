@@ -50,7 +50,9 @@ def main() -> int:
     from agentpm.biblescholar.reference_parser import parse_reference
 
     parsed = parse_reference(verse_ref)
-    passage = bible_adapter.get_passage(parsed.book, parsed.chapter, parsed.verse, parsed.chapter, parsed.verse)
+    passage = bible_adapter.get_passage(
+        parsed.book, parsed.chapter, parsed.verse, parsed.chapter, parsed.verse
+    )
     if passage:
         for verse in passage:
             print(f"   {verse.book_name} {verse.chapter_num}:{verse.verse_num} - {verse.text}")

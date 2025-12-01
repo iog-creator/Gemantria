@@ -23,7 +23,9 @@ def test_compliance_head_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "summary"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"
@@ -70,7 +72,9 @@ def test_top_violations_7d_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "window", "violations"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"
@@ -116,7 +120,9 @@ def test_top_violations_30d_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "window", "violations"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"

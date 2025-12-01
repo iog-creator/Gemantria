@@ -62,7 +62,9 @@ def main():
             "surface": hebrew,
             "hebrew": hebrew,  # Set hebrew field for enrichment filter
             "name": hebrew,  # Set name field as fallback
-            "primary_verse": noun.get("primary_verse", ""),  # Set primary_verse for enrichment prompt
+            "primary_verse": noun.get(
+                "primary_verse", ""
+            ),  # Set primary_verse for enrichment prompt
             "ai_discovered": False,  # Mark as DB-seeded, not AI-discovered (prevents "Unknown" in AI analysis section)
             "letters": [],  # Empty list (not None) to avoid "Unknown" in prompt
             "gematria": None,  # Will be calculated downstream

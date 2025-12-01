@@ -117,8 +117,12 @@ def update_agents_md(directory: Path, changes: dict[str, Any], dry_run: bool = F
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Automatically update AGENTS.md files based on code changes")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be updated without making changes")
+    parser = argparse.ArgumentParser(
+        description="Automatically update AGENTS.md files based on code changes"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be updated without making changes"
+    )
     args = parser.parse_args()
 
     changed_files = get_git_changed_files()

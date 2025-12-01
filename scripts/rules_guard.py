@@ -109,7 +109,9 @@ def validate_hints_governance():
 
     # Test hint.sh emits LOUD format
     try:
-        result = subprocess.run([str(hint_script), "test"], capture_output=True, text=True, timeout=5)
+        result = subprocess.run(
+            [str(hint_script), "test"], capture_output=True, text=True, timeout=5
+        )
         if "🔥🔥🔥 LOUD HINT:" not in result.stdout:
             require(False, "CRITICAL: hint.sh not emitting LOUD HINTS format (Rule-026)")
     except Exception as e:
@@ -153,12 +155,16 @@ def validate_hints_governance():
     print("[rules_guard]   Checking hints registry documentation...")
     hints_registry = DOCS / "hints_registry.md"
     if not hints_registry.exists():
-        require(False, "CRITICAL: docs/hints_registry.md missing (Rule-026 documentation requirement)")
+        require(
+            False, "CRITICAL: docs/hints_registry.md missing (Rule-026 documentation requirement)"
+        )
 
     with open(hints_registry) as f:
         content = f.read()
         if "METADATA BACKING" not in content:
-            require(False, "CRITICAL: hints_registry.md missing METADATA BACKING section (Rule-026)")
+            require(
+                False, "CRITICAL: hints_registry.md missing METADATA BACKING section (Rule-026)"
+            )
 
     print("[rules_guard]   ✓ Hints registry documentation complete")
 
@@ -179,12 +185,18 @@ def main():
     Related Rules: Rule-026, Rule-027, Rule-058
     Related Agents: scripts/rules_guard.py System-level Enforcement
     """
-    print("🔥🔥🔥 LOUD HINT: Rule-026 (System Enforcement Bridge) - Pre-commit + CI + Branch Protection 🔥🔥🔥")
-    print("🔥🔥🔥 LOUD HINT: Rule-027 (Docs Sync Gate) - Require docs/ADR/SSOT updates for code changes 🔥🔥🔥")
+    print(
+        "🔥🔥🔥 LOUD HINT: Rule-026 (System Enforcement Bridge) - Pre-commit + CI + Branch Protection 🔥🔥🔥"
+    )
+    print(
+        "🔥🔥🔥 LOUD HINT: Rule-027 (Docs Sync Gate) - Require docs/ADR/SSOT updates for code changes 🔥🔥🔥"
+    )
     print(
         "🔥🔥🔥 LOUD HINT: Rule-058 (Auto-Housekeeping Post-Change) - Run rules_audit.py/share.sync/forest regen 🔥🔥🔥"
     )
-    print("🔥🔥🔥 LOUD HINT: scripts/rules_guard.py - System-level enforcement so rules aren't just words 🔥🔥🔥")
+    print(
+        "🔥🔥🔥 LOUD HINT: scripts/rules_guard.py - System-level enforcement so rules aren't just words 🔥🔥🔥"
+    )
     print("[rules_guard] Starting critical validation checks...")
     files = changed_files()
     print(f"[rules_guard] Found {len(files)} changed files")
@@ -194,7 +206,9 @@ def main():
 
     code_dirs = ("src/", "scripts/", "migrations/", "webui/")
     code_touched = any(f.startswith(code_dirs) for f in files)
-    docs_touched = any(f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files)
+    docs_touched = any(
+        f.startswith("docs/") or f.endswith("README.md") or f.endswith("AGENTS.md") for f in files
+    )
 
     print(f"[rules_guard] Code touched: {code_touched}, Docs touched: {docs_touched}")
 
@@ -313,7 +327,9 @@ def main():
                 # Validate envelope structure
                 if isinstance(hints, dict) and hints.get("type") == "hints_envelope":
                     hint_count = hints.get("count", len(hints.get("items", [])))
-                    print(f"[rules_guard] ✓ Critical Check 5 PASSED: Hints envelope found ({hint_count} hints)")
+                    print(
+                        f"[rules_guard] ✓ Critical Check 5 PASSED: Hints envelope found ({hint_count} hints)"
+                    )
                 else:
                     print(
                         "[rules_guard] WARNING: Hints present but not in envelope format. Expected type='hints_envelope'",
@@ -321,7 +337,9 @@ def main():
                     )
             else:
                 # Non-fatal: hints are encouraged but not required for empty/new pipelines
-                print("[rules_guard] HINT: No hints envelope in graph export (encouraged for PRs per Rule-026)")
+                print(
+                    "[rules_guard] HINT: No hints envelope in graph export (encouraged for PRs per Rule-026)"
+                )
         except Exception as e:
             print(f"[rules_guard] Warning: Could not validate hints in graph export: {e}")
     else:
@@ -330,7 +348,9 @@ def main():
     # CRITICAL CHECK 6: ADR mention on infra/data PRs (Rule-029)
     print("[rules_guard] Critical Check 6: ADR mention required for infra/data changes")
     # Require ADR mention when sensitive areas change
-    touched = subprocess.check_output(["git", "diff", "--name-only", "origin/main...HEAD"], text=True).splitlines()
+    touched = subprocess.check_output(
+        ["git", "diff", "--name-only", "origin/main...HEAD"], text=True
+    ).splitlines()
     needs_adr = any(
         any(
             t.startswith(prefix)

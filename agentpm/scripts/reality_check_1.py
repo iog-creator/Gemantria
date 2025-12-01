@@ -33,7 +33,9 @@ from scripts.guards.guard_db_health import check_db_health  # noqa: E402
 from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
 
 
-def run_command(cmd: list[str] | str, timeout: int = 30, check: bool = False) -> tuple[int, str, str]:
+def run_command(
+    cmd: list[str] | str, timeout: int = 30, check: bool = False
+) -> tuple[int, str, str]:
     """
     Run a shell command and return (returncode, stdout, stderr).
 
@@ -172,7 +174,9 @@ def start_lm_studio_server() -> tuple[bool, str]:
         return False, "lms CLI not found (install LM Studio CLI)"
 
     # Start server
-    code, stdout, stderr = run_command(["lms", "server", "start", "--port", port, "--gpu=1.0"], timeout=10, check=False)
+    code, stdout, stderr = run_command(
+        ["lms", "server", "start", "--port", port, "--gpu=1.0"], timeout=10, check=False
+    )
     if code == 0:
         # Wait a moment for server to start
         time.sleep(3)
@@ -243,7 +247,9 @@ def run_ingest_docs() -> tuple[bool, str]:
     Returns:
         Tuple of (success, reason)
     """
-    code, stdout, stderr = run_command([sys.executable, "-m", "agentpm.scripts.ingest_docs"], timeout=60, check=False)
+    code, stdout, stderr = run_command(
+        [sys.executable, "-m", "agentpm.scripts.ingest_docs"], timeout=60, check=False
+    )
     if code == 0:
         return True, "Doc ingestion completed successfully"
     else:

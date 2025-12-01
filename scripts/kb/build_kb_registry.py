@@ -205,10 +205,14 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     )
 
     if dry_run:
-        print(f"[DRY-RUN] Would create KB registry with {len(documents)} documents", file=sys.stderr)
+        print(
+            f"[DRY-RUN] Would create KB registry with {len(documents)} documents", file=sys.stderr
+        )
         print("\nDocuments:", file=sys.stderr)
         for doc in documents:
-            print(f"  - {doc.id}: {doc.title} ({doc.owning_subsystem}, {doc.type})", file=sys.stderr)
+            print(
+                f"  - {doc.id}: {doc.title} ({doc.owning_subsystem}, {doc.type})", file=sys.stderr
+            )
             if doc.provenance.get("fragment_count"):
                 print(f"    Fragments: {doc.provenance['fragment_count']}", file=sys.stderr)
     else:

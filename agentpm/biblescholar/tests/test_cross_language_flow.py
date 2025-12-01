@@ -142,7 +142,9 @@ class TestFindCrossLanguageConnections:
     @patch("agentpm.biblescholar.cross_language_flow.fetch_lexicon_entry")
     @patch("agentpm.biblescholar.cross_language_flow.similar_verses_for_reference")
     @patch("agentpm.biblescholar.cross_language_flow.LexiconAdapter")
-    def test_find_connections_success(self, mock_adapter_class, mock_similar, mock_fetch_entry, mock_fetch_study):
+    def test_find_connections_success(
+        self, mock_adapter_class, mock_similar, mock_fetch_entry, mock_fetch_study
+    ):
         """Test successful cross-language connection finding."""
         # Mock word study to validate word exists in reference
         source_entry = LexiconEntry(
@@ -239,7 +241,9 @@ class TestFindCrossLanguageConnections:
     @patch("agentpm.biblescholar.cross_language_flow.fetch_lexicon_entry")
     @patch("agentpm.biblescholar.cross_language_flow.fetch_word_study")
     @patch("agentpm.biblescholar.cross_language_flow.LexiconAdapter")
-    def test_find_connections_without_reference(self, mock_adapter_class, mock_fetch_study, mock_fetch_entry):
+    def test_find_connections_without_reference(
+        self, mock_adapter_class, mock_fetch_study, mock_fetch_entry
+    ):
         """Test finding connections without explicit reference."""
         source_entry = LexiconEntry(
             entry_id=1,
@@ -265,7 +269,9 @@ class TestFindCrossLanguageConnections:
         mock_adapter_class.return_value = mock_adapter
 
         # Mock similar verses (empty for simplicity)
-        with patch("agentpm.biblescholar.cross_language_flow.similar_verses_for_reference") as mock_similar:
+        with patch(
+            "agentpm.biblescholar.cross_language_flow.similar_verses_for_reference"
+        ) as mock_similar:
             mock_similar.return_value = []
             result = find_cross_language_connections("H1", reference=None)
 

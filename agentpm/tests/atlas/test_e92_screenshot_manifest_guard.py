@@ -89,7 +89,11 @@ def test_guard_screenshot_manifest_passes_with_valid_manifest():
 
     # If manifest exists and is valid, guard should pass
     checks = data.get("checks", {})
-    if checks.get("manifest_exists") and checks.get("manifest_json_valid") and checks.get("manifest_nonempty"):
+    if (
+        checks.get("manifest_exists")
+        and checks.get("manifest_json_valid")
+        and checks.get("manifest_nonempty")
+    ):
         # E92 requires manifest structure + hash determinism, coverage is advisory
         required_ok = (
             checks.get("manifest_exists", False)

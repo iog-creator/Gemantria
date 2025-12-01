@@ -118,7 +118,9 @@ def analyze_branch_health(branches: list[dict]) -> dict:
     no_checks = sum(1 for b in branches if b["checks_status"] is None)
 
     # Age analysis
-    old_branches = sum(1 for b in branches if "month" in b["relative_age"] or "year" in b["relative_age"])
+    old_branches = sum(
+        1 for b in branches if "month" in b["relative_age"] or "year" in b["relative_age"]
+    )
 
     return {
         "total_branches": total_branches,
@@ -208,7 +210,9 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
         f.write(
             f"| Checks Pending | {stats['checks_pending']} | {stats['checks_pending'] / stats['total_branches'] * 100:.1f}% |\n"  # noqa: E501
         )
-        f.write(f"| No Checks | {stats['no_checks']} | {stats['no_checks'] / stats['total_branches'] * 100:.1f}% |\n")
+        f.write(
+            f"| No Checks | {stats['no_checks']} | {stats['no_checks'] / stats['total_branches'] * 100:.1f}% |\n"
+        )
         f.write(
             f"| Old Branches (>1 month) | {stats['old_branches']} | {stats['old_branches'] / stats['total_branches'] * 100:.1f}% |\n\n"  # noqa: E501
         )
@@ -257,7 +261,9 @@ def generate_markdown_report(branches: list[dict], stats: dict, output_path: Pat
 
         if stats["no_checks"] > 0:
             f.write("### Immediate Actions\n")
-            f.write(f"- **{stats['no_checks']} branches lack checks** - these need PRs opened or checks triggered\n")
+            f.write(
+                f"- **{stats['no_checks']} branches lack checks** - these need PRs opened or checks triggered\n"
+            )
             if stats["old_branches"] > 0:
                 f.write(f"- **{stats['old_branches']} old branches** (>1 month) may need cleanup\n")
 

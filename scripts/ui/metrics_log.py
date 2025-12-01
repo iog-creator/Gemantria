@@ -40,7 +40,11 @@ def main():
 def next_or(default, pattern):
     import glob
 
-    matches = sorted(glob.glob(pattern), key=lambda p: os.path.getmtime(p)) if "*" in pattern else [pattern]
+    matches = (
+        sorted(glob.glob(pattern), key=lambda p: os.path.getmtime(p))
+        if "*" in pattern
+        else [pattern]
+    )
     return matches[-1] if matches else default
 
 

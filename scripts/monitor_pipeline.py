@@ -375,7 +375,9 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
         # Enrichment stage
         if msg == "enrichment_start":
             stages["enrichment"]["status"] = "running"
-            stages["enrichment"]["total"] = parsed.get("noun_count", stages["enrichment"]["total"] or 0)
+            stages["enrichment"]["total"] = parsed.get(
+                "noun_count", stages["enrichment"]["total"] or 0
+            )
             stages["enrichment"]["last_event"] = event_time
             if not stages["enrichment"]["start_time"]:
                 stages["enrichment"]["start_time"] = event_time
@@ -496,7 +498,9 @@ def extract_stage_status(log_lines: List[str]) -> Tuple[Dict[str, Any], Dict[str
     return {"stages": stages, "orchestrator": orchestrator_stage}, {"stages": stages}
 
 
-def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any]) -> Dict[str, Any]:
+def calculate_metrics(
+    stage_status: Dict[str, Any], stage_timings: Dict[str, Any]
+) -> Dict[str, Any]:
     """Calculate progress metrics and ETA for all stages."""
     enrichment = stage_status["stages"].get("enrichment", {})
     total = enrichment.get("total", 0)
@@ -606,7 +610,11 @@ def calculate_metrics(stage_status: Dict[str, Any], stage_timings: Dict[str, Any
         # Parse all log lines for enrichment batch_processed events
         for line in reversed(log_lines[-1000:]):  # Check more lines
             parsed = parse_log_line(line)
-            if parsed and parsed.get("event") == "batch_processed" and parsed.get("node") == "enrichment":
+            if (
+                parsed
+                and parsed.get("event") == "batch_processed"
+                and parsed.get("node") == "enrichment"
+            ):
                 duration_ms = parsed.get("duration_ms", 0)
                 items_in = parsed.get("items_in", 0)
                 if duration_ms and duration_ms > 0:
@@ -724,7 +732,9 @@ def format_box_edge(width: int, top: bool = True, color: str = Colors.CYAN) -> s
     edge_char = "╔" if top else "╚"
     opposite_char = "╗" if top else "╝"
     middle_char = "═"
-    return f"{Colors.BOLD}{color}{edge_char}{middle_char * (width - 2)}{opposite_char}{Colors.RESET}"
+    return (
+        f"{Colors.BOLD}{color}{edge_char}{middle_char * (width - 2)}{opposite_char}{Colors.RESET}"
+    )
 
 
 def format_box_separator(width: int, color: str = Colors.CYAN) -> str:
@@ -752,7 +762,9 @@ def format_status_report(
         f"{Colors.BOLD}{Colors.BRIGHT_CYAN}{' ' * padding}{title}{' ' * (width - len(title) - padding - 1)}{Colors.RESET}"
     )
     lines.append(header_line)
-    lines.append(f"{Colors.DIM}Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.RESET}")
+    lines.append(
+        f"{Colors.DIM}Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.RESET}"
+    )
     lines.append("")
 
     # Error alert section (if errors exist)
@@ -840,7 +852,9 @@ def format_status_report(
         display_name = stage_name.replace("_", " ").title()
 
         # Stage header
-        lines.append(f"  {icon} {Colors.BOLD}{display_name}:{Colors.RESET} {color}{status}{Colors.RESET}")
+        lines.append(
+            f"  {icon} {Colors.BOLD}{display_name}:{Colors.RESET} {color}{status}{Colors.RESET}"
+        )
 
         # Stage-specific details
         if stage_name == "enrichment":
@@ -867,9 +881,13 @@ def format_status_report(
                         f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.BRIGHT_YELLOW}~{hours}h {mins}m{Colors.RESET} ({eta:.1f} minutes)"
                     )
                 elif status == "RUNNING":
-                    lines.append(f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.DIM}Calculating...{Colors.RESET}")
+                    lines.append(
+                        f"      {Colors.DIM}ETA:{Colors.RESET} {Colors.DIM}Calculating...{Colors.RESET}"
+                    )
             elif count > 0:
-                lines.append(f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET}")
+                lines.append(
+                    f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{count:,}{Colors.RESET}"
+                )
         elif stage.get("count", 0) > 0:
             lines.append(
                 f"      {Colors.DIM}Count:{Colors.RESET} {Colors.BRIGHT_MAGENTA}{stage['count']:,}{Colors.RESET}"
@@ -902,8 +920,12 @@ def format_status_report(
                 f"      {Colors.DIM}Operation:{Colors.RESET} {Colors.BRIGHT_CYAN}{stage['operation']}{Colors.RESET}"
             )
         if stage.get("status_msg"):
-            msg_color = Colors.BRIGHT_GREEN if stage["status_msg"] == "passed" else Colors.BRIGHT_RED
-            lines.append(f"      {Colors.DIM}Status:{Colors.RESET} {msg_color}{stage['status_msg']}{Colors.RESET}")
+            msg_color = (
+                Colors.BRIGHT_GREEN if stage["status_msg"] == "passed" else Colors.BRIGHT_RED
+            )
+            lines.append(
+                f"      {Colors.DIM}Status:{Colors.RESET} {msg_color}{stage['status_msg']}{Colors.RESET}"
+            )
 
         if i < len(stage_order) - 1:
             lines.append(f"  {Colors.DIM}─{Colors.RESET}")
@@ -934,7 +956,9 @@ def format_status_report(
                 cpu_value = float(match.group(1))
         except (ValueError, AttributeError):
             pass
-    cpu_color = Colors.BRIGHT_GREEN if cpu_value is not None and cpu_value < 10 else Colors.BRIGHT_YELLOW
+    cpu_color = (
+        Colors.BRIGHT_GREEN if cpu_value is not None and cpu_value < 10 else Colors.BRIGHT_YELLOW
+    )
     lines.append(f"    {Colors.DIM}CPU:{Colors.RESET}     {cpu_color}{cpu_usage}{Colors.RESET}")
     lines.append(
         f"    {Colors.DIM}Memory:{Colors.RESET}  {Colors.BRIGHT_CYAN}{process_stats.get('memory_usage', 'N/A')}{Colors.RESET}"
@@ -956,7 +980,9 @@ def format_status_report(
             gpu_color = Colors.BRIGHT_CYAN
 
     lines.append(f"  {Colors.BOLD}GPU:{Colors.RESET}")
-    lines.append(f"    {Colors.DIM}Utilization:{Colors.RESET} {gpu_color}{gpu_util or 'N/A'}{Colors.RESET}")
+    lines.append(
+        f"    {Colors.DIM}Utilization:{Colors.RESET} {gpu_color}{gpu_util or 'N/A'}{Colors.RESET}"
+    )
     lines.append(
         f"    {Colors.DIM}Memory:{Colors.RESET}      {Colors.BRIGHT_MAGENTA}{gpu_stats.get('memory', 'N/A')}{Colors.RESET}"
     )
@@ -968,7 +994,9 @@ def format_status_report(
             temp_color = Colors.BRIGHT_RED
         elif temp_val > 70:
             temp_color = Colors.BRIGHT_YELLOW
-    lines.append(f"    {Colors.DIM}Temperature:{Colors.RESET} {temp_color}{gpu_temp or 'N/A'}{Colors.RESET}")
+    lines.append(
+        f"    {Colors.DIM}Temperature:{Colors.RESET} {temp_color}{gpu_temp or 'N/A'}{Colors.RESET}"
+    )
 
     lines.append(format_box_edge(width, top=False, color=Colors.CYAN))
     lines.append("")
@@ -999,7 +1027,9 @@ def copy_to_clipboard(text: str) -> bool:
         if sys.platform == "darwin":
             proc = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE, text=True)
         else:
-            proc = subprocess.Popen(["xclip", "-selection", "clipboard"], stdin=subprocess.PIPE, text=True)
+            proc = subprocess.Popen(
+                ["xclip", "-selection", "clipboard"], stdin=subprocess.PIPE, text=True
+            )
         proc.communicate(input=text)
         return proc.returncode == 0
     except Exception:
@@ -1011,7 +1041,9 @@ def show_interactive_menu(status: Dict[str, Any], errors: List[Dict[str, Any]]) 
     width = get_terminal_width()
     menu_lines = []
     menu_lines.append(f"\n{format_box_edge(width, top=True, color=Colors.BRIGHT_CYAN)}")
-    menu_lines.append(format_box_line("Quick Actions (Press number to activate)", width, color=Colors.BRIGHT_CYAN))
+    menu_lines.append(
+        format_box_line("Quick Actions (Press number to activate)", width, color=Colors.BRIGHT_CYAN)
+    )
     menu_lines.append(format_box_separator(width, color=Colors.BRIGHT_CYAN))
 
     # Menu items with proper spacing
@@ -1030,7 +1062,9 @@ def show_interactive_menu(status: Dict[str, Any], errors: List[Dict[str, Any]]) 
 
     for num, desc, detail in menu_items:
         if detail:
-            line = f"  {Colors.BOLD}{num}.{Colors.RESET} {desc} ({Colors.DIM}{detail}{Colors.RESET})"
+            line = (
+                f"  {Colors.BOLD}{num}.{Colors.RESET} {desc} ({Colors.DIM}{detail}{Colors.RESET})"
+            )
         else:
             line = f"  {Colors.BOLD}{num}.{Colors.RESET} {desc}"
         menu_lines.append(line)
@@ -1062,7 +1096,9 @@ def handle_menu_choice(choice: str, status: Dict[str, Any], errors: List[Dict[st
             if copy_to_clipboard(error_text):
                 print(f"\n{Colors.BRIGHT_GREEN}✓ Last error copied to clipboard!{Colors.RESET}")
             else:
-                print(f"\n{Colors.BRIGHT_YELLOW}⚠ Clipboard not available. Error text:{Colors.RESET}\n{error_text}")
+                print(
+                    f"\n{Colors.BRIGHT_YELLOW}⚠ Clipboard not available. Error text:{Colors.RESET}\n{error_text}"
+                )
         else:
             print(f"\n{Colors.DIM}No errors found.{Colors.RESET}")
         print(f"\n{Colors.DIM}Press Enter to continue...{Colors.RESET}")
@@ -1072,7 +1108,9 @@ def handle_menu_choice(choice: str, status: Dict[str, Any], errors: List[Dict[st
         print(f"\n{Colors.BRIGHT_YELLOW}Last 10 errors:{Colors.RESET}\n")
         if errors:
             for i, error in enumerate(errors[-10:], 1):
-                print(f"{Colors.BRIGHT_RED}[{i}] {format_timestamp(error.get('time'))}{Colors.RESET}")
+                print(
+                    f"{Colors.BRIGHT_RED}[{i}] {format_timestamp(error.get('time'))}{Colors.RESET}"
+                )
                 print(f"  {Colors.DIM}Level:{Colors.RESET} {error.get('level', 'N/A')}")
                 print(f"  {Colors.DIM}Message:{Colors.RESET} {error.get('msg', 'N/A')}")
                 if error.get("error"):
@@ -1087,14 +1125,20 @@ def handle_menu_choice(choice: str, status: Dict[str, Any], errors: List[Dict[st
         print(f"\n{Colors.BRIGHT_YELLOW}Last run timestamps:{Colors.RESET}\n")
         orch = status["stage_status"]["orchestrator"]
         if orch.get("start_time"):
-            print(f"  {Colors.BOLD}Orchestrator started:{Colors.RESET} {format_timestamp(orch['start_time'])}")
+            print(
+                f"  {Colors.BOLD}Orchestrator started:{Colors.RESET} {format_timestamp(orch['start_time'])}"
+            )
         if orch.get("last_event"):
-            print(f"  {Colors.BOLD}Orchestrator last event:{Colors.RESET} {format_timestamp(orch['last_event'])}")
+            print(
+                f"  {Colors.BOLD}Orchestrator last event:{Colors.RESET} {format_timestamp(orch['last_event'])}"
+            )
         print()
         for stage_name, stage_data in status["stage_status"]["stages"].items():
             if stage_data.get("last_event"):
                 display_name = stage_name.replace("_", " ").title()
-                print(f"  {Colors.BOLD}{display_name}:{Colors.RESET} {format_timestamp(stage_data['last_event'])}")
+                print(
+                    f"  {Colors.BOLD}{display_name}:{Colors.RESET} {format_timestamp(stage_data['last_event'])}"
+                )
         print(f"\n{Colors.DIM}Press Enter to continue...{Colors.RESET}")
         input()
         return True
@@ -1247,7 +1291,9 @@ def main():
         os.system("clear" if os.name != "nt" else "cls")
 
         mode = "Interactive Menu Mode" if args.interactive else "Watch Mode"
-        print(f"{Colors.BOLD}{Colors.BRIGHT_CYAN}🧭 Gemantria Pipeline Monitor - {mode}{Colors.RESET}")
+        print(
+            f"{Colors.BOLD}{Colors.BRIGHT_CYAN}🧭 Gemantria Pipeline Monitor - {mode}{Colors.RESET}"
+        )
         print(f"{Colors.DIM}Press Ctrl+C to stop{Colors.RESET}")
         print("")
         iteration = 0
@@ -1283,7 +1329,9 @@ def main():
                             if not handle_menu_choice(key, status, status["errors"]):
                                 break
                     else:
-                        print(f"\n{Colors.DIM}🔄 Next update in 10 seconds... (Iteration #{iteration}){Colors.RESET}")
+                        print(
+                            f"\n{Colors.DIM}🔄 Next update in 10 seconds... (Iteration #{iteration}){Colors.RESET}"
+                        )
                         time.sleep(10)
         except KeyboardInterrupt:
             print(f"\n\n{Colors.BRIGHT_YELLOW}Monitoring stopped.{Colors.RESET}")

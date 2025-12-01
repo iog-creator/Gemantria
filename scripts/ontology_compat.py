@@ -24,7 +24,9 @@ def check_compat(ontology):
     # Version check
     current_version = ontology.get("version", "v0.0")
     if current_version < REQUIRED_VERSION:
-        raise ValueError(f"Ontology version {current_version} incompatible (required: {REQUIRED_VERSION})")
+        raise ValueError(
+            f"Ontology version {current_version} incompatible (required: {REQUIRED_VERSION})"
+        )
 
     # Required fields check
     required = ["nodes", "edges", "temporal"]

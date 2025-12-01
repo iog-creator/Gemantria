@@ -158,7 +158,9 @@ def main() -> int:
     # Generate summary
     for hint in catalog["hints"]:
         pattern = hint.get("pattern", "UNKNOWN")
-        catalog["summary"]["by_pattern"][pattern] = catalog["summary"]["by_pattern"].get(pattern, 0) + 1
+        catalog["summary"]["by_pattern"][pattern] = (
+            catalog["summary"]["by_pattern"].get(pattern, 0) + 1
+        )
 
         kind = hint.get("suggested_kind", "UNKNOWN")
         if kind in catalog["summary"]["by_kind"]:

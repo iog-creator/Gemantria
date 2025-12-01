@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-11-30T02:21:28.496470+00:00
+**Generated**: 2025-12-01T16:01:38.090016+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-11-29T18:21:18-08:00`
+- **generated_at**: `2025-12-01T08:01:28-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -78,26 +78,21 @@
   - **headline**: `All systems nominal`
   - **details**: `Database is ready and all checks passed. All 4 LM slot(s) are operational.`
   - **documentation**:
-    - **available**: `true`
+    - **available**: `false`
     - **total**: `0`
     - **by_subsystem**:
     - **by_type**:
     - **hints**:
       1. Item:
         - **level**: `INFO`
-        - **code**: `KB_EMPTY_REGISTRY`
-        - **message**: `KB registry exists but contains no documents (may need seeding)`
+        - **code**: `KB_REGISTRY_UNAVAILABLE`
+        - **message**: `KB registry file not found (registry may not be seeded yet)`
     - **key_docs**:
     - **freshness**:
-      - **total**: `0`
-      - **stale_count**: `0`
-      - **missing_count**: `0`
-      - **out_of_sync_count**: `0`
-      - **fresh_count**: `0`
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-11-30T02:21:18.050434+00:00`
+  - **timestamp**: `2025-12-01T16:01:28.565598+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -111,7 +106,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-11-30T02:21:18.050451+00:00`
+    - **generated_at**: `2025-12-01T16:01:28.565621+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -128,8 +123,8 @@
             - **latest_created_at**: `2025-11-29T17:34:39.838318-08:00`
           - **control.agent_run**:
             - **present**: `true`
-            - **row_count**: `2159`
-            - **latest_created_at**: `2025-11-27T09:10:02.584405-08:00`
+            - **row_count**: `2270`
+            - **latest_created_at**: `2025-11-30T09:02:28.655100-08:00`
           - **control.tool_catalog**:
             - **present**: `true`
             - **row_count**: `7`
@@ -143,21 +138,21 @@
         - **mode**: `db_on`
         - **error**: `null`
         - **tables**:
-          - **control.agent_run**: `2159`
-          - **control.agent_run_cli**: `31`
+          - **control.agent_run**: `2270`
+          - **control.agent_run_cli**: `68`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
           - **control.doc_embedding**: `2963`
-          - **control.doc_fragment**: `2968`
-          - **control.doc_registry**: `193`
+          - **control.doc_fragment**: `42338`
+          - **control.doc_registry**: `994`
           - **control.doc_sync_state**: `0`
-          - **control.doc_version**: `758`
+          - **control.doc_version**: `2373`
           - **control.guard_definition**: `0`
           - **control.hint_registry**: `5`
           - **control.kb_document**: `4238`
           - **control.rule_definition**: `69`
           - **control.rule_source**: `138`
-          - **control.system_state_ledger**: `339`
+          - **control.system_state_ledger**: `365`
           - **control.tool_catalog**: `7`
           - **gematria.ai_embeddings**: `1`
           - **gematria.checkpoints**: `4`
@@ -202,10 +197,10 @@
           - **public.cross_references**: `0`
           - **public.doctrinal_links**: `0`
           - **public.document_access_log**: `1`
-          - **public.document_sections**: `397`
+          - **public.document_sections**: `398`
           - **public.governance_artifacts**: `131`
-          - **public.governance_compliance_log**: `225`
-          - **public.hint_emissions**: `713`
+          - **public.governance_compliance_log**: `235`
+          - **public.hint_emissions**: `773`
           - **public.hypotheses**: `0`
           - **public.integration_log**: `0`
           - **public.isolation_patterns**: `0`
@@ -490,6 +485,11 @@
                 - **data_type**: `timestamp with time zone`
                 - **is_nullable**: `true`
                 - **default**: `now()`
+              13. Item:
+                - **name**: `meta`
+                - **data_type**: `jsonb`
+                - **is_nullable**: `true`
+                - **default**: `'{}'::jsonb`
             - **primary_key**:
               1. `id`
             - **indexes**:
@@ -513,26 +513,31 @@
                   1. `doc_id`
                 - **unique**: `false`
               4. Item:
+                - **name**: `idx_doc_fragment_meta`
+                - **columns**:
+                  1. `meta`
+                - **unique**: `false`
+              5. Item:
                 - **name**: `idx_doc_fragment_project`
                 - **columns**:
                   1. `project_id`
                 - **unique**: `false`
-              5. Item:
+              6. Item:
                 - **name**: `idx_doc_fragment_sha256`
                 - **columns**:
                   1. `sha256`
                 - **unique**: `false`
-              6. Item:
+              7. Item:
                 - **name**: `idx_doc_fragment_src`
                 - **columns**:
                   1. `src`
                 - **unique**: `false`
-              7. Item:
+              8. Item:
                 - **name**: `idx_doc_fragment_type`
                 - **columns**:
                   1. `fragment_type`
                 - **unique**: `false`
-              8. Item:
+              9. Item:
                 - **name**: `idx_doc_fragment_version_id`
                 - **columns**:
                   1. `version_id`
@@ -754,8 +759,26 @@
         - **reason**: `null`
         - **window_hours**: `24`
         - **summary**:
-          - **total_runs**: `0`
+          - **total_runs**: `111`
           - **pipelines**:
+            - **classify_fragment**:
+              - **total**: `110`
+              - **by_status**:
+                - **success**: `110`
+                - **failed**: `0`
+                - **running**: `0`
+                - **other**: `0`
+              - **last_run_started_at**: `2025-11-30T09:02:28.655100-08:00`
+              - **last_run_status**: `success`
+            - **test_classify_fragment**:
+              - **total**: `1`
+              - **by_status**:
+                - **success**: `1`
+                - **failed**: `0`
+                - **running**: `0`
+                - **other**: `0`
+              - **last_run_started_at**: `2025-11-30T09:01:24.602351-08:00`
+              - **last_run_status**: `success`
   - **lm**:
     - **ok**: `true`
     - **provider**: `unknown`
@@ -801,12 +824,12 @@
       2. `eval.graph.calibrate.adv: OK`
   - **hints**:
     1. `DMS-REQUIRED: reality.green STRICT must pass all required checks before declaring system ready.`
-    2. `KB: KB registry exists but contains no documents (may need seeding)`
+    2. `KB: KB registry file not found (registry may not be seeded yet)`
   - **kb_hints**:
     1. Item:
       - **level**: `INFO`
-      - **code**: `KB_EMPTY_REGISTRY`
-      - **message**: `KB registry exists but contains no documents (may need seeding)`
+      - **code**: `KB_REGISTRY_UNAVAILABLE`
+      - **message**: `KB registry file not found (registry may not be seeded yet)`
   - **overall_ok**: `true`
   - **required_hints**:
     1. Item:
@@ -829,13 +852,13 @@
   - **mode**: `db_on`
   - **summary**:
     - **agent_run**:
-      - **total**: `2159`
-      - **last_24h**: `0`
-      - **last_7d**: `2154`
+      - **total**: `2270`
+      - **last_24h**: `111`
+      - **last_7d**: `2265`
     - **agent_run_cli**:
-      - **total**: `31`
-      - **last_24h**: `10`
-      - **last_7d**: `31`
+      - **total**: `68`
+      - **last_24h**: `28`
+      - **last_7d**: `68`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:
@@ -853,7 +876,7 @@
     - **note**: `Edge class counts export not available (file missing)`
     - **available**: `false`
 - **kb_registry**:
-  - **available**: `true`
+  - **available**: `false`
   - **total**: `0`
   - **valid**: `true`
   - **errors_count**: `0`
@@ -861,10 +884,10 @@
 - **kb_hints**:
   1. Item:
     - **level**: `INFO`
-    - **code**: `KB_EMPTY_REGISTRY`
-    - **message**: `KB registry exists but contains no documents (may need seeding)`
+    - **code**: `KB_REGISTRY_UNAVAILABLE`
+    - **message**: `KB registry file not found (registry may not be seeded yet)`
 - **kb_doc_health**:
-  - **available**: `true`
+  - **available**: `false`
   - **metrics**:
     - **kb_fresh_ratio**:
       - **overall**: `null`
@@ -873,13 +896,13 @@
       - **overall**: `0`
       - **by_subsystem**:
     - **kb_stale_count_by_subsystem**:
-    - **kb_fixes_applied_last_7d**: `2`
+    - **kb_fixes_applied_last_7d**: `0`
     - **kb_debt_burned_down**:
       - **overall**: `null`
       - **by_subsystem**:
       - **note**: `insufficient_history`
     - **notes**:
-      1. `Registry is empty; kb_fresh_ratio_overall is unknown`
+      1. `KB registry not found; metrics unavailable`
 - **mcp_catalog**:
   - **available**: `false`
   - **tools_count**: `0`

@@ -3,7 +3,11 @@ import pathlib
 
 root = pathlib.Path("share/atlas")
 
-chips = json.loads((root / "filter_chips.json").read_text()) if (root / "filter_chips.json").exists() else {"items": []}
+chips = (
+    json.loads((root / "filter_chips.json").read_text())
+    if (root / "filter_chips.json").exists()
+    else {"items": []}
+)
 
 chip_ids = {it.get("id") for it in chips.get("items", []) if it.get("id")}
 

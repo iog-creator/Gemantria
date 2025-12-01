@@ -18,5 +18,7 @@ totals = doc.get("totals", {})
 sessions = totals.get("sessions", 0)
 calls = totals.get("calls", 0)
 
-print(f"[analytics.ai.verify] generated_at RFC3339: {'OK' if ok_ts else 'FAIL'}; sessions={sessions} calls={calls}")
+print(
+    f"[analytics.ai.verify] generated_at RFC3339: {'OK' if ok_ts else 'FAIL'}; sessions={sessions} calls={calls}"
+)
 sys.exit(0 if ok_ts else 3)

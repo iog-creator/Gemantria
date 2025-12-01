@@ -193,7 +193,9 @@ def export_biblescholar_references(cur: psycopg.Cursor, window_days: int = 30) -
                 "question": question,
                 "verse_ref": verse_ref,
                 "answer": answer,
-                "created_at": created_at.isoformat() if hasattr(created_at, "isoformat") else str(created_at),
+                "created_at": created_at.isoformat()
+                if hasattr(created_at, "isoformat")
+                else str(created_at),
                 "metadata": {
                     "mode": mode,
                     "ok": ok,
@@ -231,7 +233,9 @@ def export_biblescholar_references(cur: psycopg.Cursor, window_days: int = 30) -
 
 def main() -> int:
     """Generate BibleScholar reference export."""
-    parser = argparse.ArgumentParser(description="Export BibleScholar reference questions and answers")
+    parser = argparse.ArgumentParser(
+        description="Export BibleScholar reference questions and answers"
+    )
     parser.add_argument(
         "--window-days",
         type=int,

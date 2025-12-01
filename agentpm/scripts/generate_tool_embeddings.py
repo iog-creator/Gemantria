@@ -42,7 +42,9 @@ def generate_tool_embeddings(dry_run: bool = False) -> None:
         test_embeddings = embed(["test"], model_slot="embedding")
         if not test_embeddings or not test_embeddings[0]:
             LOG.error("Embedding test failed: empty result returned")
-            LOG.error("Check that EMBEDDING_PROVIDER=ollama and EMBEDDING_MODEL is set correctly in .env")
+            LOG.error(
+                "Check that EMBEDDING_PROVIDER=ollama and EMBEDDING_MODEL is set correctly in .env"
+            )
             sys.exit(1)
         LOG.info(f"Embedding test successful (dimension: {len(test_embeddings[0])})")
     except Exception as e:
@@ -112,7 +114,9 @@ def generate_tool_embeddings(dry_run: bool = False) -> None:
                 embedding_vector = embeddings[0]
 
                 if dry_run:
-                    LOG.info(f"[DRY RUN] Would update embedding for {name} (dimension: {len(embedding_vector)})")
+                    LOG.info(
+                        f"[DRY RUN] Would update embedding for {name} (dimension: {len(embedding_vector)})"
+                    )
                 else:
                     # Update the tool with the embedding
                     with conn.cursor() as cur:
@@ -145,7 +149,9 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate embeddings for MCP tools")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be updated without making changes")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be updated without making changes"
+    )
 
     args = parser.parse_args()
 

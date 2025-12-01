@@ -10,7 +10,11 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 # Never write to share/** in CI. Use artifacts-first contract.
 CI = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
-OUT = ROOT / "_artifacts" / "eval" / "exports_catalog.md" if CI else ROOT / "share" / "eval" / "exports_catalog.md"
+OUT = (
+    ROOT / "_artifacts" / "eval" / "exports_catalog.md"
+    if CI
+    else ROOT / "share" / "eval" / "exports_catalog.md"
+)
 
 
 def _load_json(p: pathlib.Path) -> dict:
@@ -22,7 +26,9 @@ def _summ(p: pathlib.Path) -> tuple[int, int]:
         doc = _load_json(p)
         nodes = doc.get("nodes", [])
         edges = doc.get("edges", [])
-        return len(nodes) if isinstance(nodes, list) else 0, (len(edges) if isinstance(edges, list) else 0)
+        return len(nodes) if isinstance(nodes, list) else 0, (
+            len(edges) if isinstance(edges, list) else 0
+        )
     except Exception:
         return 0, 0
 

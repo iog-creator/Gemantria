@@ -97,6 +97,12 @@
 - Phase 2 - Ketiv/Qere Policy & Numeric SSOT (#588)
 - Phase 1 - Code Hygiene Restoration (#587)
 
+- clarify backup strategy - tags are primary, not branches
+- enhance branch-cleanup to handle remote branches
+- add git workflow automation commands
+- add git workflow automation commands
+- add merge guard to prevent destructive merges
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

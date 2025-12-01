@@ -144,7 +144,9 @@ def export_top_violations(cur: psycopg.Cursor, window: str) -> dict:
             }
 
         # Convert jsonb object to list of {violation_code, count} dicts
-        violations = [{"violation_code": code, "count": count} for code, count in violations_top.items()]
+        violations = [
+            {"violation_code": code, "count": count} for code, count in violations_top.items()
+        ]
         # Sort by count descending
         violations.sort(key=lambda x: x["count"], reverse=True)
 
@@ -184,7 +186,9 @@ def main() -> int:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema exists
-                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
+                cur.execute(
+                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
+                )
                 schema_exists = cur.fetchone()[0]
 
                 if not schema_exists:
@@ -202,7 +206,9 @@ def main() -> int:
                             "summary": None,
                             "error": "Schema does not exist",
                         }
-                        (output_dir / "compliance.head.json").write_text(json.dumps(payload, indent=2))
+                        (output_dir / "compliance.head.json").write_text(
+                            json.dumps(payload, indent=2)
+                        )
 
                     for filename, window in [
                         ("top_violations_7d.json", "7d"),
@@ -248,7 +254,9 @@ def main() -> int:
                     }
                     if "error" in result:
                         payload["error"] = result["error"]
-                    (output_dir / "top_violations_7d.json").write_text(json.dumps(payload, indent=2))
+                    (output_dir / "top_violations_7d.json").write_text(
+                        json.dumps(payload, indent=2)
+                    )
                     print(
                         f"[control_compliance_exports] Wrote top_violations_7d.json ({len(result['violations'])} violations)"
                     )
@@ -265,7 +273,9 @@ def main() -> int:
                     }
                     if "error" in result:
                         payload["error"] = result["error"]
-                    (output_dir / "top_violations_30d.json").write_text(json.dumps(payload, indent=2))
+                    (output_dir / "top_violations_30d.json").write_text(
+                        json.dumps(payload, indent=2)
+                    )
                     print(
                         f"[control_compliance_exports] Wrote top_violations_30d.json ({len(result['violations'])} violations)"
                     )

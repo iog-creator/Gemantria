@@ -146,7 +146,9 @@ def get_kb_registry_summary(registry_path: Path | None = None) -> dict[str, Any]
         }
     """
     if registry_path is None:
-        repo_root = Path(__file__).resolve().parents[2]  # agentpm/status/snapshot.py -> agentpm/ -> repo root
+        repo_root = (
+            Path(__file__).resolve().parents[2]
+        )  # agentpm/status/snapshot.py -> agentpm/ -> repo root
         registry_path = repo_root / "share" / "kb_registry.json"
 
     try:
@@ -192,7 +194,9 @@ def get_kb_status_view(registry_path: Path | None = None) -> dict[str, Any]:
         }
     """
     if registry_path is None:
-        repo_root = Path(__file__).resolve().parents[2]  # agentpm/status/snapshot.py -> agentpm/ -> repo root
+        repo_root = (
+            Path(__file__).resolve().parents[2]
+        )  # agentpm/status/snapshot.py -> agentpm/ -> repo root
         registry_path = repo_root / "share" / "kb_registry.json"
 
     result: dict[str, Any] = {
@@ -248,7 +252,9 @@ def get_kb_status_view(registry_path: Path | None = None) -> dict[str, Any]:
 
         # Add notes for validation issues
         if not validation["valid"]:
-            result["notes"].append(f"Registry validation failed: {len(validation['errors'])} errors")
+            result["notes"].append(
+                f"Registry validation failed: {len(validation['errors'])} errors"
+            )
         if validation["warnings"]:
             result["notes"].append(f"Registry has {len(validation['warnings'])} warnings")
 
@@ -375,7 +381,8 @@ def get_kb_hints(kb_status_view: dict[str, Any] | None = None) -> list[dict[str,
                 "message": f"{len(stale_docs)} document(s) are stale (exceed refresh interval)",
                 "stale_count": len(stale_docs),
                 "stale_docs": [
-                    {"id": doc["id"], "path": doc["path"], "title": doc["title"]} for doc in stale_docs[:5]
+                    {"id": doc["id"], "path": doc["path"], "title": doc["title"]}
+                    for doc in stale_docs[:5]
                 ],  # Limit to first 5
             }
         )
@@ -388,7 +395,8 @@ def get_kb_hints(kb_status_view: dict[str, Any] | None = None) -> list[dict[str,
                 "message": f"{len(out_of_sync_docs)} document(s) are out of sync (file modified after last check)",
                 "out_of_sync_count": len(out_of_sync_docs),
                 "out_of_sync_docs": [
-                    {"id": doc["id"], "path": doc["path"], "title": doc["title"]} for doc in out_of_sync_docs[:5]
+                    {"id": doc["id"], "path": doc["path"], "title": doc["title"]}
+                    for doc in out_of_sync_docs[:5]
                 ],  # Limit to first 5
             }
         )
@@ -642,7 +650,9 @@ def get_system_snapshot(
             snapshot["mcp_catalog"] = {
                 "available": mcp_catalog_result.get("ok", False),
                 "tools_count": len(mcp_catalog_result.get("tools", [])),
-                "error": mcp_catalog_result.get("error") if not mcp_catalog_result.get("ok", False) else None,
+                "error": mcp_catalog_result.get("error")
+                if not mcp_catalog_result.get("ok", False)
+                else None,
             }
         except Exception as e:
             snapshot["mcp_catalog"] = {
@@ -666,7 +676,9 @@ def get_system_snapshot(
                 "status": graph_compliance_props["status"],
                 "label": graph_compliance_props["label"],
                 "metrics": {
-                    "totalRunsWithViolations": graph_compliance_props["metrics"]["totalRunsWithViolations"],
+                    "totalRunsWithViolations": graph_compliance_props["metrics"][
+                        "totalRunsWithViolations"
+                    ],
                     "windowDays": graph_compliance_props["metrics"]["windowDays"],
                 },
             },

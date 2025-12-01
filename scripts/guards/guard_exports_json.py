@@ -76,8 +76,14 @@ def main() -> int:
             json_ok = True
             # --- Minimal shape checks (dependency-free) ---
             if fname == "ai_nouns.json":
-                if not isinstance(obj, dict) or "nodes" not in obj or not isinstance(obj["nodes"], list):
-                    (errors if strict else hints).append("ai_nouns.json: expected object with list 'nodes'")
+                if (
+                    not isinstance(obj, dict)
+                    or "nodes" not in obj
+                    or not isinstance(obj["nodes"], list)
+                ):
+                    (errors if strict else hints).append(
+                        "ai_nouns.json: expected object with list 'nodes'"
+                    )
             elif fname == "graph_stats.json":
                 if not isinstance(obj, dict) or not all(k in obj for k in ("nodes", "edges")):
                     (errors if strict else hints).append(
@@ -90,11 +96,18 @@ def main() -> int:
                             "graph_stats.json: 'nodes'/'edges' must be non-negative integers"
                         )
             elif fname == "graph_patterns.json":
-                if not ((isinstance(obj, list)) or (isinstance(obj, dict) and isinstance(obj.get("patterns"), list))):
-                    (errors if strict else hints).append("graph_patterns.json: expected list or object{patterns: list}")
+                if not (
+                    (isinstance(obj, list))
+                    or (isinstance(obj, dict) and isinstance(obj.get("patterns"), list))
+                ):
+                    (errors if strict else hints).append(
+                        "graph_patterns.json: expected list or object{patterns: list}"
+                    )
             elif fname == "graph_latest.scored.json":
                 if not isinstance(obj, dict):
-                    (errors if strict else hints).append("graph_latest.scored.json: expected top-level object")
+                    (errors if strict else hints).append(
+                        "graph_latest.scored.json: expected top-level object"
+                    )
             # --- JSON Schema validation (if schema file found) ---
             if schema_name:
                 sp = _find_schema_path(schema_name)
@@ -106,13 +119,17 @@ def main() -> int:
                         verrs = _validate_schema(obj, sch)
                         if verrs:
                             schema_fail += 1
-                            msg = f"schema: {fname} does not match {schema_name}: " + "; ".join(verrs[:5])
+                            msg = f"schema: {fname} does not match {schema_name}: " + "; ".join(
+                                verrs[:5]
+                            )
                             (errors if strict else hints).append(msg)
                         else:
                             schema_pass += 1
                             schema_ok = True
                     except Exception as e:
-                        (errors if strict else hints).append(f"schema: {schema_name} invalid or unreadable: {e}")
+                        (errors if strict else hints).append(
+                            f"schema: {schema_name} invalid or unreadable: {e}"
+                        )
         except Exception as e:
             msg = f"invalid json: exports/{fname}: {e}"
             err = f"json:{type(e).__name__}"

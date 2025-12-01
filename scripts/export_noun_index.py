@@ -227,7 +227,9 @@ def main():
             rows = cur.fetchall()
 
             if not rows:
-                print(f"No noun data found in {args.nouns_table}. Run with --extract-from-bible first.")
+                print(
+                    f"No noun data found in {args.nouns_table}. Run with --extract-from-bible first."
+                )
                 return
 
             jsonl_path = os.path.join(OUTDIR, "nouns.jsonl")

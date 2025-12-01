@@ -39,7 +39,8 @@ for node in ["node_001", "node_002"]:
 
 # Verdict
 ok = tl.exists() and all(
-    pathlib.Path(f"share/atlas/nodes/{n}/provenance.json").exists() for n in ["node_001", "node_002"]
+    pathlib.Path(f"share/atlas/nodes/{n}/provenance.json").exists()
+    for n in ["node_001", "node_002"]
 )
 
 verdict = {"ok": bool(ok), "trace_links": tl.as_posix(), "nodes": ["node_001", "node_002"]}

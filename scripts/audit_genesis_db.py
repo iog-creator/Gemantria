@@ -143,7 +143,9 @@ def run_audit():
                 )
                 null_relations = cur.fetchone()[0]
                 if null_relations > 0:
-                    print(f"❌ CRITICAL: {null_relations} NULL source/target IDs in concept_relations")
+                    print(
+                        f"❌ CRITICAL: {null_relations} NULL source/target IDs in concept_relations"
+                    )
                 else:
                     print("✅ All concept_relations have valid source and target IDs")
             except Exception as e:
@@ -160,7 +162,9 @@ def run_audit():
                 cur.execute("SELECT COUNT(*) FROM concept_relations WHERE weight < 0 OR weight > 1")
                 invalid_weights = cur.fetchone()[0]
                 if invalid_weights > 0:
-                    print(f"❌ CRITICAL: {invalid_weights} relations have invalid weights (not 0-1)")
+                    print(
+                        f"❌ CRITICAL: {invalid_weights} relations have invalid weights (not 0-1)"
+                    )
                 else:
                     print("✅ All relation weights are in valid range [0,1]")
             except Exception as e:
@@ -168,10 +172,14 @@ def run_audit():
 
             # Check cosine ranges (should be -1 to 1, typically 0 to 1 for similarity)
             try:
-                cur.execute("SELECT COUNT(*) FROM concept_relations WHERE cosine < -1 OR cosine > 1")
+                cur.execute(
+                    "SELECT COUNT(*) FROM concept_relations WHERE cosine < -1 OR cosine > 1"
+                )
                 invalid_cosines = cur.fetchone()[0]
                 if invalid_cosines > 0:
-                    print(f"❌ CRITICAL: {invalid_cosines} relations have invalid cosine values (not [-1,1])")
+                    print(
+                        f"❌ CRITICAL: {invalid_cosines} relations have invalid cosine values (not [-1,1])"
+                    )
                 else:
                     print("✅ All cosine values are in valid range [-1,1]")
             except Exception as e:
@@ -181,9 +189,13 @@ def run_audit():
             try:
                 cur.execute("SELECT DISTINCT relation_type FROM concept_relations LIMIT 10")
                 relation_types = [row[0] for row in cur.fetchall() if row[0] is not None]
-                print(f"📋 Relation types found: {relation_types[:5]}{'...' if len(relation_types) > 5 else ''}")
+                print(
+                    f"📋 Relation types found: {relation_types[:5]}{'...' if len(relation_types) > 5 else ''}"
+                )
 
-                invalid_types = [t for t in relation_types if not isinstance(t, str) or len(str(t).strip()) == 0]
+                invalid_types = [
+                    t for t in relation_types if not isinstance(t, str) or len(str(t).strip()) == 0
+                ]
                 if invalid_types:
                     print(f"❌ CRITICAL: Invalid relation types found: {invalid_types}")
                 else:

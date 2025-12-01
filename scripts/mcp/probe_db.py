@@ -9,7 +9,9 @@ mode = (
 receipt = {
     "ok": True,
     "mode": mode,
-    "dsn_present": bool(os.getenv("GEMATRIA_DSN") or os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO")),
+    "dsn_present": bool(
+        os.getenv("GEMATRIA_DSN") or os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO")
+    ),
 }
 
 os.makedirs("evidence", exist_ok=True)

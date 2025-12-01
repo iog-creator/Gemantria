@@ -50,7 +50,9 @@ def main():
     for noun in nouns:
         # Map from discovery function fields to ai-nouns.v1 schema
         node = {
-            "noun_id": str(noun.get("noun_id", f"ai-{book.lower()}-{hash(noun.get('surface', ''))}")),
+            "noun_id": str(
+                noun.get("noun_id", f"ai-{book.lower()}-{hash(noun.get('surface', ''))}")
+            ),
             "surface": noun.get("surface", ""),
             "lemma": noun.get("lemma", None),
             "letters": noun.get("letters", []),

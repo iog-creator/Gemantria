@@ -135,7 +135,9 @@ def validate_temporal_patterns(envelope: Dict[str, Any]) -> Tuple[float, List[st
         values = pattern["values"]
 
         if len(timestamps) != len(values):
-            issues.append(f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})")
+            issues.append(
+                f"Temporal pattern {i}: timestamps ({len(timestamps)}) != values ({len(values)})"
+            )
             invalid_patterns += 1
 
         # Check for monotonic timestamps (should be sorted)
@@ -154,7 +156,9 @@ def score_envelope(envelope_path: str, verbose: bool = False) -> Tuple[float, Di
     try:
         envelope = load_envelope(envelope_path)
         # Friendly guard: unify with validate_input.py behavior
-        if "meta" not in envelope or not all(k in envelope["meta"] for k in ("temporal_source", "correlation_weights")):
+        if "meta" not in envelope or not all(
+            k in envelope["meta"] for k in ("temporal_source", "correlation_weights")
+        ):
             print(
                 "HINT: This file does not look like a unified envelope. "
                 "Run extract to produce ui/out/unified_envelope_*.json or use share/exports/envelope.json."

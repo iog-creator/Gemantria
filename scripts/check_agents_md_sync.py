@@ -194,7 +194,9 @@ def check_agents_md_sync(staged_only: bool = False, verbose: bool = False) -> in
         agents_path = directory / "AGENTS.md"
 
         if not agents_path.exists():
-            issues.append(f"  ⚠️  {directory.relative_to(ROOT)}/: Code changed but AGENTS.md missing")
+            issues.append(
+                f"  ⚠️  {directory.relative_to(ROOT)}/: Code changed but AGENTS.md missing"
+            )
             continue
 
         # Check if AGENTS.md was updated recently
@@ -230,7 +232,9 @@ def check_agents_md_sync(staged_only: bool = False, verbose: bool = False) -> in
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Check if AGENTS.md files need updates based on code changes")
+    parser = argparse.ArgumentParser(
+        description="Check if AGENTS.md files need updates based on code changes"
+    )
     parser.add_argument(
         "--staged",
         action="store_true",

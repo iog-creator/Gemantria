@@ -36,7 +36,9 @@ class TestOllamaRerankFailures:
             patch("agentpm.adapters.ollama.get_lm_model_config", return_value=cfg),
             patch(
                 "agentpm.adapters.ollama._post_json",
-                side_effect=OllamaAPIError("404 Not Found", status_code=404, error_type="http_error"),
+                side_effect=OllamaAPIError(
+                    "404 Not Found", status_code=404, error_type="http_error"
+                ),
             ),
         ):
             # Should fall back to embedding_only, which also fails, so returns equal scores
@@ -60,7 +62,9 @@ class TestOllamaRerankFailures:
             patch("agentpm.adapters.ollama.get_lm_model_config", return_value=cfg),
             patch(
                 "agentpm.adapters.ollama._post_json",
-                side_effect=OllamaAPIError("500 Internal Server Error", status_code=500, error_type="http_error"),
+                side_effect=OllamaAPIError(
+                    "500 Internal Server Error", status_code=500, error_type="http_error"
+                ),
             ),
         ):
             result = rerank(query, docs)

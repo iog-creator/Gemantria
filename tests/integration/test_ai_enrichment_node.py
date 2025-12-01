@@ -20,7 +20,11 @@ def test_enrichment_qwen_live_gate_enabled(monkeypatch):
     monkeypatch.setenv("THEOLOGY_MODEL", "nonexistent-model")
     monkeypatch.setenv("ALLOW_MOCKS_FOR_TESTS", "0")
 
-    state = {"validated_nouns": [{"name": "Adam", "hebrew": "אדם", "value": 45, "primary_verse": "Gen 1:1"}]}
+    state = {
+        "validated_nouns": [
+            {"name": "Adam", "hebrew": "אדם", "value": 45, "primary_verse": "Gen 1:1"}
+        ]
+    }
 
     with pytest.raises(Exception, match="Qwen Live Gate failed"):
         enrichment_node(state)

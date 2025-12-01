@@ -157,16 +157,24 @@ def main() -> int:
     manifest_paths_set = set(manifest_paths)
 
     # Unlisted screenshots = in tagproof PNGs but not mentioned in manifest
-    unlisted_screenshots = sorted([s for s in screenshot_names if not any(s in m for m in manifest_paths_set)])
+    unlisted_screenshots = sorted(
+        [s for s in screenshot_names if not any(s in m for m in manifest_paths_set)]
+    )
     counts["unlisted_screenshots"] = len(unlisted_screenshots)
     checks["all_screenshots_listed"] = counts["unlisted_screenshots"] == 0 if screenshots else False
 
     # Orphan manifest entries = manifest paths that don't correspond to existing PNGs
     orphan_manifest_entries = sorted(
-        [m for m in manifest_paths_set if not any(m.endswith("/" + s) or s in m for s in screenshot_names)]
+        [
+            m
+            for m in manifest_paths_set
+            if not any(m.endswith("/" + s) or s in m for s in screenshot_names)
+        ]
     )
     counts["orphan_manifest_entries"] = len(orphan_manifest_entries)
-    checks["no_manifest_orphans"] = counts["orphan_manifest_entries"] == 0 if manifest_paths else False
+    checks["no_manifest_orphans"] = (
+        counts["orphan_manifest_entries"] == 0 if manifest_paths else False
+    )
 
     details["unlisted_screenshots"] = unlisted_screenshots[:64]
     details["orphan_manifest_entries"] = orphan_manifest_entries[:64]

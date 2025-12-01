@@ -128,7 +128,8 @@ def check_model_installed(model_name: str, base_url: str | None = None) -> bool:
     """Check if a specific model is installed."""
     installed = list_installed_models(base_url)
     return any(
-        installed_model == model_name or installed_model.startswith(f"{model_name}:") for installed_model in installed
+        installed_model == model_name or installed_model.startswith(f"{model_name}:")
+        for installed_model in installed
     )
 
 
@@ -262,7 +263,9 @@ def _rerank_embedding_only(
     logger = logging.getLogger(__name__)
 
     if not embedding_model:
-        logger.warning("HINT: No EMBEDDING_MODEL configured for embedding_only rerank strategy; returning equal scores")
+        logger.warning(
+            "HINT: No EMBEDDING_MODEL configured for embedding_only rerank strategy; returning equal scores"
+        )
         return [(doc, 0.5) for doc in docs]
 
     try:
@@ -276,7 +279,9 @@ def _rerank_embedding_only(
             return [(doc, 0.5) for doc in docs]
         query_embedding = query_embed_data["embedding"]
         if not isinstance(query_embedding, list) or not query_embedding:
-            logger.warning(f"HINT: Invalid query embedding format: {type(query_embedding)}; returning equal scores")
+            logger.warning(
+                f"HINT: Invalid query embedding format: {type(query_embedding)}; returning equal scores"
+            )
             return [(doc, 0.5) for doc in docs]
 
         # Embed documents
@@ -292,7 +297,9 @@ def _rerank_embedding_only(
                     continue
                 doc_embedding = doc_embed_data["embedding"]
                 if not isinstance(doc_embedding, list) or not doc_embedding:
-                    logger.warning(f"HINT: Invalid doc embedding format for doc {doc[:50]!r}; skipping this doc")
+                    logger.warning(
+                        f"HINT: Invalid doc embedding format for doc {doc[:50]!r}; skipping this doc"
+                    )
                     continue
                 doc_embeddings.append(doc_embedding)
             except OllamaAPIError as e:
@@ -318,7 +325,9 @@ def _rerank_embedding_only(
                 for q, d in zip(query_embedding, doc_emb, strict=True)
                 if isinstance(q, (int, float)) and isinstance(d, (int, float))
             )
-            query_norm = math.sqrt(sum(x * x for x in query_embedding if isinstance(x, (int, float))))
+            query_norm = math.sqrt(
+                sum(x * x for x in query_embedding if isinstance(x, (int, float)))
+            )
             doc_norm = math.sqrt(sum(x * x for x in doc_emb if isinstance(x, (int, float))))
             if query_norm > 0 and doc_norm > 0:
                 similarity = dot_product / (query_norm * doc_norm)
@@ -339,7 +348,9 @@ def _rerank_embedding_only(
         )
         return [(doc, 0.5) for doc in docs]
     except Exception as e:
-        logger.warning(f"HINT: Unexpected error during embedding_only rerank: {e!s}; returning equal scores")
+        logger.warning(
+            f"HINT: Unexpected error during embedding_only rerank: {e!s}; returning equal scores"
+        )
         return [(doc, 0.5) for doc in docs]
 
 
@@ -356,7 +367,9 @@ def _rerank_granite_llm(
     reranker_model = model or cfg.get("reranker_model") or cfg.get("local_agent_model")
 
     if not reranker_model:
-        raise RuntimeError("No RERANKER_MODEL or LOCAL_AGENT_MODEL configured for granite_llm rerank strategy")
+        raise RuntimeError(
+            "No RERANKER_MODEL or LOCAL_AGENT_MODEL configured for granite_llm rerank strategy"
+        )
 
     # Truncate documents to fixed window (per Prompting Guide: keep within ~8K tokens)
     truncated_docs = [doc[:MAX_DOC_CHARS] for doc in docs]
@@ -484,5 +497,7 @@ Return JSON list: [{{"index": 1, "score": 0.95}}, {{"index": 2, "score": 0.75}},
     except Exception as e:
         # On any other exception, log HINT and fall back to embedding_only
         logger = logging.getLogger(__name__)
-        logger.warning(f"HINT: Granite LLM rerank call failed ({e!s}), falling back to embedding_only")
+        logger.warning(
+            f"HINT: Granite LLM rerank call failed ({e!s}), falling back to embedding_only"
+        )
         return _rerank_embedding_only(query, docs, model, model_slot, cfg)

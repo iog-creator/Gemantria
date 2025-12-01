@@ -111,9 +111,15 @@ def move_file(source: Path, target: Path, dry_run: bool) -> tuple[bool, str | No
 def main() -> None:
     import argparse
 
-    parser = argparse.ArgumentParser(description="Cleanup root directory - move old/temporary files")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be moved without actually moving")
-    parser.add_argument("--list-only", action="store_true", help="Just list files that would be archived")
+    parser = argparse.ArgumentParser(
+        description="Cleanup root directory - move old/temporary files"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be moved without actually moving"
+    )
+    parser.add_argument(
+        "--list-only", action="store_true", help="Just list files that would be archived"
+    )
     args = parser.parse_args()
 
     # Files that should NEVER be archived

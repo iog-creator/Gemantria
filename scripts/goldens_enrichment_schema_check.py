@@ -15,7 +15,9 @@ except Exception:
     )
     sys.exit(2)
 
-SCHEMA = json.loads(Path("examples/enrichment/enrichment_row.schema.json").read_text(encoding="utf-8"))
+SCHEMA = json.loads(
+    Path("examples/enrichment/enrichment_row.schema.json").read_text(encoding="utf-8")
+)
 GOLDEN = Path("examples/enrichment/golden_enrichment.jsonl")  # your current golden
 
 

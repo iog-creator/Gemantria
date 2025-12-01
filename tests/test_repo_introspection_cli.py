@@ -60,9 +60,9 @@ def test_semantic_inventory_generates_expected_evidence_files() -> None:
     _remove_if_exists(filtered_path)
 
     result = _run_pmagent(["repo", "semantic-inventory"])
-    assert result.returncode == 0, (
-        f"semantic-inventory failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
-    )
+    assert (
+        result.returncode == 0
+    ), f"semantic-inventory failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
 
     assert semantic_inventory_path.exists(), "repo_semantic_inventory.json not created"
     assert filtered_path.exists(), "semantic_inventory_filtered.json not created"
@@ -102,12 +102,14 @@ def test_reunion_plan_generates_reunion_and_inventory() -> None:
     _remove_if_exists(reunion_plan_path)
 
     result = _run_pmagent(["repo", "reunion-plan"])
-    assert result.returncode == 0, (
-        f"reunion-plan failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
-    )
+    assert (
+        result.returncode == 0
+    ), f"reunion-plan failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
 
     assert reunion_plan_path.exists(), "repo_reunion_plan.json not created"
-    assert semantic_inventory_path.exists(), "reunion-plan did not produce repo_semantic_inventory.json as expected"
+    assert (
+        semantic_inventory_path.exists()
+    ), "reunion-plan did not produce repo_semantic_inventory.json as expected"
 
     # Sanity-check reunion plan JSON shape (dict or list, non-empty)
     raw = reunion_plan_path.read_text(encoding="utf-8")
@@ -136,9 +138,9 @@ def test_quarantine_candidates_json_non_empty() -> None:
     _remove_if_exists(quarantine_path)
 
     result = _run_pmagent(["repo", "quarantine-candidates"])
-    assert result.returncode == 0, (
-        f"quarantine-candidates failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
-    )
+    assert (
+        result.returncode == 0
+    ), f"quarantine-candidates failed: rc={result.returncode}, stdout={result.stdout}, stderr={result.stderr}"
 
     assert quarantine_path.exists(), "repo_quarantine_candidates.json not created"
 

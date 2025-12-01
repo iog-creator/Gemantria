@@ -15,7 +15,9 @@ def build_capability_session(project_id: int, task_id: str, intent: str) -> Dict
     }
 
 
-def execute_guarded_tool_call_p0(tool_id: str, args: Dict[str, Any], session: Dict[str, Any]) -> Dict[str, Any]:
+def execute_guarded_tool_call_p0(
+    tool_id: str, args: Dict[str, Any], session: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     PLAN-091 P0 execution: coordinate guard validation + tool execution.
     Returns structured result suitable for recording in control.agent_run.

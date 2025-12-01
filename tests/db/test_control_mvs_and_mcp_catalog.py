@@ -23,7 +23,9 @@ def test_control_mvs_snapshot_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "materialized_views"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"
@@ -70,7 +72,9 @@ def test_mcp_catalog_stub_evidence_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "connection_ok", "tools"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"

@@ -46,7 +46,9 @@ def main() -> int:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema already exists (idempotent check)
-                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
+                cur.execute(
+                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
+                )
                 schema_exists = cur.fetchone()[0]
 
                 # Read and apply migration
@@ -54,7 +56,9 @@ def main() -> int:
                 cur.execute(sql)
 
                 if schema_exists:
-                    print("[migrate_control] Control schema already existed; migration applied (idempotent).")
+                    print(
+                        "[migrate_control] Control schema already existed; migration applied (idempotent)."
+                    )
                 else:
                     print("[migrate_control] Control schema created successfully.")
 

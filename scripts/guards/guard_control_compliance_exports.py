@@ -82,7 +82,9 @@ def check_file(file_path: Path, file_name: str, expected: dict) -> tuple[bool, l
         if "window" in data:
             expected_window = "7d" if "7d" in file_name else "30d"
             if data["window"] != expected_window:
-                errors.append(f"Invalid window: expected '{expected_window}', got '{data.get('window')}'")
+                errors.append(
+                    f"Invalid window: expected '{expected_window}', got '{data.get('window')}'"
+                )
 
         # Check violations is a list
         if "violations" in data and not isinstance(data["violations"], list):

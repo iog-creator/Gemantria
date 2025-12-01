@@ -42,7 +42,9 @@ def test_node_page_has_summary(nodes_dir: pathlib.Path):
     # Check first node page
     node_file = node_files[0]
     content = node_file.read_text(encoding="utf-8")
-    assert "Summary" in content or "<h2>Summary</h2>" in content, f"Summary section missing in {node_file.name}"
+    assert (
+        "Summary" in content or "<h2>Summary</h2>" in content
+    ), f"Summary section missing in {node_file.name}"
 
 
 def test_execution_live_has_click_handlers(atlas_dir: pathlib.Path):

@@ -33,7 +33,12 @@ def get_dsn() -> str:
         rw = getattr(_env, "dsn_rw", lambda: None)()
         return ro or rw or ""
     except Exception:
-        return os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO") or os.getenv("GEMATRIA_RW_DSN") or ""
+        return (
+            os.getenv("GEMATRIA_RO_DSN")
+            or os.getenv("ATLAS_DSN_RO")
+            or os.getenv("GEMATRIA_RW_DSN")
+            or ""
+        )
 
 
 def main() -> int:

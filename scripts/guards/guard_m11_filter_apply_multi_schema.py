@@ -10,7 +10,9 @@ if not p.exists():
 else:
     data = json.loads(p.read_text())
     items = data.get("items", [])
-    ok = bool(items) and all(isinstance(it.get("queries", []), list) and len(it["queries"]) >= min_q for it in items)
+    ok = bool(items) and all(
+        isinstance(it.get("queries", []), list) and len(it["queries"]) >= min_q for it in items
+    )
     verdict = {"ok": ok, "min_queries": min_q, "items": len(items)}
 
 out = pathlib.Path("evidence/guard_m11_apply_multi_schema.verdict.json")

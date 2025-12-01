@@ -48,7 +48,11 @@ def ensure_import(lines: list[str]) -> list[str]:
     # insert after first future/import block if present
     ins = 0
     for i, line in enumerate(lines[:40]):
-        if line.startswith("from __future__") or line.startswith("import ") or line.startswith("from "):
+        if (
+            line.startswith("from __future__")
+            or line.startswith("import ")
+            or line.startswith("from ")
+        ):
             ins = i + 1
     lines.insert(ins, hdr + "\n")
     return lines
@@ -76,7 +80,9 @@ def rewrite(path: pathlib.Path) -> bool:
             if k == "engine":
                 return f"create_engine({func}())"
             if k == "psycopg":
-                return re.sub(r"psycopg\.(connect|Connection)\([^)]*\)", f"psycopg.connect({func}())", chunk)
+                return re.sub(
+                    r"psycopg\.(connect|Connection)\([^)]*\)", f"psycopg.connect({func}())", chunk
+                )
             return func + "()"  # env -> direct call
 
         text = pat.sub(_repl, text)

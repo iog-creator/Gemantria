@@ -160,7 +160,8 @@ def build_relations(db, embeddings_batch, enriched_nouns=None):
     name_map = {}
     try:
         noun_id_to_name = {
-            noun.get("noun_id"): noun.get("name", str(noun.get("noun_id"))) for noun in (enriched_nouns or [])
+            noun.get("noun_id"): noun.get("name", str(noun.get("noun_id")))
+            for noun in (enriched_nouns or [])
         }
         for e in embeddings_batch:
             noun_id, concept_network_id, _, _ = e
@@ -534,7 +535,9 @@ def _generate_and_store_embeddings(
                 vector_dim=VECTOR_DIM,
             )
 
-            for noun, embedding, doc_text in zip(batch_nouns, batch_embeddings, batch_texts, strict=False):
+            for noun, embedding, doc_text in zip(
+                batch_nouns, batch_embeddings, batch_texts, strict=False
+            ):
                 noun_id = noun.get("noun_id", uuid.uuid4())
 
                 # Store in concept_network
@@ -753,7 +756,9 @@ def _build_rerank_relationships(
 
     # Update summary metrics
     if summary["strong_edges"] + summary["weak_edges"] > 0:
-        summary["avg_edge_strength"] = total_edge_strength / (summary["strong_edges"] + summary["weak_edges"])
+        summary["avg_edge_strength"] = total_edge_strength / (
+            summary["strong_edges"] + summary["weak_edges"]
+        )
 
     if total_rerank_calls > 0:
         summary["rerank_yes_ratio"] = total_yes_scores / total_rerank_calls

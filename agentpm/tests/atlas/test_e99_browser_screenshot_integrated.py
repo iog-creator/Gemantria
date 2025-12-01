@@ -150,7 +150,9 @@ def test_integrated_guard_counts_consistency():
     ok = counts["guards_ok"]
     failed = counts["guards_failed"]
 
-    assert ok + failed == total, f"guards_ok ({ok}) + guards_failed ({failed}) should equal guards_total ({total})"
+    assert (
+        ok + failed == total
+    ), f"guards_ok ({ok}) + guards_failed ({failed}) should equal guards_total ({total})"
 
 
 def test_integrated_guard_extracts_broken_links():

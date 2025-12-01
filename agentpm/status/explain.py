@@ -80,8 +80,12 @@ def summarize_system_status(status: dict[str, Any]) -> dict[str, Any]:
         elif level == "WARN":
             level = "ERROR"
             headline = "Database and LM issues detected"
-        down_slot_names = [slot.get("name", "unknown") for slot in lm_slots if slot.get("service") == "DOWN"]
-        details_parts.append(f"{down_slots} of {total_slots} LM slot(s) are down: {', '.join(down_slot_names)}.")
+        down_slot_names = [
+            slot.get("name", "unknown") for slot in lm_slots if slot.get("service") == "DOWN"
+        ]
+        details_parts.append(
+            f"{down_slots} of {total_slots} LM slot(s) are down: {', '.join(down_slot_names)}."
+        )
     elif unknown_slots > 0:
         if level == "OK":
             level = "WARN"

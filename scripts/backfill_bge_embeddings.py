@@ -67,7 +67,9 @@ def backfill_bge_embeddings():
 
             for i in range(0, len(rows), batch_size):
                 batch = rows[i : i + batch_size]
-                print(f"Processing batch {i // batch_size + 1}/{(len(rows) + batch_size - 1) // batch_size}...")
+                print(
+                    f"Processing batch {i // batch_size + 1}/{(len(rows) + batch_size - 1) // batch_size}..."
+                )
 
                 # Prepare documents for embedding
                 documents = []

@@ -160,14 +160,18 @@ class AISessionMonitor:
 
         # Get git status
         try:
-            result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, cwd=ROOT)
+            result = subprocess.run(
+                ["git", "status", "--porcelain"], capture_output=True, text=True, cwd=ROOT
+            )
             context["git_status"] = result.stdout.strip()
         except Exception:
             context["git_status"] = "unknown"
 
         # Get current branch
         try:
-            result = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, cwd=ROOT)
+            result = subprocess.run(
+                ["git", "branch", "--show-current"], capture_output=True, text=True, cwd=ROOT
+            )
             context["git_branch"] = result.stdout.strip()
         except Exception:
             context["git_branch"] = "unknown"
@@ -215,7 +219,9 @@ class AISessionMonitor:
 
         return context
 
-    def log_learning_event(self, learning_type: str, trigger: Dict, outcome: str, confidence: float):
+    def log_learning_event(
+        self, learning_type: str, trigger: Dict, outcome: str, confidence: float
+    ):
         """Log an AI learning event."""
         if not self.current_session:
             print("⚠️  No active session - learning event not logged")
@@ -348,7 +354,9 @@ def main():
     # Learning event
     learn_parser = subparsers.add_parser("log_learning", help="Log learning event")
     learn_parser.add_argument("--type", required=True, help="Learning type")
-    learn_parser.add_argument("--trigger", type=json.loads, required=True, help="Trigger event JSON")
+    learn_parser.add_argument(
+        "--trigger", type=json.loads, required=True, help="Trigger event JSON"
+    )
     learn_parser.add_argument("--outcome", required=True, help="Learning outcome")
     learn_parser.add_argument("--confidence", type=float, required=True, help="Confidence score")
 
@@ -360,7 +368,9 @@ def main():
 
     # End session
     end_parser = subparsers.add_parser("end_session", help="End session monitoring")
-    end_parser.add_argument("--feedback", type=int, choices=range(1, 6), help="Session satisfaction 1-5")
+    end_parser.add_argument(
+        "--feedback", type=int, choices=range(1, 6), help="Session satisfaction 1-5"
+    )
     end_parser.add_parser("--text", help="Feedback text")
     end_parser.add_argument("--tags", nargs="*", help="Feedback tags")
 

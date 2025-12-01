@@ -261,7 +261,9 @@ lines.append("### DB Proofs\n")
 lines.append(f"- Bible RO probe: `{ro_probe}`")
 lines.append(f"- Gematria RW temp-write probe: `{rw_probe}`\n")
 lines.append("### DB Health Guard\n")
-lines.append(f"- Status: `{'✓ Ready' if db_health_json.get('ok') else '✗ ' + db_health_json.get('mode', 'unknown')}`")
+lines.append(
+    f"- Status: `{'✓ Ready' if db_health_json.get('ok') else '✗ ' + db_health_json.get('mode', 'unknown')}`"
+)
 lines.append(f"- Mode: `{db_health_json.get('mode', 'unknown')}`")
 if db_health_json.get("checks"):
     checks = db_health_json["checks"]
@@ -395,13 +397,17 @@ if eval_lm.get("available"):
     lines.append(f"  - Success rate: {lm_data.get('success_rate', 0):.1%}")
 else:
     lines.append(f"  - Note: {eval_lm.get('note', 'LM indicator export not found')}")
-lines.append(f"- DB Health Snapshot: `{'✓ Available' if eval_db.get('available') else '✗ Unavailable'}`")
+lines.append(
+    f"- DB Health Snapshot: `{'✓ Available' if eval_db.get('available') else '✗ Unavailable'}`"
+)
 if eval_db.get("available"):
     db_data = eval_db.get("data", {})
     lines.append(f"  - Mode: {db_data.get('mode', 'unknown')}")
 else:
     lines.append(f"  - Note: {eval_db.get('note', 'DB health export not found')}")
-lines.append(f"- Edge Class Counts: `{'✓ Available' if eval_edges.get('available') else '✗ Unavailable'}`")
+lines.append(
+    f"- Edge Class Counts: `{'✓ Available' if eval_edges.get('available') else '✗ Unavailable'}`"
+)
 if eval_edges.get("available"):
     edge_data = eval_edges.get("data", {})
     counts = edge_data.get("counts", {})
@@ -413,7 +419,9 @@ else:
 lines.append("")
 
 lines.append("## KB Registry Summary (Advisory)\n")
-lines.append("_Note: KB registry is advisory-only and read-only in CI. It does not affect system health gates._\n")
+lines.append(
+    "_Note: KB registry is advisory-only and read-only in CI. It does not affect system health gates._\n"
+)
 kb_available = kb_registry_summary.get("available", False)
 kb_total = kb_registry_summary.get("total", 0)
 kb_valid = kb_registry_summary.get("valid", False)
@@ -452,7 +460,9 @@ lines.append("")
 
 # Documentation Health (AgentPM-Next:M3)
 lines.append("## Documentation Health (Advisory)\n")
-lines.append("_Note: Documentation health metrics are advisory-only and do not affect system health gates._\n")
+lines.append(
+    "_Note: Documentation health metrics are advisory-only and do not affect system health gates._\n"
+)
 kb_doc_available = kb_doc_health_summary.get("available", False)
 if kb_doc_available:
     metrics = kb_doc_health_summary.get("metrics", {})
@@ -474,7 +484,9 @@ if kb_doc_available:
         for subsystem, ratio in sorted(by_sub.items()):
             miss_sub = missing_count.get("by_subsystem", {}).get(subsystem, 0)
             stale_sub = stale_by_sub.get(subsystem, 0)
-            lines.append(f"    - {subsystem}: {ratio:.1f}% fresh (missing={miss_sub}, stale={stale_sub})")
+            lines.append(
+                f"    - {subsystem}: {ratio:.1f}% fresh (missing={miss_sub}, stale={stale_sub})"
+            )
 
     missing_overall = missing_count.get("overall", 0)
     if missing_overall > 0:

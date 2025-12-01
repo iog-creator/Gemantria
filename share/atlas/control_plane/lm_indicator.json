@@ -1,11 +1,4 @@
 {
-  "db_off": false,
-  "error_rate": 0.6744186046511628,
-  "generated_at": "2025-11-30T03:10:33.295305+00:00",
-  "reason": "high_error_rate",
-  "status": "degraded",
-  "success_rate": 0.32558139534883723,
-  "top_error_reason": "lm_studio_error",
-  "total_calls": 2150,
-  "window_days": 7
+  "status": "captured",
+  "output": "LM_HEALTH: mode=lm_ready (ok)\n{\n  \"ok\": true,\n  \"mode\": \"lm_ready\",\n  \"details\": {\n    \"endpoint\": \"http://127.0.0.1:9994/v1\",\n    \"provider\": \"lmstudio\",\n    \"errors\": []\n  }\n}\n"
 }

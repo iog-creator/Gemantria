@@ -34,7 +34,9 @@ def main():
 
     node_count = len(data["nodes"])
     if node_count == 0:
-        msg = f"{hint_prefix}: no nodes found in ai_nouns.json (hermetic behavior: empty nodes array)"
+        msg = (
+            f"{hint_prefix}: no nodes found in ai_nouns.json (hermetic behavior: empty nodes array)"
+        )
         print(msg, file=sys.stderr)
         sys.exit(2 if strict_mode else 0)
 

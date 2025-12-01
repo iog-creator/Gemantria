@@ -86,7 +86,9 @@ def main() -> int:
                 status["rfc3339_ok"] = ok
 
                 if not ok:
-                    (errors if strict else hints).append(f"{name}: generated_at not RFC3339 (fast-lane)")
+                    (errors if strict else hints).append(
+                        f"{name}: generated_at not RFC3339 (fast-lane)"
+                    )
 
         except Exception as e:
             status["error"] = f"json:{type(e).__name__}"

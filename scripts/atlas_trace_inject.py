@@ -12,7 +12,9 @@ else:
 if "data-trace-id=" not in text:
     # Try multiple injection points
     if "<div id='app'" in text:
-        text = text.replace("<div id='app'", f'<div id=\'app\' data-trace-id="{trace}" trace-link="true"')
+        text = text.replace(
+            "<div id='app'", f'<div id=\'app\' data-trace-id="{trace}" trace-link="true"'
+        )
     elif "<html" in text and "data-trace-id=" not in text:
         text = text.replace("<html", f'<html data-trace-id="{trace}" trace-link="true"', 1)
     elif "<body" in text:

@@ -7,7 +7,9 @@ from typing import Any
 from scripts.governance import ingest_docs_to_db as mod
 
 
-def test_iter_agents_docs_discovers_root_and_module_agents(tmp_path: Path, monkeypatch: Any) -> None:  # noqa: ANN001
+def test_iter_agents_docs_discovers_root_and_module_agents(
+    tmp_path: Path, monkeypatch: Any
+) -> None:  # noqa: ANN001
     # Create a fake repo structure with:
     # - Root AGENTS.md
     # - A module-level AGENTS.md

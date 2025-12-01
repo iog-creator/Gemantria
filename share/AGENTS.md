@@ -1670,3 +1670,25 @@ Merges are permitted only when **all** are true:
 > **Postgres Knowledge MCP (RFC-078):** Catalog-as-a-service lives in Postgres. Tag builds use RO DSN and must prove `mcp.v_catalog`. See `docs/runbooks/MCP_KNOWLEDGE_DB.md`.
 
 > **Postgres Knowledge MCP (STRICT tags: RO proof):** tagproof runs `make guard.mcp.db.ro STRICT_DB_PROBE=1` to verify `mcp.v_catalog` via RO DSN; PR CI remains hermetic (no probes).
+
+## pmagent repo — Repository Introspection Subsystem (NEW)
+
+The `pmagent repo` command group provides read-only, DMS-aware introspection of the repository.
+It implements three commands:
+
+* **semantic-inventory**
+  Produces a JSON inventory of all repo files, correlated with DMS-tracked paths.
+
+* **reunion-plan**
+  Labels repository directories as integration, quarantine, or investigate.
+  Auto-runs semantic-inventory if needed.
+
+* **quarantine-candidates**
+  Identifies quarantine-eligible files under `archive/` and `logs/`.
+  Auto-runs reunion-plan (and thus semantic-inventory) if needed.
+
+All repo commands:
+
+* Are **read-only**
+* Only write JSON evidence to `evidence/repo/` (and optionally `share/exports/repo/`)
+* Never modify repo files or DMS records

@@ -172,7 +172,9 @@ def _strict_write(conn, window: str):
               group by 1
             """
             )
-            counts: Dict[str, Tuple[int, int]] = {r[0]: (int(r[1]), int(r[2])) for r in cur.fetchall()}
+            counts: Dict[str, Tuple[int, int]] = {
+                r[0]: (int(r[1]), int(r[2])) for r in cur.fetchall()
+            }
 
             # Helper: choose class by error rate
             def edge_class(child: str) -> str:

@@ -35,4 +35,6 @@ def test_e28_node_pages_have_breadcrumb_to_index():
     if not node0:
         pytest.skip("node pages not generated yet ")
     html = open(node0, encoding="utf-8").read()
-    assert re.search(r'href="..\/index\.html"', html) or ("Back to Atlas" in html), "no breadcrumb/backlink "
+    assert re.search(r'href="..\/index\.html"', html) or (
+        "Back to Atlas" in html
+    ), "no breadcrumb/backlink "

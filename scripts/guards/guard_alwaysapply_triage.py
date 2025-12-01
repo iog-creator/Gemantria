@@ -46,7 +46,9 @@ def check_rules_table(path: Path) -> dict[str, object]:
         return {"path": str(path), "status": "missing"}
 
     content = path.read_text(encoding="utf-8", errors="ignore")
-    always_apply = set(re.findall(r"^\|\s*(0\d{2})\s*\|.*\(AlwaysApply\)", content, flags=re.MULTILINE))
+    always_apply = set(
+        re.findall(r"^\|\s*(0\d{2})\s*\|.*\(AlwaysApply\)", content, flags=re.MULTILINE)
+    )
     return {
         "path": str(path),
         "found": sorted(always_apply),

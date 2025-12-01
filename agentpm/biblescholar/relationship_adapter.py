@@ -246,7 +246,9 @@ class RelationshipAdapter:
             self._db_status = "unavailable"
             return []
 
-    def get_enriched_context(self, verse_id: int, include_word_links: bool = True) -> EnrichedContext | None:
+    def get_enriched_context(
+        self, verse_id: int, include_word_links: bool = True
+    ) -> EnrichedContext | None:
         """Get enriched RAG context for a verse.
 
         This method combines proper names and word links to create

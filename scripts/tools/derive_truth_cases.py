@@ -32,11 +32,15 @@ def main(limit: int = 25) -> int:
                 src_nodes = data.get("nodes", [])
                 # Filter for nodes with gematria and are proper nouns
                 filtered_nodes = [
-                    n for n in src_nodes if n.get("gematria") is not None or n.get("gematria_value") is not None
+                    n
+                    for n in src_nodes
+                    if n.get("gematria") is not None or n.get("gematria_value") is not None
                 ]
                 if filtered_nodes:
                     nodes.extend(filtered_nodes)
-                    print(f"Found {len(filtered_nodes)} valid nodes from {src.name}", file=sys.stderr)
+                    print(
+                        f"Found {len(filtered_nodes)} valid nodes from {src.name}", file=sys.stderr
+                    )
                     break  # Use first source with valid nodes
             except Exception as e:
                 print(f"HINT: derive_truth_cases: failed to read {src}: {e}", file=sys.stderr)
@@ -61,7 +65,9 @@ def main(limit: int = 25) -> int:
     nodes.sort(key=_canon_key)
     out = {
         "version": "v1",
-        "generated_at": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "generated_at": datetime.datetime.now(datetime.UTC)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z"),
         "source": "fixtures",
         "cases": [],
     }
@@ -86,7 +92,9 @@ def main(limit: int = 25) -> int:
             )
 
     if not out["cases"]:
-        print("HINT: derive_truth_cases: no cases generated (missing gematria data)", file=sys.stderr)
+        print(
+            "HINT: derive_truth_cases: no cases generated (missing gematria data)", file=sys.stderr
+        )
         return 0
 
     OUTFILE.parent.mkdir(parents=True, exist_ok=True)

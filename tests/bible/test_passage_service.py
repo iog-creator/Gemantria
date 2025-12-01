@@ -74,7 +74,9 @@ def test_generate_commentary_with_lm():
     """Test generate_commentary when LM is available."""
     passage = {
         "reference": "John 3:16",
-        "verses": [{"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}],
+        "verses": [
+            {"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}
+        ],
     }
 
     with patch("agentpm.biblescholar.passage.theology_chat") as mock_chat:

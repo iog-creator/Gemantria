@@ -52,7 +52,9 @@ def main() -> int:
     out_path.write_text(json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8")
 
     # lightweight marker to latest sanitized
-    (EXPORTS / "graph_sanitized.json").write_text(json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8")  # noqa: E501
+    (EXPORTS / "graph_sanitized.json").write_text(
+        json.dumps(sanitized, indent=2, sort_keys=True), encoding="utf-8"
+    )  # noqa: E501
 
     print(f"[data.sanitize] kept_edges={len(kept_edges)} dropped_edges={len(dropped_edges)}")
     print(f"[data.sanitize] wrote {out_path.relative_to(ROOT)}")

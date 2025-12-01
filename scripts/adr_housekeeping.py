@@ -108,10 +108,18 @@ def update_adr_index():
         if "## Architectural Decision Records" in readme_content:
             # Replace ADR section
             before_adr = readme_content.split("## Architectural Decision Records")[0]
-            after_adr_match = re.search(r"## Architectural Decision Records.*?(?=\n## |\Z)", readme_content, re.DOTALL)
+            after_adr_match = re.search(
+                r"## Architectural Decision Records.*?(?=\n## |\Z)", readme_content, re.DOTALL
+            )
             after_adr = readme_content[after_adr_match.end() :] if after_adr_match else ""
 
-            new_content = before_adr + "## Architectural Decision Records\n\n" + index_content + "\n" + after_adr
+            new_content = (
+                before_adr
+                + "## Architectural Decision Records\n\n"
+                + index_content
+                + "\n"
+                + after_adr
+            )
             readme_path.write_text(new_content)
             print(f"Updated ADR index in {readme_path}")
         else:

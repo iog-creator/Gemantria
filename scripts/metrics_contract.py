@@ -35,7 +35,9 @@ def check_sync(contract):
 
     # Check dashboards exist (if specified in contract)
     required_dashboards = contract.get("dashboards", [])
-    existing_dashboards = [os.path.basename(d).replace(".md", "") for d in glob.glob(DASHBOARDS_DIR)]
+    existing_dashboards = [
+        os.path.basename(d).replace(".md", "") for d in glob.glob(DASHBOARDS_DIR)
+    ]
     missing_dashboards = [d for d in required_dashboards if d not in existing_dashboards]
 
     if missing_dashboards:

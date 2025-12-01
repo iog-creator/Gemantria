@@ -97,7 +97,9 @@ More content.
             try:
                 with psycopg.connect(os.environ["GEMATRIA_DSN"]) as conn:
                     with conn.cursor() as cur:
-                        cur.execute("DELETE FROM document_sections WHERE document_name = 'test_document.md'")
+                        cur.execute(
+                            "DELETE FROM document_sections WHERE document_name = 'test_document.md'"
+                        )
                         conn.commit()
             except Exception:
                 pass  # Ignore cleanup errors
@@ -143,7 +145,9 @@ More content.
                     AND (artifact_name LIKE '%document%' OR artifact_name LIKE '%manage%')
                 """)
                 governance_count = cur.fetchone()[0]
-                assert governance_count > 0, "Document management should create governance artifacts"
+                assert (
+                    governance_count > 0
+                ), "Document management should create governance artifacts"
 
                 # Check that hint emissions exist for document operations
                 cur.execute("""

@@ -44,7 +44,9 @@ def provenance_hash(prov: Dict[str, Any]) -> str:
     return hashlib.sha256(blob).hexdigest()
 
 
-def assemble_graph(items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt: datetime) -> Dict[str, Any]:
+def assemble_graph(
+    items: Iterable[Dict[str, Any]], model: str, seed: int | str, base_dt: datetime
+) -> Dict[str, Any]:
     """
     Build graph with provenance propagation and audit trail.
     - Uses stamp_batch(..., base_dt=...) to stamp ts_iso (monotonic) + attach model/seed.
@@ -84,7 +86,9 @@ def assemble_graph(items: Iterable[Dict[str, Any]], model: str, seed: int | str,
     return {"batch_id": bid, "meta": {"provenance_rollup": rollup}, "nodes": nodes}
 
 
-def correlate_nodes_across_batches(graphs: Iterable[Dict[str, Any]], key_field: str) -> Dict[Any, List[str]]:
+def correlate_nodes_across_batches(
+    graphs: Iterable[Dict[str, Any]], key_field: str
+) -> Dict[Any, List[str]]:
     """
     Cross-batch correlation (E19): for each graph, map node.data[key_field] -> batch_id list.
     Order of batch_ids follows input graphs order; duplicates avoided.

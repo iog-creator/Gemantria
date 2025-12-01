@@ -36,7 +36,9 @@ M14_ARTIFACTS = {
 }
 
 
-def _generate_webproof_html(artifact_name: str, json_path: str, guard_path: str, title: str, out_dir: Path) -> Path:
+def _generate_webproof_html(
+    artifact_name: str, json_path: str, guard_path: str, title: str, out_dir: Path
+) -> Path:
     """Generate a single webproof HTML page with backlinks."""
     json_file = Path(json_path)
     guard_file = Path(guard_path)

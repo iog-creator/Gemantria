@@ -72,7 +72,9 @@ if __name__ == "__main__":
             )
         )[0]
         dens = density(n, e_within)
-        sample = vecs if n <= SAMPLE else [vecs[i] for i in np.random.choice(n, SAMPLE, replace=False)]
+        sample = (
+            vecs if n <= SAMPLE else [vecs[i] for i in np.random.choice(n, SAMPLE, replace=False)]
+        )
         div = cluster_semantic_diversity(sample)
         # exemplars by mean cosine to cluster
         means = [(cid, float(np.mean([np.dot(v, u) for u in vecs]))) for cid, v in pairs]

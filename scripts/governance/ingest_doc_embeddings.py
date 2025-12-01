@@ -48,7 +48,9 @@ def get_embedding_model(model_name: str | None = None) -> str:
     cfg = get_retrieval_lane_models()
     model = cfg.get("embedding_model")
     if not model:
-        raise RuntimeError("No EMBEDDING_MODEL configured. Set EMBEDDING_MODEL or a Granite override in .env")
+        raise RuntimeError(
+            "No EMBEDDING_MODEL configured. Set EMBEDDING_MODEL or a Granite override in .env"
+        )
     return model
 
 
@@ -66,7 +68,9 @@ def get_fragments_needing_embeddings(
     # Build WHERE clause for Tier-0 docs
     where_clauses = []
     if only_agents:
-        where_clauses.append("(dr.logical_name = 'AGENTS_ROOT' OR dr.logical_name LIKE 'AGENTS::%')")
+        where_clauses.append(
+            "(dr.logical_name = 'AGENTS_ROOT' OR dr.logical_name LIKE 'AGENTS::%')"
+        )
     else:
         # Include all Tier-0 docs
         where_clauses.append(
@@ -145,7 +149,9 @@ def embed_fragments(fragments: List[dict], model_name: str, dry_run: bool = Fals
     if not embeddings:
         raise RuntimeError("No embeddings returned from model")
     if len(embeddings) != len(fragments):
-        raise RuntimeError(f"Embedding count mismatch: expected {len(fragments)}, got {len(embeddings)}")
+        raise RuntimeError(
+            f"Embedding count mismatch: expected {len(fragments)}, got {len(embeddings)}"
+        )
 
     # Check dimension (should be 1024 for BGE-M3, but some models like granite-embedding:278m return 768)
     dim = len(embeddings[0])
@@ -162,7 +168,9 @@ def embed_fragments(fragments: List[dict], model_name: str, dry_run: bool = Fals
         )
 
     # Combine fragment IDs with embeddings
-    return [{"fragment_id": f["fragment_id"], "embedding": emb} for f, emb in zip(fragments, embeddings)]
+    return [
+        {"fragment_id": f["fragment_id"], "embedding": emb} for f, emb in zip(fragments, embeddings)
+    ]
 
 
 def store_embeddings(conn, embeddings: List[dict], model_name: str, dry_run: bool = False) -> int:
@@ -288,7 +296,9 @@ def ingest_embeddings(
 
 def main() -> int:
     """CLI entry point."""
-    parser = argparse.ArgumentParser(description="Ingest document fragment embeddings into control.doc_embedding")
+    parser = argparse.ArgumentParser(
+        description="Ingest document fragment embeddings into control.doc_embedding"
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",

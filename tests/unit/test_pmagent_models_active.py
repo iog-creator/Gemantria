@@ -62,7 +62,10 @@ def test_models_active_granite_profile(mock_retrieval, mock_config, runner):
     assert result.exit_code == 0
     assert "ACTIVE RETRIEVAL PROFILE: GRANITE" in result.stdout
     assert "EMBEDDING_MODEL:          ibm-granite/granite-embedding-english-r2" in result.stdout
-    assert "RERANKER_MODEL:           ibm-granite/granite-embedding-reranker-english-r2" in result.stdout
+    assert (
+        "RERANKER_MODEL:           ibm-granite/granite-embedding-reranker-english-r2"
+        in result.stdout
+    )
     assert "LOCAL_AGENT_MODEL:        ibm-granite/granite-4.0-h-tiny-GGUF" in result.stdout
 
 

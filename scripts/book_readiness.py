@@ -126,7 +126,9 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
         total_edges = edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
         if total_edges > 0:
             metrics["strong_edges"] = edges.get("strong_edges", 0) / total_edges
-            metrics["weak_edges"] = (edges.get("strong_edges", 0) + edges.get("weak_edges", 0)) / total_edges
+            metrics["weak_edges"] = (
+                edges.get("strong_edges", 0) + edges.get("weak_edges", 0)
+            ) / total_edges
 
     # Correlation metrics
     if stats.get("correlations"):
@@ -143,7 +145,9 @@ def _collect_metrics(stats_path, temporal_path, forecast_path):
 
     # Centrality coverage
     if "centrality" in stats:
-        cent_values = [v for v in stats["centrality"].values() if isinstance(v, int | float) and v > 0]
+        cent_values = [
+            v for v in stats["centrality"].values() if isinstance(v, int | float) and v > 0
+        ]
         if cent_values:
             metrics["centrality_nonzero_ratio"] = len(cent_values) / len(stats["centrality"])
 
@@ -267,7 +271,9 @@ def cmd_gate(args):
 
     except ImportError:
         schema_ok = False
-        schema_errs.append("jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt")
+        schema_errs.append(
+            "jsonschema not installed (hard requirement) — run: pip install -r requirements-dev.txt"
+        )
     except ValidationError as e:
         schema_ok = False
         schema_errs.append(f"Schema validation error: {e.message}")
@@ -337,7 +343,9 @@ def main():
 
     # run-mini
     mini_parser = subparsers.add_parser("run-mini", help="Run mini experiment")
-    mini_parser.add_argument("--config", default="config/mini_experiments.yaml", help="Mini config file")
+    mini_parser.add_argument(
+        "--config", default="config/mini_experiments.yaml", help="Mini config file"
+    )
     mini_parser.set_defaults(func=cmd_run_mini)
 
     # compute

@@ -55,7 +55,9 @@ def validate_por(call: Dict[str, Any], session: Dict[str, Any]) -> None:
         raise GuardError("MISSING_POR")
 
 
-def validate_tool_call_p0(call: Dict[str, Any], session: Dict[str, Any], policy: Dict[str, Any]) -> None:
+def validate_tool_call_p0(
+    call: Dict[str, Any], session: Dict[str, Any], policy: Dict[str, Any]
+) -> None:
     """
     PLAN-091 P0 validation: jsonschema + PoR + legacy checks.
     Enforce allowlist, ring, PoR, and schema validation for P0 tools.

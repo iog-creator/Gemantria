@@ -113,7 +113,8 @@ for key in [
 
 # 8) JSON adapters (psycopg3) guard
 code_uses_json = any(
-    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT))) for p in ROOT.rglob("**/*.py")
+    "from psycopg.types.json import Json" in read(str(p.relative_to(ROOT)))
+    for p in ROOT.rglob("**/*.py")
 )
 if not code_uses_json:
     add("WARN", "No psycopg Json adapter import found; ensure JSONB inserts adapt dicts")

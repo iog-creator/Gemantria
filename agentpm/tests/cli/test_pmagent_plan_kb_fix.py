@@ -86,11 +86,15 @@ def test_build_fix_actions_filters(tmp_path: Path) -> None:
     worklist = build_kb_doc_worklist(registry_path=registry_path)
 
     # Filter by subsystem
-    actions = build_fix_actions(worklist, filters={"subsystem": "docs"}, registry_path=registry_path)
+    actions = build_fix_actions(
+        worklist, filters={"subsystem": "docs"}, registry_path=registry_path
+    )
     assert all(a.subsystem == "docs" for a in actions)
 
     # Filter by min_severity
-    actions = build_fix_actions(worklist, filters={"min_severity": "missing"}, registry_path=registry_path)
+    actions = build_fix_actions(
+        worklist, filters={"min_severity": "missing"}, registry_path=registry_path
+    )
     assert all(a.severity == "missing" for a in actions)
 
     # Filter by limit
@@ -255,7 +259,9 @@ def test_apply_actions_approved_paths(tmp_path: Path) -> None:
     assert not (repo_root / "scripts" / "test.py").exists()
     # Check that action2 was skipped with appropriate note
     assert action2.notes
-    assert any("not approved" in note.lower() or "approved" in note.lower() for note in action2.notes)
+    assert any(
+        "not approved" in note.lower() or "approved" in note.lower() for note in action2.notes
+    )
 
 
 def test_is_approved_path() -> None:

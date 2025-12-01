@@ -116,7 +116,9 @@ def backfill_noun_embeddings(
                     noun_id, lemma, surface, book, chapter, verse = row
 
                     # Build document string for embedding
-                    doc = f"Lemma: {lemma} | Surface: {surface} | Reference: {book} {chapter}:{verse}"
+                    doc = (
+                        f"Lemma: {lemma} | Surface: {surface} | Reference: {book} {chapter}:{verse}"
+                    )
                     documents.append(doc)
                     noun_ids.append(noun_id)
 
@@ -125,7 +127,9 @@ def backfill_noun_embeddings(
                     embeddings = client.get_embeddings(documents, model=model_name)
 
                     if len(embeddings) != len(documents):
-                        print(f"Warning: Got {len(embeddings)} embeddings for {len(documents)} documents")
+                        print(
+                            f"Warning: Got {len(embeddings)} embeddings for {len(documents)} documents"
+                        )
                         continue
 
                     # Store embeddings

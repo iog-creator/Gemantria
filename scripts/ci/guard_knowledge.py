@@ -25,10 +25,14 @@ def file_contains(path, pats):
 
 result = {
     "sentinels": {
-        "triad_rules": (Path("RULES_INDEX.md").exists() and file_contains("RULES_INDEX.md", [r"050", r"051", r"052"])),
+        "triad_rules": (
+            Path("RULES_INDEX.md").exists()
+            and file_contains("RULES_INDEX.md", [r"050", r"051", r"052"])
+        ),
         "ssot_prompt": exists_any(["docs/SSOT/GPT_SYSTEM_PROMPT.md", "GPT_SYSTEM_PROMPT.md"]),
         "agents_triad": (
-            Path("AGENTS.md").exists() and file_contains("AGENTS.md", [r"Always-Apply", r"050", r"051", r"052"])
+            Path("AGENTS.md").exists()
+            and file_contains("AGENTS.md", [r"Always-Apply", r"050", r"051", r"052"])
         ),
         "dsn_loader": (
             Path("scripts/config/env.py").exists()

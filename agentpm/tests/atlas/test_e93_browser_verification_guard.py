@@ -122,6 +122,6 @@ def test_guard_browser_verification_validates_core_pages():
         # At least one core page should be verified if report is valid
         core_pages = ["index.html", "mcp_catalog_view.html"]
         core_verified = [p for p in core_pages if p in pages_verified]
-        assert len(core_verified) > 0 or len(core_pages_missing) == 0, (
-            "Core pages should be verified or explicitly missing"
-        )
+        assert (
+            len(core_verified) > 0 or len(core_pages_missing) == 0
+        ), "Core pages should be verified or explicitly missing"

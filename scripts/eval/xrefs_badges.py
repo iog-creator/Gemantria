@@ -51,7 +51,9 @@ def main() -> int:
     edges = data.get("edges", [])
     total_nouns = len(nodes)
     # Handle both xref_count field and xrefs array
-    nouns_with_xrefs = sum(1 for n in nodes if n.get("xref_count", 0) > 0 or len(n.get("xrefs", [])) > 0)
+    nouns_with_xrefs = sum(
+        1 for n in nodes if n.get("xref_count", 0) > 0 or len(n.get("xrefs", [])) > 0
+    )
     total_xrefs = sum(n.get("xref_count", 0) or len(n.get("xrefs", [])) for n in nodes)
     # Coverage: % nouns that have >=1 xref; Rate: xrefs per noun (2 decimals)
     coverage = 0 if total_nouns == 0 else (100.0 * nouns_with_xrefs / total_nouns)

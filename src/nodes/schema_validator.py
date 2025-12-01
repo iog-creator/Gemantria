@@ -88,7 +88,9 @@ def schema_validator_node(state: dict[str, Any]) -> dict[str, Any]:
 
                     validate(instance=envelope_data, schema=schema)
                     schemas_validated.append("envelope.json")
-                    log_json(LOG, 20, "schema_validated", file="envelope.json", schema=str(schema_file))
+                    log_json(
+                        LOG, 20, "schema_validated", file="envelope.json", schema=str(schema_file)
+                    )
                 except ValidationError as e:
                     validation_errors.append(f"envelope.json: {e.message}")
                 except Exception as e:

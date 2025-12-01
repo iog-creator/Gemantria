@@ -52,7 +52,9 @@ def with_http_retry(attempts: int = 3, delay: float = 2.0, backoff: float = 2.0)
                     continue
 
             # All attempts failed
-            raise QwenUnavailableError(f"Qwen Live service unavailable after {attempts} attempts: {last_error}")
+            raise QwenUnavailableError(
+                f"Qwen Live service unavailable after {attempts} attempts: {last_error}"
+            )
 
         return wrapper
 

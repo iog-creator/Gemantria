@@ -95,7 +95,9 @@ def fetch_rules() -> CapabilityRulesExport:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema exists
-                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
+                cur.execute(
+                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
+                )
                 schema_exists = cur.fetchone()[0]
 
                 if not schema_exists:
@@ -111,7 +113,9 @@ def fetch_rules() -> CapabilityRulesExport:
                     return db_off_payload("control.capability_rule table does not exist")
 
                 # row_to_json preserves all columns without us depending on schema details
-                cur.execute("SELECT row_to_json(cr) FROM control.capability_rule AS cr ORDER BY cr.id;")
+                cur.execute(
+                    "SELECT row_to_json(cr) FROM control.capability_rule AS cr ORDER BY cr.id;"
+                )
                 rows = cur.fetchall()
 
     except psycopg.Error as e:

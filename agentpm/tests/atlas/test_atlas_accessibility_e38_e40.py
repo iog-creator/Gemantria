@@ -10,9 +10,9 @@ def test_e38_breadcrumb_has_aria_label_on_back_to_atlas():
     p = "share/atlas/nodes/0.html"
     assert os.path.exists(p), "node page missing (staged)"
     html = _read(p)
-    assert re.search(r'<a[^>]+aria-label="Back to Atlas"[^>]*>\s*←\s*Back to Atlas', html), (
-        "breadcrumb lacks aria-label (staged)"
-    )
+    assert re.search(
+        r'<a[^>]+aria-label="Back to Atlas"[^>]*>\s*←\s*Back to Atlas', html
+    ), "breadcrumb lacks aria-label (staged)"
 
 
 def test_e39_index_links_to_sitemap_html_and_json():

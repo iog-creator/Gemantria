@@ -52,7 +52,9 @@ def main() -> int:
     out["nodes"] = nodes
     ts = time.strftime("%Y%m%d%H%M%S")
     out_path = EXPORTS / f"graph_repaired_{ts}.json"
-    (EXPORTS / "graph_repaired.json").write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
+    (EXPORTS / "graph_repaired.json").write_text(
+        json.dumps(out, indent=2, sort_keys=True), encoding="utf-8"
+    )
     out_path.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
 
     print(f"[repair.apply] added_stub_nodes={len(added)}")

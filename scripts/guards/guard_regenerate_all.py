@@ -28,7 +28,9 @@ SCHEMA_MAP = {
 }
 
 
-def validate_schema(instance_path: pathlib.Path, schema_path: pathlib.Path) -> tuple[bool, str | None]:
+def validate_schema(
+    instance_path: pathlib.Path, schema_path: pathlib.Path
+) -> tuple[bool, str | None]:
     """Validate an instance against a schema. Returns (is_valid, error_message)."""
     try:
         from jsonschema import ValidationError, validate
@@ -135,7 +137,8 @@ def main() -> int:
 
     # DB-off mode detection (if receipt indicates DB issues)
     if not receipt.get("ok", False) and any(
-        "db" in str(step.get("error", "")).lower() or "database" in str(step.get("error", "")).lower()
+        "db" in str(step.get("error", "")).lower()
+        or "database" in str(step.get("error", "")).lower()
         for step in receipt.get("steps", [])
     ):
         details["mode"] = "db_off"

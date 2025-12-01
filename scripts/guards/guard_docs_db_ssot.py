@@ -217,12 +217,20 @@ def main() -> int:
             if missing_registry:
                 hints.append(
                     f"{len(missing_registry)} docs missing from registry: {', '.join(missing_registry[:5])}"
-                    + (f" and {len(missing_registry) - 5} more" if len(missing_registry) > 5 else "")
+                    + (
+                        f" and {len(missing_registry) - 5} more"
+                        if len(missing_registry) > 5
+                        else ""
+                    )
                 )
             if missing_versions:
                 hints.append(
                     f"{len(missing_versions)} docs missing versions: {', '.join(missing_versions[:5])}"
-                    + (f" and {len(missing_versions) - 5} more" if len(missing_versions) > 5 else "")
+                    + (
+                        f" and {len(missing_versions) - 5} more"
+                        if len(missing_versions) > 5
+                        else ""
+                    )
                 )
             hints.append("Run 'make governance.ingest.docs' to sync docs to registry.")
             verdict["hints"] = hints

@@ -10,7 +10,9 @@ REQ = [r"Model:", r"Iterations:", r"Prompt \(last effective\):"]
 
 def prnum():
     try:
-        return subprocess.check_output(["gh", "pr", "view", "--json", "number", "--jq", ".number"], text=True).strip()
+        return subprocess.check_output(
+            ["gh", "pr", "view", "--json", "number", "--jq", ".number"], text=True
+        ).strip()
     except Exception:
         return ""
 
@@ -20,7 +22,9 @@ def main():
     if not n:
         print("[PRCHECK] No open PR for this branch; SKIP.")
         return 0
-    body = subprocess.check_output(["gh", "pr", "view", n, "--json", "body", "--jq", ".body"], text=True)
+    body = subprocess.check_output(
+        ["gh", "pr", "view", n, "--json", "body", "--jq", ".body"], text=True
+    )
     missing = [p for p in REQ if re.search(p, body) is None]
     if missing:
         print("[PRCHECK] FAIL: missing in 'Model Usage':", ", ".join(missing))

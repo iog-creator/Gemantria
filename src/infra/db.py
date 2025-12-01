@@ -27,7 +27,9 @@ __all__ = [
     "sql_is_write",
 ]
 
-WRITE_RE = re.compile(r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I)
+WRITE_RE = re.compile(
+    r"^\s*(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE)\b", re.I
+)
 
 
 class ReadOnlyViolation(RuntimeError):

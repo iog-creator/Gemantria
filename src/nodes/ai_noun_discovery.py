@@ -70,7 +70,9 @@ class AINounDiscovery:
         # Use AI to discover and analyze nouns
         discovered_nouns = self._ai_discover_nouns(raw_text, book)
 
-        log_json(LOG, 20, "ai_noun_discovery_complete", book=book, nouns_discovered=len(discovered_nouns))
+        log_json(
+            LOG, 20, "ai_noun_discovery_complete", book=book, nouns_discovered=len(discovered_nouns)
+        )
 
         return discovered_nouns
 
@@ -196,10 +198,14 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
             nouns_to_validate = result.get("nouns", [])
             log_json(LOG, 20, "about_to_validate", nouns_to_validate_count=len(nouns_to_validate))
             try:
-                validated_nouns = self._validate_and_enhance_nouns(nouns_to_validate, hebrew_text, book)
+                validated_nouns = self._validate_and_enhance_nouns(
+                    nouns_to_validate, hebrew_text, book
+                )
                 log_json(LOG, 20, "post_validation", validated_count=len(validated_nouns))
             except Exception as e:
-                log_json(LOG, 40, "validation_function_error", error=str(e), error_type=type(e).__name__)
+                log_json(
+                    LOG, 40, "validation_function_error", error=str(e), error_type=type(e).__name__
+                )
                 validated_nouns = []
 
             return validated_nouns
@@ -251,7 +257,11 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
             # Try direct JSON parsing
             parsed = json.loads(content)
             # Handle case where AI returns array of strings instead of objects
-            if isinstance(parsed.get("nouns"), list) and parsed["nouns"] and isinstance(parsed["nouns"][0], str):
+            if (
+                isinstance(parsed.get("nouns"), list)
+                and parsed["nouns"]
+                and isinstance(parsed["nouns"][0], str)
+            ):
                 # Convert string array to proper noun objects
                 nouns = []
                 for hebrew_word in parsed["nouns"][:10]:  # Limit to first 10
@@ -263,8 +273,12 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
                                 "letters": list(word),  # Simple letter breakdown
                                 "gematria": self._calculate_gematria(word),
                                 "class": "thing",  # Schema field: class (valid values: person/place/thing/other)
-                                "sources": [{"ref": "Unknown", "offset": None}],  # Schema field: sources array
-                                "analysis": {"meaning": f"Hebrew noun: {word}"},  # Schema field: analysis (object)
+                                "sources": [
+                                    {"ref": "Unknown", "offset": None}
+                                ],  # Schema field: sources array
+                                "analysis": {
+                                    "meaning": f"Hebrew noun: {word}"
+                                },  # Schema field: analysis (object)
                             }
                         )
                 return {"nouns": nouns}
@@ -291,7 +305,9 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
                                         "letters": list(word),  # Simple letter breakdown
                                         "gematria": self._calculate_gematria(word),
                                         "class": "thing",  # Schema field: class (valid values: person/place/thing/other)
-                                        "sources": [{"ref": "Unknown", "offset": None}],  # Schema field: sources array
+                                        "sources": [
+                                            {"ref": "Unknown", "offset": None}
+                                        ],  # Schema field: sources array
                                         "analysis": {
                                             "meaning": f"Hebrew noun: {word}"
                                         },  # Schema field: analysis (object)
@@ -313,7 +329,9 @@ IMPORTANT: Your response must be ONLY the JSON object above, with actual nouns e
         validated = []
 
         for noun in ai_nouns:
-            log_json(LOG, 10, "validating_noun", noun_index=len(validated), total_nouns=len(ai_nouns))
+            log_json(
+                LOG, 10, "validating_noun", noun_index=len(validated), total_nouns=len(ai_nouns)
+            )
             try:
                 # Validate required fields (ai-nouns.v1 schema)
                 required_fields = ["surface", "letters", "gematria", "class"]

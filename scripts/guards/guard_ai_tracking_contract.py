@@ -45,7 +45,11 @@ if not a:
     print(json.dumps({"ok": return_ok, "note": msg, **info}, indent=2))
     sys.exit(0 if return_ok else 1)
 
-same_db = (Gs["db"] == As["db"]) and ((Gs["host"] or "") == (As["host"] or "")) and (Gs["port"] == As["port"])
+same_db = (
+    (Gs["db"] == As["db"])
+    and ((Gs["host"] or "") == (As["host"] or ""))
+    and (Gs["port"] == As["port"])
+)
 
 if not same_db:
     die("AI automation DSN must point to the same DB as GEMATRIA_DSN", {"G": Gs, "A": As})

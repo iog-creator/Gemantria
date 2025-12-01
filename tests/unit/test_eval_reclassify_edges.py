@@ -64,7 +64,9 @@ class TestReclassifyEdges:
                 )
 
                 # Check exit code
-                assert result.returncode == 0, f"Script should exit with 0, got {result.returncode}\n{result.stderr}"
+                assert (
+                    result.returncode == 0
+                ), f"Script should exit with 0, got {result.returncode}\n{result.stderr}"
 
                 # Check output file exists
                 output_file = tmp_path / "share" / "eval" / "edges" / "edge_class_counts.json"
@@ -123,9 +125,9 @@ class TestReclassifyEdges:
                 )
 
                 # Script should still exit 0 (hermetic behavior)
-                assert result.returncode == 0, (
-                    f"Script should exit 0 even when graph_latest.json is missing, got {result.returncode}\n{result.stderr}"
-                )
+                assert (
+                    result.returncode == 0
+                ), f"Script should exit 0 even when graph_latest.json is missing, got {result.returncode}\n{result.stderr}"
 
                 # Output file should still be created with zero counts
                 output_file = tmp_path / "share" / "eval" / "edges" / "edge_class_counts.json"

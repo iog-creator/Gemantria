@@ -62,7 +62,10 @@ def fetch_graph_data(
         SELECT cluster_id, density, semantic_diversity, top_examples FROM cluster_metrics
     """
     ).fetchall()
-    cmeta = {r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]} for r in cmetrics}
+    cmeta = {
+        r[0]: {"clusterDensity": r[1], "clusterDiversity": r[2], "topExamples": r[3]}
+        for r in cmetrics
+    }
 
     # Try to fetch metadata (optional table)
     metadata = None
@@ -211,7 +214,9 @@ def build_jsonld_graph(
     return graph
 
 
-def create_rdf_graph(nodes: list[tuple], edges: list[tuple], metadata: list[tuple] | None = None) -> Graph:
+def create_rdf_graph(
+    nodes: list[tuple], edges: list[tuple], metadata: list[tuple] | None = None
+) -> Graph:
     """Create RDF graph using rdflib."""
 
     g = Graph()

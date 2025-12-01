@@ -15,7 +15,12 @@ def main():
     except Exception:
         pass
 
-    print(os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO") or os.getenv("GEMATRIA_RW_DSN") or "")
+    print(
+        os.getenv("GEMATRIA_RO_DSN")
+        or os.getenv("ATLAS_DSN_RO")
+        or os.getenv("GEMATRIA_RW_DSN")
+        or ""
+    )
 
 
 if __name__ == "__main__":

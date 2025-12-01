@@ -11,7 +11,9 @@ def validate_first_response(first_msg: Dict[str, Any], session: Dict[str, Any]) 
     return
 
 
-def validate_tool_call(call: Dict[str, Any], session: Dict[str, Any], policy: Dict[str, Any]) -> None:
+def validate_tool_call(
+    call: Dict[str, Any], session: Dict[str, Any], policy: Dict[str, Any]
+) -> None:
     """Check allowed tool id, jsonschema args, and budgets."""
     return
 

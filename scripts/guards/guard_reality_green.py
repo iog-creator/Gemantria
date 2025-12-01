@@ -59,10 +59,14 @@ def check_db_health() -> CheckResult:
     exit_code, stdout, stderr = run_subprocess_check(script)
 
     if exit_code == 0:
-        return CheckResult("DB Health", True, "DB is reachable and healthy", {"output": stdout.strip()})
+        return CheckResult(
+            "DB Health", True, "DB is reachable and healthy", {"output": stdout.strip()}
+        )
     else:
         error_msg = stderr.strip() or stdout.strip() or "Unknown error"
-        return CheckResult("DB Health", False, f"DB health check failed: {error_msg}", {"exit_code": exit_code})
+        return CheckResult(
+            "DB Health", False, f"DB health check failed: {error_msg}", {"exit_code": exit_code}
+        )
 
 
 def check_control_plane_health() -> CheckResult:
@@ -71,7 +75,9 @@ def check_control_plane_health() -> CheckResult:
     exit_code, stdout, stderr = run_subprocess_check(script)
 
     if exit_code == 0:
-        return CheckResult("Control-Plane Health", True, "Control plane is healthy", {"output": stdout.strip()})
+        return CheckResult(
+            "Control-Plane Health", True, "Control plane is healthy", {"output": stdout.strip()}
+        )
     else:
         error_msg = stderr.strip() or stdout.strip() or "Unknown error"
         return CheckResult(
@@ -88,7 +94,9 @@ def check_agents_md_sync() -> CheckResult:
     exit_code, stdout, stderr = run_subprocess_check(script)
 
     if exit_code == 0:
-        return CheckResult("AGENTS.md Sync", True, "All AGENTS.md files are in sync", {"output": stdout.strip()})
+        return CheckResult(
+            "AGENTS.md Sync", True, "All AGENTS.md files are in sync", {"output": stdout.strip()}
+        )
     else:
         error_msg = stderr.strip() or stdout.strip() or "Unknown error"
         return CheckResult(
@@ -146,7 +154,9 @@ def check_webui_shell_sanity() -> CheckResult:
     # Check if orchestrator shell files exist
     shell_dir = ROOT / "webui" / "orchestrator-shell"
     if not shell_dir.exists():
-        return CheckResult("WebUI Shell Sanity", True, "WebUI shell directory not present (skipped)", {})
+        return CheckResult(
+            "WebUI Shell Sanity", True, "WebUI shell directory not present (skipped)", {}
+        )
 
     # Check for key TypeScript files
     key_files = ["MainCanvas.tsx", "LeftRail.tsx", "OrchestratorOverview.tsx"]
@@ -215,7 +225,9 @@ def check_ledger_verification() -> CheckResult:
 def check_ketiv_primary_policy() -> CheckResult:
     """Check that Ketiv-primary policy is enforced (Phase 2, ADR-002)."""
     try:
-        exit_code, stdout, stderr = run_subprocess_check(ROOT / "scripts" / "guards" / "guard_ketiv_primary.py", [])
+        exit_code, stdout, stderr = run_subprocess_check(
+            ROOT / "scripts" / "guards" / "guard_ketiv_primary.py", []
+        )
 
         if exit_code == 0:
             return CheckResult(

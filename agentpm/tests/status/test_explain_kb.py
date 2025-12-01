@@ -66,5 +66,8 @@ def test_add_kb_documentation_section_handles_missing_registry():
 
     assert "documentation" in enhanced
     # Should have empty/fallback structure
-    assert enhanced["documentation"]["available"] is False or enhanced["documentation"]["available"] is True
+    assert (
+        enhanced["documentation"]["available"] is False
+        or enhanced["documentation"]["available"] is True
+    )
     assert isinstance(enhanced["documentation"]["total"], int)

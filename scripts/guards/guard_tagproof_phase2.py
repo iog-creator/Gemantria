@@ -127,7 +127,9 @@ def main() -> int:
             checks[f"{check_name}_ok"] = False
             counts["components_missing"] += 1
             details["missing_components"].append(component_key)
-            details["component_errors"][component_key] = components[component_key].get("error", "missing")
+            details["component_errors"][component_key] = components[component_key].get(
+                "error", "missing"
+            )
         else:
             ok, error_msg = _get_component_ok(components[component_key], component_key)
             check_key = f"{check_name}_ok"

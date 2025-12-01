@@ -57,7 +57,9 @@ class TestKBDocument:
         """Test type validation."""
         # Invalid type should fail
         try:
-            KBDocument(id="test", title="Test", path="test.md", type="invalid", owning_subsystem="docs")
+            KBDocument(
+                id="test", title="Test", path="test.md", type="invalid", owning_subsystem="docs"
+            )
             raise AssertionError("Should have raised ValueError")
         except ValueError:
             pass
@@ -254,7 +256,9 @@ class TestRegistryValidation:
             doc = KBDocument(
                 id="test-doc-1",
                 title="Test Document",
-                path=str(test_file.relative_to(ROOT) if tmpdir.startswith(str(ROOT)) else test_file),
+                path=str(
+                    test_file.relative_to(ROOT) if tmpdir.startswith(str(ROOT)) else test_file
+                ),
                 type="ssot",
                 owning_subsystem="docs",
             )
@@ -443,7 +447,9 @@ class TestRegistryQuery:
         registry.add_document(doc2)
 
         # Query with combined filters
-        results = query_registry(registry, type="ssot", owning_subsystem="docs", tags=["governance"])
+        results = query_registry(
+            registry, type="ssot", owning_subsystem="docs", tags=["governance"]
+        )
         assert len(results) == 1
         assert results[0].id == "doc-1"
 

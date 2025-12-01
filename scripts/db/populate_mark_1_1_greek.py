@@ -128,7 +128,9 @@ def main() -> int:
         return 1
 
     verse_id, book_name, chapter_num, verse_num, translation_source, text = verse
-    print(f"Found: verse_id={verse_id} {book_name} {chapter_num}:{verse_num} ({translation_source})")
+    print(
+        f"Found: verse_id={verse_id} {book_name} {chapter_num}:{verse_num} ({translation_source})"
+    )
     print(f"Text: {text}")
     print()
 
@@ -175,7 +177,9 @@ def main() -> int:
             (verse_id, word_data["word_position"]),
         )
         if cur.fetchone():
-            print(f"  Skipped position {word_data['word_position']}: '{word_data['word_text']}' (already exists)")
+            print(
+                f"  Skipped position {word_data['word_position']}: '{word_data['word_text']}' (already exists)"
+            )
             skipped += 1
             continue
 

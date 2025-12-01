@@ -45,7 +45,9 @@ def check_lm_health() -> dict:
     """
     cfg = get_lm_model_config()
     provider = cfg.get("provider", "lmstudio").strip()
-    endpoint = cfg.get("base_url" if provider == "lmstudio" else "ollama_base_url", "http://localhost:1234/v1")
+    endpoint = cfg.get(
+        "base_url" if provider == "lmstudio" else "ollama_base_url", "http://localhost:1234/v1"
+    )
 
     result: dict = {
         "ok": False,

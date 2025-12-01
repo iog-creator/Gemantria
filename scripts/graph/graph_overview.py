@@ -75,7 +75,9 @@ def compute_graph_overview() -> dict:
         with SessionLocal() as session:
             # Get latest snapshot (most recent created_at)
             latest_snapshot_query = (
-                select(GraphStatsSnapshot.snapshot_id).order_by(GraphStatsSnapshot.created_at.desc()).limit(1)
+                select(GraphStatsSnapshot.snapshot_id)
+                .order_by(GraphStatsSnapshot.created_at.desc())
+                .limit(1)
             )
             latest_snapshot_result = session.execute(latest_snapshot_query).scalar_one_or_none()
 
@@ -139,7 +141,9 @@ def compute_graph_overview() -> dict:
             result["stats"]["edges"] = int(edges) if edges is not None else None
             result["stats"]["avg_degree"] = float(avg_degree) if avg_degree is not None else None
             result["stats"]["snapshot_count"] = int(snapshot_count) if snapshot_count else 0
-            result["stats"]["last_import_at"] = last_import_at.isoformat() if last_import_at else None
+            result["stats"]["last_import_at"] = (
+                last_import_at.isoformat() if last_import_at else None
+            )
 
             return result
 

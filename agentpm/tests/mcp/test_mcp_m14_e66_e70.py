@@ -99,7 +99,9 @@ def test_e69_reranker_badges_exported_and_guarded():
     assert isinstance(items, list)
     mode = data.get("mode", "").upper()
     min_items = 3 if mode == "HINT" else 1
-    assert len(items) >= min_items, f"Expected at least {min_items} items in {mode} mode, got {len(items)}"
+    assert (
+        len(items) >= min_items
+    ), f"Expected at least {min_items} items in {mode} mode, got {len(items)}"
 
     # Validate each item structure and badge classification
     for item in items:
@@ -116,8 +118,12 @@ def test_e69_reranker_badges_exported_and_guarded():
         score_val = float(score)
         thresh_high = float(thresholds["high"])
         thresh_med = float(thresholds["med"])
-        expected_badge = "high" if score_val >= thresh_high else ("med" if score_val >= thresh_med else "low")
-        assert badge == expected_badge, f"Badge mismatch: score={score_val}, badge={badge}, expected={expected_badge}"
+        expected_badge = (
+            "high" if score_val >= thresh_high else ("med" if score_val >= thresh_med else "low")
+        )
+        assert (
+            badge == expected_badge
+        ), f"Badge mismatch: score={score_val}, badge={badge}, expected={expected_badge}"
 
     # Check sorting by node_id
     if len(items) > 1:

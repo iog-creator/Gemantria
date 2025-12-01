@@ -47,7 +47,9 @@ def check_schema_exists(conn) -> dict:
     """Check if mcp schema exists."""
     try:
         with conn.cursor() as cur:
-            cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'mcp')")
+            cur.execute(
+                "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'mcp')"
+            )
             exists = cur.fetchone()[0]
             return {"exists": bool(exists), "error": None}
     except Exception as e:
@@ -147,7 +149,9 @@ def main() -> int:
                     EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
                     return 1
                 else:
-                    print("[guard_mcp_schema] HINT: mcp schema missing (HINT mode)", file=sys.stderr)
+                    print(
+                        "[guard_mcp_schema] HINT: mcp schema missing (HINT mode)", file=sys.stderr
+                    )
                     print(json.dumps(verdict, indent=2))
                     EVIDENCE_FILE.write_text(json.dumps(verdict, indent=2))
                     return 0

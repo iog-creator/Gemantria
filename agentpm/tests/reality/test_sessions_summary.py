@@ -157,7 +157,9 @@ def test_summarize_tracked_sessions_respects_limit(tmp_path: Path, monkeypatch) 
     assert len(summary["envelopes"]["latest"]) == 3  # But latest is limited to 3
 
 
-def test_summarize_tracked_sessions_handles_invalid_json_gracefully(tmp_path: Path, monkeypatch) -> None:
+def test_summarize_tracked_sessions_handles_invalid_json_gracefully(
+    tmp_path: Path, monkeypatch
+) -> None:
     """Test that invalid JSON files are skipped gracefully."""
     evidence_dir = tmp_path / "evidence" / "pmagent"
     evidence_dir.mkdir(parents=True, exist_ok=True)

@@ -168,7 +168,9 @@ def answer_reference_question(
         }
 
         try:
-            similar_verses_list = similar_verses_for_reference(verse_ref, translation_source, limit=3)
+            similar_verses_list = similar_verses_for_reference(
+                verse_ref, translation_source, limit=3
+            )
             context_used["similar_verses"] = [
                 f"{v.book_name} {v.chapter_num}:{v.verse_num}" for v in similar_verses_list
             ]
@@ -192,18 +194,26 @@ def answer_reference_question(
     # Build context for LM prompt
     context_parts: list[str] = []
     if verse_record:
-        context_parts.append(f"Verse: {verse_record.book_name} {verse_record.chapter_num}:{verse_record.verse_num}")
+        context_parts.append(
+            f"Verse: {verse_record.book_name} {verse_record.chapter_num}:{verse_record.verse_num}"
+        )
         context_parts.append(f"Text: {verse_record.text}")
 
     if gematria_summary:
-        gematria_info = ", ".join([f"{sys}: {result.value}" for sys, result in gematria_summary.systems.items()])
+        gematria_info = ", ".join(
+            [f"{sys}: {result.value}" for sys, result in gematria_summary.systems.items()]
+        )
         context_parts.append(f"Gematria values: {gematria_info}")
 
     if similar_verses_list:
-        similar_refs = ", ".join([f"{v.book_name} {v.chapter_num}:{v.verse_num}" for v in similar_verses_list[:3]])
+        similar_refs = ", ".join(
+            [f"{v.book_name} {v.chapter_num}:{v.verse_num}" for v in similar_verses_list[:3]]
+        )
         context_parts.append(f"Similar verses: {similar_refs}")
 
-    context_text = "\n".join(context_parts) if context_parts else "No specific verse context provided."
+    context_text = (
+        "\n".join(context_parts) if context_parts else "No specific verse context provided."
+    )
 
     # Build LM messages
     system_message = """You are a Bible scholar assistant. Answer questions about biblical verses using the provided context.
@@ -236,9 +246,13 @@ Please provide a clear, concise answer based on the context above."""
         lm_meta = {
             "call_site": lm_result.get("call_site", "biblescholar.reference_slice"),
             "mode": lm_result.get("mode", "unknown"),
-            "tokens_used": response.get("usage", {}).get("total_tokens", 0) if isinstance(response, dict) else 0,
+            "tokens_used": response.get("usage", {}).get("total_tokens", 0)
+            if isinstance(response, dict)
+            else 0,
             "latency_ms": response.get("latency_ms", 0) if isinstance(response, dict) else 0,
-            "budget_status": "ok" if lm_result.get("mode") == "lm_on" else lm_result.get("mode", "unknown"),
+            "budget_status": "ok"
+            if lm_result.get("mode") == "lm_on"
+            else lm_result.get("mode", "unknown"),
         }
 
         # Extract answer from response

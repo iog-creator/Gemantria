@@ -154,7 +154,10 @@ def test_control_status_missing_table(mock_status, runner):
     assert "mode=ready" in result.stderr
     # Should only show present tables in summary
     assert "ai_interactions(10)" in result.stderr
-    assert "governance_artifacts" not in result.stderr or "governance_artifacts(0)" not in result.stderr
+    assert (
+        "governance_artifacts" not in result.stderr
+        or "governance_artifacts(0)" not in result.stderr
+    )
     # Check JSON shows missing tables
     data = json.loads(result.stdout)
     assert data["tables"]["public.governance_artifacts"]["present"] is False

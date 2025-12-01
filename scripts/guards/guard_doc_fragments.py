@@ -133,7 +133,9 @@ def main() -> int:
             # Compute stats
             docs_with_fragments = sum(1 for count in fragment_counts.values() if count > 0)
             docs_with_zero_fragments = sum(1 for count in fragment_counts.values() if count == 0)
-            missing_docs = [agents_docs[doc_id] for doc_id, count in fragment_counts.items() if count == 0]
+            missing_docs = [
+                agents_docs[doc_id] for doc_id, count in fragment_counts.items() if count == 0
+            ]
 
             verdict["stats"] = {
                 "agents_docs_count": agents_docs_count,

@@ -169,7 +169,9 @@ def verify_ledger() -> tuple[int, dict]:
 
                 for result in results:
                     status_icon = "✓" if result["status"] == "current" else "✗"
-                    print(f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}")
+                    print(
+                        f"{result['name']:<40} {result['source_of_truth']:<30} {status_icon} {result['status']:<10}"
+                    )
 
                 print("-" * 80)
                 print(

@@ -24,7 +24,9 @@ def span_llm(agent: str = "unknown", model: str = "unknown", prompt_len: int = 0
         "dur_ms": 0.0,
         "trace_id": None,
         "span_id": str(uuid.uuid4()),
-        "run_id": os.environ.get("PIPELINE_RUN_ID", "local-" + datetime.utcnow().strftime("%Y%m%d%H%M%S")),
+        "run_id": os.environ.get(
+            "PIPELINE_RUN_ID", "local-" + datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        ),
     }
     t0 = datetime.utcnow()
     try:
@@ -56,7 +58,9 @@ def span_tool(name: str = "tool.call", **attrs):
         "dur_ms": 0.0,
         "trace_id": None,
         "span_id": str(uuid.uuid4()),
-        "run_id": os.environ.get("PIPELINE_RUN_ID", "local-" + datetime.utcnow().strftime("%Y%m%d%H%M%S")),
+        "run_id": os.environ.get(
+            "PIPELINE_RUN_ID", "local-" + datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        ),
     }
     t0 = datetime.utcnow()
     try:

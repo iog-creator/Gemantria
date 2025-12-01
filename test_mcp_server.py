@@ -16,7 +16,9 @@ try:
     def test_tool() -> str:
         return "test response"
 
-    print(f"✅ Tool registration successful, tools: {len(mcp._tools) if hasattr(mcp, '_tools') else 'unknown'}")
+    print(
+        f"✅ Tool registration successful, tools: {len(mcp._tools) if hasattr(mcp, '_tools') else 'unknown'}"
+    )
     print("✅ MCP server components working")
 
 except ImportError as e:

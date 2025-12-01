@@ -93,7 +93,9 @@ def test_tv01_missing_por_invalid_token(project_id, rule_id, tmp_path):
             if dsn:
                 try:
                     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-                        cur.execute("DELETE FROM control.capability_session WHERE id = %s", (session_id,))
+                        cur.execute(
+                            "DELETE FROM control.capability_session WHERE id = %s", (session_id,)
+                        )
                         conn.commit()
                 except Exception:
                     pass
@@ -127,7 +129,9 @@ def test_tv01_por_success(project_id, rule_id, tmp_path):
             if dsn:
                 try:
                     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-                        cur.execute("DELETE FROM control.capability_session WHERE id = %s", (session_id,))
+                        cur.execute(
+                            "DELETE FROM control.capability_session WHERE id = %s", (session_id,)
+                        )
                         conn.commit()
                 except Exception:
                     pass

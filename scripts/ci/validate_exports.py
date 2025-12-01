@@ -15,7 +15,9 @@ def size(p):
 
 def main():
     # Only validate when outputs exist and are non-empty (hermetic CI)
-    files = glob.glob("exports/**/*.json*", recursive=True) + glob.glob("exports/**/*.csv", recursive=True)
+    files = glob.glob("exports/**/*.json*", recursive=True) + glob.glob(
+        "exports/**/*.csv", recursive=True
+    )
     files = [f for f in files if size(f) > 0]
     if not files:
         print("[validate] no exports found; skip (empty DB tolerated)")
@@ -28,7 +30,11 @@ def main():
             try:
                 with open(f, encoding="utf-8") as fh:
                     head = fh.read(2048)
-                    json.loads(head if not f.endswith(".jsonl") else "[" + ",".join(head.splitlines()[:5]) + "]")
+                    json.loads(
+                        head
+                        if not f.endswith(".jsonl")
+                        else "[" + ",".join(head.splitlines()[:5]) + "]"
+                    )
             except Exception as e:
                 ok = False
                 print(f"[validate] JSON parse error in {f}: {e}")

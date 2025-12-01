@@ -37,7 +37,9 @@ def _node_payload(noun: dict) -> dict:
     enr = noun.get("enrichment") or {}
     xrefs = enr.get("crossrefs") or []
     if xrefs:
-        out["external_refs"] = [{"label": xr.get("label"), "osis": xr.get("osis")} for xr in xrefs if xr.get("osis")]
+        out["external_refs"] = [
+            {"label": xr.get("label"), "osis": xr.get("osis")} for xr in xrefs if xr.get("osis")
+        ]
     return out
 
 
@@ -57,7 +59,9 @@ def export_correlation_graph():
         metadata = correlation_data.get("metadata", {})
 
         # Filter correlations |r| >= 0.4
-        filtered_correlations = [corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4]
+        filtered_correlations = [
+            corr for corr in correlations if abs(corr.get("correlation", 0)) >= 0.4
+        ]
 
         if not filtered_correlations:
             LOG.info("No strong correlations found (>= 0.4), correlation graph will be empty")
@@ -102,7 +106,9 @@ def export_correlation_graph():
                 degrees = dict(G.degree(weight="weight"))
                 network_metrics.update(
                     {
-                        "avg_weighted_degree": (sum(degrees.values()) / len(degrees) if degrees else 0),
+                        "avg_weighted_degree": (
+                            sum(degrees.values()) / len(degrees) if degrees else 0
+                        ),
                         "max_weighted_degree": max(degrees.values()) if degrees else 0,
                         "avg_clustering_coeff": nx.average_clustering(G, weight="weight"),
                     }
@@ -164,7 +170,9 @@ def export_correlation_graph():
                     "metric": corr.get("metric", "unknown"),
                     "cluster_source": corr.get("cluster_source"),
                     "cluster_target": corr.get("cluster_target"),
-                    "significance": ("significant" if corr.get("p_value", 1.0) < 0.05 else "not_significant"),
+                    "significance": (
+                        "significant" if corr.get("p_value", 1.0) < 0.05 else "not_significant"
+                    ),
                 }
                 for corr in filtered_correlations
             ],
@@ -329,14 +337,18 @@ def main():
                     "target": str(r[1]),
                     "cosine": float(r[2] or 0),
                     "rerank_score": float(r[3] or 0) if r[3] else None,
-                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0)) if r[3] else float(r[2] or 0),
+                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0))
+                    if r[3]
+                    else float(r[2] or 0),
                 }
                 for r in edges
             ],
             "metadata": {
                 "node_count": len(nodes),
                 "edge_count": len(edges),
-                "cluster_count": len(set(n.get("cluster") for n in nodes_data if n.get("cluster") is not None)),
+                "cluster_count": len(
+                    set(n.get("cluster") for n in nodes_data if n.get("cluster") is not None)
+                ),
                 "export_timestamp": str(next(iter(db.execute("SELECT now()")))[0]),
             },
         }

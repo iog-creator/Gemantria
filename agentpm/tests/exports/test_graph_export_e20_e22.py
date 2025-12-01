@@ -36,7 +36,9 @@ def test_e21_graph_meta_has_atlas_linkbacks_fields():
     meta = data.get("meta", {})
     links = meta.get("links", {})
     # Expected fields (implementation will populate):
-    assert any(k in links for k in ("atlas_index", "atlas_node_prefix", "atlas_graph_view")), "no linkbacks"
+    assert any(
+        k in links for k in ("atlas_index", "atlas_node_prefix", "atlas_graph_view")
+    ), "no linkbacks"
 
 
 def test_e22_stats_consistency_with_graph_export_when_present():

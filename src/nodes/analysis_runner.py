@@ -79,7 +79,9 @@ def analysis_runner_node(state: dict[str, Any]) -> dict[str, Any]:
                             )
                             centrality_count += 1
                         except Exception as e:
-                            log_json(LOG, 30, "centrality_insert_failed", node=str(node), error=str(e))
+                            log_json(
+                                LOG, 30, "centrality_insert_failed", node=str(node), error=str(e)
+                            )
 
                     analysis_results["graph_analysis"] = {
                         "clusters_stored": cluster_count,
@@ -378,7 +380,9 @@ def _export_graph_data(state: dict[str, Any] | None = None):
             "node_count": len(nodes),
             "edge_count": len(edges),
             "export_timestamp": None,  # Will be set by calling code
-            "source": "fallback_fast_lane" if is_fast_lane else ("state_graph" if fallback_used else "database"),
+            "source": "fallback_fast_lane"
+            if is_fast_lane
+            else ("state_graph" if fallback_used else "database"),
         }
         # Include hints envelope in metadata if available
         if hints_envelope:
@@ -419,7 +423,9 @@ def _export_stats():
         # Get basic counts
         concept_count = db.execute("SELECT count(*) FROM concepts").fetchone()[0]
         relation_count = db.execute("SELECT count(*) FROM concept_relations").fetchone()[0]
-        cluster_count = db.execute("SELECT count(distinct cluster_id) FROM concept_clusters").fetchone()[0]
+        cluster_count = db.execute(
+            "SELECT count(distinct cluster_id) FROM concept_clusters"
+        ).fetchone()[0]
 
         # Get centrality averages
         centrality_stats = db.execute("""

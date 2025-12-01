@@ -36,7 +36,9 @@ except ImportError:
 def run_cmd(cmd: list[str], capture_output: bool = True) -> tuple[int, str, str]:
     """Run a shell command and return exit code, stdout, stderr."""
     try:
-        result = subprocess.run(cmd, capture_output=capture_output, text=True, check=False, timeout=30)
+        result = subprocess.run(
+            cmd, capture_output=capture_output, text=True, check=False, timeout=30
+        )
         return result.returncode, result.stdout.strip(), result.stderr.strip()
     except subprocess.TimeoutExpired:
         return 1, "", "Command timed out"
@@ -244,11 +246,15 @@ def copy_to_clipboard(text: str) -> bool:
         elif platform == "linux":
             # Try xclip first, then xsel
             try:
-                subprocess.run(["xclip", "-selection", "clipboard"], input=text, text=True, check=True)
+                subprocess.run(
+                    ["xclip", "-selection", "clipboard"], input=text, text=True, check=True
+                )
                 return True
             except (subprocess.CalledProcessError, FileNotFoundError):
                 try:
-                    subprocess.run(["xsel", "--clipboard", "--input"], input=text, text=True, check=True)
+                    subprocess.run(
+                        ["xsel", "--clipboard", "--input"], input=text, text=True, check=True
+                    )
                     return True
                 except (subprocess.CalledProcessError, FileNotFoundError):
                     pass

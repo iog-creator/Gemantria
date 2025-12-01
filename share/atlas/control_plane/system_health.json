@@ -1,32 +1,5 @@
-{
-  "ok": false,
-  "components": {
-    "db": {
-      "ok": false,
-      "mode": "unknown",
-      "details": {
-        "errors": [
-          "error running db_health: [Errno 2] No such file or directory: 'python'"
-        ]
-      }
-    },
-    "lm": {
-      "ok": false,
-      "mode": "unknown",
-      "details": {
-        "errors": [
-          "error running lm_health: [Errno 2] No such file or directory: 'python'"
-        ]
-      }
-    },
-    "graph": {
-      "ok": false,
-      "mode": "unknown",
-      "details": {
-        "errors": [
-          "error running graph_overview: [Errno 2] No such file or directory: 'python'"
-        ]
-      }
-    }
-  }
-}
+Usage: pmagent control status [OPTIONS]
+Try 'pmagent control status --help' for help.
+╭─ Error ───────────────────────────────────────────────────────────────────────────╮
+│ No such option: --json Did you mean --json-only?                                  │
+╰───────────────────────────────────────────────────────────────────────────────────╯

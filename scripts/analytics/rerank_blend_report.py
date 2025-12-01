@@ -48,14 +48,22 @@ def main() -> int:
             strength_val = 0.0
 
         if strength_val < hint_thr:
-            below_hint.append({"source": e.get("source"), "target": e.get("target"), "strength": strength_val})
+            below_hint.append(
+                {"source": e.get("source"), "target": e.get("target"), "strength": strength_val}
+            )
         else:
-            ok_hint.append({"source": e.get("source"), "target": e.get("target"), "strength": strength_val})
+            ok_hint.append(
+                {"source": e.get("source"), "target": e.get("target"), "strength": strength_val}
+            )
 
         if strength_val < strict_thr:
-            below_strict.append({"source": e.get("source"), "target": e.get("target"), "strength": strength_val})
+            below_strict.append(
+                {"source": e.get("source"), "target": e.get("target"), "strength": strength_val}
+            )
         else:
-            ok_strict.append({"source": e.get("source"), "target": e.get("target"), "strength": strength_val})
+            ok_strict.append(
+                {"source": e.get("source"), "target": e.get("target"), "strength": strength_val}
+            )
 
     out = {
         "schema": "rerank-blend.v1",

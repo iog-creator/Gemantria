@@ -37,7 +37,9 @@ def test_e54_node_rollup_totals_consistency():
 
 def test_e55_filter_apply_multi_schema_guard():
     sh("make -s m11.proofs")
-    fresh = json.loads(pathlib.Path("evidence/guard_m11_apply_multi_schema.verdict.json").read_text())
+    fresh = json.loads(
+        pathlib.Path("evidence/guard_m11_apply_multi_schema.verdict.json").read_text()
+    )
     assert fresh["ok"] is True and fresh["items"] >= 1
     # Force fail by requiring too many queries
     env = dict(os.environ)

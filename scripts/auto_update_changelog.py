@@ -164,10 +164,16 @@ def update_changelog(entries: list[str], dry_run: bool = False) -> bool:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Automatically update CHANGELOG.md based on recent commits")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be added without making changes")
+    parser = argparse.ArgumentParser(
+        description="Automatically update CHANGELOG.md based on recent commits"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be added without making changes"
+    )
     parser.add_argument("--pr", type=int, help="PR number to extract changelog entry from")
-    parser.add_argument("--limit", type=int, default=10, help="Number of recent commits to check (default: 10)")
+    parser.add_argument(
+        "--limit", type=int, default=10, help="Number of recent commits to check (default: 10)"
+    )
     args = parser.parse_args()
 
     entries = []

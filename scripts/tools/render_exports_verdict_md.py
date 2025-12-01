@@ -24,7 +24,9 @@ def main():
     files = v.get("files", {})
 
     # Header line
-    title = f"### Exports JSON {'✅ PASS' if ok else '❌ FAIL'} {'(STRICT)' if strict else '(HINT)'}"
+    title = (
+        f"### Exports JSON {'✅ PASS' if ok else '❌ FAIL'} {'(STRICT)' if strict else '(HINT)'}"
+    )
     lines = [title, ""]
 
     lines.append(f"- Generated: `{gen}`")

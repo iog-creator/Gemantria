@@ -80,7 +80,9 @@ def main() -> int:
         with psycopg.connect(DSN, autocommit=True) as conn:
             with conn.cursor() as cur:
                 # Check if schema exists
-                cur.execute("SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')")
+                cur.execute(
+                    "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = 'control')"
+                )
                 schema_exists = cur.fetchone()[0]
 
                 if not schema_exists:

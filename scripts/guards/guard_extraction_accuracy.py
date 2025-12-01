@@ -41,7 +41,9 @@ if TRUTH == TRUTH_V1:
 # STRICT-on-tags hardening: require v2 with ≥25 cases
 if _is_tag_ctx:
     if TRUTH != TRUTH_V2 or (v2_cases or 0) < 25:
-        print("ERROR: STRICT(tag): requires truth=v2 with ≥25 cases; failing gate.", file=sys.stderr)
+        print(
+            "ERROR: STRICT(tag): requires truth=v2 with ≥25 cases; failing gate.", file=sys.stderr
+        )
         sys.exit(2)
 
 

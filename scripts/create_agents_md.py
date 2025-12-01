@@ -54,28 +54,44 @@ def get_required_directories() -> dict[str, list[str]]:
     src_dir = ROOT / "src"
     if src_dir.exists():
         for subdir in src_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+            ):
                 required["source"].append(f"src/{subdir.name}")
 
     # Add all agentpm subdirectories (excluding cache/generated dirs)
     agentpm_dir = ROOT / "agentpm"
     if agentpm_dir.exists():
         for subdir in agentpm_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+            ):
                 required["agentpm"].append(f"agentpm/{subdir.name}")
 
     # Add all docs subdirectories (excluding cache/generated dirs)
     docs_dir = ROOT / "docs"
     if docs_dir.exists():
         for subdir in docs_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+            ):
                 required["docs"].append(f"docs/{subdir.name}")
 
     # Add all webui subdirectories (excluding cache/generated dirs)
     webui_dir = ROOT / "webui"
     if webui_dir.exists():
         for subdir in webui_dir.iterdir():
-            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+            if (
+                subdir.is_dir()
+                and not subdir.name.startswith(".")
+                and subdir.name not in EXCLUDED_DIRS
+            ):
                 required["webui"].append(f"webui/{subdir.name}")
 
     return required

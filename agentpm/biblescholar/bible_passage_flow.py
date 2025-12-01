@@ -39,7 +39,9 @@ def _get_book_name_mapping() -> dict[str, str]:
         engine = get_bible_engine()
         with engine.connect() as conn:
             result = conn.execute(
-                text("SELECT abbreviation, book_name FROM bible.book_abbreviations WHERE source = 'standard'")
+                text(
+                    "SELECT abbreviation, book_name FROM bible.book_abbreviations WHERE source = 'standard'"
+                )
             )
             mapping = {row[0]: row[1] for row in result}
             _book_name_cache = mapping
@@ -241,7 +243,9 @@ def fetch_passage(
         start_verse = int(cross_chapter_match.group(3))
         end_chapter = int(cross_chapter_match.group(4))
         end_verse = int(cross_chapter_match.group(5))
-        return adapter.get_passage(book_name, start_chapter, start_verse, end_chapter, end_verse, translation_source)
+        return adapter.get_passage(
+            book_name, start_chapter, start_verse, end_chapter, end_verse, translation_source
+        )
 
     # Try parsing with the new parser (handles single verses and same-chapter ranges)
     try:

@@ -114,7 +114,9 @@ def test_genesis_chapter_1():
         embeddings = client.get_embeddings(doc_strings)
         embeddings = [_l2_normalize(vec) for vec in embeddings]
 
-        print(f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})")
+        print(
+            f"   Generated {len(embeddings)} embeddings (dim: {len(embeddings[0]) if embeddings else 0})"
+        )
 
         # Test self-similarities (should be ~1.0)
         self_similarities = []

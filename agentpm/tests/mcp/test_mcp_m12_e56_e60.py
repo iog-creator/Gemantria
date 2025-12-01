@@ -30,7 +30,9 @@ def test_e58_trace_badge_presence_on_index():
 
 def test_e59_filter_apply_roundtrip_guard():
     sh("make -s m12.proofs")
-    v = json.loads(pathlib.Path("evidence/guard_m12_filter_apply_roundtrip.verdict.json").read_text())
+    v = json.loads(
+        pathlib.Path("evidence/guard_m12_filter_apply_roundtrip.verdict.json").read_text()
+    )
     assert v["ok"] is True
 
 

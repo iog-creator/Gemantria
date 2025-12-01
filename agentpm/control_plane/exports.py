@@ -48,20 +48,32 @@ def export_compliance_head() -> Dict[str, Any]:
             compliance_30d = cur.fetchone()
 
             result = {
-                "generated_at": compliance_7d[6].isoformat() if compliance_7d else None,  # updated_at
+                "generated_at": compliance_7d[6].isoformat()
+                if compliance_7d
+                else None,  # updated_at
                 "windows": {
                     "7d": {
                         "runs": compliance_7d[1] if compliance_7d else 0,
-                        "por_ok_ratio": float(compliance_7d[2]) if compliance_7d and compliance_7d[2] else 0.0,
-                        "schema_ok_ratio": float(compliance_7d[3]) if compliance_7d and compliance_7d[3] else 0.0,
-                        "provenance_ok_ratio": float(compliance_7d[4]) if compliance_7d and compliance_7d[4] else 0.0,
+                        "por_ok_ratio": float(compliance_7d[2])
+                        if compliance_7d and compliance_7d[2]
+                        else 0.0,
+                        "schema_ok_ratio": float(compliance_7d[3])
+                        if compliance_7d and compliance_7d[3]
+                        else 0.0,
+                        "provenance_ok_ratio": float(compliance_7d[4])
+                        if compliance_7d and compliance_7d[4]
+                        else 0.0,
                     }
                     if compliance_7d
                     else {},
                     "30d": {
                         "runs": compliance_30d[1] if compliance_30d else 0,
-                        "por_ok_ratio": float(compliance_30d[2]) if compliance_30d and compliance_30d[2] else 0.0,
-                        "schema_ok_ratio": float(compliance_30d[3]) if compliance_30d and compliance_30d[3] else 0.0,
+                        "por_ok_ratio": float(compliance_30d[2])
+                        if compliance_30d and compliance_30d[2]
+                        else 0.0,
+                        "schema_ok_ratio": float(compliance_30d[3])
+                        if compliance_30d and compliance_30d[3]
+                        else 0.0,
                         "provenance_ok_ratio": float(compliance_30d[4])
                         if compliance_30d and compliance_30d[4]
                         else 0.0,

@@ -181,7 +181,9 @@ def _normalize_model_name(model_name: str) -> str:
     return model_name
 
 
-def ensure_models(base_url: str, required_models: list[str], skip_embeddings: bool = False) -> dict[str, bool]:
+def ensure_models(
+    base_url: str, required_models: list[str], skip_embeddings: bool = False
+) -> dict[str, bool]:
     """Ensure all required models are installed, pulling missing ones.
 
     Args:
@@ -210,7 +212,10 @@ def ensure_models(base_url: str, required_models: list[str], skip_embeddings: bo
             or installed_model.startswith(f"{model}:")
             or installed_model == normalized_model
             or installed_model.startswith(f"{normalized_model}:")
-            or (normalized_model != model and installed_model.startswith(normalized_model.split(":")[0]))
+            or (
+                normalized_model != model
+                and installed_model.startswith(normalized_model.split(":")[0])
+            )
             for installed_model in installed
         )
 

@@ -5,7 +5,9 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[3]
-BIBLESCHOLAR_REFERENCE_JSON = REPO / "share" / "atlas" / "control_plane" / "biblescholar_reference.json"
+BIBLESCHOLAR_REFERENCE_JSON = (
+    REPO / "share" / "atlas" / "control_plane" / "biblescholar_reference.json"
+)
 VIEWER_HTML = REPO / "docs" / "atlas" / "browser" / "biblescholar_reference.html"
 GUARD_EVIDENCE = REPO / "evidence" / "guard_biblescholar_reference.json"
 
@@ -24,9 +26,9 @@ def test_phase6p_export_structure():
 
     # Check required keys
     assert "schema" in data, "Missing 'schema' key"
-    assert data["schema"] == "biblescholar_reference_v1", (
-        f"Wrong schema: expected biblescholar_reference_v1, got {data['schema']}"
-    )
+    assert (
+        data["schema"] == "biblescholar_reference_v1"
+    ), f"Wrong schema: expected biblescholar_reference_v1, got {data['schema']}"
 
     assert "generated_at" in data, "Missing 'generated_at' key"
     assert "ok" in data, "Missing 'ok' key"
@@ -86,8 +88,12 @@ def test_phase6p_guard_evidence():
         evidence = json.load(f)
 
     assert "guard" in evidence, "Missing 'guard' key in evidence"
-    assert evidence["guard"] == "guard_biblescholar_reference", f"Wrong guard name: {evidence['guard']}"
+    assert (
+        evidence["guard"] == "guard_biblescholar_reference"
+    ), f"Wrong guard name: {evidence['guard']}"
     assert "episode" in evidence, "Missing 'episode' key in evidence"
-    assert evidence["episode"] == "Phase-6P", f"Wrong episode: expected Phase-6P, got {evidence['episode']}"
+    assert (
+        evidence["episode"] == "Phase-6P"
+    ), f"Wrong episode: expected Phase-6P, got {evidence['episode']}"
     assert "overall_ok" in evidence, "Missing 'overall_ok' key in evidence"
     assert "checks" in evidence, "Missing 'checks' key in evidence"

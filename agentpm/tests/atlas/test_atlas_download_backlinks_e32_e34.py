@@ -29,7 +29,9 @@ def test_e33_jumper_page_has_backlink_to_node():
     j0 = _maybe(["share/atlas/jumpers/idx/0.html"])
     assert j0, "jumper page missing (staged)"
     html = _read(j0)
-    assert "../nodes/0.html" in html or "../../nodes/0.html" in html, "no backlink to node page (staged)"
+    assert (
+        "../nodes/0.html" in html or "../../nodes/0.html" in html
+    ), "no backlink to node page (staged)"
 
 
 def test_e34_sitemap_or_counts_present():

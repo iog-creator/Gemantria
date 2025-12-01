@@ -22,7 +22,9 @@ def test_e30_node_page_has_cross_batch_jump_links():
     assert node0, "node page missing (staged)"
     html = open(node0, encoding="utf-8").read()
     # Expect link(s) to other batches/graphs, e.g., href="../jumpers/idx/0.html" or data-jump="..."
-    assert ("jumpers" in html) or re.search(r'href="..\/jumpers\/', html), "no cross-batch jumper link (staged)"
+    assert ("jumpers" in html) or re.search(
+        r'href="..\/jumpers\/', html
+    ), "no cross-batch jumper link (staged)"
 
 
 def test_e31_jumper_index_exists_when_exports_present():

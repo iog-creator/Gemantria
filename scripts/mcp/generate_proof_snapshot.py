@@ -114,7 +114,11 @@ def _aggregate_components() -> tuple[dict, list[str]]:
 
 def _compute_overall_ok(components: dict) -> bool:
     """Compute overall_ok: all required components (E01, E02, E04) must be ok."""
-    return components["e01_schema"]["ok"] and components["e02_ro_dsn"]["ok"] and components["e04_query"]["ok"]
+    return (
+        components["e01_schema"]["ok"]
+        and components["e02_ro_dsn"]["ok"]
+        and components["e04_query"]["ok"]
+    )
 
 
 def _generate_text_summary(snapshot: dict) -> str:

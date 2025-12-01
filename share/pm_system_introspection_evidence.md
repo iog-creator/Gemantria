@@ -4,868 +4,400 @@ This file aggregates raw evidence about how the pmagent + AGENTS + share +
 planning + KB + tracking/self-healing systems currently behave. It is NOT a
 designed doc; it is an evidence pack for the PM to read and interpret.
 
-**Generated**: 2025-11-30T02:21:19.121792+00:00
+**Generated**: 2025-12-01T16:01:29.704568+00:00
 
 ## 1. Repo / branch / status
 
 ```
 ## main...origin/main
- M .cursor/rules/050-ops-contract.mdc
- M .cursor/rules/051-cursor-insight.mdc
- M AGENTS.md
  M CHANGELOG.md
- M Makefile
  M NEXT_STEPS.md
+ M agentpm/adapters/ollama.py
+ M agentpm/adapters/theology.py
+ M agentpm/atlas/generate.py
+ M agentpm/atlas/reranker_badges.py
+ M agentpm/atlas/webproof.py
+ M agentpm/biblescholar/bible_db_adapter.py
+ M agentpm/biblescholar/bible_passage_flow.py
+ M agentpm/biblescholar/cross_language_flow.py
+ M agentpm/biblescholar/insights_flow.py
+ M agentpm/biblescholar/lexicon_adapter.py
+ M agentpm/biblescholar/reference_slice.py
+ M agentpm/biblescholar/relationship_adapter.py
+ M agentpm/biblescholar/tests/test_bible_passage_flow.py
+ M agentpm/biblescholar/tests/test_cross_language_flow.py
+ M agentpm/biblescholar/tests/test_reference_slice.py
+ M agentpm/control_plane/exports.py
+ M agentpm/control_plane/sessions.py
+ M agentpm/control_widgets/adapter.py
+ M agentpm/docs/search.py
+ M agentpm/extractors/provenance.py
+ M agentpm/gatekeeper.py
+ M agentpm/gatekeeper/impl.py
+ M agentpm/graph/assembler.py
+ M agentpm/guard/__init__.py
+ M agentpm/guard/impl.py
+ M agentpm/guarded/guard_shim.py
+ M agentpm/kb/classify.py
  M agentpm/kb/registry.py
- M agentpm/plan/next.py
+ M agentpm/knowledge/qa_docs.py
+ M agentpm/lm/lm_status.py
+ M agentpm/lm/router.py
+ M agentpm/modules/gematria/nouns.py
+ M agentpm/plan/fix.py
+ M agentpm/plan/kb.py
  M agentpm/reality/check.py
+ M agentpm/runtime/lm_budget.py
+ M agentpm/scripts/cleanup_codebase.py
+ M agentpm/scripts/cleanup_root.py
+ M agentpm/scripts/docs_archive_apply.py
+ M agentpm/scripts/docs_classify_direct.py
+ M agentpm/scripts/docs_dashboard_refresh.py
+ M agentpm/scripts/docs_dm002_sync.py
+ M agentpm/scripts/docs_duplicates_report.py
+ M agentpm/scripts/docs_inventory.py
+ M agentpm/scripts/generate_tool_embeddings.py
+ M agentpm/scripts/ingest_docs.py
+ M agentpm/scripts/reality_check_1.py
+ M agentpm/scripts/reality_check_1_live.py
+ M agentpm/scripts/state/ledger_verify.py
+ M agentpm/status/explain.py
+ M agentpm/status/kb_metrics.py
  M agentpm/status/snapshot.py
- M docs/SSOT/MASTER_PLAN.md
- M docs/SSOT/PM_CONTRACT.md
- M docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md
- M docs/SSOT/RULES_INDEX.md
+ M agentpm/tests/adapters/test_lm_studio_adapter.py
+ M agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py
+ M agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py
+ M agentpm/tests/atlas/test_atlas_download_backlinks_e32_e34.py
+ M agentpm/tests/atlas/test_atlas_links_e26_e28.py
+ M agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py
+ M agentpm/tests/atlas/test_e100_tagproof_phase2.py
+ M agentpm/tests/atlas/test_e92_screenshot_manifest_guard.py
+ M agentpm/tests/atlas/test_e93_browser_verification_guard.py
+ M agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py
+ M agentpm/tests/atlas/test_lm_dashboards_config.py
+ M agentpm/tests/atlas/test_lm_status_page_insights.py
+ M agentpm/tests/atlas/test_phase6p_biblescholar_reference_guard.py
+ M agentpm/tests/atlas/test_phase_d_autopilot_summary.py
+ M agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py
+ M agentpm/tests/cli/test_pmagent_plan_kb_fix.py
+ M agentpm/tests/cli/test_pmagent_reality_check_cli.py
+ M agentpm/tests/db/test_phase3a_db_health_guard.py
+ M agentpm/tests/db/test_phase3a_db_health_smoke.py
+ M agentpm/tests/db/test_phase3a_db_loader.py
+ M agentpm/tests/db/test_phase3a_graph_stats_import.py
+ M agentpm/tests/db/test_phase3b_graph_overview.py
+ M agentpm/tests/docs/test_dms_guards.py
+ M agentpm/tests/exports/test_graph_export_e20_e22.py
+ M agentpm/tests/extractors/test_extraction_determinism_e11_e13.py
+ M agentpm/tests/extractors/test_graph_rollups_e17_e19.py
+ M agentpm/tests/html/test_lm_status_page.py
+ M agentpm/tests/kb/test_freshness.py
+ M agentpm/tests/kb/test_registry.py
+ M agentpm/tests/knowledge/test_qa_docs.py
+ M agentpm/tests/lm/test_phase3b_lm_health_guard.py
+ M agentpm/tests/lm/test_phase6_lm_budgets.py
+ M agentpm/tests/mcp/test_mcp_catalog_e01_e05.py
+ M agentpm/tests/mcp/test_mcp_m10_e46_e50.py
+ M agentpm/tests/mcp/test_mcp_m11_e51_e55.py
+ M agentpm/tests/mcp/test_mcp_m12_e56_e60.py
+ M agentpm/tests/mcp/test_mcp_m14_e66_e70.py
+ M agentpm/tests/mcp/test_mcp_m3_e11_e15.py
+ M agentpm/tests/mcp/test_mcp_m8_e36_e40.py
+ M agentpm/tests/mcp/test_mcp_m9_e41_e45.py
+ M agentpm/tests/phase1/test_tv01_missing_por.py
+ M agentpm/tests/phase1/test_tv02_arg_schema_invalid.py
+ M agentpm/tests/phase1/test_tv03_ring_violation.py
+ M agentpm/tests/phase1/test_tv04_provenance_mismatch.py
+ M agentpm/tests/phase1/test_tv05_forbidden_tool.py
+ M agentpm/tests/reality/test_capability_envelope_writer.py
+ M agentpm/tests/reality/test_sessions_summary.py
+ M agentpm/tests/status/test_explain_kb.py
+ M agentpm/tests/system/test_phase3b_system_health.py
+ M agentpm/tools/rerank.py
+ M conftest.py
  M docs/forest/overview.md
+ M pmagent/cli.py
+ M pmagent/repo/logic.py
+ M rules_guard.py
+ M scripts/_deprecated/apply_rerank_blend.py
+ M scripts/_deprecated/apply_rerank_refresh.py
+ M scripts/acceptance/check_envelope.py
+ M scripts/adapter/exports_to_viewer.py
+ M scripts/adr_housekeeping.py
+ M scripts/ai/embeddings_upsert.py
+ M scripts/ai_analytics_dashboard.py
+ M scripts/ai_integration_example.py
+ M scripts/ai_learning_tracker.py
+ M scripts/ai_noun_discovery.py
+ M scripts/ai_session_monitor.py
+ M scripts/analytics/export_ai_tracking.py
+ M scripts/analytics/graph_stats_from_json.py
+ M scripts/analytics/rerank_blend_report.py
+ M scripts/analytics/verify_ai_tracking.py
+ M scripts/analytics/verify_export.py
+ M scripts/analyze_metrics.py
+ M scripts/atlas/gen_index_badge_rollup.py
+ M scripts/atlas/gen_index_summary.py
+ M scripts/atlas/generate_atlas.py
+ M scripts/atlas/generate_compliance_summary.py
+ M scripts/atlas/generate_compliance_timeseries.py
+ M scripts/atlas/generate_mermaid.py
+ M scripts/atlas_chip_inject.py
+ M scripts/atlas_trace_inject.py
+ M scripts/audit_genesis_db.py
+ M scripts/auto_update_agents_md.py
+ M scripts/auto_update_changelog.py
+ M scripts/backfill_bge_embeddings.py
+ M scripts/backfill_noun_embeddings.py
+ M scripts/badges/make_badge.py
+ M scripts/badges/make_patterns_badge.py
+ M scripts/book_readiness.py
+ M scripts/branch_health_report.py
+ M scripts/check_agents_md_sync.py
+ M scripts/ci/check_pr_model_usage.py
+ M scripts/ci/guard_dsn_centralized.py
+ M scripts/ci/guard_json_schema.py
+ M scripts/ci/guard_knowledge.py
+ M scripts/ci/guard_mcp_live.py
+ M scripts/ci/tv_coverage.py
+ M scripts/ci/validate_exports.py
+ M scripts/code_ingest/export_code_fragments.py
+ M scripts/compass/scorer.py
+ M scripts/control/control_summary.py
+ M scripts/create_agents_md.py
+ M scripts/db/contextual_search.py
+ M scripts/db/control_biblescholar_reference_export.py
+ M scripts/db/control_capability_rules_export.py
+ M scripts/db/control_compliance_exports.py
+ M scripts/db/control_lm_insights_export.py
+ M scripts/db/control_mvs_snapshot.py
+ M scripts/db/control_plane_smoke.py
  M scripts/db/control_schema_snapshot.py
+ M scripts/db/export_governance_freshness.py
+ M scripts/db/export_planning_lane_status.py
+ M scripts/db/mcp_catalog_stub.py
+ M scripts/db/migrate_control.py
+ M scripts/db/populate_mark_1_1_greek.py
+ M scripts/db/upsert_helpers.py
+ M scripts/db_head.py
+ M scripts/deploy.py
+ M scripts/dev_seed_enriched_sample.py
+ M scripts/document_management_hints.py
+ M scripts/eval/anomalies.py
+ M scripts/eval/apply_remediation.py
+ M scripts/eval/build_exports_catalog.py
+ M scripts/eval/build_html_index.py
+ M scripts/eval/build_provenance.py
+ M scripts/eval/build_release_notes.py
+ M scripts/eval/build_run_summary.py
+ M scripts/eval/build_snapshot.py
+ M scripts/eval/calibrate_advanced.py
+ M scripts/eval/detect_anomalies.py
+ M scripts/eval/edge_audit.py
+ M scripts/eval/jsonschema_validate.py
+ M scripts/eval/make_quality_badge.py
+ M scripts/eval/provenance.py
+ M scripts/eval/quality_trend.py
+ M scripts/eval/report.py
+ M scripts/eval/report_history.py
+ M scripts/eval/report_id_stability.py
+ M scripts/eval/verify_integrity.py
+ M scripts/eval/xrefs_badges.py
+ M scripts/export_graph.py
+ M scripts/export_jsonld.py
+ M scripts/export_noun_index.py
+ M scripts/export_stats.py
+ M scripts/exports/export_graph_core.py
+ M scripts/extract_nouns_from_bible_db.py
+ M scripts/find_approved_examples.py
+ M scripts/fix/apply_repair_plan.py
+ M scripts/fix/sanitize_missing_endpoints.py
+ M scripts/generate_report.py
+ M scripts/goldens_enrichment_schema_check.py
+ M scripts/goldens_sample_check.py
+ M scripts/governance/discover_hints.py
+ M scripts/governance/ingest_doc_content.py
+ M scripts/governance/ingest_doc_embeddings.py
  M scripts/governance/ingest_docs_to_db.py
+ M scripts/governance/seed_hint_registry.py
+ M scripts/governance_tracker.py
+ M scripts/graph/graph_overview.py
+ M scripts/guard_all.py
+ M scripts/guard_graph_schema.py
+ M scripts/guards/guard_ai_tracking_contract.py
+ M scripts/guards/guard_alwaysapply_triage.py
+ M scripts/guards/guard_atlas_compliance_drilldowns.py
+ M scripts/guards/guard_atlas_compliance_timeseries.py
+ M scripts/guards/guard_biblescholar_reference.py
+ M scripts/guards/guard_browser_screenshot_integrated.py
+ M scripts/guards/guard_browser_verification.py
+ M scripts/guards/guard_ci_empty_db.py
+ M scripts/guards/guard_control_autopilot_summary.py
+ M scripts/guards/guard_control_compliance_exports.py
+ M scripts/guards/guard_control_compliance_webproof_backlinks.py
+ M scripts/guards/guard_control_graph_compliance.py
+ M scripts/guards/guard_control_plane_health.py
+ M scripts/guards/guard_control_widgets.py
+ M scripts/guards/guard_crossrefs_extracted.py
+ M scripts/guards/guard_cursorignore.py
+ M scripts/guards/guard_doc_fragments.py
+ M scripts/guards/guard_docs_db_ssot.py
+ M scripts/guards/guard_enrichment_details.py
+ M scripts/guards/guard_exports_json.py
+ M scripts/guards/guard_exports_rfc3339.py
+ M scripts/guards/guard_extraction_accuracy.py
+ M scripts/guards/guard_graph_generated_at.py
+ M scripts/guards/guard_ketiv_primary.py
+ M scripts/guards/guard_lm_health.py
+ M scripts/guards/guard_m11_filter_apply_multi_schema.py
+ M scripts/guards/guard_m11_trace_links_across_nodes.py
+ M scripts/guards/guard_m12_chip_coverage.py
+ M scripts/guards/guard_m13_chip_id_uniqueness.py
+ M scripts/guards/guard_m13_manifest_consistency.py
+ M scripts/guards/guard_m13_sitemap_min.py
+ M scripts/guards/guard_m13_stale_sweep.py
+ M scripts/guards/guard_m14_node_drilldowns_links.py
+ M scripts/guards/guard_m14_reranker_badges.py
+ M scripts/guards/guard_m14_webproof_backlinks.py
+ M scripts/guards/guard_mcp_proof.py
+ M scripts/guards/guard_mcp_schema.py
  M scripts/guards/guard_reality_green.py
+ M scripts/guards/guard_regenerate_all.py
+ M scripts/guards/guard_snapshot_drift.py
+ M scripts/guards/guard_tagproof_phase2.py
+ M scripts/guards/guard_tagproof_screenshots.py
+ M scripts/guards/hints_required.py
+ M scripts/guards/sync_alwaysapply_from_db.py
+ M scripts/ingest_docs.py
+ M scripts/kb/build_kb_registry.py
+ M scripts/kb/seed_registry.py
+ M scripts/math_verifier.py
+ M scripts/mcp/export_catalog_json.py
+ M scripts/mcp/gen_filter_chips.py
+ M scripts/mcp/generate_proof_snapshot.py
+ M scripts/mcp/get_dsn_for_examples.py
+ M scripts/mcp/http_export_server.py
+ M scripts/mcp/probe_db.py
+ M scripts/metrics_contract.py
+ M scripts/mode_decider.py
+ M scripts/models_verify.py
+ M scripts/monitor_pipeline.py
+ M scripts/monitoring.py
+ M scripts/observability/otel_helpers.py
+ M scripts/ollama_discovery.py
+ M scripts/ontology_compat.py
+ M scripts/ops/agent_evidence_summary.py
+ M scripts/ops/codemod_dsn_to_shim.py
+ M scripts/ops/convert_socket_to_network_dsn.py
+ M scripts/pipeline_orchestrator.py
+ M scripts/pm_snapshot.py
  M scripts/prepare_handoff.py
- M scripts/sync_share.py
+ M scripts/repo_audit.py
+ M scripts/rules_audit.py
+ M scripts/rules_guard.py
+ M scripts/sanity_check.py
+ M scripts/smokes/writers_smoke.py
+ M scripts/status/export_live_posture.py
+ M scripts/status/update_mermaid_from_evidence.py
+ M scripts/temporal_analytics.py
+ M scripts/tools/derive_truth_cases.py
+ M scripts/tools/render_exports_verdict_md.py
+ M scripts/ui/metrics_log.py
+ M scripts/util/export_pm_introspection_evidence.py
+ M scripts/util/export_pm_snapshot_json.py
+ M scripts/util/json_to_markdown.py
+ M scripts/validate_agents_md.py
+ M scripts/validate_examples.py
+ M scripts/verify_pr016_pr017.py
  M share/AGENTS.md
- M share/BIBLESCHOLAR_MIGRATION_PLAN.md
- D share/CHANGELOG.md
- M share/MASTER_PLAN.md
- D share/Makefile
- D share/README.md
- D share/README_FULL.md
- D share/RELEASES.md
- M share/RULES_INDEX.md
- D share/SHARE_MANIFEST.json
- D share/ai-nouns.schema.json
- D share/atlas/badges/index_rollup.json
- D share/atlas/badges/latency.json
- D share/atlas/badges/reranker.json
- D share/atlas/badges/trace.json
- D share/atlas/breadcrumbs.json
- D share/atlas/control_plane/agent_runs_7d.json
- D share/atlas/control_plane/autopilot_summary.json
- D share/atlas/control_plane/biblescholar_reference.json
- D share/atlas/control_plane/capability_rules.json
- D share/atlas/control_plane/compliance.head.json
- D share/atlas/control_plane/compliance_summary.json
- D share/atlas/control_plane/compliance_timeseries.json
- D share/atlas/control_plane/e86_compliance_summary.json
- D share/atlas/control_plane/graph_compliance.json
- D share/atlas/control_plane/kb_docs.head.json
- D share/atlas/control_plane/lm_budget_7d.json
+ M share/agents_md.head.md
  D share/atlas/control_plane/lm_health_7d.json
  D share/atlas/control_plane/lm_indicator.json
  D share/atlas/control_plane/lm_insights_7d.json
  D share/atlas/control_plane/lm_usage_7d.json
- D share/atlas/control_plane/mcp_catalog.json
- D share/atlas/control_plane/mcp_status_cards.json
- D share/atlas/control_plane/mv_schema.json
- D share/atlas/control_plane/schema_snapshot.json
  D share/atlas/control_plane/system_health.json
- D share/atlas/control_plane/top_violations_30d.json
- D share/atlas/control_plane/top_violations_7d.json
- D share/atlas/db_proof_chip.json
- D share/atlas/filter_apply.json
- D share/atlas/filter_apply_multi.json
- D share/atlas/filter_chips.json
- D share/atlas/graph.html
- D share/atlas/graph/rollup.json
- D share/atlas/index.html
- D share/atlas/index_summary.json
- D share/atlas/jumpers/idx/0.html
- D share/atlas/jumpers/idx/1.html
- D share/atlas/jumpers/idx/2.html
- D share/atlas/jumpers/index.html
- D share/atlas/nodes/0.html
- D share/atlas/nodes/0.json
- D share/atlas/nodes/0.raw.html
- D share/atlas/nodes/1.html
- D share/atlas/nodes/1.json
- D share/atlas/nodes/1.raw.html
- D share/atlas/nodes/2.html
- D share/atlas/nodes/2.json
- D share/atlas/nodes/2.raw.html
- D share/atlas/nodes/drilldown.sample.json
- D share/atlas/nodes/node_001/coverage.json
- D share/atlas/nodes/node_001/provenance.json
- D share/atlas/nodes/node_002/provenance.json
- D share/atlas/screenshots/manifest.json
- D share/atlas/sitemap.html
- D share/atlas/sitemap.json
- D share/atlas/trace_links.json
- D share/env_example.txt
- D share/evidence/db_ingest.morph.head.json
- D share/evidence/guard_all_agent_result_20251106_112404.json
- D share/evidence/guard_all_agent_result_20251106_112703.json
- D share/evidence/guard_all_agent_result_20251106_113159.json
- D share/evidence/guard_all_agent_result_20251106_113207.json
- D share/evidence/guard_all_agent_result_20251106_113216.json
- D share/evidence/guard_all_agent_result_20251106_113238.json
- D share/evidence/guard_all_agent_result_20251106_113243.json
- D share/evidence/guard_all_agent_result_20251106_115317.json
- D share/evidence/guard_all_agent_result_20251106_115331.json
- D share/evidence/guard_all_agent_result_20251106_115718.json
- D share/evidence/guard_all_agent_result_20251106_115946.json
- D share/evidence/guard_all_agent_result_20251106_142436.json
- D share/evidence/guard_all_agent_result_20251106_142453.json
- D share/evidence/guard_all_agent_result_20251106_142455.json
- D share/evidence/guard_all_agent_result_20251106_142802.json
- D share/evidence/guard_all_agent_result_20251106_143308.json
- D share/evidence/guard_all_agent_result_20251106_144154.json
- D share/evidence/guard_all_agent_result_20251106_153424.json
- D share/evidence/guard_all_agent_result_20251106_153654.json
- D share/evidence/guard_all_agent_result_20251106_154111.json
- D share/evidence/guard_all_agent_result_20251106_155136.json
- D share/evidence/guard_all_agent_result_20251107_094210.json
- D share/evidence/guard_all_agent_result_20251107_094916.json
- D share/evidence/guard_all_agent_result_20251107_095547.json
- D share/evidence/guard_all_agent_result_20251107_100331.json
- D share/evidence/guard_all_agent_result_20251107_101035.json
- D share/evidence/guard_all_agent_result_20251107_101609.json
- D share/evidence/guard_all_agent_result_20251107_101625.json
- D share/evidence/guard_all_agent_result_20251107_102231.json
- D share/evidence/guard_all_agent_result_20251107_102544.json
- D share/evidence/guard_all_agent_result_20251107_112514.json
- D share/evidence/guard_all_agent_result_20251107_112530.json
- D share/evidence/guard_all_agent_result_20251107_113005.json
- D share/evidence/guard_all_agent_result_20251107_113132.json
- D share/evidence/guard_all_agent_result_20251107_113236.json
- D share/evidence/guard_all_agent_result_20251107_115426.json
- D share/evidence/guard_all_agent_result_20251107_141532.json
- D share/evidence/guard_all_agent_result_20251107_142105.json
- D share/evidence/guard_all_agent_result_20251107_142120.json
- D share/evidence/guard_all_agent_result_20251107_142134.json
- D share/evidence/guard_all_agent_result_20251107_143554.json
- D share/evidence/guard_all_agent_result_20251107_143810.json
- D share/evidence/guard_all_agent_result_20251107_144033.json
- D share/evidence/guard_all_agent_result_20251107_144118.json
- D share/evidence/guard_all_agent_result_20251107_144147.json
- D share/evidence/guard_all_agent_result_20251107_144321.json
- D share/evidence/guard_all_agent_result_20251107_145010.json
- D share/evidence/guard_all_agent_result_20251107_172004.json
- D share/evidence/guard_all_agent_result_20251107_172005.json
- D share/evidence/guard_all_agent_result_20251107_172356.json
- D share/evidence/guard_all_agent_result_20251107_172447.json
- D share/evidence/guard_all_agent_result_20251107_172955.json
- D share/evidence/guard_all_agent_result_20251107_173255.json
- D share/evidence/guard_all_agent_result_20251107_173257.json
- D share/evidence/guard_all_agent_result_20251107_173258.json
- D share/evidence/guard_all_agent_result_20251107_173304.json
- D share/evidence/guard_all_agent_result_20251107_173331.json
- D share/evidence/guard_all_agent_result_20251107_174026.json
- D share/evidence/guard_all_agent_result_20251107_174027.json
- D share/evidence/guard_all_agent_result_20251107_174033.json
- D share/evidence/guard_all_agent_result_20251107_174036.json
- D share/evidence/guard_all_agent_result_20251107_193348.json
- D share/evidence/guard_all_agent_result_20251107_193403.json
- D share/evidence/guard_all_agent_result_20251107_193514.json
- D share/evidence/guard_all_agent_result_20251107_194011.json
- D share/evidence/guard_all_agent_result_20251107_194116.json
- D share/evidence/guard_all_agent_result_20251107_194409.json
- D share/evidence/guard_all_agent_result_20251107_200125.json
- D share/evidence/guard_all_agent_result_20251107_200544.json
- D share/evidence/guard_all_agent_result_20251107_202046.json
- D share/evidence/guard_all_agent_result_20251107_202217.json
- D share/evidence/guard_all_agent_result_20251107_202958.json
- D share/evidence/guard_all_agent_result_20251107_204647.json
- D share/evidence/guard_all_agent_result_20251107_205426.json
- D share/evidence/guard_all_agent_result_20251107_205531.json
- D share/evidence/guard_all_agent_result_20251107_205700.json
- D share/evidence/guard_all_agent_result_20251107_205814.json
- D share/evidence/guard_all_agent_result_20251107_205941.json
- D share/evidence/guard_all_agent_result_20251107_222516.json
- D share/evidence/guard_all_agent_result_20251107_225525.json
- D share/evidence/guard_all_agent_result_20251107_225736.json
- D share/evidence/guard_all_agent_result_20251107_225805.json
- D share/evidence/guard_all_agent_result_20251107_225937.json
- D share/evidence/guard_all_agent_result_20251107_231023.json
- D share/evidence/guard_all_agent_result_20251107_231758.json
- D share/evidence/guard_all_agent_result_20251107_232251.json
- D share/evidence/guard_all_agent_result_20251107_232306.json
- D share/evidence/guard_all_agent_result_20251107_232307.json
- D share/evidence/guard_all_agent_result_20251107_232559.json
- D share/evidence/guard_all_agent_result_20251107_232642.json
- D share/evidence/guard_all_agent_result_20251107_232833.json
- D share/evidence/guard_all_agent_result_20251108_092939.json
- D share/evidence/guard_all_agent_result_20251108_093514.json
- D share/evidence/guard_all_agent_result_20251108_093929.json
- D share/evidence/guard_all_agent_result_20251108_094058.json
- D share/evidence/guard_all_agent_result_20251108_100558.json
- D share/evidence/guard_all_agent_result_20251108_100601.json
- D share/evidence/guard_all_agent_result_20251108_100850.json
- D share/evidence/guard_all_agent_result_20251108_100901.json
- D share/evidence/guard_all_agent_result_20251108_100902.json
- D share/evidence/guard_all_agent_result_20251108_101037.json
- D share/evidence/guard_all_agent_result_20251108_101116.json
- D share/evidence/guard_all_agent_result_20251108_101117.json
- D share/evidence/guard_all_agent_result_20251108_101118.json
- D share/evidence/guard_all_agent_result_20251108_101126.json
- D share/evidence/guard_all_agent_result_20251108_101145.json
- D share/evidence/guard_all_agent_result_20251108_101146.json
- D share/evidence/guard_all_agent_result_20251108_101229.json
- D share/evidence/guard_all_agent_result_20251108_101344.json
- D share/evidence/guard_all_agent_result_20251108_101401.json
- D share/evidence/guard_all_agent_result_20251108_101442.json
- D share/evidence/guard_all_agent_result_20251108_101452.json
- D share/evidence/guard_all_agent_result_20251108_101459.json
- D share/evidence/guard_all_agent_result_20251108_101555.json
- D share/evidence/guard_all_agent_result_20251108_101601.json
- D share/evidence/guard_all_agent_result_20251108_101606.json
- D share/evidence/guard_all_agent_result_20251108_101701.json
- D share/evidence/guard_all_agent_result_20251108_101819.json
- D share/evidence/guard_all_agent_result_20251108_101833.json
- D share/evidence/guard_all_agent_result_20251108_101834.json
- D share/evidence/guard_all_agent_result_20251108_101958.json
- D share/evidence/guard_all_agent_result_20251108_102012.json
- D share/evidence/guard_all_agent_result_20251108_102013.json
- D share/evidence/guard_all_agent_result_20251108_102026.json
- D share/evidence/guard_all_agent_result_20251108_102125.json
- D share/evidence/guard_all_agent_result_20251108_102131.json
- D share/evidence/guard_all_agent_result_20251108_102132.json
- D share/evidence/guard_all_agent_result_20251108_102140.json
- D share/evidence/guard_all_agent_result_20251108_102438.json
- D share/evidence/guard_all_agent_result_20251108_102445.json
- D share/evidence/guard_all_agent_result_20251108_102640.json
- D share/evidence/guard_all_agent_result_20251108_102732.json
- D share/evidence/guard_all_agent_result_20251108_102746.json
- D share/evidence/guard_all_agent_result_20251108_102747.json
- D share/evidence/guard_all_agent_result_20251108_102908.json
- D share/evidence/guard_all_agent_result_20251108_103005.json
- D share/evidence/guard_all_agent_result_20251108_103121.json
- D share/evidence/guard_all_agent_result_20251108_103128.json
- D share/evidence/guard_all_agent_result_20251108_103129.json
- D share/evidence/guard_all_agent_result_20251108_103138.json
- D share/evidence/guard_all_agent_result_20251108_103142.json
- D share/evidence/guard_all_agent_result_20251108_103143.json
- D share/evidence/guard_all_agent_result_20251108_103327.json
- D share/evidence/guard_all_agent_result_20251108_103504.json
- D share/evidence/guard_all_agent_result_20251108_103536.json
- D share/evidence/guard_all_agent_result_20251108_103714.json
- D share/evidence/guard_all_agent_result_20251108_103719.json
- D share/evidence/guard_all_agent_result_20251108_103720.json
- D share/evidence/guard_all_agent_result_20251108_103834.json
- D share/evidence/guard_all_agent_result_20251108_103847.json
- D share/evidence/guard_all_agent_result_20251108_104203.json
- D share/evidence/guard_all_agent_result_20251108_104220.json
- D share/evidence/guard_all_agent_result_20251108_104458.json
- D share/evidence/guard_all_agent_result_20251108_104558.json
- D share/evidence/guard_all_agent_result_20251108_104835.json
- D share/evidence/guard_all_agent_result_20251108_105019.json
- D share/evidence/guard_all_agent_result_20251108_105020.json
- D share/evidence/guard_all_agent_result_20251108_105104.json
- D share/evidence/guard_all_agent_result_20251108_105105.json
- D share/evidence/guard_all_agent_result_20251108_110332.json
- D share/evidence/guard_all_agent_result_20251108_121834.json
- D share/evidence/guard_all_agent_result_20251108_122056.json
- D share/evidence/guard_all_agent_result_20251108_122057.json
- D share/evidence/guard_all_guards_start_20251106_112404.json
- D share/evidence/guard_all_guards_start_20251106_112703.json
- D share/evidence/guard_all_guards_start_20251106_113159.json
- D share/evidence/guard_all_guards_start_20251106_113207.json
- D share/evidence/guard_all_guards_start_20251106_113216.json
- D share/evidence/guard_all_guards_start_20251106_113238.json
- D share/evidence/guard_all_guards_start_20251106_113243.json
- D share/evidence/guard_all_guards_start_20251106_115317.json
- D share/evidence/guard_all_guards_start_20251106_115331.json
- D share/evidence/guard_all_guards_start_20251106_115718.json
- D share/evidence/guard_all_guards_start_20251106_115945.json
- D share/evidence/guard_all_guards_start_20251106_142436.json
- D share/evidence/guard_all_guards_start_20251106_142453.json
- D share/evidence/guard_all_guards_start_20251106_142455.json
- D share/evidence/guard_all_guards_start_20251106_142802.json
- D share/evidence/guard_all_guards_start_20251106_143308.json
- D share/evidence/guard_all_guards_start_20251106_144153.json
- D share/evidence/guard_all_guards_start_20251106_144154.json
- D share/evidence/guard_all_guards_start_20251106_153423.json
- D share/evidence/guard_all_guards_start_20251106_153654.json
- D share/evidence/guard_all_guards_start_20251106_154111.json
- D share/evidence/guard_all_guards_start_20251106_155136.json
- D share/evidence/guard_all_guards_start_20251107_094210.json
- D share/evidence/guard_all_guards_start_20251107_094916.json
- D share/evidence/guard_all_guards_start_20251107_095547.json
- D share/evidence/guard_all_guards_start_20251107_100331.json
- D share/evidence/guard_all_guards_start_20251107_101035.json
- D share/evidence/guard_all_guards_start_20251107_101609.json
- D share/evidence/guard_all_guards_start_20251107_101625.json
- D share/evidence/guard_all_guards_start_20251107_102230.json
- D share/evidence/guard_all_guards_start_20251107_102544.json
- D share/evidence/guard_all_guards_start_20251107_112514.json
- D share/evidence/guard_all_guards_start_20251107_112530.json
- D share/evidence/guard_all_guards_start_20251107_113005.json
- D share/evidence/guard_all_guards_start_20251107_113131.json
- D share/evidence/guard_all_guards_start_20251107_113235.json
- D share/evidence/guard_all_guards_start_20251107_113236.json
- D share/evidence/guard_all_guards_start_20251107_115426.json
- D share/evidence/guard_all_guards_start_20251107_141532.json
- D share/evidence/guard_all_guards_start_20251107_142105.json
- D share/evidence/guard_all_guards_start_20251107_142120.json
- D share/evidence/guard_all_guards_start_20251107_142134.json
- D share/evidence/guard_all_guards_start_20251107_143554.json
- D share/evidence/guard_all_guards_start_20251107_143810.json
- D share/evidence/guard_all_guards_start_20251107_144033.json
- D share/evidence/guard_all_guards_start_20251107_144118.json
- D share/evidence/guard_all_guards_start_20251107_144147.json
- D share/evidence/guard_all_guards_start_20251107_144320.json
- D share/evidence/guard_all_guards_start_20251107_145010.json
- D share/evidence/guard_all_guards_start_20251107_172004.json
- D share/evidence/guard_all_guards_start_20251107_172356.json
- D share/evidence/guard_all_guards_start_20251107_172447.json
- D share/evidence/guard_all_guards_start_20251107_172954.json
- D share/evidence/guard_all_guards_start_20251107_173255.json
- D share/evidence/guard_all_guards_start_20251107_173257.json
- D share/evidence/guard_all_guards_start_20251107_173304.json
- D share/evidence/guard_all_guards_start_20251107_173331.json
- D share/evidence/guard_all_guards_start_20251107_174026.json
- D share/evidence/guard_all_guards_start_20251107_174033.json
- D share/evidence/guard_all_guards_start_20251107_174036.json
- D share/evidence/guard_all_guards_start_20251107_193348.json
- D share/evidence/guard_all_guards_start_20251107_193403.json
- D share/evidence/guard_all_guards_start_20251107_193514.json
- D share/evidence/guard_all_guards_start_20251107_194011.json
- D share/evidence/guard_all_guards_start_20251107_194116.json
- D share/evidence/guard_all_guards_start_20251107_194409.json
- D share/evidence/guard_all_guards_start_20251107_200125.json
- D share/evidence/guard_all_guards_start_20251107_200544.json
- D share/evidence/guard_all_guards_start_20251107_202045.json
- D share/evidence/guard_all_guards_start_20251107_202217.json
- D share/evidence/guard_all_guards_start_20251107_202958.json
- D share/evidence/guard_all_guards_start_20251107_204646.json
- D share/evidence/guard_all_guards_start_20251107_205426.json
- D share/evidence/guard_all_guards_start_20251107_205531.json
- D share/evidence/guard_all_guards_start_20251107_205659.json
- D share/evidence/guard_all_guards_start_20251107_205813.json
- D share/evidence/guard_all_guards_start_20251107_205941.json
- D share/evidence/guard_all_guards_start_20251107_222516.json
- D share/evidence/guard_all_guards_start_20251107_225525.json
- D share/evidence/guard_all_guards_start_20251107_225736.json
- D share/evidence/guard_all_guards_start_20251107_225805.json
- D share/evidence/guard_all_guards_start_20251107_225937.json
- D share/evidence/guard_all_guards_start_20251107_231022.json
- D share/evidence/guard_all_guards_start_20251107_231757.json
- D share/evidence/guard_all_guards_start_20251107_232251.json
- D share/evidence/guard_all_guards_start_20251107_232306.json
- D share/evidence/guard_all_guards_start_20251107_232558.json
- D share/evidence/guard_all_guards_start_20251107_232642.json
- D share/evidence/guard_all_guards_start_20251107_232833.json
- D share/evidence/guard_all_guards_start_20251108_092939.json
- D share/evidence/guard_all_guards_start_20251108_093514.json
- D share/evidence/guard_all_guards_start_20251108_093929.json
- D share/evidence/guard_all_guards_start_20251108_094058.json
- D share/evidence/guard_all_guards_start_20251108_100557.json
- D share/evidence/guard_all_guards_start_20251108_100601.json
- D share/evidence/guard_all_guards_start_20251108_100850.json
- D share/evidence/guard_all_guards_start_20251108_100901.json
- D share/evidence/guard_all_guards_start_20251108_100902.json
- D share/evidence/guard_all_guards_start_20251108_101036.json
- D share/evidence/guard_all_guards_start_20251108_101116.json
- D share/evidence/guard_all_guards_start_20251108_101117.json
- D share/evidence/guard_all_guards_start_20251108_101126.json
- D share/evidence/guard_all_guards_start_20251108_101145.json
- D share/evidence/guard_all_guards_start_20251108_101146.json
- D share/evidence/guard_all_guards_start_20251108_101229.json
- D share/evidence/guard_all_guards_start_20251108_101344.json
- D share/evidence/guard_all_guards_start_20251108_101401.json
- D share/evidence/guard_all_guards_start_20251108_101442.json
- D share/evidence/guard_all_guards_start_20251108_101452.json
- D share/evidence/guard_all_guards_start_20251108_101459.json
- D share/evidence/guard_all_guards_start_20251108_101554.json
- D share/evidence/guard_all_guards_start_20251108_101601.json
- D share/evidence/guard_all_guards_start_20251108_101606.json
- D share/evidence/guard_all_guards_start_20251108_101700.json
- D share/evidence/guard_all_guards_start_20251108_101819.json
- D share/evidence/guard_all_guards_start_20251108_101833.json
- D share/evidence/guard_all_guards_start_20251108_101958.json
- D share/evidence/guard_all_guards_start_20251108_102012.json
- D share/evidence/guard_all_guards_start_20251108_102013.json
- D share/evidence/guard_all_guards_start_20251108_102026.json
- D share/evidence/guard_all_guards_start_20251108_102125.json
- D share/evidence/guard_all_guards_start_20251108_102131.json
- D share/evidence/guard_all_guards_start_20251108_102139.json
- D share/evidence/guard_all_guards_start_20251108_102438.json
- D share/evidence/guard_all_guards_start_20251108_102444.json
- D share/evidence/guard_all_guards_start_20251108_102445.json
- D share/evidence/guard_all_guards_start_20251108_102640.json
- D share/evidence/guard_all_guards_start_20251108_102732.json
- D share/evidence/guard_all_guards_start_20251108_102746.json
- D share/evidence/guard_all_guards_start_20251108_102908.json
- D share/evidence/guard_all_guards_start_20251108_103004.json
- D share/evidence/guard_all_guards_start_20251108_103005.json
- D share/evidence/guard_all_guards_start_20251108_103121.json
- D share/evidence/guard_all_guards_start_20251108_103128.json
- D share/evidence/guard_all_guards_start_20251108_103138.json
- D share/evidence/guard_all_guards_start_20251108_103142.json
- D share/evidence/guard_all_guards_start_20251108_103143.json
- D share/evidence/guard_all_guards_start_20251108_103326.json
- D share/evidence/guard_all_guards_start_20251108_103504.json
- D share/evidence/guard_all_guards_start_20251108_103536.json
- D share/evidence/guard_all_guards_start_20251108_103714.json
- D share/evidence/guard_all_guards_start_20251108_103719.json
- D share/evidence/guard_all_guards_start_20251108_103834.json
- D share/evidence/guard_all_guards_start_20251108_103847.json
- D share/evidence/guard_all_guards_start_20251108_104203.json
- D share/evidence/guard_all_guards_start_20251108_104220.json
- D share/evidence/guard_all_guards_start_20251108_104458.json
- D share/evidence/guard_all_guards_start_20251108_104558.json
- D share/evidence/guard_all_guards_start_20251108_104834.json
- D share/evidence/guard_all_guards_start_20251108_104835.json
- D share/evidence/guard_all_guards_start_20251108_105019.json
- D share/evidence/guard_all_guards_start_20251108_105104.json
- D share/evidence/guard_all_guards_start_20251108_105105.json
- D share/evidence/guard_all_guards_start_20251108_110331.json
- D share/evidence/guard_all_guards_start_20251108_110332.json
- D share/evidence/guard_all_guards_start_20251108_121834.json
- D share/evidence/guard_all_guards_start_20251108_122056.json
- D share/evidence/guard_all_summary_20251106_112404.json
- D share/evidence/guard_all_summary_20251106_112703.json
- D share/evidence/guard_all_summary_20251106_113159.json
- D share/evidence/guard_all_summary_20251106_113207.json
- D share/evidence/guard_all_summary_20251106_113216.json
- D share/evidence/guard_all_summary_20251106_113238.json
- D share/evidence/guard_all_summary_20251106_113243.json
- D share/evidence/guard_all_summary_20251106_115317.json
- D share/evidence/guard_all_summary_20251106_115331.json
- D share/evidence/guard_all_summary_20251106_115718.json
- D share/evidence/guard_all_summary_20251106_115946.json
- D share/evidence/guard_all_summary_20251106_142436.json
- D share/evidence/guard_all_summary_20251106_142453.json
- D share/evidence/guard_all_summary_20251106_142455.json
- D share/evidence/guard_all_summary_20251106_142802.json
- D share/evidence/guard_all_summary_20251106_143308.json
- D share/evidence/guard_all_summary_20251106_144154.json
- D share/evidence/guard_all_summary_20251106_153424.json
- D share/evidence/guard_all_summary_20251106_153654.json
- D share/evidence/guard_all_summary_20251106_154111.json
- D share/evidence/guard_all_summary_20251106_155136.json
- D share/evidence/guard_all_summary_20251107_094210.json
- D share/evidence/guard_all_summary_20251107_094916.json
- D share/evidence/guard_all_summary_20251107_095547.json
- D share/evidence/guard_all_summary_20251107_100331.json
- D share/evidence/guard_all_summary_20251107_101035.json
- D share/evidence/guard_all_summary_20251107_101609.json
- D share/evidence/guard_all_summary_20251107_101625.json
- D share/evidence/guard_all_summary_20251107_102231.json
- D share/evidence/guard_all_summary_20251107_102544.json
- D share/evidence/guard_all_summary_20251107_112514.json
- D share/evidence/guard_all_summary_20251107_112530.json
- D share/evidence/guard_all_summary_20251107_113005.json
- D share/evidence/guard_all_summary_20251107_113132.json
- D share/evidence/guard_all_summary_20251107_113236.json
- D share/evidence/guard_all_summary_20251107_115426.json
- D share/evidence/guard_all_summary_20251107_141532.json
- D share/evidence/guard_all_summary_20251107_142105.json
- D share/evidence/guard_all_summary_20251107_142120.json
- D share/evidence/guard_all_summary_20251107_142134.json
- D share/evidence/guard_all_summary_20251107_143554.json
- D share/evidence/guard_all_summary_20251107_143810.json
- D share/evidence/guard_all_summary_20251107_144033.json
- D share/evidence/guard_all_summary_20251107_144118.json
- D share/evidence/guard_all_summary_20251107_144147.json
- D share/evidence/guard_all_summary_20251107_144321.json
- D share/evidence/guard_all_summary_20251107_145010.json
- D share/evidence/guard_all_summary_20251107_172004.json
- D share/evidence/guard_all_summary_20251107_172005.json
- D share/evidence/guard_all_summary_20251107_172356.json
- D share/evidence/guard_all_summary_20251107_172447.json
- D share/evidence/guard_all_summary_20251107_172955.json
- D share/evidence/guard_all_summary_20251107_173255.json
- D share/evidence/guard_all_summary_20251107_173257.json
- D share/evidence/guard_all_summary_20251107_173258.json
- D share/evidence/guard_all_summary_20251107_173304.json
- D share/evidence/guard_all_summary_20251107_173331.json
- D share/evidence/guard_all_summary_20251107_174026.json
- D share/evidence/guard_all_summary_20251107_174027.json
- D share/evidence/guard_all_summary_20251107_174033.json
- D share/evidence/guard_all_summary_20251107_174036.json
- D share/evidence/guard_all_summary_20251107_193348.json
- D share/evidence/guard_all_summary_20251107_193403.json
- D share/evidence/guard_all_summary_20251107_193514.json
- D share/evidence/guard_all_summary_20251107_194011.json
- D share/evidence/guard_all_summary_20251107_194116.json
- D share/evidence/guard_all_summary_20251107_194409.json
- D share/evidence/guard_all_summary_20251107_200125.json
- D share/evidence/guard_all_summary_20251107_200544.json
- D share/evidence/guard_all_summary_20251107_202046.json
- D share/evidence/guard_all_summary_20251107_202217.json
- D share/evidence/guard_all_summary_20251107_202958.json
- D share/evidence/guard_all_summary_20251107_204647.json
- D share/evidence/guard_all_summary_20251107_205426.json
- D share/evidence/guard_all_summary_20251107_205531.json
- D share/evidence/guard_all_summary_20251107_205700.json
- D share/evidence/guard_all_summary_20251107_205814.json
- D share/evidence/guard_all_summary_20251107_205941.json
- D share/evidence/guard_all_summary_20251107_222516.json
- D share/evidence/guard_all_summary_20251107_225525.json
- D share/evidence/guard_all_summary_20251107_225736.json
- D share/evidence/guard_all_summary_20251107_225805.json
- D share/evidence/guard_all_summary_20251107_225937.json
- D share/evidence/guard_all_summary_20251107_231023.json
- D share/evidence/guard_all_summary_20251107_231758.json
- D share/evidence/guard_all_summary_20251107_232251.json
- D share/evidence/guard_all_summary_20251107_232306.json
- D share/evidence/guard_all_summary_20251107_232307.json
- D share/evidence/guard_all_summary_20251107_232559.json
- D share/evidence/guard_all_summary_20251107_232642.json
- D share/evidence/guard_all_summary_20251107_232833.json
- D share/evidence/guard_all_summary_20251108_092939.json
- D share/evidence/guard_all_summary_20251108_093514.json
- D share/evidence/guard_all_summary_20251108_093929.json
- D share/evidence/guard_all_summary_20251108_094058.json
- D share/evidence/guard_all_summary_20251108_100558.json
- D share/evidence/guard_all_summary_20251108_100601.json
- D share/evidence/guard_all_summary_20251108_100850.json
- D share/evidence/guard_all_summary_20251108_100901.json
- D share/evidence/guard_all_summary_20251108_100902.json
- D share/evidence/guard_all_summary_20251108_101037.json
- D share/evidence/guard_all_summary_20251108_101116.json
- D share/evidence/guard_all_summary_20251108_101117.json
- D share/evidence/guard_all_summary_20251108_101118.json
- D share/evidence/guard_all_summary_20251108_101126.json
- D share/evidence/guard_all_summary_20251108_101145.json
- D share/evidence/guard_all_summary_20251108_101146.json
- D share/evidence/guard_all_summary_20251108_101229.json
- D share/evidence/guard_all_summary_20251108_101344.json
- D share/evidence/guard_all_summary_20251108_101401.json
- D share/evidence/guard_all_summary_20251108_101442.json
- D share/evidence/guard_all_summary_20251108_101452.json
- D share/evidence/guard_all_summary_20251108_101459.json
- D share/evidence/guard_all_summary_20251108_101555.json
- D share/evidence/guard_all_summary_20251108_101601.json
- D share/evidence/guard_all_summary_20251108_101606.json
- D share/evidence/guard_all_summary_20251108_101701.json
- D share/evidence/guard_all_summary_20251108_101819.json
- D share/evidence/guard_all_summary_20251108_101833.json
- D share/evidence/guard_all_summary_20251108_101834.json
- D share/evidence/guard_all_summary_20251108_101958.json
- D share/evidence/guard_all_summary_20251108_102012.json
- D share/evidence/guard_all_summary_20251108_102013.json
- D share/evidence/guard_all_summary_20251108_102026.json
- D share/evidence/guard_all_summary_20251108_102125.json
- D share/evidence/guard_all_summary_20251108_102131.json
- D share/evidence/guard_all_summary_20251108_102132.json
- D share/evidence/guard_all_summary_20251108_102140.json
- D share/evidence/guard_all_summary_20251108_102438.json
- D share/evidence/guard_all_summary_20251108_102445.json
- D share/evidence/guard_all_summary_20251108_102640.json
- D share/evidence/guard_all_summary_20251108_102732.json
- D share/evidence/guard_all_summary_20251108_102746.json
- D share/evidence/guard_all_summary_20251108_102747.json
- D share/evidence/guard_all_summary_20251108_102908.json
- D share/evidence/guard_all_summary_20251108_103005.json
- D share/evidence/guard_all_summary_20251108_103121.json
- D share/evidence/guard_all_summary_20251108_103128.json
- D share/evidence/guard_all_summary_20251108_103129.json
- D share/evidence/guard_all_summary_20251108_103138.json
- D share/evidence/guard_all_summary_20251108_103142.json
- D share/evidence/guard_all_summary_20251108_103143.json
- D share/evidence/guard_all_summary_20251108_103327.json
- D share/evidence/guard_all_summary_20251108_103504.json
- D share/evidence/guard_all_summary_20251108_103536.json
- D share/evidence/guard_all_summary_20251108_103714.json
- D share/evidence/guard_all_summary_20251108_103719.json
- D share/evidence/guard_all_summary_20251108_103720.json
- D share/evidence/guard_all_summary_20251108_103834.json
- D share/evidence/guard_all_summary_20251108_103847.json
- D share/evidence/guard_all_summary_20251108_104203.json
- D share/evidence/guard_all_summary_20251108_104220.json
- D share/evidence/guard_all_summary_20251108_104458.json
- D share/evidence/guard_all_summary_20251108_104558.json
- D share/evidence/guard_all_summary_20251108_104835.json
- D share/evidence/guard_all_summary_20251108_105019.json
- D share/evidence/guard_all_summary_20251108_105020.json
- D share/evidence/guard_all_summary_20251108_105104.json
- D share/evidence/guard_all_summary_20251108_105105.json
- D share/evidence/guard_all_summary_20251108_110332.json
- D share/evidence/guard_all_summary_20251108_121834.json
- D share/evidence/guard_all_summary_20251108_122056.json
- D share/evidence/guard_all_summary_20251108_122057.json
- D share/evidence/guard_all_validation_20251106_112404.json
- D share/evidence/guard_all_validation_20251106_112703.json
- D share/evidence/guard_all_validation_20251106_113159.json
- D share/evidence/guard_all_validation_20251106_113207.json
- D share/evidence/guard_all_validation_20251106_113216.json
- D share/evidence/guard_all_validation_20251106_113238.json
- D share/evidence/guard_all_validation_20251106_113243.json
- D share/evidence/guard_all_validation_20251106_115317.json
- D share/evidence/guard_all_validation_20251106_115331.json
- D share/evidence/guard_all_validation_20251106_115718.json
- D share/evidence/guard_all_validation_20251106_115945.json
- D share/evidence/guard_all_validation_20251106_115946.json
- D share/evidence/guard_all_validation_20251106_142436.json
- D share/evidence/guard_all_validation_20251106_142453.json
- D share/evidence/guard_all_validation_20251106_142455.json
- D share/evidence/guard_all_validation_20251106_142802.json
- D share/evidence/guard_all_validation_20251106_143308.json
- D share/evidence/guard_all_validation_20251106_144154.json
- D share/evidence/guard_all_validation_20251106_153424.json
- D share/evidence/guard_all_validation_20251106_153654.json
- D share/evidence/guard_all_validation_20251106_154111.json
- D share/evidence/guard_all_validation_20251106_155136.json
- D share/evidence/guard_all_validation_20251107_094210.json
- D share/evidence/guard_all_validation_20251107_094916.json
- D share/evidence/guard_all_validation_20251107_095547.json
- D share/evidence/guard_all_validation_20251107_100331.json
- D share/evidence/guard_all_validation_20251107_101035.json
- D share/evidence/guard_all_validation_20251107_101609.json
- D share/evidence/guard_all_validation_20251107_101625.json
- D share/evidence/guard_all_validation_20251107_102230.json
- D share/evidence/guard_all_validation_20251107_102231.json
- D share/evidence/guard_all_validation_20251107_102544.json
- D share/evidence/guard_all_validation_20251107_112514.json
- D share/evidence/guard_all_validation_20251107_112530.json
- D share/evidence/guard_all_validation_20251107_113005.json
- D share/evidence/guard_all_validation_20251107_113132.json
- D share/evidence/guard_all_validation_20251107_113236.json
- D share/evidence/guard_all_validation_20251107_115426.json
- D share/evidence/guard_all_validation_20251107_141532.json
- D share/evidence/guard_all_validation_20251107_142105.json
- D share/evidence/guard_all_validation_20251107_142120.json
- D share/evidence/guard_all_validation_20251107_142134.json
- D share/evidence/guard_all_validation_20251107_143554.json
- D share/evidence/guard_all_validation_20251107_143810.json
- D share/evidence/guard_all_validation_20251107_144033.json
- D share/evidence/guard_all_validation_20251107_144118.json
- D share/evidence/guard_all_validation_20251107_144147.json
- D share/evidence/guard_all_validation_20251107_144321.json
- D share/evidence/guard_all_validation_20251107_145010.json
- D share/evidence/guard_all_validation_20251107_172004.json
- D share/evidence/guard_all_validation_20251107_172005.json
- D share/evidence/guard_all_validation_20251107_172356.json
- D share/evidence/guard_all_validation_20251107_172447.json
- D share/evidence/guard_all_validation_20251107_172954.json
- D share/evidence/guard_all_validation_20251107_172955.json
- D share/evidence/guard_all_validation_20251107_173255.json
- D share/evidence/guard_all_validation_20251107_173257.json
- D share/evidence/guard_all_validation_20251107_173258.json
- D share/evidence/guard_all_validation_20251107_173304.json
- D share/evidence/guard_all_validation_20251107_173331.json
- D share/evidence/guard_all_validation_20251107_174026.json
- D share/evidence/guard_all_validation_20251107_174027.json
- D share/evidence/guard_all_validation_20251107_174033.json
- D share/evidence/guard_all_validation_20251107_174036.json
- D share/evidence/guard_all_validation_20251107_193348.json
- D share/evidence/guard_all_validation_20251107_193403.json
- D share/evidence/guard_all_validation_20251107_193514.json
- D share/evidence/guard_all_validation_20251107_194011.json
- D share/evidence/guard_all_validation_20251107_194116.json
- D share/evidence/guard_all_validation_20251107_194409.json
- D share/evidence/guard_all_validation_20251107_200125.json
- D share/evidence/guard_all_validation_20251107_200544.json
- D share/evidence/guard_all_validation_20251107_202046.json
- D share/evidence/guard_all_validation_20251107_202217.json
- D share/evidence/guard_all_validation_20251107_202958.json
- D share/evidence/guard_all_validation_20251107_204647.json
- D share/evidence/guard_all_validation_20251107_205426.json
- D share/evidence/guard_all_validation_20251107_205531.json
- D share/evidence/guard_all_validation_20251107_205700.json
- D share/evidence/guard_all_validation_20251107_205813.json
- D share/evidence/guard_all_validation_20251107_205814.json
- D share/evidence/guard_all_validation_20251107_205941.json
- D share/evidence/guard_all_validation_20251107_222516.json
- D share/evidence/guard_all_validation_20251107_225525.json
- D share/evidence/guard_all_validation_20251107_225736.json
- D share/evidence/guard_all_validation_20251107_225805.json
- D share/evidence/guard_all_validation_20251107_225937.json
- D share/evidence/guard_all_validation_20251107_231023.json
- D share/evidence/guard_all_validation_20251107_231758.json
- D share/evidence/guard_all_validation_20251107_232251.json
- D share/evidence/guard_all_validation_20251107_232306.json
- D share/evidence/guard_all_validation_20251107_232307.json
- D share/evidence/guard_all_validation_20251107_232559.json
- D share/evidence/guard_all_validation_20251107_232642.json
- D share/evidence/guard_all_validation_20251107_232833.json
- D share/evidence/guard_all_validation_20251108_092939.json
- D share/evidence/guard_all_validation_20251108_093514.json
- D share/evidence/guard_all_validation_20251108_093929.json
- D share/evidence/guard_all_validation_20251108_094058.json
- D share/evidence/guard_all_validation_20251108_100558.json
- D share/evidence/guard_all_validation_20251108_100601.json
- D share/evidence/guard_all_validation_20251108_100850.json
- D share/evidence/guard_all_validation_20251108_100901.json
- D share/evidence/guard_all_validation_20251108_100902.json
- D share/evidence/guard_all_validation_20251108_101036.json
- D share/evidence/guard_all_validation_20251108_101037.json
- D share/evidence/guard_all_validation_20251108_101116.json
- D share/evidence/guard_all_validation_20251108_101117.json
- D share/evidence/guard_all_validation_20251108_101118.json
- D share/evidence/guard_all_validation_20251108_101126.json
- D share/evidence/guard_all_validation_20251108_101145.json
- D share/evidence/guard_all_validation_20251108_101146.json
- D share/evidence/guard_all_validation_20251108_101229.json
- D share/evidence/guard_all_validation_20251108_101344.json
- D share/evidence/guard_all_validation_20251108_101401.json
- D share/evidence/guard_all_validation_20251108_101442.json
- D share/evidence/guard_all_validation_20251108_101452.json
- D share/evidence/guard_all_validation_20251108_101459.json
- D share/evidence/guard_all_validation_20251108_101555.json
- D share/evidence/guard_all_validation_20251108_101601.json
- D share/evidence/guard_all_validation_20251108_101606.json
- D share/evidence/guard_all_validation_20251108_101701.json
- D share/evidence/guard_all_validation_20251108_101819.json
- D share/evidence/guard_all_validation_20251108_101833.json
- D share/evidence/guard_all_validation_20251108_101834.json
- D share/evidence/guard_all_validation_20251108_101958.json
- D share/evidence/guard_all_validation_20251108_102012.json
- D share/evidence/guard_all_validation_20251108_102013.json
- D share/evidence/guard_all_validation_20251108_102026.json
- D share/evidence/guard_all_validation_20251108_102125.json
- D share/evidence/guard_all_validation_20251108_102131.json
- D share/evidence/guard_all_validation_20251108_102132.json
- D share/evidence/guard_all_validation_20251108_102140.json
- D share/evidence/guard_all_validation_20251108_102438.json
- D share/evidence/guard_all_validation_20251108_102444.json
- D share/evidence/guard_all_validation_20251108_102445.json
- D share/evidence/guard_all_validation_20251108_102640.json
- D share/evidence/guard_all_validation_20251108_102732.json
- D share/evidence/guard_all_validation_20251108_102746.json
- D share/evidence/guard_all_validation_20251108_102747.json
- D share/evidence/guard_all_validation_20251108_102908.json
- D share/evidence/guard_all_validation_20251108_103005.json
- D share/evidence/guard_all_validation_20251108_103121.json
- D share/evidence/guard_all_validation_20251108_103128.json
- D share/evidence/guard_all_validation_20251108_103129.json
- D share/evidence/guard_all_validation_20251108_103138.json
- D share/evidence/guard_all_validation_20251108_103142.json
- D share/evidence/guard_all_validation_20251108_103143.json
- D share/evidence/guard_all_validation_20251108_103327.json
- D share/evidence/guard_all_validation_20251108_103504.json
- D share/evidence/guard_all_validation_20251108_103536.json
- D share/evidence/guard_all_validation_20251108_103714.json
- D share/evidence/guard_all_validation_20251108_103719.json
- D share/evidence/guard_all_validation_20251108_103720.json
- D share/evidence/guard_all_validation_20251108_103834.json
- D share/evidence/guard_all_validation_20251108_103847.json
- D share/evidence/guard_all_validation_20251108_104203.json
- D share/evidence/guard_all_validation_20251108_104220.json
- D share/evidence/guard_all_validation_20251108_104458.json
- D share/evidence/guard_all_validation_20251108_104558.json
- D share/evidence/guard_all_validation_20251108_104835.json
- D share/evidence/guard_all_validation_20251108_105019.json
- D share/evidence/guard_all_validation_20251108_105020.json
- D share/evidence/guard_all_validation_20251108_105104.json
- D share/evidence/guard_all_validation_20251108_105105.json
- D share/evidence/guard_all_validation_20251108_110331.json
- D share/evidence/guard_all_validation_20251108_110332.json
- D share/evidence/guard_all_validation_20251108_121834.json
- D share/evidence/guard_all_validation_20251108_122056.json
- D share/evidence/guard_all_validation_20251108_122057.json
- D share/evidence/rfc3339-fastlane/20251108T184406Z/release-rfc3339-guard.log
- D share/evidence/rfc3339-fastlane/20251108T184418Z/git_head.txt
- D share/evidence/rfc3339-fastlane/20251108T184418Z/meta.env
- D share/evidence/rfc3339-fastlane/20251108T184418Z/release-rfc3339-guard.log
- D share/exports/biblescholar/cross_language.json
- D share/exports/biblescholar/insights.json
- D share/exports/biblescholar/lexicon.json
- D share/exports/biblescholar/search.json
- D share/exports/biblescholar/semantic_search.json
- D share/exports/biblescholar/summary.json
- D share/exports/docs-control/archive-candidates.json
- D share/exports/docs-control/archive-dryrun.json
- D share/exports/docs-control/archive-receipt.json
- D share/exports/docs-control/canonical.json
- D share/exports/docs-control/codebase-cleanup-receipt.json
- D share/exports/docs-control/orphans.json
- D share/exports/docs-control/root-cleanup-receipt.json
- D share/exports/docs-control/summary.json
- D share/exports/docs-control/unreviewed-batch.json
- D share/exports/graph_correlations.json
- D share/exports/graph_latest.json
- D share/exports/graph_patterns.json
- D share/exports/graph_stats.json
- D share/exports/pattern_forecast.json
- D share/exports/temporal_patterns.json
- D share/forest_overview.md
- D share/graph-patterns.schema.json
- D share/graph-stats.schema.json
- D share/graph.schema.json
- D share/graph_stats.head.json
+ D share/code_fragments_classified.json
+ D share/code_fragments_embedded.json
+ M share/doc_registry.md
+ M share/doc_sync_state.md
+ M share/doc_version.md
+ M share/exports/docs-control/archive-candidates.json
+ M share/exports/docs-control/archive-dryrun.json
+ M share/exports/docs-control/canonical.json
+ M share/exports/docs-control/orphans.json
+ M share/exports/docs-control/summary.json
+ M share/exports/docs-control/unreviewed-batch.json
+ D share/exports/repo/reunion_plan.json
+ D share/exports/repo/semantic_inventory.json
+ M share/governance_freshness.md
+ M share/hint_registry.md
  M share/kb_registry.json
- D share/ledger_sync.py
- D share/ledger_verify.py
- D share/mcp/agent_runtime.bindings.chip.json
- D share/mcp/agent_runtime.bindings.json
- D share/mcp/atlas_node_deeplink.ok.json
- D share/mcp/biblescholar_envelope.json
- D share/mcp/bundle_proof.json
- D share/mcp/db_error.guard.json
- D share/mcp/db_select1.ok.json
- D share/mcp/db_smoke.ok.json
- D share/mcp/dsn_mismatch.guard.json
- D share/mcp/env_mismatch.warn.json
- D share/mcp/envelope_trace.dbmap.json
- D share/mcp/envelope_trace.map.json
- D share/mcp/envelopes/smoke.json
- D share/mcp/envelopes/test-env-001.json
- D share/mcp/gatekeeper_proof.json
- D share/mcp/knowledge_mcp_proof.json
- D share/mcp/knowledge_mcp_proof.txt
- D share/mcp/pg_checkpointer.handshake.json
- D share/mcp/por_proof.json
- D share/mcp/proof_ok.json
- D share/mcp/proof_snapshot.generated_at.txt
- D share/mcp/query_result.json
- D share/mcp/rodsn.guard.json
- D share/mcp/runtime_checkpointer.json
- D share/mcp/schema_proof.json
- D share/mcp/session_trace.json
- D share/mcp/strict.env.json
- D share/mcp/strict_live.handshake.json
- D share/mcp/strict_roundtrip.ok.json
- D share/mcp/strict_trace.ptr.txt
- D share/mcp/tagproof_proof.json
- D share/mcp/trace_link.guard.json
- D share/mcp/trace_links.json
- D share/ops_command_ledger.jsonl
+ M share/kb_registry.md
+ M share/live_posture.md
+ M share/next_steps.head.md
+ M share/planning_context.md
+ M share/planning_lane_status.md
  M share/pm.snapshot.md
- D share/pre-commit-config.yaml
- D share/projects/biblescholar/ARCHITECTURE.md
- D share/projects/biblescholar/README.md
- D share/projects/storymaker/AGENTS.md
- D share/projects/storymaker/README.md
- D share/pull_request_template.md
- D share/pyproject.toml
- D share/pytest.ini
- D share/releases/v0.0.2/webproof/browser_verified_catalog.png
- D share/releases/v0.0.2/webproof/browser_verified_index.png
- D share/releases/v0.0.2/webproof/catalog.png
- D share/releases/v0.0.2/webproof/index.png
- D share/releases/v0.0.2/webproof/report.json
- D share/releases/v0.0.3/mcp_guard/guard_mcp_db_ro.final.json
- D share/releases/v0.0.3/tagproof/tag_run.full.log
- D share/releases/v0.0.3/tagproof/tag_run.view.final.json
- D share/releases/v0.0.3/tagproof/tag_run.view.pre.json
- D share/releases/v0.0.3/webproof/browser_verified_index.png
- D share/releases/v0.0.3/webproof/browser_verified_mcp_catalog_view.png
- D share/releases/v0.0.3/webproof/catalog.png
- D share/releases/v0.0.3/webproof/index.png
- D share/releases/v0.0.3/webproof/report.json
- D share/rules/069-always-use-dms-first.md
- D share/runtime/system_bringup.manifest.json
- D share/schemas/SCHEMA_REGISTRY.md
- D share/schemas/biblescholar/README.md
- D share/schemas/biblescholar/bible_db_verses_structure.sql
- D share/schemas/biblescholar/bible_db_versification_structure.sql
- D share/webproof/lm/browser_verified_lm_status.png
- D share/webproof/lm/browser_verify_instructions.txt
- D share/webproof/lm/lm_status.phase4b.png
-?? agentpm/hints/
-?? docs/ADRs/ADR-059-hint-registry.md
-?? docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md
-?? docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md
-?? docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md
-?? docs/SSOT/SHARE_FOLDER_STRUCTURE.md
-?? migrations/054_control_hint_registry.sql
-?? scripts/db/export_dms_tables.py
-?? scripts/db/export_governance_freshness.py
-?? scripts/db/export_planning_lane_status.py
-?? scripts/governance/discover_hints.py
-?? scripts/governance/seed_hint_registry.py
-?? scripts/guards/hints_required.py
-?? scripts/status/export_live_posture.py
-?? scripts/util/
+ M share/pm_contract.head.md
+ M share/pm_snapshot.md
+ M share/pm_system_introspection_evidence.md
+ M share/schema_snapshot.md
+ M src/gemantria/dsn.py
+ M src/graph/batch_processor.py
+ M src/graph/graph.py
+ M src/graph/patterns.py
+ M src/infra/checkpointer.py
+ M src/infra/db.py
+ M src/infra/evidence_logger.py
+ M src/infra/metrics_queries.py
+ M src/infra/retry_utils.py
+ M src/nodes/ai_noun_discovery.py
+ M src/nodes/analysis_runner.py
+ M src/nodes/enrichment.py
+ M src/nodes/math_verifier.py
+ M src/nodes/network_aggregator.py
+ M src/nodes/schema_validator.py
+ M src/obs/prom_exporter.py
+ M src/services/api_server.py
+ M src/services/lmstudio_client.py
+ M src/services/model_router.py
+ M src/services/rerank_via_embeddings.py
+ M test_bi_encoder_rerank.py
+ M test_mcp_server.py
+ M tests/acceptance/test_document_management_e2e.py
+ M tests/bible/test_passage_service.py
+ M tests/cli/test_tools_planning.py
+ M tests/contract/test_document_governance.py
+ M tests/db/test_control_compliance_exports.py
+ M tests/db/test_control_mvs_and_mcp_catalog.py
+ M tests/db/test_control_plane_smoke.py
+ M tests/guards/test_guard_control_compliance_exports.py
+ M tests/guards/test_guard_control_compliance_webproof.py
+ M tests/integration/test_ai_enrichment_node.py
+ M tests/integration/test_api_temporal_forecast.py
+ M tests/integration/test_checkpoint_resume_compass.py
+ M tests/integration/test_phase7f_model_readiness.py
+ M tests/integration/test_postgres_checkpointer.py
+ M tests/scripts/governance/test_ingest_docs_to_db.py
+ M tests/scripts/governance/test_ingest_docs_to_db_agents.py
+ M tests/scripts/guards/test_guard_doc_embeddings.py
+ M tests/scripts/guards/test_guard_doc_fragments.py
+ M tests/scripts/guards/test_guard_docs_db_ssot.py
+ M tests/test_env_loader.py
+ M tests/test_repo_introspection_cli.py
+ M tests/ui/test_atlas_node_click.py
+ M tests/unit/guards/test_exports_guard_negative.py
+ M tests/unit/guards/test_exports_rfc3339.py
+ M tests/unit/test_confidence_gates.py
+ M tests/unit/test_eval_reclassify_edges.py
+ M tests/unit/test_network_aggregator.py
+ M tests/unit/test_ollama_rerank_failures.py
+ M tests/unit/test_planning_lane.py
+ M tests/unit/test_pmagent_models_active.py
+ M tests/unit/test_ssot.py
+ M tests/web/test_bible_passage_api.py
+ M tests/web/test_lm_indicator_api.py
+ M tools/genesis_autopilot.py
 ?? share/agents_md.head.json
 ?? share/doc_registry.json
 ?? share/doc_sync_state.json
@@ -878,7 +410,6 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ?? share/planning_lane_status.json
 ?? share/pm_contract.head.json
 ?? share/pm_snapshot.json
-?? share/pm_system_introspection_evidence.md
 ?? share/schema_snapshot.json
 
 ```
@@ -888,36 +419,37 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent
 
 ```
-                                                                                
- Usage: pmagent [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ health          Health check commands                                        │
-│ graph           Graph operations                                             │
-│ control         Control-plane operations                                     │
-│ ask             Ask questions using SSOT documentation                       │
-│ reality-check   Reality checks for automated bring-up                        │
-│ reality         Reality validation commands                                  │
-│ bringup         System bring-up commands                                     │
-│ mcp             MCP server commands                                          │
-│ lm              LM (Language Model) operations                               │
-│ status          System status helpers                                        │
-│ docs            Documentation search operations                              │
-│ models          Model introspection commands                                 │
-│ state           System state ledger operations                               │
-│ kb              Knowledge-base document registry operations                  │
-│ plan            Planning workflows powered by KB registry                    │
-│ report          Reporting commands                                           │
-│ tools           External planning/tool helpers (Gemini, Codex)               │
-│ autopilot       Autopilot backend operations                                 │
-│ bible           Bible operations                                             │
-│ rerank          Rerank operations                                            │
-│ extract         Extract operations                                           │
-│ embed           Embed operations                                             │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent [OPTIONS] COMMAND [ARGS]...                                          
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ health          Health check commands                                             │
+│ graph           Graph operations                                                  │
+│ control         Control-plane operations                                          │
+│ ask             Ask questions using SSOT documentation                            │
+│ reality-check   Reality checks for automated bring-up                             │
+│ reality         Reality validation commands                                       │
+│ bringup         System bring-up commands                                          │
+│ mcp             MCP server commands                                               │
+│ lm              LM (Language Model) operations                                    │
+│ status          System status helpers                                             │
+│ docs            Documentation search operations                                   │
+│ models          Model introspection commands                                      │
+│ state           System state ledger operations                                    │
+│ kb              Knowledge-base document registry operations                       │
+│ plan            Planning workflows powered by KB registry                         │
+│ report          Reporting commands                                                │
+│ tools           External planning/tool helpers (Gemini, Codex)                    │
+│ autopilot       Autopilot backend operations                                      │
+│ repo            Repository introspection and git workflow commands.               │
+│ bible           Bible operations                                                  │
+│ rerank          Rerank operations                                                 │
+│ extract         Extract operations                                                │
+│ embed           Embed operations                                                  │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -925,22 +457,22 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent plan
 
 ```
-                                                                                
- Usage: pmagent plan [OPTIONS] COMMAND [ARGS]...                                
-                                                                                
- Planning workflows powered by KB registry                                      
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ next           Suggest next work items from MASTER_PLAN + NEXT_STEPS         │
-│ open           Open a NEXT_STEPS item as a capability_session envelope       │
-│ reality-loop   Run a single plan+posture loop and persist a                  │
-│                capability_session envelope                                   │
-│ history        List recent capability_session envelopes (read-only)          │
-│ kb             KB-powered planning commands                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent plan [OPTIONS] COMMAND [ARGS]...                                     
+                                                                                     
+ Planning workflows powered by KB registry                                           
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ next           Suggest next work items from MASTER_PLAN + NEXT_STEPS              │
+│ open           Open a NEXT_STEPS item as a capability_session envelope            │
+│ reality-loop   Run a single plan+posture loop and persist a capability_session    │
+│                envelope                                                           │
+│ history        List recent capability_session envelopes (read-only)               │
+│ kb             KB-powered planning commands                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -948,17 +480,17 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent kb
 
 ```
-                                                                                
- Usage: pmagent kb [OPTIONS] COMMAND [ARGS]...                                  
-                                                                                
- Knowledge-base document registry operations                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ registry   KB document registry commands                                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent kb [OPTIONS] COMMAND [ARGS]...                                       
+                                                                                     
+ Knowledge-base document registry operations                                         
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ registry   KB document registry commands                                          │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -966,18 +498,18 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status
 
 ```
-                                                                                
- Usage: pmagent status [OPTIONS] COMMAND [ARGS]...                              
-                                                                                
- System status helpers                                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ explain   Explain current DB + LM health in plain language                   │
-│ kb        KB registry status view for PM/AgentPM planning                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent status [OPTIONS] COMMAND [ARGS]...                                   
+                                                                                     
+ System status helpers                                                               
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ explain   Explain current DB + LM health in plain language                        │
+│ kb        KB registry status view for PM/AgentPM planning                         │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -991,16 +523,16 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status kb
 
 ```
-                                                                                
- Usage: pmagent status kb [OPTIONS]                                             
-                                                                                
- KB registry status view for PM/AgentPM planning                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --json-only                  Print only JSON                                 │
-│ --registry-path        TEXT  Path to registry JSON file                      │
-│ --help                       Show this message and exit.                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent status kb [OPTIONS]                                                  
+                                                                                     
+ KB registry status view for PM/AgentPM planning                                     
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --json-only                  Print only JSON                                      │
+│ --registry-path        TEXT  Path to registry JSON file                           │
+│ --help                       Show this message and exit.                          │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1008,16 +540,16 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status explain
 
 ```
-                                                                                
- Usage: pmagent status explain [OPTIONS]                                        
-                                                                                
- Explain current DB + LM health in plain language                               
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --json-only          Return JSON instead of text                             │
-│ --no-lm              Skip LM enhancement, use rule-based only                │
-│ --help               Show this message and exit.                             │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent status explain [OPTIONS]                                             
+                                                                                     
+ Explain current DB + LM health in plain language                                    
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --json-only          Return JSON instead of text                                  │
+│ --no-lm              Skip LM enhancement, use rule-based only                     │
+│ --help               Show this message and exit.                                  │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1031,20 +563,20 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent health
 
 ```
-                                                                                
- Usage: pmagent health [OPTIONS] COMMAND [ARGS]...                              
-                                                                                
- Health check commands                                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ system   Aggregate system health (DB + LM + Graph)                           │
-│ db       Check database health                                               │
-│ lm       Check LM Studio health                                              │
-│ graph    Check graph overview                                                │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent health [OPTIONS] COMMAND [ARGS]...                                   
+                                                                                     
+ Health check commands                                                               
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ system   Aggregate system health (DB + LM + Graph)                                │
+│ db       Check database health                                                    │
+│ lm       Check LM Studio health                                                   │
+│ graph    Check graph overview                                                     │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1052,15 +584,15 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent health system
 
 ```
-                                                                                
- Usage: pmagent health system [OPTIONS]                                         
-                                                                                
- Aggregate system health (DB + LM + Graph)                                      
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --json-only          Print only JSON                                         │
-│ --help               Show this message and exit.                             │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent health system [OPTIONS]                                              
+                                                                                     
+ Aggregate system health (DB + LM + Graph)                                           
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --json-only          Print only JSON                                              │
+│ --help               Show this message and exit.                                  │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1068,19 +600,19 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent reality-check
 
 ```
-                                                                                
- Usage: pmagent reality-check [OPTIONS] COMMAND [ARGS]...                       
-                                                                                
- Reality checks for automated bring-up                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ 1       Run Reality Check #1 automated bring-up                              │
-│ live    Run Reality Check #1 LIVE (DB + LM + pipeline)                       │
-│ check   Run comprehensive reality check (env + DB + LM + exports + eval)     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent reality-check [OPTIONS] COMMAND [ARGS]...                            
+                                                                                     
+ Reality checks for automated bring-up                                               
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                       │
+╰───────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────╮
+│ 1       Run Reality Check #1 automated bring-up                                   │
+│ live    Run Reality Check #1 LIVE (DB + LM + pipeline)                            │
+│ check   Run comprehensive reality check (env + DB + LM + exports + eval)          │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1088,17 +620,17 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent reality-check check
 
 ```
-                                                                                
- Usage: pmagent reality-check check [OPTIONS]                                   
-                                                                                
- Run comprehensive reality check (env + DB + LM + exports + eval)               
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --mode                 TEXT  Mode: hint (default) or strict [default: hint]  │
-│ --json-only                  Print only JSON                                 │
-│ --no-dashboards              Skip exports/eval checks                        │
-│ --help                       Show this message and exit.                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                     
+ Usage: pmagent reality-check check [OPTIONS]                                        
+                                                                                     
+ Run comprehensive reality check (env + DB + LM + exports + eval)                    
+                                                                                     
+╭─ Options ─────────────────────────────────────────────────────────────────────────╮
+│ --mode                 TEXT  Mode: hint (default) or strict [default: hint]       │
+│ --json-only                  Print only JSON                                      │
+│ --no-dashboards              Skip exports/eval checks                             │
+│ --help                       Show this message and exit.                          │
+╰───────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -1142,7 +674,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
     "reality": {
       "command": "reality.check",
       "mode": "HINT",
-      "timestamp": "2025-11-30T02:21:23.227976+00:00",
+      "timestamp": "2025-12-01T16:01:33.866684+00:00",
       "env": {
         "ok": true,
         "dsn_ok": true,
@@ -1159,7 +691,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
         "control_schema": "control",
         "tables_expected": 0,
         "tables_present": 0,
-        "generated_at": "2025-11-30T02:21:23.228001+00:00",
+        "generated_at": "2025-12-01T16:01:33.866710+00:00",
         "components": {
           "status": {
             "ok": true,
@@ -1178,8 +710,8 @@ designed doc; it is an evidence pack for the PM to read and interpret.
               },
               "control.agent_run": {
                 "present": true,
-                "row_count": 2159,
-                "latest_created_at": "2025-11-27T09:10:02.584405-08:00"
+                "row_count": 2270,
+                "latest_created_at": "2025-11-30T09:02:28.655100-08:00"
               },
               "control.tool_catalog": {
                 "present": true,
@@ -1198,21 +730,21 @@ designed doc; it is an evidence pack for the PM to read and interpret.
             "mode": "db_on",
             "error": null,
             "tables": {
-              "control.agent_run": 2159,
-              "control.agent_run_cli": 32,
+              "control.agent_run": 2270,
+              "control.agent_run_cli": 69,
               "control.capability_rule": 5,
               "control.capability_session": 5,
               "control.doc_embedding": 2963,
-              "control.doc_fragment": 2968,
-              "control.doc_registry": 193,
+              "control.doc_fragment": 42338,
+              "control.doc_registry": 994,
               "control.doc_sync_state": 0,
-              "control.doc_version": 758,
+              "control.doc_version": 2373,
               "control.guard_definition": 0,
               "control.hint_registry": 5,
               "control.kb_document": 4238,
               "control.rule_definition": 69,
               "control.rule_source": 138,
-              "control.system_state_ledger": 339,
+              "control.system_state_ledger": 365,
               "control.tool_catalog": 7,
               "gematria.ai_embeddings": 1,
               "gematria.checkpoints": 4,
@@ -1257,10 +789,10 @@ designed doc; it is an evidence pack for the PM to read and interpret.
               "public.cross_references": 0,
               "public.doctrinal_links": 0,
               "public.document_access_log": 1,
-              "public.document_sections": 397,
+              "public.document_sections": 398,
               "public.governance_artifacts": 131,
-              "public.governance_compliance_log": 225,
-              "public.hint_emissions": 713,
+              "public.governance_compliance_log": 235,
+              "public.hint_emissions": 773,
               "public.hypotheses": 0,
               "public.integration_log": 0,
               "public.isolation_patterns": 0,
@@ -1617,6 +1149,12 @@ designed doc; it is an evidence pack for the PM to read and interpret.
                     "data_type": "timestamp with time zone",
                     "is_nullable": true,
                     "default": "now()"
+                  },
+                  {
+                    "name": "meta",
+                    "data_type": "jsonb",
+                    "is_nullable": true,
+                    "default": "'{}'::jsonb"
                   }
                 ],
                 "primary_key": [
@@ -1645,6 +1183,13 @@ designed doc; it is an evidence pack for the PM to read and interpret.
                     "name": "idx_doc_fragment_doc_id",
                     "columns": [
                       "doc_id"
+                    ],
+                    "unique": false
+                  },
+                  {
+                    "name": "idx_doc_fragment_meta",
+                    "columns": [
+                      "meta"
                     ],
                     "unique": false
                   },
@@ -1965,8 +1510,31 @@ designed doc; it is an evidence pack for the PM to read and interpret.
             "reason": null,
             "window_hours": 24,
             "summary": {
-              "total_runs": 0,
-              "pipelines": {}
+              "total_runs": 111,
+              "pipelines": {
+                "classify_fragment": {
+                  "total": 110,
+                  "by_status": {
+                    "success": 110,
+                    "failed": 0,
+                    "running": 0,
+                    "other": 0
+                  },
+                  "last_run_started_at": "2025-11-30T09:02:28.655100-08:00",
+                  "last_run_status": "success"
+                },
+                "test_classify_fragment": {
+                  "total": 1,
+                  "by_status": {
+                    "success": 1,
+                    "failed": 0,
+                    "running": 0,
+                    "other": 0
+                  },
+                  "last_run_started_at": "2025-11-30T09:01:24.602351-08:00",
+                  "last_run_status": "success"
+                }
+              }
             }
           }
         }
@@ -2361,7 +1929,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 {
   "command": "reality.check",
   "mode": "HINT",
-  "timestamp": "2025-11-30T02:21:27.872988+00:00",
+  "timestamp": "2025-12-01T16:01:37.462169+00:00",
   "env": {
     "ok": true,
     "dsn_ok": true,
@@ -2378,7 +1946,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
     "control_schema": "control",
     "tables_expected": 0,
     "tables_present": 0,
-    "generated_at": "2025-11-30T02:21:27.873006+00:00",
+    "generated_at": "2025-12-01T16:01:37.462205+00:00",
     "components": {
       "status": {
         "ok": true,
@@ -2397,8 +1965,8 @@ designed doc; it is an evidence pack for the PM to read and interpret.
           },
           "control.agent_run": {
             "present": true,
-            "row_count": 2159,
-            "latest_created_at": "2025-11-27T09:10:02.584405-08:00"
+            "row_count": 2270,
+            "latest_created_at": "2025-11-30T09:02:28.655100-08:00"
           },
           "control.tool_catalog": {
             "present": true,
@@ -2417,21 +1985,21 @@ designed doc; it is an evidence pack for the PM to read and interpret.
         "mode": "db_on",
         "error": null,
         "tables": {
-          "control.agent_run": 2159,
-          "control.agent_run_cli": 34,
+          "control.agent_run": 2270,
+          "control.agent_run_cli": 71,
           "control.capability_rule": 5,
           "control.capability_session": 5,
           "control.doc_embedding": 2963,
-          "control.doc_fragment": 2968,
-          "control.doc_registry": 193,
+          "control.doc_fragment": 42338,
+          "control.doc_registry": 994,
           "control.doc_sync_state": 0,
-          "control.doc_version": 758,
+          "control.doc_version": 2373,
           "control.guard_definition": 0,
           "control.hint_registry": 5,
           "control.kb_document": 4238,
           "control.rule_definition": 69,
           "control.rule_source": 138,
-          "control.system_state_ledger": 339,
+          "control.system_state_ledger": 365,
           "control.tool_catalog": 7,
           "gematria.ai_embeddings": 1,
           "gematria.checkpoints": 4,
@@ -2476,10 +2044,10 @@ designed doc; it is an evidence pack for the PM to read and interpret.
           "public.cross_references": 0,
           "public.doctrinal_links": 0,
           "public.document_access_log": 1,
-          "public.document_sections": 397,
+          "public.document_sections": 398,
           "public.governance_artifacts": 131,
-          "public.governance_compliance_log": 225,
-          "public.hint_emissions": 713,
+          "public.governance_compliance_log": 235,
+          "public.hint_emissions": 773,
           "public.hypotheses": 0,
           "public.integration_log": 0,
           "public.isolation_patterns": 0,
@@ -2836,6 +2404,12 @@ designed doc; it is an evidence pack for the PM to read and interpret.
                 "data_type": "timestamp with time zone",
                 "is_nullable": true,
                 "default": "now()"
+              },
+              {
+                "name": "meta",
+                "data_type": "jsonb",
+                "is_nullable": true,
+                "default": "'{}'::jsonb"
               }
             ],
             "primary_key": [
@@ -2864,6 +2438,13 @@ designed doc; it is an evidence pack for the PM to read and interpret.
                 "name": "idx_doc_fragment_doc_id",
                 "columns": [
                   "doc_id"
+                ],
+                "unique": false
+              },
+              {
+                "name": "idx_doc_fragment_meta",
+                "columns": [
+                  "meta"
                 ],
                 "unique": false
               },
@@ -3184,8 +2765,31 @@ designed doc; it is an evidence pack for the PM to read and interpret.
         "reason": null,
         "window_hours": 24,
         "summary": {
-          "total_runs": 0,
-          "pipelines": {}
+          "total_runs": 111,
+          "pipelines": {
+            "classify_fragment": {
+              "total": 110,
+              "by_status": {
+                "success": 110,
+                "failed": 0,
+                "running": 0,
+                "other": 0
+              },
+              "last_run_started_at": "2025-11-30T09:02:28.655100-08:00",
+              "last_run_status": "success"
+            },
+            "test_classify_fragment": {
+              "total": 1,
+              "by_status": {
+                "success": 1,
+                "failed": 0,
+                "running": 0,
+                "other": 0
+              },
+              "last_run_started_at": "2025-11-30T09:01:24.602351-08:00",
+              "last_run_status": "success"
+            }
+          }
         }
       }
     }
@@ -3501,6 +3105,9 @@ scripts/util/export_pm_introspection_evidence.py:145:        ("tracking agent", 
 ### envelope_refs
 
 ```
+agentpm/hints/__init__.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
+agentpm/hints/__init__.py:3:from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
+agentpm/hints/__init__.py:5:__all__ = ["embed_hints_in_envelope", "load_hints_for_flow"]
 docs/phase10/UI_SPEC.md:10:**Input**: `/tmp/p9-ingest-envelope.json` (built via `make ingest.local.envelope`)  
 docs/phase10/UI_SPEC.md:11:Schema (draft): `docs/phase9/ingest_envelope.schema.draft.json`.
 docs/phase10/UI_SPEC.md:41:  Copy the envelope into your dev server's static root and fetch it:
@@ -3514,6 +3121,13 @@ docs/phase10/UI_SPEC.md:91:* `envelopeLoaded`: `{ nodeCount, edgeCount, meta }`
 docs/phase10/UI_SPEC.md:109:  public/              # (optional) envelope.json for dev fetch
 docs/phase10/UI_SPEC.md:126:* [ ] Loads via file picker (and/or `/envelope.json`) with **no network/DB**.
 docs/phase10/UI_SPEC.md:127:* [ ] Renders meta + counts deterministically with our sample envelope.
+agentpm/hints/registry.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
+agentpm/hints/registry.py:92:def embed_hints_in_envelope(
+agentpm/hints/registry.py:93:    envelope: dict[str, Any],
+agentpm/hints/registry.py:97:    Embed hints into an envelope structure.
+agentpm/hints/registry.py:99:    Adds "required_hints" and "suggested_hints" sections to the envelope.
+agentpm/hints/registry.py:103:        envelope: Existing envelope dict
+agentpm/hints/registry.py:110:    result = envelope.copy()
 docs/phase10/DASHBOARD_PLAN.md:5:- Visualize local ingestion envelopes (Phase-9) without network/DB.
 docs/phase10/DASHBOARD_PLAN.md:10:- Input: /tmp/p9-ingest-envelope.json (built locally via `make ingest.local.envelope`).
 docs/phase10/DASHBOARD_PLAN.md:22:- P10-B: JSON loader + minimal graph view reading envelope nodes/edges.
@@ -3524,16 +3138,6 @@ docs/phase10/AGENTS.md:38:5. **Integration** - Backend data integration and enve
 docs/phase10/AGENTS.md:61:- **Envelope loading**: Load data from `/tmp/p9-ingest-envelope.json` or `share/exports/`
 docs/phase10/AGENTS.md:75:- **scripts/extract/extract_all.py**: Unified envelope extraction
 docs/phase10/AGENTS.md:76:- **make ui.extract.all**: Extract envelope for UI consumption
-agentpm/hints/__init__.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
-agentpm/hints/__init__.py:3:from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
-agentpm/hints/__init__.py:5:__all__ = ["embed_hints_in_envelope", "load_hints_for_flow"]
-agentpm/hints/registry.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
-agentpm/hints/registry.py:92:def embed_hints_in_envelope(
-agentpm/hints/registry.py:93:    envelope: dict[str, Any],
-agentpm/hints/registry.py:97:    Embed hints into an envelope structure.
-agentpm/hints/registry.py:99:    Adds "required_hints" and "suggested_hints" sections to the envelope.
-agentpm/hints/registry.py:103:        envelope: Existing envelope dict
-agentpm/hints/registry.py:110:    result = envelope.copy()
 docs/PHASE11_PLAN.md:5:* **1d**: Unified pipeline (graph + temporal + correlations → single envelope)
 docs/PHASE11_PLAN.md:12:* Extract stub generates `unified_envelope_SIZE.json` in <2 sec for SIZE=10,000
 docs/PHASE11_PLAN.md:21:* Include schema version in envelope header
@@ -3590,7 +3194,6 @@ scripts/ingest/build_envelope.py:35:    out_path = os.getenv("OUT_FILE", "/tmp/p
 scripts/ingest/build_envelope.py:44:    envelope = {
 scripts/ingest/build_envelope.py:47:            "source": "p9-envelope-local",
 scripts/ingest/build_envelope.py:55:    s = json.dumps(envelope, indent=2)
-.cursor/rules/058-auto-housekeeping.mdc:119:- **Rule 061**: AI learning tracking (hint envelope detection)
 scripts/governance_docs_hints.py:7:hints envelope for auditability.
 scripts/governance_docs_hints.py:85:def emit_hints_envelope(modified_files: list[str], recent_files: list[str]) -> dict:
 scripts/governance_docs_hints.py:86:    """Create a hints envelope for governance docs/rule changes."""
@@ -3601,31 +3204,34 @@ scripts/governance_docs_hints.py:137:    """Main function: check for changes and
 scripts/governance_docs_hints.py:141:    envelope = emit_hints_envelope(modified, recent)
 scripts/governance_docs_hints.py:143:    # Write hints envelope to evidence directory
 scripts/governance_docs_hints.py:146:        json.dump(envelope, f, indent=2, ensure_ascii=False)
+scripts/governance_docs_hints.py:149:    if envelope["count"] > 0:
 
 ```
 
 ### housekeeping_refs
 
 ```
+agentpm/ai_docs/reality_check_ai_notes.py:68:    prompt = f"""You are the Granite housekeeping AI for the Gemantria project.
+agentpm/control_plane/sessions.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+agentpm/control_plane/doc_fragments.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+agentpm/control_plane/exports.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:92:- After generating diagrams, MUST run `make housekeeping` before committing
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:95:  1. Run housekeeping: `make housekeeping`
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:184:8. **Run housekeeping** (Rule 058)
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:185:   - Execute `make housekeeping` after all changes
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:216:8. Run `make housekeeping`
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:272:- Housekeeping: `make housekeeping` runs after diagram generation
-agentpm/ai_docs/reality_check_ai_notes.py:68:    prompt = f"""You are the Granite housekeeping AI for the Gemantria project.
+docs/BACKUP_STRATEGY_AUDIT.md:45:- Part of housekeeping (`make housekeeping`)
+docs/BACKUP_STRATEGY_AUDIT.md:130:- Run during housekeeping
 .cursor/plans/plan-e3abd805.plan.md:34:- Every execution brief includes required SSOT references, guard/tests, and housekeeping/reality.green expectations per OPS v6.2.3.
 .cursor/plans/plan-e3abd805.plan.md:50:- [ ] Specify final repo-wide gates (ruff, focused smokes, housekeeping, optionally reality.green) to run after the E-step.
-agentpm/control_plane/sessions.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/ingest/validate_ingest_envelope_schema.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/ingest/show_meta.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/ingest/__init__.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:144:### Step 5: Integrate doc registry ingestion into housekeeping
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:150:- Add `governance.ingest.docs` as a dependency to `housekeeping` target (before `share.sync`)
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:176:7. Run `make housekeeping` and verify it completes successfully
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:209:- [ ] Add governance.ingest.docs as dependency to housekeeping target in Makefile (before share.sync)
-agentpm/control_plane/doc_fragments.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-agentpm/control_plane/exports.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ingest/validate_ingest_envelope_schema.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ingest/show_meta.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ingest/__init__.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/validate_snapshot.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/validate_envelope_schema.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/build_envelope.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
@@ -3636,10 +3242,28 @@ scripts/book_policy_check.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT:
 scripts/docs/apply_ops_header.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/docs/apply_ops_header.py:7:HEADER = """# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/sync_share.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/sync_share.py:83:    - Ensures `make housekeeping` can self-heal share/ folder.
 scripts/exports_smoke.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/verify_enrichment_prompts.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/echo_env.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/goldens_status.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/governance_tracker.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/governance_tracker.py:303:        return True  # Return success to allow housekeeping to pass
+scripts/governance_tracker.py:341:        return True  # Return success to allow housekeeping to pass
+scripts/document_management_hints.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 docs/atlas/README.md:84:PRs run the HINT lane in CI. **No nightly workflows.** Run everything via housekeeping:
 docs/atlas/README.md:88:make housekeeping.atlas
 docs/atlas/README.md:91:STRICT_ATLAS_DSN=1 make housekeeping.atlas
+scripts/exports/export_biblescholar_summary.py:14:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports/export_biblescholar_lexicon.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports/export_compliance.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports/export_biblescholar_semantic_search.py:18:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports/export_biblescholar_insights.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports/export_biblescholar_search.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/monitor_pipeline.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/export_noun_index.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/manage_document_sections.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/verify_data_completeness.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/058-auto-housekeeping.mdc:2:description: Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail. Includes share.sync, governance, ADRs, rules audit, forest regen, and evidence archiving.
 .cursor/rules/058-auto-housekeeping.mdc:14:**CRITICAL CURSOR ENFORCEMENT**: After ANY file edit in this repository, Cursor MUST automatically run `make housekeeping` before committing. This is non-negotiable. Do not proceed without running housekeeping.
 .cursor/rules/058-auto-housekeeping.mdc:16:**AUTOMATIC DOCUMENTATION UPDATES**: The housekeeping pipeline now **automatically** updates:
@@ -3664,66 +3288,43 @@ docs/atlas/README.md:91:STRICT_ATLAS_DSN=1 make housekeeping.atlas
 .cursor/rules/058-auto-housekeeping.mdc:114:- **Rule 027**: Docs sync gate (housekeeping includes docs sync)
 .cursor/rules/058-auto-housekeeping.mdc:116:- **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
 .cursor/rules/058-auto-housekeeping.mdc:117:- **Rule 017**: Agent docs presence (housekeeping validates coverage)
-scripts/verify_enrichment_prompts.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/echo_env.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/goldens_status.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/governance_tracker.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/governance_tracker.py:293:        return True  # Return success to allow housekeeping to pass
-scripts/governance_tracker.py:329:        return True  # Return success to allow housekeeping to pass
-scripts/document_management_hints.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/README.md:5:> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
-scripts/exports/export_biblescholar_summary.py:14:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/exports/export_biblescholar_lexicon.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/exports/export_compliance.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/exports/export_biblescholar_semantic_search.py:18:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/006-agents-md-governance.mdc:13:- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
-.cursor/rules/006-agents-md-governance.mdc:50:- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
-scripts/exports/export_biblescholar_insights.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/exports/export_biblescholar_search.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/010-task-brief.mdc:23:- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
-.cursor/rules/010-task-brief.mdc:38:- **Rule 058**: Auto-housekeeping (mandatory after modifications)
-scripts/monitor_pipeline.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/export_noun_index.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/030-share-sync.mdc:38:- **Rule 058**: Auto-housekeeping (includes share sync validation)
-scripts/manage_document_sections.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/verify_data_completeness.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/quick_fixes.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/061-ai-learning-tracking.mdc:52:- Must integrate with `make housekeeping` workflow
 scripts/__init__.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/analyze_metrics.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/longline_noqa.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/find_approved_examples.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/validate_examples.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/README.md:5:> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+scripts/adapter/exports_to_viewer.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/006-agents-md-governance.mdc:13:- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
+.cursor/rules/006-agents-md-governance.mdc:50:- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
+scripts/rules_audit.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/010-task-brief.mdc:23:- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
+.cursor/rules/010-task-brief.mdc:38:- **Rule 058**: Auto-housekeeping (mandatory after modifications)
+scripts/create_agents_md.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/030-share-sync.mdc:38:- **Rule 058**: Auto-housekeeping (includes share sync validation)
+.cursor/rules/061-ai-learning-tracking.mdc:52:- Must integrate with `make housekeeping` workflow
+docs/README.md:310:| [docs/ADRs/ADR-056-auto-housekeeping-ci.md](docs/ADRs/ADR-056-auto-housekeeping-ci.md) | ADR-056: Auto-Housekeeping CI Enforcement | Proposed | Unknown |
 .cursor/rules/068-gpt-docs-sync.mdc:21:3. **Operational Workflows**: Changes to `make housekeeping`, validation procedures, or quality gates
 .cursor/rules/068-gpt-docs-sync.mdc:68:**Change**: New validation step added to `make housekeeping`
 .cursor/rules/068-gpt-docs-sync.mdc:79:- **Automatic Detection**: `scripts/governance_docs_hints.py` runs during `make housekeeping`
 .cursor/rules/068-gpt-docs-sync.mdc:94:- **Housekeeping**: Include GPT docs sync in `make housekeeping` validation
 .cursor/rules/068-gpt-docs-sync.mdc:95:- **Hints**: Automatic hint emission via `governance.docs.hints` target (integrated into `make housekeeping`)
-scripts/longline_noqa.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/008-cursor-rule-authoring.mdc:89:- [ ] Run `make housekeeping` after rule changes (Rule 058 - MANDATORY)
-scripts/find_approved_examples.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/validate_examples.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/acceptance/check_envelope.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-.cursor/rules/AGENTS.md:132:- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
-.cursor/rules/AGENTS.md:169:- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
-.cursor/rules/AGENTS.md:290:- [ ] Run `make housekeeping` after rule changes (Rule 058 - MANDATORY)
-.cursor/rules/AGENTS.md:332:- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
-.cursor/rules/AGENTS.md:347:- **Rule 058**: Auto-housekeeping (mandatory after modifications)
-.cursor/rules/AGENTS.md:925:- **Rule 058**: Auto-housekeeping (includes share sync validation)
 
 ```
 
 ### pm_snapshot_refs
 
 ```
+docs/BACKUP_STRATEGY_AUDIT.md:32:- `Makefile` lines 187-189 (`pm.snapshot` target)
+docs/BACKUP_STRATEGY_AUDIT.md:33:- `scripts/pm_snapshot.py`
+docs/BACKUP_STRATEGY_AUDIT.md:34:- Output: `evidence/pm_snapshot/run.txt`
+docs/BACKUP_STRATEGY_AUDIT.md:38:make pm.snapshot  # Generate PM health snapshot
+docs/BACKUP_STRATEGY_AUDIT.md:128:**PM Snapshots** (`pm.snapshot`):
 .cursor/rules/070-gotchas-check.mdc:136:- All command execution wrappers (e.g., `scripts/pm_snapshot.py::run()`, `scripts/prepare_handoff.py::run_cmd()`)
 .cursor/rules/058-auto-housekeeping.mdc:48:13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
 .cursor/rules/071-portable-json-not-plan-ssot.mdc:3:* The `share/*.json` portable bundle (e.g. `pm_snapshot.json`,
-scripts/guard_pm_snapshot.sh:3:SNAPSHOT_PATH="${1:-share/pm.snapshot.md}"
-agentpm/status/snapshot.py:5:AgentPM-First:M3: Unified system snapshot helper for pm.snapshot and WebUI APIs.
-agentpm/status/snapshot.py:458:    """Get unified system snapshot (pm.snapshot + API contract).
-agentpm/status/eval_exports.py:24:DB_HEALTH_PATH = REPO_ROOT / "evidence" / "pm_snapshot" / "db_health.json"
-agentpm/status/eval_exports.py:121:    """Load DB health snapshot (from pm.snapshot evidence).
-agentpm/status/eval_exports.py:136:                "note": "DB health snapshot not available (file missing; run `make pm.snapshot`)",
-agentpm/status/AGENTS.md:9:- `snapshot.py`: Unified system snapshot helpers used by `pm.snapshot` and `/api/status/system`. Now includes advisory `kb_doc_health` metrics (AgentPM-Next:M3).
-agentpm/status/AGENTS.md:10:- `kb_metrics.py`: KB documentation health metrics helper (AgentPM-Next:M3) that aggregates KB registry freshness + M2 fix manifests into doc-health metrics for reporting surfaces (`pmagent report kb`, `pm.snapshot`, and future status integration).
 agentpm/AGENTS.md:59:  - **Snapshot integration (KB-Reg:M2)**: Registry summary included in `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()` (advisory-only, non-gating)
 agentpm/AGENTS.md:80:## pm.snapshot Integration (AgentPM-First:M3 + M4)
 agentpm/AGENTS.md:82:**Purpose:** `pm.snapshot` (`make pm.snapshot` / `scripts/pm_snapshot.py`) generates a comprehensive PM-facing status snapshot that composes health, status explanation, reality-check, AI tracking, share manifest, and eval exports posture into a single operator-facing view.
@@ -3735,37 +3336,35 @@ agentpm/AGENTS.md:119:- **DB health JSON** (backward compatibility): `evidence/p
 agentpm/AGENTS.md:122:- **Local operator command**: `make pm.snapshot` — Run after bring-up or DSN changes to generate current system posture snapshot
 agentpm/AGENTS.md:123:- **CI usage**: CI may run `pm.snapshot` but should not fail if DB/LM are offline (hermetic behavior)
 agentpm/AGENTS.md:132:- **KB hints (KB-Reg:M4 + M6)**: KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, validation issues, stale docs (`KB_DOC_STALE`), and out-of-sync docs (`KB_DOC_OUT_OF_SYNC`); all hints are advisory-only and never affect `overall_ok`
+scripts/guard_pm_snapshot.sh:3:SNAPSHOT_PATH="${1:-share/pm.snapshot.md}"
 .cursor/rules/AGENTS.md:2076:13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
+agentpm/status/snapshot.py:5:AgentPM-First:M3: Unified system snapshot helper for pm.snapshot and WebUI APIs.
+agentpm/status/snapshot.py:466:    """Get unified system snapshot (pm.snapshot + API contract).
+agentpm/status/eval_exports.py:24:DB_HEALTH_PATH = REPO_ROOT / "evidence" / "pm_snapshot" / "db_health.json"
+agentpm/status/eval_exports.py:121:    """Load DB health snapshot (from pm.snapshot evidence).
+agentpm/status/eval_exports.py:136:                "note": "DB health snapshot not available (file missing; run `make pm.snapshot`)",
+agentpm/status/AGENTS.md:9:- `snapshot.py`: Unified system snapshot helpers used by `pm.snapshot` and `/api/status/system`. Now includes advisory `kb_doc_health` metrics (AgentPM-Next:M3).
+agentpm/status/AGENTS.md:10:- `kb_metrics.py`: KB documentation health metrics helper (AgentPM-Next:M3) that aggregates KB registry freshness + M2 fix manifests into doc-health metrics for reporting surfaces (`pmagent report kb`, `pm.snapshot`, and future status integration).
 scripts/util/export_pm_snapshot_json.py:5:Exports pm.snapshot as JSON format by calling get_system_snapshot() directly.
 scripts/util/export_pm_snapshot_json.py:6:This is the JSON version of the markdown snapshot generated by make pm.snapshot.
 scripts/util/export_pm_snapshot_json.py:9:    python scripts/util/export_pm_snapshot_json.py [--output <path>]
 scripts/util/export_pm_snapshot_json.py:24:OUT_FILE = OUT_DIR / "pm_snapshot.json"
-scripts/util/export_pm_snapshot_json.py:30:    parser.add_argument("--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)")
-scripts/util/export_pm_snapshot_json.py:67:            "schema": "pm_snapshot.v1",
+scripts/util/export_pm_snapshot_json.py:31:        "--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)"
+scripts/util/export_pm_snapshot_json.py:69:            "schema": "pm_snapshot.v1",
 scripts/util/export_pm_introspection_evidence.py:148:        ("pm.snapshot", "pm_snapshot_refs"),
-scripts/guards/guard_snapshot_drift.py:78:        "pm_snapshot": ROOT / "share" / "pm.snapshot.md",
-scripts/AGENTS.md:1304:- `share/pm.snapshot.md`
-scripts/pm_snapshot.py:12:doc_path = share_dir / "pm.snapshot.md"
-scripts/pm_snapshot.py:14:evid_dir = root / "evidence" / "pm_snapshot"
-scripts/pm_snapshot.py:225:entry = {"src": "share/pm.snapshot.md", "dst": "share/pm.snapshot.md"}
-scripts/pm_snapshot.py:267:    "**Now**\n- Keep GemantriaV.2 as the active project.\n- Use `STRICT` posture when DSNs present; otherwise HINT mode is allowed for hermetic tests.\n- Regenerate this PM Snapshot on each bring-up or DSN change (`make pm.snapshot`).\n"
-scripts/kb/seed_registry.py:108:            id="runbook-pm-snapshot",
-docs/runbooks/LM_HEALTH.md:156:make pm.snapshot
-agentpm/kb/AGENTS.md:73:- **pm.snapshot**: Registry is included in system snapshots (KB-Reg:M2) — advisory-only, non-gating
-agentpm/kb/AGENTS.md:81:The KB registry is integrated into `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()`:
-agentpm/kb/AGENTS.md:181:KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`:
-agentpm/kb/AGENTS.md:193:- **pm.snapshot**: KB hints included in `evidence/pm_snapshot/snapshot.json` and rendered in `share/pm.snapshot.md` under "KB Hints (Advisory)" section
-docs/runbooks/DB_HEALTH.md:134:make pm.snapshot
-docs/runbooks/DSN_SECRETS.md:21:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
-docs/runbooks/DSN_SECRETS.md:27:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
-docs/runbooks/DSN_SECRETS.md:29:> CI uses these secrets only on **release tags** and regenerates `share/pm.snapshot.md`
-docs/runbooks/DSN_SECRETS.md:35:- PM Snapshot exists in `share/pm.snapshot.md`
-docs/runbooks/DSN_SECRETS.md:50:3. Confirm Actions jobs **tagproof** and **pm-snapshot** are green.
 docs/forest/overview.md:98:- pm-snapshot.yml
-agentpm/tests/runtime/test_pm_snapshot.py:2:Tests for pm.snapshot integration (AgentPM-First:M3).
-agentpm/tests/runtime/test_pm_snapshot.py:4:Verifies that pm.snapshot composes health, status explain, reality-check,
-agentpm/tests/runtime/test_pm_snapshot.py:8:executing the full pm_snapshot.py script (which runs at module import time).
-agentpm/tests/runtime/test_pm_snapshot.py:21:    """Test pm.snapshot integration with pmagent commands."""
+docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md:96:**M4 - UI Integration (pm.snapshot kb_doc_health):**
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:129:* **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:130:  - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:131:  - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:132:  - Generates both Markdown (`share/pm.snapshot.md`) and JSON (`evidence/pm_snapshot/snapshot.json`) outputs
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:139:  - **KB hints (KB-Reg:M4)**: KB registry health surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, and validation issues; all hints are advisory-only and never affect `overall_ok`
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:140:  - **KB doc health (AgentPM-Next:M3)**: `pm.snapshot` includes "Documentation Health" section with aggregated metrics (freshness, missing/stale counts, fixes applied) derived from `pmagent report kb` logic; fully advisory-only.
+docs/SSOT/PM_HANDOFF_PROTOCOL.md:72:6. pm.snapshot.md
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:106:- PM tries to infer active PLAN from `pm_snapshot.json`
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:182:**Issue**: `pmagent pm.snapshot` doesn't include planning context from `pmagent plan next`.
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:237:1. **Integrate planning system into PM snapshot** - include planning context in `pm_snapshot.json`
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:65:- **Goal 1**: Expose doc-health metrics in `pmagent pm.snapshot` (the "110% signal")
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:94:- **`pmagent pm.snapshot`**: Include doc-health metrics in system snapshot
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:114:7. Regenerate snapshot: `make pm.snapshot` (now includes doc-health metrics)
@@ -3774,45 +3373,50 @@ docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:241:- **Integration points**: Specifies exac
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:264:- **M3a**: Implement metrics in `pmagent pm.snapshot` (read-only aggregation)
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:271:- **Existing surfaces**: `pm.snapshot` already includes KB registry summary (advisory)
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:290:| pm.snapshot integration | AgentPM-First:M3 + M4 |
-docs/SSOT/MASTER_PLAN.md:80:- **M3** ✅ PASS: Doc-health control loop & reporting — `pmagent report kb` aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. `pm.snapshot` now includes an advisory "Documentation Health" section with fresh ratios, missing/stale counts, and fix activity. Artifacts: `agentpm/status/kb_metrics.py`, `pmagent/cli.py` (report_kb), `agentpm/tests/cli/test_pmagent_report_kb.py`. Targets: `pmagent report kb`. (PR #582)
-docs/SSOT/MASTER_PLAN.md:170:- ✅ E103: Catalog integration into pm.snapshot + end-to-end TVs + tagproof evidence (read-only catalog access, TVs 06–07, bundle generation).
-docs/SSOT/MASTER_PLAN.md:507:- **7C** ✅ PASS: Snapshot Integrity & Drift Review — Validated all snapshot/export artifacts (control-plane schema/MVs, ledger, pm snapshot, Atlas compliance artifacts, browser receipts) are consistent, drift-free, and covered by guards. Created `scripts/guards/guard_snapshot_drift.py` to validate snapshot file existence, structure, and ledger sync status. All snapshots refreshed: `share/atlas/control_plane/{schema_snapshot.json,mv_schema.json,mcp_catalog.json,compliance_summary.json,compliance_timeseries.json}`, `share/pm.snapshot.md`. Ledger verification shows all 9 tracked artifacts current. Guard outputs: `guard_control_plane_health` (STRICT), `guard_atlas_compliance_timeseries`, `guard_browser_verification`, `guard_snapshot_drift` all PASS. Evidence: `evidence/guard_snapshot_drift.json`.
-docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md:96:**M4 - UI Integration (pm.snapshot kb_doc_health):**
-docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:100:  `pm_snapshot.json`, `next_steps.head.json`, `doc_registry.json`,
+docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:222:- `scripts/pm_snapshot.py`
+docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:305:- `.github/workflows/pm-snapshot.yml`
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:44:- `pm_snapshot.md` - System snapshot (from JSON export)
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:60:1. **`pm.snapshot.md` vs `pm_snapshot.md`**
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:61:   - `pm.snapshot.md`: DMS-synced from repo (canonical)
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:62:   - `pm_snapshot.md`: JSON export converted to MD (generated)
 docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:32:- **Snapshot Integration:** `pm.snapshot` generates complete doc-health data
 docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:44:  - ✅ **Integration**: `pm.snapshot` includes `kb_doc_health` data (`agentpm/status/snapshot.py`)
 docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:77:**M4 - UI Integration (pm.snapshot kb_doc_health):**
 docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:111:- `evidence/pm_snapshot/snapshot.json` — Complete system snapshot with kb_doc_health data
 docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:112:- `share/pm.snapshot.md` — Human-readable PM snapshot with doc health section
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:129:* **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:130:  - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:131:  - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:132:  - Generates both Markdown (`share/pm.snapshot.md`) and JSON (`evidence/pm_snapshot/snapshot.json`) outputs
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:139:  - **KB hints (KB-Reg:M4)**: KB registry health surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, and validation issues; all hints are advisory-only and never affect `overall_ok`
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:140:  - **KB doc health (AgentPM-Next:M3)**: `pm.snapshot` includes "Documentation Health" section with aggregated metrics (freshness, missing/stale counts, fixes applied) derived from `pmagent report kb` logic; fully advisory-only.
-docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:222:- `scripts/pm_snapshot.py`
-docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:305:- `.github/workflows/pm-snapshot.yml`
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:106:- PM tries to infer active PLAN from `pm_snapshot.json`
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:182:**Issue**: `pmagent pm.snapshot` doesn't include planning context from `pmagent plan next`.
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:237:1. **Integrate planning system into PM snapshot** - include planning context in `pm_snapshot.json`
-docs/SSOT/SHARE_MANIFEST.json:158:      "src": "share/pm.snapshot.md",
-docs/SSOT/SHARE_MANIFEST.json:159:      "dst": "share/pm.snapshot.md"
+agentpm/kb/AGENTS.md:73:- **pm.snapshot**: Registry is included in system snapshots (KB-Reg:M2) — advisory-only, non-gating
+agentpm/kb/AGENTS.md:81:The KB registry is integrated into `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()`:
+agentpm/kb/AGENTS.md:181:KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`:
+agentpm/kb/AGENTS.md:193:- **pm.snapshot**: KB hints included in `evidence/pm_snapshot/snapshot.json` and rendered in `share/pm.snapshot.md` under "KB Hints (Advisory)" section
+docs/SSOT/SHARE_MANIFEST.json:162:      "src": "share/pm.snapshot.md",
+docs/SSOT/SHARE_MANIFEST.json:163:      "dst": "share/pm.snapshot.md"
+docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:100:  `pm_snapshot.json`, `next_steps.head.json`, `doc_registry.json`,
+docs/runbooks/LM_HEALTH.md:156:make pm.snapshot
+docs/SSOT/MASTER_PLAN.md:80:- **M3** ✅ PASS: Doc-health control loop & reporting — `pmagent report kb` aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. `pm.snapshot` now includes an advisory "Documentation Health" section with fresh ratios, missing/stale counts, and fix activity. Artifacts: `agentpm/status/kb_metrics.py`, `pmagent/cli.py` (report_kb), `agentpm/tests/cli/test_pmagent_report_kb.py`. Targets: `pmagent report kb`. (PR #582)
+docs/SSOT/MASTER_PLAN.md:170:- ✅ E103: Catalog integration into pm.snapshot + end-to-end TVs + tagproof evidence (read-only catalog access, TVs 06–07, bundle generation).
+docs/SSOT/MASTER_PLAN.md:507:- **7C** ✅ PASS: Snapshot Integrity & Drift Review — Validated all snapshot/export artifacts (control-plane schema/MVs, ledger, pm snapshot, Atlas compliance artifacts, browser receipts) are consistent, drift-free, and covered by guards. Created `scripts/guards/guard_snapshot_drift.py` to validate snapshot file existence, structure, and ledger sync status. All snapshots refreshed: `share/atlas/control_plane/{schema_snapshot.json,mv_schema.json,mcp_catalog.json,compliance_summary.json,compliance_timeseries.json}`, `share/pm.snapshot.md`. Ledger verification shows all 9 tracked artifacts current. Guard outputs: `guard_control_plane_health` (STRICT), `guard_atlas_compliance_timeseries`, `guard_browser_verification`, `guard_snapshot_drift` all PASS. Evidence: `evidence/guard_snapshot_drift.json`.
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:95:* `share/pm_snapshot.json` - PM system snapshot
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:19:* `pm_snapshot.md` - System health snapshot
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:75:* `share/pm_snapshot.md` - Complete system snapshot (converted from JSON)
+docs/runbooks/DB_HEALTH.md:134:make pm.snapshot
+docs/runbooks/DSN_SECRETS.md:21:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
+docs/runbooks/DSN_SECRETS.md:27:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
+docs/runbooks/DSN_SECRETS.md:29:> CI uses these secrets only on **release tags** and regenerates `share/pm.snapshot.md`
+docs/runbooks/DSN_SECRETS.md:35:- PM Snapshot exists in `share/pm.snapshot.md`
+docs/runbooks/DSN_SECRETS.md:50:3. Confirm Actions jobs **tagproof** and **pm-snapshot** are green.
+agentpm/tests/runtime/test_pm_snapshot.py:2:Tests for pm.snapshot integration (AgentPM-First:M3).
+agentpm/tests/runtime/test_pm_snapshot.py:4:Verifies that pm.snapshot composes health, status explain, reality-check,
+agentpm/tests/runtime/test_pm_snapshot.py:8:executing the full pm_snapshot.py script (which runs at module import time).
+agentpm/tests/runtime/test_pm_snapshot.py:21:    """Test pm.snapshot integration with pmagent commands."""
+scripts/pm_snapshot.py:12:doc_path = share_dir / "pm.snapshot.md"
+scripts/pm_snapshot.py:14:evid_dir = root / "evidence" / "pm_snapshot"
+scripts/pm_snapshot.py:237:entry = {"src": "share/pm.snapshot.md", "dst": "share/pm.snapshot.md"}
+scripts/pm_snapshot.py:281:    "**Now**\n- Keep GemantriaV.2 as the active project.\n- Use `STRICT` posture when DSNs present; otherwise HINT mode is allowed for hermetic tests.\n- Regenerate this PM Snapshot on each bring-up or DSN change (`make pm.snapshot`).\n"
+scripts/guards/guard_snapshot_drift.py:86:        "pm_snapshot": ROOT / "share" / "pm.snapshot.md",
+scripts/kb/seed_registry.py:108:            id="runbook-pm-snapshot",
+scripts/AGENTS.md:1304:- `share/pm.snapshot.md`
 agentpm/tests/db/test_phase3a_db_health_snapshot.py:2:Tests for Phase-3A Step-5: DB health integration in pm.snapshot.
 agentpm/tests/db/test_phase3a_db_health_snapshot.py:4:Verifies that pm.snapshot calls guard.db.health and embeds JSON correctly.
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:18:    """Test DB health integration in pm.snapshot."""
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:20:    @patch("scripts.pm_snapshot.check_db_health")
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:22:        """Test that pm.snapshot includes DB health JSON in output."""
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:23:        from scripts import pm_snapshot
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:39:            patch("scripts.pm_snapshot.pathlib.Path.write_text"),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:40:            patch("scripts.pm_snapshot.pathlib.Path.exists", return_value=True),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:41:            patch("scripts.pm_snapshot.pathlib.Path.read_text", return_value='{"items": []}'),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:42:            patch("scripts.pm_snapshot.pathlib.Path.mkdir"),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:47:            with patch("scripts.pm_snapshot.share_dir", mock_share_dir):
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:56:                        pm_snapshot.now_iso = "2024-01-01T00:00:00+00:00"
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:57:                        pm_snapshot.BIBLE_DB_DSN = "postgresql://test/bible_db"
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:58:                        pm_snapshot.GEMATRIA_DSN = "postgresql://test/gematria"
 
 ```
 
@@ -3820,15 +3424,17 @@ agentpm/tests/db/test_phase3a_db_health_snapshot.py:58:                        p
 
 ```
 scripts/util/export_pm_introspection_evidence.py:149:        ("planning_context", "planning_context_refs"),
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:62:* `share/planning_context.json` - Full planning output from `pmagent plan next`
-docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:69:2. **Planning Context** (`share/planning_context.json`)
-docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:128:* `make pm.share.planning_context` - Export planning context only
-docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:183:2. **Use planning context** from `share/planning_context.json` for current focus
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:147:**Fix**: Consider including `pmagent plan next --json-only` output in share folder as `planning_context.json` (full, not head).
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:154:- Add `planning_context.json` to share folder (from `pmagent plan next`)
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:233:4. **Add planning context to share folder** - include `pmagent plan next --json-only` output as `share/planning_context.json`
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:245:2. **Automate planning context updates** - ensure `share/planning_context.json` is always fresh
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:46:- `planning_context.md` - Planning context
+docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:69:2. **Planning Context** (`share/planning_context.json`)
+docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:128:* `make pm.share.planning_context` - Export planning context only
+docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:183:2. **Use planning context** from `share/planning_context.json` for current focus
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:20:* `planning_context.md` - Full planning output from `pmagent plan next`
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:73:* `share/planning_context.md` - Full planning output from `pmagent plan next` (converted from JSON)
 
 ```
 
@@ -3841,57 +3447,76 @@ docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:245:2. **Automate planning context updates*
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:129:**Files**: `share/kb_registry.json`, `scripts/kb/seed_registry.py`
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:133:- If `share/kb_registry.json` is missing or corrupted:
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:194:- `share/kb_registry.json` - KB registry file (may need restoration)
-.cursor/rules/068-gpt-docs-sync.mdc:99:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
-.cursor/rules/AGENTS.md:2998:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
-agentpm/status/snapshot.py:131:def get_kb_registry_summary(registry_path: Path | None = None) -> dict[str, Any]:
-agentpm/status/snapshot.py:135:        registry_path: Path to kb_registry.json (defaults to share/kb_registry.json)
-agentpm/status/snapshot.py:150:        registry_path = repo_root / "share" / "kb_registry.json"
-agentpm/status/snapshot.py:181:        registry_path: Path to kb_registry.json (defaults to share/kb_registry.json)
-agentpm/status/snapshot.py:196:        registry_path = repo_root / "share" / "kb_registry.json"
-agentpm/status/snapshot.py:218:        # If registry is at share/kb_registry.json, repo_root is parent of share/
-agentpm/status/snapshot.py:220:        if registry_path.name == "kb_registry.json" and registry_path.parent.name == "share":
-agentpm/status/snapshot.py:452:    include_kb_registry: bool = True,
-agentpm/status/snapshot.py:465:        include_kb_registry: Whether to include KB registry summary (advisory-only)
-agentpm/status/snapshot.py:483:            "kb_registry": {...} (if included) - optional, advisory-only, read-only in CI
-agentpm/status/snapshot.py:562:    kb_registry_summary = {}
-agentpm/status/snapshot.py:563:    if include_kb_registry:
-agentpm/status/snapshot.py:565:            kb_registry_summary = get_kb_registry_summary()
-agentpm/status/snapshot.py:567:            kb_registry_summary = {
-agentpm/status/snapshot.py:589:    # NOTE: eval_insights and kb_registry are advisory only and do NOT affect overall_ok
-agentpm/status/snapshot.py:617:    if include_kb_registry:
-agentpm/status/snapshot.py:618:        snapshot["kb_registry"] = kb_registry_summary
-agentpm/status/explain.py:202:                registry_path = repo_root / "share" / "kb_registry.json"
-agentpm/status/AGENTS.md:24:    include_kb_registry: bool = True,
-agentpm/status/AGENTS.md:42:    registry_path: str = "share/kb_registry.json"
 agentpm/AGENTS.md:57:  - **SSOT**: Registry entries live in `share/kb_registry.json` (read-only in CI per Rule-044)
 agentpm/AGENTS.md:87:- **Components**: DB health, system health (DB + LM + Graph), status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10 exports), kb_registry (KB-Reg:M2)
 agentpm/AGENTS.md:112:  - `kb_registry`: KB registry summary (KB-Reg:M2) — **advisory only, read-only in CI**:
-scripts/util/export_pm_snapshot_json.py:45:            include_kb_registry=True,
-scripts/util/export_pm_introspection_evidence.py:150:        ("kb_registry", "kb_registry_refs"),
+.cursor/rules/068-gpt-docs-sync.mdc:99:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
+agentpm/status/snapshot.py:131:def get_kb_registry_summary(registry_path: Path | None = None) -> dict[str, Any]:
+agentpm/status/snapshot.py:135:        registry_path: Path to kb_registry.json (defaults to share/kb_registry.json)
+agentpm/status/snapshot.py:152:        registry_path = repo_root / "share" / "kb_registry.json"
+agentpm/status/snapshot.py:183:        registry_path: Path to kb_registry.json (defaults to share/kb_registry.json)
+agentpm/status/snapshot.py:200:        registry_path = repo_root / "share" / "kb_registry.json"
+agentpm/status/snapshot.py:222:        # If registry is at share/kb_registry.json, repo_root is parent of share/
+agentpm/status/snapshot.py:224:        if registry_path.name == "kb_registry.json" and registry_path.parent.name == "share":
+agentpm/status/snapshot.py:460:    include_kb_registry: bool = True,
+agentpm/status/snapshot.py:473:        include_kb_registry: Whether to include KB registry summary (advisory-only)
+agentpm/status/snapshot.py:491:            "kb_registry": {...} (if included) - optional, advisory-only, read-only in CI
+agentpm/status/snapshot.py:570:    kb_registry_summary = {}
+agentpm/status/snapshot.py:571:    if include_kb_registry:
+agentpm/status/snapshot.py:573:            kb_registry_summary = get_kb_registry_summary()
+agentpm/status/snapshot.py:575:            kb_registry_summary = {
+agentpm/status/snapshot.py:597:    # NOTE: eval_insights and kb_registry are advisory only and do NOT affect overall_ok
+agentpm/status/snapshot.py:625:    if include_kb_registry:
+agentpm/status/snapshot.py:626:        snapshot["kb_registry"] = kb_registry_summary
+agentpm/status/explain.py:206:                registry_path = repo_root / "share" / "kb_registry.json"
+agentpm/status/AGENTS.md:24:    include_kb_registry: bool = True,
+agentpm/status/AGENTS.md:42:    registry_path: str = "share/kb_registry.json"
+.cursor/rules/AGENTS.md:2998:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
 agentpm/kb/__init__.py:8:SSOT: Registry entries live in share/kb_registry.json (read-only in CI per Rule-044).
 agentpm/kb/AGENTS.md:17:- **Registry file**: `share/kb_registry.json` (JSON format)
 agentpm/kb/AGENTS.md:121:**Seeding Script**: `scripts/kb/seed_registry.py` — Populates `share/kb_registry.json` with initial document entries. Respects CI write guards (Rule-044) — only runs in local/dev environments.
 agentpm/kb/registry.py:9:SSOT: Registry entries live in share/kb_registry.json (read-only in CI per Rule-044).
 agentpm/kb/registry.py:25:REGISTRY_PATH = REPO_ROOT / "share" / "kb_registry.json"
-agentpm/kb/registry.py:169:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
-agentpm/kb/registry.py:205:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
-scripts/pm_snapshot.py:95:        include_kb_registry=True,  # Include KB registry summary (KB-Reg:M2)
-scripts/pm_snapshot.py:108:    kb_registry_summary = snapshot.get("kb_registry", {})
-scripts/pm_snapshot.py:181:    kb_registry_summary = {
-scripts/pm_snapshot.py:192:            get_kb_registry_summary,
-scripts/pm_snapshot.py:197:        kb_registry_summary = get_kb_registry_summary()
-scripts/pm_snapshot.py:205:        kb_registry_summary = {
-scripts/pm_snapshot.py:312:    "kb_registry": kb_registry_summary,
-scripts/pm_snapshot.py:405:kb_available = kb_registry_summary.get("available", False)
-scripts/pm_snapshot.py:406:kb_total = kb_registry_summary.get("total", 0)
-scripts/pm_snapshot.py:407:kb_valid = kb_registry_summary.get("valid", False)
-scripts/pm_snapshot.py:408:kb_errors = kb_registry_summary.get("errors_count", 0)
-scripts/pm_snapshot.py:409:kb_warnings = kb_registry_summary.get("warnings_count", 0)
-scripts/pm_snapshot.py:419:    lines.append(f"- Note: {kb_registry_summary.get('note', 'KB registry file not found')}")
+agentpm/kb/registry.py:171:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
+agentpm/kb/registry.py:207:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
+scripts/util/export_pm_introspection_evidence.py:150:        ("kb_registry", "kb_registry_refs"),
+scripts/util/export_pm_snapshot_json.py:47:            include_kb_registry=True,
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:41:- `kb_registry.md` - Knowledge base registry
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:137:  - Reads `share/kb_registry.json` for KB registry summary (KB-Reg:M2 + M3a, advisory-only, read-only in CI, seeded with core SSOT/runbook/AGENTS docs)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:21:* `kb_registry.md` - KB document registry (for DMS integration)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:74:* `share/kb_registry.md` - Complete KB document registry (converted from JSON)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:95:* **KB Registry** (`share/kb_registry.md`) - Document metadata and registry (converted from JSON)
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:50:- ✅ `share/kb_registry.md` — Current status (empty: no documents)
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:184:1. **Create KB registry builder** (`scripts/kb/build_kb_registry.py`)
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:187:   - Output: `share/kb_registry.json` with structure:
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:220:- `scripts/kb/build_kb_registry.py` (new script)
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:238:   python scripts/kb/build_kb_registry.py          # Generate registry
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:254:   - Does `share/kb_registry.json` contain all 7 PDFs?
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:336:- [ ] `share/kb_registry.json` contains all 7 PDFs
+docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:378:3. `scripts/kb/build_kb_registry.py` — KB registry generator
+docs/SSOT/LAYERS_AND_PHASES.md:29:  - **Artifact:** `share/kb_registry.json` (generated from DMS)
+docs/SSOT/LAYERS_AND_PHASES.md:30:  - **Builder:** `scripts/kb/build_kb_registry.py`
+docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md:108:- `scripts/kb/build_kb_registry.py` - Extended to include code files (already supports CODE::*)
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:31:* Exports complete KB document registry to `share/kb_registry.json`
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:74:3. **KB Registry** (`share/kb_registry.json`)
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:184:3. **Query KB registry** from `share/kb_registry.json` for document discovery
+docs/SSOT/LAYER3_DRIFT_RESCUE.md:12:- `share/kb_registry.json` - KB registry from DMS
+scripts/kb/build_kb_registry.py:8:SSOT: share/kb_registry.json (read-only in CI per Rule-044).
+scripts/kb/build_kb_registry.py:40:def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
+scripts/kb/build_kb_registry.py:241:        registry = build_kb_registry_from_dms(dry_run=args.dry_run)
+scripts/pm_snapshot.py:95:        include_kb_registry=True,  # Include KB registry summary (KB-Reg:M2)
+scripts/pm_snapshot.py:108:    kb_registry_summary = snapshot.get("kb_registry", {})
+scripts/pm_snapshot.py:193:    kb_registry_summary = {
+scripts/pm_snapshot.py:204:            get_kb_registry_summary,
+scripts/pm_snapshot.py:209:        kb_registry_summary = get_kb_registry_summary()
+scripts/pm_snapshot.py:217:        kb_registry_summary = {
+scripts/pm_snapshot.py:326:    "kb_registry": kb_registry_summary,
+scripts/pm_snapshot.py:425:kb_available = kb_registry_summary.get("available", False)
+scripts/pm_snapshot.py:426:kb_total = kb_registry_summary.get("total", 0)
+scripts/pm_snapshot.py:427:kb_valid = kb_registry_summary.get("valid", False)
+scripts/pm_snapshot.py:428:kb_errors = kb_registry_summary.get("errors_count", 0)
+scripts/pm_snapshot.py:429:kb_warnings = kb_registry_summary.get("warnings_count", 0)
+scripts/pm_snapshot.py:439:    lines.append(f"- Note: {kb_registry_summary.get('note', 'KB registry file not found')}")
 agentpm/tests/status/test_kb_hints.py:51:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/status/test_kb_hints.py:100:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/status/test_kb_hints.py:130:    registry_path = tmp_path / "kb_registry.json"
@@ -3899,42 +3524,23 @@ agentpm/tests/status/test_kb_hints.py:151:    registry_path = Path("/nonexistent
 agentpm/tests/status/test_kb_hints.py:168:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/status/test_kb_hints.py:205:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/status/test_kb_hints.py:249:    registry_path = tmp_path / "kb_registry.json"
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:63:* `share/kb_registry.json` - Complete KB document registry (for DMS integration)
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:70:* **KB Registry** (`share/kb_registry.json`) - Document metadata and registry
-agentpm/tests/runtime/test_pm_snapshot.py:171:    def test_snapshot_helper_includes_kb_registry(self):
-agentpm/tests/runtime/test_pm_snapshot.py:180:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:186:        kb_registry = result["kb_registry"]
-agentpm/tests/runtime/test_pm_snapshot.py:187:        assert isinstance(kb_registry, dict)
-agentpm/tests/runtime/test_pm_snapshot.py:188:        assert "available" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:189:        assert "total" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:190:        assert "valid" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:191:        assert "errors_count" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:192:        assert "warnings_count" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:194:    def test_snapshot_helper_kb_registry_optional(self):
-agentpm/tests/runtime/test_pm_snapshot.py:204:            include_kb_registry=False,
-agentpm/tests/runtime/test_pm_snapshot.py:209:        # Verify kb_registry is not present
-agentpm/tests/runtime/test_pm_snapshot.py:210:        assert "kb_registry" not in result
-agentpm/tests/runtime/test_pm_snapshot.py:212:    def test_snapshot_helper_kb_registry_handles_missing_file(self):
-agentpm/tests/runtime/test_pm_snapshot.py:222:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:228:        kb_registry = result["kb_registry"]
-agentpm/tests/runtime/test_pm_snapshot.py:229:        assert isinstance(kb_registry, dict)
-agentpm/tests/runtime/test_pm_snapshot.py:230:        assert "available" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:231:        assert "total" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:233:        if not kb_registry.get("available", False):
-agentpm/tests/runtime/test_pm_snapshot.py:234:            assert kb_registry.get("total", 0) == 0
-agentpm/tests/runtime/test_pm_snapshot.py:245:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:270:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:301:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:320:            include_kb_registry=True,
+agentpm/tests/cli/test_pmagent_report_kb.py:16:    """Create a minimal kb_registry.json with a couple of docs."""
+agentpm/tests/cli/test_pmagent_report_kb.py:40:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_report_kb.py:105:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_plan_kb.py:54:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_plan_kb.py:114:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_plan_kb.py:133:    registry_path = tmp_path / "nonexistent" / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_plan_kb.py:161:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:39:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:83:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:290:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:341:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_status_kb.py:47:    registry_path = tmp_path / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_status_kb.py:75:    registry_path = repo_root / "share" / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_status_kb.py:100:    registry_path = tmp_path / "nonexistent" / "kb_registry.json"
 agentpm/tests/cli/test_pmagent_status_kb.py:137:def test_kb_registry_summary_cli_json_only() -> None:
-agentpm/tests/cli/test_pmagent_report_kb.py:16:    """Create a minimal kb_registry.json with a couple of docs."""
+agentpm/tests/runtime/test_pm_snapshot.py:171:    def test_snapshot_helper_includes_kb_registry(self):
+agentpm/tests/runtime/test_pm_snapshot.py:180:            include_kb_registry=True,
 
 ```
 
@@ -3963,25 +3569,27 @@ docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:100:SELECT count(*) FROM control.hint_re
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:101:SELECT kind, count(*) FROM control.hint_registry GROUP BY kind;
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:102:SELECT scope, count(*) FROM control.hint_registry GROUP BY scope;
 .cursor/rules/071-portable-json-not-plan-ssot.mdc:4:  `next_steps.head.json`, `doc_registry.json`, `hint_registry.json`,
-scripts/util/export_pm_introspection_evidence.py:151:        ("hint_registry", "hint_registry_refs"),
-scripts/guards/hints_required.py:5:Checks that envelopes contain all REQUIRED hints from the DMS hint_registry.
-docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:93:* `share/hint_registry.json` - System hints registry
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:40:- `hint_registry.md` - Runtime hints registry
 scripts/db/export_dms_tables.py:9:- control.hint_registry
 scripts/db/export_dms_tables.py:40:    "control.hint_registry",
-docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:101:  `hint_registry.json`, `governance_freshness.json`, `planning_lane_status.json`,
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:26:* `hint_registry.md` - System hints and warnings
 scripts/governance/seed_hint_registry.py:3:Seed the hint_registry with initial hints.
 scripts/governance/seed_hint_registry.py:5:Loads hints from discovery catalog and inserts them into control.hint_registry.
 scripts/governance/seed_hint_registry.py:98:def seed_hint_registry(discovery_catalog_path: Path | None = None) -> int:
 scripts/governance/seed_hint_registry.py:100:    Seed the hint_registry with initial hints.
 scripts/governance/seed_hint_registry.py:122:                        INSERT INTO control.hint_registry
-scripts/governance/seed_hint_registry.py:184:                            INSERT INTO control.hint_registry
-scripts/governance/seed_hint_registry.py:222:    parser = argparse.ArgumentParser(description="Seed hint_registry with initial hints")
-scripts/governance/seed_hint_registry.py:231:    return seed_hint_registry(args.discovery_catalog)
+scripts/governance/seed_hint_registry.py:186:                            INSERT INTO control.hint_registry
+scripts/governance/seed_hint_registry.py:224:    parser = argparse.ArgumentParser(description="Seed hint_registry with initial hints")
+scripts/governance/seed_hint_registry.py:233:    return seed_hint_registry(args.discovery_catalog)
+docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:93:* `share/hint_registry.json` - System hints registry
+scripts/util/export_pm_introspection_evidence.py:151:        ("hint_registry", "hint_registry_refs"),
 docs/ADRs/ADR-059-hint-registry.md:19:Implement a DMS-backed Hint Registry (`control.hint_registry`) that:
 docs/ADRs/ADR-059-hint-registry.md:28:**Table**: `control.hint_registry`
 docs/ADRs/ADR-059-hint-registry.md:122:- [ ] `control.hint_registry` table exists and is populated
 docs/ADRs/ADR-059-hint-registry.md:130:- Migration: `migrations/054_control_hint_registry.sql`
 docs/ADRs/ADR-059-hint-registry.md:134:- Seed script: `scripts/governance/seed_hint_registry.py`
+docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:101:  `hint_registry.json`, `governance_freshness.json`, `planning_lane_status.json`,
+scripts/guards/hints_required.py:5:Checks that envelopes contain all REQUIRED hints from the DMS hint_registry.
 
 ```
 
@@ -4005,14 +3613,6 @@ docs/ADRs/ADR-059-hint-registry.md:134:- Seed script: `scripts/governance/seed_h
 .cursor/plans/pmagent-reality-check-implementation-a3cef828.plan.md:146:- `AGENTS.md` - Add reference to `reality.check` and link SSOT doc
 .cursor/plans/pmagent-reality-check-implementation-a3cef828.plan.md:178:- [ ] `pmagent reality-check check --mode hint` runs successfully with DB off
 .cursor/plans/pmagent-reality-check-implementation-a3cef828.plan.md:179:- [ ] `pmagent reality-check check --mode strict` fails appropriately when checks fail
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:6:Move hints from hardcoded strings in agent code to a DMS-backed registry (`control.hint_registry`) with REQUIRED vs SUGGESTED semantics. Envelope generators (handoff, capability_session, reality_check, status) will query the registry and embed hints into their outputs. A guard (`guard.hints.required`) will enforce that REQUIRED hints are present in envelopes.
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:82:**File**: `agentpm/reality/check.py` (`reality_check`)
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:84:- Query hints for `scope="status_api"`, `applies_to={"flow": "reality_check"}`
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:105:**Integration**: Add to `make reality.green STRICT` (via `agentpm/reality/check.py` or new guard script)
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:116:  - `agentpm/reality/check.py` (runtime hints)
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:170:- `agentpm/reality/check.py` - Merge DMS hints with runtime hints
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:205:- [ ] Run discovery script to catalog all hardcoded hints in codebase (src/graph/graph.py, scripts/prepare_handoff.py, agentpm/reality/check.py, docs/hints_registry.md) and classify as REQUIRED vs SUGGESTED
-.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:208:- [ ] Wire envelope generators to query DMS and embed hints: scripts/prepare_handoff.py, agentpm/plan/next.py, agentpm/reality/check.py, agentpm/status/snapshot.py (parallel behavior, non-breaking)
 agentpm/ai_docs/reality_check_ai_notes.py:3:AI Documentation Helper for pmagent reality-check
 agentpm/ai_docs/reality_check_ai_notes.py:5:Uses Granite (LM Studio) to generate orchestrator-facing notes about the reality-check system.
 agentpm/ai_docs/reality_check_ai_notes.py:22:def read_reality_check_code() -> str:
@@ -4032,6 +3632,14 @@ agentpm/ai_docs/reality_check_ai_notes.py:165:> python -m pmagent docs reality-c
 agentpm/ai_docs/reality_check_ai_notes.py:170:        note = f"""# pmagent reality-check — AI-Generated Notes
 agentpm/ai_docs/reality_check_ai_notes.py:175:> This file is automatically generated by `pmagent docs reality-check-ai-notes`.
 agentpm/ai_docs/reality_check_ai_notes.py:176:> It provides orchestrator-facing notes about the reality-check system.
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:6:Move hints from hardcoded strings in agent code to a DMS-backed registry (`control.hint_registry`) with REQUIRED vs SUGGESTED semantics. Envelope generators (handoff, capability_session, reality_check, status) will query the registry and embed hints into their outputs. A guard (`guard.hints.required`) will enforce that REQUIRED hints are present in envelopes.
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:82:**File**: `agentpm/reality/check.py` (`reality_check`)
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:84:- Query hints for `scope="status_api"`, `applies_to={"flow": "reality_check"}`
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:105:**Integration**: Add to `make reality.green STRICT` (via `agentpm/reality/check.py` or new guard script)
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:116:  - `agentpm/reality/check.py` (runtime hints)
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:170:- `agentpm/reality/check.py` - Merge DMS hints with runtime hints
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:205:- [ ] Run discovery script to catalog all hardcoded hints in codebase (src/graph/graph.py, scripts/prepare_handoff.py, agentpm/reality/check.py, docs/hints_registry.md) and classify as REQUIRED vs SUGGESTED
+.cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:208:- [ ] Wire envelope generators to query DMS and embed hints: scripts/prepare_handoff.py, agentpm/plan/next.py, agentpm/reality/check.py, agentpm/status/snapshot.py (parallel behavior, non-breaking)
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:40:- **Hardcoded Location**: `agentpm/reality/check.py`, `agentpm/status/snapshot.py`
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:62:- **Flow**: `reality_check`
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:64:- **Hardcoded Location**: `agentpm/reality/check.py`, `scripts/guards/guard_reality_green.py`
@@ -4044,50 +3652,50 @@ docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:187:    --envelope evidence/pmagent/real
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:200:- `agentpm/reality/check.py` - Remove local gates primary strings
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:225:python scripts/guards/hints_required.py --flow reality_check --envelope evidence/pmagent/reality_check_latest.json --mode STRICT
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:241:- `agentpm/reality/check.py` - Remove hardcoded local gates hints
-agentpm/status/snapshot.py:6:Composes health, status explain, reality-check, AI tracking, and share manifest.
-agentpm/status/snapshot.py:16:from agentpm.reality.check import reality_check as check_reality
-agentpm/status/snapshot.py:448:    include_reality_check: bool = True,
-agentpm/status/snapshot.py:455:    reality_check_mode: str = "HINT",
-agentpm/status/snapshot.py:461:        include_reality_check: Whether to include reality-check verdict
-agentpm/status/snapshot.py:468:        reality_check_mode: Mode for reality-check ("HINT" or "STRICT")
-agentpm/status/snapshot.py:479:            "reality_check": {...} (if included),
-agentpm/status/snapshot.py:525:    # Gather reality-check verdict (if requested)
-agentpm/status/snapshot.py:526:    reality_check_json = {}
-agentpm/status/snapshot.py:527:    if include_reality_check:
-agentpm/status/snapshot.py:529:            reality_check_json = check_reality(mode=reality_check_mode, skip_dashboards=False)
-agentpm/status/snapshot.py:531:            reality_check_json = {
-agentpm/status/snapshot.py:532:                "command": "reality.check",
-agentpm/status/snapshot.py:533:                "mode": reality_check_mode,
-agentpm/status/snapshot.py:535:                "error": f"reality_check failed: {e}",
-agentpm/status/snapshot.py:593:        and (reality_check_json.get("overall_ok", True) if include_reality_check else True)
-agentpm/status/snapshot.py:605:    if include_reality_check:
-agentpm/status/snapshot.py:606:        snapshot["reality_check"] = reality_check_json
-agentpm/status/snapshot.py:695:                mode=reality_check_mode,  # Use same mode as reality_check
-agentpm/status/AGENTS.md:20:    include_reality_check: bool = True,
-agentpm/status/AGENTS.md:26:    reality_check_mode: str = "HINT",
-agentpm/scripts/reality_check_1_live.py:39:  - `pmagent reality-check live`
-agentpm/scripts/reality_check_1_live.py:41:  - `make reality.check.1.live`
-agentpm/scripts/reality_check_1.py:14:    python -m agentpm.scripts.reality_check_1
-agentpm/scripts/AGENTS.md:12:| `reality_check_1.py` | Automates Phase-6 Reality Check #1 by verifying Postgres + LM Studio, running docs ingest, and executing the golden question `What does Phase-6P deliver?`. |
-agentpm/scripts/AGENTS.md:19:| `reality_check_1.main()` | Performs stepwise bring-up → returns structured JSON `{ok, steps, summary, errors}` and never mutates schemas when DB is offline. |
-agentpm/scripts/AGENTS.md:23:- Scripts are exercised via `make reality.check.1`, `python -m agentpm.scripts.ingest_docs`, and pm-agent CLI entrypoints (`pmagent reality-check 1`, `pmagent ask docs ...`).  
-agentpm/scripts/AGENTS.md:40:| `reality_check_1.py` | ADR-066 (LM Studio integration), ADR-058 (Reality Check workflows) |
-scripts/util/export_pm_snapshot_json.py:41:            include_reality_check=True,
-scripts/util/export_pm_snapshot_json.py:48:            reality_check_mode="HINT",  # HINT mode for snapshot speed
-scripts/util/export_pm_introspection_evidence.py:79:        ("pmagent reality-check", "--help"),
-scripts/util/export_pm_introspection_evidence.py:80:        ("pmagent reality-check check", "--help"),
-scripts/util/export_pm_introspection_evidence.py:110:        ("pmagent reality-check check --mode hint --json-only", "reality_check_hint"),
-scripts/util/export_pm_introspection_evidence.py:152:        ("reality.check", "reality_check_refs"),
+agentpm/tools/__init__.py:12:    reality_check,
+agentpm/tools/__init__.py:22:    "reality_check",
+agentpm/tools/AGENTS.md:5:The `agentpm/tools/` directory contains tool functions for system health, control plane, documentation, ledger verification, and reality checks. These tools are called by the `pmagent` CLI and provide structured JSON responses.
+agentpm/tools/AGENTS.md:94:### `system.reality_check()`
+agentpm/tools/AGENTS.md:96:**Purpose:** Reality check for automated bring-up (wraps `agentpm.reality.check.reality_check()`).
+agentpm/tools/AGENTS.md:102:def reality_check(**kwargs: Any) -> dict[str, Any]
+agentpm/tools/AGENTS.md:112:- `result`: Complete verdict from `reality_check()`
+agentpm/tools/AGENTS.md:115:- Calls `agentpm/reality/check.py::reality_check()` with kwargs
+agentpm/tools/AGENTS.md:119:**Note:** This is a thin wrapper around the core `reality_check()` function. The core function handles all the validation logic; this tool function provides the standard tool interface.
+agentpm/tools/AGENTS.md:122:- Called by `pmagent reality-check check` command via `pmagent/cli.py`
+agentpm/tools/AGENTS.md:172:| `system.reality_check()` | ADR-066 (LM Studio Control Plane Integration), PMAGENT_REALITY_CHECK_DESIGN.md |
+agentpm/tools/system.py:3:System Tools - Health, control summary, docs status, ledger verify, reality check.
+agentpm/tools/system.py:16:from agentpm.reality.check import reality_check as check_reality
+agentpm/tools/system.py:80:def reality_check(**kwargs: Any) -> dict[str, Any]:
+agentpm/tools/system.py:84:        Dict with reality check results.
+agentpm/AGENTS.md:10:- Guarded pipelines, metrics, and reality-check style verification
+agentpm/AGENTS.md:43:  - These exports are consumed by Atlas dashboards, pmagent CLI commands, and reality-check flows.
+agentpm/AGENTS.md:73:- **`agentpm/reality/`**: Reality-check orchestrator helpers (`reality.check` verdicts).
+agentpm/AGENTS.md:82:**Purpose:** `pm.snapshot` (`make pm.snapshot` / `scripts/pm_snapshot.py`) generates a comprehensive PM-facing status snapshot that composes health, status explanation, reality-check, AI tracking, share manifest, and eval exports posture into a single operator-facing view.
+agentpm/AGENTS.md:87:- **Components**: DB health, system health (DB + LM + Graph), status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10 exports), kb_registry (KB-Reg:M2)
+agentpm/AGENTS.md:92:- Required guards: DB health guard, system health (DB + LM + Graph), status explanation, reality-check
+agentpm/AGENTS.md:104:  - `reality_check`: Reality-check verdict (HINT mode)
+agentpm/AGENTS.md:127:- **Composes**: `pmagent health system` (DB + LM + Graph), `pmagent status explain` (plain-language explanation), `pmagent status kb` (KB registry status view, KB-Reg:M3b), `pmagent reality-check check --mode hint` (comprehensive validation)
+agentpm/AGENTS.md:130:- **Eval insights**: Eval exports are **advisory only** and do NOT affect `overall_ok`; they provide analytics context but system health is determined by the core health components (DB, LM, Graph, reality-check)
+agentpm/AGENTS.md:131:- **KB registry**: KB registry summary is **advisory only** and does NOT affect `overall_ok`; it provides document registry context but system health is determined by the core health components (DB, LM, Graph, reality-check); registry is read-only in CI per Rule-044
+agentpm/AGENTS.md:132:- **KB hints (KB-Reg:M4 + M6)**: KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, validation issues, stale docs (`KB_DOC_STALE`), and out-of-sync docs (`KB_DOC_OUT_OF_SYNC`); all hints are advisory-only and never affect `overall_ok`
+agentpm/AGENTS.md:137:- pmagent CLI subcommands (e.g. `pmagent health *`, `pmagent status *` including `pmagent status kb` for KB registry status view, `pmagent reality-check check`) are thin wrappers over `agentpm.*` modules.
 agentpm/reality/__init__.py:3:from agentpm.reality.check import print_human_summary, reality_check
 agentpm/reality/__init__.py:5:__all__ = ["print_human_summary", "reality_check"]
-scripts/pm_snapshot.py:91:        include_reality_check=True,
-scripts/pm_snapshot.py:97:        reality_check_mode="HINT",  # HINT mode for snapshot speed
-scripts/pm_snapshot.py:104:    reality_check_json = snapshot.get("reality_check", {})
-scripts/pm_snapshot.py:141:    # Gather reality-check verdict (HINT mode for snapshot)
-scripts/pm_snapshot.py:142:    reality_check_json = {}
-scripts/pm_snapshot.py:144:        from agentpm.reality.check import reality_check
-scripts/pm_snapshot.py:146:        reality_check_json = reality_check(mode="HINT", skip_dashboards=False)
-scripts/pm_snapshot.py:148:        reality_check_json = {
+agentpm/reality/check.py:205:def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str, Any]:
+agentpm/reality/check.py:206:    """Run comprehensive reality check.
+agentpm/reality/check.py:261:        # Import here to avoid circular import (snapshot imports reality_check)
+agentpm/reality/check.py:282:        "command": "reality.check",
+agentpm/reality/check.py:300:                applies_to={"flow": "reality_check"},
+agentpm/reality/check.py:301:                mode=mode,  # Use same mode as reality_check
+agentpm/reality/check.py:371:    print(f"[pmagent] reality.check (mode={mode})", file=file)
+scripts/util/export_pm_snapshot_json.py:43:            include_reality_check=True,
+scripts/util/export_pm_snapshot_json.py:50:            reality_check_mode="HINT",  # HINT mode for snapshot speed
+agentpm/reality/AGENTS.md:5:The `agentpm/reality/` directory contains the reality check system for comprehensive environment validation (env/DSN, DB/control plane, LM/models, exports, eval smokes).
+agentpm/reality/AGENTS.md:9:### `reality_check()`
+agentpm/reality/AGENTS.md:13:**Location:** `agentpm/reality/check.py`
+agentpm/reality/AGENTS.md:17:def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str, Any]
+agentpm/reality/AGENTS.md:28:- `command`: `"reality.check"`
+agentpm/reality/AGENTS.md:44:- `pmagent reality-check check --mode hint` → calls `reality_check(mode="HINT", skip_dashboards=False)`
 
 ```
 
@@ -4096,10 +3704,13 @@ scripts/pm_snapshot.py:148:        reality_check_json = {
 ```
 scripts/util/export_pm_introspection_evidence.py:6:share + planning + KB + tracking/self-healing systems currently work together.
 scripts/util/export_pm_introspection_evidence.py:153:        ("self-healing", "self_healing_refs"),
-scripts/util/export_pm_introspection_evidence.py:213:        "planning + KB + tracking/self-healing systems currently behave. It is NOT a",
-scripts/util/export_pm_introspection_evidence.py:300:            "## 6. Tracking / self-healing references (rg outputs)",
+scripts/util/export_pm_introspection_evidence.py:215:        "planning + KB + tracking/self-healing systems currently behave. It is NOT a",
+scripts/util/export_pm_introspection_evidence.py:302:            "## 6. Tracking / self-healing references (rg outputs)",
 docs/handoff/GPT_PM_CONTEXT_REBUILD.md:20:Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and visualization-ready artifacts, with self-healing guards and governance.
 docs/SSOT/MASTER_PLAN.md:24:Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and viz-ready artifacts, with self-healing guards and governance.
+docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:262:### self-healing logic
+docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:263:- **No changes** (Phase 14 is feature work, no self-healing changes)
+docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:322:- **No changes** (Phase 14 is feature work, no self-healing changes)
 
 ```
 
@@ -4128,8 +3739,8 @@ docs/SSOT/MASTER_PLAN.md:24:Build a deterministic, resumable LangGraph pipeline 
 .cursor/rules/070-gotchas-check.mdc:190:- "No gotchas found" is a valid result, but must be explicitly stated
 .cursor/rules/070-gotchas-check.mdc:192:- Use Phase 7 gotchas analysis as a template for systematic review
 scripts/util/export_pm_introspection_evidence.py:154:        ("gotchas", "gotchas_refs"),
-scripts/util/export_pm_introspection_evidence.py:163:    """Get head sections from contract/gotchas docs."""
-scripts/util/export_pm_introspection_evidence.py:316:    # Contracts/gotchas
+scripts/util/export_pm_introspection_evidence.py:165:    """Get head sections from contract/gotchas docs."""
+scripts/util/export_pm_introspection_evidence.py:318:    # Contracts/gotchas
 docs/SSOT/RULES_INDEX.md:75:| 070 | 070-gotchas-check.mdc | # --- |
 docs/forest/overview.md:77:- Rule 070-gotchas-check: ---
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:50:* Rule 070 requires gotchas checks at beginning and end of all work sessions
@@ -4998,7 +4609,7 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 ### NEXT_STEPS
 
 ```
-<!-- Handoff updated: 2025-11-29T18:21:16.832163 -->
+<!-- Handoff updated: 2025-12-01T08:00:41.440774 -->
 # PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary
 
 ## Goal
@@ -5131,28 +4742,29 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 - Consider: System health check (`make reality.green`), documentation updates, or new feature development
 - See `docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md` for architecture details
 
-## TODO — Share Manifest Drift (Governance / Housekeeping)
+## ✅ RESOLVED — Share Manifest Drift (Governance / Housekeeping)
 
-* Observed: `share/` now contains a flat set of 12 JSON governance/PM artifacts
-  (agents_md.head.json, doc_registry.json, doc_sync_state.json, doc_version.json,
-  governance_freshness.json, hint_registry.json, live_posture.json,
-  next_steps.head.json, planning_lane_status.json, pm_contract.head.json,
-  pm_snapshot.json, schema_snapshot.json).
+* **Status**: Resolved (2025-11-30)
 
-* Observed: `SHARE_MANIFEST.json` still references the old, much larger share/
-  structure (markdown files, evidence directories, etc.) and does not reflect
-  the new minimal package.
+* **Current State**: `share/` now contains **35 Markdown files** (all JSON files are automatically converted to Markdown during housekeeping):
+  * **14 core PM artifacts** (pm_snapshot.md, planning_context.md, kb_registry.md, doc_registry.md, doc_sync_state.md, doc_version.md, governance_freshness.md, hint_registry.md, live_posture.md, schema_snapshot.md, planning_lane_status.md, agents_md.head.md, pm_contract.head.md, next_steps.head.md)
+  * **21 documentation files** (MASTER_PLAN.md, RULES_INDEX.md, AGENTS.md, various intake/migration plans, etc.)
 
-* Impact: Manifest is no longer a truthful description of share/, but runtime
-  no longer depends on it (DMS is SSOT; manifest fallback removed). This is a
-  governance/documentation drift, not a runtime bug.
+* **SHARE_MANIFEST.json**: Formally deprecated with deprecation notice added. The manifest no longer reflects the current share/ structure (35 Markdown files vs 39 old items). The share/ directory is now **auto-generated** via `make pm.share.artifacts` during housekeeping, and DMS is the SSOT for document tracking.
 
-* Action (future task): In a focused governance/housekeeping step, either
-  (a) regenerate `SHARE_MANIFEST.json` from the DMS-backed share registry with
-  the correct schema, or
-  (b) formally deprecate/remove it in favor of the 12 JSON artifacts as the
-  only portable PM context.
+* **Documentation Updated**: `docs/SSOT/SHARE_FOLDER_STRUCTURE.md` updated to reflect current state (all Markdown, auto-generated, flat structure).
 
+
+### PR-1 Status: COMPLETE
+
+* Repo introspection subsystem implemented and tested (semantic-inventory, reunion-plan, quarantine-candidates).
+* CLI integration tests (TV-REPO-01..03) added and passing.
+
+### PR-2: Documentation Onboarding (IN PROGRESS)
+
+* Add repo subsystem to root AGENTS.md
+* Add pmagent/AGENTS.md documentation block
+* Update NEXT_STEPS.md lifecycle
 
 ```
 
@@ -5165,27 +4777,42 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 
 The `share/` directory is a **complete portable PM context package** that contains
 all information needed for the PM to manage the system from start to finish. It
-includes:
+is **auto-generated** during `make housekeeping` via the `pm.share.artifacts` target.
 
-* **Full AGENTS.md files** (all 84+ files, complete content, not head exports)
-* **DMS registry snapshots** (full dumps of DMS tables)
-* **KB registry** (knowledge base document registry for DMS integration)
-* **Hint registry posture** (system hints and warnings)
-* **Governance freshness summaries** (document freshness tracking)
-* **System health and live posture** (DB/LM status, system state)
-* **Planning context** (full planning output from `pmagent plan next`)
-* **Control-plane exports** (for dashboards and downstream apps)
-* **PM contracts and state** (head exports for quick reference)
+**Current State (2025-11-30):**
+* **All files are Markdown format** (`.md`) - JSON files are automatically converted to Markdown
+* **Flat directory structure** - no subdirectories
+* **35 total files** - 14 core PM artifacts + 21 documentation files
+* **Auto-generated** - no manual file management required
 
-## Head Exports (`*.head.json`)
+## Core PM Artifacts (14 files)
+
+These are the essential governance/PM artifacts, all in Markdown format:
+
+* `pm_snapshot.md` - System health snapshot
+* `planning_context.md` - Full planning output from `pmagent plan next`
+* `kb_registry.md` - KB document registry (for DMS integration)
+* `doc_registry.md` - DMS document registry snapshot
+* `doc_sync_state.md` - Document sync state
+* `doc_version.md` - Document version tracking
+* `governance_freshness.md` - Document freshness tracking
+* `hint_registry.md` - System hints and warnings
+* `live_posture.md` - System health posture
+* `schema_snapshot.md` - Database schema snapshot
+* `planning_lane_status.md` - Planning lane status
+* `agents_md.head.md` - AGENTS.md head export (first 100 lines)
+* `pm_contract.head.md` - PM contract head export (first 100 lines)
+* `next_steps.head.md` - Next steps head export (first 100 lines)
+
+## Head Exports (`*.head.md`)
 
 Some files in `share/` are generated as **head exports** via
-`scripts/util/export_head_json.py`. These files contain only the **first 100
-lines** of their source documents. Examples:
+`scripts/util/export_head_json.py` and then converted to Markdown. These files
+contain only the **first 100 lines** of their source documents. Examples:
 
-* `next_steps.head.json` ← first 100 lines of `NEXT_STEPS.md`
-* `pm_contract.head.json` ← first 100 lines of `PM_CONTRACT.md`
-* `agents_md.head.json` ← first 100 lines of `AGENTS.md`
+* `next_steps.head.md` ← first 100 lines of `NEXT_STEPS.md` (converted from JSON)
+* `pm_contract.head.md` ← first 100 lines of `PM_CONTRACT.md` (converted from JSON)
+* `agents_md.head.md` ← first 100 lines of `AGENTS.md` (converted from JSON)
 
 These head exports are:
 
@@ -5214,22 +4841,32 @@ They **must not** be used to infer:
 
 ## Full Exports (Complete Files)
 
-The following are **full exports** (complete files, not head exports):
+The following are **full exports** (complete files, not head exports), all in Markdown format:
 
-* `share/agents_md/` - **All AGENTS.md files** (84+ files, complete content)
-  * Generated by `scripts/util/export_all_agents_md.py`
-  * Includes manifest.json with metadata (hashes, paths, line counts)
-  * Safe filenames (path separators replaced with underscores)
-* `share/planning_context.json` - Full planning output from `pmagent plan next`
-* `share/kb_registry.json` - Complete KB document registry (for DMS integration)
+* `share/planning_context.md` - Full planning output from `pmagent plan next` (converted from JSON)
+* `share/kb_registry.md` - Complete KB document registry (converted from JSON)
+* `share/pm_snapshot.md` - Complete system snapshot (converted from JSON)
+* `share/doc_registry.md` - Complete DMS document registry (converted from JSON)
+* All other core PM artifacts are full exports (not head exports)
 
 These full exports provide complete context for PM decision-making.
+
+## JSON to Markdown Conversion
+
+**All JSON files are automatically converted to Markdown** during `make housekeeping`:
+
+1. JSON files are exported to `share/` as normal
+2. `scripts/util/json_to_markdown.py` converts each JSON file to Markdown
+3. Original JSON files are removed (only `.md` files remain)
+4. This ensures all files in `share/` are human-readable Markdown format
+
+The conversion preserves all data structure and content, making it easier for PM agents to read and understand the system state.
 
 ## DMS Integration
 
 All AGENTS.md files and other critical documents are tracked in:
-* **KB Registry** (`share/kb_registry.json`) - Document metadata and registry
-* **DMS Tables** (`share/doc_registry.json`, etc.) - Full DMS table dumps
+* **KB Registry** (`share/kb_registry.md`) - Document metadata and registry (converted from JSON)
+* **DMS Tables** (`share/doc_registry.md`, etc.) - Full DMS table dumps (converted from JSON)
 
 The PM can query DMS using:
 * `pmagent kb registry list` - List all registered documents
@@ -5242,6 +4879,20 @@ For planning decisions, see:
 * `PM_CONTRACT_STRICT_SSOT_DMS.md` "Planning Context vs Portable Snapshots"
 * The `pmagent plan` commands (`pmagent plan next --with-status`, etc.)
 
+## SHARE_MANIFEST.json Deprecation
+
+**Status**: `SHARE_MANIFEST.json` is **deprecated** and no longer reflects the current `share/` structure.
+
+**Reason**: The `share/` directory is now **auto-generated** via `make pm.share.artifacts` during housekeeping. The manifest was designed for manual file synchronization, which is no longer needed.
+
+**Current State**:
+* `share/` contains 35 Markdown files (14 core PM artifacts + 21 documentation files)
+* All files are auto-generated during `make housekeeping`
+* DMS is the SSOT for document tracking
+* No manual file management required
+
+**Action**: The manifest is kept for historical reference but should not be used for validation or synchronization. The `share.manifest.verify` Makefile target may produce warnings about missing files - these can be ignored as the manifest is outdated.
+
 
 ```
 
@@ -5249,7 +4900,7 @@ For planning decisions, see:
 
 ```json
 {
-  "total_files": 35,
+  "total_files": 57,
   "json_files": [
     "agents_md.head.json",
     "doc_registry.json",
@@ -5275,20 +4926,44 @@ For planning decisions, see:
     "GEMATRIA_NUMERICS_INTAKE.md",
     "GPT_REFERENCE_GUIDE.md",
     "GPT_SYSTEM_PROMPT.md",
+    "LAYER3_AI_DOC_INGESTION_PLAN.md",
+    "LAYER4_CODE_INGESTION_PLAN.md",
     "LM_STUDIO_SETUP.md",
     "LM_WIDGETS.md",
     "MASTER_PLAN.md",
+    "NEXT_STEPS.md",
+    "PHASE_14_SEMANTIC_RECORD.md",
     "PHASE_6_PLAN.md",
+    "PM_CONTRACT.md",
+    "PM_CONTRACT_STRICT_SSOT_DMS.md",
+    "PM_HANDOFF_PROTOCOL.md",
     "PROJECTS_INVENTORY.md",
     "REFERENCES.md",
     "RULES_INDEX.md",
+    "SHARE_FOLDER_ANALYSIS.md",
     "STORYMAKER_INTAKE.md",
     "USAGE_PATTERNS_REFERENCE.md",
+    "agents_md.head.md",
+    "doc_registry.md",
+    "doc_sync_state.md",
+    "doc_version.md",
+    "governance_freshness.md",
+    "hint_registry.md",
+    "kb_registry.md",
+    "live_posture.md",
+    "next_steps.head.md",
+    "planning_context.md",
+    "planning_lane_status.md",
     "pm.snapshot.md",
+    "pm_contract.head.md",
+    "pm_snapshot.md",
     "pm_system_introspection_evidence.md",
+    "schema_snapshot.md",
     "scripts_AGENTS.md",
     "webui-contract.md"
   ],
-  "directories": []
+  "directories": [
+    "exports"
+  ]
 }
 ```

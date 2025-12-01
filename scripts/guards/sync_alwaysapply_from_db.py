@@ -26,9 +26,13 @@ FILES = [
 ]
 
 pat_block = re.compile(r"(?is)^[^\n]*Always[ -]Apply[^\n]*$\n(?:.*?\n)*?(?=^#|^\S|\Z)", re.M)
-pat_ruleline = re.compile(r"^(?P<prefix>\s*[-*]\s*)(?P<rule>Rule-(?P<num>\d{3}))(?P<rest>.*)$", re.M)
+pat_ruleline = re.compile(
+    r"^(?P<prefix>\s*[-*]\s*)(?P<rule>Rule-(?P<num>\d{3}))(?P<rest>.*)$", re.M
+)
 # Optional sentinel comment we maintain inside the block (or immediately after its title line)
-pat_sentinel = re.compile(r"<!--\s*alwaysapply\.sentinel:\s*([0-9,\s]+)\s*source=([a-z_]+)\s*-->", re.I)
+pat_sentinel = re.compile(
+    r"<!--\s*alwaysapply\.sentinel:\s*([0-9,\s]+)\s*source=([a-z_]+)\s*-->", re.I
+)
 # Also match old format: <!-- guard.alwaysapply sentinel: ... -->
 pat_sentinel_old = re.compile(r"<!--\s*guard\.alwaysapply\s+sentinel:\s*[0-9,\s]+\s*-->", re.I)
 

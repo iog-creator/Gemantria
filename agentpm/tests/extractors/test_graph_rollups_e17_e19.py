@@ -25,7 +25,10 @@ def test_e18_per_node_audit_trail_fields_present():
         assert isinstance(h, str) and len(h) == 64 and all(c in "0123456789abcdef" for c in h)
     # hash changes if provenance changes (model differs)
     g2 = assemble_graph([{"idx": 0}], "other-model", 7, BASE)
-    assert g2["nodes"][0]["meta"]["audit"]["provenance_hash"] != g["nodes"][0]["meta"]["audit"]["provenance_hash"]
+    assert (
+        g2["nodes"][0]["meta"]["audit"]["provenance_hash"]
+        != g["nodes"][0]["meta"]["audit"]["provenance_hash"]
+    )
 
 
 def test_e19_cross_batch_correlation_helper():

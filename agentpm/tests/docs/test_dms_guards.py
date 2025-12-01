@@ -111,7 +111,9 @@ class TestGuardDocsDbSsot:
         mock_engine = MagicMock()
         mock_engine.connect.return_value = mock_conn
 
-        with patch("scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine):
+        with patch(
+            "scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine
+        ):
             exit_code, output = run_guard(GUARD_DOCS_DB_SSOT, {"STRICT_MODE": "0"})
 
             # HINT mode should exit 0 even with partial sync
@@ -135,7 +137,9 @@ class TestGuardDocsDbSsot:
         mock_engine = MagicMock()
         mock_engine.connect.return_value = mock_conn
 
-        with patch("scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine):
+        with patch(
+            "scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine
+        ):
             exit_code, output = run_guard(GUARD_DOCS_DB_SSOT, {"STRICT_MODE": "1"})
 
             # STRICT mode should exit 1 if sync is partial (ok=false)
@@ -173,7 +177,9 @@ class TestGuardDocsDbSsot:
             mock_engine = MagicMock()
             mock_engine.connect.return_value = mock_conn
 
-            with patch("scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine):
+            with patch(
+                "scripts.guards.guard_docs_db_ssot.get_control_engine", return_value=mock_engine
+            ):
                 exit_code, output = run_guard(GUARD_DOCS_DB_SSOT, {"STRICT_MODE": "1"})
 
                 # If sync is complete, should exit 0

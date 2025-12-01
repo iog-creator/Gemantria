@@ -59,7 +59,9 @@ def chat(
 
         # Ensure base_url is localhost/127.0.0.1 (security check)
         if "127.0.0.1" not in base_url and "localhost" not in base_url:
-            raise RuntimeError(f"Theology LM Studio base URL must be localhost/127.0.0.1, got {base_url!r}")
+            raise RuntimeError(
+                f"Theology LM Studio base URL must be localhost/127.0.0.1, got {base_url!r}"
+            )
 
         # Build messages
         messages = []
@@ -120,4 +122,6 @@ def chat(
         )
 
     else:
-        raise RuntimeError(f"Unsupported theology provider: {provider!r}. Supported providers: lmstudio, ollama")
+        raise RuntimeError(
+            f"Unsupported theology provider: {provider!r}. Supported providers: lmstudio, ollama"
+        )

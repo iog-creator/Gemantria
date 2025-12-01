@@ -10,7 +10,9 @@ from scripts.governance import ingest_docs_to_db as ingest_mod
 from scripts.guards import guard_docs_db_ssot as mod
 
 
-def test_guard_reports_db_off_when_engine_unavailable(tmp_path: Path, monkeypatch: Any, capsys: Any) -> None:  # noqa: ANN001
+def test_guard_reports_db_off_when_engine_unavailable(
+    tmp_path: Path, monkeypatch: Any, capsys: Any
+) -> None:  # noqa: ANN001
     # Build a minimal fake repo tree that the guard/ingest logic can discover.
     agents = tmp_path / "AGENTS.md"
     agents.write_text("# AGENTS\n", encoding="utf-8")

@@ -170,7 +170,10 @@ class BatchProcessor:
             else:
                 noun_str = str(noun)
             input_hashes.append(hashlib.sha256(noun_str.encode("utf-8")).hexdigest())
-        result_hashes = [hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest() for r in results]  # noqa: E501
+        result_hashes = [
+            hashlib.sha256(json.dumps(r, sort_keys=True).encode("utf-8")).hexdigest()
+            for r in results
+        ]  # noqa: E501
 
         return {
             "batch_id": batch_id,

@@ -53,7 +53,9 @@ def test_reality_check_cli_hint_mode_ok(mock_check, mock_create_run, mock_mark_s
     assert output["overall_ok"] is True
     assert output["mode"] == "HINT"
     # Verify AI tracking: create_agent_run was called
-    mock_create_run.assert_called_once_with("system.reality-check", {"mode": "hint", "no_dashboards": False})
+    mock_create_run.assert_called_once_with(
+        "system.reality-check", {"mode": "hint", "no_dashboards": False}
+    )
     # Verify AI tracking: mark_agent_run_success was called with verdict
     mock_mark_success.assert_called_once_with(mock_run, mock_check.return_value)
     mock_check.assert_called_once_with(mode="HINT", skip_dashboards=False)
@@ -95,7 +97,9 @@ def test_reality_check_cli_strict_mode_ok(mock_check, mock_create_run, mock_mark
     assert output["overall_ok"] is True
     assert output["mode"] == "STRICT"
     # Verify AI tracking
-    mock_create_run.assert_called_once_with("system.reality-check", {"mode": "strict", "no_dashboards": False})
+    mock_create_run.assert_called_once_with(
+        "system.reality-check", {"mode": "strict", "no_dashboards": False}
+    )
     mock_mark_success.assert_called_once_with(mock_run, mock_check.return_value)
     mock_check.assert_called_once_with(mode="STRICT", skip_dashboards=False)
 
@@ -136,7 +140,9 @@ def test_reality_check_cli_strict_mode_fail(mock_check, mock_create_run, mock_ma
     assert output["mode"] == "STRICT"
     assert len(output["hints"]) > 0
     # Verify AI tracking: CLI marks success even when overall_ok=False (only errors on exceptions)
-    mock_create_run.assert_called_once_with("system.reality-check", {"mode": "strict", "no_dashboards": False})
+    mock_create_run.assert_called_once_with(
+        "system.reality-check", {"mode": "strict", "no_dashboards": False}
+    )
     mock_mark_success.assert_called_once_with(mock_run, mock_check.return_value)
 
 
@@ -200,7 +206,9 @@ def test_reality_check_cli_no_dashboards(mock_check, mock_create_run, mock_mark_
 
     assert result.exit_code == 0
     # Verify AI tracking
-    mock_create_run.assert_called_once_with("system.reality-check", {"mode": "hint", "no_dashboards": True})
+    mock_create_run.assert_called_once_with(
+        "system.reality-check", {"mode": "hint", "no_dashboards": True}
+    )
     mock_mark_success.assert_called_once_with(mock_run, mock_check.return_value)
     mock_check.assert_called_once_with(mode="HINT", skip_dashboards=True)
 
@@ -226,6 +234,8 @@ def test_reality_check_cli_invalid_mode(mock_check, mock_create_run, mock_mark_e
     assert "ERROR" in result.stderr or "invalid" in result.stderr.lower()
     mock_check.assert_not_called()
     # Verify AI tracking: create_agent_run was called, mark_agent_run_error was called
-    mock_create_run.assert_called_once_with("system.reality-check", {"mode": "invalid", "no_dashboards": False})
+    mock_create_run.assert_called_once_with(
+        "system.reality-check", {"mode": "invalid", "no_dashboards": False}
+    )
     # mark_agent_run_error may be called multiple times (error message + exception)
     assert mock_mark_error.called

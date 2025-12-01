@@ -150,11 +150,15 @@ def guard_hints_required(
         }
 
     # Extract logical names of required hints
-    required_logical_names = {hint.get("logical_name") for hint in required_hints if hint.get("logical_name")}
+    required_logical_names = {
+        hint.get("logical_name") for hint in required_hints if hint.get("logical_name")
+    }
 
     # Check envelope for required_hints array
     envelope_required_hints = envelope_data.get("required_hints", [])
-    found_logical_names = {hint.get("logical_name") for hint in envelope_required_hints if hint.get("logical_name")}
+    found_logical_names = {
+        hint.get("logical_name") for hint in envelope_required_hints if hint.get("logical_name")
+    }
 
     # Find missing hints
     missing = list(required_logical_names - found_logical_names)
@@ -199,7 +203,9 @@ def main() -> int:
         if verdict.get("ok"):
             print(f"✅ Guard passed: {args.flow}")
             if verdict.get("required_hints_count", 0) > 0:
-                print(f"   Found {verdict['found_hints_count']}/{verdict['required_hints_count']} required hints")
+                print(
+                    f"   Found {verdict['found_hints_count']}/{verdict['required_hints_count']} required hints"
+                )
         else:
             print(f"❌ Guard failed: {args.flow}")
             if verdict.get("missing"):

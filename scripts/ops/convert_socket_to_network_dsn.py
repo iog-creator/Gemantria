@@ -34,7 +34,9 @@ def convert_socket_to_network(socket_dsn: str, host: str, port: int = 5432) -> s
 
     query = urlencode(query_params, doseq=True) if query_params else ""
 
-    network_dsn = urlunparse((parsed.scheme or "postgresql", netloc, path, parsed.params, query, parsed.fragment))
+    network_dsn = urlunparse(
+        (parsed.scheme or "postgresql", netloc, path, parsed.params, query, parsed.fragment)
+    )
 
     return network_dsn
 

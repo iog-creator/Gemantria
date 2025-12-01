@@ -114,7 +114,9 @@ def resolve_cross_language_lemma(greek_strongs: str) -> Dict[str, Any] | None:
     try:
         from sqlalchemy import text
 
-        query = text("SELECT lemma FROM bible.hebrew_entries WHERE strongs_id = :strongs_id LIMIT 1")
+        query = text(
+            "SELECT lemma FROM bible.hebrew_entries WHERE strongs_id = :strongs_id LIMIT 1"
+        )
         with adapter._engine.connect() as conn:
             result = conn.execute(query, {"strongs_id": hebrew_strongs}).fetchone()
             hebrew_lemma = result[0] if result else None
@@ -197,7 +199,9 @@ def analyze_word_in_context(ref: str, strongs_id: str) -> WordAnalysis | None:
 
         with adapter._engine.connect() as conn:
             result = conn.execute(query, {"strongs_id": strongs_id.upper()})
-            related_verses = [f"{row[0]} {row[1]}:{row[2]}" for row in result if row[0] and row[1] and row[2]]
+            related_verses = [
+                f"{row[0]} {row[1]}:{row[2]}" for row in result if row[0] and row[1] and row[2]
+            ]
 
         # Get total count
         count_query = text(
@@ -317,7 +321,9 @@ def find_cross_language_connections(
     target_word_table = "bible.greek_nt_words" if is_hebrew else "bible.hebrew_ot_words"
 
     for similar_verse in similar_verses:
-        verse_ref = f"{similar_verse.book_name} {similar_verse.chapter_num}:{similar_verse.verse_num}"
+        verse_ref = (
+            f"{similar_verse.book_name} {similar_verse.chapter_num}:{similar_verse.verse_num}"
+        )
 
         # Get verse_id
         verse_query = text(
@@ -379,7 +385,9 @@ def find_cross_language_connections(
 
         # Find common verses (verses that contain both source and target)
         common_verses = [
-            verse_ref for verse_ref, strongs_list in verse_to_strongs.items() if target_strongs in strongs_list
+            verse_ref
+            for verse_ref, strongs_list in verse_to_strongs.items()
+            if target_strongs in strongs_list
         ]
 
         # Calculate similarity score (simplified: based on co-occurrence frequency)

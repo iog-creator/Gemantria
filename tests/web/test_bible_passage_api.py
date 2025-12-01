@@ -26,7 +26,9 @@ def test_bible_passage_api_valid_reference():
     """Test /api/bible/passage with valid reference."""
     mock_result = {
         "reference": "John 3:16",
-        "verses": [{"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}],
+        "verses": [
+            {"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}
+        ],
         "commentary": {"source": "lm_theology", "text": "This passage speaks of God's love..."},
         "errors": [],
     }
@@ -68,7 +70,9 @@ def test_bible_passage_api_lm_disabled():
     """Test /api/bible/passage with use_lm=false."""
     mock_result = {
         "reference": "John 3:16",
-        "verses": [{"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}],
+        "verses": [
+            {"book": "John", "chapter": 3, "verse": 16, "text": "For God so loved the world..."}
+        ],
         "commentary": {"source": "fallback", "text": "Theology model commentary is disabled."},
         "errors": [],
     }

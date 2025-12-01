@@ -37,7 +37,9 @@ def test_guard_control_compliance_exports_verdict_structure():
 
     # Validate top-level keys
     required_keys = {"schema", "generated_at", "ok", "files_checked", "errors"}
-    assert required_keys.issubset(data.keys()), f"Missing required keys: {required_keys - data.keys()}"
+    assert required_keys.issubset(
+        data.keys()
+    ), f"Missing required keys: {required_keys - data.keys()}"
 
     # Validate schema
     assert data["schema"] == "control"

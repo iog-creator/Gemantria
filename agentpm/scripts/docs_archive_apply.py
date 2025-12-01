@@ -112,7 +112,9 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Apply archive plan - move archive candidates")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be moved without actually moving")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be moved without actually moving"
+    )
     args = parser.parse_args()
 
     dsn = get_rw_dsn()
@@ -131,7 +133,9 @@ def main() -> None:
                 print("No archive candidates found in database.")
                 sys.exit(0)
 
-            print(f"\n{'[DRY RUN] ' if args.dry_run else ''}Processing {len(candidate_paths)} archive candidates...\n")
+            print(
+                f"\n{'[DRY RUN] ' if args.dry_run else ''}Processing {len(candidate_paths)} archive candidates...\n"
+            )
 
             moves: List[ArchiveMove] = []
             moved_paths: List[str] = []
@@ -143,7 +147,9 @@ def main() -> None:
 
                 moved, error = move_file(source_file, target_file, args.dry_run)
 
-                moves.append(ArchiveMove(path=source_path, target=target_rel, moved=moved, error=error))
+                moves.append(
+                    ArchiveMove(path=source_path, target=target_rel, moved=moved, error=error)
+                )
 
                 if moved:
                     moved_paths.append(source_path)

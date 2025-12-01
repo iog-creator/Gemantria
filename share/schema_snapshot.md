@@ -1,12 +1,12 @@
 # schema_snapshot
 
-**Generated**: 2025-11-30T02:21:28.515354+00:00
+**Generated**: 2025-12-01T16:01:38.107563+00:00
 **Source**: `schema_snapshot.json`
 
 ---
 
 - **schema**: `control`
-- **generated_at**: `2025-11-30T02:21:17.322492+00:00`
+- **generated_at**: `2025-12-01T16:01:27.812128+00:00`
 - **tables**:
   1. Item:
     - **name**: `agent_run`
@@ -371,6 +371,11 @@
         - **type**: `timestamp with time zone`
         - **nullable**: `true`
         - **default**: `now()`
+      13. Item:
+        - **name**: `meta`
+        - **type**: `jsonb`
+        - **nullable**: `true`
+        - **default**: `'{}'::jsonb`
     - **primary_key**:
       1. `id`
     - **indexes**:
@@ -391,22 +396,26 @@
         - **columns**:
           1. `doc_id`
       4. Item:
+        - **name**: `idx_doc_fragment_meta`
+        - **columns**:
+          1. `meta`
+      5. Item:
         - **name**: `idx_doc_fragment_project`
         - **columns**:
           1. `project_id`
-      5. Item:
+      6. Item:
         - **name**: `idx_doc_fragment_sha256`
         - **columns**:
           1. `sha256`
-      6. Item:
+      7. Item:
         - **name**: `idx_doc_fragment_src`
         - **columns**:
           1. `src`
-      7. Item:
+      8. Item:
         - **name**: `idx_doc_fragment_type`
         - **columns**:
           1. `fragment_type`
-      8. Item:
+      9. Item:
         - **name**: `idx_doc_fragment_version_id`
         - **columns**:
           1. `version_id`

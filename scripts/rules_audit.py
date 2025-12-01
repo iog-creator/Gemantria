@@ -98,7 +98,9 @@ def inject_plan_rules(entries):
 def main():
     print(f"[rules_audit] Scanning {RULES} for rule files...")
     entries = find_rules()
-    print(f"[rules_audit] Found {len(entries)} rule files: {[f'{num:03d}-{fname}' for num, fname, _ in entries]}")
+    print(
+        f"[rules_audit] Found {len(entries)} rule files: {[f'{num:03d}-{fname}' for num, fname, _ in entries]}"
+    )
 
     if not entries:
         print("[rules_audit] FAIL: No rules found", file=sys.stderr)
@@ -140,7 +142,9 @@ def main():
         sys.exit(2)
 
     if unresolved:
-        print(f"[rules_audit] Tolerating {len(unresolved)} missing numbers (reserved markers present): {unresolved}")
+        print(
+            f"[rules_audit] Tolerating {len(unresolved)} missing numbers (reserved markers present): {unresolved}"
+        )
 
     changed_files = []
 

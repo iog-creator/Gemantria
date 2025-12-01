@@ -59,7 +59,9 @@ class TestFetchVerse:
         assert result.book_name == "Genesis"
         assert result.chapter_num == 1
         assert result.verse_num == 1
-        mock_adapter.get_verse.assert_called_once_with("Gen", 1, 1, "KJV")  # Book names are normalized
+        mock_adapter.get_verse.assert_called_once_with(
+            "Gen", 1, 1, "KJV"
+        )  # Book names are normalized
 
     @patch("agentpm.biblescholar.bible_passage_flow.BibleDbAdapter")
     def test_fetch_verse_invalid_reference(self, mock_adapter_class):
@@ -117,7 +119,9 @@ class TestFetchPassage:
         result = fetch_passage("Genesis 1:1-3", "KJV")
 
         assert len(result) == 3
-        mock_adapter.get_passage.assert_called_once_with("Gen", 1, 1, 1, 3, "KJV")  # Book names are normalized
+        mock_adapter.get_passage.assert_called_once_with(
+            "Gen", 1, 1, 1, 3, "KJV"
+        )  # Book names are normalized
 
     @patch("agentpm.biblescholar.bible_passage_flow.BibleDbAdapter")
     def test_fetch_passage_range_cross_chapter(self, mock_adapter_class):
@@ -134,7 +138,9 @@ class TestFetchPassage:
         result = fetch_passage("Genesis 1:31-2:2", "KJV")
 
         assert len(result) == 3
-        mock_adapter.get_passage.assert_called_once_with("Gen", 1, 31, 2, 2, "KJV")  # Book names are normalized
+        mock_adapter.get_passage.assert_called_once_with(
+            "Gen", 1, 31, 2, 2, "KJV"
+        )  # Book names are normalized
 
     @patch("agentpm.biblescholar.bible_passage_flow.BibleDbAdapter")
     def test_fetch_passage_invalid_reference(self, mock_adapter_class):

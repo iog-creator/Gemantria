@@ -190,7 +190,9 @@ def main() -> None:
                 )
                 found_tables = {row[0] for row in cur.fetchall()}
                 if found_tables != {"doc_sources", "doc_sections"}:
-                    print("ERROR: doc_sources or doc_sections tables do not exist. Run migration 044 first.")
+                    print(
+                        "ERROR: doc_sources or doc_sections tables do not exist. Run migration 044 first."
+                    )
                     sys.exit(1)
 
             # Find files to ingest

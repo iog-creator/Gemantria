@@ -1,17 +1,17 @@
 # next_steps.head
 
-**Generated**: 2025-11-30T02:21:28.418594+00:00
+**Generated**: 2025-12-01T16:01:38.014218+00:00
 **Source**: `next_steps.head.json`
 
 ---
 
 - **schema**: `file_head.v1`
-- **generated_at**: `2025-11-30T02:21:17.401947+00:00`
+- **generated_at**: `2025-12-01T16:01:27.882133+00:00`
 - **file_path**: `/home/mccoy/Projects/Gemantria.v2/NEXT_STEPS.md`
 - **exists**: `true`
-- **line_count**: `155`
+- **line_count**: `156`
 - **head_lines**:
-  1. `<!-- Handoff updated: 2025-11-29T18:21:16.832163 -->`
+  1. `<!-- Handoff updated: 2025-12-01T08:00:41.440774 -->`
   2. `# PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary`
   3. ``
   4. `## Goal`

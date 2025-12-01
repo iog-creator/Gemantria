@@ -100,7 +100,9 @@ def main() -> int:
         },
     }
     OUT.write_text(json.dumps(out, indent=2, sort_keys=True), encoding="utf-8")
-    print(f"[calibrate.adv] wrote {OUT.relative_to(ROOT)} W={best['W']} weak≥{best['weak']} strong≥{best['strong']}")
+    print(
+        f"[calibrate.adv] wrote {OUT.relative_to(ROOT)} W={best['W']} weak≥{best['weak']} strong≥{best['strong']}"
+    )
     return 0
 
 

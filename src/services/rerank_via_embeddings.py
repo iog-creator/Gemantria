@@ -60,7 +60,9 @@ def _embed(texts: list[str]) -> list[list[float]]:
     Raises:
         requests.HTTPError: If the API call fails
     """
-    r = requests.post(f"{LM_BASE}/embeddings", json={"model": EMBED_MODEL, "input": texts}, timeout=60)
+    r = requests.post(
+        f"{LM_BASE}/embeddings", json={"model": EMBED_MODEL, "input": texts}, timeout=60
+    )
     r.raise_for_status()
     return [item["embedding"] for item in r.json()["data"]]
 

@@ -35,7 +35,9 @@ conn = psycopg.connect(dsn)
 cur = conn.cursor()
 
 cur.execute("""CREATE UNIQUE INDEX IF NOT EXISTS uq_nodes_name ON gematria.nodes(name);""")
-cur.execute("""CREATE UNIQUE INDEX IF NOT EXISTS uq_aiemb_node ON gematria.ai_embeddings(node_id);""")
+cur.execute(
+    """CREATE UNIQUE INDEX IF NOT EXISTS uq_aiemb_node ON gematria.ai_embeddings(node_id);"""
+)
 conn.commit()
 
 for text, vec in zip(texts, vectors):

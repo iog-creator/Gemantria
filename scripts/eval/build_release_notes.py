@@ -24,7 +24,11 @@ def main() -> int:
     delta = _load(EVAL / "delta.json") or {}
     idst = _load(EVAL / "id_stability.json") or {}
     prov = _load(EVAL / "provenance.json") or {}
-    policy = (EVAL / "policy_diff.md").read_text(encoding="utf-8") if (EVAL / "policy_diff.md").exists() else ""
+    policy = (
+        (EVAL / "policy_diff.md").read_text(encoding="utf-8")
+        if (EVAL / "policy_diff.md").exists()
+        else ""
+    )
     s = report.get("summary", {})
     ok, fail, tasks = (
         s.get("ok_count", 0),

@@ -38,7 +38,9 @@ def test_guard_strict_mode_fails_on_missing_fragments(monkeypatch: pytest.Monkey
         [(0,)],  # doc2 has 0 fragments
     ]
 
-    monkeypatch.setattr("scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine)
+    monkeypatch.setattr(
+        "scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine
+    )
     monkeypatch.setenv("STRICT_MODE", "1")
 
     result = mod.main()
@@ -59,7 +61,9 @@ def test_guard_hint_mode_passes_on_missing_fragments(monkeypatch: pytest.MonkeyP
         [(0,)],  # doc1 has 0 fragments
     ]
 
-    monkeypatch.setattr("scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine)
+    monkeypatch.setattr(
+        "scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine
+    )
     # Don't set STRICT_MODE (defaults to HINT)
 
     result = mod.main()
@@ -67,7 +71,9 @@ def test_guard_hint_mode_passes_on_missing_fragments(monkeypatch: pytest.MonkeyP
     assert result == 0
 
 
-def test_guard_outputs_json(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_guard_outputs_json(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     """Test that guard outputs valid JSON."""
     # Mock DB connection
     mock_conn = MagicMock()
@@ -77,7 +83,9 @@ def test_guard_outputs_json(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Capt
     # Mock query results: no AGENTS docs
     mock_conn.execute.return_value.fetchall.return_value = []
 
-    monkeypatch.setattr("scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine)
+    monkeypatch.setattr(
+        "scripts.guards.guard_doc_fragments.get_control_engine", lambda: mock_engine
+    )
 
     mod.main()
     output = capsys.readouterr().out

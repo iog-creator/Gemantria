@@ -99,7 +99,9 @@ def test_e02_echo_dsn_ro_redacts_credentials():
         # Should contain <REDACTED> or ***, not actual credentials
         assert "<REDACTED>" in result.stdout or "***" in result.stdout, "DSN should be redacted"
         # Should not contain password patterns (user:password@)
-        assert ":" not in result.stdout.split("@")[0].split("://")[-1] or "<REDACTED>" in result.stdout
+        assert (
+            ":" not in result.stdout.split("@")[0].split("://")[-1] or "<REDACTED>" in result.stdout
+        )
 
 
 def test_e02_guard_mcp_db_ro_hint_mode_db_off():
@@ -176,7 +178,9 @@ def test_e03_ingest_envelope_validates_schema():
     # Create invalid envelope (missing required fields: generated_at, endpoints)
     invalid_envelope = pathlib.Path("share/mcp/test_invalid_envelope.json")
     invalid_envelope.parent.mkdir(parents=True, exist_ok=True)
-    invalid_envelope.write_text(json.dumps({"schema": "mcp_ingest_envelope.v1", "tools": []}, indent=2))
+    invalid_envelope.write_text(
+        json.dumps({"schema": "mcp_ingest_envelope.v1", "tools": []}, indent=2)
+    )
 
     # Run ingest script
     result = subprocess.run(
@@ -356,7 +360,9 @@ def test_e04_query_catalog_db_off_hint_mode():
 
     # Should exit 0 in HINT mode even if DB unavailable
     assert result.returncode == 0, f"Query should exit 0 in HINT mode: {result.stderr}"
-    assert "HINT" in result.stderr or result.stdout.strip() == "[]", "Should output HINT or empty array"
+    assert (
+        "HINT" in result.stderr or result.stdout.strip() == "[]"
+    ), "Should output HINT or empty array"
 
 
 def test_e04_query_catalog_output_shape():
@@ -367,7 +373,10 @@ def test_e04_query_catalog_output_shape():
 
     # Skip if no DSN available (hermetic test)
     dsn = (
-        os.getenv("GEMATRIA_RO_DSN") or os.getenv("ATLAS_DSN_RO") or os.getenv("ATLAS_DSN") or os.getenv("GEMATRIA_DSN")
+        os.getenv("GEMATRIA_RO_DSN")
+        or os.getenv("ATLAS_DSN_RO")
+        or os.getenv("ATLAS_DSN")
+        or os.getenv("GEMATRIA_DSN")
     )
     if not dsn:
         return  # Skip if no DB available
@@ -398,7 +407,9 @@ def test_e04_query_catalog_output_shape():
         for item in data:
             assert isinstance(item, dict), f"Item should be a dict: {item}"
             item_keys = set(item.keys())
-            assert expected_keys.issubset(item_keys), f"Item missing expected keys: {expected_keys - item_keys}"
+            assert expected_keys.issubset(
+                item_keys
+            ), f"Item missing expected keys: {expected_keys - item_keys}"
 
 
 def test_e04_guard_mcp_query_writes_evidence():

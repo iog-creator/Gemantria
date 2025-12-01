@@ -107,7 +107,12 @@ def main() -> int:
             nodes = doc.get("nodes", [])
             edges = doc.get("edges", [])
             # Only include files where nodes/edges are arrays with content
-            if isinstance(nodes, list) and isinstance(edges, list) and len(nodes) > 0 and len(edges) > 0:
+            if (
+                isinstance(nodes, list)
+                and isinstance(edges, list)
+                and len(nodes) > 0
+                and len(edges) > 0
+            ):
                 graph_files.append(f)
         except Exception:
             continue

@@ -43,7 +43,9 @@ def main() -> int:
         e["edge_strength"] = strength
         e["class"] = "strong" if strength >= 0.90 else "weak" if strength >= 0.75 else "other"
     GRAPH_OUT.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
-    print(f"[rerank] updated edges={len(data.get('edges', []))} (filled={changed}) → {GRAPH_OUT.relative_to(ROOT)}")
+    print(
+        f"[rerank] updated edges={len(data.get('edges', []))} (filled={changed}) → {GRAPH_OUT.relative_to(ROOT)}"
+    )
     return 0
 
 

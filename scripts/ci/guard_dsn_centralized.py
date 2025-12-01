@@ -52,7 +52,9 @@ def find_dsn_env_violations(p: Path, text: str) -> list[dict]:
     bad = [n for n in names if n in DSN_VARS]
     v = []
     for n in bad:
-        v.append({"file": str(p), "var": n, "reason": "direct DSN env access; use scripts.config.env"})
+        v.append(
+            {"file": str(p), "var": n, "reason": "direct DSN env access; use scripts.config.env"}
+        )
     return v
 
 

@@ -133,11 +133,15 @@ class TestDbOffBehavior:
             mock_conn = MagicMock()
             mock_engine.connect.return_value.__enter__.return_value = mock_conn
             # Both queries fail with "does not exist"
-            mock_conn.execute.side_effect = MockProgrammingError('relation "gematria.nodes" does not exist')
+            mock_conn.execute.side_effect = MockProgrammingError(
+                'relation "gematria.nodes" does not exist'
+            )
 
             mock_get_engine.return_value = mock_engine
 
-            with pytest.raises(TableMissingError, match=r"Neither gematria\.nodes nor gematria\.concepts"):
+            with pytest.raises(
+                TableMissingError, match=r"Neither gematria\.nodes nor gematria\.concepts"
+            ):
                 fetch_graph_head(limit=1)
         finally:
             if original_prog_error is not None:

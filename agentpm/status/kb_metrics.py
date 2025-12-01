@@ -199,7 +199,9 @@ def compute_kb_doc_health_metrics(
     # Overall fresh ratio: (total - stale - missing) / total * 100
     if total > 0:
         fresh_docs_estimate = total - stale_count - missing_count
-        kb_fresh_ratio_overall: float | None = max(0.0, min(100.0, (fresh_docs_estimate / total) * 100.0))
+        kb_fresh_ratio_overall: float | None = max(
+            0.0, min(100.0, (fresh_docs_estimate / total) * 100.0)
+        )
     else:
         kb_fresh_ratio_overall = None
         notes.append("Registry is empty; kb_fresh_ratio_overall is unknown")

@@ -306,7 +306,9 @@ class GuardShim:
         tool_ring = tool_catalog.get("ring", 999)
         allowed_ring = rule.get("ring", 1) if rule else 1
         if not check_ring(tool_ring, allowed_ring):
-            violation = create_violation(RING_VIOLATION, f"Tool ring {tool_ring} > allowed ring {allowed_ring}")
+            violation = create_violation(
+                RING_VIOLATION, f"Tool ring {tool_ring} > allowed ring {allowed_ring}"
+            )
             self.violations.append(violation)
             result = {
                 "schema_ok": False,
@@ -328,7 +330,9 @@ class GuardShim:
         if input_schema:
             schema_ok, schema_error = validate_json_schema(args, input_schema)
             if not schema_ok:
-                violation = create_violation(ARG_SCHEMA_INVALID, schema_error or "Schema validation failed")
+                violation = create_violation(
+                    ARG_SCHEMA_INVALID, schema_error or "Schema validation failed"
+                )
                 self.violations.append(violation)
 
         # Retry loop for schema validation failures
@@ -349,7 +353,9 @@ class GuardShim:
                 provenance_schema = load_schema("provenance")
                 provenance_ok, prov_error = validate_json_schema(provenance, provenance_schema)
                 if not provenance_ok:
-                    violation = create_violation(PROVENANCE_MISMATCH, prov_error or "Provenance validation failed")
+                    violation = create_violation(
+                        PROVENANCE_MISMATCH, prov_error or "Provenance validation failed"
+                    )
                     self.violations.append(violation)
             except Exception as e:
                 violation = create_violation(PROVENANCE_MISMATCH, f"Provenance error: {e}")

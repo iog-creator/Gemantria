@@ -283,7 +283,9 @@ def check_models(base_url: str) -> Dict[str, Any]:
 def run_pipeline() -> Dict[str, Any]:
     """Run docs ingest + golden Q&A via pmagent."""
 
-    ingest_code, ingest_out, ingest_err = _run([sys.executable, "-m", "agentpm.scripts.ingest_docs"])
+    ingest_code, ingest_out, ingest_err = _run(
+        [sys.executable, "-m", "agentpm.scripts.ingest_docs"]
+    )
 
     ask_code, ask_out, ask_err = _run(["pmagent", "ask", "docs", "What does Phase-6P deliver?"])
 
@@ -343,7 +345,9 @@ def main() -> None:
     ):
         report["ok"] = True
 
-        report["summary"] = "Reality Check #1 LIVE passed: DB, LM Studio, models, and pipeline all OK"
+        report["summary"] = (
+            "Reality Check #1 LIVE passed: DB, LM Studio, models, and pipeline all OK"
+        )
 
     else:
         report["ok"] = False

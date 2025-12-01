@@ -30,12 +30,18 @@ try:
             sys.exit(2)
         cur.execute("SELECT to_regclass('gematria.nouns')")
         if cur.fetchone()[0] is None:
-            print("ERROR: gematria.nouns missing with DSN set; run make db.migrate", file=sys.stderr)
+            print(
+                "ERROR: gematria.nouns missing with DSN set; run make db.migrate", file=sys.stderr
+            )
             sys.exit(2)
         print("OK: DB reachable and base tables present.")
         sys.exit(0)
 except Exception as e:
-    print("❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr)
+    print(
+        "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.", file=sys.stderr
+    )
     print(f"   Error: {e}", file=sys.stderr)
-    print("   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr)
+    print(
+        "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.", file=sys.stderr
+    )
     sys.exit(1)

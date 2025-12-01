@@ -66,7 +66,13 @@ class TestAnswerReferenceQuestion:
             "ok": True,
             "mode": "lm_on",
             "response": {
-                "choices": [{"message": {"content": "This verse describes the creation of the heavens and earth."}}],
+                "choices": [
+                    {
+                        "message": {
+                            "content": "This verse describes the creation of the heavens and earth."
+                        }
+                    }
+                ],
                 "usage": {"total_tokens": 150},
                 "latency_ms": 250,
             },
@@ -79,7 +85,9 @@ class TestAnswerReferenceQuestion:
         # Verify result structure
         assert isinstance(result, ReferenceAnswerResult)
         assert "answer" in result.answer.lower() or "creation" in result.answer.lower()
-        assert len(result.trace) == 4  # verse_context, gematria_patterns, vector_similarity, lm_synthesis
+        assert (
+            len(result.trace) == 4
+        )  # verse_context, gematria_patterns, vector_similarity, lm_synthesis
         assert "verse_refs" in result.context_used
         assert len(result.context_used["verse_refs"]) > 0
         assert result.lm_meta is not None
@@ -120,7 +128,11 @@ class TestAnswerReferenceQuestion:
             "mode": "lm_on",
             "response": {
                 "choices": [
-                    {"message": {"content": "I cannot access the verse text, but I can provide general information."}}
+                    {
+                        "message": {
+                            "content": "I cannot access the verse text, but I can provide general information."
+                        }
+                    }
                 ],
                 "usage": {"total_tokens": 100},
                 "latency_ms": 200,
@@ -265,7 +277,9 @@ class TestAnswerReferenceQuestion:
             "ok": True,
             "mode": "lm_on",
             "response": {
-                "choices": [{"message": {"content": "This is a well-known verse about God's love."}}],
+                "choices": [
+                    {"message": {"content": "This is a well-known verse about God's love."}}
+                ],
                 "usage": {"total_tokens": 120},
                 "latency_ms": 180,
             },

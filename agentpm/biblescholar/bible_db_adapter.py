@@ -209,7 +209,9 @@ class BibleDbAdapter:
             self._db_status = "unavailable"
             return []
 
-    def search_verses(self, query: str, translation_source: str = "KJV", limit: int = 20) -> list[VerseRecord]:
+    def search_verses(
+        self, query: str, translation_source: str = "KJV", limit: int = 20
+    ) -> list[VerseRecord]:
         """Search verses by keyword in text content.
 
         Args:

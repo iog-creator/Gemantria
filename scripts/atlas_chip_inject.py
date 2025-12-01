@@ -58,7 +58,9 @@ else:
     text = "<!doctype html><html><head><meta charset='utf-8'></head><body><div id='app'></div></body></html>"
 
 if "data-db-strict=" not in text and "db-proof-chip" not in text:
-    text = text.replace("<div id='app'", "<div id='app' data-db-strict=\"true\"><!-- db-proof-chip -->")
+    text = text.replace(
+        "<div id='app'", "<div id='app' data-db-strict=\"true\"><!-- db-proof-chip -->"
+    )
 
 idx.write_text(text)
 

@@ -56,7 +56,9 @@ def main() -> int:
             "graph_latest.json": sha256_path(EVAL / "graph_latest.json")
             if (EVAL / "graph_latest.json").exists()
             else None,
-            "graph_prev.json": sha256_path(EVAL / "graph_prev.json") if (EVAL / "graph_prev.json").exists() else None,
+            "graph_prev.json": sha256_path(EVAL / "graph_prev.json")
+            if (EVAL / "graph_prev.json").exists()
+            else None,
             "release_manifest.json": sha256_path(EVAL / "release_manifest.json")
             if (EVAL / "release_manifest.json").exists()
             else None,

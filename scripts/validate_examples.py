@@ -39,7 +39,9 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
 
         # Type checks for required fields
         if "confidence" in record and not isinstance(record["confidence"], int | float):
-            errors.append(f"Record {i + 1}: confidence should be numeric, got {type(record['confidence'])}")
+            errors.append(
+                f"Record {i + 1}: confidence should be numeric, got {type(record['confidence'])}"
+            )
 
         if "tokens" in record and not isinstance(record["tokens"], int):
             errors.append(f"Record {i + 1}: tokens should be int, got {type(record['tokens'])}")
@@ -55,7 +57,9 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
 
         # Optional fields from collection phase (may be present)
         if "primary_verse" in record and not isinstance(record["primary_verse"], str):
-            errors.append(f"Record {i + 1}: primary_verse should be str, got {type(record['primary_verse'])}")
+            errors.append(
+                f"Record {i + 1}: primary_verse should be str, got {type(record['primary_verse'])}"
+            )
 
         if "freq" in record and not isinstance(record["freq"], int):
             errors.append(f"Record {i + 1}: freq should be int, got {type(record['freq'])}")
@@ -63,14 +67,22 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
         if "book" in record and not isinstance(record["book"], str):
             errors.append(f"Record {i + 1}: book should be str, got {type(record['book'])}")
 
-        if "chapter" in record and record["chapter"] is not None and not isinstance(record["chapter"], int):
-            errors.append(f"Record {i + 1}: chapter should be int or null, got {type(record['chapter'])}")
+        if (
+            "chapter" in record
+            and record["chapter"] is not None
+            and not isinstance(record["chapter"], int)
+        ):
+            errors.append(
+                f"Record {i + 1}: chapter should be int or null, got {type(record['chapter'])}"
+            )
 
         # Validate insight length (should be substantial theological analysis)
         if "insights" in record:
             word_count = len(record["insights"].split())
             if word_count < 150:
-                errors.append(f"Record {i + 1}: insights too short ({word_count} words), expected 150-300 words")
+                errors.append(
+                    f"Record {i + 1}: insights too short ({word_count} words), expected 150-300 words"
+                )
 
         # Validate confidence range
         if "confidence" in record:
@@ -81,7 +93,9 @@ def validate_structure(records: list[dict[str, Any]]) -> list[str]:
     return errors
 
 
-def compare_outputs(new_records: list[dict[str, Any]], golden_records: list[dict[str, Any]]) -> dict[str, Any]:
+def compare_outputs(
+    new_records: list[dict[str, Any]], golden_records: list[dict[str, Any]]
+) -> dict[str, Any]:
     """Compare new output against golden example."""
     results = {
         "structure_valid": True,
@@ -134,7 +148,9 @@ def compare_outputs(new_records: list[dict[str, Any]], golden_records: list[dict
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate noun probe outputs against golden examples")
+    parser = argparse.ArgumentParser(
+        description="Validate noun probe outputs against golden examples"
+    )
     parser.add_argument("--new", required=True, help="Path to new output JSONL file")
     parser.add_argument("--golden", required=True, help="Path to golden example JSONL file")
     parser.add_argument("--quiet", action="store_true", help="Only show errors/summary")
@@ -162,7 +178,9 @@ def main():
     results = compare_outputs(new_records, golden_records)
 
     if not args.quiet:
-        print(f"[validate] Comparing {len(new_records)} new records vs {len(golden_records)} golden")
+        print(
+            f"[validate] Comparing {len(new_records)} new records vs {len(golden_records)} golden"
+        )
         print(f"[validate] Structure valid: {results['structure_valid']}")
         print(f"[validate] Count match: {results['count_match']}")
 
@@ -174,7 +192,9 @@ def main():
 
         conf = results["confidence_range"]
         if conf["min"] is not None:
-            print(f"[validate] Confidence range: {conf['min']:.2f} - {conf['max']:.2f} (avg: {conf['avg']:.2f})")
+            print(
+                f"[validate] Confidence range: {conf['min']:.2f} - {conf['max']:.2f} (avg: {conf['avg']:.2f})"
+            )
 
         print(f"[validate] Source distribution: {results['source_distribution']}")
 

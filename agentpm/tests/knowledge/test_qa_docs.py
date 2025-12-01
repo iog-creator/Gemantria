@@ -36,7 +36,9 @@ def test_happy_path(monkeypatch):
         "ok": True,
         "mode": "lm_on",
         "response": {
-            "choices": [{"message": {"content": "Phase-6P delivers BibleScholar Reference Answer Slice."}}],
+            "choices": [
+                {"message": {"content": "Phase-6P delivers BibleScholar Reference Answer Slice."}}
+            ],
             "usage": {"total_tokens": 100},
             "model": "test-model",
         },
@@ -67,7 +69,13 @@ def test_db_off(monkeypatch):
         "ok": True,
         "mode": "lm_on",
         "response": {
-            "choices": [{"message": {"content": "I don't have relevant documentation to answer this question."}}],
+            "choices": [
+                {
+                    "message": {
+                        "content": "I don't have relevant documentation to answer this question."
+                    }
+                }
+            ],
             "usage": {"total_tokens": 50},
             "model": "test-model",
         },
