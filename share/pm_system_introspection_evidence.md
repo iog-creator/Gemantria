@@ -4,322 +4,18 @@ This file aggregates raw evidence about how the pmagent + AGENTS + share +
 planning + KB + tracking/self-healing systems currently behave. It is NOT a
 designed doc; it is an evidence pack for the PM to read and interpret.
 
-**Generated**: 2025-12-01T16:09:34.583355+00:00
+**Generated**: 2025-12-01T16:34:54.632646+00:00
 
 ## 1. Repo / branch / status
 
 ```
 ## main...origin/main
  M NEXT_STEPS.md
- M agentpm/adapters/ollama.py
- M agentpm/adapters/theology.py
- M agentpm/atlas/generate.py
- M agentpm/atlas/reranker_badges.py
- M agentpm/atlas/webproof.py
- M agentpm/biblescholar/bible_db_adapter.py
- M agentpm/biblescholar/bible_passage_flow.py
- M agentpm/biblescholar/cross_language_flow.py
- M agentpm/biblescholar/insights_flow.py
- M agentpm/biblescholar/lexicon_adapter.py
- M agentpm/biblescholar/reference_slice.py
- M agentpm/biblescholar/relationship_adapter.py
- M agentpm/biblescholar/tests/test_bible_passage_flow.py
- M agentpm/biblescholar/tests/test_cross_language_flow.py
- M agentpm/biblescholar/tests/test_reference_slice.py
- M agentpm/control_plane/exports.py
- M agentpm/control_plane/sessions.py
- M agentpm/control_widgets/adapter.py
- M agentpm/docs/search.py
- M agentpm/extractors/provenance.py
- M agentpm/gatekeeper.py
- M agentpm/gatekeeper/impl.py
- M agentpm/graph/assembler.py
- M agentpm/guard/__init__.py
- M agentpm/guard/impl.py
- M agentpm/guarded/guard_shim.py
- M agentpm/kb/classify.py
- M agentpm/kb/registry.py
- M agentpm/knowledge/qa_docs.py
- M agentpm/lm/lm_status.py
- M agentpm/lm/router.py
- M agentpm/modules/gematria/nouns.py
- M agentpm/plan/fix.py
- M agentpm/plan/kb.py
- M agentpm/reality/check.py
- M agentpm/runtime/lm_budget.py
- M agentpm/scripts/cleanup_codebase.py
- M agentpm/scripts/cleanup_root.py
- M agentpm/scripts/docs_archive_apply.py
- M agentpm/scripts/docs_classify_direct.py
- M agentpm/scripts/docs_dashboard_refresh.py
- M agentpm/scripts/docs_dm002_sync.py
- M agentpm/scripts/docs_duplicates_report.py
- M agentpm/scripts/docs_inventory.py
- M agentpm/scripts/generate_tool_embeddings.py
- M agentpm/scripts/ingest_docs.py
- M agentpm/scripts/reality_check_1.py
- M agentpm/scripts/reality_check_1_live.py
- M agentpm/scripts/state/ledger_verify.py
- M agentpm/status/explain.py
- M agentpm/status/kb_metrics.py
- M agentpm/status/snapshot.py
- M agentpm/tests/adapters/test_lm_studio_adapter.py
- M agentpm/tests/atlas/test_atlas_accessibility_e38_e40.py
- M agentpm/tests/atlas/test_atlas_auditjump_e29_e31.py
- M agentpm/tests/atlas/test_atlas_download_backlinks_e32_e34.py
- M agentpm/tests/atlas/test_atlas_links_e26_e28.py
- M agentpm/tests/atlas/test_atlas_rawproof_e35_e37.py
- M agentpm/tests/atlas/test_e100_tagproof_phase2.py
- M agentpm/tests/atlas/test_e92_screenshot_manifest_guard.py
- M agentpm/tests/atlas/test_e93_browser_verification_guard.py
- M agentpm/tests/atlas/test_e99_browser_screenshot_integrated.py
- M agentpm/tests/atlas/test_lm_dashboards_config.py
- M agentpm/tests/atlas/test_lm_status_page_insights.py
- M agentpm/tests/atlas/test_phase6p_biblescholar_reference_guard.py
- M agentpm/tests/atlas/test_phase_d_autopilot_summary.py
- M agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py
- M agentpm/tests/cli/test_pmagent_plan_kb_fix.py
- M agentpm/tests/cli/test_pmagent_reality_check_cli.py
- M agentpm/tests/db/test_phase3a_db_health_guard.py
- M agentpm/tests/db/test_phase3a_db_health_smoke.py
- M agentpm/tests/db/test_phase3a_db_loader.py
- M agentpm/tests/db/test_phase3a_graph_stats_import.py
- M agentpm/tests/db/test_phase3b_graph_overview.py
- M agentpm/tests/docs/test_dms_guards.py
- M agentpm/tests/exports/test_graph_export_e20_e22.py
- M agentpm/tests/extractors/test_extraction_determinism_e11_e13.py
- M agentpm/tests/extractors/test_graph_rollups_e17_e19.py
- M agentpm/tests/html/test_lm_status_page.py
- M agentpm/tests/kb/test_freshness.py
- M agentpm/tests/kb/test_registry.py
- M agentpm/tests/knowledge/test_qa_docs.py
- M agentpm/tests/lm/test_phase3b_lm_health_guard.py
- M agentpm/tests/lm/test_phase6_lm_budgets.py
- M agentpm/tests/mcp/test_mcp_catalog_e01_e05.py
- M agentpm/tests/mcp/test_mcp_m10_e46_e50.py
- M agentpm/tests/mcp/test_mcp_m11_e51_e55.py
- M agentpm/tests/mcp/test_mcp_m12_e56_e60.py
- M agentpm/tests/mcp/test_mcp_m14_e66_e70.py
- M agentpm/tests/mcp/test_mcp_m3_e11_e15.py
- M agentpm/tests/mcp/test_mcp_m8_e36_e40.py
- M agentpm/tests/mcp/test_mcp_m9_e41_e45.py
- M agentpm/tests/phase1/test_tv01_missing_por.py
- M agentpm/tests/phase1/test_tv02_arg_schema_invalid.py
- M agentpm/tests/phase1/test_tv03_ring_violation.py
- M agentpm/tests/phase1/test_tv04_provenance_mismatch.py
- M agentpm/tests/phase1/test_tv05_forbidden_tool.py
- M agentpm/tests/reality/test_capability_envelope_writer.py
- M agentpm/tests/reality/test_sessions_summary.py
- M agentpm/tests/status/test_explain_kb.py
- M agentpm/tests/system/test_phase3b_system_health.py
- M agentpm/tools/rerank.py
- M conftest.py
  M docs/forest/overview.md
- M pmagent/cli.py
- M pmagent/repo/logic.py
- M rules_guard.py
- M scripts/_deprecated/apply_rerank_blend.py
- M scripts/_deprecated/apply_rerank_refresh.py
- M scripts/acceptance/check_envelope.py
- M scripts/adapter/exports_to_viewer.py
- M scripts/adr_housekeeping.py
- M scripts/ai/embeddings_upsert.py
- M scripts/ai_analytics_dashboard.py
- M scripts/ai_integration_example.py
- M scripts/ai_learning_tracker.py
- M scripts/ai_noun_discovery.py
- M scripts/ai_session_monitor.py
- M scripts/analytics/export_ai_tracking.py
- M scripts/analytics/graph_stats_from_json.py
- M scripts/analytics/rerank_blend_report.py
- M scripts/analytics/verify_ai_tracking.py
- M scripts/analytics/verify_export.py
- M scripts/analyze_metrics.py
- M scripts/atlas/gen_index_badge_rollup.py
- M scripts/atlas/gen_index_summary.py
- M scripts/atlas/generate_atlas.py
- M scripts/atlas/generate_compliance_summary.py
- M scripts/atlas/generate_compliance_timeseries.py
- M scripts/atlas/generate_mermaid.py
- M scripts/atlas_chip_inject.py
- M scripts/atlas_trace_inject.py
- M scripts/audit_genesis_db.py
- M scripts/auto_update_agents_md.py
- M scripts/auto_update_changelog.py
- M scripts/backfill_bge_embeddings.py
- M scripts/backfill_noun_embeddings.py
- M scripts/badges/make_badge.py
- M scripts/badges/make_patterns_badge.py
- M scripts/book_readiness.py
- M scripts/branch_health_report.py
- M scripts/check_agents_md_sync.py
- M scripts/ci/check_pr_model_usage.py
- M scripts/ci/guard_dsn_centralized.py
- M scripts/ci/guard_json_schema.py
- M scripts/ci/guard_knowledge.py
- M scripts/ci/guard_mcp_live.py
- M scripts/ci/tv_coverage.py
- M scripts/ci/validate_exports.py
- M scripts/code_ingest/export_code_fragments.py
- M scripts/compass/scorer.py
- M scripts/control/control_summary.py
- M scripts/create_agents_md.py
- M scripts/db/contextual_search.py
- M scripts/db/control_biblescholar_reference_export.py
- M scripts/db/control_capability_rules_export.py
- M scripts/db/control_compliance_exports.py
- M scripts/db/control_lm_insights_export.py
- M scripts/db/control_mvs_snapshot.py
- M scripts/db/control_plane_smoke.py
- M scripts/db/control_schema_snapshot.py
- M scripts/db/export_governance_freshness.py
- M scripts/db/export_planning_lane_status.py
- M scripts/db/mcp_catalog_stub.py
- M scripts/db/migrate_control.py
- M scripts/db/populate_mark_1_1_greek.py
- M scripts/db/upsert_helpers.py
- M scripts/db_head.py
- M scripts/deploy.py
- M scripts/dev_seed_enriched_sample.py
- M scripts/document_management_hints.py
- M scripts/eval/anomalies.py
- M scripts/eval/apply_remediation.py
- M scripts/eval/build_exports_catalog.py
- M scripts/eval/build_html_index.py
- M scripts/eval/build_provenance.py
- M scripts/eval/build_release_notes.py
- M scripts/eval/build_run_summary.py
- M scripts/eval/build_snapshot.py
- M scripts/eval/calibrate_advanced.py
- M scripts/eval/detect_anomalies.py
- M scripts/eval/edge_audit.py
- M scripts/eval/jsonschema_validate.py
- M scripts/eval/make_quality_badge.py
- M scripts/eval/provenance.py
- M scripts/eval/quality_trend.py
- M scripts/eval/report.py
- M scripts/eval/report_history.py
- M scripts/eval/report_id_stability.py
- M scripts/eval/verify_integrity.py
- M scripts/eval/xrefs_badges.py
- M scripts/export_graph.py
- M scripts/export_jsonld.py
- M scripts/export_noun_index.py
- M scripts/export_stats.py
- M scripts/exports/export_graph_core.py
- M scripts/extract_nouns_from_bible_db.py
- M scripts/find_approved_examples.py
- M scripts/fix/apply_repair_plan.py
- M scripts/fix/sanitize_missing_endpoints.py
- M scripts/generate_report.py
- M scripts/goldens_enrichment_schema_check.py
- M scripts/goldens_sample_check.py
- M scripts/governance/discover_hints.py
- M scripts/governance/ingest_doc_content.py
- M scripts/governance/ingest_doc_embeddings.py
- M scripts/governance/ingest_docs_to_db.py
- M scripts/governance/seed_hint_registry.py
- M scripts/governance_tracker.py
- M scripts/graph/graph_overview.py
- M scripts/guard_all.py
- M scripts/guard_graph_schema.py
- M scripts/guards/guard_ai_tracking_contract.py
- M scripts/guards/guard_alwaysapply_triage.py
- M scripts/guards/guard_atlas_compliance_drilldowns.py
- M scripts/guards/guard_atlas_compliance_timeseries.py
- M scripts/guards/guard_biblescholar_reference.py
- M scripts/guards/guard_browser_screenshot_integrated.py
- M scripts/guards/guard_browser_verification.py
- M scripts/guards/guard_ci_empty_db.py
- M scripts/guards/guard_control_autopilot_summary.py
- M scripts/guards/guard_control_compliance_exports.py
- M scripts/guards/guard_control_compliance_webproof_backlinks.py
- M scripts/guards/guard_control_graph_compliance.py
- M scripts/guards/guard_control_plane_health.py
- M scripts/guards/guard_control_widgets.py
- M scripts/guards/guard_crossrefs_extracted.py
- M scripts/guards/guard_cursorignore.py
- M scripts/guards/guard_doc_fragments.py
- M scripts/guards/guard_docs_db_ssot.py
- M scripts/guards/guard_enrichment_details.py
- M scripts/guards/guard_exports_json.py
- M scripts/guards/guard_exports_rfc3339.py
- M scripts/guards/guard_extraction_accuracy.py
- M scripts/guards/guard_graph_generated_at.py
- M scripts/guards/guard_ketiv_primary.py
- M scripts/guards/guard_lm_health.py
- M scripts/guards/guard_m11_filter_apply_multi_schema.py
- M scripts/guards/guard_m11_trace_links_across_nodes.py
- M scripts/guards/guard_m12_chip_coverage.py
- M scripts/guards/guard_m13_chip_id_uniqueness.py
- M scripts/guards/guard_m13_manifest_consistency.py
- M scripts/guards/guard_m13_sitemap_min.py
- M scripts/guards/guard_m13_stale_sweep.py
- M scripts/guards/guard_m14_node_drilldowns_links.py
- M scripts/guards/guard_m14_reranker_badges.py
- M scripts/guards/guard_m14_webproof_backlinks.py
- M scripts/guards/guard_mcp_proof.py
- M scripts/guards/guard_mcp_schema.py
- M scripts/guards/guard_reality_green.py
- M scripts/guards/guard_regenerate_all.py
- M scripts/guards/guard_snapshot_drift.py
- M scripts/guards/guard_tagproof_phase2.py
- M scripts/guards/guard_tagproof_screenshots.py
- M scripts/guards/hints_required.py
- M scripts/guards/sync_alwaysapply_from_db.py
- M scripts/ingest_docs.py
- M scripts/kb/build_kb_registry.py
- M scripts/kb/seed_registry.py
- M scripts/math_verifier.py
- M scripts/mcp/export_catalog_json.py
- M scripts/mcp/gen_filter_chips.py
- M scripts/mcp/generate_proof_snapshot.py
- M scripts/mcp/get_dsn_for_examples.py
- M scripts/mcp/http_export_server.py
- M scripts/mcp/probe_db.py
- M scripts/metrics_contract.py
- M scripts/mode_decider.py
- M scripts/models_verify.py
- M scripts/monitor_pipeline.py
- M scripts/monitoring.py
- M scripts/observability/otel_helpers.py
- M scripts/ollama_discovery.py
- M scripts/ontology_compat.py
- M scripts/ops/agent_evidence_summary.py
- M scripts/ops/codemod_dsn_to_shim.py
- M scripts/ops/convert_socket_to_network_dsn.py
- M scripts/pipeline_orchestrator.py
- M scripts/pm_snapshot.py
- M scripts/prepare_handoff.py
- M scripts/repo_audit.py
- M scripts/rules_audit.py
- M scripts/rules_guard.py
- M scripts/sanity_check.py
- M scripts/smokes/writers_smoke.py
- M scripts/status/export_live_posture.py
- M scripts/status/update_mermaid_from_evidence.py
- M scripts/temporal_analytics.py
- M scripts/tools/derive_truth_cases.py
- M scripts/tools/render_exports_verdict_md.py
- M scripts/ui/metrics_log.py
- M scripts/util/export_pm_introspection_evidence.py
- M scripts/util/export_pm_snapshot_json.py
- M scripts/util/json_to_markdown.py
- M scripts/validate_agents_md.py
- M scripts/validate_examples.py
- M scripts/verify_pr016_pr017.py
  D share/agents_md.head.md
- D share/atlas/control_plane/lm_indicator.json
- D share/atlas/control_plane/system_health.json
  D share/doc_registry.md
  D share/doc_sync_state.md
  D share/doc_version.md
- D share/exports/docs-control/archive-candidates.json
- D share/exports/docs-control/archive-dryrun.json
- D share/exports/docs-control/canonical.json
- D share/exports/docs-control/orphans.json
- D share/exports/docs-control/summary.json
- D share/exports/docs-control/unreviewed-batch.json
  D share/governance_freshness.md
  D share/hint_registry.md
  D share/kb_registry.md
@@ -332,62 +28,6 @@ designed doc; it is an evidence pack for the PM to read and interpret.
  D share/pm_snapshot.md
  D share/pm_system_introspection_evidence.md
  D share/schema_snapshot.md
- M src/gemantria/dsn.py
- M src/graph/batch_processor.py
- M src/graph/graph.py
- M src/graph/patterns.py
- M src/infra/checkpointer.py
- M src/infra/db.py
- M src/infra/evidence_logger.py
- M src/infra/metrics_queries.py
- M src/infra/retry_utils.py
- M src/nodes/ai_noun_discovery.py
- M src/nodes/analysis_runner.py
- M src/nodes/enrichment.py
- M src/nodes/math_verifier.py
- M src/nodes/network_aggregator.py
- M src/nodes/schema_validator.py
- M src/obs/prom_exporter.py
- M src/services/api_server.py
- M src/services/lmstudio_client.py
- M src/services/model_router.py
- M src/services/rerank_via_embeddings.py
- M test_bi_encoder_rerank.py
- M test_mcp_server.py
- M tests/acceptance/test_document_management_e2e.py
- M tests/bible/test_passage_service.py
- M tests/cli/test_tools_planning.py
- M tests/contract/test_document_governance.py
- M tests/db/test_control_compliance_exports.py
- M tests/db/test_control_mvs_and_mcp_catalog.py
- M tests/db/test_control_plane_smoke.py
- M tests/guards/test_guard_control_compliance_exports.py
- M tests/guards/test_guard_control_compliance_webproof.py
- M tests/integration/test_ai_enrichment_node.py
- M tests/integration/test_api_temporal_forecast.py
- M tests/integration/test_checkpoint_resume_compass.py
- M tests/integration/test_phase7f_model_readiness.py
- M tests/integration/test_postgres_checkpointer.py
- M tests/scripts/governance/test_ingest_docs_to_db.py
- M tests/scripts/governance/test_ingest_docs_to_db_agents.py
- M tests/scripts/guards/test_guard_doc_embeddings.py
- M tests/scripts/guards/test_guard_doc_fragments.py
- M tests/scripts/guards/test_guard_docs_db_ssot.py
- M tests/test_env_loader.py
- M tests/test_repo_introspection_cli.py
- M tests/ui/test_atlas_node_click.py
- M tests/unit/guards/test_exports_guard_negative.py
- M tests/unit/guards/test_exports_rfc3339.py
- M tests/unit/test_confidence_gates.py
- M tests/unit/test_eval_reclassify_edges.py
- M tests/unit/test_network_aggregator.py
- M tests/unit/test_ollama_rerank_failures.py
- M tests/unit/test_planning_lane.py
- M tests/unit/test_pmagent_models_active.py
- M tests/unit/test_ssot.py
- M tests/web/test_bible_passage_api.py
- M tests/web/test_lm_indicator_api.py
- M tools/genesis_autopilot.py
 ?? share/agents_md.head.json
 ?? share/doc_registry.json
 ?? share/doc_sync_state.json
@@ -410,37 +50,37 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent
 
 ```
-                                                                                            
- Usage: pmagent [OPTIONS] COMMAND [ARGS]...                                                 
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ health          Health check commands                                                    │
-│ graph           Graph operations                                                         │
-│ control         Control-plane operations                                                 │
-│ ask             Ask questions using SSOT documentation                                   │
-│ reality-check   Reality checks for automated bring-up                                    │
-│ reality         Reality validation commands                                              │
-│ bringup         System bring-up commands                                                 │
-│ mcp             MCP server commands                                                      │
-│ lm              LM (Language Model) operations                                           │
-│ status          System status helpers                                                    │
-│ docs            Documentation search operations                                          │
-│ models          Model introspection commands                                             │
-│ state           System state ledger operations                                           │
-│ kb              Knowledge-base document registry operations                              │
-│ plan            Planning workflows powered by KB registry                                │
-│ report          Reporting commands                                                       │
-│ tools           External planning/tool helpers (Gemini, Codex)                           │
-│ autopilot       Autopilot backend operations                                             │
-│ repo            Repository introspection and git workflow commands.                      │
-│ bible           Bible operations                                                         │
-│ rerank          Rerank operations                                                        │
-│ extract         Extract operations                                                       │
-│ embed           Embed operations                                                         │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent [OPTIONS] COMMAND [ARGS]...                                            
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ health          Health check commands                                               │
+│ graph           Graph operations                                                    │
+│ control         Control-plane operations                                            │
+│ ask             Ask questions using SSOT documentation                              │
+│ reality-check   Reality checks for automated bring-up                               │
+│ reality         Reality validation commands                                         │
+│ bringup         System bring-up commands                                            │
+│ mcp             MCP server commands                                                 │
+│ lm              LM (Language Model) operations                                      │
+│ status          System status helpers                                               │
+│ docs            Documentation search operations                                     │
+│ models          Model introspection commands                                        │
+│ state           System state ledger operations                                      │
+│ kb              Knowledge-base document registry operations                         │
+│ plan            Planning workflows powered by KB registry                           │
+│ report          Reporting commands                                                  │
+│ tools           External planning/tool helpers (Gemini, Codex)                      │
+│ autopilot       Autopilot backend operations                                        │
+│ repo            Repository introspection and git workflow commands.                 │
+│ bible           Bible operations                                                    │
+│ rerank          Rerank operations                                                   │
+│ extract         Extract operations                                                  │
+│ embed           Embed operations                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -448,21 +88,22 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent plan
 
 ```
-                                                                                            
- Usage: pmagent plan [OPTIONS] COMMAND [ARGS]...                                            
-                                                                                            
- Planning workflows powered by KB registry                                                  
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ next           Suggest next work items from MASTER_PLAN + NEXT_STEPS                     │
-│ open           Open a NEXT_STEPS item as a capability_session envelope                   │
-│ reality-loop   Run a single plan+posture loop and persist a capability_session envelope  │
-│ history        List recent capability_session envelopes (read-only)                      │
-│ kb             KB-powered planning commands                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent plan [OPTIONS] COMMAND [ARGS]...                                       
+                                                                                       
+ Planning workflows powered by KB registry                                             
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ next           Suggest next work items from MASTER_PLAN + NEXT_STEPS                │
+│ open           Open a NEXT_STEPS item as a capability_session envelope              │
+│ reality-loop   Run a single plan+posture loop and persist a capability_session      │
+│                envelope                                                             │
+│ history        List recent capability_session envelopes (read-only)                 │
+│ kb             KB-powered planning commands                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -470,17 +111,17 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent kb
 
 ```
-                                                                                            
- Usage: pmagent kb [OPTIONS] COMMAND [ARGS]...                                              
-                                                                                            
- Knowledge-base document registry operations                                                
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ registry   KB document registry commands                                                 │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent kb [OPTIONS] COMMAND [ARGS]...                                         
+                                                                                       
+ Knowledge-base document registry operations                                           
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ registry   KB document registry commands                                            │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -488,18 +129,18 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status
 
 ```
-                                                                                            
- Usage: pmagent status [OPTIONS] COMMAND [ARGS]...                                          
-                                                                                            
- System status helpers                                                                      
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ explain   Explain current DB + LM health in plain language                               │
-│ kb        KB registry status view for PM/AgentPM planning                                │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent status [OPTIONS] COMMAND [ARGS]...                                     
+                                                                                       
+ System status helpers                                                                 
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ explain   Explain current DB + LM health in plain language                          │
+│ kb        KB registry status view for PM/AgentPM planning                           │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -513,16 +154,16 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status kb
 
 ```
-                                                                                            
- Usage: pmagent status kb [OPTIONS]                                                         
-                                                                                            
- KB registry status view for PM/AgentPM planning                                            
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --json-only                  Print only JSON                                             │
-│ --registry-path        TEXT  Path to registry JSON file                                  │
-│ --help                       Show this message and exit.                                 │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent status kb [OPTIONS]                                                    
+                                                                                       
+ KB registry status view for PM/AgentPM planning                                       
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --json-only                  Print only JSON                                        │
+│ --registry-path        TEXT  Path to registry JSON file                             │
+│ --help                       Show this message and exit.                            │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -530,16 +171,16 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent status explain
 
 ```
-                                                                                            
- Usage: pmagent status explain [OPTIONS]                                                    
-                                                                                            
- Explain current DB + LM health in plain language                                           
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --json-only          Return JSON instead of text                                         │
-│ --no-lm              Skip LM enhancement, use rule-based only                            │
-│ --help               Show this message and exit.                                         │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent status explain [OPTIONS]                                               
+                                                                                       
+ Explain current DB + LM health in plain language                                      
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --json-only          Return JSON instead of text                                    │
+│ --no-lm              Skip LM enhancement, use rule-based only                       │
+│ --help               Show this message and exit.                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -553,20 +194,20 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent health
 
 ```
-                                                                                            
- Usage: pmagent health [OPTIONS] COMMAND [ARGS]...                                          
-                                                                                            
- Health check commands                                                                      
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ system   Aggregate system health (DB + LM + Graph)                                       │
-│ db       Check database health                                                           │
-│ lm       Check LM Studio health                                                          │
-│ graph    Check graph overview                                                            │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent health [OPTIONS] COMMAND [ARGS]...                                     
+                                                                                       
+ Health check commands                                                                 
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ system   Aggregate system health (DB + LM + Graph)                                  │
+│ db       Check database health                                                      │
+│ lm       Check LM Studio health                                                     │
+│ graph    Check graph overview                                                       │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -574,15 +215,15 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent health system
 
 ```
-                                                                                            
- Usage: pmagent health system [OPTIONS]                                                     
-                                                                                            
- Aggregate system health (DB + LM + Graph)                                                  
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --json-only          Print only JSON                                                     │
-│ --help               Show this message and exit.                                         │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent health system [OPTIONS]                                                
+                                                                                       
+ Aggregate system health (DB + LM + Graph)                                             
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --json-only          Print only JSON                                                │
+│ --help               Show this message and exit.                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -590,19 +231,19 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent reality-check
 
 ```
-                                                                                            
- Usage: pmagent reality-check [OPTIONS] COMMAND [ARGS]...                                   
-                                                                                            
- Reality checks for automated bring-up                                                      
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────╮
-│ 1       Run Reality Check #1 automated bring-up                                          │
-│ live    Run Reality Check #1 LIVE (DB + LM + pipeline)                                   │
-│ check   Run comprehensive reality check (env + DB + LM + exports + eval)                 │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent reality-check [OPTIONS] COMMAND [ARGS]...                              
+                                                                                       
+ Reality checks for automated bring-up                                                 
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────╮
+│ 1       Run Reality Check #1 automated bring-up                                     │
+│ live    Run Reality Check #1 LIVE (DB + LM + pipeline)                              │
+│ check   Run comprehensive reality check (env + DB + LM + exports + eval)            │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -610,17 +251,17 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 ### pmagent reality-check check
 
 ```
-                                                                                            
- Usage: pmagent reality-check check [OPTIONS]                                               
-                                                                                            
- Run comprehensive reality check (env + DB + LM + exports + eval)                           
-                                                                                            
-╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
-│ --mode                 TEXT  Mode: hint (default) or strict [default: hint]              │
-│ --json-only                  Print only JSON                                             │
-│ --no-dashboards              Skip exports/eval checks                                    │
-│ --help                       Show this message and exit.                                 │
-╰──────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                       
+ Usage: pmagent reality-check check [OPTIONS]                                          
+                                                                                       
+ Run comprehensive reality check (env + DB + LM + exports + eval)                      
+                                                                                       
+╭─ Options ───────────────────────────────────────────────────────────────────────────╮
+│ --mode                 TEXT  Mode: hint (default) or strict [default: hint]         │
+│ --json-only                  Print only JSON                                        │
+│ --no-dashboards              Skip exports/eval checks                               │
+│ --help                       Show this message and exit.                            │
+╰─────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```
@@ -664,7 +305,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
     "reality": {
       "command": "reality.check",
       "mode": "HINT",
-      "timestamp": "2025-12-01T16:09:38.717081+00:00",
+      "timestamp": "2025-12-01T16:34:58.721684+00:00",
       "env": {
         "ok": true,
         "dsn_ok": true,
@@ -681,7 +322,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
         "control_schema": "control",
         "tables_expected": 0,
         "tables_present": 0,
-        "generated_at": "2025-12-01T16:09:38.717109+00:00",
+        "generated_at": "2025-12-01T16:34:58.721707+00:00",
         "components": {
           "status": {
             "ok": true,
@@ -721,7 +362,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
             "error": null,
             "tables": {
               "control.agent_run": 2270,
-              "control.agent_run_cli": 72,
+              "control.agent_run_cli": 75,
               "control.capability_rule": 5,
               "control.capability_session": 5,
               "control.doc_embedding": 2963,
@@ -781,8 +422,8 @@ designed doc; it is an evidence pack for the PM to read and interpret.
               "public.document_access_log": 1,
               "public.document_sections": 398,
               "public.governance_artifacts": 131,
-              "public.governance_compliance_log": 236,
-              "public.hint_emissions": 779,
+              "public.governance_compliance_log": 237,
+              "public.hint_emissions": 785,
               "public.hypotheses": 0,
               "public.integration_log": 0,
               "public.isolation_patterns": 0,
@@ -1919,7 +1560,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
 {
   "command": "reality.check",
   "mode": "HINT",
-  "timestamp": "2025-12-01T16:09:43.386355+00:00",
+  "timestamp": "2025-12-01T16:35:03.239867+00:00",
   "env": {
     "ok": true,
     "dsn_ok": true,
@@ -1936,7 +1577,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
     "control_schema": "control",
     "tables_expected": 0,
     "tables_present": 0,
-    "generated_at": "2025-12-01T16:09:43.386378+00:00",
+    "generated_at": "2025-12-01T16:35:03.239889+00:00",
     "components": {
       "status": {
         "ok": true,
@@ -1976,7 +1617,7 @@ designed doc; it is an evidence pack for the PM to read and interpret.
         "error": null,
         "tables": {
           "control.agent_run": 2270,
-          "control.agent_run_cli": 74,
+          "control.agent_run_cli": 77,
           "control.capability_rule": 5,
           "control.capability_session": 5,
           "control.doc_embedding": 2963,
@@ -2036,8 +1677,8 @@ designed doc; it is an evidence pack for the PM to read and interpret.
           "public.document_access_log": 1,
           "public.document_sections": 398,
           "public.governance_artifacts": 131,
-          "public.governance_compliance_log": 236,
-          "public.hint_emissions": 779,
+          "public.governance_compliance_log": 237,
+          "public.hint_emissions": 785,
           "public.hypotheses": 0,
           "public.integration_log": 0,
           "public.isolation_patterns": 0,
@@ -3111,23 +2752,55 @@ docs/phase10/UI_SPEC.md:127:* [ ] Renders meta + counts deterministically with o
 docs/phase10/DASHBOARD_PLAN.md:5:- Visualize local ingestion envelopes (Phase-9) without network/DB.
 docs/phase10/DASHBOARD_PLAN.md:10:- Input: /tmp/p9-ingest-envelope.json (built locally via `make ingest.local.envelope`).
 docs/phase10/DASHBOARD_PLAN.md:22:- P10-B: JSON loader + minimal graph view reading envelope nodes/edges.
+scripts/ingest/validate_ingest_envelope_schema.py:32:        error("usage: python3 scripts/ingest/validate_ingest_envelope_schema.py <envelope.json>")
+scripts/ingest/validate_ingest_envelope_schema.py:42:        errs.append("envelope must be an object")
 docs/phase10/STRUCTURE.md:10:* `ui/src/lib/` helpers (envelope loader)
 docs/phase10/STRUCTURE.md:15:1. Build envelope locally: `make ingest.local.envelope`
 docs/phase10/STRUCTURE.md:17:3. Load `/tmp/p9-ingest-envelope.json` for views
+scripts/ingest/show_meta.py:18:    out = os.getenv("OUT_FILE", "/tmp/p9-ingest-envelope.json")
+scripts/ingest/show_meta.py:21:        print(f"ERR[ingest.meta]: envelope not found: {p}", file=sys.stderr)
+agentpm/hints/__init__.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
+agentpm/hints/__init__.py:3:from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
+agentpm/hints/__init__.py:5:__all__ = ["embed_hints_in_envelope", "load_hints_for_flow"]
+scripts/ingest/validate_snapshot.py:53:    envelope = {
+scripts/ingest/validate_snapshot.py:63:    print(json.dumps(envelope, indent=2))
 docs/phase10/AGENTS.md:38:5. **Integration** - Backend data integration and envelope loading
 docs/phase10/AGENTS.md:61:- **Envelope loading**: Load data from `/tmp/p9-ingest-envelope.json` or `share/exports/`
 docs/phase10/AGENTS.md:75:- **scripts/extract/extract_all.py**: Unified envelope extraction
 docs/phase10/AGENTS.md:76:- **make ui.extract.all**: Extract envelope for UI consumption
-scripts/ingest/validate_ingest_envelope_schema.py:32:        error("usage: python3 scripts/ingest/validate_ingest_envelope_schema.py <envelope.json>")
-scripts/ingest/validate_ingest_envelope_schema.py:42:        errs.append("envelope must be an object")
+scripts/ingest/validate_envelope_schema.py:22:def validate_envelope(env: dict) -> list[str]:
+scripts/ingest/validate_envelope_schema.py:60:            "usage: python3 scripts/ingest/validate_envelope_schema.py <envelope.json>",
+scripts/ingest/validate_envelope_schema.py:69:    errs = validate_envelope(env)
+agentpm/hints/registry.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
+agentpm/hints/registry.py:92:def embed_hints_in_envelope(
+agentpm/hints/registry.py:93:    envelope: dict[str, Any],
+agentpm/hints/registry.py:97:    Embed hints into an envelope structure.
+agentpm/hints/registry.py:99:    Adds "required_hints" and "suggested_hints" sections to the envelope.
+agentpm/hints/registry.py:103:        envelope: Existing envelope dict
+agentpm/hints/registry.py:110:    result = envelope.copy()
+scripts/ingest/build_envelope.py:21:        print(f"ERR[p9.envelope]: snapshot not found: {p}", file=sys.stderr)
+scripts/ingest/build_envelope.py:28:        print("HINT[p9.envelope]: CI detected; noop (hermetic).")
+scripts/ingest/build_envelope.py:35:    out_path = os.getenv("OUT_FILE", "/tmp/p9-ingest-envelope.json")
+scripts/ingest/build_envelope.py:44:    envelope = {
+scripts/ingest/build_envelope.py:47:            "source": "p9-envelope-local",
+scripts/ingest/build_envelope.py:55:    s = json.dumps(envelope, indent=2)
 docs/PHASE11_PLAN.md:5:* **1d**: Unified pipeline (graph + temporal + correlations → single envelope)
 docs/PHASE11_PLAN.md:12:* Extract stub generates `unified_envelope_SIZE.json` in <2 sec for SIZE=10,000
 docs/PHASE11_PLAN.md:21:* Include schema version in envelope header
 docs/PHASE11_PLAN.md:25:See AGENTS.md section "Data Extraction Lineage" for complete flow: graph_latest → temporal_export → correlation_weights → unified_envelope
-scripts/ingest/show_meta.py:18:    out = os.getenv("OUT_FILE", "/tmp/p9-ingest-envelope.json")
-scripts/ingest/show_meta.py:21:        print(f"ERR[ingest.meta]: envelope not found: {p}", file=sys.stderr)
-scripts/ingest/validate_snapshot.py:53:    envelope = {
-scripts/ingest/validate_snapshot.py:63:    print(json.dumps(envelope, indent=2))
+scripts/governance_docs_hints.py:7:hints envelope for auditability.
+scripts/governance_docs_hints.py:85:def emit_hints_envelope(modified_files: list[str], recent_files: list[str]) -> dict:
+scripts/governance_docs_hints.py:86:    """Create a hints envelope for governance docs/rule changes."""
+scripts/governance_docs_hints.py:122:    envelope = {
+scripts/governance_docs_hints.py:123:        "type": "hints_envelope",
+scripts/governance_docs_hints.py:133:    return envelope
+scripts/governance_docs_hints.py:137:    """Main function: check for changes and emit hints envelope."""
+scripts/governance_docs_hints.py:141:    envelope = emit_hints_envelope(modified, recent)
+scripts/governance_docs_hints.py:143:    # Write hints envelope to evidence directory
+scripts/governance_docs_hints.py:146:        json.dump(envelope, f, indent=2, ensure_ascii=False)
+scripts/governance_docs_hints.py:149:    if envelope["count"] > 0:
+scripts/governance_docs_hints.py:150:        for hint in envelope["items"]:
+scripts/governance_docs_hints.py:153:            f"HINT: governance.docs: Wrote {envelope['count']} hint(s) → {HINTS_FILE}",
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:6:Move hints from hardcoded strings in agent code to a DMS-backed registry (`control.hint_registry`) with REQUIRED vs SUGGESTED semantics. Envelope generators (handoff, capability_session, reality_check, status) will query the registry and embed hints into their outputs. A guard (`guard.hints.required`) will enforce that REQUIRED hints are present in envelopes.
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:12:3. **Ensure envelopes always carry required hints** – fail if they don't
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:66:- `embed_hints_in_envelope(envelope: dict, hints: dict[str, list]) -> dict`
@@ -3149,27 +2822,8 @@ scripts/ingest/validate_snapshot.py:63:    print(json.dumps(envelope, indent=2))
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:208:- [ ] Wire envelope generators to query DMS and embed hints: scripts/prepare_handoff.py, agentpm/plan/next.py, agentpm/reality/check.py, agentpm/status/snapshot.py (parallel behavior, non-breaking)
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:209:- [ ] Implement scripts/guards/hints_required.py guard that checks envelopes contain all REQUIRED hints, wire into make reality.green STRICT
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:210:- [ ] Fix any flows that fail guard.hints.required until all envelope generators pass in STRICT mode
-agentpm/hints/__init__.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
-agentpm/hints/__init__.py:3:from agentpm.hints.registry import embed_hints_in_envelope, load_hints_for_flow
-agentpm/hints/__init__.py:5:__all__ = ["embed_hints_in_envelope", "load_hints_for_flow"]
-scripts/ingest/validate_envelope_schema.py:22:def validate_envelope(env: dict) -> list[str]:
-scripts/ingest/validate_envelope_schema.py:60:            "usage: python3 scripts/ingest/validate_envelope_schema.py <envelope.json>",
-scripts/ingest/validate_envelope_schema.py:69:    errs = validate_envelope(env)
-scripts/ingest/build_envelope.py:21:        print(f"ERR[p9.envelope]: snapshot not found: {p}", file=sys.stderr)
-scripts/ingest/build_envelope.py:28:        print("HINT[p9.envelope]: CI detected; noop (hermetic).")
-scripts/ingest/build_envelope.py:35:    out_path = os.getenv("OUT_FILE", "/tmp/p9-ingest-envelope.json")
-scripts/ingest/build_envelope.py:44:    envelope = {
-scripts/ingest/build_envelope.py:47:            "source": "p9-envelope-local",
-scripts/ingest/build_envelope.py:55:    s = json.dumps(envelope, indent=2)
 .cursor/plans/ui-enhancement-18696d49.plan.md:11:- Generate unified envelope format with integrated attributes
 .cursor/plans/ui-enhancement-18696d49.plan.md:128:- IndexedDB storage for large envelopes
-agentpm/hints/registry.py:1:"""Hint Registry - DMS-backed hint loading and embedding for envelopes."""
-agentpm/hints/registry.py:92:def embed_hints_in_envelope(
-agentpm/hints/registry.py:93:    envelope: dict[str, Any],
-agentpm/hints/registry.py:97:    Embed hints into an envelope structure.
-agentpm/hints/registry.py:99:    Adds "required_hints" and "suggested_hints" sections to the envelope.
-agentpm/hints/registry.py:103:        envelope: Existing envelope dict
-agentpm/hints/registry.py:110:    result = envelope.copy()
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:154:Test that hints appear in generated envelopes:
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:156:# Test handoff envelope
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:160:# Test capability_session envelope
@@ -3182,51 +2836,34 @@ docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:224:python scripts/guards/hints_required
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:225:python scripts/guards/hints_required.py --flow reality_check --envelope evidence/pmagent/reality_check_latest.json --mode STRICT
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:253:3. ✅ All hints appear in their respective envelopes
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:261:### Risk: Removing hardcoded hints breaks envelope generation
-docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:263:- Verify hints in envelopes before removing hardcoded copies
-docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:269:- Test guard with actual envelope files before final verification
-scripts/governance_docs_hints.py:7:hints envelope for auditability.
-scripts/governance_docs_hints.py:85:def emit_hints_envelope(modified_files: list[str], recent_files: list[str]) -> dict:
-scripts/governance_docs_hints.py:86:    """Create a hints envelope for governance docs/rule changes."""
-scripts/governance_docs_hints.py:122:    envelope = {
-scripts/governance_docs_hints.py:123:        "type": "hints_envelope",
-scripts/governance_docs_hints.py:133:    return envelope
-scripts/governance_docs_hints.py:137:    """Main function: check for changes and emit hints envelope."""
-scripts/governance_docs_hints.py:141:    envelope = emit_hints_envelope(modified, recent)
-scripts/governance_docs_hints.py:143:    # Write hints envelope to evidence directory
-scripts/governance_docs_hints.py:146:        json.dump(envelope, f, indent=2, ensure_ascii=False)
-scripts/governance_docs_hints.py:149:    if envelope["count"] > 0:
 
 ```
 
 ### housekeeping_refs
 
 ```
-agentpm/ai_docs/reality_check_ai_notes.py:68:    prompt = f"""You are the Granite housekeeping AI for the Gemantria project.
-agentpm/control_plane/sessions.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-agentpm/control_plane/doc_fragments.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-agentpm/control_plane/exports.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-docs/BACKUP_STRATEGY_AUDIT.md:45:- Part of housekeeping (`make housekeeping`)
-docs/BACKUP_STRATEGY_AUDIT.md:130:- Run during housekeeping
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:92:- After generating diagrams, MUST run `make housekeeping` before committing
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:95:  1. Run housekeeping: `make housekeeping`
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:184:8. **Run housekeeping** (Rule 058)
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:185:   - Execute `make housekeeping` after all changes
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:216:8. Run `make housekeeping`
 .cursor/plans/atlas-enhancement-flow-and-architecture-diagrams-1045166e.plan.md:272:- Housekeeping: `make housekeeping` runs after diagram generation
+agentpm/ai_docs/reality_check_ai_notes.py:68:    prompt = f"""You are the Granite housekeeping AI for the Gemantria project.
 .cursor/plans/plan-e3abd805.plan.md:34:- Every execution brief includes required SSOT references, guard/tests, and housekeeping/reality.green expectations per OPS v6.2.3.
 .cursor/plans/plan-e3abd805.plan.md:50:- [ ] Specify final repo-wide gates (ruff, focused smokes, housekeeping, optionally reality.green) to run after the E-step.
+docs/BACKUP_STRATEGY_AUDIT.md:45:- Part of housekeeping (`make housekeeping`)
+docs/BACKUP_STRATEGY_AUDIT.md:130:- Run during housekeeping
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:144:### Step 5: Integrate doc registry ingestion into housekeeping
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:150:- Add `governance.ingest.docs` as a dependency to `housekeeping` target (before `share.sync`)
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:176:7. Run `make housekeeping` and verify it completes successfully
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:209:- [ ] Add governance.ingest.docs as dependency to housekeeping target in Makefile (before share.sync)
+agentpm/control_plane/sessions.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+agentpm/control_plane/doc_fragments.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+agentpm/control_plane/exports.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/validate_ingest_envelope_schema.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-agentpm/AGENTS.md:173:  - Run `make housekeeping` (or at least `make share.sync governance.housekeeping`) after changes to ensure docs and share/ are updated.
 scripts/ingest/show_meta.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/__init__.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/validate_snapshot.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-docs/atlas/README.md:84:PRs run the HINT lane in CI. **No nightly workflows.** Run everything via housekeeping:
-docs/atlas/README.md:88:make housekeeping.atlas
-docs/atlas/README.md:91:STRICT_ATLAS_DSN=1 make housekeeping.atlas
 scripts/ingest/validate_envelope_schema.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/build_envelope.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/ingest/check_env.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
@@ -3237,7 +2874,9 @@ scripts/docs/apply_ops_header.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | S
 scripts/docs/apply_ops_header.py:7:HEADER = """# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/sync_share.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/sync_share.py:83:    - Ensures `make housekeeping` can self-heal share/ folder.
-scripts/exports_smoke.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+docs/atlas/README.md:84:PRs run the HINT lane in CI. **No nightly workflows.** Run everything via housekeeping:
+docs/atlas/README.md:88:make housekeeping.atlas
+docs/atlas/README.md:91:STRICT_ATLAS_DSN=1 make housekeeping.atlas
 .cursor/rules/058-auto-housekeeping.mdc:2:description: Mandatory run `make housekeeping` after every change/PR. Fail-closed if skipped—critical error log/CI fail. Includes share.sync, governance, ADRs, rules audit, forest regen, and evidence archiving.
 .cursor/rules/058-auto-housekeeping.mdc:14:**CRITICAL CURSOR ENFORCEMENT**: After ANY file edit in this repository, Cursor MUST automatically run `make housekeeping` before committing. This is non-negotiable. Do not proceed without running housekeeping.
 .cursor/rules/058-auto-housekeeping.mdc:16:**AUTOMATIC DOCUMENTATION UPDATES**: The housekeeping pipeline now **automatically** updates:
@@ -3262,7 +2901,7 @@ scripts/exports_smoke.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruf
 .cursor/rules/058-auto-housekeeping.mdc:114:- **Rule 027**: Docs sync gate (housekeeping includes docs sync)
 .cursor/rules/058-auto-housekeeping.mdc:116:- **Rule 055**: Auto-docs sync pass (housekeeping enforces this)
 .cursor/rules/058-auto-housekeeping.mdc:117:- **Rule 017**: Agent docs presence (housekeeping validates coverage)
-agentpm/guarded/guard_shim.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/exports_smoke.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/verify_enrichment_prompts.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/echo_env.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/goldens_status.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
@@ -3270,37 +2909,39 @@ scripts/governance_tracker.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT
 scripts/governance_tracker.py:293:        return True  # Return success to allow housekeeping to pass
 scripts/governance_tracker.py:329:        return True  # Return success to allow housekeeping to pass
 scripts/document_management_hints.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/acceptance/check_envelope.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/temporal_analytics.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ingest_bible_db_morphology.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/README.md:5:> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
 scripts/exports/export_biblescholar_summary.py:14:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/sandbox_smoke_check.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-agentpm/guarded/gatekeeper.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/exports/export_biblescholar_lexicon.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/exports/export_compliance.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/backfill_bge_embeddings.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/006-agents-md-governance.mdc:13:- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
 .cursor/rules/006-agents-md-governance.mdc:50:- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
 scripts/exports/export_biblescholar_semantic_search.py:18:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/repo_audit.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/exports/export_biblescholar_insights.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ontology_compat.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/010-task-brief.mdc:23:- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
 .cursor/rules/010-task-brief.mdc:38:- **Rule 058**: Auto-housekeeping (mandatory after modifications)
+scripts/exports/export_biblescholar_insights.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/exports/export_biblescholar_search.py:17:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/monitor_pipeline.py:2:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/030-share-sync.mdc:38:- **Rule 058**: Auto-housekeeping (includes share sync validation)
 scripts/export_noun_index.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/ci/check_pr_model_usage.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-scripts/manage_document_sections.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/061-ai-learning-tracking.mdc:52:- Must integrate with `make housekeeping` workflow
+scripts/manage_document_sections.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 scripts/verify_data_completeness.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 .cursor/rules/068-gpt-docs-sync.mdc:21:3. **Operational Workflows**: Changes to `make housekeeping`, validation procedures, or quality gates
 .cursor/rules/068-gpt-docs-sync.mdc:68:**Change**: New validation step added to `make housekeeping`
 .cursor/rules/068-gpt-docs-sync.mdc:79:- **Automatic Detection**: `scripts/governance_docs_hints.py` runs during `make housekeeping`
 .cursor/rules/068-gpt-docs-sync.mdc:94:- **Housekeeping**: Include GPT docs sync in `make housekeeping` validation
 .cursor/rules/068-gpt-docs-sync.mdc:95:- **Hints**: Automatic hint emission via `governance.docs.hints` target (integrated into `make housekeeping`)
+scripts/quick_fixes.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/__init__.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/008-cursor-rule-authoring.mdc:89:- [ ] Run `make housekeeping` after rule changes (Rule 058 - MANDATORY)
+scripts/analyze_metrics.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/longline_noqa.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/find_approved_examples.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+scripts/acceptance/check_envelope.py:1:# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
+.cursor/rules/AGENTS.md:132:- **MANDATORY**: Run `make housekeeping` after ANY changes to docs, scripts, rules, or database
+.cursor/rules/AGENTS.md:169:- **Rule 058**: Auto-housekeeping (mandatory after any modifications)
+.cursor/rules/AGENTS.md:290:- [ ] Run `make housekeeping` after rule changes (Rule 058 - MANDATORY)
+.cursor/rules/AGENTS.md:332:- **MANDATORY**: Include `make housekeeping` in Tests/checks for any doc/script/rule changes
 
 ```
 
@@ -3315,6 +2956,13 @@ docs/BACKUP_STRATEGY_AUDIT.md:128:**PM Snapshots** (`pm.snapshot`):
 .cursor/rules/070-gotchas-check.mdc:136:- All command execution wrappers (e.g., `scripts/pm_snapshot.py::run()`, `scripts/prepare_handoff.py::run_cmd()`)
 .cursor/rules/058-auto-housekeeping.mdc:48:13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
 .cursor/rules/071-portable-json-not-plan-ssot.mdc:3:* The `share/*.json` portable bundle (e.g. `pm_snapshot.json`,
+agentpm/kb/AGENTS.md:73:- **pm.snapshot**: Registry is included in system snapshots (KB-Reg:M2) — advisory-only, non-gating
+agentpm/kb/AGENTS.md:81:The KB registry is integrated into `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()`:
+agentpm/kb/AGENTS.md:181:KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`:
+agentpm/kb/AGENTS.md:193:- **pm.snapshot**: KB hints included in `evidence/pm_snapshot/snapshot.json` and rendered in `share/pm.snapshot.md` under "KB Hints (Advisory)" section
+scripts/guard_pm_snapshot.sh:3:SNAPSHOT_PATH="${1:-share/pm.snapshot.md}"
+.cursor/rules/AGENTS.md:2076:13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
+docs/HANDOFF_2025-12-01_github_recovery.md:88:- pm.snapshot.md, live_posture.md
 agentpm/status/snapshot.py:5:AgentPM-First:M3: Unified system snapshot helper for pm.snapshot and WebUI APIs.
 agentpm/status/snapshot.py:458:    """Get unified system snapshot (pm.snapshot + API contract).
 agentpm/status/eval_exports.py:24:DB_HEALTH_PATH = REPO_ROOT / "evidence" / "pm_snapshot" / "db_health.json"
@@ -3322,12 +2970,6 @@ agentpm/status/eval_exports.py:121:    """Load DB health snapshot (from pm.snaps
 agentpm/status/eval_exports.py:136:                "note": "DB health snapshot not available (file missing; run `make pm.snapshot`)",
 agentpm/status/AGENTS.md:9:- `snapshot.py`: Unified system snapshot helpers used by `pm.snapshot` and `/api/status/system`. Now includes advisory `kb_doc_health` metrics (AgentPM-Next:M3).
 agentpm/status/AGENTS.md:10:- `kb_metrics.py`: KB documentation health metrics helper (AgentPM-Next:M3) that aggregates KB registry freshness + M2 fix manifests into doc-health metrics for reporting surfaces (`pmagent report kb`, `pm.snapshot`, and future status integration).
-scripts/guard_pm_snapshot.sh:3:SNAPSHOT_PATH="${1:-share/pm.snapshot.md}"
-.cursor/rules/AGENTS.md:2076:13. **PM snapshot** (`pm.snapshot`) — generates PM-facing status snapshot
-agentpm/kb/AGENTS.md:73:- **pm.snapshot**: Registry is included in system snapshots (KB-Reg:M2) — advisory-only, non-gating
-agentpm/kb/AGENTS.md:81:The KB registry is integrated into `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()`:
-agentpm/kb/AGENTS.md:181:KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`:
-agentpm/kb/AGENTS.md:193:- **pm.snapshot**: KB hints included in `evidence/pm_snapshot/snapshot.json` and rendered in `share/pm.snapshot.md` under "KB Hints (Advisory)" section
 agentpm/AGENTS.md:59:  - **Snapshot integration (KB-Reg:M2)**: Registry summary included in `pm.snapshot` via `agentpm.status.snapshot.get_system_snapshot()` (advisory-only, non-gating)
 agentpm/AGENTS.md:80:## pm.snapshot Integration (AgentPM-First:M3 + M4)
 agentpm/AGENTS.md:82:**Purpose:** `pm.snapshot` (`make pm.snapshot` / `scripts/pm_snapshot.py`) generates a comprehensive PM-facing status snapshot that composes health, status explanation, reality-check, AI tracking, share manifest, and eval exports posture into a single operator-facing view.
@@ -3339,30 +2981,11 @@ agentpm/AGENTS.md:119:- **DB health JSON** (backward compatibility): `evidence/p
 agentpm/AGENTS.md:122:- **Local operator command**: `make pm.snapshot` — Run after bring-up or DSN changes to generate current system posture snapshot
 agentpm/AGENTS.md:123:- **CI usage**: CI may run `pm.snapshot` but should not fail if DB/LM are offline (hermetic behavior)
 agentpm/AGENTS.md:132:- **KB hints (KB-Reg:M4 + M6)**: KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, validation issues, stale docs (`KB_DOC_STALE`), and out-of-sync docs (`KB_DOC_OUT_OF_SYNC`); all hints are advisory-only and never affect `overall_ok`
-scripts/util/export_pm_snapshot_json.py:5:Exports pm.snapshot as JSON format by calling get_system_snapshot() directly.
-scripts/util/export_pm_snapshot_json.py:6:This is the JSON version of the markdown snapshot generated by make pm.snapshot.
-scripts/util/export_pm_snapshot_json.py:9:    python scripts/util/export_pm_snapshot_json.py [--output <path>]
-scripts/util/export_pm_snapshot_json.py:24:OUT_FILE = OUT_DIR / "pm_snapshot.json"
-scripts/util/export_pm_snapshot_json.py:30:    parser.add_argument("--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)")
-scripts/util/export_pm_snapshot_json.py:67:            "schema": "pm_snapshot.v1",
-scripts/util/export_pm_introspection_evidence.py:148:        ("pm.snapshot", "pm_snapshot_refs"),
-scripts/AGENTS.md:1304:- `share/pm.snapshot.md`
-scripts/kb/seed_registry.py:108:            id="runbook-pm-snapshot",
-scripts/guards/guard_snapshot_drift.py:78:        "pm_snapshot": ROOT / "share" / "pm.snapshot.md",
 scripts/pm_snapshot.py:12:doc_path = share_dir / "pm.snapshot.md"
 scripts/pm_snapshot.py:14:evid_dir = root / "evidence" / "pm_snapshot"
 scripts/pm_snapshot.py:237:entry = {"src": "share/pm.snapshot.md", "dst": "share/pm.snapshot.md"}
 scripts/pm_snapshot.py:279:    "**Now**\n- Keep GemantriaV.2 as the active project.\n- Use `STRICT` posture when DSNs present; otherwise HINT mode is allowed for hermetic tests.\n- Regenerate this PM Snapshot on each bring-up or DSN change (`make pm.snapshot`).\n"
-docs/runbooks/LM_HEALTH.md:156:make pm.snapshot
-docs/runbooks/DB_HEALTH.md:134:make pm.snapshot
-docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md:96:**M4 - UI Integration (pm.snapshot kb_doc_health):**
-docs/runbooks/DSN_SECRETS.md:21:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
-docs/runbooks/DSN_SECRETS.md:27:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
-docs/runbooks/DSN_SECRETS.md:29:> CI uses these secrets only on **release tags** and regenerates `share/pm.snapshot.md`
-docs/runbooks/DSN_SECRETS.md:35:- PM Snapshot exists in `share/pm.snapshot.md`
-docs/runbooks/DSN_SECRETS.md:50:3. Confirm Actions jobs **tagproof** and **pm-snapshot** are green.
-docs/forest/overview.md:98:- pm-snapshot.yml
-docs/SSOT/PM_HANDOFF_PROTOCOL.md:72:6. pm.snapshot.md
+scripts/AGENTS.md:1304:- `share/pm.snapshot.md`
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:65:- **Goal 1**: Expose doc-health metrics in `pmagent pm.snapshot` (the "110% signal")
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:94:- **`pmagent pm.snapshot`**: Include doc-health metrics in system snapshot
 docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md:114:7. Regenerate snapshot: `make pm.snapshot` (now includes doc-health metrics)
@@ -3375,38 +2998,56 @@ docs/SSOT/SHARE_FOLDER_ANALYSIS.md:44:- `pm_snapshot.md` - System snapshot (from
 docs/SSOT/SHARE_FOLDER_ANALYSIS.md:60:1. **`pm.snapshot.md` vs `pm_snapshot.md`**
 docs/SSOT/SHARE_FOLDER_ANALYSIS.md:61:   - `pm.snapshot.md`: DMS-synced from repo (canonical)
 docs/SSOT/SHARE_FOLDER_ANALYSIS.md:62:   - `pm_snapshot.md`: JSON export converted to MD (generated)
+scripts/kb/seed_registry.py:108:            id="runbook-pm-snapshot",
 docs/SSOT/MASTER_PLAN.md:80:- **M3** ✅ PASS: Doc-health control loop & reporting — `pmagent report kb` aggregates M1 worklists and M2 fix manifests into doc-health metrics and trends. `pm.snapshot` now includes an advisory "Documentation Health" section with fresh ratios, missing/stale counts, and fix activity. Artifacts: `agentpm/status/kb_metrics.py`, `pmagent/cli.py` (report_kb), `agentpm/tests/cli/test_pmagent_report_kb.py`. Targets: `pmagent report kb`. (PR #582)
 docs/SSOT/MASTER_PLAN.md:170:- ✅ E103: Catalog integration into pm.snapshot + end-to-end TVs + tagproof evidence (read-only catalog access, TVs 06–07, bundle generation).
 docs/SSOT/MASTER_PLAN.md:507:- **7C** ✅ PASS: Snapshot Integrity & Drift Review — Validated all snapshot/export artifacts (control-plane schema/MVs, ledger, pm snapshot, Atlas compliance artifacts, browser receipts) are consistent, drift-free, and covered by guards. Created `scripts/guards/guard_snapshot_drift.py` to validate snapshot file existence, structure, and ledger sync status. All snapshots refreshed: `share/atlas/control_plane/{schema_snapshot.json,mv_schema.json,mcp_catalog.json,compliance_summary.json,compliance_timeseries.json}`, `share/pm.snapshot.md`. Ledger verification shows all 9 tracked artifacts current. Guard outputs: `guard_control_plane_health` (STRICT), `guard_atlas_compliance_timeseries`, `guard_browser_verification`, `guard_snapshot_drift` all PASS. Evidence: `evidence/guard_snapshot_drift.json`.
 docs/SSOT/SHARE_FOLDER_STRUCTURE.md:19:* `pm_snapshot.md` - System health snapshot
 docs/SSOT/SHARE_FOLDER_STRUCTURE.md:75:* `share/pm_snapshot.md` - Complete system snapshot (converted from JSON)
-docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:100:  `pm_snapshot.json`, `next_steps.head.json`, `doc_registry.json`,
-docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:222:- `scripts/pm_snapshot.py`
-docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:305:- `.github/workflows/pm-snapshot.yml`
-docs/SSOT/SHARE_MANIFEST.json:162:      "src": "share/pm.snapshot.md",
-docs/SSOT/SHARE_MANIFEST.json:163:      "dst": "share/pm.snapshot.md"
+docs/runbooks/LM_HEALTH.md:156:make pm.snapshot
+scripts/util/export_pm_snapshot_json.py:5:Exports pm.snapshot as JSON format by calling get_system_snapshot() directly.
+scripts/util/export_pm_snapshot_json.py:6:This is the JSON version of the markdown snapshot generated by make pm.snapshot.
+scripts/util/export_pm_snapshot_json.py:9:    python scripts/util/export_pm_snapshot_json.py [--output <path>]
+scripts/util/export_pm_snapshot_json.py:24:OUT_FILE = OUT_DIR / "pm_snapshot.json"
+scripts/util/export_pm_snapshot_json.py:30:    parser.add_argument("--output", type=Path, help="Output JSON file path (default: share/pm_snapshot.json)")
+scripts/util/export_pm_snapshot_json.py:67:            "schema": "pm_snapshot.v1",
+docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md:96:**M4 - UI Integration (pm.snapshot kb_doc_health):**
+scripts/util/export_pm_introspection_evidence.py:148:        ("pm.snapshot", "pm_snapshot_refs"),
+docs/runbooks/DB_HEALTH.md:134:make pm.snapshot
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:95:* `share/pm_snapshot.json` - PM system snapshot
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:106:- PM tries to infer active PLAN from `pm_snapshot.json`
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:182:**Issue**: `pmagent pm.snapshot` doesn't include planning context from `pmagent plan next`.
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
-docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:237:1. **Integrate planning system into PM snapshot** - include planning context in `pm_snapshot.json`
+docs/runbooks/DSN_SECRETS.md:21:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
+docs/runbooks/DSN_SECRETS.md:27:  **Used in:** `pm-snapshot.yml` (release tags), `tagproof.yml` (release tags)
+docs/runbooks/DSN_SECRETS.md:29:> CI uses these secrets only on **release tags** and regenerates `share/pm.snapshot.md`
+docs/runbooks/DSN_SECRETS.md:35:- PM Snapshot exists in `share/pm.snapshot.md`
+docs/runbooks/DSN_SECRETS.md:50:3. Confirm Actions jobs **tagproof** and **pm-snapshot** are green.
+docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:32:- **Snapshot Integration:** `pm.snapshot` generates complete doc-health data
+docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:44:  - ✅ **Integration**: `pm.snapshot` includes `kb_doc_health` data (`agentpm/status/snapshot.py`)
+docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:77:**M4 - UI Integration (pm.snapshot kb_doc_health):**
+docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:111:- `evidence/pm_snapshot/snapshot.json` — Complete system snapshot with kb_doc_health data
+docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md:112:- `share/pm.snapshot.md` — Human-readable PM snapshot with doc health section
+scripts/guards/guard_snapshot_drift.py:78:        "pm_snapshot": ROOT / "share" / "pm.snapshot.md",
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:129:* **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:130:  - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:131:  - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:132:  - Generates both Markdown (`share/pm.snapshot.md`) and JSON (`evidence/pm_snapshot/snapshot.json`) outputs
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:139:  - **KB hints (KB-Reg:M4)**: KB registry health surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`; hints include missing docs, low coverage subsystems, and validation issues; all hints are advisory-only and never affect `overall_ok`
 docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:140:  - **KB doc health (AgentPM-Next:M3)**: `pm.snapshot` includes "Documentation Health" section with aggregated metrics (freshness, missing/stale counts, fixes applied) derived from `pmagent report kb` logic; fully advisory-only.
+docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:100:  `pm_snapshot.json`, `next_steps.head.json`, `doc_registry.json`,
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:106:- PM tries to infer active PLAN from `pm_snapshot.json`
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:182:**Issue**: `pmagent pm.snapshot` doesn't include planning context from `pmagent plan next`.
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
+docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:237:1. **Integrate planning system into PM snapshot** - include planning context in `pm_snapshot.json`
+docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:222:- `scripts/pm_snapshot.py`
+docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md:305:- `.github/workflows/pm-snapshot.yml`
+docs/SSOT/SHARE_MANIFEST.json:162:      "src": "share/pm.snapshot.md",
+docs/SSOT/SHARE_MANIFEST.json:163:      "dst": "share/pm.snapshot.md"
+docs/SSOT/PM_HANDOFF_PROTOCOL.md:72:6. pm.snapshot.md
+docs/forest/overview.md:98:- pm-snapshot.yml
+agentpm/tests/runtime/test_pm_snapshot.py:2:Tests for pm.snapshot integration (AgentPM-First:M3).
+agentpm/tests/runtime/test_pm_snapshot.py:4:Verifies that pm.snapshot composes health, status explain, reality-check,
+agentpm/tests/runtime/test_pm_snapshot.py:8:executing the full pm_snapshot.py script (which runs at module import time).
+agentpm/tests/runtime/test_pm_snapshot.py:21:    """Test pm.snapshot integration with pmagent commands."""
 agentpm/tests/db/test_phase3a_db_health_snapshot.py:2:Tests for Phase-3A Step-5: DB health integration in pm.snapshot.
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:4:Verifies that pm.snapshot calls guard.db.health and embeds JSON correctly.
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:18:    """Test DB health integration in pm.snapshot."""
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:20:    @patch("scripts.pm_snapshot.check_db_health")
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:22:        """Test that pm.snapshot includes DB health JSON in output."""
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:23:        from scripts import pm_snapshot
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:39:            patch("scripts.pm_snapshot.pathlib.Path.write_text"),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:40:            patch("scripts.pm_snapshot.pathlib.Path.exists", return_value=True),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:41:            patch("scripts.pm_snapshot.pathlib.Path.read_text", return_value='{"items": []}'),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:42:            patch("scripts.pm_snapshot.pathlib.Path.mkdir"),
-agentpm/tests/db/test_phase3a_db_health_snapshot.py:47:            with patch("scripts.pm_snapshot.share_dir", mock_share_dir):
 
 ```
 
@@ -3414,17 +3055,18 @@ agentpm/tests/db/test_phase3a_db_health_snapshot.py:47:            with patch("s
 
 ```
 scripts/util/export_pm_introspection_evidence.py:149:        ("planning_context", "planning_context_refs"),
+docs/HANDOFF_2025-12-01_github_recovery.md:87:- planning_context.md, kb_registry.md
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:147:**Fix**: Consider including `pmagent plan next --json-only` output in share folder as `planning_context.json` (full, not head).
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:154:- Add `planning_context.json` to share folder (from `pmagent plan next`)
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:184:**Fix**: Include `planning_context` in `pm_snapshot.json` by calling `pmagent plan next --json-only`.
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:233:4. **Add planning context to share folder** - include `pmagent plan next --json-only` output as `share/planning_context.json`
 docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md:245:2. **Automate planning context updates** - ensure `share/planning_context.json` is always fresh
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:20:* `planning_context.md` - Full planning output from `pmagent plan next`
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:73:* `share/planning_context.md` - Full planning output from `pmagent plan next` (converted from JSON)
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:46:- `planning_context.md` - Planning context
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:69:2. **Planning Context** (`share/planning_context.json`)
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:128:* `make pm.share.planning_context` - Export planning context only
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:183:2. **Use planning context** from `share/planning_context.json` for current focus
-docs/SSOT/SHARE_FOLDER_ANALYSIS.md:46:- `planning_context.md` - Planning context
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:20:* `planning_context.md` - Full planning output from `pmagent plan next`
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:73:* `share/planning_context.md` - Full planning output from `pmagent plan next` (converted from JSON)
 
 ```
 
@@ -3437,6 +3079,11 @@ docs/SSOT/SHARE_FOLDER_ANALYSIS.md:46:- `planning_context.md` - Planning context
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:129:**Files**: `share/kb_registry.json`, `scripts/kb/seed_registry.py`
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:133:- If `share/kb_registry.json` is missing or corrupted:
 .cursor/plans/dms-only-docs-management-d24d0c78.plan.md:194:- `share/kb_registry.json` - KB registry file (may need restoration)
+.cursor/rules/068-gpt-docs-sync.mdc:99:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
+.cursor/rules/AGENTS.md:2998:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
+agentpm/AGENTS.md:57:  - **SSOT**: Registry entries live in `share/kb_registry.json` (read-only in CI per Rule-044)
+agentpm/AGENTS.md:87:- **Components**: DB health, system health (DB + LM + Graph), status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10 exports), kb_registry (KB-Reg:M2)
+agentpm/AGENTS.md:112:  - `kb_registry`: KB registry summary (KB-Reg:M2) — **advisory only, read-only in CI**:
 agentpm/status/snapshot.py:131:def get_kb_registry_summary(registry_path: Path | None = None) -> dict[str, Any]:
 agentpm/status/snapshot.py:135:        registry_path: Path to kb_registry.json (defaults to share/kb_registry.json)
 agentpm/status/snapshot.py:150:        registry_path = repo_root / "share" / "kb_registry.json"
@@ -3457,8 +3104,11 @@ agentpm/status/snapshot.py:618:        snapshot["kb_registry"] = kb_registry_sum
 agentpm/status/explain.py:202:                registry_path = repo_root / "share" / "kb_registry.json"
 agentpm/status/AGENTS.md:24:    include_kb_registry: bool = True,
 agentpm/status/AGENTS.md:42:    registry_path: str = "share/kb_registry.json"
-.cursor/rules/068-gpt-docs-sync.mdc:99:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
-.cursor/rules/AGENTS.md:2998:The KB document registry (`share/kb_registry.json`) serves as the SSOT for document coverage and freshness:
+scripts/util/export_pm_snapshot_json.py:45:            include_kb_registry=True,
+scripts/util/export_pm_introspection_evidence.py:150:        ("kb_registry", "kb_registry_refs"),
+scripts/kb/build_kb_registry.py:8:SSOT: share/kb_registry.json (read-only in CI per Rule-044).
+scripts/kb/build_kb_registry.py:40:def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
+scripts/kb/build_kb_registry.py:237:        registry = build_kb_registry_from_dms(dry_run=args.dry_run)
 agentpm/kb/__init__.py:8:SSOT: Registry entries live in share/kb_registry.json (read-only in CI per Rule-044).
 agentpm/kb/AGENTS.md:17:- **Registry file**: `share/kb_registry.json` (JSON format)
 agentpm/kb/AGENTS.md:121:**Seeding Script**: `scripts/kb/seed_registry.py` — Populates `share/kb_registry.json` with initial document entries. Respects CI write guards (Rule-044) — only runs in local/dev environments.
@@ -3466,14 +3116,6 @@ agentpm/kb/registry.py:9:SSOT: Registry entries live in share/kb_registry.json (
 agentpm/kb/registry.py:25:REGISTRY_PATH = REPO_ROOT / "share" / "kb_registry.json"
 agentpm/kb/registry.py:169:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
 agentpm/kb/registry.py:205:        registry_path: Path to registry JSON file (defaults to share/kb_registry.json)
-agentpm/AGENTS.md:57:  - **SSOT**: Registry entries live in `share/kb_registry.json` (read-only in CI per Rule-044)
-agentpm/AGENTS.md:87:- **Components**: DB health, system health (DB + LM + Graph), status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10 exports), kb_registry (KB-Reg:M2)
-agentpm/AGENTS.md:112:  - `kb_registry`: KB registry summary (KB-Reg:M2) — **advisory only, read-only in CI**:
-scripts/util/export_pm_snapshot_json.py:45:            include_kb_registry=True,
-scripts/util/export_pm_introspection_evidence.py:150:        ("kb_registry", "kb_registry_refs"),
-scripts/kb/build_kb_registry.py:8:SSOT: share/kb_registry.json (read-only in CI per Rule-044).
-scripts/kb/build_kb_registry.py:40:def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
-scripts/kb/build_kb_registry.py:237:        registry = build_kb_registry_from_dms(dry_run=args.dry_run)
 scripts/pm_snapshot.py:95:        include_kb_registry=True,  # Include KB registry summary (KB-Reg:M2)
 scripts/pm_snapshot.py:108:    kb_registry_summary = snapshot.get("kb_registry", {})
 scripts/pm_snapshot.py:193:    kb_registry_summary = {
@@ -3487,13 +3129,37 @@ scripts/pm_snapshot.py:419:kb_valid = kb_registry_summary.get("valid", False)
 scripts/pm_snapshot.py:420:kb_errors = kb_registry_summary.get("errors_count", 0)
 scripts/pm_snapshot.py:421:kb_warnings = kb_registry_summary.get("warnings_count", 0)
 scripts/pm_snapshot.py:431:    lines.append(f"- Note: {kb_registry_summary.get('note', 'KB registry file not found')}")
+agentpm/tests/cli/test_pmagent_status_kb.py:47:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_status_kb.py:75:    registry_path = repo_root / "share" / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_status_kb.py:100:    registry_path = tmp_path / "nonexistent" / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_status_kb.py:137:def test_kb_registry_summary_cli_json_only() -> None:
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:39:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:83:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:284:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb_fix.py:335:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb.py:54:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb.py:114:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb.py:133:    registry_path = tmp_path / "nonexistent" / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_plan_kb.py:161:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:51:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:100:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:130:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:151:    registry_path = Path("/nonexistent/kb_registry.json")
+agentpm/tests/status/test_kb_hints.py:168:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:205:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/status/test_kb_hints.py:249:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_report_kb.py:16:    """Create a minimal kb_registry.json with a couple of docs."""
+agentpm/tests/cli/test_pmagent_report_kb.py:40:    registry_path = tmp_path / "kb_registry.json"
+agentpm/tests/cli/test_pmagent_report_kb.py:105:    registry_path = tmp_path / "kb_registry.json"
+docs/HANDOFF_2025-12-01_github_recovery.md:87:- planning_context.md, kb_registry.md
 docs/SSOT/SHARE_FOLDER_ANALYSIS.md:41:- `kb_registry.md` - Knowledge base registry
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:21:* `kb_registry.md` - KB document registry (for DMS integration)
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:74:* `share/kb_registry.md` - Complete KB document registry (converted from JSON)
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:95:* **KB Registry** (`share/kb_registry.md`) - Document metadata and registry (converted from JSON)
 docs/SSOT/LAYERS_AND_PHASES.md:29:  - **Artifact:** `share/kb_registry.json` (generated from DMS)
 docs/SSOT/LAYERS_AND_PHASES.md:30:  - **Builder:** `scripts/kb/build_kb_registry.py`
 docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md:108:- `scripts/kb/build_kb_registry.py` - Extended to include code files (already supports CODE::*)
+docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:137:  - Reads `share/kb_registry.json` for KB registry summary (KB-Reg:M2 + M3a, advisory-only, read-only in CI, seeded with core SSOT/runbook/AGENTS docs)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:21:* `kb_registry.md` - KB document registry (for DMS integration)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:74:* `share/kb_registry.md` - Complete KB document registry (converted from JSON)
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:95:* **KB Registry** (`share/kb_registry.md`) - Document metadata and registry (converted from JSON)
 docs/SSOT/LAYER3_DRIFT_RESCUE.md:12:- `share/kb_registry.json` - KB registry from DMS
 docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:50:- ✅ `share/kb_registry.md` — Current status (empty: no documents)
 docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:184:1. **Create KB registry builder** (`scripts/kb/build_kb_registry.py`)
@@ -3506,37 +3172,16 @@ docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md:378:3. `scripts/kb/build_kb_registry.p
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:31:* Exports complete KB document registry to `share/kb_registry.json`
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:74:3. **KB Registry** (`share/kb_registry.json`)
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:184:3. **Query KB registry** from `share/kb_registry.json` for document discovery
-docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md:137:  - Reads `share/kb_registry.json` for KB registry summary (KB-Reg:M2 + M3a, advisory-only, read-only in CI, seeded with core SSOT/runbook/AGENTS docs)
 agentpm/tests/runtime/test_pm_snapshot.py:171:    def test_snapshot_helper_includes_kb_registry(self):
-agentpm/tests/runtime/test_pm_snapshot.py:180:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:186:        kb_registry = result["kb_registry"]
-agentpm/tests/runtime/test_pm_snapshot.py:187:        assert isinstance(kb_registry, dict)
-agentpm/tests/runtime/test_pm_snapshot.py:188:        assert "available" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:189:        assert "total" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:190:        assert "valid" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:191:        assert "errors_count" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:192:        assert "warnings_count" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:194:    def test_snapshot_helper_kb_registry_optional(self):
-agentpm/tests/runtime/test_pm_snapshot.py:204:            include_kb_registry=False,
-agentpm/tests/runtime/test_pm_snapshot.py:209:        # Verify kb_registry is not present
-agentpm/tests/runtime/test_pm_snapshot.py:210:        assert "kb_registry" not in result
-agentpm/tests/runtime/test_pm_snapshot.py:212:    def test_snapshot_helper_kb_registry_handles_missing_file(self):
-agentpm/tests/runtime/test_pm_snapshot.py:222:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:228:        kb_registry = result["kb_registry"]
-agentpm/tests/runtime/test_pm_snapshot.py:229:        assert isinstance(kb_registry, dict)
-agentpm/tests/runtime/test_pm_snapshot.py:230:        assert "available" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:231:        assert "total" in kb_registry
-agentpm/tests/runtime/test_pm_snapshot.py:233:        if not kb_registry.get("available", False):
-agentpm/tests/runtime/test_pm_snapshot.py:234:            assert kb_registry.get("total", 0) == 0
-agentpm/tests/runtime/test_pm_snapshot.py:245:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:270:            include_kb_registry=True,
-agentpm/tests/runtime/test_pm_snapshot.py:301:            include_kb_registry=True,
 
 ```
 
 ### hint_registry_refs
 
 ```
+agentpm/hints/registry.py:18:    Load hints from DMS hint_registry for a given flow.
+agentpm/hints/registry.py:30:        TableMissingError: If hint_registry table doesn't exist and mode="STRICT"
+agentpm/hints/registry.py:50:                FROM control.hint_registry
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:6:Move hints from hardcoded strings in agent code to a DMS-backed registry (`control.hint_registry`) with REQUIRED vs SUGGESTED semantics. Envelope generators (handoff, capability_session, reality_check, status) will query the registry and embed hints into their outputs. A guard (`guard.hints.required`) will enforce that REQUIRED hints are present in envelopes.
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:19:**Migration**: `migrations/052_control_hint_registry.sql`
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:21:Create `control.hint_registry` table:
@@ -3552,17 +3197,19 @@ agentpm/tests/runtime/test_pm_snapshot.py:301:            include_kb_registry=Tr
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:163:- `scripts/governance/seed_hint_registry.py` - Registry seeding
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:178:1. ✅ `control.hint_registry` table exists and is populated with initial hints
 .cursor/plans/dms-hint-registry-implementation-a7527037.plan.md:206:- [ ] Create migration 052_control_hint_registry.sql with hint_registry table schema, then seed initial REQUIRED hints (docs.dms_only, status.local_gates_first, share.dms_only)
-agentpm/hints/registry.py:18:    Load hints from DMS hint_registry for a given flow.
-agentpm/hints/registry.py:30:        TableMissingError: If hint_registry table doesn't exist and mode="STRICT"
-agentpm/hints/registry.py:50:                FROM control.hint_registry
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:100:SELECT count(*) FROM control.hint_registry;
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:101:SELECT kind, count(*) FROM control.hint_registry GROUP BY kind;
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:102:SELECT scope, count(*) FROM control.hint_registry GROUP BY scope;
 .cursor/rules/071-portable-json-not-plan-ssot.mdc:4:  `next_steps.head.json`, `doc_registry.json`, `hint_registry.json`,
 scripts/util/export_pm_introspection_evidence.py:151:        ("hint_registry", "hint_registry_refs"),
+docs/HANDOFF_2025-12-01_github_recovery.md:89:- governance_freshness.md, hint_registry.md
+scripts/guards/hints_required.py:5:Checks that envelopes contain all REQUIRED hints from the DMS hint_registry.
+docs/SSOT/SHARE_FOLDER_ANALYSIS.md:40:- `hint_registry.md` - Runtime hints registry
+docs/SSOT/SHARE_FOLDER_STRUCTURE.md:26:* `hint_registry.md` - System hints and warnings
+docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:93:* `share/hint_registry.json` - System hints registry
 scripts/db/export_dms_tables.py:9:- control.hint_registry
 scripts/db/export_dms_tables.py:40:    "control.hint_registry",
-scripts/guards/hints_required.py:5:Checks that envelopes contain all REQUIRED hints from the DMS hint_registry.
+docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:101:  `hint_registry.json`, `governance_freshness.json`, `planning_lane_status.json`,
 scripts/governance/seed_hint_registry.py:3:Seed the hint_registry with initial hints.
 scripts/governance/seed_hint_registry.py:5:Loads hints from discovery catalog and inserts them into control.hint_registry.
 scripts/governance/seed_hint_registry.py:98:def seed_hint_registry(discovery_catalog_path: Path | None = None) -> int:
@@ -3571,15 +3218,11 @@ scripts/governance/seed_hint_registry.py:122:                        INSERT INTO
 scripts/governance/seed_hint_registry.py:184:                            INSERT INTO control.hint_registry
 scripts/governance/seed_hint_registry.py:222:    parser = argparse.ArgumentParser(description="Seed hint_registry with initial hints")
 scripts/governance/seed_hint_registry.py:231:    return seed_hint_registry(args.discovery_catalog)
-docs/SSOT/SHARE_FOLDER_ANALYSIS.md:40:- `hint_registry.md` - Runtime hints registry
 docs/ADRs/ADR-059-hint-registry.md:19:Implement a DMS-backed Hint Registry (`control.hint_registry`) that:
 docs/ADRs/ADR-059-hint-registry.md:28:**Table**: `control.hint_registry`
 docs/ADRs/ADR-059-hint-registry.md:122:- [ ] `control.hint_registry` table exists and is populated
 docs/ADRs/ADR-059-hint-registry.md:130:- Migration: `migrations/054_control_hint_registry.sql`
 docs/ADRs/ADR-059-hint-registry.md:134:- Seed script: `scripts/governance/seed_hint_registry.py`
-docs/SSOT/SHARE_FOLDER_STRUCTURE.md:26:* `hint_registry.md` - System hints and warnings
-docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md:101:  `hint_registry.json`, `governance_freshness.json`, `planning_lane_status.json`,
-docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:93:* `share/hint_registry.json` - System hints registry
 
 ```
 
@@ -3642,38 +3285,6 @@ docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:187:    --envelope evidence/pmagent/real
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:200:- `agentpm/reality/check.py` - Remove local gates primary strings
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:225:python scripts/guards/hints_required.py --flow reality_check --envelope evidence/pmagent/reality_check_latest.json --mode STRICT
 docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md:241:- `agentpm/reality/check.py` - Remove hardcoded local gates hints
-agentpm/reality/__init__.py:3:from agentpm.reality.check import print_human_summary, reality_check
-agentpm/reality/__init__.py:5:__all__ = ["print_human_summary", "reality_check"]
-agentpm/reality/check.py:205:def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str, Any]:
-agentpm/reality/check.py:206:    """Run comprehensive reality check.
-agentpm/reality/check.py:259:        # Import here to avoid circular import (snapshot imports reality_check)
-agentpm/reality/check.py:280:        "command": "reality.check",
-agentpm/reality/check.py:298:                applies_to={"flow": "reality_check"},
-agentpm/reality/check.py:299:                mode=mode,  # Use same mode as reality_check
-agentpm/reality/check.py:369:    print(f"[pmagent] reality.check (mode={mode})", file=file)
-agentpm/reality/AGENTS.md:5:The `agentpm/reality/` directory contains the reality check system for comprehensive environment validation (env/DSN, DB/control plane, LM/models, exports, eval smokes).
-agentpm/reality/AGENTS.md:9:### `reality_check()`
-agentpm/reality/AGENTS.md:13:**Location:** `agentpm/reality/check.py`
-agentpm/reality/AGENTS.md:17:def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str, Any]
-agentpm/reality/AGENTS.md:28:- `command`: `"reality.check"`
-agentpm/reality/AGENTS.md:44:- `pmagent reality-check check --mode hint` → calls `reality_check(mode="HINT", skip_dashboards=False)`
-agentpm/reality/AGENTS.md:45:- `pmagent reality-check check --mode strict` → calls `reality_check(mode="STRICT", skip_dashboards=False)`
-agentpm/reality/AGENTS.md:46:- `pmagent reality-check check --no-dashboards` → calls `reality_check(mode="HINT", skip_dashboards=True)`
-agentpm/reality/AGENTS.md:246:- Test `reality_check()` with different modes (HINT/STRICT) and `skip_dashboards` flag
-agentpm/reality/AGENTS.md:250:- Test full `reality_check()` with real DB/LM (when available) and hermetic fallbacks
-agentpm/reality/AGENTS.md:254:- Test `pmagent reality-check check` command with `--mode hint/strict` and `--json-only` flags
-agentpm/reality/AGENTS.md:269:| `reality_check()` | ADR-066 (LM Studio Control Plane Integration) |
-scripts/util/export_pm_introspection_evidence.py:79:        ("pmagent reality-check", "--help"),
-scripts/util/export_pm_introspection_evidence.py:80:        ("pmagent reality-check check", "--help"),
-scripts/util/export_pm_introspection_evidence.py:110:        ("pmagent reality-check check --mode hint --json-only", "reality_check_hint"),
-scripts/util/export_pm_introspection_evidence.py:152:        ("reality.check", "reality_check_refs"),
-scripts/util/export_pm_snapshot_json.py:41:            include_reality_check=True,
-scripts/util/export_pm_snapshot_json.py:48:            reality_check_mode="HINT",  # HINT mode for snapshot speed
-agentpm/kb/AGENTS.md:181:KB registry health is surfaced as structured hints in `pm.snapshot` and `pmagent reality-check`:
-agentpm/kb/AGENTS.md:194:- **reality-check**: KB hints included in `kb_hints` field of verdict (advisory-only, never affects `overall_ok`)
-scripts/guards/hints_required.py:36:        flow_name: Flow identifier (e.g., "handoff.generate", "capability_session", "reality_check")
-scripts/guards/hints_required.py:81:        "reality_check": "status_api",
-scripts/guards/guard_cursorignore.py:18:    # Or via reality-check integration
 agentpm/status/snapshot.py:6:Composes health, status explain, reality-check, AI tracking, and share manifest.
 agentpm/status/snapshot.py:16:from agentpm.reality.check import reality_check as check_reality
 agentpm/status/snapshot.py:448:    include_reality_check: bool = True,
@@ -3686,6 +3297,38 @@ agentpm/status/snapshot.py:526:    reality_check_json = {}
 agentpm/status/snapshot.py:527:    if include_reality_check:
 agentpm/status/snapshot.py:529:            reality_check_json = check_reality(mode=reality_check_mode, skip_dashboards=False)
 agentpm/status/snapshot.py:531:            reality_check_json = {
+agentpm/status/snapshot.py:532:                "command": "reality.check",
+agentpm/status/snapshot.py:533:                "mode": reality_check_mode,
+agentpm/status/snapshot.py:535:                "error": f"reality_check failed: {e}",
+agentpm/status/snapshot.py:593:        and (reality_check_json.get("overall_ok", True) if include_reality_check else True)
+agentpm/status/snapshot.py:605:    if include_reality_check:
+agentpm/status/snapshot.py:606:        snapshot["reality_check"] = reality_check_json
+agentpm/status/snapshot.py:695:                mode=reality_check_mode,  # Use same mode as reality_check
+agentpm/status/AGENTS.md:20:    include_reality_check: bool = True,
+agentpm/status/AGENTS.md:26:    reality_check_mode: str = "HINT",
+agentpm/scripts/reality_check_1_live.py:39:  - `pmagent reality-check live`
+agentpm/scripts/reality_check_1_live.py:41:  - `make reality.check.1.live`
+agentpm/scripts/reality_check_1.py:14:    python -m agentpm.scripts.reality_check_1
+scripts/util/export_pm_snapshot_json.py:41:            include_reality_check=True,
+scripts/util/export_pm_snapshot_json.py:48:            reality_check_mode="HINT",  # HINT mode for snapshot speed
+scripts/util/export_pm_introspection_evidence.py:79:        ("pmagent reality-check", "--help"),
+scripts/util/export_pm_introspection_evidence.py:80:        ("pmagent reality-check check", "--help"),
+scripts/util/export_pm_introspection_evidence.py:110:        ("pmagent reality-check check --mode hint --json-only", "reality_check_hint"),
+scripts/util/export_pm_introspection_evidence.py:152:        ("reality.check", "reality_check_refs"),
+scripts/setup_lm_studio_and_db.sh:161:echo "5. Run Reality Check #1: pmagent reality-check 1"
+agentpm/scripts/AGENTS.md:12:| `reality_check_1.py` | Automates Phase-6 Reality Check #1 by verifying Postgres + LM Studio, running docs ingest, and executing the golden question `What does Phase-6P deliver?`. |
+agentpm/scripts/AGENTS.md:19:| `reality_check_1.main()` | Performs stepwise bring-up → returns structured JSON `{ok, steps, summary, errors}` and never mutates schemas when DB is offline. |
+agentpm/scripts/AGENTS.md:23:- Scripts are exercised via `make reality.check.1`, `python -m agentpm.scripts.ingest_docs`, and pm-agent CLI entrypoints (`pmagent reality-check 1`, `pmagent ask docs ...`).  
+agentpm/scripts/AGENTS.md:40:| `reality_check_1.py` | ADR-066 (LM Studio integration), ADR-058 (Reality Check workflows) |
+agentpm/reality/__init__.py:3:from agentpm.reality.check import print_human_summary, reality_check
+agentpm/reality/__init__.py:5:__all__ = ["print_human_summary", "reality_check"]
+agentpm/reality/check.py:205:def reality_check(mode: str = "HINT", skip_dashboards: bool = False) -> dict[str, Any]:
+agentpm/reality/check.py:206:    """Run comprehensive reality check.
+agentpm/reality/check.py:259:        # Import here to avoid circular import (snapshot imports reality_check)
+agentpm/reality/check.py:280:        "command": "reality.check",
+agentpm/reality/check.py:298:                applies_to={"flow": "reality_check"},
+agentpm/reality/check.py:299:                mode=mode,  # Use same mode as reality_check
+agentpm/reality/check.py:369:    print(f"[pmagent] reality.check (mode={mode})", file=file)
 
 ```
 
@@ -3697,10 +3340,10 @@ scripts/util/export_pm_introspection_evidence.py:153:        ("self-healing", "s
 scripts/util/export_pm_introspection_evidence.py:213:        "planning + KB + tracking/self-healing systems currently behave. It is NOT a",
 scripts/util/export_pm_introspection_evidence.py:300:            "## 6. Tracking / self-healing references (rg outputs)",
 docs/handoff/GPT_PM_CONTEXT_REBUILD.md:20:Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and visualization-ready artifacts, with self-healing guards and governance.
-docs/SSOT/MASTER_PLAN.md:24:Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and viz-ready artifacts, with self-healing guards and governance.
 docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:262:### self-healing logic
 docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:263:- **No changes** (Phase 14 is feature work, no self-healing changes)
 docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:322:- **No changes** (Phase 14 is feature work, no self-healing changes)
+docs/SSOT/MASTER_PLAN.md:24:Build a deterministic, resumable LangGraph pipeline that produces verified gematria data and viz-ready artifacts, with self-healing guards and governance.
 
 ```
 
@@ -3731,7 +3374,7 @@ docs/SSOT/PHASE_14_SEMANTIC_RECORD.md:322:- **No changes** (Phase 14 is feature 
 scripts/util/export_pm_introspection_evidence.py:154:        ("gotchas", "gotchas_refs"),
 scripts/util/export_pm_introspection_evidence.py:163:    """Get head sections from contract/gotchas docs."""
 scripts/util/export_pm_introspection_evidence.py:316:    # Contracts/gotchas
-docs/SSOT/RULES_INDEX.md:75:| 070 | 070-gotchas-check.mdc | # --- |
+docs/forest/overview.md:77:- Rule 070-gotchas-check: ---
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:50:* Rule 070 requires gotchas checks at beginning and end of all work sessions
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:52:* Should emit hints (Rule 026) if gotchas checks are missing
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:54:  * Pre-work gotchas analysis in Goal block (Rule 050)
@@ -3743,7 +3386,7 @@ docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:169:* Need to integrate gotchas checks
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:173:* Add gotchas check validation to `make reality.green`
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:174:* Ensure gotchas checks are part of work completion gates
 docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md:210:3. Verify gotchas checks are working as hints
-docs/forest/overview.md:77:- Rule 070-gotchas-check: ---
+docs/SSOT/RULES_INDEX.md:75:| 070 | 070-gotchas-check.mdc | # --- |
 
 ```
 
@@ -4599,7 +4242,7 @@ Rebuild the complete Gematria system from scratch using existing assets in a cle
 ### NEXT_STEPS
 
 ```
-<!-- Handoff updated: 2025-12-01T08:09:32.194479 -->
+<!-- Handoff updated: 2025-12-01T08:34:52.243079 -->
 # PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary
 
 ## Goal

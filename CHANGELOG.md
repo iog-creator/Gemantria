@@ -103,6 +103,8 @@
 - add git workflow automation commands
 - add merge guard to prevent destructive merges
 
+- PM handoff for GitHub recovery session
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
