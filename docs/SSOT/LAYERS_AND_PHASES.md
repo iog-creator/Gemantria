@@ -32,7 +32,7 @@
 
 ## Layer 4: Code Ingestion & Embeddings
 
-**Status:** 🔄 IN PROGRESS (Phases 1-4 complete, Phase 5 ready)
+**Status:** ✅ COMPLETE (merged to main)
 
 - **Phase 1: Code Discovery** — ✅ COMPLETE (merged, commit 181675ef)
   - **Artifact:** `share/code_registry.json` (919 Python files)
@@ -50,8 +50,9 @@
   - **Artifact:** `share/code_fragments_embedded.json` (3,749 fragments with 1024-D vectors)
   - **State:** Merged to main, schema-compliant
 
-- **Phase 5: Export** — 🔄 WIP
-  - **State:** Ready to proceed with corrected 1024-D embeddings
+- **Phase 5: Export** — ✅ COMPLETE (commit ed04a74d)
+  - **Artifact:** `scripts/code_ingest/export_code_fragments.py` (3,748 fragments exported to control-plane)
+  - **State:** Merged to main, 1024-D embeddings verified
 
 ## Notes
 
