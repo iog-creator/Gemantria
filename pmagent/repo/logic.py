@@ -341,58 +341,111 @@ def safe_merge_to_main(force: bool = False) -> Dict[str, any]:
     return result
 
 
-def cleanup_merged_branches(dry_run: bool = True) -> Dict[str, any]:
+def cleanup_merged_branches(dry_run: bool = True, force: bool = False) -> Dict[str, any]:
     """
     Delete branches that have been merged to main.
 
     Args:
         dry_run: If True, only show what would be deleted
+        force: If True, use -D instead of -d (force delete)
 
     Returns status dict with deleted branches.
     """
-    result = {"success": False, "dry_run": dry_run, "deleted": [], "messages": []}
+    result = {
+        "success": False,
+        "dry_run": dry_run,
+        "deleted_local": [],
+        "deleted_remote": [],
+        "failed": [],
+        "messages": [],
+    }
 
     try:
         # Get current branch to avoid deleting it
         current_branch = _run_git(["branch", "--show-current"]).stdout.strip()
 
-        # Get merged branches
+        # Get LOCAL merged branches
         merged_result = _run_git(["branch", "--merged", "main"])
-        branches = [
+        local_branches = [
             b.strip().replace("* ", "")
             for b in merged_result.stdout.split("\n")
-            if b.strip() and b.strip() != "main" and b.strip() != current_branch
+            if b.strip() and b.strip() != "main" and b.strip() != current_branch and not b.strip().startswith("origin/")
         ]
 
-        result["merged_branches"] = branches
+        # Get REMOTE merged branches
+        remote_merged_result = _run_git(["branch", "-r", "--merged", "main"])
+        remote_branches = [
+            b.strip().replace("origin/", "")
+            for b in remote_merged_result.stdout.split("\n")
+            if b.strip() and "origin/" in b and "HEAD" not in b and "main" not in b
+        ]
 
-        if not branches:
+        result["local_branches"] = local_branches
+        result["remote_branches"] = remote_branches
+
+        if not local_branches and not remote_branches:
             result["messages"].append("No merged branches to clean up")
             result["success"] = True
             return result
 
         if dry_run:
-            result["messages"].append(f"Would delete {len(branches)} merged branches:")
-            for b in branches:
-                result["messages"].append(f"  - {b}")
-            result["messages"].append("\nRun with dry_run=False to actually delete")
-        else:
-            result["messages"].append(f"Deleting {len(branches)} merged branches...")
-            for b in branches:
-                _run_git(["branch", "-d", b])
-                result["deleted"].append(b)
-                result["messages"].append(f"  ✓ Deleted {b}")
+            if local_branches:
+                result["messages"].append(f"Would delete {len(local_branches)} local merged branches:")
+                for b in local_branches[:10]:  # Show first 10
+                    result["messages"].append(f"  - {b}")
+                if len(local_branches) > 10:
+                    result["messages"].append(f"  ... and {len(local_branches) - 10} more")
 
-            # Also try to delete from origin
-            result["messages"].append("\nDeleting from origin...")
-            for b in branches:
-                try:
-                    _run_git(["push", "origin", "--delete", b], check=False)
-                    result["messages"].append(f"  ✓ Deleted origin/{b}")
-                except subprocess.CalledProcessError:
-                    result["messages"].append(f"  ⚠ Could not delete origin/{b} (may not exist or permission denied)")
+            if remote_branches:
+                result["messages"].append(f"\nWould delete {len(remote_branches)} remote merged branches:")
+                for b in remote_branches[:10]:  # Show first 10
+                    result["messages"].append(f"  - origin/{b}")
+                if len(remote_branches) > 10:
+                    result["messages"].append(f"  ... and {len(remote_branches) - 10} more")
+
+            result["messages"].append("\nRun with --execute to actually delete")
+        else:
+            # Delete local branches
+            if local_branches:
+                result["messages"].append(f"Deleting {len(local_branches)} local branches...")
+                delete_flag = "-D" if force else "-d"
+
+                for b in local_branches:
+                    try:
+                        _run_git(["branch", delete_flag, b])
+                        result["deleted_local"].append(b)
+                        result["messages"].append(f"  ✓ Deleted {b}")
+                    except subprocess.CalledProcessError as e:
+                        result["failed"].append({"branch": b, "error": str(e.stderr)})
+                        if "not fully merged" in e.stderr:
+                            result["messages"].append(f"  ⚠ {b} not fully merged (use --force to delete anyway)")
+                        else:
+                            result["messages"].append(f"  ✗ Failed to delete {b}")
+
+            # Delete remote branches
+            if remote_branches:
+                result["messages"].append(f"\nDeleting {len(remote_branches)} remote branches from origin...")
+
+                for b in remote_branches:
+                    try:
+                        _run_git(["push", "origin", "--delete", b])
+                        result["deleted_remote"].append(b)
+                        result["messages"].append(f"  ✓ Deleted origin/{b}")
+                    except subprocess.CalledProcessError as e:
+                        error_msg = e.stderr.lower() if e.stderr else ""
+                        if "unable to delete" in error_msg or "does not exist" in error_msg:
+                            result["messages"].append(f"  ⚠ origin/{b} already deleted")
+                        else:
+                            result["failed"].append({"branch": f"origin/{b}", "error": str(e.stderr)})
+                            result["messages"].append(f"  ✗ Failed to delete origin/{b}")
 
         result["success"] = True
+        result["summary"] = {
+            "local_deleted": len(result["deleted_local"]),
+            "remote_deleted": len(result["deleted_remote"]),
+            "failed": len(result["failed"]),
+            "total_cleaned": len(result["deleted_local"]) + len(result["deleted_remote"]),
+        }
 
     except subprocess.CalledProcessError as e:
         result["error"] = e.stderr

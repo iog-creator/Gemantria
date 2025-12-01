@@ -146,16 +146,31 @@ def branch_cleanup(
         "--execute",
         help="Actually delete branches (default is dry-run)",
     ),
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Force delete branches (use -D instead of -d)",
+    ),
 ) -> None:
     """
     Delete branches that have been merged to main.
 
     Default is dry-run. Use --execute to actually delete.
+    Use --force for branches that aren't fully merged upstream.
     """
-    result = cleanup_merged_branches(dry_run=not execute)
+    result = cleanup_merged_branches(dry_run=not execute, force=force)
 
     for msg in result["messages"]:
         typer.echo(msg)
+
+    # Show summary if executed
+    if not result["dry_run"] and result.get("summary"):
+        summary = result["summary"]
+        typer.echo("\n📊 Summary:")
+        typer.echo(f"  Local deleted: {summary['local_deleted']}")
+        typer.echo(f"  Remote deleted: {summary['remote_deleted']}")
+        typer.echo(f"  Failed: {summary['failed']}")
+        typer.echo(f"  Total cleaned: {summary['total_cleaned']}")
 
     if not result["success"]:
         raise typer.Exit(code=1)
