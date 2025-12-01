@@ -13,7 +13,6 @@ import json
 import hashlib
 import sys
 from pathlib import Path
-from datetime import datetime, UTC
 
 from sqlalchemy import text
 from agentpm.db.loader import get_control_engine
@@ -35,7 +34,7 @@ def export_fragments_to_db(
 ) -> None:
     """
     Export code fragments and embeddings to control-plane database.
-    
+
     Args:
         input_path: Path to embedded fragments JSON
         model_name: Model name for embeddings
@@ -65,10 +64,10 @@ def export_fragments_to_db(
                 if not full_path.exists():
                     print(f"[WARN] Skipping missing file: {file_path}", file=sys.stderr)
                     continue
-                
+
                 file_content = full_path.read_text(encoding="utf-8")
                 content_hash = compute_sha256(file_content)
-                
+
                 unique_files[file_path] = {
                     "logical_name": f"CODE::{file_path}",
                     "repo_path": file_path,
@@ -91,7 +90,7 @@ def export_fragments_to_db(
                 """),
                 {"repo_path": file_meta["repo_path"]},
             ).fetchone()
-            
+
             if result:
                 doc_id = result[0]
                 # Update existing
@@ -130,7 +129,7 @@ def export_fragments_to_db(
                     },
                 ).fetchone()
                 doc_id = result[0]
-            
+
             doc_id_map[file_path] = doc_id
 
             # Insert into doc_version (check if exists first, then insert or retrieve)
@@ -144,7 +143,7 @@ def export_fragments_to_db(
                     "content_hash": file_meta["content_hash"],
                 },
             ).fetchone()
-            
+
             if version_result:
                 version_id = version_result[0]
             else:
@@ -162,7 +161,7 @@ def export_fragments_to_db(
                     },
                 ).fetchone()
                 version_id = version_result[0] if version_result else None
-            
+
             if version_id:
                 version_id_map[doc_id] = version_id
 
@@ -194,7 +193,7 @@ def export_fragments_to_db(
                     "fragment_index": frag["start_line"],  # Using start_line as index
                 },
             ).fetchone()
-            
+
             if fragment_check:
                 fragment_id = fragment_check[0]
                 # Update existing
@@ -233,7 +232,7 @@ def export_fragments_to_db(
                     },
                 ).fetchone()
                 fragment_id = fragment_result[0]
-            
+
             exported_fragments += 1
 
             # Insert into control.doc_embedding
@@ -273,15 +272,9 @@ def export_fragments_to_db(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Export code fragments and embeddings to control-plane DB."
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Perform a dry run without writing to DB."
-    )
-    parser.add_argument(
-        "--project-id", type=int, default=1, help="Project ID for the fragments."
-    )
+    parser = argparse.ArgumentParser(description="Export code fragments and embeddings to control-plane DB.")
+    parser.add_argument("--dry-run", action="store_true", help="Perform a dry run without writing to DB.")
+    parser.add_argument("--project-id", type=int, default=1, help="Project ID for the fragments.")
     parser.add_argument(
         "--model-name",
         type=str,
@@ -295,4 +288,3 @@ if __name__ == "__main__":
         project_id=args.project_id,
         model_name=args.model_name,
     )
-

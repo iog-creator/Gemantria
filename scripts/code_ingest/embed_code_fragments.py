@@ -18,10 +18,10 @@ VECTOR_DIM = 1024
 def embed(text: str) -> list[float]:
     """
     Generate deterministic pseudo-random 1024-D vector from content hash.
-    
+
     Args:
         text: Code fragment content
-        
+
     Returns:
         List of 1024 float values in range [-1, 1]
     """
@@ -36,7 +36,7 @@ def embed_fragments(
 ) -> None:
     """
     Embed all classified code fragments with 1024-D vectors.
-    
+
     Args:
         input_path: Path to classified fragments JSON
         output_path: Path to write embedded fragments JSON
@@ -60,4 +60,3 @@ def embed_fragments(
 
 if __name__ == "__main__":
     embed_fragments()
-

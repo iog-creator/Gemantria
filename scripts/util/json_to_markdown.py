@@ -95,7 +95,9 @@ def convert_file(input_path: Path, output_path: Path | None = None) -> int:
     # Skip files larger than 1MB (likely binary or too large for markdown)
     file_size = input_path.stat().st_size
     if file_size > 1024 * 1024:  # 1MB
-        print(f"⏭️  Skipping large file: {input_path.name} ({file_size / 1024 / 1024:.1f}MB, too large for markdown conversion)")
+        print(
+            f"⏭️  Skipping large file: {input_path.name} ({file_size / 1024 / 1024:.1f}MB, too large for markdown conversion)"
+        )
         return 0
 
     try:
