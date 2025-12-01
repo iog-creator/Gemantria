@@ -50,10 +50,8 @@
   - **Artifact:** `share/code_fragments_embedded.json` (3,749 fragments with 1024-D vectors)
   - **State:** Merged to main, schema-compliant
 
-- **Phase 5: Export** — ⛔️ BLOCKED (embedding invalid, must fix Phase 4 first)
-  - **Issue:** Export logic relied on invalid 768-D embedding shape
-  - **Commit:** `c8bc50bb` (on branch, NOT merged to main)
-  - **State:** Blocked until Phase 4 is corrected
+- **Phase 5: Export** — 🔄 WIP
+  - **State:** Ready to proceed with corrected 1024-D embeddings
 
 ## Notes
 
