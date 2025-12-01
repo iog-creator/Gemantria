@@ -144,12 +144,9 @@ After Phase 15 begins:
 ## 6. Phase 15 Reconciliation Status (PR #593)
 
 - **PR #593 — feat/phase15-init**
-  - Status: ⚠️ **Reconciliation in progress**
-  - Phase 13 & Phase 14 are now reconciled on main (see PHASE13_RECON.md, PHASE14_RECON.md).
-  - Evidence harvested for PR #593:
-    - metadata: `evidence/phase15/pr593_metadata.json`
-    - diff: `evidence/phase15/pr593_diff.patch`
-    - files list: `evidence/phase15/pr593_files.txt`
-  - Final verdict (superseded / partially salvageable / needs clean recon) will be recorded in:
-    - `docs/SSOT/PHASE15_RECON.md`
+  - Status: ⚠️ **Partially Salvageable**
+  - Phase 15 init skeleton files (`contextual_chunks.py`, `contextual_fetch.py`, schema) are aligned with Phase 14 architecture but are placeholder implementations.
+  - Core code correctly uses Phase 14 `RelationshipAdapter` and follows DB-ONLY rules; no conflicts with 1024D vector unification.
+  - See: `docs/SSOT/PHASE15_RECON.md` for detailed analysis and salvage targets.
+  - Action: Close PR #593 as archived (historical reference). Re-implement salvageable components on a new `recon/phase15-rag-context` branch from `main`.
 
