@@ -1,4 +1,4 @@
-<!-- Handoff updated: 2025-11-29T18:21:16.832163 -->
+<!-- Handoff updated: 2025-11-30T18:38:25.663410 -->
 # PLAN-078 E90: Compliance Metrics in Graph Stats — Execution Summary
 
 ## Goal
@@ -118,7 +118,7 @@
 **Verification Summary:**
 - ✅ All 5 tab components present and functional (SearchTab, SemanticSearchTab, LexiconTab, InsightsTab, CrossLanguageTab)
 - ✅ All 6 export scripts operational (`export_biblescholar_{summary,search,semantic_search,lexicon,insights,cross_language}.py`)
-- ✅ All static JSON exports present in `share/exports/biblescholar/`
+- ⬜ All static JSON exports present in `share/exports/biblescholar/` (currently MISSING; exports to be regenerated before marking complete)
 - ✅ UI build passing (679ms, 338.50 KB bundle, no errors)
 - ✅ Hermetic contract compliance verified across all tabs (live/static mode toggle, WHEN/THEN messaging)
 - ✅ CapabilitiesSidebar integration working
