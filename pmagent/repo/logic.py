@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import re
+import subprocess
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
@@ -153,6 +156,326 @@ def _by_top_level_dir(untracked_source_files: List[str]) -> Dict[str, int]:
         top = path.split("/", 1)[0]
         counts[top] = counts.get(top, 0) + 1
     return counts
+
+
+# ============================================================================
+# Git Branch Management (Workflow Automation)
+# ============================================================================
+
+
+def _run_git(args: List[str], check: bool = True) -> subprocess.CompletedProcess:
+    """Run git command and return result."""
+    return subprocess.run(
+        ["git"] + args,
+        capture_output=True,
+        text=True,
+        check=check,
+    )
+
+
+def create_branch(branch_name: str, base: str = "main") -> Dict[str, any]:
+    """
+    Create new branch from fresh main (or specified base).
+    
+    Automatically:
+    1. Fetches latest from origin
+    2. Checks out base branch
+    3. Pulls latest
+    4. Creates new branch
+    
+    Returns status dict with success/error info.
+    """
+    result = {"success": False, "branch": branch_name, "base": base, "messages": []}
+    
+    try:
+        # Fetch latest
+        result["messages"].append("Fetching latest from origin...")
+        _run_git(["fetch", "origin"])
+        
+        # Checkout base
+        result["messages"].append(f"Checking out {base}...")
+        _run_git(["checkout", base])
+        
+        # Pull latest
+        result["messages"].append(f"Pulling latest {base}...")
+        _run_git(["pull", "origin", base])
+        
+        # Create and checkout new branch
+        result["messages"].append(f"Creating branch {branch_name}...")
+        _run_git(["checkout", "-b", branch_name])
+        
+        result["success"] = True
+        result["messages"].append(f"✅ Branch {branch_name} created from latest {base}")
+        
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+    
+    return result
+
+
+def update_branch_from_main(strategy: str = "merge") -> Dict[str, any]:
+    """
+    Update current branch with latest main.
+    
+    Args:
+        strategy: "merge" or "rebase"
+    
+    Returns status dict.
+    """
+    result = {"success": False, "strategy": strategy, "messages": []}
+    
+    try:
+        # Get current branch
+        current = _run_git(["branch", "--show-current"]).stdout.strip()
+        if not current:
+            result["error"] = "Not on a branch (detached HEAD)"
+            return result
+        
+        if current == "main":
+            result["error"] = "Already on main - nothing to update"
+            return result
+        
+        result["branch"] = current
+        
+        # Fetch latest
+        result["messages"].append("Fetching latest from origin...")
+        _run_git(["fetch", "origin"])
+        
+        # Update main
+        result["messages"].append("Updating local main...")
+        _run_git(["checkout", "main"])
+        _run_git(["pull", "origin", "main"])
+        
+        # Back to feature branch
+        _run_git(["checkout", current])
+        
+        # Merge or rebase
+        if strategy == "merge":
+            result["messages"].append(f"Merging main into {current}...")
+            _run_git(["merge", "main"])
+        else:
+            result["messages"].append(f"Rebasing {current} onto main...")
+            _run_git(["rebase", "main"])
+        
+        result["success"] = True
+        result["messages"].append(f"✅ Branch {current} updated from main via {strategy}")
+        
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+    
+    return result
+
+
+def safe_merge_to_main(force: bool = False) -> Dict[str, any]:
+    """
+    Safely merge current branch to main with guard checks.
+    
+    Args:
+        force: Skip guard checks (dangerous!)
+    
+    Returns status dict.
+    """
+    result = {"success": False, "messages": [], "guard_checks": {}}
+    
+    try:
+        # Get current branch
+        current = _run_git(["branch", "--show-current"]).stdout.strip()
+        if not current:
+            result["error"] = "Not on a branch (detached HEAD)"
+            return result
+        
+        if current == "main":
+            result["error"] = "Already on main - nothing to merge"
+            return result
+        
+        result["branch"] = current
+        
+        # Run guard checks (unless forced)
+        if not force:
+            result["messages"].append("Running merge guard checks...")
+            guard_result = _run_git(
+                ["diff", "--shortstat", "main...HEAD"],
+                check=False
+            )
+            
+            if guard_result.stdout:
+                stats = guard_result.stdout.strip()
+                result["guard_checks"]["stats"] = stats
+                
+                # Parse insertions/deletions
+                
+                insertions = int(re.search(r'(\d+) insertion', stats).group(1)) if 'insertion' in stats else 0
+                deletions = int(re.search(r'(\d+) deletion', stats).group(1)) if 'deletion' in stats else 0
+                
+                result["guard_checks"]["insertions"] = insertions
+                result["guard_checks"]["deletions"] = deletions
+                
+                # Check for destructive merge
+                if deletions > insertions:
+                    net = deletions - insertions
+                    result["error"] = f"BLOCKED: Would delete {net} net lines (potential destructive merge)"
+                    result["messages"].append(f"❌ Merge blocked - use force=True to override")
+                    result["guard_checks"]["blocked"] = True
+                    return result
+        
+        # Update main first
+        result["messages"].append("Updating main...")
+        _run_git(["checkout", "main"])
+        _run_git(["pull", "origin", "main"])
+        
+        # Merge feature branch
+        result["messages"].append(f"Merging {current} into main...")
+        _run_git(["merge", current, "--no-ff", "-m", f"feat: merge {current}"])
+        
+        # Push to origin
+        result["messages"].append("Pushing to origin/main...")
+        _run_git(["push", "origin", "main"])
+        
+        result["success"] = True
+        result["messages"].append(f"✅ Successfully merged {current} to main")
+        result["messages"].append(f"💡 Run 'pmagent repo branch-cleanup' to delete merged branch")
+        
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+    
+    return result
+
+
+def cleanup_merged_branches(dry_run: bool = True) -> Dict[str, any]:
+    """
+    Delete branches that have been merged to main.
+    
+    Args:
+        dry_run: If True, only show what would be deleted
+    
+    Returns status dict with deleted branches.
+    """
+    result = {"success": False, "dry_run": dry_run, "deleted": [], "messages": []}
+    
+    try:
+        # Get current branch to avoid deleting it
+        current_branch = _run_git(["branch", "--show-current"]).stdout.strip()
+
+        # Get merged branches
+        merged_result = _run_git(["branch", "--merged", "main"])
+        branches = [
+            b.strip().replace("* ", "")
+            for b in merged_result.stdout.split("\n")
+            if b.strip() and b.strip() != "main" and b.strip() != current_branch
+        ]
+        
+        result["merged_branches"] = branches
+        
+        if not branches:
+            result["messages"].append("No merged branches to clean up")
+            result["success"] = True
+            return result
+        
+        if dry_run:
+            result["messages"].append(f"Would delete {len(branches)} merged branches:")
+            for b in branches:
+                result["messages"].append(f"  - {b}")
+            result["messages"].append("\nRun with dry_run=False to actually delete")
+        else:
+            result["messages"].append(f"Deleting {len(branches)} merged branches...")
+            for b in branches:
+                _run_git(["branch", "-d", b])
+                result["deleted"].append(b)
+                result["messages"].append(f"  ✓ Deleted {b}")
+            
+            # Also try to delete from origin
+            result["messages"].append("\nDeleting from origin...")
+            for b in branches:
+                try:
+                    _run_git(["push", "origin", "--delete", b], check=False)
+                    result["messages"].append(f"  ✓ Deleted origin/{b}")
+                except subprocess.CalledProcessError:
+                    result["messages"].append(f"  ⚠ Could not delete origin/{b} (may not exist or permission denied)")
+        
+        result["success"] = True
+        
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+    
+    return result
+
+
+def get_branch_status() -> Dict[str, any]:
+    """
+    Get status of current branch vs main.
+    
+    Returns:
+        - Current branch name
+        - Commits ahead of main
+        - Commits behind main
+        - Last commit date
+        - Branch age in days
+    """
+    result = {"success": False, "messages": []}
+    
+    try:
+        # Current branch
+        current = _run_git(["branch", "--show-current"]).stdout.strip()
+        if not current:
+            result["error"] = "Not on a branch (detached HEAD)"
+            return result
+        
+        result["branch"] = current
+        
+        if current == "main":
+            result["messages"].append("On main branch")
+            result["success"] = True
+            return result
+        
+        # Commits ahead/behind
+        ahead_behind = _run_git(
+            ["rev-list", "--left-right", "--count", "main...HEAD"]
+        ).stdout.strip().split()
+        
+        result["behind_main"] = int(ahead_behind[0])
+        result["ahead_of_main"] = int(ahead_behind[1])
+        
+        # Last commit info
+        last_commit = _run_git(
+            ["log", "-1", "--format=%H|%ci|%s"]
+        ).stdout.strip().split("|")
+        
+        result["last_commit"] = {
+            "sha": last_commit[0][:8],
+            "date": last_commit[1],
+            "message": last_commit[2],
+        }
+        
+        # Calculate age
+        commit_date = datetime.fromisoformat(last_commit[1].replace(" +", "+").replace(" -", "-"))
+        age_days = (datetime.now(timezone.utc) - commit_date).days
+        result["age_days"] = age_days
+        
+        # Status message
+        result["messages"].append(f"Branch: {current}")
+        result["messages"].append(f"Ahead of main: {result['ahead_of_main']} commits")
+        result["messages"].append(f"Behind main: {result['behind_main']} commits")
+        result["messages"].append(f"Age: {age_days} days")
+        result["messages"].append(f"Last commit: {last_commit[2]}")
+        
+        # Warnings
+        if result["behind_main"] > 10:
+            result["messages"].append("⚠️  Branch is significantly behind main - consider updating")
+        
+        if age_days > 14:
+            result["messages"].append("⚠️  Branch is older than 2 weeks - consider merging or closing")
+        
+        result["success"] = True
+        
+    except subprocess.CalledProcessError as e:
+        result["error"] = e.stderr
+        result["messages"].append(f"❌ Failed: {e.stderr}")
+    
+    return result
 
 
 def run_semantic_inventory(write_share: bool = False) -> None:

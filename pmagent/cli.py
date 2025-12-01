@@ -134,6 +134,10 @@ app.add_typer(tools_app, name="tools")
 autopilot_app = typer.Typer(help="Autopilot backend operations")
 app.add_typer(autopilot_app, name="autopilot")
 
+# Import and register repo commands
+from pmagent.repo.commands import app as repo_app  # noqa: E402
+app.add_typer(repo_app, name="repo")
+
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
     """Print health JSON to stdout and optional summary to stderr."""
