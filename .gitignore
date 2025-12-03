@@ -38,6 +38,7 @@ exports/graph_correlation_network.json
 exports/graph_correlations.json
 exports/temporal_patterns.json
 exports/pattern_forecast.json
+exports/graph_latest.json.pre-enrichment
 **/__pycache__/
 evidence/
 share/evidence/
