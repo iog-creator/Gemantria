@@ -210,8 +210,8 @@ pm.share.artifacts:
 	@echo ">> Exporting planning context (full, not head)"
 	@mkdir -p share
 	@pmagent plan next --json-only > share/planning_context.json 2>/dev/null || echo "⚠️  Planning context export had issues (non-fatal)"
-	@echo ">> Seeding KB registry (if not already seeded)"
-	@PYTHONPATH=. python3 scripts/kb/seed_registry.py || echo "⚠️  KB registry seeding had issues (non-fatal)"
+	@echo ">> Building KB registry from DMS (all enabled documents)"
+	@PYTHONPATH=. python3 scripts/kb/build_kb_registry.py || echo "⚠️  KB registry build had issues (non-fatal)"
 	@echo ">> Exporting KB registry (for DMS integration)"
 	@mkdir -p share
 	@if pmagent kb registry list --json-only > share/kb_registry.json 2>/dev/null; then \
@@ -230,10 +230,17 @@ pm.share.artifacts:
 	@echo ">> Converting JSON files to Markdown (root of share/ only)"
 	@for json_file in share/*.json; do \
 		if [ -f "$$json_file" ]; then \
-			PYTHONPATH=. python3 scripts/util/json_to_markdown.py "$$json_file" && rm -f "$$json_file" || echo "⚠️  Failed to convert $$json_file (non-fatal)"; \
+			case "$$(basename $$json_file)" in \
+				kb_registry.json) \
+					echo "⚠️  Skipping $$json_file (required for programmatic access)"; \
+					;; \
+				*) \
+					PYTHONPATH=. python3 scripts/util/json_to_markdown.py "$$json_file" && rm -f "$$json_file" || echo "⚠️  Failed to convert $$json_file (non-fatal)"; \
+					;; \
+			esac; \
 		fi; \
 	done
-	@echo "✅ All JSON files converted to Markdown and removed"
+	@echo "✅ All JSON files converted to Markdown and removed (kb_registry.json preserved)"
 	@echo "✅ PM share artifacts generation complete"
 
 plan.next:
@@ -609,12 +616,22 @@ housekeeping.db.gate:
 	@PYTHONPATH=. $(PYTHON) -c "from scripts.guards.guard_db_health import check_db_health; import sys; h = check_db_health(); ok = h.get('ok', False) and h.get('mode') == 'ready'; sys.exit(0 if ok else 1)" || (echo "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - housekeeping cannot proceed."; echo "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured."; exit 1)
 	@echo "✅ DB connectivity verified"
 
-housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
+housekeeping: housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot + pm.share.artifacts)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
 	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/auto_update_agents_md.py || echo "⚠️  AGENTS.md auto-update had issues (non-fatal)"
+
+# Fast-path DMS work: only run classification/embedding if work is needed
+housekeeping.dms.conditional:
+	@echo ">> Checking if DMS classification/embedding work is needed..."
+	@if PYTHONPATH=. $(PYTHON) scripts/governance/check_dms_work_needed.py; then \
+		echo ">> Running DMS classification and embedding (work detected - using GPU-accelerated path)"; \
+		$(MAKE) governance.classify.fragments.gpu governance.ingest.doc_embeddings; \
+	else \
+		echo ">> Skipping DMS classification/embedding (no work needed - fast path)"; \
+	fi
 	@echo ">> Auto-updating CHANGELOG.md based on recent commits (Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/auto_update_changelog.py || echo "⚠️  CHANGELOG.md auto-update had issues (non-fatal)"
 	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
@@ -2801,11 +2818,31 @@ ci.guards.docs:
 # -----------------------------------------------------------------------------
 
 governance.ingest.doc_content:
-	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py
+	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py --all-docs
 
 governance.ingest.doc_content.dryrun:
 	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py --dry-run
 
+
+# -----------------------------------------------------------------------------
+# Governance Doc Classification — AI metadata (Layer 3 Phase 3)
+# -----------------------------------------------------------------------------
+
+# GPU-accelerated classification (10-100x faster than LLM-per-fragment)
+governance.classify.fragments.gpu:
+	@echo ">> Running GPU-accelerated fragment classification (fast path)"
+	@PYTHONPATH=. python scripts/housekeeping_gpu/classify_fragments_gpu.py --all-docs
+
+governance.classify.fragments.gpu.dryrun:
+	@PYTHONPATH=. python scripts/housekeeping_gpu/classify_fragments_gpu.py --all-docs --dry-run
+
+# Legacy LLM-based classification (slow, 4-hour+ runtime)
+governance.classify.fragments:
+	@echo ">> Running LLM-based fragment classification (legacy slow path)"
+	@PYTHONPATH=. python scripts/governance/classify_fragments.py --all-docs
+
+governance.classify.fragments.dryrun:
+	@PYTHONPATH=. python scripts/governance/classify_fragments.py --all-docs --dry-run
 
 # -----------------------------------------------------------------------------
 # Governance Doc Content — guards (HINT posture)
@@ -2823,7 +2860,7 @@ ci.guards.doc_content:
 # -----------------------------------------------------------------------------
 
 governance.ingest.doc_embeddings:
-	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py
+	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py --all-docs
 
 governance.ingest.doc_embeddings.dryrun:
 	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py --dry-run
