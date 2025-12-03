@@ -51,8 +51,7 @@ def run_rg_scan() -> int:
         proc = subprocess.run(
             cmd,
             cwd=ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             text=True,
         )
     except FileNotFoundError:
@@ -121,7 +120,7 @@ if __name__ == "__main__":
 print("\n[guard_gotchas_index] Checking for namespace drift (agentpm)...")
 try:
     cmd = ["rg", "agentpm", "-n", "scripts", "src", "pmagent", "docs"]
-    proc = subprocess.run(cmd, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
     ns_output = proc.stdout.strip()
     if ns_output:
         print("[guard_gotchas_index] ⚠️  NAMESPACE GOTCHAS FOUND:")
