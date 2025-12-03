@@ -212,18 +212,20 @@ pm.share.artifacts:
 	@pmagent plan next --json-only > share/planning_context.json 2>/dev/null || echo "⚠️  Planning context export had issues (non-fatal)"
 	@echo ">> Building KB registry from DMS (all enabled documents)"
 	@PYTHONPATH=. python3 scripts/kb/build_kb_registry.py || echo "⚠️  KB registry build had issues (non-fatal)"
-	@echo ">> Exporting KB registry (for DMS integration)"
+	@echo ">> Validating KB registry export"
 	@mkdir -p share
-	@if pmagent kb registry list --json-only > share/kb_registry.json 2>/dev/null; then \
+	@if pmagent kb registry list --json-only > /dev/null 2>&1; then \
 		if [ -s share/kb_registry.json ]; then \
-			echo "✅ KB registry exported"; \
+			echo "✅ KB registry validated"; \
 		else \
 			echo "⚠️  KB registry is empty (not seeded yet)"; \
 			echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
 		fi; \
 	else \
-		echo "⚠️  KB registry export had issues (non-fatal)"; \
-		echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+		echo "⚠️  KB registry validation had issues (non-fatal)"; \
+		if [ ! -f share/kb_registry.json ]; then \
+			echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+		fi; \
 	fi
 	@echo ">> Generating PM system introspection evidence pack"
 	@PYTHONPATH=. python3 scripts/util/export_pm_introspection_evidence.py || echo "⚠️  PM introspection evidence pack had issues (non-fatal)"

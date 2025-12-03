@@ -37,7 +37,7 @@ This document provides a map of the Gemantria Agent Framework, synthesized from 
 ## Agent Development Protocol
 
 ### 1. Create Agent Logic
-- Create new Python files in appropriate directories (e.g., `agentpm/modules/`).
+- Create new Python files in appropriate directories (e.g., `pmagent/modules/`).
 - **Instrumentation**: Use OTel decorators (`@span_llm`, `@span_tool`) for observability.
 
 ### 2. Define in `AGENTS.md`
@@ -53,7 +53,7 @@ This document provides a map of the Gemantria Agent Framework, synthesized from 
 ## Key Protocols & Contracts
 
 - **Database Access**:
-    - **Strictly use centralized loaders**: `scripts.config.env` or `agentpm.db.loader`.
+    - **Strictly use centralized loaders**: `scripts.config.env` or `pmagent.db.loader`.
     - **NEVER** use `os.getenv("GEMATRIA_DSN")` directly.
     - **Bible DB** is strictly READ-ONLY.
 - **PM DMS Integration (Rule-053)**:
@@ -67,12 +67,12 @@ This document provides a map of the Gemantria Agent Framework, synthesized from 
 The following `AGENTS.md` files define specific subsystem contracts:
 
 - **Root Framework**: [`AGENTS.md`](./AGENTS.md)
-- **AgentPM (Control Plane)**: [`agentpm/AGENTS.md`](./agentpm/AGENTS.md)
-- **BibleScholar**: [`agentpm/biblescholar/AGENTS.md`](./agentpm/biblescholar/AGENTS.md)
-- **Knowledge Base**: [`agentpm/kb/AGENTS.md`](./agentpm/kb/AGENTS.md)
-- **Planning**: [`agentpm/plan/AGENTS.md`](./agentpm/plan/AGENTS.md)
-- **Reality Check**: [`agentpm/reality/AGENTS.md`](./agentpm/reality/AGENTS.md)
-- **DB Layer**: [`agentpm/db/AGENTS.md`](./agentpm/db/AGENTS.md)
-- **LM Layer**: [`agentpm/lm/AGENTS.md`](./agentpm/lm/AGENTS.md)
+- **AgentPM (Control Plane)**: [`pmagent/AGENTS.md`](./pmagent/AGENTS.md)
+- **BibleScholar**: [`pmagent/biblescholar/AGENTS.md`](./pmagent/biblescholar/AGENTS.md)
+- **Knowledge Base**: [`pmagent/kb/AGENTS.md`](./pmagent/kb/AGENTS.md)
+- **Planning**: [`pmagent/plan/AGENTS.md`](./pmagent/plan/AGENTS.md)
+- **Reality Check**: [`pmagent/reality/AGENTS.md`](./pmagent/reality/AGENTS.md)
+- **DB Layer**: [`pmagent/db/AGENTS.md`](./pmagent/db/AGENTS.md)
+- **LM Layer**: [`pmagent/lm/AGENTS.md`](./pmagent/lm/AGENTS.md)
 
 *Note: This list is not exhaustive. Always check for a local `AGENTS.md` in your working directory.*
