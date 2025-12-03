@@ -57,8 +57,7 @@ def run_rg_scan() -> int:
         )
     except FileNotFoundError:
         print(
-            "[guard_gotchas_index] WARNING: rg (ripgrep) not found; "
-            "skipping static gotchas scan",
+            "[guard_gotchas_index] WARNING: rg (ripgrep) not found; skipping static gotchas scan",
             file=sys.stderr,
         )
         return 0
@@ -107,15 +106,9 @@ def main() -> int:
             )
             return 1
         else:
-            print(
-                "[guard_gotchas_index] STRICT_GOTCHAS is set and "
-                "no markers found. OK."
-            )
+            print("[guard_gotchas_index] STRICT_GOTCHAS is set and no markers found. OK.")
     else:
-        print(
-            "[guard_gotchas_index] STRICT_GOTCHAS is not set or false; "
-            "reporting gotchas but not failing build."
-        )
+        print("[guard_gotchas_index] STRICT_GOTCHAS is not set or false; reporting gotchas but not failing build.")
 
     print("[guard_gotchas_index] Gotchas scan complete.")
     return 0
@@ -132,14 +125,18 @@ try:
     ns_output = proc.stdout.strip()
     if ns_output:
         print("[guard_gotchas_index] ⚠️  NAMESPACE GOTCHAS FOUND:")
-        for line in ns_output.split('\n')[:10]:  # Show first 10
+        for line in ns_output.split("\n")[:10]:  # Show first 10
             print(f"  {line}")
-        if len(ns_output.split('\n')) > 10:
-            print(f"  ... and {len(ns_output.split('\n')) - 10} more")
+        lines = ns_output.split("\n")
+        if len(lines) > 10:
+            print(f"  ... and {len(lines) - 10} more")
         if os.environ.get("STRICT_GOTCHAS") == "1":
             print("[guard_gotchas_index] STRICT mode: failing due to namespace drift")
             sys.exit(1)
     else:
         print("[guard_gotchas_index] ✓ No namespace drift detected")
 except FileNotFoundError:
-    print("[guard_gotchas_index] WARNING: ripgrep not found; namespace check skipped.", file=sys.stderr)
+    print(
+        "[guard_gotchas_index] WARNING: ripgrep not found; namespace check skipped.",
+        file=sys.stderr,
+    )
