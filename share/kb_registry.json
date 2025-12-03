@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2025-12-02T15:54:13.529505+00:00",
+  "generated_at": "2025-12-03T21:50:23.644625+00:00",
   "documents": [
     {
       "id": "agents::agentpm/kb/agents.md",
@@ -1240,7 +1240,8 @@
       "path": "docs/SSOT/PHASE_6_PLAN.md",
       "type": "ssot",
       "tags": [
-        "ssot",
+        "plan",
+        "phase-6",
         "ssot",
         "phase-Phase 6"
       ],
@@ -1250,12 +1251,14 @@
         "is_ssot": true,
         "enabled": true,
         "dominant_subsystem": "ops",
-        "dominant_importance": "core",
+        "dominant_importance": "high",
         "phase_relevance": [
           "Phase 6"
         ],
         "fragment_count": 136,
-        "has_classified_fragments": true
+        "has_classified_fragments": true,
+        "phase": 6,
+        "phase_key": "6"
       },
       "registered_at": "2025-12-02T15:54:13.528562+00:00",
       "last_seen_mtime": null,
@@ -1283,6 +1286,592 @@
         "has_classified_fragments": true
       },
       "registered_at": "2025-12-02T15:54:13.529365+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_OPS_BLOCK",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644461+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_COMPASS_ALIGNMENT_ANALYSIS",
+      "title": "SSOT: PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "path": "docs/SSOT/PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644472+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-13::PHASE13_RECON",
+      "title": "SSOT: PHASE13_RECON.md",
+      "path": "docs/SSOT/PHASE13_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-13"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 13,
+        "phase_key": "13",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644479+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-16::PHASE_16_INIT_PLAN",
+      "title": "SSOT: PHASE_16_INIT_PLAN.md",
+      "path": "docs/SSOT/PHASE_16_INIT_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-16",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 16,
+        "phase_key": "16",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644498+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_COMPASS_RESULTS",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644504+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_METADATA_ENRICHMENT_DB_SCHEMA",
+      "title": "SSOT: PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644509+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-14::PHASE_14_SEMANTIC_RECORD",
+      "title": "SSOT: PHASE_14_SEMANTIC_RECORD.md",
+      "path": "docs/SSOT/PHASE_14_SEMANTIC_RECORD.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-14"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 14,
+        "phase_key": "14",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644514+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_FIX12_EVIDENCE",
+      "title": "SSOT: PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644519+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10::PHASE10_WIRING_SELF_ASSESSMENT",
+      "title": "SSOT: PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "path": "docs/SSOT/PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "wiring"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644524+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_METADATA_ENRICHMENT_PLAN",
+      "title": "SSOT: PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644530+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE2_SPEC",
+      "title": "SSOT: PHASE15_WAVE2_SPEC.md",
+      "path": "docs/SSOT/PHASE15_WAVE2_SPEC.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644535+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10::PHASE10_CORRELATION_WIRING_COMPLETE",
+      "title": "SSOT: PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "path": "docs/SSOT/PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "wiring"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644542+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-14::PHASE14_RECON",
+      "title": "SSOT: PHASE14_RECON.md",
+      "path": "docs/SSOT/PHASE14_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-14"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 14,
+        "phase_key": "14",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644547+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_PLAN",
+      "title": "SSOT: PHASE15_PLAN.md",
+      "path": "docs/SSOT/PHASE15_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644552+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_PM_DECISION",
+      "title": "SSOT: PHASE8_PHASE10_PM_DECISION.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_PM_DECISION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644557+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_DIAGNOSTIC",
+      "title": "SSOT: PHASE8_PHASE10_DIAGNOSTIC.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "diagnostic"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644564+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_RECON",
+      "title": "SSOT: PHASE15_RECON.md",
+      "path": "docs/SSOT/PHASE15_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644569+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_COMPASS_STRUCTURAL_GAP",
+      "title": "SSOT: PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "path": "docs/SSOT/PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644576+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_DIAGNOSTIC_PLAN",
+      "title": "SSOT: PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "diagnostic",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644581+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10.4::PHASE_10_4_ID_FIX",
+      "title": "SSOT: PHASE_10_4_ID_FIX.md",
+      "path": "docs/SSOT/PHASE_10_4_ID_FIX.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "phase-10.4"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10.4",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644587+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_STATUS",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_STATUS.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_STATUS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "status"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644591+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_PLAN",
+      "title": "SSOT: PHASE15_WAVE3_PLAN.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644597+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-5::PHASE_5_PLAN",
+      "title": "SSOT: PHASE_5_PLAN.md",
+      "path": "docs/SSOT/PHASE_5_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-5",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 5,
+        "phase_key": "5",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644602+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-9.1::PHASE_9_1_PM_DMS_INTEGRATION",
+      "title": "SSOT: PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "path": "docs/SSOT/PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-9",
+        "phase-9.1"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 9,
+        "phase_key": "9.1",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644607+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_STATUS_CORRECTION",
+      "title": "SSOT: PHASE15_STATUS_CORRECTION.md",
+      "path": "docs/SSOT/PHASE15_STATUS_CORRECTION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "status"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644613+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_BRIDGE_DECISION",
+      "title": "SSOT: PHASE8_BRIDGE_DECISION.md",
+      "path": "docs/SSOT/PHASE8_BRIDGE_DECISION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644619+00:00",
       "last_seen_mtime": null,
       "last_refreshed_at": null,
       "min_refresh_interval_days": null
