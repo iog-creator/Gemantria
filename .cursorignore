@@ -60,6 +60,14 @@ logs/**
 
 backups/**
 
+# Backup files (various patterns)
+*.bak
+*.bak2
+*.bak.*
+*.old
+*.old_*
+.env.bak.*
+
 ui/out/**
 
 # VCS and editor internals

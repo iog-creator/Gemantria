@@ -21,6 +21,14 @@ backup-safety-rules-*.tar.gz
 backup-safety-rules-*.bundle
 backups/codebase/backup-safety-rules-*.tar.gz
 
+# Backup files (various patterns)
+*.bak
+*.bak2
+*.bak.*
+*.old
+*.old_*
+.env.bak.*
+
 # Dev artifacts
 __pycache__/
 *.pyc
