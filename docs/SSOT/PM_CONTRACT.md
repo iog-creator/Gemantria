@@ -188,7 +188,7 @@ After implementing any new tool, module, or capability, I MUST:
 2. **Update KB Registry**:
    ```bash
    # Scan for new docs
-   python agentpm/scripts/docs_inventory.py
+   python pmagent/scripts/docs_inventory.py
    
    # Verify registration
    pmagent kb registry list | grep <project>
@@ -453,7 +453,7 @@ When an external tool (Gemini CLI, Codex, Granite local agent, or any other mode
    - `docs/SSOT/PM_CONTRACT.md` (this file)
    - `docs/SSOT/MASTER_PLAN.md`
    - `NEXT_STEPS.md`
-   - Any directory‑level `AGENTS.md` for the code being touched (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`).
+   - Any directory‑level `AGENTS.md` for the code being touched (for example, `pmagent/plan/AGENTS.md`, `pmagent/reality/AGENTS.md`).
 
 2. **Fail‑closed on missing governance:**
    - If any of the above are missing, unreadable, or the tool cannot see `.cursor/rules` because of container mounts or working‑directory issues, the PM agent MUST:
@@ -469,7 +469,7 @@ When an external tool (Gemini CLI, Codex, Granite local agent, or any other mode
      2. `docs/SSOT/MASTER_PLAN.md` (“Active Development Workstreams” and explicit checklist items under each PLAN/Phase),
      3. `NEXT_STEPS.md` (the latest “Next Gate” / “Next Steps” block as the primary short‑term queue),
      4. Governance rules in `.cursor/rules/` (especially 050/051/052/062),
-     5. The relevant directory‑level `AGENTS.md` documents and SSOT/runbooks (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`, `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`).
+     5. The relevant directory‑level `AGENTS.md` documents and SSOT/runbooks (for example, `pmagent/plan/AGENTS.md`, `pmagent/reality/AGENTS.md`, `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`).
    - **Postgres and DB tables are not additional truth sources for planning.**
      - For features like `pmagent plan reality-loop`, `plan history`, and `reality sessions`, the PM agent MUST treat file‑level SSOT (envelopes in `evidence/pmagent/`, control‑plane SSOT docs, and mapping docs) as primary.
      - DB reads (for example, over `control.agent_run_cli`) may only occur via existing, centralized helpers and only when explicitly called out by a work item; they are never a substitute for missing `.cursor/rules`.

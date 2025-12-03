@@ -2,7 +2,7 @@
 
 **Status**: ✅ COMPLETE (Phase-7C Granite Router)  
 **Design Reference**: `Prompting Guide for Our Core LLM models.md`  
-**Runtime SSOT**: This document (contract) + `agentpm/lm/router.py` (implementation)
+**Runtime SSOT**: This document (contract) + `pmagent/lm/router.py` (implementation)
 
 ## Purpose
 
@@ -140,19 +140,19 @@ For `kind == "rerank"` tasks, downstream adapters **MUST** implement error-toler
 5. **Router Decision Stability**: Router decisions remain deterministic regardless of adapter fallback behavior. Fallback is an **adapter concern**, not a routing change. The router continues to route `kind == "rerank"` to the `reranker` slot; adapters handle errors internally.
 
 **Implementation Reference**: 
-- `agentpm/adapters/ollama.OllamaAPIError` - Custom exception for HTTP/connection/timeout errors
-- `agentpm/adapters/ollama._post_json()` / `_get_json()` - HTTP error handling with `OllamaAPIError` raising
-- `agentpm/adapters/ollama._rerank_granite_llm()` - Catches `OllamaAPIError` and falls back to `embedding_only`
-- `agentpm/adapters/ollama._rerank_embedding_only()` - Catches `OllamaAPIError` and returns equal scores (0.5)
+- `pmagent/adapters/ollama.OllamaAPIError` - Custom exception for HTTP/connection/timeout errors
+- `pmagent/adapters/ollama._post_json()` / `_get_json()` - HTTP error handling with `OllamaAPIError` raising
+- `pmagent/adapters/ollama._rerank_granite_llm()` - Catches `OllamaAPIError` and falls back to `embedding_only`
+- `pmagent/adapters/ollama._rerank_embedding_only()` - Catches `OllamaAPIError` and returns equal scores (0.5)
 - `tests/unit/test_ollama_rerank_failures.py` - Comprehensive test coverage for all failure modes
 
 ## Integration with Existing Adapters
 
 The router does **not** duplicate HTTP/adapter logic. It produces `RouterDecision` objects that downstream code uses to call existing adapters:
 
-- `agentpm.adapters.lm_studio.chat()` / `embed()` / `rerank()`
-- `agentpm.adapters.ollama.chat()` / `embed()` / `rerank()`
-- `agentpm.adapters.theology.chat()`
+- `pmagent.adapters.lm_studio.chat()` / `embed()` / `rerank()`
+- `pmagent.adapters.ollama.chat()` / `embed()` / `rerank()`
+- `pmagent.adapters.theology.chat()`
 
 The router is **agnostic** to whether the underlying provider is `lmstudio` or `ollama`; that decision belongs to the adapters and environment configuration.
 
@@ -175,7 +175,7 @@ Router behavior is controlled by environment variables loaded via `scripts.confi
 - `Prompting Guide for Our Core LLM models.md` - Design-level spec for model stack and prompting
 - `AGENTS.md` - Runtime SSOT for model bindings and adapter usage
 - `scripts/config/env.py` - Environment configuration loader (`get_lm_model_config()`)
-- `agentpm/adapters/lm_studio.py` - LM Studio adapter
-- `agentpm/adapters/ollama.py` - Ollama adapter
-- `agentpm/adapters/theology.py` - Theology adapter
+- `pmagent/adapters/lm_studio.py` - LM Studio adapter
+- `pmagent/adapters/ollama.py` - Ollama adapter
+- `pmagent/adapters/theology.py` - Theology adapter
 

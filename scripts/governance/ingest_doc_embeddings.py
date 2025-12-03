@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 from typing import List
 
@@ -33,12 +34,16 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
-from agentpm.adapters import lm_studio
-from agentpm.db.loader import get_control_engine
+from pmagent.adapters import lm_studio
+from pmagent.db.loader import get_control_engine
 from scripts.config.env import get_retrieval_lane_models
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# Batch size for embedding generation and DB inserts
+DEFAULT_EMBEDDING_BATCH_SIZE = 32  # Typical batch size for embedding models
+DEFAULT_DB_BATCH_SIZE = 100  # Batch size for DB inserts
 
 
 def get_embedding_model(model_name: str | None = None) -> str:
@@ -56,6 +61,7 @@ def get_fragments_needing_embeddings(
     conn,
     model_name: str,
     only_agents: bool = True,
+    all_docs: bool = False,
     limit: int | None = None,
 ) -> List[dict]:
     """
@@ -65,7 +71,10 @@ def get_fragments_needing_embeddings(
     """
     # Build WHERE clause for Tier-0 docs
     where_clauses = []
-    if only_agents:
+    if all_docs:
+        # Include all enabled documents (no filtering)
+        where_clauses.append("dr.enabled = true")
+    elif only_agents:
         where_clauses.append("(dr.logical_name = 'AGENTS_ROOT' OR dr.logical_name LIKE 'AGENTS::%')")
     else:
         # Include all Tier-0 docs
@@ -122,9 +131,11 @@ def get_fragments_needing_embeddings(
     ]
 
 
-def embed_fragments(fragments: List[dict], model_name: str, dry_run: bool = False) -> List[dict]:
+def embed_fragments(
+    fragments: List[dict], model_name: str, dry_run: bool = False, batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE
+) -> List[dict]:
     """
-    Generate embeddings for fragments.
+    Generate embeddings for fragments in batches.
 
     Returns list of dicts with: fragment_id, embedding (list of floats).
     """
@@ -132,66 +143,79 @@ def embed_fragments(fragments: List[dict], model_name: str, dry_run: bool = Fals
         # Return mock embeddings for dry-run
         return [{"fragment_id": f["fragment_id"], "embedding": [0.0] * 1024} for f in fragments]
 
-    # Extract text content
-    texts = [f["content"] for f in fragments]
+    all_embeddings = []
+    total = len(fragments)
 
-    # Generate embeddings using the provider-aware adapter
-    try:
-        embeddings = lm_studio.embed(texts, model_slot="embedding")
-    except Exception as e:
-        raise RuntimeError(f"Failed to generate embeddings: {e}") from e
+    # Process in batches for better performance and memory efficiency
+    for batch_start in range(0, total, batch_size):
+        batch_end = min(batch_start + batch_size, total)
+        batch_fragments = fragments[batch_start:batch_end]
+        texts = [f["content"] for f in batch_fragments]
 
-    # Validate embedding dimensions
-    if not embeddings:
-        raise RuntimeError("No embeddings returned from model")
-    if len(embeddings) != len(fragments):
-        raise RuntimeError(f"Embedding count mismatch: expected {len(fragments)}, got {len(embeddings)}")
+        # Generate embeddings for this batch
+        try:
+            batch_embeddings = lm_studio.embed(texts, model_slot="embedding")
+        except Exception as e:
+            raise RuntimeError(f"Failed to generate embeddings for batch {batch_start}-{batch_end}: {e}") from e
 
-    # Check dimension (should be 1024 for BGE-M3, but some models like granite-embedding:278m return 768)
-    dim = len(embeddings[0])
-    if dim not in (768, 1024):
-        raise RuntimeError(
-            f"Unsupported embedding dimension: {dim}. Expected 768 or 1024. "
-            f"Please use a model that produces 768 or 1024-dimensional embeddings."
-        )
-    if dim != 1024:
-        print(
-            f"[WARN] Embedding dimension is {dim}, expected 1024. "
-            f"Schema expects vector(1024); this may cause issues with pgvector.",
-            file=sys.stderr,
-        )
+        # Validate batch embeddings
+        if not batch_embeddings:
+            raise RuntimeError(f"No embeddings returned for batch {batch_start}-{batch_end}")
+        if len(batch_embeddings) != len(batch_fragments):
+            raise RuntimeError(
+                f"Embedding count mismatch in batch {batch_start}-{batch_end}: "
+                f"expected {len(batch_fragments)}, got {len(batch_embeddings)}"
+            )
 
-    # Combine fragment IDs with embeddings
-    return [{"fragment_id": f["fragment_id"], "embedding": emb} for f, emb in zip(fragments, embeddings)]
+        # Check dimension (must be 1024-D - canonical format required)
+        dim = len(batch_embeddings[0])
+        if dim != 1024:
+            raise RuntimeError(
+                f"Critical violation: Embedding dimension is {dim}, expected 1024. "
+                f"Legacy 768-D embeddings are not allowed. "
+                f"Please use a model that produces 1024-dimensional embeddings."
+            )
+
+        # Combine fragment IDs with embeddings
+        batch_results = [
+            {"fragment_id": f["fragment_id"], "embedding": emb}
+            for f, emb in zip(batch_fragments, batch_embeddings)
+        ]
+        all_embeddings.extend(batch_results)
+
+    return all_embeddings
 
 
-def store_embeddings(conn, embeddings: List[dict], model_name: str, dry_run: bool = False) -> int:
-    """Store embeddings in control.doc_embedding."""
+def store_embeddings(
+    conn, embeddings: List[dict], model_name: str, dry_run: bool = False, batch_size: int = DEFAULT_DB_BATCH_SIZE
+) -> int:
+    """Store embeddings in control.doc_embedding using bulk inserts."""
     if dry_run:
         return len(embeddings)
 
     inserted = 0
-    for emb_data in embeddings:
-        fragment_id = emb_data["fragment_id"]
-        embedding = emb_data["embedding"]
+    total = len(embeddings)
 
-        # Convert embedding list to JSON string for pgvector
-        # Use json.dumps() to match existing codebase patterns (see scripts/db/upsert_helpers.py)
-        embedding_json = json.dumps(embedding)
+    # Process in batches for better performance
+    for batch_start in range(0, total, batch_size):
+        batch_end = min(batch_start + batch_size, total)
+        batch_embeddings = embeddings[batch_start:batch_end]
 
-        # Pad to 1024 dimensions if needed (granite-embedding:278m returns 768)
-        embedding_list = embedding
-        if len(embedding_list) == 768:
-            # Pad with zeros to reach 1024 dimensions
-            embedding_list = embedding_list + [0.0] * (1024 - 768)
-            embedding_json = json.dumps(embedding_list)
-            print(
-                f"[INFO] Padded embedding from 768 to 1024 dimensions for fragment {fragment_id}",
-                file=sys.stderr,
+        # Prepare batch data
+        batch_data = []
+        for emb_data in batch_embeddings:
+            fragment_id = emb_data["fragment_id"]
+            embedding = emb_data["embedding"]
+            embedding_json = json.dumps(embedding)
+            batch_data.append(
+                {
+                    "fragment_id": fragment_id,
+                    "model_name": model_name,
+                    "embedding": embedding_json,
+                }
             )
 
-        # Use text() with parameter binding for pgvector
-        # Note: We use CAST instead of ::vector to avoid SQLAlchemy parameter binding issues
+        # Bulk insert using executemany
         insert_query = text(
             """
             INSERT INTO control.doc_embedding (fragment_id, model_name, embedding)
@@ -200,15 +224,8 @@ def store_embeddings(conn, embeddings: List[dict], model_name: str, dry_run: boo
             """
         )
 
-        conn.execute(
-            insert_query,
-            {
-                "fragment_id": fragment_id,
-                "model_name": model_name,
-                "embedding": embedding_json,
-            },
-        )
-        inserted += 1
+        result = conn.execute(insert_query, batch_data)
+        inserted += result.rowcount if hasattr(result, "rowcount") else len(batch_data)
 
     conn.commit()
     return inserted
@@ -217,8 +234,12 @@ def store_embeddings(conn, embeddings: List[dict], model_name: str, dry_run: boo
 def ingest_embeddings(
     dry_run: bool = False,
     only_agents: bool = True,
+    all_docs: bool = False,
     limit: int | None = None,
     model_name: str | None = None,
+    embedding_batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE,
+    db_batch_size: int = DEFAULT_DB_BATCH_SIZE,
+    show_progress: bool = True,
 ) -> dict:
     """
     Main ingestion function.
@@ -249,9 +270,11 @@ def ingest_embeddings(
 
     with engine.connect() as conn:
         # Get fragments needing embeddings
-        fragments = get_fragments_needing_embeddings(conn, model, only_agents, limit)
+        fragments = get_fragments_needing_embeddings(conn, model, only_agents, all_docs, limit)
 
         if not fragments:
+            if show_progress:
+                print("[INFO] No fragments need embeddings", file=sys.stderr)
             return {
                 "docs_processed": 0,
                 "fragments_embedded": 0,
@@ -262,10 +285,27 @@ def ingest_embeddings(
 
         # Group by doc for stats
         docs_processed = len(set(f["doc_id"] for f in fragments))
+        total_fragments = len(fragments)
+
+        if show_progress:
+            print(
+                f"[INFO] Processing {total_fragments:,} fragments from {docs_processed} docs "
+                f"(embedding batch: {embedding_batch_size}, DB batch: {db_batch_size})",
+                file=sys.stderr,
+            )
+
+        start_time = time.time()
 
         # Generate embeddings
         try:
-            embedded_data = embed_fragments(fragments, model, dry_run)
+            embedded_data = embed_fragments(fragments, model, dry_run, embedding_batch_size)
+            if show_progress:
+                elapsed = time.time() - start_time
+                print(
+                    f"[INFO] Generated {len(embedded_data):,} embeddings in {elapsed:.1f}s "
+                    f"({len(embedded_data)/elapsed:.1f} embeddings/s)",
+                    file=sys.stderr,
+                )
         except RuntimeError as e:
             return {
                 "error": str(e),
@@ -276,7 +316,16 @@ def ingest_embeddings(
             }
 
         # Store embeddings
-        inserted = store_embeddings(conn, embedded_data, model, dry_run)
+        store_start = time.time()
+        inserted = store_embeddings(conn, embedded_data, model, dry_run, db_batch_size)
+        if show_progress:
+            store_elapsed = time.time() - store_start
+            total_elapsed = time.time() - start_time
+            print(
+                f"[INFO] Stored {inserted:,} embeddings in {store_elapsed:.1f}s "
+                f"({inserted/store_elapsed:.1f} inserts/s) | Total: {total_elapsed:.1f}s",
+                file=sys.stderr,
+            )
 
         return {
             "docs_processed": docs_processed,
@@ -311,20 +360,46 @@ def main() -> int:
         help="Include all Tier-0 docs (AGENTS, MASTER_PLAN, RULES_INDEX, GPT_REFERENCE_GUIDE)",
     )
     parser.add_argument(
+        "--all-docs",
+        action="store_true",
+        help="Include all enabled documents (overrides --only-agents and --all-tier0)",
+    )
+    parser.add_argument(
         "--model-name",
         type=str,
         help="Override default embedding model",
     )
+    parser.add_argument(
+        "--embedding-batch-size",
+        type=int,
+        default=DEFAULT_EMBEDDING_BATCH_SIZE,
+        help=f"Batch size for embedding generation (default: {DEFAULT_EMBEDDING_BATCH_SIZE})",
+    )
+    parser.add_argument(
+        "--db-batch-size",
+        type=int,
+        default=DEFAULT_DB_BATCH_SIZE,
+        help=f"Batch size for DB inserts (default: {DEFAULT_DB_BATCH_SIZE})",
+    )
+    parser.add_argument(
+        "--no-progress",
+        action="store_true",
+        help="Disable progress indicators",
+    )
 
     args = parser.parse_args()
 
-    only_agents = args.only_agents and not args.all_tier0
+    only_agents = args.only_agents and not args.all_tier0 and not args.all_docs
 
     result = ingest_embeddings(
         dry_run=args.dry_run,
         only_agents=only_agents,
+        all_docs=args.all_docs,
         limit=args.limit,
         model_name=args.model_name,
+        embedding_batch_size=args.embedding_batch_size,
+        db_batch_size=args.db_batch_size,
+        show_progress=not args.no_progress,
     )
 
     print(json.dumps(result, indent=2))

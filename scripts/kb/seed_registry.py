@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from agentpm.kb.registry import (
+from pmagent.kb.registry import (
     KBDocument,
     load_registry,
     save_registry,
@@ -130,12 +130,12 @@ def create_seed_documents(repo_root: Path) -> list[KBDocument]:
 
     documents.append(
         KBDocument(
-            id="agents-md-agentpm",
-            title="agentpm Package AGENTS.md",
-            path="agentpm/AGENTS.md",
+            id="agents-md-pmagent",
+            title="pmagent Package AGENTS.md",
+            path="pmagent/AGENTS.md",
             type="agents_md",
-            tags=["governance", "agentpm"],
-            owning_subsystem="agentpm",
+            tags=["governance", "pmagent"],
+            owning_subsystem="pmagent",
             provenance={"source": "seeded", "category": "agents_md"},
         )
     )

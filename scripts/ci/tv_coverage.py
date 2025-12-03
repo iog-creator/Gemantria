@@ -6,7 +6,7 @@ Re-runs TV-01..TV-05 and writes a machine-readable coverage receipt:
   evidence/tv_coverage_receipt.json
 
 Assumptions:
-- Test vectors live in agentpm/tests/test_guarded_calls_tv.py
+- Test vectors live in pmagent/tests/test_guarded_calls_tv.py
 - Pytest is configured via pytest.ini
 - Exit code 0 => all TVs passed
 
@@ -25,7 +25,7 @@ EVIDENCE_PATH = ROOT / "evidence" / "tv_coverage_receipt.json"
 
 
 def run_tv_tests() -> int:
-    cmd = [sys.executable, "-m", "pytest", "-q", "agentpm/tests/test_guarded_calls_tv.py"]
+    cmd = [sys.executable, "-m", "pytest", "-q", "pmagent/tests/test_guarded_calls_tv.py"]
     result = subprocess.run(cmd, cwd=ROOT)
     return result.returncode
 

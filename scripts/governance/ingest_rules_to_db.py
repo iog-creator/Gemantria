@@ -46,7 +46,7 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CURSOR_RULES_DIR = REPO_ROOT / ".cursor" / "rules"

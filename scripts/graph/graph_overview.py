@@ -19,8 +19,8 @@ from sqlalchemy.orm import sessionmaker
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from agentpm.db.loader import get_control_engine
-from agentpm.db.models_graph_stats import GraphStatsSnapshot
+from pmagent.db.loader import get_control_engine
+from pmagent.db.models_graph_stats import GraphStatsSnapshot
 from scripts.guards.guard_db_health import check_db_health
 
 

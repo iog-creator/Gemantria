@@ -1,4 +1,18 @@
-# Cursor Workflow Contract (v2025-11-20)
+# ⚠️ DEPRECATED — SUPERSEDED BY EXECUTION_CONTRACT.md ⚠️
+
+**Status**: SUPERSEDED (as of 2025-12-03)  
+**Replacement**: [`EXECUTION_CONTRACT.md`](./EXECUTION_CONTRACT.md)
+
+This document is kept for historical reference only.
+
+All Cursor behavior is now governed by the comprehensive contract in:
+- **`docs/SSOT/EXECUTION_CONTRACT.md`**
+
+Please consult that document for current Cursor execution requirements.
+
+---
+
+# Cursor Workflow Contract (v2025-11-20) — LEGACY
 
 ## Purpose
 

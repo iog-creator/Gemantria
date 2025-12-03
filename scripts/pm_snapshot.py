@@ -85,7 +85,7 @@ except Exception as e:
 
 # Use unified snapshot helper (AgentPM-First:M3)
 try:
-    from agentpm.status.snapshot import get_system_snapshot
+    from pmagent.status.snapshot import get_system_snapshot
 
     snapshot = get_system_snapshot(
         include_reality_check=True,
@@ -113,7 +113,7 @@ except Exception as e:
     # Gather system health (DB + LM + Graph)
     system_health_json = {}
     try:
-        from agentpm.tools.system import health as tool_health
+        from pmagent.tools.system import health as tool_health
 
         system_health_json = tool_health()
     except Exception as e2:
@@ -128,7 +128,7 @@ except Exception as e:
     # Gather status explanation
     status_explain_json = {}
     try:
-        from agentpm.status.explain import explain_system_status
+        from pmagent.status.explain import explain_system_status
 
         status_explain_json = explain_system_status(use_lm=False)  # Skip LM for snapshot speed
     except Exception as e2:
@@ -141,7 +141,7 @@ except Exception as e:
     # Gather reality-check verdict (HINT mode for snapshot)
     reality_check_json = {}
     try:
-        from agentpm.reality.check import reality_check
+        from pmagent.reality.check import reality_check
 
         reality_check_json = reality_check(mode="HINT", skip_dashboards=False)
     except Exception as e2:
@@ -155,7 +155,7 @@ except Exception as e:
     # Gather AI tracking summary (control.agent_run and control.agent_run_cli)
     ai_tracking_summary = {"ok": False, "mode": "db_off", "summary": {}}
     try:
-        from agentpm.status.snapshot import get_ai_tracking_summary
+        from pmagent.status.snapshot import get_ai_tracking_summary
 
         ai_tracking_summary = get_ai_tracking_summary()
     except Exception as e2:
@@ -168,7 +168,7 @@ except Exception as e:
     # Gather share manifest summary
     share_manifest_summary = {"ok": False, "count": 0, "items": []}
     try:
-        from agentpm.status.snapshot import get_share_manifest_summary
+        from pmagent.status.snapshot import get_share_manifest_summary
 
         share_manifest_summary = get_share_manifest_summary(manifest_path)
     except Exception as e2:
@@ -180,7 +180,7 @@ except Exception as e:
     # Gather eval insights summary (advisory-only, non-gating)
     eval_insights_summary = {}
     try:
-        from agentpm.status.snapshot import get_eval_insights_summary
+        from pmagent.status.snapshot import get_eval_insights_summary
 
         eval_insights_summary = get_eval_insights_summary()
     except Exception as e2:
@@ -200,7 +200,7 @@ except Exception as e:
     kb_hints = []  # KB-Reg:M4
     kb_doc_health_summary = {}  # AgentPM-Next:M3
     try:
-        from agentpm.status.snapshot import (
+        from pmagent.status.snapshot import (
             get_kb_registry_summary,
             get_kb_status_view,
             get_kb_hints,

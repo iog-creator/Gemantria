@@ -170,7 +170,7 @@ def check_webui_shell_sanity() -> CheckResult:
 def check_ledger_verification() -> CheckResult:
     """Check that system state ledger is current (all artifacts match ledger hashes)."""
     try:
-        from agentpm.scripts.state.ledger_verify import verify_ledger  # noqa: E402
+        from pmagent.scripts.state.ledger_verify import verify_ledger  # noqa: E402
 
         exit_code, summary = verify_ledger()
 
@@ -243,13 +243,13 @@ def check_ketiv_primary_policy() -> CheckResult:
 def check_hints_required() -> CheckResult:
     """Check that DMS hint registry is accessible and has hints configured (ADR-059)."""
     try:
-        from agentpm.hints.registry import load_hints_for_flow
+        from pmagent.hints.registry import load_hints_for_flow
 
         # Test loading hints for key flows
         flows_to_check = [
             ("handoff", "handoff.generate"),
             ("status_api", "status_snapshot"),
-            ("agentpm", "capability_session"),
+            ("pmagent", "capability_session"),
         ]
 
         total_hints = 0

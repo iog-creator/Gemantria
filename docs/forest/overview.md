@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-12-01 08:48:20
+Generated: 2025-12-03 08:40:55
 
 ## Active Rules
 
@@ -76,6 +76,7 @@ Generated: 2025-12-01 08:48:20
 - Rule 069-always-use-dms-first: Rule 069 — Always Use DMS First (Planning Queries)
 - Rule 070-gotchas-check: ---
 - Rule 071-portable-json-not-plan-ssot: Rule 071 — Portable JSON is not Plan SSOT
+- Rule 072-hint-system: ---
 
 ## CI Workflows
 

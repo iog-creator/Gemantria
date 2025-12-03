@@ -95,7 +95,7 @@ def discover_hints() -> dict[str, Any]:
     scan_paths = [
         ROOT / "src",
         ROOT / "scripts",
-        ROOT / "agentpm",
+        ROOT / "pmagent",
     ]
 
     for scan_path in scan_paths:

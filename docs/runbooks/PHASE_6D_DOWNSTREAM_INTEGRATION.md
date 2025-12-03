@@ -16,7 +16,7 @@ All adapters are read-only, file-based, and fail-closed (offline-safe defaults w
 
 ## Adapter Module
 
-**Location**: `agentpm/control_widgets/adapter.py`
+**Location**: `pmagent/control_widgets/adapter.py`
 
 ### Functions
 
@@ -132,11 +132,11 @@ const referenceProps = load_biblescholar_reference_widget_props();
 
 ## Testing
 
-**Test suite**: `agentpm/tests/control_widgets/test_adapter.py`
+**Test suite**: `pmagent/tests/control_widgets/test_adapter.py`
 
 Run tests:
 ```bash
-pytest agentpm/tests/control_widgets/test_adapter.py -v
+pytest pmagent/tests/control_widgets/test_adapter.py -v
 ```
 
 Tests cover:

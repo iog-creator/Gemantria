@@ -245,7 +245,7 @@ Cursor must report posture clearly:
 
 **Approved loaders:**
 - `scripts/config/env.py` — Centralized environment configuration
-- `agentpm/db/loader.py` — Database loader with hermetic fallback
+- `pmagent/db/loader.py` — Database loader with hermetic fallback
 
 **Forbidden patterns:**
 - Direct `os.getenv("GEMATRIA_DSN")` calls in feature code
@@ -468,31 +468,31 @@ Rule 039 now requires:
 
 **`pmagent`** is the **canonical** package and CLI namespace.
 
-**`agentpm`** is a **legacy/transitional** namespace that must be phased out.
+**`pmagent`** is a **legacy/transitional** namespace that must be phased out.
 
 ### 11.2 Cursor Behavior
 
 Cursor **must**:
 - Use `pmagent` in all new code, docs, and examples
-- Treat `agentpm` usages as **gotchas** (Layer 3 behavioral)
-- **Not introduce** new `agentpm` references
+- Treat `pmagent` usages as **gotchas** (Layer 3 behavioral)
+- **Not introduce** new `pmagent` references
 
 Cursor **must not**:
-- Add new `import agentpm` statements
-- Use `agentpm` in CLI examples or docs
-- Create new directories or modules under `agentpm/`
+- Add new `import pmagent` statements
+- Use `pmagent` in CLI examples or docs
+- Create new directories or modules under `pmagent/`
 
 ### 11.3 Discovery and Reporting
 
-If Cursor encounters `agentpm` usage during work:
-- Report: "Namespace gotcha: found `agentpm` at [file:line]"
+If Cursor encounters `pmagent` usage during work:
+- Report: "Namespace gotcha: found `pmagent` at [file:line]"
 - Add to gotchas tracking via `GOTCHAS_INDEX.md` §3.6 (if added)
 
 ### 11.4 Controlled Migration (Future)
 
-When the PM provides an OPS block to migrate `agentpm` → `pmagent`:
+When the PM provides an OPS block to migrate `pmagent` → `pmagent`:
 - Follow explicit commands only
-- Update imports: `import agentpm` → `import pmagent`
+- Update imports: `import pmagent` → `import pmagent`
 - May include legacy shim with `DeprecationWarning` if instructed
 - Verify all tests pass after migration
 
@@ -513,7 +513,7 @@ When the PM provides an OPS block to migrate `agentpm` → `pmagent`:
 9. ✅ **Housekeeping**: Run after every change (Rule 058)
 10. ✅ **UI**: Browser verification for visual work (Rule 051)
 11. ✅ **NO-OP**: Stop when checks fail, never guess
-12. ✅ **Namespace**: Use `pmagent`, surface `agentpm` as gotchas
+12. ✅ **Namespace**: Use `pmagent`, surface `pmagent` as gotchas
 
 ---
 

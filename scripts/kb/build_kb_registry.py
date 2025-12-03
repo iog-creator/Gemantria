@@ -21,8 +21,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from agentpm.db.loader import get_control_engine
-from agentpm.kb.registry import (
+from pmagent.db.loader import get_control_engine
+from pmagent.kb.registry import (
     KBDocument,
     KBDocumentRegistry,
     REGISTRY_PATH,
@@ -39,7 +39,13 @@ if os.getenv("CI") == "true":
 
 def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     """
-    Build KB registry from DMS (control.doc_registry + control.doc_fragment.meta).
+    Build KB registry from DMS (control.doc_registry).
+    
+    Curated subset for PM usability:
+    - Documents with kb_candidate=true fragments (AI-classified)
+    - Manually curated high-importance docs (SSOT, runbooks, root AGENTS.md)
+    
+    Target size: ~100-200 documents (not all 994 enabled docs)
 
     Args:
         dry_run: If True, print summary instead of writing to file
@@ -49,24 +55,79 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     """
     engine = get_control_engine()
 
-    # Query docs with kb_candidate fragments
-    # Layer 4: Include code files (CODE::*) in addition to PDFs/docs
+    # Query curated subset: Most important documents only
+    # Target: ~100-200 documents (aggressively filter to meet size target)
     query = text("""
-        SELECT DISTINCT
-            d.doc_id,
-            d.logical_name,
-            d.role,
-            d.repo_path,
-            d.share_path,
-            d.is_ssot,
-            d.enabled
-        FROM control.doc_registry d
-        JOIN control.doc_fragment f ON f.doc_id = d.doc_id
-        WHERE d.enabled = true
-          AND f.meta IS NOT NULL
-          AND f.meta::text <> '{}'::text
-          AND (f.meta->>'kb_candidate')::boolean = true
-        ORDER BY d.logical_name
+        SELECT * FROM (
+            -- Primary filter: SSOT docs with kb_candidate=true (highest priority)
+            SELECT DISTINCT
+                d.doc_id,
+                d.logical_name,
+                d.role,
+                d.repo_path,
+                d.share_path,
+                d.is_ssot,
+                d.enabled
+            FROM control.doc_registry d
+            JOIN control.doc_fragment f ON f.doc_id = d.doc_id
+            WHERE d.enabled = true
+              AND d.is_ssot = true
+              AND f.meta @> '{"kb_candidate": true}'::jsonb
+
+            UNION
+
+            -- Runbooks (always included)
+            SELECT DISTINCT
+                d.doc_id,
+                d.logical_name,
+                d.role,
+                d.repo_path,
+                d.share_path,
+                d.is_ssot,
+                d.enabled
+            FROM control.doc_registry d
+            WHERE d.enabled = true
+              AND d.role = 'runbook'
+
+            UNION
+
+            -- Root AGENTS.md files (critical for PM)
+            SELECT DISTINCT
+                d.doc_id,
+                d.logical_name,
+                d.role,
+                d.repo_path,
+                d.share_path,
+                d.is_ssot,
+                d.enabled
+            FROM control.doc_registry d
+            WHERE d.enabled = true
+              AND (
+                d.repo_path = 'AGENTS.md'
+                OR d.repo_path = 'pmagent/AGENTS.md'
+                OR d.repo_path = 'pmagent/AGENTS.md'
+              )
+
+            UNION
+
+            -- Top core-importance kb_candidate documents (limit to ~50 most important)
+            SELECT DISTINCT
+                d.doc_id,
+                d.logical_name,
+                d.role,
+                d.repo_path,
+                d.share_path,
+                d.is_ssot,
+                d.enabled
+            FROM control.doc_registry d
+            JOIN control.doc_fragment f ON f.doc_id = d.doc_id
+            WHERE d.enabled = true
+              AND f.meta @> '{"kb_candidate": true, "importance": "core"}'::jsonb
+              AND d.is_ssot = false
+              AND d.role != 'runbook'
+            LIMIT 50
+        ) AS curated_docs
+        ORDER BY logical_name
     """)
 
     documents = []
@@ -76,23 +137,20 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
         for doc_row in doc_rows:
             doc_id, logical_name, role, repo_path, share_path, is_ssot, enabled = doc_row
 
-            # Get all kb_candidate fragments for this doc
+            # Get fragment metadata if available (optional - docs may not be fragmented yet)
             fragment_query = text("""
                 SELECT
                     f.fragment_index,
                     f.meta
                 FROM control.doc_fragment f
                 WHERE f.doc_id = :doc_id
-                  AND f.meta IS NOT NULL
-                  AND f.meta::text <> '{}'::text
-                  AND (f.meta->>'kb_candidate')::boolean = true
+                  AND f.meta @> '{"kb_candidate": true}'::jsonb
                 ORDER BY f.fragment_index
             """)
 
             fragment_rows = conn.execute(fragment_query, {"doc_id": doc_id}).fetchall()
 
-            if not fragment_rows:
-                continue  # Skip docs with no kb_candidate fragments
+            # Documents without fragments are still included (they just have no fragment metadata)
 
             # Aggregate metadata from fragments
             subsystems = []
@@ -123,21 +181,9 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
                 if doc_role:
                     doc_roles.append(doc_role)
 
-                # Store fragment metadata
-                fragments_meta.append(
-                    {
-                        "fragment_index": frag_idx,
-                        "subsystem": subsystem,
-                        "doc_role": doc_role,
-                        "importance": importance,
-                        "phase_relevance": phase_relevance
-                        if isinstance(phase_relevance, list)
-                        else [phase_relevance]
-                        if phase_relevance
-                        else [],
-                        "kb_candidate": True,
-                    }
-                )
+            # Don't store fragment metadata in registry (reduces file size)
+            # Full metadata is available in DMS; registry is lightweight index only
+            # Just count fragments for provenance
 
             # Determine dominant values (most common)
             dominant_subsystem = Counter(subsystems).most_common(1)[0][0] if subsystems else None
@@ -157,8 +203,8 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
             owning_subsystem = dominant_subsystem
             if not owning_subsystem:
                 # Fallback: extract from logical_name or repo_path
-                if "agentpm" in logical_name.lower() or "agentpm" in (repo_path or "").lower():
-                    owning_subsystem = "agentpm"
+                if "pmagent" in logical_name.lower() or "pmagent" in (repo_path or "").lower():
+                    owning_subsystem = "pmagent"
                 elif "docs" in (repo_path or "").lower():
                     owning_subsystem = "docs"
                 else:
@@ -192,8 +238,10 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
                 },
             )
 
-            # Store fragments in provenance (for now; could be separate structure later)
-            kb_doc.provenance["fragments"] = fragments_meta
+            # Store fragment count only (not full fragment metadata to reduce file size)
+            # Full fragment metadata available in control.doc_fragment.meta
+            kb_doc.provenance["fragment_count"] = len(fragment_rows)
+            kb_doc.provenance["has_classified_fragments"] = len(fragment_rows) > 0
 
             documents.append(kb_doc)
 

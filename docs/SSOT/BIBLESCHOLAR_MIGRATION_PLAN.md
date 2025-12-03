@@ -71,7 +71,7 @@ This document maps **BibleScholarProjectClean** (Flask/Jinja + API + database la
 - `docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md` — Gematria module extraction plan
 - `docs/rfcs/RFC-081-unified-ui-and-biblescholar-module.md` — Unification architecture
 - `docs/projects/biblescholar/ARCHITECTURE.md` — BibleScholar system architecture
-- `agentpm/biblescholar/AGENTS.md` — Current BibleScholar module status
+- `pmagent/biblescholar/AGENTS.md` — Current BibleScholar module status
 - `GEMATRIA_MASTER_REFERENCE_v2.md` — Master reference for Gemantria system
 
 ---
@@ -80,13 +80,13 @@ This document maps **BibleScholarProjectClean** (Flask/Jinja + API + database la
 
 ### What We Have Now (AgentPM/BibleScholar)
 
-**Phase-6J (COMPLETE):** `agentpm/biblescholar/gematria_adapter.py`
+**Phase-6J (COMPLETE):** `pmagent/biblescholar/gematria_adapter.py`
 - Read-only adapter for phrase-level Gematria computation
-- Calls `agentpm.modules.gematria.core` and `agentpm.modules.gematria.hebrew`
+- Calls `pmagent.modules.gematria.core` and `pmagent.modules.gematria.hebrew`
 - Returns `GematriaPhraseResult` dataclass
 - Supports `mispar_hechrachi` and `mispar_gadol` systems
 
-**Phase-6K (COMPLETE):** `agentpm/biblescholar/gematria_flow.py`
+**Phase-6K (COMPLETE):** `pmagent/biblescholar/gematria_flow.py`
 - Read-only verse-level flow for Gematria computation
 - Wraps `gematria_adapter` for whole verses
 - Returns `VerseGematriaSummary` with multi-system support
@@ -94,7 +94,7 @@ This document maps **BibleScholarProjectClean** (Flask/Jinja + API + database la
 
 ### Gematria Module Status
 
-**Core numerics** (`agentpm/modules/gematria/`):
+**Core numerics** (`pmagent/modules/gematria/`):
 - `core.py` — Mispar Hechrachi and Mispar Gadol implementations
 - `hebrew.py` — Hebrew normalization (ADR-002 compliant) and letter extraction
 - Tests: 31 tests covering both systems, edge cases, normalization
@@ -265,8 +265,8 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - (Not present in current BibleScholarProjectClean — this is new)
 
 **AgentPM modules (COMPLETE):**
-- `agentpm/biblescholar/gematria_adapter.py` — Phrase-level Gematria
-- `agentpm/biblescholar/gematria_flow.py` — Verse-level Gematria flow
+- `pmagent/biblescholar/gematria_adapter.py` — Phrase-level Gematria
+- `pmagent/biblescholar/gematria_flow.py` — Verse-level Gematria flow
 
 **Features:**
 - Gematria computation for Hebrew phrases/verses
@@ -297,17 +297,17 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 
 | Feature Area | BibleScholar Today | AgentPM / Gemantria Target | Schema Tables | Dependency Type | Phase Window |
 |--------------|-------------------|----------------------------|---------------|-----------------|--------------|
-| **Gematria verse views** | (Not present) | `agentpm/biblescholar/gematria_flow.compute_verse_gematria` | (Computed, not stored) | Read-only, Gematria core | **DONE (6K)** |
-| **Gematria phrase computation** | (Not present) | `agentpm/biblescholar/gematria_adapter.compute_phrase_gematria` | (Computed, not stored) | Read-only, Gematria core | **DONE (6J)** |
-| **Bible reference parsing** | `src/utils/bible_reference_parser.py` | Future `agentpm/biblescholar/reference_parser.py` | `bible.books`, `bible.book_abbreviations` | Pure function (no DB) | Phase-7A |
-| **Verse lookup** | `src/database/database.py` (verse queries) | Future `agentpm/biblescholar/bible_db_adapter.py` | `bible.verses` (verse_id, book_name, chapter_num, verse_num, text, translation_source) | Bible DB RO | Phase-7B |
-| **Lexicon lookup (Hebrew)** | `src/api/lexicon_api.py` | Future `agentpm/biblescholar/lexicon_adapter.py` | `bible.hebrew_entries`, `bible.hebrew_ot_words`, `bible.hebrew_morphology_codes` | Bible DB RO | Phase-7C |
-| **Lexicon lookup (Greek)** | `src/api/lexicon_api.py` | Future `agentpm/biblescholar/lexicon_adapter.py` | `bible.greek_entries`, `bible.greek_nt_words`, `bible.greek_morphology_codes` | Bible DB RO | Phase-7C |
-| **Keyword search** | `src/api/search_api.py` | Future `agentpm/biblescholar/search_flow.py` | `bible.verses` (text column, translation_source filter) | Bible DB RO | Phase-7D |
+| **Gematria verse views** | (Not present) | `pmagent/biblescholar/gematria_flow.compute_verse_gematria` | (Computed, not stored) | Read-only, Gematria core | **DONE (6K)** |
+| **Gematria phrase computation** | (Not present) | `pmagent/biblescholar/gematria_adapter.compute_phrase_gematria` | (Computed, not stored) | Read-only, Gematria core | **DONE (6J)** |
+| **Bible reference parsing** | `src/utils/bible_reference_parser.py` | Future `pmagent/biblescholar/reference_parser.py` | `bible.books`, `bible.book_abbreviations` | Pure function (no DB) | Phase-7A |
+| **Verse lookup** | `src/database/database.py` (verse queries) | Future `pmagent/biblescholar/bible_db_adapter.py` | `bible.verses` (verse_id, book_name, chapter_num, verse_num, text, translation_source) | Bible DB RO | Phase-7B |
+| **Lexicon lookup (Hebrew)** | `src/api/lexicon_api.py` | Future `pmagent/biblescholar/lexicon_adapter.py` | `bible.hebrew_entries`, `bible.hebrew_ot_words`, `bible.hebrew_morphology_codes` | Bible DB RO | Phase-7C |
+| **Lexicon lookup (Greek)** | `src/api/lexicon_api.py` | Future `pmagent/biblescholar/lexicon_adapter.py` | `bible.greek_entries`, `bible.greek_nt_words`, `bible.greek_morphology_codes` | Bible DB RO | Phase-7C |
+| **Keyword search** | `src/api/search_api.py` | Future `pmagent/biblescholar/search_flow.py` | `bible.verses` (text column, translation_source filter) | Bible DB RO | Phase-7D |
 | **Vector search** | `src/api/vector_search_api.py` | Control-plane Knowledge Slice + future BibleScholar search flow | `bible.verse_embeddings.embedding` (vector(1024)) - canonical source | DB + embeddings | Phase-7E |
-| **Contextual insights** | `src/api/contextual_insights_api.py` | Future `agentpm/biblescholar/insights_flow.py` | `bible.verse_word_links`, `bible.proper_names`, `bible.versification_mappings` | DB + LM (DB-grounded) | Phase-8A |
-| **Cross-language search** | `src/api/cross_language_api.py` | Future `agentpm/biblescholar/cross_language_flow.py` | `bible.hebrew_ot_words`, `bible.greek_nt_words`, `bible.verse_word_links` | DB + embeddings | Phase-8B |
-| **LM status indicator** | `src/utils/lm_indicator_adapter.py` | `agentpm/lm_widgets/adapter.py` (Phase-5) | (Control-plane exports, not bible_db) | Control-plane exports | **DONE (Phase-5)** |
+| **Contextual insights** | `src/api/contextual_insights_api.py` | Future `pmagent/biblescholar/insights_flow.py` | `bible.verse_word_links`, `bible.proper_names`, `bible.versification_mappings` | DB + LM (DB-grounded) | Phase-8A |
+| **Cross-language search** | `src/api/cross_language_api.py` | Future `pmagent/biblescholar/cross_language_flow.py` | `bible.hebrew_ot_words`, `bible.greek_nt_words`, `bible.verse_word_links` | DB + embeddings | Phase-8B |
+| **LM status indicator** | `src/utils/lm_indicator_adapter.py` | `pmagent/lm_widgets/adapter.py` (Phase-5) | (Control-plane exports, not bible_db) | Control-plane exports | **DONE (Phase-5)** |
 
 ### 5.2 Data Contract / Dependency Classification
 
@@ -320,7 +320,7 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 | **Greek words** | `bible_db.bible.greek_nt_words` (word_text, strongs_id, grammar_code, transliteration, gloss, theological_term) | Future `bible_db` adapter (RO) | **DB-ONLY** | Word-level Greek data, linked via verse_id |
 | **Lexicon entries** | `bible_db.bible.hebrew_entries.strongs_id`, `bible_db.bible.greek_entries.strongs_id` (lemma, transliteration, definition, usage, gloss) | Future `bible_db` adapter (RO) | **DB-ONLY** | Strong's number lookups, unique constraint on strongs_id |
 | **Morphology codes** | `bible_db.bible.hebrew_morphology_codes`, `bible_db.bible.greek_morphology_codes` (code, description, part_of_speech, morphology_type) | Future `bible_db` adapter (RO) | **DB-ONLY** | Grammar explanations for morphology codes |
-| **Gematria values** | (Computed, not stored) | `agentpm.modules.gematria.core` | **Pure function (no DB)** | Deterministic calculation from Hebrew text |
+| **Gematria values** | (Computed, not stored) | `pmagent.modules.gematria.core` | **Pure function (no DB)** | Deterministic calculation from Hebrew text |
 | **Vector embeddings** | `bible_db.bible.verse_embeddings.embedding` (vector(1024)) - canonical source | Control-plane Knowledge Slice or direct `bible_db` RO | **DB + embeddings** | Semantic search (768-D column removed in Phase 3) |
 | **Cross-references** | `bible_db.bible.versification_mappings` (source_tradition, source_book, source_chapter, source_verse, target_*) | Future `bible_db` adapter (RO) | **DB-ONLY** | Cross-tradition verse mappings |
 | **Proper names** | `bible_db.bible.proper_names` (unified_name, description, relationships) | Future `bible_db` adapter (RO) | **DB-ONLY** | Proper name entries with contextual relationships |
@@ -339,15 +339,15 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 - **6K**: BibleScholar Gematria verse flow (read-only)
 - **6L**: This design document
 - **6M**: Bible DB read-only adapter + passage flow (COMPLETE)
-  - `agentpm/biblescholar/bible_db_adapter.py` — Read-only adapter for `bible_db`
-  - `agentpm/biblescholar/bible_passage_flow.py` — Passage/verse retrieval flow
+  - `pmagent/biblescholar/bible_db_adapter.py` — Read-only adapter for `bible_db`
+  - `pmagent/biblescholar/bible_passage_flow.py` — Passage/verse retrieval flow
   - Verse lookup by book/chapter/verse (reference string parsing)
   - Multi-translation support (KJV default, extensible)
   - DB-off mode handling (graceful degradation)
   - Tests: `test_bible_db_adapter.py`, `test_bible_passage_flow.py`
 - **6N**: Lexicon read-only adapter + word-study flow (COMPLETE)
-  - `agentpm/biblescholar/lexicon_adapter.py` — Read-only adapter for lexicon tables
-  - `agentpm/biblescholar/lexicon_flow.py` — Word-study retrieval flow
+  - `pmagent/biblescholar/lexicon_adapter.py` — Read-only adapter for lexicon tables
+  - `pmagent/biblescholar/lexicon_flow.py` — Word-study retrieval flow
   - Hebrew/Greek lexicon lookup by Strong's number
   - Word-level data retrieval for verse references
   - Tables: `bible.hebrew_entries`, `bible.greek_entries`, `bible.hebrew_ot_words`, `bible.greek_nt_words`
@@ -358,34 +358,34 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 
 **7A: Bible Reference Parsing** (✅ COMPLETE)
 - ✅ Extract `bible_reference_parser.py` logic
-- ✅ Create `agentpm/biblescholar/reference_parser.py`
+- ✅ Create `pmagent/biblescholar/reference_parser.py`
 - ✅ Pure function, no DB dependency
 - ✅ OSIS format support
 - ✅ Enhance `bible_passage_flow.parse_reference()` with OSIS support (Pending integration)
 
 **7B: Bible DB Read-Only Adapter** (Partially complete via Phase-6M)
-- ✅ `agentpm/biblescholar/bible_db_adapter.py` — COMPLETE (Phase-6M)
-- ✅ `agentpm/biblescholar/bible_passage_flow.py` — COMPLETE (Phase-6M)
+- ✅ `pmagent/biblescholar/bible_db_adapter.py` — COMPLETE (Phase-6M)
+- ✅ `pmagent/biblescholar/bible_passage_flow.py` — COMPLETE (Phase-6M)
 - 🔄 Enhanced reference parsing (OSIS format) — Phase-7A
 - 🔄 Connection pooling and security — Future enhancement
 
 **7C: Lexicon Adapter** (Partially complete via Phase-6N)
-- ✅ `agentpm/biblescholar/lexicon_adapter.py` — COMPLETE (Phase-6N)
-- ✅ `agentpm/biblescholar/lexicon_flow.py` — COMPLETE (Phase-6N)
+- ✅ `pmagent/biblescholar/lexicon_adapter.py` — COMPLETE (Phase-6N)
+- ✅ `pmagent/biblescholar/lexicon_flow.py` — COMPLETE (Phase-6N)
 - ✅ Hebrew/Greek lexicon lookup (Strong's numbers) — COMPLETE
 - ✅ Word-level data retrieval — COMPLETE
 - 🔄 Morphology code explanations — Future enhancement
 
 **7D: Keyword Search Flow** (✅ COMPLETE)
-- ✅ Create `agentpm/biblescholar/search_flow.py`
+- ✅ Create `pmagent/biblescholar/search_flow.py`
 - ✅ Keyword search across verses (ILIKE)
 - ✅ Multi-translation search
 - ✅ Result ranking (ordered by book/chapter/verse) and filtering (limit)
 - ✅ Uses `bible_db_adapter` (read-only)
 
 **7E: Vector Search Integration** (Complete via Phase-6O)
-- ✅ `agentpm/biblescholar/vector_adapter.py` — COMPLETE (Phase-6O)
-- ✅ `agentpm/biblescholar/vector_flow.py` — COMPLETE (Phase-6O)
+- ✅ `pmagent/biblescholar/vector_adapter.py` — COMPLETE (Phase-6O)
+- ✅ `pmagent/biblescholar/vector_flow.py` — COMPLETE (Phase-6O)
 - ✅ Direct `bible_db` vector search adapter — COMPLETE
 - ✅ Semantic similarity search using pgvector — COMPLETE
 - ✅ Embedding-based verse retrieval — COMPLETE
@@ -394,14 +394,14 @@ Based on `BIBLESCHOLAR_INTAKE.md` and `ARCHITECTURE.md`, features are grouped in
 ### Phase 8: Advanced Features
 
 **8A: Contextual Insights Flow** (✅ COMPLETE)
-- ✅ Create `agentpm/biblescholar/insights_flow.py`
+- ✅ Create `pmagent/biblescholar/insights_flow.py`
 - ✅ DB-grounded contextual analysis (VerseContext aggregation)
 - ✅ LM formatting (via `format_context_for_llm`)
 - ✅ Cross-references and related passages (via vector search)
 - ✅ **Rule**: All content from DB; LM only formats
 
 **8B: Cross-Language Flow** (✅ COMPLETE)
-- ✅ Create `agentpm/biblescholar/cross_language_flow.py`
+- ✅ Create `pmagent/biblescholar/cross_language_flow.py`
 - ✅ Hebrew/Greek word analysis within verse context
 - ✅ Cross-language search capabilities (via vector similarity)
 - ✅ Uses lexicon adapter + vector search
@@ -568,7 +568,7 @@ All BibleScholar adapters in AgentPM are **read-only**:
 
 **First implementation episode:**
 - Extract `bible_reference_parser.py` logic
-- Create `agentpm/biblescholar/reference_parser.py`
+- Create `pmagent/biblescholar/reference_parser.py`
 - Pure function, no DB dependency
 - OSIS format parsing and validation
 - Tests covering edge cases
@@ -577,7 +577,7 @@ All BibleScholar adapters in AgentPM are **read-only**:
 - Reference parser module exists and is tested
 - OSIS format fully supported
 - No DB dependencies
-- Documented in `agentpm/biblescholar/AGENTS.md`
+- Documented in `pmagent/biblescholar/AGENTS.md`
 
 ---
 
@@ -587,7 +587,7 @@ All BibleScholar adapters in AgentPM are **read-only**:
 - `docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md` — Gematria module plan
 - `docs/rfcs/RFC-081-unified-ui-and-biblescholar-module.md` — Unification RFC
 - `docs/projects/biblescholar/ARCHITECTURE.md` — BibleScholar architecture
-- `agentpm/biblescholar/AGENTS.md` — Current module status
+- `pmagent/biblescholar/AGENTS.md` — Current module status
 - `schemas/biblescholar/bible_db_structure.sql` — Complete database schema dump (primary input)
 - `schemas/biblescholar/bible_db_verses_structure.sql` — Verses table schema
 - `schemas/biblescholar/bible_db_versification_structure.sql` — Versification mappings schema

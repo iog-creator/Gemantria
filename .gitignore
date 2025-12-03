@@ -33,6 +33,11 @@ backups/codebase/backup-safety-rules-*.tar.gz
 __pycache__/
 *.pyc
 exports/ai_nouns.enriched.json
+# Large generated export files (should not be versioned)
+exports/graph_correlation_network.json
+exports/graph_correlations.json
+exports/temporal_patterns.json
+exports/pattern_forecast.json
 **/__pycache__/
 evidence/
 share/evidence/

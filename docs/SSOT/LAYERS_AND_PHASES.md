@@ -20,7 +20,7 @@
 - **Phase 3: AI Classification** — ✅ COMPLETE
   - **Commit:** `3f055af7` (feat(layer3-phase3): add AI classification metadata to document fragments)
   - **Artifacts:** 
-    - `agentpm/kb/classify.py` (classification module)
+    - `pmagent/kb/classify.py` (classification module)
     - `scripts/governance/classify_fragments.py` (runner)
     - `migrations/048_add_fragment_meta_column.sql` (schema)
   - **State:** Merged to main

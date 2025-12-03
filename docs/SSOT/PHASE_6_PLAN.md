@@ -23,7 +23,7 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
   - latency (via control-plane logging)
   - success/failure (via control-plane logging)
   - logged into control-plane
-- First LM-enabled feature: `agentpm/runtime/lm_helpers.generate_text()` ✅
+- First LM-enabled feature: `pmagent/runtime/lm_helpers.generate_text()` ✅
   - Simple text generation helper that demonstrates LM Studio enablement
   - Can be used by downstream apps (StoryMaker, BibleScholar) or internal features
   - Respects `LM_STUDIO_ENABLED` flag with graceful fallback
@@ -42,7 +42,7 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
 
 **Deliverables**:
 - New table: `control.lm_usage_budget` ✅ (migration 042)
-- Budget checks before LM calls ✅ (`check_lm_budget()` in `agentpm/runtime/lm_budget.py`)
+- Budget checks before LM calls ✅ (`check_lm_budget()` in `pmagent/runtime/lm_budget.py`)
 - Automatic fallback when exceeded ✅ (wired into `guarded_lm_call()`, returns "budget_exceeded" mode)
 - Export: `lm_budget_7d.json` ✅ (`scripts/db/control_lm_budget_export.py`, `make atlas.lm.budget`)
 - Atlas dashboard for budgets (future work)
@@ -77,7 +77,7 @@ Move from "wired but off" to **real LM Studio usage** for selected features unde
   - `make atlas.kb.export` ✅
 
 **Tests**:
-- ETL hermetic tests ✅ (`agentpm/tests/knowledge/test_kb_ingest_and_export.py`)
+- ETL hermetic tests ✅ (`pmagent/tests/knowledge/test_kb_ingest_and_export.py`)
   - db_off handling (fail-soft, exit 0)
   - Export JSON structure validation
   - Slug generation and title extraction utilities

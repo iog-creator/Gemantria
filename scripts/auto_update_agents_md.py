@@ -49,11 +49,11 @@ def get_directory_for_file(file_path: Path) -> Path | None:
         src_idx = parts.index("src")
         if len(parts) > src_idx + 1:
             return ROOT / "/".join(parts[: src_idx + 2])
-    elif "agentpm" in parts:
-        # agentpm/*/ requires AGENTS.md (modules, biblescholar, etc.)
-        agentpm_idx = parts.index("agentpm")
-        if len(parts) > agentpm_idx + 1:
-            return ROOT / "/".join(parts[: agentpm_idx + 2])
+    elif "pmagent" in parts:
+        # pmagent/*/ requires AGENTS.md (modules, biblescholar, etc.)
+        pmagent_idx = parts.index("pmagent")
+        if len(parts) > pmagent_idx + 1:
+            return ROOT / "/".join(parts[: pmagent_idx + 2])
     elif "webui" in parts:
         # webui/*/ requires AGENTS.md for UI apps (graph dashboard, forecast UI, etc.)
         webui_idx = parts.index("webui")

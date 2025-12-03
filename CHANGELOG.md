@@ -108,6 +108,14 @@
 
 - reconcile AGENTS.md and rules with new branch protection
 
+- raise LOUD FAIL in rerank_chunks when LM unavailable
+- wire query embeddings and reranker to real LM services
+- complete PR-3 - alignment guard, test vectors, reality.green integration
+- implement contextual chunk builder and fetch API
+- finalize Phase 15 reconciliation verdict for PR #593
+
+- Add new SSOT documentation, database migrations, refine KB/agent scripts, and clean up temporary share files.
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

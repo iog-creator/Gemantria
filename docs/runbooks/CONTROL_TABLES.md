@@ -190,9 +190,9 @@ If `tables: {}`:
 - **Script**: `scripts/control/control_tables.py`
 - **CLI Command**: `pmagent control tables`
 - **Make Target**: `make control.tables.smoke`
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
 
-The command uses the centralized DB loader (`agentpm.db.loader`) and reuses the DB health check logic (`scripts.guards.guard_db_health`) to ensure consistent behavior with other health commands.
+The command uses the centralized DB loader (`pmagent.db.loader`) and reuses the DB health check logic (`scripts.guards.guard_db_health`) to ensure consistent behavior with other health commands.
 
 **Schema Filtering**: The query excludes system schemas (`pg_catalog`, `information_schema`) to focus on application tables. All base tables in other schemas are included.
 

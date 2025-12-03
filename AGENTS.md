@@ -645,6 +645,17 @@ Runtime hints are collected and wrapped in structured envelopes for persistence 
 - **Validation**: `rules_guard.py` validates hints envelope structure in exports (non-fatal, encouraged for PRs)
 - **Purpose**: Enables determinism and auditability without breaking resumable pipeline design
 
+### DMS Hint System (Rule-072)
+The DMS Hint System centralizes "gotchas" and critical warnings in `control.hint_registry`.
+- **Registry**: `scripts/governance/seed_hint_registry.py` is the SSOT for all hints.
+- **Docs**: `pmagent hints export` generates `docs/hints/*.md`.
+- **Runtime**: Code emits `LOUD HINT [logical_name]` referencing the registry ID.
+- **Workflow**:
+  1. Identify a gotcha.
+  2. Add to `seed_hint_registry.py`.
+  3. Run `make housekeeping` (seeds DB + exports docs).
+  4. Update code to emit the hint ID.
+
 ## Integrated Pipeline Architecture
 
 The Gemantria system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.
@@ -842,6 +853,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
 | 070 | # --- |
 | 071 | # Rule 071 — Portable JSON is not Plan SSOT |
+| 072 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

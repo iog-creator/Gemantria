@@ -98,6 +98,6 @@ echo "4. Update model names in .env (use canonical names, adapter will map to Ol
 echo "   - LOCAL_AGENT_MODEL=granite-4.0-h-tiny"
 echo "   - EMBEDDING_MODEL=granite-embedding-english-r2"
 echo "   - RERANKER_MODEL=granite-embedding-reranker-english-r2"
-echo "5. Test: python -c 'from agentpm.adapters.ollama import ollama_health_check; print(ollama_health_check())'"
+echo "5. Test: python -c 'from pmagent.adapters.ollama import ollama_health_check; print(ollama_health_check())'"
 echo ""
 

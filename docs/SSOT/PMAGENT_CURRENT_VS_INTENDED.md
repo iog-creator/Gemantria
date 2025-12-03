@@ -1,7 +1,7 @@
 # pmagent — Current vs Intended State (Control Plane Orchestrator)
 
 > **Short version:**
-> `pmagent` (`agentpm`) is already the *governed conductor* for parts of the system, but a lot of the original design lives in **guards + Make + workflows** instead of a single, clean CLI surface.
+> `pmagent` (`pmagent`) is already the *governed conductor* for parts of the system, but a lot of the original design lives in **guards + Make + workflows** instead of a single, clean CLI surface.
 > 
 > This doc explains what's **implemented now** and what's still **planned**.
 
@@ -128,9 +128,9 @@ Implemented commands (names approximate):
   - DB-off behavior: All tracking functions gracefully no-op when DB is unavailable (return `None`, no exceptions) for hermetic CI/testing
 * **pm.snapshot integration is implemented (AgentPM-First:M3 + M4 + KB-Reg:M2 + AgentPM-Next:M3)**:
   - `make pm.snapshot` / `scripts/pm_snapshot.py` composes health, status explanation, reality-check, AI tracking, share manifest, eval insights (Phase-8/10), KB registry, and KB doc-health into a single operator-facing snapshot
-  - **Unified helper**: `agentpm.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
+  - **Unified helper**: `pmagent.status.snapshot.get_system_snapshot()` — Single source of truth for system snapshot composition, shared by `pm.snapshot` and WebUI APIs (`/api/status/system`)
   - Generates both Markdown (`share/pm.snapshot.md`) and JSON (`evidence/pm_snapshot/snapshot.json`) outputs
-  - Calls `pmagent health system` (via `agentpm.tools.system.health()`), `pmagent status explain` (via `agentpm.status.explain.explain_system_status()`), and `pmagent reality-check check --mode hint` (via `agentpm.reality.check.reality_check()`)
+  - Calls `pmagent health system` (via `pmagent.tools.system.health()`), `pmagent status explain` (via `pmagent.status.explain.explain_system_status()`), and `pmagent reality-check check --mode hint` (via `pmagent.reality.check.reality_check()`)
   - Queries `control.agent_run` and `control.agent_run_cli` tables for AI tracking summary (counts, success/error rates)
   - Reads `SHARE_MANIFEST.json` for share manifest summary (file count and status)
   - Reads Phase-8/10 eval exports for eval insights summary (advisory-only, export-driven analytics)
@@ -205,8 +205,8 @@ Any pmagent command should:
   * Call guards and tools that validate DSN, DB, exports, etc.
   * Write evidence to `share/` and `evidence/`.
   * Use control-plane tables for AI tracking:
-    * Runtime LM calls write to `control.agent_run` via `_write_agent_run()` (from `agentpm.runtime.lm_logging`)
-    * CLI commands write to `control.agent_run_cli` via `create_agent_run()` / `mark_agent_run_success()` / `mark_agent_run_error()` (from `agentpm.control_plane`)
+    * Runtime LM calls write to `control.agent_run` via `_write_agent_run()` (from `pmagent.runtime.lm_logging`)
+    * CLI commands write to `control.agent_run_cli` via `create_agent_run()` / `mark_agent_run_success()` / `mark_agent_run_error()` (from `pmagent.control_plane`)
   * Surface status via dashboards and `pmagent health`/`control` commands.
   * Some commands (like `reality-check check`) follow a structured step-by-step flow with AI tracking.
 
@@ -240,7 +240,7 @@ The next concrete step is `pmagent reality.check`.
 * `docs/runbooks/CONTROL_SUMMARY.md` – Control-plane summary usage.
 * `docs/runbooks/SYSTEM_HEALTH.md` – System health checks.
 * `docs/runbooks/LM_HEALTH.md` – LM health checks.
-* `agentpm/scripts/AGENTS.md` – Scripts directory documentation.
+* `pmagent/scripts/AGENTS.md` – Scripts directory documentation.
 * `.cursor/rules/050-ops-contract.mdc` – OPS Contract v6.2.3.
 * `.cursor/rules/051-cursor-insight.mdc` – CI gating and handoff protocol.
 * `.cursor/rules/052-tool-priority.mdc` – Tool priority and context guidance.

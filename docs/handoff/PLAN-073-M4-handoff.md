@@ -14,7 +14,7 @@
   - `share/mcp/dsn_mismatch.guard.json` → took main's version (generated artifact)
   - `share/mcp/rodsn.guard.json` → took main's version (generated artifact)
   - `share/mcp/strict_roundtrip.ok.json` → took main's version (generated artifact)
-  - `agentpm/tests/mcp/test_mcp_m3_e11_e15.py` → took PR branch version (implementation)
+  - `pmagent/tests/mcp/test_mcp_m3_e11_e15.py` → took PR branch version (implementation)
 
 ### 2. Main Branch Posture — VERIFIED ✅
 - **HEAD:** `716da11f`
@@ -41,7 +41,7 @@
   - ✅ `scripts/mcp_db_smoke.py` (E12)
   - ✅ `scripts/atlas_chip_inject.py` (E13/E14)
   - ✅ `scripts/mcp_strict_trace_ptr.sh` (E15)
-  - ✅ `agentpm/tests/mcp/test_mcp_m3_e11_e15.py` (all tests passing)
+  - ✅ `pmagent/tests/mcp/test_mcp_m3_e11_e15.py` (all tests passing)
   - ✅ Makefile targets: `mcp.strict.live.handshake`, `mcp.db.smoke`, `atlas.db_proof.inject`, `mcp.strict.trace`
 
 ### M4 Test Requirements (from PR #458)
@@ -94,7 +94,7 @@ Implement E16-E20 to flip xfail tests to PASS:
 - `scripts/atlas_chip_inject.py` (update for E18/E19)
 - `scripts/mcp_db_error_guard.py` (E20)
 - `Makefile` (add M4 targets)
-- `agentpm/tests/mcp/test_mcp_m4_e16_e20.py` (remove xfail markers)
+- `pmagent/tests/mcp/test_mcp_m4_e16_e20.py` (remove xfail markers)
 
 ### Environment Requirements
 - `STRICT=1`
@@ -231,7 +231,7 @@ echo "=== 7) Update Makefile with M4 targets ==="
 # Add targets: mcp.pg.checkpointer.handshake, mcp.db.select1, atlas.db_proof.inject (updated), mcp.db.error.guard
 
 echo "=== 8) Flip tests (remove xfail markers) ==="
-# Edit agentpm/tests/mcp/test_mcp_m4_e16_e20.py to remove @pytest.mark.xfail decorators
+# Edit pmagent/tests/mcp/test_mcp_m4_e16_e20.py to remove @pytest.mark.xfail decorators
 
 echo "=== 9) Verify with STRICT=1 CHECKPOINTER=postgres ==="
 STRICT=1 CHECKPOINTER=postgres python3 scripts/mcp_pg_checkpointer_handshake.py
@@ -240,7 +240,7 @@ STRICT=1 CHECKPOINTER=postgres python3 scripts/atlas_chip_inject.py
 STRICT=1 CHECKPOINTER=postgres python3 scripts/mcp_db_error_guard.py
 
 echo "=== 10) Run tests ==="
-STRICT=1 CHECKPOINTER=postgres pytest agentpm/tests/mcp/test_mcp_m4_e16_e20.py -v
+STRICT=1 CHECKPOINTER=postgres pytest pmagent/tests/mcp/test_mcp_m4_e16_e20.py -v
 
 echo "=== 11) Create implementation PR ==="
 git add -A

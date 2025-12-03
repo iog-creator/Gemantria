@@ -5,7 +5,7 @@ Guard: LM (Language Model) Health Check
 Checks LM Studio/Ollama endpoint availability and response validity.
 Returns JSON verdict summarizing LM posture (lm_ready, lm_off).
 
-Phase-3C P1: Updated to use LM Studio adapter from agentpm.adapters.lm_studio.
+Phase-3C P1: Updated to use LM Studio adapter from pmagent.adapters.lm_studio.
 Phase-7E: Added Ollama provider support with automatic model discovery.
 """
 
@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
 # Import lightweight health check (doesn't trigger model loads)
-from agentpm.lm.lm_status import check_lmstudio_health, check_ollama_health  # noqa: E402
+from pmagent.lm.lm_status import check_lmstudio_health, check_ollama_health  # noqa: E402
 from scripts.config.env import get_lm_model_config, get_lm_studio_settings  # noqa: E402
 
 
@@ -28,7 +28,7 @@ def check_lm_health() -> dict:
     """
     Check LM Studio/Ollama health posture using the unified adapter.
 
-    Phase-3C P1: Uses agentpm.adapters.lm_studio.lm_studio_chat() for health check.
+    Phase-3C P1: Uses pmagent.adapters.lm_studio.lm_studio_chat() for health check.
     Phase-7E: Supports Ollama provider with automatic model discovery.
 
     Returns:

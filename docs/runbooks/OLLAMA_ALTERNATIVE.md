@@ -160,7 +160,7 @@ RERANKER_MODEL=granite-reranker-english-r2
 
 ### 2. Update Adapter (if using custom adapter)
 
-See `agentpm/adapters/ollama.py` for a drop-in replacement adapter.
+See `pmagent/adapters/ollama.py` for a drop-in replacement adapter.
 
 ### 3. Update Health Checks
 
@@ -227,7 +227,7 @@ ollama create christian-bible-expert -f Modelfile
 
 **Migration Path**:
 1. Install Ollama alongside LM Studio (dual support)
-2. Create Ollama adapter (`agentpm/adapters/ollama.py`)
+2. Create Ollama adapter (`pmagent/adapters/ollama.py`)
 3. Add `INFERENCE_PROVIDER=ollama` option
 4. Test with existing LangGraph pipeline
 5. Gradually migrate models to Ollama

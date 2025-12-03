@@ -7,7 +7,7 @@ Phase-1 violation codes used by the Gatekeeper + Guard Shim.
 
 It:
 - Defines the Phase-1 violation code set (SSOT).
-- Greps the test suite (agentpm/tests) for each violation code string.
+- Greps the test suite (pmagent/tests) for each violation code string.
 - Emits evidence/gatekeeper_coverage.json summarizing which codes
   are referenced by tests.
 
@@ -21,7 +21,7 @@ import subprocess
 from typing import Dict
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-TEST_ROOT = ROOT / "agentpm" / "tests"
+TEST_ROOT = ROOT / "pmagent" / "tests"
 OUT_PATH = ROOT / "evidence" / "gatekeeper_coverage.json"
 
 VIOLATION_CODES = [
@@ -37,7 +37,7 @@ VIOLATION_CODES = [
 
 def grep_for_code(code: str) -> bool:
     """
-    Returns True if the violation code string appears anywhere under agentpm/tests.
+    Returns True if the violation code string appears anywhere under pmagent/tests.
     Uses `git grep` when available, else falls back to Python scanning.
     """
     if not TEST_ROOT.exists():

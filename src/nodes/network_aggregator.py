@@ -43,7 +43,7 @@ from src.ssot.noun_adapter import adapt_ai_noun  # noqa: E402
 
 # Phase-7F: Provider-aware embedding and rerank adapters
 try:
-    from agentpm.adapters.lm_studio import (
+    from pmagent.adapters.lm_studio import (
         embed as provider_aware_embed,
         rerank as provider_aware_rerank,
     )  # noqa: E402

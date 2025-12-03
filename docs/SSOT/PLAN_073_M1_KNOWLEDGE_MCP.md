@@ -336,7 +336,7 @@ All guards follow the same pattern:
 - `share/mcp/knowledge_mcp_proof.txt` (E05)
 
 **Tests**:
-- `agentpm/tests/mcp/test_mcp_knowledge_e01_e05.py` (new, 5 tests)
+- `pmagent/tests/mcp/test_mcp_knowledge_e01_e05.py` (new, 5 tests)
 
 ---
 

@@ -20,20 +20,20 @@
 - **Model**: `bge-m3:latest` (Ollama: `qllama/bge-m3`)
 - **Status**: **IMPLEMENTED** ✅
 - **Provider**: Ollama
-- **Implementation**: `agentpm/adapters/ollama.py` `embed()` function
+- **Implementation**: `pmagent/adapters/ollama.py` `embed()` function
 
 ### ✅ Slot 3: RERANKER_MODEL → BGE Reranker via Ollama
 - **Model**: `bge-reranker-v2-m3:latest` (Ollama: `bona/bge-reranker-v2-m3`)
 - **Status**: **IMPLEMENTED** ✅
 - **Provider**: Ollama
-- **Implementation**: `agentpm/adapters/ollama.py` `rerank()` function
+- **Implementation**: `pmagent/adapters/ollama.py` `rerank()` function
 - **Note**: May need refinement during testing (proper BGE reranker API integration)
 
 ### ✅ Slot 4: THEOLOGY_MODEL → Existing Christian LLM
 - **Model**: `Christian-Bible-Expert-v2.0-12B`
 - **Status**: **IMPLEMENTED** ✅
 - **Provider**: Theology adapter (routes to Ollama if available, else OpenAI-compatible API)
-- **Implementation**: `agentpm/adapters/theology.py` - Independent of LM Studio critical path
+- **Implementation**: `pmagent/adapters/theology.py` - Independent of LM Studio critical path
 
 ---
 
@@ -59,7 +59,7 @@
 
 ### Phase 7F.2: Reranker Model (BGE Reranker)
 - [ ] Research Ollama model name for BGE reranker
-- [ ] Implement `rerank()` in `agentpm/adapters/ollama.py`
+- [ ] Implement `rerank()` in `pmagent/adapters/ollama.py`
 - [ ] Update `_normalize_model_name()` for BGE reranker
 - [ ] Update `.env` and `env_example.txt`
 - [ ] Add BGE reranker to auto-discovery
@@ -118,7 +118,7 @@
 
 ## Files to Modify
 
-- `agentpm/adapters/ollama.py` - Add `rerank()` function
+- `pmagent/adapters/ollama.py` - Add `rerank()` function
 - `scripts/ollama_discovery.py` - Update `_normalize_model_name()` for BGE models
 - `src/rerank/blender.py` - Update to use Ollama reranker
 - `.env` / `env_example.txt` - Update with verified model names

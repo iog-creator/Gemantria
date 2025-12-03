@@ -14,7 +14,7 @@ This document compares existing COMPASS/blend validation infrastructure with Pha
 - Pipeline integration - COMPASS already integrated into `pipeline_orchestrator.py` and `schema_validator.py`
 
 **What's New in Phase 15 Wave-3:**
-- **RAG spine alignment** - Wiring RAG retrieval (`agentpm/biblescholar/rag_retrieval.py`, `reranker_adapter.py`) to use Rule 045 field names (`cosine`, `rerank_score`, `edge_strength`) instead of legacy names (`embedding_score`, `combined_score`)
+- **RAG spine alignment** - Wiring RAG retrieval (`pmagent/biblescholar/rag_retrieval.py`, `reranker_adapter.py`) to use Rule 045 field names (`cosine`, `rerank_score`, `edge_strength`) instead of legacy names (`embedding_score`, `combined_score`)
 - **Extract script gap** - `scripts/extract_all.py` is currently a MOCK/PLACEHOLDER that doesn't read from `graph_latest.json`; it generates dummy data without Rule 045 fields
 
 ## Detailed Comparison
@@ -70,7 +70,7 @@ This document compares existing COMPASS/blend validation infrastructure with Pha
 - Used by:
   - `scripts/export_graph.py` - graph export
   - `src/nodes/graph_scorer.py` - pipeline scoring
-  - `agentpm/tools/rerank.py` - rerank tool
+  - `pmagent/tools/rerank.py` - rerank tool
 
 **Configuration:**
 - `EDGE_RERANK_BLEND_W` env var (default: 0.5)
@@ -95,7 +95,7 @@ This document compares existing COMPASS/blend validation infrastructure with Pha
 - Graph export has 0 edges (stale/empty DB)
 - But the code is correct and aligned with Rule 045
 
-### 5. RAG Retrieval (`agentpm/biblescholar/rag_retrieval.py`, `reranker_adapter.py`)
+### 5. RAG Retrieval (`pmagent/biblescholar/rag_retrieval.py`, `reranker_adapter.py`)
 
 **Status:** ⚠️ **Updated in Phase 15 Wave-3 Step-2**
 

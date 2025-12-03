@@ -35,7 +35,7 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     try:
-        from agentpm.status.snapshot import get_system_snapshot
+        from pmagent.status.snapshot import get_system_snapshot
 
         snapshot = get_system_snapshot(
             include_reality_check=True,

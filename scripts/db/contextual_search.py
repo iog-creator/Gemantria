@@ -12,9 +12,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from agentpm.biblescholar.relationship_adapter import RelationshipAdapter
-from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
-from agentpm.biblescholar.bible_db_adapter import BibleDbAdapter
+from pmagent.biblescholar.relationship_adapter import RelationshipAdapter
+from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
+from pmagent.biblescholar.bible_db_adapter import BibleDbAdapter
 
 
 def main() -> int:
@@ -47,7 +47,7 @@ def main() -> int:
     print("1. Base Verse Text:")
     print("-" * 80)
     # Parse reference to get book, chapter, verse
-    from agentpm.biblescholar.reference_parser import parse_reference
+    from pmagent.biblescholar.reference_parser import parse_reference
 
     parsed = parse_reference(verse_ref)
     passage = bible_adapter.get_passage(parsed.book, parsed.chapter, parsed.verse, parsed.chapter, parsed.verse)

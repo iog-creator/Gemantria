@@ -37,8 +37,8 @@ def parse_expected_paths_from_plan() -> Set[str]:
     - scripts/governance/ingest_doc_content.py
     - scripts/governance/ingest_doc_embeddings.py
     - scripts/governance/classify_fragments.py
-    - agentpm/kb/classify.py
-    - agentpm/kb/search.py
+    - pmagent/kb/classify.py
+    - pmagent/kb/search.py
     """
     if not LAYER4_PLAN.exists():
         return set()
@@ -53,8 +53,8 @@ def parse_expected_paths_from_plan() -> Set[str]:
         "scripts/governance/ingest_doc_content.py",
         "scripts/governance/ingest_doc_embeddings.py",
         "scripts/governance/classify_fragments.py",
-        "agentpm/kb/classify.py",
-        "agentpm/kb/search.py",
+        "pmagent/kb/classify.py",
+        "pmagent/kb/search.py",
         "scripts/kb/build_kb_registry.py",
     ]
 
@@ -72,7 +72,7 @@ def scan_actual_layer4_code() -> Set[str]:
     Known locations (from reality):
     - scripts/code_ingest/embed_code_fragments.py
     - scripts/code_ingest/export_code_fragments.py
-    - agentpm/kb/search.py
+    - pmagent/kb/search.py
     """
     actual = set()
 
@@ -83,12 +83,12 @@ def scan_actual_layer4_code() -> Set[str]:
             actual.add(str(py_file.relative_to(REPO_ROOT)))
 
     # Check for KB search implementation
-    kb_search = REPO_ROOT / "agentpm" / "kb" / "search.py"
+    kb_search = REPO_ROOT / "pmagent" / "kb" / "search.py"
     if kb_search.exists():
         actual.add(str(kb_search.relative_to(REPO_ROOT)))
 
     # Check for classify implementation
-    kb_classify = REPO_ROOT / "agentpm" / "kb" / "classify.py"
+    kb_classify = REPO_ROOT / "pmagent" / "kb" / "classify.py"
     if kb_classify.exists():
         actual.add(str(kb_classify.relative_to(REPO_ROOT)))
 

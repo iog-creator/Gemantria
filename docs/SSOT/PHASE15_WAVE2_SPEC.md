@@ -95,7 +95,7 @@ retrieve_contextual_chunks(query: str, top_k: int = 5) -> list[dict]
 
 **Hermetic**:
 - All test vectors pass with DB-off graceful degradation
-- `pytest agentpm/biblescholar/tests/test_rag_retrieval.py -v`
+- `pytest pmagent/biblescholar/tests/test_rag_retrieval.py -v`
 
 **Live** (Required per PM Contract §6.6):
 - pgvector 1024-D embeddings accessible

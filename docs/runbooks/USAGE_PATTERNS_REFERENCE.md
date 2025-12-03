@@ -92,7 +92,7 @@ with psycopg.connect(dsn) as conn:
 
 **Using SQLAlchemy (engine):**
 ```python
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 from sqlalchemy import text
 
 engine = get_control_engine()
@@ -203,7 +203,7 @@ base_url = os.getenv("LM_STUDIO_BASE_URL")
 **For simple LM Studio calls, use the adapter:**
 
 ```python
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 
 messages = [
     {"role": "user", "content": "What is gematria?"}
@@ -236,7 +236,7 @@ else:
 **For control-plane observability, use the logging wrapper:**
 
 ```python
-from agentpm.runtime.lm_logging import lm_studio_chat_with_logging
+from pmagent.runtime.lm_logging import lm_studio_chat_with_logging
 
 messages = [
     {"role": "user", "content": "What is gematria?"}
@@ -259,7 +259,7 @@ result = lm_studio_chat_with_logging(
 **For budget enforcement and fallback support, use the guarded wrapper:**
 
 ```python
-from agentpm.runtime.lm_logging import guarded_lm_call
+from pmagent.runtime.lm_logging import guarded_lm_call
 
 def my_fallback(messages, kwargs):
     """Fallback function when LM Studio is unavailable."""
@@ -301,7 +301,7 @@ result = guarded_lm_call(
 **For backend selection logic:**
 
 ```python
-from agentpm.runtime.lm_routing import select_lm_backend
+from pmagent.runtime.lm_routing import select_lm_backend
 
 backend = select_lm_backend(prefer_local=True)
 # Returns: "lm_studio" or "remote"
@@ -342,7 +342,7 @@ response = requests.post(
 
 ```python
 from scripts.config.env import get_lm_studio_enabled
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 
 if get_lm_studio_enabled():
     result = lm_studio_chat(messages, ...)
@@ -360,7 +360,7 @@ else:
 ### Pattern 2: Graceful Degradation
 
 ```python
-from agentpm.runtime.lm_logging import guarded_lm_call
+from pmagent.runtime.lm_logging import guarded_lm_call
 
 def fallback_response(messages, kwargs):
     """Return a simple fallback when LM Studio is unavailable."""
@@ -412,7 +412,7 @@ def query_database():
 ### Pattern 4: Control-Plane Logging
 
 ```python
-from agentpm.runtime.lm_logging import _write_agent_run
+from pmagent.runtime.lm_logging import _write_agent_run
 
 # Log any tool/agent operation to control.agent_run
 _write_agent_run(
@@ -465,7 +465,7 @@ import requests
 response = requests.post("http://127.0.0.1:1234/v1/chat/completions", ...)
 
 # ✅ CORRECT
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 result = lm_studio_chat(messages, ...)
 ```
 
@@ -510,13 +510,13 @@ except psycopg.OperationalError:
 
 ```python
 # ❌ WRONG - Assumes LM Studio is always available
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 
 result = lm_studio_chat(messages, ...)
 content = result["response"]["choices"][0]["message"]["content"]  # Crashes if lm_off
 
 # ✅ CORRECT - Check result first
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 
 result = lm_studio_chat(messages, ...)
 if result["ok"]:
@@ -549,9 +549,9 @@ When writing code that uses LM Studio or databases:
 - **LM Studio Setup**: `docs/runbooks/LM_STUDIO_SETUP.md`
 - **Database Configuration**: `env_example.txt`
 - **Centralized Config**: `scripts/config/env.py`
-- **LM Studio Adapter**: `agentpm/adapters/lm_studio.py`
-- **LM Logging**: `agentpm/runtime/lm_logging.py`
-- **LM Routing**: `agentpm/runtime/lm_routing.py`
+- **LM Studio Adapter**: `pmagent/adapters/lm_studio.py`
+- **LM Logging**: `pmagent/runtime/lm_logging.py`
+- **LM Routing**: `pmagent/runtime/lm_routing.py`
 - **ADR-066**: `docs/ADRs/ADR-066-lm-studio-control-plane-integration.md`
 - **RFC-080**: `docs/rfcs/RFC-080-lm-studio-control-plane-integration.md`
 
