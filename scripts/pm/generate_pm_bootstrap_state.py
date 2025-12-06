@@ -250,8 +250,8 @@ def main() -> int:
             "kb_registry": optional("share/kb_registry.json"),
         },
         "meta": {
-            "current_phase": "17",
-            "last_completed_phase": "16",
+            "current_phase": "23",
+            "last_completed_phase": "23",
             "kb_registry_path": "share/kb_registry.json",
         },
         "kb": {
@@ -266,6 +266,35 @@ def main() -> int:
             "KB registry is used as canonical source when available (ssot + high importance).",
             "Phase 17: Post-purge SSOT surface regeneration and bootstrap refresh.",
         ],
+        "webui": {
+            "console_v2": {
+                "source": "webui/orchestrator-console-v2/",
+                "schema": optional("share/orchestrator/CONSOLE_SCHEMA.json"),
+                "view_model": optional("share/orchestrator/VIEW_MODEL.json"),
+                "dev_server": optional("scripts/dev/serve_console_v2.py"),
+                "ci_check": optional("scripts/pm/check_console_v2.py"),
+                "dev_url": "http://localhost:8080/console-v2/",
+                "surfaces_consumed": [
+                    optional("share/SSOT_SURFACE_V17.json"),
+                    optional("share/PM_BOOTSTRAP_STATE.json"),
+                    optional("share/PHASE18_INDEX.md"),
+                    optional("share/PHASE18_AGENTS_SYNC_SUMMARY.json"),
+                    optional("share/PHASE18_SHARE_EXPORTS_SUMMARY.json"),
+                    optional("share/PHASE18_LEDGER_REPAIR_SUMMARY.json"),
+                    optional("share/PHASE19_SHARE_HYGIENE_SUMMARY.json"),
+                    optional("share/PHASE20_UI_RESET_DECISION.md"),
+                    optional("share/PHASE20_ORCHESTRATOR_UI_MODEL.md"),
+                    optional("share/PHASE21_CONSOLE_SERVE_PLAN.md"),
+                    optional("share/orchestrator/STATE.json"),
+                    optional("share/orchestrator_assistant/STATE.json"),
+                    optional("share/atlas/control_plane/system_health.json"),
+                    optional("share/atlas/control_plane/lm_indicator.json"),
+                    optional("share/exports/docs-control/canonical.json"),
+                    optional("share/exports/docs-control/summary.json"),
+                    optional("share/kb_registry.json"),
+                ],
+            }
+        },
     }
 
     # Drop keys with null values to keep the file small
