@@ -1,0 +1,320 @@
+# Gematria Project Environment Configuration
+# Copy this file to .env and customize for your environment
+
+# ============================================================================
+# DATABASE CONFIGURATION
+# ============================================================================
+
+# Gematria Database (read-write) - Primary database for concepts and networks
+GEMATRIA_DSN=postgresql://mccoy@/gematria?host=/var/run/postgresql
+
+# Bible Database (read-only) - Reference database with biblical text
+BIBLE_DB_DSN=postgresql://postgres@/bible_db?host=/var/run/postgresql
+
+# --- Atlas / Governance DSN (read-only recommended) ---
+# Prefer a minimally-privileged, read-only role for docs sync & telemetry proofs.
+# ATLAS_DSN falls back to GEMATRIA_DSN if unset.
+# Example: postgres://atlas_ro:***@localhost:5432/gemantria?sslmode=disable
+ATLAS_DSN=
+
+# Read-write DSN for writers, telemetry, HNSW (preferred if available)
+# Falls back to GEMATRIA_DSN if unset
+ATLAS_DSN_RW=
+
+# Read-only DSN (peer equivalence for tag builds)
+# GEMATRIA_RO_DSN and ATLAS_DSN_RO are equal primaries (not fallback)
+# Both are checked first in centralized DSN loaders (scripts/config/env.py, src/gemantria/dsn.py)
+# Required for tag builds; fail-closed if neither peer RO DSN is present
+GEMATRIA_RO_DSN=
+ATLAS_DSN_RO=
+
+# HINT/STRICT switches (default HINT in CI; opt-in STRICT locally/tags)
+STRICT_ATLAS_DSN=0
+STRICT_ALWAYS_APPLY=0
+STRICT_GOVERNANCE=0
+
+# ============================================================================
+# LM STUDIO CONFIGURATION
+# ============================================================================
+
+# Phase-6: LM Studio live usage toggle
+# When true, selected features may call LM Studio under guardrails.
+# Recommended default for local strict bringup (`make bringup.live`).
+LM_STUDIO_ENABLED=true
+
+# Inference provider used by the runtime (lmstudio | openai | other)
+# === Local Inference Configuration (LM Studio / Ollama) ===
+#
+# INFERENCE_PROVIDER controls which local runtime we talk to:
+#   - lmstudio: OpenAI-compatible HTTP API (OPENAI_BASE_URL)
+#   - ollama:   Ollama HTTP API (OLLAMA_BASE_URL)
+#
+# You can switch providers by changing INFERENCE_PROVIDER and the base URL.
+
+# Default: LM Studio (recommended provider for local strict bringup)
+INFERENCE_PROVIDER=lmstudio
+# Optional provider toggles (defaults keep both runtimes available)
+OLLAMA_ENABLED=true
+
+# LM Studio Server Host (legacy, use OPENAI_BASE_URL instead)
+LM_STUDIO_HOST=  # e.g. http://127.0.0.1:9994 (set in your .env)
+
+# === Local AI (LM Studio / OpenAI-compatible) ===
+# OpenAI-compatible API base URL (defaults to LM Studio on port 9994 per AGENTS.md)
+# This is the PRIMARY base URL for LM Studio API calls
+OPENAI_BASE_URL=http://127.0.0.1:9994/v1
+# API key (any non-empty string works for local servers; SDK requires it)
+OPENAI_API_KEY=sk-local-placeholder
+
+# Ollama base URL (used when INFERENCE_PROVIDER=ollama)
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+# Per-slot provider overrides (default to INFERENCE_PROVIDER)
+LOCAL_AGENT_PROVIDER=
+EMBEDDING_PROVIDER=
+RERANKER_PROVIDER=
+THEOLOGY_PROVIDER=
+
+# === Planning Lane (Gemini CLI + Codex) ===
+# pmagent uses these variables to decide which helper CLI to call for planning/coding/maths tasks.
+# Leaving PLANNING_PROVIDER empty falls back to the Granite local_agent slot.
+PLANNING_PROVIDER=
+PLANNING_MODEL=
+GEMINI_ENABLED=true
+GEMINI_CLI_PATH=gemini
+CODEX_ENABLED=false
+CODEX_CLI_PATH=codex
+
+# === Canonical LM Model IDs (slots) ===
+# These slots are provider-agnostic. The runtime picks the right host
+# (LM Studio vs Ollama) based on INFERENCE_PROVIDER.
+#
+# All model configuration is centralized in scripts/config/env.py
+# 
+# NOTE: Replace these with your actual model IDs. Use `python -m scripts.lm_models_ls`
+# to list available models and validate your configuration.
+#
+# ============================================================================
+# GENERAL RETRIEVAL (Default - Granite Stack)
+# ============================================================================
+# Granite is the default stack for general retrieval and local agent.
+# BGE is reserved for Bible/multilingual lanes (see below).
+
+# General embedding model (Granite - default for general retrieval)
+EMBEDDING_MODEL=granite-embedding:278m
+LM_EMBED_MODEL=granite-embedding:278m  # Legacy support (deprecated)
+
+# Local agent / workflow model (Granite - default)
+# Used for local agent workflows and reasoning
+LOCAL_AGENT_MODEL=granite4:tiny-h
+
+# Reranker model (Granite - default for general retrieval)
+# Used for semantic reranking in network aggregation
+RERANKER_MODEL=granite4:tiny-h
+
+# Theology / Bible expert model
+# Used for noun discovery, enrichment, and general theological analysis
+THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+THEOLOGY_LMSTUDIO_BASE_URL=http://127.0.0.1:1234
+THEOLOGY_LMSTUDIO_API_KEY=sk-local-placeholder
+
+# Optional: math-heavy model for numeric/reasoning tasks
+# Used for gematria calculation verification
+MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# ============================================================================
+# BIBLE / MULTILINGUAL LANE (BGE-based)
+# ============================================================================
+# Used by Bible-specific pipelines; not the general default.
+# Uncomment and set these if you need BGE for Bible/multilingual tasks:
+
+# BIBLE_EMBEDDING_MODEL=bge-m3:latest
+# Optional: Qwen reranker fallback (not the primary reranker)
+# LEGACY_RERANKER_MODEL=qwen.qwen3-reranker-0.6b
+
+# ============================================================================
+# RETRIEVAL PROFILE SWITCH (Phase-7C)
+# ============================================================================
+# RETRIEVAL_PROFILE controls retrieval lane:
+#   DEFAULT  - Granite stack (this file's main example above)
+#   BIBLE    - Bible/multilingual lane (BGE-based)
+#   CUSTOM   - for explicit env overrides
+RETRIEVAL_PROFILE=DEFAULT
+
+# Optional Granite overrides (used when RETRIEVAL_PROFILE=GRANITE or CUSTOM)
+# GRANITE_EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# GRANITE_RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+# GRANITE_LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny-GGUF
+
+# ============================================================================
+# PROFILE: PHASE-7F (Ollama + BGE Models - Recommended)
+# ============================================================================
+# Copy this block for Phase-7F: All four slots ready via Ollama
+#
+#   INFERENCE_PROVIDER=ollama
+#   OLLAMA_BASE_URL=http://127.0.0.1:11434
+#   LOCAL_AGENT_MODEL=granite4:tiny-h
+#   EMBEDDING_MODEL=bge-m3:latest
+#   RERANKER_MODEL=bge-reranker-v2-m3:latest
+#   THEOLOGY_MODEL=Christian-Bible-Expert-v2.0-12B
+#   THEOLOGY_PROVIDER=theology
+#
+# Installation:
+#   1. Install Ollama: curl -fsSL https://ollama.com/install.sh | sh
+#   2. Pull Granite models: ollama pull ibm/granite4.0-preview:tiny
+#   3. Set INFERENCE_PROVIDER=ollama in your .env
+#   4. See docs/runbooks/OLLAMA_ALTERNATIVE.md for details
+#
+# NOTE: The adapter automatically maps canonical model names to provider-specific names
+#       (e.g., granite-4.0-h-tiny → ibm/granite4.0-preview:tiny for Ollama)
+
+# General embedding model (Granite)
+# EMBEDDING_MODEL=ibm-granite/granite-embedding-english-r2
+# LM_EMBED_MODEL=ibm-granite/granite-embedding-english-r2  # Legacy support (deprecated)
+
+# Theology / Bible expert model (unchanged - Christian model remains)
+# THEOLOGY_MODEL=christian-bible-expert-v2.0-12b
+
+# Local agent / workflow model (Granite 4.0 H Tiny)
+# LOCAL_AGENT_MODEL=ibm-granite/granite-4.0-h-tiny
+
+# Optional: math-heavy model (unchanged)
+# MATH_MODEL=self-certainty-qwen3-1.7b-base-math
+
+# Optional: reranker model (Granite)
+# RERANKER_MODEL=ibm-granite/granite-embedding-reranker-english-r2
+
+# Optional: override LM Studio embed host/port if not defaulting to 9994.
+# LM_EMBED_HOST=localhost
+# LM_EMBED_PORT=9994
+
+# Embedding Configuration
+USE_QWEN_EMBEDDINGS=true
+
+# Production Safety: No Mocks in Production
+ALLOW_MOCKS_FOR_TESTS=0           # Only set to 1 inside unit tests
+ENFORCE_QWEN_LIVE=1               # Require live Qwen models for enrichment (fail-closed if unavailable)
+
+# Connection Settings
+LM_STUDIO_TIMEOUT=30
+LM_STUDIO_RETRY_ATTEMPTS=3
+LM_STUDIO_RETRY_DELAY=2.0
+LM_STUDIO_MOCK=false
+
+# MCP SSE Server Auto-Start (for LM Studio bridge)
+# Set to 1 to automatically start MCP SSE server on port 8005 when needed
+# Auto-starts when running: pmagent bringup full, make bringup.001, pmagent mcp sse, make mcp.sse.ensure
+AUTO_START_MCP_SSE=0
+
+# ============================================================================
+# PIPELINE CONFIGURATION
+# ============================================================================
+
+# Processing Batch Size
+BATCH_SIZE=50
+
+# Semantic Network Configuration
+VECTOR_DIM=1024
+
+# Relations Configuration (KNN + optional rerank)
+ENABLE_RELATIONS=true
+ENABLE_RERANK=true
+SIM_MIN_COSINE=0.15
+KNN_K=8
+RERANK_TOPK=50
+RERANK_PASS=0.50
+
+# Rerank-Driven Relationship Configuration
+NN_TOPK=20
+RERANK_MIN=0.50
+EDGE_STRONG=0.90
+EDGE_WEAK=0.75
+
+# Pattern Discovery Configuration
+CLUSTER_ALGO=louvain
+CENTRALITY=degree,betweenness,eigenvector
+
+# Exports Configuration
+EXPORT_DIR=exports
+
+# Error Handling
+CONFLICT_RETRY_LIMIT=3
+
+# Quality Thresholds
+GEMATRIA_CONFIDENCE_THRESHOLD=0.90
+AI_CONFIDENCE_THRESHOLD=0.95
+
+# Confidence Gates (soft = warn, hard = fail)
+AI_CONFIDENCE_SOFT=0.90
+AI_CONFIDENCE_HARD=0.95
+
+# Content Limits (words)
+MAX_INSIGHTS_WORDS=250
+MIN_INSIGHTS_WORDS=150
+MAX_SIGNIFICANCE_WORDS=125
+MIN_SIGNIFICANCE_WORDS=75
+
+# ============================================================================
+# DEVELOPMENT SETTINGS
+# ============================================================================
+
+# Logging Level (DEBUG, INFO, WARNING, ERROR)
+LOG_LEVEL=INFO
+
+# Metrics & Logging
+METRICS_ENABLED=1   # 0 disables DB writes (stdout JSON remains)
+WORKFLOW_ID=gemantria.v1
+
+# Observability / Exporter (optional)
+PROM_EXPORTER_ENABLED=0
+PROM_EXPORTER_PORT=9108
+
+# Enable verbose database logging
+DB_DEBUG=false
+
+# Database connection pool settings
+DB_POOL_SIZE=5
+DB_MAX_OVERFLOW=10
+
+# Virtual Environment Safety (prevent pip installs outside venv)
+PIP_REQUIRE_VENV=true
+
+# ============================================================================
+# OPTIONAL: ADVANCED SETTINGS
+# ============================================================================
+
+# Custom data directory (if different from project root)
+# DATA_DIR=/path/to/custom/data
+
+# Custom models directory
+# MODELS_DIR=/path/to/models
+
+# Custom logs directory
+# LOGS_DIR=/path/to/logs
+
+# ============================================================================
+# SECURITY NOTES
+# ============================================================================
+# - Never commit .env files to version control
+# - Bible DB should remain read-only
+# - Use strong database passwords in production
+# - LM Studio models are local (no cloud credentials needed)
+
+CODE_EXEC_TS=0
+
+# ============================================================================
+# RUNTIME BRING-UP HOOKS (Phase-6 Reality Checks)
+# ============================================================================
+
+# Optional shell command the tools can use to start Postgres automatically.
+# Example (macOS/Homebrew):  DB_START_CMD="brew services start postgresql"
+# Example (systemd):         DB_START_CMD="sudo systemctl start postgresql"
+DB_START_CMD=""
+
+# LM Studio CLI model identifier to auto-load via `lms load`.
+# Example: LM_STUDIO_MODEL_ID="lmstudio-community/Meta-Llama-3-8B-Instruct"
+LM_STUDIO_MODEL_ID=""
+
+# Port for the LM Studio HTTP server (used by lms server start).
+# Defaults to 1234 if left blank.
+LM_STUDIO_SERVER_PORT=""

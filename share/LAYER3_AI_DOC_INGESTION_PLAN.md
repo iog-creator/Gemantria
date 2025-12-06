@@ -45,7 +45,7 @@ The PM proposes implementing **Layer 3 (AI Doc Ingestion + Classification)** bef
   - Works on existing fragments
 
 #### 3. KB Registry & Planning (Complete)
-- ✅ `agentpm/plan/kb.py` — Worklist builder from KB registry
+- ✅ `pmagent/plan/kb.py` — Worklist builder from KB registry
 - ✅ `pmagent plan kb` — CLI command for doc health reporting
 - ✅ `share/kb_registry.md` — Current status (empty: no documents)
 
@@ -145,7 +145,7 @@ The PM's Layer 3 proposal **extends existing infrastructure** rather than duplic
    - Migration: `048_add_fragment_meta_column.sql`
    - Column: `meta JSONB DEFAULT '{}'::jsonb`
 
-2. **Create AI classification module** (`agentpm/kb/classify.py`)
+2. **Create AI classification module** (`pmagent/kb/classify.py`)
    - Function: `classify_fragment(content: str, doc_path: str) -> dict`
    - Inputs: fragment text, file name/path
    - Outputs (stored in `meta`):
@@ -167,12 +167,12 @@ The PM's Layer 3 proposal **extends existing infrastructure** rather than duplic
 4. **Test**: Dry-run classification on Phase 14 PDF fragments
 
 **Files Created**:
-- `agentpm/kb/classify.py` (new module)
+- `pmagent/kb/classify.py` (new module)
 - `scripts/governance/classify_fragments.py` (new script)
 - `migrations/048_add_fragment_meta_column.sql` (new migration)
 
 **Files Modified**:
-- `agentpm/kb/__init__.py` (export `classify_fragment`)
+- `pmagent/kb/__init__.py` (export `classify_fragment`)
 
 ---
 
@@ -221,7 +221,7 @@ The PM's Layer 3 proposal **extends existing infrastructure** rather than duplic
 
 **Files Modified**:
 - `pmagent/cli.py` (add `kb refresh` command)
-- `agentpm/kb/registry.py` (update schema for new format)
+- `pmagent/kb/registry.py` (update schema for new format)
 
 ---
 
@@ -373,7 +373,7 @@ The PM's Layer 3 proposal **extends existing infrastructure** rather than duplic
 ## Artifacts to Create
 
 ### Code Files:
-1. `agentpm/kb/classify.py` — AI classification logic
+1. `pmagent/kb/classify.py` — AI classification logic
 2. `scripts/governance/classify_fragments.py` — Classification runner
 3. `scripts/kb/build_kb_registry.py` — KB registry generator
 4. `migrations/048_add_fragment_meta_column.sql` — Schema update
@@ -387,7 +387,7 @@ The PM's Layer 3 proposal **extends existing infrastructure** rather than duplic
 
 ### Documentation:
 1. `docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md` — Design doc (this file)
-2. `agentpm/kb/AGENTS.md` — Document new classification module
+2. `pmagent/kb/AGENTS.md` — Document new classification module
 3. `scripts/governance/AGENTS.md` — Document new scripts
 4. Update `MASTER_PLAN.md` — Add Layer 3 to roadmap
 

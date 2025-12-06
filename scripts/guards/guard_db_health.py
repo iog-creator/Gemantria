@@ -19,7 +19,7 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-from agentpm.db.loader import (
+from pmagent.db.loader import (
     DbDriverMissingError,
     DbUnavailableError,
     get_control_engine,

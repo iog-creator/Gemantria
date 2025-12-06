@@ -13,8 +13,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from agentpm.biblescholar.relationship_adapter import RelationshipAdapter
-from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+from pmagent.biblescholar.relationship_adapter import RelationshipAdapter
+from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
 
 
 def main() -> int:

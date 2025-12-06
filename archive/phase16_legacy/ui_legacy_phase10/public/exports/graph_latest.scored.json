@@ -1,0 +1,90 @@
+{
+  "schema": "gemantria/graph.v1",
+  "book": "Genesis",
+  "generated_at": "2025-11-25T17:25:55.970758+00:00",
+  "nodes": [
+    {
+      "id": "node-1",
+      "surface": "אלהים",
+      "hebrew": "אלהים",
+      "gematria": 86,
+      "class": "proper"
+    },
+    {
+      "id": "node-2",
+      "surface": "אדם",
+      "hebrew": "אדם",
+      "gematria": 45,
+      "class": "proper"
+    },
+    {
+      "id": "node-3",
+      "surface": "ארץ",
+      "hebrew": "ארץ",
+      "gematria": 291,
+      "class": "common"
+    },
+    {
+      "id": "node-4",
+      "surface": "שמים",
+      "hebrew": "שמים",
+      "gematria": 390,
+      "class": "common"
+    },
+    {
+      "id": "node-5",
+      "surface": "אור",
+      "hebrew": "אור",
+      "gematria": 207,
+      "class": "common"
+    }
+  ],
+  "edges": [
+    {
+      "source": "node-1",
+      "target": "node-2",
+      "cosine": 0.85,
+      "rerank_score": 0.9,
+      "edge_strength": 0.875
+    },
+    {
+      "source": "node-1",
+      "target": "node-3",
+      "cosine": 0.75,
+      "rerank_score": 0.8,
+      "edge_strength": 0.775
+    },
+    {
+      "source": "node-2",
+      "target": "node-3",
+      "cosine": 0.7,
+      "rerank_score": 0.75,
+      "edge_strength": 0.725
+    },
+    {
+      "source": "node-3",
+      "target": "node-4",
+      "cosine": 0.65,
+      "rerank_score": 0.7,
+      "edge_strength": 0.675
+    },
+    {
+      "source": "node-4",
+      "target": "node-5",
+      "cosine": 0.6,
+      "rerank_score": 0.65,
+      "edge_strength": 0.625
+    },
+    {
+      "source": "node-1",
+      "target": "node-5",
+      "cosine": 0.55,
+      "rerank_score": 0.6,
+      "edge_strength": 0.575
+    }
+  ],
+  "metadata": {
+    "source": "test_data",
+    "test": true
+  }
+}

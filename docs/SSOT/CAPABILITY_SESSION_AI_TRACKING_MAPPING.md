@@ -2,11 +2,11 @@
 
 **Status:** Design-only; no writes implemented yet  
 **Purpose:** Define how `capability_session` envelopes (from `pmagent plan reality-loop`) would map into AI tracking tables  
-**Related:** `agentpm/plan/next.py` (reality-loop), `agentpm/control_plane.py` (agent_run_cli), `migrations/051_control_agent_run_cli.sql`
+**Related:** `pmagent/plan/next.py` (reality-loop), `pmagent/control_plane.py` (agent_run_cli), `migrations/051_control_agent_run_cli.sql`
 
 ## Overview
 
-This document defines the **future contract** for persisting `capability_session` envelopes (created by `pmagent plan reality-loop`) into AI tracking tables. The mapping is **design-only** at this stage; no database writes are implemented. A hermetic validator (`agentpm/reality/capability_envelope_validator.py`) checks envelopes against this contract without writing to the database.
+This document defines the **future contract** for persisting `capability_session` envelopes (created by `pmagent plan reality-loop`) into AI tracking tables. The mapping is **design-only** at this stage; no database writes are implemented. A hermetic validator (`pmagent/reality/capability_envelope_validator.py`) checks envelopes against this contract without writing to the database.
 
 ## Capability Session Envelope Structure
 
@@ -90,7 +90,7 @@ A `capability_session` envelope (from `evidence/pmagent/capability_session-*.jso
 
 ## Validation Contract
 
-The hermetic validator (`agentpm/reality/capability_envelope_validator.py`) checks:
+The hermetic validator (`pmagent/reality/capability_envelope_validator.py`) checks:
 
 **Required Fields:**
 - `type` must be `"capability_session"`
@@ -122,14 +122,14 @@ The hermetic validator (`agentpm/reality/capability_envelope_validator.py`) chec
 
 **Gating:** Controlled by `PMAGENT_TRACK_SESSIONS=1` environment variable or explicit opt-in flag (e.g., `--track-session` in CLI). Default behavior is **no DB writes** (hermetic).
 
-**Writer Helper:** `agentpm/reality/capability_envelope_writer.py`
+**Writer Helper:** `pmagent/reality/capability_envelope_writer.py`
 
 **Function:** `maybe_persist_capability_session(envelope: dict[str, Any], *, tracking_enabled: bool) -> dict[str, Any]`
 
 **Behavior:**
 - If `tracking_enabled=False`: Returns `{"written": False, "mode": "disabled"}` (no DB calls)
 - If DB unavailable (DSN missing or connection fails): Returns `{"written": False, "mode": "db_off"}` (graceful no-op)
-- If DB available and tracking enabled: Calls `agentpm.control_plane.create_agent_run()` to insert a row
+- If DB available and tracking enabled: Calls `pmagent.control_plane.create_agent_run()` to insert a row
 
 **Mapping to `control.agent_run_cli`:**
 - `command`: Uses `plan.dry_run_command` if present and non-empty, else `"plan.reality-loop"`
@@ -138,7 +138,7 @@ The hermetic validator (`agentpm/reality/capability_envelope_validator.py`) chec
 - `response_json`: `null` (envelope is intent/preview, not execution result)
 - `error_text`: `null` (envelope is intent/preview, not execution result)
 
-**Integration Point:** `validate_and_optionally_persist()` in `agentpm/reality/capability_envelope_validator.py`
+**Integration Point:** `validate_and_optionally_persist()` in `pmagent/reality/capability_envelope_validator.py`
 - First runs `validate_capability_envelope()` (hermetic validation)
 - If validation fails OR `tracking_enabled=False`: Returns validation result only (no DB calls)
 - If validation passes AND `tracking_enabled=True`: Calls `maybe_persist_capability_session()` and merges result under `"tracking"` key
@@ -151,10 +151,10 @@ The hermetic validator (`agentpm/reality/capability_envelope_validator.py`) chec
 ## Implementation Status
 
 **Current State:**
-- ✅ Envelope structure defined (`agentpm/plan/next.py`)
-- ✅ Hermetic validator implemented (`agentpm/reality/capability_envelope_validator.py`)
+- ✅ Envelope structure defined (`pmagent/plan/next.py`)
+- ✅ Hermetic validator implemented (`pmagent/reality/capability_envelope_validator.py`)
 - ✅ CLI validation commands (`pmagent reality validate-capability-envelope`, `validate-capability-history`)
-- ✅ **Gated writer path implemented** (`agentpm/reality/capability_envelope_writer.py`)
+- ✅ **Gated writer path implemented** (`pmagent/reality/capability_envelope_writer.py`)
 - ✅ Integration helper (`validate_and_optionally_persist()`)
 - ✅ Tests proving clean DB-off behavior
 - ❌ **CLI wiring NOT implemented** (library-only; no default behavior change)
@@ -166,8 +166,8 @@ The hermetic validator (`agentpm/reality/capability_envelope_validator.py`) chec
 
 ## Related Documentation
 
-- `agentpm/plan/AGENTS.md` - Planning shell (reality-loop + history)
-- `agentpm/control_plane.py` - `create_agent_run()` helper (future writer)
+- `pmagent/plan/AGENTS.md` - Planning shell (reality-loop + history)
+- `pmagent/control_plane.py` - `create_agent_run()` helper (future writer)
 - `migrations/051_control_agent_run_cli.sql` - Target table schema
-- `agentpm/AGENTS.md` - AI tracking tables overview
+- `pmagent/AGENTS.md` - AI tracking tables overview
 

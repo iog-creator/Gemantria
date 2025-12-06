@@ -260,7 +260,7 @@ Pipeline names come from the `tool` column in `control.agent_run`. If pipeline n
 - **Runbook**: `docs/runbooks/CONTROL_STATUS.md` (control-plane status check)
 - **Runbook**: `docs/runbooks/CONTROL_TABLES.md` (table listing)
 - **Runbook**: `docs/runbooks/CONTROL_SCHEMA.md` (schema introspection)
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_pipeline_status_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_pipeline_status_cli.py`
 - **CLI**: `pmagent control pipeline-status` command
 - **Rule-046**: Hermetic CI Fallbacks (DB-off behavior)
 

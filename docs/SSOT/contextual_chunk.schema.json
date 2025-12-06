@@ -1,0 +1,67 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Contextual Chunk Schema",
+    "description": "Schema for enriched contextual chunks used in Phase 15 RAG integration",
+    "type": "object",
+    "properties": {
+        "verse_id": {"type": "integer", "description": "Verse identifier from bible_db"},
+        "verse_ref": {"type": "string", "description": "Human-readable verse reference (e.g., 'Mark 1:1')"},
+        "greek_words": {
+            "type": "array",
+            "description": "Greek words for NT verses (empty for OT)",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "word_position": {"type": "integer"},
+                    "surface": {"type": "string"},
+                    "strongs_id": {"type": "string"},
+                    "grammar_code": {"type": "string"},
+                    "lemma": {"type": "string"},
+                    "gloss": {"type": "string"},
+                    "language": {"type": "string", "enum": ["GR"]},
+                },
+                "required": ["word_position", "surface", "strongs_id", "language"],
+            },
+        },
+        "proper_names": {
+            "type": "array",
+            "description": "Proper names found in the verse",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "unified_name": {"type": "string"},
+                    "type": {"type": "string"},
+                    "category": {"type": "string"},
+                    "briefest": {"type": "string"},
+                    "brief": {"type": "string"},
+                },
+                "required": ["unified_name"],
+            },
+        },
+        "cross_language_hints": {
+            "type": "array",
+            "description": "Cross-language lemma hints when Greek-to-Hebrew mapping exists",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "greek_strongs": {"type": "string"},
+                    "hebrew_strongs": {"type": "string"},
+                    "hebrew_lemma": {"type": "string"},
+                    "mapping_source": {"type": "string"},
+                },
+                "required": ["greek_strongs"],
+            },
+        },
+        "metadata": {
+            "type": "object",
+            "description": "Additional metadata",
+            "properties": {
+                "book_name": {"type": "string"},
+                "chapter_num": {"type": "integer"},
+                "verse_num": {"type": "integer"},
+                "is_new_testament": {"type": "boolean"},
+            },
+        },
+    },
+    "required": ["verse_id", "verse_ref"],
+}

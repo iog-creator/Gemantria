@@ -56,7 +56,7 @@ def main() -> int:
 
     # Generate MCP catalog summary (PLAN-091 E103)
     try:
-        from agentpm.adapters.mcp_db import catalog_read_ro
+        from pmagent.adapters.mcp_db import catalog_read_ro
 
         catalog_result = catalog_read_ro()
         catalog_summary = {

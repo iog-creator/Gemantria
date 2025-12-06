@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json, sys, pathlib
 
-root = pathlib.Path("agentpm/tests/extractors")
+root = pathlib.Path("pmagent/tests/extractors")
 fixdir = root / "fixtures"
 resp = {"ok": True, "errors": []}
 # presence

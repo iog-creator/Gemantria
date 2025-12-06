@@ -5,7 +5,7 @@
 This document defines the **Phase-8D UI layer** that sits on top of the
 already-completed **Phase-8C semantic search backend**:
 
-- Phase-8C: `agentpm/docs/search.py` + `pmagent docs.search` CLI +
+- Phase-8C: `pmagent/docs/search.py` + `pmagent docs.search` CLI +
   doc fragments/embeddings guards (STRICT/tagproof).
 - Phase-8D: Atlas/TV **Governance Search Panel** and **Orchestrator Console**
   that let the human orchestrator search, browse, and understand governance docs
@@ -19,7 +19,7 @@ framework.
 
 Phase-8C provides:
 
-- `agentpm/docs/search.py` — semantic search implementation
+- `pmagent/docs/search.py` — semantic search implementation
 - `pmagent docs search "query" --k 10 --tier0-only --json-only` — CLI entrypoint
 - Guards:
   - `guard_doc_fragments.py` — verifies all Tier-0 docs have fragments
@@ -86,7 +86,7 @@ Phase-8D must **reuse this path**. No new embedding logic, no new DB tables.
 
 ### 3.4 Implementation Notes
 
-- **Reuse existing search function**: Call `agentpm.docs.search.search_docs()` directly
+- **Reuse existing search function**: Call `pmagent.docs.search.search_docs()` directly
 - **Response transformation**: Map CLI output shape to API response shape:
   - `logical_name` → `source_id` + `title` (parse `AGENTS::` prefix)
   - `content` → `snippet` (already truncated to ~200 chars)
@@ -145,7 +145,7 @@ Phase-8D must **reuse this path**. No new embedding logic, no new DB tables.
        tier0_only: bool = Query(True, description="Restrict to Tier-0 docs"),
    ) -> JSONResponse:
        """Search governance/docs content via semantic similarity."""
-       from agentpm.docs.search import search_docs
+       from pmagent.docs.search import search_docs
        
        result = search_docs(query=q, k=k, tier0_only=tier0_only)
        
@@ -262,14 +262,14 @@ Phase-8D must **reuse this path**. No new embedding logic, no new DB tables.
 - `docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md` — Phase-8C backend implementation
 - `docs/SSOT/DOC_REGISTRY_PLAN.md` — Doc registry schema
 - `docs/runbooks/GOVERNANCE_DB_SSOT.md` — Governance DB SSOT overview
-- `agentpm/docs/search.py` — Search implementation (backend)
+- `pmagent/docs/search.py` — Search implementation (backend)
 - `src/services/api_server.py` — API server (integration point)
 - `docs/atlas/index.html` — Atlas viewer (UI integration point)
 
 ## 10. Notes
 
 - **No new DB tables**: Reuse existing `control.doc_embedding`, `control.doc_fragment`, `control.doc_registry`
-- **No new embedding logic**: Reuse `agentpm.docs.search.search_docs()`
+- **No new embedding logic**: Reuse `pmagent.docs.search.search_docs()`
 - **Consistent styling**: Use Tailwind CSS (same as `/bible`, `/status` pages)
 - **Accessibility**: Follow WCAG 2.1 AA guidelines (keyboard navigation, ARIA labels)
 - **Performance**: Consider caching frequent queries (future enhancement)

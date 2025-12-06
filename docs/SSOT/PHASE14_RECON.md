@@ -27,8 +27,8 @@ This file answers: **"Does current `main` already satisfy the Phase 14 contract?
 - Add `get_greek_words_for_verse()` method
 
 **Subsystems:**
-- `agentpm/biblescholar/lexicon_adapter.py`
-- `agentpm/biblescholar/bible_db_adapter.py`
+- `pmagent/biblescholar/lexicon_adapter.py`
+- `pmagent/biblescholar/bible_db_adapter.py`
 
 ### Track 2: Greek Data Access ✅
 
@@ -51,7 +51,7 @@ This file answers: **"Does current `main` already satisfy the Phase 14 contract?
 - Handle unmapped entries gracefully
 
 **Subsystems:**
-- `agentpm/biblescholar/cross_language_flow.py`
+- `pmagent/biblescholar/cross_language_flow.py`
 - `config/greek_to_hebrew_strongs.json` (mapping file)
 
 ### Track 4: Relationship Tables PoC ✅
@@ -65,8 +65,8 @@ This file answers: **"Does current `main` already satisfy the Phase 14 contract?
 - Read-only adapter (no writes)
 
 **Subsystems:**
-- `agentpm/biblescholar/relationship_adapter.py` (NEW)
-- `agentpm/biblescholar/tests/test_relationship_adapter.py` (NEW)
+- `pmagent/biblescholar/relationship_adapter.py` (NEW)
+- `pmagent/biblescholar/tests/test_relationship_adapter.py` (NEW)
 - `scripts/db/entity_diagnostic.py` (verification script)
 - `scripts/db/contextual_search.py` (verification script)
 
@@ -92,12 +92,12 @@ This file answers: **"Does current `main` already satisfy the Phase 14 contract?
 
 **Phase 14 modules on main:**
 
-- ✅ `agentpm/biblescholar/relationship_adapter.py` — EXISTS (350+ lines, RelationshipAdapter class)
-- ✅ `agentpm/biblescholar/cross_language_flow.py` — EXISTS (cross-language lemma resolution)
-- ✅ `agentpm/biblescholar/reference_parser.py` — EXISTS (verse reference parsing)
-- ✅ `agentpm/biblescholar/cross_language_semantic_flow.py` — EXISTS (semantic flow integration)
-- ✅ `agentpm/biblescholar/lexicon_adapter.py` — MODIFIED (DB-ONLY verse lookup, Greek word access)
-- ✅ `agentpm/biblescholar/bible_db_adapter.py` — MODIFIED (enhanced reference handling)
+- ✅ `pmagent/biblescholar/relationship_adapter.py` — EXISTS (350+ lines, RelationshipAdapter class)
+- ✅ `pmagent/biblescholar/cross_language_flow.py` — EXISTS (cross-language lemma resolution)
+- ✅ `pmagent/biblescholar/reference_parser.py` — EXISTS (verse reference parsing)
+- ✅ `pmagent/biblescholar/cross_language_semantic_flow.py` — EXISTS (semantic flow integration)
+- ✅ `pmagent/biblescholar/lexicon_adapter.py` — MODIFIED (DB-ONLY verse lookup, Greek word access)
+- ✅ `pmagent/biblescholar/bible_db_adapter.py` — MODIFIED (enhanced reference handling)
 
 **Configuration files:**
 

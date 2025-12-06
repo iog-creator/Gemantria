@@ -12,7 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from agentpm.biblescholar.cross_language_semantic_flow import find_cross_language_connections
+from pmagent.biblescholar.cross_language_semantic_flow import find_cross_language_connections
 
 
 def export_cross_language(strongs_id: str, limit: int, output_path: Path) -> None:

@@ -93,7 +93,7 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 - `--json-only`: Output only JSON to stdout (no human-readable stderr)
 - `--dry-run`: Emit proposed actions only (default)
 - `--apply`: Execute actions (requires explicit opt-in)
-- `--subsystem SUB`: Filter to specific subsystem (e.g. `agentpm`, `docs`, `webui`)
+- `--subsystem SUB`: Filter to specific subsystem (e.g. `pmagent`, `docs`, `webui`)
 - `--min-severity LEVEL`: Filter to severity level or higher (`missing`, `stale`, `out_of_sync`, `low_coverage`, `info`)
 - `--limit N`: Limit number of actions processed (default: 50)
 - `--allow-stubs-for-low-coverage`: Allow creating stub files for low-coverage subsystems (only with `--apply`)
@@ -106,7 +106,7 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 {
   "mode": "dry-run" | "apply",
   "filters": {
-    "subsystem": "agentpm|webui|docs|rules|root|...",
+    "subsystem": "pmagent|webui|docs|rules|root|...",
     "min_severity": "missing|stale|out_of_sync|low_coverage|info",
     "limit": 50
   },
@@ -149,7 +149,7 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 
 ### All Writes Go Through Single Executor
 
-- Helper: `agentpm.plan.fix.apply_actions(actions)`
+- Helper: `pmagent.plan.fix.apply_actions(actions)`
 - Writes only under allowed directories:
   - `docs/**`
   - `AGENTS.md` files
@@ -174,7 +174,7 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 
 ### Core Module
 
-- **File**: `agentpm/plan/fix.py`
+- **File**: `pmagent/plan/fix.py`
 - **Functions**:
   - `build_fix_actions(worklist, filters) -> list[Action]`: Convert worklist items to action objects
   - `apply_actions(actions, dry_run=True) -> dict`: Execute actions (or simulate in dry-run)
@@ -186,11 +186,11 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 
 - **File**: `pmagent/cli.py`
 - **Command**: `@plan_app.command("fix")` (subcommand of `plan kb fix`)
-- **Integration**: Calls `agentpm.plan.fix.build_fix_actions()` and `apply_actions()`
+- **Integration**: Calls `pmagent.plan.fix.build_fix_actions()` and `apply_actions()`
 
 ### Tests
 
-- **File**: `agentpm/tests/cli/test_pmagent_plan_kb_fix.py`
+- **File**: `pmagent/tests/cli/test_pmagent_plan_kb_fix.py`
 - **Coverage**:
   - Dry-run produces correct action JSON
   - Apply mode creates/updates files correctly
@@ -202,8 +202,8 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
 ### Documentation Updates
 
 - **Files**:
-  - `agentpm/AGENTS.md`: Add M2 fix flow section
-  - `agentpm/plan/AGENTS.md`: Document fix module and safety model
+  - `pmagent/AGENTS.md`: Add M2 fix flow section
+  - `pmagent/plan/AGENTS.md`: Document fix module and safety model
   - `docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md`: Move `plan kb fix` from "INTENDED" to "CURRENT" once implemented
 
 ---
@@ -220,7 +220,7 @@ pmagent plan kb fix [--json-only] [--dry-run|--apply] [--subsystem SUB] [--min-s
    - Idempotence on repeated runs
 
 4. **AGENTS/SSOT docs updated**:
-   - `agentpm/AGENTS.md` and `agentpm/plan/AGENTS.md` describe the M2 fix flow and its safety model
+   - `pmagent/AGENTS.md` and `pmagent/plan/AGENTS.md` describe the M2 fix flow and its safety model
    - `PMAGENT_CURRENT_VS_INTENDED.md` moves `plan kb fix` from "INTENDED" to "CURRENT" once implemented
 
 5. **Integration tests pass**: Full test suite (`test_pmagent_plan_kb_fix.py`) covers all action types, filters, and safety checks

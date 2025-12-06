@@ -37,7 +37,7 @@ from sqlalchemy import text
 
 import pdfplumber
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export BibleScholar lexicon entry to share/exports/biblescholar/lexicon.json.
 
-This script wraps agentpm.biblescholar.lexicon_flow to generate static JSON exports
+This script wraps pmagent.biblescholar.lexicon_flow to generate static JSON exports
 for the Orchestrator Shell UI.
 """
 
@@ -12,7 +12,7 @@ import sys
 from dataclasses import asdict
 from datetime import datetime, UTC
 
-from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
 
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 

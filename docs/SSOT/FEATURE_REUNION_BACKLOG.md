@@ -31,7 +31,7 @@ Source: `evidence/repo_cleanup/feature_catalog_by_dir.json` (3,749 fragments)
 
 High-level distribution:
 
-- `agentpm/` — core agent + PM framework (~38.6% of fragments)
+- `pmagent/` — core agent + PM framework (~38.6% of fragments)
 - `scripts/` — operational scripts (~35.5%)
 - `tests/` — test code (~14.6%)
 - `src/` — additional source modules (~7.4%)
@@ -48,7 +48,7 @@ These buckets will be used to group candidates into:
 
 These are code areas likely to contain valuable features to bring into the v2 architecture.
 
-### 3.1 agentpm/
+### 3.1 pmagent/
 
 Role: Core orchestration and agent framework.
 
@@ -140,7 +140,7 @@ No quarantine PRs should proceed until both:
 ## 7. Next Steps
 
 - [ ] Expand this backlog with concrete items based on:
-  - Detailed inspection of `agentpm/`, `scripts/`, `src/`, and `archive/`,
+  - Detailed inspection of `pmagent/`, `scripts/`, `src/`, and `archive/`,
   - DMS/code fragment queries,
   - Gemini's orphan-feature list.
 - [ ] Register this document in DMS and export to `share/`.

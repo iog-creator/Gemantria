@@ -23,7 +23,9 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
+from typing import List
 
 # Add project root to path for imports
 ROOT = Path(__file__).resolve().parents[2]
@@ -31,16 +33,21 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
-from agentpm.db.loader import get_control_engine
-from agentpm.kb.classify import classify_fragment
+from pmagent.db.loader import get_control_engine
+from pmagent.kb.classify import classify_fragment
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# Batch size for bulk updates (optimize DB writes)
+DEFAULT_BATCH_SIZE = 50
 
 
 def classify_fragments(
     dry_run: bool = False,
     pdf_only: bool = True,
     limit: int | None = None,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    show_progress: bool = True,
 ) -> dict:
     """
     Classify document fragments with AI metadata.
@@ -73,7 +80,7 @@ def classify_fragments(
         # Query for fragments that need classification
         # Select fragments where meta is NULL or empty JSONB
         where_clause = """
-            WHERE (f.meta IS NULL OR f.meta::text = '{}'::text)
+            WHERE (f.meta IS NULL OR f.meta = '{}'::jsonb)
         """
 
         if pdf_only:
@@ -101,60 +108,114 @@ def classify_fragments(
             query = text(str(query) + f" LIMIT {limit}")
 
         rows = conn.execute(query).fetchall()
+        total_rows = len(rows)
 
-        for fragment_id, doc_id, fragment_index, content, logical_name, repo_path in rows:
+        if total_rows == 0:
+            if show_progress:
+                print("[INFO] No fragments need classification", file=sys.stderr)
+            return {
+                "fragments_processed": 0,
+                "fragments_classified": 0,
+                "dry_run": dry_run,
+                "message": "No unclassified fragments found",
+            }
+
+        if show_progress:
+            print(
+                f"[INFO] Processing {total_rows:,} fragments (batch size: {batch_size})",
+                file=sys.stderr,
+            )
+
+        # Batch processing: collect updates, commit in batches
+        batch_updates: List[dict] = []
+        start_time = time.time()
+        last_progress_time = start_time
+
+        for idx, (
+            fragment_id,
+            doc_id,
+            fragment_index,
+            content,
+            logical_name,
+            repo_path,
+        ) in enumerate(rows, 1):
             fragments_processed += 1
 
             # Classify fragment
             try:
                 meta = classify_fragment(content or "", repo_path or "")
             except Exception as exc:
-                print(
-                    f"[WARN] Classification failed for {logical_name} fragment {fragment_index}: {exc}",
-                    file=sys.stderr,
-                )
+                if show_progress:
+                    print(
+                        f"[WARN] Classification failed for {logical_name} fragment {fragment_index}: {exc}",
+                        file=sys.stderr,
+                    )
                 continue
 
             if not meta:
                 # Empty classification (LM unavailable or parsing failed)
                 if dry_run:
-                    print(
-                        f"[DRY-RUN] {logical_name} fragment {fragment_index}: would classify (LM unavailable)",
-                        file=sys.stderr,
-                    )
+                    if show_progress and idx % 100 == 0:
+                        print(
+                            f"[DRY-RUN] {logical_name} fragment {fragment_index}: would classify (LM unavailable)",
+                            file=sys.stderr,
+                        )
                 else:
                     # Store empty dict to mark as "attempted"
                     meta = {}
 
             if dry_run:
-                print(
-                    f"[DRY-RUN] {logical_name} fragment {fragment_index}: would store meta={json.dumps(meta)}",
-                    file=sys.stderr,
-                )
                 fragments_classified += 1
+                if show_progress and idx % 100 == 0:
+                    print(
+                        f"[DRY-RUN] {idx}/{total_rows}: {logical_name} fragment {fragment_index}",
+                        file=sys.stderr,
+                    )
                 continue
 
-            # Update fragment with classification
-            conn.execute(
-                text(
-                    """
-                    UPDATE control.doc_fragment
-                    SET meta = :meta
-                    WHERE id = :fragment_id
-                    """
-                ),
+            # Collect update for batch commit
+            batch_updates.append(
                 {
                     "fragment_id": fragment_id,
                     "meta": json.dumps(meta),
-                },
+                    "logical_name": logical_name,
+                    "fragment_index": fragment_index,
+                    "subsystem": meta.get("subsystem", "N/A"),
+                    "role": meta.get("doc_role", "N/A"),
+                }
             )
-
-            conn.commit()
             fragments_classified += 1
-            print(
-                f"[OK] {logical_name} fragment {fragment_index}: classified (subsystem={meta.get('subsystem', 'N/A')}, role={meta.get('doc_role', 'N/A')})",
-                file=sys.stderr,
-            )
+
+            # Commit batch when full or at end
+            if len(batch_updates) >= batch_size or idx == total_rows:
+                # Bulk update using executemany for efficiency
+                update_query = text(
+                    """
+                    UPDATE control.doc_fragment
+                    SET meta = CAST(:meta AS jsonb)
+                    WHERE id = :fragment_id
+                    """
+                )
+                conn.execute(
+                    update_query,
+                    [{"fragment_id": u["fragment_id"], "meta": u["meta"]} for u in batch_updates],
+                )
+                conn.commit()
+                batch_updates.clear()
+
+            # Progress indicator every 100 fragments or every 30 seconds
+            current_time = time.time()
+            if show_progress and (idx % 100 == 0 or (current_time - last_progress_time) >= 30.0 or idx == total_rows):
+                elapsed = current_time - start_time
+                rate = idx / elapsed if elapsed > 0 else 0
+                remaining = (total_rows - idx) / rate if rate > 0 else 0
+                print(
+                    f"[PROGRESS] {idx:,}/{total_rows:,} ({idx / total_rows * 100:.1f}%) | "
+                    f"Rate: {rate:.1f}/s | ETA: {remaining / 60:.1f}m | "
+                    f"Classified: {fragments_classified:,}",
+                    file=sys.stderr,
+                )
+                last_progress_time = current_time
 
     return {
         "fragments_processed": fragments_processed,
@@ -181,6 +242,17 @@ def main() -> int:
         action="store_true",
         help="Process all documents (not just PDFs)",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=DEFAULT_BATCH_SIZE,
+        help=f"Batch size for DB updates (default: {DEFAULT_BATCH_SIZE})",
+    )
+    parser.add_argument(
+        "--no-progress",
+        action="store_true",
+        help="Disable progress indicators",
+    )
 
     args = parser.parse_args()
 
@@ -191,6 +263,8 @@ def main() -> int:
             dry_run=args.dry_run,
             pdf_only=pdf_only,
             limit=args.limit,
+            batch_size=args.batch_size,
+            show_progress=not args.no_progress,
         )
 
         # Emit JSON summary

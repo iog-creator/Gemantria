@@ -50,14 +50,14 @@ PLAN-080 implements a comprehensive verification sweep of Phase-1+2 components, 
 ## Current State Assessment
 
 ### What Exists Today
-- **Test Vectors:** TV-01…TV-05 framework exists in `agentpm/tests/`
+- **Test Vectors:** TV-01…TV-05 framework exists in `pmagent/tests/`
 - **E96 Coverage:** `test.tv.coverage` and `guard.tv.coverage` targets wired; `evidence/tv_coverage_receipt.json` generated with all TVs passing
 - **E97 Coverage:** `gatekeeper.coverage` and `guard.gatekeeper.coverage` targets wired; `evidence/gatekeeper_coverage.json` generated with all seven violation codes present and covered
 - **E98 Regeneration:** `regenerate.all` target wired; `share/atlas/` and `share/exports/` fully regenerated with exports (`graph_latest.json`, `graph_stats.json`, `graph_patterns.json`, `temporal_patterns.json`, `pattern_forecast.json`) validated via `ci.exports.smoke`, `atlas.viewer.validate`, `schema.validate`, and `analytics.export`
 - **Browser Verification:** Basic browser verification script exists (`scripts/ops/browser_verify.sh`)
 - **Tagproof Infrastructure:** Tagproof workflows exist in `.github/workflows/`
 - **Atlas/Exports:** Current artifacts in `share/atlas/`, `share/exports/`
-- **Guard/Gatekeeper:** Basic implementations exist in `agentpm/guard/`, `agentpm/gatekeeper/`
+- **Guard/Gatekeeper:** Basic implementations exist in `pmagent/guard/`, `pmagent/gatekeeper/`
 
 ### What Needs Implementation
 - **E99 Integration:** Unified browser + screenshot validation
@@ -70,11 +70,11 @@ PLAN-080 implements a comprehensive verification sweep of Phase-1+2 components, 
 {
     "available": true,
     "total_items": 2,
-    "by_subsystem": {"agentpm": 1, "webui": 1},
+    "by_subsystem": {"pmagent": 1, "webui": 1},
     "items": [
         {
-            "id": "subsystem:agentpm",
-            "title": "Subsystem 'agentpm' documentation",
+            "id": "subsystem:pmagent",
+            "title": "Subsystem 'pmagent' documentation",
             "severity": "low_coverage"
         }
     ]
@@ -124,9 +124,9 @@ PLAN-080 implements a comprehensive verification sweep of Phase-1+2 components, 
 - **Integration:** All Phase-1+2 components verified end-to-end
 
 ### Key PLAN-092 Files Created/Modified
-- `agentpm/status/kb_metrics.py` - Core KB registry and metrics engine
+- `pmagent/status/kb_metrics.py` - Core KB registry and metrics engine
 - `pmagent/cli.py` - Added plan kb, plan kb fix, report kb subcommands
-- `agentpm/status/snapshot.py` - Integrated kb_doc_health into system snapshots
+- `pmagent/status/snapshot.py` - Integrated kb_doc_health into system snapshots
 - `src/services/api_server.py` - Added kb_doc_health to /api/status/system
 - `tests/web/test_status_page.py` - UI tests for KB metrics display
 - Various test files for CLI and runtime verification
@@ -134,11 +134,11 @@ PLAN-080 implements a comprehensive verification sweep of Phase-1+2 components, 
 ## Evidence & Validation
 
 ### Pre-Implementation Evidence
-- **TV Framework:** `agentpm/tests/` contains TV-01…TV-05 test structures
+- **TV Framework:** `pmagent/tests/` contains TV-01…TV-05 test structures
 - **Browser Scripts:** `scripts/ops/browser_verify.sh` exists with basic functionality
 - **Tagproof Workflows:** `.github/workflows/tagproof*.yml` exist
 - **Atlas Artifacts:** `share/atlas/` contains current dashboard exports
-- **Guard Infrastructure:** `agentpm/guard/`, `agentpm/gatekeeper/` have base implementations
+- **Guard Infrastructure:** `pmagent/guard/`, `pmagent/gatekeeper/` have base implementations
 
 ### Success Metrics
 - **Coverage:** >95% for all guard/gatekeeper shims (E97)

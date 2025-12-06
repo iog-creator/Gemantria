@@ -5,7 +5,7 @@ Accepted
 
 ## Context
 
-Hints are currently hardcoded in various agent files (`src/graph/graph.py`, `scripts/prepare_handoff.py`, `agentpm/reality/check.py`, etc.) and treated as optional suggestions. This creates several problems:
+Hints are currently hardcoded in various agent files (`src/graph/graph.py`, `scripts/prepare_handoff.py`, `pmagent/reality/check.py`, etc.) and treated as optional suggestions. This creates several problems:
 
 1. **No contractual enforcement**: REQUIRED hints (like "DMS-only, no fallback") are treated the same as optional suggestions
 2. **Scattered maintenance**: Hints live in code, making updates require code changes
@@ -29,7 +29,7 @@ Implement a DMS-backed Hint Registry (`control.hint_registry`) that:
 
 - `hint_id` (UUID, primary key)
 - `logical_name` (TEXT, unique) - e.g., "docs.dms_only", "status.local_gates_first"
-- `scope` (TEXT) - e.g., "handoff", "status_api", "agentpm", "biblescholar"
+- `scope` (TEXT) - e.g., "handoff", "status_api", "pmagent", "biblescholar"
 - `applies_to` (JSONB) - selectors: must include `flow` key, may include `rule`, `agent`, `scope`
 - `kind` (TEXT, CHECK constraint) - "REQUIRED", "SUGGESTED", "DEBUG"
 - `injection_mode` (TEXT, CHECK constraint) - "PRE_PROMPT", "POST_PROMPT", "TOOL_CALL", "META_ONLY"
@@ -64,9 +64,9 @@ envelope = {
 
 **Affected generators**:
 - `scripts/prepare_handoff.py` - handoff markdown
-- `agentpm/plan/next.py` - capability_session JSON
-- `agentpm/reality/check.py` - reality check verdict
-- `agentpm/status/snapshot.py` - status snapshot
+- `pmagent/plan/next.py` - capability_session JSON
+- `pmagent/reality/check.py` - reality check verdict
+- `pmagent/status/snapshot.py` - status snapshot
 
 ### Guard Enforcement
 
@@ -82,7 +82,7 @@ envelope = {
 
 1. **Step 0**: Discovery - scan codebase for hardcoded hints, classify REQUIRED vs SUGGESTED
 2. **Step 1**: Create schema + ADR, seed registry with initial hints
-3. **Step 2**: Implement helper module (`agentpm/hints/registry.py`)
+3. **Step 2**: Implement helper module (`pmagent/hints/registry.py`)
 4. **Step 3**: Wire envelope generators (parallel behavior, non-breaking)
 5. **Step 4**: Implement guard, add to `reality.green STRICT`
 6. **Step 5**: Fix any failing flows, ensure guard passes
@@ -128,7 +128,7 @@ envelope = {
 ## References
 
 - Migration: `migrations/054_control_hint_registry.sql`
-- Helper module: `agentpm/hints/registry.py`
+- Helper module: `pmagent/hints/registry.py`
 - Guard: `scripts/guards/hints_required.py`
 - Discovery script: `scripts/governance/discover_hints.py`
 - Seed script: `scripts/governance/seed_hint_registry.py`

@@ -11,8 +11,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from agentpm.runtime.lm_logging import lm_studio_chat_with_logging
-from agentpm.runtime.lm_routing import select_lm_backend
+from pmagent.runtime.lm_logging import lm_studio_chat_with_logging
+from pmagent.runtime.lm_routing import select_lm_backend
 from src.infra.structured_logger import get_logger, log_json
 
 LOG = get_logger("gemantria.lm_routing_bridge")

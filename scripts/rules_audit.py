@@ -16,6 +16,7 @@ rules_audit.py - Ensure .cursor/rules numbering is contiguous; update docs lists
 import os
 import re
 import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,15 +26,35 @@ PLAN = ROOT / "docs" / "SSOT" / "MASTER_PLAN.md"
 INDEX = ROOT / "docs" / "SSOT" / "RULES_INDEX.md"
 
 
+def _read_rule_file(rule_path_str: str) -> tuple[int, str, str] | None:
+    """Read a single rule file and extract metadata (for parallel processing)."""
+    rule_path = Path(rule_path_str)
+    m = re.match(r"^(\d{3})-", rule_path.name)
+    if not m:
+        return None
+    num = int(m.group(1))
+    try:
+        title = "# " + rule_path.read_text(errors="ignore").splitlines()[0].lstrip("# ").strip()
+        return (num, rule_path.name, title)
+    except Exception:
+        return None
+
+
 def find_rules():
+    """Find all rule files (parallelized file reading)."""
+    rule_files = sorted(RULES.glob("*.mdc"))
     entries = []
-    for p in sorted(RULES.glob("*.mdc")):
-        m = re.match(r"^(\d{3})-", p.name)
-        if not m:
-            continue
-        num = int(m.group(1))
-        title = "# " + p.read_text(errors="ignore").splitlines()[0].lstrip("# ").strip()
-        entries.append((num, p.name, title))
+
+    # Parallelize rule file reading
+    with ProcessPoolExecutor(max_workers=min(8, len(rule_files))) as executor:
+        futures = {executor.submit(_read_rule_file, str(p)): p for p in rule_files}
+        for future in as_completed(futures):
+            result = future.result()
+            if result:
+                entries.append(result)
+
+    # Sort by rule number
+    entries.sort(key=lambda x: x[0])
     return entries
 
 

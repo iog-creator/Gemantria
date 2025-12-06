@@ -28,13 +28,13 @@ from src.infra.env_loader import ensure_env_loaded
 from src.infra.structured_logger import get_logger
 
 # Import system status helpers
-from agentpm.status.eval_exports import (
+from pmagent.status.eval_exports import (
     load_db_health_snapshot,
     load_edge_class_counts,
     load_lm_indicator,
 )
-from agentpm.status.explain import explain_system_status
-from agentpm.status.system import get_system_status
+from pmagent.status.explain import explain_system_status
+from pmagent.status.system import get_system_status
 from datetime import UTC
 
 # Load environment variables
@@ -207,7 +207,7 @@ async def get_system_status_endpoint() -> JSONResponse:
     """
     try:
         # Use unified snapshot helper for consistency with pm.snapshot
-        from agentpm.status.snapshot import get_system_snapshot
+        from pmagent.status.snapshot import get_system_snapshot
 
         snapshot = get_system_snapshot(
             include_reality_check=False,  # Skip for /api/status/system (use /api/status/explain for that)
@@ -1744,7 +1744,7 @@ async def get_bible_passage(
             "errors": list[str],
         }
     """
-    from agentpm.biblescholar.passage import get_passage_and_commentary
+    from pmagent.biblescholar.passage import get_passage_and_commentary
 
     try:
         result = get_passage_and_commentary(reference, use_lm=use_lm)
@@ -1798,7 +1798,7 @@ async def semantic_search_endpoint(
             "generated_at": str (RFC3339)
         }
     """
-    from agentpm.biblescholar.semantic_search_flow import semantic_search
+    from pmagent.biblescholar.semantic_search_flow import semantic_search
     from datetime import datetime, UTC
 
     try:
@@ -1878,7 +1878,7 @@ async def keyword_search_endpoint(request: KeywordSearchRequest) -> JSONResponse
             "mode": "available" | "db_off"
         }
     """
-    from agentpm.biblescholar.search_flow import search_verses, get_db_status
+    from pmagent.biblescholar.search_flow import search_verses, get_db_status
     from datetime import datetime, UTC
 
     db_status = get_db_status()
@@ -1945,8 +1945,8 @@ async def lexicon_lookup_endpoint(strongs_id: str) -> JSONResponse:
             "mode": "available" | "db_off"
         }
     """
-    from agentpm.biblescholar.lexicon_flow import fetch_lexicon_entry
-    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+    from pmagent.biblescholar.lexicon_flow import fetch_lexicon_entry
+    from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
 
     try:
         entry = fetch_lexicon_entry(strongs_id)
@@ -2026,8 +2026,8 @@ async def cross_language_endpoint(request: CrossLanguageRequest) -> JSONResponse
             "mode": "available" | "db_off"
         }
     """
-    from agentpm.biblescholar.cross_language_flow import find_cross_language_connections
-    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+    from pmagent.biblescholar.cross_language_flow import find_cross_language_connections
+    from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
     from datetime import datetime, UTC
 
     try:
@@ -2112,8 +2112,8 @@ async def insights_endpoint(
             "mode": "available" | "db_off"
         }
     """
-    from agentpm.biblescholar.insights_flow import get_verse_context
-    from agentpm.biblescholar.lexicon_adapter import LexiconAdapter
+    from pmagent.biblescholar.insights_flow import get_verse_context
+    from pmagent.biblescholar.lexicon_adapter import LexiconAdapter
     from datetime import datetime, UTC
 
     try:
@@ -2258,7 +2258,7 @@ async def mcp_tools_search_endpoint(
             query_embedding = None
             if q:
                 try:
-                    from agentpm.adapters.lm_studio import embed
+                    from pmagent.adapters.lm_studio import embed
 
                     embeddings = embed([q], model_slot="embedding")
                     if embeddings and embeddings[0]:
@@ -2964,9 +2964,9 @@ async def search_docs_endpoint(
     """
     Search governance/docs content via semantic similarity.
 
-    Backed by agentpm.docs.search.search_docs / existing Phase-8C pipeline.
+    Backed by pmagent.docs.search.search_docs / existing Phase-8C pipeline.
     """
-    from agentpm.docs.search import search_docs
+    from pmagent.docs.search import search_docs
 
     result = search_docs(query=q, k=k, tier0_only=tier0_only)
 

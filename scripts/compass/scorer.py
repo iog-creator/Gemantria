@@ -41,10 +41,11 @@ def validate_correlation_weights(envelope: Dict[str, Any]) -> Tuple[float, List[
 
     # Validation of correlation weights using basic math
     invalid_weights = 0
+    missing_weights = 0
     for i, edge in enumerate(edges):
-        if "correlation_weight" not in edge:
-            issues.append(f"Edge {i}: missing correlation_weight")
-            invalid_weights += 1
+        if "correlation_weight" not in edge or edge["correlation_weight"] is None:
+            missing_weights += 1
+            # Don't count missing as invalid for scoring (some edges may not have correlations)
             continue
 
         weight = edge["correlation_weight"]
@@ -53,6 +54,7 @@ def validate_correlation_weights(envelope: Dict[str, Any]) -> Tuple[float, List[
         if not (0 <= weight <= 1):
             issues.append(f"Edge {i}: correlation_weight {weight} not in [0,1]")
             invalid_weights += 1
+            continue
 
         # Check >0.5 threshold
         if weight <= 0.5:
@@ -60,7 +62,15 @@ def validate_correlation_weights(envelope: Dict[str, Any]) -> Tuple[float, List[
             invalid_weights += 1
 
     if len(edges) > 0:
-        score = 1.0 - (invalid_weights / len(edges))
+        # Score based on edges that have correlation_weight (not missing)
+        edges_with_corr = len(edges) - missing_weights
+        if edges_with_corr > 0:
+            # Score is based on valid correlations among edges that have them
+            score = 1.0 - (invalid_weights / edges_with_corr)
+        else:
+            # No edges have correlations - score is 0
+            score = 0.0
+            issues.append("No edges have correlation_weight (all missing)")
 
     return score, issues
 

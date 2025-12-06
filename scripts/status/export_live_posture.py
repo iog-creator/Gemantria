@@ -68,7 +68,7 @@ def export_live_posture() -> dict[str, Any]:
 
     # Get LM status
     try:
-        from agentpm.status.system import get_system_status
+        from pmagent.status.system import get_system_status
 
         system_status = get_system_status()
         lm_slots = system_status.get("lm", {}).get("slots", [])

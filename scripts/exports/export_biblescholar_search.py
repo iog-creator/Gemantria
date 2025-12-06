@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export BibleScholar search results to share/exports/biblescholar/search.json.
 
-This script wraps agentpm.biblescholar.search_flow to generate static JSON exports
+This script wraps pmagent.biblescholar.search_flow to generate static JSON exports
 for the Orchestrator Shell UI.
 """
 
@@ -12,7 +12,7 @@ import sys
 from dataclasses import asdict
 from datetime import datetime, UTC
 
-from agentpm.biblescholar.search_flow import get_db_status, search_verses
+from pmagent.biblescholar.search_flow import get_db_status, search_verses
 
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 

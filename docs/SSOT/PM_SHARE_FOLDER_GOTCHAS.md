@@ -49,7 +49,7 @@ The PM is incorrectly trying to infer the current active Phase/PLAN from the `sh
 
 ### 3. Planning System Exists But Isn't Being Used
 
-**Problem**: The `agentpm/plan/` system provides accurate, up-to-date planning information but the PM isn't using it.
+**Problem**: The `pmagent/plan/` system provides accurate, up-to-date planning information but the PM isn't using it.
 
 **Available Commands**:
 - `pmagent plan next` - Returns current focus, next milestone, and candidates from MASTER_PLAN.md + NEXT_STEPS.md
@@ -119,7 +119,7 @@ The PM is incorrectly trying to infer the current active Phase/PLAN from the `sh
 2. PM infers phase from incomplete snapshot
 3. PM makes planning decisions based on stale data
 
-**Intended Workflow** (from agentpm/plan/AGENTS.md):
+**Intended Workflow** (from pmagent/plan/AGENTS.md):
 1. PM runs `pmagent plan next --with-status`
 2. PM gets accurate candidates from full NEXT_STEPS.md
 3. PM opens capability session: `pmagent plan open NEXT_STEPS:1`
@@ -249,8 +249,8 @@ plan.history:
 
 ## Related Files
 
-- `agentpm/plan/next.py` - Planning system implementation
-- `agentpm/plan/AGENTS.md` - Planning system documentation
+- `pmagent/plan/next.py` - Planning system implementation
+- `pmagent/plan/AGENTS.md` - Planning system documentation
 - `scripts/util/export_head_json.py` - Head export utility (100 lines only)
 - `docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md` - PM contract with planning rules
 - `docs/SSOT/PM_CONTRACT.md` - PM contract Section 2.7

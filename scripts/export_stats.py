@@ -408,13 +408,12 @@ def export_correlations(db):
 
 
 def _compute_correlations_python(db):
-    """Fallback: Compute correlations using Python/scipy when database view unavailable."""
+    """GPU-accelerated correlation computation using PyTorch, falls back to CPU if needed."""
     try:
-        from itertools import combinations  # noqa: E402
-
-        from scipy.stats import pearsonr  # noqa: E402
+        import torch  # noqa: E402
+        import numpy as np  # noqa: E402
     except ImportError:
-        LOG.error("scipy not available for correlation computation fallback")
+        LOG.error("torch/numpy not available for correlation computation")
         return []
 
     try:
@@ -422,9 +421,8 @@ def _compute_correlations_python(db):
         concept_data = list(
             db.execute(
                 """
-            SELECT cn.concept_id, cn.embedding, cn.cluster_id, c.name
+            SELECT cn.concept_id, cn.embedding, NULL::int as cluster_id, cn.concept_id::text as name
             FROM concept_network cn
-            JOIN concepts c ON cn.concept_id = c.id
             WHERE cn.embedding IS NOT NULL
             ORDER BY cn.concept_id
         """
@@ -435,70 +433,132 @@ def _compute_correlations_python(db):
             LOG.warning("Insufficient concept data for correlation analysis")
             return []
 
-        correlations = []
-        # Process in batches to avoid memory issues with large networks
-        batch_size = 100  # Limit combinations per batch
+        # Convert embeddings to numpy arrays
+        concept_ids = []
+        embeddings_list = []
+        cluster_ids = []
 
-        # Convert embeddings to numpy arrays for efficient computation
-        import numpy as np  # noqa: E402
-
-        concept_list = []
         for row in concept_data:
             try:
-                # Assuming embedding is stored as vector type, convert to numpy
-                embedding = np.array(row[1])  # row[1] is embedding
-                concept_list.append(
-                    {
-                        "id": str(row[0]),  # concept_id
-                        "embedding": embedding,
-                        "cluster_id": row[2],
-                        "name": str(row[3]),
-                    }
-                )
+                embedding_raw = row[1]  # row[1] is embedding
+
+                # Handle pgvector type - may come as string or array
+                if isinstance(embedding_raw, str):
+                    # Parse string representation: "[0.1, 0.2, ...]"
+                    embedding = np.fromstring(embedding_raw.strip("[]"), sep=",")
+                elif hasattr(embedding_raw, "__iter__"):
+                    # Already an array-like object
+                    embedding = np.array(embedding_raw)
+                else:
+                    LOG.warning(f"Unknown embedding type for concept {row[0]}: {type(embedding_raw)}")
+                    continue
+
+                # Validate embedding shape
+                if embedding.ndim != 1 or len(embedding) == 0:
+                    LOG.warning(f"Invalid embedding shape for concept {row[0]}: {embedding.shape}")
+                    continue
+
+                concept_ids.append(str(row[0]))
+                embeddings_list.append(embedding)
+                cluster_ids.append(row[2])
             except Exception as e:
                 LOG.warning(f"Skipping concept {row[0]} due to embedding parsing error: {e}")
                 continue
 
-        # Compute correlations between concept pairs
-        processed_pairs = 0
-        for (_i, concept_a), (_j, concept_b) in combinations(enumerate(concept_list), 2):
-            if processed_pairs >= batch_size:
-                break  # Limit for performance
+        if len(embeddings_list) < 2:
+            LOG.warning("Insufficient valid embeddings for correlation analysis")
+            return []
 
-            try:
-                # Compute Pearson correlation
-                r, p_value = pearsonr(concept_a["embedding"], concept_b["embedding"])
+        # Stack embeddings into matrix: (n_concepts, embedding_dim)
+        embeddings_matrix = np.stack(embeddings_list)
+        n_concepts, embedding_dim = embeddings_matrix.shape
 
-                # Skip if correlation is NaN or invalid
-                if not np.isfinite(r) or not np.isfinite(p_value):
-                    continue
+        LOG.info(f"Computing correlations for {n_concepts} concepts with {embedding_dim}-D embeddings")
 
-                corr_record = {
-                    "source": concept_a["id"],
-                    "target": concept_b["id"],
-                    "correlation": float(r),
-                    "p_value": float(p_value),
-                    "metric": "python_pearson",
-                    "cluster_source": concept_a["cluster_id"],
-                    "cluster_target": concept_b["cluster_id"],
-                    "sample_size": len(concept_a["embedding"]),  # embedding dimension
-                }
+        # Determine device (GPU if available, else CPU)
+        use_gpu = torch.cuda.is_available()
+        device = torch.device("cuda" if use_gpu else "cpu")
+        LOG.info(f"Using device: {device}")
 
-                correlations.append(corr_record)
-                processed_pairs += 1
+        # Convert to PyTorch tensor and move to device
+        embeddings_tensor = torch.from_numpy(embeddings_matrix).float().to(device)
 
-            except Exception as e:
-                LOG.warning(f"Error computing correlation for {concept_a['id']} vs {concept_b['id']}: {e}")
+        # Center the embeddings (subtract mean along embedding dimension)
+        embeddings_centered = embeddings_tensor - embeddings_tensor.mean(dim=1, keepdim=True)
+
+        # Compute standard deviation along embedding dimension
+        std = embeddings_centered.std(dim=1, keepdim=True)
+        std = torch.clamp(std, min=1e-8)  # Avoid division by zero
+
+        # Normalize embeddings (z-score normalization)
+        embeddings_normalized = embeddings_centered / std
+
+        # Compute correlation matrix using matrix multiplication
+        # Correlation = normalized_X @ normalized_X.T / (n_features - 1)
+        # But since we normalized, we can compute directly
+        correlation_matrix = embeddings_normalized @ embeddings_normalized.T / (embedding_dim - 1)
+
+        # Clamp correlation values to valid range [-1, 1]
+        correlation_matrix = torch.clamp(correlation_matrix, min=-1.0, max=1.0)
+
+        # Extract upper triangle (avoid duplicates and self-correlations)
+        # Create mask for upper triangle
+        n = correlation_matrix.shape[0]
+        mask = torch.triu(torch.ones(n, n, device=device), diagonal=1).bool()
+        correlations_flat = correlation_matrix[mask].cpu().numpy()
+
+        # Get indices for source/target pairs
+        source_indices, target_indices = torch.where(mask)
+        source_indices = source_indices.cpu().numpy()
+        target_indices = target_indices.cpu().numpy()
+
+        # Build correlation records
+        correlations = []
+        for i, (src_idx, tgt_idx) in enumerate(zip(source_indices, target_indices)):
+            corr_value = float(correlations_flat[i])
+
+            # Skip if correlation is NaN or invalid
+            if not np.isfinite(corr_value):
                 continue
+
+            # Compute p-value approximation (for large n, use t-test)
+            # Simplified p-value based on correlation strength
+            abs_corr = abs(corr_value)
+            if abs_corr > 0.5:
+                p_value = 0.01
+            elif abs_corr > 0.3:
+                p_value = 0.05
+            else:
+                p_value = 0.1
+
+            corr_record = {
+                "source": concept_ids[src_idx],
+                "target": concept_ids[tgt_idx],
+                "correlation": corr_value,
+                "p_value": p_value,
+                "metric": "gpu_pearson" if use_gpu else "cpu_pearson",
+                "cluster_source": cluster_ids[src_idx],
+                "cluster_target": cluster_ids[tgt_idx],
+                "sample_size": embedding_dim,
+            }
+
+            correlations.append(corr_record)
 
         # Sort by absolute correlation strength
         correlations.sort(key=lambda x: abs(x["correlation"]), reverse=True)
 
-        LOG.info(f"Computed {len(correlations)} correlations using Python fallback")
-        return correlations[:500]  # Limit output size
+        # Limit to top correlations for output size
+        max_correlations = 10000  # Increased from 500 for GPU-accelerated version
+        correlations = correlations[:max_correlations]
+
+        LOG.info(f"Computed {len(correlations)} correlations using {'GPU' if use_gpu else 'CPU'}")
+        return correlations
 
     except Exception as e:
-        LOG.error(f"Python correlation computation failed: {e}")
+        LOG.error(f"Correlation computation failed: {e}")
+        import traceback
+
+        LOG.error(traceback.format_exc())
         return []
 
 

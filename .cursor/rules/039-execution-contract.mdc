@@ -1,18 +1,35 @@
 ---
-description: Execution Contract Enforcement
+description: Execution Contract Enforcement — Cursor is OPS-Only
 alwaysApply: false
 globs: []
 ---
 id: 039_EXECUTION_CONTRACT
-version: 1
+version: 2.0
 alwaysApply: false
-title: Cursor Execution Contract (GPT-5 orchestrates; Cursor executes)
+title: Cursor Execution Contract (PM orchestrates; Cursor executes)
 description: |
-  Cursor executes commands, applies diffs, runs make/CI, and merges PRs.
-  Cursor MUST follow NEXT_STEPS.md exactly. No scope drift.
+  Cursor is the OPS executor, never the PM.
+  
+  SSOT: docs/SSOT/EXECUTION_CONTRACT.md
+  
+  Cursor executes OPS blocks from the PM (ChatGPT, Gemini, LM Studio).
+  Cursor MUST verify OPS block shape, source, and scope before execution.
+  Cursor MUST run gotchas guard before feature work.
+  Cursor MUST enter NO-OP mode when checks fail.
+  
+  See EXECUTION_CONTRACT.md for full behavior contract.
+
 policy:
-  - Follow NEXT_STEPS.md in order. Paste evidence tails after each step.
-  - If a command fails, paste last 40 lines and STOP for GPT-5 instructions.
-  - Do not modify governance or workflows unless NEXT_STEPS explicitly says so.
+  - SSOT is docs/SSOT/EXECUTION_CONTRACT.md (this rule is a wrapper)
+  - Before executing OPS blocks with code changes, run: python scripts/guards/guard_gotchas_index.py
+  - OPS blocks must contain: Goal, Commands, Evidence to return, Next gate
+  - OPS blocks must include governance source header
+  - If OPS block invalid or checks fail, enter NO-OP mode and report to PM
+  - Do not implement changes without valid OPS block from PM
+  - If user asks for work without OPS block, respond: "I am OPS-only and cannot modify the repo without a PM OPS block."
+
 acceptance:
-  - Each step shows decisive OK/FAIL lines. Evidence pasted verbatim.
+  - Gotchas guard run before feature work (or explicitly acknowledged in OPS block)
+  - OPS block shape verified (all 4 sections present)
+  - Evidence reported exactly as commanded
+  - NO-OP mode entered on any check failure

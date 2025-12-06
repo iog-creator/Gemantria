@@ -1,0 +1,34 @@
+{
+  "phase": "16.1",
+  "status": "COMPLETE_WITH_WARNINGS",
+  "reality_green_strict_ran": true,
+  "reality_green_result": "FAIL",
+  "reality_green_failures": [
+    "AGENTS.md sync (4 issues: scripts, src/infra, pmagent/hints, pmagent/repo)",
+    "Share sync & exports (3 missing: system_health.json, lm_indicator.json, docs-control dir)",
+    "Ledger verification (2 stale: AGENTS.md, MASTER_PLAN.md; 4 missing exports)"
+  ],
+  "reality_green_passes": [
+    "DB Health",
+    "Control-Plane Health",
+    "Ketiv-Primary Policy",
+    "DMS Hint Registry",
+    "Repo Alignment (Layer 4) - HINT mode",
+    "WebUI Shell Sanity"
+  ],
+  "phase16_blocker_resolved": {
+    "blocker": "share/doc_registry.md missing - pmagent repo commands required it",
+    "resolution": "Patched pmagent/repo/logic.py to use kb_registry.json as primary SSOT",
+    "result": "All inventory commands now execute successfully"
+  },
+  "inventory_artifacts": {
+    "semantic_inventory": "evidence/repo/repo_semantic_inventory.json",
+    "semantic_inventory_filtered": "evidence/repo/semantic_inventory_filtered.json",
+    "reunion_plan": "evidence/repo/repo_reunion_plan.json",
+    "quarantine_candidates": "evidence/repo/repo_quarantine_candidates.json"
+  },
+  "architectural_fix": "JSON (kb_registry.json) is now primary SSOT; Markdown (doc_registry.md) is optional human view only",
+  "phase16_status": "Ready to proceed to Phase 16.2 classification - inventory commands successful, REALITY RED issues are pre-existing governance debt not Phase 16 blockers",
+  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "git_branch": "feat/repo-governance-pr3-alignment-guard"
+}

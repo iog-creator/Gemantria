@@ -170,7 +170,7 @@ def check_webui_shell_sanity() -> CheckResult:
 def check_ledger_verification() -> CheckResult:
     """Check that system state ledger is current (all artifacts match ledger hashes)."""
     try:
-        from agentpm.scripts.state.ledger_verify import verify_ledger  # noqa: E402
+        from pmagent.scripts.state.ledger_verify import verify_ledger  # noqa: E402
 
         exit_code, summary = verify_ledger()
 
@@ -243,13 +243,13 @@ def check_ketiv_primary_policy() -> CheckResult:
 def check_hints_required() -> CheckResult:
     """Check that DMS hint registry is accessible and has hints configured (ADR-059)."""
     try:
-        from agentpm.hints.registry import load_hints_for_flow
+        from pmagent.hints.registry import load_hints_for_flow
 
         # Test loading hints for key flows
         flows_to_check = [
             ("handoff", "handoff.generate"),
             ("status_api", "status_snapshot"),
-            ("agentpm", "capability_session"),
+            ("pmagent", "capability_session"),
         ]
 
         total_hints = 0
@@ -297,6 +297,47 @@ def check_hints_required() -> CheckResult:
         )
 
 
+def check_repo_alignment() -> CheckResult:
+    """Check Layer 4 plan vs implementation alignment (detect drift)."""
+    try:
+        script = ROOT / "scripts" / "guards" / "guard_repo_layer4_alignment.py"
+        if not script.exists():
+            return CheckResult(
+                "Repo Alignment (Layer 4)",
+                True,  # Pass if guard doesn't exist yet
+                "Alignment guard not yet deployed (OK during transition)",
+                {"note": "Guard expected at scripts/guards/guard_repo_layer4_alignment.py"},
+            )
+
+        _exit_code, stdout, _stderr = run_subprocess_check(script)
+
+        # Guard is in HINT mode by default, so exit_code = 0 always
+        # Parse the stdout to check for violations
+        has_violations = "FAIL" in stdout or "Violations detected" in stdout
+
+        if has_violations:
+            return CheckResult(
+                "Repo Alignment (Layer 4)",
+                True,  # Pass in HINT mode (warnings only)
+                "Plan vs implementation drift detected (HINT mode: warnings only)",
+                {"output": stdout, "note": "Run with --strict to enforce"},
+            )
+        else:
+            return CheckResult(
+                "Repo Alignment (Layer 4)",
+                True,
+                "No plan vs implementation drift detected",
+                {"output": stdout},
+            )
+    except Exception as e:
+        return CheckResult(
+            "Repo Alignment (Layer 4)",
+            False,
+            f"Failed to run alignment guard: {e}",
+            {"error": str(e)},
+        )
+
+
 def main() -> int:
     """Run all reality green checks and report results."""
     print("🔍 REALITY GREEN - Full System Truth Gate")
@@ -311,6 +352,7 @@ def main() -> int:
         check_ledger_verification(),  # Must pass: all artifacts must be current in ledger
         check_ketiv_primary_policy(),  # Phase 2: Ketiv-primary policy enforcement (ADR-002)
         check_hints_required(),  # ADR-059: DMS hint registry accessibility check
+        check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
         check_webui_shell_sanity(),
     ]
 

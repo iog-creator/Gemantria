@@ -2,9 +2,39 @@
 """Validate all AGENTS.md files are present and up-to-date (Rule 017 + Rule 058)"""
 
 import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def _check_single_agents_file(dir_path: str) -> tuple[str, bool]:
+    """Check if a single AGENTS.md file exists (for parallel processing)."""
+    root = Path(__file__).resolve().parent.parent
+    agents_path = root / dir_path / "AGENTS.md"
+    return (dir_path, agents_path.exists())
+
+
+def _check_single_agents_content(dir_path: str) -> list[str]:
+    """Check content of a single AGENTS.md file (for parallel processing)."""
+    root = Path(__file__).resolve().parent.parent
+    agents_path = root / dir_path / "AGENTS.md"
+    if not agents_path.exists():
+        return []
+
+    issues = []
+    try:
+        content = agents_path.read_text()
+        if len(content.strip()) < 50:
+            issues.append(f"{agents_path}: Content too short (< 50 chars)")
+        if not content.startswith("# AGENTS.md"):
+            issues.append(f"{agents_path}: Missing '# AGENTS.md' header")
+        if "## Directory Purpose" not in content:
+            issues.append(f"{agents_path}: Missing '## Directory Purpose' section")
+    except Exception as e:
+        issues.append(f"{agents_path}: Error reading file: {e}")
+
+    return issues
 
 
 def get_required_directories() -> list[str]:
@@ -41,12 +71,12 @@ def get_required_directories() -> list[str]:
             ):
                 required.append(f"src/{subdir.name}")
 
-    # Add all agentpm subdirectories (excluding cache/generated dirs)
-    agentpm_dir = ROOT / "agentpm"
-    if agentpm_dir.exists():
-        for subdir in agentpm_dir.iterdir():
+    # Add all pmagent subdirectories (excluding cache/generated dirs)
+    pmagent_dir = ROOT / "pmagent"
+    if pmagent_dir.exists():
+        for subdir in pmagent_dir.iterdir():
             if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
-                required.append(f"agentpm/{subdir.name}")
+                required.append(f"pmagent/{subdir.name}")
 
     # Add all docs subdirectories (excluding cache/generated dirs)
     docs_dir = ROOT / "docs"
@@ -72,13 +102,17 @@ def get_required_directories() -> list[str]:
 
 
 def check_agents_files():
-    """Check that all required AGENTS.md files exist"""
+    """Check that all required AGENTS.md files exist (parallelized)."""
     required_dirs = get_required_directories()
     missing = []
-    for dir_path in required_dirs:
-        agents_path = ROOT / dir_path / "AGENTS.md"
-        if not agents_path.exists():
-            missing.append(dir_path)
+
+    # Parallelize file existence checks
+    with ProcessPoolExecutor(max_workers=min(8, len(required_dirs))) as executor:
+        futures = {executor.submit(_check_single_agents_file, dir_path): dir_path for dir_path in required_dirs}
+        for future in as_completed(futures):
+            dir_path, exists = future.result()
+            if not exists:
+                missing.append(dir_path)
 
     if missing:
         print(f"[validate_agents_md] FAIL: Missing {len(missing)} AGENTS.md files:")
@@ -91,21 +125,16 @@ def check_agents_files():
 
 
 def check_agents_content():
-    """Check that AGENTS.md files have basic required structure"""
+    """Check that AGENTS.md files have basic required structure (parallelized)."""
     required_dirs = get_required_directories()
     issues = []
-    for dir_path in required_dirs:
-        agents_path = ROOT / dir_path / "AGENTS.md"
-        if not agents_path.exists():
-            continue
 
-        content = agents_path.read_text()
-        if len(content.strip()) < 50:
-            issues.append(f"{agents_path}: Content too short (< 50 chars)")
-        if not content.startswith("# AGENTS.md"):
-            issues.append(f"{agents_path}: Missing '# AGENTS.md' header")
-        if "## Directory Purpose" not in content:
-            issues.append(f"{agents_path}: Missing '## Directory Purpose' section")
+    # Parallelize content checks
+    with ProcessPoolExecutor(max_workers=min(8, len(required_dirs))) as executor:
+        futures = {executor.submit(_check_single_agents_content, dir_path): dir_path for dir_path in required_dirs}
+        for future in as_completed(futures):
+            file_issues = future.result()
+            issues.extend(file_issues)
 
     if issues:
         print(f"[validate_agents_md] WARN: {len(issues)} content issues:")

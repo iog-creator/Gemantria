@@ -64,49 +64,88 @@ def _walk_repo_files(base: Path = Path(".")) -> Tuple[List[str], int]:
 
 def _load_dms_tracked_paths() -> Set[str]:
     """
-    Load DMS-tracked repo paths from share/doc_registry.md, which is the
-    Markdown export of control.doc_registry.
+    Load DMS-tracked repo paths from the KB/DMS registry.
 
-    Assumes there is a 'repo_path' column in the header row.
-    If the file is missing or malformed, this will raise.
+    Primary source of truth:
+      - share/kb_registry.json (JSON export from DMS)
+
+    Legacy compatibility:
+      - If kb_registry.json is missing but doc_registry.md exists, fall back
+        to parsing the markdown table.
+
+    Markdown is treated as a *derived view* only, for humans/OA sharing.
+    JSON is the SSOT for machine consumption.
     """
-    md_path = Path("share/doc_registry.md")
-    if not md_path.exists():
-        raise RuntimeError("share/doc_registry.md not found; run housekeeping / DMS export first.")
+    import json
 
-    lines = md_path.read_text(encoding="utf-8").splitlines()
-    header: List[str] | None = None
-    repo_idx: int | None = None
+    kb_json_path = Path("share/kb_registry.json")
+    md_path = Path("share/doc_registry.md")
     tracked: Set[str] = set()
 
-    for line in lines:
-        if not line.startswith("|"):
-            continue
-        cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        # header row detection
-        if header is None and any(c.lower() == "repo_path" for c in cells):
-            header = cells
-            try:
-                repo_idx = [c.lower() for c in cells].index("repo_path")
-            except ValueError as exc:
-                raise RuntimeError("Could not find 'repo_path' column in share/doc_registry.md header") from exc
-            continue
+    # Primary: Use kb_registry.json if available
+    if kb_json_path.exists():
+        data = json.loads(kb_json_path.read_text(encoding="utf-8"))
 
-        if header is None or repo_idx is None:
-            # not reached header yet
-            continue
+        # Handle both {"documents": [...]} and raw list formats
+        if isinstance(data, dict) and "documents" in data:
+            docs = data["documents"]
+        elif isinstance(data, list):
+            docs = data
+        else:
+            raise RuntimeError(
+                f"Unrecognized kb_registry.json structure: expected dict with 'documents' key or list, got {type(data)}"
+            )
 
-        # skip separator rows like | --- | --- |
-        if all(set(c) <= {"-", ":"} for c in cells):
-            continue
+        for doc in docs:
+            # Only track enabled documents with a repo_path
+            if not doc.get("enabled", False):
+                continue
+            repo_path = doc.get("repo_path") or doc.get("path")
+            if repo_path:
+                tracked.add(repo_path)
 
-        if len(cells) <= repo_idx:
-            continue
-        repo_path = cells[repo_idx]
-        if repo_path:
-            tracked.add(repo_path)
+        return tracked
 
-    return tracked
+    # Legacy fallback: doc_registry.md (for backward compatibility)
+    if md_path.exists():
+        lines = md_path.read_text(encoding="utf-8").splitlines()
+        header: List[str] | None = None
+        repo_idx: int | None = None
+
+        for line in lines:
+            if not line.startswith("|"):
+                continue
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+
+            # header row detection
+            if header is None and any(c.lower() == "repo_path" for c in cells):
+                header = cells
+                try:
+                    repo_idx = [c.lower() for c in cells].index("repo_path")
+                except ValueError as exc:
+                    raise RuntimeError("Could not find 'repo_path' column in share/doc_registry.md header") from exc
+                continue
+
+            if header is None or repo_idx is None:
+                continue
+
+            # skip separator rows like | --- | --- |
+            if all(set(c) <= {"-", ":"} for c in cells):
+                continue
+
+            if len(cells) <= repo_idx:
+                continue
+            repo_path = cells[repo_idx]
+            if repo_path:
+                tracked.add(repo_path)
+
+        return tracked
+
+    # Neither source available - this is now an error
+    raise RuntimeError(
+        f"Neither {kb_json_path} nor {md_path} could be used as a registry source. "
+        "Run 'make share.sync' or housekeeping to generate the KB registry."
+    )
 
 
 def build_semantic_inventory() -> Dict:

@@ -10,7 +10,7 @@ No deletions or moves have been performed.
 - `.current_branch.txt` (file)
 - `.last_doctor.json` (file)
 - `activate_venv.sh` (file)
-- `agentpm` (dir)
+- `pmagent` (dir)
 - `agents` (dir)
 - `atlas.e86.tree.txt` (file)
 - `backup-safety-rules-20251107_114253.bundle` (file)

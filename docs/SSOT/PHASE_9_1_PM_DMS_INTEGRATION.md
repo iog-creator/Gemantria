@@ -43,11 +43,11 @@ Fix critical gap: PM (AI Project Manager) was searching files instead of queryin
 **Deliverable**: BibleScholar docs tracked in `control.kb_document`
 
 **Actions Taken**:
-- Ran `python agentpm/scripts/docs_inventory.py --dir agentpm/biblescholar`
+- Ran `python pmagent/scripts/docs_inventory.py --dir pmagent/biblescholar`
 - Scanned 2232 files total
 - Inserted 54 new documents
 - Updated 2178 existing documents
-- ✅ `agentpm/biblescholar/AGENTS.md` now in KB registry
+- ✅ `pmagent/biblescholar/AGENTS.md` now in KB registry
 
 **Verification** (when DB available):
 ```bash
@@ -79,7 +79,7 @@ psql "$GEMATRIA_DSN" -c "SELECT path, title, subsystem FROM control.kb_document 
 **Feature Registration Workflow**:
 - Step 1: Create MCP envelope (`share/mcp/<project>_envelope.json`)
 - Step 2: Ingest into catalog (`make mcp.ingest`)
-- Step 3: Update KB registry (`python agentpm/scripts/docs_inventory.py`)
+- Step 3: Update KB registry (`python pmagent/scripts/docs_inventory.py`)
 - Step 4: Verify registration (`pmagent kb registry list | grep <project>`)
 
 **Example Added**: BibleScholar envelope registration (Phase 9.1)

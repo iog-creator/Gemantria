@@ -74,3 +74,4 @@
 | 069 | 069-always-use-dms-first.mdc | # Rule 069 — Always Use DMS First (Planning Queries) |
 | 070 | 070-gotchas-check.mdc | # --- |
 | 071 | 071-portable-json-not-plan-ssot.mdc | # Rule 071 — Portable JSON is not Plan SSOT |
+| 072 | 072-hint-system.mdc | # --- |

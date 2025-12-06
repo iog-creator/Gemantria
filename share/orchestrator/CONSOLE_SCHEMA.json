@@ -1,0 +1,96 @@
+{
+    "version": "v2.0",
+    "description": "Orchestrator Console v2 Schema - defines regions, data sources, and bindings",
+    "regions": {
+        "left_nav": {
+            "type": "mode_selector",
+            "modes": [
+                "overview",
+                "docs",
+                "temporal",
+                "forecast",
+                "graph"
+            ]
+        },
+        "conversation": {
+            "type": "chat_pane",
+            "sources": [
+                "phase_context",
+                "orchestrator_state",
+                "oa_state"
+            ]
+        },
+        "right_status": {
+            "type": "tile_grid",
+            "tiles": [
+                "system_status",
+                "phase_governance",
+                "docs_registry",
+                "agent_state"
+            ]
+        }
+    },
+    "data_sources": {
+        "ssot_surface": {
+            "path": "share/SSOT_SURFACE_V17.json",
+            "type": "json"
+        },
+        "pm_bootstrap": {
+            "path": "share/PM_BOOTSTRAP_STATE.json",
+            "type": "json"
+        },
+        "phase_index": {
+            "path": "share/PHASE23_INDEX.md",
+            "type": "markdown"
+        },
+        "phase_summaries": {
+            "paths": [
+                "share/PHASE18_AGENTS_SYNC_SUMMARY.json",
+                "share/PHASE18_SHARE_EXPORTS_SUMMARY.json",
+                "share/PHASE18_LEDGER_REPAIR_SUMMARY.json",
+                "share/PHASE19_SHARE_HYGIENE_SUMMARY.json"
+            ],
+            "type": "json_array"
+        },
+        "ui_decision": {
+            "path": "share/PHASE20_UI_RESET_DECISION.md",
+            "type": "markdown"
+        },
+        "control_plane_exports": {
+            "path": "share/atlas/control_plane/",
+            "type": "directory"
+        },
+        "docs_control_exports": {
+            "path": "share/exports/docs-control/",
+            "type": "directory"
+        },
+        "kb_registry": {
+            "path": "share/kb_registry.json",
+            "type": "json"
+        },
+        "orchestrator_state": {
+            "path": "share/orchestrator/STATE.json",
+            "type": "json"
+        },
+        "orchestrator_decisions": {
+            "path": "share/orchestrator/DECISIONS.json",
+            "type": "json"
+        },
+        "oa_state": {
+            "path": "share/orchestrator_assistant/STATE.json",
+            "type": "json"
+        },
+        "oa_decisions": {
+            "path": "share/orchestrator_assistant/DECISIONS.json",
+            "type": "json"
+        },
+        "orchestrator_prompts": {
+            "path": "share/orchestrator/ACTIVE_PROMPTS.md",
+            "type": "markdown"
+        },
+        "oa_prompts": {
+            "path": "share/orchestrator_assistant/ACTIVE_PROMPTS.md",
+            "type": "markdown"
+        }
+    }
+}

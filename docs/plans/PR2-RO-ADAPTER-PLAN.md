@@ -11,7 +11,7 @@
 
 ## Implementation Approach
 
-### Adapter Changes (`agentpm/adapters/mcp_db.py`)
+### Adapter Changes (`pmagent/adapters/mcp_db.py`)
 
 - Detect tag builds via environment (e.g., `CI_TAG_BUILD=1` or git tag detection)
 - Use centralized DSN loader (`scripts.config.env.get_ro_dsn()` or `src.gemantria.dsn.dsn_ro()`)

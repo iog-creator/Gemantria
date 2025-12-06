@@ -67,6 +67,39 @@ def quarantine_candidates(
     run_quarantine_candidates(write_share=write_share)
 
 
+@app.command("alignment-guard")
+def alignment_guard(
+    strict: bool = typer.Option(
+        False,
+        "--strict",
+        help="STRICT mode: fail on violations (default: HINT mode, warnings only)",
+    ),
+) -> None:
+    """
+    Check Layer 4 plan vs implementation alignment (detect drift).
+
+    Compares expected code paths from LAYER4_CODE_INGESTION_PLAN.md with actual
+    code locations in the repository. Detects integration islands like scripts/code_ingest/.
+
+    Modes:
+    - HINT (default): Emit warnings only, exit 0
+    - STRICT (--strict): Fail closed on violations, exit 1
+    """
+    import subprocess
+
+    guard_script = pathlib.Path("scripts/guards/guard_repo_layer4_alignment.py")
+    if not guard_script.exists():
+        typer.echo(f"Error: Guard script not found: {guard_script}", err=True)
+        raise typer.Exit(code=1)
+
+    args = ["python", str(guard_script)]
+    if strict:
+        args.append("--strict")
+
+    result = subprocess.run(args)
+    raise typer.Exit(code=result.returncode)
+
+
 # ============================================================================
 # Git Workflow Commands (Automate Safe Branching)
 # ============================================================================

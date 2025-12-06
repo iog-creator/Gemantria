@@ -37,11 +37,11 @@
 - **Branch:** `main`
 - **HEAD:** `c7f6b2d`
 - **PLAN-092 Components on Main:**
-  - ✅ **M1**: `pmagent plan kb` - KB registry worklist generation (`agentpm/status/kb_metrics.py`)
+  - ✅ **M1**: `pmagent plan kb` - KB registry worklist generation (`pmagent/status/kb_metrics.py`)
   - ✅ **M2**: `pmagent plan kb fix` - Orchestrated doc fixes (`pmagent/cli.py` + fix manifests)
-  - ✅ **M3**: `pmagent report kb` - Doc-health reporting (`agentpm/status/kb_metrics.py`)
+  - ✅ **M3**: `pmagent report kb` - Doc-health reporting (`pmagent/status/kb_metrics.py`)
   - ✅ **M4**: `/status` page KB metrics (`src/services/api_server.py` + `tests/web/test_status_page.py`)
-  - ✅ **Integration**: `pm.snapshot` includes `kb_doc_health` data (`agentpm/status/snapshot.py`)
+  - ✅ **Integration**: `pm.snapshot` includes `kb_doc_health` data (`pmagent/status/snapshot.py`)
   - ✅ **Tests**: 34 tests passing across CLI, runtime, and web components
 
 ### PLAN-092 Verification Evidence
@@ -51,11 +51,11 @@
 {
     "available": true,
     "total_items": 2,
-    "by_subsystem": {"agentpm": 1, "webui": 1},
+    "by_subsystem": {"pmagent": 1, "webui": 1},
     "items": [
         {
-            "id": "subsystem:agentpm",
-            "title": "Subsystem 'agentpm' documentation",
+            "id": "subsystem:pmagent",
+            "title": "Subsystem 'pmagent' documentation",
             "severity": "low_coverage"
         }
     ]
@@ -100,9 +100,9 @@
 4. **PLAN-082 KB Registry Automation**: Automated doc updates based on code changes
 
 ### Key PLAN-092 Files Created/Modified
-- `agentpm/status/kb_metrics.py` - Core KB registry and metrics engine
+- `pmagent/status/kb_metrics.py` - Core KB registry and metrics engine
 - `pmagent/cli.py` - Added plan kb, plan kb fix, report kb subcommands
-- `agentpm/status/snapshot.py` - Integrated kb_doc_health into system snapshots
+- `pmagent/status/snapshot.py` - Integrated kb_doc_health into system snapshots
 - `src/services/api_server.py` - Added kb_doc_health to /api/status/system
 - `tests/web/test_status_page.py` - UI tests for KB metrics display
 - Various test files for CLI and runtime verification

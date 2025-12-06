@@ -18,26 +18,26 @@ a canonical SSOT document yet.
 
 - README.md: present
 
-#### agentpm.git
+#### pmagent.git
 - (no obvious project markers found)
 
-#### agentpm_workspace
+#### pmagent_workspace
 
 - README.md: present
 - Python project markers detected
 - MASTER_PLAN.md found
 - Mentions BibleScholar
 
-#### agentpm_workspace1
+#### pmagent_workspace1
 
 - Python project markers detected
 - AGENTS.md found
 
-#### agentpm_workspace2
+#### pmagent_workspace2
 
 - MASTER_PLAN.md found
 
-#### agentpm_workspace_old
+#### pmagent_workspace_old
 
 - README.md: present
 - Python project markers detected

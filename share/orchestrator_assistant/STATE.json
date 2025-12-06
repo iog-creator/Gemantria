@@ -1,0 +1,16 @@
+{
+    "version": 1,
+    "role": "orchestrator_assistant",
+    "description": "Research and analysis assistant for the Orchestrator and PM.",
+    "primary_tasks": [
+        "Perform Rule 070 gotchas checks before major phases.",
+        "Propose phase plans and stress scenarios.",
+        "Cross-check governance docs for drift (SHARE_SURFACE_CONTRACT, webui-contract, ADRs)."
+    ],
+    "truth_hierarchy": [
+        "Postgres DMS (SSOT)",
+        "docs/SSOT/*.md",
+        "share/ surfaces",
+        "pmagent/ outputs"
+    ]
+}

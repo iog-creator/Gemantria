@@ -30,19 +30,19 @@ human/PM curation.
 
 ### 3.1 Python modules (candidates)
 
-- `agentpm/adapters/mcp_db.py`
-- `agentpm/atlas/generate.py`
-- `agentpm/control_plane/doc_fragments.py`
-- `agentpm/control_plane/exports.py`
-- `agentpm/control_plane/sessions.py`
-- `agentpm/db/__init__.py`
-- `agentpm/db/loader.py`
-- `agentpm/db/models_graph_stats.py`
-- `agentpm/lm_widgets/__init__.py`
-- `agentpm/lm_widgets/adapter.py`
-- `agentpm/runtime/lm_budget.py`
-- `agentpm/runtime/lm_helpers.py`
-- `agentpm/runtime/lm_logging.py`
+- `pmagent/adapters/mcp_db.py`
+- `pmagent/atlas/generate.py`
+- `pmagent/control_plane/doc_fragments.py`
+- `pmagent/control_plane/exports.py`
+- `pmagent/control_plane/sessions.py`
+- `pmagent/db/__init__.py`
+- `pmagent/db/loader.py`
+- `pmagent/db/models_graph_stats.py`
+- `pmagent/lm_widgets/__init__.py`
+- `pmagent/lm_widgets/adapter.py`
+- `pmagent/runtime/lm_budget.py`
+- `pmagent/runtime/lm_helpers.py`
+- `pmagent/runtime/lm_logging.py`
 - `agents/example_enrich.py`
 - `archive/_quarantine/p2-scaffold/graph.py`
 - `archive/_quarantine/p2-scaffold/nodes.py`
@@ -241,24 +241,24 @@ human/PM curation.
 
 ### 3.3 Tests (candidates)
 
-- `agentpm/tests/atlas/fixtures/e100/regeneration_guard_failed.json`
-- `agentpm/tests/atlas/fixtures/e100/regeneration_guard_ok.json`
-- `agentpm/tests/atlas/test_atlas_search_title_aria_e41_e43.py`
-- `agentpm/tests/atlas/test_lm_metrics_exports.py`
-- `agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py`
-- `agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
-- `agentpm/tests/db/test_phase3a_db_health_smoke.py`
-- `agentpm/tests/db/test_phase3a_db_health_snapshot.py`
-- `agentpm/tests/db/test_phase3a_db_loader.py`
-- `agentpm/tests/db/test_phase3a_graph_stats_import.py`
-- `agentpm/tests/db/test_phase3b_graph_overview.py`
-- `agentpm/tests/lm/test_phase6_lm_budgets.py`
-- `agentpm/tests/phase1/test_tv01_missing_por.py`
-- `agentpm/tests/phase1/test_tv02_arg_schema_invalid.py`
-- `agentpm/tests/phase1/test_tv03_ring_violation.py`
-- `agentpm/tests/phase1/test_tv04_provenance_mismatch.py`
-- `agentpm/tests/phase1/test_tv05_forbidden_tool.py`
-- `agentpm/tests/system/test_phase3b_system_health.py`
+- `pmagent/tests/atlas/fixtures/e100/regeneration_guard_failed.json`
+- `pmagent/tests/atlas/fixtures/e100/regeneration_guard_ok.json`
+- `pmagent/tests/atlas/test_atlas_search_title_aria_e41_e43.py`
+- `pmagent/tests/atlas/test_lm_metrics_exports.py`
+- `pmagent/tests/cli/test_phase3b_pmagent_control_status_cli.py`
+- `pmagent/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
+- `pmagent/tests/db/test_phase3a_db_health_smoke.py`
+- `pmagent/tests/db/test_phase3a_db_health_snapshot.py`
+- `pmagent/tests/db/test_phase3a_db_loader.py`
+- `pmagent/tests/db/test_phase3a_graph_stats_import.py`
+- `pmagent/tests/db/test_phase3b_graph_overview.py`
+- `pmagent/tests/lm/test_phase6_lm_budgets.py`
+- `pmagent/tests/phase1/test_tv01_missing_por.py`
+- `pmagent/tests/phase1/test_tv02_arg_schema_invalid.py`
+- `pmagent/tests/phase1/test_tv03_ring_violation.py`
+- `pmagent/tests/phase1/test_tv04_provenance_mismatch.py`
+- `pmagent/tests/phase1/test_tv05_forbidden_tool.py`
+- `pmagent/tests/system/test_phase3b_system_health.py`
 - `tests/AGENTS.md`
 - `tests/README.md`
 - `tests/acceptance/test_document_management_e2e.py`

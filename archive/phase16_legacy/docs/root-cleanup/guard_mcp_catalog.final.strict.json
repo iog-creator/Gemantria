@@ -1,0 +1,14 @@
+{
+  "ok_repo": true,
+  "exists": {
+    "catalog": true,
+    "endpoints": true
+  },
+  "checks": {
+    "functions_present": true,
+    "no_write_verbs": true,
+    "catalog_present": true,
+    "budget_ok": true
+  },
+  "notes": []
+}

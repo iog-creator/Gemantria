@@ -16,8 +16,8 @@ from uuid import UUID, uuid4
 from sqlalchemy import insert
 from sqlalchemy.exc import OperationalError, ProgrammingError
 
-from agentpm.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
-from agentpm.db.models_graph_stats import Base, GraphStatsSnapshot
+from pmagent.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
+from pmagent.db.models_graph_stats import Base, GraphStatsSnapshot
 
 # Add project root to path
 ROOT = Path(__file__).resolve().parent.parent

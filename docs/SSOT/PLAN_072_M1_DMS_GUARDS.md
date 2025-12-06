@@ -318,8 +318,8 @@ docs.audit:                # Runs guard.docs.consistency
 
 ### Test Evidence
 
-- `agentpm/tests/docs/test_guard_docs_consistency.py` (if missing)
-- `agentpm/tests/docs/test_guard_docs_db_ssot.py` (new)
+- `pmagent/tests/docs/test_guard_docs_consistency.py` (if missing)
+- `pmagent/tests/docs/test_guard_docs_db_ssot.py` (new)
 - Other guard tests as needed
 
 ---

@@ -279,7 +279,7 @@ If tables are present but have `row_count: 0`:
 - **Script**: `scripts/control/control_status.py`
 - **CLI Command**: `pmagent control status`
 - **Make Target**: `make control.status.smoke`
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_status_cli.py`
 
-The command uses the centralized DB loader (`agentpm.db.loader`) and reuses the DB health check logic (`scripts.guards.guard_db_health`) to ensure consistent behavior with other health commands.
+The command uses the centralized DB loader (`pmagent.db.loader`) and reuses the DB health check logic (`scripts.guards.guard_db_health`) to ensure consistent behavior with other health commands.
 

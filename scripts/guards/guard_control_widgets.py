@@ -32,7 +32,7 @@ def _is_strict_mode() -> bool:
 def check_adapter_import() -> dict[str, bool | str]:
     """Check that adapter module can be imported."""
     try:
-        from agentpm.control_widgets.adapter import (  # noqa: F401
+        from pmagent.control_widgets.adapter import (  # noqa: F401
             load_biblescholar_reference_widget_props,
             load_graph_compliance_widget_props,
         )
@@ -51,7 +51,7 @@ def check_adapter_import() -> dict[str, bool | str]:
 def check_widget_functions() -> dict[str, bool | str]:
     """Check that widget functions work (even with missing files)."""
     try:
-        from agentpm.control_widgets.adapter import (
+        from pmagent.control_widgets.adapter import (
             load_biblescholar_reference_widget_props,
             load_graph_compliance_widget_props,
         )

@@ -16,13 +16,13 @@
 
 ## Deliverables
 
-- `agentpm/guard/impl.py`: `validate_first_response`, `validate_tool_call`, `record_violation` (stub write path, no CI DB writes).
+- `pmagent/guard/impl.py`: `validate_first_response`, `validate_tool_call`, `record_violation` (stub write path, no CI DB writes).
 
-- `agentpm/gatekeeper/impl.py`: `build_capability_session` (deterministic checklists + policy snapshot).
+- `pmagent/gatekeeper/impl.py`: `build_capability_session` (deterministic checklists + policy snapshot).
 
-- `agentpm/adapters/mcp_db.py`: RO adapter using centralized DSN loader; skips on CI unless STRICT lane.
+- `pmagent/adapters/mcp_db.py`: RO adapter using centralized DSN loader; skips on CI unless STRICT lane.
 
-- Tests: `agentpm/tests/test_guarded_calls_tv.py` with real TVs 01–05 (pure-unit; no network).
+- Tests: `pmagent/tests/test_guarded_calls_tv.py` with real TVs 01–05 (pure-unit; no network).
 
 - Make targets: `guard.mcp.db.ro` remains opt-in; no CI change in this PR.
 

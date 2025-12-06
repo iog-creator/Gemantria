@@ -26,7 +26,7 @@ except ImportError:
 
 # Import hint registry (graceful degradation if unavailable)
 try:
-    from agentpm.hints.registry import load_hints_for_flow
+    from pmagent.hints.registry import load_hints_for_flow
 
     HAS_HINT_REGISTRY = True
 except ImportError:

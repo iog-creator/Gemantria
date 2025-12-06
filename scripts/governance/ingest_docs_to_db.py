@@ -39,7 +39,7 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -78,7 +78,7 @@ def iter_agents_docs() -> Iterable[DocTarget]:
 
     - Root AGENTS.md is treated as the global agent framework index.
 
-    - Any other *AGENTS*.md (e.g. scripts_AGENTS.md, agentpm/AGENTS.md) is treated
+    - Any other *AGENTS*.md (e.g. scripts_AGENTS.md, pmagent/AGENTS.md) is treated
 
       as module- or directory-level agent framework documentation.
     """

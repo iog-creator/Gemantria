@@ -1,0 +1,94 @@
+===============================================================================
+                           GEMATRIA DATA FLOW ARCHITECTURE
+===============================================================================
+
+EXTERNAL SOURCES
+├── Bible Database (PostgreSQL, Read-Only)
+│   └── KJV text by verse, pre-extracted nouns
+└── LM Studio API (Live Models)
+    ├── christian-bible-expert-v2.0-12b (Theology)
+    ├── self-certainty-qwen3-1.7b-base-math (Validation)
+    ├── text-embedding-qwen3-embedding-0.6b (Embeddings)
+    └── qwen.qwen3-reranker-0.6b (Relations)
+
+PIPELINE STAGES
+1. COLLECT NOUNS ──────────────────────────────────────────────────────────────
+   │ Bible text → Hebrew extraction → Deduplication → Normalization → IDs
+   └─ OUTPUT: validated_nouns (List[dict] with content_hash, uuidv7)
+
+2. VALIDATE BATCH ─────────────────────────────────────────────────────────────
+   │ Size check (≥50) → Quality gates → ALLOW_PARTIAL logic
+   └─ OUTPUT: batch_result (BatchResult with manifest + errors)
+
+3. AI ENRICHMENT ──────────────────────────────────────────────────────────────
+   │ Theological prompts → LM Studio API → Response parsing → Confidence calc
+   └─ OUTPUT: enriched_nouns (with AI insights + confidence scores)
+
+4. CONFIDENCE VALIDATION ──────────────────────────────────────────────────────
+   │ AI confidence gates → Gematria checks → Quality filters
+   └─ OUTPUT: confidence_validation (pass/fail with evidence)
+
+5. NETWORK AGGREGATION ────────────────────────────────────────────────────────
+   │ Embedding generation → KNN relations → Community detection → Centrality
+   └─ OUTPUT: network_summary (nodes, edges, clusters, metrics)
+
+STORAGE LAYER (PostgreSQL)
+├── concepts: Core noun metadata and identities
+├── concept_network: 1024-dim embeddings (L2 normalized)
+├── concept_relations: Similarity edges (cosine + rerank scores)
+├── concept_clusters: Community detection results
+├── concept_centrality: Node importance measures
+├── metrics_log: Performance and observability data
+├── ai_enrichment_log: AI interaction records
+├── confidence_validation_log: Quality gate results
+└── qwen_health_log: Model verification evidence
+
+OUTPUT FORMATS
+├── REPORTS: Markdown + JSON analytics
+│   ├── Pipeline performance metrics
+│   ├── AI quality analysis (confidence distributions)
+│   ├── Qwen health verification (live inference proof)
+│   └── Network statistics (nodes, edges, communities)
+├── GRAPH VISUALIZATION: JSON for WebUI
+│   ├── Force-directed layout data
+│   ├── Node positions and metadata
+│   ├── Edge relationships with weights
+│   └── Cluster coloring and centrality
+├── SEMANTIC WEB: JSON-LD + RDF/Turtle
+│   ├── JSON-LD with @context and @graph
+│   ├── RDF/Turtle for knowledge graphs
+│   └── Global URIs for cross-system linking
+└── STATISTICS: Dashboard metrics
+    ├── Real-time health indicators
+    ├── Network growth trends
+    └── Performance monitoring data
+
+QUALITY GATES & SAFETY
+├── PRE-PROCESSING
+│   ├── Qwen Live Gate: All models verified (fail-closed)
+│   ├── Batch Size Gate: ≥50 nouns (ALLOW_PARTIAL override)
+│   └── Hebrew Normalization: NFKD→NFC verified
+├── PROCESSING
+│   ├── AI Confidence: ≥85% soft, ≥95% hard gates
+│   ├── Gematria Accuracy: ≥90% validation
+│   └── Embedding Quality: 1024-dim, L2 normalized
+└── POST-PROCESSING
+    ├── Real Data Verification: No placeholder values
+    ├── Schema Compliance: JSON-LD/RDF validation
+    └── Completeness: All expected fields populated
+
+PERFORMANCE CHARACTERISTICS
+├── Collection: ~1000 nouns/second (DB limited)
+├── Enrichment: ~5 nouns/minute (API rate limited)
+├── Network: ~500 embeddings/second (vector ops)
+├── Validation: ~1000 items/second (in-memory)
+└── Total: ~16-30 minutes for 1000 nouns (API bound)
+
+FAILURE MODES & RECOVERY
+├── Transactional Safety: All DB writes atomic
+├── Checkpointer Resume: State survives restarts
+├── ALLOW_PARTIAL Override: Incomplete batch processing
+├── Node Isolation: Individual failures don't stop pipeline
+└── Data Consistency: SHA-256 content hashing
+
+===============================================================================

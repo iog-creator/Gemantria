@@ -98,7 +98,7 @@ The eventual goal is a Gematria module under AgentPM, *not* inside this repo.
 A rough target structure might look like:
 
 ```text
-agentpm/modules/gematria/
+pmagent/modules/gematria/
     __init__.py
     core.py            # core gematria value logic
     hebrew.py          # Hebrew-specific utilities
@@ -173,7 +173,7 @@ dependencies. It should not depend on Gemantria.v2-specific infrastructure.
 
 ### Phase 2: Create AgentPM Module
 
-1. Create `agentpm/modules/gematria/` structure
+1. Create `pmagent/modules/gematria/` structure
 2. Port core logic with minimal dependencies
 3. Add AgentPM-specific adapters
 4. Integrate with AgentPM control-plane

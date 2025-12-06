@@ -108,7 +108,7 @@ This slice demonstrates the complete flow from natural-language question → ver
 
 ## Implementation Notes
 
-- **Entry point**: `agentpm/biblescholar/reference_slice.py` — `answer_reference_question(question: str, verse_ref: str | None = None) -> ReferenceAnswerResult`
+- **Entry point**: `pmagent/biblescholar/reference_slice.py` — `answer_reference_question(question: str, verse_ref: str | None = None) -> ReferenceAnswerResult`
 - **Flow orchestration**: Use existing adapters in sequence, assemble context, call LM, return structured result
 - **Error handling**: Graceful degradation at each step (DB-off, LM-off, budget-exceeded)
 - **Testing**: Hermetic tests with mocks for DB/LM, verify trace structure, verify provenance logging

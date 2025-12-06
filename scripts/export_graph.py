@@ -26,12 +26,93 @@ ensure_env_loaded()
 LOG = get_logger("export_graph")
 
 
+def _load_correlation_weights(db) -> dict:
+    """
+    Load correlation weights from Phase 10 export and map to concept_network.id.
+
+    Correlations use concept_network.concept_id, but edges use concept_network.id.
+    This function creates a mapping from (network_id_source, network_id_target) to correlation.
+
+    Returns:
+        Dict mapping (source_network_id, target_network_id) tuple to correlation value.
+        Handles bidirectional matching (both (a,b) and (b,a) keys).
+    """
+    correlations_path = os.path.join("exports", "graph_correlations.json")
+    if not os.path.exists(correlations_path):
+        LOG.warning(f"Correlation file not found: {correlations_path}")
+        return {}
+
+    try:
+        with open(correlations_path, encoding="utf-8") as f:
+            data = json.load(f)
+
+        correlations_list = data.get("correlations", [])
+        if not correlations_list:
+            LOG.warning("Correlation file exists but contains no correlations")
+            return {}
+
+        # Build mapping from concept_id to network_id
+        # Correlations use concept_id, but edges use network_id
+        concept_to_network = {}
+        try:
+            for row in db.execute("SELECT id, concept_id FROM concept_network"):
+                network_id = str(row[0])
+                concept_id = str(row[1])
+                concept_to_network[concept_id] = network_id
+            LOG.info(f"Mapped {len(concept_to_network)} concept_ids to network_ids")
+        except Exception as e:
+            LOG.warning(f"Failed to build concept_id->network_id mapping: {e}")
+            return {}
+
+        # Build lookup dict using network_ids (what edges use)
+        lookup = {}
+        mapped_count = 0
+        for corr in correlations_list:
+            source_concept_id = str(corr.get("source", ""))
+            target_concept_id = str(corr.get("target", ""))
+            correlation = float(corr.get("correlation", 0.0))
+
+            if not source_concept_id or not target_concept_id:
+                continue
+
+            # Map concept_ids to network_ids
+            source_network_id = concept_to_network.get(source_concept_id)
+            target_network_id = concept_to_network.get(target_concept_id)
+
+            if not source_network_id or not target_network_id:
+                continue
+
+            # Store with both orderings for flexible lookup
+            key_forward = (source_network_id, target_network_id)
+            key_reverse = (target_network_id, source_network_id)
+            lookup[key_forward] = correlation
+            lookup[key_reverse] = correlation
+            mapped_count += 1
+
+        LOG.info(
+            f"Loaded {len(correlations_list)} correlations, mapped {mapped_count} to network_ids, {len(lookup)} lookup entries"
+        )
+        return lookup
+
+    except Exception as e:
+        LOG.warning(f"Failed to load correlations: {e}")
+        import traceback
+
+        LOG.warning(traceback.format_exc())
+        return {}
+
+
 def _node_payload(noun: dict) -> dict:
     out = {
         "id": noun["noun_id"],
         "surface": noun.get("surface"),
         "class": noun.get("class"),
         "analysis": noun.get("analysis", {}),
+        "gematria": noun.get("gematria"),
+        "book": noun.get("book"),
+        "chapter": noun.get("chapter"),
+        "verse": noun.get("verse"),
+        "position": noun.get("position"),
     }
     # Expose enrichment cross-references to UI as external_refs (optional)
     enr = noun.get("enrichment") or {}
@@ -275,20 +356,25 @@ def main():
         if not use_ai_nouns:
             # Fallback to database nodes if ai_nouns.json doesn't exist or is empty
             db = get_gematria_rw()
+            # PM Decision: Use v_concepts_with_verses as canonical bridge
+            # See docs/SSOT/PHASE8_BRIDGE_DECISION.md
             db_nodes = list(
                 db.execute(
                     """
-                SELECT n.concept_id, co.name, c.cluster_id,
-                       ce.degree, ce.betweenness, ce.eigenvector
+                SELECT n.concept_id, cm.label, c.cluster_id,
+                       ce.degree, ce.betweenness, ce.eigenvector,
+                       v.gematria_value, v.book_source, v.verses
                 FROM concept_network n
-                LEFT JOIN concepts co ON co.id::text = n.concept_id::text
+                LEFT JOIN concept_metadata cm ON cm.concept_id = n.concept_id
                 LEFT JOIN concept_clusters c ON c.concept_id = n.concept_id
                 LEFT JOIN concept_centrality ce ON ce.concept_id = n.concept_id
+                LEFT JOIN v_concepts_with_verses v ON cm.source = 'bible_db:concept_id:' || v.id::text
             """
                 )
             )
-            nodes_data = [
-                {
+            nodes_data = []
+            for r in db_nodes:
+                node = {
                     "noun_id": str(r[0]),
                     "surface": r[1] or str(r[0]),
                     "cluster": r[2],
@@ -296,14 +382,63 @@ def main():
                     "betweenness": float(r[4] or 0),
                     "eigenvector": float(r[5] or 0),
                 }
-                for r in db_nodes
-            ]
+
+                # Enrichment Logic (Phase 8)
+                # Extract metadata from v_concepts_with_verses columns
+                gematria_val = r[6]
+                book_src = r[7]
+                verses_data = r[8]  # JSONB array of objects
+
+                # 1. Gematria
+                if gematria_val is not None:
+                    node["gematria"] = float(gematria_val)
+
+                # 2. Book
+                if book_src:
+                    node["book"] = book_src
+
+                # 3. Chapter/Verse/Position from verses JSON
+                # Expected JSON structure: [{"ref": "Gen 1:1", "verse_id": ..., "position": 1001, ...}, ...]
+                if verses_data and isinstance(verses_data, list) and len(verses_data) > 0:
+                    # Take the first occurrence as primary reference
+                    first_occ = verses_data[0]
+                    if isinstance(first_occ, dict):
+                        # Try explicit fields first if view provides them
+                        # The view definition shows: 'ref', 'verse_id', 'position'
+                        # It constructs ref as "Book Chapter:Verse"
+
+                        # Extract position directly if available
+                        if "position" in first_occ and first_occ["position"] is not None:
+                            node["position"] = int(first_occ["position"])
+
+                        # Parse ref or use other fields for chapter/verse
+                        # View def: ref = book + ' ' + chapter + ':' + verse
+                        ref = first_occ.get("ref", "")
+                        if ":" in ref:
+                            try:
+                                # "Genesis 1:1" -> split last part
+                                parts = ref.rsplit(" ", 1)
+                                if len(parts) == 2:
+                                    cv = parts[1].split(":")
+                                    if len(cv) == 2:
+                                        node["chapter"] = int(cv[0])
+                                        node["verse"] = int(cv[1])
+                                        # Fallback position calculation if not in JSON
+                                        if "position" not in node:
+                                            node["position"] = (node["chapter"] * 1000) + node["verse"]
+                            except (ValueError, IndexError):
+                                pass
+
+                nodes_data.append(node)
 
         # Build nodes using _node_payload function
         nodes = [_node_payload(noun) for noun in nodes_data]
 
         # Always need db connection for edges
         db = get_gematria_rw()
+
+        # Load correlation weights (Phase 10) - needs DB for concept_id->network_id mapping
+        correlation_lookup = _load_correlation_weights(db)
 
         # Fetch edges
         try:
@@ -319,20 +454,42 @@ def main():
             LOG.warning(f"Could not fetch edges: {e}, using empty edges list")
             edges = []
 
-        # Build graph structure
+        # Build graph structure with correlation weights
+        edges_with_corr = []
+        edges_with_correlation_count = 0
+        for r in edges:
+            source_id = str(r[0])
+            target_id = str(r[1])
+            edge = {
+                "source": source_id,
+                "target": target_id,
+                "cosine": float(r[2] or 0),
+                "rerank_score": float(r[3] or 0) if r[3] else None,
+                "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0)) if r[3] else float(r[2] or 0),
+            }
+
+            # Add correlation_weight if available (Phase 10)
+            # Normalize from [-1, 1] to [0, 1] for COMPASS validation
+            # Only include if normalized value > 0.5 (i.e., original correlation > 0)
+            corr_key = (source_id, target_id)
+            if corr_key in correlation_lookup:
+                raw_correlation = correlation_lookup[corr_key]
+                # Normalize from [-1, 1] to [0, 1]
+                normalized_correlation = (raw_correlation + 1.0) / 2.0
+                # Only include if significant (normalized > 0.5 means original > 0)
+                if normalized_correlation > 0.5:
+                    edge["correlation_weight"] = normalized_correlation
+                    edges_with_correlation_count += 1
+
+            edges_with_corr.append(edge)
+
+        if edges_with_correlation_count > 0:
+            LOG.info(f"Added correlation_weight to {edges_with_correlation_count} edges (Phase 10)")
+
         graph = {
             "nodes": nodes,
             # SSOT field names (Rule-045); validators depend on exact keys.
-            "edges": [
-                {
-                    "source": str(r[0]),
-                    "target": str(r[1]),
-                    "cosine": float(r[2] or 0),
-                    "rerank_score": float(r[3] or 0) if r[3] else None,
-                    "edge_strength": blend_strength(float(r[2] or 0), float(r[3] or 0)) if r[3] else float(r[2] or 0),
-                }
-                for r in edges
-            ],
+            "edges": edges_with_corr,
             "metadata": {
                 "node_count": len(nodes),
                 "edge_count": len(edges),

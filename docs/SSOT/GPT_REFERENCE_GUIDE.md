@@ -187,7 +187,7 @@ See `docs/runbooks/LM_STUDIO_SETUP.md` for complete installation instructions.
 
 ### LM Studio Adapter (Phase-7D)
 
-The LM Studio adapter (`agentpm/adapters/lm_studio.py`) is aligned with the canonical model loader (`get_lm_model_config()`). The adapter supports model slots:
+The LM Studio adapter (`pmagent/adapters/lm_studio.py`) is aligned with the canonical model loader (`get_lm_model_config()`). The adapter supports model slots:
 
 - **`model_slot="theology"`** – Uses `THEOLOGY_MODEL` from config
 - **`model_slot="local_agent"`** – Uses `LOCAL_AGENT_MODEL` from config
@@ -196,7 +196,7 @@ The LM Studio adapter (`agentpm/adapters/lm_studio.py`) is aligned with the cano
 
 Example usage:
 ```python
-from agentpm.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat
 
 # Use theology model
 result = lm_studio_chat(

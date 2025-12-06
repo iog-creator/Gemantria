@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "role": "orchestrator",
+    "description": "Top-level product owner view for Gemantria. This surface expresses the orchestrator's current focus, preferences, and key state for all agents.",
+    "generated_by": "Phase 18.4 reconstruction",
+    "branch": "feat/repo-governance-pr3-alignment-guard",
+    "active_phase": "23",
+    "last_completed_phase": "23",
+    "decision_focus": [
+        "Stabilization and governance of share/ and reality.green surfaces",
+        "Design and behavior of the orchestrator console UI (v2)",
+        "Tight integration of Orchestrator Assistant (OA), pmagent, and Cursor"
+    ],
+    "preferences": {
+        "communication_style": "direct",
+        "ops_visibility": "pm-only (OPS blocks for Cursor, summaries for Orchestrator)",
+        "ui_principles": [
+            "single chatbox as conductor console",
+            "no implementation details or wiring shown to the orchestrator",
+            "status and surfaces auto-refresh based on backend state"
+        ]
+    },
+    "surfaces": {
+        "pm_bootstrap_state": "share/PM_BOOTSTRAP_STATE.json",
+        "ssot_surface": "share/SSOT_SURFACE_V17.json",
+        "phase_index_18": "share/PHASE18_INDEX.md",
+        "phase_index_19": "share/PHASE19_SHARE_HYGIENE_SUMMARY.json",
+        "phase_index_20": "share/PHASE20_INDEX.md",
+        "phase_index_21": "share/PHASE21_INDEX.md",
+        "phase_index_22": "share/PHASE22_INDEX.md",
+        "phase_index_23": "share/PHASE23_INDEX.md",
+        "orchestrator_surface_root": "share/orchestrator/",
+        "orchestrator_assistant_surface_root": "share/orchestrator_assistant/"
+    }
+}

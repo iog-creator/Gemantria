@@ -37,7 +37,7 @@ Small, targeted rollout to migrate a high-value subset of hardcoded hints into t
 - **Scope**: `status_api`
 - **Flow**: `status_snapshot`
 - **Status**: ✅ Already in registry
-- **Hardcoded Location**: `agentpm/reality/check.py`, `agentpm/status/snapshot.py`
+- **Hardcoded Location**: `pmagent/reality/check.py`, `pmagent/status/snapshot.py`
 - **Action**: Verify present, remove hardcoded copy
 
 ### 3. Share Sync DMS-Only
@@ -61,7 +61,7 @@ Small, targeted rollout to migrate a high-value subset of hardcoded hints into t
 - **Scope**: `status_api`
 - **Flow**: `reality_check`
 - **Status**: ⏳ To be added
-- **Hardcoded Location**: `agentpm/reality/check.py`, `scripts/guards/guard_reality_green.py`
+- **Hardcoded Location**: `pmagent/reality/check.py`, `scripts/guards/guard_reality_green.py`
 - **Action**: Add to registry, remove hardcoded copy
 
 ## Implementation Steps
@@ -197,8 +197,8 @@ python scripts/guards/hints_required.py \
 
 Remove hardcoded hint strings from:
 - `scripts/prepare_handoff.py` - Remove DMS-only and share.dms_only strings
-- `agentpm/reality/check.py` - Remove local gates primary strings
-- `agentpm/status/snapshot.py` - Remove local gates primary strings
+- `pmagent/reality/check.py` - Remove local gates primary strings
+- `pmagent/status/snapshot.py` - Remove local gates primary strings
 - `scripts/sync_share.py` - Remove DMS-only docstring references (keep technical docs)
 - `scripts/governance/*.py` - Remove fail-closed hint strings
 
@@ -238,8 +238,8 @@ python scripts/guards/hints_required.py --flow reality_check --envelope evidence
 ### Modified Files
 - `scripts/governance/discover_hints.py` - Add `--output` flag
 - `scripts/prepare_handoff.py` - Remove hardcoded DMS-only hints
-- `agentpm/reality/check.py` - Remove hardcoded local gates hints
-- `agentpm/status/snapshot.py` - Remove hardcoded local gates hints
+- `pmagent/reality/check.py` - Remove hardcoded local gates hints
+- `pmagent/status/snapshot.py` - Remove hardcoded local gates hints
 - `scripts/sync_share.py` - Clean up docstring references (keep technical docs)
 
 ### Registry Updates
