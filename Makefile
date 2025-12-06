@@ -172,6 +172,7 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
+	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
 	@PYTHONPATH=. python3 scripts/sync_share.py || { \
 		exit_code=$$?; \
 		if [ $$exit_code -eq 1 ]; then \
@@ -618,7 +619,9 @@ housekeeping.db.gate:
 	@PYTHONPATH=. $(PYTHON) -c "from scripts.guards.guard_db_health import check_db_health; import sys; h = check_db_health(); ok = h.get('ok', False) and h.get('mode') == 'ready'; sys.exit(0 if ok else 1)" || (echo "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - housekeeping cannot proceed."; echo "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured."; exit 1)
 	@echo "✅ DB connectivity verified"
 
-housekeeping: housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
+housekeeping:
+	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
+	$(MAKE) housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot + pm.share.artifacts)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
