@@ -25,7 +25,6 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import List
 
 # Add project root to path for imports
 ROOT = Path(__file__).resolve().parents[2]
@@ -205,13 +204,15 @@ def classify_fragments_gpu(
 
             # Progress indicator
             current_time = time.time()
-            if show_progress and (batch_end % 1000 == 0 or batch_end == total_rows or (current_time - last_progress_time) >= 10.0):
+            if show_progress and (
+                batch_end % 1000 == 0 or batch_end == total_rows or (current_time - last_progress_time) >= 10.0
+            ):
                 elapsed = current_time - start_time
                 rate = fragments_processed / elapsed if elapsed > 0 else 0
                 remaining = (total_rows - fragments_processed) / rate if rate > 0 else 0
                 print(
-                    f"[PROGRESS] {fragments_processed:,}/{total_rows:,} ({fragments_processed/total_rows*100:.1f}%) | "
-                    f"Rate: {rate:.1f}/s | ETA: {remaining/60:.1f}m",
+                    f"[PROGRESS] {fragments_processed:,}/{total_rows:,} ({fragments_processed / total_rows * 100:.1f}%) | "
+                    f"Rate: {rate:.1f}/s | ETA: {remaining / 60:.1f}m",
                     file=sys.stderr,
                 )
                 last_progress_time = current_time
@@ -221,7 +222,7 @@ def classify_fragments_gpu(
     if show_progress:
         print(
             f"\n[COMPLETE] Classified {fragments_classified:,} fragments in {elapsed:.1f}s "
-            f"({fragments_classified/elapsed:.1f}/s)",
+            f"({fragments_classified / elapsed:.1f}/s)",
             file=sys.stderr,
         )
 

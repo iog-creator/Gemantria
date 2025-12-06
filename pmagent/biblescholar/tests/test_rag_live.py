@@ -30,16 +30,18 @@ class TestRAGLiveIntegration:
         # Use a known verse_id that exists in the database
         from sqlalchemy import text
         from pmagent.db.loader import get_bible_engine
-        
+
         engine = get_bible_engine()
         with engine.connect() as conn:
-            result = conn.execute(text("""
+            result = conn.execute(
+                text("""
                 SELECT verse_id 
                 FROM bible.verse_embeddings 
                 WHERE embedding IS NOT NULL 
                 ORDER BY verse_id 
                 LIMIT 1
-            """))
+            """)
+            )
             valid_verse_id = result.scalar()
             assert valid_verse_id is not None, "No verses with embeddings found"
             assert valid_verse_id >= 42358, f"Expected verse_id >= 42358, got {valid_verse_id}"
@@ -61,16 +63,18 @@ class TestRAGLiveIntegration:
         # Get a valid verse_id (actual range: 42,358 to 323,425)
         from sqlalchemy import text
         from pmagent.db.loader import get_bible_engine
-        
+
         engine = get_bible_engine()
         with engine.connect() as conn:
-            result = conn.execute(text("""
+            result = conn.execute(
+                text("""
                 SELECT verse_id 
                 FROM bible.verse_embeddings 
                 WHERE embedding IS NOT NULL 
                 ORDER BY verse_id 
                 LIMIT 1
-            """))
+            """)
+            )
             valid_verse_id = result.scalar()
             assert valid_verse_id is not None, "No verses with embeddings found"
 
@@ -93,7 +97,9 @@ class TestRAGLiveIntegration:
 
         # First result should be the query verse itself with high similarity
         first_verse_id, first_score = results[0]
-        assert first_verse_id == valid_verse_id, f"First result should be query verse {valid_verse_id}, got {first_verse_id}"
+        assert first_verse_id == valid_verse_id, (
+            f"First result should be query verse {valid_verse_id}, got {first_verse_id}"
+        )
         assert first_score > 0.99, f"Self-similarity should be ~1.0, got {first_score}"
 
     def test_live_rag_retrieval_end_to_end(self):

@@ -1,0 +1,33 @@
+{
+  "schema": "gemantria/graph.v1",
+  "generated_at": "2025-11-11T02:28:12.428782Z",
+  "nodes": [
+    {
+      "id": "2",
+      "surface": "Beta",
+      "hebrew_text": null,
+      "gematria_value": null,
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 2
+    },
+    {
+      "id": "1",
+      "surface": "Alpha",
+      "hebrew_text": null,
+      "gematria_value": null,
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 1
+    }
+  ],
+  "edges": [
+    {
+      "src": "1",
+      "dst": "2",
+      "type": "semantic",
+      "weight": 0.9
+    }
+  ],
+  "book": "Genesis"
+}

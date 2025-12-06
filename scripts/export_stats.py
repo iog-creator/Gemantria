@@ -441,23 +441,23 @@ def _compute_correlations_python(db):
         for row in concept_data:
             try:
                 embedding_raw = row[1]  # row[1] is embedding
-                
+
                 # Handle pgvector type - may come as string or array
                 if isinstance(embedding_raw, str):
                     # Parse string representation: "[0.1, 0.2, ...]"
-                    embedding = np.fromstring(embedding_raw.strip('[]'), sep=',')
-                elif hasattr(embedding_raw, '__iter__'):
+                    embedding = np.fromstring(embedding_raw.strip("[]"), sep=",")
+                elif hasattr(embedding_raw, "__iter__"):
                     # Already an array-like object
                     embedding = np.array(embedding_raw)
                 else:
                     LOG.warning(f"Unknown embedding type for concept {row[0]}: {type(embedding_raw)}")
                     continue
-                
+
                 # Validate embedding shape
                 if embedding.ndim != 1 or len(embedding) == 0:
                     LOG.warning(f"Invalid embedding shape for concept {row[0]}: {embedding.shape}")
                     continue
-                
+
                 concept_ids.append(str(row[0]))
                 embeddings_list.append(embedding)
                 cluster_ids.append(row[2])

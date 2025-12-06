@@ -1,5 +1,9 @@
 # KB Document Registry (KB-Reg:M1)
 
+> **AGENT REGISTRY ROLE: CANONICAL_PM**  
+> PM-focused view of the agent roster and KB integration. Canonical global source: `AGENTS.md` (root).  
+> This document focuses on PM-specific agent workflows, DMS integration, and KB registry operations.
+
 ## Purpose
 
 The KB document registry tracks knowledge-base documents (AGENTS.md, SSOT docs, rules, runbooks, ADRs, etc.) with structured metadata including:

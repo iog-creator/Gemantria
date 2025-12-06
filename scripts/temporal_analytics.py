@@ -23,6 +23,7 @@ ensure_env_loaded()
 
 def _iso_now():
     from datetime import UTC
+
     return datetime.now(UTC).isoformat()
 
 

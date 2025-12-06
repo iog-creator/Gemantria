@@ -43,7 +43,7 @@ def _load_correlation_weights(db) -> dict:
         return {}
 
     try:
-        with open(correlations_path, "r", encoding="utf-8") as f:
+        with open(correlations_path, encoding="utf-8") as f:
             data = json.load(f)
 
         correlations_list = data.get("correlations", [])

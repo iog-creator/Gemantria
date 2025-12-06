@@ -64,3 +64,7 @@ share/eval/
 # Local scratch PR body files
 tmp_pr_body*.md
 genai-toolbox/
+archive/phase16_legacy/docs/root-cleanup/*.tar.gz
+backup/
+archive/phase16_legacy/docs/root-cleanup/*.tar.gz
+backup/

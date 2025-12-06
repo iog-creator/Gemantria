@@ -160,8 +160,7 @@ class RerankerAdapter:
         if not self._ensure_lm():
             # Wave-3: LM-off = LOUD FAIL
             raise RuntimeError(
-                "LOUD FAIL: Reranker service unavailable. "
-                "Wave-3 requires LM to be available for reranking."
+                "LOUD FAIL: Reranker service unavailable. Wave-3 requires LM to be available for reranking."
             )
 
         # Get EDGE_ALPHA from environment (Rule 045 default: 0.5)

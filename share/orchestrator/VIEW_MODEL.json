@@ -1,0 +1,101 @@
+{
+    "version": 2,
+    "description": "View model binding data sources to UI regions for console v2",
+    "bindings": {
+        "left_nav": {
+            "modes": [
+                "overview",
+                "docs",
+                "temporal",
+                "forecast",
+                "graph"
+            ],
+            "default_mode": "overview"
+        },
+        "conversation": [
+            "phase_index",
+            "orchestrator_prompts",
+            "oa_prompts",
+            "orchestrator_state",
+            "oa_state"
+        ],
+        "right_status": {
+            "system_status": {
+                "sources": [
+                    "ssot_surface",
+                    "control_plane_exports"
+                ]
+            },
+            "phase_governance": {
+                "sources": [
+                    "phase_index",
+                    "phase_summaries",
+                    "ui_decision"
+                ]
+            },
+            "docs_registry": {
+                "sources": [
+                    "docs_control_exports",
+                    "kb_registry"
+                ]
+            },
+            "agent_state": {
+                "sources": [
+                    "orchestrator_state",
+                    "orchestrator_decisions",
+                    "oa_state",
+                    "oa_decisions"
+                ]
+            }
+        }
+    },
+    "data_sources": {
+        "ssot_surface": {
+            "path": "share/SSOT_SURFACE_V17.json"
+        },
+        "pm_bootstrap": {
+            "path": "share/PM_BOOTSTRAP_STATE.json"
+        },
+        "phase_index": {
+            "path": "share/PHASE23_INDEX.md"
+        },
+        "phase_summaries": {
+            "paths": [
+                "share/PHASE18_AGENTS_SYNC_SUMMARY.json",
+                "share/PHASE18_SHARE_EXPORTS_SUMMARY.json",
+                "share/PHASE18_LEDGER_REPAIR_SUMMARY.json",
+                "share/PHASE19_SHARE_HYGIENE_SUMMARY.json"
+            ]
+        },
+        "ui_decision": {
+            "path": "share/PHASE20_UI_RESET_DECISION.md"
+        },
+        "control_plane_exports": {
+            "path": "share/atlas/control_plane/"
+        },
+        "docs_control_exports": {
+            "path": "share/exports/docs-control/"
+        },
+        "kb_registry": {
+            "path": "share/kb_registry.json"
+        },
+        "orchestrator_state": {
+            "path": "share/orchestrator/STATE.json"
+        },
+        "orchestrator_decisions": {
+            "path": "share/orchestrator/DECISION_LOG.json"
+        },
+        "oa_state": {
+            "path": "share/orchestrator_assistant/STATE.json"
+        },
+        "oa_decisions": {
+            "path": "share/orchestrator_assistant/DECISION_LOG.json"
+        },
+        "orchestrator_prompts": {
+            "path": "share/orchestrator/ACTIVE_PROMPTS.md"
+        },
+        "oa_prompts": {
+            "path": "share/orchestrator_assistant/ACTIVE_PROMPTS.md"
+        }
+    }
+}

@@ -38,7 +38,7 @@ def load_graph_export() -> dict:
     for candidate in candidates:
         if candidate.exists():
             try:
-                with open(candidate, "r", encoding="utf-8") as f:
+                with open(candidate, encoding="utf-8") as f:
                     data = json.load(f)
                     print(f">> Loaded graph from {candidate}", file=sys.stderr)
                     return data
@@ -62,10 +62,13 @@ def load_correlation_weights() -> dict:
     correlations_file = pathlib.Path("exports/graph_correlations.json")
     if correlations_file.exists():
         try:
-            with open(correlations_file, "r", encoding="utf-8") as f:
+            with open(correlations_file, encoding="utf-8") as f:
                 data = json.load(f)
             correlations = data.get("correlations", [])
-            print(f">> Found {len(correlations)} correlations in graph_correlations.json", file=sys.stderr)
+            print(
+                f">> Found {len(correlations)} correlations in graph_correlations.json",
+                file=sys.stderr,
+            )
             return {len(correlations): "available"}  # Just for logging
         except Exception as e:
             print(f">> Warning: Failed to load correlations file: {e}", file=sys.stderr)
@@ -87,7 +90,7 @@ def load_temporal_patterns() -> list:
         return []
 
     try:
-        with open(temporal_file, "r", encoding="utf-8") as f:
+        with open(temporal_file, encoding="utf-8") as f:
             data = json.load(f)
 
         patterns = data.get("temporal_patterns", [])
@@ -138,7 +141,10 @@ def main():
         # Filter edges to only include connections between selected nodes
         edges = [e for e in edges if e.get("source") in node_ids and e.get("target") in node_ids]
         nodes = nodes[: args.size]
-        print(f">> Limited to {args.size} nodes (from {len(graph_data.get('nodes', []))})", file=sys.stderr)
+        print(
+            f">> Limited to {args.size} nodes (from {len(graph_data.get('nodes', []))})",
+            file=sys.stderr,
+        )
 
     # Load Phase 8 temporal patterns (for COMPASS validation)
     temporal_patterns = load_temporal_patterns()
@@ -194,8 +200,8 @@ def main():
     print(f"temporal_source: {envelope['meta']['temporal_source']}")
     print(f"temporal_patterns: {len(temporal_patterns)} patterns")
     print(f"correlation_weights: {envelope['meta']['correlation_weights']} ({edges_with_corr} edges)")
-    print(f"Rule 045 fields: cosine, rerank_score, edge_strength")
-    print(f"Phase 10 field: correlation_weight")
+    print("Rule 045 fields: cosine, rerank_score, edge_strength")
+    print("Phase 10 field: correlation_weight")
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ import typer
 # are not yet implemented in pmagent.hints. These are stub implementations
 # for CLI compatibility. Full implementation pending Phase-4 hint automation.
 
+
 def analyze_error_and_generate_hint(error: str, context: dict, auto_insert: bool = False) -> dict:
     """Stub: Generate hint from error (not yet implemented)."""
     return {
@@ -20,13 +21,18 @@ def analyze_error_and_generate_hint(error: str, context: dict, auto_insert: bool
         },
     }
 
-def batch_generate_hints_from_session(session_file: str, filter_scope: str | None = None, auto_insert: bool = False) -> list:
+
+def batch_generate_hints_from_session(
+    session_file: str, filter_scope: str | None = None, auto_insert: bool = False
+) -> list:
     """Stub: Batch generate hints (not yet implemented)."""
     return []
+
 
 def list_hints(scope: str | None = None, kind: str | None = None, flow: str | None = None) -> list:
     """Stub: List hints from registry (not yet implemented)."""
     return []
+
 
 def export_hints_to_docs(output_dir: str) -> dict:
     """Stub: Export hints to docs (not yet implemented)."""
@@ -50,18 +56,18 @@ def generate_hint(
     """Generate a hint from an error message and context."""
     context = {
         "flow": flow,
-        "scope": scope,  
+        "scope": scope,
     }
-    
+
     if title:
         context["title"] = title
     if fix:
         context["fix"] = fix
     if code_ref:
         context["code_ref"] = code_ref
-    
+
     result = analyze_error_and_generate_hint(error, context, auto_insert=auto_insert)
-    
+
     if json_only:
         typer.echo(json.dumps(result, indent=2))
     else:
@@ -85,7 +91,7 @@ def batch_generate(
         filter_scope=scope,
         auto_insert=auto_insert,
     )
-    
+
     if json_only:
         typer.echo(json.dumps(hints, indent=2))
     else:
@@ -105,7 +111,7 @@ def list_command(
 ):
     """List hints from the registry."""
     hints = list_hints(scope=scope, kind=kind, flow=flow)
-    
+
     if json_only:
         typer.echo(json.dumps(hints, indent=2))
     else:
@@ -125,12 +131,12 @@ def export_command(
 ):
     """Export all hints to markdown documentation."""
     stats = export_hints_to_docs(output_dir)
-    
+
     if json_only:
         typer.echo(json.dumps(stats, indent=2))
     else:
         typer.echo(f"Exported {stats['exported']}/{stats['total']} hints to {output_dir}")
-        if stats['errors'] > 0:
+        if stats["errors"] > 0:
             typer.echo(f"⚠ {stats['errors']} errors occurred")
 
 

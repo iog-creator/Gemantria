@@ -40,11 +40,11 @@ if os.getenv("CI") == "true":
 def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     """
     Build KB registry from DMS (control.doc_registry).
-    
+
     Curated subset for PM usability:
     - Documents with kb_candidate=true fragments (AI-classified)
     - Manually curated high-importance docs (SSOT, runbooks, root AGENTS.md)
-    
+
     Target size: ~100-200 documents (not all 994 enabled docs)
 
     Args:
@@ -56,61 +56,59 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     engine = get_control_engine()
 
     # Query curated subset: Most important documents only
-    # Target: ~100-200 documents (aggressively filter to meet size target)
+    # Phase 17.4 update: Include ALL enabled SSOT docs (not just kb_candidate)
+    # Target: All SSOT + select high-value code docs
     query = text("""
+        -- All enabled SSOT docs (Phase 17.4: removed kb_candidate filter)
+        SELECT DISTINCT
+            d.doc_id,
+            d.logical_name,
+            d.role,
+            d.repo_path,
+            d.share_path,
+            d.is_ssot,
+            d.enabled
+        FROM control.doc_registry d
+        WHERE d.enabled = true
+          AND d.is_ssot = true
+
+        UNION
+
+        -- Runbooks (always included)
+        SELECT DISTINCT
+            d.doc_id,
+            d.logical_name,
+            d.role,
+            d.repo_path,
+            d.share_path,
+            d.is_ssot,
+            d.enabled
+        FROM control.doc_registry d
+        WHERE d.enabled = true
+          AND d.role = 'runbook'
+
+        UNION
+
+        -- Root AGENTS.md files (critical for PM)
+        SELECT DISTINCT
+            d.doc_id,
+            d.logical_name,
+            d.role,
+            d.repo_path,
+            d.share_path,
+            d.is_ssot,
+            d.enabled
+        FROM control.doc_registry d
+        WHERE d.enabled = true
+          AND (
+            d.repo_path = 'AGENTS.md'
+            OR d.repo_path = 'pmagent/AGENTS.md'
+          )
+
+        UNION
+
+        -- Top core-importance kb_candidate documents (select code docs, limited to 50)
         SELECT * FROM (
-            -- Primary filter: SSOT docs with kb_candidate=true (highest priority)
-            SELECT DISTINCT
-                d.doc_id,
-                d.logical_name,
-                d.role,
-                d.repo_path,
-                d.share_path,
-                d.is_ssot,
-                d.enabled
-            FROM control.doc_registry d
-            JOIN control.doc_fragment f ON f.doc_id = d.doc_id
-            WHERE d.enabled = true
-              AND d.is_ssot = true
-              AND f.meta @> '{"kb_candidate": true}'::jsonb
-
-            UNION
-
-            -- Runbooks (always included)
-            SELECT DISTINCT
-                d.doc_id,
-                d.logical_name,
-                d.role,
-                d.repo_path,
-                d.share_path,
-                d.is_ssot,
-                d.enabled
-            FROM control.doc_registry d
-            WHERE d.enabled = true
-              AND d.role = 'runbook'
-
-            UNION
-
-            -- Root AGENTS.md files (critical for PM)
-            SELECT DISTINCT
-                d.doc_id,
-                d.logical_name,
-                d.role,
-                d.repo_path,
-                d.share_path,
-                d.is_ssot,
-                d.enabled
-            FROM control.doc_registry d
-            WHERE d.enabled = true
-              AND (
-                d.repo_path = 'AGENTS.md'
-                OR d.repo_path = 'pmagent/AGENTS.md'
-                OR d.repo_path = 'pmagent/AGENTS.md'
-              )
-
-            UNION
-
-            -- Top core-importance kb_candidate documents (limit to ~50 most important)
             SELECT DISTINCT
                 d.doc_id,
                 d.logical_name,
@@ -126,13 +124,15 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
               AND d.is_ssot = false
               AND d.role != 'runbook'
             LIMIT 50
-        ) AS curated_docs
+        ) AS top_code_docs
+
         ORDER BY logical_name
     """)
 
     documents = []
     with engine.connect() as conn:
         doc_rows = conn.execute(query).fetchall()
+        print(f"[DEBUG] Query returned {len(doc_rows)} documents", file=sys.stderr)
 
         for doc_row in doc_rows:
             doc_id, logical_name, role, repo_path, share_path, is_ssot, enabled = doc_row

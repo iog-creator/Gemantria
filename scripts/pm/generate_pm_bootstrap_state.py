@@ -17,7 +17,6 @@ Upgraded to:
 import json
 import os
 import re
-import sys
 from pathlib import Path
 from datetime import datetime, UTC
 from typing import Any
@@ -42,7 +41,7 @@ def optional(path: str):
 
 def extract_phase_number(filename: str) -> tuple[int, int | None] | None:
     """Extract phase number from filename.
-    
+
     Returns (phase, sub_phase) or None if not a phase file.
     """
     match = PHASE_PATTERN.match(filename.upper())
@@ -56,28 +55,28 @@ def extract_phase_number(filename: str) -> tuple[int, int | None] | None:
 def discover_phase_files() -> dict[str, dict[str, Any]]:
     """Dynamically discover all PHASE*.md files in docs/SSOT/."""
     phase_files = {}
-    
+
     if not SSOT.exists():
         return phase_files
-    
+
     for file_path in SSOT.glob("PHASE*.md"):
         filename = file_path.name
         rel_path = str(file_path.relative_to(ROOT))
-        
+
         phase_info = extract_phase_number(filename)
         if not phase_info:
             continue
-        
+
         phase, sub_phase = phase_info
         phase_key = f"{phase}.{sub_phase}" if sub_phase else str(phase)
-        
+
         phase_files[rel_path] = {
             "path": rel_path,
             "phase": phase,
             "sub_phase": sub_phase,
             "phase_key": phase_key,
         }
-    
+
     return phase_files
 
 
@@ -85,19 +84,21 @@ def load_kb_registry() -> dict[str, Any] | None:
     """Load KB registry if available."""
     if not REGISTRY_PATH.exists():
         return None
-    
+
     try:
-        with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
+        with open(REGISTRY_PATH, encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return None
 
 
-def get_registry_docs_by_filter(registry: dict[str, Any], tags: list[str] | None = None, importance: str | None = None, enabled_only: bool = True) -> list[dict[str, Any]]:
+def get_registry_docs_by_filter(
+    registry: dict[str, Any], tags: list[str] | None = None, importance: str | None = None, enabled_only: bool = True
+) -> list[dict[str, Any]]:
     """Filter registry documents by tags, importance, and enabled status."""
     if "documents" not in registry:
         return []
-    
+
     docs = []
     for doc in registry["documents"]:
         # Check enabled status
@@ -105,34 +106,36 @@ def get_registry_docs_by_filter(registry: dict[str, Any], tags: list[str] | None
             enabled = doc.get("provenance", {}).get("enabled", True)
             if not enabled:
                 continue
-        
+
         # Check tags
         if tags:
             doc_tags = set(doc.get("tags", []))
             if not all(tag in doc_tags for tag in tags):
                 continue
-        
+
         # Check importance
         if importance:
             doc_importance = doc.get("provenance", {}).get("dominant_importance", "low")
             if doc_importance != importance:
                 continue
-        
+
         docs.append(doc)
-    
+
     return docs
 
 
-def build_phase_structure(phase_files: dict[str, dict[str, Any]], registry: dict[str, Any] | None = None) -> dict[str, Any]:
+def build_phase_structure(
+    phase_files: dict[str, dict[str, Any]], registry: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """Build phase structure from discovered files and registry."""
     phases: dict[str, Any] = {}
-    
+
     # Group by phase key
     for rel_path, metadata in phase_files.items():
         phase_key = metadata["phase_key"]
         if phase_key not in phases:
             phases[phase_key] = {}
-        
+
         # Use filename to create a semantic key
         filename = Path(rel_path).stem
         # Remove PHASE prefix and normalize
@@ -159,9 +162,9 @@ def build_phase_structure(phase_files: dict[str, dict[str, Any]], registry: dict
         else:
             # Fallback: use sanitized filename
             semantic_key = filename.lower().replace("phase", "").replace("_", "").replace("-", "")
-        
+
         phases[phase_key][semantic_key] = optional(rel_path)
-    
+
     # If registry is available, enhance with registry metadata
     if registry:
         registry_docs = get_registry_docs_by_filter(registry, tags=["ssot"], importance="high", enabled_only=True)
@@ -169,7 +172,7 @@ def build_phase_structure(phase_files: dict[str, dict[str, Any]], registry: dict
             path = doc.get("path", "")
             if not path.startswith("docs/SSOT/"):
                 continue
-            
+
             # Extract phase from provenance or path
             provenance = doc.get("provenance", {})
             phase_key = provenance.get("phase_key")
@@ -182,10 +185,10 @@ def build_phase_structure(phase_files: dict[str, dict[str, Any]], registry: dict
                     phase_key = f"{phase}.{sub_phase}" if sub_phase else str(phase)
                 else:
                     continue
-            
+
             if phase_key not in phases:
                 phases[phase_key] = {}
-            
+
             # Add document if not already present
             # Use a generic key if we can't determine semantic key
             if path not in [v for v in phases[phase_key].values() if v]:
@@ -193,29 +196,29 @@ def build_phase_structure(phase_files: dict[str, dict[str, Any]], registry: dict
                 filename = Path(path).stem
                 semantic_key = filename.lower().replace("phase", "").replace("_", "").replace("-", "")
                 phases[phase_key][semantic_key] = optional(path)
-    
+
     return phases
 
 
 def main() -> int:
     branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip() or None
     ts = datetime.now(UTC).isoformat()
-    
+
     # Discover phase files dynamically
     print(f"[PM_BOOTSTRAP] Discovering phase files in {SSOT}...")
     phase_files = discover_phase_files()
     print(f"[PM_BOOTSTRAP] Found {len(phase_files)} phase files")
-    
+
     # Load KB registry if available
     registry = load_kb_registry()
     if registry:
         print(f"[PM_BOOTSTRAP] Loaded KB registry with {len(registry.get('documents', []))} documents")
     else:
         print("[PM_BOOTSTRAP] KB registry not found, using file discovery only")
-    
+
     # Build phase structure
     phases = build_phase_structure(phase_files, registry)
-    
+
     data = {
         "version": "2025-12-03",
         "generated_at_utc": ts,
@@ -241,6 +244,16 @@ def main() -> int:
             "dsn_governance": optional("docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md"),
         },
         "phases": phases,
+        "surfaces": {
+            "ssot_surface": optional("share/SSOT_SURFACE_V17.json"),
+            "phase16_purge_plan": optional("docs/SSOT/PHASE16_LEGACY_PURGE_PLAN.md"),
+            "kb_registry": optional("share/kb_registry.json"),
+        },
+        "meta": {
+            "current_phase": "17",
+            "last_completed_phase": "16",
+            "kb_registry_path": "share/kb_registry.json",
+        },
         "kb": {
             "registry_course_correction": optional("docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md"),
             "share_layout_phase15": optional("docs/SSOT/PM_SHARE_LAYOUT_PHASE15.md"),
@@ -251,9 +264,10 @@ def main() -> int:
             "Generated by scripts/pm/generate_pm_bootstrap_state.py.",
             "Phases are auto-discovered from docs/SSOT/PHASE*.md files.",
             "KB registry is used as canonical source when available (ssot + high importance).",
+            "Phase 17: Post-purge SSOT surface regeneration and bootstrap refresh.",
         ],
     }
-    
+
     # Drop keys with null values to keep the file small
     def prune(obj):
         if isinstance(obj, dict):
@@ -261,7 +275,7 @@ def main() -> int:
         if isinstance(obj, list):
             return [prune(x) for x in obj]
         return obj
-    
+
     pruned = prune(data)
     SHARE.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(pruned, indent=2, sort_keys=True), encoding="utf-8")

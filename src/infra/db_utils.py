@@ -37,7 +37,10 @@ def get_connection_dsn(env_var: str = "GEMATRIA_DSN", fallback: str = "DB_DSN") 
     """
     dsn = get_rw_dsn()
     if env_var != "GEMATRIA_DSN":
-        print(f"🔥🔥🔥 LOUD HINT [db.dsn_env_var_ignored]: get_connection_dsn() ignores '{env_var}' arg. Use scripts.config.env for specific DBs (e.g. Bible DB). 🔥🔥🔥", file=sys.stderr)
+        print(
+            f"🔥🔥🔥 LOUD HINT [db.dsn_env_var_ignored]: get_connection_dsn() ignores '{env_var}' arg. Use scripts.config.env for specific DBs (e.g. Bible DB). 🔥🔥🔥",
+            file=sys.stderr,
+        )
     if not dsn:
         raise ValueError("GEMATRIA_DSN environment variable required (via centralized loader)")
     return dsn

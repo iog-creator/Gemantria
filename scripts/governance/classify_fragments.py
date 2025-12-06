@@ -121,14 +121,24 @@ def classify_fragments(
             }
 
         if show_progress:
-            print(f"[INFO] Processing {total_rows:,} fragments (batch size: {batch_size})", file=sys.stderr)
+            print(
+                f"[INFO] Processing {total_rows:,} fragments (batch size: {batch_size})",
+                file=sys.stderr,
+            )
 
         # Batch processing: collect updates, commit in batches
         batch_updates: List[dict] = []
         start_time = time.time()
         last_progress_time = start_time
 
-        for idx, (fragment_id, doc_id, fragment_index, content, logical_name, repo_path) in enumerate(rows, 1):
+        for idx, (
+            fragment_id,
+            doc_id,
+            fragment_index,
+            content,
+            logical_name,
+            repo_path,
+        ) in enumerate(rows, 1):
             fragments_processed += 1
 
             # Classify fragment
@@ -195,15 +205,13 @@ def classify_fragments(
 
             # Progress indicator every 100 fragments or every 30 seconds
             current_time = time.time()
-            if show_progress and (
-                idx % 100 == 0 or (current_time - last_progress_time) >= 30.0 or idx == total_rows
-            ):
+            if show_progress and (idx % 100 == 0 or (current_time - last_progress_time) >= 30.0 or idx == total_rows):
                 elapsed = current_time - start_time
                 rate = idx / elapsed if elapsed > 0 else 0
                 remaining = (total_rows - idx) / rate if rate > 0 else 0
                 print(
-                    f"[PROGRESS] {idx:,}/{total_rows:,} ({idx/total_rows*100:.1f}%) | "
-                    f"Rate: {rate:.1f}/s | ETA: {remaining/60:.1f}m | "
+                    f"[PROGRESS] {idx:,}/{total_rows:,} ({idx / total_rows * 100:.1f}%) | "
+                    f"Rate: {rate:.1f}/s | ETA: {remaining / 60:.1f}m | "
                     f"Classified: {fragments_classified:,}",
                     file=sys.stderr,
                 )

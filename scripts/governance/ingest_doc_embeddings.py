@@ -132,7 +132,10 @@ def get_fragments_needing_embeddings(
 
 
 def embed_fragments(
-    fragments: List[dict], model_name: str, dry_run: bool = False, batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE
+    fragments: List[dict],
+    model_name: str,
+    dry_run: bool = False,
+    batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE,
 ) -> List[dict]:
     """
     Generate embeddings for fragments in batches.
@@ -178,8 +181,7 @@ def embed_fragments(
 
         # Combine fragment IDs with embeddings
         batch_results = [
-            {"fragment_id": f["fragment_id"], "embedding": emb}
-            for f, emb in zip(batch_fragments, batch_embeddings)
+            {"fragment_id": f["fragment_id"], "embedding": emb} for f, emb in zip(batch_fragments, batch_embeddings)
         ]
         all_embeddings.extend(batch_results)
 
@@ -187,7 +189,11 @@ def embed_fragments(
 
 
 def store_embeddings(
-    conn, embeddings: List[dict], model_name: str, dry_run: bool = False, batch_size: int = DEFAULT_DB_BATCH_SIZE
+    conn,
+    embeddings: List[dict],
+    model_name: str,
+    dry_run: bool = False,
+    batch_size: int = DEFAULT_DB_BATCH_SIZE,
 ) -> int:
     """Store embeddings in control.doc_embedding using bulk inserts."""
     if dry_run:
@@ -303,7 +309,7 @@ def ingest_embeddings(
                 elapsed = time.time() - start_time
                 print(
                     f"[INFO] Generated {len(embedded_data):,} embeddings in {elapsed:.1f}s "
-                    f"({len(embedded_data)/elapsed:.1f} embeddings/s)",
+                    f"({len(embedded_data) / elapsed:.1f} embeddings/s)",
                     file=sys.stderr,
                 )
         except RuntimeError as e:
@@ -323,7 +329,7 @@ def ingest_embeddings(
             total_elapsed = time.time() - start_time
             print(
                 f"[INFO] Stored {inserted:,} embeddings in {store_elapsed:.1f}s "
-                f"({inserted/store_elapsed:.1f} inserts/s) | Total: {total_elapsed:.1f}s",
+                f"({inserted / store_elapsed:.1f} inserts/s) | Total: {total_elapsed:.1f}s",
                 file=sys.stderr,
             )
 

@@ -6,11 +6,26 @@ The `share/` directory is a **complete portable PM context package** that contai
 all information needed for the PM to manage the system from start to finish. It
 is **auto-generated** during `make housekeeping` via the `pm.share.artifacts` target.
 
-**Current State (2025-11-30):**
-* **All files are Markdown format** (`.md`) - JSON files are automatically converted to Markdown
-* **Flat directory structure** - no subdirectories
-* **35 total files** - 14 core PM artifacts + 21 documentation files
+**Current State (2025-12-05):**
+* **Most files are Markdown format** (`.md`) - JSON files are automatically converted to Markdown
+* **Mostly flat directory structure** - see "Allowed Subdirectories" below
 * **Auto-generated** - no manual file management required
+* **Preserves console v2 subdirectories** - `orchestrator/`, `orchestrator_assistant/`, `atlas/`, `exports/`
+
+## Allowed Subdirectories
+
+The following subdirectories are **preserved** during `make housekeeping` because they
+are managed by other subsystems (console v2, control-plane exports):
+
+| Directory | Purpose | Managed By |
+|-----------|---------|------------|
+| `orchestrator/` | Console v2 schema, state, prompts | Console v2 |
+| `orchestrator_assistant/` | OA state and prompts | Console v2 |
+| `atlas/control_plane/` | Control-plane exports | Atlas |
+| `exports/docs-control/` | Docs-control exports | DMS |
+
+These directories contain JSON files that are **NOT** converted to Markdown because they
+are consumed programmatically by the console v2 webui.
 
 ## Core PM Artifacts (14 files)
 

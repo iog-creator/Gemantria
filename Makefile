@@ -224,7 +224,7 @@ pm.share.artifacts:
 	else \
 		echo "⚠️  KB registry validation had issues (non-fatal)"; \
 		if [ ! -f share/kb_registry.json ]; then \
-			echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+		echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
 		fi; \
 	fi
 	@echo ">> Generating PM system introspection evidence pack"
@@ -603,11 +603,11 @@ reality.green: ## Full system truth gate (DB, AGENTS, share, SSOT)
 .PHONY: state.sync state.verify
 state.sync: ## Sync system state ledger with current artifact hashes
 	@echo ">> Syncing system state ledger"
-	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_sync
+	@PYTHONPATH=. $(PYTHON) -m pmagent.scripts.state.ledger_sync
 
 state.verify: ## Verify system state ledger against current artifact hashes
 	@echo ">> Verifying system state ledger"
-	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_verify
+	@PYTHONPATH=. $(PYTHON) -m pmagent.scripts.state.ledger_verify
 
 # Complete housekeeping (Rule-058: mandatory post-change)
 # CRITICAL: DB must be reachable (SSOT requirement) - fail-closed if offline
@@ -2878,4 +2878,43 @@ guard.docs.embeddings:
 ci.guards.doc_vectors:
 	@PYTHONPATH=. python scripts/guards/guard_doc_fragments.py
 	@PYTHONPATH=. python scripts/guards/guard_doc_embeddings.py
+
+
+# -----------------------------------------------------------------------------
+# Phase 23 — PM Bootstrap Hardening + Stress Smoke
+# -----------------------------------------------------------------------------
+
+pm.bootstrap.state:  ## Regenerate PM bootstrap (preserving webui.console_v2)
+	@echo "=== pm.bootstrap.state: regenerating PM_BOOTSTRAP_STATE.json ==="
+	$(PYTHON) scripts/pm/patch_pm_bootstrap_webui.py
+
+stress.smoke:  ## Integrated smoke: console v2 + governance + pmagent (best-effort)
+	@echo "=== stress.smoke: starting ==="
+	$(PYTHON) scripts/pm/check_console_v2.py --skip-build
+	-$(MAKE) reality.green STRICT=1
+	@echo "=== stress.smoke: completed ==="
+
+
+# --- Phase DONE checklist guard (Phase 23.3) ---
+# Validates phase has required artifacts (hints, AGENTS, CI, operator docs)
+# HINT mode is default; STRICT mode deferred to future governance phase
+PHASE ?= 23
+MODE ?= HINT
+.PHONY: phase.done.check
+phase.done.check:  ## Run Phase-DONE checklist guard
+	$(PYTHON) scripts/guards/guard_phase_done.py --phase $(PHASE) --mode $(MODE)
+
+# -----------------------------------------------------------------------------
+# Phase 23.4 — Mandatory Pre-Housekeeping Backup Policy
+# -----------------------------------------------------------------------------
+
+.PHONY: backup.surfaces
+backup.surfaces:  ## Create timestamped backup of surfaces before destructive ops
+	@ts=$$(date -u +"%Y%m%dT%H%M%SZ"); \
+	mkdir -p backup/$$ts; \
+	cp -r share backup/$$ts/share; \
+	git_branch=$$(git branch --show-current 2>/dev/null || echo "unknown"); \
+	git_commit=$$(git rev-parse --short HEAD 2>/dev/null || echo "unknown"); \
+	echo "{\"created_at\":\"$$ts\",\"branch\":\"$$git_branch\",\"commit\":\"$$git_commit\"}" > backup/$$ts/MANIFEST.json; \
+	echo "✓ Backup created: backup/$$ts"
 

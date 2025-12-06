@@ -20,12 +20,10 @@ This replaces the LLM-per-fragment sequential bottleneck with:
 from __future__ import annotations
 
 import multiprocessing as mp
-import os
 import sys
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 
 # Detect GPU availability early
 GPU_AVAILABLE = False
@@ -65,9 +63,6 @@ def classify_batch_gpu(
     """
     if not GPU_AVAILABLE:
         return classify_batch_cpu_parallel(fragments)
-
-    import torch
-    from torch.utils.data import DataLoader, TensorDataset
 
     # Extract text content
     texts = [f.get("content", "")[:2000] for f in fragments]  # Limit to 2K chars like original
@@ -192,7 +187,10 @@ def main() -> int:
     """CLI entry point for testing."""
     # Quick smoke test
     test_fragments = [
-        {"content": "This is a BibleScholar architectural blueprint for Phase 14", "repo_path": "docs/bible.pdf"},
+        {
+            "content": "This is a BibleScholar architectural blueprint for Phase 14",
+            "repo_path": "docs/bible.pdf",
+        },
         {"content": "Gematria calculations for Genesis", "repo_path": "docs/gematria.pdf"},
         {"content": "WebUI tutorial for React components", "repo_path": "docs/ui_guide.pdf"},
     ]

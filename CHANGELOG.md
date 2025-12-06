@@ -116,6 +116,13 @@
 
 - Add new SSOT documentation, database migrations, refine KB/agent scripts, and clean up temporary share files.
 
+- fix deprecated namespace references and registry overwrite bug
+- upgrade PM bootstrap system with registry + dynamic phase detection
+- use capture_output in subprocess calls
+- add noqa comments for Hebrew character false positives
+- fix f-string syntax error in guard_gotchas_index.py
+- add PM bootstrap state index and SSOT documentation
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

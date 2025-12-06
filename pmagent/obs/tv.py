@@ -1,7 +1,6 @@
 import json
 import time
 import sys
-from pathlib import Path
 from datetime import datetime
 
 # Re-use log path from logger
@@ -17,7 +16,7 @@ def watch_tv(follow: bool = True, lines: int = 20) -> None:
         lines: Number of initial lines to show.
     """
     print(f"📺  AgentPM TV - Watching {LOG_FILE}...")
-    print(f"Waiting for retrieval events... (Ctrl+C to exit)")
+    print("Waiting for retrieval events... (Ctrl+C to exit)")
     print("-" * 60)
 
     if not LOG_FILE.exists():
@@ -28,7 +27,7 @@ def watch_tv(follow: bool = True, lines: int = 20) -> None:
 
     # Read last N lines
     try:
-        with open(LOG_FILE, "r", encoding="utf-8") as f:
+        with open(LOG_FILE, encoding="utf-8") as f:
             # Simple tail implementation
             all_lines = f.readlines()
             last_n = all_lines[-lines:]
