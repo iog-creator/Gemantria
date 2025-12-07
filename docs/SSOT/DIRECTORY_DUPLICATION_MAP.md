@@ -83,11 +83,28 @@ The repository has **significant directory duplication** that creates confusion 
 - **Status:** **JSON Schema files** (actual validation schemas)
 - **Purpose:** Machine-readable JSON Schema validation
 
+### `docs/SSOT/*.schema.json` (domain-specific schemas)
+- **Contents:**
+  - `SSOT_graph.v1.schema.json`
+  - `SSOT_ai-nouns.v1.schema.json`
+  - `graph-stats.schema.json`
+  - `temporal-patterns.schema.json`
+  - `pattern-forecast.schema.json`
+  - `graph-patterns.schema.json`
+  - `graph-correlations.schema.json`
+  - And other SSOT-specific schemas
+- **Status:** **SSOT/domain-specific schemas** (temporal, AI-related, etc.)
+- **Purpose:** Governed by existing OPS/temporal rules, not part of general schema cleanup
+- **Note:** These are **intentionally separate** from `schemas/` and are **out of scope** for Phase 27.I
+
 ### **Recommendation:**
-- **Keep:** `schemas/` (root) — canonical JSON Schema location
+- **Keep:** `schemas/` (root) — canonical JSON Schema location for general machine schemas
 - **Keep:** `docs/schemas/` — human-readable schema documentation (Markdown)
+- **Keep:** `docs/SSOT/*.schema.json` — SSOT/domain-specific schemas (out of scope for 27.I)
 - **Merge:** `docs/schema/` content into `docs/schemas/` (if valuable) or delete if redundant
-- **Rationale:** JSON schemas (root) vs documentation (docs) is a valid separation
+- **Rationale:** 
+  - JSON schemas (root) vs documentation (docs) is a valid separation
+  - SSOT schemas serve domain-specific purposes and are governed by separate rules
 
 ---
 
@@ -191,7 +208,7 @@ The repository has **significant directory duplication** that creates confusion 
 | Category | Directories | Files | Action |
 |----------|-------------|-------|--------|
 | **ADRs** | `docs/adr/` (5) vs `docs/ADRs/` (35) | 40 | **MERGE** `adr/` → `ADRs/`, delete `adr/` |
-| **Schemas** | `docs/schema/` (2) vs `docs/schemas/` (8) vs `schemas/` (20+) | 30+ | **KEEP** `schemas/` + `docs/schemas/`, **MERGE/DELETE** `docs/schema/` |
+| **Schemas** | `docs/schema/` (2) vs `docs/schemas/` (8) vs `schemas/` (20+) vs `docs/SSOT/*.schema.json` (7+) | 37+ | **KEEP** `schemas/` + `docs/schemas/` + `docs/SSOT/*.schema.json`, **MERGE/DELETE** `docs/schema/` |
 | **SQL** | `docs/sql/` (2) vs `db/sql/` (2) vs `scripts/sql/` (5+) | 9+ | **KEEP ALL** (different purposes, but document clearly) |
 | **SSOT** | `docs/SSOT/` (142) vs `src/ssot/` (?) | 142+ | **KEEP BOTH** (docs vs code) |
 | **Analysis** | `docs/analysis/` (10) vs `docs/ANALYSIS/` (2) | 12 | **MERGE** → `analysis/`, delete `ANALYSIS/` |

@@ -1189,7 +1189,7 @@ def main():
 
         # Validate stats schema (only if we have meaningful data)
         if stats["nodes"] > 0 or stats["edges"] > 0:
-            SCHEMA_PATH = Path("docs/SSOT/graph-stats.schema.json")
+            SCHEMA_PATH = Path("schemas/graph-stats.schema.json")
             schema = json.loads(SCHEMA_PATH.read_text())
             try:
                 validate(instance=stats, schema=schema)
