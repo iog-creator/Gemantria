@@ -1,0 +1,377 @@
+---
+description: OPS Contract v6.2.3
+alwaysApply: true
+globs: []
+---
+# 🧭 Gemantria — OPS Contract v6.2.3
+
+**Mode:** OPS MODE only (no small talk, no speculation without evidence)
+**Scope:** Gemantria repository and its subprojects (pipeline, exports, viz)
+**Authority chain:** Rules 039 → 041 → 046 → 050 → 051 → **052 (Tool Priority & Context Guidance)**
+
+## 0 · Mandatory Kernel Boot (Phase 26+)
+
+**CRITICAL**: Before ANY destructive OPS work (editing code, running migrations, modifying `share/`, or changing SSOT docs), Cursor **MUST** perform a kernel boot preflight:
+
+1. **Run**: `make ops.kernel.check`
+2. **If `ops.kernel.check` fails** (non-zero exit):
+   - Enter **NO-OP mode** for feature work
+   - Report the failure and surfaced kernel/health info back to the PM
+   - **Only execute PM-approved remediation OPS blocks**
+3. **Only if `ops.kernel.check` succeeds** MAY Cursor proceed to:
+   - Apply the standard evidence-first checks
+   - Run additional OPS commands per the PM's OPS block
+
+**This section is non-optional** and treated as part of the `alwaysApply: true` OPS contract.
+
+**Related**:
+- `docs/SSOT/EXECUTION_CONTRACT.md` Section 5 (Kernel-Aware Preflight)
+- `docs/SSOT/PHASE26_OPS_BOOT_SPEC.md`
+- `scripts/guards/guard_kernel_boot.py`
+
+## 1 · Activation Rule
+
+I operate *only if all four* are true:
+
+1. **Repo present** → `git rev-parse --show-toplevel` succeeds.
+2. **Governance docs present** → `AGENTS.md` and `RULES_INDEX.md` exist.
+3. **Virtual environment active** → `VIRTUAL_ENV=/home/mccoy/Projects/Gemantria.v2/.venv` (Rule 062 - CRITICAL)
+4. **Quality SSOT available** → `ruff format --check . && ruff check .` runs.
+
+If any is missing → **FAIL-CLOSED (LOUD FAIL)**.
+
+**VENV CHECK (Rule 062):** Before ANY Python command, verify:
+```bash
+bash scripts/check_venv.sh || exit 1
+```
+
+## 2 · LOUD FAIL Pattern
+
+Emit **exactly** if a required tool/context is missing:
+
+```
+LOUD FAIL
+governance: Gemantria OPS v6.2
+tool: <name>              # e.g., codex, gemini, gh, local-make
+action: <what you tried>
+args: <key args>
+error: <short reason>
+fallback:
+
+* git pull --ff-only
+* make share.sync
+* ruff format --check . && ruff check .
+```
+
+## 3 · Tool Priority & File References
+
+Cursor **must** declare the tool and files used.
+
+### Tool Order
+
+1. **Local + GH tools** (`git`, `make`, `gh pr …`)
+2. **Codex** — edits/patches/re-writes
+   *If unavailable → print `Codex disabled (401)` and fallback*
+3. **Gemini / MCP** — long-context reasoning or large docs
+   - pmagent’s **planning lane** treats Codex and Gemini CLI as optional planning/coding/maths providers. They are configured via `PLANNING_PROVIDER` / `PLANNING_MODEL` and CLI paths. When disabled, pmagent falls back to the Granite local_agent slot; theology slots remain LM Studio/Ollama-only.
+
+### Files Referenced
+
+* `AGENTS.md`
+* `RULES_INDEX.md`
+* `.cursor/rules/050-ops-contract.mdc`
+* `.cursor/rules/051-cursor-insight.mdc`
+* `src/**/AGENTS.md` (scoped to relevant module)
+
+### Example Cursor Header
+
+```
+governance: Gemantria OPS v6.2.3
+tool-priority:
+  1. local+gh
+  2. codex (if available)
+  3. gemini/mcp (for long files)
+   files-referenced:
+* AGENTS.md
+* RULES_INDEX.md
+* .cursor/rules/050-ops-contract.mdc
+* .cursor/rules/051-cursor-insight.mdc
+* .cursor/rules/053-idempotence.mdc
+  output-shape: 4 blocks (Goal, Commands, Evidence, Next gate)
+  ssot: ruff format --check . && ruff check .
+```
+
+## 4 · Context-Thinning Rule
+
+If overflow, **reduce** to:
+
+1. `AGENTS.md`
+2. `RULES_INDEX.md`
+3. `.cursor/rules/050-ops-contract.mdc`
+4. `.cursor/rules/051-cursor-insight.mdc`
+5. The single relevant submodule `AGENTS.md`
+
+Do **not** reload the entire repo once this subset is set.
+
+## 5 · Evidence-First Protocol
+
+**MANDATORY FIRST CHECK (Rule 062):** Before ANY Python commands, verify venv:
+
+```bash
+# CRITICAL: Check venv BEFORE any Python operations
+if [ -z "${VIRTUAL_ENV:-}" ] || [ "${VIRTUAL_ENV}" != "/home/mccoy/Projects/Gemantria.v2/.venv" ]; then
+  echo "🚨 ENVIRONMENT FAILURE 🚨"
+  echo "Expected venv: /home/mccoy/Projects/Gemantria.v2/.venv"
+  echo "Current venv: ${VIRTUAL_ENV:-NOT SET}"
+  echo "Current python: $(which python3 2>/dev/null || echo 'NOT FOUND')"
+  echo "ACTION REQUIRED: source .venv/bin/activate"
+  echo "🚨 DO NOT PROCEED 🚨"
+  exit 1
+fi
+```
+
+**Before proposing changes OR pushing code:**
+
+```bash
+git rev-parse --show-toplevel
+git rev-parse --abbrev-ref HEAD
+git status -sb
+ruff format --check . && ruff check .
+# Git safety: verify no upstream tracking that enables drift
+git config --get branch.$(git rev-parse --abbrev-ref HEAD).remote || echo "No upstream remote"
+git config --get branch.$(git rev-parse --abbrev-ref HEAD).merge || echo "No upstream merge"
+# ENVELOPE-FIRST HARDENING: Validate envelopes before operations
+make guards.envelope_first 2>/dev/null || echo "ENVELOPE-FIRST: No envelopes present or validation failed"
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
+```
+
+**After making ANY changes, Cursor MUST complete this checklist:**
+
+1. **Run housekeeping**: `make housekeeping` (Rule 058 - MANDATORY)
+2. **Check hints**: If rule/docs changed, verify hints emitted (Rule 026)
+3. **Verify share sync**: Check `share/` updated (Rule 030)
+4. **Check related rules**: Review "Related Rules" sections for updates needed
+5. **Commit generated files**: Share sync, evidence, forest updates, etc.
+
+**DO NOT** commit changes without completing this checklist. This is non-negotiable.
+
+For PR work:
+
+```bash
+gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks
+gh pr checks <N> --required --json name,state
+```
+
+## 5.5 · Local Gates Are Primary (CI Is Secondary)
+
+**CRITICAL WORKFLOW RULE:** Local checks are the **primary truth gate**. CI is a **remote mirror only** and must never be treated as a blocking dependency.
+
+### Mandatory Pre-Push/PR Checklist
+
+Before **any** push or PR creation, Cursor **must** run these local gates:
+
+```bash
+ruff format --check . && ruff check .
+make book.smoke
+make ci.exports.smoke
+make reality.green STRICT
+```
+
+**If any local gate fails:**
+- **DO NOT** push
+- **DO NOT** open a PR
+- Fix issues locally where error messages are readable
+- Re-run gates until all pass
+
+**Only after all local gates pass:**
+- Push to remote
+- Open/update PR
+- Continue with other work (do not wait for CI)
+
+### CI Is a Mirror, Not the Gate
+
+- CI is allowed to:
+  - Flake (infrastructure issues)
+  - Be slow (queue delays)
+  - Fail due to transient errors
+- CI must **never** be treated as:
+  > "We can't proceed until GitHub tells us what to think."
+
+### "Waiting for CI" Is Not a Valid State
+
+Cursor/PM are **not allowed** to say:
+- "We're blocked waiting for CI"
+- "We can't proceed until CI completes"
+
+**Approved stances:**
+- "Local gates are green; CI is pending, we continue planning/work"
+- "Local gates are green; CI disagrees → we reproduce locally and debug"
+- "Local gates failed; fixing locally before push"
+
+**No more passive waiting** as if CI were the decision-maker.
+
+### Phase-Level Failure Reporting
+
+If CI fails, the explanation must be **phase-level**, not job-level:
+- ❌ "Job 12 failed with exit code 1"
+- ✅ "Phase 3 vector migration failed because `graph-stats.schema.json` didn't match the DB; here's what we changed"
+
+### You Don't Need GitHub to Move Phases
+
+Operator involvement stays at:
+- "Is Phase 4 functionally complete?"
+- "Are all local gates green?"
+- "Okay, move to Phase 5"
+
+The details of:
+- Which PR is open
+- Which CI job is pending
+- Which branch name is used
+
+→ That stays in Cursor-land and does not block phase progression.
+
+## 6 · Output Shape (4-Block Standard)
+
+1. **Goal** — one sentence defining the action.
+2. **Commands** — runnable shell/gh/make lines only.
+3. **Evidence to return** — numbered list of expected outputs.
+4. **Next gate** — what to do after I see the evidence.
+
+   Each command block begins with:
+
+```
+# source: AGENTS.md + RULES_INDEX.md + .cursor/rules/050 + .cursor/rules/051
+```
+
+## 7 · SSOT for Quality
+
+```bash
+ruff format --check . && ruff check .
+```
+
+If ruff fails → stop and request the last 60–200 lines.
+
+## 8 · Hermetic Test Bundle
+
+```bash
+make book.smoke
+make eval.graph.calibrate.adv
+make ci.exports.smoke
+```
+
+Hermetic smokes are required for CI and for **initial safety checks**, but they are **not sufficient** to declare any DB/LM‑touching feature "done."
+
+- For features that exercise DB or LM (pipelines, BibleScholar, Knowledge MCP, control‑plane exports, etc.), Cursor must:
+  - Run the hermetic bundle above, **and then**
+  - Run at least one **live DB+LM execution of the relevant flow** whenever the operator has indicated DB/LM should be up.
+- Persistent `db_off` / `lm_off` / similar HINTs in that live context are a **failure to investigate**, not "correct hermetic behavior."
+
+In CI and explicitly hermetic runs (where DB/LM are intentionally off), DB/services down → "correct hermetic behavior."
+
+## 9 · Non-Required Automated Reviews
+
+If required checks are green:
+
+> "Required checks are green; non-required automated reviews are **advisory only** per AGENTS.md and Rule 051."
+
+## 10 · CI Naming-Conflict Clause
+
+If duplicate `build` jobs (one pass / one fail):
+
+> "Treat as infra fault. With ruff + smokes green, **admin merge allowed** per Governance v6.2 §10."
+
+## 11 · Handoff / New Chat Rule
+
+On "prepare handoff" or "new chat", output **only** the 4 blocks and include baseline evidence (§5).
+
+## 12 · Dirty-Branch Rule
+
+If `git status -sb` shows dirty on `main`, open hygiene PR first:
+
+```bash
+git switch -c ci/hygiene-ruff-$(date +%Y%m%d-%H%M)
+ruff format --check . && ruff check .
+make ops.verify
+make share.sync
+git add .
+git commit -m "ci: apply ruff/py.fullwave hygiene"
+git push -u origin HEAD
+gh pr create --title "ci: hygiene (ruff)" --body "Automated hygiene per OPS v6.2"
+```
+
+## 13 · Required-Checks Gate
+
+Always emit:
+
+```bash
+gh pr checks <N> --required --json name,state \
+  --jq 'if length==0 then "NO_REQUIRED_CHECKS" else all(.state=="SUCCESS") end'
+```
+
+If `NO_REQUIRED_CHECKS`, say: *"Automated checks present → advisory only (051)."*
+
+## 14 · Fail-Closed on Share
+
+If CI writes to `share/`:
+
+1. Identify script. 2) Explain why it breaks hermetic CI.
+2. `make share.sync`. 4) Re-run CI.
+
+## 15 · No Async Promises
+
+Never say "I'll check later" or give time estimates.
+
+Always output commands runnable **now**.
+
+## 16 · Header Banner for OPS Responses
+
+Every OPS reply begins:
+
+> **Governance: Gemantria OPS v6.2.3 (tool-aware, 050 + 051 + 052 active)**
+
+> Then the 4-block format follows.
+
+## 17 · Rule-053 — Idempotent Baseline
+
+Cache baseline evidence by `(branch, HEAD)` for **60 minutes**.
+
+If unchanged, **do not** re-ask for baseline; acknowledge cached evidence.
+
+Emit `HINT[baseline.sha]: <sha>` when using cache.
+
+## 18 · CI Single-Context Requirement
+
+PRs expose **one** required status context: **`build-pr`**.
+
+Use concurrency with `cancel-in-progress: true`.
+
+Duplicate/legacy contexts = **infra fault** (see §10).
+
+## 19 · Internal Guardrails (Branch Protection OFF allowed)
+
+Merges are permitted only when **all** are true:
+
+* **policy-gate** passed (Conventional Commits + signed-commit verification).
+* **build-pr** passed.
+* ≥ **1 human approval** present.
+* Prefer **bot-mediated merge** (queue/automation) over manual "Merge".
+
+## 20 · Security & Supply Chain
+
+* Pin third-party actions to **full commit SHAs** (avoid `@v*` tags).
+* Enable **Dependabot** for `github-actions` (weekly).
+* Nightly **OpenSSF Scorecard** with SARIF upload to Security tab.
+
+### Summary
+
+* **SSOT:** Ruff
+* **Hermetic:** book + eval + exports smokes
+* **Reviews:** non-required = advisory
+* **Tool Priority:** local+gh → codex → gemini/mcp
+* **Files:** AGENTS.md, RULES_INDEX.md, 050, 051 (+ Rule-053)
+* **Output:** 4 blocks
+* **Failure:** LOUD FAIL v6.2
+* **Chain:** 039→041→046→050→051→052→**053**
+* **Local Gates Primary:** Ruff + smokes + reality.green must pass before push/PR; CI is mirror only, never blocking

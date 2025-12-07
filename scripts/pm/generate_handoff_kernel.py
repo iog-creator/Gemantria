@@ -66,7 +66,10 @@ def main():
         rg_summary_path = SHARE / "REALITY_GREEN_SUMMARY.json"
         # If missing, we can't fully populate health, but valid generator execution implies it exists (or we fail)
         if not rg_summary_path.exists():
-            print(f"WARNING: {rg_summary_path} not found. Health data will be incomplete/false.", file=sys.stderr)
+            print(
+                f"WARNING: {rg_summary_path} not found. Health data will be incomplete/false.",
+                file=sys.stderr,
+            )
             rg_summary = {"reality_green": False, "checks": []}
         else:
             rg_summary = load_json(rg_summary_path)
@@ -87,7 +90,12 @@ def main():
         # Health
         rg_ok = rg_summary.get("reality_green", False)
         checks_map = {}
-        target_checks = ["DMS Alignment", "Bootstrap Consistency", "Share Sync Policy", "Backup System"]
+        target_checks = [
+            "DMS Alignment",
+            "Bootstrap Consistency",
+            "Share Sync Policy",
+            "Backup System",
+        ]
 
         summary_checks = rg_summary.get("checks", [])
         # Convert list to dict for lookup

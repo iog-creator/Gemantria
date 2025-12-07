@@ -1,0 +1,132 @@
+---
+description: Cursor Insight & Handoff
+alwaysApply: true
+globs: []
+---
+# 051 — Cursor Insight & Handoff (AlwaysApply)
+
+## Intent
+
+Cursor must stop exploratory / unfocused tool flurries and instead **emit the exact evidence set** the PM agent needs. This rule anchors to the OPS Contract (050) and the PR Merge Policy (041).
+
+## Triggers
+
+- PR is *mergeable* but appears "blocked" by a **non-required** automated review (Sourcery, Copilot, Snyk, etc.)
+- PR is rebased on `main` and needs verification gates
+- Operator asks for "handoff", "next chat", or "prepare evidence"
+
+## Required Evidence Set
+
+**CRITICAL:** Local gates (steps 4) are **primary**; CI status (step 5) is **informational only**. Never block on CI.
+
+Cursor **must** paste, in this order:
+
+1. `git rev-parse --show-toplevel`
+2. `git rev-parse --abbrev-ref HEAD`
+3. `git status -sb`
+4. **Local gates (PRIMARY - must pass before push/PR):**
+   - `ruff format --check . && ruff check .`
+   - `make book.smoke`
+   - `make ci.exports.smoke`
+   - `make reality.green STRICT`
+5. For the active PR **N** (if exists; **informational only**, not blocking):
+   - `gh pr view <N> --json number,title,headRefName,baseRefName,state,author,reviews,reviewDecision,mergeable,mergeStateStatus,checks`
+   - `gh pr checks <N> --required --json name,state`
+6. If `gh pr checks ...` shows **all required = SUCCESS**, Cursor must **explicitly state**:
+   > "Non-required automated review present → advisory only per 041 + 050. Standard merge allowed."
+7. **Never state:** "Waiting for CI" or "Blocked on CI". If local gates pass, proceed with work.
+8. **Browser verification (MANDATORY for UI/visual work)**: 
+   - **If the work involves ANY web pages, HTML, UI components, React components, dashboards, charts, visualizations, or documentation sites, Cursor MUST use browser tools to visually verify BEFORE completing the task.**
+   - **Do NOT wait for user reminders. Do this proactively as part of the workflow.**
+   - Use `browser_snapshot` to capture accessibility snapshots of rendered pages
+   - Use `browser_take_screenshot` for visual verification of layouts, styling, or rendering
+   - Navigate to local files using HTTP server (not file:// URLs) and verify
+   - Verify links, navigation, and interactive elements work correctly
+   - Include browser verification evidence (screenshots, snapshots) in the output
+   - **Failure to perform browser verification for UI/visual work is a workflow violation.**
+
+## Live vs Hermetic Evidence
+
+- When the work touches **DB or LM** and the operator has indicated DB/LM should be running, Cursor must include in the handoff:
+  - At least one **hermetic evidence block** (smokes/guards), and
+  - Evidence from a **live DB+LM run of the relevant flow** (or an explicit statement that DB/LM are intentionally offline for this run).
+- In that live context, repeated `db_off` / `lm_off` HINTs are a gap to fix before marking the PLAN/phase item **complete**; do not treat them as "expected" final state.
+
+## Non-Required Review Rule
+
+- If the review is **not** part of GitHub's "required" checks and **not** in CODEOWNERS → treat as **advisory**.
+- Cursor **must not** stop or say "blocked" if: ruff ✅, build ✅, required checks ✅.
+- Cursor **may** note: "If you have admin you can dismiss the stale automated review."
+
+## Handoff Format
+
+When a handoff is requested, Cursor must output **4 blocks only**:
+
+1. **Goal** — single sentence, present tense
+2. **Commands** — runnable shell, in order
+3. **Evidence to return** — numbered list tied to the commands
+4. **Next gate** — what the PM/next chat will do
+
+No extra narrative, no speculation.
+
+## Browser Verification Requirement (MANDATORY)
+
+**CRITICAL: Browser verification is NOT optional for UI/visual work. Cursor MUST perform browser verification proactively, without waiting for user reminders.**
+
+Cursor **must** use the integrated browser tool to visually verify results when:
+- Generating or modifying web pages, HTML files, or documentation that renders in a browser
+- Creating UI components, dashboards, charts, or visualizations
+- Creating or modifying React components (including new tabs, panels, or UI elements)
+- Working with GitHub Pages, documentation sites, or any web-based outputs
+- Verifying visual layout, styling, CSS, or rendering issues
+- Checking links, navigation, forms, or interactive elements
+- Validating that generated content displays correctly
+- **ANY task that produces visual output must be browser-verified before completion**
+
+**Workflow requirement**: When creating or modifying UI components:
+1. Create the component/file
+2. **IMMEDIATELY** set up a local HTTP server and navigate to the page
+3. Use `browser_snapshot` and `browser_take_screenshot` to verify
+4. Include verification evidence in the response
+5. **Do NOT mark the task complete until browser verification is done**
+
+**Browser tools available**:
+- `browser_snapshot`: Capture accessibility snapshot (preferred for structure/content verification)
+- `browser_take_screenshot`: Capture visual screenshot (preferred for layout/styling verification)
+- `browser_navigate`: Navigate to URLs or local files
+- `browser_click`, `browser_type`, etc.: Interact with pages when needed
+
+**When to verify**:
+- After generating HTML/Markdown that will be rendered
+- After modifying CSS, styling, or layout code
+- After creating or updating documentation sites
+- After generating visualizations, charts, or dashboards
+- Before marking visual/UI work as complete
+
+**Visual verification workflow**:
+1. **Use the standardized script (RECOMMENDED):**
+   ```bash
+   make browser.verify
+   # OR
+   bash scripts/ops/browser_verify.sh --strict --port 8778
+   ```
+   The script generates instructions in `evidence/webproof/browser_verify_instructions.txt`. Cursor **must** execute the browser tool calls listed there.
+
+2. **Manual workflow (if script unavailable):**
+   - Start local HTTP server: `python3 -m http.server 8000`
+   - Navigate with cache-busting: `?nocache=$(date +%s)` to avoid stale content
+   - Use `browser_snapshot` for structure/content verification
+   - Use `browser_take_screenshot` for visual layout verification
+   - Verify all expected content is visible (check DOM length, element presence)
+   - Save screenshots to `evidence/` directory
+   - Clean up server: `kill $(cat .server.pid) && rm .server.pid`
+
+**Runbooks**:
+- Atlas visual verification: `docs/runbooks/ATLAS_VISUAL_VERIFICATION.md`
+- General browser QA: `docs/runbooks/CURSOR_BROWSER_QA.md`
+
+## Notes
+
+- This rule is **AlwaysApply** for Gemantria
+- This rule depends on: 039, 041, 046, 050
+- Browser verification is **mandatory** for visual/web outputs, not optional

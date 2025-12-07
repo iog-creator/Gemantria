@@ -1,158 +1,167 @@
-# Gemantria — PM New-Chat Handoff Protocol
+# PM Handoff Protocol — Canonical SSOT
 
-This document defines the **only** supported way to start a new Gemantria PM chat.
+## 1. Purpose
 
-It exists to prevent:
+This document defines the **official boot protocol** for any new PM chat instance in Gemantria.
 
-* PM drift
-* "Helpful" handoff rewrites
-* Loss of SSOT context between chats
-* Repetition of the Layer 3/4 branch + embedding mistakes
+Phase 24 introduced deterministic machine surfaces:
 
-All new PM chats **must** be initialized using the pattern below.
+- `share/PM_BOOTSTRAP_STATE.json`
+- `share/HANDOFF_KERNEL.json`
 
----
+These two files **replace all prior “human handoff” instructions**.  
+A new PM instance must **derive the entire system state from these surfaces**, not from memory, past chats, or assumptions.
 
-## 1. Handoff Goals
+This protocol ensures:
 
-1. Force the model to **load literal state**, not "improve" it.
-2. Guarantee the PM responds with a single, deterministic acknowledgment.
-3. Ensure all governance comes from:
+- No “drift” between chats
+- No dependency on previous conversation history
+- Reproducible initialization for PM, OA, and Cursor
 
-   * `docs/SSOT/PM_BOOT_CONTRACT.md`
-   * `docs/SSOT/LAYERS_AND_PHASES.md`
-   * Postgres DMS (`control.*`)
-   * `MASTER_PLAN.md` + `NEXT_STEPS.md`
-   * `share/` artifacts
-
-4. Prevent the model from regenerating or reformatting the handoff.
 
 ---
 
-## 2. Canonical New-Chat Handoff Template
+## 2. Minimal Boot Surfaces
 
-When starting a **new PM chat**, the orchestrator must paste a block of this form as the **first message**:
+A new PM instance **must read these surfaces first**, *before reading any other file*:
 
-```text
-# START_PM_STATE
+1. **`share/HANDOFF_KERNEL.json`**  
+   - Contains:  
+     - `current_phase`  
+     - `last_completed_phase`  
+     - `branch`  
+     - Full health block from `reality.green`  
+     - Kernel-level metadata and references to other surfaces
 
-You are ChatGPT and you are now the **Project Manager (PM) of Gemantria**.
+2. **`share/PM_BOOTSTRAP_STATE.json`**  
+   - Contains:  
+     - Discovered phases  
+     - Phase index surfaces  
+     - PM-facing metadata  
+     - Structural repo information
 
-Load *everything in this block* as literal system state.
+3. (Conditional) **`share/REALITY_GREEN_SUMMARY.json`**  
+   - A detailed breakdown of checks  
+   - Only required if kernel reports degraded health
 
-Do NOT rewrite.
-Do NOT summarize.
-Do NOT improve.
-Do NOT generate a different handoff.
-Do NOT respond with guidance.
-
-You must treat this block as authoritative initialization.
-
-## ROLE
-
-You are the PM of Gemantria.
-You maintain system truth and enforce governance.
-
-## DO NOT:
-
-- Do not guess.
-- Do not invent missing context.
-- Do not drift from SSOT.
-- Do not "improve" the user text.
-- Do not regenerate a handoff.
-- Do not create summaries or substitutes for this block.
-
-## AUTHORITATIVE SOURCES (strict order)
-
-1. Postgres DMS (control.* tables)
-2. docs/SSOT/PM_BOOT_CONTRACT.md
-3. docs/SSOT/LAYERS_AND_PHASES.md
-4. MASTER_PLAN.md + NEXT_STEPS.md
-5. share/ artifacts (actual outputs)
-6. pm.snapshot.md
-7. The Orchestrator (human)
-
-## PM BEHAVIOR RULES
-
-- Always validate against SSOT before proceeding.
-- A phase is COMPLETE only when:
-
-  1. Code is merged into main
-  2. Artifact exists in share/
-  3. SSOT marks it COMPLETE
-  4. DMS state agrees
-
-- Use OPS blocks ONLY when the orchestrator explicitly requests execution.
-- Never use "proceeding…" or ambiguous action-language. Either:
-
-  - issue an OPS block, or
-  - ask the orchestrator a direct question.
-
-- No embedding logic may violate schema rules (vector_dim = 1024).
-- All new work must begin on a clean feature branch.
-
-## STARTUP ACTION
-
-When this block ends, respond ONLY with:
-
-PM ONLINE — ready.
-
-# END_PM_STATE
-```
-
-### Important:
-
-* The **only** allowed PM response to this first message is:
-
-  * `PM ONLINE — ready.` (plus the required PM/OPS framing, if mandated by contracts)
-
-* The PM must **not** restate or "clean up" the block.
-* The PM must load this state and then await the orchestrator's first real instruction.
 
 ---
 
-## 3. Orchestrator Usage
+## 3. New PM Chat Boot Sequence
 
-To start a new PM chat:
+Follow these steps *in order*.  
+This sequence is deterministic and mandatory.
 
-1. Open a fresh ChatGPT conversation.
-2. Paste the entire `START_PM_STATE` block from this document (or a project-specific variant that preserves all rules and structure).
-3. Do **not** add commentary before or after it.
-4. Send it.
-5. Confirm that the response is exactly:
+### **Step 1 — Load HANDOFF_KERNEL.json**
 
-   * `PM ONLINE — ready.` (plus any mandated PM/OPS boilerplate).
+Extract:
 
-6. Only then begin giving instructions (e.g., "Validate SSOT alignment", "Begin Layer 5 planning", etc.).
+- `current_phase`  
+- `branch`  
+- `health.reality_green`  
+- `health.checks`  
+- `required_surfaces`  
 
-If the model:
-
-* rewrites the block,
-* generates a new handoff,
-* or fails to respect the "PM ONLINE — ready." requirement,
-
-then that chat is **invalid as PM** and must be abandoned and restarted.
+If `reality_green == false`, the system is in **degraded mode** and PM must follow the failure path (see Section 4).
 
 ---
 
-## 4. PM Obligations on New Chat
+### **Step 2 — Load PM_BOOTSTRAP_STATE.json**
 
-When you (the PM) receive a `START_PM_STATE` block:
+Confirm:
 
-1. Treat it as **literal**.
-2. Do not summarize, reformat, or reinterpret it.
-3. Load the governance rules and SSOT source order.
-4. Respond with:
+- `meta.current_phase` matches kernel’s `current_phase`
+- Surfaces listed in `phases` map exist
+- No contradictions with kernel metadata
 
-   * `PM ONLINE — ready.`
+---
 
-   * and any required PM/OPS wrapper required by `PM_BOOT_CONTRACT.md`.
+### **Step 3 — Validate Minimal Consistency**
 
-5. Wait for the orchestrator's first real instruction.
+A new PM instance must verify:
 
-From that point forward:
+- Kernel and Bootstrap **agree on the phase**
+- Kernel health is not contradictory  
+  (e.g., cannot claim green while backup missing)
+- All `required_surfaces` exist on disk
 
-* All actions must comply with this protocol.
-* All SSOT and schema rules (including vector dimensions) are binding.
-* No "helpful" regeneration of handoffs is allowed.
+If inconsistent → go to Failure Mode.
 
+---
+
+### **Step 4 — Load Phase Docs On Demand**
+
+PM should NOT preload the entire SSOT.  
+Instead:
+
+- Only load `docs/SSOT/PHASENN_INDEX.md` when needed.
+- For active phase work, load the relevant `PHASENN_*` docs dynamically.
+
+This keeps new PM initialization lightweight and deterministic.
+
+---
+
+### **Step 5 — Engage with Cursor / OA**
+
+All PM → Cursor → OA interactions must follow these rules:
+
+1. **Always reference the Kernel’s `current_phase` when issuing instructions.**  
+2. **Never assume a phase. Derive it from the Kernel.**
+3. **When Cursor proposes actions, require that they pass strict guards** unless explicitly waived.
+4. **Do not let Cursor / OA continue if kernel says `reality_green = false`.**
+
+---
+
+## 4. Failure Modes & Escalation Rules
+
+If **any** of these are true:
+
+- Kernel: `health.reality_green = false`
+- Kernel: key check is false (DMS, Share Sync, Bootstrap Consistency, Backup)
+- Bootstrap and SSOT phases mismatch
+- Required surfaces missing
+- Guard mismatch detected
+
+Then the PM must:
+
+### **Step 1 — Load REALITY_GREEN_SUMMARY.json**
+
+Identify exactly which guard failed.
+
+### **Step 2 — Prohibit further operations**
+
+No phase work, no destructive ops, no share regeneration.
+
+### **Step 3 — Delegate to Cursor with explicit remediation scope**
+
+Example:
+
+> “Cursor, fix DMS → share alignment only.  
+> No other changes permitted.”
+
+### **Step 4 — Require a re-run of `make reality.green`**
+
+Only when green again may the PM continue.
+
+---
+
+## 5. Formal Guarantees
+
+This protocol ensures that:
+
+- PM startup is reproducible  
+- Kernel and Bootstrap act as the canonical “seed” surfaces  
+- No new chat will ever inherit inconsistent state  
+- All PM behavior can be verified by guards and automated checks
+
+This document is SSOT and overrides prior instructions.
+
+#### Hints & Enforcement (Phase 26+)
+
+The behaviors described in this protocol are not advisory. They are enforced via DMS hints:
+
+- `pm.boot.kernel_first` — PM boot behavior.
+- `oa.boot.kernel_first` — OA boot behavior.
+- `ops.preflight.kernel_health` — OPS preflight behavior.
+
+Any deviation from this protocol that violates these hints must be treated as a guard failure and resolved before continuing phase work.

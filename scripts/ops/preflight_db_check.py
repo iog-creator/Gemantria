@@ -71,7 +71,10 @@ def main() -> int:
                 print("\n   See: docs/hints/HINT-DB-002-postgres-not-running.md", file=sys.stderr)
                 return 1
             # Hint mode: warn but continue
-            print(f"⚠️  WARNING: Database is unreachable (mode: {mode}) - continuing in hint mode", file=sys.stderr)
+            print(
+                f"⚠️  WARNING: Database is unreachable (mode: {mode}) - continuing in hint mode",
+                file=sys.stderr,
+            )
             return 0
 
         # DB is ready

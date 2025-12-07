@@ -49,13 +49,11 @@ def load_allowlist() -> set[str]:
 
 def main() -> int:
     """Main guard logic."""
-    parser = argparse.ArgumentParser(
-        description="Guard: Repository Root Surface Policy"
-    )
+    parser = argparse.ArgumentParser(description="Guard: Repository Root Surface Policy")
     parser.add_argument(
         "--mode",
         choices=["HINT", "STRICT"],
-        default=os.getenv("STRICT_MODE", "0") == "1" and "STRICT" or "HINT",
+        default=(os.getenv("STRICT_MODE", "0") == "1" and "STRICT") or "HINT",
         help="Guard mode: HINT (warn only) or STRICT (fail on violations)",
     )
     args = parser.parse_args()

@@ -123,6 +123,8 @@
 - fix f-string syntax error in guard_gotchas_index.py
 - add PM bootstrap state index and SSOT documentation
 
+- Phase 24 remediation polish + restore mcp.proof.snapshot target
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights
