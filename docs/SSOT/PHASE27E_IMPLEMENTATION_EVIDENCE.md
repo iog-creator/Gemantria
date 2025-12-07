@@ -77,3 +77,58 @@ Phase 27.E Batch 1 created `share/oa/CONTEXT.json`, but `guard_dms_share_alignme
 | DMS Alignment | ❌ `extra_in_share: ["oa/"]` | ✅ OK |
 | Backup System | ❌ No recent backup | ✅ Passing |
 | reality.green | 16/18 | **18/18** |
+
+---
+
+## Batch 2 — Phase 27 Evidence Auto-Share
+
+### Status
+- **Commit**: `9e7fdd67` (chore(27.E): auto-share Phase 27 evidence into share/ and kernel indices)
+- **reality.green**: ✅ 18/18 passing
+
+### Goal
+Make Phase 27 evidence behave like earlier phases — materialized in `share/` and indexed in kernel surfaces.
+
+### Changes
+
+| File | Change |
+|------|--------|
+| `share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md` | **NEW** - copied from docs/SSOT |
+| `share/PHASE27D_IMPLEMENTATION_EVIDENCE.md` | **NEW** - copied from docs/SSOT |
+| `share/PHASE27E_IMPLEMENTATION_EVIDENCE.md` | **NEW** - copied from docs/SSOT |
+| `scripts/guards/guard_dms_share_alignment.py` | Added Phase 27 evidence to ALLOWED_FILES |
+| `scripts/guards/guard_share_sync_policy.py` | Added Phase 27 evidence to SYSTEM_FILES |
+| `scripts/pm/generate_ssot_surface.py` | Added phases.27.evidence[] to output |
+
+### Verification
+
+**SSOT_SURFACE_V17.json phases section:**
+```json
+"phases": {
+  "27": {
+    "status": "in_progress",
+    "evidence": [
+      "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+      "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+      "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+      "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md"
+    ]
+  }
+}
+```
+
+**PM_BOOTSTRAP_STATE.json phases["27"]:**
+```json
+{
+  "27apmagentkernelinterpreter": "docs/SSOT/PHASE27_A_PMAGENT_KERNEL_INTERPRETER.md",
+  "27boaruntime": "docs/SSOT/PHASE27_B_OA_RUNTIME.md",
+  "27cconsolekernelpanel": "docs/SSOT/PHASE27_C_CONSOLE_KERNEL_PANEL.md",
+  "27ddspyreasoningoutline": "docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md",
+  "27index": "docs/SSOT/PHASE27_INDEX.md"
+}
+```
+
+### Result
+Phase 27 evidence is now auto-surfaced. PM/OA can find it via:
+- `SSOT_SURFACE_V17.json` → `phases.27.evidence[]`
+- `share/PHASE27*EVIDENCE*.md` (generated views)
