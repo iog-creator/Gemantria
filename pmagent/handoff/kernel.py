@@ -147,7 +147,7 @@ Version: {kernel.generator_version}
 - **Last Completed**: {kernel.last_completed_phase}
 - **Branch**: `{kernel.branch}`
 
-## What’s green / proven
+## What's green / proven
 - **Kernel Integrity**: Generated and consistent with bootstrap.
 - **Guard Policy**: Enforced (`reality.green`, `stress.smoke`, `phase.done.check`).
 

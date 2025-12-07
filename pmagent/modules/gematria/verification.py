@@ -1,6 +1,6 @@
-from __future__ import annotations
-
 """Gematria / numerics verification helpers (skeleton)."""
+
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Iterable

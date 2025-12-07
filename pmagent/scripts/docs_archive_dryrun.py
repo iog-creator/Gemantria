@@ -25,9 +25,9 @@ from typing import List
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
-import psycopg
+import psycopg  # noqa: E402
 
-from scripts.config.env import get_rw_dsn
+from scripts.config.env import get_rw_dsn  # noqa: E402
 
 OUT_PATH = REPO_ROOT / "docs" / "analysis" / "DOC_ARCHIVE_DRYRUN.md"
 
