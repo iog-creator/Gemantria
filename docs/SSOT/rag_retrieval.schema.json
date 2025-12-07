@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "RAG Retrieval Response Schema",
+    "description": "Schema for Phase 15 Wave-2 RAG retrieval responses (Option B profile)",
+    "type": "object",
+    "properties": {
+        "query": {
+            "type": "string",
+            "description": "Original query string"
+        },
+        "top_k": {
+            "type": "integer",
+            "description": "Number of chunks requested",
+            "minimum": 1
+        },
+        "retrieval_profile": {
+            "type": "string",
+            "enum": [
+                "standard"
+            ],
+            "description": "RAG profile used (Option B = standard)"
+        },
+        "chunks": {
+            "type": "array",
+            "description": "Retrieved and ranked contextual chunks",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "verse_id": {
+                        "type": "integer",
+                        "description": "Verse identifier from bible_db"
+                    },
+                    "verse_ref": {
+                        "type": "string",
+                        "description": "Human-readable verse reference (e.g., 'Mark 1:1')"
+                    },
+                    "relevance_score": {
+                        "type": "number",
+                        "description": "Combined relevance score (0.0 - 1.0)",
+                        "minimum": 0.0,
+                        "maximum": 1.0
+                    },
+                    "embedding_score": {
+                        "type": "number",
+                        "description": "1024-D embedding cosine similarity (0.0 - 1.0)",
+                        "minimum": 0.0,
+                        "maximum": 1.0
+                    },
+                    "reranker_score": {
+                        "type": "number",
+                        "description": "Reranker cross-encoder score (0.0 - 1.0)",
+                        "minimum": 0.0,
+                        "maximum": 1.0
+                    },
+                    "context_window": {
+                        "type": "array",
+                        "description": "5-verse context window (verse references)",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "enriched_metadata": {
+                        "type": "object",
+                        "description": "Phase 14 enriched context",
+                        "properties": {
+                            "greek_words": {
+                                "type": "array",
+                                "description": "Greek words for NT verses",
+                                "items": {
+                                    "type": "object"
+                                }
+                            },
+                            "proper_names": {
+                                "type": "array",
+                                "description": "Proper names from RelationshipAdapter",
+                                "items": {
+                                    "type": "object"
+                                }
+                            },
+                            "cross_language_hints": {
+                                "type": "array",
+                                "description": "Greek-to-Hebrew lemma mappings",
+                                "items": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "verse_id",
+                    "verse_ref",
+                    "relevance_score"
+                ]
+            }
+        }
+    },
+    "required": [
+        "query",
+        "top_k",
+        "retrieval_profile",
+        "chunks"
+    ]
+}

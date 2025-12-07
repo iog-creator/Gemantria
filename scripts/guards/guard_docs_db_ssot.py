@@ -59,7 +59,7 @@ sys.path.insert(0, str(ROOT))
 
 from sqlalchemy import text
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 from scripts.governance import ingest_docs_to_db as ingest_mod
 
 

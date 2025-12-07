@@ -115,6 +115,12 @@ guard.ketiv.primary:
 guard.jsonschema.import:
 	@scripts/ci/run_strict.sh python3 scripts/ci/guard_jsonschema_import.py
 
+# Phase 26.5: OPS must run this before destructive commands.
+.PHONY: ops.kernel.check
+ops.kernel.check:
+	@echo "[Phase26.5] Running kernel boot guard..."
+	@python scripts/guards/guard_kernel_boot.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -172,15 +178,8 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@PYTHONPATH=. python3 scripts/sync_share.py || { \
-		exit_code=$$?; \
-		if [ $$exit_code -eq 1 ]; then \
-			echo "[share.sync] Files changed (exit code 1 is expected when files are updated)"; \
-			exit 0; \
-		else \
-			exit $$exit_code; \
-		fi; \
-	}
+	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
+	@PYTHONPATH=. python3 scripts/sync_share.py
 
 .PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke pm.share.artifacts plan.next plan.history pm.share.planning_context
 
@@ -210,30 +209,39 @@ pm.share.artifacts:
 	@echo ">> Exporting planning context (full, not head)"
 	@mkdir -p share
 	@pmagent plan next --json-only > share/planning_context.json 2>/dev/null || echo "⚠️  Planning context export had issues (non-fatal)"
-	@echo ">> Seeding KB registry (if not already seeded)"
-	@PYTHONPATH=. python3 scripts/kb/seed_registry.py || echo "⚠️  KB registry seeding had issues (non-fatal)"
-	@echo ">> Exporting KB registry (for DMS integration)"
+	@echo ">> Building KB registry from DMS (all enabled documents)"
+	@PYTHONPATH=. python3 scripts/kb/build_kb_registry.py || echo "⚠️  KB registry build had issues (non-fatal)"
+	@echo ">> Validating KB registry export"
 	@mkdir -p share
-	@if pmagent kb registry list --json-only > share/kb_registry.json 2>/dev/null; then \
+	@if pmagent kb registry list --json-only > /dev/null 2>&1; then \
 		if [ -s share/kb_registry.json ]; then \
-			echo "✅ KB registry exported"; \
+			echo "✅ KB registry validated"; \
 		else \
 			echo "⚠️  KB registry is empty (not seeded yet)"; \
 			echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
 		fi; \
 	else \
-		echo "⚠️  KB registry export had issues (non-fatal)"; \
+		echo "⚠️  KB registry validation had issues (non-fatal)"; \
+		if [ ! -f share/kb_registry.json ]; then \
 		echo '{"version":"1.0","generated_at":"","documents":[]}' > share/kb_registry.json; \
+		fi; \
 	fi
 	@echo ">> Generating PM system introspection evidence pack"
 	@PYTHONPATH=. python3 scripts/util/export_pm_introspection_evidence.py || echo "⚠️  PM introspection evidence pack had issues (non-fatal)"
 	@echo ">> Converting JSON files to Markdown (root of share/ only)"
 	@for json_file in share/*.json; do \
 		if [ -f "$$json_file" ]; then \
-			PYTHONPATH=. python3 scripts/util/json_to_markdown.py "$$json_file" && rm -f "$$json_file" || echo "⚠️  Failed to convert $$json_file (non-fatal)"; \
+			case "$$(basename $$json_file)" in \
+				kb_registry.json) \
+					echo "⚠️  Skipping $$json_file (required for programmatic access)"; \
+					;; \
+				*) \
+					PYTHONPATH=. python3 scripts/util/json_to_markdown.py "$$json_file" && rm -f "$$json_file" || echo "⚠️  Failed to convert $$json_file (non-fatal)"; \
+					;; \
+			esac; \
 		fi; \
 	done
-	@echo "✅ All JSON files converted to Markdown and removed"
+	@echo "✅ All JSON files converted to Markdown and removed (kb_registry.json preserved)"
 	@echo "✅ PM share artifacts generation complete"
 
 plan.next:
@@ -345,6 +353,12 @@ handoff.update:
 	@echo ">> Updating project handoff document"
 	@PYTHONPATH=. $(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
+
+handoff.kernel:
+	@pmagent handoff kernel
+
+kernel.check:  ## Validate PM handoff kernel bundle
+	$(PYTHON) scripts/guards/guard_kernel_surfaces.py --mode $(MODE)
 
 # Atlas status diagram generation
 
@@ -594,11 +608,11 @@ reality.green: ## Full system truth gate (DB, AGENTS, share, SSOT)
 .PHONY: state.sync state.verify
 state.sync: ## Sync system state ledger with current artifact hashes
 	@echo ">> Syncing system state ledger"
-	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_sync
+	@PYTHONPATH=. $(PYTHON) -m pmagent.scripts.state.ledger_sync
 
 state.verify: ## Verify system state ledger against current artifact hashes
 	@echo ">> Verifying system state ledger"
-	@PYTHONPATH=. $(PYTHON) -m agentpm.scripts.state.ledger_verify
+	@PYTHONPATH=. $(PYTHON) -m pmagent.scripts.state.ledger_verify
 
 # Complete housekeeping (Rule-058: mandatory post-change)
 # CRITICAL: DB must be reachable (SSOT requirement) - fail-closed if offline
@@ -609,12 +623,24 @@ housekeeping.db.gate:
 	@PYTHONPATH=. $(PYTHON) -c "from scripts.guards.guard_db_health import check_db_health; import sys; h = check_db_health(); ok = h.get('ok', False) and h.get('mode') == 'ready'; sys.exit(0 if ok else 1)" || (echo "❌ CRITICAL: Database is unreachable (db_off). DB is SSOT - housekeeping cannot proceed."; echo "   Ensure Postgres is running and GEMATRIA_DSN is correctly configured."; exit 1)
 	@echo "✅ DB connectivity verified"
 
-housekeeping: housekeeping.db.gate share.sync adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
+housekeeping:
+	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
+	$(MAKE) backup.rotate housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot + pm.share.artifacts)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
 	@echo ">> Auto-updating AGENTS.md files based on code changes (Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/auto_update_agents_md.py || echo "⚠️  AGENTS.md auto-update had issues (non-fatal)"
+
+# Fast-path DMS work: only run classification/embedding if work is needed
+housekeeping.dms.conditional:
+	@echo ">> Checking if DMS classification/embedding work is needed..."
+	@if PYTHONPATH=. $(PYTHON) scripts/governance/check_dms_work_needed.py; then \
+		echo ">> Running DMS classification and embedding (work detected - using GPU-accelerated path)"; \
+		$(MAKE) governance.classify.fragments.gpu governance.ingest.doc_embeddings; \
+	else \
+		echo ">> Skipping DMS classification/embedding (no work needed - fast path)"; \
+	fi
 	@echo ">> Auto-updating CHANGELOG.md based on recent commits (Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/auto_update_changelog.py || echo "⚠️  CHANGELOG.md auto-update had issues (non-fatal)"
 	@PYTHONPATH=. $(PYTHON) scripts/validate_agents_md.py
@@ -862,10 +888,6 @@ temporal.analytics:
 	@if [ -f exports/pattern_forecast.json ]; then \
 		echo ">> Pattern forecasts generated successfully"; \
 	fi
-
-.PHONY: phase8.temporal
-phase8.temporal: temporal.analytics
-	@echo ">> Phase-8 Temporal Analytics completed"
 
 .PHONY: phase8.forecast
 phase8.forecast:
@@ -1875,12 +1897,6 @@ agents.md.index:
 	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "\copy ai.agent_docs_index (path,sha256_12,excerpt) FROM program 'jq -cr \".[]|[.path,.sha256_12,(.excerpt|tojson)]|@tsv\" tmp.agent_docs_index.json' WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b')"
 	@psql "$$GEMATRIA_DSN" -c "SELECT count(*) AS indexed, min(updated_at) AS first_at, max(updated_at) AS last_at FROM ai.agent_docs_index"
 
-# Rerank smoke test (stub for now)
-.PHONY: rerank.smoke
-rerank.smoke:
-	@echo "[rerank.smoke] Checking rerank components..."
-	@python3 scripts/analytics/rerank_smoke.py
-
 # Rerank smoke test
 .PHONY: rerank.smoke
 rerank.smoke:
@@ -2130,15 +2146,13 @@ guard.mcp.query:
 	@echo "[guard.mcp.query] Validating Knowledge MCP query roundtrip"
 	@$(PYTHON) scripts/guards/guard_mcp_query.py
 
-# PLAN-073 M1 E05: Proof Snapshot
-.PHONY: mcp.proof.snapshot guard.mcp.proof
-mcp.proof.snapshot:
-	@echo "[mcp.proof.snapshot] Generating Knowledge MCP proof snapshot"
-	@$(PYTHON) scripts/mcp/generate_proof_snapshot.py
-
 guard.mcp.proof:
 	@echo "[guard.mcp.proof] Validating Knowledge MCP proof snapshot"
 	@$(PYTHON) scripts/guards/guard_mcp_proof.py
+
+guard.root.surface:
+	@echo "[guard.root.surface] Validating repository root surface policy"
+	@$(PYTHON) scripts/guards/guard_root_surface_policy.py --mode STRICT
 
 .PHONY: guard.schema.naming
 guard.schema.naming:
@@ -2205,7 +2219,7 @@ mcp.query.smoke:
 	@echo 'mcp.query.smoke OK'
 
 mcp.proof.snapshot:
-	@bash scripts/mcp_proof_snapshot.sh || true
+	@$(PYTHON) scripts/mcp/generate_proof_snapshot.py
 	@echo 'mcp.proof.snapshot OK'
 
 ## MCP M2 targets
@@ -2801,11 +2815,31 @@ ci.guards.docs:
 # -----------------------------------------------------------------------------
 
 governance.ingest.doc_content:
-	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py
+	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py --all-docs
 
 governance.ingest.doc_content.dryrun:
 	@PYTHONPATH=. python scripts/governance/ingest_doc_content.py --dry-run
 
+
+# -----------------------------------------------------------------------------
+# Governance Doc Classification — AI metadata (Layer 3 Phase 3)
+# -----------------------------------------------------------------------------
+
+# GPU-accelerated classification (10-100x faster than LLM-per-fragment)
+governance.classify.fragments.gpu:
+	@echo ">> Running GPU-accelerated fragment classification (fast path)"
+	@PYTHONPATH=. python scripts/housekeeping_gpu/classify_fragments_gpu.py --all-docs
+
+governance.classify.fragments.gpu.dryrun:
+	@PYTHONPATH=. python scripts/housekeeping_gpu/classify_fragments_gpu.py --all-docs --dry-run
+
+# Legacy LLM-based classification (slow, 4-hour+ runtime)
+governance.classify.fragments:
+	@echo ">> Running LLM-based fragment classification (legacy slow path)"
+	@PYTHONPATH=. python scripts/governance/classify_fragments.py --all-docs
+
+governance.classify.fragments.dryrun:
+	@PYTHONPATH=. python scripts/governance/classify_fragments.py --all-docs --dry-run
 
 # -----------------------------------------------------------------------------
 # Governance Doc Content — guards (HINT posture)
@@ -2823,7 +2857,7 @@ ci.guards.doc_content:
 # -----------------------------------------------------------------------------
 
 governance.ingest.doc_embeddings:
-	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py
+	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py --all-docs
 
 governance.ingest.doc_embeddings.dryrun:
 	@PYTHONPATH=. python scripts/governance/ingest_doc_embeddings.py --dry-run
@@ -2839,4 +2873,58 @@ guard.docs.embeddings:
 ci.guards.doc_vectors:
 	@PYTHONPATH=. python scripts/guards/guard_doc_fragments.py
 	@PYTHONPATH=. python scripts/guards/guard_doc_embeddings.py
+
+
+# -----------------------------------------------------------------------------
+# Phase 23 — PM Bootstrap Hardening + Stress Smoke
+# -----------------------------------------------------------------------------
+
+pm.bootstrap.state:  ## Regenerate PM bootstrap (preserving webui.console_v2)
+	@echo "=== pm.bootstrap.state: regenerating PM_BOOTSTRAP_STATE.json ==="
+	$(PYTHON) scripts/pm/patch_pm_bootstrap_webui.py
+
+stress.smoke:  ## Integrated smoke: console v2 + governance + pmagent (best-effort)
+	@echo "=== stress.smoke: starting ==="
+	$(PYTHON) scripts/pm/check_console_v2.py --skip-build
+	-$(MAKE) reality.green STRICT=1
+	@echo "=== stress.smoke: completed ==="
+
+
+# --- Phase DONE checklist guard (Phase 23.3) ---
+# Validates phase has required artifacts (hints, AGENTS, CI, operator docs)
+# HINT mode is default; STRICT mode deferred to future governance phase
+PHASE ?= 23
+MODE ?= HINT
+.PHONY: phase.done.check
+phase.done.check:  ## Run Phase-DONE checklist guard
+	$(PYTHON) scripts/guards/guard_phase_done.py --phase $(PHASE) --mode $(MODE)
+	@if [ "$(PHASE)" -ge 26 ]; then \
+		echo ">> Running Kernel Check (Phase 26+)"; \
+		$(PYTHON) scripts/guards/guard_kernel_surfaces.py --mode HINT; \
+	fi
+
+# -----------------------------------------------------------------------------
+# Phase 23.4 — Mandatory Pre-Housekeeping Backup Policy
+# -----------------------------------------------------------------------------
+
+.PHONY: backup.surfaces
+backup.surfaces:  ## Create timestamped backup of surfaces before destructive ops
+	@ts=$$(date -u +"%Y%m%dT%H%M%SZ"); \
+	mkdir -p backup/$$ts; \
+	cp -r share backup/$$ts/share; \
+	git_branch=$$(git branch --show-current 2>/dev/null || echo "unknown"); \
+	git_commit=$$(git rev-parse --short HEAD 2>/dev/null || echo "unknown"); \
+	echo "{\"created_at\":\"$$ts\",\"branch\":\"$$git_branch\",\"commit\":\"$$git_commit\"}" > backup/$$ts/MANIFEST.json; \
+	echo "✓ Backup created: backup/$$ts"
+
+.PHONY: backup.rotate
+backup.rotate: ## Rotate backups (Retention: 10 recent + 7 daily)
+	@PYTHONPATH=. python3 scripts/ops/backup_rotate.py
+
+
+# Phase 26.5: GitHub reality check (informational, non-blocking for now)
+.PHONY: github.state.check
+github.state.check:
+	@echo "[Phase26.5] Running GitHub reality check..."
+	@python scripts/guards/guard_github_state.py
 

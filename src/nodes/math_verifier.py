@@ -22,10 +22,10 @@ LOG = get_logger("gemantria.math_verifier")
 
 # Phase-7C: Router integration (optional, behind ROUTER_ENABLED flag)
 try:
-    from agentpm.lm.router import RouterTask, route_task
-    from agentpm.adapters.lm_studio import chat as lm_studio_chat
-    from agentpm.adapters.ollama import chat as ollama_chat
-    from agentpm.adapters.theology import chat as theology_chat
+    from pmagent.lm.router import RouterTask, route_task
+    from pmagent.adapters.lm_studio import chat as lm_studio_chat
+    from pmagent.adapters.ollama import chat as ollama_chat
+    from pmagent.adapters.theology import chat as theology_chat
 
     ROUTER_AVAILABLE = True
 except ImportError:

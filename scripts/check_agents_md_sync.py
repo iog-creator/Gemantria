@@ -65,7 +65,7 @@ def get_directory_for_file(file_path: Path) -> Path | None:
             return current
 
         # AgentPM directories (agent automation modules)
-        if path_str.startswith("agentpm/") and current.name not in excluded:
+        if path_str.startswith("pmagent/") and current.name not in excluded:
             return current
 
         # Tool directories

@@ -42,20 +42,20 @@ Phase-7F implements all four model slots with finalized model names, ensuring 10
 ### ✅ Adapter Implementations
 
 **Files Created**:
-- `agentpm/adapters/theology.py`:
+- `pmagent/adapters/theology.py`:
   - Dedicated theology adapter for Christian-Bible-Expert-v2.0-12B
   - Routes to Ollama if provider is ollama
   - Falls back to OpenAI-compatible API (non-blocking)
   - Independent of LM Studio critical path
 
 **Files Modified**:
-- `agentpm/adapters/ollama.py`:
+- `pmagent/adapters/ollama.py`:
   - Added `rerank(query, docs, model=None, model_slot=None)` function
   - Returns list of `(document, score)` tuples sorted by score
   - Uses BGE reranker model via Ollama API
   - Note: Current implementation uses placeholder scores; proper BGE reranker integration may require model-specific API patterns
 
-- `agentpm/adapters/lm_studio.py`:
+- `pmagent/adapters/lm_studio.py`:
   - Added theology adapter import and routing
   - Updated `chat()` to route `model_slot="theology"` to theology adapter
   - Added `rerank()` function that routes to Ollama adapter when `INFERENCE_PROVIDER=ollama`
@@ -141,10 +141,10 @@ Phase-7F implements all four model slots with finalized model names, ensuring 10
    ```
 
 4. **Test Individual Slots**:
-   - Granite chat: `python -c "from agentpm.adapters.lm_studio import chat; print(chat('Say: GRANITE-READY', model_slot='local_agent'))"`
-   - BGE embeddings: `python -c "from agentpm.adapters.lm_studio import embed; print(len(embed(['hello', 'world'], model_slot='embedding')))"`
-   - BGE reranker: `python -c "from agentpm.adapters.lm_studio import rerank; print(rerank('test', ['doc1', 'doc2'], model_slot='reranker'))"`
-   - Theology chat: `python -c "from agentpm.adapters.lm_studio import chat; print(chat('Summarize John 3:16', model_slot='theology'))"`
+   - Granite chat: `python -c "from pmagent.adapters.lm_studio import chat; print(chat('Say: GRANITE-READY', model_slot='local_agent'))"`
+   - BGE embeddings: `python -c "from pmagent.adapters.lm_studio import embed; print(len(embed(['hello', 'world'], model_slot='embedding')))"`
+   - BGE reranker: `python -c "from pmagent.adapters.lm_studio import rerank; print(rerank('test', ['doc1', 'doc2'], model_slot='reranker'))"`
+   - Theology chat: `python -c "from pmagent.adapters.lm_studio import chat; print(chat('Summarize John 3:16', model_slot='theology'))"`
 
 ---
 
@@ -162,7 +162,7 @@ Phase-7F implements all four model slots with finalized model names, ensuring 10
 ## Files Changed
 
 ### Created
-- `agentpm/adapters/theology.py`
+- `pmagent/adapters/theology.py`
 - `tests/integration/test_phase7f_model_readiness.py`
 - `docs/PHASE_7F_MODEL_READINESS_CHECKLIST.md`
 - `docs/PHASE_7F_SUMMARY.md`
@@ -172,8 +172,8 @@ Phase-7F implements all four model slots with finalized model names, ensuring 10
 - `scripts/config/env.py`
 - `env_example.txt`
 - `scripts/ollama_discovery.py`
-- `agentpm/adapters/ollama.py`
-- `agentpm/adapters/lm_studio.py`
+- `pmagent/adapters/ollama.py`
+- `pmagent/adapters/lm_studio.py`
 
 ---
 

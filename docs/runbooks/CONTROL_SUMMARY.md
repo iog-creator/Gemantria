@@ -284,7 +284,7 @@ If all components are `db_off`:
 - **Runbook**: [CONTROL_TABLES.md](CONTROL_TABLES.md) (individual tables command)
 - **Runbook**: [CONTROL_SCHEMA.md](CONTROL_SCHEMA.md) (individual schema command)
 - **Runbook**: [CONTROL_PIPELINE_STATUS.md](CONTROL_PIPELINE_STATUS.md) (individual pipeline-status command)
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_summary_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_summary_cli.py`
 - **CLI**: `pmagent control summary` command
 - **Rule-046**: Hermetic CI Fallbacks (DB-off behavior)
 

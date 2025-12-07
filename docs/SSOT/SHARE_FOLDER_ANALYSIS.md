@@ -1,157 +1,181 @@
-# Share/ Folder Analysis & Purpose
+# SHARE Folder Analysis — Canonical SSOT
 
-**Date:** 2025-12-01  
-**Status:** Active documentation
+> SSOT description of the layout, generation rules, and semantics of `share/`
 
-## Purpose Change
+## 1. Purpose
 
-The `share/` folder has evolved from a simple export directory to a **first-class part of the codebase** that should be:
+The `share/` folder is the **materialized view** of all operator-facing surfaces produced by:
 
-1. **Indexed by AI agents** (Cursor, PM agents, etc.)
-2. **Tracked in DMS** (`control.doc_registry` with `share_path`)
-3. **Synced from DMS** (not manually managed)
-4. **Converted to Markdown** (all JSON exports become MD for readability)
+- DMS registry  
+- Phase machinery  
+- pmagent scripts  
+- reality.green  
+- bootstrap generation  
+- handoff kernel system  
 
-## Current Structure (42 MD files)
+Its purpose is to provide a **single place** where human- and agent-readable surfaces exist.
 
-### File Sources
+`share/` is **not** the Source of Truth.  
+The Source of Truth is the **DMS + SSOT docs**.  
+`share/` is a **generated and synchronized surface**.
 
-#### 1. DMS-Synced Files (27 files)
-Files copied from `control.doc_registry` where `share_path IS NOT NULL` and `enabled = TRUE`:
+---
 
-- SSOT documents (`docs/SSOT/*.md`)
-- Runbooks (`docs/runbooks/*.md`)
-- Planning documents (`MASTER_PLAN.md`, `NEXT_STEPS.md`)
-- Agent documentation (`AGENTS.md`, `scripts_AGENTS.md`)
-- All other documents explicitly registered with `share_path`
+## 2. High-Level Layout
 
-**Sync mechanism:** `scripts/sync_share.py` (runs during `make housekeeping`)
+```
+share/
+  PM_BOOTSTRAP_STATE.json
+  HANDOFF_KERNEL.json
+  REALITY_GREEN_SUMMARY.json
+  SSOT_SURFACE_V17.json
+  PHASENN_* (Phase surfaces 18–24)
+  orchestrator/
+  orchestrator_assistant/
+  atlas/
+  exports/
+```
 
-#### 2. JSON-to-MD Converted Files (15 files)
-JSON exports generated during `pm.share.artifacts` and converted to Markdown:
+### **Generated Surfaces**
 
-**DMS Table Exports:**
-- `doc_registry.md` - Full DMS document registry
-- `doc_version.md` - Document version tracking
-- `doc_sync_state.md` - Sync state tracking
+- `PM_BOOTSTRAP_STATE.json` (phase summary, metadata)
+- `HANDOFF_KERNEL.json` (seed for new PM/OA)
+- `REALITY_GREEN_SUMMARY.json` (guard evaluations)
+- `SSOT_SURFACE_V17.json` (registry + alignment metadata)
+- All *phase summary docs* (PHASE18–PHASE24)
 
-**Governance Exports:**
-- `governance_freshness.md` - Governance artifact freshness
-- `hint_registry.md` - Runtime hints registry
-- `kb_registry.md` - Knowledge base registry
+### **Stateful Subdirs**
 
-**PM Exports:**
-- `pm_snapshot.md` - System snapshot (from JSON export)
-- `live_posture.md` - Live system posture
-- `planning_context.md` - Planning context
-- `planning_lane_status.md` - Planning lane status
-- `schema_snapshot.md` - Schema snapshot
+- `share/orchestrator/`  
+- `share/orchestrator_assistant/`  
 
-**Head Exports (partial):**
-- `next_steps.head.md` - Head of NEXT_STEPS.md
-- `pm_contract.head.md` - Head of PM_CONTRACT.md
-- `agents_md.head.md` - Head of AGENTS.md
+These are not DMS-managed but represent “working surfaces” for live agents.
 
-**Conversion mechanism:** `scripts/util/json_to_markdown.py` (runs during `make housekeeping`)
+### **Atlas + Exports**
 
-### Duplicates & Consolidation Opportunities
+- `share/atlas/` — control plane snapshot exports  
+- `share/exports/` — governance and document exports
 
-#### Known Duplicates:
-1. **`pm.snapshot.md` vs `pm_snapshot.md`**
-   - `pm.snapshot.md`: DMS-synced from repo (canonical)
-   - `pm_snapshot.md`: JSON export converted to MD (generated)
-   - **Action:** Consider consolidating or documenting the difference
+---
 
-#### Head Exports:
-- Head exports are intentionally partial (first N lines)
-- They are marked as "incomplete by construction" per `SHARE_FOLDER_STRUCTURE.md`
-- **Purpose:** Quick reference without full context
+## 3. Relationship to DMS (The Actual SSOT)
 
-## File Count Growth (21 → 42)
+DMS controls:
 
-### Why the increase?
+- Which documents exist  
+- Metadata for documents  
+- Canonical `share_path` for all managed surfaces  
+- Hints, envelopes, registry state
 
-1. **More DMS-registered documents** with `share_path` set
-2. **New JSON export pipeline** (`pm.share.artifacts`) generates:
-   - DMS table dumps
-   - Governance exports
-   - PM snapshots
-   - Planning context
-3. **Automatic JSON-to-MD conversion** during housekeeping
+Thus:
 
-### Is this expected?
+### **Rule:**  
+**If DMS and share disagree → DMS is correct.**
 
-**Yes.** The growth reflects:
-- More comprehensive DMS integration
-- Better observability (table dumps, governance tracking)
-- PM tooling needs (planning context, snapshots)
+Phase 24 introduced:
 
-## Embedding Files Exclusion
+- `guard_dms_share_alignment.py`
+- DMS-driven share sync policy
+- SSOT_SURFACE generator including alignment metadata
 
-Large embedding files are **correctly excluded** from `share/`:
+These enforce:
 
-- `code_fragments_embedded.json` (91MB if converted to MD)
-- `json_to_markdown.py` skips:
-  - Files with "embedding" or "embedded" in name
-  - Files larger than 1MB
+- Every managed doc in DMS must exist in share/  
+- No extra or unknown managed docs may appear in share/  
+- share/ regenerates safely from DMS without risk of deletion
 
-**Rationale:** These files are too large for markdown conversion and not useful for PM consumption.
+---
 
-## Access & Indexing
+## 4. Relationship to the Handoff Kernel
 
-The `share/` folder is now:
+The kernel uses `share/` as its input namespace.  
+Specifically, it requires:
 
-1. **Part of the codebase** (not just exports)
-2. **DMS-managed** (single source of truth)
-3. **AI-indexable** (all MD format, human-readable)
-4. **Self-healing** (housekeeping syncs from DMS)
+- `share/PM_BOOTSTRAP_STATE.json`
+- `share/SSOT_SURFACE_V17.json`
+- `share/REALITY_GREEN_SUMMARY.json`
 
-**For AI agents:**
-- All files are Markdown (readable)
-- Structure is flat (no subdirectories)
-- Content is current (synced from DMS on housekeeping)
-- Purpose is documented (this file + `SHARE_FOLDER_STRUCTURE.md`)
+And it emits:
 
-## Maintenance
+- `share/HANDOFF_KERNEL.json`
 
-### Adding Files to Share/
+The kernel is valid *iff*:
 
-1. **Register in DMS:**
-   ```sql
-   UPDATE control.doc_registry 
-   SET share_path = 'FILENAME.md' 
-   WHERE logical_name = 'DOC_NAME';
-   ```
+- Share is aligned  
+- Bootstrap is consistent  
+- All required surfaces exist  
+- All guards pass in STRICT mode  
 
-2. **Run housekeeping:**
-   ```bash
-   make housekeeping
-   ```
+Thus:
 
-3. **File will be synced automatically**
+### **Rule:**  
+**A new PM chat must treat share/ as the authoritative materialized state of the system**,  
+derived from DMS and validated by guards.
 
-### Removing Files from Share/
+* The Handoff Kernel (`share/handoff/PM_KERNEL.json` + `share/handoff/PM_SUMMARY.md`) is the **only** supported entrypoint for new PM/OA/OPS sessions. This is enforced by DMS hints:
+  * `pm.boot.kernel_first`
+  * `oa.boot.kernel_first`
+  * `ops.preflight.kernel_health`.
 
-1. **Disable in DMS:**
-   ```sql
-   UPDATE control.doc_registry 
-   SET share_path = NULL 
-   WHERE logical_name = 'DOC_NAME';
-   ```
+---
 
-2. **Or disable the document:**
-   ```sql
-   UPDATE control.doc_registry 
-   SET enabled = FALSE 
-   WHERE logical_name = 'DOC_NAME';
-   ```
+## 5. Generation vs Manual Edits
 
-3. **Run housekeeping** (stale files will be removed)
+| Surface | Generated? | Notes |
+|--------|-----------|-------|
+| PM_BOOTSTRAP_STATE.json | Yes | From pmagent script |
+| HANDOFF_KERNEL.json | Yes | From generator |
+| SSOT_SURFACE_V17.json | Yes | From generator |
+| REALITY_GREEN_SUMMARY.json | Yes | Written by reality.green |
+| PHASENN docs | Yes | From DMS + scripts |
+| orchestrator/, OA/ | Partially | State folders (not governed by DMS) |
 
-## Related Documentation
+Manual edits should **never** occur in share/ (except orchestrator/OA state dirs).
 
-- `docs/SSOT/SHARE_FOLDER_STRUCTURE.md` - Structure and usage rules
-- `scripts/sync_share.py` - DMS sync implementation
-- `scripts/util/json_to_markdown.py` - JSON conversion logic
-- `Makefile` (target: `pm.share.artifacts`) - Export generation
+Everything else must be generated or synchronized from DMS or scripts.
 
+---
+
+## 6. Safety Guarantees
+
+Phase 24 introduced three guarantees:
+
+1. **Backup Guard:** destructive operations blocked unless recent backup exists  
+2. **Share Sync Policy Guard:** no unknown files in managed namespaces  
+3. **DMS Alignment Guard:** share/ must match registry
+
+These guarantees make `share/` safe to use as the agent-facing FS view.
+
+This document is SSOT and must remain consistent with guard behavior.
+
+---
+
+## 5. Root Surface Policy (Phase 27.G)
+
+The repository root is **code + top-level config only**. All temporary artifacts, logs, and generated files belong in designated directories:
+
+### **Allowed in Root:**
+- Source code files (`.py`, `.ts`, `.tsx`, etc.)
+- Configuration files (`.toml`, `.ini`, `.json`, `.yaml`, `.yml`)
+- Documentation files (`.md`, `.txt`)
+- Build system files (`Makefile`, `package.json`, `pyproject.toml`)
+- Git metadata (`.gitignore`, `.github/`, `.githooks/`)
+- Environment files (`.env.example`, `.env.local` - git-ignored)
+
+### **Not Allowed in Root:**
+- Log files (`reality_green_*.log` → `var/log/pm/`)
+- PR summaries (`pr_summary.md` → `share/handoff/pr/PR-{N}.md`)
+- Test files (`test_*.py`, `conftest.py` → `tests/` or `tests/integration/`)
+- Temporary artifacts (→ `evidence/`, `share/exports/`, or `var/`)
+
+### **Enforcement:**
+- **Allowlist**: `docs/SSOT/ROOT_SURFACE_ALLOWLIST.txt` (canonical list of allowed root files)
+- **Guard**: `scripts/guards/guard_root_surface_policy.py` validates root against allowlist
+- **Integration**: `make guard.root.surface` (standalone) + `make reality.green` (included)
+- **Mode**: STRICT (fails on violations) or HINT (warns only)
+
+### **Git Ignore:**
+- `var/log/pm/` is git-ignored (ephemeral logs)
+- `.env.local`, `.server.pid` are git-ignored (local-only files)
+
+This policy prevents root drift and ensures repository hygiene is automatically enforced.

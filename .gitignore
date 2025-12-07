@@ -21,10 +21,27 @@ backup-safety-rules-*.tar.gz
 backup-safety-rules-*.bundle
 backups/codebase/backup-safety-rules-*.tar.gz
 
+# Backup files (various patterns)
+*.bak
+*.bak2
+*.bak.*
+*.old
+*.old_*
+.env.bak.*
+
+# PM / guard logs
+var/log/pm/
+
 # Dev artifacts
 __pycache__/
 *.pyc
 exports/ai_nouns.enriched.json
+# Large generated export files (should not be versioned)
+exports/graph_correlation_network.json
+exports/graph_correlations.json
+exports/temporal_patterns.json
+exports/pattern_forecast.json
+exports/graph_latest.json.pre-enrichment
 **/__pycache__/
 evidence/
 share/evidence/
@@ -50,3 +67,7 @@ share/eval/
 # Local scratch PR body files
 tmp_pr_body*.md
 genai-toolbox/
+archive/phase16_legacy/docs/root-cleanup/*.tar.gz
+backup/
+archive/phase16_legacy/docs/root-cleanup/*.tar.gz
+backup/

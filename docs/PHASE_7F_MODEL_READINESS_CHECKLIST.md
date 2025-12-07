@@ -112,7 +112,7 @@ scores = rerank(query, docs, model_slot="reranker")
 
 **Implementation Tasks**:
 - [ ] Research actual Ollama model name for BGE reranker
-- [ ] Add `rerank()` function to `agentpm/adapters/ollama.py`
+- [ ] Add `rerank()` function to `pmagent/adapters/ollama.py`
 - [ ] Update `_normalize_model_name()` to handle BGE reranker
 - [ ] Update `.env` and `env_example.txt` with correct Ollama model name
 - [ ] Add BGE reranker to auto-discovery required models list
@@ -152,7 +152,7 @@ THEOLOGY_PROVIDER=<provider_name>  # ollama, lmstudio, or dedicated
 **Implementation Tasks**:
 - [ ] Check if `christian-bible-expert-v2.0-12b` is available in Ollama
 - [ ] If not available, create dedicated theology adapter
-- [ ] Update `agentpm/adapters/lm_studio.py` to route theology calls correctly
+- [ ] Update `pmagent/adapters/lm_studio.py` to route theology calls correctly
 - [ ] Ensure theology calls don't block on LM Studio availability
 - [ ] Create theology smoke test
 - [ ] Document theology provider choice
@@ -239,7 +239,7 @@ THEOLOGY_PROVIDER=<provider_name>  # ollama, lmstudio, or dedicated
 
 ## Related Files
 
-- `agentpm/adapters/ollama.py` - Ollama adapter (needs `rerank()`)
+- `pmagent/adapters/ollama.py` - Ollama adapter (needs `rerank()`)
 - `scripts/ollama_discovery.py` - Auto-discovery (needs BGE model normalization)
 - `scripts/config/env.py` - Configuration loader (already supports all slots)
 - `src/rerank/blender.py` - Reranker integration (needs Ollama reranker)

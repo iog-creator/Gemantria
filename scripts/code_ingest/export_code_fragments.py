@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 from sqlalchemy import text
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 # Assuming REPO_ROOT is defined elsewhere or can be derived
 REPO_ROOT = Path(__file__).resolve().parents[2]

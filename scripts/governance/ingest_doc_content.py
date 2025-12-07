@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -33,11 +34,18 @@ from typing import List
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+# Pre-flight DB check (mandatory - Rule 050 evidence-first)
+preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
+result = subprocess.run([sys.executable, str(preflight_script), "--mode", "strict"], capture_output=True)
+if result.returncode != 0:
+    print(result.stderr.decode(), file=sys.stderr)
+    sys.exit(result.returncode)
+
 from sqlalchemy import text
 
 import pdfplumber
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]

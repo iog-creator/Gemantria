@@ -36,10 +36,10 @@ Source: `evidence/phase15/pr593_metadata.json`
 Source: `evidence/phase15/pr593_files.txt`
 
 **BibleScholar / RAG Core (5 files, ~242 additions):**
-- `agentpm/biblescholar/contextual_chunks.py` (34 lines) — Placeholder ContextualChunkBuilder class
-- `agentpm/biblescholar/contextual_fetch.py` (60 lines) — ContextualFetch aggregation class
-- `agentpm/biblescholar/tests/test_contextual_chunks.py` (14 lines)
-- `agentpm/biblescholar/tests/test_contextual_fetch.py` (134 lines)
+- `pmagent/biblescholar/contextual_chunks.py` (34 lines) — Placeholder ContextualChunkBuilder class
+- `pmagent/biblescholar/contextual_fetch.py` (60 lines) — ContextualFetch aggregation class
+- `pmagent/biblescholar/tests/test_contextual_chunks.py` (14 lines)
+- `pmagent/biblescholar/tests/test_contextual_fetch.py` (134 lines)
 - `docs/SSOT/contextual_chunk.schema.json` (24 lines) — JSON schema for contextual chunks
 
 **Docs / Share Updates (22 files):**
@@ -92,7 +92,7 @@ Source: `evidence/phase15/pr593_diff.patch`
 ### 2.3 BibleScholar / Relationship Integration
 
 **PR #593 integration**:
-- ✅ Correctly imports `RelationshipAdapter` from `agentpm.biblescholar.relationship_adapter` (Phase 14, on main)
+- ✅ Correctly imports `RelationshipAdapter` from `pmagent.biblescholar.relationship_adapter` (Phase 14, on main)
 - ✅ Uses `get_proper_names_for_verse()` and `get_verse_word_links()` methods (Phase 14 methods)
 - ✅ Uses `LexiconAdapter` for lemmas and morphology (Phase 14, on main)
 - ✅ Follows DB-ONLY strategy (no LLM factual authority)
@@ -115,8 +115,8 @@ Source: `evidence/phase15/pr593_diff.patch`
 ### 3.2 Analysis Summary
 
 **Core code files (salvageable)**:
-- `agentpm/biblescholar/contextual_chunks.py` — Placeholder skeleton, aligned with Phase 15 goals
-- `agentpm/biblescholar/contextual_fetch.py` — Aggregation layer using Phase 14 adapters correctly
+- `pmagent/biblescholar/contextual_chunks.py` — Placeholder skeleton, aligned with Phase 15 goals
+- `pmagent/biblescholar/contextual_fetch.py` — Aggregation layer using Phase 14 adapters correctly
 - `docs/SSOT/contextual_chunk.schema.json` — JSON schema definition (useful reference)
 - Test files — Placeholder tests, aligned with current test patterns
 

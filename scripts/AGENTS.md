@@ -159,7 +159,7 @@ STRICT_MODE=1 python scripts/guards/guard_docs_db_ssot.py
 - **PLAN-072 M1**: DMS guard fixes — See `docs/SSOT/PLAN_072_M1_DMS_GUARDS.md`
 - **Rule-027**: Docs Sync Gate
 - **Rule-055**: Auto-Docs Sync Pass
-- **Tests**: `agentpm/tests/docs/test_dms_guards.py`
+- **Tests**: `pmagent/tests/docs/test_dms_guards.py`
 
 ### `guards/guard_docs_consistency.py` — Docs Consistency Guard (PLAN-072)
 
@@ -400,7 +400,7 @@ make db.health.smoke        # Human-readable summary
 **Related:**
 - **Phase-3A**: DB activation and health checks
 - **Runbook**: `docs/runbooks/DB_HEALTH.md`
-- **Tests**: `agentpm/tests/db/test_phase3a_db_health_guard.py`
+- **Tests**: `pmagent/tests/db/test_phase3a_db_health_guard.py`
 
 ### `guards/guard_lm_health.py` — LM Health Guard (Phase-3B)
 
@@ -435,7 +435,7 @@ make lm.health.smoke        # Human-readable summary
 **Related:**
 - **Phase-3B**: LM health guard and smoke command
 - **Runbook**: `docs/runbooks/LM_HEALTH.md`
-- **Tests**: `agentpm/tests/lm/test_phase3b_lm_health_guard.py`
+- **Tests**: `pmagent/tests/lm/test_phase3b_lm_health_guard.py`
 
 ### `hint.sh` — Uniform Runtime Hints Emitter (NEW)
 
@@ -624,21 +624,20 @@ python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
 
 **Safety**: Conservative approach - E402 uses `# noqa` instead of moving imports.
 
-### `update_share.py` & `sync_share.py` — Share Directory Synchronization
+### `sync_share.py` — Share Directory Synchronization (Phase 24.C)
 
-**Purpose**: Maintain a flat `share/` directory with canonical project files for external access and tooling.
+**Purpose**: Populate and audit the `share/` directory using `control.doc_registry` as the Single Source of Truth (DMS-driven allowlist).
 
 **Requirements**:
-- **Manifest-Driven**: Reads `docs/SSOT/SHARE_MANIFEST.json` for file list and destinations
-- **Change Detection**: Only copies files that have actually changed (SHA-256 content comparison)
-- **Preview Generation**: Creates small JSON head previews for large export files
-- **Flat Layout**: All files copied to root `share/` directory (no subdirectories)
+- **DMS-Driven**: Only syncs files explicitly registered in `control.doc_registry` with a `share_path`.
+- **Policy Enforcement**: Calls `guard_share_sync_policy.py` to ensure no unknown files exist in managed namespaces (`share/PHASE*`).
+- **Safe Sync**: Never deletes files silently. In `STRICT` mode, aborts if unknown managed files are found. In `DEV` mode, warns.
+- **Fail-Closed**: Requires DB availability and valid registry.
 
 **Capabilities**:
-- **Efficient Sync**: Compares file hashes before copying to avoid unnecessary I/O
-- **Large File Handling**: Generates preview headers for JSON exports over 4KB
-- **Progress Reporting**: Shows count of files updated vs total files processed
-- **Error Handling**: Validates source files exist and manifest is well-formed
+- **Audit**: Detects `extra_in_share` (unknown managed files) and `missing_in_share`.
+- **Populate**: Copies missing files from `repo_path` to `share_path`.
+- **System Exemptions**: Explicitly preserves system state directories (`share/orchestrator`, `share/atlas`, etc.) and root artifacts (`SSOT_SURFACE.json`).
 
 **Usage**:
 ```bash
@@ -646,36 +645,54 @@ python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
 make share.sync
 
 # Direct script execution
-python scripts/update_share.py
-python scripts/sync_share.py  # Wrapper script
+python scripts/sync_share.py
 ```
 
 **Output Examples**:
 ```bash
-# When files changed
-[update_share] OK — share/ refreshed (3/20 files updated)
-
-# When no changes
-[update_share] OK — share/ up to date (no changes)
+[sync_share] Running Share Sync Policy Guard...
+[sync_share] Populated 12 files from DMS.
 ```
 
-**Manifest Structure**:
-```json
-{
-  "items": [
-    {
-      "src": "AGENTS.md",
-      "dst": "share/AGENTS.md"
-    },
-    {
-      "src": "exports/graph_stats.json",
-      "dst": "share/graph_stats.head.json",
-      "generate": "head_json",
-      "max_bytes": 4096
-    }
-  ]
-}
+### `guards/guard_share_sync_policy.py` — Share Sync Policy Guard (Phase 24.C)
+
+**Purpose**: Audits `share/` directory against DMS allowlist and Governance Policy.
+
+**Policies**:
+1. **Managed Namespaces**: Files in `share/PHASE*` MUST be registered in DMS.
+2. **System Exemptions**: Files in `share/orchestrator` etc are preserved but not checked against DMS.
+3. **No Extras**: No unknown files allowed in Managed Namespaces.
+
+**Modes**:
+- **HINT**: Reports status, exits 0.
+- **STRICT**: Reports status. If `extra_in_share` exists (policy violation), exits 1.
+
+**Usage**:
+```bash
+make guard.share.policy
+python scripts/guards/guard_share_sync_policy.py --mode STRICT
 ```
+
+**Output**:
+JSON report with `ok`, `missing_in_share`, `extra_in_share`, `missing_in_dms`.
+
+### `ops/backup_rotate.py` — Backup Retention Policy (Phase 24.D)
+
+**Purpose**: Manage disk usage by rotating old backups while preserving recent history.
+
+**Policy**:
+1. **Recent**: Keep last 10 backups.
+2. **Daily**: Keep latest backup for each of the last 7 days.
+3. **Safety**: Never deletes the only backup (vacuously true if N=10).
+
+**Usage**:
+```bash
+make backup.rotate
+python3 scripts/ops/backup_rotate.py [--dry-run]
+```
+
+**Output**:
+Logs actions to stdout.
 
 ### `generate_report.py` - Pipeline Reporting (Critical - Always Apply)
 
@@ -1028,6 +1045,34 @@ python scripts/auto_update_agents_md.py --dry-run
 
 **Note:** This script is designed to reduce manual documentation maintenance. If you find yourself manually editing AGENTS.md files, that indicates the auto-update script needs enhancement, not that manual updates are required.
 
+### `kb/build_kb_registry.py` — KB Registry Builder from DMS
+
+**Purpose:** Builds KB registry from DMS (`control.doc_registry` + `control.doc_fragment.meta`) with curated subset for PM usability.
+
+**PostgreSQL Optimization (2025-01-XX):**
+- **JSONB Query Optimization**: Uses `meta @> '{"kb_candidate": true}'::jsonb` instead of `meta::text <> '{}'::text`
+- **Performance Impact**: 2-5x faster queries, better GIN index utilization
+- **Files Modified**: `scripts/kb/build_kb_registry.py` (3 query locations), `scripts/governance/classify_fragments.py` (1 query location)
+- **Documentation**: See `docs/SSOT/POSTGRES_OPTIMIZATION_SUMMARY.md` for details
+
+**Usage:**
+```bash
+# Build KB registry from DMS (curated subset: ~100-200 documents)
+python scripts/kb/build_kb_registry.py
+
+# Dry-run to see what would be created
+python scripts/kb/build_kb_registry.py --dry-run
+```
+
+**Output:**
+- `share/kb_registry.json` (curated subset, <50KB target)
+- Filters by `kb_candidate=true` fragments + manually curated high-importance docs (SSOT, runbooks, root AGENTS.md)
+
+**Related:**
+- **Architectural Course Correction**: `docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md`
+- **Optimization Summary**: `docs/SSOT/POSTGRES_OPTIMIZATION_SUMMARY.md`
+- **Optimization Review**: `docs/SSOT/POSTGRES_OPTIMIZATION_REVIEW.md` (reference)
+
 ### `auto_update_changelog.py` — Automatic CHANGELOG.md Updater (Rule-058)
 
 **Purpose:** **AUTOMATICALLY** updates CHANGELOG.md based on recent git commits. Extracts feature/fix/docs entries from conventional commit messages and adds them to the [Unreleased] section.
@@ -1070,7 +1115,7 @@ python scripts/auto_update_changelog.py --limit 20
 - **Presence Validation**: Checks that all required AGENTS.md files exist
 - **Structure Validation**: Verifies AGENTS.md files have required sections (`# AGENTS.md` header, `## Directory Purpose`)
 - **Exclusion Handling**: Properly excludes generated/static directories (public, dist, build, .egg-info, cache dirs)
-- **Comprehensive Coverage**: Validates AGENTS.md files in `src/`, `agentpm/`, `docs/`, `webui/`, and tool directories
+- **Comprehensive Coverage**: Validates AGENTS.md files in `src/`, `pmagent/`, `docs/`, `webui/`, and tool directories
 
 **Usage:**
 
@@ -1087,7 +1132,7 @@ make housekeeping
 - **Validation**: Ensures Rule 017 compliance (all required AGENTS.md files present)
 - **Dynamic**: Automatically adapts to new directories without hardcoded lists
 
-**Note:** This script was updated to use dynamic directory discovery instead of a hardcoded list. It now correctly validates all directories that require AGENTS.md files, including all `agentpm/` subdirectories and `docs/` subdirectories.
+**Note:** This script was updated to use dynamic directory discovery instead of a hardcoded list. It now correctly validates all directories that require AGENTS.md files, including all `pmagent/` subdirectories and `docs/` subdirectories.
 
 ### `check_agents_md_sync.py` — AGENTS.md Sync Checker
 
@@ -1455,8 +1500,8 @@ make graph.overview         # JSON to stdout, human summary to stderr
 **Related:**
 - **Phase-3B**: DB-backed graph overview command
 - **Runbook**: `docs/runbooks/GRAPH_OVERVIEW.md`
-- **Tests**: `agentpm/tests/db/test_phase3b_graph_overview.py`
-- **DB Integration**: Uses `graph_stats_snapshots` table via `agentpm.db.models_graph_stats`
+- **Tests**: `pmagent/tests/db/test_phase3b_graph_overview.py`
+- **DB Integration**: Uses `graph_stats_snapshots` table via `pmagent.db.models_graph_stats`
 
 ### `control/control_status.py` — Control Plane Status Check (Phase-3B Feature #6)
 
@@ -1505,7 +1550,7 @@ CONTROL_STATUS: mode=ready tables=ai_interactions(42),governance_artifacts(15),a
 **Related:**
 - **Phase-3B Feature #6**: Control-plane status check
 - **Runbook**: `docs/runbooks/CONTROL_STATUS.md`
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_status_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_status_cli.py`
 - **CLI**: `pmagent control status` command
 
 ### `control/control_tables.py` — Control Plane Tables Listing (Phase-3B Feature #7)
@@ -1546,7 +1591,7 @@ CONTROL_TABLES: mode=db_on tables=8 schemas=control(3),gematria(3),public(2)
 **Related:**
 - **Phase-3B Feature #7**: Control-plane tables listing
 - **Runbook**: `docs/runbooks/CONTROL_TABLES.md`
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_tables_cli.py`
 - **CLI**: `pmagent control tables` command
 
 ### `control/control_schema.py` — Control Plane Schema Introspection (Phase-3B Feature #8)
@@ -1612,7 +1657,7 @@ CONTROL_SCHEMA: mode=db_on tables=2 columns=19
 **Related:**
 - **Phase-3B Feature #8**: Control-plane schema introspection
 - **Runbook**: `docs/runbooks/CONTROL_SCHEMA.md`
-- **Tests**: `agentpm/tests/cli/test_phase3b_pmagent_control_schema_cli.py`
+- **Tests**: `pmagent/tests/cli/test_phase3b_pmagent_control_schema_cli.py`
 - **CLI**: `pmagent control schema` command
 - **Migrations**: 015 (governance_artifacts), 016 (ai_interactions), 040 (control schema)
 
@@ -1653,7 +1698,7 @@ SYSTEM_HEALTH:
 **Related:**
 - **Phase-3B**: System health aggregate (DB + LM + Graph)
 - **Runbook**: `docs/runbooks/SYSTEM_HEALTH.md`
-- **Tests**: `agentpm/tests/system/test_phase3b_system_health.py`
+- **Tests**: `pmagent/tests/system/test_phase3b_system_health.py`
 - **Integration**: Calls `guard_db_health`, `guard_lm_health`, and `graph_overview` via subprocess
 
 ### `lm/print_lm_health_summary.py` — LM Health Summary Printer (Phase-3B)

@@ -8,6 +8,7 @@ Loads hints from discovery catalog and inserts them into control.hint_registry.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -15,9 +16,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+# Pre-flight DB check (mandatory - Rule 050 evidence-first)
+preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
+result = subprocess.run([sys.executable, str(preflight_script), "--mode", "strict"], capture_output=True)
+if result.returncode != 0:
+    print(result.stderr.decode(), file=sys.stderr)
+    sys.exit(result.returncode)
+
 from sqlalchemy import text
 
-from agentpm.db.loader import get_control_engine
+from pmagent.db.loader import get_control_engine
 
 
 # Initial seed hints (minimal set of REQUIRED hints)
@@ -91,6 +99,48 @@ INITIAL_HINTS = [
             "metadata": {"source": "Rule-050", "section": "5"},
         },
         "priority": 10,
+    },
+    {
+        "logical_name": "db.dsn_env_var_ignored",
+        "scope": "infra",
+        "applies_to": {"flow": "db_connection"},
+        "kind": "REQUIRED",
+        "injection_mode": "PRE_PROMPT",
+        "payload": {
+            "text": "get_connection_dsn() ignores 'env_var' arg. Use scripts.config.env for specific DBs (e.g. Bible DB).",
+            "commands": [],
+            "constraints": {"use_loader": True},
+            "metadata": {"source": "Phase 8 Recovery"},
+        },
+        "priority": 20,
+    },
+    {
+        "logical_name": "data.bible_lemma_english",
+        "scope": "data",
+        "applies_to": {"flow": "ingest_bible_nouns"},
+        "kind": "REQUIRED",
+        "injection_mode": "PRE_PROMPT",
+        "payload": {
+            "text": "Bible DB 'lemma' column contains English definitions. Use surface form for Hebrew text & Gematria.",
+            "commands": [],
+            "constraints": {"use_surface": True},
+            "metadata": {"source": "Phase 8 Recovery"},
+        },
+        "priority": 20,
+    },
+    {
+        "logical_name": "ops.regenerate_truncation",
+        "scope": "ops",
+        "applies_to": {"flow": "regenerate_network"},
+        "kind": "REQUIRED",
+        "injection_mode": "PRE_PROMPT",
+        "payload": {
+            "text": "Regeneration TRUNCATES concept_network. Ensure canonical data is backed up before running.",
+            "commands": ["pmagent graph regenerate --force"],
+            "constraints": {"backup_required": True},
+            "metadata": {"source": "Phase 8 Recovery"},
+        },
+        "priority": 20,
     },
 ]
 
@@ -168,8 +218,8 @@ def seed_hint_registry(discovery_catalog_path: Path | None = None) -> int:
                 elif "status" in source_file.lower() or "reality" in source_file.lower():
                     scope = "status_api"
                     flow = "status_snapshot"
-                elif "agentpm" in source_file.lower() or "plan" in source_file.lower():
-                    scope = "agentpm"
+                elif "pmagent" in source_file.lower() or "plan" in source_file.lower():
+                    scope = "pmagent"
                     flow = "capability_session"
                 else:
                     scope = "handoff"  # default

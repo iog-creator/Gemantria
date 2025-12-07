@@ -22,7 +22,9 @@ ensure_env_loaded()
 
 
 def _iso_now():
-    return datetime.now(datetime.timezone.utc).isoformat()
+    from datetime import UTC
+
+    return datetime.now(UTC).isoformat()
 
 
 def _write_json(path, obj):
@@ -68,7 +70,8 @@ def analyze_temporal_patterns(graph_data: Dict[str, Any], window_size: int = 10)
             }
         )
 
-    # Sort by position for temporal analysis
+    # Sort by position for temporal analysis (filter None positions)
+    temporal_features = [f for f in temporal_features if f["position"] is not None]
     temporal_features.sort(key=lambda x: x["position"])
 
     # Calculate rolling statistics

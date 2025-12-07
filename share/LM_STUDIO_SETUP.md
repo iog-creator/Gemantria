@@ -281,7 +281,7 @@ The LM Studio adapter is integrated into the enrichment pipeline via:
    - Calls `lm_studio_chat_with_logging()` for LM Studio requests
    - Falls back to legacy `chat_completion()` if LM Studio unavailable
 
-2. **Control-Plane Logging** (`agentpm/runtime/lm_logging.py`):
+2. **Control-Plane Logging** (`pmagent/runtime/lm_logging.py`):
    - Writes LM Studio calls to `control.agent_run` table
    - Graceful no-op when DB unavailable (hermetic DB-off behavior)
    - Tool identifier: `lm_studio`

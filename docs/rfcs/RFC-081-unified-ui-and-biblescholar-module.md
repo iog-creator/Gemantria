@@ -64,7 +64,7 @@ This RFC realigns the implementation with that intent.
 
 - **Governance:** RULES_INDEX, MASTER_PLAN, PLAN-* episodes remain here.
 
-BibleScholar and StoryMaker logic will live as *modules* within this core, using existing patterns (e.g. `agentpm/…`).
+BibleScholar and StoryMaker logic will live as *modules* within this core, using existing patterns (e.g. `pmagent/…`).
 
 ### 3.2 Single UI: React/Tailwind web app
 
@@ -86,7 +86,7 @@ Styling and layout will be normalized using Tailwind and simple, reusable compon
 
 ### 3.3 BibleScholar as backend module
 
-- BibleScholar becomes a Python module (e.g. `agentpm/biblescholar/` or similar).
+- BibleScholar becomes a Python module (e.g. `pmagent/biblescholar/` or similar).
 
 - Responsibilities:
 
@@ -150,7 +150,7 @@ are treated as **donor projects**:
 
 ### Phase B — BibleScholar module in Gemantria
 
-- Create an `agentpm/biblescholar/` (or equivalent) module.
+- Create an `pmagent/biblescholar/` (or equivalent) module.
 
 - Port the identified BibleScholar domain logic.
 

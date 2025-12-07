@@ -37,7 +37,8 @@ JOIN_QUERIES: list[tuple[str, str]] = [
         (
             "SELECT cn.id, c.id AS concept_id "
             "FROM concept_network cn "
-            "LEFT JOIN concepts c ON c.id = cn.concept_id "
+            "LEFT JOIN concept_metadata cm ON cm.concept_id = cn.concept_id "
+            "LEFT JOIN concepts c ON cm.source = 'bible_db:concept_id:' || c.id::text "
             "WHERE cn.id IS NOT NULL LIMIT 10"
         ),
     ),
@@ -46,8 +47,10 @@ JOIN_QUERIES: list[tuple[str, str]] = [
         (
             "SELECT cr.id, cs.id AS src_cid, ct.id AS tgt_cid "
             "FROM concept_relations cr "
-            "LEFT JOIN concepts cs ON cs.id = cr.source_id "
-            "LEFT JOIN concepts ct ON ct.id = cr.target_id "
+            "LEFT JOIN concept_metadata cms ON cms.concept_id = cr.source_id "
+            "LEFT JOIN concepts cs ON cms.source = 'bible_db:concept_id:' || cs.id::text "
+            "LEFT JOIN concept_metadata cmt ON cmt.concept_id = cr.target_id "
+            "LEFT JOIN concepts ct ON cmt.source = 'bible_db:concept_id:' || ct.id::text "
             "WHERE cr.id IS NOT NULL LIMIT 10"
         ),
     ),

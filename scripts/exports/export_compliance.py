@@ -8,7 +8,7 @@ import argparse
 import pathlib
 import sys
 
-from agentpm.control_plane.exports import write_compliance_exports
+from pmagent.control_plane.exports import write_compliance_exports
 
 
 def main() -> int:

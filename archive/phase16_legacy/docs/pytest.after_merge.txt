@@ -1,0 +1,63 @@
+
+==================================== ERRORS ====================================
+____________________ ERROR collecting archive/test_graph.py ____________________
+ImportError while importing test module '/home/mccoy/Projects/Gemantria.v2/archive/test_graph.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+archive/test_graph.py:3: in <module>
+    from src.graph import GraphRunResult, HelloGraph, main
+E   ImportError: cannot import name 'GraphRunResult' from 'src.graph' (/home/mccoy/Projects/Gemantria.v2/src/graph/__init__.py)
+_______________ ERROR collecting tests/ui/test_extract_smoke.py ________________
+ImportError while importing test module '/home/mccoy/Projects/Gemantria.v2/tests/ui/test_extract_smoke.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/ui/test_extract_smoke.py:2: in <module>
+    from scripts.extract.extract_all import gen_unified_envelope  # Stub import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'scripts.extract'
+=============================== warnings summary ===============================
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+../../.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68
+  /home/mccoy/.local/lib/python3.13/site-packages/pydantic/v1/typing.py:68: DeprecationWarning: Failing to pass a value to the 'type_params' parameter of 'typing.ForwardRef._evaluate' is deprecated, as it leads to incorrect behaviour when calling typing.ForwardRef._evaluate on a stringified annotation that references a PEP 695 type parameter. It will be disallowed in Python 3.15.
+    return cast(Any, type_)._evaluate(globalns, localns, recursive_guard=set())
+
+src/graph/graph.py:25
+  /home/mccoy/Projects/Gemantria.v2/src/graph/graph.py:25: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+    from src.nodes import network_aggregator
+
+src/nodes/network_aggregator.py:41
+  /home/mccoy/Projects/Gemantria.v2/src/nodes/network_aggregator.py:41: UserWarning: pgvector not installed. Semantic network features will be unavailable. Install with: pip install pgvector psycopg[binary]
+    from src.services.lmstudio_client import get_lmstudio_client  # noqa: E402
+
+tests/integration/test_ai_enrichment_node.py:61
+  /home/mccoy/Projects/Gemantria.v2/tests/integration/test_ai_enrichment_node.py:61: PytestUnknownMarkWarning: Unknown pytest.mark.requires_live_qwen - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.requires_live_qwen
+
+tests/integration/test_book_run_genesis.py:7
+  /home/mccoy/Projects/Gemantria.v2/tests/integration/test_book_run_genesis.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.requires_bible_db - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.requires_bible_db
+
+tests/smoke/test_models.py:42
+  /home/mccoy/Projects/Gemantria.v2/tests/smoke/test_models.py:42: PytestUnknownMarkWarning: Unknown pytest.mark.smoke - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.smoke
+
+tests/smoke/test_models.py:66
+  /home/mccoy/Projects/Gemantria.v2/tests/smoke/test_models.py:66: PytestUnknownMarkWarning: Unknown pytest.mark.smoke - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.smoke
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR archive/test_graph.py
+ERROR tests/ui/test_extract_smoke.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!

@@ -12,7 +12,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, ProgrammingError
 
-from agentpm.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
+from pmagent.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
 from scripts.guards.guard_db_health import check_db_health
 
 

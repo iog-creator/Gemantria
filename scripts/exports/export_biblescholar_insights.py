@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export BibleScholar insights to share/exports/biblescholar/insights.json.
 
-This script wraps agentpm.biblescholar.insights_flow to generate static JSON exports
+This script wraps pmagent.biblescholar.insights_flow to generate static JSON exports
 for the Orchestrator Shell UI.
 """
 
@@ -12,7 +12,7 @@ import sys
 from dataclasses import asdict
 from datetime import datetime, UTC
 
-from agentpm.biblescholar.insights_flow import get_verse_context
+from pmagent.biblescholar.insights_flow import get_verse_context
 
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 

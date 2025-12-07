@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+- **Phase 15 Wave-2 — Advanced RAG Engine (Option B Standard)**: Core implementation COMPLETE. EmbeddingAdapter (1024-D pgvector), RerankerAdapter (combined scoring 0.7×embedding + 0.3×reranker), RAGRetriever (full pipeline), context window expansion (5-verse ±2), and Phase 14 batch adapter methods (N+1 optimization). 20 tests passing (7 embedding + 8 reranker + 1 RAG + 2 batch + 2 vector). Hermetic DB-off and LM-off fallback verified. Test vectors (TV-01 through TV-05) and live DB+LM validation pending.
 - **AgentPM-Next PLAN-092 (M1–M4) — Complete**: KB registry-powered planning workflows implemented and shipped. M1: `pmagent plan kb` for prioritized documentation worklists. M2: `pmagent plan kb fix` for orchestrated doc-fix runs. M3: `pmagent report kb` for doc-health control loop & reporting. M4: `/status` page KB doc-health metrics visualization. CLI, API, and UI integration tested; browser verification setup complete; governance gates passed.
 - **Phase-7 — Runtime Bring-Up Completion**: Planning initiated. Added planning section to MASTER_PLAN.md describing:
   - 7A control-plane bring-up (migration 040)
@@ -106,6 +107,21 @@
 - PM handoff for GitHub recovery session
 
 - reconcile AGENTS.md and rules with new branch protection
+
+- raise LOUD FAIL in rerank_chunks when LM unavailable
+- wire query embeddings and reranker to real LM services
+- complete PR-3 - alignment guard, test vectors, reality.green integration
+- implement contextual chunk builder and fetch API
+- finalize Phase 15 reconciliation verdict for PR #593
+
+- Add new SSOT documentation, database migrations, refine KB/agent scripts, and clean up temporary share files.
+
+- fix deprecated namespace references and registry overwrite bug
+- upgrade PM bootstrap system with registry + dynamic phase detection
+- use capture_output in subprocess calls
+- add noqa comments for Hebrew character false positives
+- fix f-string syntax error in guard_gotchas_index.py
+- add PM bootstrap state index and SSOT documentation
 
 ## [v0.0.8] - 2025-11-12
 

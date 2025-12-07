@@ -83,7 +83,7 @@ Reusing what we *already* do, but wrapped into one CLI call.
   * Configured model slots (main LLM, theology, embedding, reranker) exist.
 * Return `lm_ok`, per-slot flags, and discovered model names.
 
-**Implementation:** Reuse `scripts/guards/guard_lm_health.py` (`check_lm_health()`) and `agentpm/lm/lm_status.py` (`compute_lm_status()`).
+**Implementation:** Reuse `scripts/guards/guard_lm_health.py` (`check_lm_health()`) and `pmagent/lm/lm_status.py` (`compute_lm_status()`).
 
 #### 4. Exports & Atlas Indicators
 
@@ -95,7 +95,7 @@ Reusing what we *already* do, but wrapped into one CLI call.
   * Distinguish between: missing file, invalid JSON, "offline but safe", etc.
 * Return `exports_ok`, and per-export statuses.
 
-**Implementation:** Reuse hermetic JSON loaders from `scripts/db/control_lm_indicator_export.py`, `agentpm/control_plane/exports.py`, and similar patterns from `scripts/atlas/generate_compliance_summary.py`.
+**Implementation:** Reuse hermetic JSON loaders from `scripts/db/control_lm_indicator_export.py`, `pmagent/control_plane/exports.py`, and similar patterns from `scripts/atlas/generate_compliance_summary.py`.
 
 #### 5. Eval Smoke
 
@@ -269,11 +269,11 @@ def reality_check(mode: Literal["HINT", "STRICT"] = "HINT") -> Verdict:
 
 ### Step 1: Create Module
 
-Create `agentpm/reality/check.py` with:
+Create `pmagent/reality/check.py` with:
 
 * `check_env_and_dsn()` → uses `scripts/config/env.py`
 * `check_db_and_control()` → uses `scripts/control/control_status.py` and `scripts/control/control_summary.py`
-* `check_lm_health()` → uses `scripts/guards/guard_lm_health.py` and `agentpm/lm/lm_status.py`
+* `check_lm_health()` → uses `scripts/guards/guard_lm_health.py` and `pmagent/lm/lm_status.py`
 * `check_control_plane_exports()` → uses hermetic JSON loaders
 * `run_eval_smoke()` → calls `make eval.smoke` or underlying functions
 * `reality_check(mode: str)` → orchestrates all checks and returns verdict
@@ -291,7 +291,7 @@ def reality_check_check(
     no_dashboards: bool = typer.Option(False, "--no-dashboards", help="Skip exports/eval checks"),
 ) -> None:
     """Run comprehensive reality check."""
-    from agentpm.reality.check import reality_check, print_human_summary
+    from pmagent.reality.check import reality_check, print_human_summary
     
     mode_upper = mode.upper()
     if mode_upper not in ("HINT", "STRICT"):

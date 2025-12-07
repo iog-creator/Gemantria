@@ -21,6 +21,8 @@ import typer
 
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
+dms_app = typer.Typer(help="DMS governance commands.")
+app.add_typer(dms_app, name="dms")
 
 
 def _run(cmd: str) -> int:
@@ -90,6 +92,14 @@ def quickstart():
             sys.exit(rc)
 
     print("[quickstart] complete ✅")
+
+
+@dms_app.command(name="ingest-share", help="Ingest share/ docs into DMS registry.")
+def ingest_share(dry_run: bool = typer.Option(False, "--dry-run", help="Dry run only")):
+    cmd = "python3 scripts/governance/ingest_share_docs.py"
+    if dry_run:
+        cmd += " --dry-run"
+    sys.exit(_run(cmd))
 
 
 if __name__ == "__main__":

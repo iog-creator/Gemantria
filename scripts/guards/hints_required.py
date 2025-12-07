@@ -19,8 +19,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-from agentpm.db.loader import DbUnavailableError, TableMissingError
-from agentpm.hints.registry import load_hints_for_flow
+from pmagent.db.loader import DbUnavailableError, TableMissingError
+from pmagent.hints.registry import load_hints_for_flow
 
 
 def guard_hints_required(
@@ -77,7 +77,7 @@ def guard_hints_required(
     # Determine scope from flow_name
     scope_map = {
         "handoff.generate": "handoff",
-        "capability_session": "agentpm",
+        "capability_session": "pmagent",
         "reality_check": "status_api",
         "status_snapshot": "status_api",
     }

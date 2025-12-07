@@ -48,12 +48,12 @@ pmagent health lm
 python3 scripts/guards/guard_lm_health.py
 ```
 
-### 3. Adapter Helpers (`agentpm/adapters/ollama.py`)
+### 3. Adapter Helpers (`pmagent/adapters/ollama.py`)
 
 New helper functions for model management:
 
 ```python
-from agentpm.adapters.ollama import list_installed_models, check_model_installed
+from pmagent.adapters.ollama import list_installed_models, check_model_installed
 
 # List all installed models
 models = list_installed_models()
@@ -118,7 +118,7 @@ python3 scripts/ollama_discovery.py
 
 4. **Use models:**
    ```python
-   from agentpm.adapters.lm_studio import chat, embed
+   from pmagent.adapters.lm_studio import chat, embed
    
    # Chat (automatically routes to Ollama)
    response = chat("Hello", model_slot="local_agent")

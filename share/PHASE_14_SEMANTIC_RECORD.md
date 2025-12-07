@@ -33,8 +33,8 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 - Fix schema mismatch: Hebrew uses TEXT `verse_id`, Greek uses INTEGER
 
 **Subsystems Affected**:
-- `agentpm/biblescholar/lexicon_adapter.py`
-- `agentpm/biblescholar/bible_db_adapter.py`
+- `pmagent/biblescholar/lexicon_adapter.py`
+- `pmagent/biblescholar/bible_db_adapter.py`
 
 **Implementation Summary**:
 - Added `_verse_ref_to_id()` method (DB-ONLY, no file parsing)
@@ -80,7 +80,7 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 - Handle unmapped entries gracefully
 
 **Subsystems Affected**:
-- `agentpm/biblescholar/cross_language_flow.py`
+- `pmagent/biblescholar/cross_language_flow.py`
 - `config/greek_to_hebrew_strongs.json` (mapping file)
 
 **Implementation Summary**:
@@ -106,8 +106,8 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 - Read-only adapter (no writes)
 
 **Subsystems Affected**:
-- `agentpm/biblescholar/relationship_adapter.py` (NEW)
-- `agentpm/biblescholar/tests/test_relationship_adapter.py` (NEW)
+- `pmagent/biblescholar/relationship_adapter.py` (NEW)
+- `pmagent/biblescholar/tests/test_relationship_adapter.py` (NEW)
 - `scripts/db/entity_diagnostic.py` (verification script)
 - `scripts/db/contextual_search.py` (verification script)
 
@@ -133,41 +133,41 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 - `scripts/db/contextual_search.py` — Enhanced RAG context demo
 
 ### Modules (Created)
-- `agentpm/biblescholar/relationship_adapter.py` — RelationshipAdapter class (350+ lines)
-- `agentpm/biblescholar/cross_language_flow.py` — Cross-language lemma resolution
-- `agentpm/biblescholar/reference_parser.py` — Verse reference parsing
-- `agentpm/biblescholar/cross_language_semantic_flow.py` — Semantic flow integration
-- `agentpm/biblescholar/insights_flow.py` — Insights generation
-- `agentpm/biblescholar/search_flow.py` — Search flow
-- `agentpm/biblescholar/semantic_search_flow.py` — Semantic search
+- `pmagent/biblescholar/relationship_adapter.py` — RelationshipAdapter class (350+ lines)
+- `pmagent/biblescholar/cross_language_flow.py` — Cross-language lemma resolution
+- `pmagent/biblescholar/reference_parser.py` — Verse reference parsing
+- `pmagent/biblescholar/cross_language_semantic_flow.py` — Semantic flow integration
+- `pmagent/biblescholar/insights_flow.py` — Insights generation
+- `pmagent/biblescholar/search_flow.py` — Search flow
+- `pmagent/biblescholar/semantic_search_flow.py` — Semantic search
 
 ### Modules (Modified)
-- `agentpm/biblescholar/lexicon_adapter.py` — Added DB-ONLY verse lookup, Greek word access
-- `agentpm/biblescholar/bible_db_adapter.py` — Enhanced verse reference handling
-- `agentpm/biblescholar/bible_passage_flow.py` — Integration with new adapters
+- `pmagent/biblescholar/lexicon_adapter.py` — Added DB-ONLY verse lookup, Greek word access
+- `pmagent/biblescholar/bible_db_adapter.py` — Enhanced verse reference handling
+- `pmagent/biblescholar/bible_passage_flow.py` — Integration with new adapters
 
 ### Test Suites (Created)
-- `agentpm/biblescholar/tests/test_relationship_adapter.py` — 10 tests (all passing)
-- `agentpm/biblescholar/tests/test_cross_language.py` — Cross-language tests
-- `agentpm/biblescholar/tests/test_cross_language_flow.py` — Flow integration tests
-- `agentpm/biblescholar/tests/test_insights_flow.py` — Insights tests
-- `agentpm/biblescholar/tests/test_reference_parser.py` — Reference parser tests
-- `agentpm/biblescholar/tests/test_search_flow.py` — Search flow tests
+- `pmagent/biblescholar/tests/test_relationship_adapter.py` — 10 tests (all passing)
+- `pmagent/biblescholar/tests/test_cross_language.py` — Cross-language tests
+- `pmagent/biblescholar/tests/test_cross_language_flow.py` — Flow integration tests
+- `pmagent/biblescholar/tests/test_insights_flow.py` — Insights tests
+- `pmagent/biblescholar/tests/test_reference_parser.py` — Reference parser tests
+- `pmagent/biblescholar/tests/test_search_flow.py` — Search flow tests
 
 ### Test Suites (Modified)
-- `agentpm/biblescholar/tests/test_bible_db_adapter.py` — Enhanced tests
-- `agentpm/biblescholar/tests/test_bible_passage_flow.py` — Integration tests
-- `agentpm/biblescholar/tests/test_vector_adapter.py` — Vector adapter tests
+- `pmagent/biblescholar/tests/test_bible_db_adapter.py` — Enhanced tests
+- `pmagent/biblescholar/tests/test_bible_passage_flow.py` — Integration tests
+- `pmagent/biblescholar/tests/test_vector_adapter.py` — Vector adapter tests
 
 ### Planning Adapters (Created)
-- `agentpm/adapters/codex_cli.py` — Codex CLI adapter (planning lane)
-- `agentpm/adapters/gemini_cli.py` — Gemini CLI adapter (planning lane)
-- `agentpm/adapters/planning.py` — Planning adapter base
-- `agentpm/adapters/planning_common.py` — Planning common utilities
+- `pmagent/adapters/codex_cli.py` — Codex CLI adapter (planning lane)
+- `pmagent/adapters/gemini_cli.py` — Gemini CLI adapter (planning lane)
+- `pmagent/adapters/planning.py` — Planning adapter base
+- `pmagent/adapters/planning_common.py` — Planning common utilities
 
 ### Planning Adapters (Modified)
-- `agentpm/adapters/ollama.py` — Enhanced Ollama support
-- `agentpm/adapters/theology.py` — Theology adapter updates
+- `pmagent/adapters/ollama.py` — Enhanced Ollama support
+- `pmagent/adapters/theology.py` — Theology adapter updates
 
 ### Database Migrations
 - None (uses existing `bible.proper_names` and `bible.verse_word_links` tables)
@@ -189,8 +189,8 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 - `.cursor/rules/051-cursor-insight.mdc` — Cursor insight updates
 - `.cursor/rules/052-tool-priority.mdc` — Tool priority updates
 - `AGENTS.md` — BibleScholar section updates
-- `agentpm/biblescholar/AGENTS.md` — BibleScholar agent docs
-- `agentpm/adapters/AGENTS.md` — Planning adapters documentation
+- `pmagent/biblescholar/AGENTS.md` — BibleScholar agent docs
+- `pmagent/adapters/AGENTS.md` — Planning adapters documentation
 - `CHANGELOG.md` — Phase 14 entries
 - `NEXT_STEPS.md` — Phase 14 completion status
 - `RULES_INDEX.md` — Rules index updates
@@ -211,17 +211,17 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 ### pmagent
 - **No changes** (Phase 14 is BibleScholar feature work)
 
-### agentpm
-- **NEW**: `agentpm/biblescholar/relationship_adapter.py` — RelationshipAdapter class
-- **NEW**: `agentpm/biblescholar/cross_language_flow.py` — Cross-language lemma resolution
-- **NEW**: `agentpm/biblescholar/reference_parser.py` — Verse reference parsing
-- **NEW**: `agentpm/biblescholar/cross_language_semantic_flow.py` — Semantic flow
-- **NEW**: `agentpm/biblescholar/insights_flow.py` — Insights
-- **NEW**: `agentpm/biblescholar/search_flow.py` — Search flow
-- **NEW**: `agentpm/biblescholar/semantic_search_flow.py` — Semantic search
-- **MODIFIED**: `agentpm/biblescholar/lexicon_adapter.py` — DB-ONLY verse lookup, Greek access
-- **MODIFIED**: `agentpm/biblescholar/bible_db_adapter.py` — Enhanced reference handling
-- **MODIFIED**: `agentpm/biblescholar/bible_passage_flow.py` — Integration updates
+### pmagent
+- **NEW**: `pmagent/biblescholar/relationship_adapter.py` — RelationshipAdapter class
+- **NEW**: `pmagent/biblescholar/cross_language_flow.py` — Cross-language lemma resolution
+- **NEW**: `pmagent/biblescholar/reference_parser.py` — Verse reference parsing
+- **NEW**: `pmagent/biblescholar/cross_language_semantic_flow.py` — Semantic flow
+- **NEW**: `pmagent/biblescholar/insights_flow.py` — Insights
+- **NEW**: `pmagent/biblescholar/search_flow.py` — Search flow
+- **NEW**: `pmagent/biblescholar/semantic_search_flow.py` — Semantic search
+- **MODIFIED**: `pmagent/biblescholar/lexicon_adapter.py` — DB-ONLY verse lookup, Greek access
+- **MODIFIED**: `pmagent/biblescholar/bible_db_adapter.py` — Enhanced reference handling
+- **MODIFIED**: `pmagent/biblescholar/bible_passage_flow.py` — Integration updates
 
 ### bible scholar
 - **RelationshipAdapter**: New adapter for proper names and verse-word links
@@ -268,7 +268,7 @@ Enhance BibleScholar with relationship tables for RAG context enrichment and imp
 
 ### Expected Directory Layout
 ```
-agentpm/biblescholar/
+pmagent/biblescholar/
   ├── relationship_adapter.py          # NEW
   ├── cross_language_flow.py          # NEW
   ├── reference_parser.py              # NEW
@@ -280,7 +280,7 @@ agentpm/biblescholar/
   ├── bible_db_adapter.py               # MODIFIED
   └── bible_passage_flow.py            # MODIFIED
 
-agentpm/adapters/
+pmagent/adapters/
   ├── codex_cli.py                     # NEW (planning lane)
   ├── gemini_cli.py                    # NEW (planning lane)
   ├── planning.py                       # NEW

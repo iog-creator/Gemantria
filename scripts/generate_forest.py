@@ -7,6 +7,7 @@
 import os
 import datetime
 import glob
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 RULES_DIR = ".cursor/rules/*.mdc"
@@ -15,27 +16,59 @@ ADRS_DIR = "docs/ADRs/*.md"
 OUTPUT_MD = "docs/forest/overview.md"
 
 
+def _read_rule_file(rule_path: str) -> str:
+    """Read a single rule file and extract title (for parallel processing)."""
+    try:
+        with open(rule_path) as f:
+            first_line = f.readline().strip()
+            title = first_line.lstrip("#").strip() if first_line.startswith("#") else first_line
+            rule_num = os.path.basename(rule_path).split(".")[0]
+            return f"- Rule {rule_num}: {title}"
+    except Exception:
+        return None
+
+
+def _read_adr_file(adr_path: str) -> str:
+    """Read a single ADR file and extract title (for parallel processing)."""
+    try:
+        with open(adr_path) as f:
+            content = f.read()
+            lines = content.split("\n")
+            title = "Unknown Title"
+            for line in lines[:5]:
+                if line.startswith("# "):
+                    title = line[2:].strip()
+                    break
+            adr_num = os.path.basename(adr_path).split(".")[0]
+            return f"- {adr_num}: {title}"
+    except Exception as e:
+        return f"- {os.path.basename(adr_path)}: Error reading ({e})"
+
+
 def generate_overview():
-    """Generate forest overview document."""
+    """Generate forest overview document (parallelized file reading)."""
     overview = "# Forest Overview\n\n"
     overview += f"Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
-    # Rules
+    # Rules (parallelized)
     overview += "## Active Rules\n\n"
+    rule_files = sorted(glob.glob(RULES_DIR))
     rules = []
-    for rule in sorted(glob.glob(RULES_DIR)):
-        with open(rule) as f:
-            first_line = f.readline().strip()
-            title = first_line.lstrip("#").strip() if first_line.startswith("#") else first_line
-            rule_num = os.path.basename(rule).split(".")[0]
-            rules.append(f"- Rule {rule_num}: {title}")
+    if rule_files:
+        with ProcessPoolExecutor(max_workers=min(8, len(rule_files))) as executor:
+            futures = {executor.submit(_read_rule_file, rule): rule for rule in rule_files}
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    rules.append(result)
+        rules.sort()  # Sort by rule number
 
     if rules:
         overview += "\n".join(rules) + "\n\n"
     else:
         overview += "No rules found.\n\n"
 
-    # Workflows
+    # Workflows (simple - no parallelization needed)
     overview += "## CI Workflows\n\n"
     workflows = []
     for wf in sorted(glob.glob(WORKFLOWS_DIR)):
@@ -47,24 +80,16 @@ def generate_overview():
     else:
         overview += "No workflows found.\n\n"
 
-    # ADRs
+    # ADRs (parallelized)
     overview += "## ADRs\n\n"
+    adr_files = sorted(glob.glob(ADRS_DIR))
     adrs = []
-    for adr in sorted(glob.glob(ADRS_DIR)):
-        try:
-            with open(adr) as f:
-                content = f.read()
-                # Extract title from first header
-                lines = content.split("\n")
-                title = "Unknown Title"
-                for line in lines[:5]:  # Check first 5 lines
-                    if line.startswith("# "):
-                        title = line[2:].strip()
-                        break
-                adr_num = os.path.basename(adr).split(".")[0]
-                adrs.append(f"- {adr_num}: {title}")
-        except Exception as e:
-            adrs.append(f"- {os.path.basename(adr)}: Error reading ({e})")
+    if adr_files:
+        with ProcessPoolExecutor(max_workers=min(8, len(adr_files))) as executor:
+            futures = {executor.submit(_read_adr_file, adr): adr for adr in adr_files}
+            for future in as_completed(futures):
+                adrs.append(future.result())
+        adrs.sort()  # Sort by ADR number
 
     if adrs:
         overview += "\n".join(adrs) + "\n\n"

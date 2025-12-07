@@ -23,18 +23,18 @@ Layer 4 extends the DMS (Document Management System) from docs/PDFs to the entir
 - `pyproject.toml` - Added `pathspec>=0.11.0` dependency
 
 **Features:**
-- Tiered discovery (Tier 1: agentpm/, scripts/; Tier 2: pmagent/, tests/; Tier 3: rest)
+- Tiered discovery (Tier 1: pmagent/, scripts/; Tier 2: pmagent/, tests/; Tier 3: rest)
 - Exclusion patterns from `.gitignore` + explicit patterns
 - `--tier`, `--target-dirs`, `--limit` flags
 - `--include-code` flag to enable code discovery
 
 **Usage:**
 ```bash
-# Discover Tier 1 code files (agentpm/, scripts/)
+# Discover Tier 1 code files (pmagent/, scripts/)
 python scripts/governance/ingest_docs_to_db.py --include-code --tier 1 --dry-run
 
 # Discover specific directories
-python scripts/governance/ingest_docs_to_db.py --include-code --target-dirs agentpm/kb scripts/kb --dry-run
+python scripts/governance/ingest_docs_to_db.py --include-code --target-dirs pmagent/kb scripts/kb --dry-run
 ```
 
 ### ✅ Phase 4.2: AST-Based Code Fragmentation (Complete)
@@ -76,12 +76,12 @@ python scripts/governance/ingest_doc_embeddings.py --all-docs
 ### ✅ Phase 4.4: AI Classification (Complete)
 
 **Files Modified:**
-- `agentpm/kb/classify.py` - Added `classify_code_fragment()` function
+- `pmagent/kb/classify.py` - Added `classify_code_fragment()` function
 - `scripts/governance/classify_fragments.py` - Added `--code-only` flag
 
 **Features:**
 - Code-specific classification prompt (subsystem, code_role, importance, etc.)
-- Usage frequency heuristic (high: agentpm/, scripts/; medium: pmagent/, tests/; low: rest)
+- Usage frequency heuristic (high: pmagent/, scripts/; medium: pmagent/, tests/; low: rest)
 - Control-plane tracking via `_write_agent_run()` (reuses Phase 3.1 pattern)
 
 **Classification Fields:**
@@ -102,7 +102,7 @@ python scripts/governance/classify_fragments.py --code-only --limit 10
 ### ✅ Phase 4.5: KB Registry & Search (Complete)
 
 **Files Created:**
-- `agentpm/kb/search.py` - Semantic code search via pgvector
+- `pmagent/kb/search.py` - Semantic code search via pgvector
 
 **Files Modified:**
 - `scripts/kb/build_kb_registry.py` - Extended to include code files (already supports CODE::*)
@@ -185,6 +185,6 @@ pmagent kb refresh
 
 - Layer 3 Plan: `docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md`
 - DMS Schema: `migrations/047_control_doc_content_schema.sql`
-- KB Registry: `agentpm/kb/registry.py`
-- Search Implementation: `agentpm/kb/search.py`
+- KB Registry: `pmagent/kb/registry.py`
+- Search Implementation: `pmagent/kb/search.py`
 

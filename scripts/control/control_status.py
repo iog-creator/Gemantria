@@ -13,7 +13,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, ProgrammingError
 
-from agentpm.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
+from pmagent.db.loader import DbDriverMissingError, DbUnavailableError, get_control_engine
 from scripts.guards.guard_db_health import check_db_health
 
 
@@ -22,6 +22,10 @@ CONTROL_TABLES = [
     ("public", "ai_interactions"),
     ("public", "governance_artifacts"),
     ("control", "agent_run"),
+    ("control", "agent_run_cli"),
+    ("control", "kb_document"),
+    ("control", "doc_registry"),
+    ("control", "doc_version"),
     ("control", "tool_catalog"),
     ("gematria", "graph_stats_snapshots"),
 ]

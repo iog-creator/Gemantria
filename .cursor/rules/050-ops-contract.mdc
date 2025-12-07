@@ -9,6 +9,26 @@ globs: []
 **Scope:** Gemantria repository and its subprojects (pipeline, exports, viz)
 **Authority chain:** Rules 039 → 041 → 046 → 050 → 051 → **052 (Tool Priority & Context Guidance)**
 
+## 0 · Mandatory Kernel Boot (Phase 26+)
+
+**CRITICAL**: Before ANY destructive OPS work (editing code, running migrations, modifying `share/`, or changing SSOT docs), Cursor **MUST** perform a kernel boot preflight:
+
+1. **Run**: `make ops.kernel.check`
+2. **If `ops.kernel.check` fails** (non-zero exit):
+   - Enter **NO-OP mode** for feature work
+   - Report the failure and surfaced kernel/health info back to the PM
+   - **Only execute PM-approved remediation OPS blocks**
+3. **Only if `ops.kernel.check` succeeds** MAY Cursor proceed to:
+   - Apply the standard evidence-first checks
+   - Run additional OPS commands per the PM's OPS block
+
+**This section is non-optional** and treated as part of the `alwaysApply: true` OPS contract.
+
+**Related**:
+- `docs/SSOT/EXECUTION_CONTRACT.md` Section 5 (Kernel-Aware Preflight)
+- `docs/SSOT/PHASE26_OPS_BOOT_SPEC.md`
+- `scripts/guards/guard_kernel_boot.py`
+
 ## 1 · Activation Rule
 
 I operate *only if all four* are true:

@@ -1,21 +1,21 @@
-# OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
-# Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
-
 #!/usr/bin/env python3
 """
-sync_share.py — standard share sync entrypoint.
+sync_share.py — DMS-driven share sync (Phase 24.C).
 
-DMS-only sync: syncs share/ from control.doc_registry only.
-
-- Requires DMS doc registry to be populated with share_path-enabled docs.
-- Fail-closed: exits with error if registry is unavailable or has no share_path-enabled docs.
-- No manifest fallback: registry is the single source of truth for share/ sync.
+- Fetches allowed paths from DMS.
+- Populates share/ from repo (fixes missing_in_share).
+- Audits share/ for unknown files (extra_in_share).
+- STRICT mode: Aborts if unknown managed files exist.
+- DEV mode: Warns if unknown managed files exist.
+- NEVER DELETE files silently.
 """
 
 from __future__ import annotations
 
 import shutil
+import subprocess
 import sys
+import json
 from pathlib import Path
 from typing import List
 
@@ -23,173 +23,138 @@ from typing import List
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+# Pre-flight DB check (mandatory - Rule 050 evidence-first)
+preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
+result = subprocess.run([sys.executable, str(preflight_script), "--mode", "strict"], capture_output=True)
+if result.returncode != 0:
+    print(result.stderr.decode(), file=sys.stderr)
+    sys.exit(result.returncode)
+
 try:
     from sqlalchemy import text
-
-    from agentpm.db.loader import get_control_engine
+    from pmagent.db.loader import get_control_engine
 
     DB_AVAILABLE = True
 except ImportError:
     DB_AVAILABLE = False
 
-
 REPO_ROOT = ROOT
 SHARE_ROOT = REPO_ROOT / "share"
 
 
-def _sync_from_registry() -> bool:
-    """
-    Attempt to sync share/ from the control.doc_registry.
+def run_guard(mode: str) -> dict:
+    """Run guard_share_sync_policy.py and return output."""
+    guard_script = ROOT / "scripts" / "guards" / "guard_share_sync_policy.py"
+    if not guard_script.exists():
+        print(f"[sync_share] ERROR: Guard script missing at {guard_script}", file=sys.stderr)
+        sys.exit(1)
 
-    Returns True if registry-based sync was performed.
-    Raises SystemExit(1) if registry is unavailable or has no share_path-enabled docs.
+    # We run the guard in HINT mode initially to get the data without exiting on failure
+    # We will enforce policy locally
+    res = subprocess.run([sys.executable, str(guard_script), "--mode", "HINT"], capture_output=True, text=True)
+    try:
+        return json.loads(res.stdout)
+    except json.JSONDecodeError:
+        print(f"[sync_share] ERROR: Invalid JSON from guard:\n{res.stdout}", file=sys.stderr)
+        return {"ok": False, "extra_in_share": [], "missing_in_share": []}
 
-    This function is fail-closed: it never falls back to manifest-based behavior.
 
-    **Contract (DMS SSOT Enforcement):**
-
-    1. **DMS as Single Source of Truth**
-       - Query `control.doc_registry` for all rows where:
-         - `share_path IS NOT NULL`
-         - `enabled = TRUE`
-       - Build set of expected share paths from registry (no filesystem discovery).
-
-    2. **Populate share/ from DMS**
-       - For each enabled doc with a `share_path`:
-         - Copy source file from `repo_path` to `share_path`.
-         - Create parent directories if needed.
-         - Log each copy operation.
-
-    3. **Delete Stale Files (Enforce Registry-Only)**
-       - For any `.md` file in `share/` root NOT in expected set:
-         - Delete it immediately (stale/obsolete file).
-       - This prevents drift: files not in registry are removed.
-
-    4. **Delete Stale Subdirectories (Enforce Flat Structure)**
-       - For any subdirectory in `share/`:
-         - Recursively remove it (enforce flat structure per SHARE_FOLDER_STRUCTURE.md).
-       - Prevents legacy subdirs (e.g., `atlas/`, `exports/`, `runtime/`) from persisting.
-
-    5. **Fail-Closed on DB Unavailability**
-       - If Postgres/control schema unreachable:
-         - Exit non-zero (SystemExit(1)).
-         - Print error to stderr.
-         - Do NOT proceed with filesystem-only sync.
-       - Principle: If SSOT is unreachable, we do not trust the filesystem view.
-
-    **Why This Matters:**
-    - Prevents "zombie files" (41 stale files when registry says 17).
-    - Prevents subdirectory drift (old `atlas/`, `exports/` persisting).
-    - Ensures `make housekeeping` can self-heal share/ folder.
-    - Aligns share/ with DMS registry on every sync (no manual cleanup needed).
-    """
+def _sync_from_registry(strict: bool = True) -> bool:
     if not DB_AVAILABLE:
-        print(
-            "[sync_share] ERROR: Database not available for registry sync. DMS doc registry is required.",
-            file=sys.stderr,
+        print("[sync_share] ERROR: Database not available.", file=sys.stderr)
+        sys.exit(1)
+
+    print("[sync_share] Running Share Sync Policy Guard...")
+    report = run_guard("HINT")
+
+    extra_in_share = report.get("extra_in_share", [])
+
+    # Policy Enforcement: Extra Files
+    if extra_in_share:
+        msg = f"[sync_share] Found {len(extra_in_share)} unknown files in managed namespaces:\n" + "\n".join(
+            f"  - {f}" for f in extra_in_share
         )
-        raise SystemExit(1) from None
+
+        if strict:
+            print(
+                f"{msg}\n[sync_share] STRICT MODE: Aborting sync. Register these files in DMS or move them to share/tmp/.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        else:
+            print(f"{msg}\n[sync_share] WARN: Skipping strictly managed check (DEV mode). Files will NOT be deleted.")
+
+    # Proceed to Populate (Fix Missing)
+    # We re-fetch allowlist to know source paths using same logic as guard/previous version
+    # Actually guard logic doesn't give us source paths, only status.
+    # So we need to query DB again to get (repo_path -> share_path) mapping.
 
     try:
         engine = get_control_engine()
-    except Exception as exc:  # pragma: no cover - defensive
-        print(
-            f"[sync_share] ERROR: Unable to get control-plane engine: {exc}",
-            file=sys.stderr,
-        )
-        raise SystemExit(1) from exc
-
-    try:
         with engine.connect() as conn:
             rows = conn.execute(
-                text(
-                    """
-                    SELECT logical_name, repo_path, share_path, enabled
-                    FROM control.doc_registry
-                    WHERE share_path IS NOT NULL
-                      AND enabled = TRUE
-                    ORDER BY logical_name
-                    """
-                )
+                text("""
+                SELECT logical_name, repo_path, share_path
+                FROM control.doc_registry 
+                WHERE enabled = TRUE
+            """)
             ).fetchall()
-
-            if not rows:
-                print(
-                    "[sync_share] ERROR: DMS doc registry has no share_path-enabled docs. "
-                    "Manifest fallback is forbidden. Run: make governance.ingest.docs",
-                    file=sys.stderr,
-                )
-                raise SystemExit(1)
 
             SHARE_ROOT.mkdir(parents=True, exist_ok=True)
 
-            # Step 1: Collect all expected share paths from registry (SSOT)
-            expected_share_paths = set()
-            for logical_name, repo_rel, share_rel, enabled in rows:
-                repo_path = REPO_ROOT / repo_rel
-                # Handle both relative and absolute share paths
-                if str(share_rel).startswith("share/"):
-                    share_path = REPO_ROOT / share_rel
-                else:
-                    share_path = SHARE_ROOT / share_rel
+            count = 0
+            for row in rows:
+                sp = row.share_path
+                if not sp and row.repo_path and row.repo_path.startswith("share/"):
+                    sp = row.repo_path
 
-                if not repo_path.is_file():
-                    print(
-                        f"[sync_share] WARN: registry repo_path missing for {logical_name}: {repo_path}",
-                        file=sys.stderr,
-                    )
+                if not sp:
                     continue
 
-                expected_share_paths.add(share_path)
-                share_path.parent.mkdir(parents=True, exist_ok=True)
+                repo_path = REPO_ROOT / row.repo_path
+                share_path = REPO_ROOT / sp
+
+                if not repo_path.exists():
+                    print(f"[sync_share] WARN: Source missing for {row.logical_name}: {repo_path}")
+                    continue
+
+                # Check if update needed
+                # For now, just copy (blind overwrite is safe as source is SSOT)
+                # Optimization: check mtime or hash? sync_share usually forces copy.
+
+                if not share_path.parent.exists():
+                    share_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Avoid copy if src and dst are the same file
+                if repo_path.resolve() == share_path.resolve():
+                    # print(f"[sync_share] skipping copy (same file): {row.logical_name}")
+                    continue
+
                 shutil.copy2(repo_path, share_path)
-                print(f"[sync_share] registry copy: {logical_name}: {repo_path} -> {share_path}")
+                count += 1
 
-            # Step 2: Clean up files in share/ that are NOT in the registry
-            # Only clean up .md files in the root of share/ (enforce registry-only)
-            if SHARE_ROOT.is_dir():
-                for share_file in SHARE_ROOT.iterdir():
-                    if share_file.is_file() and share_file.suffix == ".md":
-                        if share_file not in expected_share_paths:
-                            print(
-                                f"[sync_share] cleanup: removing stale file not in registry: {share_file.name}",
-                                file=sys.stderr,
-                            )
-                            share_file.unlink()
-                    elif share_file.is_dir():
-                        # Step 3: Remove all subdirectories to enforce flat structure
-                        # (per SHARE_FOLDER_STRUCTURE.md: "Flat directory structure - no subdirectories")
-                        print(
-                            f"[sync_share] cleanup: removing subdirectory: {share_file.name}",
-                            file=sys.stderr,
-                        )
-                        shutil.rmtree(share_file)
+            print(f"[sync_share] Populated {count} files from DMS.")
 
-        return True
-    except SystemExit:
-        raise
-    except Exception as exc:  # pragma: no cover - defensive
-        print(
-            f"[sync_share] ERROR: Registry sync failed: {exc}",
-            file=sys.stderr,
-        )
-        raise SystemExit(1) from exc
+    except Exception as e:
+        print(f"[sync_share] ERROR: Sync failed: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    return True
 
 
 def main(argv: List[str] | None = None) -> int:
-    """
-    Main entrypoint: sync share/ from DMS doc registry only.
+    # Determine mode. Default to STRICT in CI, but maybe we want a flag.
+    # For now, assume STRICT by default unless --dev is passed?
+    # Or rely on AGENTS/Tasks saying "STRICT in CI".
+    # We'll default to STRICT.
 
-    This function is fail-closed: it requires the registry to be populated with
-    share_path-enabled docs. No manifest fallback is performed.
-    """
-    # Sync from the doc registry. This will raise SystemExit(1) if:
-    # - Database is unavailable
-    # - Registry has no share_path-enabled docs
-    # - Any other error occurs during sync
-    _sync_from_registry()
+    strict = True
+    if len(sys.argv) > 1 and "--dev" in sys.argv:
+        strict = False
+
+    _sync_from_registry(strict=strict)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

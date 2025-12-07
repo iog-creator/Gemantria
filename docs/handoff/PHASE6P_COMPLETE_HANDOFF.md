@@ -20,8 +20,8 @@ main
 # Git status
 ## main...origin/main
 ?? SCHEMA_INDEX.md
-?? agentpm/adapters/AGENTS.md
-?? agentpm/atlas/AGENTS.md
+?? pmagent/adapters/AGENTS.md
+?? pmagent/atlas/AGENTS.md
 [... 40+ untracked files - separate from Phase-6P work]
 ```
 
@@ -63,7 +63,7 @@ d5e9a5c3 docs(phase6p): BibleScholar Reference Slice design doc + MASTER_PLAN up
 
 ### Phase-6P Implementation Complete
 
-1. **Reference Slice Module** (`agentpm/biblescholar/reference_slice.py`)
+1. **Reference Slice Module** (`pmagent/biblescholar/reference_slice.py`)
    - Implemented `answer_reference_question()` function
    - Orchestrates complete E2E flow:
      - Verse context resolution (bible_db adapter)
@@ -73,7 +73,7 @@ d5e9a5c3 docs(phase6p): BibleScholar Reference Slice design doc + MASTER_PLAN up
    - Returns structured `ReferenceAnswerResult` with answer, trace, context_used, and lm_meta
    - Handles db_off, budget_exceeded, and other error scenarios gracefully
 
-2. **Comprehensive Tests** (`agentpm/biblescholar/tests/test_reference_slice.py`)
+2. **Comprehensive Tests** (`pmagent/biblescholar/tests/test_reference_slice.py`)
    - 5 test cases covering all scenarios:
      - Happy path (all adapters + LM succeed)
      - db_off scenario (DB unavailable, graceful degradation)
@@ -152,8 +152,8 @@ d5e9a5c3 docs(phase6p): BibleScholar Reference Slice design doc + MASTER_PLAN up
 ## Key Files Modified/Created
 
 ### New Files
-- `agentpm/biblescholar/reference_slice.py` (288 lines)
-- `agentpm/biblescholar/tests/test_reference_slice.py` (289 lines)
+- `pmagent/biblescholar/reference_slice.py` (288 lines)
+- `pmagent/biblescholar/tests/test_reference_slice.py` (289 lines)
 
 ### Modified Files
 - `docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md` (design doc, from PR #559)

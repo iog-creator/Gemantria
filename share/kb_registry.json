@@ -1,0 +1,1880 @@
+{
+  "version": "1.0",
+  "generated_at": "2025-12-03T21:50:23.644625+00:00",
+  "documents": [
+    {
+      "id": "agents::agentpm/kb/agents.md",
+      "title": "AGENTS::agentpm/kb/AGENTS.md",
+      "path": "agentpm/kb/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "cc65b81d-62e2-4aab-9303-ca219a3ae0ad",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 190,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.520187+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::agentpm/knowledge/agents.md",
+      "title": "AGENTS::agentpm/knowledge/AGENTS.md",
+      "path": "agentpm/knowledge/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "34f3bec0-5314-4472-b58d-94814086f78f",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 65,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.520567+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::agentpm/metrics/agents.md",
+      "title": "AGENTS::agentpm/metrics/AGENTS.md",
+      "path": "agentpm/metrics/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "763f1f22-4a1b-41a7-b883-cef43da35c68",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 65,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.520890+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::agentpm/rpc/agents.md",
+      "title": "AGENTS::agentpm/rpc/AGENTS.md",
+      "path": "agentpm/rpc/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "94af1cfb-df69-456f-99c8-6ed2d076f6e2",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 65,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.521140+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::agentpm/tests/kb/agents.md",
+      "title": "AGENTS::agentpm/tests/kb/AGENTS.md",
+      "path": "agentpm/tests/kb/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "general",
+      "provenance": {
+        "doc_id": "d50460db-c878-40c2-9fe9-76fcd0528340",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "general",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 28,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.521303+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::agentpm/tests/status/agents.md",
+      "title": "AGENTS::agentpm/tests/status/AGENTS.md",
+      "path": "agentpm/tests/status/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "a02721eb-13a4-48bb-b453-386b41fb16d5",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 28,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.521452+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::docs/audits/agents.md",
+      "title": "AGENTS::docs/audits/AGENTS.md",
+      "path": "docs/audits/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "ee911e86-fe82-4b8c-aed7-bbdec80acd9a",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 175,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.521851+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "agents::src/gemantria.egg-info/agents.md",
+      "title": "AGENTS::src/gemantria.egg-info/AGENTS.md",
+      "path": "src/gemantria.egg-info/AGENTS.md",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "agent_framework"
+      ],
+      "owning_subsystem": "gematria",
+      "provenance": {
+        "doc_id": "edb801e4-1239-48ac-9d45-84ec6bd9533f",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "gematria",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 65,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522075+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/control-plane.py",
+      "title": "CODE::agentpm/control_plane.py",
+      "path": "agentpm/control_plane.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "287c711f-af5d-4a9e-9520-ad0f3839996c",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 22,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522213+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/modules/gematria/verification.py",
+      "title": "CODE::agentpm/modules/gematria/verification.py",
+      "path": "agentpm/modules/gematria/verification.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "gematria",
+      "provenance": {
+        "doc_id": "01006b9b-bae9-4b78-96f3-7ce58badb245",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "gematria",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 6,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522312+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/plan/kb.py",
+      "title": "CODE::agentpm/plan/kb.py",
+      "path": "agentpm/plan/kb.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "pm",
+      "provenance": {
+        "doc_id": "eb742763-12e3-4dd7-9c89-f0978d10e677",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "pm",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 26,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522452+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/scripts/docs-dashboard-refresh.py",
+      "title": "CODE::agentpm/scripts/docs_dashboard_refresh.py",
+      "path": "agentpm/scripts/docs_dashboard_refresh.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "eb794630-cda2-4f22-954a-a6e3cd783a27",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 36,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522603+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/tests/atlas/test-atlas-filters-breadcrumbs-sitemap-e44-e46.py",
+      "title": "CODE::agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py",
+      "path": "agentpm/tests/atlas/test_atlas_filters_breadcrumbs_sitemap_e44_e46.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "ffd3914a-4e2f-4db2-8718-57dd9f05689b",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "supporting",
+        "phase_relevance": [],
+        "fragment_count": 4,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522696+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/tests/atlas/test-e94-tagproof-screenshots-guard.py",
+      "title": "CODE::agentpm/tests/atlas/test_e94_tagproof_screenshots_guard.py",
+      "path": "agentpm/tests/atlas/test_e94_tagproof_screenshots_guard.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "2742dc50-0ff8-4c75-ac56-01fdd38dce12",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 7,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522791+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/tests/cli/test-pmagent-health-lm.py",
+      "title": "CODE::agentpm/tests/cli/test_pmagent_health_lm.py",
+      "path": "agentpm/tests/cli/test_pmagent_health_lm.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase-3C P1"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "9c1052ca-aa3a-46fc-88f2-bd19fdad3ad4",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase-3C P1"
+        ],
+        "fragment_count": 15,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522903+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/tests/exports/test-graph-export-e20-e22.py",
+      "title": "CODE::agentpm/tests/exports/test_graph_export_e20_e22.py",
+      "path": "agentpm/tests/exports/test_graph_export_e20_e22.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "c5d66b08-e32a-4637-b1d4-c4a7521e21f7",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 6,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.522996+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agentpm/tests/phase1/test-tv04-provenance-mismatch.py",
+      "title": "CODE::agentpm/tests/phase1/test_tv04_provenance_mismatch.py",
+      "path": "agentpm/tests/phase1/test_tv04_provenance_mismatch.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase 1"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "cb375a4b-b662-4673-98d8-238558e9dad6",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase 1"
+        ],
+        "fragment_count": 33,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523148+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::agents/example-enrich.py",
+      "title": "CODE::agents/example_enrich.py",
+      "path": "agents/example_enrich.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "be3ffd21-caaf-46b7-ad60-cba9a8e6ba1b",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 10,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523250+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/atlas/gen-breadcrumbs.py",
+      "title": "CODE::scripts/atlas/gen_breadcrumbs.py",
+      "path": "scripts/atlas/gen_breadcrumbs.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "general",
+      "provenance": {
+        "doc_id": "a30cb9ba-8afe-49a4-8c6a-4a17193375c5",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "general",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 5,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523341+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/atlas/generate-compliance-summary.py",
+      "title": "CODE::scripts/atlas/generate_compliance_summary.py",
+      "path": "scripts/atlas/generate_compliance_summary.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "5c6edd43-89ee-44bf-aadf-7075d1f4eebc",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 36,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523493+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/ci/gatekeeper-coverage.py",
+      "title": "CODE::scripts/ci/gatekeeper_coverage.py",
+      "path": "scripts/ci/gatekeeper_coverage.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "72403bbe-2c08-4763-b7a2-a67b408cb4ad",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 14,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523603+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/db/populate-mark-1-1-greek.py",
+      "title": "CODE::scripts/db/populate_mark_1_1_greek.py",
+      "path": "scripts/db/populate_mark_1_1_greek.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "edcd5b43-ecbe-4f96-a24d-72325298765b",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 29,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.523738+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/eval/build-release-notes.py",
+      "title": "CODE::scripts/eval/build_release_notes.py",
+      "path": "scripts/eval/build_release_notes.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "d78591e4-6b33-4098-8f4a-5399deed7618",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 9,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524021+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/eval/run-log.py",
+      "title": "CODE::scripts/eval/run_log.py",
+      "path": "scripts/eval/run_log.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "b28adfcd-fba5-44a5-9cb8-7f46f6dc3372",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 7,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524232+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/eval/verify-integrity.py",
+      "title": "CODE::scripts/eval/verify_integrity.py",
+      "path": "scripts/eval/verify_integrity.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "a05418a6-14bc-4e20-a7fa-f7bf1d616a5b",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 7,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524345+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/exports/export-biblescholar-insights.py",
+      "title": "CODE::scripts/exports/export_biblescholar_insights.py",
+      "path": "scripts/exports/export_biblescholar_insights.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "gematria",
+      "provenance": {
+        "doc_id": "b2602e8e-e04b-43bf-95a0-85d81257250d",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "gematria",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 13,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524466+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/exports/export-compliance.py",
+      "title": "CODE::scripts/exports/export_compliance.py",
+      "path": "scripts/exports/export_compliance.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "9da4c9fd-047e-408b-8fb8-e08c9dae0734",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 12,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524575+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/generate-handoff.py",
+      "title": "CODE::scripts/generate_handoff.py",
+      "path": "scripts/generate_handoff.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "a177cabb-20df-448e-a518-e4d0e6ed4d2f",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 12,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524681+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/governance-tracker.py",
+      "title": "CODE::scripts/governance_tracker.py",
+      "path": "scripts/governance_tracker.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "dd04386a-f0cd-4732-8bdc-afae7d96fd9d",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 66,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.524885+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/guards/guard-atlas-guard-receipts.py",
+      "title": "CODE::scripts/guards/guard_atlas_guard_receipts.py",
+      "path": "scripts/guards/guard_atlas_guard_receipts.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "1cda6a27-cc5f-44c5-a692-051e5b74454e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 21,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525013+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/guards/guard-crossrefs-extracted.py",
+      "title": "CODE::scripts/guards/guard_crossrefs_extracted.py",
+      "path": "scripts/guards/guard_crossrefs_extracted.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "a11e9be5-458c-4d10-a5eb-da358c22b5f0",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 13,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525121+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::scripts/ops/agent-evidence-summary.py",
+      "title": "CODE::scripts/ops/agent_evidence_summary.py",
+      "path": "scripts/ops/agent_evidence_summary.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "e117bd8b-a796-49cb-b16e-7faaee7e165c",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 6,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525214+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::src/core/books.py",
+      "title": "CODE::src/core/books.py",
+      "path": "src/core/books.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "d9c2edc3-2fa9-4c36-a14c-9687bd37d86b",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 5,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525305+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::src/infra/metrics-core.py",
+      "title": "CODE::src/infra/metrics_core.py",
+      "path": "src/infra/metrics_core.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "2beb5cae-eeff-467d-8c2d-bdd79bb54c6e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 21,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525432+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::src/nodes/ai-noun-discovery.py",
+      "title": "CODE::src/nodes/ai_noun_discovery.py",
+      "path": "src/nodes/ai_noun_discovery.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "5ae64cd5-6880-42f8-b99f-02be9a4f3b32",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 48,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525611+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::src/obs/prom-exporter.py",
+      "title": "CODE::src/obs/prom_exporter.py",
+      "path": "src/obs/prom_exporter.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "c1e4a92e-ab58-4fec-8493-2eed0c41d5d2",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 16,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525723+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::src/utils/json-sanitize.py",
+      "title": "CODE::src/utils/json_sanitize.py",
+      "path": "src/utils/json_sanitize.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "general",
+      "provenance": {
+        "doc_id": "afdeaa02-b802-4564-aa66-d4c884a613b0",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "general",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 7,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525821+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/integration/test-checkpoint-resume-compass.py",
+      "title": "CODE::tests/integration/test_checkpoint_resume_compass.py",
+      "path": "tests/integration/test_checkpoint_resume_compass.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase 1",
+        "phase-Phase 2"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "5d2278d5-fd00-4449-b436-db974c244237",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase 1",
+          "Phase 2"
+        ],
+        "fragment_count": 36,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.525976+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/integration/test-network-aggregator-integration.py",
+      "title": "CODE::tests/integration/test_network_aggregator_integration.py",
+      "path": "tests/integration/test_network_aggregator_integration.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "ab8661e7-c309-452a-8337-cae3ea783832",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 70,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526204+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/integration/test-temporal-export.py",
+      "title": "CODE::tests/integration/test_temporal_export.py",
+      "path": "tests/integration/test_temporal_export.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "general",
+      "provenance": {
+        "doc_id": "18753633-ad6b-48e8-901f-7fd1ec9e0f54",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "general",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 5,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526298+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/scripts/guards/test-guard-docs-db-ssot.py",
+      "title": "CODE::tests/scripts/guards/test_guard_docs_db_ssot.py",
+      "path": "tests/scripts/guards/test_guard_docs_db_ssot.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "204529fc-c57b-47ed-94e9-2811d23eb6b6",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 16,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526414+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/unit/test-lm-router.py",
+      "title": "CODE::tests/unit/test_lm_router.py",
+      "path": "tests/unit/test_lm_router.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase-7C"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "4ffb5a9a-c767-4a6b-9321-e61781e03a4e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase-7C"
+        ],
+        "fragment_count": 42,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526580+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/unit/test-metrics-queries.py",
+      "title": "CODE::tests/unit/test_metrics_queries.py",
+      "path": "tests/unit/test_metrics_queries.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "fed4f10f-5df8-46bb-831f-cb297d43f39e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 3,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526669+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/unit/test-network-aggregator.py",
+      "title": "CODE::tests/unit/test_network_aggregator.py",
+      "path": "tests/unit/test_network_aggregator.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "9b5228bf-0ab7-4fa0-bc5a-fc2dcdf6c7f8",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 111,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.526952+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/web/test-status-api.py",
+      "title": "CODE::tests/web/test_status_api.py",
+      "path": "tests/web/test_status_api.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase-7G"
+      ],
+      "owning_subsystem": "webui",
+      "provenance": {
+        "doc_id": "a85fa116-798e-4b10-a276-e05b8e5a4dfb",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "webui",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase-7G"
+        ],
+        "fragment_count": 22,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.527087+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "code::tests/web/test-status-page.py",
+      "title": "CODE::tests/web/test_status_page.py",
+      "path": "tests/web/test_status_page.py",
+      "type": "other",
+      "tags": [
+        "ssot",
+        "code_module",
+        "phase-Phase-7G"
+      ],
+      "owning_subsystem": "webui",
+      "provenance": {
+        "doc_id": "c3b81cdb-b0f9-476f-ae25-62c74ff7e61e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "webui",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase-7G"
+        ],
+        "fragment_count": 15,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.527200+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "runbook::docs/runbooks/ollama-alternative.md",
+      "title": "RUNBOOK::docs/runbooks/OLLAMA_ALTERNATIVE.md",
+      "path": "docs/runbooks/OLLAMA_ALTERNATIVE.md",
+      "type": "runbook",
+      "tags": [
+        "ssot",
+        "runbook",
+        "phase-Phase 7",
+        "phase-Phase-7D+"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "751c9c8c-6721-4aee-a9bd-28808b80d640",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase 7",
+          "Phase-7D+"
+        ],
+        "fragment_count": 208,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.527678+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "runbook::docs/runbooks/ollama-auto-discovery.md",
+      "title": "RUNBOOK::docs/runbooks/OLLAMA_AUTO_DISCOVERY.md",
+      "path": "docs/runbooks/OLLAMA_AUTO_DISCOVERY.md",
+      "type": "runbook",
+      "tags": [
+        "ssot",
+        "runbook",
+        "phase-Phase 7",
+        "phase-Phase 7E",
+        "phase-Phase-7E"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "1f8a64bc-e922-4c85-8bda-8d747fe32f29",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "core",
+        "phase_relevance": [
+          "Phase 7",
+          "Phase 7E",
+          "Phase-7E"
+        ],
+        "fragment_count": 204,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.528196+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::docs/ssot/phase-6-plan.md",
+      "title": "SSOT::docs/SSOT/PHASE_6_PLAN.md",
+      "path": "docs/SSOT/PHASE_6_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "plan",
+        "phase-6",
+        "ssot",
+        "phase-Phase 6"
+      ],
+      "owning_subsystem": "ops",
+      "provenance": {
+        "doc_id": "7808f992-7f48-4636-a486-67467793a6c0",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "ops",
+        "dominant_importance": "high",
+        "phase_relevance": [
+          "Phase 6"
+        ],
+        "fragment_count": 136,
+        "has_classified_fragments": true,
+        "phase": 6,
+        "phase_key": "6"
+      },
+      "registered_at": "2025-12-02T15:54:13.528562+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::docs/ssot/visualization-config.md",
+      "title": "SSOT::docs/SSOT/visualization-config.md",
+      "path": "docs/SSOT/visualization-config.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "ssot"
+      ],
+      "owning_subsystem": "general",
+      "provenance": {
+        "doc_id": "58f2839e-af30-44cd-b287-44b861983c6e",
+        "is_ssot": true,
+        "enabled": true,
+        "dominant_subsystem": "general",
+        "dominant_importance": "core",
+        "phase_relevance": [],
+        "fragment_count": 388,
+        "has_classified_fragments": true
+      },
+      "registered_at": "2025-12-02T15:54:13.529365+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_OPS_BLOCK",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644461+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_COMPASS_ALIGNMENT_ANALYSIS",
+      "title": "SSOT: PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "path": "docs/SSOT/PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644472+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-13::PHASE13_RECON",
+      "title": "SSOT: PHASE13_RECON.md",
+      "path": "docs/SSOT/PHASE13_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-13"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 13,
+        "phase_key": "13",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644479+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-16::PHASE_16_INIT_PLAN",
+      "title": "SSOT: PHASE_16_INIT_PLAN.md",
+      "path": "docs/SSOT/PHASE_16_INIT_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-16",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 16,
+        "phase_key": "16",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644498+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_COMPASS_RESULTS",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644504+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_METADATA_ENRICHMENT_DB_SCHEMA",
+      "title": "SSOT: PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644509+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-14::PHASE_14_SEMANTIC_RECORD",
+      "title": "SSOT: PHASE_14_SEMANTIC_RECORD.md",
+      "path": "docs/SSOT/PHASE_14_SEMANTIC_RECORD.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-14"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 14,
+        "phase_key": "14",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644514+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_FIX12_EVIDENCE",
+      "title": "SSOT: PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644519+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10::PHASE10_WIRING_SELF_ASSESSMENT",
+      "title": "SSOT: PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "path": "docs/SSOT/PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "wiring"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644524+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_METADATA_ENRICHMENT_PLAN",
+      "title": "SSOT: PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644530+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE2_SPEC",
+      "title": "SSOT: PHASE15_WAVE2_SPEC.md",
+      "path": "docs/SSOT/PHASE15_WAVE2_SPEC.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644535+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10::PHASE10_CORRELATION_WIRING_COMPLETE",
+      "title": "SSOT: PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "path": "docs/SSOT/PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "wiring"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644542+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-14::PHASE14_RECON",
+      "title": "SSOT: PHASE14_RECON.md",
+      "path": "docs/SSOT/PHASE14_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-14"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 14,
+        "phase_key": "14",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644547+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_PLAN",
+      "title": "SSOT: PHASE15_PLAN.md",
+      "path": "docs/SSOT/PHASE15_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644552+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_PM_DECISION",
+      "title": "SSOT: PHASE8_PHASE10_PM_DECISION.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_PM_DECISION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644557+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_DIAGNOSTIC",
+      "title": "SSOT: PHASE8_PHASE10_DIAGNOSTIC.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "diagnostic"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644564+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_RECON",
+      "title": "SSOT: PHASE15_RECON.md",
+      "path": "docs/SSOT/PHASE15_RECON.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "medium",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644569+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_COMPASS_STRUCTURAL_GAP",
+      "title": "SSOT: PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "path": "docs/SSOT/PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644576+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_PHASE10_DIAGNOSTIC_PLAN",
+      "title": "SSOT: PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8",
+        "diagnostic",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644581+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-10.4::PHASE_10_4_ID_FIX",
+      "title": "SSOT: PHASE_10_4_ID_FIX.md",
+      "path": "docs/SSOT/PHASE_10_4_ID_FIX.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-10",
+        "phase-10.4"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 10,
+        "phase_key": "10.4",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644587+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_STEP2_STATUS",
+      "title": "SSOT: PHASE15_WAVE3_STEP2_STATUS.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_STATUS.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "status"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644591+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_WAVE3_PLAN",
+      "title": "SSOT: PHASE15_WAVE3_PLAN.md",
+      "path": "docs/SSOT/PHASE15_WAVE3_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644597+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-5::PHASE_5_PLAN",
+      "title": "SSOT: PHASE_5_PLAN.md",
+      "path": "docs/SSOT/PHASE_5_PLAN.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-5",
+        "plan"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 5,
+        "phase_key": "5",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644602+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-9.1::PHASE_9_1_PM_DMS_INTEGRATION",
+      "title": "SSOT: PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "path": "docs/SSOT/PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-9",
+        "phase-9.1"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 9,
+        "phase_key": "9.1",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644607+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-15::PHASE15_STATUS_CORRECTION",
+      "title": "SSOT: PHASE15_STATUS_CORRECTION.md",
+      "path": "docs/SSOT/PHASE15_STATUS_CORRECTION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-15",
+        "status"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 15,
+        "phase_key": "15",
+        "dominant_importance": "high",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644613+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    },
+    {
+      "id": "ssot::phase-8::PHASE8_BRIDGE_DECISION",
+      "title": "SSOT: PHASE8_BRIDGE_DECISION.md",
+      "path": "docs/SSOT/PHASE8_BRIDGE_DECISION.md",
+      "type": "ssot",
+      "tags": [
+        "ssot",
+        "phase-8"
+      ],
+      "owning_subsystem": "docs",
+      "provenance": {
+        "phase": 8,
+        "phase_key": "8",
+        "dominant_importance": "low",
+        "is_ssot": true,
+        "enabled": true
+      },
+      "registered_at": "2025-12-03T21:50:23.644619+00:00",
+      "last_seen_mtime": null,
+      "last_refreshed_at": null,
+      "min_refresh_interval_days": null
+    }
+  ]
+}

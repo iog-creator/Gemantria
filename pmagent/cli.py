@@ -44,23 +44,23 @@ from scripts.control.control_pipeline_status import (  # noqa: E402
 from scripts.control.control_summary import (  # noqa: E402
     print_human_summary as print_summary_summary,
 )
-from agentpm.knowledge.qa_docs import answer_doc_question  # noqa: E402
-from agentpm.lm.lm_status import compute_lm_status, print_lm_status_table  # noqa: E402
-from agentpm.status.explain import explain_system_status  # noqa: E402
-from agentpm.status.snapshot import get_kb_status_view  # noqa: E402
-from agentpm.docs.search import search_docs  # noqa: E402
-from agentpm.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
+from pmagent.knowledge.qa_docs import answer_doc_question  # noqa: E402
+from pmagent.lm.lm_status import compute_lm_status, print_lm_status_table  # noqa: E402
+from pmagent.status.explain import explain_system_status  # noqa: E402
+from pmagent.status.snapshot import get_kb_status_view  # noqa: E402
+from pmagent.docs.search import search_docs  # noqa: E402
+from pmagent.ai_docs.reality_check_ai_notes import main as reality_check_ai_notes_main  # noqa: E402
 from scripts.config.env import get_retrieval_lane_models, get_lm_model_config  # noqa: E402
-from agentpm.scripts.docs_inventory import run_inventory  # noqa: E402
-from agentpm.scripts.docs_duplicates_report import generate_duplicates_report  # noqa: E402
-from agentpm.scripts.docs_dm002_preview import main as docs_dm002_preview_main  # noqa: E402
-from agentpm.scripts.docs_dm002_sync import main as docs_dm002_sync_main  # noqa: E402
-from agentpm.scripts.docs_dm002_summary import main as docs_dm002_summary_main  # noqa: E402
-from agentpm.scripts.docs_archive_dryrun import main as docs_archive_dryrun_main  # noqa: E402
-from agentpm.scripts.docs_dashboard_refresh import main as docs_dashboard_refresh_main  # noqa: E402
-from agentpm.scripts.state.ledger_sync import sync_ledger  # noqa: E402
-from agentpm.control_plane import create_agent_run, mark_agent_run_success, mark_agent_run_error  # noqa: E402
-from agentpm.tools import (  # noqa: E402
+from pmagent.scripts.docs_inventory import run_inventory  # noqa: E402
+from pmagent.scripts.docs_duplicates_report import generate_duplicates_report  # noqa: E402
+from pmagent.scripts.docs_dm002_preview import main as docs_dm002_preview_main  # noqa: E402
+from pmagent.scripts.docs_dm002_sync import main as docs_dm002_sync_main  # noqa: E402
+from pmagent.scripts.docs_dm002_summary import main as docs_dm002_summary_main  # noqa: E402
+from pmagent.scripts.docs_archive_dryrun import main as docs_archive_dryrun_main  # noqa: E402
+from pmagent.scripts.docs_dashboard_refresh import main as docs_dashboard_refresh_main  # noqa: E402
+from pmagent.scripts.state.ledger_sync import sync_ledger  # noqa: E402
+from pmagent.control_plane import create_agent_run, mark_agent_run_success, mark_agent_run_error  # noqa: E402
+from pmagent.tools import (  # noqa: E402
     health as tool_health,
     control_summary as tool_control_summary,
     ledger_verify as tool_ledger_verify,
@@ -69,25 +69,25 @@ from agentpm.tools import (  # noqa: E402
     extract_concepts,
     generate_embeddings as tool_embed,
 )
-from agentpm.adapters import planning as planning_adapter  # noqa: E402
-from agentpm.adapters import gemini_cli as gemini_cli_adapter  # noqa: E402
-from agentpm.adapters import codex_cli as codex_cli_adapter  # noqa: E402
-from agentpm.kb.registry import (  # noqa: E402
+from pmagent.adapters import planning as planning_adapter  # noqa: E402
+from pmagent.adapters import gemini_cli as gemini_cli_adapter  # noqa: E402
+from pmagent.adapters import codex_cli as codex_cli_adapter  # noqa: E402
+from pmagent.kb.registry import (  # noqa: E402
     load_registry,
     query_registry,
     validate_registry,
     REGISTRY_PATH,
 )
-from agentpm.plan.kb import build_kb_doc_worklist  # noqa: E402
-from agentpm.plan.fix import build_fix_actions, apply_actions  # noqa: E402
-from agentpm.plan.next import (  # noqa: E402
+from pmagent.plan.kb import build_kb_doc_worklist  # noqa: E402
+from pmagent.plan.fix import build_fix_actions, apply_actions  # noqa: E402
+from pmagent.plan.next import (  # noqa: E402
     build_capability_session,
     build_next_plan,
     list_capability_sessions,
     run_reality_loop,
 )
-from agentpm.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
-from agentpm.kb.registry import REPO_ROOT  # noqa: E402
+from pmagent.status.kb_metrics import compute_kb_doc_health_metrics  # noqa: E402
+from pmagent.kb.registry import REPO_ROOT  # noqa: E402
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 health_app = typer.Typer(help="Health check commands")
@@ -138,6 +138,20 @@ app.add_typer(autopilot_app, name="autopilot")
 from pmagent.repo.commands import app as repo_app  # noqa: E402
 
 app.add_typer(repo_app, name="repo")
+
+# Import and register handoff commands
+from pmagent.handoff.commands import app as handoff_app  # noqa: E402
+
+app.add_typer(handoff_app, name="handoff")
+
+# Import and register hint management commands
+from pmagent.hints import app as hints_app  # noqa: E402
+
+app.add_typer(hints_app, name="hints")
+
+
+dms_app = typer.Typer(help="DMS governance operations")
+app.add_typer(dms_app, name="dms")
 
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
@@ -260,7 +274,7 @@ def lm_router_status(
 ) -> None:
     """Show LM router configuration and slot mappings (read-only, hermetic)."""
     try:
-        from agentpm.lm.router import GraniteRouter, RouterTask
+        from pmagent.lm.router import GraniteRouter, RouterTask
         from scripts.config.env import get_lm_model_config
 
         router = GraniteRouter(config=get_lm_model_config(), dry_run=True)
@@ -654,7 +668,7 @@ def plan_reality_loop(
         if result.get("available", False) and result.get("envelope_path"):
             envelope = result.get("envelope", {})
             if envelope:
-                from agentpm.reality.capability_envelope_validator import (
+                from pmagent.reality.capability_envelope_validator import (
                     validate_and_optionally_persist,
                 )  # noqa: E402, PLC0415
 
@@ -831,7 +845,7 @@ def autopilot_serve(
     import uvicorn
 
     print(f"Starting Autopilot backend on http://{host}:{port}...", file=sys.stderr)
-    uvicorn.run("agentpm.server.autopilot_api:app", host=host, port=port, reload=reload)
+    uvicorn.run("pmagent.server.autopilot_api:app", host=host, port=port, reload=reload)
 
 
 @plan_kb_app.command("fix", help="Execute doc fixes from KB worklist")
@@ -1219,6 +1233,43 @@ def graph_import(
         sys.exit(1)
 
 
+@graph_app.command("regenerate", help="Regenerate semantic network from canonical concepts")
+def graph_regenerate(
+    force: bool = typer.Option(False, "--force", "-f", help="Force regeneration (truncates existing data)"),
+) -> None:
+    """Regenerate concept_network from concepts table."""
+    import subprocess
+
+    if not force:
+        print("Warning: This will truncate concept_network and regenerate it.", file=sys.stderr)
+        print("Use --force to confirm.", file=sys.stderr)
+        sys.exit(1)
+
+    cmd = ["python3", "scripts/ops/regenerate_network.py"]
+    print(f"Running: {' '.join(cmd)}", file=sys.stderr)
+    try:
+        subprocess.run(cmd, check=True)
+        print("Regeneration complete.", file=sys.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+@graph_app.command("analyze", help="Analyze graph structure (clusters, centrality)")
+def graph_analyze() -> None:
+    """Run graph analysis."""
+    import subprocess
+
+    cmd = ["python3", "scripts/analyze_graph.py"]
+    print(f"Running: {' '.join(cmd)}", file=sys.stderr)
+    try:
+        subprocess.run(cmd, check=True)
+        print("Analysis complete.", file=sys.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 @control_app.command("status", help="Check control-plane database status and table row counts")
 def control_status(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON"),
@@ -1348,7 +1399,7 @@ def reality_check_one() -> None:
     import subprocess
 
     proc = subprocess.run(
-        [sys.executable, "-m", "agentpm.scripts.reality_check_1"],
+        [sys.executable, "-m", "pmagent.scripts.reality_check_1"],
         capture_output=True,
         text=True,
     )
@@ -1365,7 +1416,7 @@ def reality_check_live() -> None:
     import sys
 
     proc = subprocess.run(
-        [sys.executable, "-m", "agentpm.scripts.reality_check_1_live"],
+        [sys.executable, "-m", "pmagent.scripts.reality_check_1_live"],
         text=True,
     )
     # The script itself prints JSON and returns appropriate exit code.
@@ -1379,7 +1430,7 @@ def reality_check_check(
     no_dashboards: bool = typer.Option(False, "--no-dashboards", help="Skip exports/eval checks"),
 ) -> None:
     """Run comprehensive reality check."""
-    from agentpm.reality.check import reality_check, print_human_summary
+    from pmagent.reality.check import reality_check, print_human_summary
 
     run = create_agent_run("system.reality-check", {"mode": mode, "no_dashboards": no_dashboards})
     try:
@@ -1417,7 +1468,7 @@ def reality_validate_capability_envelope(
 
     Hermetic: read-only, no DB writes. Checks envelope against future AI tracking mapping.
     """
-    from agentpm.reality.capability_envelope_validator import validate_capability_envelope_file
+    from pmagent.reality.capability_envelope_validator import validate_capability_envelope_file
 
     try:
         result = validate_capability_envelope_file(file)
@@ -1472,7 +1523,7 @@ def reality_sessions(
 
     Hermetic: read-only, file-only reads, optional DB reads (gracefully handles DB-off).
     """
-    from agentpm.reality.sessions_summary import summarize_tracked_sessions
+    from pmagent.reality.sessions_summary import summarize_tracked_sessions
 
     try:
         summary = summarize_tracked_sessions(limit=limit)
@@ -1542,7 +1593,7 @@ def reality_validate_capability_history(
 
     Hermetic: read-only, no DB writes. Aggregates validation results across all envelopes.
     """
-    from agentpm.reality.capability_envelope_validator import scan_capability_envelopes
+    from pmagent.reality.capability_envelope_validator import scan_capability_envelopes
 
     try:
         report = scan_capability_envelopes()
@@ -1601,7 +1652,7 @@ def bringup_full() -> None:
     import sys
 
     proc = subprocess.run(
-        [sys.executable, "-m", "agentpm.scripts.system_bringup"],
+        [sys.executable, "-m", "pmagent.scripts.system_bringup"],
         text=True,
     )
     # The script itself prints JSON and returns appropriate exit code.
@@ -2186,6 +2237,22 @@ def kb_registry_validate(
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+@dms_app.command(name="ingest-share", help="Ingest share/ docs into DMS registry.")
+def dms_ingest_share(
+    dry_run: bool = typer.Option(False, "--dry-run", help="Dry run only"),
+) -> None:
+    """Ingest/Register share/ documents into DMS."""
+    import subprocess
+
+    cmd = ["python3", "scripts/governance/ingest_share_docs.py"]
+    if dry_run:
+        cmd.append("--dry-run")
+
+    # Run the command
+    result = subprocess.run(cmd)
+    sys.exit(result.returncode)
 
 
 def main() -> None:

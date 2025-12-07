@@ -1,7 +1,29 @@
 # AGENTS.md — Gemantria Agent Framework
 <!-- alwaysapply.sentinel: 050,051,052 source=ai_interactions -->
 
+> **AGENT REGISTRY ROLE: CANONICAL_GLOBAL**  
+> Source of truth for the Gemantria agent roster (IDs, roles, subsystems, tools, workflows, governance).  
+> Derived views: `pmagent/kb/AGENTS.md` (PM-focused), `pmagent/tests/*/AGENTS.md` (test-specific), other subsystem-specific summaries.  
+> Last reviewed: 2025-12-03
+
 > **Always-Apply Triad**: We operate under **Rule-050 (LOUD FAIL)**, **Rule-051 (CI gating)**, and **Rule-052 (tool-priority)**. The guards ensure this 050/051/052 triad is present in docs and mirrored in DB checks.
+
+## Canonical Agents Table (Draft from KB Registry)
+
+The following table was generated from **share/AGENTS_REGISTRY_SNAPSHOT.json** to reflect the currently registered agents in the KB/DMS registry.
+
+<!-- BEGIN: AUTO-GENERATED AGENTS TABLE -->
+| Agent ID | Path | Subsystem | Tags |
+|----------|------|-----------|------|
+| agents::agentpm/kb/agents.md | agentpm/kb/AGENTS.md | ops | ssot, agent_framework |
+| agents::agentpm/knowledge/agents.md | agentpm/knowledge/AGENTS.md | ops | ssot, agent_framework |
+| agents::agentpm/metrics/agents.md | agentpm/metrics/AGENTS.md | ops | ssot, agent_framework |
+| agents::agentpm/rpc/agents.md | agentpm/rpc/AGENTS.md | ops | ssot, agent_framework |
+| agents::agentpm/tests/kb/agents.md | agentpm/tests/kb/AGENTS.md | general | ssot, agent_framework |
+| agents::agentpm/tests/status/agents.md | agentpm/tests/status/AGENTS.md | ops | ssot, agent_framework |
+| agents::docs/audits/agents.md | docs/audits/AGENTS.md | ops | ssot, agent_framework |
+| agents::src/gemantria.egg-info/agents.md | src/gemantria.egg-info/AGENTS.md | gematria | ssot, agent_framework |
+<!-- END: AUTO-GENERATED AGENTS TABLE -->
 
 ## Directory Purpose
 
@@ -645,6 +667,17 @@ Runtime hints are collected and wrapped in structured envelopes for persistence 
 - **Validation**: `rules_guard.py` validates hints envelope structure in exports (non-fatal, encouraged for PRs)
 - **Purpose**: Enables determinism and auditability without breaking resumable pipeline design
 
+### DMS Hint System (Rule-072)
+The DMS Hint System centralizes "gotchas" and critical warnings in `control.hint_registry`.
+- **Registry**: `scripts/governance/seed_hint_registry.py` is the SSOT for all hints.
+- **Docs**: `pmagent hints export` generates `docs/hints/*.md`.
+- **Runtime**: Code emits `LOUD HINT [logical_name]` referencing the registry ID.
+- **Workflow**:
+  1. Identify a gotcha.
+  2. Add to `seed_hint_registry.py`.
+  3. Run `make housekeeping` (seeds DB + exports docs).
+  4. Update code to emit the hint ID.
+
 ## Integrated Pipeline Architecture
 
 The Gemantria system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.
@@ -842,6 +875,7 @@ python scripts/eval/jsonschema_validate.py exports/graph_latest.json schemas/gra
 | 069 | # Rule 069 — Always Use DMS First (Planning Queries) |
 | 070 | # --- |
 | 071 | # Rule 071 — Portable JSON is not Plan SSOT |
+| 072 | # --- |
 <!-- RULES_INVENTORY_END -->
 
 ---

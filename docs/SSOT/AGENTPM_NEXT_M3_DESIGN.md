@@ -164,14 +164,14 @@ M1 provides point-in-time worklists; M2 provides point-in-time fixes. But PMs ne
 
 - **Definition**: Count of docs in registry but not found on filesystem
 - **Scope**: Overall and by subsystem
-- **Use**: "3 missing docs: 2 in docs/, 1 in agentpm/"
+- **Use**: "3 missing docs: 2 in docs/, 1 in pmagent/"
 - **Source**: KB registry validation against filesystem
 
 #### `kb_stale_count_by_subsystem` (Stale docs grouped by subsystem)
 
 - **Definition**: Count of docs where `last_refreshed_at` > `min_refresh_interval_days` ago
-- **Scope**: By subsystem (docs, agentpm, webui, root, rules)
-- **Use**: "Stale docs: docs(5), agentpm(3), webui(1)"
+- **Scope**: By subsystem (docs, pmagent, webui, root, rules)
+- **Use**: "Stale docs: docs(5), pmagent(3), webui(1)"
 - **Source**: KB registry freshness analysis
 
 #### `kb_fixes_applied_last_7d` (Count of fixes applied in last 7 days)

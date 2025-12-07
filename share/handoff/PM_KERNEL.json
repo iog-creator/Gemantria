@@ -1,0 +1,33 @@
+{
+  "current_phase": "24",
+  "branch": "feat/phase27-kernel-consumers",
+  "last_completed_phase": "23",
+  "next_actions": [
+    "Run kernel check (make kernel.check)",
+    "Verify guard status (make reality.green)",
+    "Review Phase 24 objectives"
+  ],
+  "ground_truth_files": [
+    "docs/SSOT/PHASE24_INDEX.md",
+    "docs/SSOT/PHASE25_INDEX.md",
+    "share/PHASE18_INDEX.md",
+    "share/PHASE20_INDEX.md",
+    "share/PHASE21_INDEX.md",
+    "share/PHASE22_INDEX.md",
+    "share/PHASE23_INDEX.md",
+    "share/PM_BOOTSTRAP_STATE.json",
+    "share/SSOT_SURFACE_V17.json",
+    "share/orchestrator/STATE.json",
+    "share/orchestrator_assistant/STATE.json"
+  ],
+  "constraints": {
+    "backup_required_before_destructive_ops": true,
+    "enforced_checks": [
+      "reality.green",
+      "stress.smoke",
+      "phase.done.check"
+    ]
+  },
+  "generated_at_utc": "2025-12-07T03:30:11.962693+00:00",
+  "generator_version": "pmagent.handoff.kernel.v1"
+}

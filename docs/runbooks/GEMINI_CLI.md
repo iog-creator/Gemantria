@@ -88,7 +88,7 @@ When Gemini CLI is acting as a PM / planning agent for this repo, it must follow
      - `docs/SSOT/PM_CONTRACT.md`
      - `docs/SSOT/MASTER_PLAN.md`
      - `NEXT_STEPS.md`
-     - Any relevant directory `AGENTS.md` files (for example, `agentpm/plan/AGENTS.md`, `agentpm/reality/AGENTS.md`)
+     - Any relevant directory `AGENTS.md` files (for example, `pmagent/plan/AGENTS.md`, `pmagent/reality/AGENTS.md`)
    - If Gemini cannot see `.cursor/rules` or these SSOT docs, it must **stop and report an environment error**, not continue with “best effort”.
 
 2. **Planning scope (non-theology, file-first)**

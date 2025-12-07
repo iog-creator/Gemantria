@@ -13,7 +13,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from agentpm.biblescholar.semantic_search_flow import semantic_search
+from pmagent.biblescholar.semantic_search_flow import semantic_search
 
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 
