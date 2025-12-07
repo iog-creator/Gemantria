@@ -54,3 +54,26 @@ Per PM OPS block, Batch 2 will:
 1. Wrap pmagent commands into OA-accessible "tools"
 2. Finalize JSON schemas for Phase 28 DSPy programs
 3. Ensure OA can act as a "router" for future reasoning programs
+
+---
+
+## Hygiene Sub-Batch — DMS Alignment Fix
+
+### Status
+- **Commit**: `2f2f95ea` (chore(27.E): DMS alignment for share/oa/ namespace)
+- **reality.green**: ✅ 18/18 passing
+
+### Problem
+Phase 27.E Batch 1 created `share/oa/CONTEXT.json`, but `guard_dms_share_alignment.py` didn't recognize `share/oa/` as a legitimate namespace, causing the DMS Alignment check to fail.
+
+### Fix
+1. Added `"oa"` to `ALLOWED_SUBDIRS` in `scripts/guards/guard_dms_share_alignment.py`
+2. Updated `docs/SSOT/SHARE_FOLDER_ANALYSIS.md` to document `share/oa/` layout
+
+### Verification
+
+| Check | Before | After |
+|-------|--------|-------|
+| DMS Alignment | ❌ `extra_in_share: ["oa/"]` | ✅ OK |
+| Backup System | ❌ No recent backup | ✅ Passing |
+| reality.green | 16/18 | **18/18** |
