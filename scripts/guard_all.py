@@ -33,7 +33,10 @@ def run_guard_script(script_path: str, description: str) -> Dict[str, Any]:
         Dict with success status and details
     """
     try:
+        from scripts.util.filter_stderr import filter_cursor_noise
+
         result = subprocess.run([sys.executable, script_path], capture_output=True, text=True, timeout=30)
+        result.stderr = filter_cursor_noise(result.stderr)
 
         success = result.returncode == 0
         output = result.stdout.strip()
