@@ -153,6 +153,43 @@ app.add_typer(hints_app, name="hints")
 dms_app = typer.Typer(help="DMS governance operations")
 app.add_typer(dms_app, name="dms")
 
+# OA (Orchestrator Assistant) commands - Phase 27.B/C
+oa_app = typer.Typer(help="Orchestrator Assistant kernel consumer operations")
+app.add_typer(oa_app, name="oa")
+
+
+@oa_app.command("snapshot", help="Build kernel-aligned state snapshot for OA/Console")
+def oa_snapshot(
+    json_only: bool = typer.Option(False, "--json-only", help="Print only JSON path"),
+) -> None:
+    """
+    Build a kernel-aligned state snapshot for the Orchestrator Assistant.
+
+    Reads PM_BOOTSTRAP_STATE, SSOT_SURFACE_V17, REALITY_GREEN_SUMMARY,
+    and writes share/orchestrator_assistant/STATE.json.
+
+    This command is the canonical entrypoint for OA state generation.
+    """
+    try:
+        from pmagent.oa.state import write_oa_state, build_oa_state
+
+        output_path = write_oa_state()
+        state = build_oa_state()
+
+        if json_only:
+            print(str(output_path))
+        else:
+            print(json.dumps(state, indent=2))
+            print(f"\n✓ OA state written to: {output_path}", file=sys.stderr)
+
+        sys.exit(0)
+    except Exception as e:
+        error_msg = {"error": str(e), "ok": False}
+        print(json.dumps(error_msg, indent=2))
+        if not json_only:
+            print(f"ERROR: Failed to write OA state: {e}", file=sys.stderr)
+        sys.exit(1)
+
 
 def _print_health_output(health_json: dict, summary_func=None) -> None:
     """Print health JSON to stdout and optional summary to stderr."""
