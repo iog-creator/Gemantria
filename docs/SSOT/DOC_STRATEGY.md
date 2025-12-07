@@ -1,7 +1,16 @@
 # DOC_STRATEGY.md — Gemantria Documentation & DMS Hierarchy
 
 This document defines how Gemantria organizes, governs, and cleans its documentation surfaces.
-It is the SSOT for how AGENTS.md, the DMS, and the filesystem interact.
+It is the SSOT for how AGENTS.md, the pmagent control-plane DMS, and the filesystem interact.
+
+## Architecture Clarification
+
+pmagent is the governance and control-plane engine for the Gemantria project.
+All documentation lifecycle, classification, metadata, and structural enforcement
+are handled by pmagent's control-plane DMS (`control.doc_registry`).
+Gemantria is the domain project being governed, not the system performing
+the governance. AGENTS.md surfaces define the agent-facing worldview of both
+Gemantria and pmagent; the DMS records that worldview in structured form.
 
 ## 1. Layered Truth Model
 
@@ -13,7 +22,7 @@ Gemantria uses a layered model for truth:
 
 3. **AGENTS surfaces (`AGENTS.md`)** — human/AI-readable maps of agents, tools, and key doc surfaces.
 
-4. **DMS registry (`control.doc_registry`)** — structured inventory and lifecycle metadata:
+4. **pmagent control-plane DMS (`control.doc_registry`)** — structured inventory and lifecycle metadata:
 
    - `repo_path`, `share_path`
 
@@ -59,9 +68,9 @@ Gemantria uses a layered model for truth:
 
 Any plan or script that proposes such a change is considered a **bug**, not a policy.
 
-## 3. DMS Lifecycle Rules
+## 3. pmagent control-plane DMS Lifecycle Rules
 
-- The DMS is the SSOT for:
+- The pmagent control-plane DMS is the SSOT for:
 
   - doc existence and paths,
 
@@ -71,7 +80,7 @@ Any plan or script that proposes such a change is considered a **bug**, not a po
 
   - tags and ownership for analytics and automation.
 
-- Housekeeping ingestion (`scripts/governance/ingest_docs_to_db.py`) operates in **Hybrid mode**:
+- Housekeeping ingestion (`scripts/governance/ingest_docs_to_db.py`) populates the pmagent control-plane DMS and operates in **Hybrid mode**:
 
   - It **fills in** `importance`, `tags`, and `owner_component` for new or unknown docs.
 
@@ -91,13 +100,13 @@ Any plan or script that proposes such a change is considered a **bug**, not a po
 
 ## 4. Archive & Cleanup Policy
 
-- Archival is driven by the DMS:
+- Archival is driven by the pmagent control-plane DMS:
 
   - Candidates: docs with `importance = 'low'` and `enabled = true`.
 
   - Archive moves: into `archive/docs_legacy/` (or appropriate archive namespace).
 
-  - After move: `enabled = false` and `repo_path` updated in `control.doc_registry`.
+  - After move: `enabled = false` and `repo_path` updated in `control.doc_registry` (pmagent control-plane DMS).
 
 - **AGENTS.md is explicitly excluded** from archival:
 
@@ -109,9 +118,9 @@ Any plan or script that proposes such a change is considered a **bug**, not a po
 
 - `scripts/guards/guard_reality_green.py` is responsible for checking:
 
-  - AGENTS–DMS alignment,
+  - AGENTS–pmagent control-plane DMS alignment,
 
-  - DMS lifecycle invariants,
+  - pmagent control-plane DMS lifecycle invariants,
 
   - that there are no `importance = 'low' AND enabled = true` leftovers after cleanup.
 
@@ -119,6 +128,6 @@ Any plan or script that proposes such a change is considered a **bug**, not a po
 
   - any AGENTS row is misclassified (importance too low, disabled, archived),
 
-  - DMS and filesystem disagree on AGENTS presence.
+  - pmagent control-plane DMS and filesystem disagree on AGENTS presence.
 
 This strategy is the contract OA, PM, and Cursor must follow when evolving the documentation system.

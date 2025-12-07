@@ -339,7 +339,7 @@ def check_repo_alignment() -> CheckResult:
 
 
 def check_dms_alignment() -> CheckResult:
-    """Check DMS-Share alignment (Phase 24.B)."""
+    """Check pmagent control-plane DMS-Share alignment (Phase 24.B)."""
     script = ROOT / "scripts" / "guards" / "guard_dms_share_alignment.py"
     if not script.exists():  # Should not happen if correctly deployed
         return CheckResult("DMS Alignment", False, "Guard script missing", {})
@@ -348,7 +348,9 @@ def check_dms_alignment() -> CheckResult:
     exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
 
     if exit_code == 0:
-        return CheckResult("DMS Alignment", True, "DMS and Share are aligned", {"output": stdout.strip()})
+        return CheckResult(
+            "DMS Alignment", True, "pmagent control-plane DMS and Share are aligned", {"output": stdout.strip()}
+        )
     else:
         # Try to parse JSON output for better error message
         try:
@@ -358,20 +360,22 @@ def check_dms_alignment() -> CheckResult:
             if data.get("missing_in_share"):
                 details.append(f"Missing in share: {len(data['missing_in_share'])}")
             if data.get("missing_in_dms"):
-                details.append(f"Missing in DMS: {len(data['missing_in_dms'])}")
+                details.append(f"Missing in pmagent control-plane DMS: {len(data['missing_in_dms'])}")
             if data.get("extra_in_share"):
                 details.append(f"Extra in share: {len(data['extra_in_share'])}")
 
-            msg = f"DMS Alignment BROKEN: {', '.join(details)}"
+            msg = f"pmagent control-plane DMS Alignment BROKEN: {', '.join(details)}"
             return CheckResult("DMS Alignment", False, msg, data)
         except:
             pass
 
-        return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
+        return CheckResult(
+            "DMS Alignment", False, f"pmagent control-plane DMS Alignment failed: {stderr.strip()}", {"output": stdout}
+        )
 
 
 def check_dms_metadata() -> CheckResult:
-    """Check DMS metadata health (Phase 27.J)."""
+    """Check pmagent control-plane DMS metadata health (Phase 27.J)."""
     try:
         from scripts.config.env import get_rw_dsn
         import psycopg
@@ -397,13 +401,16 @@ def check_dms_metadata() -> CheckResult:
 
             if low_enabled == 0:
                 return CheckResult(
-                    "DMS Metadata", True, f"DMS metadata sane (low_enabled={low_enabled})", {"distribution": dist}
+                    "DMS Metadata",
+                    True,
+                    f"pmagent control-plane DMS metadata sane (low_enabled={low_enabled})",
+                    {"distribution": dist},
                 )
             else:
                 return CheckResult(
                     "DMS Metadata",
                     False,
-                    f"Found {low_enabled} enabled low-importance docs (cleanup required)",
+                    f"Found {low_enabled} enabled low-importance docs in pmagent control-plane DMS (cleanup required)",
                     {"distribution": dist, "low_enabled": low_enabled},
                 )
     except Exception as e:
@@ -412,13 +419,16 @@ def check_dms_metadata() -> CheckResult:
 
 def check_agents_dms_contract() -> CheckResult:
     """
-    Verify that AGENTS.md rows in control.doc_registry obey the AGENTS<->DMS contract.
+    Verify that AGENTS.md rows in pmagent control-plane DMS (control.doc_registry) obey the AGENTS<->DMS contract.
 
     Invariants:
     - Root AGENTS.md: importance='critical', enabled=true, tags include 'ssot' and 'agent_framework_index'.
     - Any AGENTS.md: importance in ('critical', 'high'), enabled=true, repo_path not under archive/,
       tags include 'ssot' and 'agent_framework' at minimum.
     - No AGENTS rows are archived (enabled=false).
+
+    Note: pmagent is the governance engine; Gemantria is the governed project.
+    The pmagent control-plane DMS records and enforces the semantics defined by AGENTS.md.
     """
     try:
         from scripts.config.env import get_rw_dsn
@@ -441,7 +451,7 @@ def check_agents_dms_contract() -> CheckResult:
             return CheckResult(
                 "AGENTS–DMS Contract",
                 False,
-                "No AGENTS.md rows found in control.doc_registry",
+                "No AGENTS.md rows found in pmagent control-plane DMS (control.doc_registry)",
                 {"rows": []},
             )
 
@@ -479,7 +489,7 @@ def check_agents_dms_contract() -> CheckResult:
         return CheckResult(
             "AGENTS–DMS Contract",
             True,
-            "All AGENTS.md rows satisfy DMS contract",
+            "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
             {"rows": len(rows)},
         )
     except Exception as e:
@@ -653,9 +663,9 @@ def main() -> int:
         check_ketiv_primary_policy(),  # Phase 2: Ketiv-primary policy enforcement (ADR-002)
         check_hints_required(),  # ADR-059: DMS hint registry accessibility check
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
-        check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
-        check_dms_metadata(),  # Phase 27.J: Metadata health
-        check_agents_dms_contract(),  # Phase 27.L: AGENTS–DMS contract enforcement
+        check_dms_alignment(),  # Phase 24.B: pmagent control-plane DMS <-> Share alignment
+        check_dms_metadata(),  # Phase 27.J: pmagent control-plane DMS metadata health
+        check_agents_dms_contract(),  # Phase 27.L: AGENTS–pmagent control-plane DMS contract enforcement
         check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
         check_root_surface(),  # Phase 27.G: Repository root surface policy
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit

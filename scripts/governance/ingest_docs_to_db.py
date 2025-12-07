@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
 """
-Ingest documentation metadata into the control-plane doc registry.
+Ingest documentation metadata into the pmagent control-plane DMS.
 
 Purpose
 -------
 Populate the following tables from canonical docs in the repo:
 
-- control.doc_registry
+- control.doc_registry (pmagent control-plane DMS)
 - control.doc_version
 
 The goals are:
 
-- Make Postgres the SSOT for doc metadata (paths, roles, hashes).
+- Populate the pmagent control-plane DMS as the structured SSOT for doc metadata (paths, roles, hashes).
 - Track versions by content hash and optional git commit.
 - Clearly distinguish SSOT docs (repo) from derived views (e.g. share/).
 - Populate governance metadata (importance, tags, owner_component).
@@ -21,6 +21,9 @@ This script does NOT:
 
 - Modify share/ contents.
 - Store full file contents in the database.
+
+Note: pmagent is the governance engine; Gemantria is the governed project.
+The pmagent control-plane DMS records and enforces the semantics defined by AGENTS.md.
 """
 
 from __future__ import annotations
@@ -267,12 +270,12 @@ def load_share_manifest_mapping() -> dict[str, str]:
 
 def ingest_docs(dry_run: bool = False) -> int:
     """
-    Ingest documentation metadata into control.doc_registry / control.doc_version.
+    Ingest documentation metadata into pmagent control-plane DMS (control.doc_registry / control.doc_version).
 
     Steps:
     1. Build the doc target list (canonical + discovered).
     2. Compute content hashes and sizes for existing files.
-    3. Upsert registry rows and insert version rows.
+    3. Upsert registry rows and insert version rows in the pmagent control-plane DMS.
     """
     targets: List[DocTarget] = list(CANONICAL_DOCS)
     # Phase-8: treat all AGENTS*.md docs as SSOT for the agent framework.
@@ -457,7 +460,7 @@ def ingest_docs(dry_run: bool = False) -> int:
 
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Ingest documentation metadata into the control-plane doc registry.",
+        description="Ingest documentation metadata into the pmagent control-plane DMS.",
     )
     parser.add_argument(
         "--dry-run",

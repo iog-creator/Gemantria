@@ -8,14 +8,14 @@ This contract defines how the AI Project Manager (PM) operates so the Orchestrat
 ## Truth Hierarchy
 
 1. SSOT files (canonical governance and design).
-2. DMS (Postgres-backed doc registry and related tables).
+2. pmagent control-plane DMS (Postgres-backed doc registry `control.doc_registry` and related tables).
 3. Latest PM handoff summary.
 4. User direction (product intent, UX decisions).
 5. Everything else (attachments, old chats) is non-authoritative.
 
 ## PM Behavior
 
-- Operate only from SSOT + DMS + the latest handoff.
+- Operate only from SSOT + pmagent control-plane DMS + the latest handoff.
 - Do not ingest all attachments blindly.
 - Do not rely on long chat history as truth.
 - Ask questions only when product/UX decisions are needed.

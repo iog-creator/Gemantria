@@ -1,0 +1,25 @@
+# SSOT_SURFACE_V17
+
+**Generated**: 2025-12-07T19:20:06.069119+00:00
+**Source**: `SSOT_SURFACE_V17.json`
+
+---
+
+- **version**: `17`
+- **generated_by**: `generate_ssot_surface.py`
+- **generated_at**: `2025-12-06T04:40:03.438711+00:00`
+- **description**: `High-level SSOT surface snapshot for Gemantria.`
+- **db**:
+  - **status**: `online`
+  - **last_checked_at**: `2025-12-06T04:40:03.438711+00:00`
+- **dms**:
+  - **doc_registry_count**: `0`
+  - **hint_registry_status**: `active`
+- **phases**:
+  - **last_completed**: `23`
+  - **current**: `24`
+  - **notes**: `Phases 18-23 rebuilt from recovery doc. Phase 24 in progress.`
+- **dms_share_alignment**: `OK`
+- **dms_share_mismatch_count**: `0`
+- **current_phase**: `24`
+- **last_completed_phase**: `23`
