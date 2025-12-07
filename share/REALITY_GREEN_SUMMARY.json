@@ -1,0 +1,214 @@
+{
+  "reality_green": true,
+  "checks": [
+    {
+      "name": "DB Health",
+      "passed": true,
+      "message": "DB is reachable and healthy",
+      "details": {
+        "output": "OK: DB reachable and base tables present."
+      }
+    },
+    {
+      "name": "Control-Plane Health",
+      "passed": true,
+      "message": "Control plane is healthy",
+      "details": {
+        "output": "HINT: MV refresh failed: field name must not be null\nCONTEXT:  SQL statement \"REFRESH MATERIALIZED VIEW control.mv_compliance_30d\"\nPL/pgSQL function control.refresh_compliance(text) line 6 at SQL statement"
+      }
+    },
+    {
+      "name": "AGENTS.md Sync",
+      "passed": true,
+      "message": "All AGENTS.md files are in sync",
+      "details": {
+        "output": ""
+      }
+    },
+    {
+      "name": "Share Sync & Exports",
+      "passed": true,
+      "message": "All required exports present",
+      "details": {}
+    },
+    {
+      "name": "Ledger Verification",
+      "passed": true,
+      "message": "All 9 tracked artifacts are current",
+      "details": {
+        "summary": {
+          "ok": true,
+          "total": 9,
+          "current": 9,
+          "stale": [],
+          "missing": [],
+          "results": [
+            {
+              "name": "AGENTS.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "f6fee1d9b4bac96c...",
+              "current_hash": "f6fee1d9b4bac96c..."
+            },
+            {
+              "name": "MASTER_PLAN.md",
+              "source_of_truth": "docs/SSOT",
+              "status": "current",
+              "ledger_hash": "7267134e5e14bb7d...",
+              "current_hash": "7267134e5e14bb7d..."
+            },
+            {
+              "name": "DB_HEALTH.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "7b351351aaaf7321...",
+              "current_hash": "7b351351aaaf7321..."
+            },
+            {
+              "name": "PM_SNAPSHOT_CURRENT.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "6c51be1d31e4250e...",
+              "current_hash": "6c51be1d31e4250e..."
+            },
+            {
+              "name": "RULES_INDEX.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "df01a6ca8e43a79b...",
+              "current_hash": "df01a6ca8e43a79b..."
+            },
+            {
+              "name": "system_health.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "9c634ea5601204f4...",
+              "current_hash": "9c634ea5601204f4..."
+            },
+            {
+              "name": "lm_indicator.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "0c8d7f9de6b933f5...",
+              "current_hash": "0c8d7f9de6b933f5..."
+            },
+            {
+              "name": "canonical.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "c7ca48f2888fb60a...",
+              "current_hash": "c7ca48f2888fb60a..."
+            },
+            {
+              "name": "summary.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "fd4f7625bcefe9fb...",
+              "current_hash": "fd4f7625bcefe9fb..."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ketiv-Primary Policy",
+      "passed": true,
+      "message": "Ketiv-primary policy enforced (gematria uses written form per ADR-002)",
+      "details": {
+        "output": "\u2705 Ketiv-primary guard: PASS (4399/4399 nodes)\n"
+      }
+    },
+    {
+      "name": "DMS Hint Registry",
+      "passed": true,
+      "message": "DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)",
+      "details": {
+        "total_hints": 4,
+        "flows_with_hints": 2
+      }
+    },
+    {
+      "name": "Repo Alignment (Layer 4)",
+      "passed": true,
+      "message": "Plan vs implementation drift detected (HINT mode: warnings only)",
+      "details": {
+        "output": "Layer 4 Alignment Guard: FAIL\n  Expected paths: 7\n  Actual paths: 4\n  Missing: 0\n  Integration islands: 2\n\\nViolations detected:\n  - Found 2 files in scripts/code_ingest/ (plan expected scripts/governance/)\n  - Update LAYER4_CODE_INGESTION_PLAN.md or migrate code to planned locations\n\\nEvidence: evidence/repo/guard_layer4_alignment.json\n\\n\u26a0\ufe0f  HINT MODE: Warnings only (exit 0)\n",
+        "note": "Run with --strict to enforce"
+      }
+    },
+    {
+      "name": "DMS Alignment",
+      "passed": true,
+      "message": "pmagent control-plane DMS and Share are aligned",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+      }
+    },
+    {
+      "name": "DMS Metadata",
+      "passed": true,
+      "message": "pmagent control-plane DMS metadata sane (low_enabled=0)",
+      "details": {
+        "distribution": {
+          "critical": 133,
+          "high": 177,
+          "medium": 56,
+          "unknown": 783
+        }
+      }
+    },
+    {
+      "name": "AGENTS\u2013DMS Contract",
+      "passed": true,
+      "message": "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
+      "details": {
+        "rows": 115
+      }
+    },
+    {
+      "name": "Bootstrap Consistency",
+      "passed": true,
+      "message": "Bootstrap state matches SSOT",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"bootstrap_current_phase\": \"24\",\n  \"ssot_current_phase\": \"24\",\n  \"mismatches\": []\n}"
+      }
+    },
+    {
+      "name": "Root Surface",
+      "passed": true,
+      "message": "No unexpected files in repository root",
+      "details": {
+        "output": "[root-surface] OK: no unexpected files in repo root"
+      }
+    },
+    {
+      "name": "Share Sync Policy",
+      "passed": true,
+      "message": "No unknown or unsafe share/ docs in managed namespaces",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
+      }
+    },
+    {
+      "name": "Backup System",
+      "passed": true,
+      "message": "Recent backup exists and rotation logic is sane",
+      "details": {}
+    },
+    {
+      "name": "WebUI Shell Sanity",
+      "passed": true,
+      "message": "WebUI shell files present",
+      "details": {}
+    },
+    {
+      "name": "Handoff Kernel",
+      "passed": true,
+      "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"mismatches\": []\n}"
+      }
+    }
+  ],
+  "timestamp": "2025-12-07T20:00:37Z"
+}

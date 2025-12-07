@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "current_phase": "24",
+  "last_completed_phase": "23",
+  "branch": "feat/phase27l-agents-dms-contract",
+  "health": {
+    "reality_green": true,
+    "checks": {
+      "DMS Alignment": true,
+      "Bootstrap Consistency": true,
+      "Share Sync Policy": true,
+      "Backup System": true
+    }
+  },
+  "required_surfaces": [
+    "share/PM_BOOTSTRAP_STATE.json",
+    "share/SSOT_SURFACE_V17.json"
+  ],
+  "notes": {
+    "generated_at": "2025-12-07T20:00:37Z",
+    "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
+    "dms_share_alignment": "BROKEN",
+    "dms_share_mismatch_count": 24
+  }
+}
