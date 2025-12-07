@@ -53,7 +53,7 @@ When DB is OFF:
 When DB is ON:
 
 - Apply pending migrations.
-- Populate the pmagent control-plane DMS (e.g., control.kb_document) via inventory commands.
+- Populate the pmagent control-plane DMS (primarily `control.doc_registry` for logical document tracking; `control.kb_document` for file inventory and duplicate detection) via inventory commands.
 - Generate duplicates and analysis reports.
 - Treat pmagent control-plane DMS as the truth for documentation state (canonical vs archive candidates).
 
