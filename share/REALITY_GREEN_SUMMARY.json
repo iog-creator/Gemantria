@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "d9a9cd6f227511d2...",
+              "current_hash": "d9a9cd6f227511d2..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -120,10 +120,11 @@
     },
     {
       "name": "DMS Hint Registry",
-      "passed": false,
-      "message": "Failed to import hint registry: No module named 'typer'",
+      "passed": true,
+      "message": "DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)",
       "details": {
-        "error": "No module named 'typer'"
+        "total_hints": 4,
+        "flows_with_hints": 2
       }
     },
     {
@@ -137,10 +138,10 @@
     },
     {
       "name": "DMS Alignment",
-      "passed": false,
-      "message": "DMS Alignment failed: Traceback (most recent call last):\n  File \"/home/mccoy/Projects/Gemantria.v2/scripts/ops/preflight_db_check.py\", line 28, in <module>\n    from scripts.guards.guard_db_health import check_db_health\n  File \"/home/mccoy/Projects/Gemantria.v2/scripts/guards/guard_db_health.py\", line 15, in <module>\n    from sqlalchemy import text\nModuleNotFoundError: No module named 'sqlalchemy'",
+      "passed": true,
+      "message": "DMS and Share are aligned",
       "details": {
-        "output": ""
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
       }
     },
     {
@@ -153,22 +154,18 @@
     },
     {
       "name": "Root Surface",
-      "passed": false,
-      "message": "Found 2 unexpected file(s) in root: pr-27i-schemas.md, pr-27j-pm-state-package-contracts.md",
+      "passed": true,
+      "message": "No unexpected files in repository root",
       "details": {
-        "unexpected": [
-          "pr-27i-schemas.md",
-          "pr-27j-pm-state-package-contracts.md"
-        ],
-        "output": ""
+        "output": "[root-surface] OK: no unexpected files in repo root"
       }
     },
     {
       "name": "Share Sync Policy",
-      "passed": false,
-      "message": "Check failed: Error: DB not available.",
+      "passed": true,
+      "message": "No unknown or unsafe share/ docs in managed namespaces",
       "details": {
-        "output": ""
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
       }
     },
     {
@@ -194,5 +191,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T16:29:27Z"
+  "timestamp": "2025-12-07T17:04:05Z"
 }
