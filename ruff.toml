@@ -7,6 +7,12 @@ target-version = "py311"
 [format]
 line-ending = "lf"
 
+# Exclude legacy/archived directories from linting
+exclude = [
+    "archive/",
+    "oa/",
+]
+
 [lint]
 select = ["E","F","B","UP","RUF"]
 # Pragmatic relaxations to avoid mass churn in legacy code:
@@ -33,6 +39,9 @@ ignore = [
 
 # Eval scripts often carry temp vars/placeholders during smoke runs
 "scripts/eval/**/*.py" = ["F841","RUF005","E722","E501","E401","I001","F401","RUF059"]
+
+# Ops scripts with Hebrew gematria mappings (legitimate non-ASCII)
+"scripts/ops/ingest_bible_nouns.py" = ["RUF001"]
 
 # Specific files with unique issues
 "**/build_release_notes.py" = ["F821","RUF001","RUF003"]

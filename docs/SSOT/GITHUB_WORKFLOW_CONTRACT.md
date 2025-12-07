@@ -73,7 +73,17 @@ Agents MUST include this evidence in their OPS responses when planning feature w
 
 ---
 
-## 4. Phase Mixing is Forbidden
+## 4. CI Quality Gates and Ruff Scope
+
+The ruff CI job is scoped to **governed paths** (`pmagent/`, `src/`, `docs/SSOT/`, `scripts/guards/`, `tests/`) as defined in `ruff.toml`. Ruff is zero-tolerance on these paths; all errors must be fixed before merging.
+
+**Legacy directories** (`archive/`, `oa/`, and other explicitly excluded paths in `ruff.toml`) are excluded from linting to avoid blocking new PRs. These directories are treated as technical debt and must be cleaned up in dedicated PRs, not as part of feature work.
+
+**Docs-only PRs** (PRs that only modify documentation/markdown files, such as PM contract updates) must not be blocked by lint failures in excluded legacy code. The ruff CI job respects `ruff.toml` exclusions and only checks governed paths.
+
+---
+
+## 5. Phase Mixing is Forbidden
 
 On any branch whose purpose is documented as "Phase 26":
 
@@ -92,7 +102,7 @@ If Phase 27 code is accidentally wired into Phase 26 behavior, agents MUST:
 
 ---
 
-## 5. Integration Points
+## 6. Integration Points
 
 - **`EXECUTION_CONTRACT.md`**:
   - Section 5 (Kernel-Aware Preflight) MUST reference this contract as the
@@ -108,7 +118,7 @@ If Phase 27 code is accidentally wired into Phase 26 behavior, agents MUST:
 
 ---
 
-## 6. Future Guard: `reality.github`
+## 7. Future Guard: `reality.github`
 
 A future guard `make reality.github` SHOULD:
 

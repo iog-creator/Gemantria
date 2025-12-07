@@ -1,8 +1,8 @@
+"""Guard shim: JSON Schema validation, tiny-menu enforcement, budgets, retries, agent_run writes."""
+
 from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
-
-"""Guard shim: JSON Schema validation, tiny-menu enforcement, budgets, retries, agent_run writes."""
 
 import json
 import pathlib
