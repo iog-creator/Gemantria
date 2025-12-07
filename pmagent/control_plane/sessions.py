@@ -1,12 +1,13 @@
 """Capability session management with PoR checklist."""
 
-from scripts.config.env import get_rw_dsn
 # OPS meta: Rules 050/051/052 AlwaysApply | SSOT: ruff | Housekeeping: `make housekeeping`
 # Timestamp contract: RFC3339 fast-lane (generated_at RFC3339; metadata.source="fallback_fast_lane")
 
 import json
 import pathlib
 from typing import Any, Dict, List
+
+from scripts.config.env import get_rw_dsn
 
 try:
     import psycopg
