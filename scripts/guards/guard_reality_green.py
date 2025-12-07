@@ -765,23 +765,31 @@ def main() -> int:
     all_passed = all(c.passed for c in checks)
     results_summary = []
 
-    # Remediation hints for common failures
-    REMEDIATION = {
-        "DB Health": "make book.smoke",
-        "Control-Plane Health": "python scripts/guards/guard_control_plane_health.py",
-        "AGENTS.md Sync": "touch scripts/AGENTS.md  # if code changes are intentional",
-        "Share Sync & Exports": "make share.sync",
-        "Ledger Verification": "make state.sync",
-        "DMS Alignment": "python scripts/guards/guard_dms_share_alignment.py --mode HINT  # see details",
-        "DMS Metadata": "python scripts/governance/dms_doc_cleanup.py --dry-run",
-        "AGENTS–DMS Contract": "make housekeeping  # sync AGENTS.md with DMS",
-        "Bootstrap Consistency": "python scripts/pm/generate_pm_bootstrap_state.py",
-        "Share Sync Policy": "python scripts/guards/guard_share_sync_policy.py --mode HINT",
-        "Backup System": "make backup.surfaces",
-        "OA State": "python pmagent/oa/state.py  # refresh OA snapshot",
-        "Handoff Kernel": "python scripts/pm/generate_handoff_kernel.py",
-        "Root Surface": "python scripts/guards/guard_root_surface_policy.py --mode HINT",
-    }
+    # Load remediation hints from DMS hint registry (scope: reality.green)
+    # Falls back gracefully if hints don't exist yet
+    def get_remediation_hint(check_name: str) -> str | None:
+        """Query DMS hint registry for remediation hint for a given check."""
+        try:
+            from pmagent.hints.registry import load_hints_for_flow
+
+            # Normalize check name for flow selector (e.g., "DB Health" -> "db_health")
+            flow_name = check_name.lower().replace(" ", "_").replace("–", "_").replace("&", "and")
+            hints = load_hints_for_flow(
+                scope="reality.green",
+                applies_to={"flow": flow_name, "category": "remediation"},
+                mode="HINT",
+            )
+            # Return first required hint's payload description if available
+            required = hints.get("required", [])
+            if required:
+                payload = required[0].get("payload", {})
+                if isinstance(payload, dict):
+                    return payload.get("command") or payload.get("description")
+                return str(payload)
+            return None
+        except Exception:
+            # Graceful degradation - no hint available
+            return None
 
     # Separate passed and failed checks
     passed_checks = [c for c in checks if c.passed]
@@ -819,9 +827,10 @@ def main() -> int:
                     for m in check.details["mismatches"][:3]:
                         print(f"        • {m}")
 
-            # Remediation hint
-            if check.name in REMEDIATION:
-                print(f"     💡 Fix: {REMEDIATION[check.name]}")
+            # Remediation hint from DMS
+            hint = get_remediation_hint(check.name)
+            if hint:
+                print(f"     💡 Fix: {hint}")
             print()
 
         print("-" * 60)
