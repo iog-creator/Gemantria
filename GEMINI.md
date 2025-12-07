@@ -62,6 +62,28 @@ This document provides a map of the Gemantria Agent Framework, synthesized from 
 - **Orchestrator Output**:
     - Filter `dump_bash_state: command not found` noise from subprocess outputs.
 
+## Artifact & Walkthrough Protocol (Rule 071)
+
+**MANDATORY**: All phase completion walkthroughs and implementation evidence MUST be saved to the codebase, not just to the Gemini artifact directory.
+
+### Walkthrough Location
+- **Path**: `docs/SSOT/PHASE{XX}_IMPLEMENTATION_EVIDENCE.md`
+- **Example**: `docs/SSOT/PHASE27BC_IMPLEMENTATION_EVIDENCE.md`
+- **Pattern**: Follow existing phase docs in `docs/SSOT/PHASE*`
+
+### Required Content
+1. **Status & Branch**: Current state and git branch
+2. **Commits**: Table of relevant commits with descriptions
+3. **Changes Made**: New files, modified files, organized by component
+4. **Health Evidence**: `reality.green` output, guard results
+5. **Verification Commands**: How to reproduce/verify the work
+
+### Workflow
+1. Create walkthrough in artifact directory during work
+2. **ALWAYS** copy final walkthrough to `docs/SSOT/PHASE{XX}_IMPLEMENTATION_EVIDENCE.md`
+3. Commit the evidence file to the codebase
+4. This ensures PM and future agents can access the evidence
+
 ## Agent Index (Key Subsystems)
 
 The following `AGENTS.md` files define specific subsystem contracts:
