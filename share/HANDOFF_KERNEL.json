@@ -2,14 +2,14 @@
   "version": 1,
   "current_phase": "24",
   "last_completed_phase": "23",
-  "branch": "feat/phase27h-pm-boot-surface",
+  "branch": "feat/phase27i-directory-namespace-cleanup",
   "health": {
     "reality_green": false,
     "checks": {
       "DMS Alignment": true,
       "Bootstrap Consistency": true,
       "Share Sync Policy": true,
-      "Backup System": false
+      "Backup System": true
     }
   },
   "required_surfaces": [
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T06:10:27Z",
+    "generated_at": "2025-12-07T06:29:34Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0
