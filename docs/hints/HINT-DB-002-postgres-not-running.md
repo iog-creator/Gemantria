@@ -141,7 +141,7 @@ As of Phase 14, there is **one unified database**: `gematria`
 - `bible_db` - Legacy schema (read-only, being phased out)
 
 **Key Tables**:
-- `control.doc_registry` - DMS document registry (SSOT for all docs)
+- `control.doc_registry` - pmagent control-plane DMS document registry (SSOT for all docs)
 - `control.embedding_index` - Vector embeddings for semantic search
 - `control.hint_registry` - Governance hints and rules
 - `public.gematria_calculation` - Gematria values per verse/word

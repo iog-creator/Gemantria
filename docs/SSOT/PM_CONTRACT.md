@@ -142,7 +142,7 @@ If a problem appears (DSN missing, venv mismatch, migrations mismatched, etc.), 
 
 **CRITICAL WORKFLOW CHANGE (Phase 9.1)**
 
-I must query the **Postgres DMS (Document Management System / Control Plane)** BEFORE searching files.
+I must query the **pmagent control-plane DMS (Postgres `control.doc_registry` / Control Plane)** BEFORE searching files.
 
 #### **Required Context Sources (In Order)**
 
@@ -160,10 +160,10 @@ I must query the **Postgres DMS (Document Management System / Control Plane)** B
    - KB status shows doc health per subsystem
    - Plan list shows missing/stale docs requiring attention
 
-**CRITICAL (Rule-069):** Before answering "what's next" questions, **ALWAYS run `pmagent plan kb list` FIRST**. Never manually search MASTER_PLAN.md, NEXT_STEPS.md, task.md, or other docs without first querying the DMS. See `.cursor/rules/069-always-use-dms-first.mdc` for full requirements.
+**CRITICAL (Rule-069):** Before answering "what's next" questions, **ALWAYS run `pmagent plan kb list` FIRST**. Never manually search MASTER_PLAN.md, NEXT_STEPS.md, task.md, or other docs without first querying the pmagent control-plane DMS. See `.cursor/rules/069-always-use-dms-first.mdc` for full requirements.
 
 4. **File Search** (LAST RESORT):
-   - Only use grep_search/find_by_name for content NOT in DMS
+   - Only use grep_search/find_by_name for content NOT in pmagent control-plane DMS
    - Always explain why file search was needed
 
 #### **When Building New Features**
@@ -214,7 +214,7 @@ After implementing any new tool, module, or capability, I MUST:
 
 **User's Vision**: "The idea is that the project management pm and whatever project is being worked on are being developed together so we can fix pain points as we go and design the project manager to be able to build anything not just biblescholar."
 
-This workflow makes that vision real: as projects grow, PM learns automatically through DMS registration.
+This workflow makes that vision real: as projects grow, PM learns automatically through pmagent control-plane DMS registration.
 
 ---
 

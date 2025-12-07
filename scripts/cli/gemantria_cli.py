@@ -94,7 +94,7 @@ def quickstart():
     print("[quickstart] complete ✅")
 
 
-@dms_app.command(name="ingest-share", help="Ingest share/ docs into DMS registry.")
+@dms_app.command(name="ingest-share", help="Ingest share/ docs into pmagent control-plane DMS.")
 def ingest_share(dry_run: bool = typer.Option(False, "--dry-run", help="Dry run only")):
     cmd = "python3 scripts/governance/ingest_share_docs.py"
     if dry_run:

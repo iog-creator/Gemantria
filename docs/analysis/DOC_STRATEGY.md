@@ -10,7 +10,7 @@ All documentation lifecycle, classification, metadata, and structural enforcemen
 are handled by pmagent's control-plane DMS (`control.doc_registry`).
 Gemantria is the domain project being governed, not the system performing
 the governance. AGENTS.md surfaces define the agent-facing worldview of both
-Gemantria and pmagent; the DMS records that worldview in structured form.
+Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.
 
 ## Three-Layer Model
 
@@ -53,7 +53,7 @@ Gemantria and pmagent; the DMS records that worldview in structured form.
 **Relationship to DMS:**
 - Filesystem locations must match `control.doc_registry.repo_path`.
 - Filesystem is an implementation detail that must be kept in sync with the registry.
-- If DMS and filesystem disagree, DMS is correct (filesystem should be updated to match).
+- If pmagent control-plane DMS and filesystem disagree, pmagent control-plane DMS is correct (filesystem should be updated to match).
 
 **Truth Model:** The filesystem is the physical storage layer; it has no independent truth authority.
 
@@ -74,7 +74,7 @@ Gemantria and pmagent; the DMS records that worldview in structured form.
 **pmagent responsibilities:**
 - Populates the control-plane DMS via `scripts/governance/ingest_docs_to_db.py`.
 - Enforces lifecycle rules (archive, cleanup, metadata updates).
-- Validates alignment between AGENTS.md, DMS, and filesystem via guards.
+- Validates alignment between AGENTS.md, pmagent control-plane DMS, and filesystem via guards.
 - Provides structured queries and analytics over documentation metadata.
 
 **Gemantria's role:**

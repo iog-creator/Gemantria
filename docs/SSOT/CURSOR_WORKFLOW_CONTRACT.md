@@ -24,7 +24,7 @@ and maintains alignment with SSOT and the DMS. Cursor is not the architect or Or
 Cursor must obey these layers in this order:
 
 1. SSOT files (docs/SSOT/**, AGENTS.md, RULES_INDEX.md, governance rules).
-2. DMS (Postgres-backed doc registry and related tables) once DB is available.
+2. pmagent control-plane DMS (Postgres-backed doc registry `control.doc_registry` and related tables) once DB is available.
 3. Latest PM handoff summary.
 4. OPS blocks from the PM.
 5. Current repo state (branch, files, PRs).
@@ -53,9 +53,9 @@ When DB is OFF:
 When DB is ON:
 
 - Apply pending migrations.
-- Populate the doc registry (e.g., control.kb_document) via inventory commands.
+- Populate the pmagent control-plane DMS (e.g., control.kb_document) via inventory commands.
 - Generate duplicates and analysis reports.
-- Treat DMS as the truth for documentation state (canonical vs archive candidates).
+- Treat pmagent control-plane DMS as the truth for documentation state (canonical vs archive candidates).
 
 ## Branch and PR Rules
 
