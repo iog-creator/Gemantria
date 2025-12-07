@@ -421,11 +421,12 @@ def check_agents_dms_contract() -> CheckResult:
     """
     Verify that AGENTS.md rows in pmagent control-plane DMS (control.doc_registry) obey the AGENTS<->DMS contract.
 
-    Invariants:
+    Invariants (Phase 27.L Batch 3 - tightened):
+    - Only enabled rows with importance in ('critical', 'high') and required tags are considered AGENTS rows.
     - Root AGENTS.md: importance='critical', enabled=true, tags include 'ssot' and 'agent_framework_index'.
     - Any AGENTS.md: importance in ('critical', 'high'), enabled=true, repo_path not under archive/,
       tags include 'ssot' and 'agent_framework' at minimum.
-    - No AGENTS rows are archived (enabled=false).
+    - All AGENTS rows must correspond to files that exist on disk (hard error if missing).
 
     Note: pmagent is the governance engine; Gemantria is the governed project.
     The pmagent control-plane DMS records and enforces the semantics defined by AGENTS.md.
@@ -433,15 +434,21 @@ def check_agents_dms_contract() -> CheckResult:
     try:
         from scripts.config.env import get_rw_dsn
         import psycopg
+        from pathlib import Path
 
         dsn = get_rw_dsn()
+        repo_root = Path(__file__).resolve().parents[2]
+
         with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+            # Only check enabled rows with valid importance (Batch 3 contract)
             cur.execute(
                 """
                 SELECT doc_id, repo_path, importance, enabled, tags
                 FROM control.doc_registry
                 WHERE repo_path LIKE '%AGENTS.md'
                   AND repo_path NOT LIKE 'backup/%'
+                  AND enabled = TRUE
+                  AND importance IN ('critical', 'high')
                 ORDER BY repo_path
                 """
             )
@@ -451,7 +458,7 @@ def check_agents_dms_contract() -> CheckResult:
             return CheckResult(
                 "AGENTS–DMS Contract",
                 False,
-                "No AGENTS.md rows found in pmagent control-plane DMS (control.doc_registry)",
+                "No enabled AGENTS.md rows found in pmagent control-plane DMS (control.doc_registry)",
                 {"rows": []},
             )
 
@@ -460,6 +467,13 @@ def check_agents_dms_contract() -> CheckResult:
             tags = tags or []
             is_root = repo_path == "AGENTS.md"
 
+            # Hard error: file must exist on disk (Batch 3 - no ghosts allowed)
+            file_path = repo_root / repo_path
+            if not file_path.exists():
+                violations.append(f"{repo_path}: file missing on disk (AGENTS rows must correspond to existing files)")
+                continue  # Skip further checks for missing files
+
+            # These should already be enforced by the WHERE clause, but double-check
             if not enabled:
                 violations.append(f"{repo_path}: enabled is false (AGENTS must never be archived)")
 

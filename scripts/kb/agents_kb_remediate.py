@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-AGENTS/KB Registry Remediation (Phase 27.L Batch 2)
+AGENTS/KB Registry Remediation (Phase 27.L Batch 2/3)
 
 Remediates pmagent control-plane DMS (control.doc_registry) based on AGENTS/KB forensics.
 
 Reads forensics JSON and:
-- Disables agentpm/ ghosts (missing on disk)
+- Disables or hard-deletes agentpm/ ghosts (missing on disk)
 - Updates agentpm → pmagent path renames where files exist
-- Disables orphan entries (missing on disk, no canonical surface)
+- Disables or hard-deletes orphan entries (missing on disk, no canonical surface)
 - Preserves canonical AGENTS surfaces
+- Normalizes metadata (enabled, importance, tags) on remaining AGENTS rows
 
-Uses control.doc_registry.enabled for soft-disable (no hard deletes).
+Batch 2: Soft-disable mode (default)
+Batch 3: Hard-delete mode + metadata normalization
 """
 
 from __future__ import annotations
@@ -167,7 +169,98 @@ def plan_remediation(forensics_data: dict) -> dict:
     return actions
 
 
-def apply_remediation(actions: dict, dry_run: bool = False) -> dict:
+def normalize_agents_metadata(engine, dry_run: bool = False) -> dict:
+    """
+    Normalize metadata on all AGENTS.md rows that exist on disk.
+
+    Sets:
+    - enabled = TRUE
+    - importance = 'critical' for root/pmagent/scripts, 'high' for others
+    - tags: ensures 'ssot' and 'agent_framework' are present (adds if missing)
+
+    Returns:
+        Dictionary with counts of normalized rows.
+    """
+    if dry_run:
+        # Count what would be normalized
+        try:
+            engine_check = get_control_engine()
+            with engine_check.connect() as conn:
+                result = conn.execute(
+                    text("""
+                        SELECT COUNT(*)
+                        FROM control.doc_registry
+                        WHERE repo_path LIKE '%AGENTS.md'
+                          AND repo_path NOT LIKE 'backup/%'
+                          AND repo_path NOT LIKE 'archive/%'
+                    """)
+                )
+                count = result.scalar() or 0
+            return {"normalized": count}
+        except Exception:
+            return {"normalized": 0}
+
+    stats = {"normalized": 0}
+
+    with engine.begin() as conn:
+        # Get all AGENTS rows that should exist
+        result = conn.execute(
+            text("""
+                SELECT doc_id, repo_path, importance, enabled, tags
+                FROM control.doc_registry
+                WHERE repo_path LIKE '%AGENTS.md'
+                  AND repo_path NOT LIKE 'backup/%'
+                  AND repo_path NOT LIKE 'archive/%'
+            """)
+        )
+        rows = result.fetchall()
+
+        for doc_id, repo_path, importance, enabled, tags in rows:
+            # Check if file exists
+            file_path = ROOT / repo_path
+            if not file_path.exists():
+                continue  # Skip ghosts (they should be deleted separately)
+
+            # Determine target importance
+            is_root = repo_path == "AGENTS.md"
+            is_pmagent_root = repo_path == "pmagent/AGENTS.md"
+            is_scripts_root = repo_path == "scripts/AGENTS.md"
+            target_importance = "critical" if (is_root or is_pmagent_root or is_scripts_root) else "high"
+
+            # Build tags set
+            tags_list = list(tags) if tags else []
+            tags_set = set(tags_list)
+            tags_set.add("ssot")
+            tags_set.add("agent_framework")
+            if is_root:
+                tags_set.add("agent_framework_index")
+            new_tags = sorted(list(tags_set))
+
+            # Check if update needed
+            needs_update = not enabled or importance != target_importance or set(tags_list) != tags_set
+
+            if needs_update:
+                conn.execute(
+                    text("""
+                        UPDATE control.doc_registry
+                        SET enabled = TRUE,
+                            importance = :importance,
+                            tags = :tags,
+                            updated_at = NOW()
+                        WHERE doc_id = :doc_id
+                    """),
+                    {
+                        "doc_id": doc_id,
+                        "importance": target_importance,
+                        "tags": new_tags,
+                    },
+                )
+                stats["normalized"] += 1
+
+    return stats
+
+
+def apply_remediation(actions: dict, dry_run: bool = False, mode: str = "soft") -> dict:
     """
     Apply remediation actions to control.doc_registry.
 
@@ -175,57 +268,89 @@ def apply_remediation(actions: dict, dry_run: bool = False) -> dict:
         Dictionary with counts of applied actions.
     """
     if dry_run:
-        return {
-            "disabled_agentpm_ghosts": len(actions["disable_agentpm_ghosts"]),
-            "disabled_orphans": len(actions["disable_orphans"]),
-            "updated_paths": len(actions["update_agentpm_to_pmagent"]),
-            "kept_canonical": len(actions["keep_canonical"]),
-            "kept_existing": len(actions["keep_existing"]),
-        }
+        if mode == "hard":
+            return {
+                "deleted_agentpm_ghosts": len(actions["disable_agentpm_ghosts"]),
+                "deleted_orphans": len(actions["disable_orphans"]),
+                "updated_paths": len(actions["update_agentpm_to_pmagent"]),
+                "kept_canonical": len(actions["keep_canonical"]),
+                "kept_existing": len(actions["keep_existing"]),
+            }
+        else:
+            return {
+                "disabled_agentpm_ghosts": len(actions["disable_agentpm_ghosts"]),
+                "disabled_orphans": len(actions["disable_orphans"]),
+                "updated_paths": len(actions["update_agentpm_to_pmagent"]),
+                "kept_canonical": len(actions["keep_canonical"]),
+                "kept_existing": len(actions["keep_existing"]),
+            }
 
     try:
         engine = get_control_engine()
     except Exception as e:
         raise RuntimeError(f"Failed to connect to control-plane DB: {e}") from e
 
-    stats = {
-        "disabled_agentpm_ghosts": 0,
-        "disabled_orphans": 0,
-        "updated_paths": 0,
-        "kept_canonical": len(actions["keep_canonical"]),
-        "kept_existing": len(actions["keep_existing"]),
-    }
+    if mode == "hard":
+        stats = {
+            "deleted_agentpm_ghosts": 0,
+            "deleted_orphans": 0,
+            "updated_paths": 0,
+            "kept_canonical": len(actions["keep_canonical"]),
+            "kept_existing": len(actions["keep_existing"]),
+        }
+    else:
+        stats = {
+            "disabled_agentpm_ghosts": 0,
+            "disabled_orphans": 0,
+            "updated_paths": 0,
+            "kept_canonical": len(actions["keep_canonical"]),
+            "kept_existing": len(actions["keep_existing"]),
+        }
 
     with engine.begin() as conn:  # Transaction context
-        # Disable agentpm/ ghosts
+        # Handle agentpm/ ghosts (disable or hard-delete)
         for action in actions["disable_agentpm_ghosts"]:
-            conn.execute(
-                text(
-                    """
-                    UPDATE control.doc_registry
-                    SET enabled = FALSE,
-                        updated_at = NOW()
-                    WHERE doc_id = :doc_id
-                    """
-                ),
-                {"doc_id": action["doc_id"]},
-            )
-            stats["disabled_agentpm_ghosts"] += 1
+            if mode == "hard":
+                conn.execute(
+                    text("DELETE FROM control.doc_registry WHERE doc_id = :doc_id"),
+                    {"doc_id": action["doc_id"]},
+                )
+                stats["deleted_agentpm_ghosts"] += 1
+            else:
+                conn.execute(
+                    text(
+                        """
+                        UPDATE control.doc_registry
+                        SET enabled = FALSE,
+                            updated_at = NOW()
+                        WHERE doc_id = :doc_id
+                        """
+                    ),
+                    {"doc_id": action["doc_id"]},
+                )
+                stats["disabled_agentpm_ghosts"] += 1
 
-        # Disable orphans
+        # Handle orphans (disable or hard-delete)
         for action in actions["disable_orphans"]:
-            conn.execute(
-                text(
-                    """
-                    UPDATE control.doc_registry
-                    SET enabled = FALSE,
-                        updated_at = NOW()
-                    WHERE doc_id = :doc_id
-                    """
-                ),
-                {"doc_id": action["doc_id"]},
-            )
-            stats["disabled_orphans"] += 1
+            if mode == "hard":
+                conn.execute(
+                    text("DELETE FROM control.doc_registry WHERE doc_id = :doc_id"),
+                    {"doc_id": action["doc_id"]},
+                )
+                stats["deleted_orphans"] += 1
+            else:
+                conn.execute(
+                    text(
+                        """
+                        UPDATE control.doc_registry
+                        SET enabled = FALSE,
+                            updated_at = NOW()
+                        WHERE doc_id = :doc_id
+                        """
+                    ),
+                    {"doc_id": action["doc_id"]},
+                )
+                stats["disabled_orphans"] += 1
 
         # Update agentpm → pmagent paths
         for action in actions["update_agentpm_to_pmagent"]:
@@ -261,21 +386,42 @@ def apply_remediation(actions: dict, dry_run: bool = False) -> dict:
     return stats
 
 
-def print_summary(actions: dict, stats: dict | None = None, dry_run: bool = False) -> None:
+def print_summary(
+    actions: dict,
+    stats: dict | None = None,
+    dry_run: bool = False,
+    mode: str = "soft",
+    metadata_stats: dict | None = None,
+) -> None:
     """Print remediation summary."""
-    mode = "DRY-RUN" if dry_run else "APPLIED"
-    print(f"\n📊 Remediation Summary ({mode}):", file=sys.stderr)
-    print(f"   Disable agentpm/ ghosts: {len(actions['disable_agentpm_ghosts'])}", file=sys.stderr)
-    print(f"   Disable orphans: {len(actions['disable_orphans'])}", file=sys.stderr)
+    run_mode = "DRY-RUN" if dry_run else "APPLIED"
+    action_mode = "HARD-DELETE" if mode == "hard" else "SOFT-DISABLE"
+    print(f"\n📊 Remediation Summary ({run_mode}, {action_mode}):", file=sys.stderr)
+
+    if mode == "hard":
+        print(f"   Delete agentpm/ ghosts: {len(actions['disable_agentpm_ghosts'])}", file=sys.stderr)
+        print(f"   Delete orphans: {len(actions['disable_orphans'])}", file=sys.stderr)
+    else:
+        print(f"   Disable agentpm/ ghosts: {len(actions['disable_agentpm_ghosts'])}", file=sys.stderr)
+        print(f"   Disable orphans: {len(actions['disable_orphans'])}", file=sys.stderr)
+
     print(f"   Update agentpm → pmagent: {len(actions['update_agentpm_to_pmagent'])}", file=sys.stderr)
     print(f"   Keep canonical: {len(actions['keep_canonical'])}", file=sys.stderr)
     print(f"   Keep existing: {len(actions['keep_existing'])}", file=sys.stderr)
 
     if stats:
         print("\n✅ Applied:", file=sys.stderr)
-        print(f"   Disabled agentpm/ ghosts: {stats['disabled_agentpm_ghosts']}", file=sys.stderr)
-        print(f"   Disabled orphans: {stats['disabled_orphans']}", file=sys.stderr)
-        print(f"   Updated paths: {stats['updated_paths']}", file=sys.stderr)
+        if mode == "hard":
+            print(f"   Deleted agentpm/ ghosts: {stats.get('deleted_agentpm_ghosts', 0)}", file=sys.stderr)
+            print(f"   Deleted orphans: {stats.get('deleted_orphans', 0)}", file=sys.stderr)
+        else:
+            print(f"   Disabled agentpm/ ghosts: {stats.get('disabled_agentpm_ghosts', 0)}", file=sys.stderr)
+            print(f"   Disabled orphans: {stats.get('disabled_orphans', 0)}", file=sys.stderr)
+        print(f"   Updated paths: {stats.get('updated_paths', 0)}", file=sys.stderr)
+
+    if metadata_stats:
+        print("\n✅ Metadata Normalized:", file=sys.stderr)
+        print(f"   AGENTS rows normalized: {metadata_stats.get('normalized', 0)}", file=sys.stderr)
 
     # Show sample actions
     if actions["disable_agentpm_ghosts"]:
@@ -303,9 +449,21 @@ def main() -> None:
         default=FORensics_PATH,
         help="Path to forensics JSON file",
     )
+    parser.add_argument(
+        "--mode",
+        choices=["soft", "hard"],
+        default="soft",
+        help="Remediation mode: 'soft' (disable) or 'hard' (delete) ghosts (default: soft)",
+    )
+    parser.add_argument(
+        "--normalize-metadata",
+        action="store_true",
+        help="Normalize enabled/importance/tags on remaining AGENTS rows",
+    )
     args = parser.parse_args()
 
     dry_run = not args.apply
+    mode = args.mode
 
     try:
         # Load forensics data
@@ -319,14 +477,29 @@ def main() -> None:
 
         # Apply or dry-run
         if dry_run:
-            print("[DRY-RUN] Computing planned actions (no DB writes)...", file=sys.stderr)
-            stats = apply_remediation(actions, dry_run=True)
+            print(f"[DRY-RUN] Computing planned actions (no DB writes, mode={mode})...", file=sys.stderr)
+            stats = apply_remediation(actions, dry_run=True, mode=mode)
         else:
-            print("[APPLY] Applying remediation to control.doc_registry...", file=sys.stderr)
-            stats = apply_remediation(actions, dry_run=False)
+            print(f"[APPLY] Applying remediation to control.doc_registry (mode={mode})...", file=sys.stderr)
+            stats = apply_remediation(actions, dry_run=False, mode=mode)
+
+        # Normalize metadata if requested
+        metadata_stats = None
+        if args.normalize_metadata:
+            try:
+                engine = get_control_engine()
+                if dry_run:
+                    print("[DRY-RUN] Computing metadata normalization plan...", file=sys.stderr)
+                    metadata_stats = normalize_agents_metadata(engine, dry_run=True)
+                else:
+                    print("[APPLY] Normalizing AGENTS metadata...", file=sys.stderr)
+                    metadata_stats = normalize_agents_metadata(engine, dry_run=False)
+            except Exception as e:
+                print(f"[WARN] Metadata normalization failed: {e}", file=sys.stderr)
+                metadata_stats = {"normalized": 0}
 
         # Print summary
-        print_summary(actions, stats, dry_run=dry_run)
+        print_summary(actions, stats, dry_run=dry_run, mode=mode, metadata_stats=metadata_stats)
 
         if dry_run:
             print("\n💡 To apply these changes, run with --apply", file=sys.stderr)
