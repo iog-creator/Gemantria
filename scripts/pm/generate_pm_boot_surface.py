@@ -36,14 +36,20 @@ def main():
         # Share/ layout & analysis
         (ROOT / "docs" / "SSOT" / "SHARE_FOLDER_ANALYSIS.md", PM_BOOT / "SHARE_FOLDER_ANALYSIS.md"),
         # Directory namespace cleanup (Phase 27.I)
-        (ROOT / "docs" / "SSOT" / "DIRECTORY_DUPLICATION_MAP.md", PM_BOOT / "DIRECTORY_DUPLICATION_MAP.md"),
+        (
+            ROOT / "docs" / "SSOT" / "DIRECTORY_DUPLICATION_MAP.md",
+            PM_BOOT / "DIRECTORY_DUPLICATION_MAP.md",
+        ),
         (
             ROOT / "docs" / "SSOT" / "PHASE27I_DIRECTORY_UNIFICATION_PLAN.md",
             PM_BOOT / "PHASE27I_DIRECTORY_UNIFICATION_PLAN.md",
         ),
         # Governance contracts
         (ROOT / "docs" / "SSOT" / "EXECUTION_CONTRACT.md", PM_BOOT / "EXECUTION_CONTRACT.md"),
-        (ROOT / "docs" / "SSOT" / "GITHUB_WORKFLOW_CONTRACT.md", PM_BOOT / "GITHUB_WORKFLOW_CONTRACT.md"),
+        (
+            ROOT / "docs" / "SSOT" / "GITHUB_WORKFLOW_CONTRACT.md",
+            PM_BOOT / "GITHUB_WORKFLOW_CONTRACT.md",
+        ),
         (ROOT / "docs" / "SSOT" / "ORCHESTRATOR_REALITY.md", PM_BOOT / "ORCHESTRATOR_REALITY.md"),
         # Agent framework map
         (ROOT / "AGENTS.md", PM_BOOT / "AGENTS.md"),
@@ -56,12 +62,21 @@ def main():
     behavior_exports = [
         # PM contracts and behavior
         (ROOT / "docs" / "SSOT" / "PM_CONTRACT.md", PM_BOOT / "PM_CONTRACT.md"),
-        (ROOT / "docs" / "SSOT" / "PM_AND_OPS_BEHAVIOR_CONTRACT.md", PM_BOOT / "PM_AND_OPS_BEHAVIOR_CONTRACT.md"),
+        (
+            ROOT / "docs" / "SSOT" / "PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+            PM_BOOT / "PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+        ),
         (ROOT / "docs" / "SSOT" / "PM_BOOT_CONTRACT.md", PM_BOOT / "PM_BOOT_CONTRACT.md"),
-        (ROOT / "docs" / "SSOT" / "PM_CONTRACT_STRICT_SSOT_DMS.md", PM_BOOT / "PM_CONTRACT_STRICT_SSOT_DMS.md"),
+        (
+            ROOT / "docs" / "SSOT" / "PM_CONTRACT_STRICT_SSOT_DMS.md",
+            PM_BOOT / "PM_CONTRACT_STRICT_SSOT_DMS.md",
+        ),
         (ROOT / "docs" / "SSOT" / "PM_BEHAVIOR_CONTRACT.md", PM_BOOT / "PM_BEHAVIOR_CONTRACT.md"),
         # Cursor workflow
-        (ROOT / "docs" / "SSOT" / "CURSOR_WORKFLOW_CONTRACT.md", PM_BOOT / "CURSOR_WORKFLOW_CONTRACT.md"),
+        (
+            ROOT / "docs" / "SSOT" / "CURSOR_WORKFLOW_CONTRACT.md",
+            PM_BOOT / "CURSOR_WORKFLOW_CONTRACT.md",
+        ),
         (
             ROOT / "docs" / "SSOT" / "CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",
             PM_BOOT / "CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",

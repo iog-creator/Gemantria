@@ -2,14 +2,14 @@
   "version": 1,
   "current_phase": "24",
   "last_completed_phase": "23",
-  "branch": "feat/phase27i-directory-namespace-cleanup",
+  "branch": "chore/ci-hygiene-fix-ruff-and-stats",
   "health": {
     "reality_green": false,
     "checks": {
-      "DMS Alignment": true,
+      "DMS Alignment": false,
       "Bootstrap Consistency": true,
-      "Share Sync Policy": true,
-      "Backup System": true
+      "Share Sync Policy": false,
+      "Backup System": false
     }
   },
   "required_surfaces": [
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T06:29:34Z",
+    "generated_at": "2025-12-07T16:29:27Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0

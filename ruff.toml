@@ -23,6 +23,7 @@ ignore = [
 "scripts/**/*.py" = ["B007", "B905", "E402", "E501", "F841", "RUF005", "RUF007"]
 "tools/**/*.py" = ["B007", "B905", "E402", "F841", "RUF005", "RUF007"]
 "agentpm/**/*.py" = ["E402"]  # OPS meta comment pattern
+"pmagent/biblescholar/**/*.py" = ["E402"]  # Docstring-before-imports pattern
 
 # Hebrew/core modules legitimately use non-ASCII; allow ambiguous unicode there
 "src/core/**/*.py" = ["RUF001","RUF002","RUF003","I001","UP037"]
@@ -47,3 +48,6 @@ ignore = [
 
 # Deprecated scripts: allow import placement for path setup
 "scripts/_deprecated/**/*.py" = ["E402"]
+
+# Archive/legacy code: exclude from linting to avoid blocking new PRs
+"archive/**/*.py" = ["I001", "UP006", "UP035", "E401", "E402"]

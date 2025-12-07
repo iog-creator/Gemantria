@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """BibleScholar Bible DB adapter (read-only).
 
 This module provides read-only access to bible_db for verses and passages.
@@ -9,6 +7,8 @@ See:
 - docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md
 - pmagent/biblescholar/AGENTS.md
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Literal
