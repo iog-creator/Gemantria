@@ -2,9 +2,9 @@
   "version": 1,
   "current_phase": "24",
   "last_completed_phase": "23",
-  "branch": "feat/phase27i-directory-namespace-cleanup",
+  "branch": "feat/phase27i-doc-hygiene-batch1",
   "health": {
-    "reality_green": false,
+    "reality_green": true,
     "checks": {
       "DMS Alignment": true,
       "Bootstrap Consistency": true,
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T06:29:34Z",
+    "generated_at": "2025-12-07T17:40:52Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0
