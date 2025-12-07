@@ -1,5 +1,7 @@
 import React from "react";
 import type { TileDataBundle } from "../data/types";
+import { KernelHealthTile } from "./KernelHealthTile";
+import { OAWorkspacePanel } from "./OAWorkspacePanel";
 
 interface RightStatusPaneProps {
     tileData: TileDataBundle | null;
@@ -28,14 +30,14 @@ export const RightStatusPane: React.FC<RightStatusPaneProps> = ({ tileData }) =>
         typeof docsRegistry.kb_registry === "object" &&
         Object.keys(docsRegistry.kb_registry).length > 0;
 
-    const orchestratorHasState =
-        agentState?.orchestrator_state != null ||
-        agentState?.orchestrator_decisions != null;
-    const oaHasState =
-        agentState?.oa_state != null || agentState?.oa_decisions != null;
-
     return (
         <aside className="right-status">
+            {/* Kernel Health Tile - Primary OA state display (Phase 27.C) */}
+            <KernelHealthTile oaState={agentState?.oa_state} />
+
+            {/* OA Workspace Panel (Phase 27.C) */}
+            <OAWorkspacePanel workspace={agentState?.oa_workspace} />
+
             <section className="tile tile--system-status">
                 <h2>System Status</h2>
                 <ul>
@@ -70,14 +72,6 @@ export const RightStatusPane: React.FC<RightStatusPaneProps> = ({ tileData }) =>
                         <code>{docsRoot ?? "(not configured in view model)"}</code>
                     </li>
                     <li>KB registry has entries: {kbHasEntries ? "yes" : "no"}</li>
-                </ul>
-            </section>
-
-            <section className="tile tile--orchestrator-oa">
-                <h2>Orchestrator &amp; OA</h2>
-                <ul>
-                    <li>Orchestrator state/decisions loaded: {orchestratorHasState ? "yes" : "no"}</li>
-                    <li>OA state/decisions loaded: {oaHasState ? "yes" : "no"}</li>
                 </ul>
             </section>
         </aside>
