@@ -127,7 +127,10 @@ def check_consistency(kernel: dict[str, Any], bootstrap: dict[str, Any]) -> list
 
 
 def compute_degraded_mode(
-    kernel: dict[str, Any], bootstrap: dict[str, Any], health: dict[str, Any] | None, consistency_warnings: list[str]
+    kernel: dict[str, Any],
+    bootstrap: dict[str, Any],
+    health: dict[str, Any] | None,
+    consistency_warnings: list[str],
 ) -> bool:
     """
     Compute whether system is in DEGRADED mode.
@@ -159,7 +162,10 @@ def compute_degraded_mode(
 
 
 def build_status_envelope(
-    kernel: dict[str, Any], bootstrap: dict[str, Any], health: dict[str, Any] | None, consistency_warnings: list[str]
+    kernel: dict[str, Any],
+    bootstrap: dict[str, Any],
+    health: dict[str, Any] | None,
+    consistency_warnings: list[str],
 ) -> dict[str, Any]:
     """
     Build status handoff envelope.
@@ -198,7 +204,10 @@ def build_status_envelope(
 
 
 def build_boot_envelope(
-    kernel: dict[str, Any], bootstrap: dict[str, Any], health: dict[str, Any] | None, consistency_warnings: list[str]
+    kernel: dict[str, Any],
+    bootstrap: dict[str, Any],
+    health: dict[str, Any] | None,
+    consistency_warnings: list[str],
 ) -> dict[str, Any]:
     """
     Build PM boot envelope.
@@ -254,9 +263,19 @@ def build_boot_envelope(
 
     # Recommended behavior
     if mode == "DEGRADED":
-        pm_script = ["Halt phase work.", "Explain degraded mode to user.", "Define remediation scope only."]
-        oa_behavior = ["Explain degraded mode to user.", "Refuse normal analysis until remediation is defined."]
-        ops_behavior = ["Run only PM-approved remediation commands.", "Do not run destructive targets."]
+        pm_script = [
+            "Halt phase work.",
+            "Explain degraded mode to user.",
+            "Define remediation scope only.",
+        ]
+        oa_behavior = [
+            "Explain degraded mode to user.",
+            "Refuse normal analysis until remediation is defined.",
+        ]
+        ops_behavior = [
+            "Run only PM-approved remediation commands.",
+            "Do not run destructive targets.",
+        ]
     else:
         pm_script = [
             f"Review Phase {current_phase} objectives.",

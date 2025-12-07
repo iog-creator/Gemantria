@@ -120,6 +120,7 @@ guard.jsonschema.import:
 ops.kernel.check:
 	@echo "[Phase26.5] Running kernel boot guard..."
 	@python scripts/guards/guard_kernel_boot.py
+	@python scripts/guards/guard_pm_boot_surface.py
 
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
@@ -603,6 +604,7 @@ housekeeping.atlas:
 reality.green: ## Full system truth gate (DB, AGENTS, share, SSOT)
 	@echo ">> Running reality.green - Full System Truth Gate"
 	@PYTHONPATH=. $(PYTHON) scripts/guards/guard_reality_green.py
+	@$(MAKE) guard.pm_boot.surface
 
 # System State Ledger - Sync artifact hashes to control.system_state_ledger
 .PHONY: state.sync state.verify
@@ -2153,6 +2155,10 @@ guard.mcp.proof:
 guard.root.surface:
 	@echo "[guard.root.surface] Validating repository root surface policy"
 	@$(PYTHON) scripts/guards/guard_root_surface_policy.py --mode STRICT
+
+guard.pm_boot.surface:
+	@echo "[guard.pm_boot.surface] Validating PM Boot Surface capsule"
+	@$(PYTHON) scripts/guards/guard_pm_boot_surface.py
 
 .PHONY: guard.schema.naming
 guard.schema.naming:

@@ -25,7 +25,12 @@ def get_dms_alignment_status() -> dict:
     """Run guard in HINT mode to get structured status."""
     guard_script = ROOT / "scripts" / "guards" / "guard_dms_share_alignment.py"
     if not guard_script.exists():
-        return {"ok": False, "mode": "MISSING_GUARD", "dms_share_alignment": "UNKNOWN", "mismatch_count": -1}
+        return {
+            "ok": False,
+            "mode": "MISSING_GUARD",
+            "dms_share_alignment": "UNKNOWN",
+            "mismatch_count": -1,
+        }
 
     try:
         res = subprocess.run([sys.executable, str(guard_script), "--mode", "HINT"], capture_output=True, text=True)

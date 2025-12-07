@@ -66,7 +66,8 @@ def ingest_share_docs(dry_run: bool = False):
 
             # Check existence
             row = conn.execute(
-                text("SELECT doc_id, repo_path FROM control.doc_registry WHERE logical_name = :n"), {"n": logical_name}
+                text("SELECT doc_id, repo_path FROM control.doc_registry WHERE logical_name = :n"),
+                {"n": logical_name},
             ).fetchone()
 
             if row:

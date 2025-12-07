@@ -1,81 +1,5 @@
-Makefile:982: warning: overriding recipe for target 'phase8.temporal'
-Makefile:887: warning: ignoring old recipe for target 'phase8.temporal'
-Makefile:1906: warning: overriding recipe for target 'rerank.smoke'
-Makefile:1900: warning: ignoring old recipe for target 'rerank.smoke'
-Makefile:2227: warning: overriding recipe for target 'mcp.proof.snapshot'
-Makefile:2155: warning: ignoring old recipe for target 'mcp.proof.snapshot'
-Makefile:2798: warning: overriding recipe for target 'governance.ingest.docs'
-Makefile:291: warning: ignoring old recipe for target 'governance.ingest.docs'
->> Running reality.green - Full System Truth Gate
-🔍 REALITY GREEN - Full System Truth Gate
-============================================================
-
-================================================================================
-LEDGER VERIFICATION SUMMARY
-================================================================================
-Name                                     Source                         Status    
---------------------------------------------------------------------------------
-AGENTS.md                                root                           ✓ current   
-MASTER_PLAN.md                           docs/SSOT                      ✓ current   
-DB_HEALTH.md                             docs/runbooks                  ✓ current   
-PM_SNAPSHOT_CURRENT.md                   docs/runbooks                  ✓ current   
-RULES_INDEX.md                           root                           ✓ current   
-system_health.json                       share/atlas/control_plane      ✓ current   
-lm_indicator.json                        share/atlas/control_plane      ✓ current   
-canonical.json                           share/exports/docs-control     ✓ current   
-summary.json                             share/exports/docs-control     ✓ current   
---------------------------------------------------------------------------------
-Total: 9, Current: 9, Stale: 0, Missing: 0
-================================================================================
-
-✅ LEDGER VERIFICATION PASSED
-   All tracked artifacts are current
-
-✅ PASS: DB Health
-   DB is reachable and healthy
-
-✅ PASS: Control-Plane Health
-   Control plane is healthy
-
-✅ PASS: AGENTS.md Sync
-   All AGENTS.md files are in sync
-
-✅ PASS: Share Sync & Exports
-   All required exports present
-
-✅ PASS: Ledger Verification
-   All 9 tracked artifacts are current
-
-✅ PASS: Ketiv-Primary Policy
-   Ketiv-primary policy enforced (gematria uses written form per ADR-002)
-
-✅ PASS: DMS Hint Registry
-   DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)
-
-✅ PASS: Repo Alignment (Layer 4)
-   Plan vs implementation drift detected (HINT mode: warnings only)
-
-✅ PASS: DMS Alignment
-   DMS and Share are aligned
-
-✅ PASS: Bootstrap Consistency
-   Bootstrap state matches SSOT
-
-✅ PASS: Share Sync Policy
-   No unknown or unsafe share/ docs in managed namespaces
-
-✅ PASS: WebUI Shell Sanity
-   WebUI shell files present
-
-============================================================
-✅ REALITY GREEN: All checks passed - system is ready
-
-This system is up to date and consistent for the next agent.
-DB is healthy, AGENTS.md is synced, share/ is synced, exports are present.
-
-JSON Summary:
 {
-  "reality_green": true,
+  "reality_green": false,
   "checks": [
     {
       "name": "DB Health",
@@ -229,6 +153,14 @@ JSON Summary:
       }
     },
     {
+      "name": "Root Surface",
+      "passed": true,
+      "message": "No unexpected files in repository root",
+      "details": {
+        "output": "[root-surface] OK: no unexpected files in repo root"
+      }
+    },
+    {
       "name": "Share Sync Policy",
       "passed": true,
       "message": "No unknown or unsafe share/ docs in managed namespaces",
@@ -237,11 +169,27 @@ JSON Summary:
       }
     },
     {
+      "name": "Backup System",
+      "passed": false,
+      "message": "No recent backup found: ",
+      "details": {
+        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
+      }
+    },
+    {
       "name": "WebUI Shell Sanity",
       "passed": true,
       "message": "WebUI shell files present",
       "details": {}
+    },
+    {
+      "name": "Handoff Kernel",
+      "passed": true,
+      "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"mismatches\": []\n}"
+      }
     }
   ],
-  "timestamp": "2025-12-06T04:54:50Z"
+  "timestamp": "2025-12-07T05:49:43Z"
 }

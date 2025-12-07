@@ -89,12 +89,17 @@ ALLOWED_SUBDIRS = {
     "atlas",
     "exports",
     "handoff",  # kernel bundle directory (PM_KERNEL.json, PM_SUMMARY.md) - Phase 24.E deliverables
+    "pm_boot",  # PM/OA boot capsule (Phase 27.H) - generated view of kernel + governance + behavioral contracts
 }
 
 
 def check_alignment(mode: str) -> dict:
     if not DB_AVAILABLE:
-        return {"ok": False, "error": "DB_UNAVAILABLE", "details": ["Database library not available"]}
+        return {
+            "ok": False,
+            "error": "DB_UNAVAILABLE",
+            "details": ["Database library not available"],
+        }
 
     report = {
         "ok": True,

@@ -30,6 +30,7 @@ share/
   REALITY_GREEN_SUMMARY.json
   SSOT_SURFACE_V17.json
   PHASENN_* (Phase surfaces 18–24)
+  pm_boot/  — PM/OA boot capsule (kernel + bootstrap + contracts + logs)
   orchestrator/
   orchestrator_assistant/
   atlas/
@@ -116,6 +117,8 @@ derived from DMS and validated by guards.
   * `pm.boot.kernel_first`
   * `oa.boot.kernel_first`
   * `ops.preflight.kernel_health`.
+
+Phase 27.H introduces `share/pm_boot/` as the PM/OA boot capsule. It contains copies of kernel, bootstrap, REALITY_GREEN_SUMMARY, phase indexes, and core governance contracts. The pm_boot capsule is validated by `guard.pm_boot.surface` and checked via `make ops.kernel.check`.
 
 ---
 

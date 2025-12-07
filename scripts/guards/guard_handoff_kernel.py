@@ -107,7 +107,11 @@ def run_check(strict: bool):
             mismatches.append("Missing/empty branch")
 
         # Result
-        result = {"ok": len(mismatches) == 0, "mode": "STRICT" if strict else "HINT", "mismatches": mismatches}
+        result = {
+            "ok": len(mismatches) == 0,
+            "mode": "STRICT" if strict else "HINT",
+            "mismatches": mismatches,
+        }
 
         print(json.dumps(result, indent=2))
 

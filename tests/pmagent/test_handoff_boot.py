@@ -41,7 +41,10 @@ def test_status_handoff_json():
 def test_status_handoff_human():
     """Test status-handoff command with human output."""
     result = subprocess.run(
-        [sys.executable, "-m", "pmagent", "handoff", "status-handoff"], cwd=REPO_ROOT, capture_output=True, text=True
+        [sys.executable, "-m", "pmagent", "handoff", "status-handoff"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
     )
 
     assert result.returncode == 0
