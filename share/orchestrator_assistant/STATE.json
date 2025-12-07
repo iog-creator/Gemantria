@@ -1,11 +1,11 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-07T20:37:20.829202+00:00",
+  "generated_at": "2025-12-07T20:42:58.276512+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
-  "reality_green": true,
+  "reality_green": false,
   "checks_summary": [
     {
       "name": "DB Health",
@@ -17,7 +17,7 @@
     },
     {
       "name": "AGENTS.md Sync",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Share Sync & Exports",
@@ -69,6 +69,10 @@
     },
     {
       "name": "WebUI Shell Sanity",
+      "passed": true
+    },
+    {
+      "name": "OA State",
       "passed": true
     },
     {

@@ -202,6 +202,14 @@
       "details": {}
     },
     {
+      "name": "OA State",
+      "passed": true,
+      "message": "OA state is consistent with kernel surfaces",
+      "details": {
+        "output": "\u2705 OA State Guard: PASS\n   OA state is consistent with kernel surfaces\n\nJSON: {\"ok\": true, \"mode\": \"STRICT\", \"mismatches\": [], \"missing_surfaces\": []}"
+      }
+    },
+    {
       "name": "Handoff Kernel",
       "passed": true,
       "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
@@ -210,5 +218,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T20:37:05Z"
+  "timestamp": "2025-12-07T20:42:58Z"
 }

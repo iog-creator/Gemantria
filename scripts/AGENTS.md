@@ -694,6 +694,47 @@ python3 scripts/ops/backup_rotate.py [--dry-run]
 **Output**:
 Logs actions to stdout.
 
+### `guards/guard_oa_state.py` — OA State Consistency Guard (Phase 27.B/C)
+
+**Purpose**: Verify OA state (`share/orchestrator_assistant/STATE.json`) is consistent with kernel surfaces.
+
+**Checks**:
+- `branch` matches `PM_BOOTSTRAP_STATE.json`
+- `current_phase` matches `SSOT_SURFACE_V17.json`
+- `reality_green` matches `REALITY_GREEN_SUMMARY.json`
+- All referenced surfaces in `surface_status` exist
+
+**Modes**:
+- **HINT mode**: Warns on mismatch, exits 0
+- **STRICT mode**: Fails on mismatch, exits 1
+
+**Usage**:
+```bash
+make guard.oa.state              # STRICT mode
+make oa.snapshot                 # Refresh OA state before checking
+python scripts/guards/guard_oa_state.py --mode STRICT
+```
+
+**Output**:
+```json
+{
+  "ok": true,
+  "mode": "STRICT",
+  "mismatches": [],
+  "missing_surfaces": []
+}
+```
+
+**Integration**:
+- Wired into `guard_reality_green.py` (Phase 27.C)
+- Auto-refreshes OA snapshot before checking
+- Part of 18 checks in reality.green suite
+
+**Related**:
+- **Phase 27.B/C**: OA/Console kernel snapshot wiring
+- **OA State Builder**: `pmagent/oa/state.py`
+- **CLI**: `pmagent oa snapshot`
+
 ### `generate_report.py` - Pipeline Reporting (Critical - Always Apply)
 
 **Purpose**: Generate comprehensive markdown and JSON reports from pipeline execution data

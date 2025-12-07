@@ -630,6 +630,50 @@ def check_handoff_kernel() -> CheckResult:
         return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
 
+def check_oa_state() -> CheckResult:
+    """Check OA State consistency with kernel surfaces (Phase 27.B/C)."""
+    script = ROOT / "scripts" / "guards" / "guard_oa_state.py"
+    if not script.exists():
+        return CheckResult("OA State", True, "Guard script not deployed yet (OK during transition)", {})
+
+    # First, refresh the OA snapshot to ensure it's up to date
+    try:
+        from pmagent.oa.state import write_oa_state
+
+        write_oa_state()
+    except Exception as e:
+        return CheckResult(
+            "OA State",
+            False,
+            f"Failed to refresh OA snapshot: {e}",
+            {"error": str(e)},
+        )
+
+    # Now run the guard
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "OA State",
+            True,
+            "OA state is consistent with kernel surfaces",
+            {"output": stdout.strip()},
+        )
+    else:
+        try:
+            # Parse JSON from output
+            import re
+
+            json_match = re.search(r"JSON: ({.*})", stdout)
+            if json_match:
+                data = json.loads(json_match.group(1))
+                msg = f"OA State Mismatch: {', '.join(data.get('mismatches', []))}"
+                return CheckResult("OA State", False, msg, data)
+        except Exception:
+            pass
+        return CheckResult("OA State", False, f"Check failed: {stderr.strip()}", {"output": stdout})
+
+
 def check_root_surface() -> CheckResult:
     """Check Repository Root Surface Policy (Phase 27.G)."""
     script = ROOT / "scripts" / "guards" / "guard_root_surface_policy.py"
@@ -685,6 +729,7 @@ def main() -> int:
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit
         check_backup_system(),  # Phase 24.D: Backup Retention & Rotation
         check_webui_shell_sanity(),
+        check_oa_state(),  # Phase 27.B/C: OA state consistency with kernel surfaces
     ]
 
     # Special handling for Handoff Kernel (Phase 24.E)

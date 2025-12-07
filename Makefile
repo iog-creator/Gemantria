@@ -2888,6 +2888,17 @@ ci.guards.doc_vectors:
 # Phase 23 — PM Bootstrap Hardening + Stress Smoke
 # -----------------------------------------------------------------------------
 
+.PHONY: oa.snapshot
+oa.snapshot:  ## Refresh OA state snapshot (share/orchestrator_assistant/STATE.json)
+	@echo "=== oa.snapshot: refreshing OA state ==="
+	$(PYTHON) -c "from pmagent.oa.state import write_oa_state; write_oa_state()"
+	@echo "✓ OA state refreshed"
+
+.PHONY: guard.oa.state
+guard.oa.state:  ## Verify OA state is consistent with kernel surfaces
+	@echo "[guard.oa.state] Checking OA state consistency"
+	$(PYTHON) scripts/guards/guard_oa_state.py --mode STRICT
+
 pm.bootstrap.state:  ## Regenerate PM bootstrap (preserving webui.console_v2)
 	@echo "=== pm.bootstrap.state: regenerating PM_BOOTSTRAP_STATE.json ==="
 	$(PYTHON) scripts/pm/patch_pm_bootstrap_webui.py
