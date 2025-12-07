@@ -120,6 +120,11 @@ SYSTEM_FILES = {
     "share/PHASE23_FAILURE_INJECTION_NOTE.md",
     "share/PHASE23_PHASE_DONE_CHECKLIST.md",
     "share/PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.md",
+    # Phase 27 evidence surfaces (Phase 27.E Batch 2 - generated from docs/SSOT)
+    "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md",
     # Other governance surfaces
     "share/PM_HANDOFF_PROTOCOL.md",
     "share/SHARE_FOLDER_ANALYSIS.md",

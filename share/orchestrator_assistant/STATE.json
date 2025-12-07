@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-07T21:27:49.301092+00:00",
+  "generated_at": "2025-12-07T22:14:12.436511+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
@@ -17,7 +17,7 @@
     },
     {
       "name": "AGENTS.md Sync",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Share Sync & Exports",
@@ -41,7 +41,7 @@
     },
     {
       "name": "DMS Alignment",
-      "passed": false
+      "passed": true
     },
     {
       "name": "DMS Metadata",
@@ -61,11 +61,11 @@
     },
     {
       "name": "Share Sync Policy",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Backup System",
-      "passed": false
+      "passed": true
     },
     {
       "name": "WebUI Shell Sanity",
