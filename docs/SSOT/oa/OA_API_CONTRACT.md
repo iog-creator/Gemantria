@@ -223,25 +223,82 @@ All three must agree on:
 
 ---
 
+## OA Tools Interface (Phase 27.E Batch 3)
+
+OA invokes pmagent commands exclusively through the **OA Tools API** defined in
+`pmagent/oa/tools.py`. OA must not call arbitrary shell commands.
+
+### Available Tools
+
+| tool_id | Function | Purpose |
+|---------|----------|---------|
+| `oa.kernel_status` | `kernel_status()` | Get kernel mode, health, interpretation |
+| `oa.reality_check` | `reality_check()` | Get normalized reality check results |
+| `oa.guard.run` | `run_guard(name)` | Run a specific guard script |
+| `oa.bootstrap_state` | `get_bootstrap_state()` | Load PM_BOOTSTRAP_STATE.json |
+| `oa.ssot_surface` | `get_ssot_surface()` | Load SSOT_SURFACE_V17.json |
+| `oa.reality_summary` | `get_reality_summary()` | Load REALITY_GREEN_SUMMARY.json |
+| `oa.handoff_kernel` | `get_handoff_kernel()` | Load HANDOFF_KERNEL.json |
+
+See [OA_TOOLS_REGISTRY.md](OA_TOOLS_REGISTRY.md) for complete specifications.
+
+### DSPy Program → Tool Mapping
+
+Each DSPy reasoning program (Phase 28) has access to specific tools:
+
+| DSPy Program | Tools Used |
+|--------------|------------|
+| **SafeOPSDecision** | `oa.kernel_status`, `oa.reality_summary` |
+| **OPSBlockGenerator** | `oa.kernel_status`, `oa.ssot_surface`, `oa.bootstrap_state` |
+| **GuardFailureInterpreter** | `oa.kernel_status`, `oa.guard.run` |
+| **PhaseTransitionValidator** | `oa.kernel_status`, `oa.ssot_surface`, `oa.reality_check` |
+
+### Invocation Contract
+
+1. **All tool invocations go via `pmagent.oa.tools` wrappers**
+2. OA must not call arbitrary `subprocess.run()` or shell commands
+3. Tools are pure read-only — no writes to git, DB, or kernel surfaces
+4. Unknown tool IDs raise `OAToolError`
+
+### Example Usage (Python)
+
+```python
+from pmagent.oa.tools import kernel_status, reality_check, OAToolError
+
+# Get kernel state before drafting OPS block
+kernel = kernel_status()
+if kernel["mode"] == "BLOCKED":
+    raise OAToolError("Cannot proceed: kernel is BLOCKED")
+
+# Check reality before executing
+reality = reality_check()
+if not reality["reality_green"]:
+    print(f"Warning: {len(reality['failed_checks'])} checks failed")
+```
+
+---
+
 ## Future Extensions (Phase 28+)
 
 ### Planned Entrypoints
 
-- `pmagent oa decision` — Run SafeOPSDecision reasoning
-- `pmagent oa generate` — Run OPSBlockGenerator reasoning
-- `pmagent oa interpret <guard_output>` — Run GuardFailureInterpreter
+- `pmagent oa decision` — Run SafeOPSDecision reasoning (uses `oa.kernel_status`, `oa.reality_summary`)
+- `pmagent oa generate` — Run OPSBlockGenerator reasoning (uses tool registry)
+- `pmagent oa interpret <guard_output>` — Run GuardFailureInterpreter (uses `oa.guard.run`)
 
 ### DSPy Integration Points
 
 DSPy programs will:
 1. Read OA state via `pmagent oa snapshot --format json`
-2. Update context via direct file write to `share/oa/CONTEXT.json`
-3. Never modify kernel surfaces directly
+2. Invoke tools via `pmagent.oa.tools` (not arbitrary shell commands)
+3. Update context via direct file write to `share/oa/CONTEXT.json`
+4. Never modify kernel surfaces directly
 
 ---
 
 ## Related Documents
 
+- [OA_TOOLS_REGISTRY.md](OA_TOOLS_REGISTRY.md) — Complete tool specifications
 - [OA_DATA_MODEL.md](OA_DATA_MODEL.md) — Schema definitions
 - [OA_DIAGNOSTICS_CATALOG.md](OA_DIAGNOSTICS_CATALOG.md) — Diagnostic categories
 - [PHASE27_B_OA_RUNTIME.md](../PHASE27_B_OA_RUNTIME.md) — Boot sequence

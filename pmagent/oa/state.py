@@ -147,6 +147,22 @@ def build_oa_state() -> dict[str, Any]:
         "surfaces": ref_surfaces,
         "surface_status": surface_status,
         "oa_context": oa_context,  # Phase 27.E: Task context for DSPy programs
+        # Phase 27.E Batch 3: OA Tools Interface
+        # Lists available tools for DSPy program consumption
+        "oa_tools": {
+            "version": 1,
+            "tools": [
+                "oa.kernel_status",
+                "oa.reality_check",
+                "oa.guard.run",
+                "oa.bootstrap_state",
+                "oa.ssot_surface",
+                "oa.reality_summary",
+                "oa.handoff_kernel",
+            ],
+            "interface": "pmagent.oa.tools",
+            "registry": "docs/SSOT/oa/OA_TOOLS_REGISTRY.md",
+        },
     }
 
     return state

@@ -6,14 +6,14 @@
     "pm_contract": "docs/SSOT/PM_CONTRACT.md"
   },
   "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
-  "generated_at_utc": "2025-12-07T22:13:11.217976+00:00",
+  "generated_at_utc": "2025-12-07T22:35:25.346175+00:00",
   "gotchas": {
     "index": "docs/SSOT/GOTCHAS_INDEX.md",
     "share_folder": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
     "share_gate_status": "docs/SSOT/SHARE_FOLDER_GATE_STATUS_GAP.md"
   },
   "health": {
-    "agents_sync_ok": false,
+    "agents_sync_ok": true,
     "dms_alignment_ok": true,
     "reality_green": false,
     "source": "share/REALITY_GREEN_SUMMARY.json"

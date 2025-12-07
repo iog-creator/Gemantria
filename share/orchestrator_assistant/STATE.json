@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-07T22:14:12.436511+00:00",
+  "generated_at": "2025-12-07T22:35:29.640053+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
@@ -17,7 +17,7 @@
     },
     {
       "name": "AGENTS.md Sync",
-      "passed": false
+      "passed": true
     },
     {
       "name": "Share Sync & Exports",
@@ -61,7 +61,7 @@
     },
     {
       "name": "Share Sync Policy",
-      "passed": false
+      "passed": true
     },
     {
       "name": "Backup System",
@@ -73,7 +73,7 @@
     },
     {
       "name": "OA State",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Handoff Kernel",
@@ -110,5 +110,19 @@
     "constraints": [],
     "pending_ops_blocks": [],
     "session_metadata": {}
+  },
+  "oa_tools": {
+    "version": 1,
+    "tools": [
+      "oa.kernel_status",
+      "oa.reality_check",
+      "oa.guard.run",
+      "oa.bootstrap_state",
+      "oa.ssot_surface",
+      "oa.reality_summary",
+      "oa.handoff_kernel"
+    ],
+    "interface": "pmagent.oa.tools",
+    "registry": "docs/SSOT/oa/OA_TOOLS_REGISTRY.md"
   }
 }
