@@ -2152,10 +2152,12 @@ guard.mcp.proof:
 	@echo "[guard.mcp.proof] Validating Knowledge MCP proof snapshot"
 	@$(PYTHON) scripts/guards/guard_mcp_proof.py
 
+.PHONY: guard.root.surface
 guard.root.surface:
 	@echo "[guard.root.surface] Validating repository root surface policy"
 	@$(PYTHON) scripts/guards/guard_root_surface_policy.py --mode STRICT
 
+.PHONY: guard.pm_boot.surface
 guard.pm_boot.surface:
 	@echo "[guard.pm_boot.surface] Validating PM Boot Surface capsule"
 	@$(PYTHON) scripts/guards/guard_pm_boot_surface.py
