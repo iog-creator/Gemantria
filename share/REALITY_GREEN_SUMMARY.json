@@ -3,26 +3,26 @@
   "checks": [
     {
       "name": "DB Health",
-      "passed": false,
-      "message": "DB health check failed: \u274c CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.\n   Error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+      "passed": true,
+      "message": "DB is reachable and healthy",
       "details": {
-        "exit_code": 1
+        "output": "OK: DB reachable and base tables present."
       }
     },
     {
       "name": "Control-Plane Health",
-      "passed": false,
-      "message": "Control-plane health check failed: \u274c CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.\n   Error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+      "passed": true,
+      "message": "Control plane is healthy",
       "details": {
-        "exit_code": 1
+        "output": "HINT: MV refresh failed: field name must not be null\nCONTEXT:  SQL statement \"REFRESH MATERIALIZED VIEW control.mv_compliance_30d\"\nPL/pgSQL function control.refresh_compliance(text) line 6 at SQL statement"
       }
     },
     {
       "name": "AGENTS.md Sync",
-      "passed": false,
-      "message": "AGENTS.md sync check failed - files may be stale: [check_agents_md_sync] POTENTIAL SYNC ISSUES DETECTED:\n\n  \u26a0\ufe0f  scripts/AGENTS.md: Code updated 2025-12-06 06:48 but AGENTS.md last updated 2025-12-05 21:03\n  \u26a0\ufe0f  pmagent/handoff/AGENTS.md: Code updated 2025-12-06 06:47 but AGENTS.md last updated 2025-12-05 17:15\n\n\ud83d\udca1 HINT: Update AGENTS.md files to reflect code changes per Rule 006 & Rule 027\n   Run: python scripts/create_agents_md.py --dry-run  # Check for missing files",
+      "passed": true,
+      "message": "All AGENTS.md files are in sync",
       "details": {
-        "exit_code": 1
+        "output": ""
       }
     },
     {
@@ -33,15 +33,81 @@
     },
     {
       "name": "Ledger Verification",
-      "passed": false,
-      "message": "Ledger verification failed",
+      "passed": true,
+      "message": "All 9 tracked artifacts are current",
       "details": {
         "summary": {
-          "ok": false,
-          "error": "Database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?"
-        },
-        "stale": [],
-        "missing": []
+          "ok": true,
+          "total": 9,
+          "current": 9,
+          "stale": [],
+          "missing": [],
+          "results": [
+            {
+              "name": "AGENTS.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "5f089e214966d282...",
+              "current_hash": "5f089e214966d282..."
+            },
+            {
+              "name": "MASTER_PLAN.md",
+              "source_of_truth": "docs/SSOT",
+              "status": "current",
+              "ledger_hash": "7267134e5e14bb7d...",
+              "current_hash": "7267134e5e14bb7d..."
+            },
+            {
+              "name": "DB_HEALTH.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "7b351351aaaf7321...",
+              "current_hash": "7b351351aaaf7321..."
+            },
+            {
+              "name": "PM_SNAPSHOT_CURRENT.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "6c51be1d31e4250e...",
+              "current_hash": "6c51be1d31e4250e..."
+            },
+            {
+              "name": "RULES_INDEX.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "df01a6ca8e43a79b...",
+              "current_hash": "df01a6ca8e43a79b..."
+            },
+            {
+              "name": "system_health.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "9c634ea5601204f4...",
+              "current_hash": "9c634ea5601204f4..."
+            },
+            {
+              "name": "lm_indicator.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "0c8d7f9de6b933f5...",
+              "current_hash": "0c8d7f9de6b933f5..."
+            },
+            {
+              "name": "canonical.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "c7ca48f2888fb60a...",
+              "current_hash": "c7ca48f2888fb60a..."
+            },
+            {
+              "name": "summary.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "fd4f7625bcefe9fb...",
+              "current_hash": "fd4f7625bcefe9fb..."
+            }
+          ]
+        }
       }
     },
     {
@@ -55,9 +121,10 @@
     {
       "name": "DMS Hint Registry",
       "passed": true,
-      "message": "DMS hint registry accessible (no REQUIRED hints configured yet)",
+      "message": "DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)",
       "details": {
-        "note": "Empty registry is OK"
+        "total_hints": 4,
+        "flows_with_hints": 2
       }
     },
     {
@@ -72,11 +139,16 @@
     {
       "name": "DMS Alignment",
       "passed": false,
-      "message": "DMS Alignment BROKEN: ",
+      "message": "DMS Alignment BROKEN: Extra in share: 1",
       "details": {
         "ok": false,
-        "error": "(psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
-        "details": []
+        "mode": "STRICT",
+        "dms_share_alignment": "BROKEN",
+        "missing_in_share": [],
+        "missing_in_dms": [],
+        "extra_in_share": [
+          "mcp/"
+        ]
       }
     },
     {
@@ -89,105 +161,17 @@
     },
     {
       "name": "Share Sync Policy",
-      "passed": false,
-      "message": "Policy Violation: Found 40 unknown files",
+      "passed": true,
+      "message": "No unknown or unsafe share/ docs in managed namespaces",
       "details": {
-        "ok": false,
-        "mode": "STRICT",
-        "missing_in_share": [],
-        "extra_in_share": [
-          "share/AGENTPM_GEMATRIA_MODULE_PLAN.md",
-          "share/AGENTS.md",
-          "share/BIBLESCHOLAR_INTAKE.md",
-          "share/BIBLESCHOLAR_MIGRATION_PLAN.md",
-          "share/DB_HEALTH.md",
-          "share/GEMATRIA_NUMERICS_INTAKE.md",
-          "share/GPT_REFERENCE_GUIDE.md",
-          "share/GPT_SYSTEM_PROMPT.md",
-          "share/LAYER3_AI_DOC_INGESTION_PLAN.md",
-          "share/LAYER4_CODE_INGESTION_PLAN.md",
-          "share/LM_STUDIO_SETUP.md",
-          "share/LM_WIDGETS.md",
-          "share/MASTER_PLAN.md",
-          "share/NEXT_STEPS.md",
-          "share/PHASE18_INDEX.md",
-          "share/PHASE20_INDEX.md",
-          "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
-          "share/PHASE20_UI_RESET_DECISION.md",
-          "share/PHASE21_CONSOLE_SERVE_PLAN.md",
-          "share/PHASE21_INDEX.md",
-          "share/PHASE22_INDEX.md",
-          "share/PHASE22_OPERATOR_WORKFLOW.md",
-          "share/PHASE23_BASELINE_NOTE.md",
-          "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
-          "share/PHASE23_FAILURE_INJECTION_NOTE.md",
-          "share/PHASE23_INDEX.md",
-          "share/PHASE23_PHASE_DONE_CHECKLIST.md",
-          "share/PHASE23_STRESS_PLAN.md",
-          "share/PHASE23_STRESS_SMOKE_NOTE.md",
-          "share/PHASE_14_SEMANTIC_RECORD.md",
-          "share/PHASE_6_PLAN.md",
-          "share/PM_CONTRACT.md",
-          "share/PM_CONTRACT_STRICT_SSOT_DMS.md",
-          "share/PROJECTS_INVENTORY.md",
-          "share/REFERENCES.md",
-          "share/RULES_INDEX.md",
-          "share/STORYMAKER_INTAKE.md",
-          "share/USAGE_PATTERNS_REFERENCE.md",
-          "share/scripts_AGENTS.md",
-          "share/webui-contract.md"
-        ],
-        "missing_in_dms": [
-          "share/AGENTPM_GEMATRIA_MODULE_PLAN.md",
-          "share/AGENTS.md",
-          "share/BIBLESCHOLAR_INTAKE.md",
-          "share/BIBLESCHOLAR_MIGRATION_PLAN.md",
-          "share/DB_HEALTH.md",
-          "share/GEMATRIA_NUMERICS_INTAKE.md",
-          "share/GPT_REFERENCE_GUIDE.md",
-          "share/GPT_SYSTEM_PROMPT.md",
-          "share/LAYER3_AI_DOC_INGESTION_PLAN.md",
-          "share/LAYER4_CODE_INGESTION_PLAN.md",
-          "share/LM_STUDIO_SETUP.md",
-          "share/LM_WIDGETS.md",
-          "share/MASTER_PLAN.md",
-          "share/NEXT_STEPS.md",
-          "share/PHASE18_INDEX.md",
-          "share/PHASE20_INDEX.md",
-          "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
-          "share/PHASE20_UI_RESET_DECISION.md",
-          "share/PHASE21_CONSOLE_SERVE_PLAN.md",
-          "share/PHASE21_INDEX.md",
-          "share/PHASE22_INDEX.md",
-          "share/PHASE22_OPERATOR_WORKFLOW.md",
-          "share/PHASE23_BASELINE_NOTE.md",
-          "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
-          "share/PHASE23_FAILURE_INJECTION_NOTE.md",
-          "share/PHASE23_INDEX.md",
-          "share/PHASE23_PHASE_DONE_CHECKLIST.md",
-          "share/PHASE23_STRESS_PLAN.md",
-          "share/PHASE23_STRESS_SMOKE_NOTE.md",
-          "share/PHASE_14_SEMANTIC_RECORD.md",
-          "share/PHASE_6_PLAN.md",
-          "share/PM_CONTRACT.md",
-          "share/PM_CONTRACT_STRICT_SSOT_DMS.md",
-          "share/PROJECTS_INVENTORY.md",
-          "share/REFERENCES.md",
-          "share/RULES_INDEX.md",
-          "share/STORYMAKER_INTAKE.md",
-          "share/USAGE_PATTERNS_REFERENCE.md",
-          "share/scripts_AGENTS.md",
-          "share/webui-contract.md"
-        ]
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
       }
     },
     {
       "name": "Backup System",
-      "passed": false,
-      "message": "No recent backup found: ",
-      "details": {
-        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
-      }
+      "passed": true,
+      "message": "Recent backup exists and rotation logic is sane",
+      "details": {}
     },
     {
       "name": "WebUI Shell Sanity",
@@ -204,5 +188,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-06T14:48:48Z"
+  "timestamp": "2025-12-07T03:46:12Z"
 }

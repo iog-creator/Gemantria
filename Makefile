@@ -291,11 +291,6 @@ governance.docs.hints:
 	@PYTHONPATH=. $(PYTHON) scripts/governance_docs_hints.py || true
 	@echo "Governance docs hints check complete"
 
-# Governance ingestion (Phase 24.B)
-.PHONY: governance.ingest.docs
-governance.ingest.docs:
-	@pmagent dms ingest-share
-
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
 .PHONY: docs.hints
 docs.hints:
@@ -893,10 +888,6 @@ temporal.analytics:
 	@if [ -f exports/pattern_forecast.json ]; then \
 		echo ">> Pattern forecasts generated successfully"; \
 	fi
-
-.PHONY: phase8.temporal
-phase8.temporal: temporal.analytics
-	@echo ">> Phase-8 Temporal Analytics completed"
 
 .PHONY: phase8.forecast
 phase8.forecast:
@@ -1906,12 +1897,6 @@ agents.md.index:
 	@psql "$$GEMATRIA_DSN" -v ON_ERROR_STOP=1 -c "\copy ai.agent_docs_index (path,sha256_12,excerpt) FROM program 'jq -cr \".[]|[.path,.sha256_12,(.excerpt|tojson)]|@tsv\" tmp.agent_docs_index.json' WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b')"
 	@psql "$$GEMATRIA_DSN" -c "SELECT count(*) AS indexed, min(updated_at) AS first_at, max(updated_at) AS last_at FROM ai.agent_docs_index"
 
-# Rerank smoke test (stub for now)
-.PHONY: rerank.smoke
-rerank.smoke:
-	@echo "[rerank.smoke] Checking rerank components..."
-	@python3 scripts/analytics/rerank_smoke.py
-
 # Rerank smoke test
 .PHONY: rerank.smoke
 rerank.smoke:
@@ -2161,12 +2146,6 @@ guard.mcp.query:
 	@echo "[guard.mcp.query] Validating Knowledge MCP query roundtrip"
 	@$(PYTHON) scripts/guards/guard_mcp_query.py
 
-# PLAN-073 M1 E05: Proof Snapshot
-.PHONY: mcp.proof.snapshot guard.mcp.proof
-mcp.proof.snapshot:
-	@echo "[mcp.proof.snapshot] Generating Knowledge MCP proof snapshot"
-	@$(PYTHON) scripts/mcp/generate_proof_snapshot.py
-
 guard.mcp.proof:
 	@echo "[guard.mcp.proof] Validating Knowledge MCP proof snapshot"
 	@$(PYTHON) scripts/guards/guard_mcp_proof.py
@@ -2236,7 +2215,7 @@ mcp.query.smoke:
 	@echo 'mcp.query.smoke OK'
 
 mcp.proof.snapshot:
-	@bash scripts/mcp_proof_snapshot.sh || true
+	@$(PYTHON) scripts/mcp/generate_proof_snapshot.py
 	@echo 'mcp.proof.snapshot OK'
 
 ## MCP M2 targets

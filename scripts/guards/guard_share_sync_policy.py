@@ -45,11 +45,13 @@ MANAGED_PREFIXES = [
 ]
 
 # System namespaces are preserved but NOT checked against DMS (dynamic state or exports)
+# See docs/SSOT/SHARE_FOLDER_ANALYSIS.md for SSOT on share/ layout and non-DMS-managed surfaces
 SYSTEM_PREFIXES = [
     "share/orchestrator",
     "share/orchestrator_assistant",
     "share/atlas",
     "share/exports",
+    "share/handoff",  # kernel bundle directory (PM_KERNEL.json, PM_SUMMARY.md) - Phase 24.E deliverables
 ]
 
 EPHEMERAL_PREFIXES = [
@@ -76,6 +78,8 @@ SYSTEM_FILES = {
     "share/PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.json",
     "share/PM_HANDOFF_PROTOCOL.md",
     "share/SHARE_FOLDER_ANALYSIS.md",
+    # Non-DMS-managed agent working surfaces (see SHARE_FOLDER_ANALYSIS.md)
+    "share/planning_context.json",  # planning pipeline output for agents (not a managed doc)
 }
 
 SHARE_ROOT = ROOT / "share"

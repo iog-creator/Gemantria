@@ -42,6 +42,7 @@ SHARE_ROOT = ROOT / "share"
 
 # Files/Patterns explicitly allowed in share/ even if not in registry
 # (Matches sync_share.py + specifics)
+# See docs/SSOT/SHARE_FOLDER_ANALYSIS.md for SSOT on share/ layout and non-DMS-managed surfaces
 ALLOWED_FILES = {
     # Console v2 / Bootstrap
     "PHASE23_INDEX.md",
@@ -78,6 +79,8 @@ ALLOWED_FILES = {
     # Phase 24
     "HANDOFF_KERNEL.json",
     "REALITY_GREEN_SUMMARY.json",
+    # Non-DMS-managed agent working surfaces (see SHARE_FOLDER_ANALYSIS.md)
+    "planning_context.json",  # planning pipeline output for agents (not a managed doc)
 }
 
 ALLOWED_SUBDIRS = {
@@ -85,6 +88,7 @@ ALLOWED_SUBDIRS = {
     "orchestrator_assistant",
     "atlas",
     "exports",
+    "handoff",  # kernel bundle directory (PM_KERNEL.json, PM_SUMMARY.md) - Phase 24.E deliverables
 }
 
 

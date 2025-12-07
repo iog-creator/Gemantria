@@ -1,11 +1,11 @@
 # PM Handoff Summary
-Generated at: 2025-12-07T00:30:22.043400+00:00
+Generated at: 2025-12-07T03:30:11.962693+00:00
 Version: pmagent.handoff.kernel.v1
 
 ## Where we really are
 - **Phase**: 24
 - **Last Completed**: 23
-- **Branch**: `feat/phase26-kernel-enforcement`
+- **Branch**: `feat/phase27-kernel-consumers`
 
 ## What’s green / proven
 - **Kernel Integrity**: Generated and consistent with bootstrap.

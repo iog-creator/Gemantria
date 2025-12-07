@@ -1,12 +1,12 @@
 {
-  "branch": "feat/phase26-kernel-enforcement",
+  "branch": "feat/phase27-kernel-consumers",
   "core_governance": {
     "cursor_behavior_patch": "docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md",
     "execution_contract": "docs/SSOT/EXECUTION_CONTRACT.md",
     "pm_contract": "docs/SSOT/PM_CONTRACT.md"
   },
   "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
-  "generated_at_utc": "2025-12-06T14:49:06.611884+00:00",
+  "generated_at_utc": "2025-12-07T03:30:07.477700+00:00",
   "gotchas": {
     "index": "docs/SSOT/GOTCHAS_INDEX.md",
     "share_folder": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
@@ -101,7 +101,18 @@
     },
     "26": {
       "26handoffkernel": "docs/SSOT/PHASE26_HANDOFF_KERNEL.md",
-      "26index": "docs/SSOT/PHASE26_INDEX.md"
+      "26index": "docs/SSOT/PHASE26_INDEX.md",
+      "26oabootspec": "docs/SSOT/PHASE26_OA_BOOT_SPEC.md",
+      "26opsbootspec": "docs/SSOT/PHASE26_OPS_BOOT_SPEC.md",
+      "26pmagentbootspec": "docs/SSOT/PHASE26_PMAGENT_BOOT_SPEC.md",
+      "plan": "docs/SSOT/PHASE26_PHASE_DONE_PLAN.md"
+    },
+    "27": {
+      "27apmagentkernelinterpreter": "docs/SSOT/PHASE27_A_PMAGENT_KERNEL_INTERPRETER.md",
+      "27boaruntime": "docs/SSOT/PHASE27_B_OA_RUNTIME.md",
+      "27cconsolekernelpanel": "docs/SSOT/PHASE27_C_CONSOLE_KERNEL_PANEL.md",
+      "27ddspyreasoningoutline": "docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md",
+      "27index": "docs/SSOT/PHASE27_INDEX.md"
     },
     "5": {
       "plan": "docs/SSOT/PHASE_5_PLAN.md"
