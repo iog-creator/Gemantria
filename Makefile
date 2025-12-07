@@ -243,6 +243,8 @@ pm.share.artifacts:
 		fi; \
 	done
 	@echo "✅ All JSON files converted to Markdown and removed (kb_registry.json preserved)"
+	@echo ">> Refreshing PM boot surface (automatic)"
+	@PYTHONPATH=. python3 scripts/pm/generate_pm_boot_surface.py || echo "⚠️  PM boot surface refresh had issues (non-fatal)"
 	@echo "✅ PM share artifacts generation complete"
 
 plan.next:
