@@ -1,5 +1,5 @@
 {
-  "reality_green": false,
+  "reality_green": true,
   "checks": [
     {
       "name": "DB Health",
@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "2903a587830a9eea...",
+              "current_hash": "2903a587830a9eea..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -145,6 +145,18 @@
       }
     },
     {
+      "name": "DMS Metadata",
+      "passed": true,
+      "message": "DMS metadata sane (low_enabled=0)",
+      "details": {
+        "distribution": {
+          "critical": 130,
+          "medium": 77,
+          "unknown": 969
+        }
+      }
+    },
+    {
       "name": "Bootstrap Consistency",
       "passed": true,
       "message": "Bootstrap state matches SSOT",
@@ -154,14 +166,10 @@
     },
     {
       "name": "Root Surface",
-      "passed": false,
-      "message": "Found 2 unexpected file(s) in root: PM_HANDOFF_PROTOCOL.md, SHARE_FOLDER_ANALYSIS.md",
+      "passed": true,
+      "message": "No unexpected files in repository root",
       "details": {
-        "unexpected": [
-          "PM_HANDOFF_PROTOCOL.md",
-          "SHARE_FOLDER_ANALYSIS.md"
-        ],
-        "output": ""
+        "output": "[root-surface] OK: no unexpected files in repo root"
       }
     },
     {
@@ -169,7 +177,7 @@
       "passed": true,
       "message": "No unknown or unsafe share/ docs in managed namespaces",
       "details": {
-        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
       }
     },
     {
@@ -193,5 +201,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T18:31:30Z"
+  "timestamp": "2025-12-07T18:38:25Z"
 }
