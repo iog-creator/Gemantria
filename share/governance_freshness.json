@@ -1,0 +1,654 @@
+{
+  "schema": "governance_freshness.v1",
+  "generated_at": "2025-12-07T18:49:10.690832+00:00",
+  "summary": {
+    "artifacts_total": 134,
+    "artifacts_stale": 9,
+    "hints_total": 818,
+    "hints_stale": 815,
+    "rules_total": 75,
+    "rules_with_stale_artifacts": 0,
+    "max_staleness_days": 26.7
+  },
+  "by_rule": [
+    {
+      "rule": "058",
+      "last_artifact_update": null,
+      "last_hint_emission": "2025-12-07T09:56:28.634904-08:00",
+      "artifacts_stale": 0,
+      "artifacts_total": 0,
+      "stale": false
+    },
+    {
+      "rule": "061",
+      "last_artifact_update": null,
+      "last_hint_emission": "2025-12-07T09:56:28.654043-08:00",
+      "artifacts_stale": 0,
+      "artifacts_total": 0,
+      "stale": false
+    },
+    {
+      "rule": "Rule-000",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-001",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-002",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-003",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-004",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-005",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-006",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-007",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-008",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-009",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-010",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-011",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 2,
+      "stale": false
+    },
+    {
+      "rule": "Rule-012",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-013",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-014",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-015",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-016",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-017",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-018",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-019",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-020",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-021",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-022",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-023",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-024",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-025",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-026",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-027",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-028",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-029",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-030",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 2,
+      "stale": false
+    },
+    {
+      "rule": "Rule-031",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-032",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-033",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-034",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-035",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-036",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-037",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-038",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-039",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 4,
+      "stale": false
+    },
+    {
+      "rule": "Rule-040",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-041",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-042",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-043",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-044",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 8,
+      "artifacts_total": 46,
+      "stale": false
+    },
+    {
+      "rule": "Rule-045",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-046",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 2,
+      "stale": false
+    },
+    {
+      "rule": "Rule-047",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-048",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-049",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-050",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 4,
+      "stale": false
+    },
+    {
+      "rule": "Rule-051",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-052",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-053",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-054",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-055",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-056",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-057",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-058",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 3,
+      "stale": false
+    },
+    {
+      "rule": "Rule-059",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-060",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-061",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-062",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-063",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-064",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-065",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-066",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-067",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-068",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-069",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-070",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-071",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    },
+    {
+      "rule": "Rule-072",
+      "last_artifact_update": "2025-12-07T09:56:28.527430-08:00",
+      "last_hint_emission": null,
+      "artifacts_stale": 0,
+      "artifacts_total": 1,
+      "stale": false
+    }
+  ],
+  "by_artifact_type": [
+    {
+      "type": "agent_file",
+      "fresh": 8,
+      "stale": 1,
+      "oldest_stale": "2025-11-28T08:48:29.189525-08:00"
+    },
+    {
+      "type": "hint_emission",
+      "fresh": 4,
+      "stale": 0,
+      "oldest_stale": null
+    },
+    {
+      "type": "metadata_reference",
+      "fresh": 3,
+      "stale": 0,
+      "oldest_stale": null
+    },
+    {
+      "type": "rule",
+      "fresh": 73,
+      "stale": 0,
+      "oldest_stale": null
+    },
+    {
+      "type": "share_manifest",
+      "fresh": 1,
+      "stale": 0,
+      "oldest_stale": null
+    },
+    {
+      "type": "share_manifest_item",
+      "fresh": 36,
+      "stale": 8,
+      "oldest_stale": "2025-11-09T18:04:59.714945-08:00"
+    }
+  ],
+  "db_off": false
+}
