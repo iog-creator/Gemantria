@@ -110,6 +110,7 @@ ALLOWED_SUBDIRS = {
     "exports",
     "handoff",  # kernel bundle directory (PM_KERNEL.json, PM_SUMMARY.md) - Phase 24.E deliverables
     "pm_boot",  # PM/OA boot capsule (Phase 27.H) - generated view of kernel + governance + behavioral contracts
+    "oa",  # OA runtime workspace (Phase 27.E) - CONTEXT.json and DSPy program surfaces
 }
 
 
