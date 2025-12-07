@@ -45,3 +45,15 @@ The `webui/orchestrator-console-v2/` directory contains the Orchestrator Console
 |-------------------|--------------|
 | Kernel wiring | Phase 27.B/C OA kernel snapshot |
 | View model binding | Phase 20.4 data wiring |
+
+## Future: DSPy Reasoning Integration (Phase 28+)
+
+Console v2 serves as the **visual frontend** for the Gemantria kernel system. The **reasoning brain** will eventually be powered by DSPy reasoning programs (see [PHASE27_D_DSPY_REASONING_OUTLINE.md](../../docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md)):
+
+- **KernelHealthTile** displays kernel state; **SafeOPSDecision** (DSPy) will analyze it
+- **OAWorkspacePanel** shows active work; **OPSBlockGenerator** (DSPy) will draft OPS blocks
+- **GuardFailureInterpreter** (DSPy) will provide Console with actionable remediation for failures
+- **PhaseTransitionValidator** (DSPy) will enable/disable phase-transition UI actions
+
+**Current (Phase 27):** Console is read-only, OA does manual reasoning  
+**Future (Phase 28+):** Console wires to DSPy programs for automated reasoning suggestions

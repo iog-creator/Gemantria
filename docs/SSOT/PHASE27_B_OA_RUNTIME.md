@@ -248,6 +248,28 @@ def check_kernel_drift(state: OASessionState):
 
 ---
 
+## Future DSPy Reasoning Programs (from 27.D)
+
+OA runtime will eventually delegate key decisions to formal DSPy reasoning programs defined in [PHASE27_D_DSPY_REASONING_OUTLINE.md](docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md):
+
+| Program | Purpose | OA Integration |
+|---------|---------|----------------|
+| **SafeOPSDecision** | Decide if proposed OPS work is safe given kernel state | OA calls before drafting any OPS block |
+| **OPSBlockGenerator** | Generate complete OPS block from PM goal | Replaces manual drafting logic |
+| **GuardFailureInterpreter** | Interpret guard failure, recommend remediation | OA calls when Cursor reports failures |
+| **PhaseTransitionValidator** | Validate phase transitions are allowed | OA calls before phase-bump OPS blocks |
+
+**Phase 27 Scope:** OA uses manual drafting/interpretation logic.
+
+**Phase 28+:** OA delegates to DSPy programs, which:
+- Call `pmagent` as tools (not bypass)
+- Use SSOT docs as few-shot examples
+- Output structured JSON
+
+See [PHASE27_D_DSPY_REASONING_OUTLINE.md](docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md) for full signatures, I/O schemas, and implementation roadmap.
+
+---
+
 ## LM Studio Tool Belt Integration (Optional)
 
 If LM Studio OA runtime is ready, provide tool wrappers:

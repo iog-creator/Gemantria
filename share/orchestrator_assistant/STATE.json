@@ -1,11 +1,11 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-07T20:57:17.326178+00:00",
+  "generated_at": "2025-12-07T21:06:43.399043+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
-  "reality_green": true,
+  "reality_green": false,
   "checks_summary": [
     {
       "name": "DB Health",
@@ -73,7 +73,7 @@
     },
     {
       "name": "OA State",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Handoff Kernel",
