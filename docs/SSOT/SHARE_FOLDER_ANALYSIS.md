@@ -147,3 +147,35 @@ Phase 24 introduced three guarantees:
 These guarantees make `share/` safe to use as the agent-facing FS view.
 
 This document is SSOT and must remain consistent with guard behavior.
+
+---
+
+## 5. Root Surface Policy (Phase 27.G)
+
+The repository root is **code + top-level config only**. All temporary artifacts, logs, and generated files belong in designated directories:
+
+### **Allowed in Root:**
+- Source code files (`.py`, `.ts`, `.tsx`, etc.)
+- Configuration files (`.toml`, `.ini`, `.json`, `.yaml`, `.yml`)
+- Documentation files (`.md`, `.txt`)
+- Build system files (`Makefile`, `package.json`, `pyproject.toml`)
+- Git metadata (`.gitignore`, `.github/`, `.githooks/`)
+- Environment files (`.env.example`, `.env.local` - git-ignored)
+
+### **Not Allowed in Root:**
+- Log files (`reality_green_*.log` → `var/log/pm/`)
+- PR summaries (`pr_summary.md` → `share/handoff/pr/PR-{N}.md`)
+- Test files (`test_*.py`, `conftest.py` → `tests/` or `tests/integration/`)
+- Temporary artifacts (→ `evidence/`, `share/exports/`, or `var/`)
+
+### **Enforcement:**
+- **Allowlist**: `docs/SSOT/ROOT_SURFACE_ALLOWLIST.txt` (canonical list of allowed root files)
+- **Guard**: `scripts/guards/guard_root_surface_policy.py` validates root against allowlist
+- **Integration**: `make guard.root.surface` (standalone) + `make reality.green` (included)
+- **Mode**: STRICT (fails on violations) or HINT (warns only)
+
+### **Git Ignore:**
+- `var/log/pm/` is git-ignored (ephemeral logs)
+- `.env.local`, `.server.pid` are git-ignored (local-only files)
+
+This policy prevents root drift and ensures repository hygiene is automatically enforced.

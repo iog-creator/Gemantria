@@ -241,7 +241,13 @@ Phase 27 is DONE when:
    - Integration architecture documented
    - Phase 28+ roadmap clear
 
-5. ✅ **Guards Green:**
+5. ✅ **27.G Complete:**
+   - Root surface guard implemented and passing
+   - Root drift cleaned (no logs/tests/pr_summary in root)
+   - Allowlist created and guard integrated into reality.green
+   - Documentation updated (SHARE_FOLDER_ANALYSIS.md)
+
+6. ✅ **Guards Green:**
    - `make reality.green` passes
    - No new lint errors
    - DMS alignment maintained
@@ -267,7 +273,65 @@ Explicitly OUT of scope for Phase 27:
 
 ---
 
-## 27.G — Open Questions for PM Review
+## 27.G — Repository Hygiene & Root Surface Guard
+
+### Problem
+
+Currently:
+- Cursor and other tools dump artifacts into repository root (logs, test files, PR summaries)
+- No enforcement mechanism to prevent root drift
+- Root becomes cluttered with temporary files that should live in `var/log/`, `share/handoff/pr/`, or `tests/`
+- Manual cleanup required, no automated detection
+
+### Objectives
+
+1. **Clean Existing Root Drift:**
+   - Move `pr_summary.md` → `share/handoff/pr/PR-{N}.md`
+   - Move `reality_green_*.log` → `var/log/pm/` (git-ignored)
+   - Move stray test files → `tests/integration/` or delete if duplicates exist
+   - Move `conftest.py` → `tests/` if not already present
+
+2. **Root Surface Allowlist:**
+   - Create `docs/SSOT/ROOT_SURFACE_ALLOWLIST.txt` as canonical allowlist
+   - Generated from current clean state (code + config only, no artifacts)
+
+3. **Root Surface Guard:**
+   - Implement `scripts/guards/guard_root_surface_policy.py`
+   - Validates that no unexpected files appear in repo root
+   - STRICT mode: fails on violations
+   - HINT mode: warns but allows
+
+4. **Integration:**
+   - Wire `guard.root.surface` into `reality.green` pipeline
+   - Add to `.gitignore` for log directories (`var/log/pm/`)
+
+### Deliverables
+
+- **Root Surface Allowlist**: `docs/SSOT/ROOT_SURFACE_ALLOWLIST.txt`
+  - Canonical list of allowed root files (code + config only)
+  - Updated when legitimate root files are added
+- **Guard Script**: `scripts/guards/guard_root_surface_policy.py`
+  - Validates root against allowlist
+  - HINT/STRICT mode support
+- **Makefile Target**: `make guard.root.surface`
+  - Standalone guard execution
+  - Integrated into `reality.green`
+- **Documentation**:
+  - Updated `SHARE_FOLDER_ANALYSIS.md` with root surface policy section
+  - Updated `.gitignore` for log directories
+
+### Acceptance Criteria
+
+- ✅ Root is clean (no logs, tests, PR summaries in root)
+- ✅ `make guard.root.surface` passes in STRICT mode
+- ✅ `make reality.green` includes root surface check
+- ✅ `.gitignore` excludes `var/log/pm/`
+- ✅ PR summaries live in `share/handoff/pr/`
+- ✅ Documentation updated with root surface policy
+
+---
+
+## 27.H — Open Questions for PM Review
 
 1. **LM Studio Integration:**
    - Should 27.B include LM Studio tool belt wrappers, or is that Phase 28+?
@@ -288,7 +352,7 @@ Explicitly OUT of scope for Phase 27:
 
 ---
 
-## 27.H — Dependencies & Integration Map
+## 27.I — Dependencies & Integration Map
 
 ```mermaid
 graph TD
@@ -312,7 +376,7 @@ graph TD
 
 ---
 
-## 27.I — Success Metrics
+## 27.J — Success Metrics
 
 Phase 27 succeeds if:
 
@@ -330,7 +394,7 @@ Phase 27 fails if:
 
 ---
 
-## 27.J — PM Approval Gate
+## 27.K — PM Approval Gate
 
 **Before starting Phase 27 implementation:**
 

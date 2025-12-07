@@ -29,6 +29,9 @@ backups/codebase/backup-safety-rules-*.tar.gz
 *.old_*
 .env.bak.*
 
+# PM / guard logs
+var/log/pm/
+
 # Dev artifacts
 __pycache__/
 *.pyc

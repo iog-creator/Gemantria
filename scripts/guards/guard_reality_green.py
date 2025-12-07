@@ -485,6 +485,38 @@ def check_handoff_kernel() -> CheckResult:
         return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
 
+def check_root_surface() -> CheckResult:
+    """Check Repository Root Surface Policy (Phase 27.G)."""
+    script = ROOT / "scripts" / "guards" / "guard_root_surface_policy.py"
+    if not script.exists():
+        return CheckResult("Root Surface", False, "Guard script missing", {})
+
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "Root Surface",
+            True,
+            "No unexpected files in repository root",
+            {"output": stdout.strip()},
+        )
+    else:
+        # Parse stderr for unexpected files
+        unexpected = []
+        for line in stderr.splitlines():
+            if line.strip().startswith("- "):
+                unexpected.append(line.strip()[2:])
+
+        if unexpected:
+            msg = f"Found {len(unexpected)} unexpected file(s) in root: {', '.join(unexpected[:5])}"
+            if len(unexpected) > 5:
+                msg += f" (and {len(unexpected) - 5} more)"
+        else:
+            msg = "Root surface policy violation detected"
+
+        return CheckResult("Root Surface", False, msg, {"unexpected": unexpected, "output": stdout})
+
+
 def main() -> int:
     """Run all reality green checks and report results."""
     print("🔍 REALITY GREEN - Full System Truth Gate")
@@ -502,6 +534,7 @@ def main() -> int:
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
         check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
         check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
+        check_root_surface(),  # Phase 27.G: Repository root surface policy
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit
         check_backup_system(),  # Phase 24.D: Backup Retention & Rotation
         check_webui_shell_sanity(),

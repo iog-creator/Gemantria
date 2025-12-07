@@ -2150,6 +2150,10 @@ guard.mcp.proof:
 	@echo "[guard.mcp.proof] Validating Knowledge MCP proof snapshot"
 	@$(PYTHON) scripts/guards/guard_mcp_proof.py
 
+guard.root.surface:
+	@echo "[guard.root.surface] Validating repository root surface policy"
+	@$(PYTHON) scripts/guards/guard_root_surface_policy.py --mode STRICT
+
 .PHONY: guard.schema.naming
 guard.schema.naming:
 	$(PYTHON) scripts/ci/guard_schema_naming.py | tee evidence/guard_schema_naming.final.json
