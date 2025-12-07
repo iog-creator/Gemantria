@@ -4,11 +4,11 @@
   "last_completed_phase": "23",
   "branch": "feat/phase27j-dms-schema-upgrade",
   "health": {
-    "reality_green": true,
+    "reality_green": false,
     "checks": {
-      "DMS Alignment": true,
+      "DMS Alignment": false,
       "Bootstrap Consistency": true,
-      "Share Sync Policy": true,
+      "Share Sync Policy": false,
       "Backup System": true
     }
   },
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T18:38:25Z",
+    "generated_at": "2025-12-07T18:51:42Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0
