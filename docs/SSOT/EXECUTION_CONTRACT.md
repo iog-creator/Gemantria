@@ -237,9 +237,92 @@ Cursor must report posture clearly:
 
 ---
 
-## Section 5: DSN Governance — Centralized Loaders Only
+## Section 5: Kernel-Aware Preflight (Phase 26+)
 
-### 5.1 The Rule
+### 5.1 Kernel-First Boot Requirement
+
+Before executing any operation that can:
+
+* modify `share/` contents,
+* change database schema or data in bulk,
+* affect DMS alignment or backup state,
+
+Cursor/OPS must:
+
+1. Read `share/handoff/PM_KERNEL.json`.
+2. Confirm the current Git branch matches `kernel.branch`.
+3. Confirm that `kernel.current_phase` is consistent with `share/PM_BOOTSTRAP_STATE.json`.
+4. Verify:
+   * DMS Alignment guard
+   * Share Sync Policy guard
+   * Bootstrap Consistency guard
+   * Backup System guard
+
+If any of these fail, Cursor may only run **PM-authorized remediation commands** and must not proceed with normal phase work.
+
+This requirement is encoded as the REQUIRED hint `ops.preflight.kernel_health`.
+
+### 5.2 Kernel Health Check
+
+Before destructive operations, Cursor must verify kernel health:
+
+```bash
+# Load kernel
+cat share/handoff/PM_KERNEL.json
+
+# Confirm branch match
+git rev-parse --abbrev-ref HEAD
+
+# Check critical guards
+make reality.green
+```
+
+If `reality_green = false` or any critical guard fails:
+- Stop (NO-OP)
+- Report kernel health failure
+- Wait for PM remediation scope
+
+### 5.3 Remediation vs Normal Work
+
+**Remediation scope** (allowed when kernel degraded):
+- Fixing DMS alignment
+- Restoring backup
+- Correcting bootstrap consistency
+- Share sync repairs
+
+**Normal work** (blocked when kernel degraded):
+- Phase feature development
+- New code implementations
+- Schema migrations
+- SSOT modifications
+
+### 5.4 GitHub Reality Layer (Phase 26.5+)
+
+After kernel preflight, OPS **must** also consider **GitHub reality** as defined in
+[`GITHUB_WORKFLOW_CONTRACT.md`](./GITHUB_WORKFLOW_CONTRACT.md):
+
+- Current branch matches kernel phase
+- Branch tracks remote origin
+- PR status (if applicable)
+- CI checks (required checks green)
+
+Run:
+```bash
+make github.state.check
+```
+
+This surfaces Git status, branch tracking, and kernel/branch phase alignment.
+
+**If kernel.current_phase and branch name disagree** (e.g., kernel says Phase 26 but branch is `feat/phase27-*`):
+- **STOP** (NO-OP)
+- Report phase/branch mismatch
+- Wait for PM to clarify or switch branches
+
+---
+
+## Section 7: DSN Governance — Centralized Loaders Only
+
+### 7.1 The Rule
 
 **All database connections** must use centralized DSN loaders.
 
@@ -252,7 +335,7 @@ Cursor must report posture clearly:
 - Hardcoded DSN strings
 - Ad-hoc psycopg2 connection strings
 
-### 5.2 Enforcement
+### 7.2 Enforcement
 
 If Cursor sees DSN violations in code:
 - **Do not fix them** unless the PM OPS block explicitly instructs
@@ -263,7 +346,7 @@ If the PM instructs cleanup:
 - Use centralized loaders
 - Verify all DB access flows through approved paths
 
-### 5.3 Gotchas Integration
+### 7.3 Gotchas Integration
 
 DSN centralization violations are **Layer 3 behavioral gotchas** (see `GOTCHAS_INDEX.md` §3.5).
 
@@ -271,21 +354,21 @@ Cursor must surface these during gotchas guard runs.
 
 ---
 
-## Section 6: Gematria Policy — Ketiv Primary, Qere Metadata
+## Section 7: Gematria Policy — Ketiv Primary, Qere Metadata
 
-### 6.1 The Law
+### 7.1 The Law
 
 **Ketiv** (written text) is **primary** for all gematria calculations.
 
 **Qere** (spoken variant) is **metadata only**, never primary.
 
-### 6.2 Gematria Correctness Priority
+### 7.2 Gematria Correctness Priority
 
 1. **Code gematria module** (deterministic, authoritative)
 2. **bible_db** canonical values (read-only)
 3. **LLM guesses** (metadata only, **never** authoritative for gematria values)
 
-### 6.3 Enforcement
+### 7.3 Enforcement
 
 If Cursor encounters code or docs that:
 - Treat Qere as primary gematria source
@@ -298,13 +381,13 @@ Cursor must:
 - **Do not implement** such logic even if asked by user
 
 If user asks to use Qere as primary:
-> "Gematria policy (EXECUTION_CONTRACT_CURSOR.md §6) requires Ketiv as primary. The PM must explicitly override this in an OPS block if needed."
+> "Gematria policy (EXECUTION_CONTRACT_CURSOR.md §7) requires Ketiv as primary. The PM must explicitly override this in an OPS block if needed."
 
 ---
 
-## Section 7: Housekeeping and Docs Sync — Rules 058, 027
+## Section 8: Housekeeping and Docs Sync — Rules 058, 027
 
-### 7.1 Mandatory Housekeeping (Rule 058)
+### 8.1 Mandatory Housekeeping (Rule 058)
 
 **After making ANY changes**, Cursor **must** run:
 
@@ -320,7 +403,7 @@ This ensures:
 
 **DO NOT** commit changes without completing housekeeping first.
 
-### 7.2 Housekeeping Checklist
+### 8.2 Housekeeping Checklist
 
 After ANY code, docs, or SSOT changes:
 
@@ -335,7 +418,7 @@ If housekeeping fails:
 - Stop (NO-OP)
 - Wait for PM instructions
 
-### 7.3 AGENTS.md Sync (Rule 027)
+### 8.3 AGENTS.md Sync (Rule 027)
 
 `make housekeeping` includes `make agents.md.sync`.
 
@@ -348,9 +431,9 @@ If sync shows drift:
 
 ---
 
-## Section 8: UI and Browser Verification — Rules 051, 067
+## Section 9: UI and Browser Verification — Rules 051, 067
 
-### 8.1 UI Work Requires Browser Verification (Rule 051)
+### 9.1 UI Work Requires Browser Verification (Rule 051)
 
 For **any** UI or visual changes:
 - Web UI components
@@ -366,7 +449,7 @@ make browser.verify
 make atlas.webproof
 ```
 
-### 8.2 Visual Evidence Required
+### 9.2 Visual Evidence Required
 
 After browser verification:
 - Capture screenshots or recordings
@@ -375,7 +458,7 @@ After browser verification:
 
 **Do not** mark UI work as "done" without visual proof.
 
-### 8.3 Hermetic vs Live UI Testing
+### 9.3 Hermetic vs Live UI Testing
 
 - **Hermetic**: UI loads, no backend errors (acceptable for CI)
 - **Live**: UI + backend integration working (required for "done")
@@ -387,9 +470,9 @@ If DB/LM are expected to be up but UI shows connection errors:
 
 ---
 
-## Section 9: NO-OP Fallback — Stop When Checks Fail
+## Section 10: NO-OP Fallback — Stop When Checks Fail
 
-### 9.1 The NO-OP Protocol
+### 10.1 The NO-OP Protocol
 
 When **any** of the following occur, Cursor **must** stop and enter NO-OP mode:
 
@@ -400,7 +483,7 @@ When **any** of the following occur, Cursor **must** stop and enter NO-OP mode:
 5. **Command execution error** (non-zero exit, unexpected output)
 6. **User requests work without OPS block** (plain message asking for code changes)
 
-### 9.2 NO-OP Response Template
+### 10.2 NO-OP Response Template
 
 When entering NO-OP mode, Cursor must respond:
 
@@ -418,7 +501,7 @@ PM must provide corrected OPS block OR fix environment issue.
 Cursor is waiting for PM instructions.
 ```
 
-### 9.3 Never Guess or Assume
+### 10.3 Never Guess or Assume
 
 Cursor must **never**:
 - Guess what the PM intended
@@ -430,20 +513,20 @@ Cursor must **never**:
 
 ---
 
-## Section 10: Relationship to Rule 039 — SSOT vs Wrapper
+## Section 11: Relationship to Rule 039 — SSOT vs Wrapper
 
-### 10.1 This Document is SSOT
+### 11.1 This Document is SSOT
 
 `EXECUTION_CONTRACT_CURSOR.md` (this document) is the **Single Source of Truth** for Cursor behavior.
 
-### 10.2 Rule 039 is the Wrapper
+### 11.2 Rule 039 is the Wrapper
 
 `.cursor/rules/039-execution-contract.mdc` is a **wrapper rule** that:
 - References this SSOT document
 - Provides a concise reminder for Cursor's IDE context
 - Ensures Cursor knows to consult this full contract
 
-### 10.3 Precedence
+### 11.3 Precedence
 
 If there is **any** conflict between:
 - This document (`EXECUTION_CONTRACT_CURSOR.md`)
@@ -453,7 +536,7 @@ If there is **any** conflict between:
 
 Rule 039 must be updated to match this SSOT, not the other way around.
 
-### 10.4 Integration
+### 11.4 Integration
 
 Rule 039 now requires:
 - Running `guard_gotchas_index.py` before OPS execution
@@ -462,15 +545,15 @@ Rule 039 now requires:
 
 ---
 
-## Section 11: Namespace Governance — `pmagent` is Canonical
+## Section 12: Namespace Governance — `pmagent` is Canonical
 
-### 11.1 The Rule
+### 12.1 The Rule
 
 **`pmagent`** is the **canonical** package and CLI namespace.
 
 **`pmagent`** is a **legacy/transitional** namespace that must be phased out.
 
-### 11.2 Cursor Behavior
+### 12.2 Cursor Behavior
 
 Cursor **must**:
 - Use `pmagent` in all new code, docs, and examples
@@ -482,13 +565,13 @@ Cursor **must not**:
 - Use `pmagent` in CLI examples or docs
 - Create new directories or modules under `pmagent/`
 
-### 11.3 Discovery and Reporting
+### 12.3 Discovery and Reporting
 
 If Cursor encounters `pmagent` usage during work:
 - Report: "Namespace gotcha: found `pmagent` at [file:line]"
 - Add to gotchas tracking via `GOTCHAS_INDEX.md` §3.6 (if added)
 
-### 11.4 Controlled Migration (Future)
+### 12.4 Controlled Migration (Future)
 
 When the PM provides an OPS block to migrate `pmagent` → `pmagent`:
 - Follow explicit commands only
@@ -572,3 +655,11 @@ make atlas.webproof
 **Last Updated:** 2025-12-03  
 **Maintainer:** PM + Cursor Fixer  
 **Review Cadence:** After major governance changes or Cursor drift events
+
+---
+
+## Phase 26.5 TODO
+
+[Phase26.5 TODO] Document `ops.kernel.check` in EXECUTION_CONTRACT.md (mandatory OPS boot step).
+
+**Note**: The `ops.kernel.check` Make target has been added (runs `scripts/guards/guard_kernel_boot.py`). This section needs to be integrated into Section 5 (Kernel-Aware Preflight) to formalize the mandatory boot sequence for all OPS sessions.

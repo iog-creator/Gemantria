@@ -17,15 +17,29 @@ Upgraded to:
 import json
 import os
 import re
+import subprocess
+import sys
 from pathlib import Path
 from datetime import datetime, UTC
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+# Pre-flight DB check (mandatory - Rule 050 evidence-first)
+# Note: This script calls check_alignment_status() which runs guard_dms_share_alignment.py,
+# which itself queries control.doc_registry. Pre-flight ensures DB is available.
+preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
+result = subprocess.run([sys.executable, str(preflight_script), "--mode", "strict"], capture_output=True)
+if result.returncode != 0:
+    print(result.stderr.decode(), file=sys.stderr)
+    sys.exit(result.returncode)
+
 SSOT = ROOT / "docs" / "SSOT"
 SHARE = ROOT / "share"
 OUT = SHARE / "PM_BOOTSTRAP_STATE.json"
 REGISTRY_PATH = SHARE / "kb_registry.json"
+SSOT_SURFACE_PATH = SHARE / "SSOT_SURFACE_V17.json"
 
 # Phase file pattern: PHASE[_]?(\d+)(?:_(\d+))?.*\.md
 PHASE_PATTERN = re.compile(r"PHASE[_]?(\d+)(?:_(\d+))?[_.]", re.IGNORECASE)
@@ -53,29 +67,32 @@ def extract_phase_number(filename: str) -> tuple[int, int | None] | None:
 
 
 def discover_phase_files() -> dict[str, dict[str, Any]]:
-    """Dynamically discover all PHASE*.md files in docs/SSOT/."""
+    """Dynamically discover all PHASE*.md files in docs/SSOT/ and share/."""
     phase_files = {}
 
-    if not SSOT.exists():
-        return phase_files
+    search_paths = [SSOT, SHARE]
 
-    for file_path in SSOT.glob("PHASE*.md"):
-        filename = file_path.name
-        rel_path = str(file_path.relative_to(ROOT))
-
-        phase_info = extract_phase_number(filename)
-        if not phase_info:
+    for base_dir in search_paths:
+        if not base_dir.exists():
             continue
 
-        phase, sub_phase = phase_info
-        phase_key = f"{phase}.{sub_phase}" if sub_phase else str(phase)
+        for file_path in base_dir.glob("PHASE*.md"):
+            filename = file_path.name
+            rel_path = str(file_path.relative_to(ROOT))
 
-        phase_files[rel_path] = {
-            "path": rel_path,
-            "phase": phase,
-            "sub_phase": sub_phase,
-            "phase_key": phase_key,
-        }
+            phase_info = extract_phase_number(filename)
+            if not phase_info:
+                continue
+
+            phase, sub_phase = phase_info
+            phase_key = f"{phase}.{sub_phase}" if sub_phase else str(phase)
+
+            phase_files[rel_path] = {
+                "path": rel_path,
+                "phase": phase,
+                "sub_phase": sub_phase,
+                "phase_key": phase_key,
+            }
 
     return phase_files
 
@@ -93,7 +110,10 @@ def load_kb_registry() -> dict[str, Any] | None:
 
 
 def get_registry_docs_by_filter(
-    registry: dict[str, Any], tags: list[str] | None = None, importance: str | None = None, enabled_only: bool = True
+    registry: dict[str, Any],
+    tags: list[str] | None = None,
+    importance: str | None = None,
+    enabled_only: bool = True,
 ) -> list[dict[str, Any]]:
     """Filter registry documents by tags, importance, and enabled status."""
     if "documents" not in registry:
@@ -200,6 +220,34 @@ def build_phase_structure(
     return phases
 
 
+def load_ssot_surface() -> dict[str, Any] | None:
+    """Load SSOT surface for canonical phase state."""
+    if not SSOT_SURFACE_PATH.exists():
+        return None
+    try:
+        with open(SSOT_SURFACE_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def check_alignment_status() -> str:
+    """Check DMS-Share alignment status via guard."""
+    import subprocess
+
+    try:
+        # Run guard in HINT mode to get report (JSON output)
+        result = subprocess.run(
+            ["python3", "scripts/guards/guard_dms_share_alignment.py", "--mode", "HINT"],
+            capture_output=True,
+            text=True,
+        )
+        data = json.loads(result.stdout)
+        return data.get("dms_share_alignment", "UNKNOWN")
+    except Exception:
+        return "UNKNOWN"
+
+
 def main() -> int:
     branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip() or None
     ts = datetime.now(UTC).isoformat()
@@ -218,6 +266,11 @@ def main() -> int:
 
     # Build phase structure
     phases = build_phase_structure(phase_files, registry)
+
+    # Load SSOT surface
+    ssot_surface = load_ssot_surface() or {}
+    if not ssot_surface:
+        print("[PM_BOOTSTRAP] WARNING: SSOT_SURFACE not found. Phase state may be stale.")
 
     data = {
         "version": "2025-12-03",
@@ -250,9 +303,10 @@ def main() -> int:
             "kb_registry": optional("share/kb_registry.json"),
         },
         "meta": {
-            "current_phase": "23",
-            "last_completed_phase": "23",
+            "current_phase": ssot_surface.get("current_phase", "23"),
+            "last_completed_phase": ssot_surface.get("last_completed_phase", "23"),
             "kb_registry_path": "share/kb_registry.json",
+            "dms_share_alignment": ssot_surface.get("dms_share_alignment", check_alignment_status()),
         },
         "kb": {
             "registry_course_correction": optional("docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md"),

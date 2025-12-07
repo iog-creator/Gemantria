@@ -115,6 +115,12 @@ guard.ketiv.primary:
 guard.jsonschema.import:
 	@scripts/ci/run_strict.sh python3 scripts/ci/guard_jsonschema_import.py
 
+# Phase 26.5: OPS must run this before destructive commands.
+.PHONY: ops.kernel.check
+ops.kernel.check:
+	@echo "[Phase26.5] Running kernel boot guard..."
+	@python scripts/guards/guard_kernel_boot.py
+
 # === Auto-resolve DSNs from centralized loader (available to all targets) ===
 ATLAS_DSN    ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --ro)
 GEMATRIA_DSN ?= $(shell cd $(CURDIR) && PYTHONPATH=$(CURDIR) python3 scripts/config/dsn_echo.py --rw)
@@ -173,15 +179,7 @@ codex.parallel:
 
 share.sync:
 	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
-	@PYTHONPATH=. python3 scripts/sync_share.py || { \
-		exit_code=$$?; \
-		if [ $$exit_code -eq 1 ]; then \
-			echo "[share.sync] Files changed (exit code 1 is expected when files are updated)"; \
-			exit 0; \
-		else \
-			exit $$exit_code; \
-		fi; \
-	}
+	@PYTHONPATH=. python3 scripts/sync_share.py
 
 .PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke pm.share.artifacts plan.next plan.history pm.share.planning_context
 
@@ -293,6 +291,11 @@ governance.docs.hints:
 	@PYTHONPATH=. $(PYTHON) scripts/governance_docs_hints.py || true
 	@echo "Governance docs hints check complete"
 
+# Governance ingestion (Phase 24.B)
+.PHONY: governance.ingest.docs
+governance.ingest.docs:
+	@pmagent dms ingest-share
+
 # Document management hints (Rule-050 OPS contract + Rule-061 AI learning)
 .PHONY: docs.hints
 docs.hints:
@@ -355,6 +358,12 @@ handoff.update:
 	@echo ">> Updating project handoff document"
 	@PYTHONPATH=. $(PYTHON) scripts/generate_handoff.py
 	@echo "Handoff document updated"
+
+handoff.kernel:
+	@pmagent handoff kernel
+
+kernel.check:  ## Validate PM handoff kernel bundle
+	$(PYTHON) scripts/guards/guard_kernel_surfaces.py --mode $(MODE)
 
 # Atlas status diagram generation
 
@@ -621,7 +630,7 @@ housekeeping.db.gate:
 
 housekeeping:
 	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
-	$(MAKE) housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
+	$(MAKE) backup.rotate housekeeping.db.gate share.sync governance.ingest.docs governance.ingest.doc_content housekeeping.dms.conditional adr.housekeeping governance.housekeeping governance.docs.hints docs.hints docs.masterref.populate handoff.update pm.share.artifacts
 	@echo ">> Running complete housekeeping (share + agents + rules + forest + governance + docs hints + masterref + handoff + pm.snapshot + pm.share.artifacts)"
 	@echo ">> Creating missing AGENTS.md files (Rule-017, Rule-058)"
 	@PYTHONPATH=. $(PYTHON) scripts/create_agents_md.py || echo "⚠️  AGENTS.md creation had issues (non-fatal)"
@@ -2906,6 +2915,10 @@ MODE ?= HINT
 .PHONY: phase.done.check
 phase.done.check:  ## Run Phase-DONE checklist guard
 	$(PYTHON) scripts/guards/guard_phase_done.py --phase $(PHASE) --mode $(MODE)
+	@if [ "$(PHASE)" -ge 26 ]; then \
+		echo ">> Running Kernel Check (Phase 26+)"; \
+		$(PYTHON) scripts/guards/guard_kernel_surfaces.py --mode HINT; \
+	fi
 
 # -----------------------------------------------------------------------------
 # Phase 23.4 — Mandatory Pre-Housekeeping Backup Policy
@@ -2920,4 +2933,15 @@ backup.surfaces:  ## Create timestamped backup of surfaces before destructive op
 	git_commit=$$(git rev-parse --short HEAD 2>/dev/null || echo "unknown"); \
 	echo "{\"created_at\":\"$$ts\",\"branch\":\"$$git_branch\",\"commit\":\"$$git_commit\"}" > backup/$$ts/MANIFEST.json; \
 	echo "✓ Backup created: backup/$$ts"
+
+.PHONY: backup.rotate
+backup.rotate: ## Rotate backups (Retention: 10 recent + 7 daily)
+	@PYTHONPATH=. python3 scripts/ops/backup_rotate.py
+
+
+# Phase 26.5: GitHub reality check (informational, non-blocking for now)
+.PHONY: github.state.check
+github.state.check:
+	@echo "[Phase26.5] Running GitHub reality check..."
+	@python scripts/guards/guard_github_state.py
 

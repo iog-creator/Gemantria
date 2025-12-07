@@ -150,6 +150,10 @@ from pmagent.hints import app as hints_app  # noqa: E402
 app.add_typer(hints_app, name="hints")
 
 
+dms_app = typer.Typer(help="DMS governance operations")
+app.add_typer(dms_app, name="dms")
+
+
 def _print_health_output(health_json: dict, summary_func=None) -> None:
     """Print health JSON to stdout and optional summary to stderr."""
     print(json.dumps(health_json, indent=2))
@@ -2233,6 +2237,22 @@ def kb_registry_validate(
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+@dms_app.command(name="ingest-share", help="Ingest share/ docs into DMS registry.")
+def dms_ingest_share(
+    dry_run: bool = typer.Option(False, "--dry-run", help="Dry run only"),
+) -> None:
+    """Ingest/Register share/ documents into DMS."""
+    import subprocess
+
+    cmd = ["python3", "scripts/governance/ingest_share_docs.py"]
+    if dry_run:
+        cmd.append("--dry-run")
+
+    # Run the command
+    result = subprocess.run(cmd)
+    sys.exit(result.returncode)
 
 
 def main() -> None:

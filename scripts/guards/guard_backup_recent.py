@@ -12,9 +12,8 @@ Governance Rule (Phase 23.4):
 
 import argparse
 import json
-import os
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -27,7 +26,7 @@ def find_recent_backup(max_age_minutes: int) -> tuple[Path | None, dict | None]:
     if not BACKUP_DIR.exists():
         return None, None
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     cutoff = now - timedelta(minutes=max_age_minutes)
 
     # Find all backup directories with MANIFEST.json
@@ -41,9 +40,7 @@ def find_recent_backup(max_age_minutes: int) -> tuple[Path | None, dict | None]:
                     created_at = data.get("created_at", "")
                     # Parse ISO timestamp
                     if created_at:
-                        ts = datetime.fromisoformat(
-                            created_at.replace("Z", "+00:00")
-                        )
+                        ts = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
                         if ts >= cutoff:
                             backups.append((entry, data, ts))
                 except (json.JSONDecodeError, ValueError):

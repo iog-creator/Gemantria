@@ -624,21 +624,20 @@ python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
 
 **Safety**: Conservative approach - E402 uses `# noqa` instead of moving imports.
 
-### `update_share.py` & `sync_share.py` — Share Directory Synchronization
+### `sync_share.py` — Share Directory Synchronization (Phase 24.C)
 
-**Purpose**: Maintain a flat `share/` directory with canonical project files for external access and tooling.
+**Purpose**: Populate and audit the `share/` directory using `control.doc_registry` as the Single Source of Truth (DMS-driven allowlist).
 
 **Requirements**:
-- **Manifest-Driven**: Reads `docs/SSOT/SHARE_MANIFEST.json` for file list and destinations
-- **Change Detection**: Only copies files that have actually changed (SHA-256 content comparison)
-- **Preview Generation**: Creates small JSON head previews for large export files
-- **Flat Layout**: All files copied to root `share/` directory (no subdirectories)
+- **DMS-Driven**: Only syncs files explicitly registered in `control.doc_registry` with a `share_path`.
+- **Policy Enforcement**: Calls `guard_share_sync_policy.py` to ensure no unknown files exist in managed namespaces (`share/PHASE*`).
+- **Safe Sync**: Never deletes files silently. In `STRICT` mode, aborts if unknown managed files are found. In `DEV` mode, warns.
+- **Fail-Closed**: Requires DB availability and valid registry.
 
 **Capabilities**:
-- **Efficient Sync**: Compares file hashes before copying to avoid unnecessary I/O
-- **Large File Handling**: Generates preview headers for JSON exports over 4KB
-- **Progress Reporting**: Shows count of files updated vs total files processed
-- **Error Handling**: Validates source files exist and manifest is well-formed
+- **Audit**: Detects `extra_in_share` (unknown managed files) and `missing_in_share`.
+- **Populate**: Copies missing files from `repo_path` to `share_path`.
+- **System Exemptions**: Explicitly preserves system state directories (`share/orchestrator`, `share/atlas`, etc.) and root artifacts (`SSOT_SURFACE.json`).
 
 **Usage**:
 ```bash
@@ -646,36 +645,54 @@ python scripts/quick_fixes.py  # Apply mechanical fixes and invoke ruff --fix
 make share.sync
 
 # Direct script execution
-python scripts/update_share.py
-python scripts/sync_share.py  # Wrapper script
+python scripts/sync_share.py
 ```
 
 **Output Examples**:
 ```bash
-# When files changed
-[update_share] OK — share/ refreshed (3/20 files updated)
-
-# When no changes
-[update_share] OK — share/ up to date (no changes)
+[sync_share] Running Share Sync Policy Guard...
+[sync_share] Populated 12 files from DMS.
 ```
 
-**Manifest Structure**:
-```json
-{
-  "items": [
-    {
-      "src": "AGENTS.md",
-      "dst": "share/AGENTS.md"
-    },
-    {
-      "src": "exports/graph_stats.json",
-      "dst": "share/graph_stats.head.json",
-      "generate": "head_json",
-      "max_bytes": 4096
-    }
-  ]
-}
+### `guards/guard_share_sync_policy.py` — Share Sync Policy Guard (Phase 24.C)
+
+**Purpose**: Audits `share/` directory against DMS allowlist and Governance Policy.
+
+**Policies**:
+1. **Managed Namespaces**: Files in `share/PHASE*` MUST be registered in DMS.
+2. **System Exemptions**: Files in `share/orchestrator` etc are preserved but not checked against DMS.
+3. **No Extras**: No unknown files allowed in Managed Namespaces.
+
+**Modes**:
+- **HINT**: Reports status, exits 0.
+- **STRICT**: Reports status. If `extra_in_share` exists (policy violation), exits 1.
+
+**Usage**:
+```bash
+make guard.share.policy
+python scripts/guards/guard_share_sync_policy.py --mode STRICT
 ```
+
+**Output**:
+JSON report with `ok`, `missing_in_share`, `extra_in_share`, `missing_in_dms`.
+
+### `ops/backup_rotate.py` — Backup Retention Policy (Phase 24.D)
+
+**Purpose**: Manage disk usage by rotating old backups while preserving recent history.
+
+**Policy**:
+1. **Recent**: Keep last 10 backups.
+2. **Daily**: Keep latest backup for each of the last 7 days.
+3. **Safety**: Never deletes the only backup (vacuously true if N=10).
+
+**Usage**:
+```bash
+make backup.rotate
+python3 scripts/ops/backup_rotate.py [--dry-run]
+```
+
+**Output**:
+Logs actions to stdout.
 
 ### `generate_report.py` - Pipeline Reporting (Critical - Always Apply)
 

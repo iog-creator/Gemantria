@@ -1,12 +1,12 @@
 {
-  "branch": "feat/repo-governance-pr3-alignment-guard",
+  "branch": "feat/phase26-kernel-enforcement",
   "core_governance": {
     "cursor_behavior_patch": "docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md",
     "execution_contract": "docs/SSOT/EXECUTION_CONTRACT.md",
     "pm_contract": "docs/SSOT/PM_CONTRACT.md"
   },
   "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
-  "generated_at_utc": "2025-12-06T00:53:32.126394+00:00",
+  "generated_at_utc": "2025-12-06T14:49:06.611884+00:00",
   "gotchas": {
     "index": "docs/SSOT/GOTCHAS_INDEX.md",
     "share_folder": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
@@ -23,7 +23,8 @@
     "share_layout_phase15": "docs/SSOT/PM_SHARE_LAYOUT_PHASE15.md"
   },
   "meta": {
-    "current_phase": "23",
+    "current_phase": "24",
+    "dms_share_alignment": "OK",
     "kb_registry_path": "share/kb_registry.json",
     "last_completed_phase": "23"
   },
@@ -47,7 +48,7 @@
       "recon": "docs/SSOT/PHASE13_RECON.md"
     },
     "14": {
-      "14semanticrecord": "docs/SSOT/PHASE_14_SEMANTIC_RECORD.md",
+      "14semanticrecord": "share/PHASE_14_SEMANTIC_RECORD.md",
       "recon": "docs/SSOT/PHASE14_RECON.md"
     },
     "15": {
@@ -66,14 +67,48 @@
       "16initplan": "docs/SSOT/PHASE_16_INIT_PLAN.md",
       "plan": "docs/SSOT/PHASE16_LEGACY_PURGE_PLAN.md"
     },
+    "18": {
+      "18index": "share/PHASE18_INDEX.md"
+    },
+    "20": {
+      "20index": "share/PHASE20_INDEX.md",
+      "20orchestratoruimodel": "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+      "20uiresetdecision": "share/PHASE20_UI_RESET_DECISION.md"
+    },
+    "21": {
+      "21index": "share/PHASE21_INDEX.md",
+      "plan": "share/PHASE21_CONSOLE_SERVE_PLAN.md"
+    },
     "22": {
-      "22hintsconsolev2": "docs/SSOT/PHASE22_HINTS_CONSOLE_V2.md"
+      "22hintsconsolev2": "docs/SSOT/PHASE22_HINTS_CONSOLE_V2.md",
+      "22index": "share/PHASE22_INDEX.md",
+      "22operatorworkflow": "share/PHASE22_OPERATOR_WORKFLOW.md"
+    },
+    "23": {
+      "23baselinenote": "share/PHASE23_BASELINE_NOTE.md",
+      "23bootstraphardeningnote": "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+      "23donechecklist": "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+      "23failureinjectionnote": "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+      "23index": "share/PHASE23_INDEX.md",
+      "23stresssmokenote": "share/PHASE23_STRESS_SMOKE_NOTE.md",
+      "plan": "share/PHASE23_STRESS_PLAN.md"
+    },
+    "24": {
+      "24index": "docs/SSOT/PHASE24_INDEX.md"
+    },
+    "25": {
+      "25index": "docs/SSOT/PHASE25_INDEX.md"
+    },
+    "26": {
+      "26handoffkernel": "docs/SSOT/PHASE26_HANDOFF_KERNEL.md",
+      "26index": "docs/SSOT/PHASE26_INDEX.md"
     },
     "5": {
       "plan": "docs/SSOT/PHASE_5_PLAN.md"
     },
     "6": {
-      "plan": "docs/SSOT/PHASE_6_PLAN.md"
+      "6plan": "docs/SSOT/PHASE_6_PLAN.md",
+      "plan": "share/PHASE_6_PLAN.md"
     },
     "8": {
       "810diagnostic": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md",

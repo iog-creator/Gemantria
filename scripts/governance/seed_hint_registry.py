@@ -8,12 +8,20 @@ Loads hints from discovery catalog and inserts them into control.hint_registry.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
 # Add project root to path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
+
+# Pre-flight DB check (mandatory - Rule 050 evidence-first)
+preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
+result = subprocess.run([sys.executable, str(preflight_script), "--mode", "strict"], capture_output=True)
+if result.returncode != 0:
+    print(result.stderr.decode(), file=sys.stderr)
+    sys.exit(result.returncode)
 
 from sqlalchemy import text
 

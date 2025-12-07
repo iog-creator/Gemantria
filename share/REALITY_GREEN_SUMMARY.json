@@ -1,0 +1,208 @@
+{
+  "reality_green": false,
+  "checks": [
+    {
+      "name": "DB Health",
+      "passed": false,
+      "message": "DB health check failed: \u274c CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.\n   Error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+      "details": {
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "Control-Plane Health",
+      "passed": false,
+      "message": "Control-plane health check failed: \u274c CRITICAL: Database is unreachable (db_off). DB is SSOT - broken state.\n   Error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n   Ensure Postgres is running and GEMATRIA_DSN is correctly configured.",
+      "details": {
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "AGENTS.md Sync",
+      "passed": false,
+      "message": "AGENTS.md sync check failed - files may be stale: [check_agents_md_sync] POTENTIAL SYNC ISSUES DETECTED:\n\n  \u26a0\ufe0f  scripts/AGENTS.md: Code updated 2025-12-06 06:48 but AGENTS.md last updated 2025-12-05 21:03\n  \u26a0\ufe0f  pmagent/handoff/AGENTS.md: Code updated 2025-12-06 06:47 but AGENTS.md last updated 2025-12-05 17:15\n\n\ud83d\udca1 HINT: Update AGENTS.md files to reflect code changes per Rule 006 & Rule 027\n   Run: python scripts/create_agents_md.py --dry-run  # Check for missing files",
+      "details": {
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "Share Sync & Exports",
+      "passed": true,
+      "message": "All required exports present",
+      "details": {}
+    },
+    {
+      "name": "Ledger Verification",
+      "passed": false,
+      "message": "Ledger verification failed",
+      "details": {
+        "summary": {
+          "ok": false,
+          "error": "Database error: connection is bad: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?"
+        },
+        "stale": [],
+        "missing": []
+      }
+    },
+    {
+      "name": "Ketiv-Primary Policy",
+      "passed": true,
+      "message": "Ketiv-primary policy enforced (gematria uses written form per ADR-002)",
+      "details": {
+        "output": "\u2705 Ketiv-primary guard: PASS (4399/4399 nodes)\n"
+      }
+    },
+    {
+      "name": "DMS Hint Registry",
+      "passed": true,
+      "message": "DMS hint registry accessible (no REQUIRED hints configured yet)",
+      "details": {
+        "note": "Empty registry is OK"
+      }
+    },
+    {
+      "name": "Repo Alignment (Layer 4)",
+      "passed": true,
+      "message": "Plan vs implementation drift detected (HINT mode: warnings only)",
+      "details": {
+        "output": "Layer 4 Alignment Guard: FAIL\n  Expected paths: 7\n  Actual paths: 4\n  Missing: 0\n  Integration islands: 2\n\\nViolations detected:\n  - Found 2 files in scripts/code_ingest/ (plan expected scripts/governance/)\n  - Update LAYER4_CODE_INGESTION_PLAN.md or migrate code to planned locations\n\\nEvidence: evidence/repo/guard_layer4_alignment.json\n\\n\u26a0\ufe0f  HINT MODE: Warnings only (exit 0)\n",
+        "note": "Run with --strict to enforce"
+      }
+    },
+    {
+      "name": "DMS Alignment",
+      "passed": false,
+      "message": "DMS Alignment BROKEN: ",
+      "details": {
+        "ok": false,
+        "error": "(psycopg2.OperationalError) connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory\n\tIs the server running locally and accepting connections on that socket?\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+        "details": []
+      }
+    },
+    {
+      "name": "Bootstrap Consistency",
+      "passed": true,
+      "message": "Bootstrap state matches SSOT",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"bootstrap_current_phase\": \"24\",\n  \"ssot_current_phase\": \"24\",\n  \"mismatches\": []\n}"
+      }
+    },
+    {
+      "name": "Share Sync Policy",
+      "passed": false,
+      "message": "Policy Violation: Found 40 unknown files",
+      "details": {
+        "ok": false,
+        "mode": "STRICT",
+        "missing_in_share": [],
+        "extra_in_share": [
+          "share/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+          "share/AGENTS.md",
+          "share/BIBLESCHOLAR_INTAKE.md",
+          "share/BIBLESCHOLAR_MIGRATION_PLAN.md",
+          "share/DB_HEALTH.md",
+          "share/GEMATRIA_NUMERICS_INTAKE.md",
+          "share/GPT_REFERENCE_GUIDE.md",
+          "share/GPT_SYSTEM_PROMPT.md",
+          "share/LAYER3_AI_DOC_INGESTION_PLAN.md",
+          "share/LAYER4_CODE_INGESTION_PLAN.md",
+          "share/LM_STUDIO_SETUP.md",
+          "share/LM_WIDGETS.md",
+          "share/MASTER_PLAN.md",
+          "share/NEXT_STEPS.md",
+          "share/PHASE18_INDEX.md",
+          "share/PHASE20_INDEX.md",
+          "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+          "share/PHASE20_UI_RESET_DECISION.md",
+          "share/PHASE21_CONSOLE_SERVE_PLAN.md",
+          "share/PHASE21_INDEX.md",
+          "share/PHASE22_INDEX.md",
+          "share/PHASE22_OPERATOR_WORKFLOW.md",
+          "share/PHASE23_BASELINE_NOTE.md",
+          "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+          "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+          "share/PHASE23_INDEX.md",
+          "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+          "share/PHASE23_STRESS_PLAN.md",
+          "share/PHASE23_STRESS_SMOKE_NOTE.md",
+          "share/PHASE_14_SEMANTIC_RECORD.md",
+          "share/PHASE_6_PLAN.md",
+          "share/PM_CONTRACT.md",
+          "share/PM_CONTRACT_STRICT_SSOT_DMS.md",
+          "share/PROJECTS_INVENTORY.md",
+          "share/REFERENCES.md",
+          "share/RULES_INDEX.md",
+          "share/STORYMAKER_INTAKE.md",
+          "share/USAGE_PATTERNS_REFERENCE.md",
+          "share/scripts_AGENTS.md",
+          "share/webui-contract.md"
+        ],
+        "missing_in_dms": [
+          "share/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+          "share/AGENTS.md",
+          "share/BIBLESCHOLAR_INTAKE.md",
+          "share/BIBLESCHOLAR_MIGRATION_PLAN.md",
+          "share/DB_HEALTH.md",
+          "share/GEMATRIA_NUMERICS_INTAKE.md",
+          "share/GPT_REFERENCE_GUIDE.md",
+          "share/GPT_SYSTEM_PROMPT.md",
+          "share/LAYER3_AI_DOC_INGESTION_PLAN.md",
+          "share/LAYER4_CODE_INGESTION_PLAN.md",
+          "share/LM_STUDIO_SETUP.md",
+          "share/LM_WIDGETS.md",
+          "share/MASTER_PLAN.md",
+          "share/NEXT_STEPS.md",
+          "share/PHASE18_INDEX.md",
+          "share/PHASE20_INDEX.md",
+          "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+          "share/PHASE20_UI_RESET_DECISION.md",
+          "share/PHASE21_CONSOLE_SERVE_PLAN.md",
+          "share/PHASE21_INDEX.md",
+          "share/PHASE22_INDEX.md",
+          "share/PHASE22_OPERATOR_WORKFLOW.md",
+          "share/PHASE23_BASELINE_NOTE.md",
+          "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+          "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+          "share/PHASE23_INDEX.md",
+          "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+          "share/PHASE23_STRESS_PLAN.md",
+          "share/PHASE23_STRESS_SMOKE_NOTE.md",
+          "share/PHASE_14_SEMANTIC_RECORD.md",
+          "share/PHASE_6_PLAN.md",
+          "share/PM_CONTRACT.md",
+          "share/PM_CONTRACT_STRICT_SSOT_DMS.md",
+          "share/PROJECTS_INVENTORY.md",
+          "share/REFERENCES.md",
+          "share/RULES_INDEX.md",
+          "share/STORYMAKER_INTAKE.md",
+          "share/USAGE_PATTERNS_REFERENCE.md",
+          "share/scripts_AGENTS.md",
+          "share/webui-contract.md"
+        ]
+      }
+    },
+    {
+      "name": "Backup System",
+      "passed": false,
+      "message": "No recent backup found: ",
+      "details": {
+        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
+      }
+    },
+    {
+      "name": "WebUI Shell Sanity",
+      "passed": true,
+      "message": "WebUI shell files present",
+      "details": {}
+    },
+    {
+      "name": "Handoff Kernel",
+      "passed": true,
+      "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"mismatches\": []\n}"
+      }
+    }
+  ],
+  "timestamp": "2025-12-06T14:48:48Z"
+}

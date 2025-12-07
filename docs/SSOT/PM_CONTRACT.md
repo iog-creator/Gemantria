@@ -385,6 +385,28 @@ This document is the canonical PM prompt.
 
 ---
 
+### 3.2. Phase Transitions & Handoffs
+
+#### Kernel-First Boot (Phase 26+)
+
+As of Phase 26, all new PM chat sessions must boot from the **Handoff Kernel bundle**:
+
+1. Read `share/handoff/PM_KERNEL.json`.
+2. Read `share/PM_BOOTSTRAP_STATE.json`.
+3. Confirm that:
+   - `current_phase`, `last_completed_phase`, and `branch` agree between kernel and bootstrap.
+   - All `required_surfaces` listed in the kernel exist in `share/`.
+4. If the kernel or health surfaces indicate `reality_green = false` or a critical guard failure, the PM enters **Degraded Mode**:
+   - Halt all phase work.
+   - Do not issue destructive instructions to Cursor.
+   - Only define explicit remediation scope.
+
+This behavior is enforced by the REQUIRED DMS hint `pm.boot.kernel_first`, which is bound to:
+- `docs/SSOT/PM_HANDOFF_PROTOCOL.md`
+- `docs/SSOT/SHARE_FOLDER_ANALYSIS.md`
+- `docs/SSOT/PHASE26_HANDOFF_KERNEL.md`.
+
+#### Rule 017: AGENTS.md Sync
 # **6. Phase Flow Rules**
 
 ### **6.1 You decide major feature direction**

@@ -338,6 +338,153 @@ def check_repo_alignment() -> CheckResult:
         )
 
 
+def check_dms_alignment() -> CheckResult:
+    """Check DMS-Share alignment (Phase 24.B)."""
+    script = ROOT / "scripts" / "guards" / "guard_dms_share_alignment.py"
+    if not script.exists():  # Should not happen if correctly deployed
+        return CheckResult("DMS Alignment", False, "Guard script missing", {})
+
+    # Run in STRICT mode for reality.green
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult("DMS Alignment", True, "DMS and Share are aligned", {"output": stdout.strip()})
+    else:
+        # Try to parse JSON output for better error message
+        try:
+            data = json.loads(stdout)
+            # Construct message from mismatch arrays
+            details = []
+            if data.get("missing_in_share"):
+                details.append(f"Missing in share: {len(data['missing_in_share'])}")
+            if data.get("missing_in_dms"):
+                details.append(f"Missing in DMS: {len(data['missing_in_dms'])}")
+            if data.get("extra_in_share"):
+                details.append(f"Extra in share: {len(data['extra_in_share'])}")
+
+            msg = f"DMS Alignment BROKEN: {', '.join(details)}"
+            return CheckResult("DMS Alignment", False, msg, data)
+        except:
+            pass
+
+        return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
+
+
+def check_bootstrap_consistency() -> CheckResult:
+    """Check consistency between Bootstrap state and SSOT Surface (Phase 24.A)."""
+    script = ROOT / "scripts" / "guards" / "guard_bootstrap_consistency.py"
+    if not script.exists():
+        return CheckResult("Bootstrap Consistency", False, "Guard script missing", {})
+
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "Bootstrap Consistency",
+            True,
+            "Bootstrap state matches SSOT",
+            {"output": stdout.strip()},
+        )
+    else:
+        try:
+            data = json.loads(stdout)
+            msg = f"Bootstrap Mismatch: {', '.join(data.get('mismatches', []))}"
+            return CheckResult("Bootstrap Consistency", False, msg, data)
+        except:
+            pass
+        return CheckResult("Bootstrap Consistency", False, f"Check failed: {stderr.strip()}", {"output": stdout})
+
+
+def check_share_sync_policy() -> CheckResult:
+    """Check Share Sync Policy (Phase 24.C)."""
+    script = ROOT / "scripts" / "guards" / "guard_share_sync_policy.py"
+    if not script.exists():
+        return CheckResult("Share Sync Policy", False, "Guard script missing", {})
+
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "Share Sync Policy",
+            True,
+            "No unknown or unsafe share/ docs in managed namespaces",
+            {"output": stdout.strip()},
+        )
+    else:
+        try:
+            data = json.loads(stdout)
+            extras = data.get("extra_in_share", [])
+            msg = f"Policy Violation: Found {len(extras)} unknown files"
+            return CheckResult("Share Sync Policy", False, msg, data)
+        except:
+            pass
+        return CheckResult("Share Sync Policy", False, f"Check failed: {stderr.strip()}", {"output": stdout})
+
+
+def check_backup_system() -> CheckResult:
+    """Check Backup System (Phase 24.D)."""
+    # 1. Check recent backup exists
+    script_recent = ROOT / "scripts" / "guards" / "guard_backup_recent.py"
+    if script_recent.exists():
+        exit_code, stdout, stderr = run_subprocess_check(script_recent, ["--mode", "STRICT"])
+        if exit_code != 0:
+            return CheckResult(
+                "Backup System",
+                False,
+                f"No recent backup found: {stderr.strip()}",
+                {"output": stdout},
+            )
+
+    # 2. Check rotation logic sanity (dry run)
+    script_rotate = ROOT / "scripts" / "ops" / "backup_rotate.py"
+    if script_rotate.exists():
+        exit_code, stdout, stderr = run_subprocess_check(script_rotate, ["--dry-run"])
+        if exit_code != 0:
+            return CheckResult(
+                "Backup System",
+                False,
+                f"Backup rotation logic failed: {stderr.strip()}",
+                {"output": stdout},
+            )
+    else:
+        return CheckResult("Backup System", False, "Backup rotation script missing", {})
+
+    return CheckResult("Backup System", True, "Recent backup exists and rotation logic is sane", {})
+
+
+def check_handoff_kernel() -> CheckResult:
+    """Check Handoff Kernel (Phase 24.E)."""
+    # 1. Generate Kernel (using provisional summary)
+    try:
+        script_gen = ROOT / "scripts" / "pm" / "generate_handoff_kernel.py"
+        run_subprocess_check(script_gen)
+    except Exception as e:
+        return CheckResult("Handoff Kernel", False, f"Generation failed: {e}", {})
+
+    # 2. Verify Kernel
+    script_guard = ROOT / "scripts" / "guards" / "guard_handoff_kernel.py"
+    if not script_guard.exists():
+        return CheckResult("Handoff Kernel", False, "Guard script missing", {})
+
+    exit_code, stdout, stderr = run_subprocess_check(script_guard, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "Handoff Kernel",
+            True,
+            "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
+            {"output": stdout.strip()},
+        )
+    else:
+        try:
+            data = json.loads(stdout)
+            msg = f"Kernel Mismatch: {', '.join(data.get('mismatches', []))}"
+            return CheckResult("Handoff Kernel", False, msg, data)
+        except:
+            pass
+        return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
+
+
 def main() -> int:
     """Run all reality green checks and report results."""
     print("🔍 REALITY GREEN - Full System Truth Gate")
@@ -353,10 +500,44 @@ def main() -> int:
         check_ketiv_primary_policy(),  # Phase 2: Ketiv-primary policy enforcement (ADR-002)
         check_hints_required(),  # ADR-059: DMS hint registry accessibility check
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
+        check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
+        check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
+        check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit
+        check_backup_system(),  # Phase 24.D: Backup Retention & Rotation
         check_webui_shell_sanity(),
     ]
 
-    all_passed = True
+    # Special handling for Handoff Kernel (Phase 24.E)
+    # It requires the results of previous checks to be written to share/REALITY_GREEN_SUMMARY.json first.
+
+    # 1. Provisional Summary
+    provisional_passed = all(c.passed for c in checks)
+    provisional_summary = {
+        "reality_green": provisional_passed,
+        "checks": [
+            {
+                "name": c.name,
+                "passed": c.passed,
+            }
+            for c in checks
+        ],
+        "timestamp": subprocess.run(
+            ["date", "-u", "+%Y-%m-%dT%H:%M:%SZ"], capture_output=True, text=True, check=False
+        ).stdout.strip(),
+    }
+
+    summary_path = ROOT / "share" / "REALITY_GREEN_SUMMARY.json"
+    with open(summary_path, "w") as f:
+        json.dump(provisional_summary, f, indent=2)
+
+    # 2. Run Handoff Kernel Check
+    hk_result = check_handoff_kernel()
+    checks.append(hk_result)
+
+    if not hk_result.passed:
+        provisional_passed = False
+
+    all_passed = all(c.passed for c in checks)
     results_summary = []
 
     for check in checks:
@@ -421,6 +602,10 @@ def main() -> int:
     print()
     print("JSON Summary:")
     print(json.dumps(summary_json, indent=2))
+
+    # Write final summary to file (Source of Truth for Generator/Kernel)
+    with open(summary_path, "w") as f:
+        json.dump(summary_json, f, indent=2)
 
     return 0 if all_passed else 1
 

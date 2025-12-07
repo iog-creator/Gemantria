@@ -84,6 +84,14 @@ fi
 - `STRICT_GOTCHAS=1`
 - Guard exits with code 1 if gotchas found
 - Cursor **must** enter NO-OP mode
+- Cursor **must** report the finding to the PM
+- Cursor **must** assist in resolution (e.g., "Would you like me to fix this import?")
+
+* **Rule: Kernel First**
+  * When receiving PM instructions that involve destructive operations, Cursor must:
+    * Load `PM_KERNEL.json`.
+    * Verify environment consistency (branch/phase).
+    * Refuse to proceed if kernel indicates degraded health, unless the PM has explicitly scoped a remediation task.
 
 ### 3. NO-OP Response
 

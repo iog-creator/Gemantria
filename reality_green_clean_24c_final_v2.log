@@ -1,0 +1,247 @@
+Makefile:982: warning: overriding recipe for target 'phase8.temporal'
+Makefile:887: warning: ignoring old recipe for target 'phase8.temporal'
+Makefile:1906: warning: overriding recipe for target 'rerank.smoke'
+Makefile:1900: warning: ignoring old recipe for target 'rerank.smoke'
+Makefile:2227: warning: overriding recipe for target 'mcp.proof.snapshot'
+Makefile:2155: warning: ignoring old recipe for target 'mcp.proof.snapshot'
+Makefile:2798: warning: overriding recipe for target 'governance.ingest.docs'
+Makefile:291: warning: ignoring old recipe for target 'governance.ingest.docs'
+>> Running reality.green - Full System Truth Gate
+🔍 REALITY GREEN - Full System Truth Gate
+============================================================
+
+================================================================================
+LEDGER VERIFICATION SUMMARY
+================================================================================
+Name                                     Source                         Status    
+--------------------------------------------------------------------------------
+AGENTS.md                                root                           ✓ current   
+MASTER_PLAN.md                           docs/SSOT                      ✓ current   
+DB_HEALTH.md                             docs/runbooks                  ✓ current   
+PM_SNAPSHOT_CURRENT.md                   docs/runbooks                  ✓ current   
+RULES_INDEX.md                           root                           ✓ current   
+system_health.json                       share/atlas/control_plane      ✓ current   
+lm_indicator.json                        share/atlas/control_plane      ✓ current   
+canonical.json                           share/exports/docs-control     ✓ current   
+summary.json                             share/exports/docs-control     ✓ current   
+--------------------------------------------------------------------------------
+Total: 9, Current: 9, Stale: 0, Missing: 0
+================================================================================
+
+✅ LEDGER VERIFICATION PASSED
+   All tracked artifacts are current
+
+✅ PASS: DB Health
+   DB is reachable and healthy
+
+✅ PASS: Control-Plane Health
+   Control plane is healthy
+
+✅ PASS: AGENTS.md Sync
+   All AGENTS.md files are in sync
+
+✅ PASS: Share Sync & Exports
+   All required exports present
+
+✅ PASS: Ledger Verification
+   All 9 tracked artifacts are current
+
+✅ PASS: Ketiv-Primary Policy
+   Ketiv-primary policy enforced (gematria uses written form per ADR-002)
+
+✅ PASS: DMS Hint Registry
+   DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)
+
+✅ PASS: Repo Alignment (Layer 4)
+   Plan vs implementation drift detected (HINT mode: warnings only)
+
+✅ PASS: DMS Alignment
+   DMS and Share are aligned
+
+✅ PASS: Bootstrap Consistency
+   Bootstrap state matches SSOT
+
+✅ PASS: Share Sync Policy
+   No unknown or unsafe share/ docs in managed namespaces
+
+✅ PASS: WebUI Shell Sanity
+   WebUI shell files present
+
+============================================================
+✅ REALITY GREEN: All checks passed - system is ready
+
+This system is up to date and consistent for the next agent.
+DB is healthy, AGENTS.md is synced, share/ is synced, exports are present.
+
+JSON Summary:
+{
+  "reality_green": true,
+  "checks": [
+    {
+      "name": "DB Health",
+      "passed": true,
+      "message": "DB is reachable and healthy",
+      "details": {
+        "output": "OK: DB reachable and base tables present."
+      }
+    },
+    {
+      "name": "Control-Plane Health",
+      "passed": true,
+      "message": "Control plane is healthy",
+      "details": {
+        "output": "HINT: MV refresh failed: field name must not be null\nCONTEXT:  SQL statement \"REFRESH MATERIALIZED VIEW control.mv_compliance_30d\"\nPL/pgSQL function control.refresh_compliance(text) line 6 at SQL statement"
+      }
+    },
+    {
+      "name": "AGENTS.md Sync",
+      "passed": true,
+      "message": "All AGENTS.md files are in sync",
+      "details": {
+        "output": ""
+      }
+    },
+    {
+      "name": "Share Sync & Exports",
+      "passed": true,
+      "message": "All required exports present",
+      "details": {}
+    },
+    {
+      "name": "Ledger Verification",
+      "passed": true,
+      "message": "All 9 tracked artifacts are current",
+      "details": {
+        "summary": {
+          "ok": true,
+          "total": 9,
+          "current": 9,
+          "stale": [],
+          "missing": [],
+          "results": [
+            {
+              "name": "AGENTS.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "5f089e214966d282...",
+              "current_hash": "5f089e214966d282..."
+            },
+            {
+              "name": "MASTER_PLAN.md",
+              "source_of_truth": "docs/SSOT",
+              "status": "current",
+              "ledger_hash": "7267134e5e14bb7d...",
+              "current_hash": "7267134e5e14bb7d..."
+            },
+            {
+              "name": "DB_HEALTH.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "7b351351aaaf7321...",
+              "current_hash": "7b351351aaaf7321..."
+            },
+            {
+              "name": "PM_SNAPSHOT_CURRENT.md",
+              "source_of_truth": "docs/runbooks",
+              "status": "current",
+              "ledger_hash": "6c51be1d31e4250e...",
+              "current_hash": "6c51be1d31e4250e..."
+            },
+            {
+              "name": "RULES_INDEX.md",
+              "source_of_truth": "root",
+              "status": "current",
+              "ledger_hash": "df01a6ca8e43a79b...",
+              "current_hash": "df01a6ca8e43a79b..."
+            },
+            {
+              "name": "system_health.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "9c634ea5601204f4...",
+              "current_hash": "9c634ea5601204f4..."
+            },
+            {
+              "name": "lm_indicator.json",
+              "source_of_truth": "share/atlas/control_plane",
+              "status": "current",
+              "ledger_hash": "0c8d7f9de6b933f5...",
+              "current_hash": "0c8d7f9de6b933f5..."
+            },
+            {
+              "name": "canonical.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "c7ca48f2888fb60a...",
+              "current_hash": "c7ca48f2888fb60a..."
+            },
+            {
+              "name": "summary.json",
+              "source_of_truth": "share/exports/docs-control",
+              "status": "current",
+              "ledger_hash": "fd4f7625bcefe9fb...",
+              "current_hash": "fd4f7625bcefe9fb..."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ketiv-Primary Policy",
+      "passed": true,
+      "message": "Ketiv-primary policy enforced (gematria uses written form per ADR-002)",
+      "details": {
+        "output": "\u2705 Ketiv-primary guard: PASS (4399/4399 nodes)\n"
+      }
+    },
+    {
+      "name": "DMS Hint Registry",
+      "passed": true,
+      "message": "DMS hint registry accessible with 4 REQUIRED hints across 2 flow(s)",
+      "details": {
+        "total_hints": 4,
+        "flows_with_hints": 2
+      }
+    },
+    {
+      "name": "Repo Alignment (Layer 4)",
+      "passed": true,
+      "message": "Plan vs implementation drift detected (HINT mode: warnings only)",
+      "details": {
+        "output": "Layer 4 Alignment Guard: FAIL\n  Expected paths: 7\n  Actual paths: 4\n  Missing: 0\n  Integration islands: 2\n\\nViolations detected:\n  - Found 2 files in scripts/code_ingest/ (plan expected scripts/governance/)\n  - Update LAYER4_CODE_INGESTION_PLAN.md or migrate code to planned locations\n\\nEvidence: evidence/repo/guard_layer4_alignment.json\n\\n\u26a0\ufe0f  HINT MODE: Warnings only (exit 0)\n",
+        "note": "Run with --strict to enforce"
+      }
+    },
+    {
+      "name": "DMS Alignment",
+      "passed": true,
+      "message": "DMS and Share are aligned",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+      }
+    },
+    {
+      "name": "Bootstrap Consistency",
+      "passed": true,
+      "message": "Bootstrap state matches SSOT",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"bootstrap_current_phase\": \"24\",\n  \"ssot_current_phase\": \"24\",\n  \"mismatches\": []\n}"
+      }
+    },
+    {
+      "name": "Share Sync Policy",
+      "passed": true,
+      "message": "No unknown or unsafe share/ docs in managed namespaces",
+      "details": {
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
+      }
+    },
+    {
+      "name": "WebUI Shell Sanity",
+      "passed": true,
+      "message": "WebUI shell files present",
+      "details": {}
+    }
+  ],
+  "timestamp": "2025-12-06T04:54:55Z"
+}

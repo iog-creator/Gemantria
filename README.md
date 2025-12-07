@@ -1,3 +1,18 @@
+# ⚠️ GEMANTRIA — KERNEL-GOVERNED REPOSITORY ⚠️
+
+**This is NOT a normal Python project.**
+
+Before doing ANY work (manual or via AI agents), you MUST:
+
+1. Read [`docs/SSOT/EXECUTION_CONTRACT.md`](docs/SSOT/EXECUTION_CONTRACT.md) (execution rules)
+2. Run `make ops.kernel.check` and ensure it succeeds
+3. If the kernel reports `mode = DEGRADED`, only perform PM-approved remediation work
+4. Treat `share/handoff/PM_KERNEL.json` and `share/PM_BOOTSTRAP_STATE.json` as the source of truth for phase, branch, and system mode
+
+Failure to follow these steps will break governance. See [`START_HERE.md`](START_HERE.md) for the complete boot guide.
+
+---
+
 # Gemantria
 
 <div align="left">
