@@ -370,13 +370,12 @@ def check_dms_alignment() -> CheckResult:
         return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
 
 
-
 def check_dms_metadata() -> CheckResult:
     """Check DMS metadata health (Phase 27.J)."""
     try:
         from scripts.config.env import get_rw_dsn
         import psycopg
-        
+
         dsn = get_rw_dsn()
         with psycopg.connect(dsn) as conn, conn.cursor() as cur:
             # 1. Check importance distribution
@@ -387,7 +386,7 @@ def check_dms_metadata() -> CheckResult:
                 ORDER BY importance
             """)
             dist = {row[0]: row[1] for row in cur.fetchall()}
-            
+
             # 2. Check for enabled low-importance docs
             cur.execute("""
                 SELECT count(*)
@@ -398,20 +397,98 @@ def check_dms_metadata() -> CheckResult:
 
             if low_enabled == 0:
                 return CheckResult(
-                    "DMS Metadata",
-                    True,
-                    f"DMS metadata sane (low_enabled={low_enabled})",
-                    {"distribution": dist}
+                    "DMS Metadata", True, f"DMS metadata sane (low_enabled={low_enabled})", {"distribution": dist}
                 )
             else:
                 return CheckResult(
                     "DMS Metadata",
                     False,
                     f"Found {low_enabled} enabled low-importance docs (cleanup required)",
-                    {"distribution": dist, "low_enabled": low_enabled}
+                    {"distribution": dist, "low_enabled": low_enabled},
                 )
     except Exception as e:
         return CheckResult("DMS Metadata", False, f"Metadata check failed: {e}", {})
+
+
+def check_agents_dms_contract() -> CheckResult:
+    """
+    Verify that AGENTS.md rows in control.doc_registry obey the AGENTS<->DMS contract.
+
+    Invariants:
+    - Root AGENTS.md: importance='critical', enabled=true, tags include 'ssot' and 'agent_framework_index'.
+    - Any AGENTS.md: importance in ('critical', 'high'), enabled=true, repo_path not under archive/,
+      tags include 'ssot' and 'agent_framework' at minimum.
+    - No AGENTS rows are archived (enabled=false).
+    """
+    try:
+        from scripts.config.env import get_rw_dsn
+        import psycopg
+
+        dsn = get_rw_dsn()
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT doc_id, repo_path, importance, enabled, tags
+                FROM control.doc_registry
+                WHERE repo_path LIKE '%AGENTS.md'
+                  AND repo_path NOT LIKE 'backup/%'
+                ORDER BY repo_path
+                """
+            )
+            rows = cur.fetchall()
+
+        if not rows:
+            return CheckResult(
+                "AGENTS–DMS Contract",
+                False,
+                "No AGENTS.md rows found in control.doc_registry",
+                {"rows": []},
+            )
+
+        violations = []
+        for doc_id, repo_path, importance, enabled, tags in rows:
+            tags = tags or []
+            is_root = repo_path == "AGENTS.md"
+
+            if not enabled:
+                violations.append(f"{repo_path}: enabled is false (AGENTS must never be archived)")
+
+            if importance not in ("critical", "high"):
+                violations.append(f"{repo_path}: importance={importance!r} (must be 'critical' or 'high')")
+
+            if repo_path.startswith("archive/"):
+                violations.append(f"{repo_path}: located under archive/ (AGENTS must not be archived)")
+
+            if "ssot" not in tags:
+                violations.append(f"{repo_path}: missing 'ssot' tag")
+
+            if "agent_framework" not in tags:
+                violations.append(f"{repo_path}: missing 'agent_framework' tag")
+
+            if is_root and "agent_framework_index" not in tags:
+                violations.append(f"{repo_path}: missing 'agent_framework_index' tag for root AGENTS.md")
+
+        if violations:
+            return CheckResult(
+                "AGENTS–DMS Contract",
+                False,
+                f"{len(violations)} AGENTS metadata violation(s) detected",
+                {"violations": violations, "rows": len(rows)},
+            )
+
+        return CheckResult(
+            "AGENTS–DMS Contract",
+            True,
+            "All AGENTS.md rows satisfy DMS contract",
+            {"rows": len(rows)},
+        )
+    except Exception as e:
+        return CheckResult(
+            "AGENTS–DMS Contract",
+            False,
+            f"Contract check failed: {e}",
+            {"error": str(e)},
+        )
 
 
 def check_bootstrap_consistency() -> CheckResult:
@@ -578,6 +655,7 @@ def main() -> int:
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
         check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
         check_dms_metadata(),  # Phase 27.J: Metadata health
+        check_agents_dms_contract(),  # Phase 27.L: AGENTS–DMS contract enforcement
         check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
         check_root_surface(),  # Phase 27.G: Repository root surface policy
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit

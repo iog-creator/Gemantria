@@ -8,6 +8,38 @@
 
 > **Always-Apply Triad**: We operate under **Rule-050 (LOUD FAIL)**, **Rule-051 (CI gating)**, and **Rule-052 (tool-priority)**. The guards ensure this 050/051/052 triad is present in docs and mirrored in DB checks.
 
+## Doc Strategy & DMS Hierarchy (Gemantria-Specific)
+
+In Gemantria, documentation and metadata are layered. The hierarchy for truth is:
+
+1. **Orchestrator (human)** — ultimate source of product and governance intent.
+
+2. **Contracts & SSOT docs** (`docs/SSOT/**`, PHASE index docs, OPS/PM contracts).
+
+3. **AGENTS surfaces** (`AGENTS.md` at root and subsystem levels) — canonical map of agents, tools, and doc surfaces.
+
+4. **DMS registry** (`control.doc_registry` in Postgres) — structured inventory and lifecycle metadata for docs (paths, importance, tags, owner_component, enabled/archived), which must reflect (not override) the above.
+
+5. **Filesystem layout** — implementation detail that must be kept in sync with the registry.
+
+**AGENTS.md is privileged:**
+
+- Root `AGENTS.md` is the **global agent registry** (`CANONICAL_GLOBAL`) and must never be archived or demoted.
+
+- Subsystem-level `AGENTS.md` files are local views that inherit from this global registry.
+
+- Any automated doc lifecycle (archive/cleanup/moves) must treat `AGENTS.md` as **core SSOT**, not as regular documentation.
+
+**DMS responsibilities:**
+
+- Tracks **which docs exist**, where they live (`repo_path`), their lifecycle (`enabled`, archive path), and their metadata (`importance`, `tags`, `owner_component`).
+
+- Must not propose or apply moves that contradict the AGENTS contract (e.g., archiving `AGENTS.md`).
+
+- Housekeeping scripts (`scripts/governance/ingest_docs_to_db.py` and related) populate `importance`, `tags`, and `owner_component` but **never downgrade AGENTS docs**.
+
+In short: **AGENTS.md defines the world; the DMS records and enforces that definition.**
+
 ## Canonical Agents Table (Draft from KB Registry)
 
 The following table was generated from **share/AGENTS_REGISTRY_SNAPSHOT.json** to reflect the currently registered agents in the KB/DMS registry.

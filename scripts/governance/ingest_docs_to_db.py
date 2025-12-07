@@ -335,12 +335,70 @@ def ingest_docs(dry_run: bool = False) -> int:
             # The ON CONFLICT clause will preserve existing non-NULL share_path values
             share_path_from_manifest = manifest_mapping.get(repo_rel)
 
-            # Upsert registry row with idempotent share_path handling:
-            # - On INSERT: use defaults/heuristics
-            # - On CONFLICT:
-            #   - Update core structural logic (role, path, ssot, enabled)
-            #   - Respect manual metadata overrides if established (only update importance/tags if currently unknown/empty)
-            #   - Always update owner_component (derived from path)
+            # Determine if this is an AGENTS doc
+            is_agents = target.logical_name.startswith("AGENTS") or repo_rel.endswith("AGENTS.md")
+
+            # For AGENTS docs, ensure minimum importance and required tags
+            if is_agents:
+                # Root AGENTS.md must be critical
+                if repo_rel == "AGENTS.md":
+                    target.importance = "critical"
+                    # Ensure required tags are present
+                    required_tags = {"ssot", "agent_framework", "agent_framework_index"}
+                    target.tags = list(set(target.tags) | required_tags)
+                else:
+                    # Other AGENTS.md must be at least high
+                    if target.importance not in ("critical", "high"):
+                        target.importance = "high"
+                    # Ensure required tags are present
+                    required_tags = {"ssot", "agent_framework"}
+                    target.tags = list(set(target.tags) | required_tags)
+
+            # Check existing row to apply hybrid update logic
+            existing_row = conn.execute(
+                text(
+                    """
+                    SELECT importance, tags
+                    FROM control.doc_registry
+                    WHERE logical_name = :logical_name
+                    """
+                ),
+                {"logical_name": target.logical_name},
+            ).fetchone()
+
+            # Compute final importance and tags based on hybrid logic
+            final_importance = target.importance
+            final_tags = target.tags
+
+            if existing_row:
+                existing_importance, existing_tags = existing_row
+                existing_tags = existing_tags or []
+
+                if is_agents:
+                    # AGENTS: upgrade upward, never downgrade
+                    importance_order = {"unknown": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+                    existing_level = importance_order.get(existing_importance, 0)
+                    new_level = importance_order.get(target.importance, 0)
+                    if new_level > existing_level:
+                        final_importance = target.importance
+                    else:
+                        final_importance = existing_importance
+
+                    # Merge tags: union of existing and new
+                    final_tags = list(set(existing_tags) | set(target.tags))
+                else:
+                    # Non-AGENTS: only update if unknown/empty (preserves manual overrides)
+                    if existing_importance == "unknown":
+                        final_importance = target.importance
+                    else:
+                        final_importance = existing_importance
+
+                    if not existing_tags:
+                        final_tags = target.tags
+                    else:
+                        final_tags = existing_tags
+
+            # Upsert registry row with computed final values
             row = conn.execute(
                 text(
                     """
@@ -359,16 +417,8 @@ def ingest_docs(dry_run: bool = False) -> int:
                         is_ssot = EXCLUDED.is_ssot,
                         enabled = EXCLUDED.enabled,
                         owner_component = EXCLUDED.owner_component,
-                        -- Only update importance if unknown (preserves manual overrides)
-                        importance = CASE
-                            WHEN control.doc_registry.importance = 'unknown' THEN EXCLUDED.importance
-                            ELSE control.doc_registry.importance
-                        END,
-                        -- Only update tags if empty (preserves manual tags)
-                        tags = CASE
-                            WHEN control.doc_registry.tags = '{}' THEN EXCLUDED.tags
-                            ELSE control.doc_registry.tags
-                        END,
+                        importance = EXCLUDED.importance,
+                        tags = EXCLUDED.tags,
                         updated_at = NOW()
                     RETURNING doc_id
                     """
@@ -379,8 +429,8 @@ def ingest_docs(dry_run: bool = False) -> int:
                     "repo_path": repo_rel,
                     "share_path": share_path_from_manifest,
                     "is_ssot": target.is_ssot,
-                    "importance": target.importance,
-                    "tags": target.tags,
+                    "importance": final_importance,
+                    "tags": final_tags,
                     "owner_component": target.owner_component,
                 },
             ).one()
@@ -416,6 +466,7 @@ def main(argv: List[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     return ingest_docs(dry_run=args.dry_run)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
