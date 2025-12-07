@@ -2,7 +2,7 @@
   "version": 1,
   "current_phase": "24",
   "last_completed_phase": "23",
-  "branch": "feat/phase27i-doc-hygiene-batch1",
+  "branch": "feat/phase27j-dms-schema-upgrade",
   "health": {
     "reality_green": true,
     "checks": {
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T18:18:48Z",
+    "generated_at": "2025-12-07T18:30:45Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0
