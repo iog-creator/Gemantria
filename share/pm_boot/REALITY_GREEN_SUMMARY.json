@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "2903a587830a9eea...",
+              "current_hash": "2903a587830a9eea..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -138,10 +138,41 @@
     },
     {
       "name": "DMS Alignment",
-      "passed": true,
-      "message": "DMS and Share are aligned",
+      "passed": false,
+      "message": "DMS Alignment BROKEN: Extra in share: 12",
       "details": {
-        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+        "ok": false,
+        "mode": "STRICT",
+        "dms_share_alignment": "BROKEN",
+        "missing_in_share": [],
+        "missing_in_dms": [],
+        "extra_in_share": [
+          "doc_registry.json",
+          "doc_sync_state.json",
+          "next_steps.head.json",
+          "pm_contract.head.json",
+          "schema_snapshot.json",
+          "pm_snapshot.json",
+          "planning_lane_status.json",
+          "hint_registry.json",
+          "live_posture.json",
+          "doc_version.json",
+          "agents_md.head.json",
+          "governance_freshness.json"
+        ]
+      }
+    },
+    {
+      "name": "DMS Metadata",
+      "passed": true,
+      "message": "DMS metadata sane (low_enabled=0)",
+      "details": {
+        "distribution": {
+          "critical": 132,
+          "high": 132,
+          "medium": 86,
+          "unknown": 853
+        }
       }
     },
     {
@@ -162,19 +193,50 @@
     },
     {
       "name": "Share Sync Policy",
-      "passed": true,
-      "message": "No unknown or unsafe share/ docs in managed namespaces",
+      "passed": false,
+      "message": "Policy Violation: Found 12 unknown files",
       "details": {
-        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
+        "ok": false,
+        "mode": "STRICT",
+        "missing_in_share": [
+          "PM_HANDOFF_PROTOCOL.md",
+          "SHARE_FOLDER_ANALYSIS.md"
+        ],
+        "extra_in_share": [
+          "share/agents_md.head.json",
+          "share/doc_registry.json",
+          "share/doc_sync_state.json",
+          "share/doc_version.json",
+          "share/governance_freshness.json",
+          "share/hint_registry.json",
+          "share/live_posture.json",
+          "share/next_steps.head.json",
+          "share/planning_lane_status.json",
+          "share/pm_contract.head.json",
+          "share/pm_snapshot.json",
+          "share/schema_snapshot.json"
+        ],
+        "missing_in_dms": [
+          "share/agents_md.head.json",
+          "share/doc_registry.json",
+          "share/doc_sync_state.json",
+          "share/doc_version.json",
+          "share/governance_freshness.json",
+          "share/hint_registry.json",
+          "share/live_posture.json",
+          "share/next_steps.head.json",
+          "share/planning_lane_status.json",
+          "share/pm_contract.head.json",
+          "share/pm_snapshot.json",
+          "share/schema_snapshot.json"
+        ]
       }
     },
     {
       "name": "Backup System",
-      "passed": false,
-      "message": "No recent backup found: ",
-      "details": {
-        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
-      }
+      "passed": true,
+      "message": "Recent backup exists and rotation logic is sane",
+      "details": {}
     },
     {
       "name": "WebUI Shell Sanity",
@@ -191,5 +253,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T05:49:43Z"
+  "timestamp": "2025-12-07T18:51:42Z"
 }
