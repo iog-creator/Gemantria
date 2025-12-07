@@ -4,12 +4,12 @@
   "last_completed_phase": "23",
   "branch": "feat/phase27i-doc-hygiene-batch1",
   "health": {
-    "reality_green": true,
+    "reality_green": false,
     "checks": {
-      "DMS Alignment": true,
+      "DMS Alignment": false,
       "Bootstrap Consistency": true,
-      "Share Sync Policy": true,
-      "Backup System": true
+      "Share Sync Policy": false,
+      "Backup System": false
     }
   },
   "required_surfaces": [
@@ -17,7 +17,7 @@
     "share/SSOT_SURFACE_V17.json"
   ],
   "notes": {
-    "generated_at": "2025-12-07T17:40:52Z",
+    "generated_at": "2025-12-07T17:47:27Z",
     "reality_green_summary": "share/REALITY_GREEN_SUMMARY.json",
     "dms_share_alignment": "OK",
     "dms_share_mismatch_count": 0
