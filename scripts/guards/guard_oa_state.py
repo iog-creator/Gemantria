@@ -42,6 +42,11 @@ def check_oa_consistency(mode: str = "STRICT") -> dict:
     """
     Check OA state against kernel surfaces.
 
+    Phase 27.D: Enforces tri-surface coherence:
+    - OA STATE.json
+    - REALITY_GREEN_SUMMARY.json
+    - PM_BOOTSTRAP_STATE.json
+
     Returns a report dict with:
     - ok: bool
     - mismatches: list of mismatch descriptions
@@ -94,12 +99,71 @@ def check_oa_consistency(mode: str = "STRICT") -> dict:
         report["ok"] = False
         report["mismatches"].append(f"current_phase mismatch: OA='{oa_phase}' vs kernel='{kernel_phase}'")
 
-    # Check reality_green consistency
+    # ========================================
+    # Phase 27.D: Tri-Surface Coherence Checks
+    # ========================================
+
+    # 1. OA reality_green must match REALITY_GREEN_SUMMARY
     oa_reality = oa_state.get("reality_green", None)
     kernel_reality = reality.get("reality_green", None)
     if oa_reality != kernel_reality:
         report["ok"] = False
-        report["mismatches"].append(f"reality_green mismatch: OA={oa_reality} vs kernel={kernel_reality}")
+        report["mismatches"].append(f"reality_green mismatch: OA={oa_reality} vs REALITY_GREEN={kernel_reality}")
+
+    # 2. PM_BOOTSTRAP health.reality_green must match REALITY_GREEN_SUMMARY
+    pm_health = bootstrap.get("health", {})
+    pm_reality_green = pm_health.get("reality_green", None)
+    if pm_reality_green is not None and pm_reality_green != kernel_reality:
+        report["ok"] = False
+        report["mismatches"].append(
+            f"reality_green mismatch: PM_BOOTSTRAP.health={pm_reality_green} vs REALITY_GREEN={kernel_reality}"
+        )
+
+    # 3. Key check statuses must match between OA and REALITY_GREEN_SUMMARY
+    key_checks = ["AGENTS.md Sync", "DMS Alignment", "AGENTS–DMS Contract"]  # noqa: RUF001
+
+    # Build lookup for reality checks
+    reality_checks = {c.get("name"): c.get("passed") for c in reality.get("checks", [])}
+    # Build lookup for OA checks
+    oa_checks = {c.get("name"): c.get("passed") for c in oa_state.get("checks_summary", [])}
+
+    for check_name in key_checks:
+        rg_passed = reality_checks.get(check_name)
+        oa_passed = oa_checks.get(check_name)
+        if rg_passed is not None and oa_passed is not None and rg_passed != oa_passed:
+            report["ok"] = False
+            report["mismatches"].append(f"check '{check_name}' mismatch: OA={oa_passed} vs REALITY_GREEN={rg_passed}")
+
+    # 4. PM_BOOTSTRAP health.agents_sync_ok and health.dms_alignment_ok must match
+    if pm_health:
+        pm_agents_sync = pm_health.get("agents_sync_ok")
+        pm_dms_align = pm_health.get("dms_alignment_ok")
+        rg_agents_sync = reality_checks.get("AGENTS.md Sync")
+        rg_dms_align = reality_checks.get("DMS Alignment")
+
+        if pm_agents_sync is not None and rg_agents_sync is not None and pm_agents_sync != rg_agents_sync:
+            report["ok"] = False
+            report["mismatches"].append(
+                f"agents_sync mismatch: PM_BOOTSTRAP.health={pm_agents_sync} vs REALITY_GREEN={rg_agents_sync}"
+            )
+        if pm_dms_align is not None and rg_dms_align is not None and pm_dms_align != rg_dms_align:
+            report["ok"] = False
+            report["mismatches"].append(
+                f"dms_alignment mismatch: PM_BOOTSTRAP.health={pm_dms_align} vs REALITY_GREEN={rg_dms_align}"
+            )
+
+    # 5. Check for contradictory notes in PM_BOOTSTRAP (legacy cleanup)
+    # If a stale meta.dms_share_alignment exists and contradicts health, flag it
+    pm_meta = bootstrap.get("meta", {})
+    stale_dms_alignment = pm_meta.get("dms_share_alignment")
+    if stale_dms_alignment is not None:
+        # meta.dms_share_alignment is deprecated, should be migrated to health section
+        rg_dms_ok = reality_checks.get("DMS Alignment", False)
+        if stale_dms_alignment == "BROKEN" and rg_dms_ok:
+            report["ok"] = False
+            report["mismatches"].append(
+                "stale meta.dms_share_alignment='BROKEN' contradicts REALITY_GREEN DMS Alignment=PASS"
+            )
 
     # Check referenced surfaces exist
     surface_status = oa_state.get("surface_status", {})

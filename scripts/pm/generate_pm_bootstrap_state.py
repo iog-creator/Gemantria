@@ -231,6 +231,18 @@ def load_ssot_surface() -> dict[str, Any] | None:
         return None
 
 
+def load_reality_green_summary() -> dict[str, Any] | None:
+    """Load REALITY_GREEN_SUMMARY.json for canonical health state."""
+    rg_path = SHARE / "REALITY_GREEN_SUMMARY.json"
+    if not rg_path.exists():
+        return None
+    try:
+        with open(rg_path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
 def check_alignment_status() -> str:
     """Check DMS-Share alignment status via guard."""
     import subprocess
@@ -272,11 +284,27 @@ def main() -> int:
     if not ssot_surface:
         print("[PM_BOOTSTRAP] WARNING: SSOT_SURFACE not found. Phase state may be stale.")
 
+    # Load REALITY_GREEN_SUMMARY for coherent health data (Phase 27.D)
+    rg_summary = load_reality_green_summary() or {}
+    reality_green = rg_summary.get("reality_green", False)
+    checks = rg_summary.get("checks", [])
+
+    # Extract key check statuses for health section
+    agents_sync_ok = any(c.get("name") == "AGENTS.md Sync" and c.get("passed") for c in checks)
+    dms_alignment_ok = any(c.get("name") == "DMS Alignment" and c.get("passed") for c in checks)
+
     data = {
         "version": "2025-12-03",
         "generated_at_utc": ts,
         "branch": branch,
         "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
+        # Phase 27.D: Health section derived from REALITY_GREEN_SUMMARY for coherence
+        "health": {
+            "reality_green": reality_green,
+            "agents_sync_ok": agents_sync_ok,
+            "dms_alignment_ok": dms_alignment_ok,
+            "source": "share/REALITY_GREEN_SUMMARY.json",
+        },
         "core_governance": {
             "pm_contract": optional("docs/SSOT/PM_CONTRACT.md"),
             "execution_contract": optional("docs/SSOT/EXECUTION_CONTRACT.md"),
@@ -306,7 +334,6 @@ def main() -> int:
             "current_phase": ssot_surface.get("current_phase", "23"),
             "last_completed_phase": ssot_surface.get("last_completed_phase", "23"),
             "kb_registry_path": "share/kb_registry.json",
-            "dms_share_alignment": ssot_surface.get("dms_share_alignment", check_alignment_status()),
         },
         "kb": {
             "registry_course_correction": optional("docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md"),
