@@ -154,14 +154,10 @@
     },
     {
       "name": "Root Surface",
-      "passed": false,
-      "message": "Found 2 unexpected file(s) in root: pr-27h.md, tmp.agent_docs_index.json",
+      "passed": true,
+      "message": "No unexpected files in repository root",
       "details": {
-        "unexpected": [
-          "pr-27h.md",
-          "tmp.agent_docs_index.json"
-        ],
-        "output": ""
+        "output": "[root-surface] OK: no unexpected files in repo root"
       }
     },
     {
@@ -174,9 +170,11 @@
     },
     {
       "name": "Backup System",
-      "passed": true,
-      "message": "Recent backup exists and rotation logic is sane",
-      "details": {}
+      "passed": false,
+      "message": "No recent backup found: ",
+      "details": {
+        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
+      }
     },
     {
       "name": "WebUI Shell Sanity",
@@ -193,5 +191,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T06:29:34Z"
+  "timestamp": "2025-12-07T15:38:01Z"
 }

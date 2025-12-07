@@ -1419,6 +1419,49 @@ make reality.green
 
 **Note:** This gate enforces Option C - DB-down is always a failure when `GEMATRIA_DSN` is set. The system treats DB as SSOT and cannot proceed in a broken state.
 
+### `guards/guard_directory_namespace_policy.py` — Directory Namespace Policy Guard (Phase 27.I)
+
+**Purpose:** Enforces canonical directory structure for ADRs, Schemas, and SQL files. Ensures that files are in their canonical locations and not in legacy directories.
+
+**Rule References:** Phase 27.I (Directory Namespace Cleanup), Rule 006 (AGENTS.md Governance)
+
+**Capabilities:**
+- **ADR Namespace Check**: Validates that ADRs live only in `docs/ADRs/`, not in `docs/adr/`. Treats `AGENTS.md` files as directory documentation (not ADRs) and excludes them from the check.
+- **Future Extensions**: Will be extended to handle Schemas (`docs/schema`, `docs/schemas`, `schemas`) and SQL directories (`docs/sql`, `db/sql`, `scripts/sql`) in subsequent batches.
+
+**Usage:**
+```bash
+# Run directory namespace guard
+python scripts/guards/guard_directory_namespace_policy.py
+
+# Via Makefile (integrated into reality.green in HINT mode)
+make reality.green
+```
+
+**Output:**
+- JSON summary with `checks.adrs.ok` and list of `issues` if any
+- Exit code 0 if all checks pass, 1 if any check fails
+
+**Integration:**
+- **Makefile**: Integrated into `reality.green` target in HINT mode (`|| true`) - non-blocking
+- **Phase 27.I**: Part of directory namespace cleanup initiative
+- **Future**: Will be tightened from HINT mode to STRICT once directory cleanup is complete
+
+**Example Output:**
+```json
+{
+  "ok": true,
+  "checks": {
+    "adrs": {
+      "ok": true,
+      "issues": [],
+      "canonical": "…/docs/ADRs",
+      "legacy": "…/docs/adr"
+    }
+  }
+}
+```
+
 ### verify_pr016_pr017.py — Metrics Contract Verifier
 
 **Purpose:** Ensures exported statistics reflect live DB and UI contracts.

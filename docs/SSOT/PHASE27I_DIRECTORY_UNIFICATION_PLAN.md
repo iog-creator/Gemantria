@@ -38,9 +38,10 @@ This section is an initial proposal and may be refined during implementation.
   - Legacy: docs/adr/ (to be archived or merged)
 
 - Schemas:
-  - Canonical machine schemas: schemas/
-  - Canonical documentation: docs/schemas/
-  - Legacy: docs/schema/ (pure docs; either merged into docs/schemas/ or removed)
+  - Canonical machine schemas: `schemas/` (JSON Schema files for validation)
+  - Canonical documentation: `docs/schemas/` (human-readable schema docs, Markdown)
+  - Legacy: `docs/schema/` (pure docs only; merged into `docs/schemas/` or removed)
+  - **Out of scope for 27.I:** `docs/SSOT/*.schema.json` (SSOT/domain-specific schemas, governed by existing OPS/temporal rules)
 
 - SQL:
   - Canonical DB SQL: db/sql/

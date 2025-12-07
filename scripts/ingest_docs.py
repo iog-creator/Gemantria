@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SSOT_FILES = [
     REPO_ROOT / "docs" / "SSOT" / "MASTER_PLAN.md",
     REPO_ROOT / "AGENTS.md",
-    REPO_ROOT / "docs" / "SSOT" / "graph.schema.json",
+    REPO_ROOT / "schemas" / "graph.schema.json",
 ]
 
 
