@@ -118,7 +118,7 @@ def call_local_lm(prompt: str) -> str:
             {
                 "role": "system",
                 "content": "You are a precise, structured PM/OPS triage assistant. "
-                "You respect the Gemantria PM contract and DMS-first governance.",
+                "You respect the Gemantria PM contract and pmagent control-plane DMS-first governance.",
             },
             {
                 "role": "user",

@@ -7,7 +7,7 @@ All documentation lifecycle, classification, metadata, and structural enforcemen
 are handled by pmagent's control-plane DMS (`control.doc_registry`).
 Gemantria is the domain project being governed, not the system performing
 the governance. AGENTS.md surfaces define the agent-facing worldview of both
-Gemantria and pmagent; the DMS records that worldview in structured form.
+Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.
 
 ## Directory Purpose
 
