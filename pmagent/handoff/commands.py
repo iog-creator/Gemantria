@@ -100,7 +100,7 @@ def handoff_kernel(
 
 @app.command("kernel-bundle")
 def handoff_kernel_bundle(
-    out_dir: Path = typer.Option(ROOT / "share" / "handoff", "--out-dir", help="Output directory under share/"),
+    out_dir: Path = typer.Option(ROOT / "share" / "handoff", "--out-dir", help="Output directory under share/"),  # noqa: B008
 ) -> None:
     """
     Generate the PM handoff kernel bundle (JSON + summary markdown).

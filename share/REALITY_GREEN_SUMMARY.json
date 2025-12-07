@@ -1,5 +1,5 @@
 {
-  "reality_green": false,
+  "reality_green": true,
   "checks": [
     {
       "name": "DB Health",
@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "d9a9cd6f227511d2...",
+              "current_hash": "d9a9cd6f227511d2..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -154,14 +154,10 @@
     },
     {
       "name": "Root Surface",
-      "passed": false,
-      "message": "Found 2 unexpected file(s) in root: pr-27h.md, tmp.agent_docs_index.json",
+      "passed": true,
+      "message": "No unexpected files in repository root",
       "details": {
-        "unexpected": [
-          "pr-27h.md",
-          "tmp.agent_docs_index.json"
-        ],
-        "output": ""
+        "output": "[root-surface] OK: no unexpected files in repo root"
       }
     },
     {
@@ -193,5 +189,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T06:29:34Z"
+  "timestamp": "2025-12-07T17:31:29Z"
 }

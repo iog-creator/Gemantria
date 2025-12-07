@@ -20,10 +20,10 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
 # Import existing helpers
-from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn
-from scripts.guards.guard_lm_health import check_lm_health
-from scripts.control.control_summary import compute_control_summary
-from pmagent.lm.lm_status import compute_lm_status
+from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn  # noqa: E402
+from scripts.guards.guard_lm_health import check_lm_health  # noqa: E402
+from scripts.control.control_summary import compute_control_summary  # noqa: E402
+from pmagent.lm.lm_status import compute_lm_status  # noqa: E402
 
 # Import hint registry (graceful degradation if unavailable)
 try:

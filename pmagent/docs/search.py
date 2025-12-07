@@ -15,11 +15,11 @@ from typing import Dict
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from sqlalchemy import text
+from sqlalchemy import text  # noqa: E402
 
-from pmagent.adapters import lm_studio
-from pmagent.db.loader import get_control_engine
-from scripts.config.env import get_retrieval_lane_models
+from pmagent.adapters import lm_studio  # noqa: E402
+from pmagent.db.loader import get_control_engine  # noqa: E402
+from scripts.config.env import get_retrieval_lane_models  # noqa: E402
 
 
 def _get_retrieval_embedding_model() -> str:

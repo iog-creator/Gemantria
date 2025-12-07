@@ -24,7 +24,7 @@ import psycopg
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.config.env import get_rw_dsn  # reuse RW DSN; reads only in practice
+from scripts.config.env import get_rw_dsn  # noqa: E402  # reuse RW DSN; reads only in practice
 
 OUT_PATH = REPO_ROOT / "docs" / "analysis" / "DOC_DM002_SUMMARY.md"
 

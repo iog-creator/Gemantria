@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 """Hebrew text normalization and mapping utilities.
 
 Reference implementation: src/core/ids.py (normalize_hebrew function).
 Normalization follows ADR-002: NFKD → strip combining → strip maqaf/sof pasuq/punct → NFC.
 """
+
+from __future__ import annotations
 
 import re
 import unicodedata

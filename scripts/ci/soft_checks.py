@@ -22,9 +22,12 @@ CMDS = [
 
 
 def run(cmd):
+    from scripts.util.filter_stderr import filter_cursor_noise
+
     try:
         p = subprocess.run(cmd, text=True, capture_output=True)
-        return p.returncode, p.stdout, p.stderr
+        stderr_filtered = filter_cursor_noise(p.stderr)
+        return p.returncode, p.stdout, stderr_filtered
     except FileNotFoundError:
         return 127, "", "missing: " + cmd[0]
 

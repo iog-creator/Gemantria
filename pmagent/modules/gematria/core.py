@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 Core Gematria value logic.
 
@@ -12,6 +10,7 @@ Reference implementations:
 - scripts/gematria_verify.py (gematria function)
 """
 
+from __future__ import annotations
 from typing import Iterable
 
 DEFAULT_SYSTEM_NAME = "mispar_hechrachi"

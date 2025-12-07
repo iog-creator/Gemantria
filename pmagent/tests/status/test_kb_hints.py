@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402  # sys.path test pattern is intentional
 """
 Tests for KB hints generation (KB-Reg:M4)
 """

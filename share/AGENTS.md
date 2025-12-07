@@ -372,6 +372,13 @@ make reality.green STRICT
 - **Line length**: 120 characters maximum
 - **String concatenation**: Use `["cmd", *args]` instead of `["cmd"] + args`
 
+### Ruff Scope Policy
+Ruff linting is **zero-tolerance on governed paths** (`pmagent/`, `src/`, `docs/SSOT/`, `scripts/guards/`, `tests/`). All ruff errors in these paths must be fixed before merging.
+
+**Legacy/archived directories** (`archive/`, `oa/`, and other explicitly excluded paths in `ruff.toml`) are treated as technical debt and excluded from linting to avoid blocking new PRs. These directories must be cleaned up in dedicated PRs, not as part of feature work.
+
+**Docs-only PRs** (PRs that only modify documentation/markdown files) must not be blocked by lint failures in excluded legacy directories. The ruff CI job is scoped to governed paths via `ruff.toml` exclusions.
+
 ### Debugging Workflow State Issues
 
 If a script behaves unexpectedly or seems to be running an old version:

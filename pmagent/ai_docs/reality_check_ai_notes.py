@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pmagent.adapters.lm_studio import lm_studio_chat
+from pmagent.adapters.lm_studio import lm_studio_chat  # noqa: E402
 
 
 def read_reality_check_code() -> str:

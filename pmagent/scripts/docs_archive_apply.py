@@ -23,8 +23,8 @@ from typing import List
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
-import psycopg
-from scripts.config.env import get_rw_dsn
+import psycopg  # noqa: E402
+from scripts.config.env import get_rw_dsn  # noqa: E402
 
 RECEIPT_PATH = REPO_ROOT / "share" / "exports" / "docs-control" / "archive-receipt.json"
 ARCHIVE_BASE = REPO_ROOT / "archive" / "docs"

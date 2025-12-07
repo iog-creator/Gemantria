@@ -25,8 +25,11 @@ from pathlib import Path
 
 def run_cmd(cmd: list[str], cwd: str | None = None) -> tuple[str, str, int]:
     """Run a command and return stdout, stderr, exit_code."""
+    from scripts.util.filter_stderr import filter_cursor_noise
+
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
-    return result.stdout.strip(), result.stderr.strip(), result.returncode
+    stderr_filtered = filter_cursor_noise(result.stderr)
+    return result.stdout.strip(), stderr_filtered.strip(), result.returncode
 
 
 def get_branches() -> list[dict]:

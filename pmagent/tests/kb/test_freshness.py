@@ -1,3 +1,4 @@
+# ruff: noqa: E402  # sys.path test pattern is intentional
 """
 Tests for KB document freshness analysis (KB-Reg:M6).
 """

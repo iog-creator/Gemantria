@@ -1,3 +1,4 @@
+# ruff: noqa: E402  # sys.path test pattern is intentional
 """
 Tests for KB document registry model and persistence (KB-Reg:M1).
 """

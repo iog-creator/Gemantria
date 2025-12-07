@@ -29,9 +29,12 @@ def redact(dsn: str) -> str:
 
 
 def run(cmd: list[str], env=None) -> tuple[int, str, str]:
+    from scripts.util.filter_stderr import filter_cursor_noise
+
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
     out, err = p.communicate()
-    return p.returncode, out.strip(), err.strip()
+    err_filtered = filter_cursor_noise(err)
+    return p.returncode, out.strip(), err_filtered.strip()
 
 
 now_iso = datetime.datetime.now().astimezone().isoformat(timespec="seconds")

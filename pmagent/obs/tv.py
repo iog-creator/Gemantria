@@ -75,7 +75,6 @@ def _print_entry(json_line: str) -> None:
             lane_color = "\033[94m"  # Blue
         elif lane == "LEGACY":
             lane_color = "\033[93m"  # Yellow
-        reset = "\033[0m"
 
         print(f"\033[90m[{ts_str}]\033[0m {lane_color}[{lane}]\033[0m ({context}) {query}")
         print(f"           \033[90m↳ Model: {model}\033[0m")

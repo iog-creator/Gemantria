@@ -43,12 +43,21 @@ class CheckResult:
 
 def run_subprocess_check(script_path: Path, args: list[str] | None = None) -> tuple[int, str, str]:
     """Run a subprocess check and return (exit_code, stdout, stderr)."""
+    import os
+
     cmd = [sys.executable, str(script_path)]
     if args:
         cmd.extend(args)
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, check=False)
-        return result.returncode, result.stdout, result.stderr
+        # Filter Cursor IDE integration noise from stderr (orchestrator-friendly output)
+        stderr_filtered = result.stderr
+        if os.environ.get("REALITY_DUMP_BASH_DEBUG") != "1":
+            stderr_lines = stderr_filtered.split("\n")
+            stderr_filtered = "\n".join(
+                line for line in stderr_lines if "dump_bash_state: command not found" not in line
+            )
+        return result.returncode, result.stdout, stderr_filtered
     except Exception as e:
         return 1, "", str(e)
 
@@ -364,7 +373,7 @@ def check_dms_alignment() -> CheckResult:
 
             msg = f"DMS Alignment BROKEN: {', '.join(details)}"
             return CheckResult("DMS Alignment", False, msg, data)
-        except:
+        except Exception:
             pass
 
         return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
@@ -390,7 +399,7 @@ def check_bootstrap_consistency() -> CheckResult:
             data = json.loads(stdout)
             msg = f"Bootstrap Mismatch: {', '.join(data.get('mismatches', []))}"
             return CheckResult("Bootstrap Consistency", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Bootstrap Consistency", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
@@ -416,7 +425,7 @@ def check_share_sync_policy() -> CheckResult:
             extras = data.get("extra_in_share", [])
             msg = f"Policy Violation: Found {len(extras)} unknown files"
             return CheckResult("Share Sync Policy", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Share Sync Policy", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
@@ -480,7 +489,7 @@ def check_handoff_kernel() -> CheckResult:
             data = json.loads(stdout)
             msg = f"Kernel Mismatch: {', '.join(data.get('mismatches', []))}"
             return CheckResult("Handoff Kernel", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
