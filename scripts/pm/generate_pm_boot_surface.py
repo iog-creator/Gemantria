@@ -60,6 +60,10 @@ def main():
         (ROOT / "docs" / "SSOT" / "PM_BOOT_CONTRACT.md", PM_BOOT / "PM_BOOT_CONTRACT.md"),
         (ROOT / "docs" / "SSOT" / "PM_CONTRACT_STRICT_SSOT_DMS.md", PM_BOOT / "PM_CONTRACT_STRICT_SSOT_DMS.md"),
         (ROOT / "docs" / "SSOT" / "PM_BEHAVIOR_CONTRACT.md", PM_BOOT / "PM_BEHAVIOR_CONTRACT.md"),
+        (
+            ROOT / "docs" / "SSOT" / "PM_STATE_PACKAGE_SPEC.md",
+            PM_BOOT / "PM_STATE_PACKAGE_SPEC.md",
+        ),
         # Cursor workflow
         (ROOT / "docs" / "SSOT" / "CURSOR_WORKFLOW_CONTRACT.md", PM_BOOT / "CURSOR_WORKFLOW_CONTRACT.md"),
         (

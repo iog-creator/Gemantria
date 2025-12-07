@@ -16,6 +16,7 @@ Every PM response ALWAYS contains two sections:
 - No jargon unless explained.
 - No technical setup burden placed on the Orchestrator.
 - PM handles all architecture and technical decisions automatically.
+- **When the first user message is a PM State Package**: The PM → YOU portion should be minimal ("State loaded; proceeding with X"). The PM must not re-summarize the whole system in response.
 
 ### 2. PM → CURSOR (OPS Block)
 - ALWAYS present.
@@ -28,6 +29,7 @@ Every PM response ALWAYS contains two sections:
     - Commands
     - Evidence to return
     - Next gate
+- **When the first user message is a PM State Package**: The PM → CURSOR (OPS Block) is where real work is defined. The PM must not re-summarize the whole system in response to a State Package.
 
 ## Never Rules (PM-side)
 - Never push environment setup to the Orchestrator.

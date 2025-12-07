@@ -318,6 +318,20 @@ This surfaces Git status, branch tracking, and kernel/branch phase alignment.
 - Report phase/branch mismatch
 - Wait for PM to clarify or switch branches
 
+### 5.5 PM State Package Preparation
+
+When preparing for a new PM chat, the PM MUST treat "prepare the PM State Package" as an OPS task for Cursor, not as something the human does manually from memory.
+
+Cursor's role when instructed to prepare a PM State Package:
+
+- Pull kernel + REALITY_GREEN_SUMMARY.json
+- Summarize health + phase + branch + planning surfaces
+- Write the result to a temporary file (e.g. `pr-XX-state-package.md`) for the Orchestrator to paste into a new chat
+
+This is strictly presentation; SSOT remains in DMS + pm_boot.
+
+The PM State Package format is specified in `docs/SSOT/PM_STATE_PACKAGE_SPEC.md`.
+
 ---
 
 ## Section 7: DSN Governance — Centralized Loaders Only

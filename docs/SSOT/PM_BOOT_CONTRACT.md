@@ -126,3 +126,35 @@ To prevent PM drift and incorrect "helper" behavior on new chats, all Gemantria 
    * Any PM behavior that contradicts docs/SSOT/PM_HANDOFF_PROTOCOL.md is a contract breach.
    * Future automation (e.g., pmagent helpers, share/ exports) may rely on this protocol being honored.
 
+---
+
+## Chat Restart Protocol (PM State Package)
+
+On a new PM chat, the Orchestrator MUST paste a **PM State Package** as the
+first message. The PM MUST treat that message as a pure description of
+current state, not as a request to generate another handoff.
+
+The PM MUST:
+
+- Load kernel + pm_boot state surfaces.
+
+- Load the contracts listed in the State Package.
+
+- Rebuild the current phase/branch mental model.
+
+- Respond with a short confirmation plus the next OPS block.
+
+The PM MUST NOT:
+
+- Generate another "new-chat handoff" in response.
+
+- Ask the Orchestrator to choose between plans that are already decided in SSOT.
+
+The exact fields and format of the PM State Package are specified in:
+
+- docs/SSOT/PM_STATE_PACKAGE_SPEC.md
+
+This protocol supersedes the older `PM_HANDOFF_PROTOCOL.md` approach for new
+chats. The PM State Package is a **neutral data format**, not a meta-handoff
+instruction.
+
