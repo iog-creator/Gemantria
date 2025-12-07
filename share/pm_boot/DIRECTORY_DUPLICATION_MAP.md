@@ -248,7 +248,7 @@ After cleanup, these files may need updates:
 - `scripts/guards/guard_dms_share_alignment.py` (path checks)
 - `docs/SSOT/SHARE_FOLDER_ANALYSIS.md` (directory structure docs)
 - `docs/README.md` (documentation structure)
-- DMS registry (if paths are tracked)
+- pmagent control-plane DMS (if paths are tracked)
 
 ---
 

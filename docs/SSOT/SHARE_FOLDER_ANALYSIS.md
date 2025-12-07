@@ -141,7 +141,7 @@ Every file in `share/` must have a reason to exist that is recognized by the pma
 ### scripts_AGENTS.md (transition policy)
 
 - **Location**: `share/scripts_AGENTS.md`
-- **Status**: Transitional doc governed by the DMS.
+- **Status**: Transitional doc governed by the pmagent control-plane DMS.
 - **Role**: Helper surface for agent/script discovery until the Agent Registry and SSOT docs fully replace it.
 - **Policy**:
   - Must remain present in `share/` while pmagent control-plane DMS marks it as enabled.
