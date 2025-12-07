@@ -3,6 +3,11 @@ This report lists markdown docs discovered in root/docs/share and
 provides placeholders for classification as **helpful** or **unhelpful**.
 PM + OA will refine this in the next step; no files have been moved yet.
 
+> **Note (Batch 3):** `share/scripts_AGENTS.md` is currently classified as a
+> **transitional required doc** governed by the DMS. See
+> `docs/SSOT/SHARE_FOLDER_ANALYSIS.md` — section "scripts_AGENTS.md (transition policy)"
+> for its current role and retirement plan.
+
 ## Root-level markdown files
 
 - `ADR-007-llm-integration.md`  

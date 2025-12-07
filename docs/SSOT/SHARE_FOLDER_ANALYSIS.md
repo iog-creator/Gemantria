@@ -133,6 +133,23 @@ Phase 27.H introduces `share/pm_boot/` as the PM/OA boot capsule. It contains co
 | PHASENN docs | Yes | From DMS + scripts |
 | orchestrator/, OA/ | Partially | State folders (not governed by DMS) |
 
+## Share Layout Overview
+
+`share/` is a **governed surface**. It is not a junk drawer.  
+Every file in `share/` must have a reason to exist that is recognized by the DMS (or is a governed export).
+
+### scripts_AGENTS.md (transition policy)
+
+- **Location**: `share/scripts_AGENTS.md`
+- **Status**: Transitional doc governed by the DMS.
+- **Role**: Helper surface for agent/script discovery until the Agent Registry and SSOT docs fully replace it.
+- **Policy**:
+  - Must remain present in `share/` while DMS marks it as enabled.
+  - Content should not diverge from `AGENTS.md` and other agent SSOT docs.
+  - When the Agent Registry SSOT is complete, this file will be moved to `archive/docs_legacy/` and marked `enabled: false` in the DMS doc registry.
+
+### Core Structure
+
 Manual edits should **never** occur in share/ (except orchestrator/OA state dirs).
 
 Everything else must be generated or synchronized from DMS or scripts.
