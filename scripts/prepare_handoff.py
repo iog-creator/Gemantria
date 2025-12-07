@@ -39,6 +39,7 @@ def run_cmd(cmd: list[str], capture_output: bool = True) -> tuple[int, str, str]
         result = subprocess.run(cmd, capture_output=capture_output, text=True, check=False, timeout=30)
         # Filter Cursor IDE integration noise (orchestrator-friendly output)
         from scripts.util.filter_stderr import filter_cursor_noise
+
         stderr_filtered = filter_cursor_noise(result.stderr)
         return result.returncode, result.stdout.strip(), stderr_filtered.strip()
     except subprocess.TimeoutExpired:

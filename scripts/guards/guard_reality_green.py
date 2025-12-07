@@ -43,12 +43,21 @@ class CheckResult:
 
 def run_subprocess_check(script_path: Path, args: list[str] | None = None) -> tuple[int, str, str]:
     """Run a subprocess check and return (exit_code, stdout, stderr)."""
+    import os
+
     cmd = [sys.executable, str(script_path)]
     if args:
         cmd.extend(args)
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, check=False)
-        return result.returncode, result.stdout, result.stderr
+        # Filter Cursor IDE integration noise from stderr (orchestrator-friendly output)
+        stderr_filtered = result.stderr
+        if os.environ.get("REALITY_DUMP_BASH_DEBUG") != "1":
+            stderr_lines = stderr_filtered.split("\n")
+            stderr_filtered = "\n".join(
+                line for line in stderr_lines if "dump_bash_state: command not found" not in line
+            )
+        return result.returncode, result.stdout, stderr_filtered
     except Exception as e:
         return 1, "", str(e)
 
