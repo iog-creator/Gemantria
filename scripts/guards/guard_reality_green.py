@@ -765,22 +765,81 @@ def main() -> int:
     all_passed = all(c.passed for c in checks)
     results_summary = []
 
-    for check in checks:
-        status = "✅ PASS" if check.passed else "❌ FAIL"
-        print(f"{status}: {check.name}")
-        if check.message:
-            print(f"   {check.message}")
-        if check.details and not check.passed:
-            for key, value in check.details.items():
-                if key == "issues" and isinstance(value, list):
-                    for issue in value:
-                        print(f"      - {issue}")
-                elif key == "output" and value:
-                    # Only show output if it's an error
-                    if not check.passed:
-                        print(f"      Output: {value[:200]}")
+    # Remediation hints for common failures
+    REMEDIATION = {
+        "DB Health": "make book.smoke",
+        "Control-Plane Health": "python scripts/guards/guard_control_plane_health.py",
+        "AGENTS.md Sync": "touch scripts/AGENTS.md  # if code changes are intentional",
+        "Share Sync & Exports": "make share.sync",
+        "Ledger Verification": "make state.sync",
+        "DMS Alignment": "python scripts/guards/guard_dms_share_alignment.py --mode HINT  # see details",
+        "DMS Metadata": "python scripts/governance/dms_doc_cleanup.py --dry-run",
+        "AGENTS–DMS Contract": "make housekeeping  # sync AGENTS.md with DMS",
+        "Bootstrap Consistency": "python scripts/pm/generate_pm_bootstrap_state.py",
+        "Share Sync Policy": "python scripts/guards/guard_share_sync_policy.py --mode HINT",
+        "Backup System": "make backup.surfaces",
+        "OA State": "python pmagent/oa/state.py  # refresh OA snapshot",
+        "Handoff Kernel": "python scripts/pm/generate_handoff_kernel.py",
+        "Root Surface": "python scripts/guards/guard_root_surface_policy.py --mode HINT",
+    }
+
+    # Separate passed and failed checks
+    passed_checks = [c for c in checks if c.passed]
+    failed_checks = [c for c in checks if not c.passed]
+
+    # === FAILURE SUMMARY (if any) ===
+    if failed_checks:
+        print("🚨 FAILURES DETECTED")
+        print("-" * 60)
+        print()
+        for i, check in enumerate(failed_checks, 1):
+            print(f"  {i}. {check.name}")
+            print(f"     ❌ {check.message}")
+
+            # Show key details (not raw output)
+            if check.details:
+                # Show specific issue types
+                if "issues" in check.details and isinstance(check.details["issues"], list):
+                    for issue in check.details["issues"][:3]:  # Max 3
+                        print(f"        • {issue}")
+                    if len(check.details["issues"]) > 3:
+                        print(f"        ... and {len(check.details['issues']) - 3} more")
+                elif "violations" in check.details and isinstance(check.details["violations"], list):
+                    for v in check.details["violations"][:3]:
+                        print(f"        • {v}")
+                    if len(check.details["violations"]) > 3:
+                        print(f"        ... and {len(check.details['violations']) - 3} more")
+                elif "extra_in_share" in check.details:
+                    extras = check.details["extra_in_share"]
+                    for e in extras[:3]:
+                        print(f"        • Extra: {e}")
+                    if len(extras) > 3:
+                        print(f"        ... and {len(extras) - 3} more")
+                elif "mismatches" in check.details and isinstance(check.details["mismatches"], list):
+                    for m in check.details["mismatches"][:3]:
+                        print(f"        • {m}")
+
+            # Remediation hint
+            if check.name in REMEDIATION:
+                print(f"     💡 Fix: {REMEDIATION[check.name]}")
+            print()
+
+        print("-" * 60)
         print()
 
+    # === QUICK STATUS ===
+    print(f"📊 STATUS: {len(passed_checks)}/{len(checks)} checks passed")
+    print()
+
+    # === PASSED CHECKS (compact) ===
+    if passed_checks:
+        print("✅ PASSED:")
+        for check in passed_checks:
+            print(f"   • {check.name}")
+        print()
+
+    # Build results summary for JSON
+    for check in checks:
         results_summary.append(
             {
                 "name": check.name,
@@ -790,10 +849,7 @@ def main() -> int:
             }
         )
 
-        if not check.passed:
-            all_passed = False
-
-    # Print summary
+    # Print final verdict
     print("=" * 60)
     if all_passed:
         print("✅ REALITY GREEN: All checks passed - system is ready")
@@ -803,20 +859,12 @@ def main() -> int:
     else:
         print("❌ REALITY RED: One or more checks failed")
         print()
-        print("System is NOT ready. Fix the issues above before:")
+        print(f"Fix the {len(failed_checks)} issue(s) above before:")
         print("  - Declaring a feature 'complete'")
         print("  - Opening a PR for main")
         print("  - Generating a new share/ snapshot for other agents")
-        print()
-        print("Run individual checks to diagnose:")
-        print("  - make book.smoke              # DB health")
-        print("  - python scripts/guards/guard_control_plane_health.py  # Control-plane")
-        print("  - python scripts/check_agents_md_sync.py --verbose     # AGENTS.md sync")
-        print("  - make share.sync              # Share sync")
-        print("  - make state.verify            # Ledger verification")
-        print("  - make state.sync              # Update ledger if stale")
 
-    # Output JSON summary to stdout (for automation)
+    # Write final summary to file (Source of Truth for Generator/Kernel)
     summary_json = {
         "reality_green": all_passed,
         "checks": results_summary,
@@ -824,13 +872,14 @@ def main() -> int:
             ["date", "-u", "+%Y-%m-%dT%H:%M:%SZ"], capture_output=True, text=True, check=False
         ).stdout.strip(),
     }
-    print()
-    print("JSON Summary:")
-    print(json.dumps(summary_json, indent=2))
 
-    # Write final summary to file (Source of Truth for Generator/Kernel)
     with open(summary_path, "w") as f:
         json.dump(summary_json, f, indent=2)
+
+    # Only show full JSON in verbose mode or if explicitly requested
+    # For now, just note where to find it
+    print()
+    print(f"📄 Full details: share/REALITY_GREEN_SUMMARY.json")
 
     return 0 if all_passed else 1
 
