@@ -17,7 +17,7 @@ All documentation lifecycle, classification, metadata, and structural enforcemen
 are handled by pmagent's control-plane DMS (`control.doc_registry`).
 Gemantria is the domain project being governed, not the system performing
 the governance. AGENTS.md surfaces define the agent-facing worldview of both
-Gemantria and pmagent; the DMS records that worldview in structured form.
+Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.
 
 In Gemantria, documentation and metadata are layered. The hierarchy for truth is:
 
@@ -96,11 +96,11 @@ See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation
 1. **Documentation**: `pmagent kb registry by-subsystem --owning-subsystem=<project>`
 2. **Tool Catalog**: `SELECT * FROM control.mcp_tool_catalog WHERE tags @> '{<project>}'`
 3. **Project Status**: `pmagent status kb` and `pmagent plan kb list`
-4. **File Search** (LAST RESORT): Only if content not in DMS
+4. **File Search** (LAST RESORT): Only if content not in pmagent control-plane DMS
 
 **Feature Registration**:
 - After building new tool/module: Create MCP envelope → `make mcp.ingest` → Update KB registry
-- PM learns capabilities automatically through DMS registration
+- PM learns capabilities automatically through pmagent control-plane DMS registration
 - **Goal**: PM and project develop together
 
 See `.cursor/rules/053-pm-dms-integration.mdc` and `docs/SSOT/PM_CONTRACT.md` Section 2.6 for full workflow.

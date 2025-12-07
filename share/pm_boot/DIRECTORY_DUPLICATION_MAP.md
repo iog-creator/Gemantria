@@ -231,7 +231,7 @@ The repository has **significant directory duplication** that creates confusion 
    - `Makefile` targets
    - `scripts/` imports
    - `docs/SSOT/` documentation
-   - DMS registry
+   - pmagent control-plane DMS
 2. **Run guards:**
    - `make ops.kernel.check`
    - `make reality.green`

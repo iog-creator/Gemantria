@@ -127,9 +127,9 @@ If the guard reports blocking gotchas and the OPS block does not explicitly ackn
 
 ### 3.1 DMS is SSOT (Rule 000)
 
-The **Postgres DMS (Document Management System)** is the canonical source of truth for:
+The **pmagent control-plane DMS (Postgres `control.doc_registry` / Document Management System)** is the canonical source of truth for:
 - Project status and planning state
-- Documentation health (`control.kb_document`)
+- Documentation health and metadata (`control.doc_registry` is the primary SSOT; `control.kb_document` is a separate inventory table for duplicate detection and archive classification)
 - Tool catalog (`control.mcp_tool_catalog`)
 - Capability tracking (`control.agent_run_cli`)
 
