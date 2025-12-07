@@ -150,8 +150,8 @@
       "message": "pmagent control-plane DMS metadata sane (low_enabled=0)",
       "details": {
         "distribution": {
-          "critical": 133,
-          "high": 177,
+          "critical": 144,
+          "high": 227,
           "medium": 56,
           "unknown": 783
         }
@@ -162,7 +162,7 @@
       "passed": true,
       "message": "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
       "details": {
-        "rows": 115
+        "rows": 116
       }
     },
     {
@@ -218,5 +218,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T22:35:29Z"
+  "timestamp": "2025-12-07T22:57:17Z"
 }

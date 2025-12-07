@@ -278,6 +278,46 @@ if not reality["reality_green"]:
 
 ---
 
+## Reasoning Bridge API (Phase 27.F)
+
+The **Reasoning Bridge** mediates interactions between OA and DSPy programs. In Phase 27.F, this exists as **contracts + scaffolding**; DSPy runtime integration occurs in Phase 28.
+
+### Entrypoints
+
+| Function | Purpose |
+|----------|---------|
+| `oa.reasoning.build_envelope(program_id, goal, ...)` | Construct a read-only `ReasoningEnvelope` from kernel state. |
+| `oa.reasoning.run(envelope)` | Execute a reasoning program (STUB in 27.F). |
+
+### Schemas
+
+The bridge uses typed schemas defined in `pmagent/oa/reasoning_bridge.py`:
+
+- **ReasoningEnvelope**: Immutable input (kernel state + context + goal).
+- **ReasoningResult**: Structured output (decision + rationale + tools).
+
+### Program Interactions
+
+How OA interacts with reasoning programs via the bridge:
+
+1. **SafeOPSDecision**
+   - **Input**: Envelope with `oa.reality_summary` + `oa.kernel_status`.
+   - **Output**: `SafeOPSDecisionResult` (PROCEED/ABORT).
+
+2. **OPSBlockGenerator**
+   - **Input**: Envelope with full SSOT index + bootstrap.
+   - **Output**: `OPSBlockGeneratorResult` (List of CLI commands).
+
+3. **GuardFailureInterpreter**
+   - **Input**: Envelope with `oa.guard.run` permission.
+   - **Output**: `GuardFailureInterpreterResult` (Remediation plan).
+
+4. **PhaseTransitionValidator**
+   - **Input**: Envelope with SSOT index + reality check.
+   - **Output**: `PhaseTransitionValidatorResult` (Transition status).
+
+---
+
 ## Future Extensions (Phase 28+)
 
 ### Planned Entrypoints

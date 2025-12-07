@@ -285,6 +285,8 @@ adr.housekeeping:
 governance.housekeeping:
 	@echo ">> Running governance housekeeping (database + compliance + docs)"
 	@PYTHONPATH=. $(PYTHON) scripts/governance_housekeeping.py
+	@echo ">> Updating DMS Hint Registry (Rule-059)"
+	@PYTHONPATH=. $(PYTHON) scripts/governance/seed_hint_registry.py
 	@echo "Governance housekeeping complete"
 
 # Governance docs hints (Rule-026 + Rule-065 compliance)

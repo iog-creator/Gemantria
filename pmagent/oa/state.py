@@ -163,6 +163,21 @@ def build_oa_state() -> dict[str, Any]:
             "interface": "pmagent.oa.tools",
             "registry": "docs/SSOT/oa/OA_TOOLS_REGISTRY.md",
         },
+        # Phase 27.F: Reasoning Bridge Scaffolding
+        "reasoning_bridge": {
+            "version": 1,
+            "programs": [
+                "SafeOPSDecision",
+                "OPSBlockGenerator",
+                "GuardFailureInterpreter",
+                "PhaseTransitionValidator",
+            ],
+            "schemas": {
+                "envelope": "ReasoningEnvelope",
+                "result": "ReasoningResult",
+            },
+            "implementation_status": "DESIGN_ONLY",
+        },
     }
 
     return state

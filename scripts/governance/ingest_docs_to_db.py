@@ -35,7 +35,7 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Iterable, List
 
 # Add project root to path for imports
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,7 +57,7 @@ class DocTarget:
     is_ssot: bool
     importance: str = "unknown"
     tags: List[str] = field(default_factory=list)
-    owner_component: Optional[str] = None
+    owner_component: str | None = None
 
 
 CANONICAL_DOCS: List[DocTarget] = [

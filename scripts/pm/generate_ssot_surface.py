@@ -82,6 +82,7 @@ def generate_ssot_surface():
                     "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
                     "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
                     "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md",
+                    "share/PHASE27F_IMPLEMENTATION_EVIDENCE.md",
                 ],
             },
         },
