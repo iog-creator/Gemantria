@@ -605,6 +605,7 @@ reality.green: ## Full system truth gate (DB, AGENTS, share, SSOT)
 	@echo ">> Running reality.green - Full System Truth Gate"
 	@PYTHONPATH=. $(PYTHON) scripts/guards/guard_reality_green.py
 	@$(MAKE) guard.pm_boot.surface
+	@$(PYTHON) scripts/guards/guard_directory_namespace_policy.py || true
 
 # System State Ledger - Sync artifact hashes to control.system_state_ledger
 .PHONY: state.sync state.verify
