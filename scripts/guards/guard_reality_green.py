@@ -364,7 +364,7 @@ def check_dms_alignment() -> CheckResult:
 
             msg = f"DMS Alignment BROKEN: {', '.join(details)}"
             return CheckResult("DMS Alignment", False, msg, data)
-        except:
+        except Exception:
             pass
 
         return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
@@ -390,7 +390,7 @@ def check_bootstrap_consistency() -> CheckResult:
             data = json.loads(stdout)
             msg = f"Bootstrap Mismatch: {', '.join(data.get('mismatches', []))}"
             return CheckResult("Bootstrap Consistency", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Bootstrap Consistency", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
@@ -416,7 +416,7 @@ def check_share_sync_policy() -> CheckResult:
             extras = data.get("extra_in_share", [])
             msg = f"Policy Violation: Found {len(extras)} unknown files"
             return CheckResult("Share Sync Policy", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Share Sync Policy", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
@@ -480,7 +480,7 @@ def check_handoff_kernel() -> CheckResult:
             data = json.loads(stdout)
             msg = f"Kernel Mismatch: {', '.join(data.get('mismatches', []))}"
             return CheckResult("Handoff Kernel", False, msg, data)
-        except:
+        except Exception:
             pass
         return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
