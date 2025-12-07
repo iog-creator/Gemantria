@@ -36,6 +36,10 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 1) Correctness: **Code gematria > bible_db > LLM (LLM = metadata only)**.
 2) Determinism: content_hash identity; uuidv7 surrogate; fixed seeds; position_index.
 3) Safety: **bible_db is READ-ONLY**; parameterized SQL only; **fail-closed if <50 nouns** (ALLOW_PARTIAL=1 is explicit).
+- **DMS Lifecycle Policy**:
+    - **Exclusive SSOT**: `control.doc_registry` is the ONLY authority for document existence and status.
+    - **Lifecycle**: `importance` and `enabled` columns determine if a doc is Core, Helpful, or Archived.
+    - **Pathing**: Filesystem locations must reflect DMS `repo_path`.
 
 ## pmagent Status
 

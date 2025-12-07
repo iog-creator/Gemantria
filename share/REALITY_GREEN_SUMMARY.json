@@ -1,5 +1,5 @@
 {
-  "reality_green": true,
+  "reality_green": false,
   "checks": [
     {
       "name": "DB Health",
@@ -154,10 +154,14 @@
     },
     {
       "name": "Root Surface",
-      "passed": true,
-      "message": "No unexpected files in repository root",
+      "passed": false,
+      "message": "Found 2 unexpected file(s) in root: PM_HANDOFF_PROTOCOL.md, SHARE_FOLDER_ANALYSIS.md",
       "details": {
-        "output": "[root-surface] OK: no unexpected files in repo root"
+        "unexpected": [
+          "PM_HANDOFF_PROTOCOL.md",
+          "SHARE_FOLDER_ANALYSIS.md"
+        ],
+        "output": ""
       }
     },
     {
@@ -165,7 +169,7 @@
       "passed": true,
       "message": "No unknown or unsafe share/ docs in managed namespaces",
       "details": {
-        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [\n    \"PM_HANDOFF_PROTOCOL.md\",\n    \"SHARE_FOLDER_ANALYSIS.md\"\n  ],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
+        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"missing_in_share\": [],\n  \"extra_in_share\": [],\n  \"missing_in_dms\": []\n}"
       }
     },
     {
@@ -189,5 +193,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T18:31:07Z"
+  "timestamp": "2025-12-07T18:31:30Z"
 }

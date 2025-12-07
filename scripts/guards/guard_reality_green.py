@@ -370,6 +370,50 @@ def check_dms_alignment() -> CheckResult:
         return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
 
 
+
+def check_dms_metadata() -> CheckResult:
+    """Check DMS metadata health (Phase 27.J)."""
+    try:
+        from scripts.config.env import get_rw_dsn
+        import psycopg
+        
+        dsn = get_rw_dsn()
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+            # 1. Check importance distribution
+            cur.execute("""
+                SELECT importance, count(*)
+                FROM control.doc_registry
+                GROUP BY importance
+                ORDER BY importance
+            """)
+            dist = {row[0]: row[1] for row in cur.fetchall()}
+            
+            # 2. Check for enabled low-importance docs
+            cur.execute("""
+                SELECT count(*)
+                FROM control.doc_registry
+                WHERE importance = 'low' AND enabled = true
+            """)
+            low_enabled = cur.fetchone()[0]
+
+            if low_enabled == 0:
+                return CheckResult(
+                    "DMS Metadata",
+                    True,
+                    f"DMS metadata sane (low_enabled={low_enabled})",
+                    {"distribution": dist}
+                )
+            else:
+                return CheckResult(
+                    "DMS Metadata",
+                    False,
+                    f"Found {low_enabled} enabled low-importance docs (cleanup required)",
+                    {"distribution": dist, "low_enabled": low_enabled}
+                )
+    except Exception as e:
+        return CheckResult("DMS Metadata", False, f"Metadata check failed: {e}", {})
+
+
 def check_bootstrap_consistency() -> CheckResult:
     """Check consistency between Bootstrap state and SSOT Surface (Phase 24.A)."""
     script = ROOT / "scripts" / "guards" / "guard_bootstrap_consistency.py"
@@ -533,6 +577,7 @@ def main() -> int:
         check_hints_required(),  # ADR-059: DMS hint registry accessibility check
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
         check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
+        check_dms_metadata(),  # Phase 27.J: Metadata health
         check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
         check_root_surface(),  # Phase 27.G: Repository root surface policy
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit
