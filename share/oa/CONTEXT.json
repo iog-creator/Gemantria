@@ -1,0 +1,10 @@
+{
+    "version": 1,
+    "context": {
+        "active_goal": null,
+        "kernel_mode": null,
+        "constraints": [],
+        "pending_ops_blocks": [],
+        "session_metadata": {}
+    }
+}

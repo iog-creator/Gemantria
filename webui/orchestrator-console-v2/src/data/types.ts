@@ -20,6 +20,16 @@ export interface OAStateData {
     };
     surfaces?: Record<string, string>;
     surface_status?: Record<string, boolean>;
+    oa_context?: OAContextData;  // Phase 27.E: Task context for DSPy programs
+}
+
+/** OA Context from share/oa/CONTEXT.json (Phase 27.E) */
+export interface OAContextData {
+    active_goal?: string | null;
+    kernel_mode?: string | null;
+    constraints?: string[];
+    pending_ops_blocks?: string[];
+    session_metadata?: Record<string, unknown>;
 }
 
 /** OA Workspace surfaces (Phase 27.C) */

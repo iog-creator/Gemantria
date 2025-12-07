@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-07T21:06:43.399043+00:00",
+  "generated_at": "2025-12-07T21:27:49.301092+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
@@ -41,7 +41,7 @@
     },
     {
       "name": "DMS Alignment",
-      "passed": true
+      "passed": false
     },
     {
       "name": "DMS Metadata",
@@ -65,7 +65,7 @@
     },
     {
       "name": "Backup System",
-      "passed": true
+      "passed": false
     },
     {
       "name": "WebUI Shell Sanity",
@@ -73,7 +73,7 @@
     },
     {
       "name": "OA State",
-      "passed": false
+      "passed": true
     },
     {
       "name": "Handoff Kernel",
@@ -103,5 +103,12 @@
     "docs_control_canonical": true,
     "docs_control_summary": true,
     "kb_registry": true
+  },
+  "oa_context": {
+    "active_goal": null,
+    "kernel_mode": null,
+    "constraints": [],
+    "pending_ops_blocks": [],
+    "session_metadata": {}
   }
 }

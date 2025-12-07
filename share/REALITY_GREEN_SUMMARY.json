@@ -1,5 +1,5 @@
 {
-  "reality_green": true,
+  "reality_green": false,
   "checks": [
     {
       "name": "DB Health",
@@ -138,10 +138,17 @@
     },
     {
       "name": "DMS Alignment",
-      "passed": true,
-      "message": "pmagent control-plane DMS and Share are aligned",
+      "passed": false,
+      "message": "pmagent control-plane DMS Alignment BROKEN: Extra in share: 1",
       "details": {
-        "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+        "ok": false,
+        "mode": "STRICT",
+        "dms_share_alignment": "BROKEN",
+        "missing_in_share": [],
+        "missing_in_dms": [],
+        "extra_in_share": [
+          "oa/"
+        ]
       }
     },
     {
@@ -191,9 +198,11 @@
     },
     {
       "name": "Backup System",
-      "passed": true,
-      "message": "Recent backup exists and rotation logic is sane",
-      "details": {}
+      "passed": false,
+      "message": "No recent backup found: ",
+      "details": {
+        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
+      }
     },
     {
       "name": "WebUI Shell Sanity",
@@ -218,5 +227,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T21:06:43Z"
+  "timestamp": "2025-12-07T21:23:57Z"
 }

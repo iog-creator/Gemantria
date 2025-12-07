@@ -26,6 +26,8 @@ OA_STATE = SHARE / "orchestrator_assistant" / "STATE.json"
 PM_BOOTSTRAP_STATE = SHARE / "PM_BOOTSTRAP_STATE.json"
 SSOT_SURFACE = SHARE / "SSOT_SURFACE_V17.json"
 REALITY_GREEN_SUMMARY = SHARE / "REALITY_GREEN_SUMMARY.json"
+# Phase 27.E: OA context surface
+OA_CONTEXT = SHARE / "oa" / "CONTEXT.json"
 
 
 def _load_json(path: Path) -> dict | None:
@@ -175,6 +177,19 @@ def check_oa_consistency(mode: str = "STRICT") -> dict:
         # Missing surfaces is informational, not a hard failure
         # Console v2 can handle absent optional surfaces
         pass
+
+    # ========================================
+    # Phase 27.E: OA Context Surface Validation
+    # ========================================
+    if OA_CONTEXT.exists():
+        oa_context = _load_json(OA_CONTEXT)
+        if oa_context is None:
+            report["missing_surfaces"].append("share/oa/CONTEXT.json (invalid JSON)")
+        elif "version" not in oa_context:
+            report["missing_surfaces"].append("share/oa/CONTEXT.json (missing version)")
+        elif "context" not in oa_context:
+            report["missing_surfaces"].append("share/oa/CONTEXT.json (missing context)")
+    # Note: OA_CONTEXT is optional, missing is just informational
 
     return report
 

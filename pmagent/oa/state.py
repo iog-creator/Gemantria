@@ -36,6 +36,10 @@ DOCS_CONTROL_CANONICAL = SHARE / "exports" / "docs-control" / "canonical.json"
 DOCS_CONTROL_SUMMARY = SHARE / "exports" / "docs-control" / "summary.json"
 KB_REGISTRY = SHARE / "kb_registry.json"
 
+# OA context surface (Phase 27.E)
+OA_CONTEXT_DIR = SHARE / "oa"
+OA_CONTEXT_FILE = OA_CONTEXT_DIR / "CONTEXT.json"
+
 # Output
 OA_STATE_DIR = SHARE / "orchestrator_assistant"
 OA_STATE_FILE = OA_STATE_DIR / "STATE.json"
@@ -70,6 +74,10 @@ def build_oa_state() -> dict[str, Any]:
     bootstrap = _load_json(PM_BOOTSTRAP_STATE) or {}
     ssot = _load_json(SSOT_SURFACE) or {}
     reality = _load_json(REALITY_GREEN_SUMMARY) or {}
+
+    # Load OA context surface (Phase 27.E)
+    oa_context_data = _load_json(OA_CONTEXT_FILE) or {"version": 1, "context": {}}
+    oa_context = oa_context_data.get("context", {})
 
     # Extract key fields
     branch = bootstrap.get("branch", "unknown")
@@ -138,6 +146,7 @@ def build_oa_state() -> dict[str, Any]:
         "dms_hint_summary": dms_hint_summary,
         "surfaces": ref_surfaces,
         "surface_status": surface_status,
+        "oa_context": oa_context,  # Phase 27.E: Task context for DSPy programs
     }
 
     return state
