@@ -6,7 +6,7 @@
     "pm_contract": "docs/SSOT/PM_CONTRACT.md"
   },
   "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
-  "generated_at_utc": "2025-12-07T22:35:25.346175+00:00",
+  "generated_at_utc": "2025-12-08T16:48:31.697491+00:00",
   "gotchas": {
     "index": "docs/SSOT/GOTCHAS_INDEX.md",
     "share_folder": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",

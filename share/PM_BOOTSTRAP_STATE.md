@@ -1,21 +1,26 @@
 # PM_BOOTSTRAP_STATE
 
-**Generated**: 2025-12-07T19:20:06.029699+00:00
+**Generated**: 2025-12-08T16:47:35.190549+00:00
 **Source**: `PM_BOOTSTRAP_STATE.json`
 
 ---
 
-- **branch**: `feat/phase27-kernel-consumers`
+- **branch**: `feat/phase27l-agents-dms-contract`
 - **core_governance**:
   - **cursor_behavior_patch**: `docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md`
   - **execution_contract**: `docs/SSOT/EXECUTION_CONTRACT.md`
   - **pm_contract**: `docs/SSOT/PM_CONTRACT.md`
 - **description**: `Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.`
-- **generated_at_utc**: `2025-12-07T03:30:07.477700+00:00`
+- **generated_at_utc**: `2025-12-07T22:35:25.346175+00:00`
 - **gotchas**:
   - **index**: `docs/SSOT/GOTCHAS_INDEX.md`
   - **share_folder**: `docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md`
   - **share_gate_status**: `docs/SSOT/SHARE_FOLDER_GATE_STATUS_GAP.md`
+- **health**:
+  - **agents_sync_ok**: `true`
+  - **dms_alignment_ok**: `true`
+  - **reality_green**: `false`
+  - **source**: `share/REALITY_GREEN_SUMMARY.json`
 - **infra**:
   - **dsn_governance**: `docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md`
   - **housekeeping_gpu**: `docs/SSOT/HOUSEKEEPING_GPU_ACCELERATION.md`
@@ -26,7 +31,6 @@
   - **share_layout_phase15**: `docs/SSOT/PM_SHARE_LAYOUT_PHASE15.md`
 - **meta**:
   - **current_phase**: `24`
-  - **dms_share_alignment**: `OK`
   - **kb_registry_path**: `share/kb_registry.json`
   - **last_completed_phase**: `23`
 - **notes**:
@@ -38,7 +42,6 @@
   6. `Phase 17: Post-purge SSOT surface regeneration and bootstrap refresh.`
 - **phases**:
   - **10**:
-    - **10wiringselfassessment**: `docs/SSOT/PHASE10_WIRING_SELF_ASSESSMENT.md`
     - **wiring**: `docs/SSOT/PHASE10_CORRELATION_WIRING_COMPLETE.md`
   - **10.4**:
     - **104idfix**: `docs/SSOT/PHASE_10_4_ID_FIX.md`
@@ -49,20 +52,24 @@
     - **recon**: `docs/SSOT/PHASE14_RECON.md`
   - **15**:
     - **15compassalignmentanalysis**: `docs/SSOT/PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md`
-    - **15plan**: `docs/SSOT/PHASE15_PLAN.md`
     - **15wave2spec**: `docs/SSOT/PHASE15_WAVE2_SPEC.md`
     - **15wave3step2compassresults**: `docs/SSOT/PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md`
     - **15wave3step2opsblock**: `docs/SSOT/PHASE15_WAVE3_STEP2_OPS_BLOCK.md`
-    - **15wave3step2status**: `docs/SSOT/PHASE15_WAVE3_STEP2_STATUS.md`
     - **plan**: `docs/SSOT/PHASE15_WAVE3_PLAN.md`
     - **recon**: `docs/SSOT/PHASE15_RECON.md`
     - **status**: `docs/SSOT/PHASE15_STATUS_CORRECTION.md`
     - **structural_gap**: `docs/SSOT/PHASE15_COMPASS_STRUCTURAL_GAP.md`
   - **16**:
-    - **16initplan**: `docs/SSOT/PHASE_16_INIT_PLAN.md`
+    - **16purgeexecutionlog**: `share/PHASE16_PURGE_EXECUTION_LOG.md`
     - **plan**: `docs/SSOT/PHASE16_LEGACY_PURGE_PLAN.md`
+    - **recon**: `share/PHASE16_DB_RECON_REPORT.md`
   - **18**:
+    - **18agentssyncsummary**: `share/PHASE18_AGENTS_SYNC_SUMMARY.md`
     - **18index**: `share/PHASE18_INDEX.md`
+    - **18ledgerrepairsummary**: `share/PHASE18_LEDGER_REPAIR_SUMMARY.md`
+    - **18shareexportssummary**: `share/PHASE18_SHARE_EXPORTS_SUMMARY.md`
+  - **19**:
+    - **19sharehygienesummary**: `share/PHASE19_SHARE_HYGIENE_SUMMARY.md`
   - **20**:
     - **20index**: `share/PHASE20_INDEX.md`
     - **20orchestratoruimodel**: `share/PHASE20_ORCHESTRATOR_UI_MODEL.md`
@@ -75,6 +82,7 @@
     - **22index**: `share/PHASE22_INDEX.md`
     - **22operatorworkflow**: `share/PHASE22_OPERATOR_WORKFLOW.md`
   - **23**:
+    - **23agentssyncrepairsummary**: `share/PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.md`
     - **23baselinenote**: `share/PHASE23_BASELINE_NOTE.md`
     - **23bootstraphardeningnote**: `share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md`
     - **23donechecklist**: `share/PHASE23_PHASE_DONE_CHECKLIST.md`
@@ -102,10 +110,8 @@
   - **5**:
     - **plan**: `docs/SSOT/PHASE_5_PLAN.md`
   - **6**:
-    - **6plan**: `docs/SSOT/PHASE_6_PLAN.md`
     - **plan**: `share/PHASE_6_PLAN.md`
   - **8**:
-    - **810diagnostic**: `docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md`
     - **810fix12evidence**: `docs/SSOT/PHASE8_PHASE10_FIX12_EVIDENCE.md`
     - **810pmdecision**: `docs/SSOT/PHASE8_PHASE10_PM_DECISION.md`
     - **8bridgedecision**: `docs/SSOT/PHASE8_BRIDGE_DECISION.md`
@@ -132,10 +138,10 @@
       1. `share/SSOT_SURFACE_V17.json`
       2. `share/PM_BOOTSTRAP_STATE.json`
       3. `share/PHASE18_INDEX.md`
-      4. `share/PHASE18_AGENTS_SYNC_SUMMARY.json`
-      5. `share/PHASE18_SHARE_EXPORTS_SUMMARY.json`
-      6. `share/PHASE18_LEDGER_REPAIR_SUMMARY.json`
-      7. `share/PHASE19_SHARE_HYGIENE_SUMMARY.json`
+      4. `None`
+      5. `None`
+      6. `None`
+      7. `None`
       8. `share/PHASE20_UI_RESET_DECISION.md`
       9. `share/PHASE20_ORCHESTRATOR_UI_MODEL.md`
       10. `share/PHASE21_CONSOLE_SERVE_PLAN.md`

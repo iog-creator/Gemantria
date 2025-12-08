@@ -1,12 +1,12 @@
 # agents_md.head
 
-**Generated**: 2025-12-07T19:20:06.089351+00:00
+**Generated**: 2025-12-08T16:47:35.247150+00:00
 **Source**: `agents_md.head.json`
 
 ---
 
 - **schema**: `file_head.v1`
-- **generated_at**: `2025-12-07T19:19:53.394910+00:00`
+- **generated_at**: `2025-12-08T16:47:22.008677+00:00`
 - **file_path**: `/home/mccoy/Projects/Gemantria.v2/AGENTS.md`
 - **exists**: `true`
 - **line_count**: `1774`
@@ -39,7 +39,7 @@
   17. `are handled by pmagent's control-plane DMS (`control.doc_registry`).`
   18. `Gemantria is the domain project being governed, not the system performing`
   19. `the governance. AGENTS.md surfaces define the agent-facing worldview of both`
-  20. `Gemantria and pmagent; the DMS records that worldview in structured form.`
+  20. `Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.`
   21. ``
   22. `In Gemantria, documentation and metadata are layered. The hierarchy for truth is:`
   23. ``
@@ -178,7 +178,7 @@ See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation
   96. `1. \*\*Documentation\*\*: `pmagent kb registry by-subsystem --owning-subsystem=<project>``
   97. `2. \*\*Tool Catalog\*\*: `SELECT \* FROM control.mcp_tool_catalog WHERE tags @> '{<project>}'``
   98. `3. \*\*Project Status\*\*: `pmagent status kb` and `pmagent plan kb list``
-  99. `4. \*\*File Search\*\* (LAST RESORT): Only if content not in DMS`
+  99. `4. \*\*File Search\*\* (LAST RESORT): Only if content not in pmagent control-plane DMS`
   100. ``
 - **head_line_count**: `100`
 - **error**: `null`

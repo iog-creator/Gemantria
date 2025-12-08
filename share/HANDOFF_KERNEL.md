@@ -1,6 +1,6 @@
 # HANDOFF_KERNEL
 
-**Generated**: 2025-12-07T19:20:05.821895+00:00
+**Generated**: 2025-12-08T16:47:35.151842+00:00
 **Source**: `HANDOFF_KERNEL.json`
 
 ---
@@ -10,17 +10,17 @@
 - **last_completed_phase**: `23`
 - **branch**: `feat/phase27l-agents-dms-contract`
 - **health**:
-  - **reality_green**: `false`
+  - **reality_green**: `true`
   - **checks**:
-    - **DMS Alignment**: `false`
+    - **DMS Alignment**: `true`
     - **Bootstrap Consistency**: `true`
-    - **Share Sync Policy**: `false`
-    - **Backup System**: `false`
+    - **Share Sync Policy**: `true`
+    - **Backup System**: `true`
 - **required_surfaces**:
   1. `share/PM_BOOTSTRAP_STATE.json`
   2. `share/SSOT_SURFACE_V17.json`
 - **notes**:
-  - **generated_at**: `2025-12-07T19:13:42Z`
+  - **generated_at**: `2025-12-08T16:47:00Z`
   - **reality_green_summary**: `share/REALITY_GREEN_SUMMARY.json`
-  - **dms_share_alignment**: `OK`
-  - **dms_share_mismatch_count**: `0`
+  - **dms_share_alignment**: `BROKEN`
+  - **dms_share_mismatch_count**: `1`

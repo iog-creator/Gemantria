@@ -1,15 +1,30 @@
 # hint_registry
 
-**Generated**: 2025-12-07T19:20:06.195853+00:00
+**Generated**: 2025-12-08T16:47:35.351399+00:00
 **Source**: `hint_registry.json`
 
 ---
 
 - **schema**: `control.hint_registry.v1`
-- **generated_at**: `2025-12-07T19:19:53.050285+00:00`
+- **generated_at**: `2025-12-08T16:47:21.639720+00:00`
 - **table**: `control.hint_registry`
 - **rows**:
   1. Item:
+    - **hint_id**: `06d80888-852b-4360-a14e-32c5bfcb7901`
+    - **logical_name**: `reality.green.backup_system.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `backup_system`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make backup.surfaces`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  2. Item:
     - **hint_id**: `178555a3-fade-4659-bdec-a2331dfe02f8`
     - **logical_name**: `data.bible_lemma_english`
     - **scope**: `data`
@@ -28,7 +43,37 @@
     - **priority**: `20`
     - **created_at**: `2025-12-02T11:03:55.219239-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  2. Item:
+  3. Item:
+    - **hint_id**: `187b7465-5d06-4b20-83a2-344146341f78`
+    - **logical_name**: `reality.green.agents_dms_contract.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `agents_dms_contract`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make housekeeping  # sync AGENTS.md with DMS`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  4. Item:
+    - **hint_id**: `1b1ab1a8-8385-458b-a921-46e497bd71b3`
+    - **logical_name**: `reality.green.share_sync_and_exports.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `share_sync_and_exports`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make share.sync`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  5. Item:
     - **hint_id**: `1fd8c188-f8d0-4b0e-830d-1bd58a80ad9e`
     - **logical_name**: `share.dms_only`
     - **scope**: `handoff`
@@ -50,7 +95,7 @@
     - **priority**: `1`
     - **created_at**: `2025-11-29T07:24:46.201152-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  3. Item:
+  6. Item:
     - **hint_id**: `1ff224d9-35a4-4b4e-a1b7-80e0e9afef42`
     - **logical_name**: `HINT-CODE-001`
     - **scope**: `python`
@@ -72,7 +117,7 @@
     - **priority**: `7`
     - **created_at**: `2025-12-02T10:03:34.384140-08:00`
     - **updated_at**: `2025-12-02T10:03:34.384140-08:00`
-  4. Item:
+  7. Item:
     - **hint_id**: `22ea34c9-a463-48be-87b2-fe66ed737466`
     - **logical_name**: `HINT-DEBUG-001`
     - **scope**: `debugging`
@@ -103,7 +148,7 @@
     - **priority**: `30`
     - **created_at**: `2025-12-02T10:03:48.163957-08:00`
     - **updated_at**: `2025-12-02T10:03:48.163957-08:00`
-  5. Item:
+  8. Item:
     - **hint_id**: `2f7f8461-dcec-41cb-9383-bafad1c4b5e8`
     - **logical_name**: `HINT-SCHEMA-001`
     - **scope**: `database`
@@ -127,7 +172,7 @@
     - **priority**: `5`
     - **created_at**: `2025-12-02T10:03:16.179369-08:00`
     - **updated_at**: `2025-12-02T10:03:16.179369-08:00`
-  6. Item:
+  9. Item:
     - **hint_id**: `310fb93d-0568-488b-ae7c-f2472365418b`
     - **logical_name**: `governance.fail_closed`
     - **scope**: `handoff`
@@ -148,7 +193,7 @@
     - **priority**: `5`
     - **created_at**: `2025-11-29T07:41:52.592675-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  7. Item:
+  10. Item:
     - **hint_id**: `31b55757-fb41-4049-a28c-ba264ead1a7e`
     - **logical_name**: `HINT-PHASE-002`
     - **scope**: `analytics`
@@ -172,7 +217,7 @@
     - **priority**: `4`
     - **created_at**: `2025-12-02T10:03:48.136139-08:00`
     - **updated_at**: `2025-12-02T10:03:48.136139-08:00`
-  8. Item:
+  11. Item:
     - **hint_id**: `4051130b-41b4-40af-bb27-3b63003d9988`
     - **logical_name**: `HINT-CALC-001`
     - **scope**: `analytics`
@@ -194,7 +239,7 @@
     - **priority**: `25`
     - **created_at**: `2025-12-02T10:03:26.424702-08:00`
     - **updated_at**: `2025-12-02T10:03:26.424702-08:00`
-  9. Item:
+  12. Item:
     - **hint_id**: `4085630c-f020-437a-9d59-19589c29f71d`
     - **logical_name**: `HINT-DB-001`
     - **scope**: `database`
@@ -229,7 +274,22 @@
     - **priority**: `5`
     - **created_at**: `2025-12-02T10:00:30.234199-08:00`
     - **updated_at**: `2025-12-02T10:00:30.234199-08:00`
-  10. Item:
+  13. Item:
+    - **hint_id**: `42609cbf-9344-4e04-a85f-5fb4514ec904`
+    - **logical_name**: `reality.green.dms_hint_registry.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `dms_hint_registry`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make housekeeping  # ensure DMS hints are populated`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  14. Item:
     - **hint_id**: `4e53da3e-07a8-4084-bd45-c6f1124e745a`
     - **logical_name**: `status.local_gates_first`
     - **scope**: `status_api`
@@ -252,7 +312,37 @@
     - **priority**: `0`
     - **created_at**: `2025-11-29T07:24:46.201152-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  11. Item:
+  15. Item:
+    - **hint_id**: `4f463f01-399e-4c2b-82b0-0f1974a20f8d`
+    - **logical_name**: `reality.green.repo_alignment_(layer_4).remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `repo_alignment_(layer_4)`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_repo_layer4_alignment.py --mode HINT`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  16. Item:
+    - **hint_id**: `51004f23-e213-41c5-a389-7f627b48c336`
+    - **logical_name**: `reality.green.root_surface.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `root_surface`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_root_surface_policy.py --mode HINT`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  17. Item:
     - **hint_id**: `5bc8c31d-c42f-411a-bfaa-56a893aedf15`
     - **logical_name**: `HINT-GRAPH-001`
     - **scope**: `graph_export`
@@ -273,7 +363,7 @@
     - **priority**: `10`
     - **created_at**: `2025-12-02T10:03:08.590675-08:00`
     - **updated_at**: `2025-12-02T10:03:08.590675-08:00`
-  12. Item:
+  18. Item:
     - **hint_id**: `5edb1012-6141-4778-ab6c-e1ed17c73b81`
     - **logical_name**: `HINT-MIGRATION-001`
     - **scope**: `database`
@@ -294,7 +384,67 @@
     - **priority**: `18`
     - **created_at**: `2025-12-02T10:03:44.116411-08:00`
     - **updated_at**: `2025-12-02T10:03:44.116411-08:00`
-  13. Item:
+  19. Item:
+    - **hint_id**: `6718674b-53db-40b6-ac03-1c04f9a24a02`
+    - **logical_name**: `reality.green.handoff_kernel.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `handoff_kernel`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/pm/generate_handoff_kernel.py`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  20. Item:
+    - **hint_id**: `6860e0fa-b018-453e-b584-18f51f2bde43`
+    - **logical_name**: `reality.green.db_health.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `db_health`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make book.smoke`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  21. Item:
+    - **hint_id**: `716489ab-c26b-4767-8968-5c0171f0656a`
+    - **logical_name**: `reality.green.oa_state.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `oa_state`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python pmagent/oa/state.py  # refresh OA snapshot`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  22. Item:
+    - **hint_id**: `725f5044-1091-42dc-a572-32a99c677d3d`
+    - **logical_name**: `reality.green.bootstrap_consistency.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `bootstrap_consistency`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/pm/generate_pm_bootstrap_state.py`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  23. Item:
     - **hint_id**: `7d376b6d-b4d0-42b8-b286-e7cbd01b942b`
     - **logical_name**: `oa.boot.kernel_first`
     - **scope**: `orchestrator_assistant`
@@ -328,7 +478,7 @@ On new OA session, read `PM_KERNEL.json` and `PM_BOOTSTRAP_STATE.json` before re
     - **priority**: `0`
     - **created_at**: `2025-12-06T09:09:19.892311-08:00`
     - **updated_at**: `2025-12-06T09:09:19.892311-08:00`
-  14. Item:
+  24. Item:
     - **hint_id**: `7fe0a06e-2b53-4ca1-9e03-213f6e5722ab`
     - **logical_name**: `HINT-SCHEMA-002`
     - **scope**: `database`
@@ -353,7 +503,22 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `15`
     - **created_at**: `2025-12-02T10:03:16.208376-08:00`
     - **updated_at**: `2025-12-02T10:03:16.208376-08:00`
-  15. Item:
+  25. Item:
+    - **hint_id**: `8096a79c-3350-484b-93e3-26f5c6798ddb`
+    - **logical_name**: `reality.green.ledger_verification.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `ledger_verification`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `make state.sync`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  26. Item:
     - **hint_id**: `818c8fcb-a16b-4e5c-a589-c36f8abaabc0`
     - **logical_name**: `HINT-PHASE-001`
     - **scope**: `analytics`
@@ -377,7 +542,22 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `3`
     - **created_at**: `2025-12-02T10:03:44.147432-08:00`
     - **updated_at**: `2025-12-02T10:03:44.147432-08:00`
-  16. Item:
+  27. Item:
+    - **hint_id**: `86f9df85-32f1-4138-a016-f246fe6662c1`
+    - **logical_name**: `reality.green.ketiv_primary_policy.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `ketiv_primary_policy`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_ketiv_primary.py`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  28. Item:
     - **hint_id**: `899b6bf1-02ce-430b-9229-f2cd37690d6f`
     - **logical_name**: `docs.dms_only`
     - **scope**: `handoff`
@@ -398,7 +578,22 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `0`
     - **created_at**: `2025-11-29T07:24:46.201152-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  17. Item:
+  29. Item:
+    - **hint_id**: `a9f29790-e359-48f6-b9b8-abef3d83f1c8`
+    - **logical_name**: `reality.green.dms_metadata.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `dms_metadata`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/governance/dms_doc_cleanup.py --dry-run`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  30. Item:
     - **hint_id**: `b9f55f14-c664-49be-b16b-900d8bbc9ea6`
     - **logical_name**: `ops.regenerate_truncation`
     - **scope**: `ops`
@@ -418,7 +613,82 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `20`
     - **created_at**: `2025-12-02T11:03:55.219239-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  18. Item:
+  31. Item:
+    - **hint_id**: `c7873c24-15a6-4e8e-9467-c9e1ac39fd7b`
+    - **logical_name**: `reality.green.share_sync_policy.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `share_sync_policy`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_share_sync_policy.py --mode HINT`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  32. Item:
+    - **hint_id**: `cc06be38-0322-48c3-bb93-8ea127df39d7`
+    - **logical_name**: `reality.green.dms_alignment.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `dms_alignment`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_dms_share_alignment.py --mode HINT`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  33. Item:
+    - **hint_id**: `d16d7755-7262-4309-a5ad-de46c931bcd0`
+    - **logical_name**: `reality.green.webui_shell_sanity.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `webui_shell_sanity`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `Check webui/orchestrator-shell/ for missing files`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  34. Item:
+    - **hint_id**: `d46f4e39-180a-43d8-86ea-5f2093505f4f`
+    - **logical_name**: `reality.green.agents.md_sync.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `agents.md_sync`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `touch scripts/AGENTS.md  # if code changes are intentional`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  35. Item:
+    - **hint_id**: `d60115a0-3b24-4d37-803e-60a3ac070c1f`
+    - **logical_name**: `reality.green.control_plane_health.remediation`
+    - **scope**: `reality.green`
+    - **applies_to**:
+      - **flow**: `control_plane_health`
+      - **category**: `remediation`
+    - **kind**: `REQUIRED`
+    - **injection_mode**: `META_ONLY`
+    - **payload**:
+      - **command**: `python scripts/guards/guard_control_plane_health.py`
+    - **enabled**: `true`
+    - **priority**: `100`
+    - **created_at**: `2025-12-07T14:23:51.217267-08:00`
+    - **updated_at**: `2025-12-07T14:23:51.217267-08:00`
+  36. Item:
     - **hint_id**: `dbd5c5b3-a242-4a5d-8dc6-9f60dac38acf`
     - **logical_name**: `HINT-DEP-001`
     - **scope**: `environment`
@@ -440,7 +710,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `12`
     - **created_at**: `2025-12-02T10:03:34.417893-08:00`
     - **updated_at**: `2025-12-02T10:03:34.417893-08:00`
-  19. Item:
+  37. Item:
     - **hint_id**: `de73c666-b0e3-4ee4-984b-52cd1c9383e4`
     - **logical_name**: `HINT-GRAPH-002`
     - **scope**: `graph_export`
@@ -461,7 +731,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `20`
     - **created_at**: `2025-12-02T10:03:08.623253-08:00`
     - **updated_at**: `2025-12-02T10:03:08.623253-08:00`
-  20. Item:
+  38. Item:
     - **hint_id**: `e0045b5e-2ce3-4482-8aa7-b844235adb1a`
     - **logical_name**: `reality.green.required_checks`
     - **scope**: `status_api`
@@ -483,7 +753,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `10`
     - **created_at**: `2025-11-29T07:41:52.592675-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  21. Item:
+  39. Item:
     - **hint_id**: `e0919a4a-80aa-43a9-8b36-11454c68d318`
     - **logical_name**: `HINT-SCHEMA-003`
     - **scope**: `database`
@@ -507,7 +777,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `8`
     - **created_at**: `2025-12-02T10:03:26.396198-08:00`
     - **updated_at**: `2025-12-02T10:03:26.396198-08:00`
-  22. Item:
+  40. Item:
     - **hint_id**: `e9f6d947-496b-4efd-b1b3-83023c42c27e`
     - **logical_name**: `HINT-ENV-001`
     - **scope**: `environment`
@@ -534,7 +804,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `10`
     - **created_at**: `2025-12-02T10:00:27.278878-08:00`
     - **updated_at**: `2025-12-02T10:00:27.278878-08:00`
-  23. Item:
+  41. Item:
     - **hint_id**: `edf85953-cd58-4165-8e3b-a324bd9adf48`
     - **logical_name**: `db.dsn_env_var_ignored`
     - **scope**: `infra`
@@ -553,7 +823,7 @@ verses_json = row[8]  # JSONB from query\nif verses_json:\n    first = verses_js
     - **priority**: `20`
     - **created_at**: `2025-12-02T11:03:55.219239-08:00`
     - **updated_at**: `2025-12-02T11:03:55.219239-08:00`
-  24. Item:
+  42. Item:
     - **hint_id**: `f04024e4-0f8c-4769-9875-e9f1f56cc5b9`
     - **logical_name**: `ops.preflight.kernel_health`
     - **scope**: `ops`
@@ -590,7 +860,7 @@ Before any destructive operation (deleting or regenerating share surfaces, schem
     - **priority**: `0`
     - **created_at**: `2025-12-06T09:09:19.892311-08:00`
     - **updated_at**: `2025-12-06T09:09:19.892311-08:00`
-  25. Item:
+  43. Item:
     - **hint_id**: `fd7d1f9c-98e4-4036-8d67-fb85b1e92a02`
     - **logical_name**: `pm.boot.kernel_first`
     - **scope**: `pm`
@@ -625,5 +895,5 @@ New PM chat must \*first\* read `share/handoff/PM_KERNEL.json`, then `share/PM_B
     - **priority**: `0`
     - **created_at**: `2025-12-06T09:09:19.892311-08:00`
     - **updated_at**: `2025-12-06T09:09:19.892311-08:00`
-- **row_count**: `25`
+- **row_count**: `43`
 - **db_off**: `false`

@@ -31,6 +31,7 @@ share/
   SSOT_SURFACE_V17.json
   PHASENN_* (Phase surfaces 18–24)
   pm_boot/  — PM/OA boot capsule (kernel + bootstrap + contracts + logs)
+  oa/       — OA runtime workspace (CONTEXT.json, DSPy program surfaces)
   orchestrator/
   orchestrator_assistant/
   atlas/

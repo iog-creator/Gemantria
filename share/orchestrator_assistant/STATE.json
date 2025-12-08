@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-08T16:34:46.952218+00:00",
+  "generated_at": "2025-12-08T16:48:33.430662+00:00",
   "branch": "feat/phase27l-agents-dms-contract",
   "current_phase": "24",
   "last_completed_phase": "23",
@@ -53,11 +53,11 @@
     },
     {
       "name": "Bootstrap Consistency",
-      "passed": true
+      "passed": false
     },
     {
       "name": "Root Surface",
-      "passed": false
+      "passed": true
     },
     {
       "name": "Share Sync Policy",
@@ -77,7 +77,7 @@
     },
     {
       "name": "Handoff Kernel",
-      "passed": true
+      "passed": false
     }
   ],
   "dms_hint_summary": {

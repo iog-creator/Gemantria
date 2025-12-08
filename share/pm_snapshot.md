@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-12-07T19:20:06.318263+00:00
+**Generated**: 2025-12-08T16:47:35.468405+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-12-07T11:19:54-08:00`
+- **generated_at**: `2025-12-08T08:47:23-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -97,8 +97,8 @@
       1. Item:
         - **level**: `WARN`
         - **code**: `KB_MISSING_DOCS`
-        - **message**: `KB registry references 316 missing file(s)`
-        - **missing_count**: `316`
+        - **message**: `KB registry references 365 missing file(s)`
+        - **missing_count**: `365`
         - **missing_files**:
           1. `agentpm/adapters/AGENTS.md (ID`
           2. `agentpm/AGENTS.md (ID`
@@ -113,7 +113,7 @@
       2. Item:
         - **level**: `WARN`
         - **code**: `KB_VALIDATION_ISSUES`
-        - **message**: `KB registry validation issue: Registry validation failed: 318 errors`
+        - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
       3. Item:
         - **level**: `WARN`
         - **code**: `KB_VALIDATION_ISSUES`
@@ -163,13 +163,13 @@
     - **freshness**:
       - **total**: `1185`
       - **stale_count**: `9`
-      - **missing_count**: `316`
+      - **missing_count**: `365`
       - **out_of_sync_count**: `0`
-      - **fresh_count**: `860`
+      - **fresh_count**: `811`
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-12-07T19:19:54.191432+00:00`
+  - **timestamp**: `2025-12-08T16:47:22.732396+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -183,7 +183,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-12-07T19:19:54.191450+00:00`
+    - **generated_at**: `2025-12-08T16:47:22.732417+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -204,19 +204,19 @@
             - **latest_created_at**: `2025-11-30T09:02:28.655100-08:00`
           - **control.agent_run_cli**:
             - **present**: `true`
-            - **row_count**: `140`
-            - **latest_created_at**: `2025-12-07T10:48:59.960977-08:00`
+            - **row_count**: `143`
+            - **latest_created_at**: `2025-12-07T11:20:05.398287-08:00`
           - **control.kb_document**:
             - **present**: `true`
             - **row_count**: `4238`
             - **latest_created_at**: `2025-11-27T10:39:03.026669-08:00`
           - **control.doc_registry**:
             - **present**: `true`
-            - **row_count**: `1203`
-            - **latest_created_at**: `2025-12-07T10:46:19.978008-08:00`
+            - **row_count**: `1245`
+            - **latest_created_at**: `2025-12-08T08:25:28.507635-08:00`
           - **control.doc_version**:
             - **present**: `true`
-            - **row_count**: `8808`
+            - **row_count**: `12469`
             - **latest_created_at**: `null`
           - **control.tool_catalog**:
             - **present**: `true`
@@ -232,20 +232,20 @@
         - **error**: `null`
         - **tables**:
           - **control.agent_run**: `2270`
-          - **control.agent_run_cli**: `140`
+          - **control.agent_run_cli**: `143`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
-          - **control.doc_embedding**: `245898`
-          - **control.doc_fragment**: `245903`
-          - **control.doc_registry**: `1203`
+          - **control.doc_embedding**: `46570`
+          - **control.doc_fragment**: `46570`
+          - **control.doc_registry**: `1245`
           - **control.doc_sync_state**: `0`
-          - **control.doc_version**: `8808`
+          - **control.doc_version**: `12469`
           - **control.guard_definition**: `0`
-          - **control.hint_registry**: `25`
+          - **control.hint_registry**: `43`
           - **control.kb_document**: `4238`
           - **control.rule_definition**: `69`
           - **control.rule_source**: `138`
-          - **control.system_state_ledger**: `462`
+          - **control.system_state_ledger**: `471`
           - **control.tool_catalog**: `7`
           - **gematria.ai_embeddings**: `1`
           - **gematria.checkpoints**: `4`
@@ -292,8 +292,8 @@
           - **public.document_access_log**: `1`
           - **public.document_sections**: `398`
           - **public.governance_artifacts**: `134`
-          - **public.governance_compliance_log**: `243`
-          - **public.hint_emissions**: `818`
+          - **public.governance_compliance_log**: `245`
+          - **public.hint_emissions**: `824`
           - **public.hypotheses**: `0`
           - **public.integration_log**: `0`
           - **public.isolation_patterns**: `0`
@@ -912,8 +912,8 @@
       2. `eval.graph.calibrate.adv: OK`
   - **hints**:
     1. `DMS-REQUIRED: reality.green STRICT must pass all required checks before declaring system ready.`
-    2. `KB: KB registry references 316 missing file(s)`
-    3. `KB: KB registry validation issue: Registry validation failed: 318 errors`
+    2. `KB: KB registry references 365 missing file(s)`
+    3. `KB: KB registry validation issue: Registry validation failed: 367 errors`
     4. `KB: KB registry validation issue: Registry has 3 warnings`
     5. `KB: 9 document(s) are stale (exceed refresh interval)`
     6. `KB: Doc freshness: 9 stale, 0 out-of-sync`
@@ -921,8 +921,8 @@
     1. Item:
       - **level**: `WARN`
       - **code**: `KB_MISSING_DOCS`
-      - **message**: `KB registry references 316 missing file(s)`
-      - **missing_count**: `316`
+      - **message**: `KB registry references 365 missing file(s)`
+      - **missing_count**: `365`
       - **missing_files**:
         1. `agentpm/adapters/AGENTS.md (ID`
         2. `agentpm/AGENTS.md (ID`
@@ -937,7 +937,7 @@
     2. Item:
       - **level**: `WARN`
       - **code**: `KB_VALIDATION_ISSUES`
-      - **message**: `KB registry validation issue: Registry validation failed: 318 errors`
+      - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
     3. Item:
       - **level**: `WARN`
       - **code**: `KB_VALIDATION_ISSUES`
@@ -994,9 +994,9 @@
       - **last_24h**: `0`
       - **last_7d**: `0`
     - **agent_run_cli**:
-      - **total**: `140`
-      - **last_24h**: `4`
-      - **last_7d**: `91`
+      - **total**: `143`
+      - **last_24h**: `5`
+      - **last_7d**: `66`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:
@@ -1017,14 +1017,14 @@
   - **available**: `true`
   - **total**: `1185`
   - **valid**: `false`
-  - **errors_count**: `318`
+  - **errors_count**: `367`
   - **warnings_count**: `3`
 - **kb_hints**:
   1. Item:
     - **level**: `WARN`
     - **code**: `KB_MISSING_DOCS`
-    - **message**: `KB registry references 316 missing file(s)`
-    - **missing_count**: `316`
+    - **message**: `KB registry references 365 missing file(s)`
+    - **missing_count**: `365`
     - **missing_files**:
       1. `agentpm/adapters/AGENTS.md (ID`
       2. `agentpm/AGENTS.md (ID`
@@ -1039,7 +1039,7 @@
   2. Item:
     - **level**: `WARN`
     - **code**: `KB_VALIDATION_ISSUES`
-    - **message**: `KB registry validation issue: Registry validation failed: 318 errors`
+    - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
   3. Item:
     - **level**: `WARN`
     - **code**: `KB_VALIDATION_ISSUES`
@@ -1074,25 +1074,25 @@
   - **available**: `true`
   - **metrics**:
     - **kb_fresh_ratio**:
-      - **overall**: `72.57383966244726`
+      - **overall**: `68.43881856540084`
       - **by_subsystem**:
         - **ops**: `57.117117117117125`
         - **gematria**: `31.57894736842105`
-        - **pm**: `91.62995594713657`
+        - **pm**: `81.93832599118943`
         - **general**: `93.83259911894272`
         - **docs**: `20.0`
-        - **root**: `62.5`
+        - **root**: `6.25`
         - **webui**: `96.07843137254902`
         - **biblescholar**: `88.23529411764706`
     - **kb_missing_count**:
-      - **overall**: `316`
+      - **overall**: `365`
       - **by_subsystem**:
         - **ops**: `238`
         - **gematria**: `26`
-        - **pm**: `19`
+        - **pm**: `41`
         - **general**: `6`
         - **docs**: `4`
-        - **root**: `18`
+        - **root**: `45`
         - **webui**: `1`
         - **biblescholar**: `4`
     - **kb_stale_count_by_subsystem**:
