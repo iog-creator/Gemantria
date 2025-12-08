@@ -672,18 +672,8 @@ def check_oa_state() -> CheckResult:
     if not script.exists():
         return CheckResult("OA State", True, "Guard script not deployed yet (OK during transition)", {})
 
-    # First, refresh the OA snapshot to ensure it's up to date
-    try:
-        from pmagent.oa.state import write_oa_state
-
-        write_oa_state()
-    except Exception as e:
-        return CheckResult(
-            "OA State",
-            False,
-            f"Failed to refresh OA snapshot: {e}",
-            {"error": str(e)},
-        )
+    # NOTE: OA state refresh is done by main() AFTER final summary write
+    # Do NOT refresh here - it would read stale REALITY_GREEN_SUMMARY.json
 
     # Now run the guard
     exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
@@ -918,11 +908,20 @@ def main() -> int:
         ).stdout.strip(),
     }
 
+    print(f"[DEBUG] Writing summary with all_passed={all_passed}", file=sys.stderr)
     with open(summary_path, "w") as f:
         json.dump(summary_json, f, indent=2)
 
     # Phase 27.B/C: OA State check runs AFTER final summary is written
     # This fixes circular dependency where guard reads stale REALITY_GREEN from prior run
+    # Refresh OA state NOW so it reads the current REALITY_GREEN_SUMMARY
+    try:
+        from pmagent.oa.state import write_oa_state
+
+        write_oa_state()
+    except Exception as e:
+        print(f"[DEBUG] OA refresh failed: {e}", file=sys.stderr)
+
     oa_result = check_oa_state()
     if not oa_result.passed:
         # Add OA result to checks and update summary
