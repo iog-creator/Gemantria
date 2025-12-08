@@ -11,7 +11,7 @@ Schemas: docs/SSOT/oa/OA_REASONING_BRIDGE.md
 
 from __future__ import annotations
 
-from typing import Any, List, Literal, Optional, TYPE_CHECKING
+from typing import Any, List, Literal, TYPE_CHECKING
 
 # Guard dspy import - falls back gracefully if not installed
 try:
@@ -145,6 +145,83 @@ class PhaseTransitionValidatorSignature(dspy.Signature):
     recommendations: List[str] = dspy.OutputField(desc="Recommended actions before proceeding")
 
 
+class HandoffIntegrityValidatorSignature(dspy.Signature):
+    """
+    Validate handoff surfaces are complete and coherent.
+
+    Training data: examples/dspy/handoff_integrity_validator.jsonl
+    """
+
+    # Inputs
+    kernel_state: str = dspy.InputField(desc="Current kernel state as JSON string")
+    handoff_goal: str = dspy.InputField(desc="Goal or task for handoff validation")
+    oa_context: str = dspy.InputField(desc="OA context including constraints as JSON string")
+
+    # Outputs
+    integrity_status: Literal["clean", "dirty", "incomplete"] = dspy.OutputField(
+        desc="clean = handoff complete, dirty = conflicts present, incomplete = missing items"
+    )
+    blockers: List[str] = dspy.OutputField(desc="Items blocking clean handoff")
+    rationale: str = dspy.OutputField(desc="Explanation of integrity assessment")
+
+
+class OAToolUsagePredictionSignature(dspy.Signature):
+    """
+    Predict sequence of OA tools to call for a task.
+
+    Training data: examples/dspy/oa_tool_usage_prediction.jsonl
+    """
+
+    # Inputs
+    kernel_state: str = dspy.InputField(desc="Current kernel state as JSON string")
+    oa_context: str = dspy.InputField(desc="OA context with task description as JSON string")
+    task: str = dspy.InputField(desc="Task description for tool prediction")
+
+    # Outputs
+    tool_sequence: List[str] = dspy.OutputField(
+        desc="Ordered list of OA tools to call (e.g., ['oa.kernel_status', 'oa.guard.run:reality.green'])"
+    )
+    rationale: str = dspy.OutputField(desc="Explanation of why these tools were selected")
+
+
+class ShareDMSDriftDetectorSignature(dspy.Signature):
+    """
+    Detect drift between share/ artifacts and DMS registry.
+
+    Training data: examples/dspy/share_dms_drift_detector.jsonl
+    """
+
+    # Inputs
+    kernel_state: str = dspy.InputField(desc="Current kernel state as JSON string")
+    oa_context: str = dspy.InputField(desc="OA context as JSON string")
+
+    # Outputs
+    drift_category: Literal["none", "minor", "major", "critical"] = dspy.OutputField(
+        desc="none = in sync, minor = cosmetic, major = functional, critical = blocking"
+    )
+    missing_docs: List[str] = dspy.OutputField(desc="Docs in DMS but missing from share/")
+    unexpected_artifacts: List[str] = dspy.OutputField(desc="Artifacts in share/ not in DMS")
+    recommended_commands: List[str] = dspy.OutputField(desc="Commands to resolve drift")
+
+
+class MultiTurnKernelReasoningSignature(dspy.Signature):
+    """
+    Multi-step reasoning with kernel state and trace.
+
+    Training data: examples/dspy/multi_turn_kernel_reasoning.jsonl
+    """
+
+    # Inputs
+    kernel_state: str = dspy.InputField(desc="Current kernel state as JSON string")
+    oa_context: str = dspy.InputField(desc="OA context with task as JSON string")
+    task: str = dspy.InputField(desc="Multi-step reasoning task")
+
+    # Outputs
+    decision: dict = dspy.OutputField(desc="Final decision payload")
+    rationale: str = dspy.OutputField(desc="Overall reasoning explanation")
+    trace_steps: List[str] = dspy.OutputField(desc="Ordered list of reasoning steps taken")
+
+
 # ============================================================================
 # Signature Registry
 # ============================================================================
@@ -154,6 +231,10 @@ SIGNATURES = {
     "OPSBlockGenerator": OPSBlockGeneratorSignature,
     "GuardFailureInterpreter": GuardFailureInterpreterSignature,
     "PhaseTransitionValidator": PhaseTransitionValidatorSignature,
+    "HandoffIntegrityValidator": HandoffIntegrityValidatorSignature,
+    "OAToolUsagePrediction": OAToolUsagePredictionSignature,
+    "ShareDMSDriftDetector": ShareDMSDriftDetectorSignature,
+    "MultiTurnKernelReasoning": MultiTurnKernelReasoningSignature,
 }
 
 
@@ -174,7 +255,7 @@ def is_dspy_available() -> bool:
 # ============================================================================
 
 
-def create_module(program_id: str) -> Optional[Any]:
+def create_module(program_id: str) -> Any | None:
     """
     Create a DSPy Module for the given program.
 

@@ -9,8 +9,8 @@ future DSPy reasoning programs. It contains NO DSPy imports or runtime logic.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from typing import Any, List, Literal, Optional, TypedDict
+from datetime import datetime, UTC
+from typing import Any, List, Literal, TypedDict
 
 # --- Core Schemas ---
 # These match docs/SSOT/oa/OA_REASONING_BRIDGE.md
@@ -44,7 +44,7 @@ class DiagnosticEvent(TypedDict):
     category: str
     severity: str
     message: str
-    details: Optional[dict[str, Any]]
+    details: dict[str, Any] | None
 
 
 class ReasoningResult(TypedDict):
@@ -99,6 +99,10 @@ PROGRAM_IDS = {
     "OPSBlockGenerator",
     "GuardFailureInterpreter",
     "PhaseTransitionValidator",
+    "HandoffIntegrityValidator",
+    "OAToolUsagePrediction",
+    "ShareDMSDriftDetector",
+    "MultiTurnKernelReasoning",
 }
 
 
@@ -110,7 +114,7 @@ def build_envelope(
     goal: str,
     kernel_data: dict[str, Any],
     oa_context: dict[str, Any],
-    tools_allowed: Optional[List[str]] = None,
+    tools_allowed: List[str] | None = None,
 ) -> ReasoningEnvelope:
     """
     Build a ReasoningEnvelope using provided kernel data and context.
@@ -139,7 +143,7 @@ def build_envelope(
 
     return {
         "envelope_id": str(uuid.uuid4()),
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "program_id": program_id,
         "goal": goal,
         "kernel_state_ref": kernel_ref,
@@ -223,13 +227,156 @@ def run_reasoning_program(envelope: ReasoningEnvelope) -> ReasoningResult:
                 "diagnostics": [],
             }
 
-        # For other programs, return placeholder
+        elif program_id == "OPSBlockGenerator":
+            result = module(
+                pm_goal=envelope["goal"],
+                kernel_state=kernel_json,
+                relevant_ssot_docs=envelope["oa_context"].get("ssot_docs", []),
+                hints=envelope["oa_context"].get("hints", []),
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "ops_block_goal": getattr(result, "ops_block_goal", ""),
+                    "ops_block_commands": getattr(result, "ops_block_commands", []),
+                    "success_criteria": getattr(result, "success_criteria", []),
+                },
+                "rationale": f"Confidence: {getattr(result, 'confidence', 0.0)}",
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "GuardFailureInterpreter":
+            result = module(
+                guard_name=envelope["oa_context"].get("guard_name", "unknown"),
+                guard_output=envelope["goal"],
+                kernel_state=kernel_json,
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "diagnosis": getattr(result, "diagnosis", ""),
+                    "root_cause": getattr(result, "root_cause", ""),
+                    "remediation_steps": getattr(result, "remediation_steps", []),
+                    "is_transient": getattr(result, "is_transient", False),
+                },
+                "rationale": getattr(result, "diagnosis", ""),
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "PhaseTransitionValidator":
+            result = module(
+                current_phase=envelope["oa_context"].get("current_phase", ""),
+                proposed_phase=envelope["oa_context"].get("proposed_phase", ""),
+                kernel_state=kernel_json,
+                phase_exit_criteria=json.dumps(envelope["oa_context"].get("exit_criteria", {})),
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "allowed": getattr(result, "allowed", False),
+                    "blockers": getattr(result, "blockers", []),
+                    "recommendations": getattr(result, "recommendations", []),
+                },
+                "rationale": f"Allowed: {getattr(result, 'allowed', False)}",
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "HandoffIntegrityValidator":
+            result = module(
+                kernel_state=kernel_json,
+                handoff_goal=envelope["goal"],
+                oa_context=context_json,
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "integrity_status": getattr(result, "integrity_status", "incomplete"),
+                    "blockers": getattr(result, "blockers", []),
+                },
+                "rationale": getattr(result, "rationale", ""),
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "OAToolUsagePrediction":
+            result = module(
+                kernel_state=kernel_json,
+                oa_context=context_json,
+                task=envelope["goal"],
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "tool_sequence": getattr(result, "tool_sequence", []),
+                },
+                "rationale": getattr(result, "rationale", ""),
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "ShareDMSDriftDetector":
+            result = module(
+                kernel_state=kernel_json,
+                oa_context=context_json,
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "drift_category": getattr(result, "drift_category", "none"),
+                    "missing_docs": getattr(result, "missing_docs", []),
+                    "unexpected_artifacts": getattr(result, "unexpected_artifacts", []),
+                    "recommended_commands": getattr(result, "recommended_commands", []),
+                },
+                "rationale": f"Drift: {getattr(result, 'drift_category', 'none')}",
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        elif program_id == "MultiTurnKernelReasoning":
+            result = module(
+                kernel_state=kernel_json,
+                oa_context=context_json,
+                task=envelope["goal"],
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": getattr(result, "decision", {}),
+                "rationale": getattr(result, "rationale", ""),
+                "tool_calls": [],
+                "diagnostics": [
+                    {
+                        "category": "trace",
+                        "severity": "info",
+                        "message": "Multi-turn reasoning trace",
+                        "details": {"steps": getattr(result, "trace_steps", [])},
+                    }
+                ],
+            }
+
+        # For unknown programs, return error
         return {
             "envelope_id": envelope["envelope_id"],
             "program_id": program_id,
-            "status": "DEGRADED",
+            "status": "FAILED",
             "decision": {},
-            "rationale": f"Program {program_id} not yet fully wired.",
+            "rationale": f"Unknown program_id: {program_id}",
             "tool_calls": [],
             "diagnostics": [],
         }
