@@ -1,6 +1,6 @@
 # PM_BOOTSTRAP_STATE
 
-**Generated**: 2025-12-08T16:47:35.190549+00:00
+**Generated**: 2025-12-08T17:09:47.694384+00:00
 **Source**: `PM_BOOTSTRAP_STATE.json`
 
 ---
@@ -11,7 +11,7 @@
   - **execution_contract**: `docs/SSOT/EXECUTION_CONTRACT.md`
   - **pm_contract**: `docs/SSOT/PM_CONTRACT.md`
 - **description**: `Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.`
-- **generated_at_utc**: `2025-12-07T22:35:25.346175+00:00`
+- **generated_at_utc**: `2025-12-08T17:08:37.638604+00:00`
 - **gotchas**:
   - **index**: `docs/SSOT/GOTCHAS_INDEX.md`
   - **share_folder**: `docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md`
@@ -19,7 +19,7 @@
 - **health**:
   - **agents_sync_ok**: `true`
   - **dms_alignment_ok**: `true`
-  - **reality_green**: `false`
+  - **reality_green**: `true`
   - **source**: `share/REALITY_GREEN_SUMMARY.json`
 - **infra**:
   - **dsn_governance**: `docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md`

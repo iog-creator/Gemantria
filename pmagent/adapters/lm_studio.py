@@ -322,12 +322,12 @@ def embed(texts: str | list[str], *, model_slot: str | None = None) -> list[list
     resp = requests.post(url, json=payload, headers=headers, timeout=120.0)
     resp.raise_for_status()
     data = resp.json()
-    
+
     # Extract embeddings from response (OpenAI-compatible format)
     embeddings = []
     for item in data.get("data", []):
         embeddings.append(item.get("embedding", []))
-    
+
     return embeddings
 
 

@@ -1,12 +1,12 @@
 # doc_registry
 
-**Generated**: 2025-12-08T16:47:35.266512+00:00
+**Generated**: 2025-12-08T17:09:47.779293+00:00
 **Source**: `doc_registry.json`
 
 ---
 
 - **schema**: `control.doc_registry.v1`
-- **generated_at**: `2025-12-08T16:47:21.592707+00:00`
+- **generated_at**: `2025-12-08T17:09:35.568171+00:00`
 - **table**: `control.doc_registry`
 - **rows**:
   1. Item:

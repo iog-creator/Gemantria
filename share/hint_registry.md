@@ -1,12 +1,12 @@
 # hint_registry
 
-**Generated**: 2025-12-08T16:47:35.351399+00:00
+**Generated**: 2025-12-08T17:09:47.862277+00:00
 **Source**: `hint_registry.json`
 
 ---
 
 - **schema**: `control.hint_registry.v1`
-- **generated_at**: `2025-12-08T16:47:21.639720+00:00`
+- **generated_at**: `2025-12-08T17:09:35.617273+00:00`
 - **table**: `control.hint_registry`
 - **rows**:
   1. Item:

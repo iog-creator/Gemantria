@@ -1,12 +1,12 @@
 # pm_snapshot
 
-**Generated**: 2025-12-08T16:47:35.468405+00:00
+**Generated**: 2025-12-08T17:09:47.990360+00:00
 **Source**: `pm_snapshot.json`
 
 ---
 
 - **overall_ok**: `true`
-- **generated_at**: `2025-12-08T08:47:23-08:00`
+- **generated_at**: `2025-12-08T09:09:36-08:00`
 - **db_health**:
   - **ok**: `true`
   - **mode**: `ready`
@@ -79,46 +79,53 @@
   - **details**: `Database is ready and all checks passed. All 4 LM slot(s) are operational.`
   - **documentation**:
     - **available**: `true`
-    - **total**: `1185`
+    - **total**: `1227`
     - **by_subsystem**:
-      - **ops**: `555`
-      - **gematria**: `38`
-      - **pm**: `227`
-      - **general**: `227`
-      - **docs**: `5`
-      - **root**: `48`
-      - **webui**: `51`
-      - **biblescholar**: `34`
+      - **root**: `112`
+      - **pm**: `429`
+      - **webui**: `53`
+      - **biblescholar**: `68`
+      - **gematria**: `12`
+      - **docs**: `4`
+      - **ops**: `309`
+      - **pmagent**: `2`
+      - **general**: `238`
     - **by_type**:
-      - **other**: `1023`
-      - **ssot**: `129`
+      - **other**: `1054`
+      - **ssot**: `140`
       - **runbook**: `33`
     - **hints**:
       1. Item:
         - **level**: `WARN`
         - **code**: `KB_MISSING_DOCS`
-        - **message**: `KB registry references 365 missing file(s)`
-        - **missing_count**: `365`
+        - **message**: `KB registry references 112 missing file(s)`
+        - **missing_count**: `112`
         - **missing_files**:
-          1. `agentpm/adapters/AGENTS.md (ID`
-          2. `agentpm/AGENTS.md (ID`
-          3. `agentpm/ai_docs/AGENTS.md (ID`
-          4. `agentpm/atlas/AGENTS.md (ID`
-          5. `agentpm/biblescholar/AGENTS.md (ID`
-          6. `agentpm/biblescholar/tests/AGENTS.md (ID`
-          7. `agentpm/bus/AGENTS.md (ID`
-          8. `agentpm/control_plane/AGENTS.md (ID`
-          9. `agentpm/control_widgets/AGENTS.md (ID`
-          10. `agentpm/db/AGENTS.md (ID`
+          1. `agentpm/AGENTS.md (ID`
+          2. `backup/20251207T045808Z/share/AGENTS.md (ID`
+          3. `backup/20251207T045808Z/share/scripts_AGENTS.md (ID`
+          4. `backup/20251207T062821Z/share/AGENTS.md (ID`
+          5. `backup/20251207T062821Z/share/pm_boot/AGENTS.md (ID`
+          6. `backup/20251207T062821Z/share/scripts_AGENTS.md (ID`
+          7. `backup/20251207T153233Z/share/AGENTS.md (ID`
+          8. `backup/20251207T153233Z/share/pm_boot/AGENTS.md (ID`
+          9. `backup/20251207T153233Z/share/scripts_AGENTS.md (ID`
+          10. `backup/20251207T164600Z/share/AGENTS.md (ID`
       2. Item:
-        - **level**: `WARN`
-        - **code**: `KB_VALIDATION_ISSUES`
-        - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
+        - **level**: `INFO`
+        - **code**: `KB_LOW_COVERAGE_SUBSYSTEM`
+        - **message**: `Subsystem 'pmagent' has low document coverage (2 doc(s))`
+        - **subsystem**: `pmagent`
+        - **have**: `2`
       3. Item:
         - **level**: `WARN`
         - **code**: `KB_VALIDATION_ISSUES`
-        - **message**: `KB registry validation issue: Registry has 3 warnings`
+        - **message**: `KB registry validation issue: Registry validation failed: 114 errors`
       4. Item:
+        - **level**: `WARN`
+        - **code**: `KB_VALIDATION_ISSUES`
+        - **message**: `KB registry validation issue: Registry has 3 warnings`
+      5. Item:
         - **level**: `WARN`
         - **code**: `KB_DOC_STALE`
         - **message**: `9 document(s) are stale (exceed refresh interval)`
@@ -161,15 +168,15 @@
         - **path**: `docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md`
         - **type**: `ssot`
     - **freshness**:
-      - **total**: `1185`
+      - **total**: `1227`
       - **stale_count**: `9`
-      - **missing_count**: `365`
+      - **missing_count**: `112`
       - **out_of_sync_count**: `0`
-      - **fresh_count**: `811`
+      - **fresh_count**: `1106`
 - **reality_check**:
   - **command**: `reality.check`
   - **mode**: `HINT`
-  - **timestamp**: `2025-12-08T16:47:22.732396+00:00`
+  - **timestamp**: `2025-12-08T17:09:36.717398+00:00`
   - **env**:
     - **ok**: `true`
     - **dsn_ok**: `true`
@@ -183,7 +190,7 @@
     - **control_schema**: `control`
     - **tables_expected**: `0`
     - **tables_present**: `0`
-    - **generated_at**: `2025-12-08T16:47:22.732417+00:00`
+    - **generated_at**: `2025-12-08T17:09:36.717421+00:00`
     - **components**:
       - **status**:
         - **ok**: `true`
@@ -204,8 +211,8 @@
             - **latest_created_at**: `2025-11-30T09:02:28.655100-08:00`
           - **control.agent_run_cli**:
             - **present**: `true`
-            - **row_count**: `143`
-            - **latest_created_at**: `2025-12-07T11:20:05.398287-08:00`
+            - **row_count**: `146`
+            - **latest_created_at**: `2025-12-08T08:47:34.743436-08:00`
           - **control.kb_document**:
             - **present**: `true`
             - **row_count**: `4238`
@@ -232,7 +239,7 @@
         - **error**: `null`
         - **tables**:
           - **control.agent_run**: `2270`
-          - **control.agent_run_cli**: `143`
+          - **control.agent_run_cli**: `146`
           - **control.capability_rule**: `5`
           - **control.capability_session**: `5`
           - **control.doc_embedding**: `46570`
@@ -912,37 +919,44 @@
       2. `eval.graph.calibrate.adv: OK`
   - **hints**:
     1. `DMS-REQUIRED: reality.green STRICT must pass all required checks before declaring system ready.`
-    2. `KB: KB registry references 365 missing file(s)`
-    3. `KB: KB registry validation issue: Registry validation failed: 367 errors`
-    4. `KB: KB registry validation issue: Registry has 3 warnings`
-    5. `KB: 9 document(s) are stale (exceed refresh interval)`
-    6. `KB: Doc freshness: 9 stale, 0 out-of-sync`
+    2. `KB: KB registry references 112 missing file(s)`
+    3. `KB: Subsystem 'pmagent' has low document coverage (2 doc(s))`
+    4. `KB: KB registry validation issue: Registry validation failed: 114 errors`
+    5. `KB: KB registry validation issue: Registry has 3 warnings`
+    6. `KB: 9 document(s) are stale (exceed refresh interval)`
+    7. `KB: Doc freshness: 9 stale, 0 out-of-sync`
   - **kb_hints**:
     1. Item:
       - **level**: `WARN`
       - **code**: `KB_MISSING_DOCS`
-      - **message**: `KB registry references 365 missing file(s)`
-      - **missing_count**: `365`
+      - **message**: `KB registry references 112 missing file(s)`
+      - **missing_count**: `112`
       - **missing_files**:
-        1. `agentpm/adapters/AGENTS.md (ID`
-        2. `agentpm/AGENTS.md (ID`
-        3. `agentpm/ai_docs/AGENTS.md (ID`
-        4. `agentpm/atlas/AGENTS.md (ID`
-        5. `agentpm/biblescholar/AGENTS.md (ID`
-        6. `agentpm/biblescholar/tests/AGENTS.md (ID`
-        7. `agentpm/bus/AGENTS.md (ID`
-        8. `agentpm/control_plane/AGENTS.md (ID`
-        9. `agentpm/control_widgets/AGENTS.md (ID`
-        10. `agentpm/db/AGENTS.md (ID`
+        1. `agentpm/AGENTS.md (ID`
+        2. `backup/20251207T045808Z/share/AGENTS.md (ID`
+        3. `backup/20251207T045808Z/share/scripts_AGENTS.md (ID`
+        4. `backup/20251207T062821Z/share/AGENTS.md (ID`
+        5. `backup/20251207T062821Z/share/pm_boot/AGENTS.md (ID`
+        6. `backup/20251207T062821Z/share/scripts_AGENTS.md (ID`
+        7. `backup/20251207T153233Z/share/AGENTS.md (ID`
+        8. `backup/20251207T153233Z/share/pm_boot/AGENTS.md (ID`
+        9. `backup/20251207T153233Z/share/scripts_AGENTS.md (ID`
+        10. `backup/20251207T164600Z/share/AGENTS.md (ID`
     2. Item:
-      - **level**: `WARN`
-      - **code**: `KB_VALIDATION_ISSUES`
-      - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
+      - **level**: `INFO`
+      - **code**: `KB_LOW_COVERAGE_SUBSYSTEM`
+      - **message**: `Subsystem 'pmagent' has low document coverage (2 doc(s))`
+      - **subsystem**: `pmagent`
+      - **have**: `2`
     3. Item:
       - **level**: `WARN`
       - **code**: `KB_VALIDATION_ISSUES`
-      - **message**: `KB registry validation issue: Registry has 3 warnings`
+      - **message**: `KB registry validation issue: Registry validation failed: 114 errors`
     4. Item:
+      - **level**: `WARN`
+      - **code**: `KB_VALIDATION_ISSUES`
+      - **message**: `KB registry validation issue: Registry has 3 warnings`
+    5. Item:
       - **level**: `WARN`
       - **code**: `KB_DOC_STALE`
       - **message**: `9 document(s) are stale (exceed refresh interval)`
@@ -994,9 +1008,9 @@
       - **last_24h**: `0`
       - **last_7d**: `0`
     - **agent_run_cli**:
-      - **total**: `143`
-      - **last_24h**: `5`
-      - **last_7d**: `66`
+      - **total**: `146`
+      - **last_24h**: `8`
+      - **last_7d**: `53`
       - **success_count**: `3`
       - **error_count**: `0`
 - **share_manifest**:
@@ -1015,36 +1029,42 @@
     - **available**: `false`
 - **kb_registry**:
   - **available**: `true`
-  - **total**: `1185`
+  - **total**: `1227`
   - **valid**: `false`
-  - **errors_count**: `367`
+  - **errors_count**: `114`
   - **warnings_count**: `3`
 - **kb_hints**:
   1. Item:
     - **level**: `WARN`
     - **code**: `KB_MISSING_DOCS`
-    - **message**: `KB registry references 365 missing file(s)`
-    - **missing_count**: `365`
+    - **message**: `KB registry references 112 missing file(s)`
+    - **missing_count**: `112`
     - **missing_files**:
-      1. `agentpm/adapters/AGENTS.md (ID`
-      2. `agentpm/AGENTS.md (ID`
-      3. `agentpm/ai_docs/AGENTS.md (ID`
-      4. `agentpm/atlas/AGENTS.md (ID`
-      5. `agentpm/biblescholar/AGENTS.md (ID`
-      6. `agentpm/biblescholar/tests/AGENTS.md (ID`
-      7. `agentpm/bus/AGENTS.md (ID`
-      8. `agentpm/control_plane/AGENTS.md (ID`
-      9. `agentpm/control_widgets/AGENTS.md (ID`
-      10. `agentpm/db/AGENTS.md (ID`
+      1. `agentpm/AGENTS.md (ID`
+      2. `backup/20251207T045808Z/share/AGENTS.md (ID`
+      3. `backup/20251207T045808Z/share/scripts_AGENTS.md (ID`
+      4. `backup/20251207T062821Z/share/AGENTS.md (ID`
+      5. `backup/20251207T062821Z/share/pm_boot/AGENTS.md (ID`
+      6. `backup/20251207T062821Z/share/scripts_AGENTS.md (ID`
+      7. `backup/20251207T153233Z/share/AGENTS.md (ID`
+      8. `backup/20251207T153233Z/share/pm_boot/AGENTS.md (ID`
+      9. `backup/20251207T153233Z/share/scripts_AGENTS.md (ID`
+      10. `backup/20251207T164600Z/share/AGENTS.md (ID`
   2. Item:
-    - **level**: `WARN`
-    - **code**: `KB_VALIDATION_ISSUES`
-    - **message**: `KB registry validation issue: Registry validation failed: 367 errors`
+    - **level**: `INFO`
+    - **code**: `KB_LOW_COVERAGE_SUBSYSTEM`
+    - **message**: `Subsystem 'pmagent' has low document coverage (2 doc(s))`
+    - **subsystem**: `pmagent`
+    - **have**: `2`
   3. Item:
     - **level**: `WARN`
     - **code**: `KB_VALIDATION_ISSUES`
-    - **message**: `KB registry validation issue: Registry has 3 warnings`
+    - **message**: `KB registry validation issue: Registry validation failed: 114 errors`
   4. Item:
+    - **level**: `WARN`
+    - **code**: `KB_VALIDATION_ISSUES`
+    - **message**: `KB registry validation issue: Registry has 3 warnings`
+  5. Item:
     - **level**: `WARN`
     - **code**: `KB_DOC_STALE`
     - **message**: `9 document(s) are stale (exceed refresh interval)`
@@ -1074,29 +1094,25 @@
   - **available**: `true`
   - **metrics**:
     - **kb_fresh_ratio**:
-      - **overall**: `68.43881856540084`
+      - **overall**: `90.13854930725347`
       - **by_subsystem**:
-        - **ops**: `57.117117117117125`
-        - **gematria**: `31.57894736842105`
-        - **pm**: `81.93832599118943`
-        - **general**: `93.83259911894272`
-        - **docs**: `20.0`
-        - **root**: `6.25`
-        - **webui**: `96.07843137254902`
-        - **biblescholar**: `88.23529411764706`
+        - **root**: `2.6785714285714284`
+        - **pm**: `99.76689976689977`
+        - **webui**: `98.11320754716981`
+        - **biblescholar**: `100.0`
+        - **gematria**: `100.0`
+        - **docs**: `25.0`
+        - **ops**: `100.0`
+        - **pmagent**: `100.0`
+        - **general**: `97.05882352941177`
     - **kb_missing_count**:
-      - **overall**: `365`
+      - **overall**: `112`
       - **by_subsystem**:
-        - **ops**: `238`
-        - **gematria**: `26`
-        - **pm**: `41`
-        - **general**: `6`
-        - **docs**: `4`
-        - **root**: `45`
-        - **webui**: `1`
-        - **biblescholar**: `4`
+        - **root**: `109`
+        - **docs**: `3`
     - **kb_stale_count_by_subsystem**:
-      - **general**: `8`
+      - **general**: `7`
+      - **pm**: `1`
       - **webui**: `1`
     - **kb_fixes_applied_last_7d**: `0`
     - **kb_debt_burned_down**:

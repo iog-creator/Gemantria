@@ -1,11 +1,11 @@
 # REALITY_GREEN_SUMMARY
 
-**Generated**: 2025-12-08T16:47:35.208830+00:00
+**Generated**: 2025-12-08T17:09:47.712824+00:00
 **Source**: `REALITY_GREEN_SUMMARY.json`
 
 ---
 
-- **reality_green**: `true`
+- **reality_green**: `false`
 - **checks**:
   1. Item:
     - **name**: `DB Health`
@@ -233,18 +233,14 @@ Layer 4 Alignment Guard: FAIL
     - **details**:
   17. Item:
     - **name**: `OA State`
-    - **passed**: `true`
-    - **message**: `OA state is consistent with kernel surfaces`
+    - **passed**: `false`
+    - **message**: `OA State Mismatch: reality_green mismatch: PM_BOOTSTRAP.health=True vs REALITY_GREEN=False`
     - **details**:
-      - **output**:
-
-```
-✅ OA State Guard: PASS
-   OA state is consistent with kernel surfaces
-
-JSON: {"ok": true, "mode": "STRICT", "mismatches": [], "missing_surfaces": []}
-```
-
+      - **ok**: `false`
+      - **mode**: `STRICT`
+      - **mismatches**:
+        1. `reality_green mismatch: PM_BOOTSTRAP.health=True vs REALITY_GREEN=False`
+      - **missing_surfaces**:
   18. Item:
     - **name**: `Handoff Kernel`
     - **passed**: `true`
@@ -260,4 +256,4 @@ JSON: {"ok": true, "mode": "STRICT", "mismatches": [], "missing_surfaces": []}
 }
 ```
 
-- **timestamp**: `2025-12-08T16:34:47Z`
+- **timestamp**: `2025-12-08T17:09:16Z`

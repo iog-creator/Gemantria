@@ -1,12 +1,12 @@
 # governance_freshness
 
-**Generated**: 2025-12-08T16:47:35.333154+00:00
+**Generated**: 2025-12-08T17:09:47.843180+00:00
 **Source**: `governance_freshness.json`
 
 ---
 
 - **schema**: `governance_freshness.v1`
-- **generated_at**: `2025-12-08T16:47:21.735791+00:00`
+- **generated_at**: `2025-12-08T17:09:35.711649+00:00`
 - **summary**:
   - **artifacts_total**: `134`
   - **artifacts_stale**: `9`
@@ -14,7 +14,7 @@
   - **hints_stale**: `815`
   - **rules_total**: `75`
   - **rules_with_stale_artifacts**: `0`
-  - **max_staleness_days**: `27.61`
+  - **max_staleness_days**: `27.63`
 - **by_rule**:
   1. Item:
     - **rule**: `058`

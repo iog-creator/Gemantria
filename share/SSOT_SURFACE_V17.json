@@ -1,11 +1,11 @@
 {
   "version": 17,
   "generated_by": "generate_ssot_surface.py",
-  "generated_at": "2025-12-08T16:48:05.598483+00:00",
+  "generated_at": "2025-12-08T17:10:22.507046+00:00",
   "description": "High-level SSOT surface snapshot for Gemantria.",
   "db": {
     "status": "online",
-    "last_checked_at": "2025-12-08T16:48:05.598483+00:00"
+    "last_checked_at": "2025-12-08T17:10:22.507046+00:00"
   },
   "dms": {
     "doc_registry_count": 0,
