@@ -1,46 +1,31 @@
 # DSPy Training Examples for pmagent
 
-This directory contains synthetic training examples for DSPy programs that will power the pmagent reasoning layer in Phase 28.
+Training data for DSPy reasoning programs (Phase 28+).
 
-## Structure
+## Files
 
-- `dspy_synthetic_examples.jsonl` — 6 envelope/result pairs (original SafeOPSDecision examples)
-- `dspy_synthetic_examples_2.jsonl` — 40 envelope/result pairs (all 4 program types)
+| File | Examples | Coverage |
+|------|----------|----------|
+| `dspy_synthetic_examples_1.jsonl` | 6 | SafeOPSDecision baseline |
+| `dspy_synthetic_examples_2.jsonl` | 41 | All 4 programs |
+| `dspy_synthetic_examples_3.jsonl` | 8 | Edge cases (all programs) |
 
-**Format**: JSONL (one JSON object per line), compatible with DSPy's data loading.
+**Total: 55 examples** in JSONL format (one JSON object per line).
 
 ## Reasoning Programs
 
-| Program | Purpose |
-|---------|---------|
-| **SafeOPSDecision** | Determine if an OPS operation is safe to execute |
-| **OPSBlockGenerator** | Generate valid OPS command blocks |
-| **GuardFailureInterpreter** | Analyze guard failures and suggest remediation |
-| **PhaseTransitionValidator** | Verify phase transition criteria are met |
+1. **SafeOPSDecision** — Go/no-go for OPS work
+2. **OPSBlockGenerator** — Drafts OPS blocks from PM goals
+3. **GuardFailureInterpreter** — Diagnoses + remediates guard failures
+4. **PhaseTransitionValidator** — Validates phase transitions
 
-## Example Schema
+## DSPy Pipeline (per OA research)
 
-Each example follows the `ReasoningEnvelope → ReasoningResult` contract from `docs/SSOT/oa/OA_REASONING_BRIDGE.md`:
-
-```json
-{
-  "envelope": {
-    "envelope_id": "uuid",
-    "program_id": "SafeOPSDecision",
-    "goal": "...",
-    "kernel_state_ref": { ... },
-    "oa_context": { ... },
-    "tools_allowed": ["oa.kernel_status", "oa.guard.run"]
-  },
-  "result": {
-    "status": "OK|DEGRADED|BLOCKED|FAILED",
-    "decision": { ... },
-    "rationale": "Chain-of-thought explanation",
-    "tool_calls": [ ... ],
-    "diagnostics": [ ... ]
-  }
-}
 ```
+interpret_request → load_context → plan_tools → call_lms → post_process
+```
+
+See `AGENTS.md` for full pipeline documentation and TODO items.
 
 ## Usage
 

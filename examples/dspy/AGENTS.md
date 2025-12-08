@@ -1,76 +1,70 @@
-# examples/dspy AGENTS.md — DSPy Training Examples Directory
+# examples/dspy AGENTS.md — DSPy Training Data Directory
 
 ## Directory Purpose
 
-This directory contains training data for DSPy reasoning programs that power pmagent in Phase 28+.
+Training data for DSPy reasoning programs powering pmagent OA (Phase 28+).
 
 ---
 
-## Data Types Required
+## DSPy Pipeline Stages & Example Types
 
-Per the DSPy pipeline, we need **three categories** of training data:
+Per the DSPy research doc and OA architecture, OA is a **pipeline of modules**:
 
-### 1. Signature Examples (Input/Output Pairs)
-**Used by:** `dspy.Signature`, `dspy.ChainOfThought`, `dspy.Predict`
+```
+interpret_request → load_context → plan_tools → call_lms → post_process
+```
 
-Format: JSONL with `{"envelope": {...}, "result": {...}}`
+Each stage needs different training data:
 
-Current files:
-- `dspy_synthetic_examples.jsonl` — 6 SafeOPSDecision examples
-- `dspy_synthetic_examples_2.jsonl` — 40 examples across all 4 program types
+### Stage 1: Signature Examples (Envelope→Result)
+**Current focus.** Input/output pairs for the 4 reasoning programs.
 
-### 2. Metric Functions (Validation Data)
-**Used by:** `dspy.BootstrapFewShot` optimizer
+| File | Count | Programs |
+|------|-------|----------|
+| `dspy_synthetic_examples_1.jsonl` | 6 | SafeOPSDecision |
+| `dspy_synthetic_examples_2.jsonl` | 41 | All 4 programs |
+| `dspy_synthetic_examples_3.jsonl` | 8 | Edge cases (all programs) |
 
-These examples need explicit quality labels for the optimizer to bootstrap:
-- Correct decision (GO/NO_GO/CONDITIONAL)
-- Rationale quality score (0.0-1.0)
-- Required guards present
+### Stage 2: Evaluation Examples (TODO)
+For `dspy.BootstrapFewShot` optimizer. Same structure + quality labels:
+- Decision correctness score
+- Rationale clarity score  
+- Required guards present (bool)
 
-**TODO:** Add `dspy_evaluation_examples.jsonl` with quality labels
+### Stage 3: Few-Shot Seeds (TODO)
+Hand-curated "golden" examples (2-3 per program) for initial prompting before compilation.
 
-### 3. Few-Shot Seed Examples (High-Quality Curated)
-**Used by:** Initial prompting before compilation
-
-These are hand-curated, high-quality examples that demonstrate ideal outputs:
-- 2-3 examples per reasoning program
-- Carefully written rationales
-- Cover edge cases
-
-**TODO:** Add `dspy_seed_examples.jsonl` with curated seeds
+### Stage 4: Module-Level Data (TODO)
+Per the OA research, we need examples for individual DSPy modules:
+- `interpret_request`: user_msg → intent
+- `load_governed_context`: intent → facts (kernel+DMS+hints)
+- `plan_and_act`: intent,facts → draft_response,actions
+- `finalize_response`: draft → assistant_message
 
 ---
 
-## Program-Specific Data
+## Reasoning Programs
 
-| Program | Current Examples | Status |
-|---------|-----------------|--------|
-| SafeOPSDecision | 10+ | ✅ Good coverage |
-| OPSBlockGenerator | 10+ | ✅ Good coverage |
-| GuardFailureInterpreter | 10+ | ✅ Good coverage |
-| PhaseTransitionValidator | 10+ | ✅ Good coverage |
+| Program | Purpose | Current Examples |
+|---------|---------|------------------|
+| SafeOPSDecision | Go/no-go for OPS work | ✅ 20+ |
+| OPSBlockGenerator | Draft executable OPS blocks | ✅ 10+ |
+| GuardFailureInterpreter | Diagnose + remediate guard failures | ✅ 12+ |
+| PhaseTransitionValidator | Validate phase transitions | ✅ 10+ |
 
 ---
 
 ## Contracts
 
-1. **JSONL Format Required**: One JSON object per line for DSPy compatibility
-2. **envelope_id Must Be Unique**: Used to match envelope/result pairs
-3. **No Python Literals**: Use `true`/`false`/`null`, not `True`/`False`/`None`
-4. **Compact JSON**: Use `separators=(',', ':')` for disk efficiency
+1. **JSONL Format**: One JSON object per line
+2. **envelope_id**: Unique UUID per example
+3. **JSON Literals Only**: `true`/`false`/`null` (not Python)
+4. **DMS Tracking**: Run `make housekeeping` after adding files
 
 ---
 
-## Related Documents
+## Related Docs (DMS-Tracked)
 
-- [PHASE27_D_DSPY_REASONING_OUTLINE](../../docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md) — Program signatures
-- [OA_REASONING_BRIDGE](../../docs/SSOT/oa/OA_REASONING_BRIDGE.md) — Envelope/Result schemas
-- [OA_API_CONTRACT](../../docs/SSOT/oa/OA_API_CONTRACT.md) — Tool specifications
-
----
-
-## Maintenance
-
-- **DMS Integration**: Files here are tracked by DMS after commit
-- **Validation**: Run `python -c "import json; [json.loads(l) for l in open('<file>')]"` to validate JSONL
-- **Updates**: Add examples as real scenarios emerge from PM/Cursor work
+- `docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md` — Program signatures
+- `docs/SSOT/oa/OA_REASONING_BRIDGE.md` — Envelope/Result schemas
+- `docs/Building a Robust and Reliable Agentic AI System with DSPy.pdf` — Architecture guide
