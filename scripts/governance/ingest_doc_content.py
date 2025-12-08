@@ -275,6 +275,22 @@ def ingest_doc_content(
                 )
                 continue
 
+            # Check if fragments already exist for this version_id (skip if unchanged)
+            # This preserves embeddings and avoids expensive re-embedding
+            existing_check = conn.execute(
+                text(
+                    """
+                    SELECT COUNT(*) FROM control.doc_fragment
+                    WHERE doc_id = :doc_id AND version_id = :version_id
+                    """
+                ),
+                {"doc_id": doc_id, "version_id": version_id},
+            ).scalar()
+
+            if existing_check and existing_check > 0:
+                print(f"[SKIP] {logical_name}: {existing_check} fragments (unchanged)", file=sys.stderr)
+                continue
+
             # Read and chunk based on file type
             try:
                 if file_path.suffix.lower() == ".pdf":
