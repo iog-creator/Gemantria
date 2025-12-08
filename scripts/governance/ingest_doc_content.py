@@ -294,15 +294,16 @@ def ingest_doc_content(
                 fragments_written += len(fragments)
                 continue
 
-            # Delete existing fragments for this (doc_id, version_id)
+            # Delete ALL existing fragments for this doc_id (not just current version)
+            # This prevents fragment accumulation across version changes
             conn.execute(
                 text(
                     """
                     DELETE FROM control.doc_fragment
-                    WHERE doc_id = :doc_id AND version_id = :version_id
+                    WHERE doc_id = :doc_id
                     """
                 ),
-                {"doc_id": doc_id, "version_id": version_id},
+                {"doc_id": doc_id},
             )
 
             # Insert new fragments
