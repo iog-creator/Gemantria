@@ -19,16 +19,30 @@ a read-only kernel consumer that normalizes kernel surfaces for Console v2 and f
 - Tools correspond 1:1 with entries in `docs/SSOT/oa/OA_TOOLS_REGISTRY.md`
 - **No DSPy imports** — pure Python for decoupling
 
-### dspy_signatures.py (Phase 28)
-- DSPy Signature classes for 4 reasoning programs
+### dspy_signatures.py (Phase 28B)
+- DSPy Signature classes for **8 reasoning programs**
 - Optional dspy import — falls back gracefully if not installed
 - `create_module(program_id)` factory for DSPy Modules
-- Training data: `examples/dspy/*.jsonl`
+- Training data: `examples/dspy/*.jsonl` (126 examples across 11 files)
 
-### reasoning_bridge.py (Phase 27.F + 28)
+**Reasoning Programs:**
+| Program | Purpose |
+|---------|---------|
+| SafeOPSDecision | Go/no-go for OPS work |
+| OPSBlockGenerator | Generate executable OPS blocks |
+| GuardFailureInterpreter | Diagnose + remediate guard failures |
+| PhaseTransitionValidator | Validate phase transitions |
+| HandoffIntegrityValidator | Validate handoff surface coherence |
+| OAToolUsagePrediction | Predict OA tool call sequences |
+| ShareDMSDriftDetector | Detect share/DMS registry drift |
+| MultiTurnKernelReasoning | Multi-step reasoning with traces |
+
+### reasoning_bridge.py (Phase 27.F + 28B)
 - Types: `ReasoningEnvelope`, `ReasoningResult`, `KernelStateRef`
 - `build_envelope()` — creates immutable input for DSPy programs
 - `run_reasoning_program()` — executes DSPy signature with envelope
+- **All 8 programs fully wired** with proper input mapping
+
 
 ## OA Tools Interface
 
