@@ -32,10 +32,14 @@ make reality.green
 ### Step 4: Query DMS Before File Search (Rule 051/053/069)
 Before searching files with grep/find, FIRST query the DMS:
 ```bash
-pmagent kb registry --filter "<pattern>"
-# Examples:
-pmagent kb registry --filter "phase27"  # Find phase 27 docs
-pmagent kb registry --filter "dspy"     # Find DSPy-related docs
+# List all registered KB docs
+pmagent kb registry list
+
+# Filter by tag (e.g., dspy, governance, phase27)
+pmagent kb registry by-tag --tag "dspy"
+
+# Filter by subsystem (e.g., oa, pmagent, kernel)
+pmagent kb registry by-subsystem --subsystem "oa"
 ```
 The DMS (Document Management System) knows what docs exist and their importance.
 

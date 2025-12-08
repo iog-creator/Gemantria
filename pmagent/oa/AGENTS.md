@@ -19,6 +19,17 @@ a read-only kernel consumer that normalizes kernel surfaces for Console v2 and f
 - Tools correspond 1:1 with entries in `docs/SSOT/oa/OA_TOOLS_REGISTRY.md`
 - **No DSPy imports** — pure Python for decoupling
 
+### dspy_signatures.py (Phase 28)
+- DSPy Signature classes for 4 reasoning programs
+- Optional dspy import — falls back gracefully if not installed
+- `create_module(program_id)` factory for DSPy Modules
+- Training data: `examples/dspy/*.jsonl`
+
+### reasoning_bridge.py (Phase 27.F + 28)
+- Types: `ReasoningEnvelope`, `ReasoningResult`, `KernelStateRef`
+- `build_envelope()` — creates immutable input for DSPy programs
+- `run_reasoning_program()` — executes DSPy signature with envelope
+
 ## OA Tools Interface
 
 | Tool ID | Function | Purpose |

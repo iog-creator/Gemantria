@@ -150,19 +150,114 @@ def build_envelope(
 
 def run_reasoning_program(envelope: ReasoningEnvelope) -> ReasoningResult:
     """
-    Execute a reasoning program (STUB).
+    Execute a reasoning program.
 
-    In Phase 27.F, this is a placeholder. DSPy integration happens in Phase 28.
+    Uses DSPy if available, otherwise returns BLOCKED status.
+
+    Args:
+        envelope: The reasoning envelope with program_id, goal, kernel state.
 
     Returns:
-        ReasoningResult with status='BLOCKED' indicating not implemented.
+        ReasoningResult with decision and rationale.
     """
-    return {
-        "envelope_id": envelope["envelope_id"],
-        "program_id": envelope["program_id"],
-        "status": "BLOCKED",
-        "decision": {},
-        "rationale": "DSPy integration not implemented (Phase 27.F scaffolding only).",
-        "tool_calls": [],
-        "diagnostics": [],
-    }
+    import json
+
+    # Try to import DSPy signatures
+    try:
+        from pmagent.oa.dspy_signatures import create_module, is_dspy_available
+
+        if not is_dspy_available():
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": envelope["program_id"],
+                "status": "BLOCKED",
+                "decision": {},
+                "rationale": "DSPy not installed. Install with: pip install dspy-ai",
+                "tool_calls": [],
+                "diagnostics": [
+                    {
+                        "category": "dependency",
+                        "severity": "error",
+                        "message": "dspy-ai package not found",
+                        "details": None,
+                    }
+                ],
+            }
+
+        # Create module and run
+        module = create_module(envelope["program_id"])
+        if module is None:
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": envelope["program_id"],
+                "status": "FAILED",
+                "decision": {},
+                "rationale": "Failed to create DSPy module",
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        # Prepare inputs based on program type
+        kernel_json = json.dumps(envelope["kernel_state_ref"])
+        context_json = json.dumps(envelope["oa_context"])
+
+        program_id = envelope["program_id"]
+
+        if program_id == "SafeOPSDecision":
+            result = module(
+                kernel_state=kernel_json,
+                proposed_ops=envelope["goal"],
+                oa_context=context_json,
+            )
+            return {
+                "envelope_id": envelope["envelope_id"],
+                "program_id": program_id,
+                "status": "OK",
+                "decision": {
+                    "allowed": result.decision == "ALLOW",
+                    "required_guards": getattr(result, "required_guards", []),
+                    "risk_factors": getattr(result, "risk_factors", []),
+                },
+                "rationale": getattr(result, "rationale", ""),
+                "tool_calls": [],
+                "diagnostics": [],
+            }
+
+        # For other programs, return placeholder
+        return {
+            "envelope_id": envelope["envelope_id"],
+            "program_id": program_id,
+            "status": "DEGRADED",
+            "decision": {},
+            "rationale": f"Program {program_id} not yet fully wired.",
+            "tool_calls": [],
+            "diagnostics": [],
+        }
+
+    except ImportError:
+        return {
+            "envelope_id": envelope["envelope_id"],
+            "program_id": envelope["program_id"],
+            "status": "BLOCKED",
+            "decision": {},
+            "rationale": "DSPy signatures module not found.",
+            "tool_calls": [],
+            "diagnostics": [],
+        }
+    except Exception as e:
+        return {
+            "envelope_id": envelope["envelope_id"],
+            "program_id": envelope["program_id"],
+            "status": "FAILED",
+            "decision": {},
+            "rationale": f"Reasoning program failed: {e}",
+            "tool_calls": [],
+            "diagnostics": [
+                {
+                    "category": "runtime",
+                    "severity": "error",
+                    "message": str(e),
+                    "details": None,
+                }
+            ],
+        }
