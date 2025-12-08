@@ -1,12 +1,12 @@
 {
-  "branch": "feat/phase27l-agents-dms-contract",
+  "branch": "main",
   "core_governance": {
     "cursor_behavior_patch": "docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md",
     "execution_contract": "docs/SSOT/EXECUTION_CONTRACT.md",
     "pm_contract": "docs/SSOT/PM_CONTRACT.md"
   },
   "description": "Minimal PM bootstrap index for new chats. All paths are repo-relative. Phases are auto-discovered.",
-  "generated_at_utc": "2025-12-08T17:11:28.500544+00:00",
+  "generated_at_utc": "2025-12-08T22:59:43.180579+00:00",
   "gotchas": {
     "index": "docs/SSOT/GOTCHAS_INDEX.md",
     "share_folder": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
@@ -123,6 +123,9 @@
       "27cconsolekernelpanel": "docs/SSOT/PHASE27_C_CONSOLE_KERNEL_PANEL.md",
       "27ddspyreasoningoutline": "docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md",
       "27index": "docs/SSOT/PHASE27_INDEX.md"
+    },
+    "28": {
+      "28handoffsummary": "docs/SSOT/PHASE28_HANDOFF_SUMMARY.md"
     },
     "5": {
       "plan": "docs/SSOT/PHASE_5_PLAN.md"
