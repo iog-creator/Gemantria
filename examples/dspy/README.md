@@ -4,7 +4,10 @@ This directory contains synthetic training examples for DSPy programs that will 
 
 ## Structure
 
-- `dspy_synthetic_examples.json` — Envelope/Result pairs for all reasoning programs
+- `dspy_synthetic_examples.jsonl` — 6 envelope/result pairs (original SafeOPSDecision examples)
+- `dspy_synthetic_examples_2.jsonl` — 40 envelope/result pairs (all 4 program types)
+
+**Format**: JSONL (one JSON object per line), compatible with DSPy's data loading.
 
 ## Reasoning Programs
 
