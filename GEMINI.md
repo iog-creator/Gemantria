@@ -2,6 +2,57 @@
 
 This document provides a map of the Gemantria Agent Framework, synthesized from `AGENTS.md` and the project's governance rules. It serves as the primary integration point for Gemini agents to understand their role, constraints, and workflows within the Gemantria project.
 
+---
+
+## ⚠️ MANDATORY CONVERSATION BOOT SEQUENCE (Rule 080)
+
+**YOU MUST EXECUTE THIS SEQUENCE AT THE START OF EVERY CONVERSATION BEFORE ANY OTHER WORK.**
+
+Failure to follow this sequence has caused repeated governance violations and system fragility. This is non-negotiable.
+
+### Step 1: Kernel Health Check
+```bash
+make ops.kernel.check
+```
+**If this fails**: STOP. Enter NO-OP mode. Report failure to user.
+
+### Step 2: Check System Mode
+```bash
+cat share/handoff/PM_KERNEL.json | jq '{mode, current_phase, branch}'
+```
+- If `mode == "DEGRADED"`: Only PM-approved remediation work allowed
+- If `mode == "NORMAL"`: Proceed to Step 3
+
+### Step 3: Verify Reality Green
+```bash
+make reality.green
+```
+**If any checks fail**: Report failures before proceeding. Do NOT assume passes.
+
+### Step 4: Query DMS Before File Search (Rule 051/053)
+Before searching files with grep/find, FIRST query the DMS:
+```bash
+pmagent kb search "<your query>"
+# or
+pmagent kb registry --filter "<pattern>"
+```
+The DMS (Document Management System) knows what docs exist and their importance.
+
+### Step 5: Check Local AGENTS.md
+If working in a specific directory, read its `AGENTS.md` first:
+```bash
+cat <working_directory>/AGENTS.md
+```
+
+### Boot Confirmation
+After completing steps 1-3, state in your response:
+> **Boot complete**: Kernel mode=`<mode>`, phase=`<phase>`, reality.green=`<pass/fail count>`
+
+---
+
+> [!CAUTION]
+> **You do NOT have persistent codebase embeddings.** You must actively read docs and query DMS each session. Do not assume knowledge from previous conversations carries over.
+
 ## Core Mission & Priorities
 
 (Source: `AGENTS.md`)
