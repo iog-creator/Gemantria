@@ -1,239 +1,160 @@
-# ⚠️ GEMANTRIA — KERNEL-GOVERNED REPOSITORY ⚠️
-
-**This is NOT a normal Python project.**
-
-Before doing ANY work (manual or via AI agents), you MUST:
-
-1. Read [`docs/SSOT/EXECUTION_CONTRACT.md`](docs/SSOT/EXECUTION_CONTRACT.md) (execution rules)
-2. Run `make ops.kernel.check` and ensure it succeeds
-3. If the kernel reports `mode = DEGRADED`, only perform PM-approved remediation work
-4. Treat `share/handoff/PM_KERNEL.json` and `share/PM_BOOTSTRAP_STATE.json` as the source of truth for phase, branch, and system mode
-
-Failure to follow these steps will break governance. See [`START_HERE.md`](START_HERE.md) for the complete boot guide.
-
----
-
 # Gemantria
 
 <div align="left">
   <img alt="xref coverage" src="share/eval/badges/xrefs_coverage.svg" />
   <img alt="xref rate" src="share/eval/badges/xrefs_rate.svg" />
-  <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" />
-<img alt="RFC3339" src="share/eval/badges/rfc3339.svg" />
+  <img alt="RFC3339" src="share/eval/badges/rfc3339.svg" />
+
 [![Tagproof](https://github.com/iog-creator/Gemantria/actions/workflows/tagproof.yml/badge.svg)](../../actions/workflows/tagproof.yml)
-
-#### Operator Status
-
-| Check | Status | Evidence |
-|---|---|---|
-| Exports JSON | <img alt="Exports JSON" src="share/eval/badges/exports_json.svg" /> | [verdict JSON](evidence/exports_guard.verdict.json) · [rendered MD](evidence/exports_guard.verdict.md) |
-| RFC3339 Timestamps | <img alt="RFC3339" src="share/eval/badges/rfc3339.svg" /> | [verdict JSON](evidence/exports_rfc3339.verdict.json) · [rendered MD](evidence/exports_rfc3339.verdict.md) |
-| PR Checks (guard-tests) | **Advisory** (branch protection off) | [.github/workflows/guard-tests.yml](.github/workflows/guard-tests.yml) |
-
-**Visual Atlas:** see [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (clickable nodes → human summaries)
-
-**Telemetry Dashboard:** [Atlas Dashboard](docs/atlas/index.html) · [Now](docs/atlas/execution_live.mmd) · [Historical](docs/atlas/pipeline_flow_historical.mmd)
-
-- Atlas evidence pages live under `docs/evidence/`.
-- The Atlas Mermaid generator writes `.mmd` files to `docs/atlas/` (flows, deps, KPIs).
-
-### Project Status (evidence-driven)
-
-> **PR** = proposal to merge change · **Tag** = frozen proof snapshot · **Badge** = visual pass/fail marker
-
-> Open the visual map: [`docs/atlas/status.mmd`](docs/atlas/status.mmd) (Mermaid) · [HTML preview](docs/atlas/status.html) · [Text view](docs/atlas/status.txt)
-
 </div>
 
-This repository contains the planning scaffolding, lightweight gematria helpers, and hello-graph flow that anchor the larger rebuild effort.
+**AI-powered Hebrew gematria analysis and biblical text exploration.**
 
-> Governance fast-lane: All exports stamp `generated_at` as RFC3339 and set `metadata.source="fallback_fast_lane"`. Run guards in HINT-only mode (`STRICT_RFC3339=0`) on main/PRs and STRICT (`STRICT_RFC3339=1`) on release builds. Always run `make housekeeping` after docs or script changes so the contract stays enforced.
+---
 
-### Always-Apply Triad (Governance)
+## ⚠️ Kernel-Governed Repository
 
-The following rules are **Always-Apply** in this repo and must be referenced in the governance docs and enforced by guards:
+**This is NOT a normal Python project.** Before doing any work:
 
-- **Rule-050** — LOUD FAIL (activation + SSOT gates)
-- **Rule-051** — Required-checks/CI gating posture
-- **Rule-052** — Tool-priority (local+gh → codex → gemini/mcp)
+1. Run `make ops.kernel.check` — must succeed
+2. Run `make reality.green` — 18/18 checks must pass
+3. Read [`START_HERE.md`](START_HERE.md) for the complete boot guide
 
-These three rules are treated as the **050/051/052 triad** and are mirrored in DB/file guards.
+If the kernel reports `mode = DEGRADED`, only perform PM-approved remediation work.
 
-### DSN Centralization Policy
+---
 
-All database connection strings (DSNs) must be accessed through centralized loaders:
+## Overview
 
-- **Preferred (new code)**: `scripts.config.env` — returns `None` if not found (graceful)
-  ```python
-  from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn
-  ```
-- **Legacy (existing code)**: `src.gemantria.dsn` — raises `RuntimeError` if not found (strict)
-  ```python
-  from gemantria.dsn import dsn_rw, dsn_ro, dsn_atlas
-  ```
+Gemantria builds a deterministic LangGraph pipeline that produces verified gematria data and visualization-ready artifacts for biblical text analysis.
 
-**Never** use `os.getenv("GEMATRIA_DSN")` directly — enforced by `guard.dsn.centralized`.
+### Core Capabilities
 
-**RO-DSN Peer Equivalence**: `GEMATRIA_RO_DSN` and `ATLAS_DSN_RO` are equal primaries for tag builds (not fallback). Both are checked first in centralized loaders. Fail-closed on tags if neither peer RO DSN is present.
+- **Noun Extraction** — Extract Hebrew nouns from Bible database
+- **AI Enrichment** — Generate theological insights using Granite/Qwen models
+- **Network Building** — Create semantic embeddings and relationships
+- **Graph Analysis** — Community detection and centrality measures
+- **DSPy Reasoning** — 8 specialized reasoning programs for intelligent decisions
 
-See `RULES_INDEX.md` §DSN Policy and `AGENTS.md` §Environment for full details.
+### Current Phase: 28B
 
-## Local development
-1. Create and activate a virtual environment (for example `.venv`).
-2. Install dependencies: `pip install -r requirements.txt`.
-3. Run the lints and tests:
-   - `make lint`
-   - `make type`
-   - `make test.unit`
-   - `make coverage.report`
+- ✅ Phase 28B: 8 DSPy reasoning programs wired with 126 training examples
+- ✅ Phase 27: DMS-exclusive governance, OA runtime, kernel interpreter
+- ✅ Phase 26: Kernel enforcement and boot mandates
+- ✅ Phase 24-25: Backup system, handoff protocol, share sync
 
-## Canonical Smoke Targets (Hermetic Validation)
+---
 
-The following smoke targets provide hermetic validation (work without DB/services):
+## Quick Start
 
 ```bash
-# Book processing smoke (validates book processing pipeline)
-make book.smoke
+# 1. Activate virtual environment
+python -m venv .venv && source .venv/bin/activate
 
-# CI exports smoke (validates export readiness)
-make ci.exports.smoke
+# 2. Install dependencies
+pip install -r requirements.txt
 
-# Graph calibration smoke (validates graph analysis)
-make eval.graph.calibrate.adv
+# 3. Verify system health
+make ops.kernel.check
+make reality.green
 ```
 
-These are the **canonical smoke targets** referenced in OPS Contract (Rule-050) and CI workflows. They run in HINT-only mode on main/PRs and STRICT mode on release tags.
+---
 
-## Quick Start (5 minutes, hermetic)
+## Key Commands
 
-Use the reuse-first CLI wrapper (no new logic):
-
-```
-python3 scripts/cli/gemantria_cli.py quickstart
-# or simply:
-make cli.quickstart
-```
-
-Key knobs (already in your env): `EDGE_STRONG`, `EDGE_WEAK`, `CANDIDATE_POLICY`, `PIPELINE_SEED`.
-
-## Integrated Pipeline
-
-The system now features a fully integrated pipeline that coordinates all components from data extraction through analysis and visualization.
-
-### Complete Workflow
+### Governance
 ```bash
-# Run the full integrated pipeline
-make orchestrator.full BOOK=Genesis
-
-# Or run components individually:
-make orchestrator.pipeline BOOK=Genesis    # Main pipeline
-make orchestrator.analysis OPERATION=all   # Analysis suite
-make schema.validate                      # Schema validation
+make ops.kernel.check      # Kernel health check (mandatory)
+make reality.green         # Full system truth gate (18 checks)
+make housekeeping          # DMS sync, embeddings, cleanup
+make backup.surfaces       # Create backup before destructive ops
 ```
 
-### Pipeline Components
-1. **Noun Extraction** - Extract Hebrew nouns from Bible database
-2. **AI Enrichment** - Generate theological insights using Qwen models
-3. **Network Building** - Create semantic embeddings and relationships
-4. **Schema Validation** - Ensure data integrity with JSON schemas
-5. **Graph Analysis** - Community detection and centrality measures
-6. **Data Export** - Generate visualization-ready JSON and statistics
-
-### Book Processing
+### Development
 ```bash
-# Process entire books with orchestration
-make book.plan                             # Plan processing
-make book.dry                             # Dry run (validate services)
-make book.go                              # Execute full processing
-make book.stop N=5                        # Stop-loss after N chapters
-make book.resume                          # Resume interrupted processing
+make lint                  # Ruff format + check
+make test.unit             # Run unit tests
+make book.smoke            # Book processing smoke test
 ```
+
+### Pipeline
+```bash
+make orchestrator.full BOOK=Genesis    # Full integrated pipeline
+make analyze.export                    # Generate analysis exports
+make schema.validate                   # Validate JSON schemas
+```
+
+---
+
+## Project Structure
+
+```
+├── pmagent/             # Control plane (kernel, DMS, OA)
+│   ├── oa/              # Orchestrator Assistant (DSPy reasoning)
+│   ├── hints/           # Hint registry
+│   └── kernel/          # Kernel interpreter
+├── src/                 # Core gematria and graph modules
+├── scripts/             # Governance, guards, utilities
+├── share/               # Materialized surfaces (SSOT exports)
+├── docs/                # SSOT, ADRs, analysis
+└── examples/dspy/       # DSPy training data (126 examples)
+```
+
+---
+
+## DSPy Reasoning Programs
+
+| Program | Purpose |
+|---------|---------|
+| SafeOPSDecision | Decide if proposed OPS work is safe |
+| OPSBlockGenerator | Generate OPS blocks from PM goals |
+| GuardFailureInterpreter | Interpret guard failures |
+| PhaseTransitionValidator | Validate phase transitions |
+| HandoffIntegrityValidator | Validate handoff integrity |
+| OAToolUsagePrediction | Predict optimal tool usage |
+| ShareDMSDriftDetector | Detect share/DMS drift |
+| MultiTurnKernelReasoning | Multi-turn kernel reasoning |
+
+Training data: `examples/dspy/*.jsonl` (126 examples total)
+
+---
+
+## Governance Rules
+
+- **Rule 050** — OPS Contract (LOUD FAIL gates)
+- **Rule 051** — CI gating posture
+- **Rule 052** — Tool priority (local → codex → gemini)
+- **Rule 070** — Gotchas Check (pre/post work)
+- **Rule 071** — Artifact/walkthrough protocol
+
+See [`RULES_INDEX.md`](RULES_INDEX.md) for full rules.
+
+---
+
+## DSN Centralization
+
+All database connections via centralized loaders:
+
+```python
+from scripts.config.env import get_rw_dsn, get_ro_dsn, get_bible_db_dsn
+```
+
+Never use `os.getenv("GEMATRIA_DSN")` directly.
+
+---
 
 ## Documentation
 
-- **System Prompt (SSOT)**: see [`docs/SSOT/GPT_SYSTEM_PROMPT.md`](docs/SSOT/GPT_SYSTEM_PROMPT.md)  
-  (Defines how GPT (PM) provides instructions to Cursor (executor) for the human operator. Includes a copy-paste code box for Cursor and tutor notes for operators.)
+- [START_HERE.md](START_HERE.md) — Agent/human boot guide
+- [AGENTS.md](AGENTS.md) — Agent framework index
+- [RULES_INDEX.md](RULES_INDEX.md) — Governance rules
+- [docs/SSOT/EXECUTION_CONTRACT.md](docs/SSOT/EXECUTION_CONTRACT.md) — Execution rules
+- [docs/SSOT/MASTER_PLAN.md](docs/SSOT/MASTER_PLAN.md) — Project roadmap
 
-## Project structure
-- `docs/`: ADRs and the SSOT master plan that describe the rebuild objectives.
-- `schemas/`: JSON schema placeholders for contract validation.
-- `src/`: Minimal core, graph, and infrastructure modules that drive the hello-graph runner.
-- `tests/`: Focused unit tests with a mini coverage plug-in enforcing the 98% threshold.
+---
 
-## Quality & Trends
+## License
 
-Local smoke artifacts (run via the eval tools) can render quality trends:
+Private repository — IOG Creator
 
-![Quality Trend](share/eval/badges/quality_trend.svg)
-![Current Quality](share/eval/badges/quality.svg)
-
-### XRef Coverage & Rate (HINT-only)
-
-The operator dashboard includes lightweight badges derived from the published xref index:
-
-![XRef Coverage](share/eval/badges/xrefs_coverage.svg)
-![XRef Rate](share/eval/badges/xrefs_rate.svg)
-
-> Generated from `ui/public/xrefs/xrefs_index.v1.json` during `make eval.package`. In main/PR contexts these run in **HINT-only** mode; they do not affect the SSOT/guards.
-
-> **CI behavior:** On PRs, the xref badge guard is path-aware and skips unless `ui/**` or the guard/badge scripts change. On tags, it runs in STRICT mode (release `v*` requires the index).
-
-> In CI these are uploaded as artifacts; `share/**` remains read-only during CI.
-
-## Required Checks
-
-Main branch requires these checks to pass before merging:
-
-![Ruff Format & Lint](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/enforce-ruff.yml?label=ruff&branch=main)
-![CI Build](https://img.shields.io/github/actions/workflow/status/mccoy/Gemantria.v2/ci.yml?label=ci&branch=main)
-
-> Branch protection requires: `ruff` (formatting + linting) and `build` (CI pipeline)
-
-## Pushing changes
-A remote is not configured by default. Add the desired remote (for example, `git remote add origin <url>`) and push normally once credentials are available.
-
-## Developer Validation (Phase-9)
-
-Local-only helpers (CI no-ops):
-
-```bash
-make ingest.local.validate
-make ingest.local.validate.schema
-```
-
-See `docs/phase9/VALIDATION_README.md` for env knobs (SNAPSHOT_FILE, P9_SEED).
-
-- Snapshot prep guide: see `docs/phase9/SNAPSHOTS.md`.
-
-- Ingestion envelope fields (plan): see `docs/phase9/ENVELOPE_FIELDS.md`.
-
-- Phase-10 dashboard plan: see `docs/phase10/DASHBOARD_PLAN.md`.
-
-- UI Integration Spec: see `docs/phase10/UI_SPEC.md`.
-
-## 🔗 Correlation UI (Phase-10)
-
-**Purpose**
-Displays cross-text pattern analytics and edge strength distributions for graph validation (see `MASTER_PLAN.md`, Phase-10).
-
-**Usage**
-```bash
-export BOOK=Genesis
-make orchestrator.full BOOK="$BOOK"
-make analyze.export
-make ui.mirror.correlation
-make ui.smoke.correlation
-make ui.build
-```
-
-**Governance References**
-
-- AGENTS.md §4.1 (UI Agents: Cursor/Frontend)
-- RULES_INDEX.md Rule-050 (OPS Contract), Rule-051 (Response Format), Rule-052 (Tool Priority)
-- MASTER_PLAN.md Phase-10 Correlation → Phase-11 Unified Envelope transition
-
-**Notes**
-
-- Shows edge class counts (strong/weak/very-weak) with configurable thresholds
-- Displays SSOT blend badge: `edge_strength = EDGE_ALPHA*cosine + (1-EDGE_ALPHA)*rerank_score`
-- Correlation UI available at `/correlation`.

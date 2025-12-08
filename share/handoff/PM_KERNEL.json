@@ -1,33 +1,40 @@
 {
-  "current_phase": "24",
-  "branch": "feat/phase27i-doc-hygiene-batch1",
-  "last_completed_phase": "23",
+  "current_phase": "28",
+  "branch": "main",
+  "last_completed_phase": "28B",
+  "mode": "NORMAL",
   "next_actions": [
-    "Run kernel check (make kernel.check)",
-    "Verify guard status (make reality.green)",
-    "Review Phase 24 objectives"
+    "Phase 28C: Install DSPy and configure LM provider",
+    "Test live reasoning with run_reasoning_program()",
+    "Generate more DSPy training examples for optimization"
   ],
   "ground_truth_files": [
-    "docs/SSOT/PHASE24_INDEX.md",
-    "docs/SSOT/PHASE25_INDEX.md",
-    "share/PHASE18_INDEX.md",
-    "share/PHASE20_INDEX.md",
-    "share/PHASE21_INDEX.md",
-    "share/PHASE22_INDEX.md",
-    "share/PHASE23_INDEX.md",
+    "docs/SSOT/MASTER_PLAN.md",
+    "docs/SSOT/EXECUTION_CONTRACT.md",
+    "docs/SSOT/PHASE28B_IMPLEMENTATION_EVIDENCE.md",
     "share/PM_BOOTSTRAP_STATE.json",
     "share/SSOT_SURFACE_V17.json",
-    "share/orchestrator/STATE.json",
-    "share/orchestrator_assistant/STATE.json"
+    "share/orchestrator_assistant/STATE.json",
+    "share/REALITY_GREEN_SUMMARY.json"
   ],
+  "phase_28b_summary": {
+    "dspy_programs": 8,
+    "training_examples": 126,
+    "unit_tests": 15,
+    "commits": [
+      "a7a63b7d",
+      "5218a82a",
+      "465a998f",
+      "9bcc3466"
+    ]
+  },
   "constraints": {
     "backup_required_before_destructive_ops": true,
     "enforced_checks": [
       "reality.green",
-      "stress.smoke",
-      "phase.done.check"
+      "ops.kernel.check"
     ]
   },
-  "generated_at_utc": "2025-12-07T17:50:51.450265+00:00",
-  "generator_version": "pmagent.handoff.kernel.v1"
+  "generated_at_utc": "2025-12-08T22:21:00.000000+00:00",
+  "generator_version": "pmagent.handoff.kernel.v2"
 }
