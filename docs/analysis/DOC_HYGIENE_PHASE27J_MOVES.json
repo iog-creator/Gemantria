@@ -1,0 +1,7 @@
+{
+  "moves": [],
+  "notes": {
+    "status": "historical-plan-only",
+    "comment": "Initial DMS cleanup plan included AGENTS.md, but this move was reverted. AGENTS.md is now core and must not be archived."
+  }
+}

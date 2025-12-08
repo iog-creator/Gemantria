@@ -4,7 +4,8 @@ import type {
     PhaseGovernanceData,
     DocsRegistryData,
     AgentStateData,
-    TileDataBundle
+    TileDataBundle,
+    OAStateData
 } from "./types";
 import type { ViewModel } from "../model/consoleConfig";
 
@@ -86,21 +87,42 @@ export async function loadAgentStateData(
     const orchestratorDecisionsPath = getPath(viewModel, "orchestrator_decisions");
     const oaDecisionsPath = getPath(viewModel, "oa_decisions");
 
-    const [orchestratorState, oaState, orchestratorDecisions, oaDecisions] =
+    // OA workspace surfaces (Phase 27.C)
+    const oaPromptsPath = getPath(viewModel, "oa_prompts");
+
+    const [orchestratorState, oaState, orchestratorDecisions, oaDecisions, oaPromptsText] =
         await Promise.all([
             orchestratorStatePath ? loadJson(orchestratorStatePath) : Promise.resolve(undefined),
             oaStatePath ? loadJson(oaStatePath) : Promise.resolve(undefined),
             orchestratorDecisionsPath
                 ? loadJson(orchestratorDecisionsPath)
                 : Promise.resolve(undefined),
-            oaDecisionsPath ? loadJson(oaDecisionsPath) : Promise.resolve(undefined)
+            oaDecisionsPath ? loadJson(oaDecisionsPath) : Promise.resolve(undefined),
+            oaPromptsPath ? loadText(oaPromptsPath) : Promise.resolve(undefined)
         ]);
+
+    // Load additional OA workspace surfaces from well-known paths
+    const [researchIndex, notes] = await Promise.all([
+        loadText("share/orchestrator_assistant/RESEARCH_INDEX.md").catch(() => undefined),
+        loadText("share/orchestrator_assistant/NOTES.md").catch(() => undefined)
+    ]);
+
+    // Parse decision log entries
+    const decisionLogEntries = Array.isArray((oaDecisions as { decisions?: unknown[] })?.decisions)
+        ? (oaDecisions as { decisions: unknown[] }).decisions
+        : [];
 
     return {
         orchestrator_state: orchestratorState,
-        oa_state: oaState,
+        oa_state: oaState as OAStateData | undefined,
         orchestrator_decisions: orchestratorDecisions,
-        oa_decisions: oaDecisions
+        oa_decisions: oaDecisions,
+        oa_workspace: {
+            research_index: researchIndex,
+            active_prompts: oaPromptsText,
+            decision_log: decisionLogEntries,
+            notes: notes
+        }
     };
 }
 

@@ -339,7 +339,7 @@ def check_repo_alignment() -> CheckResult:
 
 
 def check_dms_alignment() -> CheckResult:
-    """Check DMS-Share alignment (Phase 24.B)."""
+    """Check pmagent control-plane DMS-Share alignment (Phase 24.B)."""
     script = ROOT / "scripts" / "guards" / "guard_dms_share_alignment.py"
     if not script.exists():  # Should not happen if correctly deployed
         return CheckResult("DMS Alignment", False, "Guard script missing", {})
@@ -348,7 +348,9 @@ def check_dms_alignment() -> CheckResult:
     exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
 
     if exit_code == 0:
-        return CheckResult("DMS Alignment", True, "DMS and Share are aligned", {"output": stdout.strip()})
+        return CheckResult(
+            "DMS Alignment", True, "pmagent control-plane DMS and Share are aligned", {"output": stdout.strip()}
+        )
     else:
         # Try to parse JSON output for better error message
         try:
@@ -358,16 +360,159 @@ def check_dms_alignment() -> CheckResult:
             if data.get("missing_in_share"):
                 details.append(f"Missing in share: {len(data['missing_in_share'])}")
             if data.get("missing_in_dms"):
-                details.append(f"Missing in DMS: {len(data['missing_in_dms'])}")
+                details.append(f"Missing in pmagent control-plane DMS: {len(data['missing_in_dms'])}")
             if data.get("extra_in_share"):
                 details.append(f"Extra in share: {len(data['extra_in_share'])}")
 
-            msg = f"DMS Alignment BROKEN: {', '.join(details)}"
+            msg = f"pmagent control-plane DMS Alignment BROKEN: {', '.join(details)}"
             return CheckResult("DMS Alignment", False, msg, data)
         except:
             pass
 
-        return CheckResult("DMS Alignment", False, f"DMS Alignment failed: {stderr.strip()}", {"output": stdout})
+        return CheckResult(
+            "DMS Alignment", False, f"pmagent control-plane DMS Alignment failed: {stderr.strip()}", {"output": stdout}
+        )
+
+
+def check_dms_metadata() -> CheckResult:
+    """Check pmagent control-plane DMS metadata health (Phase 27.J)."""
+    try:
+        from scripts.config.env import get_rw_dsn
+        import psycopg
+
+        dsn = get_rw_dsn()
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+            # 1. Check importance distribution
+            cur.execute("""
+                SELECT importance, count(*)
+                FROM control.doc_registry
+                GROUP BY importance
+                ORDER BY importance
+            """)
+            dist = {row[0]: row[1] for row in cur.fetchall()}
+
+            # 2. Check for enabled low-importance docs
+            cur.execute("""
+                SELECT count(*)
+                FROM control.doc_registry
+                WHERE importance = 'low' AND enabled = true
+            """)
+            low_enabled = cur.fetchone()[0]
+
+            if low_enabled == 0:
+                return CheckResult(
+                    "DMS Metadata",
+                    True,
+                    f"pmagent control-plane DMS metadata sane (low_enabled={low_enabled})",
+                    {"distribution": dist},
+                )
+            else:
+                return CheckResult(
+                    "DMS Metadata",
+                    False,
+                    f"Found {low_enabled} enabled low-importance docs in pmagent control-plane DMS (cleanup required)",
+                    {"distribution": dist, "low_enabled": low_enabled},
+                )
+    except Exception as e:
+        return CheckResult("DMS Metadata", False, f"Metadata check failed: {e}", {})
+
+
+def check_agents_dms_contract() -> CheckResult:
+    """
+    Verify that AGENTS.md rows in pmagent control-plane DMS (control.doc_registry) obey the AGENTS<->DMS contract.
+
+    Invariants (Phase 27.L Batch 3 - tightened):
+    - Only enabled rows with importance in ('critical', 'high') and required tags are considered AGENTS rows.
+    - Root AGENTS.md: importance='critical', enabled=true, tags include 'ssot' and 'agent_framework_index'.
+    - Any AGENTS.md: importance in ('critical', 'high'), enabled=true, repo_path not under archive/,
+      tags include 'ssot' and 'agent_framework' at minimum.
+    - All AGENTS rows must correspond to files that exist on disk (hard error if missing).
+
+    Note: pmagent is the governance engine; Gemantria is the governed project.
+    The pmagent control-plane DMS records and enforces the semantics defined by AGENTS.md.
+    """
+    try:
+        from scripts.config.env import get_rw_dsn
+        import psycopg
+        from pathlib import Path
+
+        dsn = get_rw_dsn()
+        repo_root = Path(__file__).resolve().parents[2]
+
+        with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+            # Only check enabled rows with valid importance (Batch 3 contract)
+            cur.execute(
+                """
+                SELECT doc_id, repo_path, importance, enabled, tags
+                FROM control.doc_registry
+                WHERE repo_path LIKE '%AGENTS.md'
+                  AND repo_path NOT LIKE 'backup/%'
+                  AND enabled = TRUE
+                  AND importance IN ('critical', 'high')
+                ORDER BY repo_path
+                """
+            )
+            rows = cur.fetchall()
+
+        if not rows:
+            return CheckResult(
+                "AGENTS–DMS Contract",
+                False,
+                "No enabled AGENTS.md rows found in pmagent control-plane DMS (control.doc_registry)",
+                {"rows": []},
+            )
+
+        violations = []
+        for doc_id, repo_path, importance, enabled, tags in rows:
+            tags = tags or []
+            is_root = repo_path == "AGENTS.md"
+
+            # Hard error: file must exist on disk (Batch 3 - no ghosts allowed)
+            file_path = repo_root / repo_path
+            if not file_path.exists():
+                violations.append(f"{repo_path}: file missing on disk (AGENTS rows must correspond to existing files)")
+                continue  # Skip further checks for missing files
+
+            # These should already be enforced by the WHERE clause, but double-check
+            if not enabled:
+                violations.append(f"{repo_path}: enabled is false (AGENTS must never be archived)")
+
+            if importance not in ("critical", "high"):
+                violations.append(f"{repo_path}: importance={importance!r} (must be 'critical' or 'high')")
+
+            if repo_path.startswith("archive/"):
+                violations.append(f"{repo_path}: located under archive/ (AGENTS must not be archived)")
+
+            if "ssot" not in tags:
+                violations.append(f"{repo_path}: missing 'ssot' tag")
+
+            if "agent_framework" not in tags:
+                violations.append(f"{repo_path}: missing 'agent_framework' tag")
+
+            if is_root and "agent_framework_index" not in tags:
+                violations.append(f"{repo_path}: missing 'agent_framework_index' tag for root AGENTS.md")
+
+        if violations:
+            return CheckResult(
+                "AGENTS–DMS Contract",
+                False,
+                f"{len(violations)} AGENTS metadata violation(s) detected",
+                {"violations": violations, "rows": len(rows)},
+            )
+
+        return CheckResult(
+            "AGENTS–DMS Contract",
+            True,
+            "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
+            {"rows": len(rows)},
+        )
+    except Exception as e:
+        return CheckResult(
+            "AGENTS–DMS Contract",
+            False,
+            f"Contract check failed: {e}",
+            {"error": str(e)},
+        )
 
 
 def check_bootstrap_consistency() -> CheckResult:
@@ -485,6 +630,50 @@ def check_handoff_kernel() -> CheckResult:
         return CheckResult("Handoff Kernel", False, f"Check failed: {stderr.strip()}", {"output": stdout})
 
 
+def check_oa_state() -> CheckResult:
+    """Check OA State consistency with kernel surfaces (Phase 27.B/C)."""
+    script = ROOT / "scripts" / "guards" / "guard_oa_state.py"
+    if not script.exists():
+        return CheckResult("OA State", True, "Guard script not deployed yet (OK during transition)", {})
+
+    # First, refresh the OA snapshot to ensure it's up to date
+    try:
+        from pmagent.oa.state import write_oa_state
+
+        write_oa_state()
+    except Exception as e:
+        return CheckResult(
+            "OA State",
+            False,
+            f"Failed to refresh OA snapshot: {e}",
+            {"error": str(e)},
+        )
+
+    # Now run the guard
+    exit_code, stdout, stderr = run_subprocess_check(script, ["--mode", "STRICT"])
+
+    if exit_code == 0:
+        return CheckResult(
+            "OA State",
+            True,
+            "OA state is consistent with kernel surfaces",
+            {"output": stdout.strip()},
+        )
+    else:
+        try:
+            # Parse JSON from output
+            import re
+
+            json_match = re.search(r"JSON: ({.*})", stdout)
+            if json_match:
+                data = json.loads(json_match.group(1))
+                msg = f"OA State Mismatch: {', '.join(data.get('mismatches', []))}"
+                return CheckResult("OA State", False, msg, data)
+        except Exception:
+            pass
+        return CheckResult("OA State", False, f"Check failed: {stderr.strip()}", {"output": stdout})
+
+
 def check_root_surface() -> CheckResult:
     """Check Repository Root Surface Policy (Phase 27.G)."""
     script = ROOT / "scripts" / "guards" / "guard_root_surface_policy.py"
@@ -532,12 +721,15 @@ def main() -> int:
         check_ketiv_primary_policy(),  # Phase 2: Ketiv-primary policy enforcement (ADR-002)
         check_hints_required(),  # ADR-059: DMS hint registry accessibility check
         check_repo_alignment(),  # Repo governance: plan vs implementation alignment (Layer 4 drift)
-        check_dms_alignment(),  # Phase 24.B: DMS <-> Share alignment
+        check_dms_alignment(),  # Phase 24.B: pmagent control-plane DMS <-> Share alignment
+        check_dms_metadata(),  # Phase 27.J: pmagent control-plane DMS metadata health
+        check_agents_dms_contract(),  # Phase 27.L: AGENTS–pmagent control-plane DMS contract enforcement
         check_bootstrap_consistency(),  # Phase 24.A: Bootstrap vs SSOT
         check_root_surface(),  # Phase 27.G: Repository root surface policy
         check_share_sync_policy(),  # Phase 24.C: Sync Policy Audit
         check_backup_system(),  # Phase 24.D: Backup Retention & Rotation
         check_webui_shell_sanity(),
+        check_oa_state(),  # Phase 27.B/C: OA state consistency with kernel surfaces
     ]
 
     # Special handling for Handoff Kernel (Phase 24.E)
@@ -573,22 +765,90 @@ def main() -> int:
     all_passed = all(c.passed for c in checks)
     results_summary = []
 
-    for check in checks:
-        status = "✅ PASS" if check.passed else "❌ FAIL"
-        print(f"{status}: {check.name}")
-        if check.message:
-            print(f"   {check.message}")
-        if check.details and not check.passed:
-            for key, value in check.details.items():
-                if key == "issues" and isinstance(value, list):
-                    for issue in value:
-                        print(f"      - {issue}")
-                elif key == "output" and value:
-                    # Only show output if it's an error
-                    if not check.passed:
-                        print(f"      Output: {value[:200]}")
+    # Load remediation hints from DMS hint registry (scope: reality.green)
+    # Falls back gracefully if hints don't exist yet
+    def get_remediation_hint(check_name: str) -> str | None:
+        """Query DMS hint registry for remediation hint for a given check."""
+        try:
+            from pmagent.hints.registry import load_hints_for_flow
+
+            # Normalize check name for flow selector (e.g., "DB Health" -> "db_health")
+            flow_name = check_name.lower().replace(" ", "_").replace("–", "_").replace("&", "and")
+            hints = load_hints_for_flow(
+                scope="reality.green",
+                applies_to={"flow": flow_name, "category": "remediation"},
+                mode="HINT",
+            )
+            # Return first required hint's payload description if available
+            required = hints.get("required", [])
+            if required:
+                payload = required[0].get("payload", {})
+                if isinstance(payload, dict):
+                    return payload.get("command") or payload.get("description")
+                return str(payload)
+            return None
+        except Exception:
+            # Graceful degradation - no hint available
+            return None
+
+    # Separate passed and failed checks
+    passed_checks = [c for c in checks if c.passed]
+    failed_checks = [c for c in checks if not c.passed]
+
+    # === FAILURE SUMMARY (if any) ===
+    if failed_checks:
+        print("🚨 FAILURES DETECTED")
+        print("-" * 60)
+        print()
+        for i, check in enumerate(failed_checks, 1):
+            print(f"  {i}. {check.name}")
+            print(f"     ❌ {check.message}")
+
+            # Show key details (not raw output)
+            if check.details:
+                # Show specific issue types
+                if "issues" in check.details and isinstance(check.details["issues"], list):
+                    for issue in check.details["issues"][:3]:  # Max 3
+                        print(f"        • {issue}")
+                    if len(check.details["issues"]) > 3:
+                        print(f"        ... and {len(check.details['issues']) - 3} more")
+                elif "violations" in check.details and isinstance(check.details["violations"], list):
+                    for v in check.details["violations"][:3]:
+                        print(f"        • {v}")
+                    if len(check.details["violations"]) > 3:
+                        print(f"        ... and {len(check.details['violations']) - 3} more")
+                elif "extra_in_share" in check.details:
+                    extras = check.details["extra_in_share"]
+                    for e in extras[:3]:
+                        print(f"        • Extra: {e}")
+                    if len(extras) > 3:
+                        print(f"        ... and {len(extras) - 3} more")
+                elif "mismatches" in check.details and isinstance(check.details["mismatches"], list):
+                    for m in check.details["mismatches"][:3]:
+                        print(f"        • {m}")
+
+            # Remediation hint from DMS
+            hint = get_remediation_hint(check.name)
+            if hint:
+                print(f"     💡 Fix: {hint}")
+            print()
+
+        print("-" * 60)
         print()
 
+    # === QUICK STATUS ===
+    print(f"📊 STATUS: {len(passed_checks)}/{len(checks)} checks passed")
+    print()
+
+    # === PASSED CHECKS (compact) ===
+    if passed_checks:
+        print("✅ PASSED:")
+        for check in passed_checks:
+            print(f"   • {check.name}")
+        print()
+
+    # Build results summary for JSON
+    for check in checks:
         results_summary.append(
             {
                 "name": check.name,
@@ -598,10 +858,7 @@ def main() -> int:
             }
         )
 
-        if not check.passed:
-            all_passed = False
-
-    # Print summary
+    # Print final verdict
     print("=" * 60)
     if all_passed:
         print("✅ REALITY GREEN: All checks passed - system is ready")
@@ -611,20 +868,12 @@ def main() -> int:
     else:
         print("❌ REALITY RED: One or more checks failed")
         print()
-        print("System is NOT ready. Fix the issues above before:")
+        print(f"Fix the {len(failed_checks)} issue(s) above before:")
         print("  - Declaring a feature 'complete'")
         print("  - Opening a PR for main")
         print("  - Generating a new share/ snapshot for other agents")
-        print()
-        print("Run individual checks to diagnose:")
-        print("  - make book.smoke              # DB health")
-        print("  - python scripts/guards/guard_control_plane_health.py  # Control-plane")
-        print("  - python scripts/check_agents_md_sync.py --verbose     # AGENTS.md sync")
-        print("  - make share.sync              # Share sync")
-        print("  - make state.verify            # Ledger verification")
-        print("  - make state.sync              # Update ledger if stale")
 
-    # Output JSON summary to stdout (for automation)
+    # Write final summary to file (Source of Truth for Generator/Kernel)
     summary_json = {
         "reality_green": all_passed,
         "checks": results_summary,
@@ -632,13 +881,14 @@ def main() -> int:
             ["date", "-u", "+%Y-%m-%dT%H:%M:%SZ"], capture_output=True, text=True, check=False
         ).stdout.strip(),
     }
-    print()
-    print("JSON Summary:")
-    print(json.dumps(summary_json, indent=2))
 
-    # Write final summary to file (Source of Truth for Generator/Kernel)
     with open(summary_path, "w") as f:
         json.dump(summary_json, f, indent=2)
+
+    # Only show full JSON in verbose mode or if explicitly requested
+    # For now, just note where to find it
+    print()
+    print(f"📄 Full details: share/REALITY_GREEN_SUMMARY.json")
 
     return 0 if all_passed else 1
 

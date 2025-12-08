@@ -9,7 +9,7 @@
 ## 1. Objective
 
 Remove legacy artifacts that:
-- Are not registered in the KB/DMS registry
+- Are not registered in the KB registry (built from pmagent control-plane DMS)
 - Are not referenced by SSOT documentation
 - Are not active code paths in the current system
 - Are not essential infrastructure or configuration
@@ -53,7 +53,7 @@ The following categories are explicitly preserved:
 
 #### 3.1.0 AGENTS Docs Are Always KEEP
 
-AGENTS.md variants that are registered in the KB/DMS registry with:
+AGENTS.md variants that are registered in the KB registry (built from pmagent control-plane DMS) with:
 - `is_ssot=true`, and
 - `enabled=true`
 
@@ -118,7 +118,7 @@ Any `*.md` file located under:
 - `docs/SSOT/`
 
 that:
-1. does **not** appear in the KB/DMS registry, **and**
+1. does **not** appear in the KB registry (built from pmagent control-plane DMS), **and**
 2. is **not referenced** by any KEEP file
 
 is classified as **MOVE** or **DELETE** by default.
@@ -170,7 +170,7 @@ After purge, if `enabled=true` docs lack embeddings:
 ### 4.3.1 Registry-Driven Embedding Source of Truth
 
 Embedding pipelines **MUST**:
-- Select documents exclusively via the KB/DMS registry
+- Select documents exclusively via the KB registry (built from pmagent control-plane DMS)
 - Never embed files discovered by filesystem globbing
 - Fail **loudly** if a file lacks a registry row
 
@@ -288,7 +288,7 @@ For each file in repo:
 #### Reconciliation Results (2025-12-04)
 
 **Analysis:**
-- Reviewed all KB/DMS registry entries against purge log
+- Reviewed all KB registry entries (built from pmagent control-plane DMS) against purge log
 - Checked 2,654 deleted files + 281 moved files
 - **Result:** ✅ Zero registry entries referenced purged files
 
@@ -298,7 +298,7 @@ For each file in repo:
 - Hint regenerations: 0 (not needed)
 
 **Conclusion:**
-All purged files were legacy artifacts outside the governance surface. The KB/DMS registry was already clean and required no reconciliation.
+All purged files were legacy artifacts outside the governance surface. The KB registry (built from pmagent control-plane DMS) was already clean and required no reconciliation.
 
 
 

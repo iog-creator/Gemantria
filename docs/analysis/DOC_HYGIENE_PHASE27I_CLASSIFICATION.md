@@ -1,0 +1,138 @@
+# Phase 27.I — Unified Doc Classification (DMS + SSOT)
+
+Derived from:
+- `DOC_HYGIENE_PHASE27I_DMS_EXPORT.json` (DMS registry)
+- `DOC_HYGIENE_PHASE27I_INVENTORY.json` (filesystem inventory)
+
+- Total classified docs: **447**
+
+## core-ssot  (count: 129)
+- `MASTER_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `RULES_INDEX.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/AGENTS.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/ATLAS_GOVERNANCE_SEARCH_PANEL.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/AUTOPILOT_ORCHESTRATOR_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/BIBLESCHOLAR_INTAKE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/COMMIT_PLAN_PHASE10_WIRING.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/CONSOLE_KERNEL_PANEL_SPEC.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/CURSOR_WORKFLOW_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DIRECTORY_DUPLICATION_MAP.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DMS_PERFORMANCE_OPTIMIZATION.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DMS_QUERY_PROTOCOL.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DM_002_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/DOC_REGISTRY_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/EPOCH_LEDGER.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/EXECUTION_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/FEATURE_REUNION_BACKLOG.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GEMATRIA_INTAKE_SCAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GEMATRIA_MASTER_REFERENCE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GITHUB_WORKFLOW_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GOTCHAS_INDEX.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GPT_REFERENCE_GUIDE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/GPT_SYSTEM_PROMPT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/HOUSEKEEPING_GPU_ACCELERATION.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/HOUSEKEEPING_PERFORMANCE_OPTIMIZATION.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LAYER3_DRIFT_RESCUE.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LAYERED_ARCHITECTURE_V1.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LAYERS_AND_PHASES.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LM_ROUTER_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/LM_WIDGETS.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/MASTER_PLAN.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/MERGE_DEBT_INVENTORY.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/NEXT_STEPS.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/ORCHESTRATOR_REALITY.md`  — role=ssot, is_ssot=None, enabled=True
+- `docs/SSOT/ORCHESTRATOR_SHELL_CONTRACT.md`  — role=ssot, is_ssot=None, enabled=True
+- … (79 more)
+
+## helpful  (count: 298)
+- `docs/ADRs/010-chapter-mode-extraction.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/029-remove-legacy-scripts.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/030-db-seeded-noun-source.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-000-langgraph.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-001-two-db.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-002-gematria-rules.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-003-batch-semantics.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-004-postgres-checkpointer.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-005-metrics-logging.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-006-observability-dashboards.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-008-confidence-validation.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-009-semantic-aggregation.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-010-qwen-integration.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-011-concept-network-verification.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-012-concept-network-dimension-fix.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-013-documentation-sync-enhancement.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-014-relations-and-pattern-discovery.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-015-jsonld-and-visualization.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-016-insight-metrics-and-ontology.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-017-agent-documentation-presence.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-018-pattern-correlation.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-019-forest-governance.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-020-ontology-forward-compatibility.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-021-metrics-contract-synchronization.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-022-cross-text-pattern-analysis.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-022-system-enforcement-bridge.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-023-visualization-api-and-dashboard.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-025-multi-temporal-analytics.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-026-reranker-bi-encoder-proxy.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-033-ai-nouns-ssot-contract.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-034-uuid-key-evolution.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-055-auto-docs-sync-ci.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-056-auto-housekeeping-ci.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-057-context-persistence-ci.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-058-gpt-system-prompt-governance.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-059-hint-registry.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-063-code-exec-ts.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/ADR-064-rfc3339-fast-lane.md`  — role=None, is_ssot=None, enabled=None
+- `docs/ADRs/AGENTS.md`  — role=agent_framework, is_ssot=None, enabled=True
+- `docs/AGENTS.md`  — role=agent_framework, is_ssot=None, enabled=True
+- `docs/AI_LEARNING_SYSTEM.md`  — role=None, is_ssot=None, enabled=None
+- `docs/AI_LEARNING_SYSTEM_AGENTS.md`  — role=agent_framework, is_ssot=None, enabled=True
+- `docs/ANALYSIS/AGENTS.md`  — role=agent_framework, is_ssot=None, enabled=True
+- `docs/ANALYSIS/rule-enforcement-gaps.md`  — role=None, is_ssot=None, enabled=None
+- `docs/BACKUP_STRATEGY_AUDIT.md`  — role=None, is_ssot=None, enabled=None
+- `docs/DECISION_LOG.md`  — role=None, is_ssot=None, enabled=None
+- `docs/FIGMA_MCP_SETUP.md`  — role=None, is_ssot=None, enabled=None
+- `docs/HANDOFF_2025-12-01_github_recovery.md`  — role=None, is_ssot=None, enabled=None
+- `docs/INDEX.md`  — role=None, is_ssot=None, enabled=None
+- `docs/INGEST_BIBLE_DB.md`  — role=None, is_ssot=None, enabled=None
+- … (248 more)
+
+## transitional  (count: 1)
+- `share/scripts_AGENTS.md`  — role=None, is_ssot=None, enabled=None
+
+## unknown  (count: 19)
+- `ADR-007-llm-integration.md`  — role=None, is_ssot=None, enabled=None
+- `ADR-032-bibledb-as-SSOT-roadmap.md`  — role=None, is_ssot=None, enabled=None
+- `ADR-065-postgres-ssot.md`  — role=None, is_ssot=None, enabled=None
+- `ADR-066-lm-studio-control-plane-integration.md`  — role=None, is_ssot=None, enabled=None
+- `AGENTS.md`  — role=agent_framework_index, is_ssot=None, enabled=True
+- `CHANGELOG.md`  — role=None, is_ssot=None, enabled=None
+- `CONTRIBUTING.md`  — role=None, is_ssot=None, enabled=None
+- `DATA_FLOW_DIAGRAM.md`  — role=None, is_ssot=None, enabled=None
+- `GEMINI.md`  — role=None, is_ssot=None, enabled=None
+- `GPT_SYSTEM_PROMPT.md`  — role=None, is_ssot=None, enabled=None
+- `MCP_BIBLESCHOLAR_REGISTRATION.md`  — role=None, is_ssot=None, enabled=None
+- `NEXT_STEPS.md`  — role=None, is_ssot=None, enabled=None
+- `Prompting Guide for Our Core LLM models.md`  — role=None, is_ssot=None, enabled=None
+- `README.md`  — role=None, is_ssot=None, enabled=None
+- `README_FULL.md`  — role=None, is_ssot=None, enabled=None
+- `RELEASES.md`  — role=None, is_ssot=None, enabled=None
+- `SCHEMA_INDEX.md`  — role=None, is_ssot=None, enabled=None
+- `START_HERE.md`  — role=None, is_ssot=None, enabled=None
+- `forest_overview.md`  — role=None, is_ssot=None, enabled=None
+

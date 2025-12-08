@@ -8,9 +8,50 @@
 
 > **Always-Apply Triad**: We operate under **Rule-050 (LOUD FAIL)**, **Rule-051 (CI gating)**, and **Rule-052 (tool-priority)**. The guards ensure this 050/051/052 triad is present in docs and mirrored in DB checks.
 
+## Doc Strategy & DMS Hierarchy (Gemantria-Specific)
+
+**Architecture Clarification:**
+
+pmagent is the governance and control-plane engine for the Gemantria project.
+All documentation lifecycle, classification, metadata, and structural enforcement
+are handled by pmagent's control-plane DMS (`control.doc_registry`).
+Gemantria is the domain project being governed, not the system performing
+the governance. AGENTS.md surfaces define the agent-facing worldview of both
+Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.
+
+In Gemantria, documentation and metadata are layered. The hierarchy for truth is:
+
+1. **Orchestrator (human)** — ultimate source of product and governance intent.
+
+2. **Contracts & SSOT docs** (`docs/SSOT/**`, PHASE index docs, OPS/PM contracts).
+
+3. **AGENTS surfaces** (`AGENTS.md` at root and subsystem levels) — canonical map of agents, tools, and doc surfaces.
+
+4. **pmagent control-plane DMS** (`control.doc_registry` in Postgres) — structured inventory and lifecycle metadata for docs (paths, importance, tags, owner_component, enabled/archived), which must reflect (not override) the above.
+
+5. **Filesystem layout** — implementation detail that must be kept in sync with the registry.
+
+**AGENTS.md is privileged:**
+
+- Root `AGENTS.md` is the **global agent registry** (`CANONICAL_GLOBAL`) and must never be archived or demoted.
+
+- Subsystem-level `AGENTS.md` files are local views that inherit from this global registry.
+
+- Any automated doc lifecycle (archive/cleanup/moves) must treat `AGENTS.md` as **core SSOT**, not as regular documentation.
+
+**pmagent control-plane DMS responsibilities:**
+
+- Tracks **which docs exist**, where they live (`repo_path`), their lifecycle (`enabled`, archive path), and their metadata (`importance`, `tags`, `owner_component`).
+
+- Must not propose or apply moves that contradict the AGENTS contract (e.g., archiving `AGENTS.md`).
+
+- Housekeeping scripts (`scripts/governance/ingest_docs_to_db.py` and related) populate the pmagent control-plane DMS with `importance`, `tags`, and `owner_component` but **never downgrade AGENTS docs**.
+
+In short: **AGENTS.md defines the world; the pmagent control-plane DMS records and enforces that definition.**
+
 ## Canonical Agents Table (Draft from KB Registry)
 
-The following table was generated from **share/AGENTS_REGISTRY_SNAPSHOT.json** to reflect the currently registered agents in the KB/DMS registry.
+The following table was generated from **share/AGENTS_REGISTRY_SNAPSHOT.json** to reflect the currently registered agents in the pmagent control-plane DMS.
 
 <!-- BEGIN: AUTO-GENERATED AGENTS TABLE -->
 | Agent ID | Path | Subsystem | Tags |
@@ -36,6 +77,10 @@ Build a deterministic, resumable LangGraph pipeline that produces verified gemat
 1) Correctness: **Code gematria > bible_db > LLM (LLM = metadata only)**.
 2) Determinism: content_hash identity; uuidv7 surrogate; fixed seeds; position_index.
 3) Safety: **bible_db is READ-ONLY**; parameterized SQL only; **fail-closed if <50 nouns** (ALLOW_PARTIAL=1 is explicit).
+- **pmagent control-plane DMS Lifecycle Policy**:
+    - **Exclusive SSOT**: `control.doc_registry` (pmagent control-plane DMS) is the ONLY authority for document existence and status.
+    - **Lifecycle**: `importance` and `enabled` columns determine if a doc is Core, Helpful, or Archived.
+    - **Pathing**: Filesystem locations must reflect pmagent control-plane DMS `repo_path`.
 
 ## pmagent Status
 
@@ -45,17 +90,17 @@ See `docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md` for reality.check implementation
 
 ## PM DMS Integration (Rule-053) ⭐ NEW
 
-**Phase 9.1**: PM must query **Postgres DMS (control plane)** BEFORE file searching.
+**Phase 9.1**: PM must query **pmagent control-plane DMS (Postgres `control.doc_registry`)** BEFORE file searching.
 
 **DMS-First Workflow**:
 1. **Documentation**: `pmagent kb registry by-subsystem --owning-subsystem=<project>`
 2. **Tool Catalog**: `SELECT * FROM control.mcp_tool_catalog WHERE tags @> '{<project>}'`
 3. **Project Status**: `pmagent status kb` and `pmagent plan kb list`
-4. **File Search** (LAST RESORT): Only if content not in DMS
+4. **File Search** (LAST RESORT): Only if content not in pmagent control-plane DMS
 
 **Feature Registration**:
 - After building new tool/module: Create MCP envelope → `make mcp.ingest` → Update KB registry
-- PM learns capabilities automatically through DMS registration
+- PM learns capabilities automatically through pmagent control-plane DMS registration
 - **Goal**: PM and project develop together
 
 See `.cursor/rules/053-pm-dms-integration.mdc` and `docs/SSOT/PM_CONTRACT.md` Section 2.6 for full workflow.

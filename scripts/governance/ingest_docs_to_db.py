@@ -1,25 +1,29 @@
 #!/usr/bin/env python
 
 """
-Ingest documentation metadata into the control-plane doc registry.
+Ingest documentation metadata into the pmagent control-plane DMS.
 
 Purpose
 -------
 Populate the following tables from canonical docs in the repo:
 
-- control.doc_registry
+- control.doc_registry (pmagent control-plane DMS)
 - control.doc_version
 
 The goals are:
 
-- Make Postgres the SSOT for doc metadata (paths, roles, hashes).
+- Populate the pmagent control-plane DMS as the structured SSOT for doc metadata (paths, roles, hashes).
 - Track versions by content hash and optional git commit.
 - Clearly distinguish SSOT docs (repo) from derived views (e.g. share/).
+- Populate governance metadata (importance, tags, owner_component).
 
 This script does NOT:
 
 - Modify share/ contents.
 - Store full file contents in the database.
+
+Note: pmagent is the governance engine; Gemantria is the governed project.
+The pmagent control-plane DMS records and enforces the semantics defined by AGENTS.md.
 """
 
 from __future__ import annotations
@@ -29,7 +33,7 @@ import hashlib
 import json
 import subprocess
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable, List
 
@@ -51,23 +55,53 @@ class DocTarget:
     role: str
     repo_path: Path
     is_ssot: bool
+    importance: str = "unknown"
+    tags: List[str] = field(default_factory=list)
+    owner_component: str | None = None
 
 
 CANONICAL_DOCS: List[DocTarget] = [
-    DocTarget(logical_name="AGENTS_ROOT", role="ssot", repo_path=REPO_ROOT / "AGENTS.md", is_ssot=True),
+    DocTarget(
+        logical_name="AGENTS_ROOT",
+        role="ssot",
+        repo_path=REPO_ROOT / "AGENTS.md",
+        is_ssot=True,
+        importance="critical",
+        tags=["ssot", "agent_framework", "agent_framework_index"],
+    ),
     DocTarget(
         logical_name="MASTER_PLAN",
         role="ssot",
         repo_path=REPO_ROOT / "MASTER_PLAN.md",
         is_ssot=True,
+        importance="critical",
+        tags=["ssot"],
     ),
     DocTarget(
         logical_name="RULES_INDEX",
         role="ssot",
         repo_path=REPO_ROOT / "RULES_INDEX.md",
         is_ssot=True,
+        importance="critical",
+        tags=["ssot"],
     ),
 ]
+
+
+def derive_owner_component(repo_path: Path) -> str:
+    """
+    Heuristic: owner_component is the top-level dir, or 'root' for root files.
+    """
+    try:
+        rel = repo_path.relative_to(REPO_ROOT)
+        path_str = str(rel)
+    except ValueError:
+        # Fallback if not relative to root (shouldn't happen given logic)
+        return "unknown"
+
+    if "/" not in path_str:
+        return "root"
+    return path_str.split("/", 1)[0]
 
 
 def iter_agents_docs() -> Iterable[DocTarget]:
@@ -96,10 +130,14 @@ def iter_agents_docs() -> Iterable[DocTarget]:
 
         logical_name: str
         role = "agent_framework"
+        importance = "high"
+        tags = ["ssot", "agent_framework"]
 
         if rel == Path("AGENTS.md"):
             logical_name = "AGENTS_ROOT"
             role = "agent_framework_index"
+            importance = "critical"
+            tags = ["ssot", "agent_framework", "agent_framework_index"]
         else:
             # Derive a stable logical name from the relative path.
             logical_name = f"AGENTS::{rel.as_posix()}"
@@ -109,6 +147,8 @@ def iter_agents_docs() -> Iterable[DocTarget]:
             role=role,
             repo_path=path,
             is_ssot=True,
+            importance=importance,
+            tags=tags,
         )
 
 
@@ -116,8 +156,8 @@ def iter_additional_docs() -> Iterable[DocTarget]:
     """
     Discover additional docs under docs/SSOT and docs/runbooks.
 
-    - docs/SSOT/** -> role="ssot"
-    - docs/runbooks/** -> role="runbook"
+    - docs/SSOT/** -> role="ssot", importance="critical"
+    - docs/runbooks/** -> role="runbook", importance="high"
     """
     ssot_root = REPO_ROOT / "docs" / "SSOT"
     if ssot_root.is_dir():
@@ -127,6 +167,8 @@ def iter_additional_docs() -> Iterable[DocTarget]:
                 role="ssot",
                 repo_path=path,
                 is_ssot=True,
+                importance="critical",
+                tags=["ssot"],
             )
 
     runbook_root = REPO_ROOT / "docs" / "runbooks"
@@ -137,6 +179,8 @@ def iter_additional_docs() -> Iterable[DocTarget]:
                 role="runbook",
                 repo_path=path,
                 is_ssot=True,
+                importance="high",
+                tags=["runbook"],
             )
 
 
@@ -179,6 +223,8 @@ def iter_pdf_docs() -> Iterable[DocTarget]:
             role=role,
             repo_path=path,
             is_ssot=True,
+            importance="medium",
+            tags=["documentation", "pdf"],
         )
 
 
@@ -224,12 +270,12 @@ def load_share_manifest_mapping() -> dict[str, str]:
 
 def ingest_docs(dry_run: bool = False) -> int:
     """
-    Ingest documentation metadata into control.doc_registry / control.doc_version.
+    Ingest documentation metadata into pmagent control-plane DMS (control.doc_registry / control.doc_version).
 
     Steps:
     1. Build the doc target list (canonical + discovered).
     2. Compute content hashes and sizes for existing files.
-    3. Upsert registry rows and insert version rows.
+    3. Upsert registry rows and insert version rows in the pmagent control-plane DMS.
     """
     targets: List[DocTarget] = list(CANONICAL_DOCS)
     # Phase-8: treat all AGENTS*.md docs as SSOT for the agent framework.
@@ -241,6 +287,9 @@ def ingest_docs(dry_run: bool = False) -> int:
     existing_targets: List[DocTarget] = []
     for t in targets:
         if t.repo_path.is_file():
+            # Apply owner_component heuristic if not explicitly set
+            if t.owner_component is None:
+                t.owner_component = derive_owner_component(t.repo_path)
             existing_targets.append(t)
         else:
             print(
@@ -262,7 +311,9 @@ def ingest_docs(dry_run: bool = False) -> int:
             repo_rel = str(target.repo_path.relative_to(REPO_ROOT))
             print(
                 f"[DRY-RUN] Would upsert doc logical_name={target.logical_name} "
-                f"role={target.role} path={repo_rel} hash={content_hash}",
+                f"role={target.role} path={repo_rel} hash={content_hash} "
+                f"importance={target.importance} tags={target.tags} "
+                f"owner_component={target.owner_component}",
                 file=sys.stderr,
             )
         return 0
@@ -287,20 +338,90 @@ def ingest_docs(dry_run: bool = False) -> int:
             # The ON CONFLICT clause will preserve existing non-NULL share_path values
             share_path_from_manifest = manifest_mapping.get(repo_rel)
 
-            # Upsert registry row with idempotent share_path handling:
-            # - On INSERT: use share_path from manifest (or NULL)
-            # - On CONFLICT: preserve existing share_path if not NULL, otherwise set from manifest
+            # Determine if this is an AGENTS doc
+            is_agents = target.logical_name.startswith("AGENTS") or repo_rel.endswith("AGENTS.md")
+
+            # For AGENTS docs, ensure minimum importance and required tags
+            if is_agents:
+                # Root AGENTS.md must be critical
+                if repo_rel == "AGENTS.md":
+                    target.importance = "critical"
+                    # Ensure required tags are present
+                    required_tags = {"ssot", "agent_framework", "agent_framework_index"}
+                    target.tags = list(set(target.tags) | required_tags)
+                else:
+                    # Other AGENTS.md must be at least high
+                    if target.importance not in ("critical", "high"):
+                        target.importance = "high"
+                    # Ensure required tags are present
+                    required_tags = {"ssot", "agent_framework"}
+                    target.tags = list(set(target.tags) | required_tags)
+
+            # Check existing row to apply hybrid update logic
+            existing_row = conn.execute(
+                text(
+                    """
+                    SELECT importance, tags
+                    FROM control.doc_registry
+                    WHERE logical_name = :logical_name
+                    """
+                ),
+                {"logical_name": target.logical_name},
+            ).fetchone()
+
+            # Compute final importance and tags based on hybrid logic
+            final_importance = target.importance
+            final_tags = target.tags
+
+            if existing_row:
+                existing_importance, existing_tags = existing_row
+                existing_tags = existing_tags or []
+
+                if is_agents:
+                    # AGENTS: upgrade upward, never downgrade
+                    importance_order = {"unknown": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+                    existing_level = importance_order.get(existing_importance, 0)
+                    new_level = importance_order.get(target.importance, 0)
+                    if new_level > existing_level:
+                        final_importance = target.importance
+                    else:
+                        final_importance = existing_importance
+
+                    # Merge tags: union of existing and new
+                    final_tags = list(set(existing_tags) | set(target.tags))
+                else:
+                    # Non-AGENTS: only update if unknown/empty (preserves manual overrides)
+                    if existing_importance == "unknown":
+                        final_importance = target.importance
+                    else:
+                        final_importance = existing_importance
+
+                    if not existing_tags:
+                        final_tags = target.tags
+                    else:
+                        final_tags = existing_tags
+
+            # Upsert registry row with computed final values
             row = conn.execute(
                 text(
                     """
-                    INSERT INTO control.doc_registry (logical_name, role, repo_path, share_path, is_ssot, enabled)
-                    VALUES (:logical_name, :role, :repo_path, :share_path, :is_ssot, TRUE)
+                    INSERT INTO control.doc_registry (
+                        logical_name, role, repo_path, share_path, is_ssot, enabled,
+                        importance, tags, owner_component
+                    )
+                    VALUES (
+                        :logical_name, :role, :repo_path, :share_path, :is_ssot, TRUE,
+                        :importance, :tags, :owner_component
+                    )
                     ON CONFLICT (logical_name) DO UPDATE SET
                         role = EXCLUDED.role,
                         repo_path = EXCLUDED.repo_path,
                         share_path = COALESCE(control.doc_registry.share_path, EXCLUDED.share_path),
                         is_ssot = EXCLUDED.is_ssot,
                         enabled = EXCLUDED.enabled,
+                        owner_component = EXCLUDED.owner_component,
+                        importance = EXCLUDED.importance,
+                        tags = EXCLUDED.tags,
                         updated_at = NOW()
                     RETURNING doc_id
                     """
@@ -311,6 +432,9 @@ def ingest_docs(dry_run: bool = False) -> int:
                     "repo_path": repo_rel,
                     "share_path": share_path_from_manifest,
                     "is_ssot": target.is_ssot,
+                    "importance": final_importance,
+                    "tags": final_tags,
+                    "owner_component": target.owner_component,
                 },
             ).one()
             doc_id = row[0]
@@ -336,7 +460,7 @@ def ingest_docs(dry_run: bool = False) -> int:
 
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Ingest documentation metadata into the control-plane doc registry.",
+        description="Ingest documentation metadata into the pmagent control-plane DMS.",
     )
     parser.add_argument(
         "--dry-run",

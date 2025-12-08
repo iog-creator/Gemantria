@@ -42,7 +42,7 @@ from scripts.config.env import get_retrieval_lane_models
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Batch size for embedding generation and DB inserts
-DEFAULT_EMBEDDING_BATCH_SIZE = 32  # Typical batch size for embedding models
+DEFAULT_EMBEDDING_BATCH_SIZE = 256  # Increased for better GPU throughput (16GB+ VRAM)
 DEFAULT_DB_BATCH_SIZE = 100  # Batch size for DB inserts
 
 
@@ -136,6 +136,7 @@ def embed_fragments(
     model_name: str,
     dry_run: bool = False,
     batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE,
+    show_progress: bool = True,
 ) -> List[dict]:
     """
     Generate embeddings for fragments in batches.
@@ -148,6 +149,8 @@ def embed_fragments(
 
     all_embeddings = []
     total = len(fragments)
+    start_time = time.time()
+    processed = 0
 
     # Process in batches for better performance and memory efficiency
     for batch_start in range(0, total, batch_size):
@@ -184,6 +187,20 @@ def embed_fragments(
             {"fragment_id": f["fragment_id"], "embedding": emb} for f, emb in zip(batch_fragments, batch_embeddings)
         ]
         all_embeddings.extend(batch_results)
+        processed = batch_end
+
+        # Progress output
+        if (show_progress and processed % 100 == 0) or batch_end == total:
+            elapsed = time.time() - start_time
+            rate = processed / elapsed if elapsed > 0 else 0
+            remaining = total - processed
+            eta = remaining / rate if rate > 0 else 0
+            pct = (processed / total) * 100
+            print(
+                f"[PROGRESS] {processed:,}/{total:,} ({pct:.1f}%) | Rate: {rate:.1f}/s | ETA: {eta / 60:.1f}m",
+                file=sys.stderr,
+                flush=True,
+            )
 
     return all_embeddings
 
@@ -304,7 +321,7 @@ def ingest_embeddings(
 
         # Generate embeddings
         try:
-            embedded_data = embed_fragments(fragments, model, dry_run, embedding_batch_size)
+            embedded_data = embed_fragments(fragments, model, dry_run, embedding_batch_size, show_progress)
             if show_progress:
                 elapsed = time.time() - start_time
                 print(

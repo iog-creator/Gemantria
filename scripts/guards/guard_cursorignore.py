@@ -6,7 +6,7 @@ Validates that `.cursorignore` does not ignore the `share/` directory.
 The `share/` directory must be visible to Cursor for proper governance and DMS sync visibility.
 
 Rule Reference: Governance gap identified in PM analysis (2025-12-01)
-- `.cursorignore` is not currently governed by DMS or SSOT rules
+- `.cursorignore` is not currently governed by pmagent control-plane DMS or SSOT rules
 - This guard enforces the policy that `share/**` must NOT be in `.cursorignore`
 
 Mode Support:

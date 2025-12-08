@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-KB Registry Builder from DMS (Layer 3 Phase 4)
+KB Registry Builder from pmagent control-plane DMS (Layer 3 Phase 4)
 
-Builds KB registry from control.doc_registry + control.doc_fragment.meta.
+Builds KB registry from pmagent control-plane DMS (control.doc_registry + control.doc_fragment.meta).
 Reads documents with kb_candidate=true fragments and aggregates metadata.
 
 SSOT: share/kb_registry.json (read-only in CI per Rule-044).
@@ -47,7 +47,7 @@ if os.getenv("CI") == "true":
 
 def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
     """
-    Build KB registry from DMS (control.doc_registry).
+    Build KB registry from pmagent control-plane DMS (control.doc_registry).
 
     Curated subset for PM usability:
     - Documents with kb_candidate=true fragments (AI-classified)
@@ -285,7 +285,7 @@ def build_kb_registry_from_dms(dry_run: bool = False) -> KBDocumentRegistry:
 
 def main() -> None:
     """CLI entry point."""
-    parser = argparse.ArgumentParser(description="Build KB registry from DMS")
+    parser = argparse.ArgumentParser(description="Build KB registry from pmagent control-plane DMS")
     parser.add_argument("--dry-run", action="store_true", help="Print summary without writing")
     args = parser.parse_args()
 

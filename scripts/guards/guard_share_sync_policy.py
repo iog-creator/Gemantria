@@ -61,12 +61,14 @@ EPHEMERAL_PREFIXES = [
 
 # Specific root files that are system-managed but not in DMS (generated artifacts)
 SYSTEM_FILES = {
+    # Console v2 / Bootstrap (JSON surfaces)
     "share/SSOT_SURFACE_V17.json",
     "share/PM_BOOTSTRAP_STATE.json",
     "share/kb_registry.json",
     "share/HANDOFF_KERNEL.json",
     "share/REALITY_GREEN_SUMMARY.json",
-    # Legacy/Transition files - Should be ingested or removed eventually, but allowed for now to pass guard
+    "share/planning_context.json",  # planning pipeline output for agents (not a managed doc)
+    # Legacy Summaries (JSON)
     "share/PHASE16_AUDIT_SNAPSHOT.json",
     "share/PHASE16_CLASSIFICATION_REPORT.json",
     "share/PHASE16_DB_RECON_REPORT.json",
@@ -76,10 +78,56 @@ SYSTEM_FILES = {
     "share/PHASE18_SHARE_EXPORTS_SUMMARY.json",
     "share/PHASE19_SHARE_HYGIENE_SUMMARY.json",
     "share/PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.json",
+    # PM Introspection Surfaces (Phase 27.M - generated agent working surfaces)
+    # See docs/SSOT/SHARE_FOLDER_ANALYSIS.md for SSOT on share/ layout
+    "share/schema_snapshot.md",
+    "share/SSOT_SURFACE_V17.md",
+    "share/agents_md.head.md",
+    "share/governance_freshness.md",
+    "share/hint_registry.md",
+    "share/PM_BOOTSTRAP_STATE.md",
+    "share/planning_lane_status.md",
+    "share/pm_snapshot.md",
+    "share/planning_context.md",
+    "share/HANDOFF_KERNEL.md",
+    "share/REALITY_GREEN_SUMMARY.md",
+    "share/doc_registry.md",
+    "share/next_steps.head.md",
+    "share/doc_sync_state.md",
+    "share/pm_system_introspection_evidence.md",
+    "share/pm_contract.head.md",
+    "share/live_posture.md",
+    # Phase specific docs in share/ (legacy governance)
+    "share/PHASE16_DB_RECON_REPORT.md",
+    "share/PHASE16_PURGE_EXECUTION_LOG.md",
+    "share/PHASE18_AGENTS_SYNC_SUMMARY.md",
+    "share/PHASE18_INDEX.md",
+    "share/PHASE18_LEDGER_REPAIR_SUMMARY.md",
+    "share/PHASE18_SHARE_EXPORTS_SUMMARY.md",
+    "share/PHASE19_SHARE_HYGIENE_SUMMARY.md",
+    "share/PHASE20_INDEX.md",
+    "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+    "share/PHASE20_UI_RESET_DECISION.md",
+    "share/PHASE21_CONSOLE_SERVE_PLAN.md",
+    "share/PHASE21_INDEX.md",
+    "share/PHASE22_OPERATOR_WORKFLOW.md",
+    "share/PHASE22_INDEX.md",
+    "share/PHASE23_INDEX.md",
+    "share/PHASE23_STRESS_PLAN.md",
+    "share/PHASE23_BASELINE_NOTE.md",
+    "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+    "share/PHASE23_STRESS_SMOKE_NOTE.md",
+    "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+    "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+    "share/PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.md",
+    # Phase 27 evidence surfaces (Phase 27.E Batch 2 - generated from docs/SSOT)
+    "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+    "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md",
+    # Other governance surfaces
     "share/PM_HANDOFF_PROTOCOL.md",
     "share/SHARE_FOLDER_ANALYSIS.md",
-    # Non-DMS-managed agent working surfaces (see SHARE_FOLDER_ANALYSIS.md)
-    "share/planning_context.json",  # planning pipeline output for agents (not a managed doc)
 }
 
 SHARE_ROOT = ROOT / "share"

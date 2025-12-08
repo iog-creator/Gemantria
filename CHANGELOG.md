@@ -125,6 +125,14 @@
 
 - Phase 24 remediation polish + restore mcp.proof.snapshot target
 
+- OA↔DSPy reasoning bridge scaffolding and evidence
+- wire remediation hints through DMS hint registry
+- improve reality.green debugging output
+- add Batch 2 evidence per Rule 071
+- Add Hygiene Sub-Batch evidence per Rule 071
+- OA data model + API contract + OA context surface
+- DSPy reasoning programs outline wired to OA runtime and Console v2 docs
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

@@ -44,43 +44,68 @@ SHARE_ROOT = ROOT / "share"
 # (Matches sync_share.py + specifics)
 # See docs/SSOT/SHARE_FOLDER_ANALYSIS.md for SSOT on share/ layout and non-DMS-managed surfaces
 ALLOWED_FILES = {
-    # Console v2 / Bootstrap
-    "PHASE23_INDEX.md",
-    "PHASE20_UI_RESET_DECISION.md",
+    # Console v2 / Bootstrap (JSON surfaces)
     "SSOT_SURFACE_V17.json",
     "PM_BOOTSTRAP_STATE.json",
     "kb_registry.json",
-    # Legacy Summaries
+    "HANDOFF_KERNEL.json",
+    "REALITY_GREEN_SUMMARY.json",
+    "planning_context.json",  # planning pipeline output for agents (not a managed doc)
+    # Legacy Summaries (JSON)
+    "PHASE16_AUDIT_SNAPSHOT.json",
+    "PHASE16_CLASSIFICATION_REPORT.json",
     "PHASE18_AGENTS_SYNC_SUMMARY.json",
     "PHASE18_SHARE_EXPORTS_SUMMARY.json",
     "PHASE18_LEDGER_REPAIR_SUMMARY.json",
-    "PHASE18_INDEX.md",
     "PHASE19_SHARE_HYGIENE_SUMMARY.json",
     "PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.json",
-    # Phase 16 Legacy
-    "PHASE16_AUDIT_SNAPSHOT.json",
-    "PHASE16_DB_RECON_REPORT.json",
-    "PHASE16_PURGE_EXECUTION_LOG.json",
-    "PHASE16_CLASSIFICATION_REPORT.json",
-    # Phase specific docs explicitly managed by other tools
+    # PM Introspection Surfaces (Phase 27.M - generated agent working surfaces)
+    # See docs/SSOT/SHARE_FOLDER_ANALYSIS.md for SSOT on share/ layout
+    "schema_snapshot.md",
+    "SSOT_SURFACE_V17.md",
+    "agents_md.head.md",
+    "governance_freshness.md",
+    "hint_registry.md",
+    "PM_BOOTSTRAP_STATE.md",
+    "planning_lane_status.md",
+    "pm_snapshot.md",
+    "planning_context.md",
+    "HANDOFF_KERNEL.md",
+    "REALITY_GREEN_SUMMARY.md",
+    "doc_registry.md",
+    "next_steps.head.md",
+    "doc_sync_state.md",
+    "pm_system_introspection_evidence.md",
+    "pm_contract.head.md",
+    "live_posture.md",
+    # Phase specific docs explicitly managed by other tools (Phase 16-23 and beyond)
+    "PHASE16_DB_RECON_REPORT.md",
+    "PHASE16_PURGE_EXECUTION_LOG.md",
+    "PHASE18_AGENTS_SYNC_SUMMARY.md",
+    "PHASE18_INDEX.md",
+    "PHASE18_LEDGER_REPAIR_SUMMARY.md",
+    "PHASE18_SHARE_EXPORTS_SUMMARY.md",
+    "PHASE19_SHARE_HYGIENE_SUMMARY.md",
     "PHASE20_INDEX.md",
     "PHASE20_ORCHESTRATOR_UI_MODEL.md",
+    "PHASE20_UI_RESET_DECISION.md",
     "PHASE21_CONSOLE_SERVE_PLAN.md",
     "PHASE21_INDEX.md",
     "PHASE22_OPERATOR_WORKFLOW.md",
     "PHASE22_INDEX.md",
-    # Phase 23
+    "PHASE23_INDEX.md",
     "PHASE23_STRESS_PLAN.md",
     "PHASE23_BASELINE_NOTE.md",
     "PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
     "PHASE23_STRESS_SMOKE_NOTE.md",
     "PHASE23_FAILURE_INJECTION_NOTE.md",
     "PHASE23_PHASE_DONE_CHECKLIST.md",
-    # Phase 24
-    "HANDOFF_KERNEL.json",
-    "REALITY_GREEN_SUMMARY.json",
-    # Non-DMS-managed agent working surfaces (see SHARE_FOLDER_ANALYSIS.md)
-    "planning_context.json",  # planning pipeline output for agents (not a managed doc)
+    "PHASE23_AGENTS_SYNC_REPAIR_SUMMARY.md",
+    # Phase 27 evidence surfaces (Phase 27.E Batch 2 - generated from docs/SSOT)
+    "PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+    "PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+    "PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+    "PHASE27E_IMPLEMENTATION_EVIDENCE.md",
 }
 
 ALLOWED_SUBDIRS = {
@@ -90,6 +115,7 @@ ALLOWED_SUBDIRS = {
     "exports",
     "handoff",  # kernel bundle directory (PM_KERNEL.json, PM_SUMMARY.md) - Phase 24.E deliverables
     "pm_boot",  # PM/OA boot capsule (Phase 27.H) - generated view of kernel + governance + behavioral contracts
+    "oa",  # OA runtime workspace (Phase 27.E) - CONTEXT.json and DSPy program surfaces
 }
 
 

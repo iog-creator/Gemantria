@@ -34,7 +34,7 @@ These are the essential governance/PM artifacts, all in Markdown format:
 * `pm_snapshot.md` - System health snapshot
 * `planning_context.md` - Full planning output from `pmagent plan next`
 * `kb_registry.md` - KB document registry (for DMS integration)
-* `doc_registry.md` - DMS document registry snapshot
+* `doc_registry.md` - pmagent control-plane DMS document registry snapshot
 * `doc_sync_state.md` - Document sync state
 * `doc_version.md` - Document version tracking
 * `governance_freshness.md` - Document freshness tracking
@@ -72,7 +72,7 @@ They **must not** be used to infer:
 * **Allowed from share/**:
 
   * Governance/status checks
-  * DMS/hint registry posture
+  * pmagent control-plane DMS/hint registry posture
   * Control-plane export inspection
   * PM posture snapshots
 
@@ -88,7 +88,7 @@ The following are **full exports** (complete files, not head exports), all in Ma
 * `share/planning_context.md` - Full planning output from `pmagent plan next` (converted from JSON)
 * `share/kb_registry.md` - Complete KB document registry (converted from JSON)
 * `share/pm_snapshot.md` - Complete system snapshot (converted from JSON)
-* `share/doc_registry.md` - Complete DMS document registry (converted from JSON)
+* `share/doc_registry.md` - Complete pmagent control-plane DMS document registry (converted from JSON)
 * All other core PM artifacts are full exports (not head exports)
 
 These full exports provide complete context for PM decision-making.
@@ -108,9 +108,9 @@ The conversion preserves all data structure and content, making it easier for PM
 
 All AGENTS.md files and other critical documents are tracked in:
 * **KB Registry** (`share/kb_registry.md`) - Document metadata and registry (converted from JSON)
-* **DMS Tables** (`share/doc_registry.md`, etc.) - Full DMS table dumps (converted from JSON)
+* **pmagent control-plane DMS Tables** (`share/doc_registry.md`, etc.) - Full pmagent control-plane DMS table dumps (converted from JSON)
 
-The PM can query DMS using:
+The PM can query pmagent control-plane DMS using:
 * `pmagent kb registry list` - List all registered documents
 * `pmagent kb registry by-subsystem --owning-subsystem <subsystem>` - Filter by subsystem
 * `pmagent kb registry show <doc_id>` - Show document details
@@ -130,7 +130,7 @@ For planning decisions, see:
 **Current State**:
 * `share/` contains 35 Markdown files (14 core PM artifacts + 21 documentation files)
 * All files are auto-generated during `make housekeeping`
-* DMS is the SSOT for document tracking
+* pmagent control-plane DMS is the SSOT for document tracking
 * No manual file management required
 
 **Action**: The manifest is kept for historical reference but should not be used for validation or synchronization. The `share.manifest.verify` Makefile target may produce warnings about missing files - these can be ignored as the manifest is outdated.

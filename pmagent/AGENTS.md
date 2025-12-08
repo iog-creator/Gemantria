@@ -1,5 +1,14 @@
 # AGENTS.md - pmagent Package
 
+## Architecture Clarification
+
+pmagent is the governance and control-plane engine for the Gemantria project.
+All documentation lifecycle, classification, metadata, and structural enforcement
+are handled by pmagent's control-plane DMS (`control.doc_registry`).
+Gemantria is the domain project being governed, not the system performing
+the governance. AGENTS.md surfaces define the agent-facing worldview of both
+Gemantria and pmagent; the pmagent control-plane DMS records that worldview in structured form.
+
 ## Directory Purpose
 
 The `pmagent/` package contains the **Postgres-backed control plane and runtime services** that pmagent uses for:

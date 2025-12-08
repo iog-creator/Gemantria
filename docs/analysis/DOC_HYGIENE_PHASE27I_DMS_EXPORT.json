@@ -1,0 +1,3501 @@
+{
+  "source": "control.doc_registry",
+  "filters": {
+    "path_suffix": ".md"
+  },
+  "doc_count": 388,
+  "docs": [
+    {
+      "id": "e7bbf9c9-0682-4994-a245-bf91f9c3a051",
+      "path": "agentpm/adapters/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "5a76371d-b70c-4548-b0c0-c376e0f8c71a",
+      "path": "agentpm/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "229e27be-55be-44ee-b236-e8d08c693480",
+      "path": "agentpm/ai_docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "cbf3b3d4-0c35-467c-9317-6352dd559c44",
+      "path": "agentpm/atlas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "51dfbe11-9c7a-4056-b602-20b1335dbabe",
+      "path": "agentpm/biblescholar/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "e24ce94b-0991-46cc-8fa2-ebddeb5d4f1f",
+      "path": "agentpm/biblescholar/tests/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "e5e129c9-0f15-4fe6-b98c-0d3d194fbc61",
+      "path": "agentpm/bus/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "8767eb1d-17a1-4299-9cc9-a3de5a7df842",
+      "path": "agentpm/control_plane/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "227d3d7c-7fbe-469b-bd13-07f20f051159",
+      "path": "agentpm/control_widgets/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "6ec9a9a7-47ba-468e-9804-a361546591c4",
+      "path": "agentpm/db/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "5ef33019-52a8-44ae-b563-1e686b9cfc4b",
+      "path": "agentpm/dms/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "6922bf2a-698c-4b37-8ea4-0d77f22dd1d3",
+      "path": "agentpm/docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "868f6c67-2f84-4118-8dd0-d90a2a74fe5a",
+      "path": "agentpm/exports/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "92be0307-3aeb-496d-bd44-ee85626d23ef",
+      "path": "agentpm/extractors/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "9c0846d2-cff0-419c-952b-c2e5c38eef82",
+      "path": "agentpm/gatekeeper/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "16a67728-a2ff-40bc-87f0-f78d39232267",
+      "path": "agentpm/governance/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "06e49b5c-553b-4f57-a069-baa48a7852b8",
+      "path": "agentpm/graph/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "0702f0f6-3ced-4778-8e2a-92435186c7ff",
+      "path": "agentpm/guard/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "efc52f9f-1c79-44ec-b3c9-43f442ca3a47",
+      "path": "agentpm/guarded/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "56fdbaaf-d93a-4300-848a-d4a3bd48c571",
+      "path": "agentpm/handoff/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "4455a075-b647-4085-947d-74088f1a9f3e",
+      "path": "agentpm/hints/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "cc65b81d-62e2-4aab-9303-ca219a3ae0ad",
+      "path": "agentpm/kb/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "34f3bec0-5314-4472-b58d-94814086f78f",
+      "path": "agentpm/knowledge/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "0b65aa56-22cd-4037-bb57-02b91d28fcdf",
+      "path": "agentpm/lm/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "94a7027c-5b3f-4145-992f-3cb41de3f386",
+      "path": "agentpm/lm_widgets/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "fb4f221c-2fb1-41d3-b805-c24856ab4e02",
+      "path": "agentpm/mcp/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "763f1f22-4a1b-41a7-b883-cef43da35c68",
+      "path": "agentpm/metrics/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "ee14c571-1373-4f9e-98a3-5d2a9a7bdf70",
+      "path": "agentpm/modules/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "a160e364-b654-4e4e-99cb-7a43d9c605c7",
+      "path": "agentpm/modules/gematria/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "29c1d30a-5c45-430f-b550-179ae1ae37a3",
+      "path": "agentpm/obs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "d855b1db-a6a3-4a38-aa37-48516bee76fd",
+      "path": "agentpm/plan/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "b8f776d7-da55-4aa7-9b11-86a016225297",
+      "path": "agentpm/reality/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "94af1cfb-df69-456f-99c8-6ed2d076f6e2",
+      "path": "agentpm/rpc/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "48e9fa7a-2e3a-43a1-8bcc-d2d165f15ff6",
+      "path": "agentpm/runtime/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "d868dad2-d4ee-4dd1-abeb-f1c2d16316d3",
+      "path": "agentpm/scripts/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "aad36226-e5ce-460e-9321-0a32e99c1f27",
+      "path": "agentpm/scripts/state/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "219dac86-ca91-4409-9d8f-adced1b8c161",
+      "path": "agentpm/server/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "77ca901e-0ff4-4718-b45f-f1056cb9d5cd",
+      "path": "agentpm/status/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "55da0565-1e9b-470a-b08d-37ed6376c4a4",
+      "path": "agentpm/tests/adapters/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "b35e9167-5a2c-49bd-8aac-0d85942dca2a",
+      "path": "agentpm/tests/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "b74d6775-c835-4b7e-bfb6-e49c7172a4d2",
+      "path": "agentpm/tests/atlas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "eda8ebc0-bc04-4c1f-8c08-0b6b43f7b615",
+      "path": "agentpm/tests/cli/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "eea9e470-95db-487a-9acd-702455d55d2c",
+      "path": "agentpm/tests/db/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "ca138d6b-ba1b-4d0b-befc-6ea8194173d3",
+      "path": "agentpm/tests/docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "fe348f4c-2bcf-45a3-84e3-bef52dbc5a81",
+      "path": "agentpm/tests/exports/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "4e3ee39e-077a-42e5-a079-004679989923",
+      "path": "agentpm/tests/extractors/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "19ccafdd-1f37-4ff7-8d6b-5eca74a38dd7",
+      "path": "agentpm/tests/html/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "d50460db-c878-40c2-9fe9-76fcd0528340",
+      "path": "agentpm/tests/kb/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "70efc721-53e7-41ad-a90b-403b15a671d1",
+      "path": "agentpm/tests/knowledge/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "1d2971e3-e7ab-45a6-9f11-98947a688916",
+      "path": "agentpm/tests/lm/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "7320e56f-371d-4682-a892-95604fd65555",
+      "path": "agentpm/tests/mcp/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "dc9af428-af01-40a8-bd6d-fd7b8f4cddb9",
+      "path": "agentpm/tests/phase1/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "43f0f1f6-32a2-4193-9ded-8e328f3f9f47",
+      "path": "agentpm/tests/reality/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "a02721eb-13a4-48bb-b453-386b41fb16d5",
+      "path": "agentpm/tests/status/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "da0bbb49-f53f-444b-abb0-572fe558e81b",
+      "path": "agentpm/tests/system/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "08b10090-fce9-46a6-bf58-0eccd3650fab",
+      "path": "agentpm/tools/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 08:48:33.559632-08:00"
+    },
+    {
+      "id": "3ce95890-8b8e-480d-ae02-eac9c87d7c42",
+      "path": "AGENTS.md",
+      "kind": "agent_framework_index",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "01be4c82-771a-419b-817a-82c09bdf5d00",
+      "path": "archive/docs/codebase-cleanup/docs-analysis/AGENTS.snapshot.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-03 14:15:39.129537-08:00"
+    },
+    {
+      "id": "27c26272-85b9-480b-8d30-cb7d6d8685f0",
+      "path": "archive/docs_legacy/share_scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c50f2cc6-f356-478c-be2e-708b93db8a3d",
+      "path": "backup/20251206T011629Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "070a34b7-ba95-4fa1-ba59-56e9e423925b",
+      "path": "backup/20251206T011629Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "8435b916-da3a-458b-a76d-7c7bb9539046",
+      "path": "backup/20251206T044916Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "cecdb817-8498-450a-999b-45350a0a2b6a",
+      "path": "backup/20251206T044916Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "8bab6ab5-f325-4417-a6b6-13f05dcbaa91",
+      "path": "backup/20251206T050237Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "48d69a8f-e65a-42de-95f1-572a0b87d640",
+      "path": "backup/20251206T050237Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "2ea5ae3b-be6a-4b06-820a-51b35d90dfb9",
+      "path": "backup/20251206T051001Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "e7e6cb1b-ed75-4521-8abc-96b7194b5011",
+      "path": "backup/20251206T051001Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "a0cf26be-bf2d-4639-9681-2809b12bdc1d",
+      "path": "backup/20251206T051704Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "6db27447-3b8f-494d-8075-f99e96972f71",
+      "path": "backup/20251206T051704Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "03b3ca8c-cbd4-4e91-af7e-85c0438161f1",
+      "path": "backup/20251207T032033Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "8ca4bc5a-e883-4fc2-a58c-0d39add2a044",
+      "path": "backup/20251207T032033Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "96b5f2e1-9bc4-43f1-a485-b2d8aa3f0732",
+      "path": "backup/20251207T045808Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5b953be6-732a-4a7e-a060-7e5a55d23fa8",
+      "path": "backup/20251207T045808Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3b6d7cc7-5629-4623-adc3-4295b4edd55a",
+      "path": "backup/20251207T062821Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4ad5b70b-a850-4230-ac13-68ed9acae2d0",
+      "path": "backup/20251207T062821Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "97d330d4-4291-4ad7-a89e-f04a9068d76a",
+      "path": "backup/20251207T062821Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1015d64c-c7e1-4096-8ef3-883e944cb7af",
+      "path": "backup/20251207T153233Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "447c360c-a3d9-46ec-bcc9-bb24d2c5f9f8",
+      "path": "backup/20251207T153233Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a46a67a4-2e57-4cec-8e89-0a1d3b07f1a8",
+      "path": "backup/20251207T153233Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "72c7f368-1c2e-4e90-b507-3c4a2853a929",
+      "path": "backup/20251207T164600Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fb6762fd-ff0d-483a-a6dd-4ede24453eab",
+      "path": "backup/20251207T164600Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8b1df3c9-cd22-4a5b-a521-bb86d3508911",
+      "path": "backup/20251207T164600Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3b1e1101-b19b-41f7-aee0-c052cac7aefa",
+      "path": "backup/20251207T173128Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9ecb488c-5083-4f8f-829f-90f05ec9e878",
+      "path": "backup/20251207T173128Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f1d5b89b-dc08-470e-80f0-843ca870ec23",
+      "path": "backup/20251207T173128Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "284e8b66-04b2-45d4-a2f9-79f62b40d860",
+      "path": "backup/20251207T173726Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c72c38a2-e99b-416d-b620-86d3134f08ec",
+      "path": "backup/20251207T173726Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1e3cf244-44d4-4723-9355-4d4f4be5b9b1",
+      "path": "backup/20251207T173726Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "92bfabd8-2a07-47d8-a363-29a74dc56e59",
+      "path": "backup/20251207T174051Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4d38f7b7-f8d8-4717-afb6-d82dffb8e0d9",
+      "path": "backup/20251207T174051Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "019467cd-b467-4d77-9575-396b9d326d47",
+      "path": "backup/20251207T174051Z/share/scripts_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8ccfe530-fabd-4d3c-92f5-aab0e929c723",
+      "path": "backup/20251207T174800Z/share/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b25e9c30-0143-44e2-b2d1-ecae09f62be3",
+      "path": "backup/20251207T174800Z/share/pm_boot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "186f8d94-608b-4230-90af-39945aa180b9",
+      "path": ".cursor/rules/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "69a956eb-5ba8-4138-ad43-0447e9a2fa14",
+      "path": "docs/adr/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3ce3c26d-9545-430f-8301-5e5dcb51fd67",
+      "path": "docs/ADRs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e5d7fa9e-08db-4c6f-9dbe-3a9fe9258fc9",
+      "path": "docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e3ff8330-baea-47e3-bbbd-c9e97bd4cbe0",
+      "path": "docs/AI_LEARNING_SYSTEM_AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "91fb4ee2-26fb-454c-b3a1-cece4de06c55",
+      "path": "docs/analysis/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "846a694f-938b-4003-9ccc-a1f3450e79fb",
+      "path": "docs/ANALYSIS/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d2e3ff9c-915e-4209-a114-124346ae8c75",
+      "path": "docs/analysis/phase7_governance/AGENTS.snapshot.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-11-16 13:40:16.893142-08:00"
+    },
+    {
+      "id": "686c4ff6-5a7a-4823-b506-e6bb1cc71496",
+      "path": "docs/atlas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ee911e86-fe82-4b8c-aed7-bbdec80acd9a",
+      "path": "docs/audits/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "0bb53c96-158f-4b2a-a8f9-5c4fe25eaaa9",
+      "path": "docs/audits/AGENTS_MD_AUDIT_20251112.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "69f46074-9511-42b8-b32b-bb2ad87db28f",
+      "path": "docs/consumers/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2d5e06f7-19f6-4c60-829a-acb28e77e6ae",
+      "path": "docs/evidence/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "56d68327-9178-4428-aff3-fdb95bfb9ee7",
+      "path": "docs/forest/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2a913c75-2532-4c02-963f-452b184ef93d",
+      "path": "docs/handoff/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f1190a6d-8b99-4a0a-ba6e-94bd6f8620ee",
+      "path": "docs/hints/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f1fef275-67fa-4bbb-875b-1f97062cd470",
+      "path": "docs/ingestion/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "90445013-6349-49b2-ae0d-bdf97ad9e24e",
+      "path": "docs/ops/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d55536f4-9024-4b89-823b-0f672fe08355",
+      "path": "docs/OPS/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f7895dce-67c4-43b1-9dd2-8f4cc275d6e2",
+      "path": "docs/phase10/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "50af9a75-af93-4a25-b4ed-b83cc48f4925",
+      "path": "docs/phase9/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "888fc5a1-48bc-4512-b5e6-e6df0edbce65",
+      "path": "docs/plan-074/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1f80883e-97e1-4793-b15e-dfac3a47f282",
+      "path": "docs/plans/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f0ee7e3c-2923-4144-9ae6-53e15ec41ada",
+      "path": "docs/projects/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9bc2879a-baaf-4df6-b667-4d2e13bad042",
+      "path": "docs/projects/storymaker/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9a6f35f5-59fa-4b90-a2b5-50a725279034",
+      "path": "docs/research/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9cf9c101-ae6e-4251-aa97-c7be0c9fb8ea",
+      "path": "docs/rfcs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "305aced3-93fa-44fc-9e10-dcfdc6727d7a",
+      "path": "docs/runbooks/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "223c6e23-2a08-4ecb-8dc8-02b4ca75dc2c",
+      "path": "docs/runbooks/AGENTS.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e6d353e8-7a2e-4b19-aaad-11f3b6e23b2f",
+      "path": "docs/runbooks/ATLAS_VISUAL_VERIFICATION.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4696e4bd-bdfb-4e8a-b5fd-095775ba3124",
+      "path": "docs/runbooks/CODEX_CLI.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fce18040-7a02-46d4-aa28-657340e031cf",
+      "path": "docs/runbooks/CONTROL_PIPELINE_STATUS.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1ffcc13d-e4a3-4191-956a-9cd42edcbbd2",
+      "path": "docs/runbooks/CONTROL_SCHEMA.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ccc5b7e9-fe16-4af2-bd8d-a8b0c95b0b99",
+      "path": "docs/runbooks/CONTROL_STATUS.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "bc63fb84-3540-4faa-ba55-5f5030b94c89",
+      "path": "docs/runbooks/CONTROL_SUMMARY.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5136adb7-ed1f-4aac-9110-c41499936d7d",
+      "path": "docs/runbooks/CONTROL_TABLES.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d98d4096-1ebb-43ea-b118-eda873e6adbe",
+      "path": "docs/runbooks/CPU_PERFORMANCE_FIX.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "5f4b30b6-a9af-4e45-8865-6d537ed0233c",
+      "path": "docs/runbooks/CURSOR_BROWSER_QA.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "05bcf8a0-8eb4-4897-a310-42b43378f49b",
+      "path": "docs/runbooks/CURSOR_WORKFLOW_RUNBOOK.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c3369335-208b-4c3f-8ec4-a80dee242a6d",
+      "path": "docs/runbooks/DB_HEALTH.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "918343b2-d970-4ef7-9c1c-16960b4f9b89",
+      "path": "docs/runbooks/DSN_SECRETS.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c9cf0f01-5f50-469d-9ae6-a030a7604a3c",
+      "path": "docs/runbooks/GEMINI_CLI.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "465f1b0d-65f3-4bc1-9f31-b3e8f2aff6ed",
+      "path": "docs/runbooks/GOVERNANCE_DB_SSOT.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1c919f1f-cbeb-4336-9dbd-a7fdc545092f",
+      "path": "docs/runbooks/GPU_RESOURCE_MANAGEMENT.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "208b32e7-f92f-4a67-8928-57b12ea8269d",
+      "path": "docs/runbooks/GRAPH_IMPORT.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8147cda8-7860-4e7d-acf2-5621eb2d411e",
+      "path": "docs/runbooks/GRAPH_OVERVIEW.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "cacc6595-9c03-4b92-92bd-fa5a0c6e9639",
+      "path": "docs/runbooks/HANDOFF_WORKFLOW.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "18deb649-1ce3-40ce-92b0-02957c5da955",
+      "path": "docs/runbooks/LM_HEALTH.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "71aa3bcd-8e8d-4a96-ae8e-cb01950dd97d",
+      "path": "docs/runbooks/LM_STUDIO_MEMORY_MANAGEMENT.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "40ff7e17-ab8d-45df-9c9d-5f9f1a409ac8",
+      "path": "docs/runbooks/LM_STUDIO_SETUP.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5aa94795-64fd-495d-b23e-3e543815b398",
+      "path": "docs/runbooks/MCP_KNOWLEDGE_DB.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "57f6f03e-2351-4066-899e-1be9da8cefc3",
+      "path": "docs/runbooks/MCP_SSE_AUTO_START.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "751c9c8c-6721-4aee-a9bd-28808b80d640",
+      "path": "docs/runbooks/OLLAMA_ALTERNATIVE.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1f8a64bc-e922-4c85-8bda-8d747fe32f29",
+      "path": "docs/runbooks/OLLAMA_AUTO_DISCOVERY.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d0db97b4-3249-438e-bda8-f043609eb560",
+      "path": "docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "27de68d0-8e44-4330-9378-beca4e932205",
+      "path": "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e4183c4c-5df7-482e-9ae8-5d973eca7856",
+      "path": "docs/runbooks/SETUP_LM_STUDIO_AND_DB.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "67b2acb8-bced-4a2b-8065-5cb1c6383a2f",
+      "path": "docs/runbooks/STATUS_POLLING_OPTIMIZATION.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b28af907-d88a-42bf-8b01-ef117621b9e8",
+      "path": "docs/runbooks/SYSTEM_HEALTH.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "984d9159-79e2-4605-8784-33a8df7f060d",
+      "path": "docs/runbooks/SYSTEM_OPTIMIZATION_AI.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 19:20:44.838901-08:00"
+    },
+    {
+      "id": "973ec99b-b378-442b-a8fb-b5e3f0b321d1",
+      "path": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
+      "kind": "runbook",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "77990c6e-22b2-4935-83aa-faa252c79847",
+      "path": "docs/schema/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "77de3242-0a68-4d04-81dc-7a561a9f81c9",
+      "path": "docs/schemas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f7b36005-e226-4fe1-a0c7-c6551501ec4d",
+      "path": "docs/sql/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "90cef796-26c1-433c-916f-d240cca924d7",
+      "path": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3afe52bd-7594-4103-9e96-ce32d93f5e2b",
+      "path": "docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9cfc5784-5cc9-4c76-b569-9918b9a4e3e3",
+      "path": "docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c9895b60-6f8f-4558-8c9b-b5aa179339ca",
+      "path": "docs/SSOT/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e2f2c400-a356-4144-bfc8-5c8066014b40",
+      "path": "docs/SSOT/AGENTS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a9e1f8c8-927c-4d1f-8c27-9c6723ebaa9d",
+      "path": "docs/SSOT/ATLAS_GOVERNANCE_SEARCH_PANEL.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6006ecae-bd8d-45f1-af6f-c711f9eabbb2",
+      "path": "docs/SSOT/AUTOPILOT_ORCHESTRATOR_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "0da0b2ba-e815-440f-90eb-6c3b11499abb",
+      "path": "docs/SSOT/BIBLESCHOLAR_INTAKE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3b773161-d9f5-4208-a16d-5e3f8c2a6498",
+      "path": "docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9d2193d5-0f8e-43ad-9ffb-9809bc310c28",
+      "path": "docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ee8ffc6c-ffbd-4410-b75a-17e0708af989",
+      "path": "docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d2261ebb-f035-48c5-8dcd-46a3eb59e3a7",
+      "path": "docs/SSOT/COMMIT_PLAN_PHASE10_WIRING.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c0a4330c-a181-43c7-bac5-a07416d07ce0",
+      "path": "docs/SSOT/CONSOLE_KERNEL_PANEL_SPEC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "41a510ca-59eb-4feb-9007-1e763c1e0b9e",
+      "path": "docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f1df224d-51ea-401c-8390-4a074e9feb63",
+      "path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f181b877-dc78-43e9-8b92-99fabd967e3d",
+      "path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dfc9ed18-7e17-4b1f-9dfe-70530979d8c5",
+      "path": "docs/SSOT/data_flow.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8ce35c69-6d12-4d17-8749-16366e66cafc",
+      "path": "docs/SSOT/data_flow_visual.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5983288d-1278-422a-a4f6-661ea709d56d",
+      "path": "docs/SSOT/DIRECTORY_DUPLICATION_MAP.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ff714c4d-05a4-4370-97c9-798851e9a394",
+      "path": "docs/SSOT/DM_002_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "117c9ff5-d3b3-42cf-8da7-a9886b45e4ea",
+      "path": "docs/SSOT/DMS_PERFORMANCE_OPTIMIZATION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "772f6850-02a5-4433-9646-5cbc946b9e86",
+      "path": "docs/SSOT/DMS_QUERY_PROTOCOL.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "388c79c4-501b-4529-9596-d97a01829cff",
+      "path": "docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "94f81bac-f3c1-4475-8ba5-bc9dbcd06989",
+      "path": "docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d576e6ad-714a-422f-85bc-30b2a4540028",
+      "path": "docs/SSOT/DOC_REGISTRY_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "084b50bc-2394-4130-baa9-bf3d45606e41",
+      "path": "docs/SSOT/EPOCH_LEDGER.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b7624973-d151-4e12-88c4-808082a558d7",
+      "path": "docs/SSOT/EXECUTION_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d85a342f-aeb2-4eae-8cdb-2a595aefaa4f",
+      "path": "docs/SSOT/FEATURE_REUNION_BACKLOG.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e83f4952-3b1f-420e-85eb-24062ad7315d",
+      "path": "docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "de53a2da-a4b0-4bb6-a634-14494f356d98",
+      "path": "docs/SSOT/GEMATRIA_INTAKE_SCAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c85f11c3-a55d-464e-9785-b511a517f3e2",
+      "path": "docs/SSOT/GEMATRIA_MASTER_REFERENCE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "181e4dff-c34d-4aeb-81c3-cd756d3474a5",
+      "path": "docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "26dec282-fc2f-4fb2-b3c4-229501630100",
+      "path": "docs/SSOT/GITHUB_WORKFLOW_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7fa2c7b2-8345-42b6-8332-a340933eea33",
+      "path": "docs/SSOT/GOTCHAS_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "68ee70f9-4e15-43bf-9895-1f7117111be6",
+      "path": "docs/SSOT/GPT_REFERENCE_GUIDE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e9d0d47c-aff1-4e68-81ff-0fb0b3e17568",
+      "path": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "515a5584-1230-4b58-98a4-68532554b48e",
+      "path": "docs/SSOT/graph-metrics-api.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c6c6bbd6-7927-4049-a7d5-f366b9ce7297",
+      "path": "docs/SSOT/graph-stats-api.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fb022a9a-d158-4c01-a285-b86849c73f4c",
+      "path": "docs/SSOT/HOUSEKEEPING_GPU_ACCELERATION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fe5a0da9-bfef-4220-90b1-e24158f8cea2",
+      "path": "docs/SSOT/HOUSEKEEPING_PERFORMANCE_OPTIMIZATION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "677ca91e-bfae-4ff1-87fd-e2a4fda45cf3",
+      "path": "docs/SSOT/jsonld-schema.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "81e7993b-bef0-4a57-8a58-0cc7c5712d65",
+      "path": "docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d25cc312-f42e-47cf-b159-951a0fb8eaa2",
+      "path": "docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7d560aec-9126-4d6b-bfb1-92e47240f08b",
+      "path": "docs/SSOT/LAYER3_DRIFT_RESCUE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f44c510f-2645-46f4-90e6-7659dd2b5a61",
+      "path": "docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b9c1268f-0fde-4bf2-82b4-8523f2637e3a",
+      "path": "docs/SSOT/LAYERED_ARCHITECTURE_V1.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7f47bef9-99b5-4a06-84bf-9d766651b0aa",
+      "path": "docs/SSOT/LAYERS_AND_PHASES.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a6b8d553-3a00-49c2-8da1-1da5bd3c43b5",
+      "path": "docs/SSOT/LM_ROUTER_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "46237642-8da8-4d58-a9dd-f2520b26a34e",
+      "path": "docs/SSOT/LM_WIDGETS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "03155ea0-0b5f-454a-b3de-82168c5879a7",
+      "path": "docs/SSOT/MASTER_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2dc0a313-ba22-4df7-ac2b-56a626ea4ec3",
+      "path": "docs/SSOT/MERGE_DEBT_INVENTORY.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6cd24560-6a4e-4dfa-ad3a-754cf50d5a98",
+      "path": "docs/SSOT/NEXT_STEPS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fe347147-cc0e-4095-9a3e-31a77f2e39fa",
+      "path": "docs/SSOT/Orchestrator Dashboard - Vision.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "83bd42d1-fa8e-4cbd-a44c-0f7a0dc45248",
+      "path": "docs/SSOT/ORCHESTRATOR_REALITY.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a07ecbb0-e67f-48f2-aeb1-99e51c25916a",
+      "path": "docs/SSOT/ORCHESTRATOR_SHELL_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3b9ae988-2bf9-478a-9a78-cf72bca453b4",
+      "path": "docs/SSOT/PHASE_10_4_ID_FIX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d4ca4136-f88e-459e-84a3-213b550cf47f",
+      "path": "docs/SSOT/PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "130328b0-a7e2-4490-85f7-147af9608ed5",
+      "path": "docs/SSOT/PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fd3bff56-2318-4c53-b47a-dd046094f461",
+      "path": "docs/SSOT/PHASE13_RECON.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5825ee10-f7d6-422f-8432-dc824195dff8",
+      "path": "docs/SSOT/PHASE14_RECON.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "72cca123-62b3-459d-a5c3-13aba4c7a7eb",
+      "path": "docs/SSOT/PHASE_14_SEMANTIC_RECORD.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "acdb8a62-646f-4a13-b4d3-9ac8740767af",
+      "path": "docs/SSOT/PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "84960b23-bfbc-4696-bfd7-22e2b6d0d9f2",
+      "path": "docs/SSOT/PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "9f5add93-ead0-4e82-89ec-91b9cfac3075",
+      "path": "docs/SSOT/PHASE15_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c0e8d3cf-ae92-4791-b7d0-44e151f6cfca",
+      "path": "docs/SSOT/PHASE15_RECON.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dc07bb0a-bc16-4480-b3b7-5ecb20088a15",
+      "path": "docs/SSOT/PHASE15_STATUS_CORRECTION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "85750efb-70c5-459c-95b2-26dbe702cd84",
+      "path": "docs/SSOT/PHASE15_WAVE2_SPEC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a00628d9-0a73-40e8-88e3-3355aa349cda",
+      "path": "docs/SSOT/phase15_wave3_gate_decision.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "574d8329-0a62-4106-aa6b-cec258029e0c",
+      "path": "docs/SSOT/PHASE15_WAVE3_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6bc5b2a4-4148-42a0-aa57-cee2e7f9b79b",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a1f933e1-fd25-4fc5-9765-8c03c8fe15d6",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7cef5a31-45a5-4913-a70f-92a25141df2d",
+      "path": "docs/SSOT/PHASE15_WAVE3_STEP2_STATUS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3bce2042-aa7a-4eff-ae21-33a4faef7d29",
+      "path": "docs/SSOT/PHASE_16_INIT_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3946d38d-dba4-43ee-851f-0c02c82d78ba",
+      "path": "docs/SSOT/PHASE16_LEGACY_PURGE_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a284d2ec-10a9-4fbe-be33-5820b1e4940d",
+      "path": "docs/SSOT/PHASE22_HINTS_CONSOLE_V2.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f31d3ed7-3f72-459f-86df-a3d9b86118a5",
+      "path": "docs/SSOT/PHASE24_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "cf70aeb6-2f64-48ce-bb59-585a0bf1c0ae",
+      "path": "docs/SSOT/PHASE25_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "824958f8-ccbe-4740-8e66-63757c559515",
+      "path": "docs/SSOT/PHASE26_HANDOFF_KERNEL.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2d7075d9-4400-444b-9727-3c180c42eebc",
+      "path": "docs/SSOT/PHASE26_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "672e9755-a9df-401b-bdd9-696a7b473bf6",
+      "path": "docs/SSOT/PHASE26_OA_BOOT_SPEC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6a8e18e6-0746-4b26-b1e2-e7873ea67b57",
+      "path": "docs/SSOT/PHASE26_OPS_BOOT_SPEC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "bf46c6e8-6e4f-4fe1-9dea-95b06c9a31b1",
+      "path": "docs/SSOT/PHASE26_PHASE_DONE_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "91f79974-5a0f-4077-bffd-575dc036f3a1",
+      "path": "docs/SSOT/PHASE26_PMAGENT_BOOT_SPEC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "af2821c9-c713-4c9e-9faa-8b669fe90a10",
+      "path": "docs/SSOT/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "65b88d34-066d-42e8-a44b-13bec7f7893a",
+      "path": "docs/SSOT/PHASE27_A_PMAGENT_KERNEL_INTERPRETER.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "69bee382-ac2c-48b6-a2d5-a0f2abcf5f6b",
+      "path": "docs/SSOT/PHASE27_B_OA_RUNTIME.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3164523d-5a56-489e-9b73-4378966edb58",
+      "path": "docs/SSOT/PHASE27_C_CONSOLE_KERNEL_PANEL.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f2a92e7c-eff3-4e4b-b720-4b5d2fadf638",
+      "path": "docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6aac6d4b-2079-4e42-9559-da151995fb1d",
+      "path": "docs/SSOT/PHASE27I_DIRECTORY_UNIFICATION_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "50cec05e-3337-412b-a772-5c667e4feea4",
+      "path": "docs/SSOT/PHASE27_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "470da49d-47c7-4197-966a-f528d477a65a",
+      "path": "docs/SSOT/PHASE_5_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7808f992-7f48-4636-a486-67467793a6c0",
+      "path": "docs/SSOT/PHASE_6_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3c2348f4-2749-4560-adbb-30d13f8441da",
+      "path": "docs/SSOT/PHASE8_BRIDGE_DECISION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d3b10747-bb94-487b-99f7-3a7309850dac",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1117ee34-1eea-4d7a-bf19-4e33fc2bf274",
+      "path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fc2a766b-8dae-4f8f-aad2-36a684ac693c",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "cda20e4b-f24a-4b50-9948-d50ea646d354",
+      "path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5b7a52f1-f56a-47f8-b6f3-4ad81368a2e0",
+      "path": "docs/SSOT/PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b9df1c8c-36ff-4720-8613-13fbb2f6f4c0",
+      "path": "docs/SSOT/PHASE8_PHASE10_PM_DECISION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3f3672d9-4842-428d-8e0a-8a7e7da942ef",
+      "path": "docs/SSOT/PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c5ec7388-8f2a-4041-be08-47c489c34af9",
+      "path": "docs/SSOT/PLAN_072_M1_DMS_GUARDS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "11fc5f01-46f2-4986-bbeb-c52745d8d078",
+      "path": "docs/SSOT/PLAN_073_M1_KNOWLEDGE_MCP.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "67c2dbfb-630b-4af7-93f5-a99672d5a162",
+      "path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "41bbc4fe-0d0a-4030-ba1c-500350a24d81",
+      "path": "docs/SSOT/PMAGENT_REALITY_CHECK_AI_NOTES.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "83903c97-80f8-487c-9cc1-d7d7e67fc6ac",
+      "path": "docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "316e45a4-72fe-4800-9267-d72119ca1da0",
+      "path": "docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ae1d9b0c-e4f9-4760-ac3d-a99a82bffb52",
+      "path": "docs/SSOT/PM_BOOT_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c05d38a3-02a7-4445-9a7f-d4c3beb8c4b1",
+      "path": "docs/SSOT/PM_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c995c5cb-5d62-404f-96ca-b82c5b74c8d9",
+      "path": "docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ab5f0f82-b505-4e15-99ab-9eec78b37222",
+      "path": "docs/SSOT/PM_HANDOFF_PROTOCOL.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "acc06da6-01ec-42ec-9c8f-efbec4149464",
+      "path": "docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a84c0294-c2cf-4e0d-94a4-54f2e9491938",
+      "path": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f563c64b-cf8b-4ebe-b878-93ad60894a3f",
+      "path": "docs/SSOT/PM_SHARE_LAYOUT_PHASE15.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dcd0d32d-45e9-4084-927c-c8be25d1cb0a",
+      "path": "docs/SSOT/POSTGRES_OPTIMIZATION_PRIORITY.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "566c76ad-a5ec-40b3-9734-3b0acdb94ff0",
+      "path": "docs/SSOT/POSTGRES_OPTIMIZATION_REVIEW.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b0a1fc6e-d707-4143-943c-14c74d3ca6f6",
+      "path": "docs/SSOT/POSTGRES_OPTIMIZATION_SUMMARY.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b178fa01-76b3-42a0-b364-1c84a42a5854",
+      "path": "docs/SSOT/PREFLIGHT_DB_CHECK_ROLLOUT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5d1a4279-5e34-4f10-af36-21960f238220",
+      "path": "docs/SSOT/PROJECTS_INVENTORY.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a7407640-ac83-4788-b688-1992c0bb1de6",
+      "path": "docs/SSOT/rdf-ontology.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1c8afdf1-fea3-41cb-b3c4-905d0757f42f",
+      "path": "docs/SSOT/REFERENCES.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "be86372d-023e-44a2-9924-d7af874519a5",
+      "path": "docs/SSOT/RULES_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "632cdd5d-a338-4549-9bb5-1a85d86be205",
+      "path": "docs/SSOT/SHARE_FOLDER_ANALYSIS.md",
+      "kind": "ssot_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-11-30 18:44:07.655237-08:00"
+    },
+    {
+      "id": "5d6a5c30-8f2d-432e-80bb-07ebbd904974",
+      "path": "docs/SSOT/SHARE_FOLDER_ANALYSIS.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "121f65a7-9ca0-4f8f-b45b-60025af569ba",
+      "path": "docs/SSOT/SHARE_FOLDER_GATE_STATUS_GAP.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ab3fe3b7-b20c-4391-b4dc-ef170d5ea7e1",
+      "path": "docs/SSOT/SHARE_FOLDER_STRUCTURE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "68d68d9f-448e-40ea-8876-f7098f3b6950",
+      "path": "docs/SSOT/SHARE_SURFACE_CONTRACT.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ba4f47e7-6a59-4582-b54d-d385555e2118",
+      "path": "docs/SSOT/STORYMAKER_INTAKE.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "58f2839e-af30-44cd-b287-44b861983c6e",
+      "path": "docs/SSOT/visualization-config.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d90e8dba-5bad-49b1-a121-d4a7c966e22c",
+      "path": "docs/SSOT/webui-contract.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "51e37396-5b23-4afb-a577-4a63e3f4573e",
+      "path": "docs/tickets/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "c64d0662-32e5-48ae-a54f-6b53fcfc192c",
+      "path": "docs/vendor/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "13230193-16b4-4266-8bff-fa7927dc7cd0",
+      "path": "MASTER_PLAN.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "847c94dc-9235-4325-8d4a-0a53230a7dab",
+      "path": "migrations/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e8ad4438-acc1-4e78-a78a-4c1d2f152b66",
+      "path": "pmagent/adapters/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "98e61f9d-5476-4331-b130-3db2ea9a0549",
+      "path": "pmagent/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "03bfe7e1-912d-4b43-ac39-4b7cc21588da",
+      "path": "pmagent/ai_docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "00b54952-fc92-4cc9-a026-4b54c62d6757",
+      "path": "pmagent/atlas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e00406d0-ecee-48d8-ac67-0b1b4b6c1101",
+      "path": "pmagent/biblescholar/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "cd359984-be79-4fb8-af97-8c58b0f91105",
+      "path": "pmagent/biblescholar/tests/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1a77ed17-28d3-4e51-98c2-fae58d0dc238",
+      "path": "pmagent/bus/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "347072e0-3895-4534-bd0d-2dd86a1cb450",
+      "path": "pmagent/control_plane/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e4a828dc-15b2-414f-a049-9fb405cd5e6f",
+      "path": "pmagent/control_widgets/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "259d107b-b437-4a5a-acd5-21e74705c646",
+      "path": "pmagent/db/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "cc54ba30-cf0d-4a04-93c1-9e5595c3fef7",
+      "path": "pmagent/dms/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3b4401d3-678e-4c6b-9acf-878bd66654a3",
+      "path": "pmagent/docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a0fcc619-3a8a-4244-8066-1fb9576b9ddb",
+      "path": "pmagent/exports/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b22e81c1-8503-4d8d-84fd-66e2439dd4d7",
+      "path": "pmagent/extractors/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "24c5828f-abf6-44b5-93ed-b1d663fc12c0",
+      "path": "pmagent/gatekeeper/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dbf5c323-a262-4914-a4e8-83f48634f664",
+      "path": "pmagent/governance/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "66aaea86-a5bc-4709-8ce6-00f232d41717",
+      "path": "pmagent/graph/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "466a3c9a-88c1-42bc-8c20-5b7c132c9230",
+      "path": "pmagent/guard/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "96125c94-1a1b-492a-a741-56ff72033716",
+      "path": "pmagent/guarded/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "412de742-25e3-467d-80cb-50c7ac6f9ca1",
+      "path": "pmagent/handoff/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "a0852fce-4ac4-4934-b6af-142ab06401a3",
+      "path": "pmagent/hints/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dd287ed2-581f-4a6f-ba66-25d27a18fa23",
+      "path": "pmagent/kb/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "277debb0-c122-4105-a168-80569ffa2cff",
+      "path": "pmagent/kernel/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "aabddc1f-2fcb-47ee-9c84-f352712ec0ab",
+      "path": "pmagent/knowledge/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "40b72e67-8962-49ea-9d21-37303a587a66",
+      "path": "pmagent/lm/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6fdc7fd3-9376-4705-93e1-a9b820bc2631",
+      "path": "pmagent/lm_widgets/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fc1939a8-c7ed-44c8-ac66-53de4c0f73ad",
+      "path": "pmagent/mcp/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "71520d22-67c0-40a2-9f36-dba0e53aa254",
+      "path": "pmagent/metrics/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5c08c276-fe0c-4d92-9e24-f03890b88d8f",
+      "path": "pmagent/modules/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "38af1974-f2a6-4ffd-8ed2-da7496a335b9",
+      "path": "pmagent/modules/gematria/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6f5fd773-1f44-4e2b-99b1-bde2c1f937ee",
+      "path": "pmagent/obs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "740d2a3d-9880-488d-a58b-b4a9a0b78c74",
+      "path": "pmagent/plan/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4b0d8550-615c-44f7-808c-850bee778076",
+      "path": "pmagent/reality/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6a787bac-b68b-48f0-95d6-76e8ac05fc85",
+      "path": "pmagent/repo/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4f6d33a8-13ff-4502-89ab-e9f37d45d0f2",
+      "path": "pmagent/rpc/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "dcb11866-884c-46d0-95ed-d5409b12ca64",
+      "path": "pmagent/runtime/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f26440a1-1ba8-4519-8aa2-527bc7a0905d",
+      "path": "pmagent/scripts/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6886d9ca-6791-4e99-b36a-8df6fb243eed",
+      "path": "pmagent/scripts/state/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "d9adcf1d-3bf0-46aa-9250-fb8696d38368",
+      "path": "pmagent/server/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "effa051e-c9e5-4a88-9e1b-24371d9fc4a4",
+      "path": "pmagent/status/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "4f877d60-3f8a-4b4c-ad23-9ff93ab3b24f",
+      "path": "pmagent/tests/adapters/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fd7f5eb6-d348-430b-8a3a-2ead72ceeea0",
+      "path": "pmagent/tests/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "addd4b5e-4a93-4676-851e-ba6389a2203a",
+      "path": "pmagent/tests/atlas/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "570286c2-8c61-40db-8524-2fcb0be2d7e6",
+      "path": "pmagent/tests/cli/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8df67f8f-bfc3-4864-969a-73be4ca9c7ff",
+      "path": "pmagent/tests/db/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "bb00f9ed-5e23-4b61-9663-cb7f21d0bfae",
+      "path": "pmagent/tests/docs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "11464c42-b2ab-4068-9899-6caa612a8187",
+      "path": "pmagent/tests/exports/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "60035fcf-546b-4c4c-a64f-51cf6fbc8c84",
+      "path": "pmagent/tests/extractors/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "be19ca81-85f9-4c69-acc4-369f2a9bab15",
+      "path": "pmagent/tests/html/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7fe51124-f3b9-48f5-843c-02b782479e74",
+      "path": "pmagent/tests/kb/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e82a7489-f524-417f-b715-fce51058e78d",
+      "path": "pmagent/tests/knowledge/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2d96a8ed-e6d7-4d2d-b3a4-975bdca9e517",
+      "path": "pmagent/tests/lm/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "0671028e-63da-4be0-8fa1-e555c9c0346f",
+      "path": "pmagent/tests/mcp/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "8722696e-45eb-4f5a-a412-30506f9779f6",
+      "path": "pmagent/tests/phase1/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b62ade26-d4f5-4dc6-80c4-4002fc2b7c37",
+      "path": "pmagent/tests/reality/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6d2f7670-5bb9-4d23-9daa-c27d52b39860",
+      "path": "pmagent/tests/status/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1958d2d8-dceb-422e-9e4c-a9b6b61279e4",
+      "path": "pmagent/tests/system/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "5120950e-f48b-4548-9b12-329c7e24f4dd",
+      "path": "pmagent/tools/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "07e451a8-806e-4365-8567-511cc8afebb9",
+      "path": "RULES_INDEX.md",
+      "kind": "ssot",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "fb11adb7-c04f-40bc-922d-cc0cd4ff503f",
+      "path": "scripts/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b1fe967d-95d6-44b9-9409-7aae900f8257",
+      "path": "share/PHASE_14_SEMANTIC_RECORD.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "db6fa155-b03f-46ef-b486-1ffcaa155067",
+      "path": "share/PHASE18_INDEX.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "dbdcd0aa-e3b1-43cb-a3e5-a4452c51626e",
+      "path": "share/PHASE20_INDEX.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "c69b87ea-46e9-4d49-a4f4-58fe57cf9bda",
+      "path": "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "47f1d2ae-327a-40bb-94f6-6d3ecbe3332f",
+      "path": "share/PHASE20_UI_RESET_DECISION.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "7fdf295e-4d3b-4a9d-b61c-0e5ebbfff4d3",
+      "path": "share/PHASE21_CONSOLE_SERVE_PLAN.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "4b8a3f3d-4633-4a17-a5fa-a09991504cd9",
+      "path": "share/PHASE21_INDEX.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "c2ea897b-eaae-42e8-a836-373df8d72352",
+      "path": "share/PHASE22_INDEX.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "40bd5fae-c13b-486d-be52-a2f537d197f2",
+      "path": "share/PHASE22_OPERATOR_WORKFLOW.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "2deec49b-d62b-4b41-b8e4-669a87dd1436",
+      "path": "share/PHASE23_BASELINE_NOTE.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "47f8b422-53b5-4722-aaa8-a5dfc92ecf06",
+      "path": "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "fcd2cae6-a0d8-4ae2-8c51-d5630f030cf4",
+      "path": "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "f0699942-9780-422c-8a0e-777e198cfe14",
+      "path": "share/PHASE23_INDEX.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "8940c618-0c5b-42f9-bac4-9741e8c6b29d",
+      "path": "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "e725df41-1848-4df3-bd80-b5e1296e2a8f",
+      "path": "share/PHASE23_STRESS_PLAN.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "7b10ad31-ffe1-4b31-9b0d-01cc9373a158",
+      "path": "share/PHASE23_STRESS_SMOKE_NOTE.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "d2e614ec-b36a-4169-80d6-bc37b55348d9",
+      "path": "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "bb46ce5e-bf8c-4d08-81a3-8d046373d495",
+      "path": "share/PHASE_6_PLAN.md",
+      "kind": "phase_doc",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-06 17:20:49.866413-08:00"
+    },
+    {
+      "id": "4ab32f63-1439-40d6-b861-75ebe8793e59",
+      "path": "src/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e6e7219e-87e7-4a43-84ba-d4f87564ed4f",
+      "path": "src/core/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "b0c63e61-7e4c-4d5d-88c6-095872c22800",
+      "path": "src/gemantria/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "edb801e4-1239-48ac-9d45-84ec6bd9533f",
+      "path": "src/gemantria.egg-info/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "6e867837-06d3-4f13-a43f-3a1f188fafbf",
+      "path": "src/graph/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "7eba8da3-03eb-476b-8257-c1e77265db1b",
+      "path": "src/infra/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "1a02af4f-baca-49a4-a99a-1a73f409785e",
+      "path": "src/nodes/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3f6f4164-317a-43e1-af00-2e7b317fb507",
+      "path": "src/obs/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "0308bc23-31c0-455f-883e-190b4a7d94b1",
+      "path": "src/persist/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "540f24cc-57ab-4ca9-a32a-40ff4017b27d",
+      "path": "src/rerank/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "33de7421-1b5d-4ab2-b580-4caadd338f0a",
+      "path": "src/services/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "22b621eb-3572-4032-a2a6-d0939ba0f42f",
+      "path": "src/ssot/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2aca15ff-72d5-49f1-8a32-70ccc510911b",
+      "path": "src/utils/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "ae9d1ede-fac5-41af-af3f-895b7dfe6fc4",
+      "path": "tests/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2886602d-904b-490d-ab8c-dc180b7b8f83",
+      "path": "tools/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "3ddcbc40-2241-4b87-9f57-43cdd0d7dbf5",
+      "path": "webui/dashboard/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "f31e3267-f8cb-4ffb-a350-f6f3e7187177",
+      "path": "webui/graph/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e1f37b2c-d9a5-43da-ab45-101566d9eddc",
+      "path": "webui/orchestrator-console-v2/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "2128907a-b911-4477-940e-c68a47682ee3",
+      "path": "webui/orchestrator-shell/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    },
+    {
+      "id": "e801cb1e-6f75-4e8a-a61a-a397e7e9a636",
+      "path": "webui/public/AGENTS.md",
+      "kind": "agent_framework",
+      "importance": "unknown",
+      "enabled": true,
+      "tags": [],
+      "updated_at": "2025-12-07 09:48:19.359840-08:00"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Forest Overview
 
-Generated: 2025-12-03 08:40:55
+Generated: 2025-12-08 08:34:02
 
 ## Active Rules
 
@@ -118,6 +118,8 @@ Generated: 2025-12-03 08:40:55
 ## ADRs
 
 - 010-chapter-mode-extraction: ADR-010: Chapter-Mode Execution for OT Extraction
+- 029-remove-legacy-scripts: ADR-029: Remove legacy offline scripts in favor of LangGraph orchestrator
+- 030-db-seeded-noun-source: ADR-030: DB-seeded noun source for STRICT extraction
 - ADR-000-langgraph: ADR-000: Orchestration via LangGraph (StateGraph)
 - ADR-001-two-db: ADR-001: Two-DB Safety (bible_db RO; gematria RW)
 - ADR-002-gematria-rules: ADR-002: Gematria and Normalization Rules
@@ -140,7 +142,6 @@ Generated: 2025-12-03 08:40:55
 - ADR-020-ontology-forward-compatibility: ADR-020: Ontology Forward Compatibility
 - ADR-021-metrics-contract-synchronization: ADR-021: Metrics Contract Synchronization
 - ADR-022-cross-text-pattern-analysis: ADR-022: Cross-Text Pattern Analysis
-- ADR-022-system-enforcement-bridge: ADR-022: System Enforcement Bridge
 - ADR-023-visualization-api-and-dashboard: ADR-023: Visualization API and Dashboard
 - ADR-025-multi-temporal-analytics: ADR-025: Multi-Temporal Analytics & Predictive Patterns
 - ADR-026-reranker-bi-encoder-proxy: ADR-026: Reranker Bi-Encoder Proxy Implementation
@@ -151,6 +152,8 @@ Generated: 2025-12-03 08:40:55
 - ADR-057-context-persistence-ci: ADR-057: Context Persistence CI Enforcement
 - ADR-058-gpt-system-prompt-governance: ADR-058: GPT System Prompt Requirements as Operational Governance
 - ADR-059-hint-registry: ADR-059: Hint Registry Design
+- ADR-063-code-exec-ts: ADR-063: TS Code-Execution Sandbox (PoC)
+- ADR-064-rfc3339-fast-lane: ADR-064: RFC3339 Fast-Lane Contract for Graph Exports
 - AGENTS: AGENTS.md - Architectural Decision Records Directory
 
 ## Phase Gate Status

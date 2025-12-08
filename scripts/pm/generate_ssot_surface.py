@@ -73,7 +73,18 @@ def generate_ssot_surface():
         "phases": {
             "last_completed": 23,
             "current": 24,
-            "notes": "Phases 18-23 rebuilt from recovery doc. Phase 24 in progress.",
+            "notes": "Phases 18-23 rebuilt from recovery doc. Phase 24+ in progress.",
+            # Phase 27 evidence surfaces (Phase 27.E Batch 2)
+            "27": {
+                "status": "in_progress",
+                "evidence": [
+                    "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+                    "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+                    "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+                    "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md",
+                    "share/PHASE27F_IMPLEMENTATION_EVIDENCE.md",
+                ],
+            },
         },
         # Phase 24.B Extension
         "dms_share_alignment": alignment.get("dms_share_alignment", "UNKNOWN"),

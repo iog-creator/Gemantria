@@ -1,0 +1,3580 @@
+{
+  "docs": [
+    {
+      "repo_path": "ADR-007-llm-integration.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "ADR-032-bibledb-as-SSOT-roadmap.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "ADR-065-postgres-ssot.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "ADR-066-lm-studio-control-plane-integration.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "AGENTS.md",
+      "role": "agent_framework_index",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "CHANGELOG.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "CONTRIBUTING.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "DATA_FLOW_DIAGRAM.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "GEMINI.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "GPT_SYSTEM_PROMPT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "MASTER_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "MCP_BIBLESCHOLAR_REGISTRATION.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "NEXT_STEPS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "Prompting Guide for Our Core LLM models.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "README_FULL.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "RELEASES.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "RULES_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "SCHEMA_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "START_HERE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "forest_overview.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "unknown"
+    },
+    {
+      "repo_path": "docs/ADRs/010-chapter-mode-extraction.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/029-remove-legacy-scripts.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/030-db-seeded-noun-source.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-000-langgraph.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-001-two-db.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-002-gematria-rules.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-003-batch-semantics.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-004-postgres-checkpointer.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-005-metrics-logging.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-006-observability-dashboards.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-008-confidence-validation.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-009-semantic-aggregation.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-010-qwen-integration.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-011-concept-network-verification.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-012-concept-network-dimension-fix.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-013-documentation-sync-enhancement.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-014-relations-and-pattern-discovery.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-015-jsonld-and-visualization.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-016-insight-metrics-and-ontology.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-017-agent-documentation-presence.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-018-pattern-correlation.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-019-forest-governance.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-020-ontology-forward-compatibility.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-021-metrics-contract-synchronization.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-022-cross-text-pattern-analysis.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-022-system-enforcement-bridge.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-023-visualization-api-and-dashboard.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-025-multi-temporal-analytics.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-026-reranker-bi-encoder-proxy.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-033-ai-nouns-ssot-contract.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-034-uuid-key-evolution.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-055-auto-docs-sync-ci.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-056-auto-housekeeping-ci.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-057-context-persistence-ci.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-058-gpt-system-prompt-governance.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-059-hint-registry.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-063-code-exec-ts.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/ADR-064-rfc3339-fast-lane.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ADRs/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/AI_LEARNING_SYSTEM.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/AI_LEARNING_SYSTEM_AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ANALYSIS/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ANALYSIS/rule-enforcement-gaps.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/BACKUP_STRATEGY_AUDIT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/DECISION_LOG.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/FIGMA_MCP_SETUP.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/HANDOFF_2025-12-01_github_recovery.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/INGEST_BIBLE_DB.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/MASTER_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/OPS/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/OPS/NEXT_STEPS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/OPS_BOOK_SMOKE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/OPS_CALIBRATION.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/OPS_VERIFY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE10_RETROSPECTIVE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE11_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE8_EVAL.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE8_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE_7F_IMPLEMENTATION_SUMMARY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE_7F_MODEL_READINESS_CHECKLIST.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE_7F_SUMMARY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/PHASE_H2_REQUIRED_HINTS_ROLLOUT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/VERIFICATION_MATRIX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/adr/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/DOC_ARCHIVE_DRYRUN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/DOC_DM002_CANONICAL_PREVIEW.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/DOC_DUPLICATES_REPORT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/KETIV_QERE_POLICY_CONFLICT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/analysis/ORPHANS_CANDIDATE_REPORT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/atlas/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/atlas/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/atlas/mcp_examples.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/audits/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/audits/AGENTS_MD_AUDIT_20251112.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/audits/AUDIT_DB_ORIGINALS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/audits/governance-audit-20251108.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/consumers/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/consumers/NOUN_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/consumers/TEMPORAL_STRIP.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/dashboard.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/badges_manifest.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/call_graph.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/class_diagram.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/dependencies.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/execution_live.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/exports_json.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/exports_json_badge.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/exports_rfc3339.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/extraction_accuracy.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/knowledge_graph.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/kpis.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/pipeline_flow_historical.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/evidence/xrefs_metrics.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/expansion.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/forest/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/forest/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/forest/overview.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/gemantria_share_reconstruction_master_doc_phases_18_23.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/2025-11-12-PLAN-074-M14-complete.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/2025-11-13-PLAN-074-M14-E69-OPS-v6.3.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/GPT_PM_CONTEXT_REBUILD.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/PHASE6P_COMPLETE_HANDOFF.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/PLAN-073-M4-handoff.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/handoff/PLAN-092-AgentPM-Next-M1-M4-handoff.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-CALC-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-CODE-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-DB-001-dsn-mandatory.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-DB-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-DB-002-postgres-not-running.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-DEBUG-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-DEP-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-ENV-001-venv-not-activated.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-ENV-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-GRAPH-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-GRAPH-002.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-MIGRATION-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-PHASE-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-PHASE-002.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-SCHEMA-001.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-SCHEMA-002.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/HINT-SCHEMA-003.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/data.bible_lemma_english.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/db.dsn_env_var_ignored.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/docs.dms_only.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/governance.fail_closed.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/ops.regenerate_truncation.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/reality.green.required_checks.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/share.dms_only.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints/status.local_gates_first.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/hints_registry.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ingestion/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ingestion/REAL_DATA_INGESTION.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ops/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ops/DSN_NETWORK_SETUP.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ops/master_reference_tracking.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/ops/mcp_README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/optimization.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase10/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase10/DASHBOARD_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase10/STRUCTURE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase10/UI_SPEC.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/ENVELOPE_FIELDS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/FIRST_SNAPSHOT_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/INGESTION_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/INGEST_ENVELOPE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/MAPPINGS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/SNAPSHOTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/phase9/VALIDATION_README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plan-074/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plan-074/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/AGENTPM_NEXT_M4.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-072-m2-extraction-correctness.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-072-resume.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-079-normalization.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-080-Verification-Sweep-and-Tagproof.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-080-guarded-calls-execution.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PLAN-081-orchestrator-dashboard-polish.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/plans/PR2-RO-ADAPTER-PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/biblescholar/ARCHITECTURE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/biblescholar/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/storymaker/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/projects/storymaker/README.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/qwen_integration.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/research/PHASE26_DEEP_RESEARCH_REPORT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/000-instrumentation-rollout.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-074-knowledge-sentinels.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-077-browser-verification-template.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-078-postgres-knowledge-mcp.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-079-guarded-calls-naming.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-080-lm-studio-control-plane-integration.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/rfcs/RFC-081-unified-ui-and-biblescholar-module.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/AGENTS.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/ATLAS_VISUAL_VERIFICATION.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CODEX_CLI.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CONTROL_PIPELINE_STATUS.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CONTROL_SCHEMA.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CONTROL_STATUS.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CONTROL_SUMMARY.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CONTROL_TABLES.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CURSOR_BROWSER_QA.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/CURSOR_WORKFLOW_RUNBOOK.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/DB_HEALTH.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/DSN_SECRETS.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/GEMINI_CLI.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/GOVERNANCE_DB_SSOT.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/GPU_RESOURCE_MANAGEMENT.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/GRAPH_IMPORT.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/GRAPH_OVERVIEW.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/HANDOFF_WORKFLOW.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/LM_HEALTH.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/LM_STUDIO_MEMORY_MANAGEMENT.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/LM_STUDIO_SETUP.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/MCP_KNOWLEDGE_DB.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/MCP_SSE_AUTO_START.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/OLLAMA_ALTERNATIVE.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/OLLAMA_AUTO_DISCOVERY.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/PHASE_6D_DOWNSTREAM_INTEGRATION.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/SETUP_LM_STUDIO_AND_DB.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/STATUS_POLLING_OPTIMIZATION.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/SYSTEM_HEALTH.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/runbooks/USAGE_PATTERNS_REFERENCE.md",
+      "role": "runbook",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schema/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schema/SCHEMA.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/SSOT_ai-nouns.v1.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/SSOT_graph.v1.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/graph-correlations.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/graph-patterns.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/graph-stats.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/pattern-forecast.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/schemas/temporal-patterns.schema.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/sql/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/tickets/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/tickets/ENRICH-JSON-REPAIR.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/vendor/AGENTS.md",
+      "role": "agent_framework",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "docs/SSOT/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/AGENTPM_NEXT_M2_DESIGN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/AGENTPM_NEXT_M3_DESIGN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/AGENTS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/ATLAS_GOVERNANCE_SEARCH_PANEL.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/AUTOPILOT_ORCHESTRATOR_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/BIBLESCHOLAR_INTAKE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/BIBLESCHOLAR_MIGRATION_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/BIBLESCHOLAR_REFERENCE_SLICE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/CAPABILITY_SESSION_AI_TRACKING_MAPPING.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/COMMIT_PLAN_PHASE10_WIRING.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/CONSOLE_KERNEL_PANEL_SPEC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/CURSOR_BEHAVIORAL_PATCH.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DIRECTORY_DUPLICATION_MAP.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DMS_PERFORMANCE_OPTIMIZATION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DMS_QUERY_PROTOCOL.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DM_002_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DOC_CONTENT_VECTOR_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DOC_CONTROL_PANEL_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/DOC_REGISTRY_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/EPOCH_LEDGER.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/EXECUTION_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/FEATURE_REUNION_BACKLOG.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GEMATRIA_DSN_GOVERNANCE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GEMATRIA_INTAKE_SCAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GEMATRIA_MASTER_REFERENCE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GEMATRIA_NUMERICS_INTAKE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GITHUB_WORKFLOW_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GOTCHAS_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GPT_REFERENCE_GUIDE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/GPT_SYSTEM_PROMPT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/HOUSEKEEPING_GPU_ACCELERATION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/HOUSEKEEPING_PERFORMANCE_OPTIMIZATION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/KB_REGISTRY_ARCHITECTURAL_COURSE_CORRECTION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LAYER3_DRIFT_RESCUE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LAYERED_ARCHITECTURE_V1.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LAYERS_AND_PHASES.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LM_ROUTER_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/LM_WIDGETS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/MASTER_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/MERGE_DEBT_INVENTORY.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/NEXT_STEPS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/ORCHESTRATOR_REALITY.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/ORCHESTRATOR_SHELL_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/Orchestrator Dashboard - Vision.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE10_CORRELATION_WIRING_COMPLETE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE10_WIRING_SELF_ASSESSMENT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE13_RECON.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE14_RECON.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_COMPASS_ALIGNMENT_ANALYSIS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_COMPASS_STRUCTURAL_GAP.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_RECON.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_STATUS_CORRECTION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_WAVE2_SPEC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_WAVE3_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_WAVE3_STEP2_COMPASS_RESULTS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_WAVE3_STEP2_OPS_BLOCK.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE15_WAVE3_STEP2_STATUS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE16_LEGACY_PURGE_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE22_HINTS_CONSOLE_V2.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE24_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE25_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_HANDOFF_KERNEL.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_OA_BOOT_SPEC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_OPS_BOOT_SPEC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_PHASE_DONE_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE26_PMAGENT_BOOT_SPEC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27I_DIRECTORY_UNIFICATION_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27_A_PMAGENT_KERNEL_INTERPRETER.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27_B_OA_RUNTIME.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27_C_CONSOLE_KERNEL_PANEL.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27_D_DSPY_REASONING_OUTLINE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE27_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_BRIDGE_DECISION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_DB_SCHEMA.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_METADATA_ENRICHMENT_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_PHASE10_DIAGNOSTIC_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_PHASE10_FIX12_EVIDENCE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE8_PHASE10_PM_DECISION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_10_4_ID_FIX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_14_SEMANTIC_RECORD.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_16_INIT_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_5_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_6_PLAN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PHASE_9_1_PM_DMS_INTEGRATION.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PLAN_072_M1_DMS_GUARDS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PLAN_073_M1_KNOWLEDGE_MCP.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PMAGENT_CURRENT_VS_INTENDED.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PMAGENT_REALITY_CHECK_AI_NOTES.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PMAGENT_REALITY_CHECK_DESIGN.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_BOOT_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_CONTRACT_STRICT_SSOT_DMS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_HANDOFF_PROTOCOL.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_SHARE_FOLDER_ENHANCEMENTS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_SHARE_FOLDER_GOTCHAS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PM_SHARE_LAYOUT_PHASE15.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/POSTGRES_OPTIMIZATION_PRIORITY.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/POSTGRES_OPTIMIZATION_REVIEW.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/POSTGRES_OPTIMIZATION_SUMMARY.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PREFLIGHT_DB_CHECK_ROLLOUT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/PROJECTS_INVENTORY.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/REFERENCES.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/RULES_INDEX.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/SHARE_FOLDER_ANALYSIS.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/SHARE_FOLDER_GATE_STATUS_GAP.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/SHARE_FOLDER_STRUCTURE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/SHARE_SURFACE_CONTRACT.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/STORYMAKER_INTAKE.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/data_flow.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/data_flow_visual.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/graph-metrics-api.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/graph-stats-api.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/jsonld-schema.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/phase15_wave3_gate_decision.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/rdf-ontology.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/visualization-config.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "docs/SSOT/webui-contract.md",
+      "role": "ssot",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "core-ssot"
+    },
+    {
+      "repo_path": "share/AGENTPM_GEMATRIA_MODULE_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/AGENTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/BIBLESCHOLAR_INTAKE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/BIBLESCHOLAR_MIGRATION_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/DB_HEALTH.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/GEMATRIA_NUMERICS_INTAKE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/GPT_REFERENCE_GUIDE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/GPT_SYSTEM_PROMPT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/LAYER3_AI_DOC_INGESTION_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/LAYER4_CODE_INGESTION_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/LM_STUDIO_SETUP.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/LM_WIDGETS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/MASTER_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/NEXT_STEPS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE18_INDEX.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE20_INDEX.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE20_ORCHESTRATOR_UI_MODEL.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE20_UI_RESET_DECISION.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE21_CONSOLE_SERVE_PLAN.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE21_INDEX.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE22_INDEX.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE22_OPERATOR_WORKFLOW.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_BASELINE_NOTE.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_BOOTSTRAP_HARDENING_NOTE.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_FAILURE_INJECTION_NOTE.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_INDEX.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_PHASE_DONE_CHECKLIST.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_STRESS_PLAN.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE23_STRESS_SMOKE_NOTE.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE_14_SEMANTIC_RECORD.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PHASE_6_PLAN.md",
+      "role": "phase_doc",
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": true,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PM_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PM_CONTRACT_STRICT_SSOT_DMS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PM_HANDOFF_PROTOCOL.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/PROJECTS_INVENTORY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/REFERENCES.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/RULES_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/SHARE_FOLDER_ANALYSIS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/STORYMAKER_INTAKE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/USAGE_PATTERNS_REFERENCE.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/handoff/PM_SUMMARY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/handoff/pr/PR-599.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/handoff/pr/PR-legacy-root-summary.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator/ACTIVE_PROMPTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator/NOTES.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator/RESEARCH_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator_assistant/ACTIVE_PROMPTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator_assistant/NOTES.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/orchestrator_assistant/RESEARCH_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/AGENTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/CURSOR_WORKFLOW_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/CURSOR_WORKFLOW_CONTRACT_INSTALLED.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/DIRECTORY_DUPLICATION_MAP.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/EXECUTION_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/GITHUB_WORKFLOW_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/ORCHESTRATOR_REALITY.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE24_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE25_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE26_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE26_OPS_BOOT_SPEC.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE27I_DIRECTORY_UNIFICATION_PLAN.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PHASE27_INDEX.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PM_AND_OPS_BEHAVIOR_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PM_BEHAVIOR_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PM_BOOT_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PM_CONTRACT.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/PM_CONTRACT_STRICT_SSOT_DMS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/pm_boot/SHARE_FOLDER_ANALYSIS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    },
+    {
+      "repo_path": "share/scripts_AGENTS.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "transitional"
+    },
+    {
+      "repo_path": "share/webui-contract.md",
+      "role": null,
+      "share_path": null,
+      "is_ssot": null,
+      "enabled": null,
+      "classification": "helpful"
+    }
+  ]
+}

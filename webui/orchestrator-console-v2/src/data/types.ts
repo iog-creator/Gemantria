@@ -1,7 +1,44 @@
 /**
  * Helper TS types for data flowing into tiles.
  * Phase 20.4 wires real data into these from the view model.
+ * Phase 27.C adds typed OA state and workspace surfaces.
  */
+
+/** OA State from share/orchestrator_assistant/STATE.json (Phase 27.B/C) */
+export interface OAStateData {
+    version?: number;
+    source?: string;
+    generated_at?: string;
+    branch?: string;
+    current_phase?: string;
+    last_completed_phase?: string;
+    reality_green?: boolean;
+    checks_summary?: Array<{ name: string; passed: boolean }>;
+    dms_hint_summary?: {
+        total_hints?: number;
+        flows_with_hints?: number;
+    };
+    surfaces?: Record<string, string>;
+    surface_status?: Record<string, boolean>;
+    oa_context?: OAContextData;  // Phase 27.E: Task context for DSPy programs
+}
+
+/** OA Context from share/oa/CONTEXT.json (Phase 27.E) */
+export interface OAContextData {
+    active_goal?: string | null;
+    kernel_mode?: string | null;
+    constraints?: string[];
+    pending_ops_blocks?: string[];
+    session_metadata?: Record<string, unknown>;
+}
+
+/** OA Workspace surfaces (Phase 27.C) */
+export interface OAWorkspaceData {
+    research_index?: string;
+    active_prompts?: string;
+    decision_log?: unknown[];
+    notes?: string;
+}
 
 export interface SystemStatusData {
     ssot?: unknown;
@@ -21,9 +58,10 @@ export interface DocsRegistryData {
 
 export interface AgentStateData {
     orchestrator_state?: unknown;
-    oa_state?: unknown;
+    oa_state?: OAStateData;
     orchestrator_decisions?: unknown;
     oa_decisions?: unknown;
+    oa_workspace?: OAWorkspaceData;
 }
 
 export interface TileDataBundle {

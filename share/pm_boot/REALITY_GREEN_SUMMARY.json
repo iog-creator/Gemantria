@@ -1,5 +1,5 @@
 {
-  "reality_green": false,
+  "reality_green": true,
   "checks": [
     {
       "name": "DB Health",
@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "f6fee1d9b4bac96c...",
+              "current_hash": "f6fee1d9b4bac96c..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -139,9 +139,30 @@
     {
       "name": "DMS Alignment",
       "passed": true,
-      "message": "DMS and Share are aligned",
+      "message": "pmagent control-plane DMS and Share are aligned",
       "details": {
         "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+      }
+    },
+    {
+      "name": "DMS Metadata",
+      "passed": true,
+      "message": "pmagent control-plane DMS metadata sane (low_enabled=0)",
+      "details": {
+        "distribution": {
+          "critical": 144,
+          "high": 262,
+          "medium": 56,
+          "unknown": 783
+        }
+      }
+    },
+    {
+      "name": "AGENTS\u2013DMS Contract",
+      "passed": true,
+      "message": "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
+      "details": {
+        "rows": 116
       }
     },
     {
@@ -170,17 +191,23 @@
     },
     {
       "name": "Backup System",
-      "passed": false,
-      "message": "No recent backup found: ",
-      "details": {
-        "output": "\u274c No backup found within the last 5 minutes.\n   Run: make backup.surfaces\n   Before running destructive operations.\n\n\ud83d\uded1 STRICT MODE: Blocking execution.\n"
-      }
+      "passed": true,
+      "message": "Recent backup exists and rotation logic is sane",
+      "details": {}
     },
     {
       "name": "WebUI Shell Sanity",
       "passed": true,
       "message": "WebUI shell files present",
       "details": {}
+    },
+    {
+      "name": "OA State",
+      "passed": true,
+      "message": "OA state is consistent with kernel surfaces",
+      "details": {
+        "output": "\u2705 OA State Guard: PASS\n   OA state is consistent with kernel surfaces\n\nJSON: {\"ok\": true, \"mode\": \"STRICT\", \"mismatches\": [], \"missing_surfaces\": []}"
+      }
     },
     {
       "name": "Handoff Kernel",
@@ -191,5 +218,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T05:49:43Z"
+  "timestamp": "2025-12-08T16:48:33Z"
 }

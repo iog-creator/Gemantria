@@ -139,7 +139,7 @@ This milestone focuses on **guard fixes only**; it does not add new DMS features
 
 ### `guard_docs_db_ssot.py`
 
-**Purpose**: Validate that control-plane doc registry in Postgres is in sync with local canonical docs.
+**Purpose**: Validate that pmagent control-plane DMS (control-plane doc registry in Postgres) is in sync with local canonical docs.
 
 **Current Status**: ⚠️ DB-dependent, needs HINT/STRICT mode support
 

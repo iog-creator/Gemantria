@@ -64,10 +64,10 @@ def _walk_repo_files(base: Path = Path(".")) -> Tuple[List[str], int]:
 
 def _load_dms_tracked_paths() -> Set[str]:
     """
-    Load DMS-tracked repo paths from the KB/DMS registry.
+    Load pmagent control-plane DMS-tracked repo paths from the KB registry (built from pmagent control-plane DMS).
 
     Primary source of truth:
-      - share/kb_registry.json (JSON export from DMS)
+      - share/kb_registry.json (JSON export from pmagent control-plane DMS)
 
     Legacy compatibility:
       - If kb_registry.json is missing but doc_registry.md exists, fall back

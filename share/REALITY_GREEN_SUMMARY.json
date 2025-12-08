@@ -1,5 +1,5 @@
 {
-  "reality_green": false,
+  "reality_green": true,
   "checks": [
     {
       "name": "DB Health",
@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "5f089e214966d282...",
-              "current_hash": "5f089e214966d282..."
+              "ledger_hash": "f6fee1d9b4bac96c...",
+              "current_hash": "f6fee1d9b4bac96c..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -139,9 +139,30 @@
     {
       "name": "DMS Alignment",
       "passed": true,
-      "message": "DMS and Share are aligned",
+      "message": "pmagent control-plane DMS and Share are aligned",
       "details": {
         "output": "{\n  \"ok\": true,\n  \"mode\": \"STRICT\",\n  \"dms_share_alignment\": \"OK\",\n  \"missing_in_share\": [],\n  \"missing_in_dms\": [],\n  \"extra_in_share\": []\n}"
+      }
+    },
+    {
+      "name": "DMS Metadata",
+      "passed": true,
+      "message": "pmagent control-plane DMS metadata sane (low_enabled=0)",
+      "details": {
+        "distribution": {
+          "critical": 144,
+          "high": 262,
+          "medium": 56,
+          "unknown": 783
+        }
+      }
+    },
+    {
+      "name": "AGENTS\u2013DMS Contract",
+      "passed": true,
+      "message": "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
+      "details": {
+        "rows": 116
       }
     },
     {
@@ -154,14 +175,10 @@
     },
     {
       "name": "Root Surface",
-      "passed": false,
-      "message": "Found 2 unexpected file(s) in root: pr-27h.md, tmp.agent_docs_index.json",
+      "passed": true,
+      "message": "No unexpected files in repository root",
       "details": {
-        "unexpected": [
-          "pr-27h.md",
-          "tmp.agent_docs_index.json"
-        ],
-        "output": ""
+        "output": "[root-surface] OK: no unexpected files in repo root"
       }
     },
     {
@@ -185,6 +202,14 @@
       "details": {}
     },
     {
+      "name": "OA State",
+      "passed": true,
+      "message": "OA state is consistent with kernel surfaces",
+      "details": {
+        "output": "\u2705 OA State Guard: PASS\n   OA state is consistent with kernel surfaces\n\nJSON: {\"ok\": true, \"mode\": \"STRICT\", \"mismatches\": [], \"missing_surfaces\": []}"
+      }
+    },
+    {
       "name": "Handoff Kernel",
       "passed": true,
       "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
@@ -193,5 +218,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-07T06:29:34Z"
+  "timestamp": "2025-12-08T17:11:50Z"
 }

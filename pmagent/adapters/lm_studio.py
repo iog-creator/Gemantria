@@ -317,13 +317,16 @@ def embed(texts: str | list[str], *, model_slot: str | None = None) -> list[list
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
 
-    for text in text_list:
-        payload = {"model": model, "input": text}
-        resp = requests.post(url, json=payload, headers=headers, timeout=30.0)
-        resp.raise_for_status()
-        data = resp.json()
-        embedding_vec = data.get("data", [{}])[0].get("embedding", [])
-        embeddings.append(embedding_vec)
+    # Batch all texts in a single request for efficiency
+    payload = {"model": model, "input": text_list}
+    resp = requests.post(url, json=payload, headers=headers, timeout=120.0)
+    resp.raise_for_status()
+    data = resp.json()
+
+    # Extract embeddings from response (OpenAI-compatible format)
+    embeddings = []
+    for item in data.get("data", []):
+        embeddings.append(item.get("embedding", []))
 
     return embeddings
 

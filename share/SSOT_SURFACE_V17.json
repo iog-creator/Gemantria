@@ -1,11 +1,11 @@
 {
   "version": 17,
   "generated_by": "generate_ssot_surface.py",
-  "generated_at": "2025-12-06T04:40:03.438711+00:00",
+  "generated_at": "2025-12-08T17:10:22.507046+00:00",
   "description": "High-level SSOT surface snapshot for Gemantria.",
   "db": {
     "status": "online",
-    "last_checked_at": "2025-12-06T04:40:03.438711+00:00"
+    "last_checked_at": "2025-12-08T17:10:22.507046+00:00"
   },
   "dms": {
     "doc_registry_count": 0,
@@ -14,7 +14,17 @@
   "phases": {
     "last_completed": 23,
     "current": 24,
-    "notes": "Phases 18-23 rebuilt from recovery doc. Phase 24 in progress."
+    "notes": "Phases 18-23 rebuilt from recovery doc. Phase 24+ in progress.",
+    "27": {
+      "status": "in_progress",
+      "evidence": [
+        "share/PHASE27A_IMPLEMENTATION_EVIDENCE.md",
+        "share/PHASE27BC_IMPLEMENTATION_EVIDENCE.md",
+        "share/PHASE27D_IMPLEMENTATION_EVIDENCE.md",
+        "share/PHASE27E_IMPLEMENTATION_EVIDENCE.md",
+        "share/PHASE27F_IMPLEMENTATION_EVIDENCE.md"
+      ]
+    }
   },
   "dms_share_alignment": "OK",
   "dms_share_mismatch_count": 0,

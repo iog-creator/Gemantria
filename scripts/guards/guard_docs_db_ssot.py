@@ -5,7 +5,7 @@ Guard: Docs DB SSOT
 
 Purpose
 -------
-Validate that the control-plane doc registry in Postgres is in sync with the
+Validate that the pmagent control-plane DMS (control-plane doc registry in Postgres) is in sync with the
 canonical documentation files in the repo:
 
 - AGENTS.md

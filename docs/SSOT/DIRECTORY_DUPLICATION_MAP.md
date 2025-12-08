@@ -19,6 +19,9 @@ The repository has **significant directory duplication** that creates confusion 
 
 **Total Impact:** ~200+ files across duplicate directories, unclear ownership, maintenance confusion.
 
+> [!IMPORTANT]
+> **Implementation Status:** No file moves have been performed yet. This document is a **planning artifact only**. The duplicate directories still exist in the repository. Actual cleanup is deferred to a future phase (Phase 28+).
+
 ---
 
 ## 1. ADR Directories
@@ -231,7 +234,7 @@ The repository has **significant directory duplication** that creates confusion 
    - `Makefile` targets
    - `scripts/` imports
    - `docs/SSOT/` documentation
-   - DMS registry
+   - pmagent control-plane DMS
 2. **Run guards:**
    - `make ops.kernel.check`
    - `make reality.green`
@@ -248,7 +251,7 @@ After cleanup, these files may need updates:
 - `scripts/guards/guard_dms_share_alignment.py` (path checks)
 - `docs/SSOT/SHARE_FOLDER_ANALYSIS.md` (directory structure docs)
 - `docs/README.md` (documentation structure)
-- DMS registry (if paths are tracked)
+- pmagent control-plane DMS (if paths are tracked)
 
 ---
 

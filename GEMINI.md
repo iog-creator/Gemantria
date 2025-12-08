@@ -2,6 +2,62 @@
 
 This document provides a map of the Gemantria Agent Framework, synthesized from `AGENTS.md` and the project's governance rules. It serves as the primary integration point for Gemini agents to understand their role, constraints, and workflows within the Gemantria project.
 
+---
+
+## ⚠️ MANDATORY CONVERSATION BOOT SEQUENCE (Rule 080)
+
+**YOU MUST EXECUTE THIS SEQUENCE AT THE START OF EVERY CONVERSATION BEFORE ANY OTHER WORK.**
+
+Failure to follow this sequence has caused repeated governance violations and system fragility. This is non-negotiable.
+
+### Step 1: Kernel Health Check
+```bash
+make ops.kernel.check
+```
+**If this fails**: STOP. Enter NO-OP mode. Report failure to user.
+
+### Step 2: Check System Mode
+```bash
+cat share/handoff/PM_KERNEL.json | jq '{mode, current_phase, branch}'
+```
+- If `mode == "DEGRADED"`: Only PM-approved remediation work allowed
+- If `mode == "NORMAL"`: Proceed to Step 3
+
+### Step 3: Verify Reality Green
+```bash
+make reality.green
+```
+**If any checks fail**: Report failures before proceeding. Do NOT assume passes.
+
+### Step 4: Query DMS Before File Search (Rule 051/053/069)
+Before searching files with grep/find, FIRST query the DMS:
+```bash
+# List all registered KB docs
+pmagent kb registry list
+
+# Filter by tag (e.g., dspy, governance, phase27)
+pmagent kb registry by-tag --tag "dspy"
+
+# Filter by subsystem (e.g., oa, pmagent, kernel)
+pmagent kb registry by-subsystem --subsystem "oa"
+```
+The DMS (Document Management System) knows what docs exist and their importance.
+
+### Step 5: Check Local AGENTS.md
+If working in a specific directory, read its `AGENTS.md` first:
+```bash
+cat <working_directory>/AGENTS.md
+```
+
+### Boot Confirmation
+After completing steps 1-3, state in your response:
+> **Boot complete**: Kernel mode=`<mode>`, phase=`<phase>`, reality.green=`<pass/fail count>`
+
+---
+
+> [!CAUTION]
+> **You do NOT have persistent codebase embeddings.** You must actively read docs and query DMS each session. Do not assume knowledge from previous conversations carries over.
+
 ## Core Mission & Priorities
 
 (Source: `AGENTS.md`)
@@ -61,6 +117,44 @@ This document provides a map of the Gemantria Agent Framework, synthesized from 
     - Use `pmagent kb registry` and `control.mcp_tool_catalog`.
 - **Orchestrator Output**:
     - Filter `dump_bash_state: command not found` noise from subprocess outputs.
+
+## Artifact & Walkthrough Protocol (Rule 071)
+
+**MANDATORY**: All phase completion walkthroughs and implementation evidence MUST be saved to the codebase, not just to the Gemini artifact directory.
+
+### Walkthrough Location
+- **Path**: `docs/SSOT/PHASE{XX}_IMPLEMENTATION_EVIDENCE.md`
+- **Example**: `docs/SSOT/PHASE27BC_IMPLEMENTATION_EVIDENCE.md`
+- **Pattern**: Follow existing phase docs in `docs/SSOT/PHASE*`
+
+### Required Content
+1. **Status & Branch**: Current state and git branch
+2. **Commits**: Table of relevant commits with descriptions
+3. **Changes Made**: New files, modified files, organized by component
+4. **Health Evidence**: `reality.green` output, guard results
+5. **Verification Commands**: How to reproduce/verify the work
+
+### Workflow
+1. Create walkthrough in artifact directory during work
+2. **ALWAYS** copy final walkthrough to `docs/SSOT/PHASE{XX}_IMPLEMENTATION_EVIDENCE.md`
+3. Commit the evidence file to the codebase
+4. This ensures PM and future agents can access the evidence
+
+## OPS Output Format (Rule 050)
+
+**All OPS responses must follow the 4-block format:**
+
+1. **Goal** — Single sentence stating the objective
+2. **Commands** — Runnable shell commands (no prose between)
+3. **Evidence to return** — What outputs to expect
+4. **Next gate** — What happens after seeing evidence
+
+**Local Gates Are Primary (Rule 050 §5.5):**
+- Never say "waiting for CI" — local gates are the truth
+- Run these before any push: `ruff format --check . && ruff check . && make book.smoke && make reality.green`
+- CI is informational only, not blocking
+
+---
 
 ## Agent Index (Key Subsystems)
 
