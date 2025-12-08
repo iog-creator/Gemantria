@@ -179,7 +179,9 @@ codex.parallel:
 # Share sync (OPS v6.2 compliance)
 
 share.sync:
-	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT
+	@PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT || \
+	(echo ">> Auto-creating backup before share.sync..." && $(MAKE) backup.surfaces && \
+	 PYTHONPATH=. python3 scripts/guards/guard_backup_recent.py --mode STRICT)
 	@PYTHONPATH=. python3 scripts/sync_share.py
 
 .PHONY: pm.snapshot share.manifest.verify snapshot.db.health.smoke pm.share.artifacts plan.next plan.history pm.share.planning_context
