@@ -1,0 +1,3122 @@
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000001",
+        "timestamp": "2025-12-08T10:00:01Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Decide if it is safe to run full reality.green and share.sync before starting Phase 27.G work on feat/phase27-oa-bridge.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=feat/phase27-oa-bridge, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:55:00Z",
+            "ssot_surface": "PM_BOOTSTRAP_STATE and SSOT_SURFACE are in STRICT alignment",
+            "oa_state": "mode=STRICT, flows=[handoff,ops]"
+        },
+        "oa_context": {
+            "task": "Gate OPS against guards before allowing any new Phase 27 work.",
+            "constraints": [
+                "Do not allow OPS if reality.green is failing in STRICT mode.",
+                "Require share.sync for any branch-level refactors."
+            ],
+            "metadata": {
+                "request_source": "PM",
+                "ticket": "PLAN-077"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.share.diff",
+            "oa.dms.check",
+            "oa.handoff.preview"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000001",
+        "program_id": "SafeOPSDecision",
+        "status": "OK",
+        "decision": {
+            "allowed": true,
+            "required_guards": [
+                "reality.green",
+                "share.sync"
+            ],
+            "risk_factors": [
+                "Layer 4 alignment guard still in HINT mode; structural drift possible."
+            ]
+        },
+        "rationale": "Kernel status shows Phase 27 running on feat/phase27-oa-bridge with reality.green passing in STRICT mode, so the core control plane and handoff kernel are healthy. The DMS/share alignment check reports ok=true, meaning share/ does not contain unknown or unsafe artifacts for this branch. The only outstanding concern is that the Layer 4 alignment guard is currently operating in HINT mode, which introduces some risk of code-plan drift but does not affect control-plane safety. Given that we will explicitly require both reality.green and share.sync to run immediately before OPS executes, the residual risk is acceptable and the OPS request can be allowed.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "branch": "feat/phase27-oa-bridge",
+                    "mode": "STRICT",
+                    "ok": true
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "reality.green",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true,
+                    "failures": []
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "share.sync",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true,
+                    "missing_in_share": [],
+                    "extra_in_share": []
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "layer4.alignment",
+                    "mode": "HINT"
+                },
+                "result": {
+                    "ok": true,
+                    "mode": "HINT",
+                    "violations": [
+                        "integration islands present"
+                    ],
+                    "note": "warnings only"
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "alignment",
+                "message": "Layer 4 alignment guard still in HINT; acceptable for OPS with explicit share.sync requirement.",
+                "severity": "warn"
+            },
+            {
+                "category": "guard",
+                "message": "reality.green and share.sync both passing in STRICT mode.",
+                "severity": "info"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000002",
+        "timestamp": "2025-12-08T10:02:15Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Determine if it is safe to let Cursor edit OA_REASONING_BRIDGE.md on main without a feature branch.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=main, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:40:00Z",
+            "ssot_surface": "SSOT docs current; PM_HANDOFF_PROTOCOL exported to share/",
+            "oa_state": "mode=STRICT, flows=[handoff,ops,oa-bridge]"
+        },
+        "oa_context": {
+            "task": "Guard main against direct edits to OA bridge specs.",
+            "constraints": [
+                "Main must remain clean; edits should land via feature branches.",
+                "Disallow structural changes without AGENTS–DMS contract guard passing."
+            ],
+            "metadata": {
+                "request_source": "Cursor",
+                "ticket": "PR-612-inline-edit-request"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.share.diff",
+            "oa.dms.check"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000002",
+        "program_id": "SafeOPSDecision",
+        "status": "BLOCKED",
+        "decision": {
+            "allowed": false,
+            "required_guards": [
+                "reality.green",
+                "share.sync",
+                "agents_dms_contract"
+            ],
+            "risk_factors": [
+                "Requested change targets OA_REASONING_BRIDGE on main instead of feature branch.",
+                "AGENTS–DMS contract guard not yet re-run after last registry migration."
+            ]
+        },
+        "rationale": "The kernel view shows that main is currently the protected baseline and that Phase 27 work is expected to occur only on feature branches. The AGENTS–DMS contract guard was last run before the most recent KB registry migration, so it may be stale. Allowing direct edits to OA_REASONING_BRIDGE.md on main would bypass the normal feature branch review workflow and risk desynchronizing the OA bridge spec from the DMS-backed AGENTS registry. Because this request touches a high-leverage governance surface and the necessary contract guard has not been revalidated, the only safe choice is to block this OPS request and require a dedicated feature branch plus a fresh agents_dms_contract run.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "branch": "main",
+                    "protected": true
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "reality.green",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "agents_dms_contract",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": false,
+                    "violations": [
+                        "registry version mismatch",
+                        "116 agents rows but 0 contract rows updated for new phase tag"
+                    ]
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "policy",
+                "message": "Direct edits to OA bridge on main violate branch hygiene expectations.",
+                "severity": "error"
+            },
+            {
+                "category": "alignment",
+                "message": "AGENTS–DMS contract guard failing due to registry version mismatch.",
+                "severity": "error"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000003",
+        "timestamp": "2025-12-08T10:03:30Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Evaluate safety of running make reality.green in HINT mode only for a quick experiment on a scratch branch.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=feat/phase27-experiment, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:20:00Z",
+            "ssot_surface": "Bootstrap and SSOT phases both = 27; no mismatch.",
+            "oa_state": "mode=HINT, flows=[experiment]"
+        },
+        "oa_context": {
+            "task": "Decide if HINT-mode guards are acceptable for non-SSOT exploratory work.",
+            "constraints": [
+                "Do not mutate SSOT or share/ managed surfaces from scratch branches.",
+                "Permit degraded guard posture for local experimentation only."
+            ],
+            "metadata": {
+                "request_source": "DeveloperShell",
+                "ticket": "EXPERIMENT-042"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.share.diff"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000003",
+        "program_id": "SafeOPSDecision",
+        "status": "DEGRADED",
+        "decision": {
+            "allowed": true,
+            "required_guards": [
+                "reality.green"
+            ],
+            "risk_factors": [
+                "Running guards in HINT mode may mask new alignment violations.",
+                "Scratch branch must not be promoted without STRICT rerun."
+            ]
+        },
+        "rationale": "The kernel indicates that the branch is explicitly marked as experimental and is not wired into any handoff or SSOT surfaces. Reality.green most recently passed in STRICT mode on the same commit, so the baseline for this branch is healthy. The request is to rerun reality.green in HINT mode to save time, not to push or merge changes. Because no SSOT docs, share/ surfaces, or control-plane schema are being modified, the risk is limited to missing early warning signals about new drift. That risk is acceptable for a purely local experiment as long as promotion back to SSOT requires a STRICT-mode rerun. Therefore the decision is to allow the OPS request but clearly tag it as degraded.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "branch": "feat/phase27-experiment",
+                    "ssot_bound": false
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "reality.green",
+                    "mode": "HINT"
+                },
+                "result": {
+                    "ok": true,
+                    "mode": "HINT",
+                    "warnings": [
+                        "Layer4 alignment drift potential"
+                    ]
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "guard",
+                "message": "Experiment is allowed to run guards in HINT mode, but must rerun STRICT before merging.",
+                "severity": "warn"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000004",
+        "timestamp": "2025-12-08T10:05:10Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Determine if it is safe to let Cursor move duplicate pmagent folders during Phase 27.L cleanup.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=feat/phase27l-agents-dms-contract, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:50:00Z",
+            "ssot_surface": "Directory duplication map present; SSOT updated for Phase 27.L.",
+            "oa_state": "mode=STRICT, flows=[ops,cleanup]"
+        },
+        "oa_context": {
+            "task": "Guard structural refactor that touches pmagent directories.",
+            "constraints": [
+                "Require directory duplication map to drive all moves.",
+                "Ensure DMS/doc_registry paths remain valid after changes."
+            ],
+            "metadata": {
+                "request_source": "PM",
+                "ticket": "PLAN-078"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.share.diff",
+            "oa.dms.check"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000004",
+        "program_id": "SafeOPSDecision",
+        "status": "OK",
+        "decision": {
+            "allowed": true,
+            "required_guards": [
+                "reality.green",
+                "dms_share_alignment"
+            ],
+            "risk_factors": [
+                "Refactor touches AGENTS/KB code paths; potential for import breakage if mapping is incomplete."
+            ]
+        },
+        "rationale": "The kernel reports that the directory duplication map for pmagent and AGENTS/KB has been authored and recorded as SSOT for Phase 27.L. Reality.green is passing, and the DMS alignment guard indicates no missing or extra share artifacts at the start of this operation. The requested OPS will follow the documented duplication map and will be followed by a strict rerun of both reality.green and dms_share_alignment. The primary risk is incomplete mapping leading to dangling imports, but that risk is mitigated by the map itself plus post-change guards. Therefore it is safe to allow Cursor to perform the directory moves under these constraints.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "subphase": "27.L",
+                    "branch": "feat/phase27l-agents-dms-contract"
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "reality.green",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "dms_share_alignment",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "alignment",
+                "message": "Directory duplication map present; refactor is guided by SSOT rather than ad hoc edits.",
+                "severity": "info"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000005",
+        "timestamp": "2025-12-08T10:06:45Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Assess whether it is safe to skip backup guard before running large KB migration.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=feat/phase27-kb-migration, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:10:00Z",
+            "ssot_surface": "KB migration plan recorded as SSOT, but backup policy requires recent snapshot.",
+            "oa_state": "mode=STRICT, flows=[migration]"
+        },
+        "oa_context": {
+            "task": "Decide if backup guard is mandatory for KB migrations that change schema and data.",
+            "constraints": [
+                "Never allow destructive DB migrations without a recent backup.",
+                "Backups may be slow but cannot be skipped for control-plane tables."
+            ],
+            "metadata": {
+                "request_source": "DevShell",
+                "ticket": "MIGRATE-203"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.dms.check"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000005",
+        "program_id": "SafeOPSDecision",
+        "status": "BLOCKED",
+        "decision": {
+            "allowed": false,
+            "required_guards": [
+                "reality.green",
+                "backup_system"
+            ],
+            "risk_factors": [
+                "KB migration touches control.mv_compliance_30d and control.doc_embedding.",
+                "Last backup is older than allowed rotation window."
+            ]
+        },
+        "rationale": "The kernel indicates that the requested migration modifies both schema and data in critical control-plane tables related to compliance and embeddings. The backup guard shows that the last successful snapshot is older than the configured rotation window, which violates the documented policy for destructive migrations. Even though reality.green is currently passing, that only confirms present health, not recoverability. Skipping the backup guard here would expose the system to unrecoverable data loss if the migration fails. Therefore this OPS request must be blocked until a fresh backup completes and the backup_system guard passes.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "branch": "feat/phase27-kb-migration",
+                    "db_role": "primary"
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "backup_system",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": false,
+                    "details": {
+                        "last_backup_age_hours": 72,
+                        "max_allowed_hours": 24
+                    }
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "safety",
+                "message": "Destructive KB migration without fresh backup is not permitted.",
+                "severity": "error"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000006",
+        "timestamp": "2025-12-08T10:08:12Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Decide if OA may update PM_SNAPSHOT_CURRENT.md via DMS instead of direct file edits.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch=feat/phase27-oa-bridge, kernel_ok=true",
+            "reality_green": "pass=true, last_run=2025-12-08T09:45:00Z",
+            "ssot_surface": "PM snapshot is DMS-backed export; file is not the source of truth.",
+            "oa_state": "mode=STRICT, flows=[handoff,ops]"
+        },
+        "oa_context": {
+            "task": "Guard correct write-paths for PM snapshot surfaces.",
+            "constraints": [
+                "Only DMS may be the source of truth for PM snapshot content.",
+                "Exports must be generated via pmagent tools, not manual edits."
+            ],
+            "metadata": {
+                "request_source": "PM",
+                "ticket": "PLAN-079"
+            }
+        },
+        "tools_allowed": [
+            "oa.kernel_status",
+            "oa.guard.run",
+            "oa.dms.check",
+            "oa.handoff.preview"
+        ]
+    },
+    "result": {
+        "envelope_id": "00000000-0000-0000-0000-000000000006",
+        "program_id": "SafeOPSDecision",
+        "status": "OK",
+        "decision": {
+            "allowed": true,
+            "required_guards": [
+                "reality.green",
+                "dms_metadata"
+            ],
+            "risk_factors": [
+                "If DMS metadata is misconfigured, exports may omit critical PM fields."
+            ]
+        },
+        "rationale": "The kernel indicates that PM_SNAPSHOT_CURRENT.md is a DMS export and explicitly not a hand-edited SSOT document. The DMS metadata guard shows sane distributions and confirms that the snapshot document is correctly registered as an export artifact. Allowing OA to update the snapshot by writing into the DMS and then regenerating the export via pmagent aligns with the architecture. The remaining risk is that incorrect DMS metadata could produce an incomplete snapshot, but this is mitigated by existing ledger and bootstrap consistency guards. Therefore the OPS request to route updates through DMS is safe and should be allowed.",
+        "tool_calls": [
+            {
+                "tool": "oa.kernel_status",
+                "args": {},
+                "result": {
+                    "phase": 27,
+                    "branch": "feat/phase27-oa-bridge",
+                    "snapshot_mode": "dms_export"
+                }
+            },
+            {
+                "tool": "oa.guard.run",
+                "args": {
+                    "name": "dms_metadata",
+                    "mode": "STRICT"
+                },
+                "result": {
+                    "ok": true,
+                    "distribution": {
+                        "critical": 144,
+                        "high": 262,
+                        "medium": 56
+                    }
+                }
+            }
+        ],
+        "diagnostics": [
+            {
+                "category": "architecture",
+                "message": "PM snapshot correctly treated as DMS export, not primary SSOT.",
+                "severity": "info"
+            }
+        ]
+    }
+}
+{
+    "envelope": {
+        "envelope_id": "00000000-0000-0000-0000-000000000007",
+        "timestamp": "2025-12-08T10:09:40Z",
+        "program_id": "SafeOPSDecision",
+        "goal": "Assess whether OA can temporarily disable a non-required CI guard to unblock a documentation-only PR.",
+        "kernel_state_ref": {
+            "pm_bootstrap": "phase=27, branch": "feat/docs-typo-fix",
+            "kernel_ok": true
+        },
+        "reality_green": "pass=true, last_run=2025-12-08T09:30:00Z",
+        "ssot_surface": "Only docs/SSOT/*.md touched; no code or DB change.",
+        "oa_state": "mode=STRICT, flows:[ci,ops]"
+    },
+    "oa_context": {
+        "task": "Decide if bypassing a flaky non-required guard is acceptable for docs-only change.",
+        "constraints": [
+            "Must not disable required SSOT or backup-related checks.",
+            "Exception must be documented in PM notes."
+        ],
+        "metadata": {
+            "request_source": "PM",
+            "ticket": "DOCS-011"
+        }
+    },
+    "tools_allowed": [
+        "oa.kernel_status",
+        "oa.guard.run",
+        "oa.share.diff"
+    ]
+},
+"result": {
+    "envelope_id": "00000000-0000-0000-0000-000000000007",
+    "program_id": "SafeOPSDecision",
+    "status": "DEGRADED",
+    "decision": {
+        "allowed": true,
+        "required_guards": [
+            "reality.green"
+        ],
+        "risk_factors": [
+            "Flaky non-required guard may conceal minor drift if misclassified.",
+            "Pattern of exceptions could erode CI trust if overused."
+        ]
+    },
+    "rationale": "The kernel shows that the PR only touches SSOT markdown files and does not modify any executable code or database migrations. Reality.green is passing, which confirms there are no hidden side effects. The failing CI guard is explicitly marked as non-required and is known to be flaky for docs-only diffs. Temporarily disabling that single guard to merge a low-risk documentation fix is acceptable as long as all required guards remain enforced and the exception is logged in PM notes. This is a degraded but safe decision for the limited scope of this change.",
+    "tool_calls": [
+        {
+            "tool": "oa.kernel_status",
+            "args": {},
+            "result": {
+                "phase": 27,
+                "branch": "feat/docs-typo-fix",
+                "ci_required_guards": [
+                    "reality.green",
+                    "backup_system"
+                ]
+            }
+        },
+        {
+            "tool": "oa.guard.run",
+            "args": {
+                "name": "reality.green",
+                "mode": "STRICT"
+            },
+            "result": {
+                "ok": true
+            }
+        }
+    ],
+    "diagnostics": [
+        {
+            "category": "process",
+            "message": "Non-required flaky guard bypassed for docs-only PR with explicit PM approval.",
+            "severity": "warn"
+        }
+    ]
+}
+}
+{
+"envelope": {
+    "envelope_id": "00000000-0000-0000-0000-000000000008",
+    "timestamp": "2025-12-08T10:11:05Z",
+    "program_id": "SafeOPSDecision",
+    "goal": "Decide if OA may request a share/ cleanup that deletes unknown files discovered by share.sync guard.",
+    "kernel_state_ref": {
+        "pm_bootstrap": "phase=27, branch": "feat/phase27-share-clean",
+        "kernel_ok": true
+    },
+    "reality_green": "pass=true, last_run=2025-12-08T09:48:00Z",
+    "ssot_surface": "Share surface contract defines allowed namespaces and patterns.",
+    "oa_state": "mode=STRICT, flows:[share]"
+},
+"oa_context": {
+    "task": "Determine safety of auto-deleting unknown files from share/.",
+    "constraints": [
+        "Do not delete files that might be stale exports still referenced by PM.",
+        "Prefer moving unknown files to quarantine/ instead of hard delete."
+    ],
+    "metadata": {
+        "request_source": "Guard",
+        "ticket": "SHARE-DRIFT-009"
+    }
+},
+"tools_allowed": [
+    "oa.kernel_status",
+    "oa.guard.run",
+    "oa.share.diff"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000008",
+"program_id": "SafeOPSDecision",
+"status": "OK",
+"decision": {
+    "allowed": true,
+    "required_guards": [
+        "share_sync_policy"
+    ],
+    "risk_factors": [
+        "If pattern definitions are wrong, legitimate files might be quarantined."
+    ]
+},
+"rationale": "The share surface contract clearly enumerates the managed namespaces and allowed file patterns. The share.sync guard has identified a small set of files in share/tmp-experiments/ that are not covered by any contract and are marked as historical from previous phases. Automatically deleting them would be risky, but moving them into a quarantine namespace preserves the data while restoring a clean, contract-compliant share/. Because the requested OPS is to move, not delete, and will be validated by rerunning the share_sync_policy guard, it is safe to allow this operation.",
+"tool_calls": [
+    {
+        "tool": "oa.guard.run",
+        "args": {
+            "name": "share_sync_policy",
+            "mode": "STRICT"
+        },
+        "result": {
+            "ok": false,
+            "extra_in_share": [
+                "share/tmp-experiments/old-notes.md"
+            ]
+        }
+    },
+    {
+        "tool": "oa.share.diff",
+        "args": {
+            "mode": "plan_quarantine"
+        },
+        "result": {
+            "plan": {
+                "move": [
+                    "share/tmp-experiments/old-notes.md"
+                ],
+                "dest": "share/quarantine/2025-12-08/"
+            }
+        }
+    }
+],
+"diagnostics": [
+    {
+        "category": "alignment",
+        "message": "Unknown share/ files will be quarantined rather than deleted, restoring strict contract compliance.",
+        "severity": "info"
+    }
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000009",
+"timestamp": "2025-12-08T10:12:30Z",
+"program_id": "SafeOPSDecision",
+"goal": "Assess if OA can approve running make pm.share.artifacts on a dirty working tree.",
+"kernel_state_ref": {
+    "pm_bootstrap": "phase=27, branch": "feat/phase27-oa-bridge",
+    "kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:35:00Z",
+"ssot_surface": "PM handoff protocol requires share artifacts to be reproducible from clean tree.",
+"oa_state": "mode=STRICT, flows:[handoff]"
+},
+"oa_context": {
+"task": "Guard reproducibility of share/ artifacts against uncommitted changes.",
+"constraints": [
+    "Do not regenerate share artifacts from a dirty tree used for handoff.",
+    "Allow local experimentation if artifacts are not copied into share/."
+],
+"metadata": {
+    "request_source": "DevShell",
+    "ticket": "HANDOFF-LOCAL-TEST"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.share.diff"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000009",
+"program_id": "SafeOPSDecision",
+"status": "BLOCKED",
+"decision": {
+"allowed": false,
+"required_guards": [
+    "handoff_kernel",
+    "root_surface"
+],
+"risk_factors": [
+    "Dirty tree means share artifacts may not be reproducible from main.",
+    "Copying such artifacts into share/ would violate handoff protocol."
+]
+},
+"rationale": "The kernel status indicates uncommitted changes in the working tree that are not yet represented in the DMS or SSOT docs. The PM handoff protocol requires that all share artifacts, including the handoff kernel and bootstrap state, be regenerable from a clean checkout of the tracked branch. Running make pm.share.artifacts and then publishing those outputs from a dirty tree would break this guarantee and make future handoffs non-reproducible. Therefore the OPS request must be blocked until the working tree is either cleaned or the changes are committed to a dedicated feature branch.",
+"tool_calls": [
+{
+    "tool": "oa.kernel_status",
+    "args": {},
+    "result": {
+        "phase": 27,
+        "branch": "feat/phase27-oa-bridge",
+        "dirty": true
+    }
+},
+{
+    "tool": "oa.guard.run",
+    "args": {
+        "name": "root_surface",
+        "mode": "STRICT"
+    },
+    "result": {
+        "ok": true
+    }
+}
+],
+"diagnostics": [
+{
+    "category": "reproducibility",
+    "message": "Share artifacts cannot be trusted when generated from a dirty working tree for handoff.",
+    "severity": "error"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000010",
+"timestamp": "2025-12-08T10:14:05Z",
+"program_id": "SafeOPSDecision",
+"goal": "Decide if OA can allow a read-only introspection script to run against production DB.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:25:00Z",
+"ssot_surface": "DB health runbook defines allowed read-only queries against production.",
+"oa_state": "mode=STRICT, flows:[ops,db]"
+},
+"oa_context": {
+"task": "Evaluate safety of read-only introspection commands on production.",
+"constraints": [
+"No writes, migrations, or long-running locks.",
+"Queries must respect DB health runbook timeouts."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "OBSERVE-101"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000010",
+"program_id": "SafeOPSDecision",
+"status": "OK",
+"decision": {
+"allowed": true,
+"required_guards": [
+"db_health"
+],
+"risk_factors": [
+"Large result sets could still cause mild load spikes if not paginated."
+]
+},
+"rationale": "The DB health guard confirms that the production database is reachable and that base tables are present. The requested introspection script is explicitly read-only and matches the patterns described in the DB health runbook, including limits on row counts and timeouts. No migrations, schema changes, or bulk updates are involved. While there is a small risk of transient load if the queries are misconfigured, this is mitigated by the built-in limits and the ability to abort. Overall, it is safe to allow this read-only introspection to run on production under the documented guardrails.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+    "name": "db_health",
+    "mode": "STRICT"
+},
+"result": {
+    "ok": true,
+    "message": "DB is reachable and healthy"
+}
+}
+],
+"diagnostics": [
+{
+"category": "safety",
+"message": "Read-only introspection against production allowed under DB health constraints.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000011",
+"timestamp": "2025-12-08T10:16:00Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Generate OPS block for running full reality.green and collecting evidence before Phase 27.G planning.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-oa-bridge",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:55:00Z",
+"ssot_surface": "REALITY_GREEN_SUMMARY export present in share/.",
+"oa_state": "mode=STRICT, flows:[ops]"
+},
+"oa_context": {
+"task": "Prepare a concrete command block Cursor can run to refresh guard evidence.",
+"constraints": [
+"Commands must be idempotent.",
+"OPS block should collect summaries into share/ without modifying SSOT docs."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-080"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000011",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Refresh reality.green evidence before Phase 27.G planning.",
+"commands": [
+"poetry run pmagent guard reality.green --mode STRICT",
+"ls -1 share | sed 's/^/share\//g'",
+"cat share/REALITY_GREEN_SUMMARY.md || echo 'summary missing'"
+],
+"success_criteria": [
+"reality.green exits with status 0 in STRICT mode.",
+"REALITY_GREEN_SUMMARY export exists in share/.",
+"PM can read summary without errors."
+]
+}
+},
+"rationale": "The kernel indicates that the branch is already configured for reality.green and that the previous run passed. For planning, the PM needs fresh evidence rather than relying on a potentially stale summary. The safest pattern is to explicitly rerun the guard in STRICT mode and then verify that the summary export is present in share/. The commands chosen are idempotent and do not alter SSOT docs; they only recompute evidence and inspect the share/ contents. The success criteria are aligned with the PM’s needs and can be verified quickly from the terminal or handoff surface.",
+"tool_calls": [
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 27,
+"branch": "feat/phase27-oa-bridge"
+}
+},
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "reality.green",
+"mode": "STRICT",
+"dry_run": true
+},
+"result": {
+"ok": true,
+"estimated_runtime_seconds": 90
+}
+}
+],
+"diagnostics": [
+{
+"category": "usability",
+"message": "OPS block provides clear commands and verification steps for PM.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000012",
+"timestamp": "2025-12-08T10:17:20Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Generate OPS block to quarantine unknown share/ files detected by share_sync_policy guard.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-share-clean",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:48:00Z",
+"ssot_surface": "Share surface contract marks unknown files as violations.",
+"oa_state": "mode=STRICT, flows:[share]"
+},
+"oa_context": {
+"task": "Provide concrete steps for moving unknown files into a dated quarantine directory.",
+"constraints": [
+"Do not delete any files.",
+"OPS block should re-run share_sync_policy after move."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "SHARE-DRIFT-010"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.share.diff"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000012",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Quarantine unknown share/ artifacts and restore contract compliance.",
+"commands": [
+"mkdir -p share/quarantine/2025-12-08",
+"mv share/tmp-experiments/old-notes.md share/quarantine/2025-12-08/",
+"poetry run pmagent guard share_sync_policy --mode STRICT"
+],
+"success_criteria": [
+"All previously unknown files are moved out of managed share/ namespaces.",
+"share_sync_policy guard passes in STRICT mode.",
+"No files are deleted; only moved to quarantine."
+]
+}
+},
+"rationale": "The share_sync_policy guard has already identified specific unknown files and confirmed that they are not part of any managed namespace. To make this safe and reproducible, the OPS block must move these files into a deterministic quarantine path that includes the date, avoiding deletion while cleaning the main share/ tree. Re-running the guard at the end validates that the contract is now satisfied. The commands are simple shell operations that will work across environments and are easy for Cursor to execute and for the PM to inspect afterward.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "share_sync_policy",
+"mode": "STRICT",
+"dry_run": true
+},
+"result": {
+"ok": false,
+"extra_in_share": [
+"share/tmp-experiments/old-notes.md"
+]
+}
+},
+{
+"tool": "oa.share.diff",
+"args": {
+"mode": "plan_quarantine"
+},
+"result": {
+"plan": {
+"move": [
+    "share/tmp-experiments/old-notes.md"
+],
+"dest": "share/quarantine/2025-12-08"
+}
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "OPS block directly encodes the plan suggested by share diff and surface contract.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000013",
+"timestamp": "2025-12-08T10:18:45Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Create OPS block for running repo introspection commands on feat/phase27l-agents-dms-contract.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27l-agents-dms-contract",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:50:00Z",
+"ssot_surface": "PHASE27_INDEX and DIRECTORY_DUPLICATION_MAP docs present.",
+"oa_state": "mode=STRICT, flows:[ops,repo]"
+},
+"oa_context": {
+"task": "Guide Cursor to generate semantic inventory, reunion plan, and quarantine candidates.",
+"constraints": [
+"Commands must run in read-only mode regarding tracked files.",
+"Outputs must be written under evidence/repo/."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-081"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000013",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Run repo introspection suite to support Phase 27.L directory unification.",
+"commands": [
+"poetry run pmagent repo semantic-inventory --write-share",
+"poetry run pmagent repo reunion-plan --write-share",
+"poetry run pmagent repo quarantine-candidates --write-share"
+],
+"success_criteria": [
+"semantic-inventory artifacts written under evidence/repo.",
+"reunion-plan describes mapping between duplicate directories.",
+"quarantine-candidates lists only files marked as safe to move or remove."
+]
+}
+},
+"rationale": "Phase 27.L requires a clear picture of how duplicate pmagent and AGENTS/KB directories relate to each other. The pmagent repo commands were designed for this purpose and operate in a read-only fashion over tracked files, writing their results as JSON into evidence/repo/. The generated OPS block simply sequences these three commands with write-share enabled so that the evidence is also visible to the PM via share/. The success criteria are phrased in terms of observable artifacts rather than internal implementation details, making them easy to validate.",
+"tool_calls": [
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 27,
+"subphase": "27.L",
+"branch": "feat/phase27l-agents-dms-contract"
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "share/PHASE27_INDEX.md"
+},
+"result": {
+"ok": true,
+"contains": [
+"AGENTS/KB Registry Forensics",
+"Directory Unification Plan"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "observability",
+"message": "OPS block emphasizes evidence outputs, aligning with PM’s workflow.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000014",
+"timestamp": "2025-12-08T10:20:10Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Generate OPS block to re-run AGENTS–DMS contract guard after KB registry changes.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27l-agents-dms-contract",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:52:00Z",
+"ssot_surface": "AGENTS.md and DMS contract schema present.",
+"oa_state": "mode=STRICT, flows:[ops,guards]"
+},
+"oa_context": {
+"task": "Provide concrete commands for validating updated AGENTS registry rows.",
+"constraints": [
+"Guard must run in STRICT mode.",
+"Evidence should be exported for later inspection."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-082"
+}
+},
+"tools_allowed": [
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000014",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Revalidate AGENTS–DMS contract after KB registry migration.",
+"commands": [
+"poetry run pmagent guard agents_dms_contract --mode STRICT --write-evidence"
+],
+"success_criteria": [
+"Guard exits with status 0.",
+"Evidence file for agents_dms_contract is written under evidence/guards/.",
+"Summary shows all AGENTS.md rows satisfy the contract."
+]
+}
+},
+"rationale": "After changing the KB registry or AGENTS metadata, the AGENTS–DMS contract guard must be re-run to ensure that every AGENT row still satisfies the control-plane contract. Running the guard in STRICT mode with evidence enabled will both enforce compliance and produce a machine-readable summary the PM can inspect. A single command is sufficient here because the guard encapsulates all necessary checks and evidence generation. The success criteria focus on the exit code and presence of the evidence file, plus the key expectation that all rows conform to the contract.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "agents_dms_contract",
+"mode": "STRICT",
+"dry_run": true
+},
+"result": {
+"ok": false,
+"rows_checked": 116,
+"violations": [
+"2 agents missing phase tag",
+"1 agent missing dms_id"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "OPS block will convert current AGENTS–DMS drift into explicit evidence and enforce compliance.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000015",
+"timestamp": "2025-12-08T10:21:35Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Produce OPS block to regenerate PM_BOOTSTRAP_STATE.json from DMS.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-bootstrap-refresh",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:44:00Z",
+"ssot_surface": "KB registry defines which SSOT docs feed into bootstrap state.",
+"oa_state": "mode=STRICT, flows:[handoff]"
+},
+"oa_context": {
+"task": "Guide Cursor to rebuild the PM bootstrap state from the latest SSOT docs.",
+"constraints": [
+"Use pmagent bootstrap command; no manual JSON edits.",
+"Ensure result lands in share/PM_BOOTSTRAP_STATE.json."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-083"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000015",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Regenerate PM bootstrap state from current SSOT and DMS.",
+"commands": [
+"poetry run pmagent bootstrap export --output share/PM_BOOTSTRAP_STATE.json",
+"git status --short share/PM_BOOTSTRAP_STATE.json"
+],
+"success_criteria": [
+"PM_BOOTSTRAP_STATE.json is updated to reflect current SSOT and phase.",
+"git status shows only expected changes to PM_BOOTSTRAP_STATE.json.",
+"Kernel handoff docs in share/ remain consistent with new bootstrap state."
+]
+}
+},
+"rationale": "The PM bootstrap state is a derived artifact that should never be hand-edited. The correct way to refresh it is to re-run the dedicated pmagent bootstrap export command so that it pulls current data from the SSOT docs and DMS. Writing directly into share/PM_BOOTSTRAP_STATE.json in a single step and then verifying the diff with git ensures the change is both traceable and reviewable. The OPS block focuses on these two steps, leaving the actual schema details to pmagent.",
+"tool_calls": [
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 27,
+"branch": "feat/phase27-bootstrap-refresh",
+"bootstrap_mode": "dms_driven"
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PM_HANDOFF_PROTOCOL.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "governance",
+"message": "OPS block adheres to rule that bootstrap state is always generated, never hand-written.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000016",
+"timestamp": "2025-12-08T10:23:00Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Generate OPS block to run make reality.green in HINT mode on a scratch branch for experimentation.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-experiment",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:20:00Z",
+"ssot_surface": "Scratch branch not used for handoff or SSOT.",
+"oa_state": "mode=HINT, flows:[experiment]"
+},
+"oa_context": {
+"task": "Provide lightweight guard run for experimentation without strict enforcement.",
+"constraints": [
+"Do not modify share/ or SSOT surfaces.",
+"Log results to local evidence directory only."
+],
+"metadata": {
+"request_source": "DevShell",
+"ticket": "EXPERIMENT-043"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000016",
+"program_id": "OPSBlockGenerator",
+"status": "DEGRADED",
+"decision": {
+"ops_block": {
+"goal": "Run reality.green in HINT mode for quick experimental feedback.",
+"commands": [
+"poetry run pmagent guard reality.green --mode HINT --no-share"
+],
+"success_criteria": [
+"Guard runs to completion without fatal errors.",
+"Any violations are reported as warnings only in local output.",
+"No new files are written under share/."
+]
+}
+},
+"rationale": "For experimental work on a scratch branch that is not tied into handoff or SSOT, it is reasonable to run guards in a relaxed mode. The OPS block uses reality.green in HINT mode and explicitly disables share/ writes so that any warnings remain local. This keeps the experimental output from contaminating the official evidence surfaces. The decision is tagged as degraded because HINT mode will not fail the build on violations, but the commands are safe for the requested use case.",
+"tool_calls": [
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 27,
+"branch": "feat/phase27-experiment",
+"ssot_bound": false
+}
+},
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "reality.green",
+"mode": "HINT",
+"dry_run": true
+},
+"result": {
+"ok": true,
+"mode": "HINT"
+}
+}
+],
+"diagnostics": [
+{
+"category": "risk",
+"message": "HINT-mode OPS block is suitable only for non-SSOT experimental contexts.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000017",
+"timestamp": "2025-12-08T10:24:30Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Create OPS block to dump OA state guard evidence before modifying OA reasoning bridge.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-oa-bridge",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:55:00Z",
+"ssot_surface": "OA state guard references OA bridge surfaces.",
+"oa_state": "mode=STRICT, flows:[oa-bridge]"
+},
+"oa_context": {
+"task": "Capture pre-change OA state evidence for regression analysis.",
+"constraints": [
+"Use existing OA state guard.",
+"Write evidence to share/ for the Orchestrator Assistant to inspect."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-084"
+}
+},
+"tools_allowed": [
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000017",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Collect OA state evidence snapshot before OA bridge changes.",
+"commands": [
+"poetry run pmagent guard oa_state --mode STRICT --write-evidence"
+],
+"success_criteria": [
+"OA state guard passes in STRICT mode.",
+"Evidence JSON for oa_state is written under evidence/guards and exported to share/.",
+"Evidence lists no mismatches between OA state and kernel surfaces."
+]
+}
+},
+"rationale": "Before modifying the OA reasoning bridge, it is valuable to capture a baseline snapshot of the OA state alignment. The oa_state guard already compares OA state to kernel surfaces and can write detailed evidence. Running it in STRICT mode with evidence enabled produces both an enforcement check and a durable record the Orchestrator Assistant can use later. The OPS block is kept minimal to avoid side effects while still ensuring the required evidence is produced.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "oa_state",
+"mode": "STRICT",
+"dry_run": true
+},
+"result": {
+"ok": true,
+"mismatches": []
+}
+}
+],
+"diagnostics": [
+{
+"category": "observability",
+"message": "OPS block ensures OA bridge changes are preceded by a clean OA state snapshot.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000018",
+"timestamp": "2025-12-08T10:26:00Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Generate OPS block to run make pm.share.artifacts on a clean tree for handoff.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-oa-bridge",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:55:00Z",
+"ssot_surface": "Handoff protocol requires regenerated share/ surfaces for each new PM chat.",
+"oa_state": "mode=STRICT, flows:[handoff]"
+},
+"oa_context": {
+"task": "Provide a safe, minimal sequence to refresh share/ artifacts from SSOT.",
+"constraints": [
+"Working tree must be clean before running.",
+"Commands should be easy for Orchestrator to re-run."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-085"
+}
+},
+"tools_allowed": [
+"oa.kernel_status"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000018",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Regenerate share/ artifacts from a clean working tree for PM handoff.",
+"commands": [
+"git status --porcelain || exit 1",
+"make pm.share.artifacts"
+],
+"success_criteria": [
+"git status shows no uncommitted changes before running.",
+"make pm.share.artifacts completes successfully.",
+"share/ contains updated kernel and bootstrap surfaces for handoff."
+]
+}
+},
+"rationale": "The PM handoff protocol depends on share/ being a faithful export of SSOT state at a particular commit. The OPS block first enforces a clean working tree via git status, failing early if there are uncommitted changes. It then runs make pm.share.artifacts, which is the approved entry point for regenerating all required share/ artifacts. This sequence is simple, repeatable, and clearly aligned with the project’s reproducibility guarantees.",
+"tool_calls": [
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 27,
+"branch": "feat/phase27-oa-bridge",
+"dirty": false
+}
+}
+],
+"diagnostics": [
+{
+"category": "reproducibility",
+"message": "OPS block encodes the clean-tree requirement explicitly before regenerating share/.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000019",
+"timestamp": "2025-12-08T10:27:30Z",
+"program_id": "OPSBlockGenerator",
+"goal": "Create OPS block that runs db_health guard before executing a read-only introspection script.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run=2025-12-08T09:25:00Z",
+"ssot_surface": "DB health runbook requires guard before production introspection.",
+"oa_state": "mode=STRICT, flows:[db,ops]"
+},
+"oa_context": {
+"task": "Wrap introspection script in a guard-then-run sequence.",
+"constraints": [
+"Abort if db_health fails.",
+"Keep introspection strictly read-only."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "OBSERVE-102"
+}
+},
+"tools_allowed": [
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000019",
+"program_id": "OPSBlockGenerator",
+"status": "OK",
+"decision": {
+"ops_block": {
+"goal": "Safely run read-only DB introspection on production.",
+"commands": [
+"poetry run pmagent guard db_health --mode STRICT",
+"poetry run pmagent db introspect --mode read-only --limit 1000"
+],
+"success_criteria": [
+"db_health guard passes in STRICT mode.",
+"Introspection command completes without write operations.",
+"No long-running locks or timeouts are reported."
+]
+}
+},
+"rationale": "To respect the DB health runbook, any production introspection must be preceded by a passing db_health guard. The OPS block enforces this ordering and uses a dedicated introspection command constrained to read-only mode with a row limit. If db_health fails, the guard command will exit non-zero and the second command should not be run. This pattern keeps the complexity low while still honoring the safety constraints.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "db_health",
+"mode": "STRICT",
+"dry_run": true
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "safety",
+"message": "OPS block enforces db_health check before production introspection.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000020",
+"timestamp": "2025-12-08T10:29:00Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Interpret failure of agents_dms_contract guard after KB registry migration.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27l-agents-dms-contract",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "AGENTS.md updated, but contract evidence not yet regenerated.",
+"oa_state": "mode=STRICT, flows:[guards]"
+},
+"oa_context": {
+"task": "Diagnose why agents_dms_contract is failing and suggest remediations.",
+"constraints": [
+"Do not assume DMS metadata is correct without checking.",
+"Prefer schema fixes over ad hoc data patches."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-086"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.dms.check"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000020",
+"program_id": "GuardFailureInterpreter",
+"status": "DEGRADED",
+"decision": {
+"guard_name": "agents_dms_contract",
+"issue": "New AGENTS rows added without required phase and dms_id fields populated.",
+"remediation_steps": [
+"Run DMS metadata check to confirm contract expectations for AGENTS table.",
+"Populate missing phase tags on new AGENTS rows based on current phase.",
+"Generate or assign correct dms_id values for affected rows.",
+"Re-run agents_dms_contract guard in STRICT mode and verify zero violations."
+]
+},
+"rationale": "The agents_dms_contract guard compares AGENTS.md-derived rows against a control-plane contract that requires phase tags and dms_id values. The latest run shows violations specifically for recently added agents, all missing these fields. A DMS metadata check confirms that these fields are required for contract compliance and are not optional. This indicates that the issue is incomplete AGENTS metadata rather than a problem with the guard itself. The appropriate remediation is to update the new rows to include the missing fields, aligned with the current phase, and then re-run the guard to confirm compliance.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "agents_dms_contract",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"violations": [
+{
+"agent": "bible-scholar-qa",
+"missing": [
+"phase",
+"dms_id"
+]
+}
+]
+}
+},
+{
+"tool": "oa.dms.check",
+"args": {
+"table": "control.agents"
+},
+"result": {
+"ok": true,
+"required_fields": [
+"id",
+"name",
+"phase",
+"dms_id"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "Guard failure caused by incomplete metadata on new AGENTS rows, not by contract regression.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000021",
+"timestamp": "2025-12-08T10:30:25Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Explain failure of share_sync_policy guard on main after manual file copy into share/.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "Share surface contract prohibits manual unmanaged files.",
+"oa_state": "mode=STRICT, flows:[share]"
+},
+"oa_context": {
+"task": "Diagnose why share_sync_policy is failing and propose safe cleanup.",
+"constraints": [
+"Do not silently delete unknown files.",
+"Ensure any cleanup path is reversible via git or backup."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "SHARE-DRIFT-011"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.share.diff"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000021",
+"program_id": "GuardFailureInterpreter",
+"status": "OK",
+"decision": {
+"guard_name": "share_sync_policy",
+"issue": "Manual copy introduced unknown files under share/experiments/ that are not tracked by DMS or contract.",
+"remediation_steps": [
+"Use share.diff to list all unknown files and categorize them.",
+"Move unknown files into a dated share/quarantine directory instead of deleting them.",
+"Update PM notes to record the quarantine operation.",
+"Re-run share_sync_policy guard in STRICT mode to confirm no remaining unknown artifacts."
+]
+},
+"rationale": "The share_sync_policy guard compares actual share/ contents against the DMS-backed manifest of allowed artifacts. Its latest run shows extra files under share/experiments/ that do not correspond to any known namespace. A share diff confirms these were introduced by a manual copy and are not associated with any SSOT export. The safest interpretation is that the guard is correctly rejecting unmanaged files. Cleaning up by quarantining the unknown files preserves their content while restoring contract compliance, and documenting the action in PM notes keeps an audit trail.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "share_sync_policy",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"extra_in_share": [
+"share/experiments/tmp1.txt",
+"share/experiments/tmp2.log"
+]
+}
+},
+{
+"tool": "oa.share.diff",
+"args": {
+"mode": "list_unknown"
+},
+"result": {
+"unknown": [
+"share/experiments/tmp1.txt",
+"share/experiments/tmp2.log"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "governance",
+"message": "Guard correctly detected unmanaged share/ files; remediation favors quarantine over deletion.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000022",
+"timestamp": "2025-12-08T10:31:50Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Interpret failure of layer4.alignment guard on feat/phase27-code-move.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-code-move",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "LAYER4_CODE_INGESTION_PLAN describes expected code locations.",
+"oa_state": "mode=STRICT, flows:[repo]"
+},
+"oa_context": {
+"task": "Understand why alignment guard reports integration islands and missing planned paths.",
+"constraints": [
+"Do not assume plan is wrong without inspecting evidence.",
+"Prefer migrating code to planned locations over updating plan as first step."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-087"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000022",
+"program_id": "GuardFailureInterpreter",
+"status": "DEGRADED",
+"decision": {
+"guard_name": "layer4.alignment",
+"issue": "Code exists in scripts/code_ingest/ while plan expects scripts/governance/; integration islands remain unmerged.",
+"remediation_steps": [
+"Review LAYER4_CODE_INGESTION_PLAN to confirm expected directory layout.",
+"Move code from scripts/code_ingest/ to scripts/governance/ or create forwarding modules as appropriate.",
+"Update imports and tests to reference planned paths.",
+"Re-run layer4.alignment guard in STRICT mode and confirm zero integration islands."
+]
+},
+"rationale": "The alignment guard compares actual code locations against the LAYER4_CODE_INGESTION_PLAN. Its evidence shows that several Python files live under scripts/code_ingest/, but the plan expects them under scripts/governance/. This mismatch is why the guard reports integration islands. The plan itself appears coherent and matches the broader architecture, so the likely issue is code lagging behind the plan. The recommended remediation is to move the files into their planned locations and adjust imports, then re-run the guard. If later investigation proves the plan outdated, it can be updated, but the first move should be to align code with the existing plan.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "layer4.alignment",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"violations": [
+"2 files in scripts/code_ingest/ expected in scripts/governance/"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/LAYER4_CODE_INGESTION_PLAN.md"
+},
+"result": {
+"ok": true,
+"high_level_layout": [
+"scripts/governance/ingest_doc_embeddings.py"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "Guard failure indicates code drift from plan; remediation favors migrating code to planned locations.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000023",
+"timestamp": "2025-12-08T10:33:15Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Explain why bootstrap_consistency guard started failing after phase number bump in SSOT docs only.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=26, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "MASTER_PLAN and PHASE_INDEX docs updated to phase=27.",
+"oa_state": "mode=STRICT, flows:[bootstrap]"
+},
+"oa_context": {
+"task": "Diagnose mismatch between bootstrap state and SSOT phase values.",
+"constraints": [
+"Do not edit PM_BOOTSTRAP_STATE.json by hand.",
+"Prefer regenerating bootstrap from SSOT using pmagent."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-088"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000023",
+"program_id": "GuardFailureInterpreter",
+"status": "OK",
+"decision": {
+"guard_name": "bootstrap_consistency",
+"issue": "Bootstrap state still encodes current_phase=26 while SSOT docs now say current_phase=27.",
+"remediation_steps": [
+"Run pmagent bootstrap export to regenerate PM_BOOTSTRAP_STATE.json from SSOT.",
+"Review diff to confirm phase bump and no unexpected changes.",
+"Re-run bootstrap_consistency guard in STRICT mode to verify match."
+]
+},
+"rationale": "The bootstrap_consistency guard cross-checks the phase encoded in PM_BOOTSTRAP_STATE.json with the phase declared in SSOT docs like MASTER_PLAN and PHASE_INDEX. After bumping these docs to phase=27 without regenerating the bootstrap state, the guard correctly reports a mismatch. This indicates that the bootstrap artifact is stale, not that the SSOT is wrong. The remediation is to re-export bootstrap state from SSOT using the pmagent command, then re-run the guard. Manual edits to the JSON would circumvent the DMS pipeline and are therefore not allowed.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "bootstrap_consistency",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"bootstrap_current_phase": "26",
+"ssot_current_phase": "27"
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "share/PM_BOOTSTRAP_STATE.json"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "governance",
+"message": "Guard caught expected stale bootstrap state after SSOT phase bump; regeneration is the correct fix.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000024",
+"timestamp": "2025-12-08T10:34:40Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Interpret OA_state guard failure after adding new OA surface without updating kernel mapping.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-oa-ui",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "OA surfaces listed in OA_STATE_CONTRACT doc.",
+"oa_state": "mode=STRICT, flows:[oa-ui]"
+},
+"oa_context": {
+"task": "Determine why OA_state guard reports missing surface and how to fix it.",
+"constraints": [
+"Keep OA state definition in sync with kernel surfaces.",
+"Avoid hard-coding new OA surfaces without DMS registration."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "OA-STATE-001"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000024",
+"program_id": "GuardFailureInterpreter",
+"status": "DEGRADED",
+"decision": {
+"guard_name": "oa_state",
+"issue": "New OA UI surface added but not registered in OA_STATE_CONTRACT or kernel surface map.",
+"remediation_steps": [
+"Update OA_STATE_CONTRACT doc to include the new OA UI surface and its role.",
+"Extend kernel surface map to reference the new OA UI surface with correct path.",
+"Re-export OA state DMS rows if applicable.",
+"Re-run oa_state guard in STRICT mode to confirm alignment."
+]
+},
+"rationale": "The OA_state guard checks that all OA surfaces defined in the contract doc are present in the kernel mapping, and vice versa. The latest failure reports a surface that exists on disk but is not referenced in OA_STATE_CONTRACT, indicating a registration gap. This is a classic drift scenario where code has been added without updating the contract. The remediation is to extend both the contract doc and the kernel’s surface map so the guard can reason about the new surface. Only then should the guard be re-run to ensure the system is back in sync.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "oa_state",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"mismatches": [
+"missing in contract: oa_ui_dashboard.json"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/OA_STATE_CONTRACT.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "OA_state guard caught a newly added surface missing from the contract; remediation is to update contract and mapping.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000025",
+"timestamp": "2025-12-08T10:36:05Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Explain why backup_system guard is failing prior to KB migration.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-kb-migration",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "Backup policy documented in DB_HEALTH runbook.",
+"oa_state": "mode=STRICT, flows:[db,migration]"
+},
+"oa_context": {
+"task": "Diagnose backup_system failure and propose safe path forward.",
+"constraints": [
+"Do not proceed with destructive migration without passing backup guard.",
+"Avoid changing backup retention policy to work around failure."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "BACKUP-007"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000025",
+"program_id": "GuardFailureInterpreter",
+"status": "OK",
+"decision": {
+"guard_name": "backup_system",
+"issue": "Last successful backup is older than allowed rotation window for destructive migrations.",
+"remediation_steps": [
+"Trigger a new full backup according to DB_HEALTH runbook.",
+"Verify backup completion and integrity via backup_system evidence.",
+"Re-run backup_system guard in STRICT mode to confirm compliance.",
+"Only then execute the KB migration scripts."
+]
+},
+"rationale": "The backup_system guard checks the recency and integrity of backups relative to the configured rotation policy. Its current failure indicates that the last successful backup is too old to safely support a destructive KB migration. This is exactly what the guard is designed to catch. The proper remediation is not to relax the policy, but to perform a new backup and verify it using the guard’s evidence. Once a fresh, valid backup is available, the guard will pass in STRICT mode and the migration can proceed safely.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "backup_system",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"details": {
+"last_backup_hours": 72,
+"max_allowed_hours": 24
+}
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/runbooks/DB_HEALTH.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "safety",
+"message": "Guard correctly blocked migration due to stale backup; remediation follows documented runbook.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000026",
+"timestamp": "2025-12-08T10:37:30Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Interpret dms_share_alignment guard failure after adding new SSOT doc without export registration.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-new-ssot",
+"kernel_ok": true
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "New SSOT doc created in docs/SSOT but not registered with DMS exports.",
+"oa_state": "mode=STRICT, flows:[share,dms]"
+},
+"oa_context": {
+"task": "Diagnose mismatch between DMS registry and share/ exports for new SSOT doc.",
+"constraints": [
+"Ensure every high-importance SSOT doc is exported or intentionally excluded.",
+"Avoid manual copy of SSOT docs into share/."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "DMS-SHARE-003"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.dms.check",
+"oa.share.diff"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000026",
+"program_id": "GuardFailureInterpreter",
+"status": "DEGRADED",
+"decision": {
+"guard_name": "dms_share_alignment",
+"issue": "New SSOT doc present in DMS registry but missing corresponding export in share/.",
+"remediation_steps": [
+"Confirm importance level of the new SSOT doc in DMS metadata.",
+"If importance is high, register an export mapping so it is included in pm.share.artifacts.",
+"Run make pm.share.artifacts to generate the new export into share/.",
+"Re-run dms_share_alignment guard in STRICT mode to confirm zero mismatches."
+]
+},
+"rationale": "The dms_share_alignment guard ensures that DMS-registered SSOT artifacts have matching exports in share/ when required. The current failure shows a doc that appears in DMS metadata but not in share/. A DMS check indicates it has high importance, so it should be exported. The issue is therefore an incomplete export registration rather than a spurious doc. The remediation is to configure an export mapping, regenerate share artifacts, and verify alignment via the guard.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "dms_share_alignment",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"missing_in_share": [
+"docs/SSOT/NEW_PHASE_GUIDE.md"
+]
+}
+},
+{
+"tool": "oa.dms.check",
+"args": {
+"artifact": "docs/SSOT/NEW_PHASE_GUIDE.md"
+},
+"result": {
+"ok": true,
+"importance": "high"
+}
+},
+{
+"tool": "oa.share.diff",
+"args": {
+"mode": "preview_exports"
+},
+"result": {
+"planned_exports": [
+"share/NEW_PHASE_GUIDE.md"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "alignment",
+"message": "Guard failure highlights missing export for high-importance SSOT doc; fix is to register and generate export.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000027",
+"timestamp": "2025-12-08T10:39:00Z",
+"program_id": "GuardFailureInterpreter",
+"goal": "Explain failure of handoff_kernel guard after manual edits to HANDOFF_KERNEL.json.",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-handoff-experiment",
+"kernel_ok": false
+},
+"reality_green": "pass=false, last_run": null,
+"ssot_surface": "Handoff kernel should be generated, not manually edited.",
+"oa_state": "mode=STRICT, flows:[handoff]"
+},
+"oa_context": {
+"task": "Diagnose why handoff_kernel guard reports mismatches after manual JSON tweaks.",
+"constraints": [
+"Do not preserve manual edits that bypass generation pipeline.",
+"Restore kernel to generated state from DMS and SSOT."
+],
+"metadata": {
+"request_source": "Guard",
+"ticket": "HANDOFF-ERR-002"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000027",
+"program_id": "GuardFailureInterpreter",
+"status": "OK",
+"decision": {
+"guard_name": "handoff_kernel",
+"issue": "HANDOFF_KERNEL.json was manually edited, causing divergence from generated kernel surfaces.",
+"remediation_steps": [
+"Discard manual changes to HANDOFF_KERNEL.json (git checkout or regeneration).",
+"Re-run pmagent handoff export command to regenerate HANDOFF_KERNEL.json from SSOT and DMS.",
+"Verify diff is minimal and reflects only expected schema/version changes.",
+"Re-run handoff_kernel guard in STRICT mode to confirm zero mismatches."
+]
+},
+"rationale": "The handoff_kernel guard compares the current HANDOFF_KERNEL.json file with the canonical kernel surfaces derived from SSOT and DMS. The failure indicates that the file has been modified in ways that do not match any known generator output. Previewing the file confirms hand-written changes. This breaks the invariant that the kernel is always generated, not edited. The remediation is to restore the file to a generated state, either by checking out the committed version or rerunning the generator, and then rerun the guard to verify consistency.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "handoff_kernel",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"mismatches": [
+"field current_phase=999 not present in SSOT"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "share/HANDOFF_KERNEL.json"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "governance",
+"message": "Manual edits to handoff kernel violated generation-only rule; guard correctly flagged drift.",
+"severity": "error"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000028",
+"timestamp": "2025-12-08T10:40:30Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 23 (Share Surface Contract) to Phase 24 (Kernel Boot Enforcement).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=23, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T08:50:00Z",
+"ssot_surface": "PHASE23_INDEX and SHARE_SURFACE_CONTRACT docs complete.",
+"oa_state": "mode=STRICT, flows:[phase]"
+},
+"oa_context": {
+"task": "Check that all Phase 23 exit criteria are satisfied before entering Phase 24.",
+"constraints": [
+"Share/ contract must be fully documented and enforced.",
+"No open TODOs in PHASE23_INDEX can block kernel boot work."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-089"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000028",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "23",
+"to_phase": "24",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 23 focused on formalizing the share/ surface contract and ensuring that the share_sync_policy guard can enforce it. Evidence from reality.green and the PHASE23_INDEX doc shows that the contract is written, exported, and enforced in STRICT mode. There are no remaining open items marked as blocking in PHASE23_INDEX. With share/ governance solidified, it is safe to begin Phase 24, which introduces kernel boot enforcement, since it will build on top of a stable share/ layer.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE23_INDEX.md"
+},
+"result": {
+"ok": true,
+"blocking_items": []
+}
+},
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "share_sync_policy",
+"mode": "STRICT"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "All Phase 23 exit criteria satisfied; transition to Phase 24 is allowed.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000029",
+"timestamp": "2025-12-08T10:42:00Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 24 (Kernel Boot 1.0) to Phase 25 (Handoff Protocol).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=24, branch": "feat/phase24-kernel-boot",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:00:00Z",
+"ssot_surface": "PM_HANDOFF_PROTOCOL not yet fully authored.",
+"oa_state": "mode=STRICT, flows:[phase,handoff]"
+},
+"oa_context": {
+"task": "Check if kernel boot enforcement is sufficiently stable to begin formal handoff protocol design.",
+"constraints": [
+"Kernel must be mandatory entry point for Cursor.",
+"At least one successful reality.green run using kernel-booted PM is required."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-090"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000029",
+"program_id": "PhaseTransitionValidator",
+"status": "DEGRADED",
+"decision": {
+"from_phase": "24",
+"to_phase": "25",
+"allowed": false,
+"blockers": [
+"PM_HANDOFF_PROTOCOL.md is still a stub with TODO markers.",
+"Kernel boot path not yet wired as mandatory in Cursor instructions."
+]
+},
+"rationale": "Phase 24’s goal is to make kernel boot the mandatory first step for the PM. While reality.green passes and kernel surfaces exist, inspection of PM_HANDOFF_PROTOCOL.md shows stub sections and TODO markers, indicating that the handoff integration is not yet designed. Additionally, the Cursor instructions still treat kernel boot as optional. Since Phase 25 depends on a stable kernel-boot foundation to define reliable handoffs, transitioning now would stack new complexity on top of incomplete work. The transition must be blocked until the protocol doc is completed and Cursor instructions are updated.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PM_HANDOFF_PROTOCOL.md"
+},
+"result": {
+"ok": true,
+"contains_todos": true
+}
+},
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 24,
+"kernel_boot_mandatory": false
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Phase 24 is functionally working but not yet fully documented or enforced; cannot transition to Phase 25.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000030",
+"timestamp": "2025-12-08T10:43:25Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 25 (Handoff Protocol) to Phase 26 (Kernel-First Enforcement).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=25, branch": "feat/phase25-handoff-protocol",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:10:00Z",
+"ssot_surface": "PM_HANDOFF_PROTOCOL and SHARE_FOLDER_ANALYSIS docs complete.",
+"oa_state": "mode=STRICT, flows:[phase,handoff]"
+},
+"oa_context": {
+"task": "Check whether handoff protocol is robust enough to enforce kernel-first behavior in Phase 26.",
+"constraints": [
+"Handoff surfaces must be regenerable via pm.share.artifacts.",
+"No manual editing of handoff kernel or bootstrap files."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-091"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000030",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "25",
+"to_phase": "26",
+"allowed": true,
+"blockers": []
+},
+"rationale": "The Phase 25 SSOT docs show that the handoff protocol is fully authored, including clear rules about how share/ is populated and how the PM kernel is delivered to new chats. Reality.green confirms that both PM_HANDOFF_PROTOCOL and SHARE_FOLDER_ANALYSIS are exported and aligned with DMS. There are no remaining blocking TODOs in PHASE25_INDEX. With this foundation, Phase 26 can safely focus on making the kernel-first pattern mandatory for all PM operations, since the underlying handoff surfaces are documented and reproducible.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE25_INDEX.md"
+},
+"result": {
+"ok": true,
+"blocking_items": []
+}
+},
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "handoff_kernel",
+"mode": "STRICT"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Handoff protocol is solid and reproducible; transition to Phase 26 is allowed.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000031",
+"timestamp": "2025-12-08T10:44:50Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 26 (Kernel Enforcement) to Phase 27 (Kernel Consumers).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=26, branch": "feat/phase26-kernel-enforcement",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:20:00Z",
+"ssot_surface": "PHASE26_INDEX describes kernel-first invariants.",
+"oa_state": "mode=STRICT, flows:[phase,kernel]"
+},
+"oa_context": {
+"task": "Check if kernel enforcement is strong enough to begin work on kernel consumers (OA, Cursor, UI).",
+"constraints": [
+"All PM operations must use kernel surfaces as SSOT.",
+"No legacy codepaths may bypass kernel when constructing PM context."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-092"
+}
+},
+"tools_allowed": [
+"oa.kernel_status",
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000031",
+"program_id": "PhaseTransitionValidator",
+"status": "DEGRADED",
+"decision": {
+"from_phase": "26",
+"to_phase": "27",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 26 introduced kernel-first enforcement and the latest evidence shows that core PM flows now consume HANDOFF_KERNEL.json and PM_BOOTSTRAP_STATE.json instead of ad hoc state. There remain a few legacy helper scripts that can still be invoked without the kernel, but these are marked as deprecated and are not used in normal PM operations. Given that the main flows are compliant and the remaining legacy paths are explicitly quarantined, it is acceptable—with a degraded note—to begin Phase 27 work on kernel consumers while keeping an eye on fully removing the deprecated entry points.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "kernel_enforcement",
+"mode": "STRICT"
+},
+"result": {
+"ok": true,
+"legacy_paths": [
+"scripts/old_pm_bootstrap.py"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE26_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Kernel-first enforcement is effectively in place; residual legacy paths are noted but do not block Phase 27.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000032",
+"timestamp": "2025-12-08T10:46:15Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 27.F (OA↔DSPy Bridge Scaffolding) to Phase 27.G (OA Reasoning Programs Planning).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-oa-bridge",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:55:00Z",
+"ssot_surface": "OA_REASONING_BRIDGE spec authored; no DSPy runtime in repo yet.",
+"oa_state": "mode=STRICT, flows:[oa-bridge]"
+},
+"oa_context": {
+"task": "Check that OA↔DSPy bridge scaffolding is complete and stable before planning concrete programs.",
+"constraints": [
+"Bridge must define schemas and interfaces but no runtime dependencies.",
+"All references to DSPy must be behind the bridge abstraction."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-093"
+}
+},
+"tools_allowed": [
+"oa.handoff.preview",
+"oa.guard.run"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000032",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "27.F",
+"to_phase": "27.G",
+"allowed": true,
+"blockers": []
+},
+"rationale": "The OA_REASONING_BRIDGE spec documents the ReasoningEnvelope and ReasoningResult schemas and the interface for invoking reasoning, and the implementation lives under pmagent.oa.reasoning_bridge without importing DSPy. A guard confirms that no DSPy-related imports exist in the repository. This satisfies the scope defined for Phase 27.F, which was to establish the scaffolding only. With the bridge in place and isolated, it is appropriate to move to 27.G, which will design the actual reasoning programs that make use of this interface.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "share/OA_REASONING_BRIDGE.md"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "no_dspy_runtime",
+"mode": "STRICT"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Bridge scaffolding is complete and clean; planning concrete OA reasoning programs is now safe.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000033",
+"timestamp": "2025-12-08T10:47:40Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 27.L (AGENTS/KB Registry Forensics) to Phase 28 (Runtime DSPy Integration).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27l-agents-dms-contract",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:50:00Z",
+"ssot_surface": "AGENTS/KB registry reports generated; some issues remain unresolved.",
+"oa_state": "mode=STRICT, flows:[agents,kb]"
+},
+"oa_context": {
+"task": "Determine whether AGENTS/KB registry is clean enough to support runtime DSPy integration.",
+"constraints": [
+"All agents should satisfy DMS contract before DSPy uses them.",
+"Directory duplication issues must be resolved or clearly quarantined."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-094"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000033",
+"program_id": "PhaseTransitionValidator",
+"status": "BLOCKED",
+"decision": {
+"from_phase": "27.L",
+"to_phase": "28",
+"allowed": false,
+"blockers": [
+"agents_dms_contract guard still reports violations for some agents.",
+"Directory duplication map shows unresolved integration islands."
+]
+},
+"rationale": "Phase 28 will rely on AGENTS/KB registry as a stable backbone for DSPy runtime programs. Current evidence from AGENTS–DMS contract guard indicates unresolved violations for a subset of agents, and the directory duplication map still lists integration islands where code is split across old and new paths. Moving into runtime integration with a partially clean registry would bake these inconsistencies into higher layers. The transition must be blocked until all AGENTS rows satisfy the contract and directory unification is complete or explicitly quarantined.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "agents_dms_contract",
+"mode": "STRICT"
+},
+"result": {
+"ok": false,
+"violations_count": 3
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "share/DIRECTORY_DUPLICATION_MAP.md"
+},
+"result": {
+"ok": true,
+"integration_islands": [
+"pmagent/agents",
+"pmagent/agents_legacy"
+]
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Unresolved AGENTS/KB contract violations and directory islands block safe transition to runtime DSPy integration.",
+"severity": "error"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000034",
+"timestamp": "2025-12-08T10:49:05Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 22 (DMS Foundation) to Phase 23 (Share Surface Contract).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=22, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T08:30:00Z",
+"ssot_surface": "DMS schema and metadata established; share/ still partially ad hoc.",
+"oa_state": "mode=STRICT, flows:[phase,dms]"
+},
+"oa_context": {
+"task": "Assess readiness to formalize share/ contract on top of DMS foundation.",
+"constraints": [
+"Core DMS tables must be stable and documented.",
+"No critical migrations should be in-flight during share contract work."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-095"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000034",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "22",
+"to_phase": "23",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 22 laid down the DMS foundation and the latest guards show that control-plane tables and metadata are stable. There are no in-flight migrations according to DB health evidence. Share/ is still somewhat ad hoc, but that is precisely the problem Phase 23 is meant to address using the DMS as source of truth. Since the lower layer is now stable and documented, it is appropriate to proceed to formalizing the share surface contract in Phase 23.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "dms_metadata",
+"mode": "STRICT"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE22_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "DMS foundation is solid; work on share surface contract can safely begin.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000035",
+"timestamp": "2025-12-08T10:50:30Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 21 (Legacy Cleanup) to Phase 22 (DMS Foundation).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=21, branch": "feat/phase21-legacy-clean",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T08:10:00Z",
+"ssot_surface": "Legacy documents tagged and either migrated or archived.",
+"oa_state": "mode=STRICT, flows:[phase,cleanup]"
+},
+"oa_context": {
+"task": "Ensure legacy clutter is reduced enough that DMS schema work will not be confused by old paths.",
+"constraints": [
+"All legacy docs must be marked with disposition (migrate, archive, delete).",
+"No unknown legacy paths should remain in share/ or docs/SSOT."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-096"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000035",
+"program_id": "PhaseTransitionValidator",
+"status": "DEGRADED",
+"decision": {
+"from_phase": "21",
+"to_phase": "22",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 21 aimed to classify legacy documents so they would not silently influence new DMS work. The latest evidence shows that all known legacy docs have been tagged with disposition and that share/ contains no unmanaged legacy files. However, a few archived docs still live in an older folder structure. They are clearly marked and excluded from DMS planning, so they do not block moving on, but this is noted as a degraded state. Given this, Phase 22 can proceed with DMS foundation work while keeping an eye on potential confusion from archived paths.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "legacy_cleanup",
+"mode": "STRICT"
+},
+"result": {
+"ok": true,
+"archived": [
+"docs/legacy/old-plan-v1.md"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE21_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Legacy clutter reduced to a manageable, explicitly archived set; DMS foundation can proceed with caution.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000036",
+"timestamp": "2025-12-08T10:52:00Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 20 (Compass / Planning Spine) to Phase 21 (Legacy Cleanup).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=20, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T07:50:00Z",
+"ssot_surface": "COMPASS docs authored; planning spine established.",
+"oa_state": "mode=STRICT, flows:[phase,planning]"
+},
+"oa_context": {
+"task": "Check whether planning spine is sufficiently clear to guide legacy cleanup without new drift.",
+"constraints": [
+"COMPASS must list all active and deprecated namespaces.",
+"Planning spine should define how new work references legacy surfaces."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-097"
+}
+},
+"tools_allowed": [
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000036",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "20",
+"to_phase": "21",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 20 created the COMPASS and planning spine that describe the project’s major namespaces and their lifecycle. Inspection of these docs shows clear classifications for active, experimental, and deprecated areas, as well as guidance for how future phases interact with them. This is exactly what Phase 21 needs to systematically clean up legacy content without introducing new drift. Since there are no unresolved TODOs or contradictions in the COMPASS docs, it is safe to move into the legacy cleanup phase.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/COMPASS.md"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE20_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Planning spine is sufficiently clear; legacy cleanup can proceed under COMPASS guidance.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000037",
+"timestamp": "2025-12-08T10:53:25Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 27 (Kernel Consumers) to Phase 28 (Runtime DSPy Integration).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=27, branch": "feat/phase27-kernel-consumers",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T09:40:00Z",
+"ssot_surface": "OA, Cursor, and UI now read from kernel; DSPy not yet integrated.",
+"oa_state": "mode=STRICT, flows:[kernel-consumers]"
+},
+"oa_context": {
+"task": "Determine whether kernel consumer integrations are mature enough to support runtime DSPy programs.",
+"constraints": [
+"All consumers must respect kernel as SSOT for PM state.",
+"There should be no ad hoc environment-variable hacks bypassing kernel."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-098"
+}
+},
+"tools_allowed": [
+"oa.guard.run",
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000037",
+"program_id": "PhaseTransitionValidator",
+"status": "DEGRADED",
+"decision": {
+"from_phase": "27",
+"to_phase": "28",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Evidence from the kernel-consumer guards shows that OA, Cursor, and the Orchestrator Console all load PM state from the kernel surfaces, with only a few minor helper scripts still reading legacy environment variables. These helpers are not part of the main flows and are flagged for removal. Given that the primary consumers are compliant and that kernel drift is unlikely, it is acceptable to begin experimenting with runtime DSPy integration on top of this foundation. The degraded status reflects the remaining cleanup work but does not warrant blocking the transition.",
+"tool_calls": [
+{
+"tool": "oa.guard.run",
+"args": {
+"name": "kernel_consumers",
+"mode": "STRICT"
+},
+"result": {
+"ok": true,
+"legacy_helpers": [
+"scripts/manual_pm_debug.py"
+]
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE27_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Kernel consumers are largely compliant; minor legacy helpers are noted but not blocking DSPy runtime experiments.",
+"severity": "warn"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000038",
+"timestamp": "2025-12-08T10:54:50Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 19 (Share Index & Registry) to Phase 20 (Compass / Planning Spine).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=19, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T07:30:00Z",
+"ssot_surface": "Share index and registry docs list current share artifacts.",
+"oa_state": "mode=STRICT, flows:[phase,share]"
+},
+"oa_context": {
+"task": "Check if share registry is complete enough to inform COMPASS design.",
+"constraints": [
+"All critical share artifacts must be listed with owner and purpose.",
+"Registry does not need to be perfect but must be directionally correct."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-099"
+}
+},
+"tools_allowed": [
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000038",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "19",
+"to_phase": "20",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 19 produced a share index and registry that enumerate existing share artifacts, their owners, and their roles. While some non-critical artifacts are still marked as “unknown”, the critical governance surfaces (kernel, bootstrap, handoff docs, reality.green summaries) are clearly documented. This is sufficient for Phase 20 to design a planning spine that references share surfaces by name and role. Any remaining unknowns can be handled later without compromising the integrity of the COMPASS.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/SHARE_INDEX.md"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE19_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Share registry is good enough to anchor COMPASS design; unknown minor artifacts do not block.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000039",
+"timestamp": "2025-12-08T10:56:10Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 18 (Initial Share Contract) to Phase 19 (Share Index & Registry).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=18, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T07:10:00Z",
+"ssot_surface": "Initial share contract documented; not all artifacts indexed.",
+"oa_state": "mode=STRICT, flows:[phase,share]"
+},
+"oa_context": {
+"task": "Determine whether it is appropriate to catalog share artifacts now that the contract exists.",
+"constraints": [
+"Initial contract must at least define managed vs unmanaged namespaces.",
+"Indexing work can proceed even if contract will evolve."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-100"
+}
+},
+"tools_allowed": [
+"oa.handoff.preview"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000039",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "18",
+"to_phase": "19",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 18 introduced the initial share contract, which distinguishes managed namespaces from ad hoc ones. This provides enough structure to begin building a detailed index and registry of share artifacts in Phase 19. The contract will evolve, but indexing does not depend on perfection—only on having basic namespace boundaries. Since those exist and reality.green shows no gross inconsistencies, the transition to Phase 19 is safe and appropriate.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/SHARE_SURFACE_CONTRACT.md"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE18_INDEX.md"
+},
+"result": {
+"ok": true
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Initial share contract is in place; detailed indexing is the right next step.",
+"severity": "info"
+}
+]
+}
+}
+{
+"envelope": {
+"envelope_id": "00000000-0000-0000-0000-000000000040",
+"timestamp": "2025-12-08T10:57:30Z",
+"program_id": "PhaseTransitionValidator",
+"goal": "Validate transition from Phase 17 (Ad hoc Governance) to Phase 18 (Initial Share Contract).",
+"kernel_state_ref": {
+"pm_bootstrap": "phase=17, branch": "main",
+"kernel_ok": true
+},
+"reality_green": "pass=true, last_run": "2025-12-08T06:50:00Z",
+"ssot_surface": "Governance scattered across various docs; no unified share contract yet.",
+"oa_state": "mode=STRICT, flows:[phase,governance]"
+},
+"oa_context": {
+"task": "Assess readiness to centralize share rules into a single contract doc.",
+"constraints": [
+"Existing governance must identify share/ as a key surface.",
+"No major reorg of share/ should be in flight while defining contract."
+],
+"metadata": {
+"request_source": "PM",
+"ticket": "PLAN-101"
+}
+},
+"tools_allowed": [
+"oa.handoff.preview",
+"oa.kernel_status"
+]
+},
+"result": {
+"envelope_id": "00000000-0000-0000-0000-000000000040",
+"program_id": "PhaseTransitionValidator",
+"status": "OK",
+"decision": {
+"from_phase": "17",
+"to_phase": "18",
+"allowed": true,
+"blockers": []
+},
+"rationale": "Phase 17 collected governance rules from multiple sources, and these now clearly call out share/ as a critical surface needing formalization. There is no evidence of large, in-flight reorganization of share/, so defining a contract will not fight concurrent structural changes. This makes it a good time to consolidate expectations into an explicit share surface contract in Phase 18, which will later support indexing and kernel work.",
+"tool_calls": [
+{
+"tool": "oa.handoff.preview",
+"args": {
+"path": "docs/SSOT/PHASE17_INDEX.md"
+},
+"result": {
+"ok": true
+}
+},
+{
+"tool": "oa.kernel_status",
+"args": {},
+"result": {
+"phase": 17,
+"branch": "main"
+}
+}
+],
+"diagnostics": [
+{
+"category": "phase",
+"message": "Governance has matured to the point where a dedicated share contract is the natural next step.",
+"severity": "info"
+}
+]
+}
+}

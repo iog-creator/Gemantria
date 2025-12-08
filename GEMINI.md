@@ -29,12 +29,13 @@ make reality.green
 ```
 **If any checks fail**: Report failures before proceeding. Do NOT assume passes.
 
-### Step 4: Query DMS Before File Search (Rule 051/053)
+### Step 4: Query DMS Before File Search (Rule 051/053/069)
 Before searching files with grep/find, FIRST query the DMS:
 ```bash
-pmagent kb search "<your query>"
-# or
 pmagent kb registry --filter "<pattern>"
+# Examples:
+pmagent kb registry --filter "phase27"  # Find phase 27 docs
+pmagent kb registry --filter "dspy"     # Find DSPy-related docs
 ```
 The DMS (Document Management System) knows what docs exist and their importance.
 
@@ -134,6 +135,22 @@ After completing steps 1-3, state in your response:
 2. **ALWAYS** copy final walkthrough to `docs/SSOT/PHASE{XX}_IMPLEMENTATION_EVIDENCE.md`
 3. Commit the evidence file to the codebase
 4. This ensures PM and future agents can access the evidence
+
+## OPS Output Format (Rule 050)
+
+**All OPS responses must follow the 4-block format:**
+
+1. **Goal** — Single sentence stating the objective
+2. **Commands** — Runnable shell commands (no prose between)
+3. **Evidence to return** — What outputs to expect
+4. **Next gate** — What happens after seeing evidence
+
+**Local Gates Are Primary (Rule 050 §5.5):**
+- Never say "waiting for CI" — local gates are the truth
+- Run these before any push: `ruff format --check . && ruff check . && make book.smoke && make reality.green`
+- CI is informational only, not blocking
+
+---
 
 ## Agent Index (Key Subsystems)
 
