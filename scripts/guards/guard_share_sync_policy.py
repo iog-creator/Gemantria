@@ -87,7 +87,7 @@ SYSTEM_FILES = {
     "share/hint_registry.md",
     "share/PM_BOOTSTRAP_STATE.md",
     "share/planning_lane_status.md",
-    "share/pm_snapshot.md",
+    "share/pm.snapshot.md",
     "share/planning_context.md",
     "share/HANDOFF_KERNEL.md",
     "share/REALITY_GREEN_SUMMARY.md",

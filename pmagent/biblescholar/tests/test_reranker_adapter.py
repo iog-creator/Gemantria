@@ -48,7 +48,7 @@ class TestRerankerAdapterReranking:
         query = "beginning of the gospel"
 
         # Wave-3: LM-off = LOUD FAIL (RuntimeError)
-        with pytest.raises(RuntimeError, match="LOUD FAIL.*Reranker service unavailable"):
+        with pytest.raises(RuntimeError, match=r"LOUD FAIL.*Reranker service unavailable"):
             adapter.rerank_chunks(chunks, query)
 
     @patch("pmagent.biblescholar.reranker_adapter.RerankerAdapter._ensure_lm")

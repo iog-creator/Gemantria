@@ -68,7 +68,7 @@ ALLOWED_FILES = {
     "hint_registry.md",
     "PM_BOOTSTRAP_STATE.md",
     "planning_lane_status.md",
-    "pm_snapshot.md",
+    "pm.snapshot.md",
     "planning_context.md",
     "HANDOFF_KERNEL.md",
     "REALITY_GREEN_SUMMARY.md",

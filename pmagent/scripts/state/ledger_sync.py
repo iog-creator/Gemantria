@@ -46,13 +46,6 @@ def sync_ledger() -> int:
         (repo_root / "AGENTS.md", "AGENTS.md", "root"),
         # SSOT docs
         (repo_root / "docs/SSOT/MASTER_PLAN.md", "MASTER_PLAN.md", "docs/SSOT"),
-        (repo_root / "docs/runbooks/DB_HEALTH.md", "DB_HEALTH.md", "docs/runbooks"),
-        (
-            repo_root / "docs/runbooks/PM_SNAPSHOT_CURRENT.md",
-            "PM_SNAPSHOT_CURRENT.md",
-            "docs/runbooks",
-        ),
-        (repo_root / "RULES_INDEX.md", "RULES_INDEX.md", "root"),
         # Share exports (control-plane)
         (
             repo_root / "share/atlas/control_plane/system_health.json",

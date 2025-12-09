@@ -62,7 +62,7 @@ The following table was generated from **share/AGENTS_REGISTRY_SNAPSHOT.json** t
 | agents::agentpm/rpc/agents.md | agentpm/rpc/AGENTS.md | ops | ssot, agent_framework |
 | agents::agentpm/tests/kb/agents.md | agentpm/tests/kb/AGENTS.md | general | ssot, agent_framework |
 | agents::agentpm/tests/status/agents.md | agentpm/tests/status/AGENTS.md | ops | ssot, agent_framework |
-| agents::docs/audits/agents.md | docs/audits/AGENTS.md | ops | ssot, agent_framework |
+
 | agents::src/gemantria.egg-info/agents.md | src/gemantria.egg-info/AGENTS.md | gematria | ssot, agent_framework |
 <!-- END: AUTO-GENERATED AGENTS TABLE -->
 

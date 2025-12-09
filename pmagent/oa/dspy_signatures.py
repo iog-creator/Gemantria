@@ -222,6 +222,27 @@ class MultiTurnKernelReasoningSignature(dspy.Signature):
     trace_steps: List[str] = dspy.OutputField(desc="Ordered list of reasoning steps taken")
 
 
+class ExplainSystemStateSignature(dspy.Signature):
+    """
+    Explain current system state to orchestrator.
+
+    First OA skill: Reads kernel & health surfaces and produces grounded Markdown explanation.
+    Training data: examples/dspy/explain_system_state.jsonl (to be created)
+    """
+
+    # Inputs
+    user_question: str = dspy.InputField(desc="Natural language question about system state")
+    kernel: str = dspy.InputField(desc="Kernel state as JSON string")
+    reality_summary: str = dspy.InputField(desc="REALITY_GREEN_SUMMARY.json as JSON string")
+    pm_snapshot: str = dspy.InputField(desc="PM snapshot/system_health.json as JSON string")
+    context_meta: str = dspy.InputField(desc="OA context metadata as JSON string")
+
+    # Outputs
+    answer_markdown: str = dspy.OutputField(desc="Grounded Markdown explanation of system state")
+    status_label: str = dspy.OutputField(desc="Overall status: 'OK' | 'DEGRADED' | 'UNCERTAIN'")
+    covered_sections: str = dspy.OutputField(desc="Comma-separated list of sections covered")
+
+
 # ============================================================================
 # Signature Registry
 # ============================================================================
@@ -235,6 +256,7 @@ SIGNATURES = {
     "OAToolUsagePrediction": OAToolUsagePredictionSignature,
     "ShareDMSDriftDetector": ShareDMSDriftDetectorSignature,
     "MultiTurnKernelReasoning": MultiTurnKernelReasoningSignature,
+    "ExplainSystemState": ExplainSystemStateSignature,
 }
 
 
@@ -265,9 +287,23 @@ def create_module(program_id: str) -> Any | None:
         module = create_module("SafeOPSDecision")
         if module:
             result = module(kernel_state=..., proposed_ops=...)
+
+    Special handling:
+        - "ExplainSystemState" uses ExplainSystemState module from dspy_explain_system_state.py
     """
     if not HAS_DSPY:
         return None
+
+    # Special case: ExplainSystemState uses its own module class
+    if program_id == "ExplainSystemState":
+        try:
+            from pmagent.oa.dspy_explain_system_state import ExplainSystemState
+
+            # Module will use dspy.settings.lm by default
+            return ExplainSystemState()
+        except ImportError:
+            # If ExplainSystemState import fails, return None
+            return None
 
     sig_class = get_signature(program_id)
 

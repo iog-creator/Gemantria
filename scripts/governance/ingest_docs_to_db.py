@@ -228,6 +228,40 @@ def iter_pdf_docs() -> Iterable[DocTarget]:
         )
 
 
+def iter_analysis_docs() -> Iterable[DocTarget]:
+    """
+    Discover analysis documentation in docs/analysis/.
+    """
+    path = REPO_ROOT / "docs" / "analysis"
+    if path.is_dir():
+        for p in path.rglob("*.md"):
+            yield DocTarget(
+                logical_name=f"ANALYSIS::{p.relative_to(REPO_ROOT)}",
+                role="analysis",
+                repo_path=p,
+                is_ssot=False,
+                importance="medium",
+                tags=["analysis"],
+            )
+
+
+def iter_adr_docs() -> Iterable[DocTarget]:
+    """
+    Discover ADRs in docs/ADRs/.
+    """
+    path = REPO_ROOT / "docs" / "ADRs"
+    if path.is_dir():
+        for p in path.rglob("*.md"):
+            yield DocTarget(
+                logical_name=f"ADR::{p.relative_to(REPO_ROOT)}",
+                role="adr",
+                repo_path=p,
+                is_ssot=True,
+                importance="critical",
+                tags=["ssot", "adr"],
+            )
+
+
 def sha256_bytes(data: bytes) -> str:
     """Return hex-encoded SHA-256 hash for the given bytes."""
     h = hashlib.sha256()
@@ -281,6 +315,8 @@ def ingest_docs(dry_run: bool = False) -> int:
     # Phase-8: treat all AGENTS*.md docs as SSOT for the agent framework.
     targets.extend(iter_agents_docs())
     targets.extend(iter_additional_docs())
+    targets.extend(iter_analysis_docs())
+    targets.extend(iter_adr_docs())
     # Layer 3 Phase 1: PDF discovery (no parsing yet)
     targets.extend(iter_pdf_docs())
 
@@ -379,7 +415,13 @@ def ingest_docs(dry_run: bool = False) -> int:
 
                 if is_agents:
                     # AGENTS: upgrade upward, never downgrade
-                    importance_order = {"unknown": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+                    importance_order = {
+                        "unknown": 0,
+                        "low": 1,
+                        "medium": 2,
+                        "high": 3,
+                        "critical": 4,
+                    }
                     existing_level = importance_order.get(existing_importance, 0)
                     new_level = importance_order.get(target.importance, 0)
                     if new_level > existing_level:
@@ -454,6 +496,27 @@ def ingest_docs(dry_run: bool = False) -> int:
                     "size_bytes": size_bytes,
                 },
             )
+
+        # Prune ghosts (enabled in DB but missing on disk)
+        # This ensures the DMS stays in sync with deletions/archivals.
+        enabled_rows = conn.execute(
+            text("SELECT doc_id, repo_path FROM control.doc_registry WHERE enabled = true AND repo_path IS NOT NULL")
+        ).fetchall()
+
+        ghosts = []
+        for doc_id, r_path in enabled_rows:
+            full_path = REPO_ROOT / r_path
+            if not full_path.exists():
+                ghosts.append((doc_id, r_path))
+
+        if ghosts:
+            print(f"[INFO] Pruning {len(ghosts)} ghost records (enabled in DB but missing on disk)...")
+            for doc_id, r_path in ghosts:
+                conn.execute(
+                    text("UPDATE control.doc_registry SET enabled = false, updated_at = NOW() WHERE doc_id = :doc_id"),
+                    {"doc_id": doc_id},
+                )
+                print(f"[DISABLE] {r_path}")
 
     return 0
 

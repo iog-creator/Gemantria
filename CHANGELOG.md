@@ -133,6 +133,15 @@
 - OA data model + API contract + OA context surface
 - DSPy reasoning programs outline wired to OA runtime and Console v2 docs
 
+- Copy PM handoff summary to SSOT
+- share.sync auto-creates backup if blocked
+- Capture guard debugging lessons in DSPy + SSOT
+- Resolve OA State circular dependency completely
+- Rewrite README + update PM_KERNEL.json for Phase 28
+- Add implementation evidence per Rule 071
+
+- Update PM handoff summary with final session commits
+
 ## [v0.0.8] - 2025-11-12
 
 ### Highlights

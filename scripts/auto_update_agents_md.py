@@ -110,7 +110,14 @@ def update_agents_md(directory: Path, changes: dict[str, Any], dry_run: bool = F
     # In the future, we could parse and update content intelligently
     if not dry_run:
         agents_path.touch()
-        print(f"  ✓ Updated {agents_path.relative_to(ROOT)} (timestamp refreshed)")
+        # Resolve path to handle any double slashes or normalization issues
+        try:
+            rel_path = agents_path.resolve().relative_to(ROOT.resolve())
+        except ValueError:
+            # Fallback if resolve fails (e.g. symlinks outside root)
+            rel_path = agents_path.relative_to(ROOT) if agents_path.is_absolute() else agents_path
+
+        print(f"  ✓ Updated {rel_path} (timestamp refreshed)")
 
     return True
 

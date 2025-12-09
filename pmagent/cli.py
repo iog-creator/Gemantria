@@ -158,6 +158,21 @@ oa_app = typer.Typer(help="Orchestrator Assistant kernel consumer operations")
 app.add_typer(oa_app, name="oa")
 
 
+@oa_app.command("explain-system-state", help="Explain current system state using DSPy (Phase 28C)")
+def oa_explain_system_state(
+    question: str = typer.Option(
+        None,
+        "--question",
+        "-q",
+        help="Optional question about system state (defaults to standard explanation)",
+    ),
+) -> None:
+    """Explain current system state using ExplainSystemState DSPy module."""
+    from pmagent.oa.dspy_explain_system_state import cli_explain_system_state
+
+    cli_explain_system_state(question)
+
+
 @oa_app.command("snapshot", help="Build kernel-aligned state snapshot for OA/Console")
 def oa_snapshot(
     json_only: bool = typer.Option(False, "--json-only", help="Print only JSON path"),

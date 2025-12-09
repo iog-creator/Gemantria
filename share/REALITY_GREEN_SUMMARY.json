@@ -34,12 +34,12 @@
     {
       "name": "Ledger Verification",
       "passed": true,
-      "message": "All 9 tracked artifacts are current",
+      "message": "All 6 tracked artifacts are current",
       "details": {
         "summary": {
           "ok": true,
-          "total": 9,
-          "current": 9,
+          "total": 6,
+          "current": 6,
           "stale": [],
           "missing": [],
           "results": [
@@ -47,8 +47,8 @@
               "name": "AGENTS.md",
               "source_of_truth": "root",
               "status": "current",
-              "ledger_hash": "f6fee1d9b4bac96c...",
-              "current_hash": "f6fee1d9b4bac96c..."
+              "ledger_hash": "04a2fb3e02aa5fee...",
+              "current_hash": "04a2fb3e02aa5fee..."
             },
             {
               "name": "MASTER_PLAN.md",
@@ -56,27 +56,6 @@
               "status": "current",
               "ledger_hash": "7267134e5e14bb7d...",
               "current_hash": "7267134e5e14bb7d..."
-            },
-            {
-              "name": "DB_HEALTH.md",
-              "source_of_truth": "docs/runbooks",
-              "status": "current",
-              "ledger_hash": "7b351351aaaf7321...",
-              "current_hash": "7b351351aaaf7321..."
-            },
-            {
-              "name": "PM_SNAPSHOT_CURRENT.md",
-              "source_of_truth": "docs/runbooks",
-              "status": "current",
-              "ledger_hash": "6c51be1d31e4250e...",
-              "current_hash": "6c51be1d31e4250e..."
-            },
-            {
-              "name": "RULES_INDEX.md",
-              "source_of_truth": "root",
-              "status": "current",
-              "ledger_hash": "df01a6ca8e43a79b...",
-              "current_hash": "df01a6ca8e43a79b..."
             },
             {
               "name": "system_health.json",
@@ -150,9 +129,9 @@
       "message": "pmagent control-plane DMS metadata sane (low_enabled=0)",
       "details": {
         "distribution": {
-          "critical": 144,
-          "high": 262,
-          "medium": 56,
+          "critical": 187,
+          "high": 383,
+          "medium": 72,
           "unknown": 783
         }
       }
@@ -162,7 +141,7 @@
       "passed": true,
       "message": "All AGENTS.md rows satisfy pmagent control-plane DMS contract",
       "details": {
-        "rows": 116
+        "rows": 90
       }
     },
     {
@@ -202,14 +181,6 @@
       "details": {}
     },
     {
-      "name": "OA State",
-      "passed": true,
-      "message": "OA state is consistent with kernel surfaces",
-      "details": {
-        "output": "\u2705 OA State Guard: PASS\n   OA state is consistent with kernel surfaces\n\nJSON: {\"ok\": true, \"mode\": \"STRICT\", \"mismatches\": [], \"missing_surfaces\": []}"
-      }
-    },
-    {
       "name": "Handoff Kernel",
       "passed": true,
       "message": "Handoff kernel is consistent with bootstrap/SSOT/reality.green",
@@ -218,5 +189,5 @@
       }
     }
   ],
-  "timestamp": "2025-12-08T17:11:50Z"
+  "timestamp": "2025-12-09T00:18:22Z"
 }

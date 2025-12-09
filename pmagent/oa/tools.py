@@ -83,7 +83,14 @@ def kernel_status() -> dict[str, Any]:
     """
     try:
         result = subprocess.run(
-            [sys.executable, "-m", "pmagent.handoff.commands", "kernel-interpret", "--format", "json"],
+            [
+                sys.executable,
+                "-m",
+                "pmagent.handoff.commands",
+                "kernel-interpret",
+                "--format",
+                "json",
+            ],
             cwd=str(ROOT),
             capture_output=True,
             text=True,

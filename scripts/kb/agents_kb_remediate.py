@@ -31,7 +31,10 @@ sys.path.insert(0, str(ROOT))
 preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
 result = subprocess.run([sys.executable, str(preflight_script), "--mode", "hint"], capture_output=True)
 if result.returncode != 0:
-    print(f"[HINT] DB preflight failed (may be DB-off mode): {result.stderr.decode()}", file=sys.stderr)
+    print(
+        f"[HINT] DB preflight failed (may be DB-off mode): {result.stderr.decode()}",
+        file=sys.stderr,
+    )
     # Continue in read-only mode (will handle DB unavailable gracefully)
 
 from pmagent.db.loader import get_control_engine
@@ -412,10 +415,16 @@ def print_summary(
     if stats:
         print("\n✅ Applied:", file=sys.stderr)
         if mode == "hard":
-            print(f"   Deleted agentpm/ ghosts: {stats.get('deleted_agentpm_ghosts', 0)}", file=sys.stderr)
+            print(
+                f"   Deleted agentpm/ ghosts: {stats.get('deleted_agentpm_ghosts', 0)}",
+                file=sys.stderr,
+            )
             print(f"   Deleted orphans: {stats.get('deleted_orphans', 0)}", file=sys.stderr)
         else:
-            print(f"   Disabled agentpm/ ghosts: {stats.get('disabled_agentpm_ghosts', 0)}", file=sys.stderr)
+            print(
+                f"   Disabled agentpm/ ghosts: {stats.get('disabled_agentpm_ghosts', 0)}",
+                file=sys.stderr,
+            )
             print(f"   Disabled orphans: {stats.get('disabled_orphans', 0)}", file=sys.stderr)
         print(f"   Updated paths: {stats.get('updated_paths', 0)}", file=sys.stderr)
 
@@ -477,10 +486,16 @@ def main() -> None:
 
         # Apply or dry-run
         if dry_run:
-            print(f"[DRY-RUN] Computing planned actions (no DB writes, mode={mode})...", file=sys.stderr)
+            print(
+                f"[DRY-RUN] Computing planned actions (no DB writes, mode={mode})...",
+                file=sys.stderr,
+            )
             stats = apply_remediation(actions, dry_run=True, mode=mode)
         else:
-            print(f"[APPLY] Applying remediation to control.doc_registry (mode={mode})...", file=sys.stderr)
+            print(
+                f"[APPLY] Applying remediation to control.doc_registry (mode={mode})...",
+                file=sys.stderr,
+            )
             stats = apply_remediation(actions, dry_run=False, mode=mode)
 
         # Normalize metadata if requested
