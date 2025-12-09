@@ -181,6 +181,24 @@ pmagent kb refresh
 3. **Expand to Tier 2/3** - Once Tier 1 is validated, expand to pmagent/, tests/, and TypeScript files
 4. **Research code-specific embedding models** - Evaluate Salesforce/codet5-base or microsoft/codebert-base for future migration
 
+## Phase 4.6: Future AI-Assisted Governance
+
+**Status:** Planned
+
+**Objective:**
+Evolve "Self-Healing" from simple logic (e.g., pruning missing files) to AI-driven inference and reranking.
+
+**Features:**
+- **AI Reranking:** Granite AI assistant to re-rank search results based on user intent and semantic context, not just cosine similarity.
+- **Smart Pruning:** AI agent to detect obsolete documentation not just by file presence, but by semantic staleness (e.g., "This doc refers to Phase 25 which is deprecated").
+- **Inference Layer:** Integrate Granite model to suggest "Next Best Action" for governance failures (e.g., suggest specific `ingest` commands or Manifest edits).
+
+**Dependencies:**
+- Layer 4 Code Ingestion (Complete)
+- Knowledge MCP (Phase 27)
+- Granite Model Integration (Future)
+
+
 ## Related Documentation
 
 - Layer 3 Plan: `docs/SSOT/LAYER3_AI_DOC_INGESTION_PLAN.md`

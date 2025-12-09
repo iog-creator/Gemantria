@@ -29,9 +29,12 @@ def batch_generate_hints_from_session(
     return []
 
 
+from pmagent.hints.registry import list_all_hints
+
+
 def list_hints(scope: str | None = None, kind: str | None = None, flow: str | None = None) -> list:
-    """Stub: List hints from registry (not yet implemented)."""
-    return []
+    """List hints from registry."""
+    return list_all_hints(scope=scope, kind=kind, flow=flow)
 
 
 def export_hints_to_docs(output_dir: str) -> dict:

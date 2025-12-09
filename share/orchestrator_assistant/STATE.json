@@ -1,8 +1,8 @@
 {
   "version": 1,
   "source": "kernel",
-  "generated_at": "2025-12-08T17:11:50.823087+00:00",
-  "branch": "feat/phase27l-agents-dms-contract",
+  "generated_at": "2025-12-09T00:18:22.573997+00:00",
+  "branch": "feat/phase28c-cleanup",
   "current_phase": "24",
   "last_completed_phase": "23",
   "reality_green": true,
@@ -69,10 +69,6 @@
     },
     {
       "name": "WebUI Shell Sanity",
-      "passed": true
-    },
-    {
-      "name": "OA State",
       "passed": true
     },
     {

@@ -14,8 +14,8 @@ class TestDSPySignatures:
         # is_dspy_available returns a boolean
         assert isinstance(is_dspy_available(), bool)
 
-    def test_signatures_registry_has_8_programs(self):
-        """TV-28B-02: SIGNATURES registry contains all 8 programs."""
+    def test_signatures_registry_has_9_programs(self):
+        """TV-28B-02: SIGNATURES registry contains all 9 programs (8 original + ExplainSystemState)."""
         from pmagent.oa.dspy_signatures import SIGNATURES
 
         expected_programs = {
@@ -27,6 +27,7 @@ class TestDSPySignatures:
             "OAToolUsagePrediction",
             "ShareDMSDriftDetector",
             "MultiTurnKernelReasoning",
+            "ExplainSystemState",
         }
         assert set(SIGNATURES.keys()) == expected_programs
 

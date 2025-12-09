@@ -69,7 +69,17 @@ def get_directory_for_file(file_path: Path) -> Path | None:
             return current
 
         # Tool directories
-        if path_str in ["scripts", "migrations", "tests", "tools"]:
+        if path_str in [
+            "scripts",
+            "migrations",
+            "tests",
+            "tools",
+            "examples",
+            "db",
+            "config",
+            "eval",
+            "schemas",
+        ]:
             return current
 
         # Docs directories
@@ -194,6 +204,9 @@ def check_agents_md_sync(staged_only: bool = False, verbose: bool = False) -> in
         agents_path = directory / "AGENTS.md"
 
         if not agents_path.exists():
+            # If the directory itself doesn't exist (deleted), then missing AGENTS.md is fine
+            if not directory.exists():
+                continue
             issues.append(f"  ⚠️  {directory.relative_to(ROOT)}/: Code changed but AGENTS.md missing")
             continue
 

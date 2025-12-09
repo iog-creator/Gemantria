@@ -30,7 +30,10 @@ sys.path.insert(0, str(ROOT))
 preflight_script = ROOT / "scripts" / "ops" / "preflight_db_check.py"
 result = subprocess.run([sys.executable, str(preflight_script), "--mode", "hint"], capture_output=True)
 if result.returncode != 0:
-    print(f"[HINT] DB preflight failed (may be DB-off mode): {result.stderr.decode()}", file=sys.stderr)
+    print(
+        f"[HINT] DB preflight failed (may be DB-off mode): {result.stderr.decode()}",
+        file=sys.stderr,
+    )
     # Continue in read-only mode (will handle DB unavailable gracefully)
 
 from pmagent.db.loader import get_control_engine
@@ -94,7 +97,17 @@ def query_dms_agents_entries() -> list[dict]:
     with engine.connect() as conn:
         rows = conn.execute(query).fetchall()
         for row in rows:
-            doc_id, logical_name, role, repo_path, share_path, enabled, importance, tags, owner_component = row
+            (
+                doc_id,
+                logical_name,
+                role,
+                repo_path,
+                share_path,
+                enabled,
+                importance,
+                tags,
+                owner_component,
+            ) = row
             entries.append(
                 {
                     "doc_id": str(doc_id),

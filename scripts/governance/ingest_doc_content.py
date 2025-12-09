@@ -288,7 +288,10 @@ def ingest_doc_content(
             ).scalar()
 
             if existing_check and existing_check > 0:
-                print(f"[SKIP] {logical_name}: {existing_check} fragments (unchanged)", file=sys.stderr)
+                print(
+                    f"[SKIP] {logical_name}: {existing_check} fragments (unchanged)",
+                    file=sys.stderr,
+                )
                 continue
 
             # Read and chunk based on file type

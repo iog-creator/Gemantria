@@ -1096,6 +1096,10 @@ python scripts/auto_update_agents_md.py --dry-run
 - **Files Modified**: `scripts/kb/build_kb_registry.py` (3 query locations), `scripts/governance/classify_fragments.py` (1 query location)
 - **Documentation**: See `docs/SSOT/POSTGRES_OPTIMIZATION_SUMMARY.md` for details
 
+**Governance**: `scripts/governance/`
+  - Ingestion (`ingest_docs_to_db.py`): Populates DMS from repo state (Self-healing).
+  - Validation: Enforces rules (e.g. `validate_agents_md.py`).
+
 **Usage:**
 ```bash
 # Build KB registry from pmagent control-plane DMS (curated subset: ~100-200 documents)

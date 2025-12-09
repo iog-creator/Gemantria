@@ -176,7 +176,7 @@ class RerankerAdapter:
             cosine = chunk.get("cosine", chunk.get("embedding_score", 0.0))  # Support legacy field name
             rerank_score = chunk.get("rerank_score", 0.5)
 
-            # Rule 045: edge_strength = α * cosine + (1 - α) * rerank_score
+            # Rule 045: edge_strength = α * cosine + (1 - α) * rerank_score  # noqa: RUF003
             edge_strength = edge_alpha * float(cosine) + (1.0 - edge_alpha) * float(rerank_score)
             chunk["edge_strength"] = edge_strength
 

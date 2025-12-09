@@ -46,8 +46,13 @@ def get_required_directories() -> dict[str, list[str]]:
         "source": [],  # src/*/
         "pmagent": [],  # pmagent/*/ (modules, biblescholar, etc.)
         "webui": [],  # webui/*/ (graph dashboard, forecast UI, etc.)
-        "tools": ["scripts", "migrations", "tests"],  # Tool directories
+        "tools": ["scripts", "tests"],  # Tool directories (migrations moved to db)
+        "examples": [],  # examples/*/
         "docs": [],  # docs/*/
+        "db": [],  # db/*/
+        "config": ["config"],  # config/
+        "eval": ["eval"],  # eval/
+        "schemas": [],  # schemas/*/
     }
 
     # Add all src subdirectories (excluding cache/generated dirs)
@@ -78,6 +83,36 @@ def get_required_directories() -> dict[str, list[str]]:
             if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
                 required["webui"].append(f"webui/{subdir.name}")
 
+    # Add all examples subdirectories
+    examples_dir = ROOT / "examples"
+    if examples_dir.exists():
+        # Root examples dir needs one too? Typically yes if it contains code.
+        # But per logic, we track subdirs. Let's add the root 'examples' if it has files,
+        # or just subdirs. The user asked for "examples folder".
+        # Let's add subdirs specifically like dspy/ and enrichment/.
+        for subdir in examples_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required["examples"].append(f"examples/{subdir.name}")
+
+        # Also require one for the root examples dir itself
+        required["examples"].append("examples")
+
+    # Add db subdirectories
+    db_dir = ROOT / "db"
+    if db_dir.exists():
+        required["db"].append("db")  # Root
+        for subdir in db_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required["db"].append(f"db/{subdir.name}")
+
+    # Add schemas subdirectories
+    schemas_dir = ROOT / "schemas"
+    if schemas_dir.exists():
+        required["schemas"].append("schemas")  # Root
+        for subdir in schemas_dir.iterdir():
+            if subdir.is_dir() and not subdir.name.startswith(".") and subdir.name not in EXCLUDED_DIRS:
+                required["schemas"].append(f"schemas/{subdir.name}")
+
     return required
 
 
@@ -100,7 +135,12 @@ def get_missing_agents_files() -> dict[str, list[str]]:
         "pmagent": [],
         "webui": [],
         "tools": [],
+        "examples": [],
         "docs": [],
+        "db": [],
+        "config": [],
+        "eval": [],
+        "schemas": [],
     }
 
     # Check source directories
@@ -132,6 +172,18 @@ def get_missing_agents_files() -> dict[str, list[str]]:
         agents_path = f"{webui_subdir}/AGENTS.md"
         if agents_path not in existing:
             missing["webui"].append(webui_subdir)
+
+    # Check examples directories
+    for examples_subdir in required["examples"]:
+        agents_path = f"{examples_subdir}/AGENTS.md"
+        if agents_path not in existing:
+            missing["examples"].append(examples_subdir)
+
+    for cat in ["db", "config", "eval", "schemas"]:
+        for subdir in required[cat]:
+            agents_path = f"{subdir}/AGENTS.md"
+            if agents_path not in existing:
+                missing[cat].append(subdir)
 
     return missing
 
@@ -504,6 +556,32 @@ The `{dir_path}/` directory contains {dir_name} tools for the Gematria analysis 
     return template
 
 
+def create_examples_agents_md(dir_path: str) -> str:
+    """Create AGENTS.md content for examples directories."""
+    dir_name = Path(dir_path).name
+
+    return f"""# AGENTS.md - Examples Directory ({dir_name})
+
+## Directory Purpose
+
+The `{dir_path}/` directory contains example implementations, training data, or reference usage patterns for the Gemantria system.
+
+## Key Examples
+
+<!-- List key examples files and their purpose -->
+
+## Usage
+
+<!-- How to run or use these examples -->
+
+## Related Documentation
+
+| Concept | Doc Link |
+|---------|----------|
+<!-- Link to relevant SSOT docs -->
+"""
+
+
 def create_docs_agents_md(dir_path: str) -> str:
     """Create AGENTS.md content for documentation directories."""
     dir_name = Path(dir_path).name
@@ -714,6 +792,14 @@ def create_agents_md_file(dir_path: str, dry_run: bool = False) -> bool:
     elif dir_path.startswith("webui/"):
         # Treat webui/* like source directories so UI surfaces stay documented
         content = create_source_agents_md(dir_path)
+    elif dir_path == "examples" or dir_path.startswith("examples/"):
+        content = create_examples_agents_md(dir_path)
+    elif dir_path.startswith("db/") or dir_path == "db":
+        content = create_tools_agents_md(dir_path)  # DB tools like migrations
+    elif dir_path.startswith("schemas/") or dir_path == "schemas":
+        content = create_docs_agents_md(dir_path)  # Schemas are docs/contracts
+    elif dir_path in ["config", "eval"]:
+        content = create_source_agents_md(dir_path)  # Generic component
     else:
         print(f"SKIP: {dir_path} not recognized as requiring AGENTS.md")
         return False

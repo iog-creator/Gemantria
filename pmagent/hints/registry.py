@@ -82,9 +82,9 @@ def load_hints_for_flow(
 
             return hints_by_kind
 
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         if mode == "STRICT":
-            raise RuntimeError(f"Failed to load hints from DMS: {exc}") from exc
+            raise RuntimeError(f"Failed to configure DSPy LM for LM Studio: {exc}") from exc  # noqa: E501
         # HINT mode: graceful degradation
         return {"required": [], "suggested": [], "debug": []}
 
@@ -116,3 +116,72 @@ def embed_hints_in_envelope(
     # DEBUG hints are not embedded (development only)
 
     return result
+
+
+def list_all_hints(
+    scope: str | None = None,
+    kind: str | None = None,
+    flow: str | None = None,
+) -> list[dict[str, Any]]:
+    """
+    List hints from the registry with optional filtering.
+
+    Args:
+        scope: Filter by scope
+        kind: Filter by kind
+        flow: Filter by flow (within applies_to)
+
+    Returns:
+        List of hint dicts
+    """
+    try:
+        engine = get_control_engine()
+    except (DbUnavailableError, TableMissingError):
+        # Graceful degradation for listing
+        return []
+
+    try:
+        with engine.connect() as conn:
+            # Base query
+            query_str = """
+                SELECT logical_name, scope, applies_to, kind, injection_mode, payload, priority, enabled
+                FROM control.hint_registry
+                WHERE enabled = TRUE
+            """
+            params = {}
+
+            if scope:
+                query_str += " AND scope = :scope"
+                params["scope"] = scope
+
+            if kind:
+                query_str += " AND kind = :kind"
+                params["kind"] = kind
+
+            if flow:
+                query_str += " AND applies_to->>'flow' = :flow"
+                params["flow"] = flow
+
+            query_str += " ORDER BY scope, kind, priority ASC"
+
+            result = conn.execute(text(query_str), params)
+
+            hints = []
+            for row in result:
+                hints.append(
+                    {
+                        "logical_name": row.logical_name,
+                        "scope": row.scope,
+                        "applies_to": row.applies_to,
+                        "kind": row.kind,
+                        "injection_mode": row.injection_mode,
+                        "payload": row.payload,
+                        "priority": row.priority,
+                        "enabled": row.enabled,
+                    }
+                )
+            return hints
+
+    except Exception as exc:
+        print(f"Warning: Failed to list hints: {exc}")
+        return []
