@@ -74,3 +74,21 @@ When DB is ON:
 - Treat the PM handoff summary as the authoritative description of current state.
 - Do not depend on earlier chat messages for truth.
 
+## Producing PM State Packages
+
+The PM may instruct Cursor to assemble or update a PM State Package draft.
+
+Cursor's job in that context is to:
+
+- Pull kernel + REALITY_GREEN_SUMMARY.json.
+
+- Summarize health + phase + branch + planning surfaces.
+
+- Write the result to a temporary file (e.g. `pr-XX-state-package.md`)
+
+  for the Orchestrator to paste into a new chat.
+
+This is strictly presentation; SSOT remains in DMS + pm_boot.
+
+The PM State Package format is specified in `docs/SSOT/PM_STATE_PACKAGE_SPEC.md`.
+
